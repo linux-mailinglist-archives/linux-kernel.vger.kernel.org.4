@@ -2,114 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA001743944
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163E2743946
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjF3KXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S232478AbjF3KXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjF3KXG (ORCPT
+        with ESMTP id S229742AbjF3KXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:23:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F65E2974;
-        Fri, 30 Jun 2023 03:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688120586; x=1719656586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XOJWnYkaajaycqJGspwc8mIlN3y/eWtpUL/gkm1GaoA=;
-  b=Zuku41uDgP47883htCNpVJcIbCeZSTMwsHTKQx+REGJ2S1DPdTuV/XSb
-   v0tKZaDzFaJ8BbzTGIleK/ffbFXGGXaGamK/CCTG61YGJ4Tqrk9DRmEL7
-   V48Y4gDQVOq8vkSgCs0J/gwRo9Hir3aRqWQ+lZdsTeXLjrceblCKI+G0C
-   YwojCtLyzZHLfdfb3sA/bIwKnaMhHRwjZeheYpR7DuZfVsaPKB+9TqHx4
-   lDi2i4mseZak+yo9vQfmqogb/c/cnogD1SGpbCfGz8ryaRm7LflRvhrrD
-   cV4qTXfa3PXBHfOaRyXOMH+NrKP4EuHMKZKQJonSxvLgCr9jJ+YfxpZ5F
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="362403551"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="362403551"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 03:23:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="787678202"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="787678202"
-Received: from valeriik-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.49.47])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 03:22:57 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 7005D109754; Fri, 30 Jun 2023 13:22:54 +0300 (+03)
-Date:   Fri, 30 Jun 2023 13:22:54 +0300
-From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "peterz@infradead.org" <peterz@infradead.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
- #GP
-Message-ID: <20230630102254.gb36e77w4m4obx4b@box.shutemov.name>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
- <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
- <20230628203823.GR38236@hirez.programming.kicks-ass.net>
- <20230628211132.GS38236@hirez.programming.kicks-ass.net>
- <20230628211641.GT38236@hirez.programming.kicks-ass.net>
- <20230630090309.6mnsvfhcptekmzfu@box.shutemov.name>
- <84e13c5e32f001b8c79f0f18fe18f3225cf47dfb.camel@intel.com>
+        Fri, 30 Jun 2023 06:23:30 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C872D55
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:23:29 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-313f18f5295so2009890f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688120607; x=1690712607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VmdXzmCC+XSRpl2cZcrWSADrZXdjh9tEbqph0HmuCQY=;
+        b=QKaSmWjPqYx99qSfHAtLNJoZP4nKQuLK4PLwpaXl0XFt0h/HKgli9EH/4IT3ZG7GaA
+         jC0nGmW1PDr3tAiVGd+brLdRpXnPgKiEyeErmJrpCvSLTN/iflGpFxZRwin7dH6N1nKk
+         LZmDKCFdPogymoQ3fJso7T5ITuxwtKVpoAQSlF5a5/FILPvSWHKXUKynXXENNbgzrpaR
+         nuslvQ8nRQ5uYatoyoCmK0iSAgT02LX0ztz111DTRQ8pMBTOvCtfLblRTPRsH8Dd26Oe
+         WfJJKeVjJTmv4x2oVLZWdMXRiw4YXlLrh378LYe1d7f0ioJqyvli1tApt0O54BPMGXNS
+         zFVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688120607; x=1690712607;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VmdXzmCC+XSRpl2cZcrWSADrZXdjh9tEbqph0HmuCQY=;
+        b=LM0oxTmMh571iJQQPKMPqWeJzjLBDFETqAr/96JtgmaodTI0E9TFKKSQc52Aj6usyc
+         AGfPH2Mb8Lnp6JjT793QqNlfSNC05LMPcW7NgQATHKETebdDUSgoAoZosmGeCP3JUnMN
+         tCHzaJVUZFldGP4FBMOxFv6tV9mfEjdk+gMgxbGLtLTm8ccaeTOlFFxMJksj+s7J3hAx
+         brNFOsmtinhlck44dY9z9aKFmkTf9CqiXBKbu7mNXQAs8Ap4gs4nyfgG0MYhHZtkT45M
+         ePgvA7mIyGe0ctTZNSq+d6g0LhP2kv5Q6L9P7aju6cS8InrWHGLlPxwcF8wBKq98EzPA
+         HCig==
+X-Gm-Message-State: ABy/qLbKu8aH22P0Vc34MEzWSzDv9IneFHUll6Tc2A868XEET1qC+wIJ
+        ShHfPSPuuMoLIk1tYGr5mnTg5Q==
+X-Google-Smtp-Source: APBJJlHNlHGSGUNDtuzzpwr9a1C38q/cF6uAOct+WK/H0b/GPF5GwP3waQft9qz4XvRy//iHgUgIQg==
+X-Received: by 2002:a5d:4804:0:b0:313:f1b7:c229 with SMTP id l4-20020a5d4804000000b00313f1b7c229mr1597471wrq.66.1688120607485;
+        Fri, 30 Jun 2023 03:23:27 -0700 (PDT)
+Received: from [192.168.69.115] ([176.187.211.104])
+        by smtp.gmail.com with ESMTPSA id z16-20020a5d4d10000000b00313eeca9f4asm14336264wrt.14.2023.06.30.03.23.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 03:23:27 -0700 (PDT)
+Message-ID: <6ca04dbe-572a-0f22-ad5f-c93d95f51cf6@linaro.org>
+Date:   Fri, 30 Jun 2023 12:23:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <84e13c5e32f001b8c79f0f18fe18f3225cf47dfb.camel@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH] irq-bcm6345-l1: do not assume a fixed block to cpu
+ mapping
+Content-Language: en-US
+To:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Simon Arlott <simon@octiron.net>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230629072620.62527-1-jonas.gorski@gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230629072620.62527-1-jonas.gorski@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:02:32AM +0000, Huang, Kai wrote:
+On 29/6/23 09:26, Jonas Gorski wrote:
+> The irq to block mapping is fixed, and interrupts from the first block
+> will always be routed to the first parent IRQ. But the parent interrupts
+> themselves can be routed to any available CPU.
 > 
-> > 
-> > I'm okay either way.
-> > 
-> > Obviously, arch/x86/coco/tdx/tdcall.S has to be patched to use the new
-> > TDX_MODULE_CALL macro.
-> > 
+> This is used by the bootloader to map the first parent interrupt to the
+> boot CPU, regardless wether the boot CPU is the first one or the second
+> one.
 > 
-> Cool then we have consensus.
+> When booting from the second CPU, the assumption that the first block's
+> IRQ is mapped to the first CPU breaks, and the system hangs because
+> interrupts do not get routed correctly.
 > 
-> Kirill will you do the patch(es), or you want me to do?
+> Fix this by passing the appropriate bcm6434_l1_cpu to the interrupt
+> handler instead of the chip itself, so the handler always has the right
+> block.
+> 
+> Fixes: c7c42ec2baa1 ("irqchips/bmips: Add bcm6345-l1 interrupt controller")
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> ---
+>   drivers/irqchip/irq-bcm6345-l1.c | 14 +++++---------
+>   1 file changed, 5 insertions(+), 9 deletions(-)
 
-Please, do.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
