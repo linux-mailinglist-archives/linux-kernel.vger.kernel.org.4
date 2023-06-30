@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF7E7437B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B6D7437B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjF3Ip3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S232351AbjF3Ipb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjF3Ip0 (ORCPT
+        with ESMTP id S231245AbjF3Ip2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:45:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC987194;
-        Fri, 30 Jun 2023 01:45:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40CA2616FE;
-        Fri, 30 Jun 2023 08:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72995C433C8;
-        Fri, 30 Jun 2023 08:45:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688114724;
-        bh=XCGEJy3R7r9qVEdodIrivlpUMg2Wf0w09Wh06MmqfKo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qYGriyuY2tStPWMV981uCR6OqpUX/wtnRmIwGMQ3laEM3IMXL8dDhFVcnZK9ojCNI
-         aEHF4JJeazTc0Z1NsmkdzpmKoZlUH6ao5cdFcUSxErg/lAFP4K2KIYyNdFNCdZGnNI
-         QnFR8IWiVZNRKWnHgUZVPtcdMJKRMZJpt7nYiEAXIdewNqW9mDbbLFGdWCtU6HvYCm
-         PNISEJy7QyzRudTeJ+bS5onYKnvJKmjHb4dOeO0P7mRjv6/ficWNt8FgvsI+3PSS2W
-         4fL73WDcCEwmVaz8Hm8e6lCLXKFuVgcpAw6glYqmoPLxo00V0rC1FirDJzYbV/srTV
-         SDXqMKN7TX2zQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Tyler Hicks <code@tyhicks.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Al Viro <viro@zeniv.linux.org.uk>, ecryptfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH v2 0/3] fs/ecryptfs: Replace kmap{,_atomic}() with kmap_local_page()
-Date:   Fri, 30 Jun 2023 10:45:17 +0200
-Message-Id: <20230630-umfang-pumpt-a0cd2d6cdd91@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230426172223.8896-1-fmdefrancesco@gmail.com>
-References: <20230426172223.8896-1-fmdefrancesco@gmail.com>
+        Fri, 30 Jun 2023 04:45:28 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67241194;
+        Fri, 30 Jun 2023 01:45:27 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 10:45:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1688114725; bh=vytjrpkLDpehIHma/uXDpeJc92hkL4ssmlqiBLvV1AQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B9d1LsZSeUT1TFfjiHwswSnUqQYzhc8GBdBrJ4V+pRfX+O2CJ5IkEsTDiO6TAd5gH
+         X5Sx12JfQ2r01aE92gJ9cZfgmgNLSQ2Ye23tdwFugTRZqS27I3R0eGbvnKDuHgNxwi
+         3Dmnah1blcbl4Snzk28Ac2aZLD15vyZBJDIg8VNk=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 13/15] selftests/nolibc: rename chroot_exe to
+ chroot_tmpfile
+Message-ID: <8665cddc-0ac8-497c-848e-aaa42398bf24@t-8ch.de>
+References: <cover.1688078604.git.falcon@tinylab.org>
+ <a38a6057866b597e5f931de550f2a6f24404ecdf.1688078605.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1421; i=brauner@kernel.org; h=from:subject:message-id; bh=HdGmSeFl/tSI7e/B0hTSZaffBkpDR39gQdEGFv0fcNQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTMm/q5w0P88u6dt4yW36v8rt9/Q/rcsnOdsmYpbg7N/TyC G1ynd5SyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykvZeR4aOQ1qeDzv99p/35FxF17o jlK+GUZD3OtZ3dRw4rSonNVWD4H7Xs4+V5Ja3fPnxcVWPek30q3vX4ZqmX8pMP2Lh1sK2LZAEA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a38a6057866b597e5f931de550f2a6f24404ecdf.1688078605.git.falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 19:22:20 +0200, Fabio M. De Francesco wrote:
-> kmap() and kmap_atomic() have been deprecated in favor of
-> kmap_local_page().
+On 2023-06-30 08:00:28+0800, Zhangjin Wu wrote:
+> For CONFIG_PROC_FS=n, let's use tmpfs and create a tmp file for
+> chroot_exe test.
 > 
-> Therefore, replace kmap() and kmap_atomic() with kmap_local_page().
+> Since chroot_exe is mainly testing the not directory case (ENOTDIR), so,
+> rename it to chroot_tmpfile may be better.
 > 
-> Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-> HIGHMEM64GB enabled.
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/testing/selftests/nolibc/nolibc-test.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 1002e0267515..2e9eaa7efa6e 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -682,6 +682,8 @@ int run_syscall(int min, int max)
+>  	int ret = 0;
+>  	void *p1, *p2;
+>  	int has_gettid = 1;
+> +	const char *tmpfile = get_tmpfile("/tmp/dummy");
+> +	int has_tmpfile = tmpfile != NULL;
+>  
+>  	/* <proc> indicates whether or not /proc is mounted */
+>  	proc = stat("/proc", &stat_buf) == 0;
+> @@ -720,7 +722,7 @@ int run_syscall(int min, int max)
+>  		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
+>  		CASE_TEST(chroot_root);       EXPECT_SYSZR(euid0, chroot("/")); break;
+>  		CASE_TEST(chroot_blah);       EXPECT_SYSER(1, chroot("/proc/self/blah"), -1, ENOENT); break;
+> -		CASE_TEST(chroot_exe);        EXPECT_SYSER(proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
+> +		CASE_TEST(chroot_tmpfile);    EXPECT_SYSER(has_tmpfile, chroot(tmpfile), -1, ENOTDIR); break;
 
-Picking this up. Please tell me if this should be routed somewhere else.
-vfs.misc will be rebased once v6.5-rc1 is released.
+get_tempfile() looks really weird.
+Given that the nolibc implementation of chroot() is the most trivial
+imaginable in my opinion we can keep the current "chroot_exe" that is
+using procfs.
 
----
-
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
-
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
-
-[1/3] fs/ecryptfs: Replace kmap() with kmap_local_page()
-      https://git.kernel.org/vfs/vfs/c/7a367455b6a5
-[2/3] fs/ecryptfs: Use kmap_local_page() in ecryptfs_write()
-      https://git.kernel.org/vfs/vfs/c/55f13011af9d
-[3/3] fs/ecryptfs: Use kmap_local_page() in copy_up_encrypted_with_header()
-      https://git.kernel.org/vfs/vfs/c/de9f5a15080f
+>  		CASE_TEST(close_m1);          EXPECT_SYSER(1, close(-1), -1, EBADF); break;
+>  		CASE_TEST(close_dup);         EXPECT_SYSZR(1, close(dup(0))); break;
+>  		CASE_TEST(dup_0);             tmp = dup(0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
+> -- 
+> 2.25.1
+> 
