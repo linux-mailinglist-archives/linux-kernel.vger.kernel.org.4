@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E8774328D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D54743292
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbjF3CJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
+        id S229522AbjF3CMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjF3CJP (ORCPT
+        with ESMTP id S229576AbjF3CMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:09:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9B2D52;
-        Thu, 29 Jun 2023 19:09:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C2661644;
-        Fri, 30 Jun 2023 02:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BE2C433C0;
-        Fri, 30 Jun 2023 02:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688090943;
-        bh=99+qyG4HyN593oTHFFKBfrO8v3BLt6plCiPCDBJrrj0=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=RQpIklMzC6Gj50RQy+L9JqgzLCE7m3UVuk8/4DRU1k+klF8vtYEb+eZXcTzz3eJuX
-         fP5v8XrGYj9FJQUiQZ4vHWZ0L1azkltCChJCSqvvbGAecYUvEOrmc4WgpWDBmvJy6k
-         JkJtQR+Z8Z3fqL4AHw6p/gKLC1cYR64EewjbU7Sj+RngqlcsZuonAFfp5XYi1anbCS
-         Omx+AdWPt0qRJLAJaU8ln0ggMz8xRxDpEArYq5VAzSg8wpmsJntdCnqeT5/ykHWqsd
-         80JqL5SYQy9WpgVukxb1PMS3E3txrRY3UQSo6bhE4xbtl5bNl68VTo1Xhq4WA6lD+9
-         XMyXZS0OJi+uA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 30 Jun 2023 05:08:58 +0300
-Message-Id: <CTPMANARFO9J.1FXO8N3EI5Q2S@suppilovahvero>
-Cc:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Linux regressions mailing list" <regressions@lists.linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        "Sachin Sant" <sachinp@linux.ibm.com>
-Subject: Re: [PATCH] tpm: Ensure that tpm chip has ops to check if it's
- defective
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "Greg KH" <gregkh@linuxfoundation.org>
-X-Mailer: aerc 0.14.0
-References: <20230623030427.908-1-mario.limonciello@amd.com>
- <2023062317-daytime-angles-3c5a@gregkh>
- <4d3c4b8a-1788-08af-97ef-a1466a8cda5c@amd.com>
-In-Reply-To: <4d3c4b8a-1788-08af-97ef-a1466a8cda5c@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Thu, 29 Jun 2023 22:12:15 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CEA2D56;
+        Thu, 29 Jun 2023 19:12:13 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 19FE824E245;
+        Fri, 30 Jun 2023 10:12:07 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
+ 2023 10:12:07 +0800
+Received: from [192.168.125.93] (183.27.97.206) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
+ 2023 10:12:06 +0800
+Message-ID: <16813f18-2188-ad9d-9c06-6bbc845b9d99@starfivetech.com>
+Date:   Fri, 30 Jun 2023 10:12:05 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 5/5] riscv: dts: starfive: Add JH7110 PWM-DAC support
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Walker Chen" <walker.chen@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230626110909.38718-1-hal.feng@starfivetech.com>
+ <20230626110909.38718-6-hal.feng@starfivetech.com>
+ <2a0154ec-7949-f1b1-760f-3ba64d2cff3f@linaro.org>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <2a0154ec-7949-f1b1-760f-3ba64d2cff3f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.206]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,42 +66,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Jun 23, 2023 at 4:42 PM EEST, Limonciello, Mario wrote:
->
-> On 6/23/2023 1:08 AM, Greg KH wrote:
-> > On Thu, Jun 22, 2023 at 10:04:27PM -0500, Mario Limonciello wrote:
-> >> The ibmvtpm doesn't have `chip->ops` set, and so trying to check
-> >> if it's a defective AMD fTPM doesn't work.
-> >>
-> >> Add an extra check to tpm_amd_is_rng_defective() to ensure the
-> >> TPM being checked has `chip->ops`.
-> >>
-> >> Cc: Linux regressions mailing list <regressions@lists.linux.dev>
-> >> Reported-by: Aneesh Kumar K. V <aneesh.kumar@linux.ibm.com>
-> >> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-> >> Link: https://lore.kernel.org/lkml/99B81401-DB46-49B9-B321-CF832B50CAC=
-3@linux.ibm.com/
-> >> Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-> >> Fixes: bd8621ca1510 ("tpm: Add !tpm_amd_is_rng_defective() to the hwrn=
-g_unregister() call site")
-> >> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs"=
-)
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >>   drivers/char/tpm/tpm-chip.c | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> > No cc: stable on that list above?
->
-> Good point, my mistake on that miss.
->
-> If Jarkko agrees with the direction of this patch, I think
-> it can be added while committing.
+On Mon, 26 Jun 2023 17:37:35 +0200, Krzysztof Kozlowski wrote:
+> On 26/06/2023 13:09, Hal Feng wrote:
+>> Add PWM-DAC support for StarFive JH7110 SoC.
+>> 
+>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         | 50 +++++++++++++++++++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 13 +++++
+>>  2 files changed, 63 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index 19b5954ee72d..5ca66a65e722 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -36,6 +36,34 @@ gpio-restart {
+>>  		gpios = <&sysgpio 35 GPIO_ACTIVE_HIGH>;
+>>  		priority = <224>;
+>>  	};
+>> +
+>> +	pwmdac_dit: pwmdac-dit {
+>> +		compatible = "starfive,jh7110-pwmdac-dit";
+>> +		#sound-dai-cells = <0>;
+>> +	};
+>> +
+>> +	sound {
+>> +		compatible = "simple-audio-card";
+>> +		simple-audio-card,name = "StarFive-PWMDAC-Sound-Card";
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +
+>> +		simple-audio-card,dai-link@0 {
+>> +			reg = <0>;
+>> +			format = "left_j";
+>> +			bitclock-master = <&sndcpu0>;
+>> +			frame-master = <&sndcpu0>;
+>> +			status = "okay";
+> 
+> Drop
 
-Hmm... sorry Midsummer weekend, which is kind of big thing in Finland,
-and also helping toe expose neo-nazi affiliated minister (sounds crazy
-but it is literally true) have made me lag a bit with LKML.
+OK.
 
-I'm presuming that we are going in the direction of Jerry's patch,
-right?
+> 
+>> +
+>> +			sndcpu0: cpu {
+>> +				sound-dai = <&pwmdac>;
+>> +			};
+>> +
+>> +			codec {
+>> +				sound-dai = <&pwmdac_dit>;
+> 
+> You said it is a transmitter, not a codec...
 
-BR, Jarkko
+It is a dummy codec, also known as a dummy transmitter.
+
+Best regards,
+Hal
