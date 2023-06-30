@@ -2,132 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4FA74427C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7873B74427F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjF3Sn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S233187AbjF3Sps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbjF3SnZ (ORCPT
+        with ESMTP id S232840AbjF3Spq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:43:25 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2922F3C00
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:43:24 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51d7f350758so2592361a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688150602; x=1690742602;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jPEvXo6WjRs1USguPeZQCvSg+BfPycq4avRrgWVGqyM=;
-        b=Tfd4srCUb5pQPtWZGrzEItpOby83+pCgDydvDuEEyTa7LSdNmjIMuWUxGxMnwUiKw3
-         hhL+mYcTJpREALUKA7NuMx6BzVcp3tgEfPFtW5rIpw93SYNEbPlwJfzvHMzcEMDCb0a1
-         dO6nTRA+ES7Ob6qnlZ64kGLfbiUn+5ya26kN0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688150602; x=1690742602;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jPEvXo6WjRs1USguPeZQCvSg+BfPycq4avRrgWVGqyM=;
-        b=VhHwnug0SWkG1mJBnDFNCNgiH+5S1XbgmJ1/qlcslZfTrrB0HOXjgZCQ235eUYGRpY
-         CK+dSNr6HJ0Rsqmm1/+XRNMZ/i470xN5FSgnJpIt5tDEIq2nqODAm42MT291LKlQ9cSk
-         n1EC1yCmLlssWG0jBYhvnMYv0MzjUcpQTYao5+FaOk4DWQmatsN12HsSCrHX2Cr0gwlC
-         QQVaGh2ArWWzMQ5TXXeMgCVm2XuoyrSdPxMXLI7+sWIsCXCipC9i++NJDLerFZpM/Cjf
-         C+fC8SdhNij5KmAb/KDp8fJ64GO1dsojlGPdWmK0HFRPW6ThX1PgyoPCMupDqj28TFnr
-         Tp9Q==
-X-Gm-Message-State: ABy/qLaPMgB9l0ZCuQzkV780b9Y+D9YiqVCQff0RZDiJvGw8MbLwJYw1
-        2jVAo12cf1UviFsUWL31PYuzxSf1Lgb12w1ahUpPFhe/
-X-Google-Smtp-Source: APBJJlGw1qbsrrksaRSL7ad9akiV8t068k37OXnm3dmYadJU7YPGF2jjtgI7WYn/D688McdRa0hqBg==
-X-Received: by 2002:aa7:c410:0:b0:51d:9110:4b11 with SMTP id j16-20020aa7c410000000b0051d91104b11mr2452534edq.12.1688150602527;
-        Fri, 30 Jun 2023 11:43:22 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id i12-20020aa7dd0c000000b0051830f22825sm6996441edv.90.2023.06.30.11.43.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 11:43:21 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51dd1e5a621so2607349a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:43:21 -0700 (PDT)
-X-Received: by 2002:a05:6402:3456:b0:51a:50f2:4e7a with SMTP id
- l22-20020a056402345600b0051a50f24e7amr2198661edc.13.1688150601530; Fri, 30
- Jun 2023 11:43:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230628215954.1230048-1-namhyung@kernel.org>
-In-Reply-To: <20230628215954.1230048-1-namhyung@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 30 Jun 2023 11:43:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whOLQsPiDJifHzfg+q-W4q=MXcbvzKLS4J4otOicbZqjA@mail.gmail.com>
-Message-ID: <CAHk-=whOLQsPiDJifHzfg+q-W4q=MXcbvzKLS4J4otOicbZqjA@mail.gmail.com>
-Subject: Re: [GIT PULL] perf tools changes for v6.5
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Fri, 30 Jun 2023 14:45:46 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90BF4217;
+        Fri, 30 Jun 2023 11:45:42 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 3197132009B8;
+        Fri, 30 Jun 2023 14:45:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 30 Jun 2023 14:45:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688150737; x=1688237137; bh=OD
+        7NEWZMjnc3AbjUhqszEH5f8FSq8A02z7HM+Zk5VTQ=; b=nZqga/m9GefFoRkgjW
+        wCScpF4TnDnGPeuUasUAy0Tsutz2ksKQc0YunXEFrcBfPE1RDulZktzaFWLnV5ig
+        WABir1b5wSPpM3Off4SL8xcJ8Qc8KLoXqvytAqKlsJvQggbeKYGTCpEFooDczmnH
+        R1BFVwrtV2ThDKmsLeOPs8NFJXW8SkfHKVNeAd4Ovh64XOSWtlcaUKdRGJmjPx9N
+        muDzkqaqkIFOdRv4FUdtFmChaiEpsQrpAq3BocX5+EMSbIRVFG7HsJUjZJtldQiA
+        4JdCzPce1O/RWqkQaFBKHbA9J/kRxGs7S0uyppxsgXuvj2BvbnrBlfWMe+Ni22Ni
+        Lovg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688150737; x=1688237137; bh=OD7NEWZMjnc3A
+        bjUhqszEH5f8FSq8A02z7HM+Zk5VTQ=; b=FYCMuqxz/bkccAwK5NS/IJZ1ViBqp
+        BEaW+z7djcsHzcEIuvYEn5rCD36aqPfmJeU7NX201iQfj1Wz6BO97KGNF3Wk8vyy
+        MNKx3nKrWZUUJE+j6XXEWq4HAPn/OD/3Db18XYUGyXIf8mvPbBbgJwwp0NbeLRaF
+        ymaUIygjD3H9h0nCb0B9VZTKb3LQgu7e1uWVvNg5R26SUHSYoEpPxs4PAq279qm6
+        OKXxb6P3gCMkcxludO0XpzlgpZWEKtdNK5FdyeqW8rX4CmCYP+DfL8zA99m7vExq
+        o/WTGB8T8RudCVRyoXrNHxvaJVrQOrt2U5Jyai6Y2iQINlKshvI8BvT6g==
+X-ME-Sender: <xms:0CKfZIxwRzPTUcYaML1VsJb665JNARXTd1nAPENK_uUR1XEzwdmXoQ>
+    <xme:0CKfZMTPjnVb4EYOyIf6JF7pg5h8qF7Qr9-Cq09JZdeLC4jIZ5f96HsN1tHUlkm6Z
+    VQIWOB8NbKCsc-z4Go>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdduvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:0CKfZKXmiNSLkZ4ueENKRKQAG6kHMQ6fsydFp3bp5kKmowxaKQnDCQ>
+    <xmx:0CKfZGjegXjsThipzMoMMNtNS_BFskCX9a0AnzfQGhI-l64YJhOvvA>
+    <xmx:0CKfZKDmQHGB-_ejbm0Qp3U929NvGSeSl2qv4azreS3wpRdKVXu4Pg>
+    <xmx:0SKfZFOQadL6j0CCbRB-TlMDEffqCZJIA16KF2kiQviHEQQIduXprA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7BD88B60092; Fri, 30 Jun 2023 14:45:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <d096e463-b135-49b1-884b-a3038723ccdd@app.fastmail.com>
+In-Reply-To: <20230630180126.283419-1-falcon@tinylab.org>
+References: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
+ <20230630180126.283419-1-falcon@tinylab.org>
+Date:   Fri, 30 Jun 2023 20:45:15 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        "Willy Tarreau" <w@1wt.eu>
+Subject: Re: [PATCH v3 03/14] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 15:00, Namhyung Kim <namhyung@kernel.org> wrote:
+On Fri, Jun 30, 2023, at 20:01, Zhangjin Wu wrote:
+> Hi, Arnd
 >
-> Please consider pulling perf tool changes.  I'm doing this on behalf of
-> Arnaldo as he's on vacation.  This is my first pull request and hope I
-> didn't break anything. :)
+>> On Fri, Jun 30, 2023, at 16:44, Zhangjin Wu wrote:
+>> > _GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
+>> > default configuration doesn't enable _LARGEFILE64_SOURCE.
+>> >
+>> > From include/dirent.h of musl, getdents64 is provided as getdents when
+>> > _LARGEFILE64_SOURCE is defined.
+>> >
+>> >     #if defined(_LARGEFILE64_SOURCE)
+>> >     ...
+>> >     #define getdents64 getdents
+>> >     #endif
+>> >
+>> > Let's define _LARGEFILE64_SOURCE to fix up this compile error:
+>> 
+>> I think a better solution would be to use the normal getdents() instead
+>> of glibc getdents64(), but then define _FILE_OFFSET_BITS=64 to tell
+>> glibc to use the modern version of all filesystem syscalls.
+>> 
+>
+> Just checked the getdents manpage[1] and the nolibc code, both of glibc and
+> nolibc don't provide the getdents() library routine but both of them provide
+> the getdents64(), only musl provide getdents() by default.
+>
+> And as the manpage shows, it is not easy to call getdents() with glibc, we
+> need manually call syscall() and define the 'dirent' struct ourselves:
+>
+>     glibc does not provide a wrapper for getdents(); call getdents()
+>     using syscall(2).  In that case you will need to define the
+>     linux_dirent or linux_dirent64 structure yourself.
+>
+> And for nolibc, a getdents64() with linux_dirent64 struct (with int64_t offset)
+> is provided, there is either no getdents() currently.
+>
+> This patch aims to let nolibc-test at least compile for musl and therefore we
+> can easily check the new tests for musl, glibc and nolibc together.
 
-Things look normal, although I find your pgp key situation confusing.
+Ok, I see. Your current approach should be fine then.
 
-I looked up your gpg key from the kernel.org pgp key repo, but that's
-apparently not the one you used for signing this.
+> For the 64bit offset related stuff, we'd better delay it in another patchset
+> (part of full rv32 support), which will convert the off_t to 64bit by default.
 
-So I have two keys for you, and neither of them are then signed by
-others (although that part is probably just the usual pgp mess with
-signatures being dropped due to flooded bogus signatures, which has
-made the whole pgp infrastructure be essentially close to useless).
+Right, makes sense.
 
-Anyway, I wish the pgp key situation would be better, but it's not an
-actual problem.
 
-HOWEVER.
-
-What _is_ a problem is that the end result doesn't build cleanly.
-
-The
-
-        if (list_empty(&pmus))
-                perf_pmu__scan(NULL);
-
-        ibs_pmu = perf_pmu__find("ibs_op");
-
-in the amd-ibs-via-core no longer works, and it seems that it should just be
-
-        ibs_pmu = perf_pmus__find("ibs_op");
-
-That's fine - I can do (and did) that merge resolution - and it's part
-of my normal "merge and test build", but I'm slightly unhappy that I
-wasn't told about this part.
-
-The actual data conflicts were trivial. But this was a semantic
-conflict that was invisible to git, but showed up in build testing.
-
-And I *think* you should have known about it, because the conflict you
-do talk about shows that
-
- +perf-y += amd-ibs-via-core-pmu.o
-
-as part of the actual data conflicts.
-
-Anyway, I've resolved this, and it wasn't a *problem*, and I'm just a
-bit unhappy that it took me by surprise.
-
-              Linus
+    ARnd
