@@ -2,64 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408D974412C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73791744125
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbjF3RZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S233185AbjF3RYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbjF3RYn (ORCPT
+        with ESMTP id S233114AbjF3RY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:24:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0EE1BCA;
-        Fri, 30 Jun 2023 10:24:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95002617CF;
-        Fri, 30 Jun 2023 17:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0948CC433C0;
-        Fri, 30 Jun 2023 17:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688145845;
-        bh=D663SZs7+77H1PI/uOLEkN8C97q8SMbZjrGtIskEKBk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=hsxVN1MAOPc+T355FMxNJwiMjiS/OMSRAEcJJQdX/ydr2bhLZ58lHVjNc6hjl6hql
-         3CupqN+KvKJ3QwGlZuwQFqfe0GbivnVO3SN3ZWDhcasKk/BpRBSkus9+bLhL6J3o0v
-         LFiIqHFc7ncm5O9oBFbmFzUYfogSIqXUB/0PhlKBO0Ok18RUDVmCzcSue2wYt99mnd
-         HQgBD1uJ4l1cKoJm2AsZPEOWIXzeg8s5VpH9FM58wx+WbFZgCU2fxNx09X9SmMtvuP
-         uXFgh7Nn1gx/jfLfz7GGNI9/UwnYvo2DIl8puEB4ud6hWJIvcbKdX7tIC0epJKsZGG
-         6qZ3540ApfXWA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EBE5CC43158;
-        Fri, 30 Jun 2023 17:24:04 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch changes for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230630100037.1071320-1-chenhuacai@loongson.cn>
-References: <20230630100037.1071320-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230630100037.1071320-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.5
-X-PR-Tracked-Commit-Id: 5ee35c769663cb1c5f26e12cad84904dc3002de8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 112e7e21519422b6f2bb0fa8061f5685e9757170
-Message-Id: <168814584495.9404.13332741026535742055.pr-tracker-bot@kernel.org>
-Date:   Fri, 30 Jun 2023 17:24:04 +0000
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 30 Jun 2023 13:24:28 -0400
+Received: from out-39.mta1.migadu.com (out-39.mta1.migadu.com [IPv6:2001:41d0:203:375::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B86199B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:24:24 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 17:24:19 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688145862;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JEgiQFbtqMAhuryJj77jXTyIRFEwAksjrjxqtSP6Jpk=;
+        b=PnIumV092qsEvd5Z3GRY627vjHr/QAzlEmygzkJfzxtT+vT/kCNuema38wnD0QczkJBNs9
+        GS9RlV8VLRCR/dnEJCkvfJyLgvrUIlVIFA9VMoBbvQbsUA5Yf834XiQR8u8MknJRZtpeR7
+        AVqDiG/EagK+xnoAZVRzYivTGYgMAaE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/tsc: Update guest tsc_offset again before vcpu
+ first runs
+Message-ID: <ZJ8Pw3YMrYbwgcP2@linux.dev>
+References: <20230629164838.66847-1-likexu@tencent.com>
+ <ZJ29KhiVLyAq/7Sh@google.com>
+ <ZJ8PIbHfhc0oYB8/@linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJ8PIbHfhc0oYB8/@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,15 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 30 Jun 2023 18:00:37 +0800:
+On Fri, Jun 30, 2023 at 05:21:41PM +0000, Oliver Upton wrote:
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index c30364152fe6..43d40f058a41 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -2721,14 +2721,14 @@ static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 data)
+> >  			 * kvm_clock stable after CPU hotplug
+> >  			 */
+> >  			synchronizing = true;
+> > -		} else {
+> > +		} else if (kvm_vcpu_has_run(vcpu)) {
+> >  			u64 tsc_exp = kvm->arch.last_tsc_write +
+> >  						nsec_to_cycles(vcpu, elapsed);
+> >  			u64 tsc_hz = vcpu->arch.virtual_tsc_khz * 1000LL;
+> >  			/*
+> >  			 * Special case: TSC write with a small delta (1 second)
+> > -			 * of virtual cycle time against real time is
+> > -			 * interpreted as an attempt to synchronize the CPU.
+> > +			 * of virtual cycle time against real time on a running
+> > +			 * vCPU is interpreted as an attempt to synchronize.
+> >  			 */
+> >  			synchronizing = data < tsc_exp + tsc_hz &&
+> >  					data + tsc_hz > tsc_exp;
+> 
+> This would break existing save/restore patterns for the TSC. QEMU relies
+> on KVM synchronizing the TSCs when restoring a VM, since it cannot
+> snapshot the TSC values of all the vCPUs in a single instant. It instead
+> tries to save the TSCs at roughly the same time [*], which KVM detects
+> on the target and gets everything back in sync. Can't wait to see when
+> this heuristic actually breaks :)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.5
+Of course, forgot to actually include the link.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/112e7e21519422b6f2bb0fa8061f5685e9757170
-
-Thank you!
+[*] https://gitlab.com/qemu-project/qemu/-/blob/408015a97dbe48a9dde8c0d2526c9312691952e7/target/i386/kvm/kvm.c#L249
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Oliver
