@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999CC744117
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AD4744119
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjF3RVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S233000AbjF3RWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbjF3RVr (ORCPT
+        with ESMTP id S232814AbjF3RWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:21:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56035107;
-        Fri, 30 Jun 2023 10:21:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8EBA617C4;
-        Fri, 30 Jun 2023 17:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FF9C433C0;
-        Fri, 30 Jun 2023 17:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688145705;
-        bh=nP0fbFeP3uVZ92LQd04sMVwYYQdCsLeYKAqxBMnc/KM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VMz2YVafjxOjYkzjJgtlZ0ImcoEGfC2h8Y1pp2Ut7Yo4A8zniR7S0jieSSjXskEN6
-         aO3xj0+b4me3m52CNWE+I9kWusLZDPyoP96YpJK7fafm5DzEV7/f7zOtBDXqWgLm/F
-         8MBZSuHNDkGDohZUe7A2j5cKHQaaE6QZpCbQdD7scg+dHmIyIoaAFVB1bD5sCSodV1
-         iyl/wFGBKCymdAVaQJ/dAgvSxld6gIwUZtHFmfvc9GQg+USupBIDUuquYOp7XIpus4
-         Xpbn3wGOd/UBqCM8q+oRmexH+TdBQnKLbl8nrNLwviMIBeXoc7lb717DCnDdZr1GM3
-         dILnlyFIaYJvQ==
-Date:   Fri, 30 Jun 2023 10:21:43 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Tariq Toukan <ttoukan.linux@gmail.com>
-Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Gal Pressman <gal@nvidia.com>, ranro@nvidia.com,
-        samiram@nvidia.com, drort@nvidia.com,
-        Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH net-next v10 08/16] tls: Inline do_tcp_sendpages()
-Message-ID: <20230630102143.7deffc30@kernel.org>
-In-Reply-To: <7337a904-231d-201d-397a-7bbe7cae929f@gmail.com>
-References: <ecbb5d7e-7238-28e2-1a17-686325e2bb50@gmail.com>
-        <4c49176f-147a-4283-f1b1-32aac7b4b996@gmail.com>
-        <20230522121125.2595254-1-dhowells@redhat.com>
-        <20230522121125.2595254-9-dhowells@redhat.com>
-        <2267272.1686150217@warthog.procyon.org.uk>
-        <5a9d4ffb-a569-3f60-6ac8-070ab5e5f5ad@gmail.com>
-        <776549.1687167344@warthog.procyon.org.uk>
-        <7337a904-231d-201d-397a-7bbe7cae929f@gmail.com>
+        Fri, 30 Jun 2023 13:22:09 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010C9421E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:21:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688145719; x=1719681719;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZBN4991fc3Az5Y2Qu0dseNwl7x1yFt5qfZkPD0JoAOk=;
+  b=le1Cu38aRUbn0TDOfW9gHqR6B+URyUWT4QThWivAX46Smz4B0ThLhZT3
+   3396gT8ZyEdQUVSbdLELM7m3xpAPGKRJ72fxRM4FWhqKL6SpMZquAI1hC
+   ePILzmUCGJHp/WWX+t78Futou5bsS23ctub8umNJyqAZPcWq2SwzaaPnk
+   lHHmJ5UgRQbP8kwN3owurlYe0OIh1QX8xxrRhG8uiZ8XYw5MAx+3J3YKq
+   M8jcqFxyAExORUwLZJATougQu0p+n2p/m0pU1+yNRZYvd/iaVh3fak7Qf
+   sV/sxaMcrpr5qWpTPbraZd5fXP901bBZ5iqgaBaSek0Yii2M/up+EPamr
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="342032355"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="342032355"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:21:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="711879223"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="711879223"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 30 Jun 2023 10:21:55 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id CB225358; Fri, 30 Jun 2023 20:21:57 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v2 0/4] ASoC: rt5677: Refactor GPIO and use device_get_match_data()
+Date:   Fri, 30 Jun 2023 20:21:51 +0300
+Message-Id: <20230630172155.83754-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,11 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 19:49:22 +0300 Tariq Toukan wrote:
-> Unfortunately, it still happens:
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 2 PID: 93427 at net/core/skbuff.c:7013 
+The code can be simplified with refactored GPIO parts and with use of
+device_get_match_data(). Besides that couple of additional changes,
+one for maintenance and one for making IRQ domain agnostic (not being
+pinned to OF).
 
-I can't repro it on net-next with basic TLS 1.2 sendmsg/stream
-test + device offload, let us know if you still see it.
+Changelog v2:
+- refactored GPIO code in (a new) patch 1
+- fixed compilation error in patch 2 (LKP)
+
+Andy Shevchenko (4):
+  ASoC: rt5677: Refactor GPIO support code
+  ASoC: rt5677: Use agnostic irq_domain_create_linear()
+  ASoC: rt5677: Use device_get_match_data()
+  ASoC: rt5677: Sort headers alphabetically
+
+ sound/soc/codecs/rt5677.c | 117 +++++++++++++-------------------------
+ sound/soc/codecs/rt5677.h |  92 +++++-------------------------
+ 2 files changed, 53 insertions(+), 156 deletions(-)
+
+-- 
+2.40.0.1.gaa8946217a0b
+
