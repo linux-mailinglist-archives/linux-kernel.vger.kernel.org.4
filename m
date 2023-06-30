@@ -2,57 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41A8744317
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF9274431A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbjF3UOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 16:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S232248AbjF3UOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 16:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjF3UN6 (ORCPT
+        with ESMTP id S229882AbjF3UOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 16:13:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6DA268A
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 13:13:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 024C561773
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 20:13:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCB05C433C8;
-        Fri, 30 Jun 2023 20:13:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688156036;
-        bh=9GNb15ETaSBgvT30j9MS7caLifXtMu0PGBzMP0Nntfs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uqgkhHWQ+gP9YU/xZQo4rkL5KPghbqETljWSD5N7+MtUYMmgQyQW/d6nAJguRXcl0
-         L+JRsQyrS106ED+rTW9qcBYQ+qTobp4bj56bRcFxrFyTYZJuFmGk2JVcdl8hft6Bfn
-         z++jTrLxfKxtNS3k20nu1tf4jLuRd++R0rNsfeni8VJ4hOLqjhxedpEDVriBRha43W
-         eGann6ZvZHN2aY4LTwfL96cmUvJi+7FVdCE4GjgfQDi5L1VqqEpjYGUAlr+Ggg6N1R
-         V+Dswtxz0cQk0wEe057SU4yCG/MM3iNBpkLHZyLsJJ1Be+n/+ZPOGeVT00GPJaY6Gp
-         6CSjJoiPiFWqA==
-Date:   Fri, 30 Jun 2023 13:13:54 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] riscv: KCFI support
-Message-ID: <20230630201354.GA3346845@dev-arch.thelio-3990X>
-References: <20230629234244.1752366-8-samitolvanen@google.com>
+        Fri, 30 Jun 2023 16:14:45 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027F72D4A;
+        Fri, 30 Jun 2023 13:14:44 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UJBJHV026958;
+        Fri, 30 Jun 2023 20:14:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=KSS9/9mG9hkHIfvpGqmGFrM7BdpMNmFNm5iOeC+uS3c=;
+ b=di0sOtjmtdyA3hP2ZFx5yT7nxGGv90OJTwmRbFdgQzv5gs4cgbkUklN5wRwP0Af5OlZw
+ 47EKUvmzWYT88Nj91gV2NoDCZEVCHtk940FIhjg9iMFV8DHs11PHBODJczJ+BQnRG69D
+ QMsVJOG+r1XTFePx7t/KPfBN0yCA4bQRZh0wJ/W5AqwrhNJEb2EPDA9AmoKwDKB8EPGg
+ g6hAb+9SonVoe5y32JgJSZhEpFQmEugve/6sU16rFUhNlH2x32+8C4UqskifQDieZQVU
+ EXXAxmNlMkB4aVeOr59U2elRyGEZch0zbjsfNucCzgN81XnpsvWhbpgmEb8ayrLfGAou MQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhwuts5u2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 20:14:40 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35UKEdFF032325
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 20:14:39 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.7; Fri, 30 Jun 2023 13:14:39 -0700
+Date:   Fri, 30 Jun 2023 13:14:38 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 3/6] nvmem: sec-qfprom: Add Qualcomm secure QFPROM
+ support.
+Message-ID: <20230630201438.GB1059662@hu-bjorande-lv.qualcomm.com>
+References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
+ <20230623141806.13388-4-quic_kbajaj@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230629234244.1752366-8-samitolvanen@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230623141806.13388-4-quic_kbajaj@quicinc.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _2BiXNPUPLR6NpwV1cgM4zHifrpcnPEp
+X-Proofpoint-GUID: _2BiXNPUPLR6NpwV1cgM4zHifrpcnPEp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-30_12,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ suspectscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306300176
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,126 +84,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sami,
+On Fri, Jun 23, 2023 at 07:48:03PM +0530, Komal Bajaj wrote:
+> For some of the Qualcomm SoC's, it is possible that
+> some of the fuse regions or entire qfprom region is
+> protected from non-secure access. In such situations,
+> linux will have to use secure calls to read the region.
 
-On Thu, Jun 29, 2023 at 11:42:45PM +0000, Sami Tolvanen wrote:
-> This series adds KCFI support for RISC-V. KCFI is a fine-grained
-> forward-edge control-flow integrity scheme supported in Clang >=16,
-> which ensures indirect calls in instrumented code can only branch to
-> functions whose type matches the function pointer type, thus making
-> code reuse attacks more difficult.
+Linux
+
+> With that motivation, add secure qfprom driver. Ensuring
+> the address to read is word aligned since our secure I/O
+> only supports word size I/O.
+
+What do you mean with this last sentence? I don't see anything in your
+patch demanding this. Perhaps just drop this sentence?
+
 > 
-> Patch 1 implements a pt_regs based syscall wrapper to address
-> function pointer type mismatches in syscall handling. Patches 2 and 3
-> annotate indirectly called assembly functions with CFI types. Patch 4
-> implements error handling for indirect call checks. Patch 5 disables
-> CFI for arch/riscv/purgatory. Patch 6 finally allows CONFIG_CFI_CLANG
-> to be enabled for RISC-V.
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> ---
+>  drivers/nvmem/Kconfig      |  12 ++++
+>  drivers/nvmem/Makefile     |   2 +
+>  drivers/nvmem/sec-qfprom.c | 116 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 130 insertions(+)
+>  create mode 100644 drivers/nvmem/sec-qfprom.c
 > 
-> Note that Clang 16 has a generic architecture-agnostic KCFI
-> implementation, which does work with the kernel, but doesn't produce
-> a stable code sequence for indirect call checks, which means
-> potential failures just trap and won't result in informative error
-> messages. Clang 17 includes a RISC-V specific back-end implementation
-> for KCFI, which emits a predictable code sequence for the checks and a
-> .kcfi_traps section with locations of the traps, which patch 5 uses to
-> produce more useful errors.
-> 
-> The type mismatch fixes and annotations in the first three patches
-> also become necessary in future if the kernel decides to support
-> fine-grained CFI implemented using the hardware landing pad
-> feature proposed in the in-progress Zicfisslp extension. Once the
-> specification is ratified and hardware support emerges, implementing
-> runtime patching support that replaces KCFI instrumentation with
-> Zicfisslp landing pads might also be feasible (similarly to KCFI to
-> FineIBT patching on x86_64), allowing distributions to ship a unified
-> kernel binary for all devices.
+> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+> index b291b27048c7..2b0dd73d899e 100644
+> --- a/drivers/nvmem/Kconfig
+> +++ b/drivers/nvmem/Kconfig
+> @@ -216,6 +216,18 @@ config NVMEM_QCOM_QFPROM
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called nvmem_qfprom.
+>  
+> +config NVMEM_QCOM_SEC_QFPROM
+> +        tristate "QCOM SECURE QFPROM Support"
+> +        depends on ARCH_QCOM || COMPILE_TEST
+> +        depends on HAS_IOMEM
+> +        select QCOM_SCM
+> +        help
+> +          Say y here to enable secure QFPROM support. The secure QFPROM provides access
+> +          functions for QFPROM data to rest of the drivers via nvmem interface.
+> +
+> +          This driver can also be built as a module. If so, the module will be called
+> +          nvmem_sec_qfprom.
+> +
+>  config NVMEM_RAVE_SP_EEPROM
+>  	tristate "Rave SP EEPROM Support"
+>  	depends on RAVE_SP_CORE
+> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+> index f82431ec8aef..4b4bf5880488 100644
+> --- a/drivers/nvmem/Makefile
+> +++ b/drivers/nvmem/Makefile
+> @@ -44,6 +44,8 @@ obj-$(CONFIG_NVMEM_NINTENDO_OTP)	+= nvmem-nintendo-otp.o
+>  nvmem-nintendo-otp-y			:= nintendo-otp.o
+>  obj-$(CONFIG_NVMEM_QCOM_QFPROM)		+= nvmem_qfprom.o
+>  nvmem_qfprom-y				:= qfprom.o
+> +obj-$(CONFIG_NVMEM_QCOM_SEC_QFPROM)     += nvmem_sec_qfprom.o
+> +nvmem_sec_qfprom-y                          := sec-qfprom.o
+>  obj-$(CONFIG_NVMEM_RAVE_SP_EEPROM)	+= nvmem-rave-sp-eeprom.o
+>  nvmem-rave-sp-eeprom-y			:= rave-sp-eeprom.o
+>  obj-$(CONFIG_NVMEM_RMEM) 		+= nvmem-rmem.o
+> diff --git a/drivers/nvmem/sec-qfprom.c b/drivers/nvmem/sec-qfprom.c
+> new file mode 100644
+> index 000000000000..47b2c71593dd
+> --- /dev/null
+> +++ b/drivers/nvmem/sec-qfprom.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/clk.h>
 
-I boot tested ARCH=riscv defconfig + CONFIG_CFI_CLANG=y with both clang
-16.0.6 and a recent LLVM 17.0.0 from tip of tree and saw no issues while
-booting. I can confirm that both kernels panic when running the
-CFI_FORWARD_PROTO LKDTM test.
+Please review your include list, this and a few others doesn't seem to
+be used.
 
-LLVM 17.0.0:
+> +#include <linux/device.h>
+> +#include <linux/firmware/qcom/qcom_scm.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/nvmem-provider.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+> +#include <linux/regulator/consumer.h>
+> +
+> +
+> +/**
+> + * struct sec_sec_qfprom_priv - structure holding secure qfprom attributes
+> + *
+> + * @qfpseccorrected: iomapped memory space for secure qfprom corrected address space.
+> + * @dev: qfprom device structure.
+> + */
+> +struct sec_qfprom_priv {
 
-[  100.722815] lkdtm: Performing direct entry CFI_FORWARD_PROTO
-[  100.723061] lkdtm: Calling matched prototype ...
-[  100.723217] lkdtm: Calling mismatched prototype ...
-[  100.723861] CFI failure at lkdtm_indirect_call+0x22/0x32 (target: lkdtm_increment_int+0x0/0x18; expected type: 0x3ad55aca)
-[  100.724191] Kernel BUG [#1]
-[  100.724226] Modules linked in:
-[  100.724343] CPU: 0 PID: 42 Comm: sh Not tainted 6.4.0-08887-ga68cded684a2 #1
-[  100.724450] Hardware name: riscv-virtio,qemu (DT)
-[  100.724552] epc : lkdtm_indirect_call+0x22/0x32
-[  100.724586]  ra : lkdtm_CFI_FORWARD_PROTO+0x40/0x74
-[  100.724603] epc : ffffffff805ee84c ra : ffffffff805ee6de sp : ff200000001a3cb0
-[  100.724617]  gp : ffffffff8130ab70 tp : ff60000001b9d240 t0 : ff200000001a3b38
-[  100.724631]  t1 : 000000003ad55aca t2 : 000000007e0c52a5 s0 : ff200000001a3cc0
-[  100.724644]  s1 : 0000000000000001 a0 : ffffffff8130edc8 a1 : ffffffff805ee876
-[  100.724658]  a2 : b5352d9a12ee0700 a3 : ffffffff8122e5c8 a4 : 0000000000000fff
-[  100.724671]  a5 : 0000000000000004 a6 : 00000000000000b4 a7 : 0000000000000000
-[  100.724683]  s2 : ff200000001a3e38 s3 : ffffffffffffffea s4 : 0000000000000012
-[  100.724696]  s5 : ff6000000804c000 s6 : 0000000000000006 s7 : ffffffff80e8ca88
-[  100.724709]  s8 : 0000000000000008 s9 : 0000000000000002 s10: ffffffff812bfd10
-[  100.724722]  s11: ffffffff812bfd10 t3 : 0000000000000003 t4 : 0000000000000000
-[  100.724735]  t5 : ff60000001858000 t6 : ff60000001858f00
-[  100.724746] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-[  100.724825] [<ffffffff805ee84c>] lkdtm_indirect_call+0x22/0x32
-[  100.724886] [<ffffffff805ee6de>] lkdtm_CFI_FORWARD_PROTO+0x40/0x74
-[  100.724898] [<ffffffff805eabbe>] lkdtm_do_action+0x22/0x32
-[  100.724908] [<ffffffff805eab78>] direct_entry+0x124/0x136
-[  100.724918] [<ffffffff8034af5a>] full_proxy_write+0x58/0xb2
-[  100.724930] [<ffffffff801e139e>] vfs_write+0x14c/0x350
-[  100.724941] [<ffffffff801e16fc>] ksys_write+0x64/0xd4
-[  100.724951] [<ffffffff801e1782>] __riscv_sys_write+0x16/0x22
-[  100.724961] [<ffffffff80005cec>] syscall_handler+0x4c/0x58
-[  100.724973] [<ffffffff809355ac>] do_trap_ecall_u+0x3e/0x88
-[  100.724996] [<ffffffff80003678>] ret_from_exception+0x0/0x64
-[  100.725150] Code: 0513 5945 a303 ffc5 53b7 7e0c 839b 2a53 0363 0073 (9002) 9582
-[  100.731204] ---[ end trace 0000000000000000 ]---
-[  100.731327] Kernel panic - not syncing: Fatal exception in interrupt
-[  100.731910] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+There no risk of confusion here, so please drop the "_priv" suffix.
 
-LLVM 16.0.6:
+> +	phys_addr_t qfpseccorrected;
 
-[   10.227530] lkdtm: Performing direct entry CFI_FORWARD_PROTO
-[   10.227755] lkdtm: Calling matched prototype ...
-[   10.227900] lkdtm: Calling mismatched prototype ...
-[   10.228721] Oops - illegal instruction [#1]
-[   10.228856] Modules linked in:
-[   10.228978] CPU: 0 PID: 1 Comm: sh Not tainted 6.4.0-08887-ga68cded684a2 #1
-[   10.229077] Hardware name: riscv-virtio,qemu (DT)
-[   10.229160] epc : lkdtm_indirect_call+0x2c/0x32
-[   10.229242]  ra : lkdtm_CFI_FORWARD_PROTO+0x40/0x74
-[   10.229259] epc : ffffffff805ef190 ra : ffffffff805ef018 sp : ff2000000000bcb0
-[   10.229272]  gp : ffffffff8130a958 tp : ff600000018c8000 t0 : ff2000000000bb38
-[   10.229285]  t1 : ff2000000000baa8 t2 : 0000000000000018 s0 : ff2000000000bcc0
-[   10.229298]  s1 : 0000000000000001 a0 : 000000003ad55aca a1 : ffffffff805ef1b0
-[   10.229310]  a2 : 000000007e0c52a5 a3 : ffffffff8122e548 a4 : 0000000000000fff
-[   10.229322]  a5 : 0000000000000004 a6 : 00000000000000b4 a7 : 0000000000000000
-[   10.229335]  s2 : ff2000000000be38 s3 : ffffffffffffffea s4 : 0000000000000012
-[   10.229347]  s5 : ff6000000802f000 s6 : 0000000000000006 s7 : ffffffff80e8ca88
-[   10.229360]  s8 : 0000000000000008 s9 : 0000000000000002 s10: ffffffff812bfc90
-[   10.229372]  s11: ffffffff812bfc90 t3 : 0000000000000003 t4 : 0000000000000000
-[   10.229385]  t5 : ff60000001858000 t6 : ff60000001858f00
-[   10.229396] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000002
-[   10.229478] [<ffffffff805ef190>] lkdtm_indirect_call+0x2c/0x32
-[   10.229538] [<ffffffff805ef018>] lkdtm_CFI_FORWARD_PROTO+0x40/0x74
-[   10.229550] [<ffffffff805eb4d4>] lkdtm_do_action+0x20/0x34
-[   10.229560] [<ffffffff805eb490>] direct_entry+0x124/0x136
-[   10.229570] [<ffffffff80349cf0>] full_proxy_write+0x56/0xb2
-[   10.229582] [<ffffffff801e0620>] vfs_write+0x14a/0x34e
-[   10.229593] [<ffffffff801e097e>] ksys_write+0x64/0xd4
-[   10.229602] [<ffffffff801e0a04>] __riscv_sys_write+0x16/0x22
-[   10.229611] [<ffffffff800056fe>] syscall_handler+0x4a/0x58
-[   10.229622] [<ffffffff80936428>] do_trap_ecall_u+0x3e/0x88
-[   10.229649] [<ffffffff80003678>] ret_from_exception+0x0/0x64
-[   10.229860] Code: 00c5 1517 00d2 0513 c4a5 9582 60a2 6402 0141 8082 (0000) 52a5
-[   10.235769] ---[ end trace 0000000000000000 ]---
-[   10.235892] Kernel panic - not syncing: Fatal exception in interrupt
-[   10.236488] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+Same thing here, so "base" or "addr" would suffice.
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+> +	struct device *dev;
+> +};
+> +
+> +static int sec_qfprom_reg_read(void *context, unsigned int reg, void *_val, size_t bytes)
+> +{
+> +	struct sec_qfprom_priv *priv = context;
+> +	u8 *val = _val;
+> +	u8 *tmp;
+> +	u32 read_val;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < bytes; i++, reg++) {
+> +		if (i == 0 || reg % 4 == 0) {
+> +			if (qcom_scm_io_readl(priv->qfpseccorrected + (reg & ~3), &read_val)) {
+> +				dev_err(priv->dev, "Couldn't access fuse register\n");
+> +				return -EINVAL;
+> +			}
+> +			tmp = (u8 *)&read_val;
+> +		}
+> +
+> +		val[i] = tmp[reg & 3];
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void sec_qfprom_runtime_disable(void *data)
+> +{
+> +	pm_runtime_disable(data);
+> +}
+> +
+> +static int sec_qfprom_probe(struct platform_device *pdev)
+> +{
+> +	struct nvmem_config econfig = {
+> +		.name = "sec-qfprom",
+> +		.stride = 1,
+> +		.word_size = 1,
+> +		.id = NVMEM_DEVID_AUTO,
+> +		.reg_read = sec_qfprom_reg_read,
+> +	};
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	struct nvmem_device *nvmem;
+> +	struct sec_qfprom_priv *priv;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	priv->qfpseccorrected = res->start;
+> +	if (!priv->qfpseccorrected)
+> +		return -ENOMEM;
+> +
+> +	econfig.size = resource_size(res);
+> +	econfig.dev = dev;
+> +	econfig.priv = priv;
+> +
+> +	priv->dev = dev;
+> +
+> +	pm_runtime_enable(dev);
+> +	ret = devm_add_action_or_reset(dev, sec_qfprom_runtime_disable, dev);
+> +	if (ret)
+> +		return ret;
 
-Cheers,
-Nathan
+Please use devm_pm_runtime_enable().
+
+> +
+> +	nvmem = devm_nvmem_register(dev, &econfig);
+> +
+> +	return PTR_ERR_OR_ZERO(nvmem);
+> +}
+> +
+> +static const struct of_device_id sec_qfprom_of_match[] = {
+> +	{ .compatible = "qcom,sec-qfprom",},
+> +	{/* sentinel */},
+> +};
+> +MODULE_DEVICE_TABLE(of, sec_qfprom_of_match);
+> +
+> +static struct platform_driver qfprom_driver = {
+> +	.probe = sec_qfprom_probe,
+> +	.driver = {
+> +		.name = "qcom,sec_qfprom",
+
+No comma here please, qcom_sec_qfprom.
+
+> +		.of_match_table = sec_qfprom_of_match,
+> +	},
+> +};
+> +module_platform_driver(qfprom_driver);
+> +MODULE_DESCRIPTION("Qualcomm Secure QFPROM driver");
+> +MODULE_LICENSE("GPL v2");
+
+Please change this to "GPL".
+
+Regards,
+Bjorn
