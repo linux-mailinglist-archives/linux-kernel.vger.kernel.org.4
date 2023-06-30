@@ -2,56 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65378743FE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAD7743FF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbjF3Qif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S231946AbjF3QkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjF3Qic (ORCPT
+        with ESMTP id S229546AbjF3QkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:38:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5583A9B;
-        Fri, 30 Jun 2023 09:38:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BA161782;
-        Fri, 30 Jun 2023 16:38:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D21C433C0;
-        Fri, 30 Jun 2023 16:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688143111;
-        bh=9F0WlbO8R869SouyiIylcXb48KO4BRuWNYId0kzGmGY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dBmQkJOU0Ixr+c/H1pqFVXF0bQ5lRSszRbfP2otjxeSJA/5Eti9Kd17vnT6S/9c+c
-         p72+TZ1I6Ip+0DvP1Dg1PzahovMWsp5OmTLRLmIw9NAFzcM0alJSHWJAhZiHxw8HkL
-         /EGLYAvIq2R3R+fQQ9o7amffqPsQz9xPwYcxVCcHtmwzQr9/O/Qzm5ANNyXmeYGWg+
-         zbqETEWwiDpVfBOfJMHhurrcXebHNgULCUtgep7AWdbv+36sjcC6NIKYmcqCIpP4Fc
-         6qKlAGzfUMBT7u/vrTaa+H/YksxRZr/nIV/sM161sQQq88wXxiRZp1PPl3EBlr/VMZ
-         hMFxRSlsOOjJQ==
-Date:   Fri, 30 Jun 2023 11:38:28 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lizhi Hou <lizhi.hou@xilinx.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        robh@kernel.org, yilun.xu@intel.com, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, trix@redhat.com, mdf@kernel.org,
-        dwmw2@infradead.org, linux-kernel@vger.kernel.org,
-        Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V1 RESEND 3/4] fpga: xrt: management physical function
- driver
-Message-ID: <20230630163828.GA486259@bhelgaas>
+        Fri, 30 Jun 2023 12:40:06 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA2E3A9B;
+        Fri, 30 Jun 2023 09:40:05 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3426e9a9c3eso5129945ab.0;
+        Fri, 30 Jun 2023 09:40:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688143205; x=1690735205;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EeB/bfHSBcU9maXUNIluojjzFlamBE8CEArcolnrob8=;
+        b=cuL6ATqx3ESLDwHctSCt9MvRDhzhjjjWHXHpJcbjGskDu2aSjuSSUWfi/DJOYMz1Hw
+         2YW5BmgBlQM05tTDoEo9K2ZlX0LrsdkIB0pW+8YWOmHp3MN07HYLCPtB0SMnol4sBjKP
+         c4DuTCQKSQLQzBnmNxQ05Xi1CoYpun2qrXwN81QBVl43S5s/FNeANuxujqJMJrNlZ9Ny
+         q8vwuIhmiskV4/LkDC9edomdX7ouitOWx4QKzvFVv8VgnAgK0HP1cYa9q6Q+IKFG6RXG
+         1QESvNitN9k/B0aHM99CWSQx8Bad0ap6uzDMCgK75eqBaiDN2wDGsI211YHlT0E+QgeR
+         Co9g==
+X-Gm-Message-State: AC+VfDxpUuXhq2V2cdjs7maiaahwraiV8q5mvcQYxFDNlKKk9d9R+noO
+        9HQLyYuCB9IpptXrCBzI8A==
+X-Google-Smtp-Source: ACHHUZ4DLZ3IurzatjPxbZeoavj6m0W8wqNX8o02xrmVCC4dlOC415Oo8kXvv2bRAOJgcoQ2rt3L/g==
+X-Received: by 2002:a05:6e02:f91:b0:345:ad29:1f84 with SMTP id v17-20020a056e020f9100b00345ad291f84mr5878456ilo.3.1688143204998;
+        Fri, 30 Jun 2023 09:40:04 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id z13-20020a056638000d00b0042b1354452csm811726jao.83.2023.06.30.09.40.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 09:40:04 -0700 (PDT)
+Received: (nullmailer pid 1877025 invoked by uid 1000);
+        Fri, 30 Jun 2023 16:40:01 -0000
+Date:   Fri, 30 Jun 2023 10:40:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        devicetree@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        freedreno@lists.freedesktop.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, David Airlie <airlied@gmail.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: regulator: Describe Qualcomm REFGEN
+ regulator
+Message-ID: <168814320140.1876966.17866889850041692910.robh@kernel.org>
+References: <20230628-topic-refgen-v2-0-6136487c78c5@linaro.org>
+ <20230628-topic-refgen-v2-1-6136487c78c5@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220305052304.726050-4-lizhi.hou@xilinx.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230628-topic-refgen-v2-1-6136487c78c5@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,24 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 09:23:03PM -0800, Lizhi Hou wrote:
-> The PCIe device driver which attaches to management function on Alveo
-> devices. The first version of this driver demonstrates calling PCIe
-> interface to create device tree node.
-> ...
 
-> +static int __init xmgmt_init(void)
-> +{
-> +	int res;
-> +
-> +	res = pci_register_driver(&xmgmt_driver);
-> +	if (res)
-> +		return res;
-> +
-> +	return 0;
+On Thu, 29 Jun 2023 22:35:41 +0200, Konrad Dybcio wrote:
+> Modern Qualcomm SoCs have a REFGEN (reference voltage generator)
+> regulator, providing reference voltage to on-chip IP, like PHYs.
+> It's controlled through MMIO and we can toggle it or read its state back.
+> 
+> Describe it.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../regulator/qcom,sdm845-refgen-regulator.yaml    | 57 ++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
 
-This is the same as:
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-  return pci_register_driver(&xmgmt_driver);
-
-Bjorn
