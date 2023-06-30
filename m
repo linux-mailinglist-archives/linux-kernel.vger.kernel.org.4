@@ -2,226 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E8D74357F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F773743586
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbjF3HG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S232165AbjF3HLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbjF3HGq (ORCPT
+        with ESMTP id S230426AbjF3HLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:06:46 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC76810F8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:06:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LD3pKCQ/WeU+gzlmF+5kshEqWiGUqjxtcNOjGm6PjM4ofTA5tAGBHUpCv2SfxyKO8FfjPDpzPAAgbQ6euJz7fgsujLGhv5EH/uMEKNPxnei4jtVbJ3tiUYSPFQ4jVDvHquXsUjDeZzFaPkiIeAs2u1/TkRQPCusNmkpBifC7pXbQIpHb6nmBHy9pDVw/4Whqe035JJ4MHOSC0TsmdC4fQCTo7cWiO4yR/jLC9VOfvyVQ6OGRNccrpU9F90O9Lqly3QBDQRfVE4XewlG6DTkk3U7i5mZKKJVwQTMImSEHX7AUBimAoh6O/RcgTJJNmwoPzHfPXtIGm6y4G0KMTnkskA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kiSTON/LT+DJq1L7PPgM6zWQ7KjeH+GUxRBrqrMWSBc=;
- b=iykWnc0ME487npvQEAhO7xhNpTyLRK5frNVgANr1frC14OWDVMem0tDbCaEYjHBKBrnOv308WCpXWbGl0xlybT62z+Bj6qjSXxtYd/sSMAEFfoxXbB3v9mclYqgwdAM7YcU/IwWKAjZhjCG407pCSS0dKHBjkthIjvptIMqaUuBOxJxvLsDs8ADQauE8aZ3Dww9TF5GFCnusG0M60t0Ko39+qxGorpOgk1eLXXBV2LXk+pD1GvI9Up7vpxoa4yWcVt+NI+uJ5m5uQr8VJvm58w9hLAsw9Dk4vQPqqZpJ2Xj8EakkcKl4dB5bTG6Z2ZR+zm17BaG5+AmRhVuxnTQHwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kiSTON/LT+DJq1L7PPgM6zWQ7KjeH+GUxRBrqrMWSBc=;
- b=ipWqNu6joHcad/OJbM9rAVeOatnNZReJxRCo5qYMG5mjmsKtmKQA/XwAKVxtPf3fJAaAEtG2D/VLVw4dqnVsPj6Vh55aTNg4RwHnN7Oh/ZcLOfUA7Lop9cVNf98YjSWHfWR0I7to7OpV7LFkIrxm+id7Zaebm+llFdNFZ+whLec=
-Received: from DS7PR03CA0333.namprd03.prod.outlook.com (2603:10b6:8:55::15) by
- CH0PR12MB5220.namprd12.prod.outlook.com (2603:10b6:610:d3::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6544.19; Fri, 30 Jun 2023 07:06:40 +0000
-Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:55:cafe::f8) by DS7PR03CA0333.outlook.office365.com
- (2603:10b6:8:55::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
- Transport; Fri, 30 Jun 2023 07:06:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.43 via Frontend Transport; Fri, 30 Jun 2023 07:06:40 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 02:06:38 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 00:06:30 -0700
-Received: from mastan.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
- Transport; Fri, 30 Jun 2023 02:06:11 -0500
-From:   Mastan Katragadda <Mastan.Katragadda@amd.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <Basavaraj.Hiregoudar@amd.com>,
-        <Sunil-kumar.Dommati@amd.com>, <vijendar.mukunda@amd.com>,
-        <Arungopal.kondaveeti@amd.com>, <vsujithkumar.reddy@amd.com>,
-        <venkataprasad.potturu@amd.com>,
-        Mastan Katragadda <Mastan.Katragadda@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Paul Olaru <paul.olaru@nxp.com>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] ASoC: SOF: amd: refactor PSP smn_read
-Date:   Fri, 30 Jun 2023 12:35:43 +0530
-Message-ID: <20230630070544.2167421-2-Mastan.Katragadda@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
-References: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
+        Fri, 30 Jun 2023 03:11:42 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6E7199;
+        Fri, 30 Jun 2023 00:11:37 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35U5QCT6014244;
+        Fri, 30 Jun 2023 07:11:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=BFrv4h8arCmopr0GT3R+CcIJImDld/jIwh7rwC4ymxw=;
+ b=lvLF6wj0ZXHO/InrTg76+zgs+3yQySN5tSVbhzoO5RpLq5O3MizpeGmjgnpzOpG0tSWy
+ VjaYNG3P7Jo19G26VQXuh8VC4Vhd4PeFjZJhUKIhHes8WvCSrLwz6ZfaAWrvdU5aRD+z
+ LnNRptFnIgpMK9OFuIxDRoK2fb+EoSNzIufs7xEC+EMRAhhg+wezCvaJh/gjC/qHeBfx
+ I5AvaOSZ3RLokNWyxmQCPDIAFnQ7HCSH7xgPQVQ5qZ5y25QqKB6qhXOxBduZeOEQQewh
+ ouCFR26fiwOSmBWWw8Vs7bS7itQ0pcgi1dQhyB2U8tSPi80Tn3ZixaPvFuJL/oVrELhZ vA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhgpgs17p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 07:11:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35U7BUMI000776
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 07:11:30 GMT
+Received: from [10.216.51.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Fri, 30 Jun
+ 2023 00:11:22 -0700
+Message-ID: <98706ea2-b722-e956-b204-08791977307b@quicinc.com>
+Date:   Fri, 30 Jun 2023 12:41:18 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH V2 13/13] arm64: dtsi: qcom: ipq9574: Add nodes to bring
+ up multipd
+Content-Language: en-US
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
+        <kvalo@kernel.org>, <loic.poulain@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
+ <20230521222852.5740-14-quic_mmanikan@quicinc.com>
+ <8d21467a-83a4-8478-dbf5-edd77461e6dc@linaro.org>
+ <15bdbd23-9066-ee20-1e29-1d086340c133@quicinc.com>
+In-Reply-To: <15bdbd23-9066-ee20-1e29-1d086340c133@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT053:EE_|CH0PR12MB5220:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b7a888b-5bc1-474e-fe32-08db79388dbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Yy7RcAj458X943fDZX5mUkOrouqo6I10snrb9uar+fY+UODQywOzaFtlspO+uIBV3+ZqGh7H1a02Hr8kIKVLEoZjs9fGlHwaUu4ZXGWr1VNIk8s96Z5rSXicrGaw0Z54JzNHevujB1XLT+6Xqn1b5F14IaXKLsTCpTpGd9QGJY3AD05Mv0St1f7unEQWaxc4W6WWylXbmafrgLkUweI5Xlc5dgo6kp1vH8qVghSP1dVutTWRn2Laqoej55gaNB+s4J78Str6lPehC+/Y8ZHR65nwddOhX1PDQE+lQtmXnvIzhcOIPqHLVmMQZBwD4yqqfPZwpdW169eEG3LfN7C5TD/yiTnGGmbqLEfGVO0xb02VuVusv7T3qxS02Zz4Hdi/MsyjqT8IPEDK6VqLMGrA2tlNvQyrckw2X2TnPMn4vPP3ag82+MUV/ztD46p5zBIplQWuxP04HqUB+yBUPLvGLQ2+Rb5RikAYtJqa7gNSOcz+uyJs1iJkwmaTE37L1Xb1r43r3fMwV8XsXOr+BnJQ3uXNd+MQO0lW0GafFIR5ILeTt36zYyQbdOHYHOyvGpJRtwIaltS4VFAcZp/QLCSxU9ONLaOpEBDkKafLpUdaAswWPydB/CPot7+c0aWpzkISAjm6JfQI/o9JzNdI7LLSb87NqON/5xkYJ71bhox+LFJT6pMcn1AGTSSbT7IunOa+GytXECCLy0BTC5bgnhp5QFT2I/C04rJwUAda9OM4DvIwvWHfIs3ui30MfS5Q/q3HRMQGazkO9nS6r1M1mwoelA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(86362001)(54906003)(8936002)(8676002)(5660300002)(82310400005)(7416002)(26005)(1076003)(7696005)(478600001)(6916009)(4326008)(70206006)(70586007)(41300700001)(316002)(6666004)(186003)(2616005)(2906002)(47076005)(40460700003)(83380400001)(336012)(426003)(36860700001)(40480700001)(36756003)(82740400003)(356005)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 07:06:40.5666
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b7a888b-5bc1-474e-fe32-08db79388dbe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5220
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pi6zt2qimRPkeghAyfoGOw672OQCrVir
+X-Proofpoint-ORIG-GUID: pi6zt2qimRPkeghAyfoGOw672OQCrVir
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-30_03,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=817 adultscore=0 suspectscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306300060
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the read_poll_timeout marco for PSP smn_read calls.
 
-Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
----
- sound/soc/sof/amd/acp.c | 34 +++++++++++++++-------------------
- sound/soc/sof/amd/acp.h |  4 ++--
- 2 files changed, 17 insertions(+), 21 deletions(-)
 
-diff --git a/sound/soc/sof/amd/acp.c b/sound/soc/sof/amd/acp.c
-index afb505461ea1..c450931ae77e 100644
---- a/sound/soc/sof/amd/acp.c
-+++ b/sound/soc/sof/amd/acp.c
-@@ -28,12 +28,14 @@ static int smn_write(struct pci_dev *dev, u32 smn_addr, u32 data)
- 	return 0;
- }
- 
--static int smn_read(struct pci_dev *dev, u32 smn_addr, u32 *data)
-+static int smn_read(struct pci_dev *dev, u32 smn_addr)
- {
-+	u32 data = 0;
-+
- 	pci_write_config_dword(dev, 0x60, smn_addr);
--	pci_read_config_dword(dev, 0x64, data);
-+	pci_read_config_dword(dev, 0x64, &data);
- 
--	return 0;
-+	return data;
- }
- 
- static void init_dma_descriptor(struct acp_dev_data *adata)
-@@ -150,15 +152,13 @@ int configure_and_run_dma(struct acp_dev_data *adata, unsigned int src_addr,
- static int psp_mbox_ready(struct acp_dev_data *adata, bool ack)
- {
- 	struct snd_sof_dev *sdev = adata->dev;
--	int timeout;
-+	int ret;
- 	u32 data;
- 
--	for (timeout = ACP_PSP_TIMEOUT_COUNTER; timeout > 0; timeout--) {
--		msleep(20);
--		smn_read(adata->smn_dev, MP0_C2PMSG_114_REG, &data);
--		if (data & MBOX_READY_MASK)
--			return 0;
--	}
-+	ret = read_poll_timeout(smn_read, data, data & MBOX_READY_MASK, MBOX_DELAY_US,
-+				ACP_PSP_TIMEOUT_US, false, adata->smn_dev, MP0_C2PMSG_114_REG);
-+	if (!ret)
-+		return 0;
- 
- 	dev_err(sdev->dev, "PSP error status %x\n", data & MBOX_STATUS_MASK);
- 
-@@ -177,23 +177,19 @@ static int psp_mbox_ready(struct acp_dev_data *adata, bool ack)
- static int psp_send_cmd(struct acp_dev_data *adata, int cmd)
- {
- 	struct snd_sof_dev *sdev = adata->dev;
--	int ret, timeout;
-+	int ret;
- 	u32 data;
- 
- 	if (!cmd)
- 		return -EINVAL;
- 
- 	/* Get a non-zero Doorbell value from PSP */
--	for (timeout = ACP_PSP_TIMEOUT_COUNTER; timeout > 0; timeout--) {
--		msleep(MBOX_DELAY);
--		smn_read(adata->smn_dev, MP0_C2PMSG_73_REG, &data);
--		if (data)
--			break;
--	}
-+	ret = read_poll_timeout(smn_read, data, data, MBOX_DELAY_US, ACP_PSP_TIMEOUT_US, false,
-+				adata->smn_dev, MP0_C2PMSG_73_REG);
- 
--	if (!timeout) {
-+	if (ret) {
- 		dev_err(sdev->dev, "Failed to get Doorbell from MBOX %x\n", MP0_C2PMSG_73_REG);
--		return -EINVAL;
-+		return ret;
- 	}
- 
- 	/* Check if PSP is ready for new command */
-diff --git a/sound/soc/sof/amd/acp.h b/sound/soc/sof/amd/acp.h
-index dc624f727aa3..c3659dbc3745 100644
---- a/sound/soc/sof/amd/acp.h
-+++ b/sound/soc/sof/amd/acp.h
-@@ -61,12 +61,12 @@
- #define HOST_BRIDGE_CZN				0x1630
- #define HOST_BRIDGE_RMB				0x14B5
- #define ACP_SHA_STAT				0x8000
--#define ACP_PSP_TIMEOUT_COUNTER			5
-+#define ACP_PSP_TIMEOUT_US			1000000
- #define ACP_EXT_INTR_ERROR_STAT			0x20000000
- #define MP0_C2PMSG_114_REG			0x3810AC8
- #define MP0_C2PMSG_73_REG			0x3810A24
- #define MBOX_ACP_SHA_DMA_COMMAND		0x70000
--#define MBOX_DELAY				1000
-+#define MBOX_DELAY_US				1000
- #define MBOX_READY_MASK				0x80000000
- #define MBOX_STATUS_MASK			0xFFFF
- 
--- 
-2.25.1
+On 6/27/2023 1:14 PM, Manikanta Mylavarapu wrote:
+> 
+> 
+> On 6/24/2023 12:31 PM, Krzysztof Kozlowski wrote:
+>> On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
+>>> Enable nodes required for multipd remoteproc bring up.
+>>>
+>>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>>> ---
+>>> Changes in V2:
+>>>     - Corrected syntax like alignmnet and kept nodes in sorted order.
+>>>     - Added 'firmware-name' property.
+>>>
+>>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 118 ++++++++++++++++++++++++++
+>>>   1 file changed, 118 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>> index 0e04549c69a5..ff0da53ba05f 100644
+>>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>> @@ -160,6 +160,11 @@
+>>>               no-map;
+>>>           };
+>>>
+>>> +        q6_region: wcnss@4ab00000 {
+>>> +            reg = <0x0 0x4ab00000 0x0 0x2b00000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>>           smem@4aa00000 {
+>>>               compatible = "qcom,smem";
+>>>               reg = <0x0 0x4aa00000 0x0 0x00100000>;
+>>> @@ -697,6 +702,95 @@
+>>>               };
+>>>           };
+>>>
+>>> +        q6v5_wcss: remoteproc@cd00000 {
+>>> +            compatible = "qcom,ipq9574-q6-mpd";
+>>> +            reg = <0x0cd00000 0x4040>;
+>>> +            firmware-name = "IPQ9574/q6_fw.mdt",
+>>> +                    "IPQ9574/m3_fw.mdt";
+>>
+>> Here and...
+>>
+>>> +            interrupts-extended = <&intc GIC_SPI 325 
+>>> IRQ_TYPE_EDGE_RISING>,
+>>> +                          <&wcss_smp2p_in 0 0>,
+>>> +                          <&wcss_smp2p_in 1 0>,
+>>> +                          <&wcss_smp2p_in 2 0>,
+>>> +                          <&wcss_smp2p_in 3 0>;
+>>> +            interrupt-names = "wdog",
+>>> +                      "fatal",
+>>> +                      "ready",
+>>> +                      "handover",
+>>> +                      "stop-ack";
+>>> +
+>>> +            qcom,smem-states = <&wcss_smp2p_out 0>,
+>>> +                       <&wcss_smp2p_out 1>;
+>>> +            qcom,smem-state-names = "shutdown",
+>>> +                        "stop";
+>>> +            memory-region = <&q6_region>;
+>>> +
+>>> +            glink-edge {
+>>> +                interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
+>>> +                label = "rtr";
+>>> +                qcom,remote-pid = <1>;
+>>> +                mboxes = <&apcs_glb 8>;
+>>> +            };
+>>> +
+>>> +            pd-1 {
+>>> +                compatible = "qcom,ipq9574-wcss-ahb-mpd";
+>>> +                firmware-name = "IPQ9574/q6_fw.mdt";
+>>
+>> ... here - why do you have firmware in both places?
+>>
 
+	In multipd model, Q6 & WCSS uses different firmware.
+	I will correct the firmware-name. Thanks for catching.
+
+>>> +                interrupts-extended = <&wcss_smp2p_in 8 0>,
+>>> +                              <&wcss_smp2p_in 9 0>,
+>>> +                              <&wcss_smp2p_in 12 0>,
+>>> +                              <&wcss_smp2p_in 11 0>;
+>>> +                interrupt-names = "fatal",
+>>> +                          "ready",
+>>> +                          "spawn-ack",
+>>> +                          "stop-ack";
+>>> +                qcom,smem-states = <&wcss_smp2p_out 8>,
+>>> +                           <&wcss_smp2p_out 9>,
+>>> +                           <&wcss_smp2p_out 10>;
+>>> +                qcom,smem-state-names = "shutdown",
+>>> +                            "stop",
+>>> +                            "spawn";
+>>> +            };
+>>> +
+>>> +            pd-2 {
+>>> +                compatible = "qcom,ipq5018-wcss-pcie-mpd";
+>>
+>> This compatible is confusing for this device.
+>>
+	I will clean up all SOC specific compatibles and have
+	only device specific compatibles for Q6 & WCSS radio's
+	as i mentioned on other thread.
+
+Thanks & Regards,
+Manikanta.
