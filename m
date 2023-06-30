@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FAC743F5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBF7743F5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbjF3QB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S231508AbjF3QCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjF3QBU (ORCPT
+        with ESMTP id S232586AbjF3QCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:01:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316813C0B
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688140829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bGGz8DiANSWoI5a6kGLb5e94iILUQVr5jzEPV3uc4I0=;
-        b=L9tAb+6Y6YS+YY+TV2FRhwDuJL8KHCXYykNHMBLOqRt8gGy9VWG6YzxAX8YsxGLSCuUXF0
-        AwsJMja4ehXiYE5mKveqF+lRAPgRz4itqmkysAugj4KntFcMYeYttzd+ADkSPaAhTix56v
-        8QNbAz61nqgv31GHkJ0sGEceihh19SM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-173-6IJV-npHPyCrw__XkncbgA-1; Fri, 30 Jun 2023 12:00:23 -0400
-X-MC-Unique: 6IJV-npHPyCrw__XkncbgA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8911138035A6;
-        Fri, 30 Jun 2023 16:00:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A5BE2166B2D;
-        Fri, 30 Jun 2023 16:00:19 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <36eda01e-502e-b93d-9098-77ed5a16f33c@kernel.dk>
-References: <36eda01e-502e-b93d-9098-77ed5a16f33c@kernel.dk> <20230630152524.661208-1-dhowells@redhat.com> <20230630152524.661208-4-dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: [RFC PATCH 03/11] vfs: Use init_kiocb() to initialise new IOCBs
+        Fri, 30 Jun 2023 12:02:15 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D7ECA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:02:14 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b6985de215so33697171fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688140932; x=1690732932;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sg13xGYv8z3aKMTOSuPSBHhxLlyyz33hg4HsG7ryfAA=;
+        b=CALM6SuT/8o6doWToXXNL7LTLDWuUzc3TV0ANV9KXZmE4Zrtm0U9KjldAe4oSOtSty
+         da6c9HQvgo5dKqW+zDiR+pWtgO9nd5cPQvoCsKZmI3rNcZX8NbKwpl3R2CmJ4DwlDrn7
+         41VCViTnagM3DwE3QXrslgeMo/jhUfpbcps8A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688140932; x=1690732932;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sg13xGYv8z3aKMTOSuPSBHhxLlyyz33hg4HsG7ryfAA=;
+        b=SiX4p2vxA+p1HniGGv5rBX/gfMx8xHXuI7z8xT4EYNCVfK3Ya0WgGeTYLW68ZP6H3v
+         VAcoIArOcffKC4TzqKJcja6iGM/2SvjpZYJU+zv4yavEj2o67YqbuOkcusxz1K8dpcRC
+         pz/u87pKZo8f7DLfzkp7wu3PR64MrsSh35jiXXJicPworm2g9NbI9lidgM8kA5jF0Fx9
+         Oj9FSLyGQjfeCN9UM7x3HcbqVF4AAfs/EtkDhsVZM1Ei2+1ACL1/3rUYwYMCJ/e33+11
+         CbgWI7NnhlD1n2tTltMWuha7z0+m/eTDZC+QIWeSqafd5tZ7RmRVV4eguneQjgelb5zN
+         dnkg==
+X-Gm-Message-State: ABy/qLZoHGj9lgxbeYIfpypJ137/sLlmpQHROs2VyUwaQyWenbf6hUoU
+        lJ4xDXYc1RM2PVWqhq0nOrbi/JU92gp4sXMJR0Kq0sfh
+X-Google-Smtp-Source: APBJJlE5nh59XR7k3PCK4niajxBgj87LyVyzEtbQ17HyjU9EJN7ulY33LGm7UqpYjM2AGndTYMRqcg==
+X-Received: by 2002:a2e:878f:0:b0:2b5:84fb:5939 with SMTP id n15-20020a2e878f000000b002b584fb5939mr2654417lji.30.1688140931823;
+        Fri, 30 Jun 2023 09:02:11 -0700 (PDT)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id a2-20020a1709065f8200b009827b97c89csm8173920eju.102.2023.06.30.09.02.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 09:02:11 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-51da8a744c4so2208004a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:02:11 -0700 (PDT)
+X-Received: by 2002:a05:6402:321f:b0:51d:9231:b9fa with SMTP id
+ g31-20020a056402321f00b0051d9231b9famr1860110eda.39.1688140931050; Fri, 30
+ Jun 2023 09:02:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <662383.1688140818.1@warthog.procyon.org.uk>
-Date:   Fri, 30 Jun 2023 17:00:18 +0100
-Message-ID: <662384.1688140818@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230628-pokal-puzzeln-5199c679b051@brauner> <CAHk-=wiBXJOzkez2Rd=cQ5ckttJq6OdYtArFmCtVQHyeuQBGrw@mail.gmail.com>
+ <20230630-testphasen-orangen-0e54486a267d@brauner> <CAHk-=whJJbmfBk_8v_vFn1NdJ9O-AKCrjY+EArkzgFp9h-sKHA@mail.gmail.com>
+ <20230630-stiefel-rotor-7f2d13fc084f@brauner> <8b73a39a359b4523a053efd614cd7dd7@AcuMS.aculab.com>
+In-Reply-To: <8b73a39a359b4523a053efd614cd7dd7@AcuMS.aculab.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 30 Jun 2023 09:01:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whY5wuS0QRtEym4d8D2hrNE3pSL9LfoHpSOUKHb2sZtjA@mail.gmail.com>
+Message-ID: <CAHk-=whY5wuS0QRtEym4d8D2hrNE3pSL9LfoHpSOUKHb2sZtjA@mail.gmail.com>
+Subject: Re: [GIT PULL] pid: use flex array
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe <axboe@kernel.dk> wrote:
+On Fri, 30 Jun 2023 at 04:21, David Laight <David.Laight@aculab.com> wrote:
+>
+> The bit pattern used for a NULL pointer is implementation defined.
 
-> One concern here is that we're using IOCB_WRITE here to tell if
-> sb_start_write() has been done or not, and hence whether
-> kiocb_end_write() needs to be called. You know set it earlier, which
-> means if we get a failure if we need to setup async data, then we know
-> have IOCB_WRITE set at that point even though we did not call
-> sb_start_write().
+Oh, pretty much everything we do in the kernel is implementation defined.
 
-Hmmm...  It's set earlier in a number of places anyway - __cachefiles_write()
-for example.
+And yes, we do indeed basically rely on the bit pattern for NULL being
+all zeroes, and that example I gave with PCI_IOBASE is just one of
+many.
 
-Btw, can you please put some comments on the IOCB_* constants?  I have to
-guess at what they mean and how they're meant to be used.  Or better still,
-get Christoph to write Documentation/core-api/iocb.rst describing the API? ;-)
+And yes, compilers will sometimes complain about the things we do.
 
-David
+On s390, for example, the low memory range is special (and the kernel
+mapping is special), so s390 uses all these pointers that are
+*literally* small constants, and we've had to turn off some compiler
+warnings because gcc would think that we're doing small offsets off
+NULL.
 
+But "implementation defined" is actually the good case.
+
+The problem case is "undefined", when we sometimes want to do exactly
+those kinds of things. We try to generally avoid it, but we sometimes
+end up using compiler switches to say "turn off that part of your
+logic" (strict overflow comes to mind).
+
+             Linus
