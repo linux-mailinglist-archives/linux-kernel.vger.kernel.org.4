@@ -2,205 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F773743586
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4420674358C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbjF3HLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S232206AbjF3HM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjF3HLm (ORCPT
+        with ESMTP id S230364AbjF3HMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:11:42 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6E7199;
-        Fri, 30 Jun 2023 00:11:37 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35U5QCT6014244;
-        Fri, 30 Jun 2023 07:11:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BFrv4h8arCmopr0GT3R+CcIJImDld/jIwh7rwC4ymxw=;
- b=lvLF6wj0ZXHO/InrTg76+zgs+3yQySN5tSVbhzoO5RpLq5O3MizpeGmjgnpzOpG0tSWy
- VjaYNG3P7Jo19G26VQXuh8VC4Vhd4PeFjZJhUKIhHes8WvCSrLwz6ZfaAWrvdU5aRD+z
- LnNRptFnIgpMK9OFuIxDRoK2fb+EoSNzIufs7xEC+EMRAhhg+wezCvaJh/gjC/qHeBfx
- I5AvaOSZ3RLokNWyxmQCPDIAFnQ7HCSH7xgPQVQ5qZ5y25QqKB6qhXOxBduZeOEQQewh
- ouCFR26fiwOSmBWWw8Vs7bS7itQ0pcgi1dQhyB2U8tSPi80Tn3ZixaPvFuJL/oVrELhZ vA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhgpgs17p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 07:11:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35U7BUMI000776
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 07:11:30 GMT
-Received: from [10.216.51.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Fri, 30 Jun
- 2023 00:11:22 -0700
-Message-ID: <98706ea2-b722-e956-b204-08791977307b@quicinc.com>
-Date:   Fri, 30 Jun 2023 12:41:18 +0530
+        Fri, 30 Jun 2023 03:12:48 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B6FE61
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:12:42 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fb863edcb6so2546304e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688109161; x=1690701161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xT0h1VwJXuRJVl6b4ZcUHqCtxF2ZZq6HpEiCot5j2I=;
+        b=hczRlo9GF1y8OYQx4hiNe3TCqWYA1xB9FDBv1rUBx3KymykGTZGCNdaZ93kQdIORmd
+         Tic2z0GgJrmum/Q56ZUsu/zSe4hdDqfNl+4DJ3vApHdd20hXW+3HSzY1jWgPpGndVELI
+         c/6JJoMQ+AAy2wjVuXJf95y1+unsB1BUC2xqs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688109161; x=1690701161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5xT0h1VwJXuRJVl6b4ZcUHqCtxF2ZZq6HpEiCot5j2I=;
+        b=O9e2Z7HE+rWfaEDsjFHLikYZ0dnEzXztNNVI/L9BVOwRh4pdy0KrH3Q/DwfgRkbHoy
+         37+XcD3gomT4JIj9VobZrUN6Fo1MGDVU7dEbJh3vtt2lzc4jUKNtjftxsmEGRtt6D/ty
+         v/7DDRRFKYMOhSOfiDlQrCTCoXl8za3+UgyHiuWeRfb98Y6jJMpZIMf4P/QZ2CQp1M7j
+         COT3rIpsYi6ppwPJx4+E0TnY6r+ijBvVUMRKYB8lIQujuDIgLFCfvlaLjdcwoInXfwO2
+         b7IN9VkeIxqNxiO8aEmOFo/CfwZR8837Fn3hI21hZBnp4/g76xZ8CWh4mUT6b9a84gIw
+         Lasg==
+X-Gm-Message-State: ABy/qLZP1MLkTzlIrQO/EcIEtCkLheuQR5d4mq0BjqekchtfPsaakx/F
+        V5b5++UiL+teg94BvaRSEoUKd/nCwEmTme1gAiirb6a5
+X-Google-Smtp-Source: APBJJlG5De1H44zJxpFbAwI0dG1C2a+n94TM/iwIcbIXbN132yAznikqDpgNrbwip+HJcI7z3cvPwg==
+X-Received: by 2002:ac2:4bca:0:b0:4f9:ec5e:d624 with SMTP id o10-20020ac24bca000000b004f9ec5ed624mr1453929lfq.38.1688109160706;
+        Fri, 30 Jun 2023 00:12:40 -0700 (PDT)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id c23-20020a197617000000b004f13cd61ebbsm2426699lff.175.2023.06.30.00.12.40
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 00:12:40 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2b69f216c73so23441351fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:12:40 -0700 (PDT)
+X-Received: by 2002:a2e:b6d0:0:b0:2b5:8a3f:4f5 with SMTP id
+ m16-20020a2eb6d0000000b002b58a3f04f5mr1288895ljo.50.1688109159752; Fri, 30
+ Jun 2023 00:12:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V2 13/13] arm64: dtsi: qcom: ipq9574: Add nodes to bring
- up multipd
-Content-Language: en-US
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
-        <kvalo@kernel.org>, <loic.poulain@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-14-quic_mmanikan@quicinc.com>
- <8d21467a-83a4-8478-dbf5-edd77461e6dc@linaro.org>
- <15bdbd23-9066-ee20-1e29-1d086340c133@quicinc.com>
-In-Reply-To: <15bdbd23-9066-ee20-1e29-1d086340c133@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pi6zt2qimRPkeghAyfoGOw672OQCrVir
-X-Proofpoint-ORIG-GUID: pi6zt2qimRPkeghAyfoGOw672OQCrVir
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_03,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=817 adultscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306300060
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230628-pokal-puzzeln-5199c679b051@brauner> <CAHk-=wiBXJOzkez2Rd=cQ5ckttJq6OdYtArFmCtVQHyeuQBGrw@mail.gmail.com>
+ <20230630-testphasen-orangen-0e54486a267d@brauner>
+In-Reply-To: <20230630-testphasen-orangen-0e54486a267d@brauner>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 30 Jun 2023 00:12:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whJJbmfBk_8v_vFn1NdJ9O-AKCrjY+EArkzgFp9h-sKHA@mail.gmail.com>
+Message-ID: <CAHk-=whJJbmfBk_8v_vFn1NdJ9O-AKCrjY+EArkzgFp9h-sKHA@mail.gmail.com>
+Subject: Re: [GIT PULL] pid: use flex array
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 29 Jun 2023 at 23:51, Christian Brauner <brauner@kernel.org> wrote:
+>
+> I have no preference for either syntax. Both work. But this is probably
+> more an objection to this being mixed in with the flex array change in
+> the first place.
 
+Yes. I looked at it, and tried to figure out if it was related
+somehow, and decided that no, it can't possibly be, and must be just
+an unrelated change.
 
-On 6/27/2023 1:14 PM, Manikanta Mylavarapu wrote:
-> 
-> 
-> On 6/24/2023 12:31 PM, Krzysztof Kozlowski wrote:
->> On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
->>> Enable nodes required for multipd remoteproc bring up.
->>>
->>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->>> ---
->>> Changes in V2:
->>>     - Corrected syntax like alignmnet and kept nodes in sorted order.
->>>     - Added 'firmware-name' property.
->>>
->>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 118 ++++++++++++++++++++++++++
->>>   1 file changed, 118 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
->>> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> index 0e04549c69a5..ff0da53ba05f 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> @@ -160,6 +160,11 @@
->>>               no-map;
->>>           };
->>>
->>> +        q6_region: wcnss@4ab00000 {
->>> +            reg = <0x0 0x4ab00000 0x0 0x2b00000>;
->>> +            no-map;
->>> +        };
->>> +
->>>           smem@4aa00000 {
->>>               compatible = "qcom,smem";
->>>               reg = <0x0 0x4aa00000 0x0 0x00100000>;
->>> @@ -697,6 +702,95 @@
->>>               };
->>>           };
->>>
->>> +        q6v5_wcss: remoteproc@cd00000 {
->>> +            compatible = "qcom,ipq9574-q6-mpd";
->>> +            reg = <0x0cd00000 0x4040>;
->>> +            firmware-name = "IPQ9574/q6_fw.mdt",
->>> +                    "IPQ9574/m3_fw.mdt";
->>
->> Here and...
->>
->>> +            interrupts-extended = <&intc GIC_SPI 325 
->>> IRQ_TYPE_EDGE_RISING>,
->>> +                          <&wcss_smp2p_in 0 0>,
->>> +                          <&wcss_smp2p_in 1 0>,
->>> +                          <&wcss_smp2p_in 2 0>,
->>> +                          <&wcss_smp2p_in 3 0>;
->>> +            interrupt-names = "wdog",
->>> +                      "fatal",
->>> +                      "ready",
->>> +                      "handover",
->>> +                      "stop-ack";
->>> +
->>> +            qcom,smem-states = <&wcss_smp2p_out 0>,
->>> +                       <&wcss_smp2p_out 1>;
->>> +            qcom,smem-state-names = "shutdown",
->>> +                        "stop";
->>> +            memory-region = <&q6_region>;
->>> +
->>> +            glink-edge {
->>> +                interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
->>> +                label = "rtr";
->>> +                qcom,remote-pid = <1>;
->>> +                mboxes = <&apcs_glb 8>;
->>> +            };
->>> +
->>> +            pd-1 {
->>> +                compatible = "qcom,ipq9574-wcss-ahb-mpd";
->>> +                firmware-name = "IPQ9574/q6_fw.mdt";
->>
->> ... here - why do you have firmware in both places?
->>
+> I did react to that in the original review here:
+> https://lore.kernel.org/all/20230518-zuneigen-brombeeren-0a57cd32b1a7@brauner
+> but then I grepped for it and saw it done in a few other places already
 
-	In multipd model, Q6 & WCSS uses different firmware.
-	I will correct the firmware-name. Thanks for catching.
+Yeah, we do end up growing new uses of 'use 0 as a pointer' almost as
+quickly as we get rid of them.
 
->>> +                interrupts-extended = <&wcss_smp2p_in 8 0>,
->>> +                              <&wcss_smp2p_in 9 0>,
->>> +                              <&wcss_smp2p_in 12 0>,
->>> +                              <&wcss_smp2p_in 11 0>;
->>> +                interrupt-names = "fatal",
->>> +                          "ready",
->>> +                          "spawn-ack",
->>> +                          "stop-ack";
->>> +                qcom,smem-states = <&wcss_smp2p_out 8>,
->>> +                           <&wcss_smp2p_out 9>,
->>> +                           <&wcss_smp2p_out 10>;
->>> +                qcom,smem-state-names = "shutdown",
->>> +                            "stop",
->>> +                            "spawn";
->>> +            };
->>> +
->>> +            pd-2 {
->>> +                compatible = "qcom,ipq5018-wcss-pcie-mpd";
->>
->> This compatible is confusing for this device.
->>
-	I will clean up all SOC specific compatibles and have
-	only device specific compatibles for Q6 & WCSS radio's
-	as i mentioned on other thread.
+We got rid of a couple just recently in commit dadeeffbe525 ("fbdev:
+hitfb: Use NULL for pointers"), but yes, a quick
 
-Thanks & Regards,
-Manikanta.
+    git grep '\*)0\>'
+
+shows many more.
+
+And some of them are even ok. I don't think it's always wrong,
+particularly if you then abstract it out.
+
+So doing something like that
+
+   #define PCI_IOBASE ((void __iomem *)0)
+
+makes perfect sense. It's literally abstracting out something real (in
+this case yes, it looks like a NULL pointer, but it's actually a
+pointer with a strict type that just happens to have the value zero.
+
+So that "NULL pointer with a type" concept makes sense, but it really
+should be abstracted out, not be in the middle of some random code.
+
+And that's *particularly* true when we already have the exact
+abstraction for the situation that the code then uses (ie in this case
+that "struct_size_t()" thing). Writing it out - in an ugly form -
+using the disgusting traditional "constant integer zero can be cast to
+any pointer" thing - just makes me go "Eugghhh!".
+
+I mean, if this ugly part was just a small detail in a l;arger patch,
+I probably would just have let it slide. It works. It is what it is.
+
+But when three quarters of the patch was stuff I found questionable, I
+just couldn't stomach it.
+
+I'm looking at some of the grep hits, and I'm going "ok, that's a C++
+programmer". I think there's a very real reason why so many of them
+are in bpf code and in the bpf tests.
+
+C++ made a *huge* fundamental design mistake early on wrt NULL, and a
+generation of C++ programmers were poisoned by it and you had people
+who swore until they were blue that 0 and NULL had to be the same
+thing.
+
+They were horribly and utterly wrong. But sometimes when it takes you
+three decades to admit that you were wrong all that time, it's just
+too painful to admit.
+
+There are literally people who still can't admit to their mistake, and
+refuse to use NULL, and use either 0 or 'nullptr'.
+
+                  Linus
