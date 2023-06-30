@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D885743398
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C7E7433A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjF3Ebi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 00:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S230141AbjF3Ef1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 00:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjF3Ebc (ORCPT
+        with ESMTP id S229459AbjF3EfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 00:31:32 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8C92D78
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:31:31 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id E6CF632007F9;
-        Fri, 30 Jun 2023 00:31:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 30 Jun 2023 00:31:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1688099489; x=
-        1688185889; bh=Q64xPEy+iwbg0p9qPUFnYa3X3kv5WuO+YEFt9NA2p98=; b=b
-        DxnBbak+dDSQpYUvRE6BUGvW9Qv1/y0gufEzS7Ik0XxaeBImMbux6KqHdTsycYnG
-        iOlhPK6F2iuH7tTm+j8trUnhgOTH2rqsbcTAuGhPtRxkgvm5FPd+T3BZa9JHyHIf
-        7YSmjU5/6P7mK5RCA99ytLqyuYLu4zZdXGFndeQBQfGVJPhpwKa9f/HQydD9hFEU
-        sa+/ek25PCnYVVTZ/cVZEOORd8w39oznoPwkQKj0a0LoKg7IlxC5ZwIsSZZVjOuN
-        xCFy+1/coahs4BuGtFLo9XGlzAkuzgaOFBhQmjZEyShLx+jxDk3TJFtilTeWnzzu
-        v0xfadTruu0RrrYaQ01kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688099489; x=
-        1688185889; bh=Q64xPEy+iwbg0p9qPUFnYa3X3kv5WuO+YEFt9NA2p98=; b=f
-        AxpZtIApHcQdJ1RmxDNHBOKp3mGS0GvfidjX7wVwpWc+P0Of6eUYxtpiAWRoOWLz
-        QMn5odcBjqVryXjgs840Z5uvZldJA1imIEl/k83Wqh7xf3iiliEteBNgqAPLfbe9
-        KWd02q8K+anDdzTEbSjYAleJDhBRVEim6XLvo4l4tj1HghqYcafSyo/tD4iscmji
-        D/P9gK4uzGsdmoo3Fr6khSc4Tzsv8WG73c3KiipxkLb6XYMwZX6SBNcH8QLJji7a
-        9WaDCUI1RCZxqri4LDNP184LqPf/6L5sS7EAX1FJWd8HKbZvMQCxyuoma8tKWrgK
-        2BxmeuGgDrKXAp+Zl0UhA==
-X-ME-Sender: <xms:oFqeZAJKyWZU10V_KTj88t8MnFrbS0Q4TeqdnxEsXfQ0JIh6ABPEew>
-    <xme:oFqeZAJrANoLjI6ZNHaWZZPussedeQ05lRFBzuzsVMEhCQWSyEZuyDrQ1O-kFMC1Y
-    TLl37TH_yYucOyfMhE>
-X-ME-Received: <xmr:oFqeZAu0iYtsOrIoxlc-WskOBooiQZgroCKiYJxiozE2x_Sl65Mv8VRwMzX4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdehgdekjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
-    ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpefgteefudfgteduueehteejhfeugf
-    fgleeltedvveethfeuueejfedvgeelveehgfenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:oVqeZNb2aupFgglUdH14aQpuvSA-Z5CcZQyHD498Cfab_fv6gRadRg>
-    <xmx:oVqeZHYh20ZY7MSmRJVFsCHZFM5gAAv0pZyOmj-93R5lDXjNk2xYgA>
-    <xmx:oVqeZJDfC7mVrmJttlSrd2Pi3f889BRKGsw-mWV9k3UVESDbMvi3gQ>
-    <xmx:oVqeZCyQbo94Svc8sC7PGxyJN_ar9rusu1BF0wk-SydbcfxR66T21w>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jun 2023 00:31:26 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     tiwai@suse.com
-Cc:     perex@perex.cz, sbinding@opensource.cirrus.com,
-        andy.chi@canonical.com, tangmeng@uniontech.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 2/2] ALSA: hda/realtek: Add quirk for ASUS ROG GA402X
-Date:   Fri, 30 Jun 2023 16:31:06 +1200
-Message-ID: <20230630043106.914724-3-luke@ljones.dev>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230630043106.914724-1-luke@ljones.dev>
-References: <20230630043106.914724-1-luke@ljones.dev>
+        Fri, 30 Jun 2023 00:35:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952D01BCC
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:35:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22D0761657
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:35:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0ECAC433C8;
+        Fri, 30 Jun 2023 04:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688099723;
+        bh=jOSdY00epdMCVNDrzwFmvJ7SMc5VHY1cqBQXCGrpKwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LTdPotVH0XNKzdhWdIyQpRUaDhfqbB0jq/5wyIaIge8J1cDjNJUIsgHOiuZU5CImU
+         y5u7AFbn5a8CMWC1DytFFOQ36cicsCnnh24QK/EhYT8nP9A0UJZ/pnUnXTbE1RBqyP
+         fKbQOIz9p6+2OoxdX7fKSBv8TbHSRzzDVVmb/1ROe0qCAiNfkvwZPrRvaAuPXb2tk3
+         aW14r/Sv9MdeXJXKrx/0UHA9B139AY100+o9VIWnxzKVH7zWnzmsIjJ1IV7RGa61pC
+         HY52Qmluj7NrA9ZImAPPWfZXwgQeuqKV/SBwgmmnNcx5wr93WSEP6/2wsnXlcyyZ94
+         QbOsonRUEIOQw==
+Date:   Fri, 30 Jun 2023 07:34:30 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>,
+        Yuwei Guan <ssawgyw@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] memblock: small updates for v6.5-rc1
+Message-ID: <20230630043430.GQ52412@kernel.org>
+References: <20230627084058.GM52412@kernel.org>
+ <CAHk-=wgkp6Cp_vNaJ02KGWwR6aj2JA5rMcTo505cuN__gknYfQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgkp6Cp_vNaJ02KGWwR6aj2JA5rMcTo505cuN__gknYfQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,29 +58,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds the required quirk to enable the Cirrus amp and correct pins
-on the ASUS ROG GV601V series.
+On Thu, Jun 29, 2023 at 04:40:59PM -0700, Linus Torvalds wrote:
+> On Tue, 27 Jun 2023 at 01:41, Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > are available in the Git repository at:
+> >
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock memblock-v6.5-rc1
+> 
+> Nope, nothing there.
+> 
+> I see the for-next branch, but no tag with that name, and no other tag
+> with those contents.
+> 
+> Forgot to push?
 
-While this works if the related _DSD properties are made available, these
-aren't included in the ACPI of these laptops (yet).
+Hmm, looks like it :(
+Pushed now.
+ 
+>                Linus
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 1c26f24b1246..5b7df324e8b4 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9544,6 +9544,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1043, 0x13b0, "ASUS Z550SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1427, "Asus Zenbook UX31E", ALC269VB_FIXUP_ASUS_ZENBOOK),
- 	SND_PCI_QUIRK(0x1043, 0x1433, "ASUS GX650P", ALC285_FIXUP_ASUS_I2C_HEADSET_MIC),
-+	SND_PCI_QUIRK(0x1043, 0x1463, "Asus GA402X", ALC285_FIXUP_ASUS_I2C_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1473, "ASUS GU604V", ALC285_FIXUP_ASUS_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1483, "ASUS GU603V", ALC285_FIXUP_ASUS_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1493, "ASUS GV601V", ALC285_FIXUP_ASUS_HEADSET_MIC),
 -- 
-2.41.0
-
+Sincerely yours,
+Mike.
