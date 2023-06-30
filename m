@@ -2,124 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B40274437C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AC274437E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjF3Uwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 16:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S232667AbjF3UyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 16:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbjF3Uwg (ORCPT
+        with ESMTP id S229496AbjF3UyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 16:52:36 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC6E3C2D;
-        Fri, 30 Jun 2023 13:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=BEH1BowktuuStjJyeH3e8YBBtNZC3SC1+Libjz6/Dj8=; b=lW574RdS0doFq42rK/UIqsZuRL
-        WnNSsLX/ZVMsZR0EKjfqfSCl2t5qiZhecH2/EYVCOjhYmRV5kQf/HAsAWQdl+zUyfZ9BcnaYwfc9C
-        a4qRCp6E4tXR7Lbf1Ho4+PPcjhKOABHUXIfm00XXYNYdXtF/utqBBIKsRn+3XJ1br8jDTtjodV2bn
-        jGQatFCT9w6sAUZ4UISN1Y9AJ3RZao9xc+1e0pcpc18ePEWgOtCZRYZvw+jsUxUTalrJ42Y3W2Dtz
-        EMcELk9+K75r84r+tLvOgeB7VjiPt1xc58k8PBVGHTnLa7IvPLwZAxKZajq+ljWyP7buvDZfKUSBW
-        8e6ZbcMg==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qFL6P-000Gji-5a; Fri, 30 Jun 2023 22:52:25 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qFL6O-000FsX-QE; Fri, 30 Jun 2023 22:52:24 +0200
-Subject: Re: [PATCH v2] btf: warn but return no error for NULL btf from
- __register_btf_kfunc_id_set()
-To:     SeongJae Park <sj@kernel.org>
-Cc:     martin.lau@linux.dev, Alexander.Egorenkov@ibm.com, ast@kernel.org,
-        memxor@gmail.com, olsajiri@gmail.com, bpf@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>
-References: <20230630194859.100332-1-sj@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <75483b53-bd8e-692e-ed18-a4c87cf20a1b@iogearbox.net>
-Date:   Fri, 30 Jun 2023 22:52:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20230630194859.100332-1-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26955/Fri Jun 30 09:29:09 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 30 Jun 2023 16:54:09 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531D83C22
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 13:54:08 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5618857518dso21649037b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 13:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688158447; x=1690750447;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oy7Fn5DLlDdqthMyo7I1xd7MlIY02Kh4pQfI/B0cxdo=;
+        b=FvnQlIQ7mYUe01dsW0Xj2KBmxBFwH8Vzk+wi3C8T0j1qVYSosHexnwLmcP8tli2Cnh
+         o5ySE81SipJPG9Hrb0Grc8iBjojvv0dr1ETjSdBuML/POMqIq+6sNhJHJUM2y63H2AVH
+         fG0uHMC5IFWwno/8vyuJCDqT6wTNfWH/qz+m3dH1Tze9ARgDjbMG9lKW4oPUwhmT6nZ2
+         Arjf0CbqjZCN1lZP72cyFdHK/TcUYd3AMzJZuL6nE0NSe/GS7qq8yObT8LI2v0enKubd
+         cjeNuBMq0zxWDorYIxRTdKlIYp9/er3mJU/zfIzqFrsu7yPQmJFcoI8ICouq8XC2ExV0
+         maQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688158447; x=1690750447;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oy7Fn5DLlDdqthMyo7I1xd7MlIY02Kh4pQfI/B0cxdo=;
+        b=Z5HBB88OAiGT+Euk2ZoKvnTvKhhDTEVDRVgzrrnk5UVIsuQ2c0eReXMWbiZ3yRIvTX
+         xHENKfgMZ0SXmGqYbUdjfcnmrMVdYMbLUe2dnMMI4MP5FPsINwb/apLbZn9k5MkMCpPX
+         p1jsspauiwfLSIimIBtppWQUO+MmneByVtPcHwElTYKTL1t8D/GgWlUZpsCkYGJnOHJT
+         ZAbRIMKxdNEM/31P/Vgd4HcVuiS9cwKmQwabQwv1JIeCbmb5PRhywMTFGfIooMgX0DWy
+         CJTJgOgS6MY8yhN5nwLnPT9awmx2LCiNtDlOOe14fPJTiSqR1z/yelSzLOST5E0CgCiH
+         D59Q==
+X-Gm-Message-State: ABy/qLbkW6HqvzIEQCY1G0zhG9xHgkIDCNPhaXgoF6afW1e2EIbt1bHQ
+        MHZAh8GCW/vOiW7XuNbhYxRmxyWW0O15i0F+6w==
+X-Google-Smtp-Source: APBJJlFnckz+hwDRlXiHLL4xP5pCQih5vkspaQJsrxW2y5s3Z8acuG/CUlTu1id83U8GZyI85yby8KJ+tH5sl88V0g==
+X-Received: from yuxiao.svl.corp.google.com ([2620:15c:2a3:200:511c:d1b:e03e:e72])
+ (user=yuxiaozhang job=sendgmr) by 2002:a25:ad17:0:b0:bac:fd63:b567 with SMTP
+ id y23-20020a25ad17000000b00bacfd63b567mr25043ybi.4.1688158447602; Fri, 30
+ Jun 2023 13:54:07 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 13:53:58 -0700
+In-Reply-To: <202306281053.EC5115465B@keescook>
+Mime-Version: 1.0
+References: <202306281053.EC5115465B@keescook>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230630205358.3601280-1-yuxiaozhang@google.com>
+Subject: Re: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc limitation
+From:   Yuxiao Zhang <yuxiaozhang@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        "'Guilherme G . Piccoli'" <gpiccoli@igalia.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wak@google.com, Yuxiao Zhang <yuxiaozhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/23 9:48 PM, SeongJae Park wrote:
-> On Fri, 30 Jun 2023 16:53:38 +0200 Daniel Borkmann <daniel@iogearbox.net> wrote:
->> On 6/28/23 6:46 PM, SeongJae Park wrote:
->>> __register_btf_kfunc_id_set() assumes .BTF to be part of the module's
->>> .ko file if CONFIG_DEBUG_INFO_BTF is enabled.  If that's not the case,
->>> the function prints an error message and return an error.  As a result,
->>> such modules cannot be loaded.
->>>
->>> However, the section could be stripped out during a build process.  It
->>> would be better to let the modules loaded, because their basic
->>> functionalities have no problem[1], though the BTF functionalities will
->>> not be supported.  Make the function to lower the level of the message
->>> from error to warn, and return no error.
->>>
->>> [1] https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
->>>
->>> Reported-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
->>> Link: https://lore.kernel.org/bpf/87y228q66f.fsf@oc8242746057.ibm.com/
->>> Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->>> Link: https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
->>> Fixes: c446fdacb10d ("bpf: fix register_btf_kfunc_id_set for !CONFIG_DEBUG_INFO_BTF")
->>> Cc: <stable@vger.kernel.org> # 5.18.x
->>> Signed-off-by: SeongJae Park <sj@kernel.org>
->>> Acked-by: Jiri Olsa <jolsa@kernel.org>
->>
->> I presume this one is targeted at bpf (rather than bpf-next) tree, right?
-> 
-> You're correct.  It's not urgent for us, but I would prefer it to be merged
-> into all affected kernels as early as possible.
+Sorry forgot to add subject header in msg which messed up email client,
+resending it again
 
-Ok, sounds good, bpf tree it is then.
-
->>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->>> index 6b682b8e4b50..d683f034996f 100644
->>> --- a/kernel/bpf/btf.c
->>> +++ b/kernel/bpf/btf.c
->>> @@ -7848,14 +7848,10 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
->>>    
->>>    	btf = btf_get_module_btf(kset->owner);
->>>    	if (!btf) {
->>> -		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
->>> -			pr_err("missing vmlinux BTF, cannot register kfuncs\n");
->>> -			return -ENOENT;
->>> -		}
->>
->> Why the above one needs to be changed? Do you also run into this case? vmlinux BTF
->> should be built-in in this case. I understand it's rather the one below for BTF +
->> modules instead, no?
-> 
-> Again, you're correct.  This change is not really needed.  I was interpreting
-> Kumar's suggestion merely into code without thinking about his real meaning,
-> sorry.  I will restore this in the next spin.
-
-Perfect, I think after your v3 respin it should be good to land.
+Added size details to commit message and fixed the format. See the new
+patch below.
 
 Thanks,
-Daniel
+-Yuxiao
+
+
+From cd3ec6155a3cf0e198afdf2d040c73ee146b696f Mon Sep 17 00:00:00 2001
+From: Yuxiao Zhang <yuxiaozhang@google.com>
+Date: Fri, 30 Jun 2023 10:45:21 -0700
+Subject: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc
+ limitation
+
+Current pmsg implementation is using kmalloc for pmsg record buffer,
+which has max size limits of 2^(MAX_ORDER + PAGE_SHIFT). Currently even
+we allocate enough space with pmsg-size, pmsg will still fail if the
+file size is larger than what kmalloc allowed.
+
+Since we don't need physical contiguous memory for pmsg buffer,
+we can use kvmalloc to avoid such limitation.
+
+Signed-off-by: Yuxiao Zhang <yuxiaozhang@google.com>
+---
+ fs/pstore/inode.c    | 2 +-
+ fs/pstore/platform.c | 9 +++++----
+ fs/pstore/ram.c      | 5 +++--
+ fs/pstore/ram_core.c | 3 ++-
+ 4 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
+index ffbadb8b3032..df7fb2ad4599 100644
+--- a/fs/pstore/inode.c
++++ b/fs/pstore/inode.c
+@@ -54,7 +54,7 @@ static void free_pstore_private(struct pstore_private *private)
+ 	if (!private)
+ 		return;
+ 	if (private->record) {
+-		kfree(private->record->buf);
++		kvfree(private->record->buf);
+ 		kfree(private->record->priv);
+ 		kfree(private->record);
+ 	}
+diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+index cbc0b468c1ab..f51e9460ac9d 100644
+--- a/fs/pstore/platform.c
++++ b/fs/pstore/platform.c
+@@ -32,6 +32,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/jiffies.h>
+ #include <linux/workqueue.h>
++#include <linux/mm.h>
+ 
+ #include "internal.h"
+ 
+@@ -549,7 +550,7 @@ static int pstore_write_user_compat(struct pstore_record *record,
+ 	if (record->buf)
+ 		return -EINVAL;
+ 
+-	record->buf = memdup_user(buf, record->size);
++	record->buf = vmemdup_user(buf, record->size);
+ 	if (IS_ERR(record->buf)) {
+ 		ret = PTR_ERR(record->buf);
+ 		goto out;
+@@ -557,7 +558,7 @@ static int pstore_write_user_compat(struct pstore_record *record,
+ 
+ 	ret = record->psi->write(record);
+ 
+-	kfree(record->buf);
++	kvfree(record->buf);
+ out:
+ 	record->buf = NULL;
+ 
+@@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record *record)
+ 		return;
+ 
+ 	/* Swap out compressed contents with decompressed contents. */
+-	kfree(record->buf);
++	kvfree(record->buf);
+ 	record->buf = unzipped;
+ 	record->size = unzipped_len;
+ 	record->compressed = false;
+@@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
+ 		rc = pstore_mkfile(root, record);
+ 		if (rc) {
+ 			/* pstore_mkfile() did not take record, so free it. */
+-			kfree(record->buf);
++			kvfree(record->buf);
+ 			kfree(record->priv);
+ 			kfree(record);
+ 			if (rc != -EEXIST || !quiet)
+diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
+index ade66dbe5f39..296465b14fa9 100644
+--- a/fs/pstore/ram.c
++++ b/fs/pstore/ram.c
+@@ -20,6 +20,7 @@
+ #include <linux/compiler.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
++#include <linux/mm.h>
+ 
+ #include "internal.h"
+ #include "ram_internal.h"
+@@ -268,7 +269,7 @@ static ssize_t ramoops_pstore_read(struct pstore_record *record)
+ 	/* ECC correction notice */
+ 	record->ecc_notice_size = persistent_ram_ecc_string(prz, NULL, 0);
+ 
+-	record->buf = kmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
++	record->buf = kvmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
+ 	if (record->buf == NULL) {
+ 		size = -ENOMEM;
+ 		goto out;
+@@ -282,7 +283,7 @@ static ssize_t ramoops_pstore_read(struct pstore_record *record)
+ 
+ out:
+ 	if (free_prz) {
+-		kfree(prz->old_log);
++		kvfree(prz->old_log);
+ 		kfree(prz);
+ 	}
+ 
+diff --git a/fs/pstore/ram_core.c b/fs/pstore/ram_core.c
+index 966191d3a5ba..3453d493ec27 100644
+--- a/fs/pstore/ram_core.c
++++ b/fs/pstore/ram_core.c
+@@ -17,6 +17,7 @@
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ #include <linux/vmalloc.h>
++#include <linux/mm.h>
+ #include <asm/page.h>
+ 
+ #include "ram_internal.h"
+@@ -385,7 +386,7 @@ void *persistent_ram_old(struct persistent_ram_zone *prz)
+ 
+ void persistent_ram_free_old(struct persistent_ram_zone *prz)
+ {
+-	kfree(prz->old_log);
++	kvfree(prz->old_log);
+ 	prz->old_log = NULL;
+ 	prz->old_log_size = 0;
+ }
+-- 
+2.41.0.255.g8b1d071c50-goog
+
