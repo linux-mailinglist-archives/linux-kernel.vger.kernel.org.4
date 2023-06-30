@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B6874318D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34057743190
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjF3AVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S232088AbjF3AVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjF3AUz (ORCPT
+        with ESMTP id S229700AbjF3AVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:20:55 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1C630DD
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:20:51 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f875b267d9so2065005e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688084450; x=1690676450;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yx2uReacsSjlB5YUCVOOR3S8enk7DDYDiBnyRDkYlf8=;
-        b=EEK6IM0oR1KQiaIUmQRzZYYbmsv33f420dSCtYsBV6ZuFqE2WeNCsHpCN+uDOGT73P
-         5B078rFYqp6L8I24vgAINwhEq2O1vhTEkUqf9wwRWpqfJPvjKOe9Fxz1GC/IZpecx3ke
-         a5M2ptUfACDXN36SmJiznMyema0SeRiDs3Jak/9AjhkiHsdnT3UiKJh+ipgRS/CExtbK
-         F2bJBiDKG0wOwYONYiUYN8Szht9deFiI+oOr8RdSpOwvZ8aAF+2lwA0meIaawZU4cr5v
-         /4P/yubPC4bvatCGzbuH9ObBkuyoB9zzTW/O0ASsqXmRW3Y/wWSLytQbYW6Cz6s5gTNg
-         NyHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688084450; x=1690676450;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yx2uReacsSjlB5YUCVOOR3S8enk7DDYDiBnyRDkYlf8=;
-        b=iVaYx3LMwLrhsQEp8mpt/58UgvAZDih4NLvw/FU+Ol9vlGKHPaU0ZxxeVmu/WGCt7F
-         3ECPHVFeyN+bv2Cem2xwT9KU00GT4n404tpI75utl5oMQ26i17gzZWkMJtmmtbT0coyG
-         1lCtEMzIUoUCfxbCJH2Vyyd6tgG/aSRRBjSIxrv6SImnhJNALY0F3bPC3CGonx9vQY3f
-         yD2Ur0pjqicj6OTwC+BR2Bp8OJBeKkfRkB0PZGisz1KD04T2Pk5NJ9kgxQMVqugxebhs
-         vSQ/rExI8lJvUbIzOoTOy5+JN9iycxTgTwjMkLp6pgxMKoal861VqonfLKyGT31WijMW
-         WWHQ==
-X-Gm-Message-State: ABy/qLbFeVYXXGUy+TvTMt4N+IlY9KAVt5SGdTSqJd41KnqQRgpsnurG
-        CGWwOJsfvhXlXos5PS5Bi811yw==
-X-Google-Smtp-Source: APBJJlGPbplAHhgvOKZA2syZpVDVCLQJrMf9fUCYsyO4mN8vNXFe03nhEl8FXt+lD7Pd8jeD+j5IEA==
-X-Received: by 2002:a05:6512:3b9c:b0:4f8:5960:49a9 with SMTP id g28-20020a0565123b9c00b004f8596049a9mr1260706lfv.23.1688084450081;
-        Thu, 29 Jun 2023 17:20:50 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id y9-20020ac255a9000000b004f755b6ffcdsm2536439lfg.23.2023.06.29.17.20.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 17:20:49 -0700 (PDT)
-Message-ID: <c4a6e82f-ddcc-3adf-4c50-b88c02c09a0f@linaro.org>
-Date:   Fri, 30 Jun 2023 03:20:49 +0300
+        Thu, 29 Jun 2023 20:21:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5DB2D62;
+        Thu, 29 Jun 2023 17:21:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1688084501;
+        bh=vt6/RnuSiSReNKf6aSQIzd35ALzFzJ90RoWD7TGrads=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BsrY9fG7XzuEgXk+vI+SJ1uwmL3NbN1AzafgjXxh5CdAjYbCQpdv/QS3GHGcNpUAa
+         OpfdzpZUskyRu5x13mgbZYpxS8D4dmiYdkz/qW6tWxTaTrQhlFBvOlbAZbEDAGP6BB
+         FOnwe1LyP537s0DPqZYccoYwa+RgVS5awllhfWZwXf7a+A7Drd82cUVRYa1cmqWPG2
+         VJwxhxcXjGGPNbpTvwDXdQS4Eo2qkN6xSbBOPazv9S4OO7AgFVSHNqPDkM8rPPZS+t
+         WRQnS6/dIxGW5XTe68ziEb4SUp8wBLMg85EgsZZnD7nn0xygKCKFbeyeI0WRk0RXic
+         LZHn0FOAnRLlw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QsbbT3phjz4wb2;
+        Fri, 30 Jun 2023 10:21:41 +1000 (AEST)
+Date:   Fri, 30 Jun 2023 10:21:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20230630102139.12a3ce8d@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 3/3] drm/msm/dpu: drop DPU_INTF_DATA_COMPRESS from dpu
- catalog
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
-        andersson@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230629193001.22618-1-quic_abhinavk@quicinc.com>
- <20230629193001.22618-3-quic_abhinavk@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230629193001.22618-3-quic_abhinavk@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/OnCSlzEEdcFJwruZ+pV7ON0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2023 22:29, Abhinav Kumar wrote:
-> Now that all usages of DPU_INTF_DATA_COMPRESS have been replaced
-> with the dpu core's major revision lets drop DPU_INTF_DATA_COMPRESS
-> from the catalog completely.
-> 
-> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 --
->   2 files changed, 1 insertion(+), 3 deletions(-)
+--Sig_/OnCSlzEEdcFJwruZ+pV7ON0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi all,
 
--- 
-With best wishes
-Dmitry
+The following commits are also in net tree as different commits (but
+the same patches):
 
+  0d4cc72dd9db ("Bluetooth: hci_bcm: do not mark valid bd_addr as invalid")
+  1155a833ed0d ("Bluetooth: MGMT: Fix marking SCAN_RSP as not connectable")
+  14dc3f27c944 ("Bluetooth: btrtl: Add missing MODULE_FIRMWARE declarations=
+")
+  15d74ca10a2e ("Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_c=
+b")
+  289bfc8d7dfd ("Bluetooth: L2CAP: Fix use-after-free")
+  3945d329465e ("Bluetooth: ISO: Rework sync_interval to be sync_factor")
+  41696c5c9627 ("Bluetooth: hci_event: fix Set CIG Parameters error status =
+handling")
+  49c5fe08def9 ("Bluetooth: btusb: Add MT7922 bluetooth ID for the Asus All=
+y")
+  5a06716bc727 ("Bluetooth: fix use-bdaddr-property quirk")
+  7a26cd876524 ("Bluetooth: hci_sysfs: make bt_class a static const structu=
+re")
+  8900ccc56ad3 ("Bluetooth: btusb: Add device 6655:8771 to device tables")
+  b3d9018d9254 ("Bluetooth: fix invalid-bdaddr quirk for non-persistent set=
+up")
+  dbc333d3abdf ("Bluetooth: btqca: use le32_to_cpu for ver.soc_id")
+  eee96e90b646 ("Bluetooth: hci_conn: Use kmemdup() to replace kzalloc + me=
+mcpy")
+
+Some of these are causing unnecessary conflicts when I merge the
+bluetooth tree.  Is there anything in the bluetooth tree (that is not in
+the net-next or net trees) that is destined for the current merge window?
+If not, then please just rename the master branch to something else and
+recreate a new master branch to be somewhere in Linus' tree or the net-dev
+tree until after the merge window closes.
+
+I am also still reverting "Bluetooth: hci_sock: Forward credentials
+to monitor".
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OnCSlzEEdcFJwruZ+pV7ON0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSeIBMACgkQAVBC80lX
+0GzCKQf/d9FIdSbBEeajh5E7cXDzvexU/NBwFh5JHmNv9jTYZTYOuZoryib3gWbj
+ZY3PNAPm+MH1ihGaCtgT5MLMNl5s6WBhfajbiMY1mXIhHVYKS1Kk54ox0I47t+9e
+QMwrI1ZQBUqFK6CBId5RnaTWcjvoAT+Rru7CVE6Aawp6xrqrhHYsNPSj1mndmrFq
+2VI7G04IxTJ9bYVvBxMOok/eqT6hdPq0bdx3OHqH+V+xtY4M+Lz64pmRFSPLKKk4
+oOI8dPLve92uonfnblFFlhKwXzIIjhFT3YEfgsLTSfOHNnEbu89GcChOO7eyPWS+
+tJoPDIKB7Wpsm3YKLRKjK8VPyQvYTg==
+=vHp8
+-----END PGP SIGNATURE-----
+
+--Sig_/OnCSlzEEdcFJwruZ+pV7ON0--
