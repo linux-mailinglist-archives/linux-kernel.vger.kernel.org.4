@@ -2,36 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8F3743367
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30A074336C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjF3ENC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 00:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S232235AbjF3EQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 00:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjF3ENA (ORCPT
+        with ESMTP id S231650AbjF3EQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 00:13:00 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E6B701FD7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:12:58 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 2B3F060765845;
-        Fri, 30 Jun 2023 12:12:52 +0800 (CST)
-X-MD-Sfrom: dengxiang@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   dengxiang <dengxiang@nfschina.com>
-To:     tiwai@suse.com, yangyingliang@huawei.com, perex@perex.cz
-Cc:     linux-kernel@vger.kernel.org, dengxiang@nfschina.com,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] ALSA: hda/realtek: Add quirks for Unis  H3C Desktop B760 & Q760
-Date:   Fri, 30 Jun 2023 12:12:43 +0800
-Message-Id: <20230630041243.2309665-1-dengxiang@nfschina.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Fri, 30 Jun 2023 00:16:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50A81FD7;
+        Thu, 29 Jun 2023 21:16:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 832A26167D;
+        Fri, 30 Jun 2023 04:16:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DDE10C433C0;
+        Fri, 30 Jun 2023 04:16:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688098603;
+        bh=UEbaQ7BXNoThBFtdI4w66veNSz4ItIQdwCIfmHkiAEY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=W+cDfJsXT59sRuu7QPcqBztAa0TCfaQynepcwRk6s62T5b9Ft9TkPVno0MT/l3VMf
+         m5of5cRu3sI7WuTKx7DyNwhSwv6iE5oT3cvYQrktgLvrFQ3rXUSGV/jZO3Ad1gvyOQ
+         XVOeJT3JcJHUzxgCOfOhjjf03LqbemjcVPBglTR27We4pc4SNHXm5OASEu7MwEaPbz
+         qaA/H/gFSBMM2Uc48MfBIyRcvSmVbPizbLYNNOLQ9ZL3C66VOpxTjCGfIvgPnvWl5q
+         W9xMh2ErKtYd3MHtrz+0hPTBw/cZz23KUjR5cw8rLpLt39ow1gjcbRr5NrV5JEbbCu
+         ma3BwdtaZS4sA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C6A80C64458;
+        Fri, 30 Jun 2023 04:16:43 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZJzUeFT7lLqEjMJn@nvidia.com>
+References: <ZJzUeFT7lLqEjMJn@nvidia.com>
+X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZJzUeFT7lLqEjMJn@nvidia.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+X-PR-Tracked-Commit-Id: 5f004bcaee4cb552cf1b46a505f18f08777db7e5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7ede5f78a0d74b574791c7eb0e2ca6e54b80c93c
+Message-Id: <168809860380.23778.16011599589680893363.pr-tracker-bot@kernel.org>
+Date:   Fri, 30 Jun 2023 04:16:43 +0000
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,83 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These models use NSIWAY amplifiers for internal speaker, but cannot put
-sound outside from these amplifiers. So eapd verbs are needed to initialize
-the amplifiers. They can be added during boot to get working sound out
-of internal speaker.
+The pull request you sent on Wed, 28 Jun 2023 21:46:48 -0300:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306291229.5w2tIZjA-lkp@xxxxxxxxx/
+> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
 
----
-v2:
-- remove warning about unused variable 'spec' as belows:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7ede5f78a0d74b574791c7eb0e2ca6e54b80c93c
 
-Signed-off-by: dengxiang <dengxiang@nfschina.com>
----
- sound/pci/hda/patch_realtek.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+Thank you!
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index afe8253f9a4f..82f53af2d08a 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -11201,6 +11201,20 @@ static void alc897_fixup_lenovo_headset_mode(struct hda_codec *codec,
- 	}
- }
- 
-+static const struct hda_verb alc897_unis_h3c_x500s_eapd_verbs[] = {
-+		{0x14, AC_VERB_SET_EAPD_BTLENABLE, 0},
-+		{ }
-+};
-+
-+static void alc897_fixup_unis_h3c_x500s(struct hda_codec *codec,
-+					  const struct hda_fixup *fix, int action)
-+{
-+	if (action != HDA_FIXUP_ACT_PRE_PROBE)
-+		return;
-+
-+	snd_hda_add_verbs(codec, alc897_unis_h3c_x500s_eapd_verbs);
-+}
-+
- static const struct coef_fw alc668_coefs[] = {
- 	WRITE_COEF(0x01, 0xbebe), WRITE_COEF(0x02, 0xaaaa), WRITE_COEF(0x03,    0x0),
- 	WRITE_COEF(0x04, 0x0180), WRITE_COEF(0x06,    0x0), WRITE_COEF(0x07, 0x0f80),
-@@ -11286,6 +11300,7 @@ enum {
- 	ALC897_FIXUP_HP_HSMIC_VERB,
- 	ALC897_FIXUP_LENOVO_HEADSET_MODE,
- 	ALC897_FIXUP_HEADSET_MIC_PIN2,
-+	ALC897_FIXUP_UNIS_H3C_X500s,
- };
- 
- static const struct hda_fixup alc662_fixups[] = {
-@@ -11725,6 +11740,10 @@ static const struct hda_fixup alc662_fixups[] = {
- 		.chained = true,
- 		.chain_id = ALC897_FIXUP_LENOVO_HEADSET_MODE
- 	},
-+	[ALC897_FIXUP_UNIS_H3C_X500s] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = alc897_fixup_unis_h3c_x500s,
-+	},
- };
- 
- static const struct snd_pci_quirk alc662_fixup_tbl[] = {
-@@ -11792,6 +11811,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1b35, 0x1234, "CZC ET26", ALC662_FIXUP_CZC_ET26),
- 	SND_PCI_QUIRK(0x1b35, 0x2206, "CZC P10T", ALC662_FIXUP_CZC_P10T),
- 	SND_PCI_QUIRK(0x1c6c, 0x1239, "Compaq N14JP6-V2", ALC897_FIXUP_HP_HSMIC_VERB),
-+	SND_PCI_QUIRK(0x10ec, 0x0897, "UNIS H3C X500s", ALC897_FIXUP_UNIS_H3C_X500s),
- 
- #if 0
- 	/* Below is a quirk table taken from the old code.
-@@ -11886,6 +11906,7 @@ static const struct hda_model_fixup alc662_fixup_models[] = {
- 	{.id = ALC662_FIXUP_USI_HEADSET_MODE, .name = "usi-headset"},
- 	{.id = ALC662_FIXUP_LENOVO_MULTI_CODECS, .name = "dual-codecs"},
- 	{.id = ALC669_FIXUP_ACER_ASPIRE_ETHOS, .name = "aspire-ethos"},
-+	{.id = ALC897_FIXUP_UNIS_H3C_X500s, .name = "unis-h3c-x500s"},
- 	{}
- };
- 
 -- 
-2.30.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
