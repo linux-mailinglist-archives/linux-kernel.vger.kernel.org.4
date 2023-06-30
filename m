@@ -2,141 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9791D74455A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FAE744565
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjF3XmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 19:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S230427AbjF3XxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 19:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjF3XmX (ORCPT
+        with ESMTP id S229503AbjF3XxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 19:42:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057963C0B;
-        Fri, 30 Jun 2023 16:42:22 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UNXIdx022615;
-        Fri, 30 Jun 2023 23:42:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=hft4E1gpvCyofLxOPJJzA7qnS+2omo4bn7L5eCF+mp8=;
- b=EgLb37mJpTQMsKkZVfJaKnz56ctDsbNiTYcIEz5lYsxLv5mZr1/7PWNgcrbvVCKjZ+lA
- eGCW8pSRCES+IUWNy5iBHHoiPoimQy727S3K5f/nvz93VdH4BorNCjKmzYA75g/VFNpZ
- LeMPBzMJS2loNREfwHYxiDu7ZH9ICYjYIMw3FfySdj+TwNmaG6WXPqPdEPvQ1fo1ur/z
- OWgylgfO0XlAJTCGv38E2GEoDEsG5KVtB8vQleikTTkHWZzsdNmdx3vz/0EbtXvvSP1X
- 4yjtjgAeXilFGEcToKrsqLuUT1CtoJQkApLp6hbwZeN4fwyoRwC9mb/260ICDSMeJQOQ aw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhw70sjfq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 23:41:59 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35UNfwp3024189
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 23:41:58 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 30 Jun
- 2023 16:41:57 -0700
-Message-ID: <7d7824a9-b57a-182d-ed04-883933ace702@quicinc.com>
-Date:   Fri, 30 Jun 2023 16:41:57 -0700
+        Fri, 30 Jun 2023 19:53:16 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E30A10FD;
+        Fri, 30 Jun 2023 16:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=tBguVH6T/Ggb9KVY+w61Ct5mLTCQ9Iqp8l22Kr6DhxI=; b=MabUXmWDLVXSP2c2FuXcWIDfp1
+        uUvyGklSWvPYC71KNDgurI2Y/1FclgUWbLmkS5nNRfp+1I/4prXDlmr/7DbL36Ij1kO+ErvMDp7Dm
+        c0I40RudgurdGpW44pDi3U2yaMerbJKU4vnlqA4VP+SUTRdmWHBEtqkOHFyKrSz+ibBjbfLQENpyv
+        sjUJGrF1XSW8qnNtUp50UbdxU5WiKEEjVoZ2yHrRshXqMx0F0zOu7NmHaXrFP3Y9j61oYVS1eThxS
+        2Nsc1k6IZQflMH0tMy4VacldcwMqWeb6sf/MUucg0vptusfBvXG9QPkM/2YxxFdBYXtpSwDABu9eL
+        fMr3jZZw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qFNvE-004nU5-2m;
+        Fri, 30 Jun 2023 23:53:04 +0000
+Date:   Fri, 30 Jun 2023 16:53:04 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     trix@redhat.com, keescook@chromium.org, ebiederm@xmission.com,
+        yzaikin@google.com, j.granados@samsung.com,
+        patches@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mcgrof@kernel.org
+Subject: [GIT PULL] second set of sysctl fixes v6.5-rc1
+Message-ID: <ZJ9q4AUkeaENryE7@bombadil.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH RFC v4 5/7] drm/msm/dpu: Add solid fill and pixel source
- properties
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <quic_abhinavk@quicinc.com>, <ppaalanen@gmail.com>,
-        <contact@emersion.fr>, <laurent.pinchart@ideasonboard.com>,
-        <sebastian.wick@redhat.com>, <ville.syrjala@linux.intel.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <wayland-devel@lists.freedesktop.org>
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
- <20230404-solid-fill-v4-5-f4ec0caa742d@quicinc.com>
- <39ee5eac-1452-1c08-c24f-6c70c13ce804@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <39ee5eac-1452-1c08-c24f-6c70c13ce804@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9BpfPWOkgs2U29cACyGlkmlvwqEevVMJ
-X-Proofpoint-GUID: 9BpfPWOkgs2U29cACyGlkmlvwqEevVMJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_13,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- mlxlogscore=999 spamscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 bulkscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306300207
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit b25f62ccb490680a8cee755ac4528909395e0711:
 
+  Merge tag 'vfio-v6.5-rc1' of https://github.com/awilliam/linux-vfio (2023-06-30 15:22:09 -0700)
 
-On 6/29/2023 5:49 PM, Dmitry Baryshkov wrote:
-> On 30/06/2023 03:25, Jessica Zhang wrote:
->> Add solid_fill and pixel_source properties to DPU plane
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 2 ++
->>   1 file changed, 2 insertions(+)
-> 
-> This should be the last commit.
+are available in the Git repository at:
 
-Hi Dmitry,
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-fixes-v2-v6.4-rc1
 
-Acked, will move this to the end.
+for you to fetch changes up to 7fffbc71075dcb733068d711c2593127cdce86f0:
 
-Thanks,
+  sysctl: set variable sysctl_mount_point storage-class-specifier to static (2023-06-30 16:19:47 -0700)
 
-Jessica Zhang
+----------------------------------------------------------------
+sysctl-fixes-v2-v6.4-rc1
 
-> Otherwise:
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->> index c2aaaded07ed..5f0984ce62b1 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->> @@ -1429,6 +1429,8 @@ struct drm_plane *dpu_plane_init(struct 
->> drm_device *dev,
->>           DPU_ERROR("failed to install zpos property, rc = %d\n", ret);
->>       drm_plane_create_alpha_property(plane);
->> +    drm_plane_create_solid_fill_property(plane);
->> +    drm_plane_create_pixel_source_property(plane, 
->> BIT(DRM_PLANE_PIXEL_SOURCE_COLOR));
->>       drm_plane_create_blend_mode_property(plane,
->>               BIT(DRM_MODE_BLEND_PIXEL_NONE) |
->>               BIT(DRM_MODE_BLEND_PREMULTI) |
->>
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
+Just one minor nit I forgot to merge.
+
+----------------------------------------------------------------
+Tom Rix (1):
+      sysctl: set variable sysctl_mount_point storage-class-specifier to static
+
+ fs/proc/proc_sysctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
