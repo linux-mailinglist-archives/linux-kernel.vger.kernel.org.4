@@ -2,153 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96426743CC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4892743CD1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbjF3NaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S232644AbjF3Ncj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbjF3NaB (ORCPT
+        with ESMTP id S232619AbjF3Ncf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:30:01 -0400
-Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724EF3C1E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 06:29:55 -0700 (PDT)
-Received: from [192.168.1.56] ([79.0.204.227])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id FEC7q77zxxoQXFEC7qiZpn; Fri, 30 Jun 2023 15:29:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1688131791; bh=0z6H/I0m3ouNyosG6I71QsEqAgExvCvtAlgv5fkSlhQ=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=NmBgzbNLwa6rEhaMkLxIClsIzg3qvnXm2bIls41oJRv02E/cuOmevi2zSCoALMzhM
-         xUpk2FgCKQD6BPcu0vJ1ennqMM+1NCpOFNxkB57JFgumUAHwFYu4dztVUcy07+HWYq
-         AvEgoMGu3TVlfbhjx9TBEyDGsYJV7X0kP2volNxj+HiqOZDfNWdJFBIFl6F/tYEs74
-         3+wiZRNt19iusd4zyNGRKb/HpWGdZs0aigZ4fQGHCxQc3Xf2pHOJ2A9BIl4hrqeR81
-         tAN/RepOi7nA2LDBKTvm6A0Z6Svnopbw7ElrCjyIbAZCme/9IT5gu3DJG6LxBawH7Y
-         L6fGRjmAk2/Mw==
-Message-ID: <ca137a28-28a3-f563-52e9-4ee0ef1daa9f@enneenne.com>
-Date:   Fri, 30 Jun 2023 15:29:50 +0200
+        Fri, 30 Jun 2023 09:32:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7341B359E;
+        Fri, 30 Jun 2023 06:32:21 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 13:32:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688131940;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Ct27fAT+6XX7UPKXfhBWOCjOGHDjnQ44IBDaz+qjbw=;
+        b=hfRme7N5dKXKo5O1TO8gz0XfuS+yInortheRRP39ifAjWip5iS8uieiiZ/+Tro9hYD4DRn
+        Cj6BL2SaWZ09364aGxDA9D2a/pGZwDhLL+JLdnw9s6gowhiQE/BR+JLaqAHw6ohBNFE4Zp
+        h+147ndUyUHUJMDa3lFxjjrckmEMSNY29oCuwFsq/Bn3zQwF7LfqHhQQJm0xgi6/JJzqgr
+        Z8/38yj9CX9XYzP/HVBwdaSsfEbgfNUVFLpSz0+32b/tpQ+V38m2BJzpuPCfWkghd1IlKg
+        rtUf2ADO233Zimskvr6niaXfrblijGnjJwJ27LAye7kb/Eq7qJGJXK4/eePT0w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688131940;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Ct27fAT+6XX7UPKXfhBWOCjOGHDjnQ44IBDaz+qjbw=;
+        b=aqIZJQLhieGpMxed3LDBpQb2BhQrZARAV4obijh/ckkjZiqQf5VdwzRK6yXAYiefxbBr24
+        HlLZnoBeC4DVY5Cg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/efi: Make efi_set_virtual_address_map IBT safe
+Cc:     pinkflames.linux@gmail.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <87jzvm12q0.ffs@tglx>
+References: <87jzvm12q0.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] include/uapi pps.h: drop not needed PPS_MAX_SOURCES
- define
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20230630071826.105501-1-giometti@enneenne.com>
- <20230630071826.105501-2-giometti@enneenne.com>
- <2023063017-traverse-accustom-97f4@gregkh>
- <56e461b4-2cd8-ec89-86b2-68544826cf73@enneenne.com>
- <2023063015-immerse-broadside-3dab@gregkh>
-From:   Rodolfo Giometti <giometti@enneenne.com>
-In-Reply-To: <2023063015-immerse-broadside-3dab@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfAMfWoGbq3Ngn4c0npnZjtt19NYdhFmvXTV4nX8+qOZg7YX9mNcBpE/3Gt9Em/V6B0qlvRX7DKzLL3MIAq1LCJ0pz8M8CD8uYKY6Hf3Z5aFspZz8u0l7
- 81g8WRlBBxjPFgTZ8eMMSgvdh2gK59+FNjqRs51zdayYByWtihb7Bn9GYY7laF3PZhA3QxGE4hy3Z54J3ZipNplOZ8Aki5KZS8cGPfnoghadw6MC0kPcC/GP
- d/Ue1GWvmawFN8T4qHY5CA==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168813193932.404.2885732890333911092.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/23 14:53, Greg Kroah-Hartman wrote:
-> On Fri, Jun 30, 2023 at 09:50:33AM +0200, Rodolfo Giometti wrote:
->> On 30/06/23 09:31, Greg Kroah-Hartman wrote:
->>> On Fri, Jun 30, 2023 at 09:18:26AM +0200, Rodolfo Giometti wrote:
->>>> Userspace PPS clients should not known about how many PPS sources can
->>>> be defined within the system (nor the rfc2783 say so), so we can
->>>> safely drop this define since is not used anymore in the kernel too.
->>>>
->>>> Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
->>>> ---
->>>>    drivers/pps/pps.c        | 6 +++---
->>>>    include/uapi/linux/pps.h | 1 -
->>>>    2 files changed, 3 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
->>>> index 5d19baae6a38..1a6131608036 100644
->>>> --- a/drivers/pps/pps.c
->>>> +++ b/drivers/pps/pps.c
->>>> @@ -354,7 +354,7 @@ int pps_register_cdev(struct pps_device *pps)
->>>>    	 * Get new ID for the new PPS source.  After idr_alloc() calling
->>>>    	 * the new source will be freely available into the kernel.
->>>>    	 */
->>>> -	err = idr_alloc(&pps_idr, pps, 0, PPS_MAX_SOURCES, GFP_KERNEL);
->>>> +	err = idr_alloc(&pps_idr, pps, 0, MINORMASK, GFP_KERNEL);
->>>>    	if (err < 0) {
->>>>    		if (err == -ENOSPC) {
->>>>    			pr_err("%s: too many PPS sources in the system\n",
->>>> @@ -449,7 +449,7 @@ EXPORT_SYMBOL(pps_lookup_dev);
->>>>    static void __exit pps_exit(void)
->>>>    {
->>>>    	class_destroy(pps_class);
->>>> -	unregister_chrdev_region(pps_devt, PPS_MAX_SOURCES);
->>>> +	unregister_chrdev_region(pps_devt, MINORMASK);
->>>>    }
->>>>    static int __init pps_init(void)
->>>> @@ -463,7 +463,7 @@ static int __init pps_init(void)
->>>>    	}
->>>>    	pps_class->dev_groups = pps_groups;
->>>> -	err = alloc_chrdev_region(&pps_devt, 0, PPS_MAX_SOURCES, "pps");
->>>> +	err = alloc_chrdev_region(&pps_devt, 0, MINORMASK, "pps");
->>>>    	if (err < 0) {
->>>>    		pr_err("failed to allocate char device region\n");
->>>>    		goto remove_class;
->>>> diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
->>>> index 90f2e86020ba..8a4096f18af1 100644
->>>> --- a/include/uapi/linux/pps.h
->>>> +++ b/include/uapi/linux/pps.h
->>>> @@ -26,7 +26,6 @@
->>>>    #include <linux/types.h>
->>>>    #define PPS_VERSION		"5.3.6"
->>>> -#define PPS_MAX_SOURCES		MINORMASK
->>>
->>> Why change this in patch 1, and then delete this here?
->>>
->>> That makes no sense.
->>
->> I did it in two steps to be clear that the first step is about a better
->> redefinition of the PPS_MAX_SOURCES define, while the second step is about
->> the fact it's now that define is useless.
-> 
-> Better to just convert everything in patch one, and then in patch 2
-> delete the .h #define.  That way, when userspace breaks, you can revert
-> just the last patch :)
+The following commit has been merged into the x86/urgent branch of tip:
 
-I'm puzzled since I did as you say... patch 1/2 increases PPS_MAX_SOURCES value 
-while patch 2/2 drops PPS_MAX_SOURCES define.
+Commit-ID:     0303c9729afc4094ef53e552b7b8cff7436028d6
+Gitweb:        https://git.kernel.org/tip/0303c9729afc4094ef53e552b7b8cff7436=
+028d6
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 29 Jun 2023 21:35:19 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Fri, 30 Jun 2023 15:26:24 +02:00
 
->>> And if this is exported to userspace, removing it should break things,
->>> right?  If not, why was it there in the first place?
->>
->> In reality such define is not stated within the PPS RFC2783, so userspace
->> programs whose relies on such define are broken.
-> 
-> RFC's do not document Linux kernel apis.
+x86/efi: Make efi_set_virtual_address_map IBT safe
 
-It's true, but well written PPS clients should relay only on PPS API which in 
-turn doesn't states that define. :P
+Nikl=C4=81vs reported a boot regression on an Alderlake machine and bisected =
+it
+to commit 9df9d2f0471b ("init: Invoke arch_cpu_finalize_init() earlier").
 
-> So if any userspace code breaks, you have to put this back, sorry.
+By moving the invocation of arch_cpu_finalize_init() further down he
+identified that efi_enter_virtual_mode() is the function which causes the
+boot hang.
 
-If you think that patch 2 is not good, no problem, just drop it, but please just 
-consider applying patch 1, since increasing PPS_MAX_SOURCES value is good.
+The main difference of the earlier invocation is that the boot CPU is
+already fully initialized and mitigations and alternatives are applied.
 
-Ciao,
+But the only really interesting change turned out to be IBT, which is now
+enabled before efi_enter_virtual_mode(). "ibt=3Doff" on the kernel command
+line cured the problem.
 
-Rodolfo
+Inspection of the involved calls in efi_enter_virtual_mode() unearthed that
+efi_set_virtual_address_map() is the only place in the kernel which invokes
+an EFI call without the IBT safe wrapper. This went obviously unnoticed so
+far as IBT was enabled later.
 
--- 
-GNU/Linux Solutions                  e-mail: giometti@enneenne.com
-Linux Device Driver                          giometti@linux.it
-Embedded Systems                     phone:  +39 349 2432127
-UNIX programming                     skype:  rodolfo.giometti
+Use arch_efi_call_virt() instead of efi_call() to cure that.
 
+Fixes: fe379fa4d199 ("x86/ibt: Disable IBT around firmware")
+Fixes: 9df9d2f0471b ("init: Invoke arch_cpu_finalize_init() earlier")
+Reported-by: Nikl=C4=81vs Ko=C4=BCes=C5=86ikovs <pinkflames.linux@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217602
+Link: https://lore.kernel.org/r/87jzvm12q0.ffs@tglx
+
+---
+ arch/x86/platform/efi/efi_64.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/platform/efi/efi_64.c b/arch/x86/platform/efi/efi_64.c
+index 232acf4..77f7ac3 100644
+--- a/arch/x86/platform/efi/efi_64.c
++++ b/arch/x86/platform/efi/efi_64.c
+@@ -853,9 +853,9 @@ efi_set_virtual_address_map(unsigned long memory_map_size,
+=20
+ 	/* Disable interrupts around EFI calls: */
+ 	local_irq_save(flags);
+-	status =3D efi_call(efi.runtime->set_virtual_address_map,
+-			  memory_map_size, descriptor_size,
+-			  descriptor_version, virtual_map);
++	status =3D arch_efi_call_virt(efi.runtime, set_virtual_address_map,
++				    memory_map_size, descriptor_size,
++				    descriptor_version, virtual_map);
+ 	local_irq_restore(flags);
+=20
+ 	efi_fpu_end();
