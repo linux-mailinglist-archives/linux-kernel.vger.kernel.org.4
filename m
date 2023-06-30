@@ -2,309 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95486743335
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 05:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D8774333D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 05:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjF3Daj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 23:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S231718AbjF3Dhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 23:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjF3Dae (ORCPT
+        with ESMTP id S229720AbjF3Dho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 23:30:34 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F406D10EC;
-        Thu, 29 Jun 2023 20:30:32 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35U3L9GC011810;
-        Fri, 30 Jun 2023 03:30:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qLQAL5oOwam7hlv102pgTGpwGwpwE4qIl50P6W/t+tw=;
- b=pDbDwlILUlQ8k41kGOjrNWRiEwCff6Zd3fPZ4/OyDdA1BZnxyvRuV1NgIIr1Krq0yFX5
- dr5gHIJTWZ+kXNaVH4Z7SkhBdIzVSufC4IUXTTIbtum3ZxxYJ3yzYqXhYVCwBGmI6BZt
- 6JfGiGq7942CaD+zwfLYw5dyAmBnxGTBthYwC3FTMJOXKqaefzYjQqy/eCfXjlCbJRW6
- FAWpZJYq0ohViYQsrjxYttfLpbGwxpAAUvn09yFBD3jSY/hH9YlCamd98n+TvAzrWqOL
- ywwmrGSeCNj7M0jH0gBdFO+EIDxcjf4OInWNBUx4jCPJ+d4HvHh+5Hi1G03Denev8jZ7 Ow== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rh7s2swp7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 03:30:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35U3UKl2030455
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 03:30:20 GMT
-Received: from [10.110.33.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Thu, 29 Jun
- 2023 20:30:19 -0700
-Message-ID: <525d4cc8-e3b4-5817-4673-c49b5c2be792@quicinc.com>
-Date:   Thu, 29 Jun 2023 20:30:17 -0700
+        Thu, 29 Jun 2023 23:37:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AE13595;
+        Thu, 29 Jun 2023 20:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bswMGS2frlt2CVVIAt/a5yir/ypUK3FQA5KZM/7MXOU=; b=UsFG2PesODzADKzUaCNSPhndkf
+        6YdolipT8DD30P07h37P8BR5PvdF9d4ajPCs63/FwRJEVJLrMcdR4faXfHxnpfdEIzLJB5zJugJqD
+        sLY5X9JbPyhIySdCJjZv2Aivl0VNbSr2BJJdYtxryogJ3FKbku/Py+0ETifxWOgLKU7QNapLQb19W
+        UhRYhDvVPsDBdHFNASIJx51gdKVL1HlHZIXNrNoIZDkKTjlD74wLknyA8rK5Krbj/2ZZocRlRh/X5
+        nTMoy6RN6lY57czZf62G1vZLOJT2raS9yAbw1BEwfYZpO/jiBbNGaPzgnatHT3PE1mF+0GTuhGE+K
+        ygosgtKg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qF4w8-005OUd-R5; Fri, 30 Jun 2023 03:36:44 +0000
+Date:   Fri, 30 Jun 2023 04:36:44 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v6 4/6] mm: change folio_lock_or_retry to use vm_fault
+ directly
+Message-ID: <ZJ5NzJDY0XPt8ui1@casper.infradead.org>
+References: <20230630020436.1066016-1-surenb@google.com>
+ <20230630020436.1066016-5-surenb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/3] drm/msm/dpu: use dpu core's major version to
- enable data compress
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        "David Airlie" <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
-        <andersson@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230629193001.22618-1-quic_abhinavk@quicinc.com>
- <20230629193001.22618-2-quic_abhinavk@quicinc.com>
- <17b3b652-194c-99c2-e460-21663040c398@linaro.org>
- <283a4ae4-c0ea-13f9-fb47-e44f366c26b2@quicinc.com>
- <1962cd48-87e6-4f26-a882-c6648e595a80@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <1962cd48-87e6-4f26-a882-c6648e595a80@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0mMVGIun-vMqCfPs8dAyYb5NxOJPrv0d
-X-Proofpoint-ORIG-GUID: 0mMVGIun-vMqCfPs8dAyYb5NxOJPrv0d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_01,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
- mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300028
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630020436.1066016-5-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 29, 2023 at 07:04:33PM -0700, Suren Baghdasaryan wrote:
+> Change folio_lock_or_retry to accept vm_fault struct and return the
+> vm_fault_t directly.
 
+I thought we decided to call this folio_lock_fault()?
 
-On 6/29/2023 8:22 PM, Dmitry Baryshkov wrote:
-> On 30/06/2023 06:07, Abhinav Kumar wrote:
->>
->>
->> On 6/29/2023 5:20 PM, Dmitry Baryshkov wrote:
->>> On 29/06/2023 22:29, Abhinav Kumar wrote:
->>>> Instead of using a feature bit to decide whether to enable data
->>>> compress or not for DSC use-cases, use dpu core's major version 
->>>> instead.
->>>> This will avoid defining feature bits for every bit level details of
->>>> registers.
->>>>
->>>> Also, rename the intf's enable_compression() op to program_datapath()
->>>> and allow it to accept a struct intf_dpu_datapath_cfg to program
->>>> all the bits at once. This can be re-used by widebus later on as
->>>> well as it touches the same register.
->>>
->>> Two separate commits please, because...
->>>
->>
->> I thought of it but it seemed better together and was the only way I 
->> could think of. Please see below.
->>
->>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>> ---
->>>>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  9 +++++++--
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c      |  9 +++++----
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h      | 16 
->>>> ++++++++++++++--
->>>>   3 files changed, 26 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>>> index b856c6286c85..f4e15b4c4cc9 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->>>> @@ -50,6 +50,7 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
->>>>               to_dpu_encoder_phys_cmd(phys_enc);
->>>>       struct dpu_hw_ctl *ctl;
->>>>       struct dpu_hw_intf_cfg intf_cfg = { 0 };
->>>> +    struct dpu_kms *dpu_kms = phys_enc->dpu_kms;
->>>>       ctl = phys_enc->hw_ctl;
->>>>       if (!ctl->ops.setup_intf_cfg)
->>>> @@ -68,8 +69,12 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
->>>>                   phys_enc->hw_intf,
->>>>                   phys_enc->hw_pp->idx);
->>>> -    if (intf_cfg.dsc != 0 && 
->>>> phys_enc->hw_intf->ops.enable_compression)
->>>> -        phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
->>>> +    if (intf_cfg.dsc != 0 && dpu_kms->catalog->core_major_version 
->>>> >= 0x7) {
->>>
->>> ... because this becomes incorrect. The datapath should be programmed 
->>> in all the cases, if there is a corresponding callback. intf_cfg.dsc 
->>> should be used as a condition to set datapath_cfg.
->>>
->>
->> The issue is that today we do not have dpu_mdss_cfg as part of 
->> dpu_hw_intf nor _setup_intf_ops because all of those have been dropped 
->> with some rework or cleanup.
-> 
-> Pass dpu_mdss_cfg to dpu_hw_intf_init(). It was removed as a cleanup, 
-> now we can reintroduce it.
-> 
+> +static inline vm_fault_t folio_lock_or_retry(struct folio *folio,
+> +					     struct vm_fault *vmf)
+>  {
+>  	might_sleep();
+> -	return folio_trylock(folio) || __folio_lock_or_retry(folio, mm, flags);
+> +	return folio_trylock(folio) ? 0 : __folio_lock_or_retry(folio, vmf);
 
-Thanks, that will address all these concerns.
+No, don't use the awful ternary operator.  The || form is used
+everywhere else.
 
-I wanted to get agreement before re-introducing it and also make sure 
-there was no other way.
+>  /*
+>   * Return values:
+> - * true - folio is locked; mmap_lock is still held.
+> - * false - folio is not locked.
+> + * 0 - folio is locked.
+> + * VM_FAULT_RETRY - folio is not locked.
 
+I don't think we want to be so prescriptive here.  It returns non-zero
+if the folio is not locked.  The precise value is not something that
+callers should depend on.
 
->>
->> Ideally even I would like to assign this op only for core_rev >=7 but 
->> that information is no longer available. We would have to start 
->> passing the major and minor versions to _setup_intf_ops() to go with 
->> that approach. So without making all of those changes, the only way I 
->> had was to assign the op unconditionally but call it only for 
->> major_rev >= 7.
->>
->> Passing core_rev to the op itself so that we can write the register 
->> only for core_rev >=7 is an option but then what if some bits start 
->> becoming usable only after minor rev. then we will have to start 
->> passing major and minor rev to program_datapath too. Again getting 
->> little messy.
->>
->> I am open to ideas to achieve the goal of assigning this op only for 
->> core_rev >=7 other than what I wrote above.
->>
->>>
->>>> +        struct intf_dpu_datapath_cfg datapath_cfg = { 0 };
->>>
->>> No need for `0' in the init, empty braces would be enough.
->>>
->>
->> ack.
->>
->>>> +
->>>> +        datapath_cfg.data_compress = true;
->>>> +        phys_enc->hw_intf->ops.program_datapath(phys_enc->hw_intf, 
->>>> &datapath_cfg);
->>>> +    }
->>>>   }
->>>>   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int 
->>>> irq_idx)
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>>> index 5b0f6627e29b..85333df08fbc 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>>> @@ -513,11 +513,13 @@ static void 
->>>> dpu_hw_intf_disable_autorefresh(struct dpu_hw_intf *intf,
->>>>   }
->>>> -static void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
->>>> +static void dpu_hw_intf_program_datapath(struct dpu_hw_intf *ctx,
->>>> +                     struct intf_dpu_datapath_cfg *datapath_cfg)
->>>>   {
->>>>       u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
->>>> -    intf_cfg2 |= INTF_CFG2_DCE_DATA_COMPRESS;
->>>> +    if (datapath_cfg->data_compress)
->>>> +        intf_cfg2 |= INTF_CFG2_DCE_DATA_COMPRESS;
->>>>       DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, intf_cfg2);
->>>>   }
->>>> @@ -543,8 +545,7 @@ static void _setup_intf_ops(struct 
->>>> dpu_hw_intf_ops *ops,
->>>>           ops->disable_autorefresh = dpu_hw_intf_disable_autorefresh;
->>>>       }
->>>> -    if (cap & BIT(DPU_INTF_DATA_COMPRESS))
->>>> -        ops->enable_compression = dpu_hw_intf_enable_compression;
->>>> +    ops->program_datapath = dpu_hw_intf_program_datapath;
->>>
->>> The `core_major_version >= 7' should either be here or in the 
->>> callback itself.
->>>
->>
->> Yes, ideally I would like it like that but please see above why I 
->> couldnt do it.
->>
->>>>   }
->>>>   struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>>> index 99e21c4137f9..f736dca38463 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>>> @@ -48,6 +48,11 @@ struct intf_status {
->>>>       u32 line_count;        /* current line count including 
->>>> blanking */
->>>>   };
->>>> +struct intf_dpu_datapath_cfg {
->>>> +    u8 data_compress;    /* enable data compress between dpu and 
->>>> dsi */
->>>> +    /* can be expanded for other programmable bits */
->>>> +};
->>>
->>> I'd say, dpu_datapath is too generic. What about  intf_cmd_mode_cfg?
->>>
->>
->> The goal was to keep it generic. Its actually the handshake between 
->> DPU and interface datapath so I chose that name.
-> 
-> Do you have plans of using it for the video mode?
-> 
-
-No because we didnt want to touch the video mode path as that was 
-discussed in the widebus series already.
-
-Ok, I am fine with intf_cmd_mode_cfg in that case.
-
-
->>
->> This is not specific to command mode and intf_cfg is already there so 
->> I chose that one :)
->>
->>>> +
->>>>   /**
->>>>    * struct dpu_hw_intf_ops : Interface to the interface Hw driver 
->>>> functions
->>>>    *  Assumption is these functions will be called after clocks are 
->>>> enabled
->>>> @@ -70,7 +75,7 @@ struct intf_status {
->>>>    * @get_autorefresh:            Retrieve autorefresh config from 
->>>> hardware
->>>>    *                              Return: 0 on success, -ETIMEDOUT 
->>>> on timeout
->>>>    * @vsync_sel:                  Select vsync signal for 
->>>> tear-effect configuration
->>>> - * @enable_compression:         Enable data compression
->>>> + * @program_datapath:           Program the DPU to interface 
->>>> datapath for relevant chipsets
->>>>    */
->>>>   struct dpu_hw_intf_ops {
->>>>       void (*setup_timing_gen)(struct dpu_hw_intf *intf,
->>>> @@ -108,7 +113,14 @@ struct dpu_hw_intf_ops {
->>>>        */
->>>>       void (*disable_autorefresh)(struct dpu_hw_intf *intf, uint32_t 
->>>> encoder_id, u16 vdisplay);
->>>> -    void (*enable_compression)(struct dpu_hw_intf *intf);
->>>> +    /**
->>>> +     * Program the DPU to intf datapath by specifying
->>>> +     * which of the settings need to be programmed for
->>>> +     * use-cases which need DPU-intf handshake such as
->>>> +     * widebus, compression etc.
->>>
->>> This is not a valid kerneldoc.
->>>
->>
->> hmmm ... ok so just // ?
->>
->> I referred disable_autorefresh from above and did the same.
->>
->>>> +     */
->>>> +    void (*program_datapath)(struct dpu_hw_intf *intf,
->>>> +                 struct intf_dpu_datapath_cfg *datapath_cfg);
->>>>   };
->>>>   struct dpu_hw_intf {
->>>
-> 
