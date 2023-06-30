@@ -2,132 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16BD743AC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5B0743ACF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbjF3LY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S232234AbjF3L05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbjF3LYU (ORCPT
+        with ESMTP id S231967AbjF3L0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:24:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0207B3AA4;
-        Fri, 30 Jun 2023 04:24:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688124257; x=1719660257;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=52Q2a5Ke+JYzT2oX03f31y1WvSO9qWB2m9pRaooy7VI=;
-  b=OvYLWa/QQSPV3UEARQGkY/3zujb9UYsyKq08H8q3NZGQG9mawSFdvPQn
-   KQ/jncRZK2kaegRFRSMx5t43TTxxZkl26kUtnCInBaPaMDPaxXI+1DK24
-   f9qZRcvwKqJT2FDi/43scLD6lC/U9DhAAMfFfuJnnTJ34jTK76FKSDnqq
-   iK4Q/eGUUq3n2OOMFeYbtDQy0STFghFa4K2duH3noi0PuHhEBrKFJupM1
-   K1CVltP527CtD/mUrIjOfgk9Spz50vq9MUfeL3+wAk7/iUsgYE4UlhhSk
-   6RZ9wyukNTGCEjl9rnMNZ9txBSuD+h3+kAmB4O7a7vxKL+dI+C8PhL3dd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="347154122"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="347154122"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 04:24:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="783050506"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="783050506"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2023 04:24:13 -0700
-Message-ID: <11d23da6-af10-7533-cf6c-98f6b836100f@linux.intel.com>
-Date:   Fri, 30 Jun 2023 14:25:40 +0300
+        Fri, 30 Jun 2023 07:26:53 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC361B1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:26:51 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5704fce0f23so18356007b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688124410; x=1690716410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZicOvf9bDN4v7xxXHEcxX/D7CBL3Gv0y/6DJ76/RtpU=;
+        b=nr+0qeBnsO0LpFZUv3yLUD2H793smM2ShCQmOJ8jSQ5ovo+SrbqQCuOFvWQc6eC/Tg
+         mfdwp6h8mPk+Suf838p2/LVSoxOQ+i+dglfsAgJ/vTHH1x9fVHIyDkLX1xTgGCoueo5A
+         JJK7t9MhytFIuMmIPJTrxWl/fcevbd2NhGlbIpSveCm9ZaZnu6cXFCmfC0iemSFsG0SS
+         4D7LpmmjslV6bPq82EAx5tCRCm1EDPGgA9OQr6opIRCq6YW3EMfRwz8AMmf8IyS5gbK9
+         IRPpFpfySROLopvKjsda5hzU9kHDl/ZJ4hXBDJR7gr948YnNxqYjA96VlBlHXwM5Unac
+         KE8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688124410; x=1690716410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZicOvf9bDN4v7xxXHEcxX/D7CBL3Gv0y/6DJ76/RtpU=;
+        b=H9sfEwCVt6LRKtw3s4LaekRQOGNTRbVE5n2E8srBx6+4P7OY+wblkc8Ovb4W+2PauB
+         aUp8BdGyGNTDA5m79JRB90UUH3xLEvtYlRagQoohpCIo09vfRs9Wcl7z2ky9134jWWy5
+         UhOGfkQDJxcysBzy7vqRORQLQbN3q/5DbveG0oCM1NxLxElWehGERVhuGm2mm3epZ6dh
+         ZdLa1MenPb9jpLbNrEiOvk/qLq3RsmqemeUq5BwOdMKUe+yQ7yC8NS71uFXOxtJNGnI9
+         bywKeWLx2orohAWrp39rU45voGNYvjf3x47x+mO3mrDANSefInwhkWJdFxu4vllqNG+D
+         Bd/g==
+X-Gm-Message-State: ABy/qLaNq6wmrKhgtPNTQ4HLUG4dudiy0BhfKYLXjwoRX9SOrCCAWif3
+        UluZkC8oQnW6W+o90O+9jDClH0wiJLXjFi6HP+G/uBvqJvlEX08NkP8=
+X-Google-Smtp-Source: APBJJlGWl+Zz2b36QIag6H3aK/0BNoriFADaghtw2KYGG+i6kE/6uWTfVRFY1+G9TpLfkHrhaUNTQRHOVWpf337++e4=
+X-Received: by 2002:a81:6783:0:b0:577:617c:8cd with SMTP id
+ b125-20020a816783000000b00577617c08cdmr507282ywc.35.1688124410564; Fri, 30
+ Jun 2023 04:26:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
- <0efd9388-4cbc-d27c-f82f-d14291580150@arm.com>
- <CANiDSCvvtdtS2E1a5qyOERG=DKzcTX2oLGWSecRz2gCi-Oo1tw@mail.gmail.com>
- <c412681d-c845-c8a9-01ed-aafb14a0381a@arm.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: xhci-mtk: set the dma max_seg_size
-In-Reply-To: <c412681d-c845-c8a9-01ed-aafb14a0381a@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230329202148.71107-1-dennis@kernel.org> <ZCTOMVjW+pnZVGsQ@snowbird>
+ <CAMuHMdVK2zPnyB9s0uYwoKj0xspa0CRzqPjhrj-YFqVNdXxEkg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVK2zPnyB9s0uYwoKj0xspa0CRzqPjhrj-YFqVNdXxEkg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 30 Jun 2023 13:26:14 +0200
+Message-ID: <CAPDyKFqtgCK5Wb_fZ9+VVK1F-LWYL+htMvQ9JPpp0zPjzBZ9gw@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
+To:     Dennis Zhou <dennis@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.6.2023 22.19, Robin Murphy wrote:
-> On 2023-06-29 19:29, Ricardo Ribalda wrote:
->> Hi Robin
->>
->> On Thu, 29 Jun 2023 at 20:11, Robin Murphy <robin.murphy@arm.com> wrote:
->>>
->>> On 2023-06-28 22:00, Ricardo Ribalda wrote:
->>>> Allow devices to have dma operations beyond 64K, and avoid warnings such
->>>> as:
->>>
->>> Hang on, is this actually correct? I just had a vague memory of XHCI
->>> having some restrictions, and sure enough according to the spec it
->>> *does* require buffers to be split at 64KB boundaries, since that's the
->>> maximum length a single TRB can encode - that's exactly the kind of
->>> constraint that the max_seg_size abstraction is intended to represent,
->>> so it seems a bit odd to be explicitly claiming a very different value.
->>>
->>> Thanks,
->>> Robin.
->>
->> I think we had a similar discussion for  93915a4170e9 ("xhci-pci: set
->> the dma max_seg_size")
->> on
->> https://lore.kernel.org/all/1fe8f8a7-c88f-0c91-e74f-4d3f2f885c89@linux.intel.com/
->>
->> ```
->> Preferred max segment size of sg list would be 64k as xHC hardware has
->> 64k TRB payload size
->> limit, but xhci driver will take care of larger segments, splitting
->> them into 64k chunks.
->> ```
-> 
-> OK, but it still seems off to me to claim to support something that the hardware doesn't support, and the driver has to fake, especially when it's only to paper over a warning which isn't even the driver's fault in the first place.
+On Tue, 27 Jun 2023 at 19:20, Geert Uytterhoeven <geert@linux-m68k.org> wro=
+te:
+>
+> Hi Dennis,
+>
+> On Thu, Mar 30, 2023 at 1:48=E2=80=AFAM Dennis Zhou <dennis@kernel.org> w=
+rote:
+> > When using dm-verity with a data partition on an emmc device, dm-verity
+> > races with the discovery of attached emmc devices. This is because mmc'=
+s
+> > probing code sets up the host data structure then a work item is
+> > scheduled to do discovery afterwards. To prevent this race on init,
+> > let's inline the first call to detection, __mm_scan(), and let
+> > subsequent detect calls be handled via the workqueue.
+> >
+> > Signed-off-by: Dennis Zhou <dennis@kernel.org>
+>
+> Thanks for your patch, which is now commit 2cc83bf7d41113d9 ("mmc:
+> core: Allow mmc_start_host() synchronously detect a card") in
+> linux-next/master mmc/next next-20230614 next-20230615 next-20230616
+>
+> I have bisected the following failure on Renesas Salvator-XS with R-Car H=
+3
+> ES2.0 to the above commit:
+>
+>     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
+> hardware interrupt (CMD0)
+>     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
+> hardware interrupt (CMD1)
+>     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
+> hardware interrupt (CMD0)
+>     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
+> hardware interrupt (CMD1)
+>     mmc0: Failed to initialize a non-removable card
 
-xHC Hardware has odd alignments and size restrictions that the driver anyway need to sort out.
-The 64K is already fake, it's the most common max supported size for TRBs, but not always true.
-Varies depending on TRB location in TRB ring.
+Thanks for reporting!
 
-xhci driver can handle any size.
+After I had a closer look, I realize that all the renesas/tmio drivers
+are suffering from the similar problem. A host driver must not call
+mmc_add_host() before it's ready to serve requests.
 
-> 
-> The aim of the DMA_API_DEBUG_SG warnings wasn't to go round blindly adding dma_set_max_seg_size(UINT_MAX) all over the place, it was always to consider whether the dma_map_sg() call and/or the scatterlist itself are right, just as much as whether the driver may have forgotten to set an appropriate parameter. As I've already raised, in this particular case I think it's actually the debug check that's misplaced, since it's not dma_map_sg() anyway, but as it stands, the implementations of dma_alloc_noncontiguous() are definitely doing the wrong thing with respect to what it is then asking to validate.
+Things like initializing an irq-handler must be done before
+mmc_add_host() is called, which is not the case for renesas/tmio. In
+fact, there seems to be a few other host drivers that have the similar
+pattern in their probe routines.
 
-Agree that this seems to be an issue in the DMA debugging side.
-Would it need to take into account cases where device driver can support different sizes than the host controller?
+Note that, even if the offending commit below triggers this problem
+100% of the cases (as the probe path has now becomes synchronous),
+there was a potential risk even before. Previously, mmc_add_host()
+ended up punting a work - and if that work ended up sending a request
+to the host driver, *before* the irq-handler would be ready, we would
+hit the similar problem. I bet adding an msleep(1000) immediately
+after mmc_add_host() in tmio_mmc_host_probe(), would then trigger this
+problem too. :-)
 
-> 
-> Unless there is some known reason to make this change to any USB host controller *other* than that someone sees UVC allocate a >64KB buffer via this path on a system which happens to have that particular HCD, it is not the right change to make.
+That said, I am going to revert the offending commit to fix these
+problems, for now. Then I will try to help out and fixup the relevant
+host drivers  - and when that is done, we can give this whole thing a
+new try.
 
-This would be all USB 3.x hosts, from all vendors.
+Any objections or other suggestions to this?
 
-keeping the 64K max seg size, and fixing the dma debug side would be optimal, but until that gets done I think
-we can take this oneliner as it resolves a real world issue where USB isn't working.
+Kind regards
+Uffe
 
-Thanks
--Mathias
-
+>
+> Reverting the commit fixes the issue for me.
+>
+> > --- a/drivers/mmc/core/core.c
+> > +++ b/drivers/mmc/core/core.c
+> > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_c=
+ard *card, sector_t *gpt_sector)
+> >  }
+> >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
+> >
+> > -void mmc_rescan(struct work_struct *work)
+> > +static void __mmc_rescan(struct mmc_host *host)
+> >  {
+> > -       struct mmc_host *host =3D
+> > -               container_of(work, struct mmc_host, detect.work);
+> >         int i;
+> >
+> >         if (host->rescan_disable)
+> > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
+> >                 mmc_schedule_delayed_work(&host->detect, HZ);
+> >  }
+> >
+> > +void mmc_rescan(struct work_struct *work)
+> > +{
+> > +       struct mmc_host *host =3D
+> > +               container_of(work, struct mmc_host, detect.work);
+> > +
+> > +       __mmc_rescan(host);
+> > +}
+> > +
+> >  void mmc_start_host(struct mmc_host *host)
+> >  {
+> >         host->f_init =3D max(min(freqs[0], host->f_max), host->f_min);
+> > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
+> >         }
+> >
+> >         mmc_gpiod_request_cd_irq(host);
+> > -       _mmc_detect_change(host, 0, false);
+> > +       host->detect_change =3D 1;
+> > +       __mmc_rescan(host);
+> >  }
+> >
+> >  void __mmc_stop_host(struct mmc_host *host)
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
