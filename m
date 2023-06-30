@@ -2,160 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A080743401
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F448743403
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjF3FUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S230415AbjF3FVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 01:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjF3FUA (ORCPT
+        with ESMTP id S231824AbjF3FVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:20:00 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E672D78
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:19:59 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b80f2e6c17so12098135ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688102399; x=1690694399;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZXNjXyUXRB3e3R4COIZ6LKTKDhQp6FWYpoDH70i59sQ=;
-        b=S4VO+ZyRe1+UIGkN8iQT2QCJs8/H6Xekfswk+8UWSaAtM27VaDw3fv/6JVLGq4DMK5
-         J3ZzXzPK82IztcwwyEkMHBaUFLKZ/KSVivQ8vHYDx965HaaUHvDwvuYT0elk6ei/wokK
-         HjXyv0GgW5ZKy+zeDx0OkrTGkMvbZilQ19EwlCTQ+zXhzeymIeryPCjg7jSPD8QHNIg3
-         p73VkhXgbRMUojuTudIVQ8hk1X8Ls7ULSMFzHa9wuLWPmQE2+lEmSgluqax5JT2QQmBQ
-         HhWdK6o5cWueeco4PgZ1yi7fbCg6k1O2jRA8mFsPvlpgKfCjdBhEDCIDIiIhWxncDu0H
-         EV9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688102399; x=1690694399;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZXNjXyUXRB3e3R4COIZ6LKTKDhQp6FWYpoDH70i59sQ=;
-        b=Pok5qMaCK6rRuG8RF2+gikoiqO4lEuLRJqEIwrACSFbtqwuONp8F6j1ec65IBkUry8
-         rbXP/hU/hSWC8iRsusarGyoPa6UIIEDD/TWdjWBNjLHysD5W5gS3VRZfK/3M4XALKRfO
-         ThoRIGSJ1ld5DWoRhNuVW5n11d2qrFP/yEP5iXp6hRnpTu4aEo/MOFinNDsBec9bSHSZ
-         kh6donwRLVaptZc4eBJF9OK0HC2nRsIsUVwzEkJoPhvhmwQ+TE2FR5Xc4yEY3I6bGK4p
-         sjv9qvY7HJA9OQzs9yqTF0Blc3iM5yIqGDNyJUbqha9yrDRZ6i65tpxlZZjFpvddQyGo
-         BnMQ==
-X-Gm-Message-State: ABy/qLZHTuy9lrR+Ide5CoJCzhhdMnLNI7Qel+A7mSFDKkSKb3H7ubAw
-        Jbq2G4ys7nicJ2pM/E+cvXK8m12PCu0=
-X-Google-Smtp-Source: APBJJlGL/07aze3izJN38pC+qJB65V7uPwoyh7HLd3fAOBDM7mKlDC9oR5xSwuu+3lWwdRAMausdSA==
-X-Received: by 2002:a17:902:ec88:b0:1b6:b805:5ae3 with SMTP id x8-20020a170902ec8800b001b6b8055ae3mr1608020plg.3.1688102398561;
-        Thu, 29 Jun 2023 22:19:58 -0700 (PDT)
-Received: from laptop.hsd1.wa.comcast.net ([2601:600:8500:5f14:d627:c51e:516e:a105])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170902a41400b001b85a4821f8sm1727390plq.276.2023.06.29.22.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 22:19:57 -0700 (PDT)
-From:   Andrei Vagin <avagin@gmail.com>
-To:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Cc:     Andrei Vagin <avagin@gmail.com>
-Subject: [PATCH] perf/bench/seccomp-notify: don't use assert to check syscall errors
-Date:   Thu, 29 Jun 2023 22:19:53 -0700
-Message-Id: <20230630051953.454638-1-avagin@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 30 Jun 2023 01:21:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C192D78;
+        Thu, 29 Jun 2023 22:21:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B43D161644;
+        Fri, 30 Jun 2023 05:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DB1C433C0;
+        Fri, 30 Jun 2023 05:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688102478;
+        bh=8Ef5WYOUOB2AfTmhfbQVbF6OgLVgkrEM1qir2bZFwy0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F/ThVpgqdR4bTPAGDcwcoqRvSuB7IH0y33T5SYkqhwf8BR/46VvONOeKW34M7qCCR
+         xaWzCJd2z7/zX5Wxiq8GukOlK4yBCU5iLX03FvIoFMoUVf8MIFxR9l9Embky0anB8a
+         x3WdHqrnpnzBpqo4t/4gWy0mW79VhdWObGSfNB3w=
+Date:   Fri, 30 Jun 2023 07:21:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     stable@vger.kernel.org, mhiramat@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        sashal@kernel.org, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, xukuohai@huawei.com
+Subject: Re: [PATCH 5.10] kprobes/x86: Fix kprobe debug exception handling
+ logic
+Message-ID: <2023063039-dotted-improper-7b3c@gregkh>
+References: <20230630020845.227939-1-lihuafei1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630020845.227939-1-lihuafei1@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 616b14b47a86, perf is built with NDEBUG=1 so the macro
-assert() is nop.
+On Fri, Jun 30, 2023 at 10:08:45AM +0800, Li Huafei wrote:
+> We get the following crash caused by a null pointer access:
+> 
+>  BUG: kernel NULL pointer dereference, address: 0000000000000000
+>  ...
+>  RIP: 0010:resume_execution+0x35/0x190
+>  ...
+>  Call Trace:
+>   <#DB>
+>   kprobe_debug_handler+0x41/0xd0
+>   exc_debug+0xe5/0x1b0
+>   asm_exc_debug+0x19/0x30
+>  RIP: 0010:copy_from_kernel_nofault.part.0+0x55/0xc0
+>  ...
+>   </#DB>
+>   process_fetch_insn+0xfb/0x720
+>   kprobe_trace_func+0x199/0x2c0
+>   ? kernel_clone+0x5/0x2f0
+>   kprobe_dispatcher+0x3d/0x60
+>   aggr_pre_handler+0x40/0x80
+>   ? kernel_clone+0x1/0x2f0
+>   kprobe_ftrace_handler+0x82/0xf0
+>   ? __se_sys_clone+0x65/0x90
+>   ftrace_ops_assist_func+0x86/0x110
+>   ? rcu_nocb_try_bypass+0x1f3/0x370
+>   0xffffffffc07e60c8
+>   ? kernel_clone+0x1/0x2f0
+>   kernel_clone+0x5/0x2f0
+> 
+> The analysis reveals that kprobe and hardware breakpoints conflict in
+> the use of debug exceptions.
+> 
+> If we set a hardware breakpoint on a memory address and also have a
+> kprobe event to fetch the memory at this address. Then when kprobe
+> triggers, it goes to read the memory and triggers hardware breakpoint
+> monitoring. This time, since kprobe handles debug exceptions earlier
+> than hardware breakpoints, it will cause kprobe to incorrectly assume
+> that the exception is a kprobe trigger.
+> 
+> Notice that after the mainline commit 6256e668b7af ("x86/kprobes: Use
+> int3 instead of debug trap for single-step"), kprobe no longer uses
+> debug trap, avoiding the conflict with hardware breakpoints here. This
+> commit is to remove the IRET that returns to kernel, not to fix the
+> problem we have here. Also there are a bunch of merge conflicts when
+> trying to apply this commit to older kernels, so fixing it directly in
+> older kernels is probably a better option.
 
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
----
- tools/perf/bench/sched-seccomp-notify.c | 35 +++++++++++++++----------
- 1 file changed, 21 insertions(+), 14 deletions(-)
+What is the list of commits that it would take to resolve this in these
+kernels?  We would almost always prefer to do that instead of taking
+changes that are not upstream.
 
-diff --git a/tools/perf/bench/sched-seccomp-notify.c b/tools/perf/bench/sched-seccomp-notify.c
-index eac4ef60090f..73ab86269427 100644
---- a/tools/perf/bench/sched-seccomp-notify.c
-+++ b/tools/perf/bench/sched-seccomp-notify.c
-@@ -22,9 +22,7 @@
- #include <sys/wait.h>
- #include <string.h>
- #include <errno.h>
--/* keep all assert() calls. */
--#undef NDEBUG
--#include <assert.h>
-+#include <err.h>
- 
- #define LOOPS_DEFAULT 1000000UL
- static uint64_t loops = LOOPS_DEFAULT;
-@@ -74,15 +72,18 @@ static void user_notification_sync_loop(int listener)
- 
- 	for (nr = 0; nr < loops; nr++) {
- 		memset(&req, 0, sizeof(req));
--		assert(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req) == 0);
-+		if (ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req))
-+			err(EXIT_FAILURE, "SECCOMP_IOCTL_NOTIF_RECV failed");
- 
--		assert(req.data.nr == __NR_gettid);
-+		if (req.data.nr != __NR_gettid)
-+			errx(EXIT_FAILURE, "unexpected syscall: %d", req.data.nr);
- 
- 		resp.id = req.id;
- 		resp.error = 0;
- 		resp.val = USER_NOTIF_MAGIC;
- 		resp.flags = 0;
--		assert(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp) == 0);
-+		if (ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp))
-+			err(EXIT_FAILURE, "SECCOMP_IOCTL_NOTIF_SEND failed");
- 	}
- }
- 
-@@ -105,12 +106,15 @@ int bench_sched_seccomp_notify(int argc, const char **argv)
- 	prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
- 	listener = user_notif_syscall(__NR_gettid,
- 				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
--	assert(listener >= 0);
-+	if (listener < 0)
-+		err(EXIT_FAILURE, "can't create a notification descriptor");
- 
- 	pid = fork();
--	assert(pid >= 0);
-+	if (pid < 0)
-+		err(EXIT_FAILURE, "fork");
- 	if (pid == 0) {
--		assert(prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) == 0);
-+		if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0))
-+			err(EXIT_FAILURE, "can't set the parent death signal");
- 		while (1) {
- 			ret = syscall(__NR_gettid);
- 			if (ret == USER_NOTIF_MAGIC)
-@@ -121,15 +125,18 @@ int bench_sched_seccomp_notify(int argc, const char **argv)
- 	}
- 
- 	if (sync_mode) {
--		assert(ioctl(listener, SECCOMP_IOCTL_NOTIF_SET_FLAGS,
--			     SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP, 0) == 0);
-+		if (ioctl(listener, SECCOMP_IOCTL_NOTIF_SET_FLAGS,
-+			     SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP, 0))
-+			err(EXIT_FAILURE,
-+			    "can't set SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP");
- 	}
- 	user_notification_sync_loop(listener);
- 
- 	kill(pid, SIGKILL);
--	assert(waitpid(pid, &status, 0) == pid);
--	assert(WIFSIGNALED(status));
--	assert(WTERMSIG(status) == SIGKILL);
-+	if (waitpid(pid, &status, 0) != pid)
-+		err(EXIT_FAILURE, "waitpid(%d) failed", pid);
-+	if (!WIFSIGNALED(status) || WTERMSIG(status) != SIGKILL)
-+		errx(EXIT_FAILURE, "unexpected exit code: %d", status);
- 
- 	gettimeofday(&stop, NULL);
- 	timersub(&stop, &start, &diff);
--- 
-2.40.1
+thanks,
 
+greg k-h
