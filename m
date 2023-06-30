@@ -2,88 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310A8743E1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE7E743E23
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbjF3O7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54958 "EHLO
+        id S232706AbjF3PAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbjF3O7J (ORCPT
+        with ESMTP id S232907AbjF3O7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:59:09 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C427F35AF;
-        Fri, 30 Jun 2023 07:59:07 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UB5F8N004978;
-        Fri, 30 Jun 2023 14:58:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=O+7N+RpWhjjER73lgAnJg3/KuwNUZLf32hCpl/lcCjg=;
- b=CsYVivMP5Nj7p2YiMGPoPcpkczwwmtjqXGhlvznK+KxysAZYAX5ghlNf//DJKf/RZlRp
- iyluJhYakWVZuVKnaOyz2SZvIe3vycn8qsX2zaubzeO+TiH5IeLgUGueEa5K7niuZEnc
- woSN5ejP7VOyrMBNCz38bTkmy6zdecZqyZ1rvlVOhh3abJXSEOEz2XfdyyYnAZPuTD3g
- udxyTIuMWecivD6gPEsyBoMIUBNBWPDH7H5NtEWc+Ms9et5ibstDFivVezFJ/tSLElHr
- UaEK175lmIwJc8d79jM9ogKclzSfib6IMMdNeNrAfON3U4NCNNvcUwKKbIuRWS9KOFZY Bw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhfewa7qs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 14:58:47 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35UEwlbS007764
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 14:58:47 GMT
-Received: from [10.216.37.216] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 30 Jun
- 2023 07:58:37 -0700
-Message-ID: <69f8c351-9654-2b4b-b95c-cd1b26b28057@quicinc.com>
-Date:   Fri, 30 Jun 2023 20:28:33 +0530
+        Fri, 30 Jun 2023 10:59:47 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1E43ABC;
+        Fri, 30 Jun 2023 07:59:41 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1688137172t6z8crq0
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 22:59:30 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: OtIeQkg1QQG1RpxwZ/4Otz5Iupcb5NPjfY3VZCaKJ6SgS7D8+uWkhgDprvLoA
+        oB0PMopiPJcqeZMc7u6JWS2IV1Y0LhcTTMpAtYxyvZ5MIBPU1hwvkIJlf1skWilaA9XZpJV
+        Zri0mMgAF2ucLHqnxB1RtntODWj70pNmBpDq3eaZ6gKQ/p8xTGas2fRKE4Rx5NM9UkPq3OM
+        GJLNNJT7aVT01VgwY24MuHNQR9XtqDGiwFfBT60AwBfkQQfnkoBXeTjcT4CtM12nBr2Zo1+
+        JvKaow3EdvCmuqBH8zLDOit155ZIgP323OcH4owv0b+GBs0RfzVHTwSoLdVmDGmYNeNfQ0Z
+        EmVcueUo1DcOiUrRRaGMvR1yqmXsbDZ4uHNCCyb3YyYevUQYtjEv76voh5zdQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14153631108985947431
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v3 13/14] selftests/nolibc: add chmod_tmpdir test
+Date:   Fri, 30 Jun 2023 22:59:17 +0800
+Message-Id: <7db449df61476b4e27a7fa70f31b6b98c6447660.1688134400.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1688134399.git.falcon@tinylab.org>
+References: <cover.1688134399.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 18/21] pinctrl: qcom: Use qcom_scm_io_update_field()
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linus.walleij@linaro.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
- <1687955688-20809-19-git-send-email-quic_mojha@quicinc.com>
- <CAHp75VcUgC+TATXp2c+VCNbfYTPYANrAcYftYqLsj+wg+e=12A@mail.gmail.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <CAHp75VcUgC+TATXp2c+VCNbfYTPYANrAcYftYqLsj+wg+e=12A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: NDy_K3d84hReuGKT4_iTMuOBUX4jA1ys
-X-Proofpoint-GUID: NDy_K3d84hReuGKT4_iTMuOBUX4jA1ys
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- clxscore=1015 spamscore=0 mlxlogscore=877 adultscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300126
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,26 +53,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your time and suggestion.
+create a temp directory to test chmod with tmpfs.
 
-On 6/28/2023 7:14 PM, Andy Shevchenko wrote:
-> On Wed, Jun 28, 2023 at 3:37 PM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->>
->> Use qcom_scm_io_update_field() exported function introduced
->> in last commit.
-> 
-> the last
-> 
-> But what is that? Be more specific.
-> 
-> ...
-> 
->> +       mask = (GENMASK(2, 0) << g->intr_target_bit);
-> 
-> Outer parentheses are not needed.
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Will apply the changes.
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 906b70ddec79..be2a18cd5bd5 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -699,6 +699,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(chdir_dot);         EXPECT_SYSZR(1, chdir(".")); break;
+ 		CASE_TEST(chdir_blah);        EXPECT_SYSER(1, chdir("/blah"), -1, ENOENT); break;
+ 		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
++		CASE_TEST(chmod_tmpdir);      mkdir("/tmp/blah", 0755); EXPECT_SYSZR(1, chmod("/tmp/blah", 0555)); rmdir("/tmp/blah"); break;
+ 		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
+ 		CASE_TEST(chroot_root);       EXPECT_SYSZR(euid0, chroot("/")); break;
+ 		CASE_TEST(chroot_blah);       EXPECT_SYSER(1, chroot("/proc/self/blah"), -1, ENOENT); break;
+-- 
+2.25.1
 
--Mukesh
-
-> 
