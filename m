@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3B3743F84
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662CD743F88
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbjF3QPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S232866AbjF3QPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232943AbjF3QOp (ORCPT
+        with ESMTP id S232983AbjF3QPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:14:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947AA3C06
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:14:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DCCA61795
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 16:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C914CC433C8;
-        Fri, 30 Jun 2023 16:14:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688141683;
-        bh=OQ6W9Mf8SjuyriHv2gHrYTgggbQw7sK3MPN4gMZ87ZI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WAwX+Yr1sAkgsIUXUcFV1FByBoFxm26kJ7kIXPDZuGZE6iqLBI4Ji4g8eHF9X4TSf
-         FZtftQgV87fi5h6nmkFhmUYeD4+za+zR5E2WkJqQVxhUmIEQOKUjm75ZQitaGSzk4J
-         0OrJqdu7MlktJKEdYMUYINhOzGyzvwS7S17WgDP1iUbaNYmxxfgBXY3DEyz+shCASI
-         ziTLDz9Y8rHUXBphJJXTXNIwHHHo4meZmPD/qhmizwVEX8m9VH+O/8vzoVL1+RILxf
-         yyLfKRBJM1M/Kl0fMmQn+t8c8s4Z/nZAuv8TJUfSnr1vtWj9rA1ccEucxd/97CeE9d
-         XUagxkK+qJVIQ==
-Date:   Fri, 30 Jun 2023 09:14:42 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Aurelien Aptel <aaptel@nvidia.com>, netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Willem de Bruijn <willemb@google.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
- sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-Message-ID: <20230630091442.172ec67f@kernel.org>
-In-Reply-To: <20230630161043.GA2902645@dev-arch.thelio-3990X>
-References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
-        <20230620145338.1300897-1-dhowells@redhat.com>
-        <20230620145338.1300897-11-dhowells@redhat.com>
-        <58466.1688074499@warthog.procyon.org.uk>
-        <20230629164318.44f45caf@kernel.org>
-        <20230630161043.GA2902645@dev-arch.thelio-3990X>
+        Fri, 30 Jun 2023 12:15:06 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013BA3C21
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:15:04 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-401d1d967beso319961cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:15:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688141704; x=1690733704;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yiUGGvDdS8R3PBD2YgZ3X8YTYgPrxBI5qP1K5GVjXY0=;
+        b=Xt8EqydTvWQR4hXsuzv+L3+naFxfOmMeXzeodf+m1VjRPytSV2y6xl4wx2mYRVD0du
+         5A8K6oCZgXZ8mgVSK2AoyjmCfaUlgq5xNJQuIWRHOn7wbFP2lSy/e95M6cBOGYeKqIGi
+         IirfYPpe67RjPz+UfUjWn2AQ9nGm5FpMrxIG4xvyRbo0lQK+YO8zembpl5r5drKDRT76
+         jmLHylxBF4kC3c2ldIanf8hZ2b5oDkYuH2uCGvWpeMLVgQg1so2u1Hz4XplZc4D54w+L
+         hT/0dr/+xCxQH+egfMiFncJWDu3CdJ0z0ozwZOOQX24Q9WfnueWjkUmnkLWooYfLBMqS
+         Qp2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688141704; x=1690733704;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yiUGGvDdS8R3PBD2YgZ3X8YTYgPrxBI5qP1K5GVjXY0=;
+        b=CANr2PbZmw9PkvS5pVEI75ZkKJF4jB9TDniKc1OWCzid3edi8RV4ZlWGXRFXFnU+7Z
+         xfT5d28+sMy7+ZDqp2gN8eKwThw0JVrVf+nybduliZCTsJzs60JISv1DvY8GcKgE+vY5
+         fmg1n7dwIfm0OXGAOx0ipbD2AtgdzU/4ADlOB4zE1sEVVYMaokzewP3O1yJM6GpukPWU
+         LRirNwkSa1kNsDEVeSK1k6WAYa8T9iPRU15d+TsrtY1aGMd4LMgPBoQi15xjddNe3Luh
+         xG2ZhYFK8/KHWjRyGwu5/jEN4KBB0vB7O6b9Y9C9EkbWgwpKsmv5HWoi4sMulEESWLde
+         7phA==
+X-Gm-Message-State: AC+VfDxVyc0n03qWCfYi5zSiUZjHqQc0LXlZZPffqf6tvjIBj5v0gnx/
+        sR8I2Sg4xtmHruKJYzmK2Z57PJeB8i1Dd93j6l8dzQ==
+X-Google-Smtp-Source: ACHHUZ6qvWQi3kNZGdcC+YAc4jK08c5yKsTf+VhsbWIHah/vsUZQqiIcOLrx14G4bqQg0c3SRJIAJkHdrlJahF74cRQ=
+X-Received: by 2002:ac8:4e46:0:b0:3f8:5b2:aeec with SMTP id
+ e6-20020ac84e46000000b003f805b2aeecmr847953qtw.20.1688141703923; Fri, 30 Jun
+ 2023 09:15:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230628200141.2739587-1-namhyung@kernel.org> <20230628200141.2739587-5-namhyung@kernel.org>
+In-Reply-To: <20230628200141.2739587-5-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 30 Jun 2023 09:14:51 -0700
+Message-ID: <CAP-5=fVMVuj2Y-ShYZwH-hetoN5ySxJfaZDJ0g29MiZ2kBpnfQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] perf test: Test perf lock contention CSV output
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,28 +76,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 09:10:43 -0700 Nathan Chancellor wrote:
-> > Let me CC llvm@ in case someone's there is willing to make 
-> > the compiler warn about this.
-> 
-> Turns out clang already has a warning for this, -Wcomma:
-> 
->   drivers/nvme/host/tcp.c:1017:38: error: possible misuse of comma operator here [-Werror,-Wcomma]
->    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
->         |                                                           ^
->   drivers/nvme/host/tcp.c:1017:4: note: cast expression to void to silence warning
->    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
->         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                         (void)(                           )
->   1 error generated.
-> 
-> Let me do some wider build testing to see if it is viable to turn this
-> on for the whole kernel because it seems worth it, at least in this
-> case. There are a lot of cases where a warning won't be emitted (see the
-> original upstream review for a list: https://reviews.llvm.org/D3976) but
-> something is better than nothing, right? :)
+On Wed, Jun 28, 2023 at 1:01=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> To verify CSV output, just check the number of separators (",") using
+> the tr and wc commands like this.
+>
+>   grep -v "^#" ${result} | tr -d -c | wc -c
+>
+> Now it expects 6 columns (and 5 separators) in the output, but it may
+> be changed later so count the field in the header first and compare it
+> to the actual output lines.
+>
+>   $ cat ${result}
+>   # output: contended, total wait, max wait, avg wait, type, caller
+>   1, 28787, 28787, 28787, spinlock, raw_spin_rq_lock_nested+0x1b
+>
+> The test looks like below now:
+>
+>   $ sudo ./perf test -v contention
+>    86: kernel lock contention analysis test                            :
+>   --- start ---
+>   test child forked, pid 2705822
+>   Testing perf lock record and perf lock contention
+>   Testing perf lock contention --use-bpf
+>   Testing perf lock record and perf lock contention at the same time
+>   Testing perf lock contention --threads
+>   Testing perf lock contention --lock-addr
+>   Testing perf lock contention --type-filter (w/ spinlock)
+>   Testing perf lock contention --lock-filter (w/ tasklist_lock)
+>   Testing perf lock contention --callstack-filter (w/ unix_stream)
+>   Testing perf lock contention --callstack-filter with task aggregation
+>   Testing perf lock contention CSV output
+>   test child finished with 0
+>   ---- end ----
+>   kernel lock contention analysis test: Ok
+>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Ah, neat. Misleading indentation is another possible angle, I reckon,
-but not sure if that's enabled/possible to enable for the entire kernel
-either :( We test-build with W=1 in networking, FWIW, so W=1 would be
-enough for us.
+Acked-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
+
+> ---
+>  tools/perf/tests/shell/lock_contention.sh | 36 +++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>
+> diff --git a/tools/perf/tests/shell/lock_contention.sh b/tools/perf/tests=
+/shell/lock_contention.sh
+> index f2cc187b6186..4a194420416e 100755
+> --- a/tools/perf/tests/shell/lock_contention.sh
+> +++ b/tools/perf/tests/shell/lock_contention.sh
+> @@ -233,6 +233,41 @@ test_aggr_task_stack_filter()
+>         fi
+>  }
+>
+> +test_csv_output()
+> +{
+> +       echo "Testing perf lock contention CSV output"
+> +       perf lock contention -i ${perfdata} -E 1 -x , --output ${result}
+> +       # count the number of commas in the header
+> +       # it should have 5: contended, total-wait, max-wait, avg-wait, ty=
+pe, caller
+> +       header=3D$(grep "# output:" ${result} | tr -d -c , | wc -c)
+> +       if [ "${header}" !=3D "5" ]; then
+> +               echo "[Fail] Recorded result does not have enough output =
+columns: ${header} !=3D 5"
+> +               err=3D1
+> +               exit
+> +       fi
+> +       # count the number of commas in the output
+> +       output=3D$(grep -v "^#" ${result} | tr -d -c , | wc -c)
+> +       if [ "${header}" !=3D "${output}" ]; then
+> +               echo "[Fail] Recorded result does not match the number of=
+ commas: ${header} !=3D ${output}"
+> +               err=3D1
+> +               exit
+> +       fi
+> +
+> +       if ! perf lock con -b true > /dev/null 2>&1 ; then
+> +               echo "[Skip] No BPF support"
+> +               return
+> +       fi
+> +
+> +       # the perf lock contention output goes to the stderr
+> +       perf lock con -a -b -E 1 -x , --output ${result} -- perf bench sc=
+hed messaging > /dev/null 2>&1
+> +       output=3D$(grep -v "^#" ${result} | tr -d -c , | wc -c)
+> +       if [ "${header}" !=3D "${output}" ]; then
+> +               echo "[Fail] BPF result does not match the number of comm=
+as: ${header} !=3D ${output}"
+> +               err=3D1
+> +               exit
+> +       fi
+> +}
+> +
+>  check
+>
+>  test_record
+> @@ -244,5 +279,6 @@ test_type_filter
+>  test_lock_filter
+>  test_stack_filter
+>  test_aggr_task_stack_filter
+> +test_csv_output
+>
+>  exit ${err}
+> --
+> 2.41.0.255.g8b1d071c50-goog
+>
