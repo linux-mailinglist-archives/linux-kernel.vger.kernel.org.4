@@ -2,185 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E1D743262
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 03:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA16743269
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 03:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjF3Bvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 21:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S231691AbjF3Byn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 21:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjF3Bve (ORCPT
+        with ESMTP id S229793AbjF3Byk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 21:51:34 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4219C2D52
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 18:51:33 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-401f4408955so86011cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 18:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688089892; x=1690681892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ReJelaju0aoDb9wHBJOMrRL3RwmVio6acM2bFwwczSc=;
-        b=jpctnlSkpJKJTWFXfWpQpjeHNbz1NDffy0XtWaM1WStlgni0XTMLdQy8U/GGYBxIVn
-         qahrBC5Xea9x35QXceoubR6HQwpNoiZhzbekxBGcvSvag3+nM0Owo/UcHmS4qQo3pAbZ
-         5aqMCZdr/bxOuxybzLqqc865Y82l8ZlNcfmEDWWARFmj3LExMt5fr44hZFm+DhIilJLB
-         Uj+dIQUu8caEr4h8TNhvG71bH70ROVIC4psg9KpYsOBFMbT1h3XQcgLvJdYlUB7OYl5c
-         d6/+KtnUFfd+YcaW1sQPpigh3w1iucc6NPlzaa3mfeagsdvi+pI6M3jYFgnJDWRhAO1f
-         JHsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688089892; x=1690681892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ReJelaju0aoDb9wHBJOMrRL3RwmVio6acM2bFwwczSc=;
-        b=d/pGy+WRHtJC1I9JoO49RcEXyrfq9qYPtLZrEUmYPxMS/GszZVX3tPrMEAyZaip2f6
-         FTDvkh7WRTRL1kaMkMTyqLN8bE6ENxNMgDjgchwc02P2C0MLIDf1WtJo+nfE3IkN4N9l
-         wU3KXm/94SCz/yeEuuiwtWCFZm4LyX+UVvOH7ELib2xQl2ZHyMn1HZrMYE1MubylkqFY
-         01LHnKN9dj6QprX8jfzYtWKMkvt2hBlKDLDpLE2cc9Tx+7j9LNFq2OOuW/L1zNbVKUqh
-         +0DCLHR8O15JREH/DKw5o61x3DXimOx7pOo0cIHMmZE/TyPs9GXuYoSGCom3BBaRUmUc
-         6cLQ==
-X-Gm-Message-State: AC+VfDw8ZQUoRqrlBq82hAb9hpJY8LFL1/o7wJgeGjQAxKTNHX5jHMA6
-        zWqav2ydyaFhouJRkmXQ8KJuorGrm8ZgbgFYmgDc3A==
-X-Google-Smtp-Source: ACHHUZ6hmFErQNQzWtOG6NXh3DrkAmCuI9UlIZ+Om4WUNnZW0VsV9MWGpYl2XvpPW7josv32svBXSMb6Q2N11IHLXMc=
-X-Received: by 2002:a05:622a:285:b0:3f8:175a:4970 with SMTP id
- z5-20020a05622a028500b003f8175a4970mr648134qtw.18.1688089892215; Thu, 29 Jun
- 2023 18:51:32 -0700 (PDT)
+        Thu, 29 Jun 2023 21:54:40 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2060.outbound.protection.outlook.com [40.107.243.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE28A1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 18:54:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IHBOqyxNJQT6vbRQEkvdrdaQYN19q/Yl0qavhx8d0FGFb5UzsTufLtQvppKfAgc5C7cCI3RSS5BuXQZPm6L8KhezC4zDlc+u1rzohxKS2NjrfKnI4KnLWO5nP7231SU6CLeVMU5g9Ukwr+H/tK9OCxz1ZvCsQNiEW8rovccHcvLqGXbMYtjHFUjD59KiKVXjQqMIOyWlAwWF7qnvM8L4NrzuqJzfWjF+7F+gk5d0MH+BHT3jxmMjFR21oEp7BI5K2LTmPJebtma4M/HUnN7cD2IIvOMgVpVPAn1G8wjIjiXqm5f/vZ1fCLa5mfB/11wNkpZW17czzKXU+M+K2TDK+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7+fAGrbz5Zlv/ma+rYOPdweHu3Y3DnsGsQ3zoodr8FI=;
+ b=KFV+c+IyvhvUB2Kqkt8xVR5JEPwRcOjXYuigHsPvijzUvy5sp1Nxd+SEw2r22TF8rjshAmuVmyk36a7Xm2FRRPn/WIwqKl90ZYkgZEE/pcOqdxSAoCAbvHtlmZjoyaHULOQGO819FS89vVvUY6cZ51Bb1XvfKHLr9GdE1VdOjZXqDwz82uEWSNhPr8AV65GpZ3/mymRexRSsTDZGu4Zrr7fDNi9KHJhCPvumhc4+KqVPk0te+oJezX+CJPNno3pNnJDL7aDRLXj5Jj7Fjk3wTnXQU82b+ZcBhVPr+mTrqSCcjr4dm1uURR8BZCD8XzwVWmjABz7sryQfs/jkoLospA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7+fAGrbz5Zlv/ma+rYOPdweHu3Y3DnsGsQ3zoodr8FI=;
+ b=s6MAIQiJV5vRkCtujbsbdCW+cCkRsy8XaykNwvWYHsEeHkhuK2xDU+yAiOZBFyIPS9QVf0PcZxl9qlOaGfNOOjiPdnWwDL9HQHpNL3E+sa2Zb7ejuZJCEwpQJhInr364ZB1i5eUjqVlpqwL+IbM9YAf2rgSn6uUTSOG4mUOveu5GX8Fsh0XAoVPtCkzS8aToxLgyuxb6UovA7ogyEdmIvumtAuVoR27gB2oZADpyPiKGwsqksZxLkVxTr6EjstRdSVWsRzJ7GATd3YKLQnOiEQfqYKSAPUWrsvWTN0WZUgEwSJkRJlYDmI2PN1mHfUst7KVzuxvM31XCtUGHO59xdQ==
+Received: from BN0PR04CA0112.namprd04.prod.outlook.com (2603:10b6:408:ec::27)
+ by SJ2PR12MB8847.namprd12.prod.outlook.com (2603:10b6:a03:546::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.44; Fri, 30 Jun
+ 2023 01:54:37 +0000
+Received: from BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ec::4) by BN0PR04CA0112.outlook.office365.com
+ (2603:10b6:408:ec::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
+ Transport; Fri, 30 Jun 2023 01:54:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT053.mail.protection.outlook.com (10.13.177.209) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 01:54:36 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 29 Jun 2023
+ 18:54:28 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 29 Jun
+ 2023 18:54:27 -0700
+Message-ID: <c7bc657b-c573-032e-f76c-f5c69198b2ff@nvidia.com>
+Date:   Thu, 29 Jun 2023 18:54:27 -0700
 MIME-Version: 1.0
-References: <20230630013203.1955064-1-jhubbard@nvidia.com>
-In-Reply-To: <20230630013203.1955064-1-jhubbard@nvidia.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 29 Jun 2023 21:50:55 -0400
-Message-ID: <CADrL8HUwxLU-UvTLbzp-JM5EqQ2u-91UU4VfAhRrPiu7i3Jhkg@mail.gmail.com>
-Subject: Re: [PATCH] mm/hugetlb.c: fix a bug within a BUG(): inconsistent pte comparison
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 11/14] arm64/mm: Wire up PTE_CONT for user mappings
+Content-Language: en-US
+To:     Ryan Roberts <ryan.roberts@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
         Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@gmail.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Alexander Potapenko <glider@google.com>,
+        "Andrey Konovalov" <andreyknvl@gmail.com>,
         Dmitry Vyukov <dvyukov@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jiri Olsa <jolsa@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Yu Zhao <yuzhao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>,
+        "Mark Rutland" <mark.rutland@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+References: <20230622144210.2623299-1-ryan.roberts@arm.com>
+ <20230622144210.2623299-12-ryan.roberts@arm.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20230622144210.2623299-12-ryan.roberts@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT053:EE_|SJ2PR12MB8847:EE_
+X-MS-Office365-Filtering-Correlation-Id: bde1bd45-dccf-4d84-c347-08db790cf54c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GvXVnDU1RFdjaNpOOuCXaaiNFUcKevti+FNKWOF6IXMvqtjgumhpGhgMLCHk+uR8WpesijmpaMPJ0JjhfjmUS0OkEuVJeQvCgj/GEoEBI7CfTOwq73ZO5yAOfVUptoMQ0IHBwbCK6zZkpsD6FqA7jA2GGmQRyjoU7n29ZQVWAX8Mi1W8EBWr06WB91qCjw4rhl0zgcA4ZVhbMeXTHx0IputAtC8VqXksCwUaWTBCy9bdFlnq3LPwC1SVHY4PsT/vqP9J9I6Sr/m7gPJxBQ0AfZ5ocfIusm3fXjM20FwFCbwKZKGTAjC+Xhy9+9dlG4UxZAUpfcFc+HqWBnPmjd7NzTs2OYnlK8tInG2b1ILSCyLFO2/pWT2gnoO9l0ONC3o9UiIAi2LVEEoMj6bhditPQJQKxFUj+JKX1MQ1oDK+0bcb4PZqyfK51u/RK06kmlB5o6OlHSDLr0TXxIpo5Tvf79KVOtAM5MR1D/hw7MoAV8PU7AEEEvyaXysmOmvI5mKym3kyyFniMX0JYBfceu8+7rmGcsKYWK2YkX15U6LairrabJT4n1Y/hxvo1KzuOyutNYzoYgNns/zBrK/NboQFQ86567M/i32stM5iK2bVViUUj0LZ3les3SRW18dK5p8+ZI9zZJRAC9wWE4Ay4S944a/7XGk1ssV4mR7LkLvziz8zpStX7TbM/XO9hi7+tJ4jP3sx3VeVZ2AUDt+oJe5g/1tzTVIKeVPI4ZrqeIgeO8RkNao/Q0081w3jslhuv/WrMIt/ndtGRpSwW/MhAtrQy5p/VZGZQ6uzQoRxjMoPTxRnwjVWc89rS4IDuVUUBUN1ETTGKgFyj2NbfpWCbLlJvA==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199021)(40470700004)(36840700001)(46966006)(7416002)(5660300002)(54906003)(8676002)(40480700001)(8936002)(66899021)(41300700001)(86362001)(110136005)(31686004)(16576012)(7636003)(356005)(47076005)(4326008)(2616005)(921005)(316002)(40460700003)(70586007)(70206006)(2906002)(83380400001)(31696002)(36756003)(478600001)(82740400003)(36860700001)(82310400005)(426003)(336012)(186003)(53546011)(16526019)(26005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 01:54:36.3043
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bde1bd45-dccf-4d84-c347-08db790cf54c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8847
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 9:32=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> =
-wrote:
->
-> The following crash happens for me when running the -mm selftests
-> (below). Specifically, it happens while running the uffd-stress
-> subtests:
->
-> kernel BUG at mm/hugetlb.c:7249!
-> invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> CPU: 0 PID: 3238 Comm: uffd-stress Not tainted 6.4.0-hubbard-github+ #109
-> Hardware name: ASUS X299-A/PRIME X299-A, BIOS 1503 08/03/2018
-> RIP: 0010:huge_pte_alloc+0x12c/0x1a0
-> ...
-> Call Trace:
->  <TASK>
->  ? __die_body+0x63/0xb0
->  ? die+0x9f/0xc0
->  ? do_trap+0xab/0x180
->  ? huge_pte_alloc+0x12c/0x1a0
->  ? do_error_trap+0xc6/0x110
->  ? huge_pte_alloc+0x12c/0x1a0
->  ? handle_invalid_op+0x2c/0x40
->  ? huge_pte_alloc+0x12c/0x1a0
->  ? exc_invalid_op+0x33/0x50
->  ? asm_exc_invalid_op+0x16/0x20
->  ? __pfx_put_prev_task_idle+0x10/0x10
->  ? huge_pte_alloc+0x12c/0x1a0
->  hugetlb_fault+0x1a3/0x1120
->  ? finish_task_switch+0xb3/0x2a0
->  ? lock_is_held_type+0xdb/0x150
->  handle_mm_fault+0xb8a/0xd40
->  ? find_vma+0x5d/0xa0
->  do_user_addr_fault+0x257/0x5d0
->  exc_page_fault+0x7b/0x1f0
->  asm_exc_page_fault+0x22/0x30
->
-> That happens because a BUG() statement in huge_pte_alloc() attempts to
-> check that a pte, if present, is a hugetlb pte, but it does so in a
-> non-lockless-safe manner that leads to a false BUG() report.
->
-> We got here due to a couple of bugs, each of which by itself was not
-> quite enough to cause a problem:
->
-> First of all, before commit c33c794828f2("mm: ptep_get() conversion"),
-> the BUG() statement in huge_pte_alloc() was itself fragile: it relied
-> upon compiler behavior to only read the pte once, despite using it twice
-> in the same conditional.
->
-> Next, commit c33c794828f2 ("mm: ptep_get() conversion") broke that
-> delicate situation, by causing all direct pte reads to be done via
-> READ_ONCE(). And so READ_ONCE() got called twice within the same BUG()
-> conditional, leading to comparing (potentially, occasionally) different
-> versions of the pte, and thus to false BUG() reports.
->
-> Fix this by taking a single snapshot of the pte before using it in the
-> BUG conditional.
->
-> Now, that commit is only partially to blame here but, people doing
-> bisections will invariably land there, so this will help them find a fix
-> for a real crash. And also, the previous behavior was unlikely to ever
-> expose this bug--it was fragile, yet not actually broken.
->
-> So that's why I chose this commit for the Fixes tag, rather than the
-> commit that created the original BUG() statement.
->
-> Fixes: c33c794828f2 ("mm: ptep_get() conversion")
+On 6/22/23 07:42, Ryan Roberts wrote:
+> With the ptep API sufficiently refactored, we can now introduce a new
+> "contpte" API layer, which transparently manages the PTE_CONT bit for
+> user mappings. Whenever it detects a set of PTEs that meet the
+> requirements for a contiguous range, the PTEs are re-painted with the
+> PTE_CONT bit.
+> 
+> This initial change provides a baseline that can be optimized in future
+> commits. That said, fold/unfold operations (which imply tlb
+> invalidation) are avoided where possible with a few tricks for
+> access/dirty bit management.
+> 
+> Write-enable and write-protect modifications are likely non-optimal and
+> likely incure a regression in fork() performance. This will be addressed
+> separately.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
 
-Hi John,
+Hi Ryan!
 
-Good catch, and thanks for the detailed explanation. It looks like
-riscv and powerpc have equivalent problems in their huge_pte_alloc
-implementations, perhaps it's worth taking a look at those. (riscv
-looks like it has precisely the same problem except it's a WARN, but
-powerpc looks more interesting.)
+While trying out the full series from your gitlab features/granule_perf/all
+branch, I found it necessary to EXPORT a symbol in order to build this.
+Please see below:
 
-Either way,
+...
+> +
+> +pte_t contpte_ptep_get(pte_t *ptep, pte_t orig_pte)
+> +{
+> +	/*
+> +	 * Gather access/dirty bits, which may be populated in any of the ptes
+> +	 * of the contig range. We are guarranteed to be holding the PTL, so any
+> +	 * contiguous range cannot be unfolded or otherwise modified under our
+> +	 * feet.
+> +	 */
+> +
+> +	pte_t pte;
+> +	int i;
+> +
+> +	ptep = contpte_align_down(ptep);
+> +
+> +	for (i = 0; i < CONT_PTES; i++, ptep++) {
+> +		pte = __ptep_get(ptep);
+> +
+> +		/*
+> +		 * Deal with the partial contpte_ptep_get_and_clear_full() case,
+> +		 * where some of the ptes in the range may be cleared but others
+> +		 * are still to do. See contpte_ptep_get_and_clear_full().
+> +		 */
+> +		if (pte_val(pte) == 0)
+> +			continue;
+> +
+> +		if (pte_dirty(pte))
+> +			orig_pte = pte_mkdirty(orig_pte);
+> +
+> +		if (pte_young(pte))
+> +			orig_pte = pte_mkyoung(orig_pte);
+> +	}
+> +
+> +	return orig_pte;
+> +}
 
-Acked-by: James Houghton <jthoughton@google.com>
+Here we need something like this, in order to get it to build in all
+possible configurations:
+
+EXPORT_SYMBOL_GPL(contpte_ptep_get);
+
+(and a corresponding "#include linux/export.h" at the top of the file).
+
+Because, the static inline functions invoke this routine, above.
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
