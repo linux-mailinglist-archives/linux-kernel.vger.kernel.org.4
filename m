@@ -2,75 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F892744AE0
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 20:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADF8744AE4
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 20:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjGASns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 14:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S229889AbjGASyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 14:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjGASnr (ORCPT
+        with ESMTP id S229650AbjGASyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 14:43:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF465171B
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 11:43:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5559360C02
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 18:43:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7C24C433C8;
-        Sat,  1 Jul 2023 18:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688237025;
-        bh=HBuOxlOAIgLipmhu+VFqP4QnRqzhGcyPzr86fs9Liz0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Abyiamk2Ack5OwnorMjXFIk2ykEiGXRjP/9Jxg/USSOY9M4/v5wD6/gNtd4tHjOIU
-         NseekKeQOzsoQ5YNcIMQEnVKDA87/Lqkbzi0fCTGxea4qq/84Q5AUTeRHJkaL+a0Iu
-         qZeWt/oTQx4KLUAq91jzwigBr0C4LkEMI40cYhKSDSVIw7VbkU+CCZFqRs4JzTFWPi
-         wOlLV6xmCsYFM5JtdyZy7rxhZ6D5l5VfifzOgRHPAWjzMQBNDRS4ewFX+elImPXztH
-         8KOgtyibVZ1zwOvas9eFmnAGzvJyFixDg+BriCT9+HZ32eg09mEihjw2sw4Dz6v/eS
-         D3hPtGSMxFJIw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98AFDE5381B;
-        Sat,  1 Jul 2023 18:43:45 +0000 (UTC)
-Subject: Re: [GIT pull] x86/urgent for v6.5-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <168823486244.3978156.6059859588267964136.tglx@xen13>
-References: <168823486244.3978156.6059859588267964136.tglx@xen13>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <168823486244.3978156.6059859588267964136.tglx@xen13>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2023-07-01
-X-PR-Tracked-Commit-Id: 0303c9729afc4094ef53e552b7b8cff7436028d6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f8566aa4f1766bb0267b7a0ed89c1d2c4a82ee1a
-Message-Id: <168823702561.9455.10890226197552462078.pr-tracker-bot@kernel.org>
-Date:   Sat, 01 Jul 2023 18:43:45 +0000
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 1 Jul 2023 14:54:50 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 24220171D
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 11:54:48 -0700 (PDT)
+Received: (qmail 1021177 invoked by uid 1000); 1 Jul 2023 14:54:46 -0400
+Date:   Sat, 1 Jul 2023 14:54:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: r8a66597-hcd: host: fix port index underflow and
+ UBSAN complains
+Message-ID: <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
+References: <tencent_AD4994DC28D60E6CF580E97BB028A0A1EA0A@qq.com>
+ <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat,  1 Jul 2023 20:08:20 +0200 (CEST):
+On Sat, Jul 01, 2023 at 07:16:48PM +0200, Uwe Kleine-König wrote:
+> On Sun, Jul 02, 2023 at 12:39:20AM +0800, Zhang Shurong wrote:
+> > If wIndex is 0 (and it often is), these calculations underflow and
+> > UBSAN complains, here resolve this by not decrementing the index when
+> > it is equal to 0.
+> > 
+> > Similar commit 85e3990bea49 ("USB: EHCI: avoid undefined pointer
+> > arithmetic and placate UBSAN")
+> > 
+> > The changes in this version:
+> > - fix some compile error
+> > 
+> > Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+> > ---
+> >  drivers/usb/host/r8a66597-hcd.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/r8a66597-hcd.c b/drivers/usb/host/r8a66597-hcd.c
+> > index 9f4bf8c5f8a5..6c597c668364 100644
+> > --- a/drivers/usb/host/r8a66597-hcd.c
+> > +++ b/drivers/usb/host/r8a66597-hcd.c
+> > @@ -2141,10 +2141,12 @@ static int r8a66597_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+> >  {
+> >  	struct r8a66597 *r8a66597 = hcd_to_r8a66597(hcd);
+> >  	int ret;
+> > -	int port = (wIndex & 0x00FF) - 1;
+> > -	struct r8a66597_root_hub *rh = &r8a66597->root_hub[port];
+> >  	unsigned long flags;
+> > +	struct r8a66597_root_hub *rh;
+> > +	u32 port = wIndex & 0xFF;
+> >  
+> > +	port -= (port > 0);
+> 
+> I have no idea about this hardware, but it seems strange to me that
+> calling r8a66597_hub_control with wIndex = 1 should have the same effect
+> as with wIndex = 0. Is you changed backed by knowledge about the
+> hardware, or is that just the most obvious way to get rid of the UB
+> warning?
+> 
+> Having said that, I think
+> 
+> 	port -= (port > 0);
+> 
+> is hard to read compared to:
+> 
+> 	if (port > 0)
+> 		port--;
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2023-07-01
+Zhang:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f8566aa4f1766bb0267b7a0ed89c1d2c4a82ee1a
+Why not just copy the code that's already in ehci-hub.c?
 
-Thank you!
+	/*
+	 * Avoid out-of-bounds values while calculating the port index
+	 * from wIndex.  The compiler doesn't like pointers to invalid
+	 * addresses, even if they are never used.
+	 */
+	port = (wIndex - 1) & 0xff;
+	if (port >= r8a66597->max_root_hub)
+		port = 0;
+	rh = &r8a66597->root_hub[port];
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Also, I see that in the ClearPortFeature, SetPortStatus, and 
+SetPortFeature cases in this routine, the code doesn't check for wIndex 
+== 0.  That's a bug -- a real one, not just a UBSAN issue.
+
+
+Uwe:
+
+wIndex should never be == 0 or > max_root_hub in the cases where rh gets 
+used; such values would be meaningless.  But we don't control the value 
+of wIndex, because it can come from userspace.  So we can't simply 
+assume it will always be valid; it has to be checked.
+
+That being understood, the changes Zhang is making here are meant mostly 
+to prevent UBSAN and the compiler from complaining or making false 
+assumptions.  The actual checks on wIndex occur later in the subroutine.
+
+Alan Stern
