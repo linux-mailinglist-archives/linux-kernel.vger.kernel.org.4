@@ -2,118 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230DA744B2E
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 23:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA70744B33
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 23:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjGAVqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 17:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
+        id S229937AbjGAVtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 17:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjGAVqC (ORCPT
+        with ESMTP id S229753AbjGAVto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 17:46:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043AF199B
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 14:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688247918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YjYFztOePLsPaJm5e5mc9Fspsz0Ww9J9HtOwfHiQKzE=;
-        b=XrxwHu/jVsOzCAkjlA6VyPW2JrkpXcF6gvQXDTeZgSraPtt6P8USh2An5iS3LbML7LZaE1
-        zH6NSFH4T/aT3B9TDSGynbrWchR9Dv/26rlGacciBWvYIYf1h+9aluW5tw4GNj2WCSupSD
-        EGpzDxBUx7qA5cCVq8RrxT0M2sEHvKI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-445-UvxPXOCgM2a_1Wv1gUqZ5g-1; Sat, 01 Jul 2023 17:45:16 -0400
-X-MC-Unique: UvxPXOCgM2a_1Wv1gUqZ5g-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3fb40ec952bso18345625e9.0
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 14:45:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688247915; x=1690839915;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YjYFztOePLsPaJm5e5mc9Fspsz0Ww9J9HtOwfHiQKzE=;
-        b=fWEA1pyAHl6/+YwneQ7wFyh1h45FC4CKSWNbAMW/iOhuKFFDrsYnmZi1CVp+050d5r
-         w5R92pzANXkIk5z/nnzmrGkILlIqZYUMRogBNExW/qkp8Ca66wh94DJUWi7XfMU6/hkL
-         3GLXNC4LBOoL98pRZ6DcpNYf5mo12XwtnammDpQcvx2z6cxC/0gUR6eK8cTcyMfEQ0zo
-         NMtZiIpAHsdNtqtMI7CxsRjB3VpKa8i2g51cqwFOWCWBtYbQSF9imN7HDbnHBKA8S1sx
-         KR4mDYWf0U5rR0X3mAW9VIXTqeh58avvfITAa4l715YaHhhetJRzsa38G2X6J2sGqdsX
-         MSyA==
-X-Gm-Message-State: AC+VfDwY7WH4KUWpTqezubxuu+Uh/gbuE264NpX23Xyo6q3WxJ6+D2Z9
-        mh+bz54a464R0iEEhcfs8gPWrRAOZxQXLftBXWf/Drvelgxua8dD3M27vX67ALAdVWR7ZjMf6C6
-        U7YQ5WOsD3Ydfk+BiTzs5JVNVbKU652RC2i2Uilj+8mZByx2mx3Rjw3lVVor8smjJY5S9eTKV18
-        r8LR1XjDc=
-X-Received: by 2002:a05:600c:2181:b0:3fa:96ae:fd78 with SMTP id e1-20020a05600c218100b003fa96aefd78mr5114283wme.29.1688247915550;
-        Sat, 01 Jul 2023 14:45:15 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4QL/alylsKkmsCF50GPU6dzPKVvFKUXejyBEKTLhORjiMD3xe/aN1kkO/WkkVl4mUmO/qwpg==
-X-Received: by 2002:a05:600c:2181:b0:3fa:96ae:fd78 with SMTP id e1-20020a05600c218100b003fa96aefd78mr5114264wme.29.1688247915076;
-        Sat, 01 Jul 2023 14:45:15 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003fbc0ea491dsm6913800wmc.40.2023.07.01.14.45.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jul 2023 14:45:14 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v2 2/2] drm: Make fbdev emulation select FB_CORE instead of depends on FB
-Date:   Sat,  1 Jul 2023 23:44:51 +0200
-Message-ID: <20230701214503.550549-3-javierm@redhat.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230701214503.550549-1-javierm@redhat.com>
-References: <20230701214503.550549-1-javierm@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 1 Jul 2023 17:49:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A90CB2;
+        Sat,  1 Jul 2023 14:49:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E995D60A72;
+        Sat,  1 Jul 2023 21:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A3ABC433C8;
+        Sat,  1 Jul 2023 21:49:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688248182;
+        bh=CqNsMs1ge4fApjWGu4EO5ntLXPQKj2XEYZR7t2Mcx9U=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Ieu0hdN6blS9LhQRfEtbnABzT6EkGdndgMifiB6L91QcyzqeHbgc86gSb0wQFL41x
+         2Y+0c1PEt+cZu1OQBMgstDj30LlsqvavZ8pWKrJsW1c/QduKByPOzc+L54E/MYU8eF
+         vT6zGHNkdcMeQgFkEwQLgbei6TDlPr2E8DjVrnL+823jHbl8RJBD8ZPqk+B6sl2Xlm
+         bdlx5golS+mKOZR5h85pYI4tVjW06GY/xKHny82a0mQh2uU0BZHyN3jWDqIUK3HOqU
+         8nFKNpi2gHZigro0u/3/XvHxprBnhh/tKYLAmcYxFSnsZRO4hdMS2HrLXE2qMe56sE
+         QwX4oCcss5cow==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4A381C0C40E;
+        Sat,  1 Jul 2023 21:49:42 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull NFS client updates for Linux 6.5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <fc3d657d436e21d86b51fcfa0553c04d217d4b80.camel@hammerspace.com>
+References: <fc3d657d436e21d86b51fcfa0553c04d217d4b80.camel@hammerspace.com>
+X-PR-Tracked-List-Id: <linux-nfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <fc3d657d436e21d86b51fcfa0553c04d217d4b80.camel@hammerspace.com>
+X-PR-Tracked-Remote: git://git.linux-nfs.org/projects/trondmy/linux-nfs.git tags/nfs-for-6.5-1
+X-PR-Tracked-Commit-Id: 5b4a82a0724af1dfd1320826e0266117b6a57fbd
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: dfab92f27c600fea3cadc6e2cb39f092024e1fef
+Message-Id: <168824818229.28886.11565152345827076204.pr-tracker-bot@kernel.org>
+Date:   Sat, 01 Jul 2023 21:49:42 +0000
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the fbdev core has been split in FB_CORE and FB, make DRM fbdev
-emulation layer to just select the former.
+The pull request you sent on Sat, 1 Jul 2023 21:33:15 +0000:
 
-This allows to disable the CONFIG_FB option if is not needed, which will
-avoid the need to explicitly disable each of the legacy fbdev drivers.
+> git://git.linux-nfs.org/projects/trondmy/linux-nfs.git tags/nfs-for-6.5-1
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/dfab92f27c600fea3cadc6e2cb39f092024e1fef
 
-Changes in v2:
-- Make CONFIG_DRM_FBDEV_EMULATION to select FB_CORE (Thomas Zimmermann).
+Thank you!
 
- drivers/gpu/drm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index afb3b2f5f425..d9b1710e3ad0 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -132,7 +132,7 @@ config DRM_DEBUG_MODESET_LOCK
- config DRM_FBDEV_EMULATION
- 	bool "Enable legacy fbdev support for your modesetting driver"
- 	depends on DRM_KMS_HELPER
--	depends on FB=y || FB=DRM_KMS_HELPER
-+	select FB_CORE
- 	select FRAMEBUFFER_CONSOLE if !EXPERT
- 	select FRAMEBUFFER_CONSOLE_DETECT_PRIMARY if FRAMEBUFFER_CONSOLE
- 	default y
 -- 
-2.41.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
