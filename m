@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F2C744A46
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9517744A49
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjGAPeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 11:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S229897AbjGAPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 11:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjGAPeD (ORCPT
+        with ESMTP id S229506AbjGAPfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 11:34:03 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAC08F;
-        Sat,  1 Jul 2023 08:34:00 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fb41682472so4623789e87.2;
-        Sat, 01 Jul 2023 08:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688225638; x=1690817638;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=880KZF/bF7Pq2RTuRW+0pg3Ip+SR1DYzPUOsvKeNVsM=;
-        b=lyQhPqOak0+3VFs5bbpx0rCwSq46srMpfg6U2AudEA5Qkit7pkzLiXdtf3zvcoVplv
-         CkltgxMlhblTxMFeayy4vLvkeI3NYwXHO5f4xAgnmMPNs0SjMIqPT+mt/hL2oJgAq6H9
-         Kp5q7y6S2xjtOm4Om/bru2wGPxOok1I8tkx4oHGHQHdI2sNyYR8m6e4G/8+ABU0L1vSH
-         /BZpBC0p3J4mkMU4W/XP8s5rMeSts9+1C0+4lxK14OpkCmXAgO545PAMQpdN60GHJO7v
-         fObAYYTziHFO7Xwpp0VfL6T6LVj4l5XCREp5wfCTnlpQG5CXB/VY2vkU9AnleAVA0oSz
-         qWSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688225638; x=1690817638;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=880KZF/bF7Pq2RTuRW+0pg3Ip+SR1DYzPUOsvKeNVsM=;
-        b=kofu06I5bm3OuQf4BkjKQ3zpDd19OnImbzuhJlqaUWGVxwiMdf1Vt6kYXaW77/VXkj
-         FdV5ID0ZkOmlZUxiXmPnNc9nFbPg8M9ecmzvRCcxwqTKZiLxoWbzRV9Iv2z8IE/LLkoh
-         ZLSEbgZXeL5O83cXVoMPbiguvm3tVFv2ypyMdm0MsM0Z4giiYrj/dI/+5WSRY/Z4e6Rv
-         yCCfAirbf6xAwJmgUJingC7OBShyD0ZKOhqkYHb8e1XcSv0es4qLv3TXZHBWj+PznjzK
-         1IaevejYCkznAgPg6reMuL4rMAr9tvmxFvykiAMdo5QgxSO4Fajs/+JbFGtTyatCFI4v
-         oJrQ==
-X-Gm-Message-State: ABy/qLaGAw/KXo4GSfb9APpFNxO2etsDyEjDPUFkzdmXh+pmKaxMk6TF
-        92DSXXsRPllcnt7ombiguG8=
-X-Google-Smtp-Source: APBJJlE3Jfw/gE1TQQQKMseHw0V7j4sMBh55RijAtpWxnofbU+lbA1ULH1dDGJzGzV/ydyR/Y1nUBA==
-X-Received: by 2002:a05:6512:31d6:b0:4fb:96ed:93b3 with SMTP id j22-20020a05651231d600b004fb96ed93b3mr5546131lfe.65.1688225637491;
-        Sat, 01 Jul 2023 08:33:57 -0700 (PDT)
-Received: from valmont.froyen.eu ([2a01:799:ba5:6500::80f])
-        by smtp.gmail.com with ESMTPSA id y16-20020a197510000000b004fba5eb0a64sm899778lfe.42.2023.07.01.08.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jul 2023 08:33:57 -0700 (PDT)
-From:   Valentin David <valentin.david@gmail.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        valentin.david@gmail.com
-Subject: [PATCH] tpm: Do not remap from ACPI resouces again for Pluton TPM
-Date:   Sat,  1 Jul 2023 17:33:29 +0200
-Message-ID: <20230701153329.6476-1-valentin.david@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Sat, 1 Jul 2023 11:35:33 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484C38F;
+        Sat,  1 Jul 2023 08:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kCNrk+ARuX6SCOmc24SortMveTD7s/DdF3ybwqHKKas=; b=ZJo/tIQVRPN1zG9rUSNNXqUhDk
+        pzAX7LSBGw813Dm4OyCV/fidzBwxYbJKKTtd3mPn9a4/5g+fp0eoJWuqACtifDOOXU4OQ4BeUleSs
+        N8DbHEQH0/ZkLiI6B8MIjpiecY7Tyovn9ZwtJHsoPrq/Fw8SErweswq9wGIexRdb+aHSnITd4UXQA
+        bSriRqbLjJZKFJMuBd0M1O/Qs2Y3ebUSBsEpfTJ9XBcpMEnnelW2H82uvzYDziAnj/GeGuwU2OD4i
+        CSnX6JWM00Be6U/j76uGkcS1OZaDXNrXR+o/drprxOBi7KeOQZ1qX2oNk9ppUoatM5fwYpRI3Q+kE
+        QiLuR/rw==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <carnil@debian.org>)
+        id 1qFcd8-007yI0-I5; Sat, 01 Jul 2023 15:35:22 +0000
+Received: by eldamar.lan (Postfix, from userid 1000)
+        id A70BFBE2DE0; Sat,  1 Jul 2023 17:35:21 +0200 (CEST)
+Date:   Sat, 1 Jul 2023 17:35:21 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     dud225 <dud225@hotmail.com>, 1039883@bugs.debian.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Bug#1039883: linux-image-6.3.0-1-amd64: ext4 corruption with
+ symlinks
+Message-ID: <ZKBHuRSrs96JDZjY@eldamar.lan>
+References: <168802788716.2369531.1979971093539266086.reportbug@ariane.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168802788716.2369531.1979971093539266086.reportbug@ariane.home>
+X-Debian-User: carnil
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,51 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For Pluton TPM devices, it was assumed that there was no ACPI memory
-regions. This is not true for ASUS ROG Ally. ACPI advertises
-0xfd500000-0xfd5fffff.
+Control: tags -1 + upstream
 
-Since remapping is already done in `crb_map_pluton`, remapping again
-in `crb_map_io` causes EBUSY error:
-```
-[    3.510453] tpm_crb MSFT0101:00: can't request region for resource [mem 0xfd500000-0xfd5fffff]
-[    3.510463] tpm_crb: probe of MSFT0101:00 failed with error -16
-```
----
- drivers/char/tpm/tpm_crb.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+Hi,
 
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index d43a0d7b97a8..1a5d09b18513 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -563,15 +563,18 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 	u32 rsp_size;
- 	int ret;
- 
--	INIT_LIST_HEAD(&acpi_resource_list);
--	ret = acpi_dev_get_resources(device, &acpi_resource_list,
--				     crb_check_resource, iores_array);
--	if (ret < 0)
--		return ret;
--	acpi_dev_free_resource_list(&acpi_resource_list);
--
--	/* Pluton doesn't appear to define ACPI memory regions */
-+	/*
-+	 * Pluton sometimes does not define ACPI memory regions.
-+	 * Mapping is then done in crb_map_pluton
-+	 */
- 	if (priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
-+		INIT_LIST_HEAD(&acpi_resource_list);
-+		ret = acpi_dev_get_resources(device, &acpi_resource_list,
-+					     crb_check_resource, iores_array);
-+		if (ret < 0)
-+			return ret;
-+		acpi_dev_free_resource_list(&acpi_resource_list);
-+
- 		if (resource_type(iores_array) != IORESOURCE_MEM) {
- 			dev_err(dev, FW_BUG "TPM2 ACPI table does not define a memory resource\n");
- 			return -EINVAL;
--- 
-2.41.0
+On Thu, Jun 29, 2023 at 10:38:07AM +0200, dud225 wrote:
+> Package: linux-image-6.3.0-1-amd64
+> Version: linux-image-6.3.0-1-amd64
+> Severity: important
+> Tags: upstream
+> X-Debbugs-Cc: dud225@hotmail.com
+> 
+> Hello
+> 
+> I've stored data on a USB external hard drive using ext4 over LUKS2 and I'm getting the following error:
+> 	kernel: EXT4-fs error (device dm-11): ext4_map_blocks:607: inode #8159552: block 959787320: comm git-annex:w: lblock 0 mapped>
+> 
+> I then stumbled upon that kernel bug [1] which matches my case as git-annex is making heavy use of symlinks. However I've faced this issue on the kernel 6.3.0 (linux-image-6.3.0-1-amd64 version 6.3.7-1) so it doesn't look to be actually addressed.
+> 
+> I've got 3 disks, 2 HDDs and 1 SSD, and oddly the failure only happens on the HDD, the SSD is running fine.
+> After reformatting my HDD without the inline_data feature, the issue has disappeared.
+> 
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=216317
 
+I believe this should be reported upstream, doing so now to get some
+ideas from Ted and Andreas. 
+
+Ted, Andreas the above was reported in Debian at
+https://bugs.debian.org/1039883 .
+
+Any insights here?
+
+Regards,
+Salvatore
