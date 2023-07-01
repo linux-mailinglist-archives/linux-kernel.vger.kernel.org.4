@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41125744A7F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037B7744A83
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjGAQTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 12:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S229981AbjGAQVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 12:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjGAQTm (ORCPT
+        with ESMTP id S229477AbjGAQVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 12:19:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108C510DC
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 09:19:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A030060B58
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 16:19:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 087B2C433C8;
-        Sat,  1 Jul 2023 16:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688228381;
-        bh=3Gv/jiuW8gpSP2P2vqG0v7wqLF6z1eu0+i6VLt1/ZYo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=W1chCRpN0xyOYQVHMJ9bFp6G0+/6G7m+kSSt21+xxlCHjJvYsBpG4cchtEhCjlwb9
-         Esjd3GuPpauxCC578a0J55Gz8vpCRwkmNuPySjZ6P5nnvGSd9+OihkccKmb7edfaFG
-         z2kMQgHokWxyTWacBTpq4+yQicYFyiYPkYLfftaYIneh+gMw1pMw66som6LoD2Lrx+
-         kEC4LYZyyMLrFJbv0CaZXOdcbpOYlicwIANT4Z1FCHRQ/IVsbDL/+p7oVQhdb1xvC1
-         Z24oLVl7GWWzUlAnc6/rzHvim2NcwzHMJeWQwQNdmB5HfpNA6nxn5cTXsCuI88YokB
-         T8V81KrgqHPoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6E80C0C40E;
-        Sat,  1 Jul 2023 16:19:40 +0000 (UTC)
-Subject: Re: [GIT PULL] arm64 fix for 6.5-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZKBRDMx96q25piLr@arm.com>
-References: <ZKBRDMx96q25piLr@arm.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZKBRDMx96q25piLr@arm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-X-PR-Tracked-Commit-Id: 893b24181b4c4bf1fa2841b1ed192e5413a97cb1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e3c2b10d6f15640407bef3098accf10faa4ecf1b
-Message-Id: <168822838093.4514.13819933134017512063.pr-tracker-bot@kernel.org>
-Date:   Sat, 01 Jul 2023 16:19:40 +0000
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 1 Jul 2023 12:21:35 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9964A10DC;
+        Sat,  1 Jul 2023 09:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=9PVVUcb5RkwFUjMyrKy1zG2bSIkmM/JEyEAWV9cGkZ8=; b=tcEWTOzM+VUgGcLfG7qPNzcJgm
+        aFwCefY9v4aGd6IpO37Sivc+M5B6+rIeayxeVKYHfhS7J/8aTrrwiCtl5Fl+kvJ14sIIE7stQ4VbL
+        lo33g5f9u98sY8vpRKNmmUvBjihWBl98MavpYqksC7+mVodbn8lk7oLXuD2aCc+x2vMo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qFdLW-000NLQ-89; Sat, 01 Jul 2023 18:21:14 +0200
+Date:   Sat, 1 Jul 2023 18:21:14 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jie Luo <quic_luoj@quicinc.com>
+Cc:     hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] net: phy: at803x: add qca8081 fifo reset on the link
+ down
+Message-ID: <34ef466e-df95-4be4-8366-64baf5f04cca@lunn.ch>
+References: <20230629034846.30600-1-quic_luoj@quicinc.com>
+ <20230629034846.30600-4-quic_luoj@quicinc.com>
+ <e1cf3666-fecc-4272-b91b-5921ada45ade@lunn.ch>
+ <0f3990de-7c72-99d8-5a93-3b7eaa066e49@quicinc.com>
+ <924ebd8b-2e1f-4060-8c66-4f4746e88696@lunn.ch>
+ <7144731c-f4ae-99b6-d32a-1d0e39bc9ee7@quicinc.com>
+ <d4043e1f-d683-48c2-af79-9fea14ab7cc1@lunn.ch>
+ <49f8ca40-e079-ad00-256e-08a61ffced22@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <49f8ca40-e079-ad00-256e-08a61ffced22@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 1 Jul 2023 17:15:08 +0100:
+> Hi Andrew,
+> it is the PLL related registers, there is no PHY ID existed in MII register
+> 2, 3 of this block, so it can't be instantiated as the generic PHY device.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
+Well, phylib is going to scan those ID registers, and if it finds
+something other than 0xffff 0xffff in those two ID registers it is
+going to think a PHY is there. And then if there is no driver using
+that ID, it will instantiate a generic PHY.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e3c2b10d6f15640407bef3098accf10faa4ecf1b
+You might be able to see this in /sys/bus/mdio_bus, especially if you
+don't have a DT node representing the MDIO bus.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+      Andrew
