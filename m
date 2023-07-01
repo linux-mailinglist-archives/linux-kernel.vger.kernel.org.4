@@ -2,133 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C999744BC8
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 01:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9FE744BCC
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 01:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjGAXf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 19:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S229817AbjGAXju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 19:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjGAXf2 (ORCPT
+        with ESMTP id S229477AbjGAXjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 19:35:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A8A1725;
-        Sat,  1 Jul 2023 16:35:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sat, 1 Jul 2023 19:39:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013A61725
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 16:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688254742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PBpTTsf34Ze+Ldbjs7Ryu+fiBB4ZKbtnHCMlWFpbQvc=;
+        b=Jvu3NWrLo2qApa9LYbXd0YJ26vOHSpyg/nxzUOsPtExjMhLFErU/yCzOln8tPCKRNfJSBv
+        HpFXHi6CaMqthxuJYL12di9ZspouS6A6PrQb/eekcaJxl5kJTN8Omr6DwQxY3vIen8MbaK
+        KfV6lItX3nv9WnVKf4Dpa47h7ei6B2c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-501-A6JHkaInPa6ji1KJgx27-g-1; Sat, 01 Jul 2023 19:38:58 -0400
+X-MC-Unique: A6JHkaInPa6ji1KJgx27-g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAA5860B41;
-        Sat,  1 Jul 2023 23:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE0EC433CB;
-        Sat,  1 Jul 2023 23:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688254526;
-        bh=PJQy4/1p5EsjFhKhO/qYY2FRfK0oK1uwx8Obk6wyd3o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ImIdfomfjxVZZ0ycehvi+hOi7iRCrcFuxAmQNRY0/n40l4c0ACk7KUddmkDzXw0zA
-         6FimANH9VzNgmTdfWB6/BRCHh5wzRB70cdhT5nItmFjwToX5I5Lw8HQp7mqAt+nDQ4
-         pQZTUsac+vEjiBj4ZkxLdHDUNcq0OGy7Vs80jvJgeY50p6jRwxY7kvjmf2aikP4vw3
-         hfRVc5bZkRF4adFrJpzkpllK9GS94DOH4MUqQ22rXhCmQgOUpVaWSsozaqN1V5cpoX
-         J/5u3Gx9ihPhWrsNxU1fkE3X1t8yS0BznuQPUzJDNc/e1ke8+P+/lfWRiMzv1pbvsr
-         dLydA7KNsMx1A==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b69a48368fso49636981fa.0;
-        Sat, 01 Jul 2023 16:35:26 -0700 (PDT)
-X-Gm-Message-State: ABy/qLY/vNcNTlssma+dJLd1dfEa2Di3Tc+VVg0c8wwdEpIM5hr/ufpT
-        DGlag+4RTUaHeYrvXnVX5MpmO8QmIckIGNmIDw==
-X-Google-Smtp-Source: APBJJlGXb97S4LcC81WPYNWzCLE4ubtRDMfQc+w41cN33vqI4+yfgrMOBvquGaWnyjqwJEnQwSWD1+OZZGu2/rbGrDo=
-X-Received: by 2002:a05:6512:2094:b0:4f9:5396:ed1b with SMTP id
- t20-20020a056512209400b004f95396ed1bmr4223084lfr.28.1688254524241; Sat, 01
- Jul 2023 16:35:24 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 70ED886F122;
+        Sat,  1 Jul 2023 23:38:58 +0000 (UTC)
+Received: from [10.22.32.52] (unknown [10.22.32.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D37B84067A00;
+        Sat,  1 Jul 2023 23:38:57 +0000 (UTC)
+Message-ID: <9244d968-b25a-066f-2ff3-1281bf03983e@redhat.com>
+Date:   Sat, 1 Jul 2023 19:38:57 -0400
 MIME-Version: 1.0
-References: <20230630100321.1951138-1-jstephan@baylibre.com> <20230630100321.1951138-3-jstephan@baylibre.com>
-In-Reply-To: <20230630100321.1951138-3-jstephan@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sun, 2 Jul 2023 07:35:12 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-qu2RWr496wXxc1Cp14eZfzKt4QgEH8fJns2LOjpwi8Q@mail.gmail.com>
-Message-ID: <CAAOTY_-qu2RWr496wXxc1Cp14eZfzKt4QgEH8fJns2LOjpwi8Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] media: platform: mediatek: isp_30: add mediatek
- ISP3.0 sensor interface
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     Louis Kuo <louis.kuo@mediatek.com>,
-        Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] cgroup/cpuset: update parent subparts cpumask while
+ holding css refcnt
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, tj@kernel.org,
+        hannes@cmpxchg.org, lizefan.x@bytedance.com
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230701065049.1758266-1-linmiaohe@huawei.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230701065049.1758266-1-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Julien:
-
-Julien Stephan <jstephan@baylibre.com> =E6=96=BC 2023=E5=B9=B46=E6=9C=8830=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:05=E5=AF=AB=E9=81=93=EF=BC=
-=9A
+On 7/1/23 02:50, Miaohe Lin wrote:
+> update_parent_subparts_cpumask() is called outside RCU read-side critical
+> section without holding extra css refcnt of cp. In theroy, cp could be
+> freed at any time. Holding extra css refcnt to ensure cp is valid while
+> updating parent subparts cpumask.
 >
-> From: Louis Kuo <louis.kuo@mediatek.com>
+> Fixes: d7c8142d5a55 ("cgroup/cpuset: Make partition invalid if cpumask change violates exclusivity rule")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>   kernel/cgroup/cpuset.c | 3 +++
+>   1 file changed, 3 insertions(+)
 >
-> This will add the mediatek ISP3.0 seninf (sensor interface) driver found
-> on several Mediatek SoCs such as the mt8365.
->
-> Then seninf module has 4 physical CSI-2 inputs. Depending on the soc they
-> may not be all connected.
->
-> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
-> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
-> Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
->
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 58e6f18f01c1..632a9986d5de 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1806,9 +1806,12 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+>   		cpuset_for_each_child(cp, css, parent)
+>   			if (is_partition_valid(cp) &&
+>   			    cpumask_intersects(trialcs->cpus_allowed, cp->cpus_allowed)) {
+> +				if (!css_tryget_online(&cp->css))
+> +					continue;
+>   				rcu_read_unlock();
+>   				update_parent_subparts_cpumask(cp, partcmd_invalidate, NULL, &tmp);
+>   				rcu_read_lock();
+> +				css_put(&cp->css);
+>   			}
+>   		rcu_read_unlock();
+>   		retval = 0;
 
-[snip]
+Thanks for finding that. It looks good to me.
 
-> +
-> +static const struct mtk_seninf_conf seninf_8365_conf =3D {
-> +       .model =3D "mtk-camsys-3.0",
-> +       .nb_inputs =3D 4,
-> +       .nb_muxes =3D 6,
-> +       .nb_outputs =3D 4,
-> +};
-> +
-> +static const struct of_device_id mtk_seninf_of_match[] =3D {
-> +       {
-> +               .compatible =3D "mediatek,mt8365-seninf",
-> +               .data =3D &seninf_8365_conf,
+Reviewed-by: Waiman Long <longman@redhat.com>
 
-Now only support one SoC, so it's necessary to select the SoC data and
-you could directly place the data in the code. After support other
-SoC, so we could know what should be placed in struct mtg_seninf_conf
-(Now we have no any information).
-
-Regards,
-Chun-Kuang.
-
-> +       },
-> +       {
-> +       },
-> +};
-> +MODULE_DEVICE_TABLE(of, mtk_seninf_of_match);
