@@ -2,143 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26061744894
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34EC744896
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjGAK4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 06:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S229799AbjGAK7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 06:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjGAK4B (ORCPT
+        with ESMTP id S229510AbjGAK7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 06:56:01 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D070E3C02
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:55:58 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso4674381e87.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688208957; x=1690800957;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f7+jU9LpPJg9EehaJpVm5VjMnguXv1PuXkPwCYOUgQk=;
-        b=RMTftJM7u4c/lcq5Kiu4tD9+Gc5eKlF5ZVUEIxbkTRVUlBEGNjIC2YzrY63xeeG5ir
-         c/4p1/+rCZwYTgVlHjp0gjLOGU02trzuPm9VtR3ATEDFotvwDNo5TuPllR870o55st/t
-         X0K/f6785V14Ov949qwF3hsQM0vYQU6nU+EcP9N0+CiYebm4vN4SGkFgvoGp5p3OWBjF
-         feC16pM3L6rzOMaX0+jegJ4ljEv4DTJzjQtNGJxoEHk3i0QWYtZOyFyb/XP1OAr/Leuj
-         0up12xQ/G7GTGxyZ4lrWiD4W02khPCXHKTAqDQV9I3CfsfsR2puTLyCZU9kAps3OuCdV
-         3YVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688208957; x=1690800957;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7+jU9LpPJg9EehaJpVm5VjMnguXv1PuXkPwCYOUgQk=;
-        b=Xxxf/TsRuDZJKKhH2sG20dyMDm/FJ+iQ/TtQknijbVIT5L4UCmDdE/bLrsmdQOSE+f
-         4H7/KC+OIT4qRuuk6exlF0NjvfNZw9vOUDWlsk0mIIyb3xuwFhjj5Yr4WWyZMn2oYTGw
-         fDxUsrj/FbVM13BsdPSlxunmn8BS8s/VyEW1hPLhq1kiRRYCdk/o3reVhbuUBS3/2S32
-         KJH6YLPcxZBr9y8mxP6fhkOBEVIFrhipafkbmOVwGOtvN5rM2NLbwzMSJr9/xSLCeLPC
-         P6Kr9LhhvxLktt1aeQZzaxwcDlDPSk/zfTRJrpCd3un3EScdk4JaG+kSOH0hFxg2YGfr
-         ydPg==
-X-Gm-Message-State: ABy/qLb21lvfY7IpNAQeBNqpAMLCMIjG4Mv2ig2xeOK4myQ7lfPg1dy/
-        pPXvCPbstNrNg2158U2ykNhF4g==
-X-Google-Smtp-Source: APBJJlGjWzze0Nw3aT298AyAOE/oLbH2N8dBcxHY1zC+9qyeCKLoYE8E6UHWwwJNQ4NwqUkLM8d6tw==
-X-Received: by 2002:ac2:4bca:0:b0:4f9:ec5e:d624 with SMTP id o10-20020ac24bca000000b004f9ec5ed624mr3905398lfq.38.1688208956879;
-        Sat, 01 Jul 2023 03:55:56 -0700 (PDT)
-Received: from [192.168.10.214] ([217.169.179.6])
-        by smtp.gmail.com with ESMTPSA id o7-20020aa7dd47000000b0051bf57aa0c6sm7800333edw.87.2023.07.01.03.55.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 03:55:56 -0700 (PDT)
-Message-ID: <bc56e3be-7d0b-5420-978e-125d66ae8f72@linaro.org>
-Date:   Sat, 1 Jul 2023 12:55:55 +0200
+        Sat, 1 Jul 2023 06:59:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FD73ABD
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688209153; x=1719745153;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9gSBtOdBbL5EszgpLqy6s7dTPkpfEsMtL/0Y2VVsd5Y=;
+  b=UcKwzwlmFz+f8thQypPDdbSNI7EtfvL2/djEtQZR8fB9reFxD3kwSjzK
+   E3w9s8OqMXTxwkMBM7vh/TlT+0U3wvS+60Q6MWW9vfxbsoNmeoPucqw0/
+   YlOMSZ1tJIrzjisKmRqcIfXieFX6/jOAzIBgW3FfWmTKmSVHVpF//M5MO
+   FlkfY38TOZXGmui64n5JxmC75I4knPf1sWcIF99zHTFRu1lcDdydV0LJm
+   JxwLx03IU3XV6aujA4i/nTJdgGdQKTC06v4mjF2iW7VZOg9h7OeQDBNak
+   JdbLAO4xT7Nkp37ryTNMbyijJQl8Lf2voXepWgy32r71ZO/+25XbnoEVK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="393318033"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="393318033"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 03:59:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="892033274"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="892033274"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Jul 2023 03:59:10 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFYJp-000Fz9-1d;
+        Sat, 01 Jul 2023 10:59:09 +0000
+Date:   Sat, 1 Jul 2023 18:58:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: arch/loongarch/kernel/stacktrace.c:47:25: sparse: sparse: incorrect
+ type in assignment (different address spaces)
+Message-ID: <202307011821.uIMwFiL1-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V2 10/13] remoteproc: qcom: Add Hexagon based multipd
- rproc driver
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jassisinghbrar@gmail.com,
-        mathieu.poirier@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, quic_eberman@quicinc.com, quic_mojha@quicinc.com,
-        kvalo@kernel.org, loic.poulain@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com, quic_varada@quicinc.com,
-        quic_devipriy@quicinc.com
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-11-quic_mmanikan@quicinc.com>
- <2061a641-4b97-1aa6-27cd-99f01a785033@linaro.org>
- <54f06704-a849-7049-5956-31cb4765a1eb@quicinc.com>
- <8cf34ab3-fa8b-90f4-215e-bbfb0c41fade@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8cf34ab3-fa8b-90f4-215e-bbfb0c41fade@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 12:29, Manikanta Mylavarapu wrote:
-> 
-> 
-> On 6/27/2023 6:09 PM, Manikanta Mylavarapu wrote:
->>
->>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a507db1d8fdc39802415e4d2ef6d1aecd67927fa
+commit: 4d7bf939df08218e682f7a42952eee3bad4dceb7 LoongArch: Add USER_STACKTRACE support
+date:   11 months ago
+config: loongarch-randconfig-r073-20230627 (https://download.01.org/0day-ci/archive/20230701/202307011821.uIMwFiL1-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230701/202307011821.uIMwFiL1-lkp@intel.com/reproduce)
 
-Do you see the lines above? You quote my reply and claim it is you who
-wrote it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307011821.uIMwFiL1-lkp@intel.com/
 
-Please fix your mailer, it's making discussions unnecessary difficult.
+sparse warnings: (new ones prefixed by >>)
+>> arch/loongarch/kernel/stacktrace.c:47:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *user_frame_tail @@     got unsigned long * @@
+   arch/loongarch/kernel/stacktrace.c:47:25: sparse:     expected unsigned long [noderef] __user *user_frame_tail
+   arch/loongarch/kernel/stacktrace.c:47:25: sparse:     got unsigned long *
 
+vim +47 arch/loongarch/kernel/stacktrace.c
 
->>>> +      Say y here to support the Qualcomm Secure Peripheral Image Loader
->>>> +      for the Hexagon based MultiPD model remote processors on e.g. 
->>>> IPQ5018.
->>>> +      This is trustZone wireless subsystem.
->>>> +
->>>
->>> ...
->>>
-> 	I didn't understand. Can you please elaborate your comment?
+    39	
+    40	static int
+    41	copy_stack_frame(unsigned long fp, struct stack_frame *frame)
+    42	{
+    43		int ret = 1;
+    44		unsigned long err;
+    45		unsigned long __user *user_frame_tail;
+    46	
+  > 47		user_frame_tail = (unsigned long *)(fp - sizeof(struct stack_frame));
+    48		if (!access_ok(user_frame_tail, sizeof(*frame)))
+    49			return 0;
+    50	
+    51		pagefault_disable();
+    52		err = (__copy_from_user_inatomic(frame, user_frame_tail, sizeof(*frame)));
+    53		if (err || (unsigned long)user_frame_tail >= frame->fp)
+    54			ret = 0;
+    55		pagefault_enable();
+    56	
+    57		return ret;
+    58	}
+    59	
 
-https://en.wikipedia.org/wiki/Ellipsis
-
-> 
->>>> +    int (*powerup_scm)(u32 peripheral);
->>>> +    int (*powerdown_scm)(u32 peripheral);
->>>> +};
->>>> +
->>>> +/**
->>>> + * qcom_get_pd_asid() - get the pd asid number from DT node
->>>
->>>  From node name? NAK. It does not work like that. Node names can change
->>> and you did not define this number as part of ABI.
->>>
->>> Probably you wanted unit address.
->>>
-> 
-> 	Yeah i got your point. Each of the WCSS PD's are internally
-> 	represented in Q6 with their corresponding "spawn" bit numbers.
-> 	I will use same and remove the "PD-" hardcodings.
-> 
-> 	Is this fine ?
-
-I don't get what you are going to use, so post a patch. Talk is cheap.
-
-
-Best regards,
-Krzysztof
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
