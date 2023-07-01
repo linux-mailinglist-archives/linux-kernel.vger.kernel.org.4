@@ -2,164 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E03744970
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 15:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18868744971
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 15:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjGANpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 09:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S230297AbjGANpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 09:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjGANpQ (ORCPT
+        with ESMTP id S229665AbjGANp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 09:45:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A8A3C00;
-        Sat,  1 Jul 2023 06:45:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A56BF60B73;
-        Sat,  1 Jul 2023 13:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE6FC43395;
-        Sat,  1 Jul 2023 13:45:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688219114;
-        bh=9d3MqgbfoEXm4e71z+ezPjR3vvvbKSQpSCaz34l0gmo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GrK12kGDrW4ojIHD5Ds6BzTLxi8rUibopincB3Vi+bjft6prxulfH8bO+BQlmEfiP
-         nvfMk5L+tjQujVSrgn+IOjWpMUGGnyxIDFZ/vZf8mGaDXwSc/O7Ww4m1oLgZNu56AX
-         StF6uJfC2l6D6VLJz9g0a3efEcrBIhJDbZHA1DXsYMKQROgkFPS1x/u8ZH2EUj22J1
-         5H4y9Y6er+zwd6rnSvMlEcbPFpfOw7YYC0vrU4bVOQWNs4cqosrWc1T0tn+1Te0ho8
-         pyoqV66iV84f0XEjTDh7AE3rMZr0jPVw32xK8yclVUq4H/RkdHaBg5hePLxBCSUO+z
-         v2RCvCd/vQckA==
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3fbc12181b6so28917155e9.2;
-        Sat, 01 Jul 2023 06:45:13 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwI3/NylOv4rXcQ8RhZh5aoBTu260TAO7XhZXBxPYZb63aVvnf4
-        1kavMPkGX2+bhCgRArHZGtOXuyc+RLBYbhUyS6E=
-X-Google-Smtp-Source: ACHHUZ5jZ82bm0qs/ibxPu0bevyKpfVXZ3uXr+bClu/6I2hRHm6zTWY5Kvnn2GemGtWi06F74RvrdWqbX20KWztL/ak=
-X-Received: by 2002:a05:600c:20a:b0:3fb:9b7e:c5b1 with SMTP id
- 10-20020a05600c020a00b003fb9b7ec5b1mr4265426wmi.19.1688219112057; Sat, 01 Jul
- 2023 06:45:12 -0700 (PDT)
+        Sat, 1 Jul 2023 09:45:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565FB3C00
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 06:45:28 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-313e23d0a28so3670453f8f.3
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 06:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688219127; x=1690811127;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=spl3Nt5Mh1u6Uhlm9oKAy/7Yr7EModW5k9NwVSB4Gms=;
+        b=Z1ihpuCsxOCdta/vnSzsGCtEzkGmm3FAcNlfZSL7Gu9C9Oo6Zrs/7fJvnBMFvG+hzv
+         luZoloDhB7NCrRHEWEsd3aFo90qXN2SPtWwBa8EUs/wZ5kzLqFZG+KXRBmXQz/Y6Xg9O
+         WJbZ9v+tGf5WfKDp8nRqxtnlYtT3Gq4X2DA9YJG5vU8WRFp/2t8UneQD/+2MWSSnz079
+         aF9lQ9xD59pHtqQj2fuv35Ip82qLROd6EWqevutmeWrjLM3qZ3CSCyAOy+6KWEZ71se0
+         G/l2j6UkcA1DnS0/f2Pik1t9s2oMKt9ykbWyu0HYIsINXyBXfd0JF+eJab36K4VkIEWx
+         SOXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688219127; x=1690811127;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=spl3Nt5Mh1u6Uhlm9oKAy/7Yr7EModW5k9NwVSB4Gms=;
+        b=SjI25r6qRA5JzHFESxyia9O+NQaKKPGDRF/UO6Da7HDtgk96cnqQ5s3LmNRxdVQ1EQ
+         UQL0w9MVwSqB38/SHnjh5Kwgv3mMzGK67vXDsk6brInB9vDQiDNl4z3J4MsUXhtZS1tq
+         AiFq4GXWCIiCvwtaelMFtwq5QYQGVzk6tArIQUMzrDSK80uA2/iAxldo3nhrdtZYMb6q
+         8hyuoiGCqEky98bZNwm+gdUTBxJAlH7JWlslcOwn//tbR3JIDJF0yCvdWFUzQ7wcbp6z
+         rZy2RWMdNB7zP/97SvMfDm9SeKxM+53ACTQHWKJfFEOIfuehkzAwmNspSj0pALAnF45J
+         k7DA==
+X-Gm-Message-State: ABy/qLYUrcdME3t+yE5nBTFt/+6+7cB9Jsvlndz6dSdQWAn/aJLWmmNI
+        DLXw2DtFb3v+I2cfuUGeunI=
+X-Google-Smtp-Source: APBJJlFVf4dqgcV+O5QCrl2XMsX21r25ocAt5xvcDIt4CgAYJ2iCMSmdlE5QCxFjdJQYx6SfgDZ7kQ==
+X-Received: by 2002:adf:ed45:0:b0:314:17a9:9f36 with SMTP id u5-20020adfed45000000b0031417a99f36mr4447038wro.69.1688219126541;
+        Sat, 01 Jul 2023 06:45:26 -0700 (PDT)
+Received: from suse.localnet (host-82-49-237-33.retail.telecomitalia.it. [82.49.237.33])
+        by smtp.gmail.com with ESMTPSA id g11-20020a7bc4cb000000b003fbab76165asm11130532wmk.48.2023.07.01.06.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jul 2023 06:45:25 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Deepak R Varma <drv@mailo.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH v3 5/6] gfs2: Replace kmap() by kmap_local_page() in
+ gfs2_read_super
+Date:   Sat, 01 Jul 2023 15:45:24 +0200
+Message-ID: <4817807.GXAFRqVoOG@suse>
+In-Reply-To: <7ad72f9d1a97d673483c206d8ac9a88f2e32d3b9.1688073459.git.drv@mailo.com>
+References: <cover.1688073459.git.drv@mailo.com>
+ <7ad72f9d1a97d673483c206d8ac9a88f2e32d3b9.1688073459.git.drv@mailo.com>
 MIME-Version: 1.0
-References: <20230701171138.1491206-1-chenjiahao16@huawei.com>
-In-Reply-To: <20230701171138.1491206-1-chenjiahao16@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 1 Jul 2023 21:45:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSPaBvB_CsmN5m91AVXwXB37j2qvyCP3VqALxHwNcGeTg@mail.gmail.com>
-Message-ID: <CAJF2gTSPaBvB_CsmN5m91AVXwXB37j2qvyCP3VqALxHwNcGeTg@mail.gmail.com>
-Subject: Re: [PATCH -next v6 0/2] support allocating crashkernel above 4G
- explicitly on riscv
-To:     Chen Jiahao <chenjiahao16@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, bjorn@rivosinc.com,
-        alex@ghiti.fr, akpm@linux-foundation.org, atishp@rivosinc.com,
-        bhe@redhat.com, thunder.leizhen@huawei.com, horms@kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 5:12=E2=80=AFPM Chen Jiahao <chenjiahao16@huawei.com=
-> wrote:
+On gioved=C3=AC 29 giugno 2023 23:51:53 CEST Deepak R Varma wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page().
+>=20
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> the mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap=E2=80=99s pool wraps and it might block when the mapping space is fu=
+lly
+> utilized until a slot becomes available.
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and still valid.
+>=20
+> Therefore, replace kmap() with kmap_local_page() in gfs2_read_super().
+>=20
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Changes in v3:
+>    - Patch included in patch set
+>=20
+> Changes in v2:
+>    - None
+>=20
+>  fs/gfs2/ops_fstype.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
+> index 8a27957dbfee..80fe61662412 100644
+> --- a/fs/gfs2/ops_fstype.c
+> +++ b/fs/gfs2/ops_fstype.c
+> @@ -264,9 +264,9 @@ static int gfs2_read_super(struct gfs2_sbd *sdp,=20
+sector_t
+> sector, int silent) __free_page(page);
+>  		return -EIO;
+>  	}
+> -	p =3D kmap(page);
+> +	p =3D kmap_local_page(page);
 >
-> On riscv, the current crash kernel allocation logic is trying to
-> allocate within 32bit addressible memory region by default, if
-> failed, try to allocate without 4G restriction.
->
-> In need of saving DMA zone memory while allocating a relatively large
-> crash kernel region, allocating the reserved memory top down in
-> high memory, without overlapping the DMA zone, is a mature solution.
-> Hence this patchset introduces the parameter option crashkernel=3DX,[high=
-,low].
->
-> One can reserve the crash kernel from high memory above DMA zone range
-> by explicitly passing "crashkernel=3DX,high"; or reserve a memory range
-> below 4G with "crashkernel=3DX,low". Besides, there are few rules need
-> to take notice:
-> 1. "crashkernel=3DX,[high,low]" will be ignored if "crashkernel=3Dsize"
->    is specified.
-> 2. "crashkernel=3DX,low" is valid only when "crashkernel=3DX,high" is pas=
-sed
->    and there is enough memory to be allocated under 4G.
-> 3. When allocating crashkernel above 4G and no "crashkernel=3DX,low" is
->    specified, a 128M low memory will be allocated automatically for
->    swiotlb bounce buffer.
-> See Documentation/admin-guide/kernel-parameters.txt for more information.
->
-> To verify loading the crashkernel, adapted kexec-tools is attached below:
-> https://github.com/chenjh005/kexec-tools/tree/build-test-riscv-v2
->
-> Following test cases have been performed as expected:
-> 1) crashkernel=3D256M                          //low=3D256M
-> 2) crashkernel=3D1G                            //low=3D1G
-Have you tried 1GB memory? we found a pud mapping problem on Sv39 of kexec,=
- See:
-https://lore.kernel.org/linux-riscv/20230629082032.3481237-1-guoren@kernel.=
-org/
+Deepak,
 
-> 3) crashkernel=3D4G                            //high=3D4G, low=3D128M(de=
-fault)
-> 4) crashkernel=3D4G crashkernel=3D256M,high      //high=3D4G, low=3D128M(=
-default), high is ignored
-> 5) crashkernel=3D4G crashkernel=3D256M,low       //high=3D4G, low=3D128M(=
-default), low is ignored
-> 6) crashkernel=3D4G,high                       //high=3D4G, low=3D128M(de=
-fault)
-> 7) crashkernel=3D256M,low                      //low=3D0M, invalid
-> 8) crashkernel=3D4G,high crashkernel=3D256M,low  //high=3D4G, low=3D256M
-> 9) crashkernel=3D4G,high crashkernel=3D4G,low    //high=3D0M, low=3D0M, i=
-nvalid
-> 10) crashkernel=3D512M@0xd0000000              //low=3D512M
+Could this page ever come from ZONE_HIGHMEM? Can you please check whether w=
+e=20
+really need to kmap*() it or not?=20
+
+=46abio
 >
-> Changes since [v6]:
-> 1. Introduce the "high" flag to mark whether "crashkernel=3DX,high"
->    is passed. Fix the retrying logic between "crashkernel=3DX,high"
->    case and others when the first allocation attempt fails.
->
-> Changes since [v5]:
-> 1. Update the crashkernel allocation logic when crashkernel=3DX,high
->    is specified. In this case, region above 4G will directly get
->    reserved as crashkernel, rather than trying lower 32bit allocation
->    first.
->
-> Changes since [v4]:
-> 1. Update some imprecise code comments for cmdline parsing.
->
-> Changes since [v3]:
-> 1. Update to print warning and return explicitly on failure when
->    crashkernel=3Dsize@offset is specified. Not changing the result
->    in this case but making the logic more straightforward.
-> 2. Some minor cleanup.
->
-> Changes since [v2]:
-> 1. Update the allocation logic to ensure the high crashkernel
->    region is reserved strictly above dma32_phys_limit.
-> 2. Clean up some minor format problems.
->
-> Chen Jiahao (2):
->   riscv: kdump: Implement crashkernel=3DX,[high,low]
->   docs: kdump: Update the crashkernel description for riscv
->
->  .../admin-guide/kernel-parameters.txt         | 15 ++--
->  arch/riscv/kernel/setup.c                     |  5 ++
->  arch/riscv/mm/init.c                          | 84 +++++++++++++++++--
->  3 files changed, 90 insertions(+), 14 deletions(-)
->
+>  	gfs2_sb_in(sdp, p);
+> -	kunmap(page);
+> +	kunmap_local(p);
+>  	__free_page(page);
+>  	return gfs2_check_sb(sdp, silent);
+>  }
 > --
 > 2.34.1
->
 
 
---=20
-Best Regards
- Guo Ren
+
+
