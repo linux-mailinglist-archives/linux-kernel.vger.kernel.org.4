@@ -2,110 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34EC744896
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE27674489B
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 13:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjGAK7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 06:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S229557AbjGALBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 07:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjGAK7O (ORCPT
+        with ESMTP id S229782AbjGALB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 06:59:14 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FD73ABD
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688209153; x=1719745153;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9gSBtOdBbL5EszgpLqy6s7dTPkpfEsMtL/0Y2VVsd5Y=;
-  b=UcKwzwlmFz+f8thQypPDdbSNI7EtfvL2/djEtQZR8fB9reFxD3kwSjzK
-   E3w9s8OqMXTxwkMBM7vh/TlT+0U3wvS+60Q6MWW9vfxbsoNmeoPucqw0/
-   YlOMSZ1tJIrzjisKmRqcIfXieFX6/jOAzIBgW3FfWmTKmSVHVpF//M5MO
-   FlkfY38TOZXGmui64n5JxmC75I4knPf1sWcIF99zHTFRu1lcDdydV0LJm
-   JxwLx03IU3XV6aujA4i/nTJdgGdQKTC06v4mjF2iW7VZOg9h7OeQDBNak
-   JdbLAO4xT7Nkp37ryTNMbyijJQl8Lf2voXepWgy32r71ZO/+25XbnoEVK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="393318033"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="393318033"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 03:59:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="892033274"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="892033274"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Jul 2023 03:59:10 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qFYJp-000Fz9-1d;
-        Sat, 01 Jul 2023 10:59:09 +0000
-Date:   Sat, 1 Jul 2023 18:58:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: arch/loongarch/kernel/stacktrace.c:47:25: sparse: sparse: incorrect
- type in assignment (different address spaces)
-Message-ID: <202307011821.uIMwFiL1-lkp@intel.com>
+        Sat, 1 Jul 2023 07:01:27 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B403C00
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 04:01:24 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-992b2249d82so297635266b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 04:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688209283; x=1690801283;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dZ1or/MdMx0omH5bKg4Oj18nw/lksLHMXCAGiNzJOQ4=;
+        b=l5ATTLEkTO6e3mMV4Zd/lzxiZOKjq9mQSPrWhK2DFNU1A1eHH4GcFlE4AI1mwkBhN1
+         0e3OO/PYcI/uXGYv0iBLZahCX5H4/N+CPOyQN/HD2RZVL5jVeF2xVRZ4xMRnSTQ5bAHU
+         HaBMFgPTvEQbduVWcooM13IMk7rSph8N0J1UwfkdwmHsLPZglXgeMMx3BJuqAlyj3P+o
+         LDEk8b6oVyBYRjCsT2D0wBBLK7Sxs2ZRDkhbAnhxef1475ZhyEWdu6bOgnp0UxsBHUBJ
+         LigN6sghjD2mXQKLfLpUTGhm0RAiouU+42/DfhvkaIR3j39nNWKB92zGcTecaADMKroS
+         gVjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688209283; x=1690801283;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dZ1or/MdMx0omH5bKg4Oj18nw/lksLHMXCAGiNzJOQ4=;
+        b=J4V10mT0c+0BgRjj2osRn7mE7zTg/tWVfYk0a3FhdX5ILrrhdIErAMtY09W3fO6rja
+         dhQfb4Kn9ab/JEJcgJPgjCZqYB68E6Oor9dx6HY/mdQ8tB3WqC1KtCWgdH2FHQh+4YhH
+         T11pFhgoW/ri2OgFj1nixAlPN73cDaBvKiq5PJhNnXTIFE1cWDkb14lurW81BnR6GDK5
+         szoYP+9QpNnkv/9NepgxxD2W1JANdD3Ebq4qnaaIQ0VzCk/ChrKKep+fdljllC5TsDIr
+         e9KMPPJuROPL89XHGkf71kHUFW00GkFChbNVch6O1nfwo2Dw/7gJqyLdoKyPr8r9ZqSf
+         RflA==
+X-Gm-Message-State: ABy/qLZ7zP9bQTRk7NltF71FExPz6ItzQWSVF7AsRCXQGhup5OmbQx6L
+        W1K0TrgZ3PKr7ODXhblAkCJb0A==
+X-Google-Smtp-Source: APBJJlElNbbZdOdk19QhJCE35zZn5Te95ct9xR7hyv0ISeTz7uMTomfWvFBRbgRu/jsnLzZJIKe2tA==
+X-Received: by 2002:a17:906:c3a4:b0:98d:f062:8503 with SMTP id t36-20020a170906c3a400b0098df0628503mr3168554ejz.77.1688209282661;
+        Sat, 01 Jul 2023 04:01:22 -0700 (PDT)
+Received: from [192.168.10.214] ([217.169.179.6])
+        by smtp.gmail.com with ESMTPSA id sb22-20020a170906edd600b00982a92a849asm9195404ejb.91.2023.07.01.04.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jul 2023 04:01:22 -0700 (PDT)
+Message-ID: <caaf6ada-61a4-df67-0a55-06ab3c19fd3c@linaro.org>
+Date:   Sat, 1 Jul 2023 13:01:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/7] dt-bindings: leds: leds-qcom-lpg: Add support for LUT
+ through NVMEM devices
+Content-Language: en-US
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, pavel@ucw.cz,
+        lee@kernel.org, thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+References: <20230621185949.2068-1-quic_amelende@quicinc.com>
+ <20230621185949.2068-3-quic_amelende@quicinc.com>
+ <4ee5f3fc-3376-7421-23cd-8fc905704493@linaro.org>
+ <cb7630b4-4953-31df-faeb-a54f7757c1af@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cb7630b4-4953-31df-faeb-a54f7757c1af@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a507db1d8fdc39802415e4d2ef6d1aecd67927fa
-commit: 4d7bf939df08218e682f7a42952eee3bad4dceb7 LoongArch: Add USER_STACKTRACE support
-date:   11 months ago
-config: loongarch-randconfig-r073-20230627 (https://download.01.org/0day-ci/archive/20230701/202307011821.uIMwFiL1-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230701/202307011821.uIMwFiL1-lkp@intel.com/reproduce)
+On 29/06/2023 02:12, Anjelique Melendez wrote:
+>>
+>>
+>>
+>>> +      required when LUT mode is supported and the LUT pattern is stored in a single
+>>> +      SDAM module instead of a LUT module.
+>>
+>> Which devices support LUT? Why this is not constrained per variant?
+> When you say constrained per variant, are you looking for something more like this?
+> i.e. 
+> allOf:
+>   - if: 
+>       properties:
+>         compatible:
+>           contains:
+>             const: qcom,pmi632-lpg
+>     then:
+>       properties:
+>         nvmem:
+>           maxItems: 1
+>         nvmem-names:
+>           items:
+>             - const: lpg_chan_sdam
+>       required:
+>         - nvmem
+>         - qcom,pbs-client
+>   - if: 
+>       properties:
+>         compatible:
+>           contains:
+>             const: qcom,pm8350c-pwm
+>     then:
+>       properties:
+>         nvmem:
+>           maxItems: 2
+>         nvmem-names:
+>           items:
+>             - const: lpg_chan_sdam
+>             - const: lut_sdam
+>       required:
+>        - nvmem
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307011821.uIMwFiL1-lkp@intel.com/
+Yes.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/loongarch/kernel/stacktrace.c:47:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *user_frame_tail @@     got unsigned long * @@
-   arch/loongarch/kernel/stacktrace.c:47:25: sparse:     expected unsigned long [noderef] __user *user_frame_tail
-   arch/loongarch/kernel/stacktrace.c:47:25: sparse:     got unsigned long *
+> 
+>>
+>>> +
+>>>    multi-led:
+>>>      type: object
+>>>      $ref: leds-class-multicolor.yaml#
+>>> @@ -191,4 +216,64 @@ examples:
+>>>        compatible = "qcom,pm8916-pwm";
+>>>        #pwm-cells = <2>;
+>>>      };
+>>> +  - |
+>>> +    #include <dt-bindings/leds/common.h>
+>>> +
+>>> +    led-controller {
+>>> +      compatible = "qcom,pm8350c-pwm";
+>>> +      #address-cells = <1>;
+>>> +      #size-cells = <0>;
+>>> +      #pwm-cells = <2>;
+>>> +      nvmem-names = "lpg_chan_sdam" , "lut_sdam";
+>>
+>> Fix your whitespaces.
+> Ack
+>>
+>>> +      nvmem = <&pmk8550_sdam_21 &pmk8550_sdam_22>;
+>>
+>> Two entries, not one> 
+>> Anyway, adding one property does not justify new example. Integrate it
+>> into existing one.
+> 
+> So we actually cannot integrate these properties into existing examples.
+> The current examples are for PMICs that use LUT peripherals (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/leds/rgb/leds-qcom-lpg.c?h=v6.4#n1417).
+> This patch series is adding support for PMICs that do not have a LUT peripheral
+> and instead store LUT patterns and LPG configurations in either 1 or 2 NVMEM(s). 
+>>
+>>> +
+>>> +      led@1 {
+>>> +        reg = <1>;
+>>> +        color = <LED_COLOR_ID_RED>;
+>>> +        label = "red";
+>>> +      };
+>>> +
+>>> +      led@2 {
+>>> +        reg = <2>;
+>>> +        color = <LED_COLOR_ID_GREEN>;
+>>> +        label = "green";
+>>> +      };
+>>> +
+>>> +      led@3 {
+>>> +        reg = <3>;
+>>> +        color = <LED_COLOR_ID_BLUE>;
+>>> +        label = "blue";
+>>> +      };
+>>> +    };
+>>> +  - |
+>>> +    #include <dt-bindings/leds/common.h>
+>>> +
+>>> +    led-controller {
+>>> +      compatible = "qcom,pmi632-lpg";
+>>> +      #address-cells = <1>;
+>>> +      #size-cells = <0>;
+>>> +      #pwm-cells = <2>;
+>>> +      nvmem-names = "lpg_chan_sdam";
+>>> +      nvmem = <&pmi632_sdam7>;
+>>> +      qcom,pbs-client = <&pmi632_pbs_client3>;
+>>
+>> One more example? Why?
+>>
+>> Why do you have here only one NVMEM cell? Aren't you missing constraints
+>> in the binding?The use of the qcom,pbs-client is only used when we have a PMIC device that has a single PPG NVMEM, 
+> which is why this was not included in the above 2 nvmem PPG example. I see how these two PPG examples
+> are repetitive so I am ok with getting rid of one of them but I do think we should have at least one PPG example.
 
-vim +47 arch/loongarch/kernel/stacktrace.c
 
-    39	
-    40	static int
-    41	copy_stack_frame(unsigned long fp, struct stack_frame *frame)
-    42	{
-    43		int ret = 1;
-    44		unsigned long err;
-    45		unsigned long __user *user_frame_tail;
-    46	
-  > 47		user_frame_tail = (unsigned long *)(fp - sizeof(struct stack_frame));
-    48		if (!access_ok(user_frame_tail, sizeof(*frame)))
-    49			return 0;
-    50	
-    51		pagefault_disable();
-    52		err = (__copy_from_user_inatomic(frame, user_frame_tail, sizeof(*frame)));
-    53		if (err || (unsigned long)user_frame_tail >= frame->fp)
-    54			ret = 0;
-    55		pagefault_enable();
-    56	
-    57		return ret;
-    58	}
-    59	
+This example probably should replace one of the previous ones, because
+it is bigger / more complete.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
+
