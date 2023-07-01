@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7EF744590
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 02:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8916744592
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 02:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjGAA0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 20:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S229724AbjGAA0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 20:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjGAA0K (ORCPT
+        with ESMTP id S229671AbjGAA0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 20:26:10 -0400
+        Fri, 30 Jun 2023 20:26:11 -0400
 Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F18D2D60;
-        Fri, 30 Jun 2023 17:26:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37283C2A;
+        Fri, 30 Jun 2023 17:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1688171167; x=1719707167;
+  t=1688171171; x=1719707171;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-id:content-transfer-encoding:
    mime-version;
   bh=EVAjfQbNhRjax6f7+Kvlem3Yk941WtRSvZSQTykb7DM=;
-  b=Sso/XAzv9k/GO5cFg66yblxv2/DmrFfmG+T6WFeCWkSFK6yJ+AKBnAWP
-   VHdm1uW4BNe9q2TnYr8eMIFMmmfUhEyvv5P4E0bH8MgAt1ndsfqHqS81x
-   hijsKdLXEaTh2o4mPheu+YVo4i2FqBpesaNY0PSXKJ+YyPOV+HzX+ItUu
-   k=;
+  b=E4J9O9Wkspa4bMMNJ9dbNJinf+gAvZlNtD9WR8KgY/jsVhiXxWP8ztyW
+   eScLICdBKJW5wF8KJyX53bOhD33/1vCrzXtYSU3EOCAa12+E6JOzTSUey
+   eB+lKgkifvgJkc0ZbDQILl155WrWm0uzPfb20aaYxQqNc9AiB+CWkaEkF
+   g=;
 X-IronPort-AV: E=Sophos;i="6.01,172,1684800000"; 
-   d="scan'208";a="348885065"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com) ([10.25.36.210])
+   d="scan'208";a="348885066"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com) ([10.25.36.210])
   by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 00:26:06 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com (Postfix) with ESMTPS id A3BD4A26F2;
+Received: from EX19MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com (Postfix) with ESMTPS id D9ACB60C5B;
         Sat,  1 Jul 2023 00:26:05 +0000 (UTC)
 Received: from EX19D001UWB003.ant.amazon.com (10.13.138.112) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1118.30; Sat, 1 Jul 2023 00:26:05 +0000
 Received: from EX19D035UWB002.ant.amazon.com (10.13.138.97) by
@@ -59,8 +59,8 @@ Subject: Re: [PATCH net] net/ipv6: Reduce chance of collisions in
  inet6_hashfn()
 Thread-Topic: [PATCH net] net/ipv6: Reduce chance of collisions in
  inet6_hashfn()
-Thread-Index: AQHZq7KfS8Nnt+OGWUqtBXbgGdVgVw==
-Date:   Sat, 1 Jul 2023 00:26:04 +0000
+Thread-Index: AQHZq7KfYc+rw25OyUiEk9xvIqrYAw==
+Date:   Sat, 1 Jul 2023 00:26:05 +0000
 Message-ID: <182D446E-8871-4811-9275-98FF067B1BA9@amazon.com>
 References: <20230629015844.800280-1-samjonas@amazon.com>
  <CANn89i+6d9K1VwNK1Joc-Yb_4jAfV_YFzk=z_K2_Oy+xJHSn_g@mail.gmail.com>
@@ -72,7 +72,7 @@ X-MS-TNEF-Correlator:
 x-mailer: Apple Mail (2.3731.600.7)
 x-originating-ip: [10.111.154.15]
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <98BDBBCBF7D2C7449B0AFE2E2C5FB98F@amazon.com>
+Content-ID: <CB90FE560575E44EB6F2A544336E3923@amazon.com>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
