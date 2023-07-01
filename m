@@ -2,115 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071CD74487F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD333744882
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjGAKcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 06:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S229846AbjGAKfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 06:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjGAKcj (ORCPT
+        with ESMTP id S229757AbjGAKfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 06:32:39 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971F63C18;
-        Sat,  1 Jul 2023 03:32:36 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1b03ec2015fso2473974fac.3;
-        Sat, 01 Jul 2023 03:32:36 -0700 (PDT)
+        Sat, 1 Jul 2023 06:35:19 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5DE3ABD
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:35:18 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-443512ad63cso875017137.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688207556; x=1690799556;
+        d=googlemail.com; s=20221208; t=1688207717; x=1690799717;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XcWDmFedEmlvfM/QLPpiDImU6EfFXswotA0Bd0Mv+MU=;
-        b=pN/GaXWU0xGEGqbcGBsu7u8YBk6BuzF57rO6R1o3JJ3Ki8T8d+dTfCzzyJXFF619gg
-         utm12XXsQsJNv2RefA+A99ifJ83+HcNxRyGPxMr0Bg4ZNwj3BBo4/HhfBtV3Fqzgp+1y
-         TAsxkHcQ1qNFQLsPlIUNWfXDBg1EaYVUSeNCaeDXeSGuTTyv4obtlLOWC0ECET4BS4ST
-         WzlsgkEw+og7F4qrbzSN8Dc7owrXS/qifb454ZKBcLnL6nJdtZ26O4wmO2gfGiRWWvyb
-         RBK77i1UV1zaXixJgkgspveLtbM7iRVZ+Svnwf/XqFLdqUPDpIcpl/BPwfeDE5zIqBtQ
-         Mlzw==
+        bh=+8Eh2PL9vw+z9/shvLtMm4v72TX39RzomazCMgKz8Nk=;
+        b=gk4OqIV5V//ZdAOJAaa5GPYAcNpTpuWFTFce8LSBa89KFGM/FmAS6z5QFS/XFlG38L
+         CaJJGZp4IRjFS0HE/dFvsjJA9OXF4XWK0ViyYv3RwVgFzGO3uGhC4MsRej6wFtS279nM
+         pUtQdHj9dNr4BiUB+sjzn8SywLstAHZDDWGH+FhRhiVHEIEriHnKgkLBhdlt9KbK2hzs
+         gr0Y3fXiBDLBIlow/iHMUOFMvuL28V9RVabATiv2RFq12pvxS6R65/mDX+s+cgwKrjX5
+         h13lHcSN3KrRvAnXU5xD7yji8lmqMxJNfUsOj8Ea4rI/AHevzcQoTbLfwSNVkQ8R/2f8
+         7mSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688207556; x=1690799556;
+        d=1e100.net; s=20221208; t=1688207717; x=1690799717;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XcWDmFedEmlvfM/QLPpiDImU6EfFXswotA0Bd0Mv+MU=;
-        b=PLx9VZv2dyR4XFNyTjqkerxIBZDsxmGRM6gRSPDhX+U1HJYJD+i9VxfaxnLOdZaATx
-         x8OuNpuFXIzcOap40+AHMaobrNho5hZIDJXiCVvjqTcWazVEkERm2xIh+Hk8hb5sL09W
-         d+lPxACQElfOhhi8V4T6SuATLznV8pDbogK394bphroy4MwAo0mupURnp0PTy72DzUup
-         Z+wPs1bFSrONgwTLiY7lsMA+wwuF2TYiyeR+aKOj47tVqNKZQwRniAjOia8FVUeiCwBW
-         6+cKKLkpG/tnmtDy58h0oXidp3fP/jmCv4+gO2jX7qF8HjlW3O5zRShTUoflC6YgSzrN
-         7B5g==
-X-Gm-Message-State: ABy/qLb6SWlQ0dxuYpcE7VENGS/zC0figwYQwMl+ePClLR7UKqIoKb2Q
-        3IGuVoTcU2nKiSBkFEccj7n3eM/CC7pQH36wwfw=
-X-Google-Smtp-Source: APBJJlHnL7gWIGSB1c+m38g/UnfxLbMWby09tpjJJgfdnvfSi3WcKwqDa93+oabEZXQ83fTXdkputC2ZldZ+TTHeSOs=
-X-Received: by 2002:a05:6870:bac3:b0:1b0:146e:75d6 with SMTP id
- js3-20020a056870bac300b001b0146e75d6mr5756259oab.51.1688207555856; Sat, 01
- Jul 2023 03:32:35 -0700 (PDT)
+        bh=+8Eh2PL9vw+z9/shvLtMm4v72TX39RzomazCMgKz8Nk=;
+        b=icM7XNrQnVBg0GMOeP/AyQVsxFk3DX2lEzu7+wN7WkCBQ1NF/D1wk82bK1v6RBzmjf
+         WziElDhuPY1n9eev9Ht59Gyz8/CQJKOYQk3ILZ2S2dyWxXfqgFwHMj2AeqGLxNMIoTq2
+         YLNmd98Vrh3UZHSKCvoDR5ji9CaGZUG7hItuq4ORjL9UU4dfiDiuwPnYj2qkju+EdFNS
+         i8DpIv8VJ7Fq+/6RLur/d5DnKsA7rKCsGU3Y9tea6efPPXVo1pWB7zzkMJIJMw/H3wyl
+         PiJRbSknYJ2oBdWG/y+ANhmD0XrYBeGRYAWSqBq38BxmSH9hbM/dYAzuRRT326hLpB//
+         PD0g==
+X-Gm-Message-State: ABy/qLYraSDPvds4LPWoCdZjXDA1UYSQ5QeD6fCB1J+GPU6fUbiWkRD5
+        7mcxI/dnq0jmWdN4jUkrgOAdiq7ize6fBlTztks=
+X-Google-Smtp-Source: APBJJlFHfNfsyxvXH3BjwiArTpL3edc4FjGRmjy6V65bUFDmug1RXImkOe4JjRA1CeTKvBNGPTUXC5oKPmqVxHbl8lU=
+X-Received: by 2002:a67:f885:0:b0:444:d85f:1f3f with SMTP id
+ h5-20020a67f885000000b00444d85f1f3fmr706523vso.3.1688207717690; Sat, 01 Jul
+ 2023 03:35:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <fbe57907-b03f-ac8c-f3f4-4d6959bbc59c@roeck-us.net> <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
- <CAHk-=wiN5H-2dh2zCo_jXE7_ekrxSHvQcMw4xfUKjuQs2=BN4w@mail.gmail.com>
- <fb63ea7b-c44b-fb1b-2014-3d23794fa896@roeck-us.net> <CAHk-=whh_aUHYF6LCV36K9NYHR4ofEZ0gwcg0RY5hj=B7AT4YQ@mail.gmail.com>
- <e4dd115b-1a41-4859-bbeb-b3a6a75bf664@roeck-us.net> <CAHk-=wgBAhFqD6aoD2rL0qws8S1erdbrvmQXuYi=ZFEUVNuVfg@mail.gmail.com>
-In-Reply-To: <CAHk-=wgBAhFqD6aoD2rL0qws8S1erdbrvmQXuYi=ZFEUVNuVfg@mail.gmail.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Sat, 1 Jul 2023 03:32:24 -0700
-Message-ID: <CAMo8BfJ+FcR8ZfNk8GNL5pRsJO13O=on8ewRHSJkuQ85_WPk0A@mail.gmail.com>
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Chris Zankel <chris@zankel.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        sparclinux@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wang <wangborong@cdjrlc.com>
+References: <20230625155632.32403-1-franziska.naepelt@gmail.com>
+ <7caa96fb-4fb6-fb87-5d0c-fa6985fa127b@gmail.com> <CAAUT3iM7eAYH5AcN=Ko9jDstEUGqXxG7Q6qjp4O9qF_e2WkUVQ@mail.gmail.com>
+ <69a90f88-634a-4126-8d33-e770fcc4b686@kadam.mountain>
+In-Reply-To: <69a90f88-634a-4126-8d33-e770fcc4b686@kadam.mountain>
+From:   =?UTF-8?Q?Franziska_N=C3=A4pelt?= 
+        <franziska.naepelt@googlemail.com>
+Date:   Sat, 1 Jul 2023 12:35:06 +0200
+Message-ID: <CAAUT3iOOzV_pAKrA1+JhFuj2Mzt9Od-fRXxTEyvEbJicHLWBvw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Fix some checkpatch issues
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        eperi1024@gmail.com, hdegoede@redhat.com, quic_vjakkam@quicinc.com,
+        johannes.berg@intel.com, tegongkang@gmail.com,
+        gregkh@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-On Fri, Jun 30, 2023 at 9:23=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+Am Do., 29. Juni 2023 um 09:40 Uhr schrieb Dan Carpenter
+<dan.carpenter@linaro.org>:
 >
-> On Fri, 30 Jun 2023 at 19:50, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Wed, Jun 28, 2023 at 06:38:03PM +0200, Franziska N=C3=A4pelt wrote:
 > >
-> > Yes, the patch below fixes the problem.
-> >
-> > Building xtensa:de212:kc705-nommu:nommu_kc705_defconfig ... running ...=
-...... passed
+> > Do you want me to submit v4 to fix the email address as well as the sub=
+ject of
+> > the cover letter or are you ok with me promising to make it properly th=
+e next
+> > time? ;)
 >
-> Thanks. Committed as
+> Philipp is not the person to ask, it's Greg.
 >
->   d85a143b69ab ("xtensa: fix NOMMU build with lock_mm_and_find_vma()
-> conversion")
+> Yes, you are going to need to resend because of the email address thing.
 >
-> and pushed out.
+> Probably the cover letter is not a reason to resend, but since you are
+> resending then please fix that as well.
+>
+> The reason why we insist that you resend is a couple things:
+> 1) This is a checkpatch change to staging so we assume that you're just
+>    doing it to learn how patches are supposed to be sent.  So this is an
+>    educational opportunity.  ;)
+> 2) Greg maintains staging, usb, serial and -stable.  He's super busy.
+>    It doesn't scale to hand edit patches.  Some maintainers are less
+>    busy so they can fix trivial stuff like this but in staging you will
+>    need to resend.  Also if it were a security fix maybe I would step
+>    in and help you fix your patch but since it's just a checkpatch thing
+>    no one is going to edit your patch.
+>
+> Right now the merge window is open so Greg isn't going to see your patch
+> for a few weeks.  When he does he will press the button on his keyboard
+> which sends an automatic reply about the email address thing and deletes
+> the thread from his inbox.
+>
+> regards,
+> dan carpenter
 
-Thanks for the build fix. Unfortunately despite being obviously correct
-it doesn't release the mm lock in case VMA is not found, so it results
-in a runtime hang. I've posted a fix for that.
-
---=20
-Thanks.
--- Max
+Thanks for your help and the comprehensive explanation Dan and Philipp :)
+Just send v4:
+https://lore.kernel.org/linux-staging/20230701102223.5308-1-franziska.naepe=
+lt@googlemail.com/T/#t
