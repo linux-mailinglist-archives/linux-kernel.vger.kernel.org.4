@@ -2,209 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE556744AD2
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 20:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EE8744AD5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 20:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjGASR4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 1 Jul 2023 14:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S229648AbjGAS2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 14:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjGASRy (ORCPT
+        with ESMTP id S229579AbjGAS2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 14:17:54 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1C71BC6;
-        Sat,  1 Jul 2023 11:17:53 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-bad0c4f6f50so4458924276.1;
-        Sat, 01 Jul 2023 11:17:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688235472; x=1690827472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VgbI56nnbOX7WhFj+KJtKuAzNzhUoMUsJk0mZzG98eQ=;
-        b=WLjeXN3JpOIlC2+u0h4TKJzg0obaQAqC5xF8/q6PAi6PxNVEfgMzx9CB2u7CnJOco6
-         8xhOcc2S6kgbPW+5oXddOsxBRm9Blz70cqLHlhH901RspWyQyb6q+zs31lJ0Gwtmu1I/
-         kObR/kvTDsbPl7aaE8mmuwQzyiTI9DKwDrJFYOPGIbqbC8q4qxFFo3WacwkaW99PzHH0
-         NzGv1oAPSww7mEtj/3r6gwf5s1ioVonuoPPZhKuJRN/wu579h9EPWCQWMO6K9IYfVjHD
-         v1rCrEbN+MnoY+FYjbMNZFsYRs7d9oDc7PRnskJEfUrdgOZNqgef8+eCN2khnctygrm9
-         Pheg==
-X-Gm-Message-State: ABy/qLbsC1tPu9iI3gNdTN5aXYY7r8hKZSjhen8JKOe28PMrEHevOWRT
-        ugGZDM72oSOl2Snlr6AemCcM80Q46L0S8s/BMN4=
-X-Google-Smtp-Source: APBJJlEXcL5nDNV6sm/lt5bWSltLXADmCHoMzR3A1HKCNHANZZJeGTGssYjdfP83vMgVHnFGuGFnrNm7ReYQa95fYUM=
-X-Received: by 2002:a25:a227:0:b0:bcd:1e9:3703 with SMTP id
- b36-20020a25a227000000b00bcd01e93703mr12091529ybi.21.1688235472430; Sat, 01
- Jul 2023 11:17:52 -0700 (PDT)
+        Sat, 1 Jul 2023 14:28:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5151BF3
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 11:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688236101; x=1719772101;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=emZhbCfguNVy5XePL4s5ylCI8nKG8H5etyDhN/w2EFw=;
+  b=He+pxd4VIy8g4bt5eqr4SbgkZFqGSxp9dNkGQcgBODTQNFDaXYRWvFRL
+   hD7O90zDSsT1B+KLXntmvAizYodBZVPZBVYV5I6dMy5+faYxnIfFCzbj+
+   0Dz27vQQ5XRPj98sJZW9HtjiSjgKg79+QM8v/+rw1niiLyX6U5a1SxeJR
+   OWAvGpSdydJPg62PYyK1V/JwF0lkqGWpxPzuthq7vOgchxY79COC7kiEi
+   p+xYVp/DN1vjMJ1JjrO48xYc8ZXKfuvbmsU2rXA5Nu9b1VGY4OYHvHOwV
+   0ZBns8xjFaeamdzTC5iQy177OBO1MR5e1qDmln+gRvsg+gb6NU5NJpO5Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="428659768"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="428659768"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 11:28:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="1048602908"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="1048602908"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Jul 2023 11:28:19 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFfKU-000GCP-0a;
+        Sat, 01 Jul 2023 18:28:18 +0000
+Date:   Sun, 2 Jul 2023 02:27:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/base/regmap/regcache-maple.c:114:23: warning: 'upper_index'
+ is used uninitialized
+Message-ID: <202307020213.Qt5xjEi8-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230630085230.437-1-ravi.bangoria@amd.com>
-In-Reply-To: <20230630085230.437-1-ravi.bangoria@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Sat, 1 Jul 2023 11:17:41 -0700
-Message-ID: <CAM9d7chYnT2s1V1juP+EyewJfRD+2qHGs2pwghh=k3kFf1P9BA@mail.gmail.com>
-Subject: Re: [PATCH v3] perf evsel amd: Fix IBS error message
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, peterz@infradead.org, irogers@google.com,
-        jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ravi,
+Hi Mark,
 
-On Fri, Jun 30, 2023 at 1:53 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> AMD IBS can do per-process profiling[1] and is no longer restricted to
-> per-cpu or systemwide only. Remove stale error message. Also, checking
-> just exclude_kernel is not sufficient since IBS does not support any
-> privilege filters. So include all exclude_* checks. And finally, move
-> these checks under tools/perf/arch/x86/ from generic code.
->
-> Before:
->   $ sudo ./perf record -e ibs_op//k -C 0
->   Error:
->   AMD IBS may only be available in system-wide/per-cpu mode.  Try
->   using -a, or -C and workload affinity
->
-> After:
->   $ sudo ./perf record -e ibs_op//k -C 0
->   Error:
->   AMD IBS doesn't support privilege filtering. Try again without
->   the privilege modifiers (like 'k') at the end.
->
-> [1] https://git.kernel.org/torvalds/c/30093056f7b2
->
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+FYI, the error/warning still remains.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e3c2b10d6f15640407bef3098accf10faa4ecf1b
+commit: f033c26de5a5734625d2dd1dc196745fae186f1b regmap: Add maple tree based register cache
+date:   3 months ago
+config: arc-vdk_hs38_defconfig (https://download.01.org/0day-ci/archive/20230702/202307020213.Qt5xjEi8-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230702/202307020213.Qt5xjEi8-lkp@intel.com/reproduce)
 
-Thanks,
-Namhyung
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307020213.Qt5xjEi8-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/base/regmap/regcache-maple.c: In function 'regcache_maple_drop':
+   drivers/base/regmap/regcache-maple.c:113:23: warning: 'lower_index' is used uninitialized [-Wuninitialized]
+     113 |         unsigned long lower_index, lower_last;
+         |                       ^~~~~~~~~~~
+   drivers/base/regmap/regcache-maple.c:113:36: warning: 'lower_last' is used uninitialized [-Wuninitialized]
+     113 |         unsigned long lower_index, lower_last;
+         |                                    ^~~~~~~~~~
+>> drivers/base/regmap/regcache-maple.c:114:23: warning: 'upper_index' is used uninitialized [-Wuninitialized]
+     114 |         unsigned long upper_index, upper_last;
+         |                       ^~~~~~~~~~~
+>> drivers/base/regmap/regcache-maple.c:114:36: warning: 'upper_last' is used uninitialized [-Wuninitialized]
+     114 |         unsigned long upper_index, upper_last;
+         |                                    ^~~~~~~~~~
 
 
-> ---
-> v2: https://lore.kernel.org/r/20230626103958.834-1-ravi.bangoria@amd.com
-> v2->v3:
->   - Make error message more perf tool user friendly.
->
->  tools/perf/arch/x86/util/evsel.c | 20 ++++++++++++++++++++
->  tools/perf/util/evsel.c          | 30 +++++++++---------------------
->  tools/perf/util/evsel.h          |  1 +
->  3 files changed, 30 insertions(+), 21 deletions(-)
->
-> diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/util/evsel.c
-> index 512c2d885d24..af454fd07887 100644
-> --- a/tools/perf/arch/x86/util/evsel.c
-> +++ b/tools/perf/arch/x86/util/evsel.c
-> @@ -102,3 +102,23 @@ void arch__post_evsel_config(struct evsel *evsel, struct perf_event_attr *attr)
->                 }
->         }
->  }
-> +
-> +int arch_evsel__open_strerror(struct evsel *evsel, char *msg, size_t size)
-> +{
-> +       if (!x86__is_amd_cpu())
-> +               return 0;
-> +
-> +       if (!evsel->core.attr.precise_ip &&
-> +           !(evsel->pmu_name && !strncmp(evsel->pmu_name, "ibs", 3)))
-> +               return 0;
-> +
-> +       /* More verbose IBS errors. */
-> +       if (evsel->core.attr.exclude_kernel || evsel->core.attr.exclude_user ||
-> +           evsel->core.attr.exclude_hv || evsel->core.attr.exclude_idle ||
-> +           evsel->core.attr.exclude_host || evsel->core.attr.exclude_guest) {
-> +               return scnprintf(msg, size, "AMD IBS doesn't support privilege filtering. Try "
-> +                                "again without the privilege modifiers (like 'k') at the end.");
-> +       }
-> +
-> +       return 0;
-> +}
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index f607b5bddc76..762e2b2634a5 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -2924,25 +2924,19 @@ static bool find_process(const char *name)
->         return ret ? false : true;
->  }
->
-> -static bool is_amd(const char *arch, const char *cpuid)
-> +int __weak arch_evsel__open_strerror(struct evsel *evsel __maybe_unused,
-> +                                    char *msg __maybe_unused,
-> +                                    size_t size __maybe_unused)
->  {
-> -       return arch && !strcmp("x86", arch) && cpuid && strstarts(cpuid, "AuthenticAMD");
-> -}
-> -
-> -static bool is_amd_ibs(struct evsel *evsel)
-> -{
-> -       return evsel->core.attr.precise_ip
-> -           || (evsel->pmu_name && !strncmp(evsel->pmu_name, "ibs", 3));
-> +       return 0;
->  }
->
->  int evsel__open_strerror(struct evsel *evsel, struct target *target,
->                          int err, char *msg, size_t size)
->  {
-> -       struct perf_env *env = evsel__env(evsel);
-> -       const char *arch = perf_env__arch(env);
-> -       const char *cpuid = perf_env__cpuid(env);
->         char sbuf[STRERR_BUFSIZE];
->         int printed = 0, enforced = 0;
-> +       int ret;
->
->         switch (err) {
->         case EPERM:
-> @@ -3044,16 +3038,6 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
->                         return scnprintf(msg, size,
->         "Invalid event (%s) in per-thread mode, enable system wide with '-a'.",
->                                         evsel__name(evsel));
-> -               if (is_amd(arch, cpuid)) {
-> -                       if (is_amd_ibs(evsel)) {
-> -                               if (evsel->core.attr.exclude_kernel)
-> -                                       return scnprintf(msg, size,
-> -       "AMD IBS can't exclude kernel events.  Try running at a higher privilege level.");
-> -                               if (!evsel->core.system_wide)
-> -                                       return scnprintf(msg, size,
-> -       "AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity");
-> -                       }
-> -               }
->
->                 break;
->         case ENODATA:
-> @@ -3063,6 +3047,10 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
->                 break;
->         }
->
-> +       ret = arch_evsel__open_strerror(evsel, msg, size);
-> +       if (ret)
-> +               return ret;
-> +
->         return scnprintf(msg, size,
->         "The sys_perf_event_open() syscall returned with %d (%s) for event (%s).\n"
->         "/bin/dmesg | grep -i perf may provide additional information.\n",
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index 9f06d6cd5379..848534ec74fa 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -311,6 +311,7 @@ void evsel__set_sample_id(struct evsel *evsel, bool use_sample_identifier);
->
->  void arch_evsel__set_sample_weight(struct evsel *evsel);
->  void arch__post_evsel_config(struct evsel *evsel, struct perf_event_attr *attr);
-> +int arch_evsel__open_strerror(struct evsel *evsel, char *msg, size_t size);
->
->  int evsel__set_filter(struct evsel *evsel, const char *filter);
->  int evsel__append_tp_filter(struct evsel *evsel, const char *filter);
-> --
-> 2.41.0
->
+vim +/upper_index +114 drivers/base/regmap/regcache-maple.c
+
+   106	
+   107	static int regcache_maple_drop(struct regmap *map, unsigned int min,
+   108				       unsigned int max)
+   109	{
+   110		struct maple_tree *mt = map->cache;
+   111		MA_STATE(mas, mt, min, max);
+   112		unsigned long *entry, *lower, *upper;
+ > 113		unsigned long lower_index, lower_last;
+ > 114		unsigned long upper_index, upper_last;
+   115		int ret;
+   116	
+   117		lower = NULL;
+   118		upper = NULL;
+   119	
+   120		mas_lock(&mas);
+   121	
+   122		mas_for_each(&mas, entry, max) {
+   123			/*
+   124			 * This is safe because the regmap lock means the
+   125			 * Maple lock is redundant, but we need to take it due
+   126			 * to lockdep asserts in the maple tree code.
+   127			 */
+   128			mas_unlock(&mas);
+   129	
+   130			/* Do we need to save any of this entry? */
+   131			if (mas.index < min) {
+   132				lower_index = mas.index;
+   133				lower_last = min -1;
+   134	
+   135				lower = kmemdup(entry, ((min - mas.index) *
+   136							sizeof(unsigned long)),
+   137						GFP_KERNEL);
+   138				if (!lower) {
+   139					ret = -ENOMEM;
+   140					goto out;
+   141				}
+   142			}
+   143	
+   144			if (mas.last > max) {
+   145				upper_index = max + 1;
+   146				upper_last = mas.last;
+   147	
+   148				upper = kmemdup(&entry[max + 1],
+   149						((mas.last - max) *
+   150						 sizeof(unsigned long)),
+   151						GFP_KERNEL);
+   152				if (!upper) {
+   153					ret = -ENOMEM;
+   154					goto out;
+   155				}
+   156			}
+   157	
+   158			kfree(entry);
+   159			mas_lock(&mas);
+   160			mas_erase(&mas);
+   161	
+   162			/* Insert new nodes with the saved data */
+   163			if (lower) {
+   164				mas_set_range(&mas, lower_index, lower_last);
+   165				ret = mas_store_gfp(&mas, lower, GFP_KERNEL);
+   166				if (ret != 0)
+   167					goto out;
+   168				lower = NULL;
+   169			}
+   170	
+   171			if (upper) {
+   172				mas_set_range(&mas, upper_index, upper_last);
+   173				ret = mas_store_gfp(&mas, upper, GFP_KERNEL);
+   174				if (ret != 0)
+   175					goto out;
+   176				upper = NULL;
+   177			}
+   178		}
+   179	
+   180	out:
+   181		mas_unlock(&mas);
+   182		kfree(lower);
+   183		kfree(upper);
+   184	
+   185		return ret;
+   186	}
+   187	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
