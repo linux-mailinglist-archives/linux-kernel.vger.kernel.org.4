@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEAE744A53
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA093744A56
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjGAPpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 11:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S229937AbjGAPpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 11:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjGAPpE (ORCPT
+        with ESMTP id S229688AbjGAPpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 11:45:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6242686;
-        Sat,  1 Jul 2023 08:45:03 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 361FgEAi015314;
-        Sat, 1 Jul 2023 15:44:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=h/XryedWCGvhLgCpbQHnyuG4JAfrMRU14lrm6sbrl0c=;
- b=Eb4nAKUmAMYLNBw8VRE1mV8AO6xxmTDSrz1SgAtpAclvk9ugwt0sDGQhJJ4F9zzSvQ2G
- otVLYf3ZE/k1ijHhtFo7vh1h4gO8Ux5HkxeC0fVa/GM74NXY97a0/rBoDBv7Bm+TR4uS
- WsHma16V5BT9/HJofqIApO+bX42jpgR2ewgFVXdNQJ6xSoQrQ4vmoErmX43pMas8GITJ
- QqtDN4pQms1ABEMpf7+lKEz6MgYO17FTlRtbCdSmDq/XT24h/KrwSwY7Deb2uHCbT1qD
- tCEUj9JB3E5LnuWRczB1LG7nL8dxp+0EGhqanDpUmJSGn19RiXqTADmF42ZoIRAePt6b QA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rj9umh5kf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 01 Jul 2023 15:44:52 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 361FiqBN029610
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 1 Jul 2023 15:44:52 GMT
-Received: from [10.253.13.42] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Sat, 1 Jul 2023
- 08:44:46 -0700
-Message-ID: <49f8ca40-e079-ad00-256e-08a61ffced22@quicinc.com>
-Date:   Sat, 1 Jul 2023 23:44:34 +0800
+        Sat, 1 Jul 2023 11:45:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A892707;
+        Sat,  1 Jul 2023 08:45:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16DC060B06;
+        Sat,  1 Jul 2023 15:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5DCC5C433C9;
+        Sat,  1 Jul 2023 15:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688226304;
+        bh=ra42rcphL7tKW7I45Ex8nV8bC3r82UuPkw0dfoyiW7w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mmGzBb8jTH4fWOy+MNZiXnhPYutdgMzfYBZLCgmZ/ahpceab/0Cqy3s+SSNxK5QVE
+         U4tAJr2SSY0YOAocXGfYFWzSKL8xOCHEyEv+8sIIWM8j5zNAm9bQd8Q9JjvzXUKWFW
+         vFQF6ixBc15d41oYC12IADIsWOFfZVKUp+MFdCSiYP0fkZ3UNedNctHuEjVsjO5cp7
+         oygFROQHAp1ArGWdQYnV/5rQ/CVmBE/tuW8Eny1KTa/b5C1/+SDBPghstrwU2hYk/j
+         RrHrXE6tg7B504hYC5s4HPy5hb7cUcdWkr4tJAoVPmcxXdEDpYmbNGnkCWF5gyXkxI
+         C2t0aIRX2B43g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3EEDEC6445B;
+        Sat,  1 Jul 2023 15:45:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] net: phy: at803x: add qca8081 fifo reset on the link
- down
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <hkallweit1@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230629034846.30600-1-quic_luoj@quicinc.com>
- <20230629034846.30600-4-quic_luoj@quicinc.com>
- <e1cf3666-fecc-4272-b91b-5921ada45ade@lunn.ch>
- <0f3990de-7c72-99d8-5a93-3b7eaa066e49@quicinc.com>
- <924ebd8b-2e1f-4060-8c66-4f4746e88696@lunn.ch>
- <7144731c-f4ae-99b6-d32a-1d0e39bc9ee7@quicinc.com>
- <d4043e1f-d683-48c2-af79-9fea14ab7cc1@lunn.ch>
-From:   Jie Luo <quic_luoj@quicinc.com>
-In-Reply-To: <d4043e1f-d683-48c2-af79-9fea14ab7cc1@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hnzGu5DvQj1kn3Mc_mXq6crkiUPKWeeR
-X-Proofpoint-ORIG-GUID: hnzGu5DvQj1kn3Mc_mXq6crkiUPKWeeR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-01_12,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 clxscore=1015 bulkscore=0 phishscore=0 malwarescore=0
- mlxlogscore=474 adultscore=0 mlxscore=0 impostorscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307010151
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 00/11] Add STG/ISP/VOUT clock and reset drivers for
+ StarFive JH7110
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <168822630425.22742.10407688185048619244.git-patchwork-notify@kernel.org>
+Date:   Sat, 01 Jul 2023 15:45:04 +0000
+References: <20230518101234.143748-1-xingyu.wu@starfivetech.com>
+In-Reply-To: <20230518101234.143748-1-xingyu.wu@starfivetech.com>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
+        conor@kernel.org, kernel@esmil.dk, robh+dt@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hal.feng@starfivetech.com,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This series was applied to riscv/linux.git (fixes)
+by Conor Dooley <conor.dooley@microchip.com>:
+
+On Thu, 18 May 2023 18:12:23 +0800 you wrote:
+> This patch serises are base on the basic JH7110 SYSCRG/AONCRG
+> drivers and add new partial clock drivers and reset supports
+> about System-Top-Group(STG), Image-Signal-Process(ISP)
+> and Video-Output(VOUT) for the StarFive JH7110 RISC-V SoC. These
+> clocks and resets could be used by DMA, VIN and Display modules.
+> 
+> Patches 1 and 2 are about the System-Top-Group clock and reset
+> generator(STGCRG) part. The first patch adds docunmentation to
+> describe STG bindings, and the second patch adds clock driver to
+> support STG clocks and resets as auxiliary device for JH7110.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v6,01/11] dt-bindings: clock: Add StarFive JH7110 System-Top-Group clock and reset generator
+    (no matching commit)
+  - [v6,02/11] clk: starfive: Add StarFive JH7110 System-Top-Group clock driver
+    (no matching commit)
+  - [v6,03/11] dt-bindings: clock: Add StarFive JH7110 Image-Signal-Process clock and reset generator
+    (no matching commit)
+  - [v6,04/11] clk: starfive: Add StarFive JH7110 Image-Signal-Process clock driver
+    (no matching commit)
+  - [v6,05/11] dt-bindings: clock: Add StarFive JH7110 Video-Output clock and reset generator
+    (no matching commit)
+  - [v6,06/11] clk: starfive: Add StarFive JH7110 Video-Output clock driver
+    (no matching commit)
+  - [v6,07/11] MAINTAINERS: Update maintainer of JH71x0 clock drivers
+    (no matching commit)
+  - [v6,08/11] reset: starfive: jh7110: Add StarFive STG/ISP/VOUT resets support
+    (no matching commit)
+  - [v6,09/11] riscv: dts: starfive: jh7110: add pmu controller node
+    https://git.kernel.org/riscv/c/6a887bcc4138
+  - [v6,10/11] riscv: dts: starfive: jh7110: Add DVP and HDMI TX pixel external clocks
+    (no matching commit)
+  - [v6,11/11] riscv: dts: starfive: jh7110: Add STGCRG/ISPCRG/VOUTCRG nodes
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 7/1/2023 10:34 PM, Andrew Lunn wrote:
->> Hi Andrew,
->> This block includes MII and MMD1 registers, which mainly configure the PLL
->> clocks, reset and calibration of the interface sgmii, there is no related
->> Clause 73 control register in this block.
-> 
-> O.K. What does it have in the MII ID registers? Does Linux think it is
-> a PHY and instantiating an generic PHY driver for it?
-> 
-> 	Andrew
-Hi Andrew,
-it is the PLL related registers, there is no PHY ID existed in MII 
-register 2, 3 of this block, so it can't be instantiated as the generic 
-PHY device.
