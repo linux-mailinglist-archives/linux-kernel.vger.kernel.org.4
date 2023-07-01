@@ -2,202 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93591744B13
+	by mail.lfdr.de (Postfix) with ESMTP id 406B8744B12
 	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 22:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjGAUk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 16:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
+        id S229557AbjGAUqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 16:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjGAUkZ (ORCPT
+        with ESMTP id S229579AbjGAUqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 16:40:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832AA1710
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 13:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688244023; x=1719780023;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4oZ4hijys+MOWZ2xfQSlawrbvm73lnsRws1GfE6Vlag=;
-  b=hAmipWw7C1PYF3sHS6pAqTeh6WN6wbvkf2uGb051qlUu/lwHYBRNg8iW
-   VvCd44TNXuuhLucEVnzjwbLbgccyG6U7lLjiiJ6EqfQMiKTSCTormh/Q0
-   ol1rHHN6JOURBkQVXsZ+BLQdTT7vyXj1AKI2Xe0VUofrtS8CPTZ4TbfRH
-   xQon7ZbpTYODVKe3kghlG2fnL1FapM55PpMMFBFgpYQQMsuonq8yg/JTt
-   tVm/tgN4zRL/kwxRPu+iLBvej8nAxFYuReXi5mSzVprwZPYB0C78FWGDg
-   S6QTzmDMWhoYxqa6QJCZuPlXZlnOsHrEBtRaOCIMpgAJ+ov0q20rIRpvx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="393363368"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="393363368"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 13:40:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="668346941"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="668346941"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jul 2023 13:40:21 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qFhOG-000GGH-1B;
-        Sat, 01 Jul 2023 20:40:20 +0000
-Date:   Sun, 2 Jul 2023 04:39:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: drivers/dma/mediatek/mtk-hsdma.c:451:17: sparse: sparse: incorrect
- type in assignment (different base types)
-Message-ID: <202307020421.cjqf74xq-lkp@intel.com>
+        Sat, 1 Jul 2023 16:46:07 -0400
+Received: from mail-pl1-f207.google.com (mail-pl1-f207.google.com [209.85.214.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000A719A0
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 13:46:04 -0700 (PDT)
+Received: by mail-pl1-f207.google.com with SMTP id d9443c01a7336-1b7f8598d5aso39676195ad.0
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 13:46:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688244364; x=1690836364;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lko05gm0yFKNW9JXkfXptRbd6tL+MYTjGoefCIzDYMQ=;
+        b=RnBs0ZhNbe7fWE7xXKHcoeDBleF/oTDF3Y1OEnS3S+xF7xJtE12aKN4PWElU3RJyPO
+         J6WbFFgzWnRMSCLbcHanXnlyAHnxnEHG99I/hvSkXfK0MD1TRDyB0NJ5XECwt8u6Ekzx
+         9tohcGa/GcY8/mfIs5K75Ru2gquF1jmopCZrGgTxuOLDsXwbMKb1WaiGJvRu/Zbx0/3b
+         53rsJPliOtx7TWnQ0aK1L7hx2aSj87Y81eFBuKkoH/A62BDiLUZ9nlGO6bODAK2sbYsp
+         eaSQyK9SojxIcH0jODseI7tu1GDn5+44Q5wzRWa9AZaUWwmoGsTa6Yn4fZDh6gnqFELa
+         LUjg==
+X-Gm-Message-State: ABy/qLbuSVH7eINTLOGDbJ8LchelKR86zYmrAD8wZgeXXw+oNSSHsd+g
+        TEdMrL1Q03Azd58HH6oNgQbFeDslC/YlelnyBUnORSvEQ/Ml
+X-Google-Smtp-Source: APBJJlH7zxzA59X8j9PRykLb2xb2VqDMe0KmjnFu4zDG9iBqM+kmzZPirJLVpLOfNx/7AwccigYd0ttfR6EHkRm/gd25C3emBs/v
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:902:ea0a:b0:1ad:fa23:dd87 with SMTP id
+ s10-20020a170902ea0a00b001adfa23dd87mr5011889plg.5.1688244364496; Sat, 01 Jul
+ 2023 13:46:04 -0700 (PDT)
+Date:   Sat, 01 Jul 2023 13:46:04 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a3d67705ff730522@google.com>
+Subject: [syzbot] [btrfs?] kernel BUG in prepare_to_merge
+From:   syzbot <syzbot+ae97a827ae1c3336bbb4@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ad2885979ea6657fa8d3da51a301ec0e998ad8e7
-commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
-date:   1 year, 3 months ago
-config: arm-randconfig-r092-20230702 (https://download.01.org/0day-ci/archive/20230702/202307020421.cjqf74xq-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230702/202307020421.cjqf74xq-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307020421.cjqf74xq-lkp@intel.com/
+syzbot found the following issue on:
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/dma/mediatek/mtk-hsdma.c:451:17: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 volatile @@     got unsigned int [usertype] src @@
-   drivers/dma/mediatek/mtk-hsdma.c:451:17: sparse:     expected restricted __le32 volatile
-   drivers/dma/mediatek/mtk-hsdma.c:451:17: sparse:     got unsigned int [usertype] src
-   drivers/dma/mediatek/mtk-hsdma.c:452:17: sparse: sparse: restricted __le32 degrades to integer
-   drivers/dma/mediatek/mtk-hsdma.c:452:17: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 volatile @@     got unsigned int @@
-   drivers/dma/mediatek/mtk-hsdma.c:452:17: sparse:     expected restricted __le32 volatile
-   drivers/dma/mediatek/mtk-hsdma.c:452:17: sparse:     got unsigned int
->> drivers/dma/mediatek/mtk-hsdma.c:456:17: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 volatile @@     got unsigned int [usertype] dest @@
-   drivers/dma/mediatek/mtk-hsdma.c:456:17: sparse:     expected restricted __le32 volatile
-   drivers/dma/mediatek/mtk-hsdma.c:456:17: sparse:     got unsigned int [usertype] dest
-   drivers/dma/mediatek/mtk-hsdma.c:457:17: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 volatile @@     got int @@
-   drivers/dma/mediatek/mtk-hsdma.c:457:17: sparse:     expected restricted __le32 volatile
-   drivers/dma/mediatek/mtk-hsdma.c:457:17: sparse:     got int
-   drivers/dma/mediatek/mtk-hsdma.c:580:33: sparse: sparse: restricted __le32 degrades to integer
-   drivers/dma/mediatek/mtk-hsdma.c:604:26: sparse: sparse: Using plain integer as NULL pointer
-   drivers/dma/mediatek/mtk-hsdma.c:878:18: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __le32 [usertype] ddone @@     got unsigned long @@
-   drivers/dma/mediatek/mtk-hsdma.c:878:18: sparse:     expected restricted __le32 [usertype] ddone
-   drivers/dma/mediatek/mtk-hsdma.c:878:18: sparse:     got unsigned long
-   drivers/dma/mediatek/mtk-hsdma.c:879:16: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __le32 [usertype] ls0 @@     got unsigned long @@
-   drivers/dma/mediatek/mtk-hsdma.c:879:16: sparse:     expected restricted __le32 [usertype] ls0
-   drivers/dma/mediatek/mtk-hsdma.c:879:16: sparse:     got unsigned long
-   drivers/dma/mediatek/mtk-hsdma.c:883:18: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __le32 [usertype] ddone @@     got unsigned long @@
-   drivers/dma/mediatek/mtk-hsdma.c:883:18: sparse:     expected restricted __le32 [usertype] ddone
-   drivers/dma/mediatek/mtk-hsdma.c:883:18: sparse:     got unsigned long
-   drivers/dma/mediatek/mtk-hsdma.c:884:16: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __le32 [usertype] ls0 @@     got unsigned long @@
-   drivers/dma/mediatek/mtk-hsdma.c:884:16: sparse:     expected restricted __le32 [usertype] ls0
-   drivers/dma/mediatek/mtk-hsdma.c:884:16: sparse:     got unsigned long
+HEAD commit:    533925cb7604 Merge tag 'riscv-for-linus-6.5-mw1' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14d8b610a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=12464973c17d2b37
+dashboard link: https://syzkaller.appspot.com/bug?extid=ae97a827ae1c3336bbb4
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-vim +451 drivers/dma/mediatek/mtk-hsdma.c
+Unfortunately, I don't have any reproducer for this issue yet.
 
-548c4597e984b7 Sean Wang 2018-03-15  411  
-548c4597e984b7 Sean Wang 2018-03-15  412  static int mtk_hsdma_issue_pending_vdesc(struct mtk_hsdma_device *hsdma,
-548c4597e984b7 Sean Wang 2018-03-15  413  					 struct mtk_hsdma_pchan *pc,
-548c4597e984b7 Sean Wang 2018-03-15  414  					 struct mtk_hsdma_vdesc *hvd)
-548c4597e984b7 Sean Wang 2018-03-15  415  {
-548c4597e984b7 Sean Wang 2018-03-15  416  	struct mtk_hsdma_ring *ring = &pc->ring;
-548c4597e984b7 Sean Wang 2018-03-15  417  	struct mtk_hsdma_pdesc *txd, *rxd;
-548c4597e984b7 Sean Wang 2018-03-15  418  	u16 reserved, prev, tlen, num_sgs;
-548c4597e984b7 Sean Wang 2018-03-15  419  	unsigned long flags;
-548c4597e984b7 Sean Wang 2018-03-15  420  
-548c4597e984b7 Sean Wang 2018-03-15  421  	/* Protect against PC is accessed by multiple VCs simultaneously */
-548c4597e984b7 Sean Wang 2018-03-15  422  	spin_lock_irqsave(&hsdma->lock, flags);
-548c4597e984b7 Sean Wang 2018-03-15  423  
-548c4597e984b7 Sean Wang 2018-03-15  424  	/*
-548c4597e984b7 Sean Wang 2018-03-15  425  	 * Reserve rooms, where pc->nr_free is used to track how many free
-548c4597e984b7 Sean Wang 2018-03-15  426  	 * rooms in the ring being updated in user and IRQ context.
-548c4597e984b7 Sean Wang 2018-03-15  427  	 */
-548c4597e984b7 Sean Wang 2018-03-15  428  	num_sgs = DIV_ROUND_UP(hvd->len, MTK_HSDMA_MAX_LEN);
-548c4597e984b7 Sean Wang 2018-03-15  429  	reserved = min_t(u16, num_sgs, atomic_read(&pc->nr_free));
-548c4597e984b7 Sean Wang 2018-03-15  430  
-548c4597e984b7 Sean Wang 2018-03-15  431  	if (!reserved) {
-548c4597e984b7 Sean Wang 2018-03-15  432  		spin_unlock_irqrestore(&hsdma->lock, flags);
-548c4597e984b7 Sean Wang 2018-03-15  433  		return -ENOSPC;
-548c4597e984b7 Sean Wang 2018-03-15  434  	}
-548c4597e984b7 Sean Wang 2018-03-15  435  
-548c4597e984b7 Sean Wang 2018-03-15  436  	atomic_sub(reserved, &pc->nr_free);
-548c4597e984b7 Sean Wang 2018-03-15  437  
-548c4597e984b7 Sean Wang 2018-03-15  438  	while (reserved--) {
-548c4597e984b7 Sean Wang 2018-03-15  439  		/* Limit size by PD capability for valid data moving */
-548c4597e984b7 Sean Wang 2018-03-15  440  		tlen = (hvd->len > MTK_HSDMA_MAX_LEN) ?
-548c4597e984b7 Sean Wang 2018-03-15  441  		       MTK_HSDMA_MAX_LEN : hvd->len;
-548c4597e984b7 Sean Wang 2018-03-15  442  
-548c4597e984b7 Sean Wang 2018-03-15  443  		/*
-548c4597e984b7 Sean Wang 2018-03-15  444  		 * Setup PDs using the remaining VD info mapped on those
-548c4597e984b7 Sean Wang 2018-03-15  445  		 * reserved rooms. And since RXD is shared memory between the
-548c4597e984b7 Sean Wang 2018-03-15  446  		 * host and the device allocated by dma_alloc_coherent call,
-548c4597e984b7 Sean Wang 2018-03-15  447  		 * the helper macro WRITE_ONCE can ensure the data written to
-548c4597e984b7 Sean Wang 2018-03-15  448  		 * RAM would really happens.
-548c4597e984b7 Sean Wang 2018-03-15  449  		 */
-548c4597e984b7 Sean Wang 2018-03-15  450  		txd = &ring->txd[ring->cur_tptr];
-548c4597e984b7 Sean Wang 2018-03-15 @451  		WRITE_ONCE(txd->desc1, hvd->src);
-548c4597e984b7 Sean Wang 2018-03-15  452  		WRITE_ONCE(txd->desc2,
-548c4597e984b7 Sean Wang 2018-03-15  453  			   hsdma->soc->ls0 | MTK_HSDMA_DESC_PLEN(tlen));
-548c4597e984b7 Sean Wang 2018-03-15  454  
-548c4597e984b7 Sean Wang 2018-03-15  455  		rxd = &ring->rxd[ring->cur_tptr];
-548c4597e984b7 Sean Wang 2018-03-15 @456  		WRITE_ONCE(rxd->desc1, hvd->dest);
-548c4597e984b7 Sean Wang 2018-03-15  457  		WRITE_ONCE(rxd->desc2, MTK_HSDMA_DESC_PLEN(tlen));
-548c4597e984b7 Sean Wang 2018-03-15  458  
-548c4597e984b7 Sean Wang 2018-03-15  459  		/* Associate VD, the PD belonged to */
-548c4597e984b7 Sean Wang 2018-03-15  460  		ring->cb[ring->cur_tptr].vd = &hvd->vd;
-548c4597e984b7 Sean Wang 2018-03-15  461  
-548c4597e984b7 Sean Wang 2018-03-15  462  		/* Move forward the pointer of TX ring */
-548c4597e984b7 Sean Wang 2018-03-15  463  		ring->cur_tptr = MTK_HSDMA_NEXT_DESP_IDX(ring->cur_tptr,
-548c4597e984b7 Sean Wang 2018-03-15  464  							 MTK_DMA_SIZE);
-548c4597e984b7 Sean Wang 2018-03-15  465  
-548c4597e984b7 Sean Wang 2018-03-15  466  		/* Update VD with remaining data */
-548c4597e984b7 Sean Wang 2018-03-15  467  		hvd->src  += tlen;
-548c4597e984b7 Sean Wang 2018-03-15  468  		hvd->dest += tlen;
-548c4597e984b7 Sean Wang 2018-03-15  469  		hvd->len  -= tlen;
-548c4597e984b7 Sean Wang 2018-03-15  470  	}
-548c4597e984b7 Sean Wang 2018-03-15  471  
-548c4597e984b7 Sean Wang 2018-03-15  472  	/*
-548c4597e984b7 Sean Wang 2018-03-15  473  	 * Tagging flag for the last PD for VD will be responsible for
-548c4597e984b7 Sean Wang 2018-03-15  474  	 * completing VD.
-548c4597e984b7 Sean Wang 2018-03-15  475  	 */
-548c4597e984b7 Sean Wang 2018-03-15  476  	if (!hvd->len) {
-548c4597e984b7 Sean Wang 2018-03-15  477  		prev = MTK_HSDMA_LAST_DESP_IDX(ring->cur_tptr, MTK_DMA_SIZE);
-548c4597e984b7 Sean Wang 2018-03-15  478  		ring->cb[prev].flag = MTK_HSDMA_VDESC_FINISHED;
-548c4597e984b7 Sean Wang 2018-03-15  479  	}
-548c4597e984b7 Sean Wang 2018-03-15  480  
-548c4597e984b7 Sean Wang 2018-03-15  481  	/* Ensure all changes indeed done before we're going on */
-548c4597e984b7 Sean Wang 2018-03-15  482  	wmb();
-548c4597e984b7 Sean Wang 2018-03-15  483  
-548c4597e984b7 Sean Wang 2018-03-15  484  	/*
-548c4597e984b7 Sean Wang 2018-03-15  485  	 * Updating into hardware the pointer of TX ring lets HSDMA to take
-548c4597e984b7 Sean Wang 2018-03-15  486  	 * action for those pending PDs.
-548c4597e984b7 Sean Wang 2018-03-15  487  	 */
-548c4597e984b7 Sean Wang 2018-03-15  488  	mtk_dma_write(hsdma, MTK_HSDMA_TX_CPU, ring->cur_tptr);
-548c4597e984b7 Sean Wang 2018-03-15  489  
-548c4597e984b7 Sean Wang 2018-03-15  490  	spin_unlock_irqrestore(&hsdma->lock, flags);
-548c4597e984b7 Sean Wang 2018-03-15  491  
-548c4597e984b7 Sean Wang 2018-03-15  492  	return 0;
-548c4597e984b7 Sean Wang 2018-03-15  493  }
-548c4597e984b7 Sean Wang 2018-03-15  494  
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7b23da6a6f6c/disk-533925cb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f163e9ea9946/vmlinux-533925cb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5b943aa5a1e1/bzImage-533925cb.xz
 
-:::::: The code at line 451 was first introduced by commit
-:::::: 548c4597e984b79aad8190235d664f1c3a433f94 dmaengine: mediatek: Add MediaTek High-Speed DMA controller for MT7622 and MT7623 SoC
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ae97a827ae1c3336bbb4@syzkaller.appspotmail.com
 
-:::::: TO: Sean Wang <sean.wang@mediatek.com>
-:::::: CC: Vinod Koul <vinod.koul@intel.com>
+assertion failed: root->reloc_root == reloc_root, in fs/btrfs/relocation.c:1919
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/relocation.c:1919!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 9904 Comm: syz-executor.3 Not tainted 6.4.0-syzkaller-08881-g533925cb7604 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:prepare_to_merge+0xbb2/0xc40 fs/btrfs/relocation.c:1919
+Code: fe e9 f5 f7 ff ff e8 6d 62 ec fd 48 c7 c7 20 5e 4b 8b 48 c7 c6 c0 6d 4b 8b 48 c7 c2 a0 5e 4b 8b b9 7f 07 00 00 e8 8e d8 15 07 <0f> 0b e8 d7 17 18 07 f3 0f 1e fa e8 3e 62 ec fd 43 80 3c 2f 00 74
+RSP: 0018:ffffc9000325f760 EFLAGS: 00010246
+RAX: 000000000000004f RBX: ffff888075644030 RCX: 1481ccc522da5800
+RDX: ffffc90005c09000 RSI: 00000000000364ca RDI: 00000000000364cb
+RBP: ffffc9000325f870 R08: ffffffff816f33ac R09: 1ffff9200064bea0
+R10: dffffc0000000000 R11: fffff5200064bea1 R12: ffff888075644000
+R13: ffff88803b166000 R14: ffff88803b166560 R15: ffff88803b166558
+FS:  00007f4e305fd700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056080679c000 CR3: 00000000193ad000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ relocate_block_group+0xa5d/0xcd0 fs/btrfs/relocation.c:3749
+ btrfs_relocate_block_group+0x7ab/0xd70 fs/btrfs/relocation.c:4087
+ btrfs_relocate_chunk+0x12c/0x3b0 fs/btrfs/volumes.c:3283
+ __btrfs_balance+0x1b06/0x2690 fs/btrfs/volumes.c:4018
+ btrfs_balance+0xbdb/0x1120 fs/btrfs/volumes.c:4402
+ btrfs_ioctl_balance+0x496/0x7c0 fs/btrfs/ioctl.c:3604
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xf8/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4e2f88c389
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4e305fd168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f4e2f9abf80 RCX: 00007f4e2f88c389
+RDX: 00000000200003c0 RSI: 00000000c4009420 RDI: 0000000000000005
+RBP: 00007f4e2f8d7493 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffdbefc213f R14: 00007f4e305fd300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:prepare_to_merge+0xbb2/0xc40 fs/btrfs/relocation.c:1919
+Code: fe e9 f5 f7 ff ff e8 6d 62 ec fd 48 c7 c7 20 5e 4b 8b 48 c7 c6 c0 6d 4b 8b 48 c7 c2 a0 5e 4b 8b b9 7f 07 00 00 e8 8e d8 15 07 <0f> 0b e8 d7 17 18 07 f3 0f 1e fa e8 3e 62 ec fd 43 80 3c 2f 00 74
+RSP: 0018:ffffc9000325f760 EFLAGS: 00010246
+RAX: 000000000000004f RBX: ffff888075644030 RCX: 1481ccc522da5800
+RDX: ffffc90005c09000 RSI: 00000000000364ca RDI: 00000000000364cb
+RBP: ffffc9000325f870 R08: ffffffff816f33ac R09: 1ffff9200064bea0
+R10: dffffc0000000000 R11: fffff5200064bea1 R12: ffff888075644000
+R13: ffff88803b166000 R14: ffff88803b166560 R15: ffff88803b166558
+FS:  00007f4e305fd700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055555657e888 CR3: 00000000193ad000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
