@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4AF7447E7
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6D07447EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjGAIGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 04:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S230013AbjGAIHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 04:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjGAIGl (ORCPT
+        with ESMTP id S229940AbjGAIGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 1 Jul 2023 04:06:41 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F81CE5E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8795EE61;
         Sat,  1 Jul 2023 01:06:39 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QtPsN4r5Jz4f3svp;
-        Sat,  1 Jul 2023 16:06:32 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QtPsP18yyz4f3m8H;
+        Sat,  1 Jul 2023 16:06:33 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgA30JOH3p9kdvLGMw--.57184S5;
+        by APP4 (Coremail) with SMTP id gCh0CgA30JOH3p9kdvLGMw--.57184S6;
         Sat, 01 Jul 2023 16:06:33 +0800 (CST)
 From:   linan666@huaweicloud.com
 To:     song@kernel.org, guoqing.jiang@cloud.ionos.com, xni@redhat.com,
@@ -27,32 +27,32 @@ To:     song@kernel.org, guoqing.jiang@cloud.ionos.com, xni@redhat.com,
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
         houtao1@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v2 1/3] md/raid10: check replacement and rdev to prevent submit the same io twice
-Date:   Sat,  1 Jul 2023 16:05:27 +0800
-Message-Id: <20230701080529.2684932-2-linan666@huaweicloud.com>
+Subject: [PATCH v2 2/3] md/raid10: factor out dereference_rdev_and_rrdev()
+Date:   Sat,  1 Jul 2023 16:05:28 +0800
+Message-Id: <20230701080529.2684932-3-linan666@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230701080529.2684932-1-linan666@huaweicloud.com>
 References: <20230701080529.2684932-1-linan666@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgA30JOH3p9kdvLGMw--.57184S5
-X-Coremail-Antispam: 1UD129KBjvdXoWrtrWxZw48Cr48Kw4fWFW3Jrb_yoWfurXEkw
-        s5AF9aqr1xKF13Cwn0kr1IvrWDXw1qgFy7WrWYgrWYvFy5uryUKrW0gFZ7W3W5CrWDZr15
-        Ar1DKa1UArn8AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbk8YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
-        8IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
-        021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
-        4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64
-        xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j
-        6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2
-        kIc2xKxwAKzVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
-        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
-        I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
-        UjIFyTuYvjxUc6wZUUUUU
+X-CM-TRANSID: gCh0CgA30JOH3p9kdvLGMw--.57184S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF1xur45Zw1rZryUtw4ktFb_yoW8CF4rpF
+        srK3WfJr1UJw47KF4DJF47Ja4a9rn7tFZ7Ary3W34ruw15trWDAF1rGrWavr98ZFZ5CryY
+        q3W5Kws5uF17XFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUmjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrV
+        ACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWU
+        JVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2
+        ka0xkIwI1lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
+        AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
+        2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
+        C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
+        nUUI43ZEXa7IU1H7K7UUUUU==
 X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
@@ -66,26 +66,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Li Nan <linan122@huawei.com>
 
-After commit 4ca40c2ce099 ("md/raid10: Allow replacement device to be
-replace old drive."), 'rdev' and 'replacement' could appear to be
-identical. There are already checks for that in wait_blocked_dev() and
-raid10_write_request(). Add check for raid10_handle_discard() now.
+Factor out a helper to get 'rdev' and 'replacement' from config->mirrors.
+Just to make code cleaner and prepare to fix the bug of io loss while
+'replacement' replace 'rdev'.
+
+There is no functional change.
 
 Signed-off-by: Li Nan <linan122@huawei.com>
 ---
- drivers/md/raid10.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/md/raid10.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index fabc340aae4f..3e6a09aaaba6 100644
+index 3e6a09aaaba6..a6c3806be903 100644
 --- a/drivers/md/raid10.c
 +++ b/drivers/md/raid10.c
-@@ -1811,6 +1811,8 @@ static int raid10_handle_discard(struct mddev *mddev, struct bio *bio)
- 		r10_bio->devs[disk].bio = NULL;
- 		r10_bio->devs[disk].repl_bio = NULL;
+@@ -1346,6 +1346,25 @@ static void raid10_write_one_disk(struct mddev *mddev, struct r10bio *r10_bio,
+ 	}
+ }
  
-+		if (rdev == rrdev)
-+			rrdev = NULL;
++static struct md_rdev *dereference_rdev_and_rrdev(struct raid10_info *mirror,
++						  struct md_rdev **prrdev)
++{
++	struct md_rdev *rdev, *rrdev;
++
++	rrdev = rcu_dereference(mirror->replacement);
++	/*
++	 * Read replacement first to prevent reading both rdev and
++	 * replacement as NULL during replacement replace rdev.
++	 */
++	smp_mb();
++	rdev = rcu_dereference(mirror->rdev);
++	if (rdev == rrdev)
++		rrdev = NULL;
++
++	*prrdev = rrdev;
++	return rdev;
++}
++
+ static void wait_blocked_dev(struct mddev *mddev, struct r10bio *r10_bio)
+ {
+ 	int i;
+@@ -1489,15 +1508,7 @@ static void raid10_write_request(struct mddev *mddev, struct bio *bio,
+ 		int d = r10_bio->devs[i].devnum;
+ 		struct md_rdev *rdev, *rrdev;
+ 
+-		rrdev = rcu_dereference(conf->mirrors[d].replacement);
+-		/*
+-		 * Read replacement first to prevent reading both rdev and
+-		 * replacement as NULL during replacement replace rdev.
+-		 */
+-		smp_mb();
+-		rdev = rcu_dereference(conf->mirrors[d].rdev);
+-		if (rdev == rrdev)
+-			rrdev = NULL;
++		rdev = dereference_rdev_and_rrdev(&conf->mirrors[d], &rrdev);
  		if (rdev && (test_bit(Faulty, &rdev->flags)))
  			rdev = NULL;
  		if (rrdev && (test_bit(Faulty, &rrdev->flags)))
