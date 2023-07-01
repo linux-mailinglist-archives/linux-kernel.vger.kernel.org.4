@@ -2,175 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760717445D5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 03:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AF57445DA
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 03:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjGABZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 21:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S229693AbjGAB0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 21:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGABZK (ORCPT
+        with ESMTP id S229565AbjGAB0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 21:25:10 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33C63C17
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 18:25:08 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso41047211fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 18:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688174707; x=1690766707;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lmQawnZPImWl2SD6T1qGl5AoepWm79fi28WZcuSJ8jI=;
-        b=CeeRsZxNqGnlFJT4guVDZstK431AVoetj5Wo0bUwttuvdnpDWCUZiKrL5GXNA0teOQ
-         rzEivXMYhoaGjcyv6/7dM76yS+gTa9VWgcjz56Mqjy8ngXvb08ZIWaN97ZRqNG+sgLEc
-         9xmRfqJYhyVRx4a5/e2Plnh2V5zvctk3CJQTs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688174707; x=1690766707;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lmQawnZPImWl2SD6T1qGl5AoepWm79fi28WZcuSJ8jI=;
-        b=L+FXp/TY8GvjRi/+OgphYRyePmS3lSbXf9CYhBjvgIXUe7GUH0Y1L4a1zR8uCC+gqx
-         C/7JzQok4N+0b6P70GcfHIuqVTFX21NrHZYCiTyuNFJXccDlGAxYbGOMr28l047pJTXw
-         AmZhFACKa8/Bz89wQFXVWvbi+Z4GICIeaClRBn63zJm/EyvQa4U/pGSiRBHbPg2t2akx
-         5mEVI7ZtYM5AU5igwKetIkmW9UsvL+fYxN5Mu5UkcPvUi51HmfduXZnKmkH35mLUud+W
-         zFTuryXWhPxYPPMrnQfhBH6hr9BCIpqAa5bOFbAkTZhlIz+saT4qjA7WuatXVTTRjZFd
-         bKrg==
-X-Gm-Message-State: ABy/qLbuFIs0lgHc7X3/8LGaUHE6HKPG9N8LcLoCrYm/2+8vTGwjq206
-        hLhDI+W1RRW6HH6WFLB9Z/9D2ftq0aGDoYDthBfB4RGU
-X-Google-Smtp-Source: APBJJlGhd17FeNXgZ/5BCA3JfMMNf/wh2vfIB5cvFkdGtHyKDtmPjQm/I5T7NS64WeX5GNc582bkvw==
-X-Received: by 2002:a2e:9350:0:b0:2b6:a0cd:ba6 with SMTP id m16-20020a2e9350000000b002b6a0cd0ba6mr3145974ljh.33.1688174707099;
-        Fri, 30 Jun 2023 18:25:07 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id d9-20020a2e3309000000b002b6da1b49c6sm266185ljc.52.2023.06.30.18.25.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 18:25:06 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f122ff663eso4097563e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 18:25:06 -0700 (PDT)
-X-Received: by 2002:a05:6512:2010:b0:4f8:e4e9:499e with SMTP id
- a16-20020a056512201000b004f8e4e9499emr2999983lfb.12.1688174706280; Fri, 30
- Jun 2023 18:25:06 -0700 (PDT)
+        Fri, 30 Jun 2023 21:26:45 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D15D3C17;
+        Fri, 30 Jun 2023 18:26:44 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3611GMMM022340;
+        Sat, 1 Jul 2023 01:26:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=c8MoAoczUZ26WVq/Ok65mivZoU6UEi5l4mI5lWL/c9c=;
+ b=TkCL+vjk67AFvnDVagB242aMkp6rC3DtHSYA9juIZhuKoP/ZOJ+vHoaF3yiFle22xaJE
+ 5YIdQIfXc/+vyNblVZ50YOHab8Z2oIFMYgmvhOkdl62HAnllaAWdHuvc6NtR0dUohTMh
+ chbov+Xmag3xBmbsnW/99VujUifbB2xPaep0/S2n6u2yaL8uyhaOrTHnw3B4dvm9jxVH
+ Jcvwwwii9waalyFSxOku7Y5E+QB+QnzP0Xu14EB1Bp0XKpkKNYLgFOjsodkTJi6xTVXM
+ XXE/0iF2m+ZvdqQGcGvJtU4xnJGTeNEVNdgV1NMG92b25S7MyfA8G67kvaD2Vs9BzWZW RA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rj6y30d2q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 01 Jul 2023 01:26:16 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3611QGmA016207
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 1 Jul 2023 01:26:16 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 30 Jun
+ 2023 18:26:15 -0700
+Message-ID: <f77c33eb-2696-2aa4-9f70-f783a04cf1cc@quicinc.com>
+Date:   Fri, 30 Jun 2023 18:26:15 -0700
 MIME-Version: 1.0
-References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <fbe57907-b03f-ac8c-f3f4-4d6959bbc59c@roeck-us.net> <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
- <CAHk-=wiN5H-2dh2zCo_jXE7_ekrxSHvQcMw4xfUKjuQs2=BN4w@mail.gmail.com> <fb63ea7b-c44b-fb1b-2014-3d23794fa896@roeck-us.net>
-In-Reply-To: <fb63ea7b-c44b-fb1b-2014-3d23794fa896@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 30 Jun 2023 18:24:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whh_aUHYF6LCV36K9NYHR4ofEZ0gwcg0RY5hj=B7AT4YQ@mail.gmail.com>
-Message-ID: <CAHk-=whh_aUHYF6LCV36K9NYHR4ofEZ0gwcg0RY5hj=B7AT4YQ@mail.gmail.com>
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        sparclinux@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wang <wangborong@cdjrlc.com>
-Content-Type: multipart/mixed; boundary="000000000000b0e4fd05ff62cd63"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH RFC v4 7/7] drm/msm/dpu: Use DRM solid_fill property
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <quic_abhinavk@quicinc.com>, <ppaalanen@gmail.com>,
+        <contact@emersion.fr>, <laurent.pinchart@ideasonboard.com>,
+        <sebastian.wick@redhat.com>, <ville.syrjala@linux.intel.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <wayland-devel@lists.freedesktop.org>
+References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
+ <20230404-solid-fill-v4-7-f4ec0caa742d@quicinc.com>
+ <572ecc01-71c1-6f64-d26c-145b870584d1@linaro.org>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <572ecc01-71c1-6f64-d26c-145b870584d1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 13yQYUmfowmd0yPAk9jK4uyF3GvcDY2-
+X-Proofpoint-GUID: 13yQYUmfowmd0yPAk9jK4uyF3GvcDY2-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-30_14,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307010012
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000b0e4fd05ff62cd63
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 30 Jun 2023 at 15:51, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> There is one more, unfortunately.
->
-> Building xtensa:de212:kc705-nommu:nommu_kc705_defconfig ... failed
 
-Heh. I didn't even realize that anybody would ever do
-lock_mm_and_find_vma() code on a nommu platform.
+On 6/29/2023 5:59 PM, Dmitry Baryshkov wrote:
+> On 30/06/2023 03:25, Jessica Zhang wrote:
+>> Drop DPU_PLANE_COLOR_FILL_FLAG and check the DRM solid_fill property to
+>> determine if the plane is solid fill. In addition drop the DPU plane
+>> color_fill field as we can now use drm_plane_state.solid_fill instead,
+>> and pass in drm_plane_state.alpha to _dpu_plane_color_fill_pipe() to
+>> allow userspace to configure the alpha value for the solid fill color.
+>>
+>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+> Minor suggestion below.
+> 
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 21 +++++++++++++++------
+>>   1 file changed, 15 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>> index 4476722f03bb..11d4fb771a1f 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>> @@ -42,7 +42,6 @@
+>>   #define SHARP_SMOOTH_THR_DEFAULT    8
+>>   #define SHARP_NOISE_THR_DEFAULT    2
+>> -#define DPU_PLANE_COLOR_FILL_FLAG    BIT(31)
+>>   #define DPU_ZPOS_MAX 255
+>>   /*
+>> @@ -82,7 +81,6 @@ struct dpu_plane {
+>>       enum dpu_sspp pipe;
+>> -    uint32_t color_fill;
+>>       bool is_error;
+>>       bool is_rt_pipe;
+>>       const struct dpu_mdss_cfg *catalog;
+>> @@ -606,6 +604,17 @@ static void _dpu_plane_color_fill_pipe(struct 
+>> dpu_plane_state *pstate,
+>>       _dpu_plane_setup_scaler(pipe, fmt, true, &pipe_cfg, 
+>> pstate->rotation);
+>>   }
+>> +static uint32_t _dpu_plane_get_fill_color(struct drm_solid_fill 
+>> solid_fill)
+> 
+> Please consider accepting drm_plane_state instead and handling alpha 
+> here. Then _dpu_color_fill can accept rgba colour instead of separate 
+> RGB and alpha values.
 
-With nommu, handle_mm_fault() will just BUG(), so it's kind of
-pointless to do any of this at all, and I didn't expect anybody to
-have this page faulting path that just causes that BUG() for any
-faults.
+Hi Dmitry,
 
-But it turns out xtensa has a notion of protection faults even for
-NOMMU configs:
+Do you mean adding a patch to refactor _dpu_plane_color_fill() to accept 
+an RGBA8888 color?
 
-    config PFAULT
-        bool "Handle protection faults" if EXPERT && !MMU
-        default y
-        help
-          Handle protection faults. MMU configurations must enable it.
-          noMMU configurations may disable it if used memory map never
-          generates protection faults or faults are always fatal.
+Since, currently, the `color` parameter gets truncated to a BGR888 value 
+and OR'd with the `alpha` parameter [1].
 
-          If unsure, say Y.
+Thanks,
 
-which is why it violated my expectations so badly.
+Jessica Zhang
 
-I'm not sure if that protection fault handling really ever gets quite
-this far (it certainly should *not* make it to the BUG() in
-handle_mm_fault()), but I think the attached patch is likely the right
-thing to do.
+[1] 
+https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c#L682
 
-Can you check if it fixes that xtensa case? It looks
-ObviouslyCorrect(tm) to me, but considering that I clearly missed this
-case existing AT ALL, it might be best to double-check.
-
-               Linus
-
---000000000000b0e4fd05ff62cd63
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljjbm8ha0>
-X-Attachment-Id: f_ljjbm8ha0
-
-IGluY2x1ZGUvbGludXgvbW0uaCB8ICA1ICsrKy0tCiBtbS9ub21tdS5jICAgICAgICAgfCAxMSAr
-KysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9u
-cygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvbW0uaCBiL2luY2x1ZGUvbGludXgvbW0u
-aAppbmRleCAzOWFhNDA5ZTg0ZDUuLjRmMmMzM2MyNzNlYiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9s
-aW51eC9tbS5oCisrKyBiL2luY2x1ZGUvbGludXgvbW0uaApAQCAtMjMyMyw2ICsyMzIzLDkgQEAg
-dm9pZCBwYWdlY2FjaGVfaXNpemVfZXh0ZW5kZWQoc3RydWN0IGlub2RlICppbm9kZSwgbG9mZl90
-IGZyb20sIGxvZmZfdCB0byk7CiB2b2lkIHRydW5jYXRlX3BhZ2VjYWNoZV9yYW5nZShzdHJ1Y3Qg
-aW5vZGUgKmlub2RlLCBsb2ZmX3Qgb2Zmc2V0LCBsb2ZmX3QgZW5kKTsKIGludCBnZW5lcmljX2Vy
-cm9yX3JlbW92ZV9wYWdlKHN0cnVjdCBhZGRyZXNzX3NwYWNlICptYXBwaW5nLCBzdHJ1Y3QgcGFn
-ZSAqcGFnZSk7CiAKK3N0cnVjdCB2bV9hcmVhX3N0cnVjdCAqbG9ja19tbV9hbmRfZmluZF92bWEo
-c3RydWN0IG1tX3N0cnVjdCAqbW0sCisJCXVuc2lnbmVkIGxvbmcgYWRkcmVzcywgc3RydWN0IHB0
-X3JlZ3MgKnJlZ3MpOworCiAjaWZkZWYgQ09ORklHX01NVQogZXh0ZXJuIHZtX2ZhdWx0X3QgaGFu
-ZGxlX21tX2ZhdWx0KHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLAogCQkJCSAgdW5zaWduZWQg
-bG9uZyBhZGRyZXNzLCB1bnNpZ25lZCBpbnQgZmxhZ3MsCkBAIC0yMzM0LDggKzIzMzcsNiBAQCB2
-b2lkIHVubWFwX21hcHBpbmdfcGFnZXMoc3RydWN0IGFkZHJlc3Nfc3BhY2UgKm1hcHBpbmcsCiAJ
-CXBnb2ZmX3Qgc3RhcnQsIHBnb2ZmX3QgbnIsIGJvb2wgZXZlbl9jb3dzKTsKIHZvaWQgdW5tYXBf
-bWFwcGluZ19yYW5nZShzdHJ1Y3QgYWRkcmVzc19zcGFjZSAqbWFwcGluZywKIAkJbG9mZl90IGNv
-bnN0IGhvbGViZWdpbiwgbG9mZl90IGNvbnN0IGhvbGVsZW4sIGludCBldmVuX2Nvd3MpOwotc3Ry
-dWN0IHZtX2FyZWFfc3RydWN0ICpsb2NrX21tX2FuZF9maW5kX3ZtYShzdHJ1Y3QgbW1fc3RydWN0
-ICptbSwKLQkJdW5zaWduZWQgbG9uZyBhZGRyZXNzLCBzdHJ1Y3QgcHRfcmVncyAqcmVncyk7CiAj
-ZWxzZQogc3RhdGljIGlubGluZSB2bV9mYXVsdF90IGhhbmRsZV9tbV9mYXVsdChzdHJ1Y3Qgdm1f
-YXJlYV9zdHJ1Y3QgKnZtYSwKIAkJCQkJIHVuc2lnbmVkIGxvbmcgYWRkcmVzcywgdW5zaWduZWQg
-aW50IGZsYWdzLApkaWZmIC0tZ2l0IGEvbW0vbm9tbXUuYyBiL21tL25vbW11LmMKaW5kZXggMzdk
-MGIwMzE0M2YxLi5mZGMzOTI3MzVlYzYgMTAwNjQ0Ci0tLSBhL21tL25vbW11LmMKKysrIGIvbW0v
-bm9tbXUuYwpAQCAtNjMwLDYgKzYzMCwxNyBAQCBzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKmZpbmRf
-dm1hKHN0cnVjdCBtbV9zdHJ1Y3QgKm1tLCB1bnNpZ25lZCBsb25nIGFkZHIpCiB9CiBFWFBPUlRf
-U1lNQk9MKGZpbmRfdm1hKTsKIAorLyoKKyAqIEF0IGxlYXN0IHh0ZW5zYSBlbmRzIHVwIGhhdmlu
-ZyBwcm90ZWN0aW9uIGZhdWx0cyBldmVuIHdpdGggbm8KKyAqIE1NVS4uIE5vIHN0YWNrIGV4cGFu
-c2lvbiwgYXQgbGVhc3QuCisgKi8KK3N0cnVjdCB2bV9hcmVhX3N0cnVjdCAqbG9ja19tbV9hbmRf
-ZmluZF92bWEoc3RydWN0IG1tX3N0cnVjdCAqbW0sCisJCQl1bnNpZ25lZCBsb25nIGFkZHIsIHN0
-cnVjdCBwdF9yZWdzICpyZWdzKQoreworCW1tYXBfcmVhZF9sb2NrKG1tKTsKKwlyZXR1cm4gdm1h
-X2xvb2t1cChtbSwgYWRkcik7Cit9CisKIC8qCiAgKiBleHBhbmQgYSBzdGFjayB0byBhIGdpdmVu
-IGFkZHJlc3MKICAqIC0gbm90IHN1cHBvcnRlZCB1bmRlciBOT01NVSBjb25kaXRpb25zCg==
---000000000000b0e4fd05ff62cd63--
+> 
+>> +{
+>> +    uint32_t ret = 0;
+>> +
+>> +    ret |= ((uint8_t) solid_fill.b) << 16;
+>> +    ret |= ((uint8_t) solid_fill.g) << 8;
+>> +    ret |= ((uint8_t) solid_fill.r);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>>   /**
+>>    * _dpu_plane_color_fill - enables color fill on plane
+>>    * @pdpu:   Pointer to DPU plane object
+>> @@ -977,9 +986,9 @@ void dpu_plane_flush(struct drm_plane *plane)
+>>       if (pdpu->is_error)
+>>           /* force white frame with 100% alpha pipe output on error */
+>>           _dpu_plane_color_fill(pdpu, 0xFFFFFF, 0xFF);
+>> -    else if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG)
+>> -        /* force 100% alpha */
+>> -        _dpu_plane_color_fill(pdpu, pdpu->color_fill, 0xFF);
+>> +    else if (drm_plane_solid_fill_enabled(plane->state))
+>> +        _dpu_plane_color_fill(pdpu, 
+>> _dpu_plane_get_fill_color(plane->state->solid_fill),
+>> +                plane->state->alpha);
+>>       else {
+>>           dpu_plane_flush_csc(pdpu, &pstate->pipe);
+>>           dpu_plane_flush_csc(pdpu, &pstate->r_pipe);
+>> @@ -1024,7 +1033,7 @@ static void dpu_plane_sspp_update_pipe(struct 
+>> drm_plane *plane,
+>>       }
+>>       /* override for color fill */
+>> -    if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG) {
+>> +    if (drm_plane_solid_fill_enabled(plane->state)) {
+>>           _dpu_plane_set_qos_ctrl(plane, pipe, false);
+>>           /* skip remaining processing on color fill */
+>>
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
