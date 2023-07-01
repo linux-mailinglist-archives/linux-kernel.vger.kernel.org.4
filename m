@@ -2,142 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8ECD744B93
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 00:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06B0744B9B
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 00:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjGAWHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 18:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S229826AbjGAWTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 18:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjGAWHP (ORCPT
+        with ESMTP id S229446AbjGAWTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 18:07:15 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C28CD3
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 15:07:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 689A53200AAA;
-        Sat,  1 Jul 2023 18:07:10 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 01 Jul 2023 18:07:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688249229; x=1688335629; bh=kV
-        GVKnBuIHX1l6ALTLY/SHtLDLdOEUzzM5SZf1Sp8Xo=; b=CHpIIZ2i4wn4xbUn9m
-        9zZbqmCR28xZWOFi6mVjHvWitYI7ASw2jR0Mw40cYfATMDL4/0tOjKsjvSsYKODm
-        JW0ugQCF6Jtfe+CXssc5UXmySpMpO5dabuNjCVqsMhWrn85gyQ3WXAr1DrV3uAgG
-        tazH8jJ6IQIzZwZC9C6jZMLsMo1At5gkkJWe564pdKze/jeC1l0P+80J33nbr0m6
-        YTZR+10N3rCdURAo0tfyGkGMOPplLzIA81dO2IvVFiuM3r6nRb+x+LJT98pPLcXq
-        WbNEfeVMtHiS0zKhcRr+gb+YauTWYkVTa/lyB2VCBqgiHitOeN6muHe2Ggl/x8EC
-        MyNQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688249229; x=1688335629; bh=kVGVKnBuIHX1l
-        6ALTLY/SHtLDLdOEUzzM5SZf1Sp8Xo=; b=K2azXMowjA85OuykdPZphJ1HUWkYg
-        NoURe5epWQCQd55n9jx39YOFXEUlt+eK9HR6rJUb+ZzhCCDFfXry62A3vRf+BZJZ
-        lJTJXMUpkt2scV8I8QApEW0BqJZsIBfkjogFf+5Sq1CmHZuz4ZpF4h1VOJl+e8xJ
-        PE/ew5GiULriP0Bfj+nfYZ6NjLEDXrlWYK0vADkglkxcnRguheSDDLSSfu3GnYse
-        SaJj1yuTOq1CsppS1GP2XNYp1EeX5Ts+QS1bsYQ/3sP8QqGQ3SxBmr9zEyFm9ojh
-        /Mxun0q2Zg1jCqCAEIReFf6CygERI2ISx06S6VPBF7UpMu9p9XepRyIdA==
-X-ME-Sender: <xms:jaOgZGWXBtzsHMZKfqVhqxnmwe0FzRQVGKTrDwrIdlA3XPXS8jwDYA>
-    <xme:jaOgZClQ5Qk8aUFevpvqL6BR0L0txvhI2H1sr2fVmEtqS4rq3A91wIMXH0qyPV42S
-    DAcK2MfmIlrM3p3L8Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdelgddtiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:jaOgZKZP1Kd_EAaYCyTnulg3-zXoCXkiTcUEa4SM2K3ombr9GMmw2w>
-    <xmx:jaOgZNV54NqnZniCWUSR3IhI5COBUO_QHnY5kMnhX1Zldbz_GecmYw>
-    <xmx:jaOgZAkCqSFe2gBfjn7NtFlqs-L1kBx9HaOCyIWgKX-D1H4QC4zjtA>
-    <xmx:jaOgZOafDBBiS__PtiplermowfLodLUywd9vo1m7t_xAyiUIsO6yrg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 10A3BB60086; Sat,  1 Jul 2023 18:07:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <2e1af219-a31c-4284-b50a-662f65c8a736@app.fastmail.com>
-In-Reply-To: <20230701214503.550549-3-javierm@redhat.com>
-References: <20230701214503.550549-1-javierm@redhat.com>
- <20230701214503.550549-3-javierm@redhat.com>
-Date:   Sun, 02 Jul 2023 00:06:47 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Javier Martinez Canillas" <javierm@redhat.com>,
+        Sat, 1 Jul 2023 18:19:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B87810E6
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 15:19:30 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qFiw5-0002Ti-T2; Sun, 02 Jul 2023 00:19:21 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qFiw2-00BRVp-5a; Sun, 02 Jul 2023 00:19:18 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qFiw1-001QHH-48; Sun, 02 Jul 2023 00:19:17 +0200
+Date:   Sun, 2 Jul 2023 00:19:11 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Dave Airlie" <airlied@gmail.com>,
-        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        "Maxime Ripard" <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 2/2] drm: Make fbdev emulation select FB_CORE instead of depends
- on FB
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v2] usb: r8a66597-hcd: host: fix port index underflow and
+ UBSAN complains
+Message-ID: <20230701221911.5mqh677uyhh2s67u@pengutronix.de>
+References: <tencent_AD4994DC28D60E6CF580E97BB028A0A1EA0A@qq.com>
+ <20230701171648.orex7hx6jpkkpub3@pengutronix.de>
+ <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6wj7odentrecp6rj"
+Content-Disposition: inline
+In-Reply-To: <ad575ac5-fccb-4b1e-b6f4-26caa814414f@rowland.harvard.edu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023, at 23:44, Javier Martinez Canillas wrote:
-> Now that the fbdev core has been split in FB_CORE and FB, make DRM fbdev
-> emulation layer to just select the former.
->
-> This allows to disable the CONFIG_FB option if is not needed, which will
-> avoid the need to explicitly disable each of the legacy fbdev drivers.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
->
-> Changes in v2:
-> - Make CONFIG_DRM_FBDEV_EMULATION to select FB_CORE (Thomas Zimmermann).
->
->  drivers/gpu/drm/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index afb3b2f5f425..d9b1710e3ad0 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -132,7 +132,7 @@ config DRM_DEBUG_MODESET_LOCK
->  config DRM_FBDEV_EMULATION
->  	bool "Enable legacy fbdev support for your modesetting driver"
->  	depends on DRM_KMS_HELPER
-> -	depends on FB=y || FB=DRM_KMS_HELPER
-> +	select FB_CORE
 
-This will unfortunately force FB_CORE=y even with DRM=m, it would be nice
-to allow both to be loadable modules. Any of these should work:
+--6wj7odentrecp6rj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-a) Add another hidden symbol like
+Hello Alan,
 
-config DRM_FB_CORE
-      def_tristate DRM && DRM_FBDEV_EMULATION
-      select FB_CORE
+On Sat, Jul 01, 2023 at 02:54:46PM -0400, Alan Stern wrote:
+> wIndex should never be =3D=3D 0 or > max_root_hub in the cases where rh g=
+ets=20
+> used; such values would be meaningless.  But we don't control the value=
+=20
+> of wIndex, because it can come from userspace.  So we can't simply=20
+> assume it will always be valid; it has to be checked.
+>=20
+> That being understood, the changes Zhang is making here are meant mostly=
+=20
+> to prevent UBSAN and the compiler from complaining or making false=20
+> assumptions.  The actual checks on wIndex occur later in the subroutine.
 
-b) move the 'select' to DRM
+I'm guilty of not having looked at all on that function, but it sounds
+wrong to me to calculate values from some untrusted input and only
+later validate the input. It should be the other way round, shouldn't
+it? This is calling for compiler optimisations stepping on your toes.
 
-config DRM
-      tristate "Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)"
-      select FB_CORE if DRM_FBDEV_EMULATION
+Best regards
+Uwe
 
-c) Remove the 'select' and instead use the default 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-config FB_CORE
-     def_tristate FB || (DRM && DRM_FBDEV_EMULATION)
+--6wj7odentrecp6rj
+Content-Type: application/pgp-signature; name="signature.asc"
 
-       Arnd
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSgpl0ACgkQj4D7WH0S
+/k7s5Af/USnPiseAlWYYwvuQXAPt3ZkNc9kuJ9OKIJWQQ6oM7HQE+6rNhYJjqhCW
+LcUgbvbyNXTpg+2QjhrQ8KLCO809uzcA+EHHBjRTYBQMc953nZQrCb4co2+OJizd
+lQsk4EApYEa6d8+2rTs+f5VJGYe9aW9TvrF9cqFoUMwqkIvLiVAHkR3DiTWHu1MJ
+F6Qxc7OMf4GprqMR5yL/RRjA66XK2Fxz7po+Z/TBNDVevjt6uAZY5Iw6jCqvVcwz
+Guu88RcWdLRtQX99yTPmr8y9ZHdACxYU8JAqLkqrA31IT88ojaiq1s7MWF5m13pD
+b72qCAMrWbBix53Uqu5KzXlgakgzEA==
+=If88
+-----END PGP SIGNATURE-----
+
+--6wj7odentrecp6rj--
