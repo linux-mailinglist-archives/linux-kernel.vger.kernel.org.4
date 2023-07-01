@@ -2,175 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A985744BA1
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 00:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D3F744BA6
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 00:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjGAWZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 18:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S229618AbjGAWw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 18:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjGAWZO (ORCPT
+        with ESMTP id S229446AbjGAWw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 18:25:14 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B026F10CE;
-        Sat,  1 Jul 2023 15:25:13 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A38EA3200A84;
-        Sat,  1 Jul 2023 18:25:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 01 Jul 2023 18:25:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688250311; x=1688336711; bh=L5
-        h/Ryrtjk3RSUbaAmGHoCMI71Hh6B3GS25Ko06eU7A=; b=l9tacFGlLNUW498NfR
-        2HMQMmJCbKpZKi8ZrBBVmmOS1kfbP6UD9QRj0UvRLPfEE1CX5yCZS+95of92s2jt
-        EgLsJU54z1zX3QXZZdIA+pAWQs5JOM8P1zB+ZGDf03krk9sukn9NUe6mk1YILu6L
-        lzEbal6qkEMCRC+XDhPYKovoKm58+5ss8loOIYbVcBLRvmLLJbaeB9dd9WtLUdaT
-        tdU04pNcut2hECqnBLgEic3ayrr4lraloH98SzSqjRIiNp1Ke6BZGP1vOLXpUnkE
-        Y3uikCLqSV3gkGBp6jfZzzK9ws4N5dFMbFzS8ZEmhLumbFHVpDgKtWjVTCrAsJrH
-        gQyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688250311; x=1688336711; bh=L5h/Ryrtjk3RS
-        UbaAmGHoCMI71Hh6B3GS25Ko06eU7A=; b=dqd93ovx5UK1r5i99ilZw9lJnCIIA
-        L+tDqCqsQFg1fnK++u17Lo8hOEZFeNAPN3/G51fUDNAEUG+ETs/BXhvZXfOpz1n1
-        HO/rf4MlBBT6CJRUYHoNzGHLuF4ln9E/SdGLo4x+tx9FiOFP5uaueZxFI8ldp7A8
-        y3h6EIXWQsVHz5+acySCAQ9UH4qf0VussviSzB5APSPHDGjhSOFsW3wY6IW1YO6W
-        58TJU5VmfvNH0mjMlv/KFLCe7CRQCjqmV3y6tso2uOYAzyNaFq/HT6vNQa/DFJem
-        nbHEoVIlmfv3Vh8RlPs+jClrTH/VI1lZO7lLXBsdXqul531hjmgCyKpSA==
-X-ME-Sender: <xms:xqegZF4EXdtptYecUzKdN8BeIQcbgzWQSzXpXrIQtV3a_qoMUGwXSA>
-    <xme:xqegZC5sJcuKFKNxurhqOd4jdIRVhpqaN3t6rcEoKZx5Qn5FagKvfD9A20yjomyow
-    sRIMb3fknsj-fMt8Vk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdelgddtlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:xqegZMe76LP1KMxgOhIEU7FTSpW7gUOtgxBbz_vmEMWQ19VAK-G98A>
-    <xmx:xqegZOIpJKVnx3ex1K_E0pHZpY9m959DqoKy99wh-Tvlxw-lcPGZvA>
-    <xmx:xqegZJKloqLtXh5N50gA7rMVQ_dBWML-ktCjO4-km_dJYT6G1mtvVQ>
-    <xmx:x6egZC596rrEo0oU1CzyS9GOsWi2oZ3XsOlWXJwzcvzHICJhprDX8g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2B8ECB60086; Sat,  1 Jul 2023 18:25:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <393ca142-5226-4779-a963-c34fb0464c59@app.fastmail.com>
-In-Reply-To: <20230701214503.550549-2-javierm@redhat.com>
-References: <20230701214503.550549-1-javierm@redhat.com>
- <20230701214503.550549-2-javierm@redhat.com>
-Date:   Sun, 02 Jul 2023 00:24:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Javier Martinez Canillas" <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Helge Deller" <deller@gmx.de>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Sam Ravnborg" <sam@ravnborg.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v2 1/2] fbdev: Split frame buffer support in FB and FB_CORE symbols
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 1 Jul 2023 18:52:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A89B10D0
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 15:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688251945; x=1719787945;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aT21eX5ZX1k2UFewqeNd8gsd73GOde4L130zhE4Xmmo=;
+  b=PPOQtW8wenNkLfdcb6ymCwQCjUV5BfUvuzmHQdgebYzwL3+s+ASfp0WL
+   7JsSK+v/gigNGzXTXaq0ARdSOis+9SgzirjVpRAy6W5K+gWPsCNItCJEp
+   tMThL5QDfoPpX+ThJhF1TIZMucuVwggIV1Nq6XmubcmLXj+SXn3ZiuGHu
+   XguogVpvBbYoLvy/CYbe9Gx+ALwjeQ99u1EwHlTVVkbNUKKAjtdADYLCI
+   ucuLhjsMVxq+rB2SaOcrASrERvt4vgU+2dyMxydletCj3VHNoRtZcqFRv
+   lYtqCF5H4rRokROEmGPIK/MjvttCRVf2T4IJaYaOYeEaDkL0InOQE7fzo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="347418113"
+X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
+   d="scan'208";a="347418113"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 15:52:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="892139143"
+X-IronPort-AV: E=Sophos;i="6.01,175,1684825200"; 
+   d="scan'208";a="892139143"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Jul 2023 15:52:22 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFjS2-000GJ7-0R;
+        Sat, 01 Jul 2023 22:52:22 +0000
+Date:   Sun, 2 Jul 2023 06:51:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/loongson64/smp.c:203:26: sparse: sparse: incorrect type in
+ assignment (different address spaces)
+Message-ID: <202307020639.QCZOKp8B-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023, at 23:44, Javier Martinez Canillas wrote:
-> Currently the CONFIG_FB option has to be enabled even if no legacy fbdev
-> drivers are needed (e.g: only to have support for framebuffer consoles).
->
-> The DRM subsystem has a fbdev emulation layer, but depends on CONFIG_FB
-> and so it can only be enabled if that dependency is enabled as well.
->
-> That means fbdev drivers have to be explicitly disabled if users want to
-> enable CONFIG_FB, only to use fbcon and/or the DRM fbdev emulation layer.
->
-> This patch introduces a non-visible CONFIG_FB_CORE symbol that could be
-> enabled just to have core support needed for CONFIG_DRM_FBDEV_EMULATION,
-> allowing CONFIG_FB to be disabled (and automatically disabling all the
-> fbdev drivers).
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dfab92f27c600fea3cadc6e2cb39f092024e1fef
+commit: 5bd3990723bdf43333b2c268cc6644cb1961125b MIPS: Loongson64: Prefix ipi register address pointers with __iomem
+date:   4 months ago
+config: mips-randconfig-r081-20230702 (https://download.01.org/0day-ci/archive/20230702/202307020639.QCZOKp8B-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230702/202307020639.QCZOKp8B-lkp@intel.com/reproduce)
 
-I found two more things now:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307020639.QCZOKp8B-lkp@intel.com/
 
-> 
-> +menuconfig FB_CORE
-> +	tristate "Core support for frame buffer devices"
-> +
+sparse warnings: (new ones prefixed by >>)
+>> arch/mips/loongson64/smp.c:203:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:203:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:203:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:205:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:205:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:205:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:207:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:207:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:207:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:209:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:209:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:209:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:211:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:211:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:211:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:213:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:213:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:213:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:215:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:215:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:215:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:217:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:217:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:217:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:219:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:219:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:219:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:221:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:221:26: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:221:26: sparse:     got void *
+   arch/mips/loongson64/smp.c:223:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:223:27: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:223:27: sparse:     got void *
+   arch/mips/loongson64/smp.c:225:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:225:27: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:225:27: sparse:     got void *
+   arch/mips/loongson64/smp.c:227:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:227:27: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:227:27: sparse:     got void *
+   arch/mips/loongson64/smp.c:229:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:229:27: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:229:27: sparse:     got void *
+   arch/mips/loongson64/smp.c:231:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:231:27: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:231:27: sparse:     got void *
+   arch/mips/loongson64/smp.c:233:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:233:27: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:233:27: sparse:     got void *
+   arch/mips/loongson64/smp.c:239:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:239:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:239:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:241:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:241:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:241:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:243:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:243:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:243:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:245:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:245:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:245:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:247:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:247:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:247:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:249:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:249:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:249:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:251:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:251:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:251:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:253:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:253:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:253:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:255:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:255:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:255:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:257:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:257:28: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:257:28: sparse:     got void *
+   arch/mips/loongson64/smp.c:259:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:259:29: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:259:29: sparse:     got void *
+   arch/mips/loongson64/smp.c:261:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:261:29: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:261:29: sparse:     got void *
+   arch/mips/loongson64/smp.c:263:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:263:29: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:263:29: sparse:     got void *
+   arch/mips/loongson64/smp.c:265:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:265:29: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:265:29: sparse:     got void *
+   arch/mips/loongson64/smp.c:267:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:267:29: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:267:29: sparse:     got void *
+   arch/mips/loongson64/smp.c:269:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:269:29: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:269:29: sparse:     got void *
+   arch/mips/loongson64/smp.c:275:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:275:29: sparse:     expected void [noderef] __iomem *
+   arch/mips/loongson64/smp.c:275:29: sparse:     got void *
+   arch/mips/loongson64/smp.c:277:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/mips/loongson64/smp.c:277:29: sparse:     expected void [noderef] __iomem *
 
-This is not actually a hidden option, since you left the prompt
-after the 'tristate' keyword. There is also no pointn in having
-it as a menu, just use the simpler
+vim +203 arch/mips/loongson64/smp.c
 
-config FB_CORE
-        tristate
+ffe59ee36aaa83 arch/mips/loongson64/loongson-3/smp.c Huacai Chen 2019-09-21  200  
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  201  static void ipi_set0_regs_init(void)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  202  {
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26 @203  	ipi_set0_regs[0] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  204  		(SMP_CORE_GROUP0_BASE + SMP_CORE0_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  205  	ipi_set0_regs[1] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  206  		(SMP_CORE_GROUP0_BASE + SMP_CORE1_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  207  	ipi_set0_regs[2] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  208  		(SMP_CORE_GROUP0_BASE + SMP_CORE2_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  209  	ipi_set0_regs[3] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  210  		(SMP_CORE_GROUP0_BASE + SMP_CORE3_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  211  	ipi_set0_regs[4] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  212  		(SMP_CORE_GROUP1_BASE + SMP_CORE0_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  213  	ipi_set0_regs[5] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  214  		(SMP_CORE_GROUP1_BASE + SMP_CORE1_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  215  	ipi_set0_regs[6] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  216  		(SMP_CORE_GROUP1_BASE + SMP_CORE2_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  217  	ipi_set0_regs[7] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  218  		(SMP_CORE_GROUP1_BASE + SMP_CORE3_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  219  	ipi_set0_regs[8] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  220  		(SMP_CORE_GROUP2_BASE + SMP_CORE0_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  221  	ipi_set0_regs[9] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  222  		(SMP_CORE_GROUP2_BASE + SMP_CORE1_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  223  	ipi_set0_regs[10] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  224  		(SMP_CORE_GROUP2_BASE + SMP_CORE2_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  225  	ipi_set0_regs[11] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  226  		(SMP_CORE_GROUP2_BASE + SMP_CORE3_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  227  	ipi_set0_regs[12] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  228  		(SMP_CORE_GROUP3_BASE + SMP_CORE0_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  229  	ipi_set0_regs[13] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  230  		(SMP_CORE_GROUP3_BASE + SMP_CORE1_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  231  	ipi_set0_regs[14] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  232  		(SMP_CORE_GROUP3_BASE + SMP_CORE2_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  233  	ipi_set0_regs[15] = (void *)
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  234  		(SMP_CORE_GROUP3_BASE + SMP_CORE3_OFFSET + SET0);
+e7841be50fe2b8 arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-06-26  235  }
+300459d558725c arch/mips/loongson/loongson-3/smp.c   Huacai Chen 2014-03-21  236  
 
-or (as in my other email)
+:::::: The code at line 203 was first introduced by commit
+:::::: e7841be50fe2b8751a51a068b8cdcdcb6611e354 MIPS: Add Loongson-3B support
 
-config FB_CORE
-       def_tristate FB || (DRM && DRM_FBDEV_EMULATION)
+:::::: TO: Huacai Chen <chenhc@lemote.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
-
-> @@ -44,7 +54,7 @@ menuconfig FB
-> 
->  config FIRMWARE_EDID
->  	bool "Enable firmware EDID"
-> -	depends on FB
-> +	depends on FB_CORE
->  	help
->  	  This enables access to the EDID transferred from the firmware.
->  	  On the i386, this is from the Video BIOS. Enable this if DDC/I2C
-> @@ -59,7 +69,7 @@ config FIRMWARE_EDID
-> 
->  config FB_DEVICE
->  	bool "Provide legacy /dev/fb* device"
-> -	depends on FB
-> +	select FB_CORE
->  	default y
->  	help
->  	  Say Y here if you want the legacy /dev/fb* device file and
-
-These are now the only user visible sub-options when CONFIG_FB is
-disabled. I missed FIRMWARE_EDID earlier, but this also looks like
-it can clearly be left as depending on FB since nothing else calls
-fb_firmware_edid. In fact, it looks like all of fbmon.c could be
-left out since none of its exported symbols are needed for DRM.
-
-That would leave CONFIG_FB_DEVICE as the only user visible option
-for DRM-only configs, which is slightly odd for the menuconfig,
-so I still wonder if that could be done differently.
-
-Is there actually a point in configurations for kernels with FB=y,
-DRM=n and FB_DEVICE=n? If we don't expect that to be a useful
-configuration, an easier way would be to have CONFIG_FB turn it
-on implicitly and instead have a user-visible Kconfig option
-below CONFIG_DRM_FBDEV_EMULATION that allows controlling the
-creation of /dev/fb*.
-
-     Arnd
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
