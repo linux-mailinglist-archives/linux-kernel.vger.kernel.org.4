@@ -2,388 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342F87448DA
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 14:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45997448D0
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 14:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjGAMUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 08:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S229643AbjGAMLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 08:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjGAMUD (ORCPT
+        with ESMTP id S229480AbjGAMLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 08:20:03 -0400
-X-Greylist: delayed 613 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Jul 2023 05:20:02 PDT
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF243C0B;
-        Sat,  1 Jul 2023 05:20:02 -0700 (PDT)
-Received: from mors-relay8203.netcup.net (localhost [127.0.0.1])
-        by mors-relay8203.netcup.net (Postfix) with ESMTPS id 4QtWG41xgrz8ZD8;
-        Sat,  1 Jul 2023 12:09:48 +0000 (UTC)
-Authentication-Results: mors-relay8203.netcup.net; dkim=permerror (bad message/signature format)
-Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
-        by mors-relay8203.netcup.net (Postfix) with ESMTPS id 4QtWG41FYMz8ZC9;
-        Sat,  1 Jul 2023 12:09:48 +0000 (UTC)
-Received: from mxe217.netcup.net (unknown [10.243.12.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by policy02-mors.netcup.net (Postfix) with ESMTPS id 4QtWG36SRVz8sZN;
-        Sat,  1 Jul 2023 14:09:47 +0200 (CEST)
-Received: from thinkpad.fritz.box (p5dccec2e.dip0.t-ipconnect.de [93.204.236.46])
-        by mxe217.netcup.net (Postfix) with ESMTPSA id 961CF81510;
-        Sat,  1 Jul 2023 14:09:35 +0200 (CEST)
-From:   Julius Zint <julius@zint.sh>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>
-Cc:     Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Julius Zint <julius@zint.sh>
-Subject: [PATCH 1/1] backlight: apple_bl_usb: Add Apple Studio Display support
-Date:   Sat,  1 Jul 2023 14:08:03 +0200
-Message-ID: <20230701120806.11812-2-julius@zint.sh>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230701120806.11812-1-julius@zint.sh>
-References: <20230701120806.11812-1-julius@zint.sh>
+        Sat, 1 Jul 2023 08:11:15 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149B03AAD;
+        Sat,  1 Jul 2023 05:11:14 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6686c74183cso2205868b3a.1;
+        Sat, 01 Jul 2023 05:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688213473; x=1690805473;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f1GyuonBm6IUr0u+r5GEAQVpS0cfgB5k80PSwBGFToY=;
+        b=KfCNmTFBwiLTda6Dm+DznJq70IhnOvAFC/zYQHCxe3keuHYR4JHjK5JzgH4OkDx2yc
+         hXpmbi/rlz80nZG5ufKcxKROcSkcMnBzEzjN+EDQtS3VlvdbOpRBAVlBpgBnv/BYemCc
+         wwjnVDGWI4Qzw2yXTiy3Id8dcsfpr+15qamDPQ7CYGPm1bGG6DTkZaT/j87fsezktniz
+         A78OIPMEG9uotIa/b1AmRA/pcI9ZJVIL51/IaKmIWTytbxVRL9bH6W0wS5KPuWYcgZGT
+         X1X0YWjCoQEJB5G7XGtcQV45Dis4/iB0Rtm+TH4X6Lu0/mQAT7RmcK72eszUsej+8JpZ
+         COiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688213473; x=1690805473;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f1GyuonBm6IUr0u+r5GEAQVpS0cfgB5k80PSwBGFToY=;
+        b=jklLHdAabqjjw6qKK+qdwTrBMNAQm2AZYk22NY+FyTugYyvT6NG55ke28yfZySXGCH
+         I5sRCpuOx/fEe2DFi7XoOu6ykadnzVzDHaGUoQjpfSGEJgBV57xZaJNv8iJbLysz3e1E
+         cJw2OrjR93v9aZQthVkTZoFKNoNPTakKC4+t6mb5A+y52Uu7ft0hH1mF93s0iouQlB3Y
+         LIC1B1lMKaS2hF5B54wUTvJFVWSPIiWjgM/XDlHuZVBOe7AKyizk7hgnFqRCUQz/7f3/
+         Sw2ShMz0/trYIxf6cgOZazo+EOTZU+UozlrLoStHcBe6J91TgUu2O2v/XqRFRo/IHSuc
+         /0wQ==
+X-Gm-Message-State: ABy/qLa9XCeNwRqPBwjAmSBFtN8ctCkrzsrrHw/bXiQ4bJRCBt75EPBV
+        jk0ZGamUWvU0IagA0nva53s=
+X-Google-Smtp-Source: APBJJlFta5cKHhIgxiLxamDAB/Qw2W5giLxoywNe8po2TJMX0I3gw3Sfh3ev9H6ouhWZEi/AI96i4g==
+X-Received: by 2002:a05:6a00:14cc:b0:66f:912b:d6f with SMTP id w12-20020a056a0014cc00b0066f912b0d6fmr7785028pfu.0.1688213473510;
+        Sat, 01 Jul 2023 05:11:13 -0700 (PDT)
+Received: from [192.168.50.210] (ip68-109-79-27.oc.oc.cox.net. [68.109.79.27])
+        by smtp.gmail.com with ESMTPSA id i22-20020aa78b56000000b006687198c3easm11781138pfd.179.2023.07.01.05.11.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jul 2023 05:11:13 -0700 (PDT)
+Message-ID: <594f73f2-59b0-bbcb-d7a0-6d89e2446830@gmail.com>
+Date:   Sat, 1 Jul 2023 05:11:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 961CF81510
-X-Rspamd-Server: rspamd-worker-8404
-X-NC-CID: xxZZds290yZdKeCDCBCYQjZuLGaqfixNp4cm7Xpq
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
+Content-Language: en-US
+To:     Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>
+References: <20230620133711.22840-1-dwagner@suse.de>
+ <20230620133711.22840-5-dwagner@suse.de>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20230620133711.22840-5-dwagner@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Apple Studio Display does not have any physical buttons and the only
-way to get or set the brightness is by sending USB control transfers to a
-HID device exposed by the display.
 
-These control transfers take the form of a HID_(GET|SET)_REPORT request
-and the payload looks like this:
+On 6/20/2023 6:37 AM, Daniel Wagner wrote:
+> Commit 4c984154efa1 ("nvme-fc: change controllers first connect to use
+> reconnect path") made the connection attempt asynchronous in order to
+> make the connection attempt from autoconnect/boot via udev/systemd up
+> case a bit more reliable.
+> 
+> Unfortunately, one side effect of this is that any wrong parameters
+> provided from userspace will not be directly reported as invalid, e.g.
+> auth keys.
+> 
+> So instead having the policy code inside the kernel it's better to
+> address this in userspace, for example in nvme-cli or nvme-stas.
+> 
+> This aligns the fc transport with tcp and rdma.
 
-    struct brightness_ctrl_message_data {
-           u8 unknown_1;
-           __le16 brightness;
-           u8 unkown_2[4];
-    } __packed;
+As much as you want to make this change to make transports "similar", I 
+am dead set against it unless you are completing a long qualification of 
+the change on real FC hardware and FC-NVME devices. There is probably 
+1.5 yrs of testing of different race conditions that drove this change. 
+You cannot declare success from a simplistic toy tool such as fcloop for 
+validation.
 
-When compiled as a module this driver needs to be part of the early boot
-environment, otherwise the generic USB HID driver will claim the device.
+The original issues exist, probably have even morphed given the time 
+from the original change, and this will seriously disrupt the transport 
+and any downstream releases.  So I have a very strong NACK on this change.
 
-Signed-off-by: Julius Zint <julius@zint.sh>
----
- drivers/video/backlight/Kconfig        |   8 +
- drivers/video/backlight/Makefile       |   1 +
- drivers/video/backlight/apple_bl_usb.c | 264 +++++++++++++++++++++++++
- 3 files changed, 273 insertions(+)
- create mode 100644 drivers/video/backlight/apple_bl_usb.c
+Yes - things such as the connect failure results are difficult to return 
+back to nvme-cli. I have had many gripes about the nvme-cli's behavior 
+over the years, especially on negative cases due to race conditions 
+which required retries. It still fails this miserably.  The async 
+reconnect path solved many of these issues for fc.
 
-diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-index 51387b1ef012..9383d402ebed 100644
---- a/drivers/video/backlight/Kconfig
-+++ b/drivers/video/backlight/Kconfig
-@@ -290,6 +290,14 @@ config BACKLIGHT_APPLE
- 	  If you have an Intel-based Apple say Y to enable a driver for its
- 	  backlight.
- 
-+config BACKLIGHT_APPLE_USB
-+	tristate "Apple USB Backlight Driver"
-+	depends on USB
-+	help
-+	  If you have an external display from Apple that is attached via USB
-+	  say Y to enable a driver for its backlight. Currently it supports the
-+	  Apple Studio Display.
-+
- config BACKLIGHT_QCOM_WLED
- 	tristate "Qualcomm PMIC WLED Driver"
- 	select REGMAP
-diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-index f72e1c3c59e9..c42880655113 100644
---- a/drivers/video/backlight/Makefile
-+++ b/drivers/video/backlight/Makefile
-@@ -23,6 +23,7 @@ obj-$(CONFIG_BACKLIGHT_ADP5520)		+= adp5520_bl.o
- obj-$(CONFIG_BACKLIGHT_ADP8860)		+= adp8860_bl.o
- obj-$(CONFIG_BACKLIGHT_ADP8870)		+= adp8870_bl.o
- obj-$(CONFIG_BACKLIGHT_APPLE)		+= apple_bl.o
-+obj-$(CONFIG_BACKLIGHT_APPLE_USB)	+= apple_bl_usb.o
- obj-$(CONFIG_BACKLIGHT_AS3711)		+= as3711_bl.o
- obj-$(CONFIG_BACKLIGHT_BD6107)		+= bd6107.o
- obj-$(CONFIG_BACKLIGHT_CARILLO_RANCH)	+= cr_bllcd.o
-diff --git a/drivers/video/backlight/apple_bl_usb.c b/drivers/video/backlight/apple_bl_usb.c
-new file mode 100644
-index 000000000000..b746b7822974
---- /dev/null
-+++ b/drivers/video/backlight/apple_bl_usb.c
-@@ -0,0 +1,264 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/usb.h>
-+#include <linux/backlight.h>
-+#include <asm/byteorder.h>
-+
-+#define APPLE_STUDIO_DISPLAY_VENDOR_ID  0x05ac
-+#define APPLE_STUDIO_DISPLAY_PRODUCT_ID 0x1114
-+
-+#define HID_GET_REPORT 0x01
-+#define HID_SET_REPORT 0x09
-+
-+#define HID_REPORT_TYPE_FEATURE 0x0300
-+
-+struct apple_bl_usb_data {
-+	struct usb_interface *usb_interface;
-+	struct usb_device *usb_dev;
-+};
-+
-+struct brightness_ctrl_message_data {
-+	u8 unknown_1;
-+	__le16 brightness;
-+	u8 unkown_2[4];
-+} __packed;
-+
-+void init_ctrl_msg_data(struct brightness_ctrl_message_data *msg)
-+{
-+	memset(msg, 0, sizeof(struct brightness_ctrl_message_data));
-+	msg->unknown_1 = 0x01;
-+}
-+
-+void set_ctrl_message_brightness(struct brightness_ctrl_message_data *msg,
-+				 u16 brightness_value)
-+{
-+	msg->brightness = cpu_to_le16(brightness_value + 400);
-+}
-+
-+u16 get_ctrl_message_brightness(struct brightness_ctrl_message_data *msg)
-+{
-+	return le16_to_cpu(msg->brightness) - 400;
-+}
-+
-+int apple_bl_usb_usb_get_brightness(struct usb_interface *interface,
-+				    struct usb_device *usb_dev,
-+				    int *brightness)
-+{
-+	int err;
-+	u16 interface_nr;
-+	int msg_data_size;
-+	struct brightness_ctrl_message_data *msg_data;
-+
-+	msg_data_size = sizeof(struct brightness_ctrl_message_data);
-+	msg_data = kzalloc(msg_data_size, GFP_KERNEL);
-+	memset(msg_data, 0x00, msg_data_size);
-+	interface_nr = interface->cur_altsetting->desc.bInterfaceNumber;
-+
-+	err = usb_control_msg(usb_dev,
-+			      usb_rcvctrlpipe(usb_dev, 0),
-+			      HID_GET_REPORT,
-+			      USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
-+			      /* wValue: HID-Report Type and Report ID */
-+			      HID_REPORT_TYPE_FEATURE | 0x01,
-+			      interface_nr /* wIndex */,
-+			      msg_data,
-+			      msg_data_size,
-+			      HZ);
-+	if (err < 0) {
-+		dev_err(&interface->dev,
-+			"get: usb control message err: %d\n",
-+			err);
-+	}
-+	*brightness = get_ctrl_message_brightness(msg_data);
-+	kfree(msg_data);
-+	dev_dbg(&interface->dev, "get brightness: %d\n", *brightness);
-+	return 0;
-+}
-+
-+int apple_bl_usb_usb_set_brightness(struct usb_interface *interface,
-+				    struct usb_device *usb_dev,
-+				    int brightness)
-+{
-+	int err;
-+	u16 interface_nr;
-+	struct brightness_ctrl_message_data *msg_data;
-+
-+	msg_data = kzalloc(sizeof(struct brightness_ctrl_message_data), GFP_KERNEL);
-+	interface_nr = interface->cur_altsetting->desc.bInterfaceNumber;
-+	init_ctrl_msg_data(msg_data);
-+	set_ctrl_message_brightness(msg_data, brightness);
-+
-+	err = usb_control_msg(usb_dev,
-+			      usb_sndctrlpipe(usb_dev, 0),
-+			      HID_SET_REPORT,
-+			      USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
-+			      /* wValue: HID-Report Type and Report ID */
-+			      HID_REPORT_TYPE_FEATURE | 0x01,
-+			      interface_nr /* wIndex */,
-+			      msg_data,
-+			      sizeof(struct brightness_ctrl_message_data),
-+			      HZ);
-+	kfree(msg_data);
-+	if (err < 0) {
-+		dev_err(&interface->dev,
-+			"set: usb control message err: %d\n",
-+			err);
-+		return err;
-+	}
-+	dev_dbg(&interface->dev, "set brightness: %d\n", brightness);
-+	return 0;
-+}
-+
-+int apple_bl_usb_check_fb(struct backlight_device *bd, struct fb_info *info)
-+{
-+	dev_info(&bd->dev, "check fb\n");
-+	return 0;
-+}
-+
-+int apple_bl_usb_get_brightness(struct backlight_device *bl)
-+{
-+	int ret;
-+	struct apple_bl_usb_data *data;
-+	int hw_brightness;
-+
-+	data = bl_get_data(bl);
-+	ret = apple_bl_usb_usb_get_brightness(data->usb_interface,
-+					      data->usb_dev,
-+					      &hw_brightness);
-+	if (!ret)
-+		ret = hw_brightness;
-+
-+	return ret;
-+}
-+
-+int apple_bl_usb_update_status(struct backlight_device *bl)
-+{
-+	int err;
-+	struct apple_bl_usb_data *data;
-+
-+	data = bl_get_data(bl);
-+	err = apple_bl_usb_usb_set_brightness(data->usb_interface,
-+					      data->usb_dev,
-+					      bl->props.brightness);
-+	return err;
-+}
-+
-+static const struct backlight_ops apple_bl_usb_ops = {
-+	.update_status  = apple_bl_usb_update_status,
-+	.get_brightness = apple_bl_usb_get_brightness,
-+	.check_fb       = apple_bl_usb_check_fb,
-+};
-+
-+static void apple_bl_usb_disconnect(struct usb_interface *interface)
-+{
-+	struct backlight_device *bl;
-+
-+	dev_dbg(&interface->dev, "disconnect\n");
-+
-+	bl = usb_get_intfdata(interface);
-+	usb_set_intfdata(interface, NULL);
-+	backlight_device_unregister(bl);
-+}
-+
-+static int apple_bl_usb_probe(struct usb_interface *interface,
-+			      const struct usb_device_id *id)
-+{
-+	struct backlight_properties props;
-+	struct backlight_device *bl;
-+	struct usb_device *usb_dev;
-+	struct device *dev;
-+	struct apple_bl_usb_data *data;
-+	int brightness_interface_nr;
-+
-+	dev_dbg(&interface->dev, "probe\n");
-+
-+	dev = &interface->dev;
-+	usb_dev = interface_to_usbdev(interface);
-+
-+	switch (usb_dev->config->desc.bConfigurationValue) {
-+	case 1:
-+		brightness_interface_nr = 0x7;
-+		break;
-+	case 2:
-+		brightness_interface_nr = 0x9;
-+		break;
-+	case 3:
-+		brightness_interface_nr = 0xc;
-+		break;
-+	default:
-+		dev_err(dev,
-+			"unexpected configuration value: %d\n",
-+			usb_dev->config->desc.bConfigurationValue);
-+		return -EINVAL;
-+	}
-+
-+	if (interface->cur_altsetting->desc.bInterfaceNumber != brightness_interface_nr)
-+		return -ENODEV;
-+
-+	data = devm_kzalloc(dev,
-+			    sizeof(struct apple_bl_usb_data),
-+			    GFP_KERNEL);
-+	if (IS_ERR(data)) {
-+		dev_err(dev, "failed to allocate memory\n");
-+		return PTR_ERR(bl);
-+	}
-+	data->usb_interface = interface;
-+	data->usb_dev = usb_dev;
-+
-+	// Valid brightness values for the apple studio display range from 400
-+	// to 60000. Since the backlight subsystem´s brightness value starts
-+	// from 0, we use 0 to 59600 and offset it by the minimum value.
-+	memset(&props, 0, sizeof(props));
-+	props.type = BACKLIGHT_RAW;
-+	props.max_brightness = 59600;
-+
-+	bl = backlight_device_register("apple_studio_display",
-+				       dev,
-+				       data,
-+				       &apple_bl_usb_ops,
-+				       &props);
-+	if (IS_ERR(bl)) {
-+		dev_err(dev, "failed to register backlight\n");
-+		return PTR_ERR(bl);
-+	}
-+	usb_set_intfdata(interface, bl);
-+	return 0;
-+}
-+
-+static int apple_bl_usb_suspend(struct usb_interface *interface,
-+				pm_message_t message)
-+{
-+	dev_dbg(&interface->dev, "suspend\n");
-+	return 0;
-+}
-+
-+static int apple_bl_usb_resume(struct usb_interface *interface)
-+{
-+	dev_dbg(&interface->dev, "resume\n");
-+	return 0;
-+}
-+
-+static const struct usb_device_id id_table[] = {
-+	{
-+		.idVendor    = APPLE_STUDIO_DISPLAY_VENDOR_ID,
-+		.idProduct   = APPLE_STUDIO_DISPLAY_PRODUCT_ID,
-+	},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(usb, id_table);
-+
-+static struct usb_driver usb_asdbl_driver = {
-+	.name         = "apple_bl_usb",
-+	.probe        = apple_bl_usb_probe,
-+	.disconnect   = apple_bl_usb_disconnect,
-+	.id_table     = id_table,
-+	.suspend      = apple_bl_usb_suspend,
-+	.resume       = apple_bl_usb_resume,
-+	.reset_resume = apple_bl_usb_resume
-+};
-+module_usb_driver(usb_asdbl_driver);
-+
-+MODULE_AUTHOR("Julius Zint <julius@zint.sh>");
-+MODULE_LICENSE("Dual MIT/GPL");
-+MODULE_DESCRIPTION("Backlight control for USB-C Thunderbolt Apple displays");
--- 
-2.41.0
+For the auth failure, how do we deal with things if auth fails over time 
+as reconnects fail due to a credential changes ?  I would think 
+commonality of this behavior drives part of the choice.
 
+-- james
