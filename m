@@ -2,67 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D071744A94
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C550D744A97
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjGAQqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 12:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S229649AbjGAQwh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 1 Jul 2023 12:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjGAQqU (ORCPT
+        with ESMTP id S229530AbjGAQwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 12:46:20 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F1B1992;
-        Sat,  1 Jul 2023 09:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688229979; x=1719765979;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xpBLTiZAkgLYAgc/awZjO9wpQmFf3GibSXy+NagE4q4=;
-  b=SN+aYlUh03FauilUiJZ2eNs1YWH6MbcGlVnLgzZI9ad/ZhjDs9PSrWP1
-   nux6dZmUY7kBYSfIh3Hh41kZUqULYSajtnyfqyuInaqm7+yjL8wNk65wr
-   Jlw135AKQC7BTlahr3JXbkXL7pZ5v0/2pc+lscmykL9OIpcXc4U8coAvo
-   EQCKkKr3LccXle94QmfoRDrwqelDKjoXig1uv/0bYJR6Jk+eI6Fr4ZItY
-   Zc3pTf0FSYG75rt9aeZgKIWvd8IiE4XT8szhVFX0M+N1hpx5k5w31NbeH
-   ZqhIhTfp2XiVHPydP3ARO/KtpWRTAu7hZFGoa1Sy+Mb5ZdIvj9j17uW2Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="393342617"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="393342617"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 09:46:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="668316570"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="668316570"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jul 2023 09:46:16 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qFdjj-000G8v-2h;
-        Sat, 01 Jul 2023 16:46:15 +0000
-Date:   Sun, 2 Jul 2023 00:45:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhang Shurong <zhang_shurong@foxmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: Re: [PATCH] usb: r8a66597-hcd: host: fix port index underflow and
- UBSAN complains
-Message-ID: <202307020021.86RVwiyt-lkp@intel.com>
-References: <tencent_71A3B792C0AA3D9E148E517B24BC6E006A09@qq.com>
+        Sat, 1 Jul 2023 12:52:35 -0400
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F6B1FE8
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 09:52:34 -0700 (PDT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-67106f598b1so2641191b3a.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 09:52:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688230353; x=1690822353;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ySurgJmBT+5Dhc6CZeRbarLNSVjGIvGveq8MgdS1Jqo=;
+        b=c0zQtU/T71XK+eKZF3ZBnKCBz6/X/RviU0ZtWUUBOwSHxge/TL7hdQGdvPiViQfjt3
+         f1RlpkkjMs981apSqKoltzY8A6X3Vv4UnvQri2ljordVZJhX6WIICXFJ7TtxDilnFL6F
+         NlLxu+tZyDcEkLvkGKnKebo7Ru8YMlws4oHoJ8A2IOOKUeT9qZPtgW1Gt4kGWZcG1TeD
+         RITbMdM8D4POEUiTV6Zmqj6gnNpOhZaYvVmsrAXr3vLdfpeM1S7Y02RebT+7rlN9PKMT
+         FRkInrWaoglySdBYYRGVGYefFdDuDIZSKBjYBI5ML1ULVnskUtxu5eARJbmqHV31sxE9
+         oO6w==
+X-Gm-Message-State: ABy/qLa77Zb1h71exxKTDpOKm/H7gz2gE2GvJBnKZpAhPDuL72/UytA3
+        q8NME8XS5DgEeEofP1AiK+Vqwb1P+1D8rxIIUzQvnS52Jsaz
+X-Google-Smtp-Source: APBJJlH3kIa6qD4yqJWlDjtLJeKZIldqaMKFOJf9sUocWrPNUcZowKRE3RfeYW73wwHljPzrgFw/PWEU/uyykNw7co2buSA3jtld
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_71A3B792C0AA3D9E148E517B24BC6E006A09@qq.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Received: by 2002:a05:6a00:2d9a:b0:67c:3aeb:a47c with SMTP id
+ fb26-20020a056a002d9a00b0067c3aeba47cmr6178067pfb.5.1688230353477; Sat, 01
+ Jul 2023 09:52:33 -0700 (PDT)
+Date:   Sat, 01 Jul 2023 09:52:33 -0700
+In-Reply-To: <CAOQ4uxirxK6ts20Ri97pMstcJYrTW8PbgYML057Uj0MBoySeGg@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000084a55305ff6fc27d@google.com>
+Subject: Re: [syzbot] [overlayfs?] KASAN: invalid-free in init_file
+From:   syzbot <syzbot+ada42aab05cf51b00e98@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, brauner@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,147 +60,265 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhang,
+Hello,
 
-kernel test robot noticed the following build errors:
+syzbot tried to test the proposed patch but the build/boot failed:
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus westeri-thunderbolt/next linus/master v6.4 next-20230630]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+27119][    T0] Smack:  IPv6 Netfilter enabled.
+[    2.128178][    T0] LSM support for eBPF active
+[    2.134180][    T0] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, vmalloc hugepage)
+[    2.138824][    T0] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc hugepage)
+[    2.141770][    T0] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+[    2.143494][    T0] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+[    2.148953][    T0] Running RCU synchronous self tests
+[    2.150087][    T0] Running RCU synchronous self tests
+[    2.272250][    T1] smpboot: CPU0: Intel(R) Xeon(R) CPU @ 2.20GHz (family: 0x6, model: 0x4f, stepping: 0x0)
+[    2.273215][    T1] RCU Tasks: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+[    2.273215][    T1] RCU Tasks Trace: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+[    2.273254][    T1] Running RCU-tasks wait API self tests
+[    2.403503][    T1] Performance Events: unsupported p6 CPU model 79 no PMU driver, software events only.
+[    2.405504][    T1] signal: max sigframe size: 1776
+[    2.407112][    T1] rcu: Hierarchical SRCU implementation.
+[    2.408574][    T1] rcu: 	Max phase no-delay instances is 1000.
+[    2.414512][    T1] NMI watchdog: Perf NMI watchdog permanently disabled
+[    2.417267][    T1] smp: Bringing up secondary CPUs ...
+[    2.420500][    T1] smpboot: x86: Booting SMP configuration:
+[    2.421388][    T1] .... node  #0, CPUs:      #1
+[    2.423383][    T1] MDS CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html for more details.
+[    2.426407][    T1] TAA CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/tsx_async_abort.html for more details.
+[    2.429092][    T1] MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.
+[    2.433473][    T1] smp: Brought up 2 nodes, 2 CPUs
+[    2.434299][    T1] smpboot: Max logical packages: 1
+[    2.435188][    T1] smpboot: Total of 2 processors activated (8800.92 BogoMIPS)
+[    2.439416][    T1] devtmpfs: initialized
+[    2.439416][    T1] x86/mm: Memory block size: 128MB
+[    2.453338][   T14] Callback from call_rcu_tasks_trace() invoked.
+[    2.475089][    T1] Running RCU synchronous self tests
+[    2.476319][    T1] Running RCU synchronous self tests
+[    2.478039][    T1] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    2.480252][    T1] futex hash table entries: 512 (order: 4, 65536 bytes, vmalloc)
+[    2.483248][    T1] PM: RTC time: 16:50:51, date: 2023-07-01
+[    2.492493][    T1] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    2.506662][    T1] audit: initializing netlink subsys (disabled)
+[    2.508842][    T1] thermal_sys: Registered thermal governor 'step_wise'
+[    2.508842][    T1] thermal_sys: Registered thermal governor 'user_space'
+[    2.508842][   T27] audit: type=2000 audit(1688230251.721:1): state=initialized audit_enabled=0 res=1
+[    2.518243][    T1] cpuidle: using governor menu
+[    2.518243][    T1] NET: Registered PF_QIPCRTR protocol family
+[    2.518243][    T1] dca service started, version 1.12.1
+[    2.518243][    T1] PCI: Using configuration type 1 for base access
+[    2.523361][    T1] WARNING: workqueue cpumask: online intersect > possible intersect
+[    2.564096][    T1] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    2.565677][    T1] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+[    2.568064][    T1] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    2.570294][    T1] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+[    2.623640][   T13] Callback from call_rcu_tasks() invoked.
+[    2.625239][    T1] cryptd: max_cpu_qlen set to 1000
+[    2.654723][    T1] raid6: skipped pq benchmark and selected avx2x4
+[    2.656007][    T1] raid6: using avx2x2 recovery algorithm
+[    2.658822][    T1] ACPI: Added _OSI(Module Device)
+[    2.659746][    T1] ACPI: Added _OSI(Processor Device)
+[    2.660600][    T1] ACPI: Added _OSI(3.0 _SCP Extensions)
+[    2.661534][    T1] ACPI: Added _OSI(Processor Aggregator Device)
+[    2.779896][    T1] ACPI: 2 ACPI AML tables successfully acquired and loaded
+[    2.853240][    T1] ACPI: Interpreter enabled
+[    2.853824][    T1] ACPI: PM: (supports S0 S3 S4 S5)
+[    2.855217][    T1] ACPI: Using IOAPIC for interrupt routing
+[    2.858802][    T1] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[    2.861808][    T1] PCI: Ignoring E820 reservations for host bridge windows
+[    2.877265][    T1] ACPI: Enabled 16 GPEs in block 00 to 0F
+[    3.020230][    T1] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[    3.022254][    T1] acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Segments MSI HPX-Type3]
+[    3.033237][    T1] acpi PNP0A03:00: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
+[    3.037635][    T1] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+[    3.045938][    T1] PCI host bridge to bus 0000:00
+[    3.047232][    T1] pci_bus 0000:00: Unknown NUMA node; performance will be reduced
+[    3.049572][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[    3.053249][    T1] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[    3.055000][    T1] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[    3.056802][    T1] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfefff window]
+[    3.059261][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    3.061286][    T1] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000
+[    3.077371][    T1] pci 0000:00:01.0: [8086:7110] type 00 class 0x060100
+[    3.108998][    T1] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000
+[    3.132904][    T1] pci 0000:00:01.3: quirk: [io  0xb000-0xb03f] claimed by PIIX4 ACPI
+[    3.132904][    T1] pci 0000:00:03.0: [1af4:1004] type 00 class 0x000000
+[    3.155328][    T1] pci 0000:00:03.0: reg 0x10: [io  0xc000-0xc03f]
+[    3.165224][    T1] pci 0000:00:03.0: reg 0x14: [mem 0xfe800000-0xfe80007f]
+[    3.191213][    T1] pci 0000:00:04.0: [1af4:1000] type 00 class 0x020000
+[    3.207352][    T1] pci 0000:00:04.0: reg 0x10: [io  0xc040-0xc07f]
+[    3.213009][    T1] pci 0000:00:04.0: reg 0x14: [mem 0xfe801000-0xfe80107f]
+[    3.242801][    T1] pci 0000:00:05.0: [1ae0:a002] type 00 class 0x030000
+[    3.258142][    T1] pci 0000:00:05.0: reg 0x10: [mem 0xfe000000-0xfe7fffff]
+[    3.283115][    T1] pci 0000:00:05.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+[    3.297395][    T1] pci 0000:00:06.0: [1af4:1002] type 00 class 0x00ff00
+[    3.309891][    T1] pci 0000:00:06.0: reg 0x10: [io  0xc080-0xc09f]
+[    3.313249][    T1] pci 0000:00:06.0: reg 0x14: [mem 0xfe802000-0xfe80207f]
+[    3.357243][    T1] pci 0000:00:07.0: [1af4:1005] type 00 class 0x00ff00
+[    3.363247][    T1] pci 0000:00:07.0: reg 0x10: [io  0xc0a0-0xc0bf]
+[    3.383254][    T1] pci 0000:00:07.0: reg 0x14: [mem 0xfe803000-0xfe80303f]
+[    3.428038][    T1] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+[    3.436722][    T1] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+[    3.445230][    T1] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+[    3.453537][    T1] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+[    3.464044][    T1] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+[    3.483327][    T1] iommu: Default domain type: Translated 
+[    3.484528][    T1] iommu: DMA domain TLB invalidation policy: lazy mode 
+[    3.491460][    T1] SCSI subsystem initialized
+[    3.505337][    T1] ACPI: bus type USB registered
+[    3.506708][    T1] usbcore: registered new interface driver usbfs
+[    3.508578][    T1] usbcore: registered new interface driver hub
+[    3.510528][    T1] usbcore: registered new device driver usb
+[    3.513915][    T1] mc: Linux media interface: v0.10
+[    3.515542][    T1] videodev: Linux video capture interface: v2.00
+[    3.518037][    T1] pps_core: LinuxPPS API ver. 1 registered
+[    3.520082][    T1] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    3.533454][    T1] PTP clock support registered
+[    3.543864][    T1] EDAC MC: Ver: 3.0.0
+[    3.546889][    T1] Advanced Linux Sound Architecture Driver Initialized.
+[    3.553096][    T1] Bluetooth: Core ver 2.22
+[    3.563575][    T1] NET: Registered PF_BLUETOOTH protocol family
+[    3.565252][    T1] Bluetooth: HCI device and connection manager initialized
+[    3.567107][    T1] Bluetooth: HCI socket layer initialized
+[    3.568386][    T1] Bluetooth: L2CAP socket layer initialized
+[    3.570088][    T1] Bluetooth: SCO socket layer initialized
+[    3.571402][    T1] NET: Registered PF_ATMPVC protocol family
+[    3.573245][    T1] NET: Registered PF_ATMSVC protocol family
+[    3.575012][    T1] NetLabel: Initializing
+[    3.575925][    T1] NetLabel:  domain hash size = 128
+[    3.576962][    T1] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+[    3.578855][    T1] NetLabel:  unlabeled traffic allowed by default
+[    3.582694][    T1] nfc: nfc_init: NFC Core ver 0.1
+[    3.582694][    T1] NET: Registered PF_NFC protocol family
+[    3.582694][    T1] PCI: Using ACPI for IRQ routing
+[    3.582694][    T1] pci 0000:00:05.0: vgaarb: setting as boot VGA device
+[    3.582694][    T1] pci 0000:00:05.0: vgaarb: bridge control possible
+[    3.582694][    T1] pci 0000:00:05.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+[    3.582988][    T1] vgaarb: loaded
+[    3.597539][    T1] clocksource: Switched to clocksource kvm-clock
+[    3.603189][    T1] VFS: Disk quotas dquot_6.6.0
+[    3.603189][    T1] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    3.603189][    T1] FS-Cache: Loaded
+[    3.605594][    T1] CacheFiles: Loaded
+[    3.607713][    T1] TOMOYO: 2.6.0
+[    3.608509][    T1] Mandatory Access Control activated.
+[    3.610238][    T1] pnp: PnP ACPI init
+[    3.632464][    T1] pnp: PnP ACPI: found 7 devices
+[    3.690116][    T1] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[    3.693133][    T1] NET: Registered PF_INET protocol family
+[    3.699454][    T1] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, vmalloc)
+[    3.712599][    T1] tcp_listen_portaddr_hash hash table entries: 4096 (order: 6, 294912 bytes, vmalloc)
+[    3.718202][    T1] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, vmalloc)
+[    3.723203][    T1] TCP established hash table entries: 65536 (order: 7, 524288 bytes, vmalloc)
+[    3.735432][    T1] TCP bind hash table entries: 65536 (order: 11, 9437184 bytes, vmalloc hugepage)
+[    3.753052][    T1] TCP: Hash tables configured (established 65536 bind 65536)
+[    3.759662][    T1] MPTCP token hash table entries: 8192 (order: 7, 720896 bytes, vmalloc)
+[    3.766188][    T1] UDP hash table entries: 4096 (order: 7, 655360 bytes, vmalloc)
+[    3.772152][    T1] UDP-Lite hash table entries: 4096 (order: 7, 655360 bytes, vmalloc)
+[    3.776897][    T1] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    3.781241][    T1] RPC: Registered named UNIX socket transport module.
+[    3.783239][    T1] RPC: Registered udp transport module.
+[    3.784886][    T1] RPC: Registered tcp transport module.
+[    3.786903][    T1] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    3.792324][    T1] NET: Registered PF_XDP protocol family
+[    3.794148][    T1] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+[    3.796651][    T1] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+[    3.798897][    T1] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+[    3.801385][    T1] pci_bus 0000:00: resource 7 [mem 0xc0000000-0xfebfefff window]
+[    3.805305][    T1] pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+[    3.807722][    T1] PCI: CLS 0 bytes, default 64
+[    3.814903][    T1] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+[    3.817626][    T1] software IO TLB: mapped [mem 0x00000000b5800000-0x00000000b9800000] (64MB)
+[    3.821308][    T1] ACPI: bus type thunderbolt registered
+[    3.827146][    T1] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+[    3.837618][   T57] kworker/u4:3 (57) used greatest stack depth: 25848 bytes left
+[    3.853873][    T1] kvm_amd: SVM not supported by CPU 0, not amd or hygon
+[    3.856145][    T1] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb70c0f8fc, max_idle_ns: 440795213829 ns
+[    3.859506][    T1] clocksource: Switched to clocksource tsc
+[    3.872085][    T1] AVX2 instructions are not detected.
+[    3.874215][    T1] AVX or AES-NI instructions are not detected.
+[    3.876743][    T1] AVX2 or AES-NI instructions are not detected.
+[    3.879753][    T1] AVX or AES-NI instructions are not detected.
+[    3.881266][    T1] AVX2 or AES-NI instructions are not detected.
+[    3.883437][    T1] AVX or AES-NI instructions are not detected.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Shurong/usb-r8a66597-hcd-host-fix-port-index-underflow-and-UBSAN-complains/20230701-223726
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/tencent_71A3B792C0AA3D9E148E517B24BC6E006A09%40qq.com
-patch subject: [PATCH] usb: r8a66597-hcd: host: fix port index underflow and UBSAN complains
-config: mips-randconfig-r003-20230701 (https://download.01.org/0day-ci/archive/20230702/202307020021.86RVwiyt-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230702/202307020021.86RVwiyt-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307020021.86RVwiyt-lkp@intel.com/
+syzkaller build log:
+go env (err=<nil>)
+GO111MODULE="auto"
+GOARCH="amd64"
+GOBIN=""
+GOCACHE="/syzkaller/.cache/go-build"
+GOENV="/syzkaller/.config/go/env"
+GOEXE=""
+GOEXPERIMENT=""
+GOFLAGS=""
+GOHOSTARCH="amd64"
+GOHOSTOS="linux"
+GOINSECURE=""
+GOMODCACHE="/syzkaller/jobs-2/linux/gopath/pkg/mod"
+GONOPROXY=""
+GONOSUMDB=""
+GOOS="linux"
+GOPATH="/syzkaller/jobs-2/linux/gopath"
+GOPRIVATE=""
+GOPROXY="https://proxy.golang.org,direct"
+GOROOT="/usr/local/go"
+GOSUMDB="sum.golang.org"
+GOTMPDIR=""
+GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
+GOVCS=""
+GOVERSION="go1.20.1"
+GCCGO="gccgo"
+GOAMD64="v1"
+AR="ar"
+CC="gcc"
+CXX="g++"
+CGO_ENABLED="1"
+GOMOD="/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/go.mod"
+GOWORK=""
+CGO_CFLAGS="-O2 -g"
+CGO_CPPFLAGS=""
+CGO_CXXFLAGS="-O2 -g"
+CGO_FFLAGS="-O2 -g"
+CGO_LDFLAGS="-O2 -g"
+PKG_CONFIG="pkg-config"
+GOGCCFLAGS="-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build2315435869=/tmp/go-build -gno-record-gcc-switches"
 
-All errors (new ones prefixed by >>):
-
->> drivers/usb/host/r8a66597-hcd.c:2147:11: error: invalid '-=' at end of declaration; did you mean '='?
-           int port -= (port_index > 0);
-                    ^~
-                    =
-   1 error generated.
+git status (err=<nil>)
+HEAD detached at 4cd5bb25a
+nothing to commit, working tree clean
 
 
-vim +2147 drivers/usb/host/r8a66597-hcd.c
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:32: run command via tools/syz-env for best compatibility, see:
+Makefile:33: https://github.com/google/syzkaller/blob/master/docs/contributing.md#using-syz-env
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
+make .descriptions
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+bin/syz-sysgen
+touch .descriptions
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=4cd5bb25a2752a9a5b25597d1da34656681f07a6 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20230626-110233'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=4cd5bb25a2752a9a5b25597d1da34656681f07a6 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20230626-110233'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=4cd5bb25a2752a9a5b25597d1da34656681f07a6 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20230626-110233'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
+mkdir -p ./bin/linux_amd64
+gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -Wno-unused-but-set-variable -Wno-unused-command-line-argument -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
+	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"4cd5bb25a2752a9a5b25597d1da34656681f07a6\"
 
-  2138	
-  2139	static int r8a66597_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
-  2140					u16 wIndex, char *buf, u16 wLength)
-  2141	{
-  2142		struct r8a66597 *r8a66597 = hcd_to_r8a66597(hcd);
-  2143		int ret;
-  2144		unsigned long flags;
-  2145		u32 port_index = wIndex & 0xFF;
-  2146	
-> 2147		int port -= (port_index > 0);
-  2148		struct r8a66597_root_hub *rh = &r8a66597->root_hub[port];
-  2149	
-  2150		ret = 0;
-  2151	
-  2152		spin_lock_irqsave(&r8a66597->lock, flags);
-  2153		switch (typeReq) {
-  2154		case ClearHubFeature:
-  2155		case SetHubFeature:
-  2156			switch (wValue) {
-  2157			case C_HUB_OVER_CURRENT:
-  2158			case C_HUB_LOCAL_POWER:
-  2159				break;
-  2160			default:
-  2161				goto error;
-  2162			}
-  2163			break;
-  2164		case ClearPortFeature:
-  2165			if (wIndex > r8a66597->max_root_hub)
-  2166				goto error;
-  2167			if (wLength != 0)
-  2168				goto error;
-  2169	
-  2170			switch (wValue) {
-  2171			case USB_PORT_FEAT_ENABLE:
-  2172				rh->port &= ~USB_PORT_STAT_POWER;
-  2173				break;
-  2174			case USB_PORT_FEAT_SUSPEND:
-  2175				break;
-  2176			case USB_PORT_FEAT_POWER:
-  2177				r8a66597_port_power(r8a66597, port, 0);
-  2178				break;
-  2179			case USB_PORT_FEAT_C_ENABLE:
-  2180			case USB_PORT_FEAT_C_SUSPEND:
-  2181			case USB_PORT_FEAT_C_CONNECTION:
-  2182			case USB_PORT_FEAT_C_OVER_CURRENT:
-  2183			case USB_PORT_FEAT_C_RESET:
-  2184				break;
-  2185			default:
-  2186				goto error;
-  2187			}
-  2188			rh->port &= ~(1 << wValue);
-  2189			break;
-  2190		case GetHubDescriptor:
-  2191			r8a66597_hub_descriptor(r8a66597,
-  2192						(struct usb_hub_descriptor *)buf);
-  2193			break;
-  2194		case GetHubStatus:
-  2195			*buf = 0x00;
-  2196			break;
-  2197		case GetPortStatus:
-  2198			if (wIndex > r8a66597->max_root_hub)
-  2199				goto error;
-  2200			*(__le32 *)buf = cpu_to_le32(rh->port);
-  2201			break;
-  2202		case SetPortFeature:
-  2203			if (wIndex > r8a66597->max_root_hub)
-  2204				goto error;
-  2205			if (wLength != 0)
-  2206				goto error;
-  2207	
-  2208			switch (wValue) {
-  2209			case USB_PORT_FEAT_SUSPEND:
-  2210				break;
-  2211			case USB_PORT_FEAT_POWER:
-  2212				r8a66597_port_power(r8a66597, port, 1);
-  2213				rh->port |= USB_PORT_STAT_POWER;
-  2214				break;
-  2215			case USB_PORT_FEAT_RESET: {
-  2216				struct r8a66597_device *dev = rh->dev;
-  2217	
-  2218				rh->port |= USB_PORT_STAT_RESET;
-  2219	
-  2220				disable_r8a66597_pipe_all(r8a66597, dev);
-  2221				free_usb_address(r8a66597, dev, 1);
-  2222	
-  2223				r8a66597_mdfy(r8a66597, USBRST, USBRST | UACT,
-  2224					      get_dvstctr_reg(port));
-  2225				mod_timer(&r8a66597->rh_timer,
-  2226					  jiffies + msecs_to_jiffies(50));
-  2227				}
-  2228				break;
-  2229			default:
-  2230				goto error;
-  2231			}
-  2232			rh->port |= 1 << wValue;
-  2233			break;
-  2234		default:
-  2235	error:
-  2236			ret = -EPIPE;
-  2237			break;
-  2238		}
-  2239	
-  2240		spin_unlock_irqrestore(&r8a66597->lock, flags);
-  2241		return ret;
-  2242	}
-  2243	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=11de8314a80000
+
+
+Tested on:
+
+commit:         a2175988 fs: fix invalid-free in init_file()
+git tree:       https://github.com/amir73il/linux.git ovl-fixes
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a9def0ca2621537a
+dashboard link: https://syzkaller.appspot.com/bug?extid=ada42aab05cf51b00e98
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
