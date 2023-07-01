@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E545744A92
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D071744A94
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjGAQje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 12:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S229596AbjGAQqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 12:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjGAQjc (ORCPT
+        with ESMTP id S229446AbjGAQqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 12:39:32 -0400
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9173C1992;
-        Sat,  1 Jul 2023 09:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688229564;
-        bh=6fCq9djsf59ztW/Td6J0/vZaft/6rDmkJSI0wgjlj6o=;
-        h=From:To:Cc:Subject:Date;
-        b=WIGQhwhx/ycpTHw1CvHqvFSthiNsF71s7Xzu8ZPvxb/hDUNZ+FHxCYrs0gGbIzVgU
-         amPb0EyGdtDHXU3D1j4R5eDi2cWP3J63wrUj0PYcumYuEN145RHY+xVcq3vEUcppE2
-         p0os9+gYqiyaTg2iI+6TliesHzxzbFNmm0+MOAKs=
-Received: from KernelDevBox.byted.org ([180.184.51.142])
-        by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
-        id 9D61D215; Sun, 02 Jul 2023 00:39:22 +0800
-X-QQ-mid: xmsmtpt1688229562t6mvo2mqs
-Message-ID: <tencent_AD4994DC28D60E6CF580E97BB028A0A1EA0A@qq.com>
-X-QQ-XMAILINFO: MyIXMys/8kCtDsSJJtgLNyGliCVUmFLSjikOECelzaHrTqMPpoR4jpvGrwR+VN
-         uQWKUbnJfszWVVDU3Mbo3u6QIcarYZ9ct/lsMPrEdtwKkbulwNCDsMjzQaYgDrzDQxi/H56QYRbs
-         KI26SfxOXj/NthbU22Rpx9/He06BDpgXXH4n7LdQRfzReLGMSw/UTQmm0HsuRWjNv5Aczs73afcP
-         IKbWbwyigjYorhhQTMDq2ZLlDM+5lr2U5rHrUEN7cX5/2BtsvqvlCmgrOM6KVdIDi8YsE+Bhca37
-         1h7lkaSWeH+fjKxn4fCWSEfCYHLOVHPM3ocMPY4YoFNEs5J3wx4QmxPAiypjcOkfDlwzuv16HvHG
-         mgHAckBUKKGvEJx75gCTkLL1N7dxG3bmkxJWWNKZVGBX2cXPr7ThoXGeARkhXNt/5pkhRMBU+SeT
-         emUvOHn3qV+iJZgf0BKMplv+GUWewKjBqxVPEBSwrK5oOE2o9h3ZAYz24sKzGIJS3vRFenjC8VrL
-         Y1bo4AEJ1l5R+xPz4dlYa/Ta5kARoDyLDXR8oo+fGdESj73h+Qnd3jMTxVTh3ztqYIJCHGPg0tL+
-         AEa9Sf+1czkiSVa0bCUTlypaTtObkeYK27zkIuXgOTSHDN6qYV3OC4b0cLUWDEBj1cOm8qzMHNOR
-         LRCaSI7wDqqTeqtanmbs8ITAC7Im0xza/7fYINy1X4kacEq26/J2T8pITnQ+tVG4DYvfAeaerJdg
-         BMsYHPGQn1PPAMGndJY6ShBJCWvtuhCgG2ZTKDTenKQfbQng6yesfU6LF21DTsY+iwlqgs57fURR
-         FBOzvi7I3bsG52mfX4dHcvilHzm14D5Qy4KPrASI7118xDZYYKfW0oQnXPIfv1TCM4Fu9ihIQADa
-         k4gkOz/hlQfaSStCbo2Ef6tl1HGYzy3TScd5C7YyFPi27ocQVkT2O1vXfTxGLl3vIKYuU4VcSaVG
-         s3omO3u6WRAx2nukxtjrtKAmOO2DYIa0lR0opXB5xYErAYDmNYGyulp+KnScVG9vJuv1UEfBp164
-         pc+NRZwg==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org,
+        Sat, 1 Jul 2023 12:46:20 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F1B1992;
+        Sat,  1 Jul 2023 09:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688229979; x=1719765979;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xpBLTiZAkgLYAgc/awZjO9wpQmFf3GibSXy+NagE4q4=;
+  b=SN+aYlUh03FauilUiJZ2eNs1YWH6MbcGlVnLgzZI9ad/ZhjDs9PSrWP1
+   nux6dZmUY7kBYSfIh3Hh41kZUqULYSajtnyfqyuInaqm7+yjL8wNk65wr
+   Jlw135AKQC7BTlahr3JXbkXL7pZ5v0/2pc+lscmykL9OIpcXc4U8coAvo
+   EQCKkKr3LccXle94QmfoRDrwqelDKjoXig1uv/0bYJR6Jk+eI6Fr4ZItY
+   Zc3pTf0FSYG75rt9aeZgKIWvd8IiE4XT8szhVFX0M+N1hpx5k5w31NbeH
+   ZqhIhTfp2XiVHPydP3ARO/KtpWRTAu7hZFGoa1Sy+Mb5ZdIvj9j17uW2Z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="393342617"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="393342617"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 09:46:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="668316570"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="668316570"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Jul 2023 09:46:16 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFdjj-000G8v-2h;
+        Sat, 01 Jul 2023 16:46:15 +0000
+Date:   Sun, 2 Jul 2023 00:45:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhang Shurong <zhang_shurong@foxmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH v2] usb: r8a66597-hcd: host: fix port index underflow and UBSAN complains
-Date:   Sun,  2 Jul 2023 00:39:20 +0800
-X-OQ-MSGID: <20230701163920.1089205-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH] usb: r8a66597-hcd: host: fix port index underflow and
+ UBSAN complains
+Message-ID: <202307020021.86RVwiyt-lkp@intel.com>
+References: <tencent_71A3B792C0AA3D9E148E517B24BC6E006A09@qq.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_71A3B792C0AA3D9E148E517B24BC6E006A09@qq.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,40 +70,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If wIndex is 0 (and it often is), these calculations underflow and
-UBSAN complains, here resolve this by not decrementing the index when
-it is equal to 0.
+Hi Zhang,
 
-Similar commit 85e3990bea49 ("USB: EHCI: avoid undefined pointer
-arithmetic and placate UBSAN")
+kernel test robot noticed the following build errors:
 
-The changes in this version:
-- fix some compile error
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus westeri-thunderbolt/next linus/master v6.4 next-20230630]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/usb/host/r8a66597-hcd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Shurong/usb-r8a66597-hcd-host-fix-port-index-underflow-and-UBSAN-complains/20230701-223726
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/tencent_71A3B792C0AA3D9E148E517B24BC6E006A09%40qq.com
+patch subject: [PATCH] usb: r8a66597-hcd: host: fix port index underflow and UBSAN complains
+config: mips-randconfig-r003-20230701 (https://download.01.org/0day-ci/archive/20230702/202307020021.86RVwiyt-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230702/202307020021.86RVwiyt-lkp@intel.com/reproduce)
 
-diff --git a/drivers/usb/host/r8a66597-hcd.c b/drivers/usb/host/r8a66597-hcd.c
-index 9f4bf8c5f8a5..6c597c668364 100644
---- a/drivers/usb/host/r8a66597-hcd.c
-+++ b/drivers/usb/host/r8a66597-hcd.c
-@@ -2141,10 +2141,12 @@ static int r8a66597_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- {
- 	struct r8a66597 *r8a66597 = hcd_to_r8a66597(hcd);
- 	int ret;
--	int port = (wIndex & 0x00FF) - 1;
--	struct r8a66597_root_hub *rh = &r8a66597->root_hub[port];
- 	unsigned long flags;
-+	struct r8a66597_root_hub *rh;
-+	u32 port = wIndex & 0xFF;
- 
-+	port -= (port > 0);
-+	rh = &r8a66597->root_hub[port];
- 	ret = 0;
- 
- 	spin_lock_irqsave(&r8a66597->lock, flags);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307020021.86RVwiyt-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/host/r8a66597-hcd.c:2147:11: error: invalid '-=' at end of declaration; did you mean '='?
+           int port -= (port_index > 0);
+                    ^~
+                    =
+   1 error generated.
+
+
+vim +2147 drivers/usb/host/r8a66597-hcd.c
+
+  2138	
+  2139	static int r8a66597_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+  2140					u16 wIndex, char *buf, u16 wLength)
+  2141	{
+  2142		struct r8a66597 *r8a66597 = hcd_to_r8a66597(hcd);
+  2143		int ret;
+  2144		unsigned long flags;
+  2145		u32 port_index = wIndex & 0xFF;
+  2146	
+> 2147		int port -= (port_index > 0);
+  2148		struct r8a66597_root_hub *rh = &r8a66597->root_hub[port];
+  2149	
+  2150		ret = 0;
+  2151	
+  2152		spin_lock_irqsave(&r8a66597->lock, flags);
+  2153		switch (typeReq) {
+  2154		case ClearHubFeature:
+  2155		case SetHubFeature:
+  2156			switch (wValue) {
+  2157			case C_HUB_OVER_CURRENT:
+  2158			case C_HUB_LOCAL_POWER:
+  2159				break;
+  2160			default:
+  2161				goto error;
+  2162			}
+  2163			break;
+  2164		case ClearPortFeature:
+  2165			if (wIndex > r8a66597->max_root_hub)
+  2166				goto error;
+  2167			if (wLength != 0)
+  2168				goto error;
+  2169	
+  2170			switch (wValue) {
+  2171			case USB_PORT_FEAT_ENABLE:
+  2172				rh->port &= ~USB_PORT_STAT_POWER;
+  2173				break;
+  2174			case USB_PORT_FEAT_SUSPEND:
+  2175				break;
+  2176			case USB_PORT_FEAT_POWER:
+  2177				r8a66597_port_power(r8a66597, port, 0);
+  2178				break;
+  2179			case USB_PORT_FEAT_C_ENABLE:
+  2180			case USB_PORT_FEAT_C_SUSPEND:
+  2181			case USB_PORT_FEAT_C_CONNECTION:
+  2182			case USB_PORT_FEAT_C_OVER_CURRENT:
+  2183			case USB_PORT_FEAT_C_RESET:
+  2184				break;
+  2185			default:
+  2186				goto error;
+  2187			}
+  2188			rh->port &= ~(1 << wValue);
+  2189			break;
+  2190		case GetHubDescriptor:
+  2191			r8a66597_hub_descriptor(r8a66597,
+  2192						(struct usb_hub_descriptor *)buf);
+  2193			break;
+  2194		case GetHubStatus:
+  2195			*buf = 0x00;
+  2196			break;
+  2197		case GetPortStatus:
+  2198			if (wIndex > r8a66597->max_root_hub)
+  2199				goto error;
+  2200			*(__le32 *)buf = cpu_to_le32(rh->port);
+  2201			break;
+  2202		case SetPortFeature:
+  2203			if (wIndex > r8a66597->max_root_hub)
+  2204				goto error;
+  2205			if (wLength != 0)
+  2206				goto error;
+  2207	
+  2208			switch (wValue) {
+  2209			case USB_PORT_FEAT_SUSPEND:
+  2210				break;
+  2211			case USB_PORT_FEAT_POWER:
+  2212				r8a66597_port_power(r8a66597, port, 1);
+  2213				rh->port |= USB_PORT_STAT_POWER;
+  2214				break;
+  2215			case USB_PORT_FEAT_RESET: {
+  2216				struct r8a66597_device *dev = rh->dev;
+  2217	
+  2218				rh->port |= USB_PORT_STAT_RESET;
+  2219	
+  2220				disable_r8a66597_pipe_all(r8a66597, dev);
+  2221				free_usb_address(r8a66597, dev, 1);
+  2222	
+  2223				r8a66597_mdfy(r8a66597, USBRST, USBRST | UACT,
+  2224					      get_dvstctr_reg(port));
+  2225				mod_timer(&r8a66597->rh_timer,
+  2226					  jiffies + msecs_to_jiffies(50));
+  2227				}
+  2228				break;
+  2229			default:
+  2230				goto error;
+  2231			}
+  2232			rh->port |= 1 << wValue;
+  2233			break;
+  2234		default:
+  2235	error:
+  2236			ret = -EPIPE;
+  2237			break;
+  2238		}
+  2239	
+  2240		spin_unlock_irqrestore(&r8a66597->lock, flags);
+  2241		return ret;
+  2242	}
+  2243	
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
