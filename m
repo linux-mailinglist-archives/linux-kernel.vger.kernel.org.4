@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E90E744A5D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1919744A5F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjGAPvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 11:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S230083AbjGAPv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 11:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjGAPvu (ORCPT
+        with ESMTP id S230013AbjGAPvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 11:51:50 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707CA2683
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 08:51:49 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fafe87c6fbso4735120e87.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 08:51:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688226707; x=1690818707;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7bnv2dUq8TcNFZhlGLeiiAGB3YUTNN/I5HHQH6Qnrpo=;
-        b=Umdk+2TtzoCcA1fHuw0nOne6Efh0y1OZP9aKvJC+WM0mSuDRkhmEsfyhBQn1m0K7Ae
-         2wM/34lsZJF+dN8qiryLOiBMKVVHlxHyEqoCDwgq7o9ms4y9Ci9sZXfzm2N++vsLqHW1
-         GBI41wQB/uB9/IJI5TEmXShxVcrnWRWxQZfj8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688226707; x=1690818707;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7bnv2dUq8TcNFZhlGLeiiAGB3YUTNN/I5HHQH6Qnrpo=;
-        b=d6N4VODLEFZQu2IGqh+rXfMTy0uf8QKFV2yqYQfqgOFq7sC7oFklgOt+r+tu68puQn
-         StNzCvO8ZrhbDSSYm+oKriVyoP6lOv5hLQTqRJZ9rnsT+6UNJllhb1sRK5Z4TMAZFbSu
-         Tv4wCMNrvO7TKnQtd20SC01AfoyZGooAgsXOBT6CwYO77P5FpqR5fpvvmWy7QyXNsn01
-         HplH3Gpef1HmM91ZP3FhOk5HnRUGuywaPg44tCjRaS4ygciBOx+LEeqzwXUOPU3s9YYU
-         nLGSm4GnxFAiBU9U04qmJHT8Nc28x1duLFCT19aKg4IxdWHnkL+TWmx9pOvPILff+HJw
-         hSvQ==
-X-Gm-Message-State: ABy/qLYVYVZzCKz7NCAucv7TOTs+1q+YMGKz1IXkAYfh1iguMqVtrzGG
-        1MZiwFCP1OwHdFTBR6bAnidTJLTb32pZVnSaeBADBcDx
-X-Google-Smtp-Source: APBJJlGADRNMd30sAaMp40RZDOb0LPgO0uE5MGlkk5gFpLOw6KsNBEU2swwQ1oNMgtraEx07lLhJxg==
-X-Received: by 2002:a05:6512:6c8:b0:4fb:9712:a717 with SMTP id u8-20020a05651206c800b004fb9712a717mr4681674lff.13.1688226707634;
-        Sat, 01 Jul 2023 08:51:47 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id c14-20020ac2530e000000b004fb12e0c3eesm3102398lfh.193.2023.07.01.08.51.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 08:51:47 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4fafe87c6fbso4735091e87.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 08:51:46 -0700 (PDT)
-X-Received: by 2002:a05:6512:3b9c:b0:4ec:9ef9:e3d with SMTP id
- g28-20020a0565123b9c00b004ec9ef90e3dmr5355258lfv.26.1688226706024; Sat, 01
- Jul 2023 08:51:46 -0700 (PDT)
+        Sat, 1 Jul 2023 11:51:54 -0400
+X-Greylist: delayed 4891 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Jul 2023 08:51:52 PDT
+Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253B82683;
+        Sat,  1 Jul 2023 08:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1688226707;
+        bh=Ou1vBhUK87QUl5Q7dSsJPlf9T8VgS2NFf1k7CSQDkDY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=InzfP/PjalXsy1+062ZbHDH7LNSpAlZb/OGrkFlT6ZDcVxJ4s6E21Y0Jh5QIZW12E
+         8Q6ikCFwk6a7xFshJF2ClUrLspmGWaAzCwUa7DR26CeBpg0R82CYdvizzsxYzyHwiD
+         EroHbCc8jD++VaWGfM/AMg/i+2aX4+bzXi2cjbQE=
+Received: from localhost.localdomain ([116.132.239.178])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id CEC3EC5C; Sat, 01 Jul 2023 23:51:44 +0800
+X-QQ-mid: xmsmtpt1688226704te5jbpodh
+Message-ID: <tencent_62EE5604188B87B14220EA91C4CD8D4C2D06@qq.com>
+X-QQ-XMAILINFO: MBf0q8AysQnB9O7sZj5jgSNUnizJ7WyO6idPxUw5LGBRfADxCatimjS8frcO53
+         OYG4ZoWqWzofoy5ziRmfTupTo+9SoOjDeAa2XX9YKT/v6+RqbSpF9nfPC/dGXC4N5shyi5gUCwOT
+         onoHlWGeP9TLE3B6807xVCxkhTgd3gCIDZMm2wgDX5qq7cBSJjjDTJD+DhgAIWj3ijzYA8OazRjZ
+         hCcsv3ngIQWuWZ0JSLmHwZ0UTSQCQ+9gatNz0ByQexx5wiifL6/U5IQ7aBk3ePXUrbKuGItZ/hth
+         J0HU4mV5UX8OkRfpsjypjuHOye9svDBiMghR4ItEpq2kZmcX/kuf80ic6deCMBP6ElKiIBP9ff1M
+         4lOyjJfPUA9x/gXw+ENR6TGd92i29BwXM/DgZkKAqY8DUCD/yZ3yW2123KA9L3yVAbe94o2uKMzD
+         OMRE+Re8ojaYsncs3JXQn+bYECgh2lMahvq6+QCkbEuT7Xp8xqlQ5jQgmTO2RvZWIJaOSknu1Jnr
+         9zgUDCBhqd0kM0AVy2PG2RsWQYFXmpk/nTTyhbSMz0mcugnZurXaV+Zalva/b+Z1rWGRSlmaHFG5
+         Nt4yPNg2xE5TQM5F0EOzRFkYY3z/EX45mBDeOQOayUqoRYNAr1XMUUeLW/1K4uMQ5vyErjZktHTT
+         W5/dU7km1Hhw9eV1NMOvr6ebUdby4tj5Cre0paw+bqbVT+FxVEZ10nqTEPGgnPFF7CU7dg6ldQ+N
+         BSVtP0u4M1PgcSaSx9O3vGFeCPowRXKZFUVilSO/Kg+reSKEHWpHGSvM931iETynrTcFIgaMb5sV
+         uNWHwK/TtGkrB72YjZYAaZ4s/r91k4vXQb4o3gxi1hfa9DP4mGcVtTTZHXL2ujyaM38vMmB8EbF9
+         Ys7lowKPVSCv27wAE8K5uFPml5MLKQ+1/R2VHsVSEI06yNT6ndWmX2YHu27XEtRV/qRxg7QRs8mF
+         29XvdMS3b9UjAGJ9Pz/mO2TCWkoQvKZvrnJAhicjk1Ja1cW6BfCg==
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jgross@suse.com, xen-devel@lists.xenproject.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xen: fix potential shift out-of-bounds in xenhcd_hub_control()
+Date:   Sat, 01 Jul 2023 23:51:43 +0800
+X-OQ-MSGID: <4825193.GXAFRqVoOG@localhost.localdomain>
+In-Reply-To: <2023062628-shame-ebook-56f2@gregkh>
+References: <tencent_15DD79B42AD8A0D64A7CDC24D4FE6C85800A@qq.com>
+ <1c8ff405-2bfe-37ff-42ba-aa4f81853475@suse.com>
+ <2023062628-shame-ebook-56f2@gregkh>
 MIME-Version: 1.0
-References: <b40d43f78d320324c7a65ec0f3162524a4781c4c.camel@intel.com>
-In-Reply-To: <b40d43f78d320324c7a65ec0f3162524a4781c4c.camel@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 1 Jul 2023 08:51:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjqW4JnbnFQ9BnTsw08WG=MrtyD_bY=4vy66KNSAUnYQA@mail.gmail.com>
-Message-ID: <CAHk-=wjqW4JnbnFQ9BnTsw08WG=MrtyD_bY=4vy66KNSAUnYQA@mail.gmail.com>
-Subject: Re: [GIT PULL] NVDIMM and DAX for 6.5
-To:     "Verma, Vishal L" <vishal.l.verma@intel.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 at 12:17, Verma, Vishal L <vishal.l.verma@intel.com> wrote:
->
-> On an operational note, as Dan handed off the branch to me for this cycle, we
-> missed that the original few commits were inadvertently made on top of a few
-> CXL commits that went in in the 6.4-rc cycle via the CXL tree.
->
-> git-request-pull included these, and hence they appear in the shortlog and
-> diffstat below, but the actual merge correctly identifies and skips over them.
-> I kept it as it is to preserve the linux-next soak time, but if I should have
-> done it differently, please let me know.
+=E5=9C=A8 2023=E5=B9=B46=E6=9C=8826=E6=97=A5=E6=98=9F=E6=9C=9F=E4=B8=80 CST=
+ =E4=B8=8B=E5=8D=881:52:02=EF=BC=8C=E6=82=A8=E5=86=99=E9=81=93=EF=BC=9A
+> On Mon, Jun 26, 2023 at 07:48:05AM +0200, Jan Beulich wrote:
+> > On 25.06.2023 18:42, Zhang Shurong wrote:
+> > > --- a/drivers/usb/host/xen-hcd.c
+> > > +++ b/drivers/usb/host/xen-hcd.c
+> > > @@ -456,6 +456,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd,
+> > > __u16 typeReq, __u16 wValue,> >=20
+> > >  			info->ports[wIndex - 1].c_connection =3D=20
+false;
+> > >  			fallthrough;
+> > >  	=09
+> > >  		default:
+> > > +			if (wValue >=3D 32)
+> > > +				goto error;
+> > >=20
+> > >  			info->ports[wIndex - 1].status &=3D ~(1=20
+<< wValue);
+> >=20
+> > Even 31 is out of bounds (as in: UB) as long as it's 1 here rather
+> > than 1u.
+>=20
+> Why isn't the caller fixed so this type of value could never be passed
+> to the hub_control callback?
+>=20
+> thanks,
+>=20
+> greg k-h
+Although I'm not knowledgeable about the USB subsystem, I've observed that =
+not=20
+all driver code that implements hub_control callback performs a shift=20
+operation on wValue, and not all shift operations among them cause problems=
+=2E=20
+Therefore, I've decided to fix this issue within each driver itself.
 
-No, this was the right thing to do. Apart from a slightly odd choice
-of base for this all, the pull looks perfectly normal.
+=46or example, in r8a66597_hub_control, it will first check whether wValue =
+is=20
+valid (always < 31) before the shift operation. In case of an invalid numbe=
+r,=20
+the code would execute the error branch instead of the shift operation.
 
-Thanks,
-                Linus
+switch (wValue) {
+case USB_PORT_FEAT_ENABLE:
+	rh->port &=3D ~USB_PORT_STAT_POWER;
+	break;
+case USB_PORT_FEAT_SUSPEND:
+	break;
+case USB_PORT_FEAT_POWER:
+	r8a66597_port_power(r8a66597, port, 0);
+	break;
+case USB_PORT_FEAT_C_ENABLE:
+case USB_PORT_FEAT_C_SUSPEND:
+case USB_PORT_FEAT_C_CONNECTION:
+case USB_PORT_FEAT_C_OVER_CURRENT:
+case USB_PORT_FEAT_C_RESET:
+	break;
+default:
+	goto error;
+}
+rh->port &=3D ~(1 << wValue);
+
+
+
+
+
