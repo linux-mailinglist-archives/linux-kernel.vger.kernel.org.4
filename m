@@ -2,113 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5957E7445EE
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 03:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062087445F2
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 03:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjGABp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 21:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S229768AbjGABzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 21:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGABp2 (ORCPT
+        with ESMTP id S229447AbjGABy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 21:45:28 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A414201;
-        Fri, 30 Jun 2023 18:45:25 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7E6E45C0175;
-        Fri, 30 Jun 2023 21:45:22 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 30 Jun 2023 21:45:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688175922; x=1688262322; bh=0032OLr1UDIHP
-        BMzcHue27WJgCny0p4WJDgbUYNu8EA=; b=dJey4+Zm9gZf8ekEbrM21L90x3SOo
-        pfIiLfBqJvJmY2Yw99ZFQEEqRCodmowN41Ml5cHDf43SMJ8JEzrP7Z4jgWEgRNAl
-        DPkN6U9UUnnpxIGDuTeafOrVOo1GOplOon+nuOX9YAgPeVmpozOP2bxPN5hSZWmr
-        kFYHKl1pDuDAiRvmmBumHESN5CsOzWkBAPXykV4U4KtJVXUQ+F6Zs6V36oiyrzXC
-        ZmK9DQgYeEE2FRgMN6xQpYQcQaQnRWzF2jotz3sLhd21hamoZgMN4/CSwSZQDiLf
-        xCrKPaBwaXS7CCvP+hIilKoT2jak54LF9vn+W4fUx/Zw6gUGZa/Mlz8WQ==
-X-ME-Sender: <xms:MoWfZPnM_D5ojVAQGN34ZYOk3qBwTmlXFmTd797j1kpb_6FXPJvOig>
-    <xme:MoWfZC0YTR3PIe9KvxupWY0szeYpqryFdil4dyWyvHN46826XOpu76lkMehTFsCy9
-    fMFkz_yDu6byWykMpU>
-X-ME-Received: <xmr:MoWfZFoRaAQdGfXbJ6563uLVcIMwb5dnFc-q-iMSOofseHtJq5o0xbVHlcQ71iJlovT-W-A51wFG5Tl42qcuaXSNcLet1ltAkLw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdejgdeglecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
-    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
-    htvghrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedvueeh
-    ueelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
-    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:MoWfZHmrwa-UkczVSH1DSvclkIqRXBrzlbPlt7C84zJ24putfJRNNA>
-    <xmx:MoWfZN18VBOxvpJAnCxA2f3RKmR4vt51qgYEufEWIIkEigV4tS0rEA>
-    <xmx:MoWfZGtUymWOII8pPighZAnz21xbJve4S24pTQAvmnBa79ssnDWfbA>
-    <xmx:MoWfZGy8oldewttf8hlSKxbZQErvVZSthBUBnLQsMw8lc6y4HTId5Q>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jun 2023 21:45:19 -0400 (EDT)
-Date:   Sat, 1 Jul 2023 11:46:18 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-cc:     Theodore Ts'o <tytso@mit.edu>, linux-doc@vger.kernel.org,
-        tech-board-discuss@lists.linux-foundation.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Measurement, was Re: [Tech-board-discuss] [PATCH] Documentation:
- Linux Contribution Maturity Model and the wider community
-In-Reply-To: <20230621100845.12588f48@gandalf.local.home>
-Message-ID: <1f5b0227-dbf6-4294-8532-525b3e405dc2@linux-m68k.org>
-References: <20230620212502.GI286961@mit.edu> <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org> <20230621100845.12588f48@gandalf.local.home>
+        Fri, 30 Jun 2023 21:54:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845E64212;
+        Fri, 30 Jun 2023 18:54:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15F4861751;
+        Sat,  1 Jul 2023 01:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F20FDC433C7;
+        Sat,  1 Jul 2023 01:49:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688176163;
+        bh=RTe0T3RxVdjPQuqXPHZ4Bf8dxfr/q1YCAdVyhSYaVUk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e4+xC34Ony+evMPxFyKLFNGZabi21MaQZSWpgDGCDeUtv0nmEVEUY4dvtDMX2nI1x
+         qWcD4HiUnhqsPyaDRbeGIZHzO3WEdWJiZGeiOrDSB+tVnO4V0k6rA+X0BmyQIMtSij
+         7PChyfUcDQjfpmn1Qz8NDyCcl7QDGFavUjWblsjO/OMkSdlQVUPjWirXowR9NQfH6N
+         ySQtMVt8VabwP1o7xMmKkEiiBRvW4GyJL4ZJ049BfIM949czfa4dqbE+EUZTtUroeN
+         /EHesIVR7D/3ZJSHwckuQn5T+OHgPPFdRA6bhQGCI9gurLgM3hdI6URCauFYaSMgNA
+         6X3l11HlBL3YA==
+Date:   Fri, 30 Jun 2023 18:49:21 -0700
+From:   Eduardo Valentin <evalenti@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Message-ID: <ZJ+GIRfhuHxbSxRf@uf8f119305bce5e.ant.amazon.com>
+References: <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
+ <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
+ <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+ <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+ <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
+ <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
+ <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
+ <1373aef0-c837-8e6f-fc94-9c6bd70a5b31@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1373aef0-c837-8e6f-fc94-9c6bd70a5b31@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On Wed, 21 Jun 2023, Steven Rostedt wrote:
+On Fri, Jun 30, 2023 at 02:09:44PM +0200, Daniel Lezcano wrote:
+> 
+> 
+> 
+> On 30/06/2023 12:46, Rafael J. Wysocki wrote:
+> > Hi Daniel,
+> > 
+> > On Fri, Jun 30, 2023 at 12:11 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> > > 
+> > > 
+> > > Hi Rafael,
+> > > 
+> > > On 30/06/2023 10:16, Rafael J. Wysocki wrote:
+> > > > On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
+> > > 
+> > > [ ... ]
+> > > 
+> > > > So what about adding a new zone attribute that can be used to specify
+> > > > the preferred caching time for the temperature?
+> > > > 
+> > > > That is, if the time interval between two consecutive updates of the
+> > > > cached temperature value is less than the value of the new attribute,
+> > > > the cached temperature value will be returned by "temp".  Otherwise,
+> > > > it will cause the sensor to be read and the value obtained from it
+> > > > will be returned to user space and cached.
+> > > > 
+> > > > If the value of the new attribute is 0, everything will work as it
+> > > > does now (which will also need to be the default behavior).
+> > > 
+> > > I'm still not convinced about the feature.
+> > > 
+> > > Eduardo provided some numbers but they seem based on the characteristics
+> > > of the I2C, not to a real use case. Eduardo?
+> > > 
+> > > Before adding more complexity in the thermal framework and yet another
+> > > sysfs entry, it would be interesting to have an experiment and show the
+> > > impact of both configurations, not from a timing point of view but with
+> > > a temperature mitigation accuracy.
+> > > 
+> > > Without a real use case, this feature does make really sense IMO.
+> > 
+> > I'm kind of unsure why you think that it is not a good idea in general
+> > to have a way to limit the rate of accessing a temperature sensor, for
+> > energy-efficiency reasons if nothing more.
+> 
+> I don't think it is not a good idea. I've no judgement with the proposed
+> change.
+> 
+> But I'm not convinced it is really useful, that is why having a real use
+> case and some numbers showing that feature solves the issue would be nice.
+> 
+> It is illogical we want a fast and accurate response on a specific
+> hardware and then design it with slow sensors and contention prone bus.
+
+Totally agree, but at same time, this is real world :-)
 
 > 
-> If your point is mainly the second part of that paragraph, which is to 
-> tie in metrics to reflect maintainer effectiveness, then I think I agree 
-> with you there. One metric is simply the time a patch is ignored by a 
-> maintainer on a mailing list (where the maintainer is Cc'd and it is 
-> obvious the patch belongs to their subsystem). I know I fail at that, 
-> especially when my work is pushing me to focus on other things.
+> In Eduardo's example, we have 100ms monitoring rate on a I2C. This rate
+> is usually to monitor CPUs with very fast transitions. With a remote
+> site, the monitoring rate would be much slower, so if there is a
+> contention in the bus because a dumb process is reading constantly the
+> temperature, then it should be negligible.
+> 
+> All that are hypothesis, that is why having a real use case would help
+> to figure out the temperature limit drift at mitigation time.
+
+Yeah, I guess the problem here is that you are assuming I2C is not a real
+use case, not sure why. But it is and very common design in fact.
+
+> 
+> Assuming it is really needed, I'm not sure that should be exported via
+> sysfs. It is a driver issue and it may register the thermal zone with a
+> parameter telling the userspace rate limit.
+> 
+> On the other side, hwmon and thermal are connected. hwmon drivers
+> register a thermal zone and thermal drivers add themselves in the hwmon
+> sysfs directory. The temperature cache is handled in the driver level in
+> the hwmon subsystems and we want to handle the temperature cache at the
+> thermal sysfs level. How will we cope with this inconsistency?
+
+Yeah, I do not see this, again, as where to handle cache type of design problem only.
+This is really a protective / defensive code on the thermal core to avoid
+userspace interfering on a kernel based control.
+
+
+I agree that drivers may be free to go and defend themselves against
+too frequent userspace requests, like they do, as you already shared
+a link in another email. But saying that it is up to the driver to do this
+is basically saying that the thermal subsystem do not care about their
+own threads being delayed by a too frequent reads on a sysfs entry
+created by the thermal subsystem, just because it is drivers responsability
+to cache. To that is a missing defensive code. 
+
+> 
+> As a side note, slow drivers are usually going under drivers/hwmon.
+
+Have you seen this code?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/lm75.c#n517
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/hwmon.c#n850
+
+
+I also do not understand when you say slow drivers are usually going under
+drivers/hwmon, does it really matter? One can design a thermal zone
+that is connected to a hwmon device as input. Why would that be illogical?
+
+
+> 
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
 > 
 
-A useful metric when pushing for a higher patch rate is the rework rate.
-
-I have found that 'Fixes' tags can be used to quantify this. I don't have 
-scripts to do so but others probably do. (My purpose at the time was to 
-quantify my own rework rate by counting my own commit hashes when they 
-appeared in subsequent 'Fixes' tags.) Note that a low 'Fixes' count could 
-indicate inadequate bug reporting processes so additional metrics may be 
-needed.
-
-Where the practices relating to 'Fixes' tagging and bug reporting are 
-uniform across subsystems, it might be possible to compare the diverse 
-processes and methodologies presently in use.
-
-BTW. I assume that 'Fixes' tags are already being used to train AI models 
-to locate bugs in existing code. If this could be used to evaluate new 
-patches when posted, it might make the code review process more efficient.
-
-The same approach could probably be generalized somewhat. For example, a 
-'Modernizes' tag might be used to train an AI model to target design 
-patterns that are being actively replaced anywhere in the code base.
-
-The real pay-off from this kind of automation is that an improvement made 
-by any reviewer gets amplified so as to reach across many subsystems and 
-mailing lists -- but only when the automation gets scaled up and widely 
-deployed. We already see this effect with Coccinelle semantic patches.
+-- 
+All the best,
+Eduardo Valentin
