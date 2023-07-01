@@ -2,349 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F3D74497C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 15:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D53874497F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 16:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjGANys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 09:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S230175AbjGAOBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 10:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjGANyc (ORCPT
+        with ESMTP id S229550AbjGAOBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 09:54:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F05F3C11;
-        Sat,  1 Jul 2023 06:54:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8883C60B71;
-        Sat,  1 Jul 2023 13:54:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A66C433C7;
-        Sat,  1 Jul 2023 13:54:23 +0000 (UTC)
-Date:   Sat, 1 Jul 2023 09:54:17 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     mhiramat@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, chinglinyu@google.com,
-        namit@vmware.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        vsirnapalli@vmware.com, tkundu@vmware.com, er.ajay.kaher@gmail.com
-Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
-Message-ID: <20230701095417.3de5baab@rorschach.local.home>
-In-Reply-To: <1685610013-33478-4-git-send-email-akaher@vmware.com>
-References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
-        <1685610013-33478-4-git-send-email-akaher@vmware.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 1 Jul 2023 10:01:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F4E60;
+        Sat,  1 Jul 2023 07:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688220076; x=1719756076;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XALiU6KHKiv9lt5YCCAWpjAQMhP1DlQ7UoS+tkKoHmk=;
+  b=b17qP4TyywJZubMsz6LZxTXsix5W5z6lpxxclbx3lhjLLxw4wIco0fG1
+   Grd8FekX/DYhLriyZ4Xa26cZUd1HeuQIULX+Nm2eLvxy4cgcxC8C9LYZF
+   UcIt3ZAk0uRj/hrs30nZ5HrpjU+tJRy+VAG6UFt/Wqo1RixHwjvB5lYjk
+   vlRs5gqe/yPJExkfh+kLCuqm7Qqb/1i225KfIyyGF88AFtoCCfG/adaLT
+   JkoCZo3NQfJZA5aYYGUCwIM3ObksL3FpTM/iganxH1q/uHolp9qnKRNc/
+   1ntzkJwD6+B59j+cnLTXpLyTW8A8IiozoGVs9Nx7l9nlSemhH+6GRcEHI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="361448026"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="361448026"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2023 07:01:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10758"; a="712089546"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="712089546"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 01 Jul 2023 07:01:13 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFbA0-000G3V-0O;
+        Sat, 01 Jul 2023 14:01:12 +0000
+Date:   Sat, 1 Jul 2023 22:00:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Julius Zint <julius@zint.sh>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Helge Deller <deller@gmx.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, Julius Zint <julius@zint.sh>
+Subject: Re: [PATCH 1/1] backlight: apple_bl_usb: Add Apple Studio Display
+ support
+Message-ID: <202307012107.OW4d1gBR-lkp@intel.com>
+References: <20230701120806.11812-2-julius@zint.sh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230701120806.11812-2-julius@zint.sh>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Julius,
 
-FYI, all subjects should start with a capital letter:
+kernel test robot noticed the following build warnings:
 
- "eventfs: Implement eventfs dir creation functions"
+[auto build test WARNING on lee-backlight/for-backlight-next]
+[also build test WARNING on lee-leds/for-leds-next drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.4 next-20230630]
+[cannot apply to lee-backlight/for-backlight-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On Thu,  1 Jun 2023 14:30:06 +0530
-Ajay Kaher <akaher@vmware.com> wrote:
+url:    https://github.com/intel-lab-lkp/linux/commits/Julius-Zint/backlight-apple_bl_usb-Add-Apple-Studio-Display-support/20230701-202142
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git for-backlight-next
+patch link:    https://lore.kernel.org/r/20230701120806.11812-2-julius%40zint.sh
+patch subject: [PATCH 1/1] backlight: apple_bl_usb: Add Apple Studio Display support
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230701/202307012107.OW4d1gBR-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230701/202307012107.OW4d1gBR-lkp@intel.com/reproduce)
 
-> Adding eventfs_file structure which will hold properties of file or dir.
-> 
-> Adding following functions to add dir in eventfs:
-> 
-> eventfs_create_events_dir() directly creates events dir with-in
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307012107.OW4d1gBR-lkp@intel.com/
 
-			"within" is a proper word.
+All warnings (new ones prefixed by >>):
 
-> tracing folder.
-> 
-> eventfs_add_subsystem_dir() adds the information of subsystem_dir to
-> eventfs and dynamically creates subsystem_dir as and when requires.
-
-  "as and when requires" does not make sense.
-
-> 
-> eventfs_add_dir() adds the information of dir (which is with-in
-
-   "within"
-
-> subsystem_dir) to eventfs and dynamically creates these dir as
-> and when requires.
-
-I'm guessing you want to say:
-
-	eventfs_add_dir() adds the information of the dir, within a
-	subsystem_dir, to eventfs and dynamically creates these
-	directories when they are accessed.
-
-> 
-> Signed-off-by: Ajay Kaher <akaher@vmware.com>
-> Co-developed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> Tested-by: Ching-lin Yu <chinglinyu@google.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-lkp/202305051619.9a469a9a-yujie.liu@intel.com
-> ---
->  fs/tracefs/Makefile      |   1 +
->  fs/tracefs/event_inode.c | 272 +++++++++++++++++++++++++++++++++++++++
->  include/linux/tracefs.h  |  29 +++++
->  kernel/trace/trace.h     |   1 +
->  4 files changed, 303 insertions(+)
->  create mode 100644 fs/tracefs/event_inode.c
-> 
-> diff --git a/fs/tracefs/Makefile b/fs/tracefs/Makefile
-> index 7c35a282b..73c56da8e 100644
-> --- a/fs/tracefs/Makefile
-> +++ b/fs/tracefs/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  tracefs-objs	:= inode.o
-> +tracefs-objs	+= event_inode.o
->  
->  obj-$(CONFIG_TRACING)	+= tracefs.o
->  
-> diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
-> new file mode 100644
-> index 000000000..a48ce23c0
-> --- /dev/null
-> +++ b/fs/tracefs/event_inode.c
-> @@ -0,0 +1,272 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + *  event_inode.c - part of tracefs, a pseudo file system for activating tracing
-> + *
-> + *  Copyright (C) 2020-22 VMware Inc, author: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> + *  Copyright (C) 2020-22 VMware Inc, author: Ajay Kaher <akaher@vmware.com>
-> + *
-> + *  eventfs is used to show trace events with one set of dentries
-> + *
-> + *  eventfs stores meta-data of files/dirs and skip to create object of
-> + *  inodes/dentries. As and when requires, eventfs will create the
-> + *  inodes/dentries for only required files/directories. Also eventfs
-> + *  would delete the inodes/dentries once no more requires but preserve
-> + *  the meta data.
-> + */
-> +#include <linux/fsnotify.h>
-> +#include <linux/fs.h>
-> +#include <linux/namei.h>
-> +#include <linux/security.h>
-> +#include <linux/tracefs.h>
-> +#include <linux/kref.h>
-> +#include <linux/delay.h>
-> +#include "internal.h"
-> +
-> +/**
-> + * eventfs_dentry_to_rwsem - Return corresponding eventfs_rwsem
-> + * @dentry: a pointer to dentry
-> + *
-> + * helper function to return crossponding eventfs_rwsem for given dentry
-> + */
-> +static struct rw_semaphore *eventfs_dentry_to_rwsem(struct dentry *dentry)
-> +{
-> +	if (S_ISDIR(dentry->d_inode->i_mode))
-> +		return (struct rw_semaphore *)dentry->d_inode->i_private;
-> +	else
-> +		return (struct rw_semaphore *)dentry->d_parent->d_inode->i_private;
-> +}
-> +
-> +/**
-> + * eventfs_down_read - acquire read lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to perform read lock. Nested locking requires because
-> + * lookup(), release() requires read lock, these could be called directly
-> + * or from open(), remove() which already hold the read/write lock.
-> + */
-> +static void eventfs_down_read(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	down_read_nested(eventfs_rwsem, SINGLE_DEPTH_NESTING);
-> +}
-> +
-> +/**
-> + * eventfs_up_read - release read lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to release eventfs_rwsem lock if locked
-> + */
-> +static void eventfs_up_read(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	up_read(eventfs_rwsem);
-> +}
-> +
-> +/**
-> + * eventfs_down_write - acquire write lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to perform write lock on eventfs_rwsem
-> + */
-> +static void eventfs_down_write(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	while (!down_write_trylock(eventfs_rwsem))
-> +		msleep(10);
-
-What's this loop for? Something like that needs a very good explanation
-in a comment. Loops like these are usually a sign of a workaround for a
-bug in the design, or worse, simply hides an existing bug.
-
-> +}
-> +
-> +/**
-> + * eventfs_up_write - release write lock function
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-> + *
-> + * helper function to perform write lock on eventfs_rwsem
-> + */
-> +static void eventfs_up_write(struct rw_semaphore *eventfs_rwsem)
-> +{
-> +	up_write(eventfs_rwsem);
-> +}
-> +
-> +static const struct file_operations eventfs_file_operations = {
-> +};
-> +
-> +static const struct inode_operations eventfs_root_dir_inode_operations = {
-> +};
-> +
-> +/**
-> + * eventfs_prepare_ef - helper function to prepare eventfs_file
-> + * @name: a pointer to a string containing the name of the file/directory
-> + *        to create.
-> + * @mode: the permission that the file should have.
-> + * @fop: a pointer to a struct file_operations that should be used for
-> + *        this file/directory.
-> + * @iop: a pointer to a struct inode_operations that should be used for
-> + *        this file/directory.
-> + * @data: a pointer to something that the caller will want to get to later
-> + *        on.  The inode.i_private pointer will point to this value on
-> + *        the open() call.
-> + *
-> + * This function allocate the fill eventfs_file structure.
-
-   "allocates and fills the" ?
-
-> + */
-> +static struct eventfs_file *eventfs_prepare_ef(const char *name, umode_t mode,
-> +					const struct file_operations *fop,
-> +					const struct inode_operations *iop,
-> +					void *data)
-> +{
-> +	struct eventfs_file *ef;
-> +
-> +	ef = kzalloc(sizeof(*ef), GFP_KERNEL);
-> +	if (!ef)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ef->name = kstrdup(name, GFP_KERNEL);
-> +	if (!ef->name) {
-> +		kfree(ef);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	if (S_ISDIR(mode)) {
-> +		ef->ei = kzalloc(sizeof(*ef->ei), GFP_KERNEL);
-> +		if (!ef->ei) {
-> +			kfree(ef->name);
-> +			kfree(ef);
-> +			return ERR_PTR(-ENOMEM);
-> +		}
-> +		INIT_LIST_HEAD(&ef->ei->e_top_files);
-> +	} else {
-> +		ef->ei = NULL;
-> +	}
-> +
-> +	ef->iop = iop;
-> +	ef->fop = fop;
-> +	ef->mode = mode;
-> +	ef->data = data;
-> +	ef->dentry = NULL;
-> +	ef->d_parent = NULL;
-> +	ef->created = false;
-
-No need for the initialization to NULL or even the false, as the
-kzalloc() already did that.
-
-> +	return ef;
-> +}
-> +
-> +/**
-> + * eventfs_create_events_dir - create the trace event structure
-> + * @name: a pointer to a string containing the name of the directory to
-> + *        create.
-
-You don't need to add "a pointer" we can see it's a pointer. Just say:
-
- * @name: The name of the directory to create
-
-Adding more makes it confusing to read.
-
-> + * @parent: a pointer to the parent dentry for this file.  This should be a
-> + *          directory dentry if set.  If this parameter is NULL, then the
-> + *          directory will be created in the root of the tracefs filesystem.
-> + * @eventfs_rwsem: a pointer to rw_semaphore
-
-Same with all the descriptions.
+>> drivers/video/backlight/apple_bl_usb.c:27:6: warning: no previous prototype for 'init_ctrl_msg_data' [-Wmissing-prototypes]
+      27 | void init_ctrl_msg_data(struct brightness_ctrl_message_data *msg)
+         |      ^~~~~~~~~~~~~~~~~~
+>> drivers/video/backlight/apple_bl_usb.c:33:6: warning: no previous prototype for 'set_ctrl_message_brightness' [-Wmissing-prototypes]
+      33 | void set_ctrl_message_brightness(struct brightness_ctrl_message_data *msg,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/video/backlight/apple_bl_usb.c:39:5: warning: no previous prototype for 'get_ctrl_message_brightness' [-Wmissing-prototypes]
+      39 | u16 get_ctrl_message_brightness(struct brightness_ctrl_message_data *msg)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/video/backlight/apple_bl_usb.c:44:5: warning: no previous prototype for 'apple_bl_usb_usb_get_brightness' [-Wmissing-prototypes]
+      44 | int apple_bl_usb_usb_get_brightness(struct usb_interface *interface,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/video/backlight/apple_bl_usb.c:79:5: warning: no previous prototype for 'apple_bl_usb_usb_set_brightness' [-Wmissing-prototypes]
+      79 | int apple_bl_usb_usb_set_brightness(struct usb_interface *interface,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/video/backlight/apple_bl_usb.c:113:5: warning: no previous prototype for 'apple_bl_usb_check_fb' [-Wmissing-prototypes]
+     113 | int apple_bl_usb_check_fb(struct backlight_device *bd, struct fb_info *info)
+         |     ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/video/backlight/apple_bl_usb.c:119:5: warning: no previous prototype for 'apple_bl_usb_get_brightness' [-Wmissing-prototypes]
+     119 | int apple_bl_usb_get_brightness(struct backlight_device *bl)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/video/backlight/apple_bl_usb.c:135:5: warning: no previous prototype for 'apple_bl_usb_update_status' [-Wmissing-prototypes]
+     135 | int apple_bl_usb_update_status(struct backlight_device *bl)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-> + *
-> + * This function creates the top of the trace event directory.
-> + */
-> +struct dentry *eventfs_create_events_dir(const char *name,
-> +					 struct dentry *parent,
-> +					 struct rw_semaphore *eventfs_rwsem)
+vim +/init_ctrl_msg_data +27 drivers/video/backlight/apple_bl_usb.c
 
-OK, I'm going to have to really look at this. Passing in a lock to the
-API is just broken. We need to find a way to solve this another way.
+    26	
+  > 27	void init_ctrl_msg_data(struct brightness_ctrl_message_data *msg)
+    28	{
+    29		memset(msg, 0, sizeof(struct brightness_ctrl_message_data));
+    30		msg->unknown_1 = 0x01;
+    31	}
+    32	
+  > 33	void set_ctrl_message_brightness(struct brightness_ctrl_message_data *msg,
+    34					 u16 brightness_value)
+    35	{
+    36		msg->brightness = cpu_to_le16(brightness_value + 400);
+    37	}
+    38	
+  > 39	u16 get_ctrl_message_brightness(struct brightness_ctrl_message_data *msg)
+    40	{
+    41		return le16_to_cpu(msg->brightness) - 400;
+    42	}
+    43	
+  > 44	int apple_bl_usb_usb_get_brightness(struct usb_interface *interface,
+    45					    struct usb_device *usb_dev,
+    46					    int *brightness)
+    47	{
+    48		int err;
+    49		u16 interface_nr;
+    50		int msg_data_size;
+    51		struct brightness_ctrl_message_data *msg_data;
+    52	
+    53		msg_data_size = sizeof(struct brightness_ctrl_message_data);
+    54		msg_data = kzalloc(msg_data_size, GFP_KERNEL);
+    55		memset(msg_data, 0x00, msg_data_size);
+    56		interface_nr = interface->cur_altsetting->desc.bInterfaceNumber;
+    57	
+    58		err = usb_control_msg(usb_dev,
+    59				      usb_rcvctrlpipe(usb_dev, 0),
+    60				      HID_GET_REPORT,
+    61				      USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
+    62				      /* wValue: HID-Report Type and Report ID */
+    63				      HID_REPORT_TYPE_FEATURE | 0x01,
+    64				      interface_nr /* wIndex */,
+    65				      msg_data,
+    66				      msg_data_size,
+    67				      HZ);
+    68		if (err < 0) {
+    69			dev_err(&interface->dev,
+    70				"get: usb control message err: %d\n",
+    71				err);
+    72		}
+    73		*brightness = get_ctrl_message_brightness(msg_data);
+    74		kfree(msg_data);
+    75		dev_dbg(&interface->dev, "get brightness: %d\n", *brightness);
+    76		return 0;
+    77	}
+    78	
+  > 79	int apple_bl_usb_usb_set_brightness(struct usb_interface *interface,
+    80					    struct usb_device *usb_dev,
+    81					    int brightness)
+    82	{
+    83		int err;
+    84		u16 interface_nr;
+    85		struct brightness_ctrl_message_data *msg_data;
+    86	
+    87		msg_data = kzalloc(sizeof(struct brightness_ctrl_message_data), GFP_KERNEL);
+    88		interface_nr = interface->cur_altsetting->desc.bInterfaceNumber;
+    89		init_ctrl_msg_data(msg_data);
+    90		set_ctrl_message_brightness(msg_data, brightness);
+    91	
+    92		err = usb_control_msg(usb_dev,
+    93				      usb_sndctrlpipe(usb_dev, 0),
+    94				      HID_SET_REPORT,
+    95				      USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
+    96				      /* wValue: HID-Report Type and Report ID */
+    97				      HID_REPORT_TYPE_FEATURE | 0x01,
+    98				      interface_nr /* wIndex */,
+    99				      msg_data,
+   100				      sizeof(struct brightness_ctrl_message_data),
+   101				      HZ);
+   102		kfree(msg_data);
+   103		if (err < 0) {
+   104			dev_err(&interface->dev,
+   105				"set: usb control message err: %d\n",
+   106				err);
+   107			return err;
+   108		}
+   109		dev_dbg(&interface->dev, "set brightness: %d\n", brightness);
+   110		return 0;
+   111	}
+   112	
+ > 113	int apple_bl_usb_check_fb(struct backlight_device *bd, struct fb_info *info)
+   114	{
+   115		dev_info(&bd->dev, "check fb\n");
+   116		return 0;
+   117	}
+   118	
+ > 119	int apple_bl_usb_get_brightness(struct backlight_device *bl)
+   120	{
+   121		int ret;
+   122		struct apple_bl_usb_data *data;
+   123		int hw_brightness;
+   124	
+   125		data = bl_get_data(bl);
+   126		ret = apple_bl_usb_usb_get_brightness(data->usb_interface,
+   127						      data->usb_dev,
+   128						      &hw_brightness);
+   129		if (!ret)
+   130			ret = hw_brightness;
+   131	
+   132		return ret;
+   133	}
+   134	
+ > 135	int apple_bl_usb_update_status(struct backlight_device *bl)
+   136	{
+   137		int err;
+   138		struct apple_bl_usb_data *data;
+   139	
+   140		data = bl_get_data(bl);
+   141		err = apple_bl_usb_usb_set_brightness(data->usb_interface,
+   142						      data->usb_dev,
+   143						      bl->props.brightness);
+   144		return err;
+   145	}
+   146	
 
-I'm about to board a plane to JFK shortly, I'm hoping to play with this
-while flying back.
-
--- Steve
-
-
-> +{
-> +	struct dentry *dentry = tracefs_start_creating(name, parent);
-> +	struct eventfs_inode *ei;
-> +	struct tracefs_inode *ti;
-> +	struct inode *inode;
-> +
-> +	if (IS_ERR(dentry))
-> +		return dentry;
-> +
-> +	ei = kzalloc(sizeof(*ei), GFP_KERNEL);
-> +	if (!ei)
-> +		return ERR_PTR(-ENOMEM);
-> +	inode = tracefs_get_inode(dentry->d_sb);
-> +	if (unlikely(!inode)) {
-> +		kfree(ei);
-> +		tracefs_failed_creating(dentry);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	init_rwsem(eventfs_rwsem);
-> +	INIT_LIST_HEAD(&ei->e_top_files);
-> +
-> +	ti = get_tracefs(inode);
-> +	ti->flags |= TRACEFS_EVENT_INODE;
-> +	ti->private = ei;
-> +
-> +	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUGO | S_IXUGO;
-> +	inode->i_op = &eventfs_root_dir_inode_operations;
-> +	inode->i_fop = &eventfs_file_operations;
-> +	inode->i_private = eventfs_rwsem;
-> +
-> +	/* directory inodes start off with i_nlink == 2 (for "." entry) */
-> +	inc_nlink(inode);
-> +	d_instantiate(dentry, inode);
-> +	inc_nlink(dentry->d_parent->d_inode);
-> +	fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
-> +	return tracefs_end_creating(dentry);
-> +}
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
