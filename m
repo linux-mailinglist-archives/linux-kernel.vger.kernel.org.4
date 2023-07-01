@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD333744882
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F24D744885
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjGAKfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 06:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
+        id S229827AbjGAKjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 06:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjGAKfT (ORCPT
+        with ESMTP id S229480AbjGAKjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 06:35:19 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5DE3ABD
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:35:18 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-443512ad63cso875017137.2
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:35:18 -0700 (PDT)
+        Sat, 1 Jul 2023 06:39:39 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74AE3ABD
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:39:38 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-666ecf9a0ceso1492976b3a.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:39:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1688207717; x=1690799717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+8Eh2PL9vw+z9/shvLtMm4v72TX39RzomazCMgKz8Nk=;
-        b=gk4OqIV5V//ZdAOJAaa5GPYAcNpTpuWFTFce8LSBa89KFGM/FmAS6z5QFS/XFlG38L
-         CaJJGZp4IRjFS0HE/dFvsjJA9OXF4XWK0ViyYv3RwVgFzGO3uGhC4MsRej6wFtS279nM
-         pUtQdHj9dNr4BiUB+sjzn8SywLstAHZDDWGH+FhRhiVHEIEriHnKgkLBhdlt9KbK2hzs
-         gr0Y3fXiBDLBIlow/iHMUOFMvuL28V9RVabATiv2RFq12pvxS6R65/mDX+s+cgwKrjX5
-         h13lHcSN3KrRvAnXU5xD7yji8lmqMxJNfUsOj8Ea4rI/AHevzcQoTbLfwSNVkQ8R/2f8
-         7mSQ==
+        d=chromium.org; s=google; t=1688207978; x=1690799978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cvKlv7V/zlmCRf2RivP0ePDgqQNtmt0BK9y0NTywrwY=;
+        b=T9sdN6D9mCYudtM9XesIP1M5FSxYgOEkeSvOLkGaCIqIjsXSLjhvzcEXE053/Ur/Lp
+         NBN52tKMJCyI0fwreg2a8EYYtF9VF0Y+1CmT8FsjdQbO+mZDlxkdl0eHclg0Dpsxq9qi
+         OVgnssEyQ5V1ZHNioOHs2+ymbJeMR9Gn1ISIg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688207717; x=1690799717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+8Eh2PL9vw+z9/shvLtMm4v72TX39RzomazCMgKz8Nk=;
-        b=icM7XNrQnVBg0GMOeP/AyQVsxFk3DX2lEzu7+wN7WkCBQ1NF/D1wk82bK1v6RBzmjf
-         WziElDhuPY1n9eev9Ht59Gyz8/CQJKOYQk3ILZ2S2dyWxXfqgFwHMj2AeqGLxNMIoTq2
-         YLNmd98Vrh3UZHSKCvoDR5ji9CaGZUG7hItuq4ORjL9UU4dfiDiuwPnYj2qkju+EdFNS
-         i8DpIv8VJ7Fq+/6RLur/d5DnKsA7rKCsGU3Y9tea6efPPXVo1pWB7zzkMJIJMw/H3wyl
-         PiJRbSknYJ2oBdWG/y+ANhmD0XrYBeGRYAWSqBq38BxmSH9hbM/dYAzuRRT326hLpB//
-         PD0g==
-X-Gm-Message-State: ABy/qLYraSDPvds4LPWoCdZjXDA1UYSQ5QeD6fCB1J+GPU6fUbiWkRD5
-        7mcxI/dnq0jmWdN4jUkrgOAdiq7ize6fBlTztks=
-X-Google-Smtp-Source: APBJJlFHfNfsyxvXH3BjwiArTpL3edc4FjGRmjy6V65bUFDmug1RXImkOe4JjRA1CeTKvBNGPTUXC5oKPmqVxHbl8lU=
-X-Received: by 2002:a67:f885:0:b0:444:d85f:1f3f with SMTP id
- h5-20020a67f885000000b00444d85f1f3fmr706523vso.3.1688207717690; Sat, 01 Jul
- 2023 03:35:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688207978; x=1690799978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cvKlv7V/zlmCRf2RivP0ePDgqQNtmt0BK9y0NTywrwY=;
+        b=Z6fIWhI9KleuelldCLBC3hEKiCK4u0zYINWEGI4DKfOZgGDMI/F6bri2/telSqQ7+L
+         9w4SWrUm57I0eTfrWdWHC5KQP3zOYxklvaTuic3jM/Wsyenlsj+YTHiHbnVZJfEgcl6m
+         RyO+YV2lls3aZ4Z9uzUKw2nS2H6mA3fbk6mfeZpWUVgnyP5eFsQnRyCiUmfLLAlZG+VK
+         3wp5I/0YMXAonVstxYomMmof4Z4nQd3GvFyd9hW6D+mxHEjPkHImyxvzzxeBjcMDmGq5
+         CvHJMQSndwmmxenxA29xO7n/eVy6fpVFxMjt5S+jxahUWDR6AXz7w+ryYMDpQaY9clcW
+         mPrQ==
+X-Gm-Message-State: ABy/qLYkzp6hjowUez0SlPm5mJ6cQCrBvpqNMWZprBdXi3p9CclrzE5Q
+        2C82Uk9A+7nvDTXerZWHd7hfRw==
+X-Google-Smtp-Source: APBJJlGAgOqMCk3sQFJB96DMY3/EXzKpV/JFxAehUu73xAC0qUEP/nMLsgNpDco3vRRCz03KezBhpg==
+X-Received: by 2002:a05:6a00:248d:b0:663:5624:6fde with SMTP id c13-20020a056a00248d00b0066356246fdemr5250642pfv.22.1688207978137;
+        Sat, 01 Jul 2023 03:39:38 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id r2-20020a62e402000000b006783ee5df8asm8958554pfh.189.2023.07.01.03.39.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jul 2023 03:39:37 -0700 (PDT)
+Date:   Sat, 1 Jul 2023 19:39:33 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Alexey Romanov <AVRomanov@sberdevices.ru>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv2 1/3] zsmalloc: do not scan for allocated objects in
+ empty zspage
+Message-ID: <20230701103933.GA283328@google.com>
+References: <20230624053120.643409-1-senozhatsky@chromium.org>
+ <20230624053120.643409-2-senozhatsky@chromium.org>
+ <20230626105750.x7dxn7z4l6t4sicb@cab-wsm-0029881>
 MIME-Version: 1.0
-References: <20230625155632.32403-1-franziska.naepelt@gmail.com>
- <7caa96fb-4fb6-fb87-5d0c-fa6985fa127b@gmail.com> <CAAUT3iM7eAYH5AcN=Ko9jDstEUGqXxG7Q6qjp4O9qF_e2WkUVQ@mail.gmail.com>
- <69a90f88-634a-4126-8d33-e770fcc4b686@kadam.mountain>
-In-Reply-To: <69a90f88-634a-4126-8d33-e770fcc4b686@kadam.mountain>
-From:   =?UTF-8?Q?Franziska_N=C3=A4pelt?= 
-        <franziska.naepelt@googlemail.com>
-Date:   Sat, 1 Jul 2023 12:35:06 +0200
-Message-ID: <CAAUT3iOOzV_pAKrA1+JhFuj2Mzt9Od-fRXxTEyvEbJicHLWBvw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] Fix some checkpatch issues
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        eperi1024@gmail.com, hdegoede@redhat.com, quic_vjakkam@quicinc.com,
-        johannes.berg@intel.com, tegongkang@gmail.com,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230626105750.x7dxn7z4l6t4sicb@cab-wsm-0029881>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,44 +74,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Do., 29. Juni 2023 um 09:40 Uhr schrieb Dan Carpenter
-<dan.carpenter@linaro.org>:
->
-> On Wed, Jun 28, 2023 at 06:38:03PM +0200, Franziska N=C3=A4pelt wrote:
-> >
-> > Do you want me to submit v4 to fix the email address as well as the sub=
-ject of
-> > the cover letter or are you ok with me promising to make it properly th=
-e next
-> > time? ;)
->
-> Philipp is not the person to ask, it's Greg.
->
-> Yes, you are going to need to resend because of the email address thing.
->
-> Probably the cover letter is not a reason to resend, but since you are
-> resending then please fix that as well.
->
-> The reason why we insist that you resend is a couple things:
-> 1) This is a checkpatch change to staging so we assume that you're just
->    doing it to learn how patches are supposed to be sent.  So this is an
->    educational opportunity.  ;)
-> 2) Greg maintains staging, usb, serial and -stable.  He's super busy.
->    It doesn't scale to hand edit patches.  Some maintainers are less
->    busy so they can fix trivial stuff like this but in staging you will
->    need to resend.  Also if it were a security fix maybe I would step
->    in and help you fix your patch but since it's just a checkpatch thing
->    no one is going to edit your patch.
->
-> Right now the merge window is open so Greg isn't going to see your patch
-> for a few weeks.  When he does he will press the button on his keyboard
-> which sends an automatic reply about the email address thing and deletes
-> the thread from his inbox.
->
-> regards,
-> dan carpenter
+On (23/06/26 10:57), Alexey Romanov wrote:
+> not sure if I can keep this tag but,
 
-Thanks for your help and the comprehensive explanation Dan and Philipp :)
-Just send v4:
-https://lore.kernel.org/linux-staging/20230701102223.5308-1-franziska.naepe=
-lt@googlemail.com/T/#t
+Sure, why not
+
+> 
+> Reviewed-by: Alexey Romanov <avromanov@sberdevices.ru>
