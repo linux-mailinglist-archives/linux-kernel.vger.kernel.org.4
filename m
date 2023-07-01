@@ -2,82 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F24D744885
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFED744887
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjGAKjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 06:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S229774AbjGAKqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 06:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjGAKjj (ORCPT
+        with ESMTP id S229480AbjGAKqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 06:39:39 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74AE3ABD
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:39:38 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-666ecf9a0ceso1492976b3a.2
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:39:38 -0700 (PDT)
+        Sat, 1 Jul 2023 06:46:35 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CA53ABD;
+        Sat,  1 Jul 2023 03:46:34 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742bso20566785e9.2;
+        Sat, 01 Jul 2023 03:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688207978; x=1690799978;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cvKlv7V/zlmCRf2RivP0ePDgqQNtmt0BK9y0NTywrwY=;
-        b=T9sdN6D9mCYudtM9XesIP1M5FSxYgOEkeSvOLkGaCIqIjsXSLjhvzcEXE053/Ur/Lp
-         NBN52tKMJCyI0fwreg2a8EYYtF9VF0Y+1CmT8FsjdQbO+mZDlxkdl0eHclg0Dpsxq9qi
-         OVgnssEyQ5V1ZHNioOHs2+ymbJeMR9Gn1ISIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688207978; x=1690799978;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1688208392; x=1690800392;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cvKlv7V/zlmCRf2RivP0ePDgqQNtmt0BK9y0NTywrwY=;
-        b=Z6fIWhI9KleuelldCLBC3hEKiCK4u0zYINWEGI4DKfOZgGDMI/F6bri2/telSqQ7+L
-         9w4SWrUm57I0eTfrWdWHC5KQP3zOYxklvaTuic3jM/Wsyenlsj+YTHiHbnVZJfEgcl6m
-         RyO+YV2lls3aZ4Z9uzUKw2nS2H6mA3fbk6mfeZpWUVgnyP5eFsQnRyCiUmfLLAlZG+VK
-         3wp5I/0YMXAonVstxYomMmof4Z4nQd3GvFyd9hW6D+mxHEjPkHImyxvzzxeBjcMDmGq5
-         CvHJMQSndwmmxenxA29xO7n/eVy6fpVFxMjt5S+jxahUWDR6AXz7w+ryYMDpQaY9clcW
-         mPrQ==
-X-Gm-Message-State: ABy/qLYkzp6hjowUez0SlPm5mJ6cQCrBvpqNMWZprBdXi3p9CclrzE5Q
-        2C82Uk9A+7nvDTXerZWHd7hfRw==
-X-Google-Smtp-Source: APBJJlGAgOqMCk3sQFJB96DMY3/EXzKpV/JFxAehUu73xAC0qUEP/nMLsgNpDco3vRRCz03KezBhpg==
-X-Received: by 2002:a05:6a00:248d:b0:663:5624:6fde with SMTP id c13-20020a056a00248d00b0066356246fdemr5250642pfv.22.1688207978137;
-        Sat, 01 Jul 2023 03:39:38 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id r2-20020a62e402000000b006783ee5df8asm8958554pfh.189.2023.07.01.03.39.36
+        bh=qzefV+3/bAJMZ1EY+HGNx4UGOVXv5aV6u0IMJ/RBDac=;
+        b=iJswOWoZx5k/NxJpQ7GfKhnESQo3LOeNouBwm7HBDMl0qAewRMwylXGzb8WDgn7MzD
+         8Ljj2SBcezmseI1NsObGf8ATwMIfa6t+0JHzeXWJRp9foeDDZ+L40jfV0jTmX/UPFWDY
+         FjGPhaUOMd9EN43lUeiHpLS2niRJ9uyy8IJBKMq0X9y4OHpe+6c8hqS122QKN/p7p/Mx
+         dg2r3jvliluD4c/2hxb923s51mMJBfuKH5LOjVWAqK3b5iruhHvP4yS5zkPZRTu4h/tF
+         8hZU0+KniuJTEyxSh2Zi3bDv2vnxhMv1mnkW0Iy+akg563oCNtEElWEb1DkPDUIgWlPh
+         d1yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688208392; x=1690800392;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qzefV+3/bAJMZ1EY+HGNx4UGOVXv5aV6u0IMJ/RBDac=;
+        b=Yq6IydSb2rbcYr218xbIvJrXOifGUk+1NiG/EB6VygQCumgwfX06m3qzjrDoeW+V6X
+         oBjVFhL5uw6+/tribnFoOAPzdTi6lLCYO9tT9D/Q/jr1ynjpJI/CaZT57DdSdsfg16Z3
+         yIRrLIPMMUBQopS8I7mXhykiHA8Iys/bq0n1vy7e0roPLFkySjOtBodpr+9ZrzAc8p+h
+         ifdTGJ37W0S8bxKVGDXysXk6bB+8qBfzj0ybZHocpcNX/Q0gwGwLGnfNWgpX4jLp94xE
+         7KLB/qiySYBFbyy9cargU9JtqIKW1gwM6IB1kILi5EqoSsJlHdfb6Yvqtf3c8BxyIhgB
+         fEEw==
+X-Gm-Message-State: ABy/qLYLN/8i0CN+3Cb9JLYVeIbUXVpRVCbbsm41J8bUZ4pwcGE/7zBQ
+        nY7uI8PetVLLkPrAf4rKFFM=
+X-Google-Smtp-Source: APBJJlHYp6Irr5YsvAuGHlnzU/mEKNkJcMWaw8V8ImtI2VJXGUQ7qua7fyOzUaSgk5SwWnj2X6w/+g==
+X-Received: by 2002:a5d:4f08:0:b0:314:10c1:881d with SMTP id c8-20020a5d4f08000000b0031410c1881dmr3643560wru.68.1688208392184;
+        Sat, 01 Jul 2023 03:46:32 -0700 (PDT)
+Received: from suse.localnet (host-212-171-6-230.retail.telecomitalia.it. [212.171.6.230])
+        by smtp.gmail.com with ESMTPSA id u8-20020adfdd48000000b0030ae6432504sm20388152wrm.38.2023.07.01.03.46.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jul 2023 03:39:37 -0700 (PDT)
-Date:   Sat, 1 Jul 2023 19:39:33 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Alexey Romanov <AVRomanov@sberdevices.ru>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv2 1/3] zsmalloc: do not scan for allocated objects in
- empty zspage
-Message-ID: <20230701103933.GA283328@google.com>
-References: <20230624053120.643409-1-senozhatsky@chromium.org>
- <20230624053120.643409-2-senozhatsky@chromium.org>
- <20230626105750.x7dxn7z4l6t4sicb@cab-wsm-0029881>
+        Sat, 01 Jul 2023 03:46:31 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Tyler Hicks <code@tyhicks.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>, ecryptfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH v2 0/3] fs/ecryptfs: Replace kmap{,_atomic}() with
+ kmap_local_page()
+Date:   Sat, 01 Jul 2023 12:46:29 +0200
+Message-ID: <1852492.atdPhlSkOF@suse>
+In-Reply-To: <20230630-umfang-pumpt-a0cd2d6cdd91@brauner>
+References: <20230426172223.8896-1-fmdefrancesco@gmail.com>
+ <20230630-umfang-pumpt-a0cd2d6cdd91@brauner>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626105750.x7dxn7z4l6t4sicb@cab-wsm-0029881>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/06/26 10:57), Alexey Romanov wrote:
-> not sure if I can keep this tag but,
+On venerd=EC 30 giugno 2023 10:45:17 CEST Christian Brauner wrote:
+> On Wed, 26 Apr 2023 19:22:20 +0200, Fabio M. De Francesco wrote:
+> > kmap() and kmap_atomic() have been deprecated in favor of
+> > kmap_local_page().
+> >=20
+> > Therefore, replace kmap() and kmap_atomic() with kmap_local_page().
+> >=20
+> > Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
+> > HIGHMEM64GB enabled.
+> >=20
+> > [...]
+>=20
+> Picking this up.
 
-Sure, why not
+Well, you anticipated me before I could ask you to take these patches throu=
+gh=20
+the VFS tree, as suggested by Eric.
 
-> 
-> Reviewed-by: Alexey Romanov <avromanov@sberdevices.ru>
+> Please tell me if this should be routed somewhere else.
+> vfs.misc will be rebased once v6.5-rc1 is released.
+
+Actually, I really don't care which route they take, what really matters to=
+ me=20
+is that they get upstream one way or another :-)
+
+Thank you very much,
+
+=46abio
+
+> ---
+>=20
+> Applied to the vfs.misc branch of the vfs/vfs.git tree.
+> Patches in the vfs.misc branch should appear in linux-next soon.
+>=20
+> Please report any outstanding bugs that were missed during review in a
+> new review to the original patch series allowing us to drop it.
+>=20
+> It's encouraged to provide Acked-bys and Reviewed-bys even though the
+> patch has now been applied. If possible patch trailers will be updated.
+>=20
+> Note that commit hashes shown below are subject to change due to rebase,
+> trailer updates or similar. If in doubt, please check the listed branch.
+>=20
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+> branch: vfs.misc
+>=20
+> [1/3] fs/ecryptfs: Replace kmap() with kmap_local_page()
+>       https://git.kernel.org/vfs/vfs/c/7a367455b6a5
+> [2/3] fs/ecryptfs: Use kmap_local_page() in ecryptfs_write()
+>       https://git.kernel.org/vfs/vfs/c/55f13011af9d
+> [3/3] fs/ecryptfs: Use kmap_local_page() in copy_up_encrypted_with_header=
+()
+>       https://git.kernel.org/vfs/vfs/c/de9f5a15080f
+
+
+
+
