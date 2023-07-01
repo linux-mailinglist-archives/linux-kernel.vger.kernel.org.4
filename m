@@ -2,135 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A916674498C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 16:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835E5744992
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 16:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjGAOUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 10:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S230348AbjGAOVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 10:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjGAOUP (ORCPT
+        with ESMTP id S230334AbjGAOVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 10:20:15 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D071FC0
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 07:20:13 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbc6ab5ff5so20540505e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 07:20:13 -0700 (PDT)
+        Sat, 1 Jul 2023 10:21:40 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548C71FC0
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 07:21:38 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-98e109525d6so516092666b.0
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 07:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688221212; x=1690813212;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SvAVVgJkmeA4hsydfmvG5kZr6g/WLMdVAO+gG1MB6IE=;
-        b=hbVwVpLQ7okN8jl5JiOiVF9PGdz2A7jSY2udUcUwG+e6m2LOkY80CAdKlbYiPIwbRa
-         OHMOhPLKVMceX8ek39BezmowNf9W6IuzzSXEqruWBQLxyJbeGmKkvOgaahWAB/bLKI7K
-         Id3IX1QAVZ0hkIfw33867/5u57Kp57o2aFS4YmOBxV2erTXw+0yhQcyYDtnuhW8G+0L/
-         5aGyvzaNrPhB9jxvbtQi40PQTwIF+0Fu5UHOod8vWTtYZVjazP5LZ1a7FccWX6PkKO0b
-         aWcSPjrJ2VNrw3opC2fBDcTqgM9iPn5o6eZv85Y664OMAyF06zSeOFCq7nCyPxkmLxan
-         i8qg==
+        d=ventanamicro.com; s=google; t=1688221297; x=1690813297;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ltc0O996d2bJf/usVXZjvRnz8qhepirqOjCRCwuDkdg=;
+        b=mDa0A4ah1iKgzXPnYv6/44AHozwnFGGexPg+UG35lheBAs2gxqEQVUT75hMDymftsC
+         0fRnCqPM7tXd26//jB7kOakAX0ym5Naru8vmf0OCMxxtMl2DPXtfyxhv0KthKTTiwirZ
+         fjsOTUpn9YXNB9lStXMEnjUnzUqC+Y62quzZNOsNN5P4wd3f/hfEtKVlDn/Gv2vX9LUl
+         1x1FTpGdFhG7i1ycYDHyPnKhv1v2H/eT5xE5NzuzWkAzpiNYxRcxQHbKT6WiIPMBRlEx
+         MyyGYNFWvbX5/dR91U9v12GyQFs5eINSLn4N5xBTyAHwIkCDZXbkvJWs2m9ko7eqGUB0
+         JoFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688221212; x=1690813212;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SvAVVgJkmeA4hsydfmvG5kZr6g/WLMdVAO+gG1MB6IE=;
-        b=MdkuDFBnJNSYPlKgZbr4e3LzteXqZ1FRx3NbSexeNZiSEvYvILFMk/HOtPLUTdwLMT
-         4UqC4wL2XZw2eKWWv2jmtyWsocJUQE/H0+tMEnQ22VAE1rG7yDxXc7PKKgPP6kshIRe3
-         H3fQgZXzKidNAWi9ydZK4Wp8USafmHRfqJsV0s/yMRbb5PXwTgprwfEjsTlYS3Zz/fmK
-         WOAh99iODJHc2Cxopk+bvXXR/sdBhimjDPjq7xr+M1eUQuL8ojezo0aqnNbALk4pqi6T
-         NDfvJRWvKLP7bE/dyU5HxsSh2aGc44v/Q78fUbdMulDWGW/TACjnNjaVVNC3Ul0fdgCS
-         f8vQ==
-X-Gm-Message-State: AC+VfDyNK6ZyzL+81ORPnSpP3oI+iG8EO2l6k8XhMJjjD2ANKaInRiLd
-        TPku4flWsP1aGSGmf5wx+kpHCg==
-X-Google-Smtp-Source: ACHHUZ7AvvU8HSIWlyr+fMlByVzT11D6vdN/V6YHGjUK3ae6gLfOmZRSkmiaBQXkZGld6pMBBrBsJg==
-X-Received: by 2002:a05:600c:2905:b0:3fb:ba04:6d57 with SMTP id i5-20020a05600c290500b003fbba046d57mr4419571wmd.5.1688221211966;
-        Sat, 01 Jul 2023 07:20:11 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l17-20020a1c7911000000b003fbb9339b29sm7060737wme.42.2023.07.01.07.20.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 07:20:11 -0700 (PDT)
-Message-ID: <a98b6393-8d59-6824-3505-975a458c4575@linaro.org>
-Date:   Sat, 1 Jul 2023 16:20:10 +0200
+        d=1e100.net; s=20221208; t=1688221297; x=1690813297;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ltc0O996d2bJf/usVXZjvRnz8qhepirqOjCRCwuDkdg=;
+        b=M2E3tocUtAzVi9BIoSLtj4dkXka43iRJ5vZIQOvobMPKuTt0ZbfisTYtG0nMt3MNsL
+         9Y9oRjlk8Pwv8Uc5rDx+dWURLh4ytwYkB2EJa9AUezW1aymkGeR2vLmLfT+E/VWe/oMU
+         2Vbvkg+c1mjBx3b/ziUGgzt1yxh96xduzfy5fiQA+wkiITVezLzUg5fwIbrbx0thztnE
+         +aoxtACsUbMR+05RsiPx8JiSzwZI0hEMf1pOtRcQZ4R1xI8fQjOQYS5+9cL8yutDg3yh
+         H1OcCmmrGfX5sn96u944EiwIHwHOO4xBUiVzCqgHzHbmapnY9dbcsA90e7S1oV6X75Yc
+         jWqQ==
+X-Gm-Message-State: ABy/qLbdrIAnNlwwRyIl6lEnS2WrqH6rp6JfXIBzOp0FWNuIBBlbUD1K
+        suik6A+r147rZd16crv9IRYT2w==
+X-Google-Smtp-Source: APBJJlEtL7xdUIWMV/E0QfeYCsba39LkB77KKUGXjQoxprjQKPF+i7ItT2onHvagrIj3biWKLiOLlA==
+X-Received: by 2002:a17:906:18d:b0:991:d883:3df9 with SMTP id 13-20020a170906018d00b00991d8833df9mr6213162ejb.21.1688221296673;
+        Sat, 01 Jul 2023 07:21:36 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id a18-20020a1709063a5200b00988f168811bsm9355065ejf.135.2023.07.01.07.21.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jul 2023 07:21:36 -0700 (PDT)
+Date:   Sat, 1 Jul 2023 16:21:34 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
+        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v5 08/13] KVM: arm64: selftests: Move reject_set check
+ logic to a function
+Message-ID: <20230701-0255de0b29b22f180bb3bbbf@orel>
+References: <cover.1688010022.git.haibo1.xu@intel.com>
+ <f5ef26e862260efdf1c809d0eee46ee1c8b457f2.1688010022.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Content-Language: en-US
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
- <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
- <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
- <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
- <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
- <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
- <ZJ+Do990LVNQx4rp@uf8f119305bce5e.ant.amazon.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZJ+Do990LVNQx4rp@uf8f119305bce5e.ant.amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f5ef26e862260efdf1c809d0eee46ee1c8b457f2.1688010022.git.haibo1.xu@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jul 01, 2023 at 09:42:56PM +0800, Haibo Xu wrote:
+> No functional changes. Just move the reject_set check logic to a
+> function so we can check for specific errno for specific register.
 
-Hi Eduardo,
+'for specific register' part isn't true anymore.
 
-On 01/07/2023 03:38, Eduardo Valentin wrote:
-> Hey Daniel,
+> This is a preparation for support reject_set in riscv.
 > 
-> On Fri, Jun 30, 2023 at 12:11:25PM +0200, Daniel Lezcano wrote:
->>
->>
->>
->> Hi Rafael,
->>
->> On 30/06/2023 10:16, Rafael J. Wysocki wrote:
->>> On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
->>
->> [ ... ]
->>
->>> So what about adding a new zone attribute that can be used to specify
->>> the preferred caching time for the temperature?
->>>
->>> That is, if the time interval between two consecutive updates of the
->>> cached temperature value is less than the value of the new attribute,
->>> the cached temperature value will be returned by "temp".  Otherwise,
->>> it will cause the sensor to be read and the value obtained from it
->>> will be returned to user space and cached.
->>>
->>> If the value of the new attribute is 0, everything will work as it
->>> does now (which will also need to be the default behavior).
->>
->> I'm still not convinced about the feature.
->>
->> Eduardo provided some numbers but they seem based on the characteristics
->> of the I2C, not to a real use case. Eduardo?
+> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> ---
+>  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 5 +++++
+>  tools/testing/selftests/kvm/get-reg-list.c         | 7 ++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 > 
-> Why I2C is not a real use case?
+> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> index aaf035c969ec..4aa58f1aebe3 100644
+> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> @@ -27,6 +27,11 @@ bool filter_reg(__u64 reg)
+>  	return false;
+>  }
+>  
+> +bool check_reject_set(int err)
+> +{
+> +	return err == EPERM;
+> +}
+> +
+>  #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK | KVM_REG_ARM_COPROC_MASK)
+>  
+>  #define CORE_REGS_XX_NR_WORDS	2
+> diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
+> index f6ad7991a812..79e198968860 100644
+> --- a/tools/testing/selftests/kvm/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/get-reg-list.c
+> @@ -98,6 +98,11 @@ void __weak print_reg(const char *prefix, __u64 id)
+>  	printf("\t0x%llx,\n", id);
+>  }
+>  
+> +bool __weak check_reject_set(int err)
+> +{
+> +	return true;
+> +}
+> +
+>  #ifdef __aarch64__
+>  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
+>  {
+> @@ -216,7 +221,7 @@ static void run_test(struct vcpu_reg_list *c)
+>  			if (s->rejects_set && find_reg(s->rejects_set, s->rejects_set_n, reg.id)) {
+>  				reject_reg = true;
+>  				ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
+> -				if (ret != -1 || errno != EPERM) {
+> +				if (ret != -1 || !check_reject_set(errno)) {
+>  					printf("%s: Failed to reject (ret=%d, errno=%d) ", config_name(c), ret, errno);
+>  					print_reg(config_name(c), reg.id);
+>  					putchar('\n');
+> -- 
+> 2.34.1
+>
 
-What I meant is "I2C is slow, ok. But what is the setup where the 
-problem arises?"
+Otherwise,
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
