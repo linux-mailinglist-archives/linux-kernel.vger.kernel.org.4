@@ -2,61 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B436E7446E6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 08:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD827446F4
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 08:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjGAGYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 02:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S229592AbjGAGbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 02:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGAGYX (ORCPT
+        with ESMTP id S229611AbjGAGbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 02:24:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532022118;
-        Fri, 30 Jun 2023 23:24:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sat, 1 Jul 2023 02:31:39 -0400
+X-Greylist: delayed 161 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 23:31:33 PDT
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22DD3C3F;
+        Fri, 30 Jun 2023 23:31:33 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 1BE07120006;
+        Sat,  1 Jul 2023 09:31:17 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 1BE07120006
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688193077;
+        bh=tzI6TM3jMhVuMl5UqIN6u/UXqmjVjTccQdGtfTsd8sI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+        b=d6gBME8thYIrtOOdw4gpjbdnGgkL4Nk0PR7vrYYkSLZAhV5oK82jtf6QOujaA1awV
+         nAyYeI5P+lR5x2XfsJO+EpeqXirSwr0Fqt2o4MtWPiOlE5mGUidnUvf7rpbJW3ogA5
+         ozMac3DNsumeiEfj5IfisnLjnfs7fdvSBzEAivZRkgbGq52XsybH0K9Jm9vLE1lEsP
+         8Mhc7RK7+69ljQwAIoSFQ7W6FEpK/T+/AcnQlyWsFVNHpXbyCMFxn57RFHkJCJaGGJ
+         sjCedysgZ2zX6uDDxhRrW8LvgbcuBeFVd4HCc09xXMToEN3WT+zGmEDFbYX/qnSFUy
+         m9lxUqgT+ndhg==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C632A60F33;
-        Sat,  1 Jul 2023 06:24:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A95C433C8;
-        Sat,  1 Jul 2023 06:24:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688192661;
-        bh=+2+3PAJ4QmjkEMR1Cw29bcot9gUloeq3lSVBiMtBPw8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q5nezvdlQrisSyM8da4gSmjw1W/zxn01PaegLh4sIIdpBuvIrapfLs6hREmCYdBjJ
-         ghhtO8I+rx7Pz2++s179RsVpX1izWrFduuxjES3A4FiAM8kvGNVw/jPJEXyVboWPS2
-         ls4iu5L2oJq6cYRCl/iikbMtRQP/FowvbUBcsZtCLD7E2mQrIV8dtncCY4A1397xvs
-         rmVvW8LycGamz5HIE0zj6snOkYIahR76IudgtTvmG65iNT/u/FvkwkGKDCT3D9+oQr
-         d9IsOviEDmsa7rfeJl4UVYUQz6e38a8AnL/QoJJc2j3EWp8r27vIEVJpSA1yNUOT/M
-         cQirb0s+ChPMA==
-Date:   Sat, 1 Jul 2023 08:24:15 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jan Kara <jack@suse.cz>, Andreas Gruenbacher <agruenba@redhat.com>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jeff Xu <jeffxu@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] pid: Replace struct pid 1-element array with
- flex-array
-Message-ID: <20230701-umspielen-wohin-de72fcaa7bbc@brauner>
-References: <20230630180418.gonna.286-kees@kernel.org>
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Sat,  1 Jul 2023 09:31:15 +0300 (MSK)
+Received: from [192.168.0.12] (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Sat, 1 Jul 2023 09:30:56 +0300
+Message-ID: <1eef6bc9-91fc-b620-84f0-2979a197c4b7@sberdevices.ru>
+Date:   Sat, 1 Jul 2023 09:26:12 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230630180418.gonna.286-kees@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v5] vsock: enable setting SO_ZEROCOPY
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <20230701062310.3397129-1-AVKrasnov@sberdevices.ru>
+ <20230701062310.3397129-14-AVKrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230701062310.3397129-14-AVKrasnov@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178380 [Jun 30 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/01 00:58:00 #21597365
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,44 +93,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 11:04:22AM -0700, Kees Cook wrote:
-> For pid namespaces, struct pid uses a dynamically sized array member,
-> "numbers". This was implemented using the ancient 1-element fake flexible
-> array, which has been deprecated for decades. Replace it with a C99
-> flexible array, refactor the array size calculations to use struct_size(),
-> and address elements via indexes. Note that the static initializer (which
-> defines a single element) works as-is, and requires no special handling.
+Oops, my mistake, this patch is 13/17
+
+Sorry
+
+Thanks, Arseniy
+
+On 01.07.2023 09:23, Arseniy Krasnov wrote:
+> For AF_VSOCK, zerocopy tx mode depends on transport, so this option must
+> be set in AF_VSOCK implementation where transport is accessible (if
+> transport is not set during setting SO_ZEROCOPY: for example socket is
+> not connected, then SO_ZEROCOPY will be enabled, but once transport will
+> be assigned, support of this type of transmission will be checked).
 > 
-> Without this, CONFIG_UBSAN_BOUNDS (and potentially CONFIG_FORTIFY_SOURCE)
-> will trigger bounds checks when entering a pid namespace:
-> https://lore.kernel.org/lkml/20230517-bushaltestelle-super-e223978c1ba6@brauner
+> To handle SO_ZEROCOPY, AF_VSOCK implementation uses SOCK_CUSTOM_SOCKOPT
+> bit, thus handling SOL_SOCKET option operations, but all of them except
+> SO_ZEROCOPY will be forwarded to the generic handler by calling
+> 'sock_setsockopt()'.
 > 
-> For example: unshare --fork --pid --mount-proc readlink /proc/self
-> 
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Andreas Gruenbacher <agruenba@redhat.com>
-> Cc: Daniel Verkamp <dverkamp@chromium.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Jeff Xu <jeffxu@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/lkml/000000000000c6de2a05fbdecbbb@google.com/
-> Acked-by: Jeff Xu <jeffxu@google.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 > ---
-> v2:
->  - drop pointer math to array index conversions (torvalds)
->  - use struct_size_t now that it exists (torvalds)
->  - updated commit log with reproducer example
-
-Thanks for that. Linus already merged the other version I gave him with
-his requested changes but without your struct_size_t() update. It didn't
-exist when you originally sent that patch afaiu and I just realized that
-it existed right now. In any case, I'm just going to send a trivial
-follow-up patch switching the two places to struct_size_t().
-
-Thanks, Kees!
+>  Changelog:
+>  v4 -> v5:
+>   * This patch is totally reworked. Previous version added check for
+>     PF_VSOCK directly to 'net/core/sock.c', thus allowing to set
+>     SO_ZEROCOPY for AF_VSOCK type of socket. This new version catches
+>     attempt to set SO_ZEROCOPY in 'af_vsock.c'. All other options
+>     except SO_ZEROCOPY are forwarded to generic handler. Only this
+>     option is processed in 'af_vsock.c'. Handling this option includes
+>     access to transport to check that MSG_ZEROCOPY transmission is
+>     supported by the current transport (if it is set, if not - transport
+>     will be checked during 'connect()').
+> 
+>  net/vmw_vsock/af_vsock.c | 44 ++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 42 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> index da22ae0ef477..8acc77981d01 100644
+> --- a/net/vmw_vsock/af_vsock.c
+> +++ b/net/vmw_vsock/af_vsock.c
+> @@ -1406,8 +1406,18 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+>  			goto out;
+>  		}
+>  
+> -		if (vsock_msgzerocopy_allow(transport))
+> +		if (!vsock_msgzerocopy_allow(transport)) {
+> +			/* If this option was set before 'connect()',
+> +			 * when transport was unknown, check that this
+> +			 * feature is supported here.
+> +			 */
+> +			if (sock_flag(sk, SOCK_ZEROCOPY)) {
+> +				err = -EOPNOTSUPP;
+> +				goto out;
+> +			}
+> +		} else {
+>  			set_bit(SOCK_SUPPORT_ZC, &sk->sk_socket->flags);
+> +		}
+>  
+>  		err = vsock_auto_bind(vsk);
+>  		if (err)
+> @@ -1643,7 +1653,7 @@ static int vsock_connectible_setsockopt(struct socket *sock,
+>  	const struct vsock_transport *transport;
+>  	u64 val;
+>  
+> -	if (level != AF_VSOCK)
+> +	if (level != AF_VSOCK && level != SOL_SOCKET)
+>  		return -ENOPROTOOPT;
+>  
+>  #define COPY_IN(_v)                                       \
+> @@ -1666,6 +1676,34 @@ static int vsock_connectible_setsockopt(struct socket *sock,
+>  
+>  	transport = vsk->transport;
+>  
+> +	if (level == SOL_SOCKET) {
+> +		if (optname == SO_ZEROCOPY) {
+> +			int zc_val;
+> +
+> +			/* Use 'int' type here, because variable to
+> +			 * set this option usually has this type.
+> +			 */
+> +			COPY_IN(zc_val);
+> +
+> +			if (zc_val < 0 || zc_val > 1) {
+> +				err = -EINVAL;
+> +				goto exit;
+> +			}
+> +
+> +			if (transport && !vsock_msgzerocopy_allow(transport)) {
+> +				err = -EOPNOTSUPP;
+> +				goto exit;
+> +			}
+> +
+> +			sock_valbool_flag(sk, SOCK_ZEROCOPY,
+> +					  zc_val ? true : false);
+> +			goto exit;
+> +		}
+> +
+> +		release_sock(sk);
+> +		return sock_setsockopt(sock, level, optname, optval, optlen);
+> +	}
+> +
+>  	switch (optname) {
+>  	case SO_VM_SOCKETS_BUFFER_SIZE:
+>  		COPY_IN(val);
+> @@ -2321,6 +2359,8 @@ static int vsock_create(struct net *net, struct socket *sock,
+>  		}
+>  	}
+>  
+> +	set_bit(SOCK_CUSTOM_SOCKOPT, &sk->sk_socket->flags);
+> +
+>  	vsock_insert_unbound(vsk);
+>  
+>  	return 0;
