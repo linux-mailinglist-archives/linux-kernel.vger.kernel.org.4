@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0D3744974
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 15:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A36744978
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 15:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjGANuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 09:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
+        id S229997AbjGANyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 09:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjGANuH (ORCPT
+        with ESMTP id S229585AbjGANyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 09:50:07 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144EC3C11
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 06:50:06 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5776312eaddso15662757b3.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 06:50:06 -0700 (PDT)
+        Sat, 1 Jul 2023 09:54:11 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F36A3C11
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 06:54:10 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fba5a8af2cso29423385e9.3
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 06:54:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688219405; x=1690811405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1688219648; x=1690811648;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ezm+NjXf2KCPvjh2cUYvqoi17u9GLDDqaRcVx1XsiHA=;
-        b=R2rNfLLxRrVBYKsSHAcBwKJVDcAhDgmgfawivAKqzoPyyh2oD0EyQ45LpLCPIoMLeH
-         J4P+p6OajPIe2EFxKpAqtnr+h0e3D3yCCc2lNMll43/f+fHtX352P2NH0M0lmhn4Xiqy
-         6qkJAhx14uUNv1QCv/Um85MT4x6fVvwpLHXbXo75ddeokFl/QInQ31DbPTsTi4jW0V+g
-         uWsQSm0eerjNioH7ecPxv3lWqAqbdFRfya2z9oDS65B7K2PHW4SxVYJYy+ZJcMqUVOtk
-         s+UVgHc69oUSNVJw4LUmrQOTloB1H1J/kYj1n3/9CbwmMayMkjlGqeegWoGtC6gPlbWr
-         SSRQ==
+        bh=0OMMsvHxXHZc/OFAWSLiE/7BBNcrGZ7HGVVSJpHQ4oU=;
+        b=WdZBm8gYVWsuxFe0tTqmRUi2cq1keghXJjX2qF1s+zENnrLES3Ns15//9eZs5Ee6CC
+         LCQmca4AgfWmp1a0XzkUjt7HE81uck7LJ6NhDyxnYLZNaWOjot8iE/Mj0k7pdlAqpwUv
+         BuTAudIHw6pyhb7W2czaqmGlJqqmIjAB/LWkHkFpTV9HlIJ/Lpv8G6Lc6xvWGUYjvjKn
+         l6U6uGciggbQs4GhL1uMK4ZjKCcwDbdae8+MkCdyD7hN3EGQLIEuIsmh90VnZnftRL7+
+         QwfV2J3a9feViug/5tQ4j2Muo/692aCJP/q0sKPTM3wV1fH2QdmcMeK5dsLQsX28LaMv
+         y3qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688219405; x=1690811405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688219648; x=1690811648;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ezm+NjXf2KCPvjh2cUYvqoi17u9GLDDqaRcVx1XsiHA=;
-        b=G8cWwNYslmbc7e1NDtDjJmkXWSfIBGDrEFRUHwEuQYqgFVCjAzCttqvYvGvLxWxC8Z
-         ORFe391y/wdeRJj49vGc7D/qMoIQ6h9/iB8E/T2Xr6uGNxo/yxDzTW1lnkJG0kAMlr65
-         i9QosqvGxF/ooG+lrfAwB7HvYDKDAJOU+544+2+SePEW5ScQvIIoHQ7KVV8RE/kKoYNj
-         juA569Dhvnfw4mMAAU0Qs4AM/fsMgdhtqTY0NWwXHKGzvWQEDi6ouQe+j4U4SrfIHhLj
-         Ftb/l9BzShza3SugcNP03s0LouIxGT+ui/FHZRdKFMbEW710/+pHTuJC11/rNNtITUoU
-         rrIA==
-X-Gm-Message-State: ABy/qLZPUY9acxpCAI/xyVL834I1FixZzUm3g1cUOGiepNUBaNwnRnnM
-        PLKN4IcOORoswbRoKCiTcJ29erssvF+beLADL1xXXg==
-X-Google-Smtp-Source: APBJJlGXw6gZAbhK4kl28Jt3+uNyGtz1CZs/V06D3OBlIubL8fMEUnFM2hCVt33G8WUHmy8s370jcIDCaHOXRR/TDpc=
-X-Received: by 2002:a81:83cc:0:b0:576:c543:2a5f with SMTP id
- t195-20020a8183cc000000b00576c5432a5fmr5543264ywf.4.1688219405263; Sat, 01
- Jul 2023 06:50:05 -0700 (PDT)
+        bh=0OMMsvHxXHZc/OFAWSLiE/7BBNcrGZ7HGVVSJpHQ4oU=;
+        b=TwVbth7Q2QlRDz1ImEflAs9YnQrk+wTQ13iQyUjVdHF0Bx1Qz1psfEcuFesW6WtWLP
+         fT5nWA/Evq0dqiSqojWTWdN3qJHTvTVdSL0ZBX604sh09LA3KvaYDxzwLMde/6wv4cAK
+         ScA67apg5vSNNKh1t5N23VcZa6EaTLpDFEakKoou0Lyv6+6xrKL9HSLp5HSUONGZK/Qv
+         +fO7RPUwEIZCBCzcz0zma9pEe5qTYe8BfOtmIautUQEJgpypbVcIXMSf8+z4JMxR+3n3
+         juv/f6LiArZSKtH1c3Q56M8qaWXU1uCRBOMEeqlRHEiX/qIIgw9IXIMumuNVAilWnjbt
+         EBkA==
+X-Gm-Message-State: ABy/qLYbVZ+sinSLAH40/6AZT3enXFq8EbtAs/2GDOItKN4SHwT3UPMk
+        ue6nVO5S/ShOT3oV1gx09d0=
+X-Google-Smtp-Source: APBJJlEvmncnJLiIiHUhRiWxw7Jv6npdvAFV6FmDI7Gddi0kszH6KRyxdntb5Xw3trZaH6qkKJGZrQ==
+X-Received: by 2002:adf:ed8a:0:b0:313:f0d7:a46 with SMTP id c10-20020adfed8a000000b00313f0d70a46mr4054894wro.3.1688219648426;
+        Sat, 01 Jul 2023 06:54:08 -0700 (PDT)
+Received: from suse.localnet (host-82-49-237-33.retail.telecomitalia.it. [82.49.237.33])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05600c211400b003fbb618f7adsm7712397wml.15.2023.07.01.06.54.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jul 2023 06:54:07 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Deepak R Varma <drv@mailo.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH v3 6/6] gfs2: Replace kmap_atomic() by kmap_local_page() in
+ gfs2_write_buf_to_page
+Date:   Sat, 01 Jul 2023 15:54:06 +0200
+Message-ID: <2235268.iZASKD2KPV@suse>
+In-Reply-To: <4bed561513ba76486ea3fc87f97e6c646f98cbe7.1688073459.git.drv@mailo.com>
+References: <cover.1688073459.git.drv@mailo.com>
+ <4bed561513ba76486ea3fc87f97e6c646f98cbe7.1688073459.git.drv@mailo.com>
 MIME-Version: 1.0
-References: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 1 Jul 2023 15:49:54 +0200
-Message-ID: <CACRpkdYu4KWx4cgt1PFniduJb5kRmnKs84k+7xVdo3dDY=TqbQ@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: busses: i2c-nomadik: Remove a useless call in the
- remove function
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     wsa@kernel.org, Andi Shyti <andi.shyti@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +78,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 11:23=E2=80=AFPM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On gioved=EC 29 giugno 2023 23:52:27 CEST Deepak R Varma wrote:
+> kmap_atomic() is deprecated in favor of kmap_local_{folio,page}().
 
-> Since commit a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of
-> git://git.pengutronix.de/git/wsa/linux"), there is no more
-> request_mem_region() call in this driver.
+Deepak,
+
+Again please refer to documentation and/or Ira's deprecation patch. The=20
+reasons why are in one of my previous messages.
+
+> Therefore, replace kmap_atomic() with kmap_local_page() in
+> gfs2_write_buf_to_page().
+>=20
+> kmap_atomic() disables page-faults and preemption (the latter only for
+> !PREEMPT_RT kernels), However, the code within the mapping/un-mapping in
+> gfs2_write_buf_to_page() does not depend on the above-mentioned side
+> effects.
+>=20
+> Therefore, a mere replacement of the old API with the new one is all that
+> is required (i.e., there is no need to explicitly add any calls to
+> pagefault_disable() and/or preempt_disable()).
 >
-> So remove the release_mem_region() call from the remove function which is
-> likely a left over.
->
-> There is no details in the above commit log, but at its end we can read:
->    Conflicts:
->            drivers/i2c/busses/i2c-nomadik.c
->
-> This may explain why this call has been left here.
->
-> Fixes: a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of git://git.p=
-engutronix.de/git/wsa/linux
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
 > ---
-> v2: synch with latest -next
+> Changes in v3:
+>    - Patch included in patch set
+>=20
+> Changes in v2:
+>    - None
+>=20
+>=20
+>  fs/gfs2/quota.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
+> index 386ca770ce2e..e5767133aeea 100644
+> --- a/fs/gfs2/quota.c
+> +++ b/fs/gfs2/quota.c
+> @@ -764,10 +764,10 @@ static int gfs2_write_buf_to_page(struct gfs2_inode=
+=20
+*ip,
+> unsigned long index, }
+>=20
+>  	/* Write to the page, now that we have setup the buffer(s) */
+> -	kaddr =3D kmap_atomic(page);
+> +	kaddr =3D kmap_local_page(page);
+>
+Well, if this page could come from HIGHMEM, how about memcpy_to_page()?=20
+Otherwise, (if it cannot come from HIGHMEM) we don't need to kmap*() it.=20
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Can you please take a look at the allocation's flags?
 
-Yours,
-Linus Walleij
+Thanks,
+
+=46abio
+>
+>  	memcpy(kaddr + off, buf, bytes);
+>  	flush_dcache_page(page);
+> -	kunmap_atomic(kaddr);
+> +	kunmap_local(kaddr);
+>  	unlock_page(page);
+>  	put_page(page);
+>=20
+> --
+> 2.34.1
+
+
+
+
