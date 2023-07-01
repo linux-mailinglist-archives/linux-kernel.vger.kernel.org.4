@@ -2,71 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C427446C3
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 07:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02B07446CD
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 07:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjGAFYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 01:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
+        id S229601AbjGAFqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 01:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjGAFYF (ORCPT
+        with ESMTP id S229520AbjGAFqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 01:24:05 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAF94204;
-        Fri, 30 Jun 2023 22:24:04 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b5c231c23aso42708831fa.0;
-        Fri, 30 Jun 2023 22:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688189042; x=1690781042;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UWSfT3e2CdHXT3PPccjwI1PvUkLEKr2RqsUNIeb0KVU=;
-        b=dv4BNmhKurSjr4SFlv7PvcW3oxS+o5nRZ0A8lZkOheALgd3YqDXfLTZeSoDO3TwBO4
-         HeowMn4na6OlBLRtOwoXYQ9LpIT6ZY/iOzYi2Nn5U0IkAUbGVj/fVT6eU9tM/XYiM68U
-         7+00JLc0mja0wzB2ItiXGm0kOMLiyTqLhi6UXs6Eb24uspVLE18y8n8X7jtCqxmDPO9W
-         uzMm8WlrJxeJguV4qoXVRw6siOUYOkaKFRN5cXEPz8JN/lUMzKzHr2Lj68wXrp1YJTr7
-         rtSrycUqnjmq5hSVc8EzFqhtwWoFfNri+c0UhLgeHAPcxIa1AhcDfjVDdAB8acEuPM8+
-         CWcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688189042; x=1690781042;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UWSfT3e2CdHXT3PPccjwI1PvUkLEKr2RqsUNIeb0KVU=;
-        b=KgJI3wBoEri1AT0CBoYlk7V+J2zH/956Cce5ZQ9C19cBkR6bLMxS/8ALQq3JP3+mGE
-         fOUY3c3iP+kAdMuPvp2wpP054tOOj+/U/C/MFK09ETEjnYL5E3z39GigQWkzcxiDUqq1
-         Dy4db4jHYUZzKIloGLHkT0fg7ydYBQAEgmwVbJ7MzRIqeYRVWRPSinsaFlqnT6T2fXoU
-         QSodpBfEkArtdyB2SA57J3sZLkRKaQkIFYBwxWBusYGWOMMiLiVeIJNARydSmRczOrr3
-         uKjpfib8sbvR+mOOz4lpDKMBKhank+BHpx3Ymk0kGd9oO0cbXFx++a+r7scMe4LK815I
-         WGGQ==
-X-Gm-Message-State: ABy/qLZllEm2bXdc3hosbrIFJlTm3xH7wKjEFuY6417sUBzAEaxKypEH
-        rEm8kgIdrEk2OWPubgmYSCZNmqcHU5dr+oBKI2E=
-X-Google-Smtp-Source: APBJJlGmNEZoTcJGC2KNmbJoTnMMgs2JN1FJjXl5qHsHC2/aeL9kSCLBqESKoi5FjagfbSLqnN3Yag9zoRE0fvq0Xs8=
-X-Received: by 2002:a2e:88c8:0:b0:2b6:ca1d:ee88 with SMTP id
- a8-20020a2e88c8000000b002b6ca1dee88mr3354057ljk.12.1688189042086; Fri, 30 Jun
- 2023 22:24:02 -0700 (PDT)
+        Sat, 1 Jul 2023 01:46:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C774204
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 22:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=gsaHjVQr2zvDdc7XvtO8GxLsgjI16sNGgoHw1T72M/A=; b=un+mTFpRvO+UwoZDlT4yNO1tZX
+        EpDj2XElOeymR+dihhi1ZMsWTZGqDVrYrVJhmYui4wSi7MLYs17pTBwGG8PncOTTy2z9WiZu3dUHU
+        MyyTf6ReN2UjHNZ0XTUzyCEFtZelN9mJi/UkIT/64J8tqojlt4dGQKn9Qtv9pE8d1SLXVsn1r/g13
+        gcbL/P7drLVh0cW73KUO5X2QyBUoRPYgJk+kuJBTGeCl2jb7tJADcdv/BMIU2tDpjpnLhffGv8sjL
+        siUoaghAaFSxzEzTUXk9UqQOrJuwuKMj4Ha36ekw7MG7PGSMkSDIVTgamdwm4pMPhnHgLy94JnGn9
+        DdaHWgMA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qFTR1-005E3i-0E;
+        Sat, 01 Jul 2023 05:46:15 +0000
+Message-ID: <a80acd62-69d2-f3dc-410f-8d9722980e74@infradead.org>
+Date:   Fri, 30 Jun 2023 22:46:12 -0700
 MIME-Version: 1.0
-References: <20230630113337.123257-1-colin.i.king@gmail.com>
-In-Reply-To: <20230630113337.123257-1-colin.i.king@gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 1 Jul 2023 00:23:50 -0500
-Message-ID: <CAH2r5mvkWeMO-AoPEpDbeKy8_K5hz3nJL3-BPh+w4Dow0qoOkg@mail.gmail.com>
-Subject: Re: [PATCH][next] smb: client: remove redundant pointer 'server'
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH] powerpc: allow PPC_EARLY_DEBUG_CPM only when SERIAL_CPM=y
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Kumar Gala <galak@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+References: <20230516152854.22465-1-rdunlap@infradead.org>
+ <20230516185400.urjy6y3kh4grbagt@pali>
+ <a259b113-6547-4323-c69d-5d04d7cf3a75@infradead.org>
+Content-Language: en-US
+In-Reply-To: <a259b113-6547-4323-c69d-5d04d7cf3a75@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,50 +60,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-merged into cifs-2.6.git for-next
-
-On Fri, Jun 30, 2023 at 6:35=E2=80=AFAM Colin Ian King <colin.i.king@gmail.=
-com> wrote:
->
-> The pointer 'server' is assigned but never read, the pointer is
-> redundant and can be removed. Cleans up clang scan build warning:
->
-> fs/smb/client/dfs.c:217:3: warning: Value stored to 'server' is
-> never read [deadcode.DeadStores]
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  fs/smb/client/dfs.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/fs/smb/client/dfs.c b/fs/smb/client/dfs.c
-> index 26d14dd0482e..1403a2d1ab17 100644
-> --- a/fs/smb/client/dfs.c
-> +++ b/fs/smb/client/dfs.c
-> @@ -143,7 +143,6 @@ static int __dfs_mount_share(struct cifs_mount_ctx *m=
-nt_ctx)
->         struct smb3_fs_context *ctx =3D mnt_ctx->fs_ctx;
->         char *ref_path =3D NULL, *full_path =3D NULL;
->         struct dfs_cache_tgt_iterator *tit;
-> -       struct TCP_Server_Info *server;
->         struct cifs_tcon *tcon;
->         char *origin_fullpath =3D NULL;
->         char sep =3D CIFS_DIR_SEP(cifs_sb);
-> @@ -214,7 +213,6 @@ static int __dfs_mount_share(struct cifs_mount_ctx *m=
-nt_ctx)
->         } while (rc =3D=3D -EREMOTE);
->
->         if (!rc) {
-> -               server =3D mnt_ctx->server;
->                 tcon =3D mnt_ctx->tcon;
->
->                 spin_lock(&tcon->tc_lock);
-> --
-> 2.39.2
->
 
 
---=20
-Thanks,
+On 6/9/23 20:11, Randy Dunlap wrote:
+> Hi--
+> 
+> On 5/16/23 11:54, Pali Rohár wrote:
+>> On Tuesday 16 May 2023 08:28:54 Randy Dunlap wrote:
+>>> In a randconfig with CONFIG_SERIAL_CPM=m and
+>>> CONFIG_PPC_EARLY_DEBUG_CPM=y, there is a build error:
+>>> ERROR: modpost: "udbg_putc" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
+>>>
+>>> Prevent the build error by allowing PPC_EARLY_DEBUG_CPM only when
+>>> SERIAL_CPM=y.
+>>>
+>>> Fixes: c374e00e17f1 ("[POWERPC] Add early debug console for CPM serial ports.")
+>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>> Cc: Scott Wood <scottwood@freescale.com>
+>>> Cc: Kumar Gala <galak@kernel.crashing.org>
+>>> Cc: "Pali Rohár" <pali@kernel.org>
+>>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>>> Cc: Nicholas Piggin <npiggin@gmail.com>
+>>> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>> Cc: linuxppc-dev@lists.ozlabs.org
+>>
+>> Looks good,
+>>
+>> Reviewed-by: Pali Rohár <pali@kernel.org>
+> 
+> I'm still seeing this build error in linux-next even with other (PPC) CPM
+> patches applied.
+> 
 
-Steve
+Patchwork shows status as Superseded:
+
+http://patchwork.ozlabs.org/project/linuxppc-dev/patch/20230516152854.22465-1-rdunlap@infradead.org/
+
+but I don't understand why or by what.
+
+I'm going to resubmit the patch now.
+
+
+>>
+>>> ---
+>>>  arch/powerpc/Kconfig.debug |    2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff -- a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
+>>> --- a/arch/powerpc/Kconfig.debug
+>>> +++ b/arch/powerpc/Kconfig.debug
+>>> @@ -240,7 +240,7 @@ config PPC_EARLY_DEBUG_40x
+>>>  
+>>>  config PPC_EARLY_DEBUG_CPM
+>>>  	bool "Early serial debugging for Freescale CPM-based serial ports"
+>>> -	depends on SERIAL_CPM
+>>> +	depends on SERIAL_CPM=y
+>>>  	help
+>>>  	  Select this to enable early debugging for Freescale chips
+>>>  	  using a CPM-based serial port.  This assumes that the bootwrapper
+> 
+
+-- 
+~Randy
