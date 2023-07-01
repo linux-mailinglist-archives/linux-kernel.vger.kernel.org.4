@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6347447DC
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8B77447DE
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjGAIC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 04:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S229863AbjGAIEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 04:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjGAIBs (ORCPT
+        with ESMTP id S229510AbjGAIEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 04:01:48 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F5510E5
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 01:01:45 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51d7e8dd118so3015578a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 01:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688198504; x=1690790504;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+/7TuI/hQwkZhyymEuytfw8tljO+CF4LNtsLy3kjnEs=;
-        b=Ou/rDZBt62vQN0g6wf8sflLQ5ypZfVU4sHRXMyBJBFWIjv9gqQQLTCW8EuKRyG+NBR
-         xIjScWjY5dZgKHSHb9rlP8TnNy0on9Y8TcqwZ1UzOn8GrFjI0qhSNC6opsr3C8vcxj4v
-         KibRH8x4qmo93VqHlE6Dr/B1pTtee/5+fgVlV9wtt10SAMxLe1UswkSjz5eQ5BFk1rTO
-         aZmeLwwNeabJtPoDohYLsGNztEwTH6mjAuDrKhZi/I4BSmNsLP4PJOIfnj8s0Cvmd383
-         8Zq2GzVGIbNP+8T/GLoqX/B0e4spM8/Pdr9htwsjSif/G/lHJM5Ig4Svo0dXK9dc/6RD
-         NfKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688198504; x=1690790504;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+/7TuI/hQwkZhyymEuytfw8tljO+CF4LNtsLy3kjnEs=;
-        b=aoVdrhNknb73umDidhWWP5n5bUgPxYvjmGt8GDgnRvGcuhKln0oU7xkOOZclCX7T/D
-         NbZjL3aQZIifuqnlxxpYJESFbbbx3jv70dxxoIjkYFmUB6TgXMq4ZpATegdVz/STd8Mt
-         Hfgn6Lgji369MhcNcNwk9Oe6SV0DUozX0S751nnlcdtcPk1MpKZ/WdUyDGxW0dEIfzll
-         gIxzxGvHZLkMOJayAgH03oBnI/cI9QIX2HU3rdcIlfViwYadLp8XCkol14YuFkOLfuKT
-         F2PtXi6lNNMiGqjBfSsjpQwsjb9sUa8aTw8utaKv58flAwOPQyyICUsBPvd1QJzTFE+J
-         lntQ==
-X-Gm-Message-State: ABy/qLY+Uc8Vc7LhZx9UJk1OJH32LBuTpEkxE8hLEN7JXNpv0bNI6KSW
-        wmzT2R+1nqyZCyzYwrEcbnGcFQ==
-X-Google-Smtp-Source: ACHHUZ5F8xUIAMknqjsoPu2of+I/Txby9lVW5dSl1hKwXHTjXld0F3vDjgHEZdD7r802EbZERuvF+g==
-X-Received: by 2002:a17:907:2c66:b0:991:fef4:bb7 with SMTP id ib6-20020a1709072c6600b00991fef40bb7mr4187077ejc.73.1688198503859;
-        Sat, 01 Jul 2023 01:01:43 -0700 (PDT)
-Received: from [192.168.10.214] ([217.169.179.6])
-        by smtp.gmail.com with ESMTPSA id bm4-20020a170906c04400b00973ca837a68sm8996694ejb.217.2023.07.01.01.01.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 01:01:43 -0700 (PDT)
-Message-ID: <207f70b5-e017-33bc-bf46-206b3fb69a04@linaro.org>
-Date:   Sat, 1 Jul 2023 10:01:42 +0200
+        Sat, 1 Jul 2023 04:04:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F331F199;
+        Sat,  1 Jul 2023 01:04:39 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3617o5r7015948;
+        Sat, 1 Jul 2023 08:04:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MS5CIDx1MWEkurYsT3/3Q/wJyBuayl6mQcGoOBHnq0U=;
+ b=duioDlccW/0/yXqWjehFi7vQgcr7aPdQHuYP63ron4ncxZGUwenlPOa2NX71Rz7K0LDj
+ R0C70njLtpYnP7l5ryf9XreSLCzkyce9TV+Fp3tCbRBAhRRojplZ5BJyq+IJbnbd3/5S
+ BVwVgIeu+qjA+KcQVVJrMXUvIwlHjMj8R1ReekRe37+LuI9KgbqwwZRJUadmSumK3CfV
+ dxkRTaDC0xhRxhhB1T5GEPYU7d7R4OOlodbAuUpXrRsIfRzOIDchfc5i8SdPpdSWfhUw
+ IKrakSoFq8rD9JPEoedgaGJ+ROHq7V9ahAwbrIcFCP7j0z+Fux22XxnYDtnUqK4ua7Ge eQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rj9umgn0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 01 Jul 2023 08:04:25 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36184PHU005241
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 1 Jul 2023 08:04:25 GMT
+Received: from [10.253.13.42] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Sat, 1 Jul 2023
+ 01:04:17 -0700
+Message-ID: <7144731c-f4ae-99b6-d32a-1d0e39bc9ee7@quicinc.com>
+Date:   Sat, 1 Jul 2023 16:04:15 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/exynos: fix a possible null-pointer dereference due
- to data race in exynos_drm_crtc_atomic_disable()
+Subject: Re: [PATCH 3/3] net: phy: at803x: add qca8081 fifo reset on the link
+ down
 Content-Language: en-US
-To:     Tuo Li <islituo@gmail.com>, inki.dae@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        airlied@gmail.com, daniel@ffwll.ch, alim.akhtar@samsung.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@outlook.com, BassCheck <bass@buaa.edu.cn>
-References: <20230630021906.1035115-1-islituo@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230630021906.1035115-1-islituo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <hkallweit1@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230629034846.30600-1-quic_luoj@quicinc.com>
+ <20230629034846.30600-4-quic_luoj@quicinc.com>
+ <e1cf3666-fecc-4272-b91b-5921ada45ade@lunn.ch>
+ <0f3990de-7c72-99d8-5a93-3b7eaa066e49@quicinc.com>
+ <924ebd8b-2e1f-4060-8c66-4f4746e88696@lunn.ch>
+From:   Jie Luo <quic_luoj@quicinc.com>
+In-Reply-To: <924ebd8b-2e1f-4060-8c66-4f4746e88696@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jL09s1ySArYGVPXMxy2JKVpkt77Em51c
+X-Proofpoint-ORIG-GUID: jL09s1ySArYGVPXMxy2JKVpkt77Em51c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-01_06,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 clxscore=1015 bulkscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=461 adultscore=0 mlxscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307010075
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,32 +86,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 04:19, Tuo Li wrote:
-> The variable crtc->state->event is often protected by the lock 
-> crtc->dev->event_lock when is accessed. However, it is accessed as a 
-> condition of an if statement in exynos_drm_crtc_atomic_disable() without
-> holding the lock:
-> 
->   if (crtc->state->event && !crtc->state->active)
-> 
-> However, if crtc->state->event is changed to NULL by another thread right
-> after the conditions of the if statement is checked to be true, a
-> null-pointer dereference can occur in drm_crtc_send_vblank_event():
-> 
->   e->pipe = pipe;
-> 
-> To fix this possible null-pointer dereference caused by data race, the 
-> spin lock coverage is extended to protect the if statement as well as the 
-> function call to drm_crtc_send_vblank_event().
-> 
-> Reported-by: BassCheck <bass@buaa.edu.cn>
 
-I cannot find this report. This is an open source work and public
-collaboration. The "Reported-by" usually means that the issue was
-reported to us, in some way, usually in public. Can we see the report?
-Otherwise adding non-public, non-verifiable reports is useless and
-clutters our report-credit-system.
 
-Best regards,
-Krzysztof
+On 6/30/2023 9:21 PM, Andrew Lunn wrote:
+>> SERDES device is the block converts data between serial data and parallel
+>> interfaces in each direction, which is the SGMII interface in qca8081 PHY,
+>> it's address is always the PHY address added by 1 in qca8081 PHY.
+> 
+> What other registers does this block have? What behaviour can be
+> configured? Does it have any support for Clause 73? Is there an open
+> datasheet for it?
+> 
+> 	    Andrew
 
+Hi Andrew,
+This block includes MII and MMD1 registers, which mainly configure the 
+PLL clocks, reset and calibration of the interface sgmii, there is no 
+related Clause 73 control register in this block.
+
+Normally it is the hardware behavior, driver do not need to configure 
+these registers, adding this interface fifo reset is for avoiding the 
+packet block issue in some corner case.
+
+it seems there is no open datasheet after searching the internet, but 
+you can get the basic information of qca8081 from the following link.
+https://www.qualcomm.com/products/internet-of-things/networking/wi-fi-networks/qca8081
+
+Thanks,
+Jie
