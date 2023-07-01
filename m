@@ -2,259 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A3E7445CD
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 03:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760717445D5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 03:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjGABPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 21:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S229508AbjGABZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 21:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGABPV (ORCPT
+        with ESMTP id S229447AbjGABZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 21:15:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062A93C18;
-        Fri, 30 Jun 2023 18:15:19 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3610kkSq029938;
-        Sat, 1 Jul 2023 01:14:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=SrBTJweWkdi0gemAtFUVQdHBHpnvXFNNG3Qz2bB+FlU=;
- b=GZ+82djH8AFt/Cm7sVrC/iHBD8CB3urTs6JVL/Db6sJq4owToc/cUb36CrSz9zunSN39
- /drjxmHZOqtyhPR8KM++Ff2X50osGdkKK4bgbjwL/7NMy0X+AcSU6rctEQkeQUmRv5ID
- 429zCfaXr3Dgyc/6/Kk49KhK6Z/nzfvfv8kvsD0QGms2rAj2VTJZ1eWFkINpwGvMDSVi
- w+Ya3vkRsUexmAAq2VgKiVTUCS4nml295U9f70sPnWCnydjNfNTUmhQnrFRVjQG/hTyc
- AFY/LVnD5eb0cI6A7pNpHTAh1Qfj4/haD2sq1z2xbG7eAyZeRnvOT7VGymgahpcmiUci MA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rj6y30crx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 01 Jul 2023 01:14:45 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3611EjAG030031
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 1 Jul 2023 01:14:45 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 30 Jun
- 2023 18:14:44 -0700
-Message-ID: <4531c809-8d0a-143b-961b-7218854d18f0@quicinc.com>
-Date:   Fri, 30 Jun 2023 18:14:44 -0700
+        Fri, 30 Jun 2023 21:25:10 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33C63C17
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 18:25:08 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso41047211fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 18:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688174707; x=1690766707;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmQawnZPImWl2SD6T1qGl5AoepWm79fi28WZcuSJ8jI=;
+        b=CeeRsZxNqGnlFJT4guVDZstK431AVoetj5Wo0bUwttuvdnpDWCUZiKrL5GXNA0teOQ
+         rzEivXMYhoaGjcyv6/7dM76yS+gTa9VWgcjz56Mqjy8ngXvb08ZIWaN97ZRqNG+sgLEc
+         9xmRfqJYhyVRx4a5/e2Plnh2V5zvctk3CJQTs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688174707; x=1690766707;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lmQawnZPImWl2SD6T1qGl5AoepWm79fi28WZcuSJ8jI=;
+        b=L+FXp/TY8GvjRi/+OgphYRyePmS3lSbXf9CYhBjvgIXUe7GUH0Y1L4a1zR8uCC+gqx
+         C/7JzQok4N+0b6P70GcfHIuqVTFX21NrHZYCiTyuNFJXccDlGAxYbGOMr28l047pJTXw
+         AmZhFACKa8/Bz89wQFXVWvbi+Z4GICIeaClRBn63zJm/EyvQa4U/pGSiRBHbPg2t2akx
+         5mEVI7ZtYM5AU5igwKetIkmW9UsvL+fYxN5Mu5UkcPvUi51HmfduXZnKmkH35mLUud+W
+         zFTuryXWhPxYPPMrnQfhBH6hr9BCIpqAa5bOFbAkTZhlIz+saT4qjA7WuatXVTTRjZFd
+         bKrg==
+X-Gm-Message-State: ABy/qLbuFIs0lgHc7X3/8LGaUHE6HKPG9N8LcLoCrYm/2+8vTGwjq206
+        hLhDI+W1RRW6HH6WFLB9Z/9D2ftq0aGDoYDthBfB4RGU
+X-Google-Smtp-Source: APBJJlGhd17FeNXgZ/5BCA3JfMMNf/wh2vfIB5cvFkdGtHyKDtmPjQm/I5T7NS64WeX5GNc582bkvw==
+X-Received: by 2002:a2e:9350:0:b0:2b6:a0cd:ba6 with SMTP id m16-20020a2e9350000000b002b6a0cd0ba6mr3145974ljh.33.1688174707099;
+        Fri, 30 Jun 2023 18:25:07 -0700 (PDT)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id d9-20020a2e3309000000b002b6da1b49c6sm266185ljc.52.2023.06.30.18.25.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 18:25:06 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f122ff663eso4097563e87.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 18:25:06 -0700 (PDT)
+X-Received: by 2002:a05:6512:2010:b0:4f8:e4e9:499e with SMTP id
+ a16-20020a056512201000b004f8e4e9499emr2999983lfb.12.1688174706280; Fri, 30
+ Jun 2023 18:25:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH RFC v4 6/7] drm/msm/dpu: Allow NULL FBs in atomic commit
-Content-Language: en-US
-To:     Pekka Paalanen <ppaalanen@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        <quic_abhinavk@quicinc.com>, <contact@emersion.fr>,
-        <laurent.pinchart@ideasonboard.com>, <sebastian.wick@redhat.com>,
-        <ville.syrjala@linux.intel.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>,
-        <wayland-devel@lists.freedesktop.org>
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
- <20230404-solid-fill-v4-6-f4ec0caa742d@quicinc.com>
- <cca48c01-b84a-dff6-57ae-356971edacf3@linaro.org>
- <20230630112153.5da36b6a@eldfell>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <20230630112153.5da36b6a@eldfell>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BGx2i0UQTu6SpT2E4JW7wfERDEBvvn7B
-X-Proofpoint-GUID: BGx2i0UQTu6SpT2E4JW7wfERDEBvvn7B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_14,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 adultscore=0 spamscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0 mlxscore=0
- mlxlogscore=983 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307010010
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
+ <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
+ <fbe57907-b03f-ac8c-f3f4-4d6959bbc59c@roeck-us.net> <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
+ <CAHk-=wiN5H-2dh2zCo_jXE7_ekrxSHvQcMw4xfUKjuQs2=BN4w@mail.gmail.com> <fb63ea7b-c44b-fb1b-2014-3d23794fa896@roeck-us.net>
+In-Reply-To: <fb63ea7b-c44b-fb1b-2014-3d23794fa896@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 30 Jun 2023 18:24:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whh_aUHYF6LCV36K9NYHR4ofEZ0gwcg0RY5hj=B7AT4YQ@mail.gmail.com>
+Message-ID: <CAHk-=whh_aUHYF6LCV36K9NYHR4ofEZ0gwcg0RY5hj=B7AT4YQ@mail.gmail.com>
+Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        sparclinux@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Helge Deller <deller@gmx.de>,
+        Jason Wang <wangborong@cdjrlc.com>
+Content-Type: multipart/mixed; boundary="000000000000b0e4fd05ff62cd63"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--000000000000b0e4fd05ff62cd63
+Content-Type: text/plain; charset="UTF-8"
 
+On Fri, 30 Jun 2023 at 15:51, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> There is one more, unfortunately.
+>
+> Building xtensa:de212:kc705-nommu:nommu_kc705_defconfig ... failed
 
-On 6/30/2023 1:21 AM, Pekka Paalanen wrote:
-> On Fri, 30 Jun 2023 03:52:37 +0300
-> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
-> 
->> On 30/06/2023 03:25, Jessica Zhang wrote:
->>> Since solid fill planes allow for a NULL framebuffer in a valid commit,
->>> add NULL framebuffer checks to atomic commit calls within DPU.
->>>
->>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>> ---
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c  |  9 ++++++-
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 45 +++++++++++++++++++------------
->>>    2 files changed, 36 insertions(+), 18 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
->>> index 1edf2b6b0a26..d1b37d2cc202 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
->>> @@ -451,6 +451,7 @@ static void _dpu_crtc_blend_setup_mixer(struct drm_crtc *crtc,
->>>    	struct drm_plane_state *state;
->>>    	struct dpu_crtc_state *cstate = to_dpu_crtc_state(crtc->state);
->>>    	struct dpu_plane_state *pstate = NULL;
->>> +	const struct msm_format *fmt;
->>>    	struct dpu_format *format;
->>>    	struct dpu_hw_ctl *ctl = mixer->lm_ctl;
->>>    
->>> @@ -470,7 +471,13 @@ static void _dpu_crtc_blend_setup_mixer(struct drm_crtc *crtc,
->>>    		pstate = to_dpu_plane_state(state);
->>>    		fb = state->fb;
->>>    
->>> -		format = to_dpu_format(msm_framebuffer_format(pstate->base.fb));
->>> +		if (state->pixel_source == DRM_PLANE_PIXEL_SOURCE_FB && fb)
->>> +			fmt = msm_framebuffer_format(pstate->base.fb);
->>> +		else
->>> +			fmt = dpu_get_msm_format(&_dpu_crtc_get_kms(crtc)->base,
->>> +					DRM_FORMAT_RGBA8888, 0);
->>
->> The DRM_FORMAT_RGBA8888 should be defined somewhere in patch 1 as format
->> for the solid_fill, then that define can be used in this patch.
-> 
-> Isn't this just a driver-specific decision to convert a RGB323232
-> solid_fill to be presented as a RGBA8888?
+Heh. I didn't even realize that anybody would ever do
+lock_mm_and_find_vma() code on a nommu platform.
 
-Hi Dmitry and Pekka,
+With nommu, handle_mm_fault() will just BUG(), so it's kind of
+pointless to do any of this at all, and I didn't expect anybody to
+have this page faulting path that just causes that BUG() for any
+faults.
 
-Yes, the ABGR8888 format is specific to msm/dpu. In earlier revisions of 
-the series, we had come to an agreement that the solid fill property 
-should take RGB323232 to match the similar Wayland single pixel buffer 
-protocol [1].
+But it turns out xtensa has a notion of protection faults even for
+NOMMU configs:
 
-[1] 
-https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/104
+    config PFAULT
+        bool "Handle protection faults" if EXPERT && !MMU
+        default y
+        help
+          Handle protection faults. MMU configurations must enable it.
+          noMMU configurations may disable it if used memory map never
+          generates protection faults or faults are always fatal.
 
-> 
-> Though, below there is ABGR8888 used for something... inconsistent?
+          If unsure, say Y.
 
-Typo on my part. The format should be consistently ABGR8888.
+which is why it violated my expectations so badly.
 
-Thanks,
+I'm not sure if that protection fault handling really ever gets quite
+this far (it certainly should *not* make it to the BUG() in
+handle_mm_fault()), but I think the attached patch is likely the right
+thing to do.
 
-Jessica Zhang
+Can you check if it fixes that xtensa case? It looks
+ObviouslyCorrect(tm) to me, but considering that I clearly missed this
+case existing AT ALL, it might be best to double-check.
 
-> 
-> 
-> Thanks,
-> pq
-> 
->>
->>> +
->>> +		format = to_dpu_format(fmt);
->>>    
->>>    		if (pstate->stage == DPU_STAGE_BASE && format->alpha_enable)
->>>    			bg_alpha_enable = true;
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->>> index 5f0984ce62b1..4476722f03bb 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
->>> @@ -837,8 +837,10 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
->>>    
->>>    	pipe_cfg->dst_rect = new_plane_state->dst;
->>>    
->>> -	fb_rect.x2 = new_plane_state->fb->width;
->>> -	fb_rect.y2 = new_plane_state->fb->height;
->>> +	if (new_plane_state->pixel_source == DRM_PLANE_PIXEL_SOURCE_FB && new_plane_state->fb) {
->>> +		fb_rect.x2 = new_plane_state->fb->width;
->>> +		fb_rect.y2 = new_plane_state->fb->height;
->>> +	}
->>>    
->>>    	/* Ensure fb size is supported */
->>>    	if (drm_rect_width(&fb_rect) > MAX_IMG_WIDTH ||
->>> @@ -848,10 +850,13 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
->>>    		return -E2BIG;
->>>    	}
->>>    
->>> -	fmt = to_dpu_format(msm_framebuffer_format(new_plane_state->fb));
->>> -
->>>    	max_linewidth = pdpu->catalog->caps->max_linewidth;
->>>    
->>> +	if (drm_plane_solid_fill_enabled(new_plane_state))
->>> +		fmt = dpu_get_dpu_format(DRM_FORMAT_ABGR8888);
->>> +	else
->>> +		fmt = to_dpu_format(msm_framebuffer_format(new_plane_state->fb));
->>> +
->>>    	if (drm_rect_width(&pipe_cfg->src_rect) > max_linewidth) {
->>>    		/*
->>>    		 * In parallel multirect case only the half of the usual width
->>> @@ -1082,21 +1087,32 @@ static void dpu_plane_sspp_atomic_update(struct drm_plane *plane)
->>>    	struct drm_crtc *crtc = state->crtc;
->>>    	struct drm_framebuffer *fb = state->fb;
->>>    	bool is_rt_pipe;
->>> -	const struct dpu_format *fmt =
->>> -		to_dpu_format(msm_framebuffer_format(fb));
->>> +	const struct dpu_format *fmt;
->>>    	struct dpu_sw_pipe_cfg *pipe_cfg = &pstate->pipe_cfg;
->>>    	struct dpu_sw_pipe_cfg *r_pipe_cfg = &pstate->r_pipe_cfg;
->>>    	struct dpu_kms *kms = _dpu_plane_get_kms(&pdpu->base);
->>>    	struct msm_gem_address_space *aspace = kms->base.aspace;
->>>    	struct dpu_hw_fmt_layout layout;
->>>    	bool layout_valid = false;
->>> -	int ret;
->>>    
->>> -	ret = dpu_format_populate_layout(aspace, fb, &layout);
->>> -	if (ret)
->>> -		DPU_ERROR_PLANE(pdpu, "failed to get format layout, %d\n", ret);
->>> -	else
->>> -		layout_valid = true;
->>> +	if (state->pixel_source == DRM_PLANE_PIXEL_SOURCE_FB && fb) {
->>> +		int ret;
->>> +
->>> +		fmt = to_dpu_format(msm_framebuffer_format(fb));
->>> +
->>> +		ret = dpu_format_populate_layout(aspace, fb, &layout);
->>> +		if (ret)
->>> +			DPU_ERROR_PLANE(pdpu, "failed to get format layout, %d\n", ret);
->>> +		else
->>> +			layout_valid = true;
->>> +
->>> +		DPU_DEBUG_PLANE(pdpu, "FB[%u] " DRM_RECT_FP_FMT "->crtc%u " DRM_RECT_FMT
->>> +				", %4.4s ubwc %d\n", fb->base.id, DRM_RECT_FP_ARG(&state->src),
->>> +				crtc->base.id, DRM_RECT_ARG(&state->dst),
->>> +				(char *)&fmt->base.pixel_format, DPU_FORMAT_IS_UBWC(fmt));
->>> +	} else {
->>> +		fmt = dpu_get_dpu_format(DRM_FORMAT_ABGR8888);
->>> +	}
->>>    
->>>    	pstate->pending = true;
->>>    
->>> @@ -1104,11 +1120,6 @@ static void dpu_plane_sspp_atomic_update(struct drm_plane *plane)
->>>    	pstate->needs_qos_remap |= (is_rt_pipe != pdpu->is_rt_pipe);
->>>    	pdpu->is_rt_pipe = is_rt_pipe;
->>>    
->>> -	DPU_DEBUG_PLANE(pdpu, "FB[%u] " DRM_RECT_FP_FMT "->crtc%u " DRM_RECT_FMT
->>> -			", %4.4s ubwc %d\n", fb->base.id, DRM_RECT_FP_ARG(&state->src),
->>> -			crtc->base.id, DRM_RECT_ARG(&state->dst),
->>> -			(char *)&fmt->base.pixel_format, DPU_FORMAT_IS_UBWC(fmt));
->>> -
->>>    	dpu_plane_sspp_update_pipe(plane, pipe, pipe_cfg, fmt,
->>>    				   drm_mode_vrefresh(&crtc->mode),
->>>    				   layout_valid ? &layout : NULL);
->>>    
->>
-> 
+               Linus
+
+--000000000000b0e4fd05ff62cd63
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljjbm8ha0>
+X-Attachment-Id: f_ljjbm8ha0
+
+IGluY2x1ZGUvbGludXgvbW0uaCB8ICA1ICsrKy0tCiBtbS9ub21tdS5jICAgICAgICAgfCAxMSAr
+KysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9u
+cygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvbW0uaCBiL2luY2x1ZGUvbGludXgvbW0u
+aAppbmRleCAzOWFhNDA5ZTg0ZDUuLjRmMmMzM2MyNzNlYiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9s
+aW51eC9tbS5oCisrKyBiL2luY2x1ZGUvbGludXgvbW0uaApAQCAtMjMyMyw2ICsyMzIzLDkgQEAg
+dm9pZCBwYWdlY2FjaGVfaXNpemVfZXh0ZW5kZWQoc3RydWN0IGlub2RlICppbm9kZSwgbG9mZl90
+IGZyb20sIGxvZmZfdCB0byk7CiB2b2lkIHRydW5jYXRlX3BhZ2VjYWNoZV9yYW5nZShzdHJ1Y3Qg
+aW5vZGUgKmlub2RlLCBsb2ZmX3Qgb2Zmc2V0LCBsb2ZmX3QgZW5kKTsKIGludCBnZW5lcmljX2Vy
+cm9yX3JlbW92ZV9wYWdlKHN0cnVjdCBhZGRyZXNzX3NwYWNlICptYXBwaW5nLCBzdHJ1Y3QgcGFn
+ZSAqcGFnZSk7CiAKK3N0cnVjdCB2bV9hcmVhX3N0cnVjdCAqbG9ja19tbV9hbmRfZmluZF92bWEo
+c3RydWN0IG1tX3N0cnVjdCAqbW0sCisJCXVuc2lnbmVkIGxvbmcgYWRkcmVzcywgc3RydWN0IHB0
+X3JlZ3MgKnJlZ3MpOworCiAjaWZkZWYgQ09ORklHX01NVQogZXh0ZXJuIHZtX2ZhdWx0X3QgaGFu
+ZGxlX21tX2ZhdWx0KHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLAogCQkJCSAgdW5zaWduZWQg
+bG9uZyBhZGRyZXNzLCB1bnNpZ25lZCBpbnQgZmxhZ3MsCkBAIC0yMzM0LDggKzIzMzcsNiBAQCB2
+b2lkIHVubWFwX21hcHBpbmdfcGFnZXMoc3RydWN0IGFkZHJlc3Nfc3BhY2UgKm1hcHBpbmcsCiAJ
+CXBnb2ZmX3Qgc3RhcnQsIHBnb2ZmX3QgbnIsIGJvb2wgZXZlbl9jb3dzKTsKIHZvaWQgdW5tYXBf
+bWFwcGluZ19yYW5nZShzdHJ1Y3QgYWRkcmVzc19zcGFjZSAqbWFwcGluZywKIAkJbG9mZl90IGNv
+bnN0IGhvbGViZWdpbiwgbG9mZl90IGNvbnN0IGhvbGVsZW4sIGludCBldmVuX2Nvd3MpOwotc3Ry
+dWN0IHZtX2FyZWFfc3RydWN0ICpsb2NrX21tX2FuZF9maW5kX3ZtYShzdHJ1Y3QgbW1fc3RydWN0
+ICptbSwKLQkJdW5zaWduZWQgbG9uZyBhZGRyZXNzLCBzdHJ1Y3QgcHRfcmVncyAqcmVncyk7CiAj
+ZWxzZQogc3RhdGljIGlubGluZSB2bV9mYXVsdF90IGhhbmRsZV9tbV9mYXVsdChzdHJ1Y3Qgdm1f
+YXJlYV9zdHJ1Y3QgKnZtYSwKIAkJCQkJIHVuc2lnbmVkIGxvbmcgYWRkcmVzcywgdW5zaWduZWQg
+aW50IGZsYWdzLApkaWZmIC0tZ2l0IGEvbW0vbm9tbXUuYyBiL21tL25vbW11LmMKaW5kZXggMzdk
+MGIwMzE0M2YxLi5mZGMzOTI3MzVlYzYgMTAwNjQ0Ci0tLSBhL21tL25vbW11LmMKKysrIGIvbW0v
+bm9tbXUuYwpAQCAtNjMwLDYgKzYzMCwxNyBAQCBzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKmZpbmRf
+dm1hKHN0cnVjdCBtbV9zdHJ1Y3QgKm1tLCB1bnNpZ25lZCBsb25nIGFkZHIpCiB9CiBFWFBPUlRf
+U1lNQk9MKGZpbmRfdm1hKTsKIAorLyoKKyAqIEF0IGxlYXN0IHh0ZW5zYSBlbmRzIHVwIGhhdmlu
+ZyBwcm90ZWN0aW9uIGZhdWx0cyBldmVuIHdpdGggbm8KKyAqIE1NVS4uIE5vIHN0YWNrIGV4cGFu
+c2lvbiwgYXQgbGVhc3QuCisgKi8KK3N0cnVjdCB2bV9hcmVhX3N0cnVjdCAqbG9ja19tbV9hbmRf
+ZmluZF92bWEoc3RydWN0IG1tX3N0cnVjdCAqbW0sCisJCQl1bnNpZ25lZCBsb25nIGFkZHIsIHN0
+cnVjdCBwdF9yZWdzICpyZWdzKQoreworCW1tYXBfcmVhZF9sb2NrKG1tKTsKKwlyZXR1cm4gdm1h
+X2xvb2t1cChtbSwgYWRkcik7Cit9CisKIC8qCiAgKiBleHBhbmQgYSBzdGFjayB0byBhIGdpdmVu
+IGFkZHJlc3MKICAqIC0gbm90IHN1cHBvcnRlZCB1bmRlciBOT01NVSBjb25kaXRpb25zCg==
+--000000000000b0e4fd05ff62cd63--
