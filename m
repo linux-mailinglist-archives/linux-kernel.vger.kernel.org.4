@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18868744971
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 15:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0D3744974
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 15:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjGANpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 09:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S229862AbjGANuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 09:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjGANp3 (ORCPT
+        with ESMTP id S229477AbjGANuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 09:45:29 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565FB3C00
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 06:45:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-313e23d0a28so3670453f8f.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 06:45:28 -0700 (PDT)
+        Sat, 1 Jul 2023 09:50:07 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144EC3C11
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 06:50:06 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5776312eaddso15662757b3.3
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 06:50:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688219127; x=1690811127;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1688219405; x=1690811405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=spl3Nt5Mh1u6Uhlm9oKAy/7Yr7EModW5k9NwVSB4Gms=;
-        b=Z1ihpuCsxOCdta/vnSzsGCtEzkGmm3FAcNlfZSL7Gu9C9Oo6Zrs/7fJvnBMFvG+hzv
-         luZoloDhB7NCrRHEWEsd3aFo90qXN2SPtWwBa8EUs/wZ5kzLqFZG+KXRBmXQz/Y6Xg9O
-         WJbZ9v+tGf5WfKDp8nRqxtnlYtT3Gq4X2DA9YJG5vU8WRFp/2t8UneQD/+2MWSSnz079
-         aF9lQ9xD59pHtqQj2fuv35Ip82qLROd6EWqevutmeWrjLM3qZ3CSCyAOy+6KWEZ71se0
-         G/l2j6UkcA1DnS0/f2Pik1t9s2oMKt9ykbWyu0HYIsINXyBXfd0JF+eJab36K4VkIEWx
-         SOXA==
+        bh=ezm+NjXf2KCPvjh2cUYvqoi17u9GLDDqaRcVx1XsiHA=;
+        b=R2rNfLLxRrVBYKsSHAcBwKJVDcAhDgmgfawivAKqzoPyyh2oD0EyQ45LpLCPIoMLeH
+         J4P+p6OajPIe2EFxKpAqtnr+h0e3D3yCCc2lNMll43/f+fHtX352P2NH0M0lmhn4Xiqy
+         6qkJAhx14uUNv1QCv/Um85MT4x6fVvwpLHXbXo75ddeokFl/QInQ31DbPTsTi4jW0V+g
+         uWsQSm0eerjNioH7ecPxv3lWqAqbdFRfya2z9oDS65B7K2PHW4SxVYJYy+ZJcMqUVOtk
+         s+UVgHc69oUSNVJw4LUmrQOTloB1H1J/kYj1n3/9CbwmMayMkjlGqeegWoGtC6gPlbWr
+         SSRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688219127; x=1690811127;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688219405; x=1690811405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=spl3Nt5Mh1u6Uhlm9oKAy/7Yr7EModW5k9NwVSB4Gms=;
-        b=SjI25r6qRA5JzHFESxyia9O+NQaKKPGDRF/UO6Da7HDtgk96cnqQ5s3LmNRxdVQ1EQ
-         UQL0w9MVwSqB38/SHnjh5Kwgv3mMzGK67vXDsk6brInB9vDQiDNl4z3J4MsUXhtZS1tq
-         AiFq4GXWCIiCvwtaelMFtwq5QYQGVzk6tArIQUMzrDSK80uA2/iAxldo3nhrdtZYMb6q
-         8hyuoiGCqEky98bZNwm+gdUTBxJAlH7JWlslcOwn//tbR3JIDJF0yCvdWFUzQ7wcbp6z
-         rZy2RWMdNB7zP/97SvMfDm9SeKxM+53ACTQHWKJfFEOIfuehkzAwmNspSj0pALAnF45J
-         k7DA==
-X-Gm-Message-State: ABy/qLYUrcdME3t+yE5nBTFt/+6+7cB9Jsvlndz6dSdQWAn/aJLWmmNI
-        DLXw2DtFb3v+I2cfuUGeunI=
-X-Google-Smtp-Source: APBJJlFVf4dqgcV+O5QCrl2XMsX21r25ocAt5xvcDIt4CgAYJ2iCMSmdlE5QCxFjdJQYx6SfgDZ7kQ==
-X-Received: by 2002:adf:ed45:0:b0:314:17a9:9f36 with SMTP id u5-20020adfed45000000b0031417a99f36mr4447038wro.69.1688219126541;
-        Sat, 01 Jul 2023 06:45:26 -0700 (PDT)
-Received: from suse.localnet (host-82-49-237-33.retail.telecomitalia.it. [82.49.237.33])
-        by smtp.gmail.com with ESMTPSA id g11-20020a7bc4cb000000b003fbab76165asm11130532wmk.48.2023.07.01.06.45.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jul 2023 06:45:25 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Deepak R Varma <drv@mailo.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH v3 5/6] gfs2: Replace kmap() by kmap_local_page() in
- gfs2_read_super
-Date:   Sat, 01 Jul 2023 15:45:24 +0200
-Message-ID: <4817807.GXAFRqVoOG@suse>
-In-Reply-To: <7ad72f9d1a97d673483c206d8ac9a88f2e32d3b9.1688073459.git.drv@mailo.com>
-References: <cover.1688073459.git.drv@mailo.com>
- <7ad72f9d1a97d673483c206d8ac9a88f2e32d3b9.1688073459.git.drv@mailo.com>
+        bh=ezm+NjXf2KCPvjh2cUYvqoi17u9GLDDqaRcVx1XsiHA=;
+        b=G8cWwNYslmbc7e1NDtDjJmkXWSfIBGDrEFRUHwEuQYqgFVCjAzCttqvYvGvLxWxC8Z
+         ORFe391y/wdeRJj49vGc7D/qMoIQ6h9/iB8E/T2Xr6uGNxo/yxDzTW1lnkJG0kAMlr65
+         i9QosqvGxF/ooG+lrfAwB7HvYDKDAJOU+544+2+SePEW5ScQvIIoHQ7KVV8RE/kKoYNj
+         juA569Dhvnfw4mMAAU0Qs4AM/fsMgdhtqTY0NWwXHKGzvWQEDi6ouQe+j4U4SrfIHhLj
+         Ftb/l9BzShza3SugcNP03s0LouIxGT+ui/FHZRdKFMbEW710/+pHTuJC11/rNNtITUoU
+         rrIA==
+X-Gm-Message-State: ABy/qLZPUY9acxpCAI/xyVL834I1FixZzUm3g1cUOGiepNUBaNwnRnnM
+        PLKN4IcOORoswbRoKCiTcJ29erssvF+beLADL1xXXg==
+X-Google-Smtp-Source: APBJJlGXw6gZAbhK4kl28Jt3+uNyGtz1CZs/V06D3OBlIubL8fMEUnFM2hCVt33G8WUHmy8s370jcIDCaHOXRR/TDpc=
+X-Received: by 2002:a81:83cc:0:b0:576:c543:2a5f with SMTP id
+ t195-20020a8183cc000000b00576c5432a5fmr5543264ywf.4.1688219405263; Sat, 01
+ Jul 2023 06:50:05 -0700 (PDT)
 MIME-Version: 1.0
+References: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 1 Jul 2023 15:49:54 +0200
+Message-ID: <CACRpkdYu4KWx4cgt1PFniduJb5kRmnKs84k+7xVdo3dDY=TqbQ@mail.gmail.com>
+Subject: Re: [PATCH v2] i2c: busses: i2c-nomadik: Remove a useless call in the
+ remove function
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     wsa@kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,65 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 29 giugno 2023 23:51:53 CEST Deepak R Varma wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page().
->=20
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> the mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap=E2=80=99s pool wraps and it might block when the mapping space is fu=
-lly
-> utilized until a slot becomes available.
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, the
-> kernel virtual addresses are restored and still valid.
->=20
-> Therefore, replace kmap() with kmap_local_page() in gfs2_read_super().
->=20
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+On Fri, Jun 30, 2023 at 11:23=E2=80=AFPM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+
+> Since commit a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of
+> git://git.pengutronix.de/git/wsa/linux"), there is no more
+> request_mem_region() call in this driver.
+>
+> So remove the release_mem_region() call from the remove function which is
+> likely a left over.
+>
+> There is no details in the above commit log, but at its end we can read:
+>    Conflicts:
+>            drivers/i2c/busses/i2c-nomadik.c
+>
+> This may explain why this call has been left here.
+>
+> Fixes: a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of git://git.p=
+engutronix.de/git/wsa/linux
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
-> Changes in v3:
->    - Patch included in patch set
->=20
-> Changes in v2:
->    - None
->=20
->  fs/gfs2/ops_fstype.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
-> index 8a27957dbfee..80fe61662412 100644
-> --- a/fs/gfs2/ops_fstype.c
-> +++ b/fs/gfs2/ops_fstype.c
-> @@ -264,9 +264,9 @@ static int gfs2_read_super(struct gfs2_sbd *sdp,=20
-sector_t
-> sector, int silent) __free_page(page);
->  		return -EIO;
->  	}
-> -	p =3D kmap(page);
-> +	p =3D kmap_local_page(page);
->
-Deepak,
+> v2: synch with latest -next
 
-Could this page ever come from ZONE_HIGHMEM? Can you please check whether w=
-e=20
-really need to kmap*() it or not?=20
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-=46abio
->
->  	gfs2_sb_in(sdp, p);
-> -	kunmap(page);
-> +	kunmap_local(p);
->  	__free_page(page);
->  	return gfs2_check_sb(sdp, silent);
->  }
-> --
-> 2.34.1
-
-
-
-
+Yours,
+Linus Walleij
