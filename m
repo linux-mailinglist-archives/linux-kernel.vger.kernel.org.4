@@ -2,85 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694217448AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 13:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF897448B0
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 13:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjGALGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 07:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S229836AbjGALJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 07:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGALGJ (ORCPT
+        with ESMTP id S229530AbjGALJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 07:06:09 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5416A3ABF
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 04:06:08 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a3373211a1so2015546b6e.0
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 04:06:08 -0700 (PDT)
+        Sat, 1 Jul 2023 07:09:34 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EC13C07;
+        Sat,  1 Jul 2023 04:09:33 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so4639458e87.0;
+        Sat, 01 Jul 2023 04:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688209567; x=1690801567;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gmmxI/09Vu1gvcqFW6wSCMsDrsU4gDstlNgv8XFwqYg=;
-        b=hYrTCI7JxoaqJZg/w4gVpQgy48lZiuGWo+hifIVceh6qtqUdzsRTROEVXNPinlvfig
-         BRpaenb+2Tadwnhn3gTkXC5r/x4rgdVPWBAD6PUjl+IHgWs/YMbNSXRJVIWYmfVrIb1I
-         40cO21V4kRB8KA0ezJ5ZV+J4h/24JpkVQSWFI=
+        d=gmail.com; s=20221208; t=1688209771; x=1690801771;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LyQo7oGCzL0q4nMHdOWsUgl2XzXKe7BOngdS1hsphWI=;
+        b=MpzVOfkTDGXum05mEE1Aa8/iBIcGLFakyuf9yYZoTYeGHZXIZ16CO5E5H8jLQ9lyUY
+         BhAOA/GGqNh3NEz45nHeZb1wJsqptZXbB0ZY19HUvc0cCo337TWu4OEYjlRpFPBSQEa8
+         3DvQ3sful+ygfpyRjqf9YU8nwUqQCq1OflOIThjnA39YC3EFgjgidkkreL1PcQBa56XX
+         uoDVGeOA/Dha/OoKocTDMDJAJk/iz3E2+fl2KmZjgZjXePXEm1grGoWgMwxnSzVN93DF
+         +VD1Y0buGkf0Ec1dk/ZOAHD74ITsKXHMFgA/T+ywwc6+b0wpKs3+Zj01lAX9tLo4lQLW
+         HP+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688209567; x=1690801567;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gmmxI/09Vu1gvcqFW6wSCMsDrsU4gDstlNgv8XFwqYg=;
-        b=fyRIrMYNV99H5+QbQ2AMM+NgqAEhOVm4TIWDYw6QRkRAtbCtd48fG9bazt4t68WxcZ
-         IE8fXbVYVXP4k/MmGifBUmfBSfb7Wm0oVPz8ImfgWA2Q2Q0EqH9heAFA+toxE0eL0mRo
-         Gg67ySJMRGCf0B1yAB1sU88vryIyKYXaibCuWXvylL+5E/lR6hCJ3uOYAcd9iFSRvChd
-         NVKGTIYXeadezIFLYEYn6TrFvpuYgQHBDmtC4xZK/gKrCIi7ZxTxvUkSPHKW0qWXYsx/
-         HaGe5dkqC4mxjyjKzhfuICj65xHHfyC+GPIrFdzTs1QBOiPsiHx+cKYLlnMj8/rbyNl9
-         1PlQ==
-X-Gm-Message-State: AC+VfDztgY3y6QmSvc+x/RGVXsyfgo20NdKGQjF03iqvjIUsySvi5py0
-        s6u6WE31Vn2r/T5OrRcNZn0jEA==
-X-Google-Smtp-Source: ACHHUZ4pV0Kah8DCJV+Y5YyZlN9QSW79Br3FCQuTe5iDhfm7KMAOlTjyoF9hL2lHOGNGztkp1Rq3cA==
-X-Received: by 2002:a05:6808:158d:b0:3a3:6e8e:5168 with SMTP id t13-20020a056808158d00b003a36e8e5168mr6106193oiw.39.1688209567625;
-        Sat, 01 Jul 2023 04:06:07 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id g19-20020aa78193000000b0065dd1e7c2c1sm9025796pfi.63.2023.07.01.04.06.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jul 2023 04:06:07 -0700 (PDT)
-Date:   Sat, 1 Jul 2023 20:06:02 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 3/3] zsmalloc: remove zs_compact_control
-Message-ID: <20230701110602.GB283328@google.com>
-References: <20230624053120.643409-1-senozhatsky@chromium.org>
- <20230624053120.643409-4-senozhatsky@chromium.org>
- <ZJnHc8ynABmyI7sE@google.com>
+        d=1e100.net; s=20221208; t=1688209771; x=1690801771;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LyQo7oGCzL0q4nMHdOWsUgl2XzXKe7BOngdS1hsphWI=;
+        b=B+8fSDQuZseJWyeh3zS6+p8XKFegF0A/zQHV/z65QoUKhR4GK587bbKlxy4/dexScF
+         uIXOj6VZnfqPaHW/qx84QO46tHwcTmLFIidCNdcxnHX0gyFTRMzuqSyXd5xS0dNpiyeJ
+         qfGlXpn7g25jiFQbkoy9Kf6PEVjlbIQf5N3PxMIpQjYaj4LYbvqnRPlJCThlVhWowKzx
+         mtQDNSq1DCxyVBQlyA4SJEtQFwyiGeG8E8ZZUvGuEWp6QrwD0IcBSl5JDANvc/LYQPFd
+         7f2Ou9vfR4FyhZjUcxDQbqD5J6tkrSH8LKNERQPm6EkjtTMuWUy539/Uxpk1kPhI1dPP
+         C8Hw==
+X-Gm-Message-State: ABy/qLYPuTNKo/PkGAaWZqkPgkrAHMTPuxM3w6HhiPB8xQaNmiKIkzEg
+        ELBZey6HFRTKuGM2nI9XLy4Jo8DWXFo=
+X-Google-Smtp-Source: APBJJlFJBnGRzqT/F8NwRkkxu9Uzyos7FGd6xZUEAGWgt3eTPo2M8RsX63JR4a+zwEAn05FPhtSxBw==
+X-Received: by 2002:a05:6512:3991:b0:4f8:49a8:a0e2 with SMTP id j17-20020a056512399100b004f849a8a0e2mr4796943lfu.16.1688209771171;
+        Sat, 01 Jul 2023 04:09:31 -0700 (PDT)
+Received: from [192.168.0.131] ([194.183.54.57])
+        by smtp.gmail.com with ESMTPSA id g7-20020ac25387000000b004f3945751b2sm3350944lfh.43.2023.07.01.04.09.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jul 2023 04:09:30 -0700 (PDT)
+Message-ID: <3e8e7834-fe0e-7e92-5472-cb9fd223980e@gmail.com>
+Date:   Sat, 1 Jul 2023 13:09:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJnHc8ynABmyI7sE@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] led: led-class: Read max-brightness from
+ devicetree
+To:     Astrid Rost <astrid.rost@axis.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>
+Cc:     kernel@axis.com, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230630092248.4146169-1-astrid.rost@axis.com>
+ <20230630092248.4146169-2-astrid.rost@axis.com>
+Content-Language: en-US
+From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
+In-Reply-To: <20230630092248.4146169-2-astrid.rost@axis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/06/26 10:14), Minchan Kim wrote:
-> On Sat, Jun 24, 2023 at 02:12:16PM +0900, Sergey Senozhatsky wrote:
-> > From: Minchan Kim <minchan@kernel.org>
-> > 
-> > __zs_compact always putback src_zspage into class list after
-> > migrate_zspage. Thus, we don't need to keep last position of
-> > src_zspage any more. Let's remove it.
-> > 
-> > Signed-off-by: Minchan Kim <minchan@kernel.org>
->  
->  Thanks for picking it up, Sergey!
+Hi Astrid,
 
-Thank you for clearing up the code!
+On 6/30/23 11:22, Astrid Rost wrote:
+> Add max-brightness in order to reduce the current on the connected LEDs.
+> Normally, the maximum brightness is determined by the hardware, and this
+> property is not required. This property is used to set a software limit.
+> It could happen that an LED is made so bright that it gets damaged or
+> causes damage due to restrictions in a specific system, such as mounting
+> conditions. Note that led-max-microamp should be preferably used, if it
+> is supported by the controller.
+> 
+> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+> ---
+>   drivers/leds/led-class.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+> index 9255bc11f99d..ce652abf9336 100644
+> --- a/drivers/leds/led-class.c
+> +++ b/drivers/leds/led-class.c
+> @@ -457,6 +457,10 @@ int led_classdev_register_ext(struct device *parent,
+>   			if (fwnode_property_present(init_data->fwnode,
+>   						    "retain-state-shutdown"))
+>   				led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
+> +
+> +			fwnode_property_read_u32(init_data->fwnode,
+> +				"max-brightness",
+> +				&led_cdev->max_brightness);
+>   		}
+>   	} else {
+>   		proposed_name = led_cdev->name;
+
+We have led-max-microamp for that and every LED class driver is supposed
+to calculate its max brightness level basing on it.
+
+-- 
+Best regards,
+Jacek Anaszewski
