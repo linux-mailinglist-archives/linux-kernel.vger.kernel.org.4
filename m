@@ -2,95 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6912474462F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 05:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69CC744676
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 06:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjGADZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 23:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
+        id S229985AbjGAEJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 00:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGADZ0 (ORCPT
+        with ESMTP id S229480AbjGAEJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 23:25:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A2055A7;
-        Fri, 30 Jun 2023 20:25:24 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QtH161LqyzqSKx;
-        Sat,  1 Jul 2023 10:57:46 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Sat, 1 Jul 2023 10:58:06 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <keescook@chromium.org>
-CC:     <bernd.edlinger@hotmail.de>, <ebiederm@xmission.com>,
-        <limin100@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <lizefan.x@bytedance.com>,
-        <shuah@kernel.org>, <songmuchun@bytedance.com>,
-        <zhengyejian1@huawei.com>
-Subject: Re: [PATCH -next] selftests/ptrace: Fix Test terminated by timeout in ptrace_attach
-Date:   Sat, 1 Jul 2023 22:58:33 +0800
-Message-ID: <20230701145833.3604187-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202212011638.31BBB562B@keescook>
-References: <202212011638.31BBB562B@keescook>
+        Sat, 1 Jul 2023 00:09:04 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB4492;
+        Fri, 30 Jun 2023 21:09:03 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1b060bce5b0so2470194fac.3;
+        Fri, 30 Jun 2023 21:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688184542; x=1690776542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gmp02HtvALfXppfVORZkmyM+4q1wj8f4w8M8Ul8HhUU=;
+        b=XJ62a32uNQpAOgoP+2tFi09+ybi1NHkreO6Qhafgs2KU/RYVmRMb2yysi0PmYiQXP9
+         R9Xe0dRES/ZAZhfWU4n2z3aKS4u2JfyWlmVPMY/Hil8rNFb9dQBcA1fmWDm9O+dRR95F
+         yHHacarfhihD+ECAJO1Q6eW5NzVKdT3O0D6pQ89LFkt4vmwXUfcmQ9NX2Zh3TtJuXa6I
+         QL2+LfGQQKX5HDiLa+lqLqER7ThttLggtuRnIw5sGgfKzFhvlKJb5p6wT/X4DmLdORcw
+         PkvpQNiLqH/36bf7v8ryzcWjNiMn5Tqvb1cb/8uTgDF41mPvC/l/0JQFQDzzE5sUUj8b
+         q0dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688184542; x=1690776542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gmp02HtvALfXppfVORZkmyM+4q1wj8f4w8M8Ul8HhUU=;
+        b=BZuXUiIcTFKux4zVNlK/Ayp3UMGJsR9Wc+kDd1HtRlLVO8oZdOZPvgXvjGIaFaTjr5
+         wvqtAeqAsBl+41Qg6vSOLR9hUGUohyv6xMrhp13+eaPBNEsb89G6h6zYLwl2b4PlhkoG
+         g6+zXpesnrqCC7R2dRwTqE5bThgkjRfnK2m/eei2Zag8tkcd30TQlzUMJKhAUuV6yY6Y
+         T3aGsjZUQBXewPXQ7JFvBfERTulhXyl27JcXeNiaXrkLtRhqX9+se8bGoPhh/+tY60uH
+         mAj8eTDCYTHM0JsKpJEv2O0oYMVkRWNpjy9Us9j12hbeK2y2W24cTjCbasviVtuVmYua
+         U+7w==
+X-Gm-Message-State: ABy/qLbtzbYKatQqNNUbFQbgMbDhgMbiqM3nXnstn68RCUQjvqpI9xc0
+        D9xSdYTvyRXAAAH8RN6wmUsVU+mSPDcw8MaXYZS+j1RP9kA=
+X-Google-Smtp-Source: ACHHUZ7sOj4+1Pb/Pan9nZ1J2Cxwgrzxlj4jClkk0wyIivSGd4JZX3nbgmp3ZnpbjVwynzrsDwdazoqERa+9meuMrvE=
+X-Received: by 2002:a05:6871:42cf:b0:1b0:68f7:da6 with SMTP id
+ lt15-20020a05687142cf00b001b068f70da6mr5975800oab.6.1688184542396; Fri, 30
+ Jun 2023 21:09:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230629160351.2996541-1-masahiroy@kernel.org> <20230629160351.2996541-2-masahiroy@kernel.org>
+In-Reply-To: <20230629160351.2996541-2-masahiroy@kernel.org>
+From:   Jesse T <mr.bossman075@gmail.com>
+Date:   Sat, 1 Jul 2023 00:08:51 -0400
+Message-ID: <CAJFTR8Txd-6-=5RSoHhgg1a6mr4rEAUv2Ta1F5OLsC3NC4U-Sw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kconfig: menuconfig: remove jump_key::index
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 16:48:20 -0800, Kees Cook wrote:
-> On Mon, Nov 28, 2022 at 08:56:09AM +0100, Bernd Edlinger wrote:
-> > thanks for cleaning this up.
+On Thu, Jun 29, 2023 at 12:03=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
 >
-> Oh, hm, I never saw the original email -- I'll check my Spam folder, it
-> gets overly excited sometimes.
+> You do not need to remember the index of each jump key because you can
+> count it up after a key is pressed.
 >
-> > Just for completenes:
-> >
-> > I have actually two patches submitted a while ago, but did not get any response so far,
-> > one that would make the test case work as it is:
-> >
-> > [PATCH v10] exec: Fix dead-lock in de_thread with ptrace_attach
-> > https://lore.kernel.org/lkml/AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM/
-> >
-> > and my favorite one, that would fix the dead-lock altogether (and adjust the test case accordingly):
-> >
-> > [PATCH v11] exec: Fix dead-lock in de_thread with ptrace_attach
-> > https://lore.kernel.org/lkml/AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM/
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 >
-> This fell off my radar, but let's look at it again. Is this still an
-> existing race after Eric's various refactorings? I assume so. Eric, can
-> you looked at this case?
+>  scripts/kconfig/expr.h  | 1 -
+>  scripts/kconfig/mconf.c | 7 ++++---
+>  scripts/kconfig/menu.c  | 8 --------
+>  3 files changed, 4 insertions(+), 12 deletions(-)
+>
+> diff --git a/scripts/kconfig/expr.h b/scripts/kconfig/expr.h
+> index 9c9caca5bd5f..4a9a23b1b7e1 100644
+> --- a/scripts/kconfig/expr.h
+> +++ b/scripts/kconfig/expr.h
+> @@ -275,7 +275,6 @@ struct jump_key {
+>         struct list_head entries;
+>         size_t offset;
+>         struct menu *target;
+> -       int index;
+>  };
+>
+>  extern struct file *file_list;
+> diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
+> index 7adfd6537279..fcb91d69c774 100644
+> --- a/scripts/kconfig/mconf.c
+> +++ b/scripts/kconfig/mconf.c
+> @@ -22,8 +22,6 @@
+>  #include "lkc.h"
+>  #include "lxdialog/dialog.h"
+>
+> -#define JUMP_NB                        9
+> -
+>  static const char mconf_readme[] =3D
+>  "Overview\n"
+>  "--------\n"
+> @@ -399,6 +397,7 @@ static int handle_search_keys(int key, int start, int=
+ end, void *_data)
+>  {
+>         struct search_data *data =3D _data;
+>         struct jump_key *pos;
+> +       int index =3D '1';
+>
+>         if (key < '1' || key > '9')
+>                 return 0;
+> @@ -408,11 +407,13 @@ static int handle_search_keys(int key, int start, i=
+nt end, void *_data)
+>                         if (pos->offset >=3D end)
+>                                 break;
+>
+> -                       if (key =3D=3D '1' + (pos->index % JUMP_NB)) {
+> +                       if (key =3D=3D index) {
+>                                 data->target =3D pos->target;
+>                                 return 1;
+>                         }
+>                 }
+> +
+> +               index =3D next_key(index);
+>         }
+>
+>         return 0;
+> diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
+> index 5578b8bc8a23..198eb1367e7a 100644
+> --- a/scripts/kconfig/menu.c
+> +++ b/scripts/kconfig/menu.c
+> @@ -735,15 +735,7 @@ static void get_prompt_str(struct gstr *r, struct pr=
+operty *prop,
+>         }
+>         if (head && location) {
+>                 jump =3D xmalloc(sizeof(struct jump_key));
+> -
+>                 jump->target =3D location;
+> -
+> -               if (list_empty(head))
+> -                       jump->index =3D 0;
+> -               else
+> -                       jump->index =3D list_entry(head->prev, struct jum=
+p_key,
+> -                                                entries)->index + 1;
+> -
+>                 list_add_tail(&jump->entries, head);
+>         }
+>
+> --
+> 2.39.2
 >
 
-Kindly ping :)
+Looks good!
+Reviewed-by: Jesse Taube <Mr.Bossman075@gmail.com>
 
-This discussion suspended for half a year, but testcase 'tools/testing/selftests/ptrace/vmaccess.c'
-still can not pass on the newest v6.4 kernel.
+One slight off-topic question.
+The names of the menu-based config programs have names similar to their
+corresponding file gconfig ('gconf'), xconfig ('qconf'), menuconfig ('mconf=
+'),
+and nconfig ('nconf'). The only exceptions to this one-letter naming are mc=
+onfig
+is not memuconfig and qconfig isn't xconfig. Would it be possible to
+add an alias
+to fix this?
 
-Would you continue to work it out?
-
-:)
-
----
+Side-side note config isn't in the docs.
 
 Thanks,
-Zheng Yejian
-
-> --
-> Kees Cook
->
+Jesse Taube
