@@ -2,92 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BEB744853
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 11:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC176744827
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 11:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjGAJ5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 05:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S229688AbjGAJMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 05:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjGAJ5g (ORCPT
+        with ESMTP id S229618AbjGAJMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 05:57:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0C02D46;
-        Sat,  1 Jul 2023 02:57:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACE4860A5C;
-        Sat,  1 Jul 2023 09:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93301C433C7;
-        Sat,  1 Jul 2023 09:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688205454;
-        bh=rcb5fmM/YGXFaxmYPm09nzSE6MxfW1AoIbS68NK9hgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lOB2tx/2N2H2VFd0tt8NrfjCdO5WWKUtaZRg+F3WbC1sM7/QuEMdwIUAdTf5uxR+1
-         OUNEOhpANcMhuuAp7BI/V2dfN+6BpJlcftZGmgIUbVq1Z4C15d2Vu1B9oTYnZI2K1C
-         KoDEWXpmcnGKlGb3y7NsLXyrOakCWKBwyCxFDqEM=
-Date:   Sat, 1 Jul 2023 11:57:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        sparclinux@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review
-Message-ID: <2023070124-electable-gear-f99e@gregkh>
-References: <20230629184151.888604958@linuxfoundation.org>
- <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <fbe57907-b03f-ac8c-f3f4-4d6959bbc59c@roeck-us.net>
- <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
- <CAHk-=wiN5H-2dh2zCo_jXE7_ekrxSHvQcMw4xfUKjuQs2=BN4w@mail.gmail.com>
- <fb63ea7b-c44b-fb1b-2014-3d23794fa896@roeck-us.net>
- <CAHk-=whh_aUHYF6LCV36K9NYHR4ofEZ0gwcg0RY5hj=B7AT4YQ@mail.gmail.com>
- <e4dd115b-1a41-4859-bbeb-b3a6a75bf664@roeck-us.net>
- <CAHk-=wgBAhFqD6aoD2rL0qws8S1erdbrvmQXuYi=ZFEUVNuVfg@mail.gmail.com>
+        Sat, 1 Jul 2023 05:12:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E179CBB;
+        Sat,  1 Jul 2023 02:12:04 -0700 (PDT)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QtRFD2wsdzMn1v;
+        Sat,  1 Jul 2023 17:08:48 +0800 (CST)
+Received: from huawei.com (10.67.174.205) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 1 Jul
+ 2023 17:12:00 +0800
+From:   Chen Jiahao <chenjiahao16@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <kexec@lists.infradead.org>, <linux-doc@vger.kernel.org>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <conor.dooley@microchip.com>, <guoren@kernel.org>,
+        <heiko@sntech.de>, <bjorn@rivosinc.com>, <alex@ghiti.fr>,
+        <akpm@linux-foundation.org>, <atishp@rivosinc.com>,
+        <bhe@redhat.com>, <thunder.leizhen@huawei.com>, <horms@kernel.org>
+Subject: [PATCH -next v6 0/2] support allocating crashkernel above 4G explicitly on riscv
+Date:   Sat, 1 Jul 2023 17:11:36 +0000
+Message-ID: <20230701171138.1491206-1-chenjiahao16@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgBAhFqD6aoD2rL0qws8S1erdbrvmQXuYi=ZFEUVNuVfg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.205]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 09:22:45PM -0700, Linus Torvalds wrote:
-> On Fri, 30 Jun 2023 at 19:50, Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > Yes, the patch below fixes the problem.
-> >
-> > Building xtensa:de212:kc705-nommu:nommu_kc705_defconfig ... running ......... passed
-> 
-> Thanks. Committed as
-> 
->   d85a143b69ab ("xtensa: fix NOMMU build with lock_mm_and_find_vma()
-> conversion")
-> 
-> and pushed out.
+On riscv, the current crash kernel allocation logic is trying to
+allocate within 32bit addressible memory region by default, if
+failed, try to allocate without 4G restriction.
 
-Thanks, now queued up.
+In need of saving DMA zone memory while allocating a relatively large
+crash kernel region, allocating the reserved memory top down in
+high memory, without overlapping the DMA zone, is a mature solution.
+Hence this patchset introduces the parameter option crashkernel=X,[high,low].
 
-greg k-h
+One can reserve the crash kernel from high memory above DMA zone range
+by explicitly passing "crashkernel=X,high"; or reserve a memory range
+below 4G with "crashkernel=X,low". Besides, there are few rules need
+to take notice:
+1. "crashkernel=X,[high,low]" will be ignored if "crashkernel=size"
+   is specified.
+2. "crashkernel=X,low" is valid only when "crashkernel=X,high" is passed
+   and there is enough memory to be allocated under 4G.
+3. When allocating crashkernel above 4G and no "crashkernel=X,low" is
+   specified, a 128M low memory will be allocated automatically for
+   swiotlb bounce buffer.
+See Documentation/admin-guide/kernel-parameters.txt for more information.
+
+To verify loading the crashkernel, adapted kexec-tools is attached below:
+https://github.com/chenjh005/kexec-tools/tree/build-test-riscv-v2
+
+Following test cases have been performed as expected:
+1) crashkernel=256M                          //low=256M
+2) crashkernel=1G                            //low=1G
+3) crashkernel=4G                            //high=4G, low=128M(default)
+4) crashkernel=4G crashkernel=256M,high      //high=4G, low=128M(default), high is ignored
+5) crashkernel=4G crashkernel=256M,low       //high=4G, low=128M(default), low is ignored
+6) crashkernel=4G,high                       //high=4G, low=128M(default)
+7) crashkernel=256M,low                      //low=0M, invalid
+8) crashkernel=4G,high crashkernel=256M,low  //high=4G, low=256M
+9) crashkernel=4G,high crashkernel=4G,low    //high=0M, low=0M, invalid
+10) crashkernel=512M@0xd0000000              //low=512M
+
+Changes since [v6]:
+1. Introduce the "high" flag to mark whether "crashkernel=X,high"
+   is passed. Fix the retrying logic between "crashkernel=X,high"
+   case and others when the first allocation attempt fails.
+
+Changes since [v5]:
+1. Update the crashkernel allocation logic when crashkernel=X,high
+   is specified. In this case, region above 4G will directly get
+   reserved as crashkernel, rather than trying lower 32bit allocation
+   first.
+
+Changes since [v4]:
+1. Update some imprecise code comments for cmdline parsing.
+
+Changes since [v3]:
+1. Update to print warning and return explicitly on failure when
+   crashkernel=size@offset is specified. Not changing the result
+   in this case but making the logic more straightforward.
+2. Some minor cleanup.
+
+Changes since [v2]:
+1. Update the allocation logic to ensure the high crashkernel
+   region is reserved strictly above dma32_phys_limit.
+2. Clean up some minor format problems.
+
+Chen Jiahao (2):
+  riscv: kdump: Implement crashkernel=X,[high,low]
+  docs: kdump: Update the crashkernel description for riscv
+
+ .../admin-guide/kernel-parameters.txt         | 15 ++--
+ arch/riscv/kernel/setup.c                     |  5 ++
+ arch/riscv/mm/init.c                          | 84 +++++++++++++++++--
+ 3 files changed, 90 insertions(+), 14 deletions(-)
+
+-- 
+2.34.1
+
