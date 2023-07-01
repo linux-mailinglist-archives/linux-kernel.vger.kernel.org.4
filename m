@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921547446A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 06:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123367446B0
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 07:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjGAE4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 00:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        id S231169AbjGAFFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 01:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGAE4H (ORCPT
+        with ESMTP id S230523AbjGAFFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 00:56:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C090AE65
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 21:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=V34U8x+xt3cNOs6Hq3uSEoa9SGtAD0arB4vReWdva5o=; b=lSUtVdDxXI/OgDHgSQt4HRzsPZ
-        nZUMDWwJwXbwtuQPPn++hWmb1SWKpfIySTrWYpJi+T+SlP01upmKXwvBvdfomak79v8tIgY8nUnVu
-        6twyGreYNzfVHePBTaAQdU3JghqV4afNehEvDkWlbLgX2NDiSRnhPPuGDcpbIqVHEreZKdeCuu8sO
-        cZjaw9eq26IEOnBcjAukOdlv61tPwzAKWzOFOAi+6pEshlSGlRJ1sK7hE7ks7sSidPdNGJu5Wl6Yp
-        wzYm/KdJskkownkXgL3XiipngKy4sgNShw+L3dc6SFudLnAu+QsL/wvWSsg+MM2BdDzUaZilsaD7j
-        Xtfy1zrw==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qFSeQ-005BFi-07;
-        Sat, 01 Jul 2023 04:56:02 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v2 RESEND RESEND] ASoC: fsl MPC52xx drivers require PPC_BESTCOMM
-Date:   Fri, 30 Jun 2023 21:56:01 -0700
-Message-ID: <20230701045601.31452-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 1 Jul 2023 01:05:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8125A44B7;
+        Fri, 30 Jun 2023 22:04:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1631060F31;
+        Sat,  1 Jul 2023 05:04:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7E0DFC433C7;
+        Sat,  1 Jul 2023 05:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688187898;
+        bh=4LWOhASE8+HGVu8i8O4N4EliCDL8lrFffN6puZLpAxs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jla41Fk6USFMFMOAxpL68YvBg8s48uB7181Pk3pwDdwe0gIg8f2qMR8B9e4LzuQqF
+         EP9jFuokOPclCJ7ciVrFmrh7t99p8fPdJ21usaUVcVNA8BmFggMqFWfK4bZAwAh2o8
+         bl2gBcVKmx3elXjdt6D43/HfxPIFKsuLEpVOqEL3BOnzKVkzW8zdS7QBYxt+og+VbK
+         DpK6C+bW3/ooU/wxBwNGv3FgCMLm/i+qUf+A73nOGv7TcV10yZwhBZGYaM4VVW/u3k
+         GUk85r95nfqqxlGtkom8lOKZmgA3pCLEoO1pEQ1uiFGuPhIQ3vUfPqXfJDnZUp05Qz
+         wLKLf+51AaK5A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68EBAE5381B;
+        Sat,  1 Jul 2023 05:04:58 +0000 (UTC)
+Subject: Re: [GIT PULL] smb3 client fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5msFa0AjapQV_+bPf+upCNnCxppVgqkcDQP9GTh8o5bgdw@mail.gmail.com>
+References: <CAH2r5msFa0AjapQV_+bPf+upCNnCxppVgqkcDQP9GTh8o5bgdw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5msFa0AjapQV_+bPf+upCNnCxppVgqkcDQP9GTh8o5bgdw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.5-rc-smb3-client-fixes-part1
+X-PR-Tracked-Commit-Id: 61986a58bc6abbb1aea26e52bd269f49e5bacf19
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a507db1d8fdc39802415e4d2ef6d1aecd67927fa
+Message-Id: <168818789842.30776.10169180339933392249.pr-tracker-bot@kernel.org>
+Date:   Sat, 01 Jul 2023 05:04:58 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both SND_MPC52xx_SOC_PCM030 and SND_MPC52xx_SOC_EFIKA select
-SND_SOC_MPC5200_AC97. The latter symbol depends on PPC_BESTCOMM,
-so the 2 former symbols should also depend on PPC_BESTCOMM since
-"select" does not follow any dependency chains.
+The pull request you sent on Fri, 30 Jun 2023 23:20:39 -0500:
 
-This prevents a kconfig warning and build errors:
+> git://git.samba.org/sfrench/cifs-2.6.git tags/6.5-rc-smb3-client-fixes-part1
 
-WARNING: unmet direct dependencies detected for SND_SOC_MPC5200_AC97
-  Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC52xx [=y] && PPC_BESTCOMM [=n]
-  Selected by [m]:
-  - SND_MPC52xx_SOC_PCM030 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC5200_SIMPLE [=y]
-  - SND_MPC52xx_SOC_EFIKA [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_EFIKA [=y]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a507db1d8fdc39802415e4d2ef6d1aecd67927fa
 
-ERROR: modpost: "mpc5200_audio_dma_destroy" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
-ERROR: modpost: "mpc5200_audio_dma_create" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
+Thank you!
 
-Fixes: 40d9ec14e7e1 ("ASoC: remove BROKEN from Efika and pcm030 fabric drivers")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Grant Likely <grant.likely@secretlab.ca>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Shengjiu Wang <shengjiu.wang@gmail.com>
-Cc: Xiubo Li <Xiubo.Lee@gmail.com>
-Cc: alsa-devel@alsa-project.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Acked-by: Shengjiu Wang <shengjiu.wang@gmail.com>
----
-v2: use correct email address for Mark Brown.
-
- sound/soc/fsl/Kconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff -- a/sound/soc/fsl/Kconfig b/sound/soc/fsl/Kconfig
---- a/sound/soc/fsl/Kconfig
-+++ b/sound/soc/fsl/Kconfig
-@@ -243,7 +243,7 @@ config SND_SOC_MPC5200_AC97
- 
- config SND_MPC52xx_SOC_PCM030
- 	tristate "SoC AC97 Audio support for Phytec pcm030 and WM9712"
--	depends on PPC_MPC5200_SIMPLE
-+	depends on PPC_MPC5200_SIMPLE && PPC_BESTCOMM
- 	select SND_SOC_MPC5200_AC97
- 	select SND_SOC_WM9712
- 	help
-@@ -252,7 +252,7 @@ config SND_MPC52xx_SOC_PCM030
- 
- config SND_MPC52xx_SOC_EFIKA
- 	tristate "SoC AC97 Audio support for bbplan Efika and STAC9766"
--	depends on PPC_EFIKA
-+	depends on PPC_EFIKA && PPC_BESTCOMM
- 	select SND_SOC_MPC5200_AC97
- 	select SND_SOC_STAC9766
- 	help
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
