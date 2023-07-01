@@ -2,125 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C89B744A29
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 16:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE03744A32
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjGAOxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 10:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S230268AbjGAPAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 11:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjGAOxv (ORCPT
+        with ESMTP id S229531AbjGAPAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 10:53:51 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A68935B3
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 07:53:50 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51d9bf5411aso3047965a12.2
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 07:53:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688223229; x=1690815229;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4z5avgOZM94E55xJX5yHh1jEBdl/Nv8eTHj3o1PmFnI=;
-        b=IqkaY/63sYcOG0vwtmF02wpU+mNr/gP2fHYz9of1UNY2Q45RQUGKnr0nycE74z3Vq+
-         vRH+iq/bEWHzZQJFNk5D1eABcSm/7HMxFYJiaIg+wuXbW55cwpQiwwq7ZbxPO2QlnkIj
-         9iVfVrEWAevgKZSOtWpo/0swSzpiq3/5R0+5tvpX1ycDHSi/sX9HFmLv96haLzn08jMc
-         DY4baiQluiuE8NdVxL1tqe/WSUZ5z1uxB9P1GEc7MeQjDLyJWrhwO9i9VTqG5iE4w+Nj
-         cKCOO9fcg9SfxcuWGrOsZkI7RcxYFElB3npOI1snh4RreMoNrKyv6N+PeDCQ9R1qg56C
-         GLsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688223229; x=1690815229;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4z5avgOZM94E55xJX5yHh1jEBdl/Nv8eTHj3o1PmFnI=;
-        b=WFZQ5GlLq+HeMs1DB25EswAIuPKWAsJkvaAzZdHZPKvIp9DrsQOPKYOuIARQo9FYX9
-         SaLABAA4w3nPd5ZafdHFoFziXheutmjd0G/M72dIovWrsZO+Dso1jan/kR5FYQQ2c6/K
-         bw1lISK7mhb9NoRDxWIbqi6QebvrP0dsWgp+lqzF9RRY4jGKIVWMTh9fiEDuV9d96gLO
-         6FIqD6BbHt6igz6Ak9OqQQxvAkuIEJCZkDDHcIE3GCtf/evoGofii57xX1YPtWAO87yL
-         3lvHgjqRsxbxImVpx/pzlpOxIlCAeefyoBsyrNmNPuuC9/XJ1I6KhCwdnEVOaLTjLHCy
-         iGbg==
-X-Gm-Message-State: AC+VfDxW3R4J9GJY8yMqWRJ+p4AWIUslo/0qwhEYsJV4s0c3oXCOV8n0
-        w/fo8EZuPbkblKq1vUuArjPCHg==
-X-Google-Smtp-Source: APBJJlFbTncNQknWuK6Y34dd/Vq9wobBPzkzq5+JVS2JfwhQSw4EsBA/mzFykhnRWmdndPeE2HFOZQ==
-X-Received: by 2002:a17:906:4093:b0:992:a85d:278b with SMTP id u19-20020a170906409300b00992a85d278bmr3179852ejj.59.1688223228877;
-        Sat, 01 Jul 2023 07:53:48 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id lf1-20020a170907174100b0098d2261d189sm1025110ejc.19.2023.07.01.07.53.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jul 2023 07:53:48 -0700 (PDT)
-Date:   Sat, 1 Jul 2023 16:53:47 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
-        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v5 00/13] RISCV: Add KVM_GET_REG_LIST API
-Message-ID: <20230701-e1bff47a0ed38ec3ab6ca252@orel>
-References: <cover.1688010022.git.haibo1.xu@intel.com>
+        Sat, 1 Jul 2023 11:00:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4617A35B3;
+        Sat,  1 Jul 2023 08:00:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA37160AB3;
+        Sat,  1 Jul 2023 15:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA57FC433C7;
+        Sat,  1 Jul 2023 15:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688223649;
+        bh=+CATQ94X96pEsyvLLOgVuj1lXomvGeVeEj/5+G0He70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IugKfnLCUmen9tyhpHqp7khuvKjnd4QiZTBtTs6YmpQA7x/ibTk6VaY4+nC6wiqYQ
+         ehoa2e0ol6Lyt/ame8kyPwlJzjF9gk4aD65wv3JlAY5qtAyYsOcR9hwvZicds7VymN
+         vgW00+0+EuaM+ZFzPGpWgIlIT2UTayLbAZ1WHjy8=
+Date:   Sat, 1 Jul 2023 17:00:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Franziska =?iso-8859-1?Q?N=E4pelt?= 
+        <franziska.naepelt@googlemail.com>, linux-staging@lists.linux.dev,
+        kernel-janitors@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Emily Peri <eperi1024@gmail.com>,
+        Guo Zihua <guozihua@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        Veerendranath Jakkam <quic_vjakkam@quicinc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/3] staging: rtl8723bs: Fix space issues
+Message-ID: <2023070123-unburned-worsening-0713@gregkh>
+References: <20230701102538.5359-1-franziska.naepelt@googlemail.com>
+ <5ad04b3a-7c77-cadb-13b4-509a086cf04d@web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1688010022.git.haibo1.xu@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5ad04b3a-7c77-cadb-13b4-509a086cf04d@web.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 01, 2023 at 09:42:48PM +0800, Haibo Xu wrote:
-> KVM_GET_REG_LIST will dump all register IDs that are available to
-> KVM_GET/SET_ONE_REG and It's very useful to identify some platform
-> regression issue during VM migration.
-> 
-> Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
-> of the code as common test framework that can be shared by riscv.
-> 
-> Patch 8 move reject_set check logic to a function so as to check for
-> different errno for different registers.
-> Patch 9 move finalize_vcpu back to run_test so that riscv can implement
-> its specific operation.
-> Patch 10 change to do the get/set operation only on present-blessed list.
-> Patch 11 add the skip_set facilities so that riscv can skip set operation
-> on some registers.
-> Patch 12 enabled the KVM_GET_REG_LIST API in riscv.
-> patch 13 added the corresponding kselftest for checking possible
-> register regressions.
-> 
-> The get-reg-list kvm selftest was ported from aarch64 and tested with
-> Linux v6.4 on a Qemu riscv64 virt machine.
+On Sat, Jul 01, 2023 at 04:43:09PM +0200, Markus Elfring wrote:
+> You should not put only your own email address into the field “To”.
+> Please reconsider the distribution of addresses between message header fields once more.
 
-Hi Haibo,
+Please do not comment on staging driver changes anymore, it is not
+helpful to anyone involved.
 
-This series needs a rebase on top of these recent patches
-
- commit ee053e03b08e ("KVM: selftests: get-reg-list: support ID register features")
- commit 5f0419a0083b ("KVM: selftests: get-reg-list: add Permission Indirection registers")
-
-The conflicts will be in my patches, which do the splitting of the test.
-I'll do the rebase and push it to a branch for you to pick up.
-
-Thanks,
-drew
+greg k-h
