@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45997448D0
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 14:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34AA7448F2
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 14:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjGAMLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 08:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S229633AbjGAM1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 08:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjGAMLP (ORCPT
+        with ESMTP id S229480AbjGAM1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 08:11:15 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149B03AAD;
-        Sat,  1 Jul 2023 05:11:14 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6686c74183cso2205868b3a.1;
-        Sat, 01 Jul 2023 05:11:14 -0700 (PDT)
+        Sat, 1 Jul 2023 08:27:20 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A003C07
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 05:27:18 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b7f2239bfdso22004565ad.1
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 05:27:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688213473; x=1690805473;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f1GyuonBm6IUr0u+r5GEAQVpS0cfgB5k80PSwBGFToY=;
-        b=KfCNmTFBwiLTda6Dm+DznJq70IhnOvAFC/zYQHCxe3keuHYR4JHjK5JzgH4OkDx2yc
-         hXpmbi/rlz80nZG5ufKcxKROcSkcMnBzEzjN+EDQtS3VlvdbOpRBAVlBpgBnv/BYemCc
-         wwjnVDGWI4Qzw2yXTiy3Id8dcsfpr+15qamDPQ7CYGPm1bGG6DTkZaT/j87fsezktniz
-         A78OIPMEG9uotIa/b1AmRA/pcI9ZJVIL51/IaKmIWTytbxVRL9bH6W0wS5KPuWYcgZGT
-         X1X0YWjCoQEJB5G7XGtcQV45Dis4/iB0Rtm+TH4X6Lu0/mQAT7RmcK72eszUsej+8JpZ
-         COiQ==
+        d=gmail.com; s=20221208; t=1688214438; x=1690806438;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfT+iCg7he7G1O8FrhG+GwexlTOWppSr6nVkF4iOKro=;
+        b=G+8kn0ys6ceNbz9BEowkPZHBHhy3YQYW9UgJEBQgXJC6OnYyVTAft19tO2uiwqBLNb
+         igEXQtaQo9igvggoezxqDdlCbfN3xCiJH9nJKCH6HXb4cJZG35wkADWnvMmtijFsh5Mh
+         7PIX4d87ZaiotIXY34HKEcka5H3sAIXbPLi0L6QXS1CIY0CoIAnKCMCmXTIdcEpSIdRq
+         xeQ/3hyQ4kKL6b2ZZIB0mgwzXBpFg4jpt+tndNR1V3Pf0W0MKQ/XAEw3mDBTsUnDlEKb
+         u8aKQjsRCTm+KCDZbEMAmlIGM2hS1mEsDUg0BOwzR1M3goETCdyvuREwC3OttU7qSt/p
+         UNsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688213473; x=1690805473;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f1GyuonBm6IUr0u+r5GEAQVpS0cfgB5k80PSwBGFToY=;
-        b=jklLHdAabqjjw6qKK+qdwTrBMNAQm2AZYk22NY+FyTugYyvT6NG55ke28yfZySXGCH
-         I5sRCpuOx/fEe2DFi7XoOu6ykadnzVzDHaGUoQjpfSGEJgBV57xZaJNv8iJbLysz3e1E
-         cJw2OrjR93v9aZQthVkTZoFKNoNPTakKC4+t6mb5A+y52Uu7ft0hH1mF93s0iouQlB3Y
-         LIC1B1lMKaS2hF5B54wUTvJFVWSPIiWjgM/XDlHuZVBOe7AKyizk7hgnFqRCUQz/7f3/
-         Sw2ShMz0/trYIxf6cgOZazo+EOTZU+UozlrLoStHcBe6J91TgUu2O2v/XqRFRo/IHSuc
-         /0wQ==
-X-Gm-Message-State: ABy/qLa9XCeNwRqPBwjAmSBFtN8ctCkrzsrrHw/bXiQ4bJRCBt75EPBV
-        jk0ZGamUWvU0IagA0nva53s=
-X-Google-Smtp-Source: APBJJlFta5cKHhIgxiLxamDAB/Qw2W5giLxoywNe8po2TJMX0I3gw3Sfh3ev9H6ouhWZEi/AI96i4g==
-X-Received: by 2002:a05:6a00:14cc:b0:66f:912b:d6f with SMTP id w12-20020a056a0014cc00b0066f912b0d6fmr7785028pfu.0.1688213473510;
-        Sat, 01 Jul 2023 05:11:13 -0700 (PDT)
-Received: from [192.168.50.210] (ip68-109-79-27.oc.oc.cox.net. [68.109.79.27])
-        by smtp.gmail.com with ESMTPSA id i22-20020aa78b56000000b006687198c3easm11781138pfd.179.2023.07.01.05.11.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 05:11:13 -0700 (PDT)
-Message-ID: <594f73f2-59b0-bbcb-d7a0-6d89e2446830@gmail.com>
-Date:   Sat, 1 Jul 2023 05:11:11 -0700
+        d=1e100.net; s=20221208; t=1688214438; x=1690806438;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xfT+iCg7he7G1O8FrhG+GwexlTOWppSr6nVkF4iOKro=;
+        b=bbXaYV2HjGUL5o5lrNgcfHVQC70uaHt3WCVe0wwIiT4wcWQtceZVTdk6XXVZRMEQFV
+         LySDVohGTtU+ydR8+qEWluwjH343mDWsbX3NbZJDstI/gasrgBQCgmwwT3S877d0TCR9
+         dbcktee4EUKUqnG5noTTh/5Y5tji65V//dSsgAbospXglWKkcTMdIT5ORZ2cKqZJRaD1
+         D/y4OFvqA8iowSitPwmbaGg8xW69FfIkU9p3Kg4ZLjVg49ot+vqI/ix2aOP5GJpOKftu
+         DZbEQg8087miFvRVJQo1iTka4bmX2iGY7Al8N6JFnG71le+htkb2BeUb9iFX93gFhD0a
+         WwwA==
+X-Gm-Message-State: ABy/qLa5RjvdoSRDOsoTJsNeXkLSOq3zY76KXUqISdRrf8tVIln8rgYj
+        4fWHOZOC5ZTIBjmL8Lx9Xog=
+X-Google-Smtp-Source: APBJJlFl919QV7xve/1RnA+jhn7mf3eSZpbJiJOsrPA8uCkDVgz9/lm87vXf7Gm8cS+z538CbRXVYA==
+X-Received: by 2002:a17:903:1c5:b0:1b8:6a09:9cf9 with SMTP id e5-20020a17090301c500b001b86a099cf9mr6402798plh.26.1688214438297;
+        Sat, 01 Jul 2023 05:27:18 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id u12-20020a170902e5cc00b001aae625e422sm10669704plf.37.2023.07.01.05.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jul 2023 05:27:17 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 4CF3083BEC72; Sat,  1 Jul 2023 19:27:13 +0700 (WIB)
+Date:   Sat, 1 Jul 2023 19:27:13 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: Fwd: commit 9df9d2f0471b causes boot failure in pre-rc1 6.5
+ kernel
+Message-ID: <ZKAboYIj6pAd9CMO@debian.me>
+References: <4d9fb4a9-6c48-600c-f625-8ef66208090a@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
-Content-Language: en-US
-To:     Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>
-References: <20230620133711.22840-1-dwagner@suse.de>
- <20230620133711.22840-5-dwagner@suse.de>
-From:   James Smart <jsmart2021@gmail.com>
-In-Reply-To: <20230620133711.22840-5-dwagner@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1Y2CUzrFU0UJ5NVe"
+Content-Disposition: inline
+In-Reply-To: <4d9fb4a9-6c48-600c-f625-8ef66208090a@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,40 +78,96 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 6/20/2023 6:37 AM, Daniel Wagner wrote:
-> Commit 4c984154efa1 ("nvme-fc: change controllers first connect to use
-> reconnect path") made the connection attempt asynchronous in order to
-> make the connection attempt from autoconnect/boot via udev/systemd up
-> case a bit more reliable.
-> 
-> Unfortunately, one side effect of this is that any wrong parameters
-> provided from userspace will not be directly reported as invalid, e.g.
-> auth keys.
-> 
-> So instead having the policy code inside the kernel it's better to
-> address this in userspace, for example in nvme-cli or nvme-stas.
-> 
-> This aligns the fc transport with tcp and rdma.
+--1Y2CUzrFU0UJ5NVe
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As much as you want to make this change to make transports "similar", I 
-am dead set against it unless you are completing a long qualification of 
-the change on real FC hardware and FC-NVME devices. There is probably 
-1.5 yrs of testing of different race conditions that drove this change. 
-You cannot declare success from a simplistic toy tool such as fcloop for 
-validation.
+On Wed, Jun 28, 2023 at 09:06:22PM +0700, Bagas Sanjaya wrote:
+> Hi,
+>=20
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+>=20
+> > Since yesterday my builds of the https://git.kernel.org/pub/scm/linux/k=
+ernel/git/torvalds/linux.git no longer boot with a black screen immediately=
+ upon booting. Today I finished git bisecting the issue and arrived at the =
+following:
+> >=20
+> > 9df9d2f0471b4c4702670380b8d8a45b40b23a7d is the first bad commit
+> > commit 9df9d2f0471b4c4702670380b8d8a45b40b23a7d
+> > Author: Thomas Gleixner <tglx@linutronix.de>
+> > Date:   Wed Jun 14 01:39:39 2023 +0200
+> >=20
+> >     init: Invoke arch_cpu_finalize_init() earlier
+> >    =20
+> >     X86 is reworking the boot process so that initializations which are=
+ not
+> >     required during early boot can be moved into the late boot process =
+and out
+> >     of the fragile and restricted initial boot phase.
+> >    =20
+> >     arch_cpu_finalize_init() is the obvious place to do such initializa=
+tions,
+> >     but arch_cpu_finalize_init() is invoked too late in start_kernel() =
+e.g. for
+> >     initializing the FPU completely. fork_init() requires that the FPU =
+is
+> >     initialized as the size of task_struct on X86 depends on the size o=
+f the
+> >     required FPU register buffer.
+> >    =20
+> >     Fortunately none of the init calls between calibrate_delay() and
+> >     arch_cpu_finalize_init() is relevant for the functionality of
+> >     arch_cpu_finalize_init().
+> >    =20
+> >     Invoke it right after calibrate_delay() where everything which is r=
+elevant
+> >     for arch_cpu_finalize_init() has been set up already.
+> >    =20
+> >     No functional change intended.
+> >    =20
+> >     Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> >     Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> >     Link: https://lore.kernel.org/r/20230613224545.612182854@linutronix=
+=2Ede
+> >=20
+> >  init/main.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > Since it might be relevant, my CPU is Intel Core i5-12400 with UEFI fro=
+m december 2022 and the compiler is gcc (Gentoo Hardened 13.1.1_p20230527 p=
+3) 13.1.1 20230527. If additional information such as the kernel configurat=
+ion is required, let me know.
+>=20
+> See Bugzilla for the full thread.
+>=20
+> The reporter can't provide requested dmesg due to this is early
+> boot failure, unfortunately.
+>=20
+> Nevertheless, this regression has already been taken care of on
+> Bugzilla, but to ensure it is tracked and doesn't get fallen through
+> cracks unnoticed, I'm adding it to regzbot:
+>=20
+> #regzbot introduced: 9df9d2f0471b https://bugzilla.kernel.org/show_bug.cg=
+i?id=3D217602
+> #regzbot title: early arch_cpu_finalize_init() cause immediate boot failu=
+re
+>=20
 
-The original issues exist, probably have even morphed given the time 
-from the original change, and this will seriously disrupt the transport 
-and any downstream releases.  So I have a very strong NACK on this change.
+#regzbot fix: 0303c9729afc40
 
-Yes - things such as the connect failure results are difficult to return 
-back to nvme-cli. I have had many gripes about the nvme-cli's behavior 
-over the years, especially on negative cases due to race conditions 
-which required retries. It still fails this miserably.  The async 
-reconnect path solved many of these issues for fc.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-For the auth failure, how do we deal with things if auth fails over time 
-as reconnects fail due to a credential changes ?  I would think 
-commonality of this behavior drives part of the choice.
+--1Y2CUzrFU0UJ5NVe
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- james
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZKAbmQAKCRD2uYlJVVFO
+o+rcAQDuovUL5Ax0sXesVsBWrU8ClRKMg+GF/SJpC0s0l5BY+AEA55qrJEQbGNL9
+az1c2oJS1pTEX/fmd9n0wtLXRFR40AU=
+=u45Q
+-----END PGP SIGNATURE-----
+
+--1Y2CUzrFU0UJ5NVe--
