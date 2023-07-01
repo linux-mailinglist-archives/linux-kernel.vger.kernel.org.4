@@ -2,89 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3C3744576
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 02:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDC5744582
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 02:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjGAAJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 20:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S229612AbjGAAUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 20:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjGAAJm (ORCPT
+        with ESMTP id S229563AbjGAAUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 20:09:42 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035783C29;
-        Fri, 30 Jun 2023 17:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=frNBpN5Ah3HHFVhq8vAbyVzkXEJ+bYa1e3oBl0nbpV8=; b=Rjm4s0jhP5lIXdHShrT46FIvjH
-        s2XBFAkiha/owQok0aH8tLh8hgGUOr6FpmeOEEtxxvpHpFvaEfrHONpnjcI9vpplPd64Cf5H5Jnly
-        4pdxaQpQTy8MXt+ogOlpSXZkegcNUv+HXs4Ix/a5X9Pu3omWw1WGIdGAkFbqxg2UDb4g0iYwh7k6C
-        wldq9b6brR27zlSiUe9hQCOoSmRuiSWlVpPHBb2Pvajybllk1QuHStiVcnp3X9gX7nwEe5I5rJ9xJ
-        KYOmumRWUZpcwL8Dgm9k0+NdcC2kPeOBI5jfItR6ohMpUAr+Z7BFADgVLaWrGCjUMLgkaKleeX8IO
-        c1XJm8SQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qFOBH-004oqX-18;
-        Sat, 01 Jul 2023 00:09:39 +0000
-Message-ID: <2e729756-4468-9e3a-2664-9b1b4b4ca060@infradead.org>
-Date:   Fri, 30 Jun 2023 17:09:38 -0700
+        Fri, 30 Jun 2023 20:20:42 -0400
+Received: from vps0.lunn.ch (unknown [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124083A9B;
+        Fri, 30 Jun 2023 17:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=RSoC/5hYUUQ3sGJr52lBB+aV7IzoV8b72rkry2pxCQg=; b=yAyplwTga+cJQhNVxS4WCa0avC
+        XATcUdMc7wgQTO46g7k9dcH2lTxfJGRCofunObU6mN+84w113eNMP2VoKVQEFW1R1wTRQT0i64hLW
+        KT9C9WzHFOqZAlNELVDobW+4G2P/rybEr2j3erhGyjDcrRq59amX2UprnR8BcrFLmzDQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qFOKp-000LM8-66; Sat, 01 Jul 2023 02:19:31 +0200
+Date:   Sat, 1 Jul 2023 02:19:31 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Evan Quan <evan.quan@amd.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, Alexander.Deucher@amd.com,
+        Christian.Koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        Mario.Limonciello@amd.com, mdaenzer@redhat.com,
+        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
+        hdegoede@redhat.com, jingyuwang_vip@163.com, Lijo.Lazar@amd.com,
+        jim.cromie@gmail.com, bellosilicio@gmail.com,
+        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH V5 1/9] drivers core: Add support for Wifi band RF
+ mitigations
+Message-ID: <7e7db6eb-4f46-407a-8d1f-16688554ad80@lunn.ch>
+References: <20230630103240.1557100-1-evan.quan@amd.com>
+ <20230630103240.1557100-2-evan.quan@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: linux-next: Tree for Jun 30 (drivers/bluetooth/btmtk.c)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Jing Cai <jing.cai@mediatek.com>,
-        Chris Lu <chris.lu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-References: <20230630131756.6dee658e@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230630131756.6dee658e@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630103240.1557100-2-evan.quan@amd.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/29/23 20:17, Stephen Rothwell wrote:
-> Hi all,
+> Drivers/subsystems contributing frequencies:
 > 
-> Please do *not* add any v6.6 related stuff to your linux-next included
-> branches until after v6.5-rc1 has been released.
-> 
-> This release is broken for 32 bit sparc builds.
-> 
-> Changes since 20230629:
-> 
+> 1) During probe, check `wbrf_supported_producer` to see if WBRF supported
+>    for the device.
 
-When CONFIG_DEV_COREDUMP is not set,
-gcc 12.2.0 (crosstools from kernel.org) complains:
+What is the purpose of this stage? Why would it not be supported for
+this device?
 
-../drivers/bluetooth/btmtk.c: In function 'btmtk_process_coredump':
-../drivers/bluetooth/btmtk.c:386:44: error: 'struct hci_dev' has no member named 'dump'
-  386 |                 schedule_delayed_work(&hdev->dump.dump_timeout,
-      |                  
+> +#ifdef CONFIG_WBRF
+> +bool wbrf_supported_producer(struct device *dev);
+> +int wbrf_add_exclusion(struct device *adev,
+> +		       struct wbrf_ranges_in *in);
+> +int wbrf_remove_exclusion(struct device *dev,
+> +			  struct wbrf_ranges_in *in);
+> +int wbrf_retrieve_exclusions(struct device *dev,
+> +			     struct wbrf_ranges_out *out);
+> +bool wbrf_supported_consumer(struct device *dev);
+> +
+> +int wbrf_register_notifier(struct notifier_block *nb);
+> +int wbrf_unregister_notifier(struct notifier_block *nb);
+> +#else
+> +static inline bool wbrf_supported_producer(struct device *dev) { return false; }
+> +static inline int wbrf_add_exclusion(struct device *adev,
+> +				     struct wbrf_ranges_in *in) { return -ENODEV; }
+> +static inline int wbrf_remove_exclusion(struct device *dev,
+> +					struct wbrf_ranges_in *in) { return -ENODEV; }
 
-I see this on arm64, ppc64, riscv32, i386, x86_64
+The normal aim of stubs is that so long as it is not expected to be
+fatal if the functionality is missing, the caller should not care if
+it is missing. So i would expect these to return 0, indicating
+everything worked as expected.
 
+> +static inline int wbrf_retrieve_exclusions(struct device *dev,
+> +					   struct wbrf_ranges_out *out) { return -ENODEV; }
 
-PS: please add a MAINTAINERS entry for btmtk.c.
+This is more complex. Ideally you want to return an empty set, so
+there is nothing to do. So i think the stub probably wants to do a
+memset and then return 0.
 
--- 
-~Randy
+> +static inline bool wbrf_supported_consumer(struct device *dev) { return false; }
+> +static inline int wbrf_register_notifier(struct notifier_block *nb) { return -ENODEV; }
+> +static inline int wbrf_unregister_notifier(struct notifier_block *nb) { return -ENODEV; }
+
+And these can just return 0.
+
+    Andrew
