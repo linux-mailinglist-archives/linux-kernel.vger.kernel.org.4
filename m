@@ -2,194 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65D57445F6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 03:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600627445FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 04:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjGAB7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 21:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S229863AbjGACAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 22:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGAB7H (ORCPT
+        with ESMTP id S229447AbjGACAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 21:59:07 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E0B420E;
-        Fri, 30 Jun 2023 18:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688176747; x=1719712747;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kadwobPbntv7bqEGAJAWmbPreUMwjC7qneUEnCmNsyQ=;
-  b=T3nD8HY4QTExSuTwe5OsLIDPWkL8Td5VXrHwfEa3QDHxCBprsamnhX2S
-   ptfLfXHyujJDyCI/QpVe/hWuDJXG3mqWOwPGOmT0ONp7ezx+5G+4FYFGO
-   D+ybZUtkRNm1DMB5+YXwFQPPlKCd5Q5K1/W4jN2FrEvsQ/+NQm3Kwav8/
-   OZ3Lw5tKpXpIgb9qDO6mMsB9FlzvYofvV52HnKukTBlOqLSdW9wtwMrTw
-   w2QWrkTgTfjBngk/L2vuig7kKDt55jRU0sm0V9ZrGxaw0Z2r8zSAoD0aH
-   LH/25faDJhmmC6lS0xF4hkV4NOxnfnXXVUh/urt1jj+6PhIDQ3CjH87lK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="342119785"
-X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
-   d="scan'208";a="342119785"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 18:59:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="964587391"
-X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
-   d="scan'208";a="964587391"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Jun 2023 18:59:06 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 30 Jun 2023 18:59:06 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Fri, 30 Jun 2023 18:59:06 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Fri, 30 Jun 2023 18:59:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LPeBEK6OrYF/aB2oSPRyWV2XIbuGiS163qKfXhJIh6WruCV5HG1fU9GbXDOsw5NbN7cpr5VRZwPcTlvYVLQFSZs03TgCXmjYmlviHFrU+Mz975xUM9a1x4o0vhKsSYhVN7U131mlg9uA5Ml+q5VY3kKGUzf2WqqEJjfb7BE+eZAIQaXcMOuyZqm0LkwK/GfG0Xjj90cBTdPjiR6H25tuNJXTgFMlYokfo3+YP63mcevS4YJUlk5EpMwnxm2JurT843qBPGFKl1p6s7YipNyiGyi2rUFE6gDWBQZvJwNHJIy6xFSP/MAnlvUYXDDCRpyTgm0prCU7zO8uXdMVImezOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=doLYAUw5JsT6W3d806pztx4iLn/V2KIYBiYFvtqp11Q=;
- b=VP5jyh26ImYUEO6sHuhWyaSy/6EUM5zBxDoCplb63rVMp8J6b9TJTpJy9KgaKruWk7ft5Nk1ojpU02nV0t+wFBuF4cYNAhtVCoAqzG/nkx+xGE3EGk7UkCxo0/ME60QCxFiKY+welz4I2155RSH/4Ui1E0l8xw9YK7VB2OEOikLReiz5tKqbM77t+ThPQIO9ueEdKrlHTK4as6O+GTmDW3uV4T0TI+Ynwa98ssFWRHTCpptwnMDfyEaKbVlf+ujOwqaLYJIvzuYYb4VpmqiKPUrX2h5oRBSIcyS6qwvUBIUo8AeaO0twbCu34e9szx9FJnAoGC1/2CAiXBOVhzaQOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by BL1PR11MB5955.namprd11.prod.outlook.com (2603:10b6:208:386::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Sat, 1 Jul
- 2023 01:59:02 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::4707:8818:a403:f7a9]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::4707:8818:a403:f7a9%6]) with mapi id 15.20.6544.024; Sat, 1 Jul 2023
- 01:59:02 +0000
-Message-ID: <8ae1bf2e-48d1-4c9b-4dc3-398c8e199247@intel.com>
-Date:   Sat, 1 Jul 2023 09:58:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 10/21] KVM:x86: Add #CP support in guest exception
- classification
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Gil Neiger <gil.neiger@intel.com>
-CC:     Chao Gao <chao.gao@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "john.allen@amd.com" <john.allen@amd.com>
-References: <20230511040857.6094-11-weijiang.yang@intel.com>
- <ZH73kDx6VCaBFiyh@chao-email>
- <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com>
- <ZIulniryqlj0hLnt@google.com>
- <dfdf6d93-a68c-bb07-e59e-8d888dd6ebb6@intel.com>
- <ZIywqx6xTAMFyDPT@google.com>
- <0a98683f-3e60-1f1b-55df-f2a781929fdf@intel.com>
- <ZJ6uKZToMPfwoXW6@chao-email>
- <8dec8b09-2568-a664-e51d-e6ff9f49e7de@intel.com>
- <CO1PR11MB5107FBC68DBA6877E390A633912AA@CO1PR11MB5107.namprd11.prod.outlook.com>
- <ZJ7xjE0qMjpYIiB/@google.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <ZJ7xjE0qMjpYIiB/@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG3P274CA0001.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::13)
- To PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
+        Fri, 30 Jun 2023 22:00:47 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F2A4212
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 19:00:45 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-401f4408955so65571cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 19:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688176844; x=1690768844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WaVezS/+JQV57xvj5fNb4PPthEyQc/LQbKbtQJe4ZRE=;
+        b=7w9aLGYKNTt6D1+bVMbb17RhF8C+rRNuaw4vyDbyVH/CM6nwWV0boif3sYwGJo9L5O
+         Aml+t3Ivaiif3sg+0+LmHVHef4DWzM1qS4opcO256p36DkAN0Jqzkxi2WFQ/slnOdNIE
+         9F/OcLhhBwNH3v/vETYX0v4nytkvdb0z/niLQvHOAdNmOTO72e2wciUcmurDCgrWjOKb
+         XIA4FVOSBkKk0Eha1MPYj94oylEB32FPjQFycq1M2g2DxgtS+LbB/DhyqiC6M/l+6v6J
+         Tg52d9yDjPeWWeNYK4f1wqPD/LcAzNWlFSlDpdFw0jnVZHAjrPkV0+qAtttc3jrkUq3l
+         JBwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688176844; x=1690768844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WaVezS/+JQV57xvj5fNb4PPthEyQc/LQbKbtQJe4ZRE=;
+        b=OCeasSuF67Rlw5Oborslvi0OUEsmt6cJShySYW07sbnlyAgnYwxArYjNO9v+i8+ZPY
+         Nc7x/l7IKy/IFfaK5cZj6nVn84kr/P0BCuB6ZfebwjUevwLqQCEV+mNiuo7u/4AuGyCM
+         Od3zIgL0xmLlRZW+jZvv+MzsdO5JhoBj3QDTWym0DhBhuCbdTWXskvs+vR1VN7wW9Re6
+         9F9ZRNwQ/L+BqAHWQhWgAC9ICHm+TViz6tOZmjlWYR5T/kf/989hIzGxFMezHA9Qi6sT
+         92TX8ysVZJxsUkEbWMpof9LUHW0IMddD/F/hdslnEi/kj2EzfNie2Dwna4R6sDUC0Z1H
+         f6hw==
+X-Gm-Message-State: ABy/qLa3SbQzPdWrOrJRNTwxOkIWhS3EkfD2uprHW5SQVxI9Da6O+vib
+        Wf3xHn/amuv8QcUAz3HBZbnJD/P1zm9gdr2FIEiHUQ==
+X-Google-Smtp-Source: APBJJlF/PwfmDQkOlM6jVa2cWWmHy5HoMqgsdTRC/CcUnKrpKXeYKOyCfH4m/A7nSSAT8wSFlGI2qcQFw95gSjfKtuA=
+X-Received: by 2002:ac8:5b05:0:b0:3ef:5f97:258f with SMTP id
+ m5-20020ac85b05000000b003ef5f97258fmr78788qtw.16.1688176844468; Fri, 30 Jun
+ 2023 19:00:44 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|BL1PR11MB5955:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0a64db4-bf7b-48ff-b95f-08db79d6bdd0
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GIEMfCCRfySLWTtqAUllj9HPr+VDFn6sZIhKj05OXOzZw9eXnLV/dr8vCdDEOY6CUHeiWuwlai310YzCjTUu695Anrw35UWTVy0PTujh2nk9FxR3T7En2gE/FiPVdwcPyxG7u7IdD4Ouf2CgGAwRjmPgDYoxpXO+h+Gb7sr2bGYf9ey0VM4532ogQZYqekzrOF4vt8+a32R4DTUTmn2yRuh/EkMzPSVHXwmuA9yJLMj0tLz7yD5avu73lN7/ZR9jwrgEDR4tKuHgv92vYJrwZPvN7Y5z6jQrkgY/OVaSbrTjr7rmOd1pOucErDrKEdjB7+S9vKk1n76xMrmH/Q/sY9P2KRXLXDG4+Pi5vMD1mjDeZg68EEBoNOW+KzP8fdUFNgIUHBthcAOW510zH+zY3ey7BBbzfNr0UutYpI4Ff8XLZNH5lx3JkLrsJGzQ7CbCAwLvblWg4dAZMVgnptxcIzPNpjEqYC39snre7pfUO8X0LW9Vi1ftez+ahDHQvrt9WujmJoRPQeTJRVd5cV6A0Sc0fs7iQyT+x5rPVuQW7xhdN6zD9C4Jae+l2vdZKqt9JCsKZOCxFrcvfip5KcPIlStRhPRODQ7/uqFggaD4uSBS8WvQ4xaFItUFnS0HDhNGaguUJUo02ZpdeDyGLysUpg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(39860400002)(366004)(396003)(136003)(451199021)(53546011)(6666004)(4744005)(6486002)(54906003)(110136005)(83380400001)(6506007)(2906002)(6512007)(2616005)(26005)(186003)(478600001)(5660300002)(36756003)(316002)(4326008)(31696002)(6636002)(82960400001)(66946007)(38100700002)(8936002)(41300700001)(66556008)(86362001)(66476007)(8676002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RjA1dG9EZGVURzRubVl4TzZaNzRsU3FCclowQVRydDRkWVV1cXhCUkFqUlcw?=
- =?utf-8?B?ZHNIWmdod1paRnpVWVNWUnJEOVRoQjVmQ3IyRXZ3bnMvVzUzcEhOTVFkU3R3?=
- =?utf-8?B?NGRFdUtOVDgzeTY3UHRnNy9jV2FvUHhQVmUwdnlJenhlR2FmS1JhY3V6aklu?=
- =?utf-8?B?bnpXbVhpb29uU0hETlVZMVdFdk03VHNsbWFDNDAydHU3U1JqbCtWN1dkWVNy?=
- =?utf-8?B?NURZYjhYV3R5dHRSeE41eHE2OVA4bFV4aDFQRlc1U1VjUi9UY2Z2cGpWZ2F0?=
- =?utf-8?B?eC9xUXRxc2M1anQ5ZE5BdEFuNCsvdGw4VW1LclpwcmVHQUt3VFVRUytTYVcy?=
- =?utf-8?B?MEZEZXBOZWFsVGZGeExoTlg1d2MxM3FSaUhSeWpTTkxablROOE1XR3ExbGtH?=
- =?utf-8?B?NndNQWNSTWhmSWREZm11V1V0ekF6YkRMUVFWK2ZaSHZ6MkpzMlRGc1NGZllF?=
- =?utf-8?B?M0trdm9IV0h3clB2ZHBZaFBiMFRLRGRzZFUybUQ5RXQ4SUM2dzhJUHdDV1hZ?=
- =?utf-8?B?S1ovbzgwWWxXelg0MWNPU2F1VFI1WWpCd21VdGVHckJvZ0FkR1NSMk9XOW5T?=
- =?utf-8?B?cmZKZnRzYmVjYTBvSXdBVGdVcmRhTVF5TnVRWXpVeDZWZzNaYnc4c3h3a3Ew?=
- =?utf-8?B?VDhxYUJOQWZxdVVQSGxIdmhCMG9Tb3ZIdUZQM25RTVhPNHYvR2tWNjhTcUJK?=
- =?utf-8?B?TUhxOE5KYTV4cncybzV5MW9zN3E5WEE5em9nd2RLMjJiV0FIenlKbXZsNXVu?=
- =?utf-8?B?NVB2VHpNSkQ1ejljQkl1U2hheEVCTldIQXNQaElXVVBpSnN3NDRKWld0TEZZ?=
- =?utf-8?B?T3pJTkk1dGZkeEU2UzFsWkw1eHhtdVliYzlqamNCRGVyOURodnB0Zm5OVExW?=
- =?utf-8?B?UFJOclFLczhSdVlzRktXNTJuZVhVK1ZkU2dOYkRKK09HbXZHVFpYY04wN05u?=
- =?utf-8?B?cE1FTURtdURiN2dZYVBxNVBXbEJyUU84Q1MzdVN0RE50UGJtazJLaTdORFZX?=
- =?utf-8?B?cnRNM3d4US9GV1hiS0x6bndITUNjRVc5bEZNS3NyY3FKWUZxM2ZZMUZXemZM?=
- =?utf-8?B?dDVnRndMaTQrUSt0T3VKNy9ialc3ZkZUSWl0SnpFMUtUbFVSUlBSQUVuVEdM?=
- =?utf-8?B?emc5Sm5iUnVwVFc3NkxFVGdFcGlVaU42bVFMTEdhNW1kNmgzRXgxYlk2VmJX?=
- =?utf-8?B?UzdjVkFWYitsMU96c1dNM0FOL2dmM2k3cE5LdzRYc2luRGxiU1VyYmtGN3Fk?=
- =?utf-8?B?bEJMRVFBNkI2dnB6NUw0YkZBNXZKSGNIMFF6aTA4MkJRVnN2VXFHQ3pRVStq?=
- =?utf-8?B?ZGhlT1dHMkEyWUh2TVVTNVVEbG8wQ2Yva1lsTlMyam9meXMvT3hYMGdCcjFZ?=
- =?utf-8?B?aUhVOUkyKzFiR2haSlpnZzcxZ2JrZHlwYTRkZUgyQ0phM3hCb3ZOeTJLeXdp?=
- =?utf-8?B?WGJRS3NkUHk2dDAzUGVQOWQ3VitNamQ0VDI2N1J5cHJlT1l1OURUd1ZaRGdP?=
- =?utf-8?B?L0RyelhQQXpVVHkra3I5alJGalNCczcxVWNWK0I0cmpwQ3ZBbzhHcUQ0L1pH?=
- =?utf-8?B?UGovdUdBNVN0aGhqNzN1VXp1RmJuZkZrb3lRQlRsM1lnMWtvUVFKaC8zOGJ0?=
- =?utf-8?B?b0tZcThXZ094enpSd3ppb0orazgyWHpzR3J2T1NyZi9tb2tUTGxTVzRvN3py?=
- =?utf-8?B?RmE3ZDkxeHd2ZFpxVFhnclcxSWk0VjJIclNOMEFnY0FKWTZEMXNLUlhyNzdU?=
- =?utf-8?B?dTlGMGNQckpVbS9ZZGozcGFleEdBUlFsUHY3QnhoUXBnNnRzTDI4ZENqdWZa?=
- =?utf-8?B?a2NhUVlyTjlFT281UDdOZUJUa00rYUNETXgvY1FGYmN6Q3BzSEhMWUk4WWpJ?=
- =?utf-8?B?akUvS3p1dTR6S2VTdXJDQ0hLODhaamUrSTQyVUdNMmhQdGNiZzEwOTNEV1FU?=
- =?utf-8?B?aDFaN3hkL1ZDS1hScjFBbFFTSFJYZWk3d0VGUzkrU1huUUp6VHNaenVIOU9D?=
- =?utf-8?B?YW5iL1htREZXYzYvWkdZQjh4T3B2TjlaUFJzMkhFelRhVTJHL0ZqRk50RUM2?=
- =?utf-8?B?cEtONFFHOElxL3Y0encvVXJlVDNMRDZocEllRVJ3aGU4MFhIYWViQkJ3NXlM?=
- =?utf-8?B?cWZ0RkhzYmJzbFY4aXIxTEd3UWNvVTJCTWliRVhGRWFnS2hZZkx6RFMxRStD?=
- =?utf-8?B?cHc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0a64db4-bf7b-48ff-b95f-08db79d6bdd0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2023 01:59:02.0739
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lEhJd/SuhNZvP/E8rPMnQPuQ+41wKTqe8VZpmGH1dR5GzK3WqH55zL1P/6ROb2+hzvbScd6PKpzkzhtS9SsVuw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5955
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230629015844.800280-1-samjonas@amazon.com> <CANn89i+6d9K1VwNK1Joc-Yb_4jAfV_YFzk=z_K2_Oy+xJHSn_g@mail.gmail.com>
+ <182D446E-8871-4811-9275-98FF067B1BA9@amazon.com>
+In-Reply-To: <182D446E-8871-4811-9275-98FF067B1BA9@amazon.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sat, 1 Jul 2023 04:00:33 +0200
+Message-ID: <CANn89i+oEvhGgtD6OrFFKXiRT3WD3uPRpNJLN6Qm2_HWaBVzrg@mail.gmail.com>
+Subject: Re: [PATCH net] net/ipv6: Reduce chance of collisions in inet6_hashfn()
+To:     "Smith, Stewart" <trawets@amazon.com>,
+        Amit Klein <aksecurity@gmail.com>
+Cc:     "Mendoza-Jonas, Samuel" <samjonas@amazon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Herrenschmidt, Benjamin" <benh@amazon.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jul 1, 2023 at 2:26=E2=80=AFAM Smith, Stewart <trawets@amazon.com> =
+wrote:
+>
+>
+>
+> > On Jun 29, 2023, at 3:05 AM, Eric Dumazet <edumazet@google.com> wrote:
+> >
+> >
+> > On Thu, Jun 29, 2023 at 3:59=E2=80=AFAM Samuel Mendoza-Jonas
+> > <samjonas@amazon.com> wrote:
+> >>
+> >> From: Stewart Smith <trawets@amazon.com>
+> >>
+> >> For both IPv4 and IPv6 incoming TCP connections are tracked in a hash
+> >> table with a hash over the source & destination addresses and ports.
+> >> However, the IPv6 hash is insufficient and can lead to a high rate of
+> >> collisions.
+> >>
+> >> The IPv6 hash used an XOR to fit everything into the 96 bits for the
+> >> fast jenkins hash, meaning it is possible for an external entity to
+> >> ensure the hash collides, thus falling back to a linear search in the
+> >> bucket, which is slow.
+> >>
+> >> We take the approach of hash half the data; hash the other half; and
+> >> then hash them together. We do this with 3x jenkins hashes rather than
+> >> 2x to calculate the hashing value for the connection covering the full
+> >> length of the addresses and ports.
+> >>
+> >
+> > ...
+> >
+> >> While this may look like it adds overhead, the reality of modern CPUs
+> >> means that this is unmeasurable in real world scenarios.
+> >>
+> >> In simulating with llvm-mca, the increase in cycles for the hashing co=
+de
+> >> was ~5 cycles on Skylake (from a base of ~50), and an extra ~9 on
+> >> Nehalem (base of ~62).
+> >>
+> >> In commit dd6d2910c5e0 ("netfilter: conntrack: switch to siphash")
+> >> netfilter switched from a jenkins hash to a siphash, but even the fast=
+er
+> >> hsiphash is a more significant overhead (~20-30%) in some preliminary
+> >> testing. So, in this patch, we keep to the more conservative approach =
+to
+> >> ensure we don't add much overhead per SYN.
+> >>
+> >> In testing, this results in a consistently even spread across the
+> >> connection buckets. In both testing and real-world scenarios, we have
+> >> not found any measurable performance impact.
+> >>
+> >> Cc: stable@vger.kernel.org
+> >> Fixes: 08dcdbf6a7b9 ("ipv6: use a stronger hash for tcp")
+> >> Fixes: b3da2cf37c5c ("[INET]: Use jhash + random secret for ehash.")
+> >> Signed-off-by: Stewart Smith <trawets@amazon.com>
+> >> Signed-off-by: Samuel Mendoza-Jonas <samjonas@amazon.com>
+> >> ---
+> >> include/net/ipv6.h          | 4 +---
+> >> net/ipv6/inet6_hashtables.c | 5 ++++-
+> >> 2 files changed, 5 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+> >> index 7332296eca44..f9bb54869d82 100644
+> >> --- a/include/net/ipv6.h
+> >> +++ b/include/net/ipv6.h
+> >> @@ -752,9 +752,7 @@ static inline u32 ipv6_addr_hash(const struct in6_=
+addr *a)
+> >> /* more secured version of ipv6_addr_hash() */
+> >> static inline u32 __ipv6_addr_jhash(const struct in6_addr *a, const u3=
+2 initval)
+> >> {
+> >> -       u32 v =3D (__force u32)a->s6_addr32[0] ^ (__force u32)a->s6_ad=
+dr32[1];
+> >> -
+> >> -       return jhash_3words(v,
+> >> +       return jhash_3words((__force u32)a->s6_addr32[1],
+> >>                            (__force u32)a->s6_addr32[2],
+> >>                            (__force u32)a->s6_addr32[3],
+> >>                            initval);
+> >
+> > Hmmm... see my following comment.
+> >
+> >> diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+> >> index b64b49012655..bb7198081974 100644
+> >> --- a/net/ipv6/inet6_hashtables.c
+> >> +++ b/net/ipv6/inet6_hashtables.c
+> >> @@ -33,7 +33,10 @@ u32 inet6_ehashfn(const struct net *net,
+> >>        net_get_random_once(&inet6_ehash_secret, sizeof(inet6_ehash_sec=
+ret));
+> >>        net_get_random_once(&ipv6_hash_secret, sizeof(ipv6_hash_secret)=
+);
+> >>
+> >> -       lhash =3D (__force u32)laddr->s6_addr32[3];
+> >> +       lhash =3D jhash_3words((__force u32)laddr->s6_addr32[3],
+> >> +                           (((u32)lport) << 16) | (__force u32)fport,
+> >> +                           (__force u32)faddr->s6_addr32[0],
+> >> +                           ipv6_hash_secret);
+> >
+> > This seems wrong to me.
+> >
+> > Reusing ipv6_hash_secret and other keys twice is not good, I am sure
+> > some security researchers
+> > would love this...
+>
+> My personal math here is nowhere near what=E2=80=99s needed to work out i=
+f it=E2=80=99s a problem or not, it passed the =E2=80=9CAm I a complete idi=
+ot here?=E2=80=9D question of someone much smarter than me in the area, but=
+ that=E2=80=99s not sustained scrutiny of course. It=E2=80=99s quite possib=
+le there=E2=80=99s something there given enough time to noodle on it.
+>
+> > Please just change __ipv6_addr_jhash(), so that all users can benefit
+> > from a more secure version ?
+> > It also leaves lhash / fhash names relevant here.
+> >
+> > We will probably have to switch to sip (or other stronger hash than
+> > jhash)  at some point, it is a tradeoff.
+>
+> Probably to a hsiphash?
+>
+> When using the same kind of sim with llvm-mca, hsiphash appears to be abo=
+ut the same number of cycles as jhash2 you suggest, so maybe we should just=
+ go there and be done with it?
+>
+> I put my tests and output up at https://github.com/stewartsmith/inet6_has=
+hfn-sim
+>
+> I=E2=80=99ll throw some traffic at the hsiphash and see if we can observe=
+ a difference.
+>
+> If nobody is madly complaining about netfilter switching to it as of dd6d=
+2910c5e071a8683827df1a89e527aa5145ab, then it may be fine, but will throw s=
+ome more benchmarks at it.
+>
 
-On 6/30/2023 11:15 PM, Sean Christopherson wrote:
-> On Fri, Jun 30, 2023, Gil Neiger wrote:
->> Intel will not produce any CPU with CET that does not enumerate IA32_VMX_BASIC[56] as 1.
->>
->> One can check that bit before injecting a #CP with error code, but it should
->> not be necessary if CET is enumerated.
->>
->> Of course, if the KVM may run as a guest of another VMM/hypervisor, it may be
->> that the virtual CPU in which KVM operates may enumerate CET but clear the
->> bit in IA32_VMX_BASIC.
-> Yeah, I think KVM should be paranoid and expose CET to the guest if and only if
-> IA32_VMX_BASIC[56] is 1.  That'll also help validate nested support, e.g. will
-> make it more obvious if userspace+KVM provides a  "bad" model to L1.
+Make sure to include Amit Klein <aksecurity@gmail.com> to the next
+round, he will "do the maths" for sure :)
 
-OK, will do it, thanks you two!
-
+Thanks.
