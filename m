@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D643744871
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5A3744875
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjGAKPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 06:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S229826AbjGAKWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 06:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjGAKPJ (ORCPT
+        with ESMTP id S229501AbjGAKWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 06:15:09 -0400
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF88271F
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:15:01 -0700 (PDT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-262d296873aso3241903a91.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:15:01 -0700 (PDT)
+        Sat, 1 Jul 2023 06:22:40 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B680F1FCB
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:22:38 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b6985de215so45236741fa.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:22:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1688206957; x=1690798957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7ztS2/YuspzN8dr6Cszov8eINdOPb7ES0wdsgpSETU=;
+        b=qE9ClLyDGIQVk6lK3tl+1wB1faJtgiF4dXaD0FBMSjU1maCOgJQ5E+ps9EHiPXqWHR
+         RHp/hX1HKFm9N2ke/5gygjgyIbsIqIwLh/mX75P4zkzYDML1TGFraywUhtSBezTRvkRR
+         ztH73D3uWzcjj177RvdNaQWlKC2ydAsiRT1S7hGUC2iGz0i9Gd/aR3zwxVp30o2BthaC
+         OiwEyhf7M4G/7hbmr8H3MXj2kKW+nLPJnecZLNcBwwEb1e+kAo9qmGteP3tldqRCKOLv
+         +cQlH10AQYzE15T1O9X8tW0FEvLzoxnc4QCoAqi6F2LIeYCrlv4FfjVPW5ChrUgupEet
+         UWfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688206501; x=1690798501;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=diYwR8St8wT/i4D42MCVrfW4HzrpsotIwwPSjUegdyU=;
-        b=HGFc664hBVLwinwrZGacXk/PGN8jgfo8ihKUw6zkhQ+pUYl3F2oTCnzwO3PP4yiVLM
-         BoHRPUpgoR53elxwBVPNmx7/0FCaELJFdw6A+J0/sUvlRWw/UhDv90TElHeI0FbAYze8
-         CbD/vBl08fniLKWF7gwd1SC46YZAlNQrDK26aiGZ4z76Fh8c5vvO5IhJ/OdvHOiIiL7F
-         IdHJ4As0HvGanuyzfyanoYqX6TCwZFqm31BL2jIp8DHKrfK95BU++Mo54dBgSat7ixHe
-         NcBSBQi9+zWOwxQka4E3EIRpzztrJpyol74TjjXzEv2BA/A+kkUfKkIHWIEEK1KLJxea
-         3u5A==
-X-Gm-Message-State: ABy/qLZ532BOPkwAbzbkzmu5E0UvCSjgcnXjIOAlEejKSG7Nd3m0mnyP
-        /SBaurx8H8zbCuoq261pawGzOV2BZkrBbVgQvyx/B1T67i34
-X-Google-Smtp-Source: APBJJlEF5a3l1q7Wnrn+Ygt2UYSCsqfnQ8ezPqLr8UHxZeYV97v5qZaRe7f38JRnFSGZ63a8P8cKE3iXGLlQaD1gk2cabNkj/en5
+        d=1e100.net; s=20221208; t=1688206957; x=1690798957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b7ztS2/YuspzN8dr6Cszov8eINdOPb7ES0wdsgpSETU=;
+        b=bKCfQ2Cy7/+cD4qQC4LFKt2OeZQyqlMrJ75v7LhLInE7+axYYEkFUV9CLZz6N2x43L
+         Qdu7HK+hbjEbG/ZEL1ebq7y700Ct8OsISrneOEcdYIdcAefVgs6oxoJYNbzxyB7JlZ3q
+         zPE241Rz32eZAkHY+HH8e024/oPBNGU9mceu4OJGGxbi5ogIMzT8WA7UOnn0TmJp33kK
+         miVse3ir01e5aXLPhuLHLdKXMNO6KDL5lqUvzuIuIl6kQqhXSlO7hlrN7rPTmCF7VdYs
+         sN89Jj3F52UKaQlIkG2jzmpO/zL7w7c8LrpyRw3iI7XN62u0NJh52YBvxkDUxPp4hfrk
+         i6PA==
+X-Gm-Message-State: ABy/qLbaBeWhibOEE/5vXX9wHx9ncuDVwQ7wlhYl8ltrA9wf7Wcm3vYY
+        RW0GTFnCyxDlvg4O8OGfBb8=
+X-Google-Smtp-Source: APBJJlEb7pbVUyHFOEsJrzzu2ifqVihvcHGkgpq9vleSGT5UTlnJEVODEq09XV3/ETLPAONHkbnTpw==
+X-Received: by 2002:a2e:b60f:0:b0:2b6:cd12:24f7 with SMTP id r15-20020a2eb60f000000b002b6cd1224f7mr3523688ljn.44.1688206956661;
+        Sat, 01 Jul 2023 03:22:36 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:810a:9640:26a8:185:3db5:c5f0:49bb])
+        by smtp.gmail.com with ESMTPSA id jt24-20020a170906dfd800b00982cfe1fe5dsm9073393ejc.65.2023.07.01.03.22.35
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 01 Jul 2023 03:22:36 -0700 (PDT)
+From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
+To:     linux-staging@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, quic_vjakkam@quicinc.com,
+        guozihua@huawei.com, eperi1024@gmail.com, hdegoede@redhat.com,
+        tegongkang@gmail.com, gregkh@linuxfoundation.org,
+        dan.carpenter@linaro.org, philipp.g.hortmann@gmail.com,
+        Franziska Naepelt <franziska.naepelt@googlemail.com>
+Subject: [PATCH v4 0/3] staging: rtl8723bs: Fix some checkpatch issues
+Date:   Sat,  1 Jul 2023 12:22:23 +0200
+Message-Id: <20230701102223.5308-1-franziska.naepelt@googlemail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-X-Received: by 2002:a17:90b:104d:b0:263:3437:a0b0 with SMTP id
- gq13-20020a17090b104d00b002633437a0b0mr3469094pjb.3.1688206500959; Sat, 01
- Jul 2023 03:15:00 -0700 (PDT)
-Date:   Sat, 01 Jul 2023 03:15:00 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cc19d705ff6a34b0@google.com>
-Subject: [syzbot] Monthly bluetooth report (Jun 2023)
-From:   syzbot <syzbot+list7e4ace863c2ed3815e4c@syzkaller.appspotmail.com>
-To:     johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello bluetooth maintainers/developers,
+This is a series of patches to fix some trivial checkpatch issues. Not all
+issues have been fixed. I intend to submit another series to fix more stuff.
 
-This is a 31-day syzbot report for the bluetooth subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/bluetooth
-
-During the period, 2 new issues were detected and 0 were fixed.
-In total, 21 issues are still open and 53 have been fixed so far.
-
-Some of the still happening issues:
-
-Ref  Crashes Repro Title
-<1>  7085    Yes   possible deadlock in rfcomm_sk_state_change
-                   https://syzkaller.appspot.com/bug?extid=d7ce59b06b3eb14fd218
-<2>  3793    Yes   WARNING in hci_conn_timeout
-                   https://syzkaller.appspot.com/bug?extid=2446dd3cb07277388db6
-<3>  1152    Yes   possible deadlock in rfcomm_dlc_exists
-                   https://syzkaller.appspot.com/bug?extid=b69a625d06e8ece26415
-<4>  1055    Yes   INFO: task can't die in __lock_sock
-                   https://syzkaller.appspot.com/bug?extid=7d51f807c81b190a127d
-<5>  95      Yes   WARNING in call_timer_fn
-                   https://syzkaller.appspot.com/bug?extid=6fb78d577e89e69602f9
-<6>  42      Yes   WARNING: ODEBUG bug in put_device
-                   https://syzkaller.appspot.com/bug?extid=a9290936c6e87b3dc3c2
-<7>  4       Yes   general protection fault in hci_uart_tty_ioctl
-                   https://syzkaller.appspot.com/bug?extid=c19afa60d78984711078
-<8>  3       Yes   general protection fault in l2cap_chan_timeout (3)
-                   https://syzkaller.appspot.com/bug?extid=f0908ddc8b64b86e81f2
-<9>  2       No    KASAN: slab-use-after-free Write in sco_conn_del
-                   https://syzkaller.appspot.com/bug?extid=6b9277cad941daf126a2
-<10> 1       No    WARNING: refcount bug in sco_sock_timeout (2)
-                   https://syzkaller.appspot.com/bug?extid=c689847e27e0fa3e7a5d
+Testing:
+* Build the module
+* Boot the kernel with busybox in initramfs
+* Load the module
+-> No errors or warnings
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v4: Fix sign-off email address and cover letter header
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+Franziska Naepelt (3):
+  staging: rtl8723bs: Fix space issues
+  staging: rtl8723bs: Fix alignment open parenthesis
+  staging: rtl8723bs: Fix remaining blank line issue
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+ .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 164 +++++++++---------
+ 1 file changed, 85 insertions(+), 79 deletions(-)
 
-You may send multiple commands in a single email message.
+--
+2.39.2 (Apple Git-143)
+
