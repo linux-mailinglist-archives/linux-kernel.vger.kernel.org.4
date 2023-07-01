@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B4174469E
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 06:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921547446A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 06:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjGAEsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 00:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S229760AbjGAE4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 00:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGAEsj (ORCPT
+        with ESMTP id S229447AbjGAE4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 00:48:39 -0400
+        Sat, 1 Jul 2023 00:56:07 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50568E65
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 21:48:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C090AE65
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 21:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=Ouh+ENUfH7xDuVT7/QdgSLCq0AO5QpecmqQ9yR+vKU4=; b=5BOjmmRRZbyzHZwHcUwvpKsx0g
-        z3P5naFfEu/0m6BSaanaNGWs0IRuQQBjI2xz2BRVJivDYa54kRd6nAFudndfJ41KsYlzYS9bpBIEo
-        Jk+yvhFndjxf5pUexRyWK76ivhXUKoNgb/YzvdBzUi6CDAsM/8j1WWDo8sV0SW89W1qcqumHH4KEa
-        pxRzobws8/Oz2fNBIWWeuAzP9w3Jj7Y6w6Pmc/GcV1WuOWOBXkSu6Q+x7t2/1iODekyJTH4LQtfz9
-        rfAmqI+bgo2ITH9ai2jQ9nQadsFeDp8c0cwyq/9fGwl70hDCcIfEi6WY3q957fbrQ95rkuYjWj6N2
-        /PRYpzcg==;
+        bh=V34U8x+xt3cNOs6Hq3uSEoa9SGtAD0arB4vReWdva5o=; b=lSUtVdDxXI/OgDHgSQt4HRzsPZ
+        nZUMDWwJwXbwtuQPPn++hWmb1SWKpfIySTrWYpJi+T+SlP01upmKXwvBvdfomak79v8tIgY8nUnVu
+        6twyGreYNzfVHePBTaAQdU3JghqV4afNehEvDkWlbLgX2NDiSRnhPPuGDcpbIqVHEreZKdeCuu8sO
+        cZjaw9eq26IEOnBcjAukOdlv61tPwzAKWzOFOAi+6pEshlSGlRJ1sK7hE7ks7sSidPdNGJu5Wl6Yp
+        wzYm/KdJskkownkXgL3XiipngKy4sgNShw+L3dc6SFudLnAu+QsL/wvWSsg+MM2BdDzUaZilsaD7j
+        Xtfy1zrw==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qFSXF-005AKU-1V;
-        Sat, 01 Jul 2023 04:48:37 +0000
+        id 1qFSeQ-005BFi-07;
+        Sat, 01 Jul 2023 04:56:02 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Grant Likely <grant.likely@secretlab.ca>,
         Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org
-Subject: [PATCH v2] ASoC: stac9766: fix build errors with REGMAP_AC97
-Date:   Fri, 30 Jun 2023 21:48:36 -0700
-Message-ID: <20230701044836.18789-1-rdunlap@infradead.org>
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v2 RESEND RESEND] ASoC: fsl MPC52xx drivers require PPC_BESTCOMM
+Date:   Fri, 30 Jun 2023 21:56:01 -0700
+Message-ID: <20230701045601.31452-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,31 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Select REGMAP_AC97 to fix these build errors:
+Both SND_MPC52xx_SOC_PCM030 and SND_MPC52xx_SOC_EFIKA select
+SND_SOC_MPC5200_AC97. The latter symbol depends on PPC_BESTCOMM,
+so the 2 former symbols should also depend on PPC_BESTCOMM since
+"select" does not follow any dependency chains.
 
-ERROR: modpost: "regmap_ac97_default_volatile" [sound/soc/codecs/snd-soc-stac9766.ko] undefined!
-ERROR: modpost: "__regmap_init_ac97" [sound/soc/codecs/snd-soc-stac9766.ko] undefined!
+This prevents a kconfig warning and build errors:
 
-Fixes: 6bbf787bb70c ("ASoC: stac9766: Convert to regmap")
+WARNING: unmet direct dependencies detected for SND_SOC_MPC5200_AC97
+  Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC52xx [=y] && PPC_BESTCOMM [=n]
+  Selected by [m]:
+  - SND_MPC52xx_SOC_PCM030 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC5200_SIMPLE [=y]
+  - SND_MPC52xx_SOC_EFIKA [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_EFIKA [=y]
+
+ERROR: modpost: "mpc5200_audio_dma_destroy" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
+ERROR: modpost: "mpc5200_audio_dma_create" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
+
+Fixes: 40d9ec14e7e1 ("ASoC: remove BROKEN from Efika and pcm030 fabric drivers")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Grant Likely <grant.likely@secretlab.ca>
 Cc: Mark Brown <broonie@kernel.org>
 Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Shengjiu Wang <shengjiu.wang@gmail.com>
+Cc: Xiubo Li <Xiubo.Lee@gmail.com>
 Cc: alsa-devel@alsa-project.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Acked-by: Shengjiu Wang <shengjiu.wang@gmail.com>
 ---
-v2: rebase/resend
+v2: use correct email address for Mark Brown.
 
- sound/soc/codecs/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/fsl/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff -- a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -1707,6 +1707,7 @@ config SND_SOC_STA529
- config SND_SOC_STAC9766
- 	tristate
- 	depends on SND_SOC_AC97_BUS
-+	select REGMAP_AC97
+diff -- a/sound/soc/fsl/Kconfig b/sound/soc/fsl/Kconfig
+--- a/sound/soc/fsl/Kconfig
++++ b/sound/soc/fsl/Kconfig
+@@ -243,7 +243,7 @@ config SND_SOC_MPC5200_AC97
  
- config SND_SOC_STI_SAS
- 	tristate "codec Audio support for STI SAS codec"
+ config SND_MPC52xx_SOC_PCM030
+ 	tristate "SoC AC97 Audio support for Phytec pcm030 and WM9712"
+-	depends on PPC_MPC5200_SIMPLE
++	depends on PPC_MPC5200_SIMPLE && PPC_BESTCOMM
+ 	select SND_SOC_MPC5200_AC97
+ 	select SND_SOC_WM9712
+ 	help
+@@ -252,7 +252,7 @@ config SND_MPC52xx_SOC_PCM030
+ 
+ config SND_MPC52xx_SOC_EFIKA
+ 	tristate "SoC AC97 Audio support for bbplan Efika and STAC9766"
+-	depends on PPC_EFIKA
++	depends on PPC_EFIKA && PPC_BESTCOMM
+ 	select SND_SOC_MPC5200_AC97
+ 	select SND_SOC_STAC9766
+ 	help
