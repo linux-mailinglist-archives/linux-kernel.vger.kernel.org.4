@@ -2,120 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CC1744807
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396DE74480A
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjGAIWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 04:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S229968AbjGAI3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 04:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjGAIWa (ORCPT
+        with ESMTP id S229833AbjGAI3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 04:22:30 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89001B9
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 01:22:28 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-98e39784a85so473412766b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 01:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688199747; x=1690791747;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gMzN5ldrDLudsFTYrIWTDNOwJnSoomZPJebktTnoU4I=;
-        b=z0vr7th4jrnuqwOOGzCSY6B5JNYPSI9Q1lAB5/LAiCsFLpgAeHlZ9AP0z3cjr2grLr
-         10l6wNeJX6XhSKFFjLl9yqKhmuQMZ5///4QLfTrb9Ctwa7DjXs75TxJFGTpwuGR9fggH
-         egDYhRbJuK7VooVdV+BHbDNF8uRt8h+WIp4+2eI9R4NNO9EvdJQLu5FFk7agf80rdsvw
-         6PFEGk8iC/GhsdXH93Z+EKtepKkCgj26eQevb3URGojIfPgReTD1tcZ0zpa0Gh2TPopR
-         pZDCSaMSd2VhCWVQV4USmsOmFUib+gIvSyi7cZf07sxN37OQdqQwARTdFK+1JBPSBcXL
-         F3Kg==
+        Sat, 1 Jul 2023 04:29:07 -0400
+Received: from mail-pf1-f207.google.com (mail-pf1-f207.google.com [209.85.210.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8E8183
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 01:29:04 -0700 (PDT)
+Received: by mail-pf1-f207.google.com with SMTP id d2e1a72fcca58-666edb72db2so2406845b3a.0
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 01:29:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688199747; x=1690791747;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gMzN5ldrDLudsFTYrIWTDNOwJnSoomZPJebktTnoU4I=;
-        b=WJeqYHg152GbUPL+mgRRxkwB0znS4Aeqe3g0ff2m1c7+ER3crj2o/ew2g//fEPIXEb
-         RmDtne/EBOBGgX7DsirriSYd1E1pMHZCR+IvldehV9NJL43W+9rdTna79MlKAzpih06P
-         Nlb8UStAWsXsad62++dl/N6vNIYdiqw2nImNozWSIejNs4IdK8olHpagrjS+JYtlnPtd
-         TqjwuzoN4QfwFEIc1JFW0TiAjAxz5+gU05hQWaZy/vC3FOUpUo9ALcojmWftPw74zN9t
-         816TBZwE+rwjlrqhYKmtJhP9c3icTZOUERcEevDVxNPqB2cx6d/LQuhKYgd39QtG0JQ/
-         AXEQ==
-X-Gm-Message-State: ABy/qLbFiF65Y87NmOo+F3xF7U3BQqOxJ/4pVtpjJRuaRkGjfdR752sI
-        MkKDetLzn5UrxSMficwZWqT2QS+Om17g0B5tUyvTajJr
-X-Google-Smtp-Source: APBJJlHQQAoTBEsW/Bor8efMuJEWqdkdKXwXOik6r7upNjbyBabBfFtmqbgej0SUq+B2EXp04+tBXg==
-X-Received: by 2002:a17:907:212a:b0:992:6d73:5696 with SMTP id qo10-20020a170907212a00b009926d735696mr4386219ejb.5.1688199747015;
-        Sat, 01 Jul 2023 01:22:27 -0700 (PDT)
-Received: from [192.168.10.214] ([217.169.179.6])
-        by smtp.gmail.com with ESMTPSA id b27-20020a170906195b00b00991e2b5a27dsm6356217eje.37.2023.07.01.01.22.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 01:22:26 -0700 (PDT)
-Message-ID: <f5275617-d68c-c76b-d799-106f67cc2071@linaro.org>
-Date:   Sat, 1 Jul 2023 10:22:25 +0200
+        d=1e100.net; s=20221208; t=1688200144; x=1690792144;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n2zqYb3bq8vh5YXOrKy7ljeLQ1ET7GZzXQL1D1Y4ntc=;
+        b=kTOdk2WvlPNdXFfERbGQzn27nK44B6cqG8wFA47ct/ltesqz94LAtj9oPAMhc46K/t
+         b3pXpAKw1WzvuUs34tzI3791V4bfQuimvfC9k5XaxLSbhBtCW/QNC9uMS5ESQFeZOGcM
+         G4V21d/7DLs1/Ll3Sz5y3xUqArGkzGiYut4o1EMTzLCkdg+e3s9YBSB2JwGwtoz2P4AZ
+         k+Kq+g1zhFkFyKDWofuypS1flAVi9u5Qss3pH07D1rQjH71f0vE1P49aJrOarGac3sA8
+         q7Q5zdBngtESgYwHYDbI+P24oUU0v6RUYu4qUPGb+WoitH1IYzC46B1xh01jXqF6KFYr
+         YQ8g==
+X-Gm-Message-State: ABy/qLbWDDbKfgF8kj5SYwdQGiQnQOx1mDPW92815DEJ4rR3MVYqZR1t
+        ArcnH1XCP6UMbr6j9l0DSpC7T85wdt9MQO+P9LweviY0RfqJ3wzdgw==
+X-Google-Smtp-Source: APBJJlEIG7PNckSWA6x/kUL5CB00BHdQH9ZpAXCgvsszVECyZeBmCQ7RgS6PSJivQ9zKimvXJWEVjs6qsNhnyhjSQe/fUl+q0dPT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] dt-bindings: riscv: sifive: Add SiFive Private L2
- cache controller
-Content-Language: en-US
-To:     Eric Lin <eric.lin@sifive.com>
-Cc:     conor@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dslin1010@gmail.com,
-        Zong Li <zong.li@sifive.com>, Nick Hu <nick.hu@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-References: <20230616063210.19063-1-eric.lin@sifive.com>
- <20230616063210.19063-4-eric.lin@sifive.com>
- <2437bda9-bbdb-ad80-7201-1e16e1388890@linaro.org>
- <CAPqJEFoTsmVZ4kvsSB0RkQZaQGyXC96KV6RvdpeC5XxURCOZ0w@mail.gmail.com>
- <8c9ed2d4-83ab-ecc0-a300-e6bc8e2047b6@linaro.org>
- <CAPqJEFqhmxksvEgvC61cJcRGR0DrSWDZxJC3J7tdgcG8UY+sFw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPqJEFqhmxksvEgvC61cJcRGR0DrSWDZxJC3J7tdgcG8UY+sFw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6a00:c94:b0:682:140c:2459 with SMTP id
+ a20-20020a056a000c9400b00682140c2459mr6500910pfv.0.1688200144092; Sat, 01 Jul
+ 2023 01:29:04 -0700 (PDT)
+Date:   Sat, 01 Jul 2023 01:29:03 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e6068305ff68b9c5@google.com>
+Subject: [syzbot] [kernel?] linux-next boot error: BUG: sleeping function
+ called from invalid context in cpu_bugs_smt_update
+From:   syzbot <syzbot+bdc9ec9be68959140dbf@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        peterz@infradead.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 18:31, Eric Lin wrote:
+Hello,
 
->>>>
->>>>> +      - enum:
->>>>> +          - sifive,pL2Cache0
->>>>> +          - sifive,pL2Cache1
->>>>
->>>> What is "0" and "1" here? What do these compatibles represent? Why they
->>>> do not have any SoC related part?
->>>
->>> The pL2Cache1 has minor changes in hardware, but it can use the same
->>> pl2 cache driver.
->>
->> Then why aren't they compatible?
->>
-> 
-> The pL2Cache1 has removed some unused bits in the register compared to
-> pl2Cache0.
-> From the hardware perspective, they are not compatible but they can
-> share the same pl2 cache driver in software.
+syzbot found the following issue on:
 
-So they are compatible... If they were not compatible, you wouldn't be
-able to use the same match in the driver.
+HEAD commit:    53cdf865f90b Add linux-next specific files for 20230627
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a6f567280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=83c17849d18e7a86
+dashboard link: https://syzkaller.appspot.com/bug?extid=bdc9ec9be68959140dbf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> Thus, we would like to keep both. It would be great if you can provide
-> some suggestions. Thanks.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cba2655c9221/disk-53cdf865.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1ef013cfe943/vmlinux-53cdf865.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f533d84244ee/bzImage-53cdf865.xz
 
-I propose to make them compatible, like every other piece of SoC. I
-don't see any benefit of having them separate.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bdc9ec9be68959140dbf@syzkaller.appspotmail.com
 
-Best regards,
-Krzysztof
+smpboot: CPU0: Intel(R) Xeon(R) CPU @ 2.20GHz (family: 0x6, model: 0x4f, stepping: 0x0)
+RCU Tasks: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+RCU Tasks Trace: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+Running RCU-tasks wait API self tests
+Performance Events: unsupported p6 CPU model 79 no PMU driver, software events only.
+signal: max sigframe size: 1776
+rcu: Hierarchical SRCU implementation.
+rcu: 	Max phase no-delay instances is 1000.
+NMI watchdog: Perf NMI watchdog permanently disabled
+smp: Bringing up secondary CPUs ...
+smpboot: x86: Booting SMP configuration:
+.... node  #0, CPUs:      #1
+BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+preempt_count: 1, expected: 0
+RCU nest depth: 0, expected: 0
+1 lock held by swapper/0/1:
+ #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_maps_update_begin kernel/cpu.c:469 [inline]
+ #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up kernel/cpu.c:1696 [inline]
+ #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up+0xbc/0x200 kernel/cpu.c:1679
+Preemption disabled at:
+[<ffffffff81363069>] wakeup_secondary_cpu_via_init arch/x86/kernel/smpboot.c:888 [inline]
+[<ffffffff81363069>] do_boot_cpu arch/x86/kernel/smpboot.c:1087 [inline]
+[<ffffffff81363069>] native_kick_ap+0x969/0x1030 arch/x86/kernel/smpboot.c:1124
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.4.0-next-20230627-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ __might_resched+0x358/0x580 kernel/sched/core.c:10189
+ __mutex_lock_common kernel/locking/mutex.c:580 [inline]
+ __mutex_lock+0x9f/0x1350 kernel/locking/mutex.c:747
+ cpu_bugs_smt_update+0x1b/0x440 arch/x86/kernel/cpu/bugs.c:1633
+ arch_smt_update+0x9/0x10 arch/x86/kernel/cpu/common.c:2326
+ _cpu_up+0x3d0/0x940 kernel/cpu.c:1674
+ cpu_up kernel/cpu.c:1707 [inline]
+ cpu_up+0xfe/0x200 kernel/cpu.c:1679
+ cpuhp_bringup_mask+0xdc/0x210 kernel/cpu.c:1773
+ cpuhp_bringup_cpus_parallel kernel/cpu.c:1837 [inline]
+ bringup_nonboot_cpus+0x15f/0x1a0 kernel/cpu.c:1848
+ smp_init+0x32/0x150 kernel/smp.c:969
+ kernel_init_freeable+0x425/0xba0 init/main.c:1540
+ kernel_init+0x1e/0x2c0 init/main.c:1437
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+BUG: scheduling while atomic: swapper/0/1/0x00000002
+3 locks held by swapper/0/1:
+ #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_maps_update_begin kernel/cpu.c:469 [inline]
+ #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up kernel/cpu.c:1696 [inline]
+ #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up+0xbc/0x200 kernel/cpu.c:1679
+ #1: ffffffff8c849670 (cpu_hotplug_lock){++++}-{0:0}, at: cpus_write_lock kernel/cpu.c:507 [inline]
+ #1: ffffffff8c849670 (cpu_hotplug_lock){++++}-{0:0}, at: _cpu_up+0x66/0x940 kernel/cpu.c:1619
+ #2: ffffffff8c9970a8 (sparse_irq_lock){+.+.}-{3:3}, at: cpuhp_bringup_ap+0x65/0x340 kernel/cpu.c:798
+Modules linked in:
+Preemption disabled at:
+[<ffffffff81363069>] wakeup_secondary_cpu_via_init arch/x86/kernel/smpboot.c:888 [inline]
+[<ffffffff81363069>] do_boot_cpu arch/x86/kernel/smpboot.c:1087 [inline]
+[<ffffffff81363069>] native_kick_ap+0x969/0x1030 arch/x86/kernel/smpboot.c:1124
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
