@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AF1744879
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BF474487B
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 12:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjGAK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 06:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S229534AbjGAKcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 06:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjGAK0V (ORCPT
+        with ESMTP id S229452AbjGAKcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 06:26:21 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB9F3C2A
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 03:26:20 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51dfa0771cdso733485a12.2
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 03:26:20 -0700 (PDT)
+        Sat, 1 Jul 2023 06:32:18 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAD73ABD;
+        Sat,  1 Jul 2023 03:32:15 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1a28de15c8aso2626718fac.2;
+        Sat, 01 Jul 2023 03:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1688207179; x=1690799179;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eRU/4EgIG59FlYdUAQY/bxVUjSKGZZK/O/khm55mTyc=;
-        b=Ui5ViJExRzULqY2c10lgXVJvlivZipx89e9cDYXQa6aFO/3yHYGLoOkPsq8ip03BV0
-         jXwFWbnz4Y/Wa4AbyZljXjV4n8V7BUm0ex5ROA3LHxnKTsH1o7bmYD9PYiPf7lL4Mw60
-         itfPn0WxcqM1+8LwCr68P7rYiQ9TGDd4jAvDHs5pfoe1jF6hBohgrTbo7Mngko8EJdum
-         QFTn3E8tk1USWd47lA0Eee70JVPg5MYMu6ho3V1xLJ5Wt2WZ/r4HwBovwO9rMRcYOZhT
-         CyGBC+h401EV7l/xHo8QyoTtokBczww9frocGE51YT1sySBK0PaOABst9nzNxLxumDqY
-         5ayA==
+        d=gmail.com; s=20221208; t=1688207535; x=1690799535;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pGpM6CzxS23sdxO56fNlVqxcfTCp7IVYaCNZLh8aKSE=;
+        b=PAsUACBjiDmca1uG/cRa+14CvaPNzBosEv8uPiP0xVRTBr8sp9MjKGQMzq/zGxnJ+z
+         V20eFrw1c7Sc86rs2aIEp8e/0PwK0/JVLSq3RlEzJyfz49Bt2FAS97ZkGbHloaOO41he
+         orYdC2d8lClXzIPoE6IeOhzPt4PuV/RARfQVq2XuNlgnJ/K+VQMaPNjvyBZyN49+eBOp
+         9fV3AqlQiI+Xb9odyCryBL+IqOSnTA0sRkWsGXMxmU2zJvED2wYDlPDZmBaMg2OphUn1
+         LGQ8/eOZP3mIP77TTjHMlxxJEcwBbVvQFgovssrzGcQ47EIjbHCfFUtSdoWxuGxHPq6R
+         PNsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688207179; x=1690799179;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eRU/4EgIG59FlYdUAQY/bxVUjSKGZZK/O/khm55mTyc=;
-        b=H4c0MMlP36U77+wcoUVi7e86Ml860OZfUyRDQvjTDlwx9J5ILXNvCAPhwTts9eJqH6
-         ytopJPVzkvXT4aHXkVofiFu5oXCkgCL5L63NIECRftW39TyJcgAJAqPkF8jRAJIv3cI1
-         tz+cT23uvPbSpcb0bYKO78b8DDpci+kuDaByZ6WNoGCBWUiUgfLHP3+ufB5kjJcaiBDd
-         Pm++wSUitZNhg9UrkbYc5ta0lJ2S1A+attLzLds+/muZ+8zvP4Lg74kcktgm3+YV1vc8
-         6P4Djo2hbzm6L/e8PAhL60vKN3Af0529Eh6vnMSyB95xHPxBfisQ0g12JBF0CDiJgCgM
-         wshA==
-X-Gm-Message-State: ABy/qLZdwCRbdTsLphC9iX+tvMkPZVi/u/4kV0iGD1ke1zOHS367BGgd
-        6Zw8iNAP/6j9wzuWpF4ZL4Y=
-X-Google-Smtp-Source: APBJJlEOM2wyXiO811piYKKG/fldWxWfNc7UGh39pgsxm8pMfnhTINVSYue1eBWNQi8U0ef4m28PcQ==
-X-Received: by 2002:aa7:d31a:0:b0:51d:d30c:f1e3 with SMTP id p26-20020aa7d31a000000b0051dd30cf1e3mr3058659edq.16.1688207178949;
-        Sat, 01 Jul 2023 03:26:18 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:810a:9640:26a8:185:3db5:c5f0:49bb])
-        by smtp.gmail.com with ESMTPSA id c19-20020a056402121300b0051dd19d6d6esm3385151edw.73.2023.07.01.03.26.18
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 01 Jul 2023 03:26:18 -0700 (PDT)
-From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
-To:     franziska.naepelt@googlemail.com
-Cc:     dan.carpenter@linaro.org, eperi1024@gmail.com,
-        gregkh@linuxfoundation.org, guozihua@huawei.com,
-        hdegoede@redhat.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, philipp.g.hortmann@gmail.com,
-        quic_vjakkam@quicinc.com, tegongkang@gmail.com
-Subject: [PATCH v4 3/3] staging: rtl8723bs: Fix remaining blank line issue
-Date:   Sat,  1 Jul 2023 12:26:13 +0200
-Message-Id: <20230701102613.5420-1-franziska.naepelt@googlemail.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230701102223.5308-1-franziska.naepelt@googlemail.com>
-References: <20230701102223.5308-1-franziska.naepelt@googlemail.com>
+        d=1e100.net; s=20221208; t=1688207535; x=1690799535;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pGpM6CzxS23sdxO56fNlVqxcfTCp7IVYaCNZLh8aKSE=;
+        b=VRLLWSeNRQ61vBx9qohGUkBub0WQDhAk1R+lTLaWSmDyuA27TEb/kBWSLIE1hif8HP
+         RnkB+826PJ5USL2BEgZ8tHXjPuJNOB+DQFzWfV/cJwmd/QRE/ZK7mXhKVTDior592vY0
+         48H+XYKX7GbyJHXNoi9HSKJSzo9y+rTNljOmjs9cqRiEtlecqYOCpn2vF9h6L8btAFZT
+         X/AdkQdpweYDdtOSgckew+xg5Ip6+B3/JRYiQLAgyRjhwnR4qbzkhpAT6mrqn/wqwBXQ
+         wzTC2m1D36sZLBPXTHe0hPUgKLa2zaxX9Oj82/Sft3q/QYtk34l4Wz4pnat6iunZVz8Y
+         qrCQ==
+X-Gm-Message-State: AC+VfDxu7+yaBx2xWttYhh9vfApifi81JcZ8j8DXg0w3urXtBrPGzJhK
+        DRqoVmAQKVIMt420vMbR5Sq8ZMWLoIY=
+X-Google-Smtp-Source: ACHHUZ5uOA5xbSyBGlBFlIvtCukl6K/M9dx0Xq1bDXphbQ7Vs1joYUrrpgWnjuzV3/KyCCiI5W6G8A==
+X-Received: by 2002:a05:6870:e253:b0:1b0:6f63:8619 with SMTP id d19-20020a056870e25300b001b06f638619mr7416607oac.24.1688207535215;
+        Sat, 01 Jul 2023 03:32:15 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:646:a201:19d0:fb41:4abd:2fa3:e68b])
+        by smtp.gmail.com with ESMTPSA id x187-20020a6363c4000000b005533b6cb3a6sm11753316pgb.16.2023.07.01.03.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jul 2023 03:32:14 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: fix lock_mm_and_find_vma in case VMA not found
+Date:   Sat,  1 Jul 2023 03:31:55 -0700
+Message-Id: <20230701103155.1209274-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following checkpatch blank line issue:
-- CHECK: Please don't use multiple blank lines
+MMU version of lock_mm_and_find_vma releases the mm lock before
+returning when VMA is not found. Do the same in noMMU version.
+This fixes hang on an attempt to handle protection fault.
 
-Signed-off-by: Franziska Naepelt <franziska.naepelt@googlemail.com>
+Fixes: d85a143b69ab ("xtensa: fix NOMMU build with lock_mm_and_find_vma() conversion")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
-v4: Fix sign-off email address
----
- drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 1 -
- 1 file changed, 1 deletion(-)
+ mm/nommu.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-index 8f30098168f1..292cba045023 100644
---- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-+++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-@@ -266,7 +266,6 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
- 	}
- 	/* spin_unlock_bh(&pwdev_priv->scan_req_lock); */
-
--
- 	channel = pnetwork->network.configuration.ds_config;
- 	freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
-
---
-2.39.2 (Apple Git-143)
+diff --git a/mm/nommu.c b/mm/nommu.c
+index fdc392735ec6..c072a660ec2c 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -637,8 +637,13 @@ EXPORT_SYMBOL(find_vma);
+ struct vm_area_struct *lock_mm_and_find_vma(struct mm_struct *mm,
+ 			unsigned long addr, struct pt_regs *regs)
+ {
++	struct vm_area_struct *vma;
++
+ 	mmap_read_lock(mm);
+-	return vma_lookup(mm, addr);
++	vma = vma_lookup(mm, addr);
++	if (!vma)
++		mmap_read_unlock(mm);
++	return vma;
+ }
+ 
+ /*
+-- 
+2.30.2
 
