@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37857446B6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 07:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11E17446C0
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 07:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjGAFFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 01:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        id S229536AbjGAFYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 01:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjGAFFI (ORCPT
+        with ESMTP id S229456AbjGAFXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 01:05:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E050D4232;
-        Fri, 30 Jun 2023 22:05:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74E5C60F05;
-        Sat,  1 Jul 2023 05:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D8C8CC433C7;
-        Sat,  1 Jul 2023 05:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688187902;
-        bh=Chp/dF5vEstDKA5BwQZEJf50ojKTOh8MxGE24r2ZtmU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=d882mKYX5Rn27rM2O/Y8TnefFy2EArz/mihlnP6+ohLtSNy/IuwHhXPFSrvEDdZOY
-         JNGjAKqx3DW1ecvR9jJ+91nH57SFfCrXD5lp5T/kKgO9XrclSRMD/bKTGdopI9hjHY
-         ucRGMeryKPLy/eEJtQxCYTIBcrkIRRt8rdbBl+1vJDB1SdvriMnIE6BXtTXmaL7pIF
-         NcyaU4itnZCIQaILklISQrDEQ2xOw/IFK0abZsWzw5DwWeuw80Ycq/cDNOBZiQC9JW
-         IKvmSCWh7LZz4Kco2JfE6PNHwXzTUEeRnAzessxrBblJXFk3Loo9khs/N/YJ8nGHEq
-         L6Lbf560APu5Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8E94E5381B;
-        Sat,  1 Jul 2023 05:05:02 +0000 (UTC)
-Subject: Re: [GIT PULL] livepatching for 6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZJ6XqN90v2tU483G@alley>
-References: <ZJ6XqN90v2tU483G@alley>
-X-PR-Tracked-List-Id: <live-patching.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZJ6XqN90v2tU483G@alley>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching tags/livepatching-for-6.5
-X-PR-Tracked-Commit-Id: 42cffe980ce383893660d78e33340763ca1dadae
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f4ce392b03722b62804909aadbce6ff4f9c50b91
-Message-Id: <168818790281.30776.1514772909331959682.pr-tracker-bot@kernel.org>
-Date:   Sat, 01 Jul 2023 05:05:02 +0000
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 1 Jul 2023 01:23:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14174E65;
+        Fri, 30 Jun 2023 22:23:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1kfkyBbEKK9syFELZldrmIs3ddT+2K6uKGsn6AiWLI8=; b=OZN9vWVvk5hzGFEn8l117P6d86
+        9BIesJUnwC+d+y77cqvkGXGjW4B6/S/INrSc9xtP+AdxLnf/kmrT1SBqcWKBD+cfWQgxuocMi5PQF
+        QK6VnyT/6aHVE3MVDIwXMgJYzdShwPha+umgEIugRfpc8sPLvlPYp5L0GZDtStl+hZdAsgI9OGkf4
+        KDeOCOGrI767RY/L72S65jzRoiMK7+aH4jT4VqT8OAz1y1D5vcqYcLT+MbXZ7sT5N1hCqqEafQWp4
+        d6WWykAsaAWFEyAK2PNd1nlDBaDp+zJHodfu05n2AIOo2+rgZSNCSE5dcrN1/ShzZodnUlgBLLTS9
+        ziceeEJA==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qFT5J-005CWM-1C;
+        Sat, 01 Jul 2023 05:23:49 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH RESEND] scsi: ufs-mediatek: add dependency for RESET_CONTROLLER
+Date:   Fri, 30 Jun 2023 22:23:48 -0700
+Message-ID: <20230701052348.28046-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 30 Jun 2023 10:51:52 +0200:
+When RESET_CONTROLLER is not set, kconfig complains about missing
+dependencies for RESET_TI_SYSCON, so add the missing dependency
+just as is done above for SCSI_UFS_QCOM.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching tags/livepatching-for-6.5
+Silences this kconfig warning:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f4ce392b03722b62804909aadbce6ff4f9c50b91
+WARNING: unmet direct dependencies detected for RESET_TI_SYSCON
+  Depends on [n]: RESET_CONTROLLER [=n] && HAS_IOMEM [=y]
+  Selected by [m]:
+  - SCSI_UFS_MEDIATEK [=m] && SCSI_UFSHCD [=y] && SCSI_UFSHCD_PLATFORM [=y] && ARCH_MEDIATEK [=y]
 
-Thank you!
+Fixes: de48898d0cb6 ("scsi: ufs-mediatek: Create reset control device_link")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202306020859.1wHg9AaT-lkp@intel.com
+Cc: Stanley Chu <stanley.chu@mediatek.com>
+Cc: Peter Wang <peter.wang@mediatek.com>
+Cc: Paul Gazzillo <paul@pgazz.com>
+Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+---
+ drivers/ufs/host/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+diff -- a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
+--- a/drivers/ufs/host/Kconfig
++++ b/drivers/ufs/host/Kconfig
+@@ -72,6 +72,7 @@ config SCSI_UFS_QCOM
+ config SCSI_UFS_MEDIATEK
+ 	tristate "Mediatek specific hooks to UFS controller platform driver"
+ 	depends on SCSI_UFSHCD_PLATFORM && ARCH_MEDIATEK
++	depends on RESET_CONTROLLER
+ 	select PHY_MTK_UFS
+ 	select RESET_TI_SYSCON
+ 	help
