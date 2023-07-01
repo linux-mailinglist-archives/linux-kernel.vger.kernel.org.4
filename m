@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CA3744A78
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F8D744A76
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 18:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjGAQMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 12:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S231138AbjGAQMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 12:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjGAQME (ORCPT
+        with ESMTP id S230263AbjGAQME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 1 Jul 2023 12:12:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486E02737;
-        Sat,  1 Jul 2023 09:12:04 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2687B271F
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 09:12:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F5C60B29;
-        Sat,  1 Jul 2023 16:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 432EEC433C7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B05F360B0A
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 16:12:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24C5EC433CA;
         Sat,  1 Jul 2023 16:12:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1688227923;
-        bh=6IsqIh05oW0elN2m/vV35hMLVDlGmRyuxBmcoCSSojE=;
+        bh=M0PDgaOnQIx4mh1sMnVuyY+C9pRZqgcDrieVFxpmVBY=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Zva+SWeBtCyuNrQUj5aoJVlKQBwFMauhtpw/tkLHH2pOk9ArpSAX8v00FDy6W0L7w
-         oStwZc3XHIduuSGukJMd5al4b6PWscMP/xJM1Q4Fsqy53bLAJljgeo55EyEzEYOwTp
-         H4M79SetZ3VClukMI6FUAdXW0aKrNNu2eSPEL2QUnOQwGRHRXe0NlaCUb82XoUNWwS
-         xZiqJiVUqNmZayFZwj6iXTdk9xjaQHl6kpavBw3Rzm9vsN8A0+pGQyeLyF0rZJPUeJ
-         yOEKU5JQPmEiFOp4ZtpdT+zXb/RwDkapRsgfLU9vBOfBmUa749TkIAQq8BYjJRKGGs
-         kUYdi3dArJwaw==
+        b=Xn/vEAFJ+rtyiTqtDmBThXSGWgM/H8jKTi/pRLUTvy+fp4PdzLHiwf+Bggx6/H3VP
+         wuwqkUjZNPtQZzgjQwzIvhMkiHY/D52Kor0fYPFZvpCda86L6zqGF/SpA5/R3Abge1
+         Wk7lqfm+0xqo0gBGy4mC2ubSn4zzXrkysvWWeV2sysMbBz0Q7+tFK3nGZGs7K/9vX+
+         jlLTqpVKlbE+oZObdzJlPyu5AIPjT3RPapy3VgTEbpW/l+g4iGhGmqQ1igr8Z9yo9u
+         s3mmEPUdlgXT7Jh+cXgpguBLcWujilhVKSzaZXHQUiEiTxqOt6t1L+tpTE1P2+fdy2
+         YevB/UuBJoZDA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D943E5381B;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09A27C6445B;
         Sat,  1 Jul 2023 16:12:03 +0000 (UTC)
-Subject: Re: [GIT PULL] second set of sysctl fixes v6.5-rc1
+Subject: Re: [GIT PULL] NVDIMM and DAX for 6.5
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZJ9q4AUkeaENryE7@bombadil.infradead.org>
-References: <ZJ9q4AUkeaENryE7@bombadil.infradead.org>
+In-Reply-To: <b40d43f78d320324c7a65ec0f3162524a4781c4c.camel@intel.com>
+References: <b40d43f78d320324c7a65ec0f3162524a4781c4c.camel@intel.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZJ9q4AUkeaENryE7@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-fixes-v2-v6.4-rc1
-X-PR-Tracked-Commit-Id: 7fffbc71075dcb733068d711c2593127cdce86f0
+X-PR-Tracked-Message-Id: <b40d43f78d320324c7a65ec0f3162524a4781c4c.camel@intel.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git tags/libnvdimm-for-6.5
+X-PR-Tracked-Commit-Id: 1ea7ca1b090145519aad998679222f0a14ab8fce
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: be21a73edd5ded67524eabb9dad42799b42c0585
-Message-Id: <168822792318.621.6724226652558527403.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 0a1c979c6b7dfe5b6c105d0f0f9f068b5eb07e25
+Message-Id: <168822792302.621.8262643616504738837.pr-tracker-bot@kernel.org>
 Date:   Sat, 01 Jul 2023 16:12:03 +0000
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, trix@redhat.com,
-        keescook@chromium.org, ebiederm@xmission.com, yzaikin@google.com,
-        j.granados@samsung.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+To:     "Verma, Vishal L" <vishal.l.verma@intel.com>
+Cc:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,12 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 30 Jun 2023 16:53:04 -0700:
+The pull request you sent on Fri, 30 Jun 2023 19:17:47 +0000:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-fixes-v2-v6.4-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git tags/libnvdimm-for-6.5
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/be21a73edd5ded67524eabb9dad42799b42c0585
+https://git.kernel.org/torvalds/c/0a1c979c6b7dfe5b6c105d0f0f9f068b5eb07e25
 
 Thank you!
 
