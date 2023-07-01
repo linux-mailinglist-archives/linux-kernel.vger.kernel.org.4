@@ -2,115 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C72C744B96
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 00:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8ECD744B93
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 00:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjGAWTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 18:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S229671AbjGAWHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 18:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjGAWTY (ORCPT
+        with ESMTP id S229446AbjGAWHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 18:19:24 -0400
-X-Greylist: delayed 1507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Jul 2023 15:19:23 PDT
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E6D1AC;
-        Sat,  1 Jul 2023 15:19:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=xXXdlOkCWm65vKF5GsUiRqvKCb4A+LCa7xc5vezYfgI=; b=YakJMl/5lgW1CugbfVN4XcJLn/
-        e3j0i7gOFSOdq54YHbS6MABE5Ahh94u+cHXUapba3iKESmpSRxB+rro3mxQ0UvDQRY0eqKhlxu2vN
-        4DgnOJ/IK9S3+GFlFVuuNrYbEZYtB+X7ajce19jhQ7JDaCQ5rR2t8dlM21MBy4nObsl6eavwkV7Qv
-        jU4x/tX+mOh3qQ3mNMoLbMvOuCKSM5Y7fJAbx6kUjvrTCDj6h7n1FKJPmO9Qcv7IudHi8jgS3pj4p
-        9mTBEpIxhK9N9C5quB/t7aVTW16Hn2Zjh/yWm9rfxTUMjpy4pGUKH8z8AVj89kxXv54mkPZVF4Z4J
-        hFNqhr0w==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1qFiXA-00F8ep-Bi; Sat, 01 Jul 2023 23:53:36 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1qFiX8-00FDHi-1D;
-        Sat, 01 Jul 2023 23:53:34 +0200
-Date:   Sat, 1 Jul 2023 23:53:34 +0200
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     jiajie.ho@starfivetech.com
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, olivia@selenic.com,
-        herbert@gondor.apana.org.au, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kernel@esmil.dk,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 3/3] riscv: dts: starfive: Add TRNG node for
- VisionFive 2
-Message-ID: <ZKCgXvcbWBGWZnsU@aurel32.net>
-Mail-Followup-To: jiajie.ho@starfivetech.com,
-        Palmer Dabbelt <palmer@rivosinc.com>, olivia@selenic.com,
-        herbert@gondor.apana.org.au, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kernel@esmil.dk,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20230117015445.32500-4-jiajie.ho@starfivetech.com>
- <mhng-348475f1-5880-4951-9692-78210a17acd3@palmer-ri-x1c9a>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-348475f1-5880-4951-9692-78210a17acd3@palmer-ri-x1c9a>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 1 Jul 2023 18:07:15 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C28CD3
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 15:07:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 689A53200AAA;
+        Sat,  1 Jul 2023 18:07:10 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 01 Jul 2023 18:07:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688249229; x=1688335629; bh=kV
+        GVKnBuIHX1l6ALTLY/SHtLDLdOEUzzM5SZf1Sp8Xo=; b=CHpIIZ2i4wn4xbUn9m
+        9zZbqmCR28xZWOFi6mVjHvWitYI7ASw2jR0Mw40cYfATMDL4/0tOjKsjvSsYKODm
+        JW0ugQCF6Jtfe+CXssc5UXmySpMpO5dabuNjCVqsMhWrn85gyQ3WXAr1DrV3uAgG
+        tazH8jJ6IQIzZwZC9C6jZMLsMo1At5gkkJWe564pdKze/jeC1l0P+80J33nbr0m6
+        YTZR+10N3rCdURAo0tfyGkGMOPplLzIA81dO2IvVFiuM3r6nRb+x+LJT98pPLcXq
+        WbNEfeVMtHiS0zKhcRr+gb+YauTWYkVTa/lyB2VCBqgiHitOeN6muHe2Ggl/x8EC
+        MyNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688249229; x=1688335629; bh=kVGVKnBuIHX1l
+        6ALTLY/SHtLDLdOEUzzM5SZf1Sp8Xo=; b=K2azXMowjA85OuykdPZphJ1HUWkYg
+        NoURe5epWQCQd55n9jx39YOFXEUlt+eK9HR6rJUb+ZzhCCDFfXry62A3vRf+BZJZ
+        lJTJXMUpkt2scV8I8QApEW0BqJZsIBfkjogFf+5Sq1CmHZuz4ZpF4h1VOJl+e8xJ
+        PE/ew5GiULriP0Bfj+nfYZ6NjLEDXrlWYK0vADkglkxcnRguheSDDLSSfu3GnYse
+        SaJj1yuTOq1CsppS1GP2XNYp1EeX5Ts+QS1bsYQ/3sP8QqGQ3SxBmr9zEyFm9ojh
+        /Mxun0q2Zg1jCqCAEIReFf6CygERI2ISx06S6VPBF7UpMu9p9XepRyIdA==
+X-ME-Sender: <xms:jaOgZGWXBtzsHMZKfqVhqxnmwe0FzRQVGKTrDwrIdlA3XPXS8jwDYA>
+    <xme:jaOgZClQ5Qk8aUFevpvqL6BR0L0txvhI2H1sr2fVmEtqS4rq3A91wIMXH0qyPV42S
+    DAcK2MfmIlrM3p3L8Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdelgddtiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:jaOgZKZP1Kd_EAaYCyTnulg3-zXoCXkiTcUEa4SM2K3ombr9GMmw2w>
+    <xmx:jaOgZNV54NqnZniCWUSR3IhI5COBUO_QHnY5kMnhX1Zldbz_GecmYw>
+    <xmx:jaOgZAkCqSFe2gBfjn7NtFlqs-L1kBx9HaOCyIWgKX-D1H4QC4zjtA>
+    <xmx:jaOgZOafDBBiS__PtiplermowfLodLUywd9vo1m7t_xAyiUIsO6yrg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 10A3BB60086; Sat,  1 Jul 2023 18:07:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <2e1af219-a31c-4284-b50a-662f65c8a736@app.fastmail.com>
+In-Reply-To: <20230701214503.550549-3-javierm@redhat.com>
+References: <20230701214503.550549-1-javierm@redhat.com>
+ <20230701214503.550549-3-javierm@redhat.com>
+Date:   Sun, 02 Jul 2023 00:06:47 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Javier Martinez Canillas" <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Dave Airlie" <airlied@gmail.com>,
+        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
+        "Maxime Ripard" <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/2] drm: Make fbdev emulation select FB_CORE instead of depends
+ on FB
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-14 18:45, Palmer Dabbelt wrote:
-> On Mon, 16 Jan 2023 17:54:45 PST (-0800), jiajie.ho@starfivetech.com wrote:
-> > Adding StarFive TRNG controller node to VisionFive 2 SoC.
-> > 
-> > Co-developed-by: Jenny Zhang <jenny.zhang@starfivetech.com>
-> > Signed-off-by: Jenny Zhang <jenny.zhang@starfivetech.com>
-> > Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
-> > ---
-> >  arch/riscv/boot/dts/starfive/jh7110.dtsi | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> > index 4ac159d79d66..3c29e0bc6246 100644
-> > --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> > +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> > @@ -455,5 +455,15 @@ uart5: serial@12020000 {
-> >  			reg-shift = <2>;
-> >  			status = "disabled";
-> >  		};
-> > +
-> > +		rng: rng@1600c000 {
-> > +			compatible = "starfive,jh7110-trng";
-> > +			reg = <0x0 0x1600C000 0x0 0x4000>;
-> > +			clocks = <&stgcrg JH7110_STGCLK_SEC_HCLK>,
-> > +				 <&stgcrg JH7110_STGCLK_SEC_MISCAHB>;
-> > +			clock-names = "hclk", "ahb";
-> > +			resets = <&stgcrg JH7110_STGRST_SEC_TOP_HRESETN>;
-> > +			interrupts = <30>;
-> > +		};
-> >  	};
-> >  };
-> 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Sat, Jul 1, 2023, at 23:44, Javier Martinez Canillas wrote:
+> Now that the fbdev core has been split in FB_CORE and FB, make DRM fbdev
+> emulation layer to just select the former.
+>
+> This allows to disable the CONFIG_FB option if is not needed, which will
+> avoid the need to explicitly disable each of the legacy fbdev drivers.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+>
+> Changes in v2:
+> - Make CONFIG_DRM_FBDEV_EMULATION to select FB_CORE (Thomas Zimmermann).
+>
+>  drivers/gpu/drm/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> index afb3b2f5f425..d9b1710e3ad0 100644
+> --- a/drivers/gpu/drm/Kconfig
+> +++ b/drivers/gpu/drm/Kconfig
+> @@ -132,7 +132,7 @@ config DRM_DEBUG_MODESET_LOCK
+>  config DRM_FBDEV_EMULATION
+>  	bool "Enable legacy fbdev support for your modesetting driver"
+>  	depends on DRM_KMS_HELPER
+> -	depends on FB=y || FB=DRM_KMS_HELPER
+> +	select FB_CORE
 
-It appears that this patch has never been applied, although the rest of
-the series has already been merged. Unfortunately it doesn't apply
-anymore due to other changes to that file.
+This will unfortunately force FB_CORE=y even with DRM=m, it would be nice
+to allow both to be loadable modules. Any of these should work:
 
-Could you please rebase and resend it?
+a) Add another hidden symbol like
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+config DRM_FB_CORE
+      def_tristate DRM && DRM_FBDEV_EMULATION
+      select FB_CORE
+
+b) move the 'select' to DRM
+
+config DRM
+      tristate "Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)"
+      select FB_CORE if DRM_FBDEV_EMULATION
+
+c) Remove the 'select' and instead use the default 
+
+config FB_CORE
+     def_tristate FB || (DRM && DRM_FBDEV_EMULATION)
+
+       Arnd
