@@ -2,85 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF911744A57
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA9E744A5A
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 17:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjGAPpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 11:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S229940AbjGAPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 11:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjGAPpG (ORCPT
+        with ESMTP id S229530AbjGAPuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 11:45:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7AB2686
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 08:45:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1482460AE7
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 15:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B83BC433C7;
-        Sat,  1 Jul 2023 15:45:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688226304;
-        bh=5goMEgvQFh3eL2WcHllJEDQ78LTNrgS33kORtflyOxk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KpsoAvIRfgnJqLnaqX3b2h0p0uqQxZ+5zGKaYWJ0WjeCASghSnQoGm+t2wDRSsYYk
-         Fx1/NVCkFFZG90oWiAFs7alb7llwYIYorfuEpkdOE3FGPWLADNYOi0aQJ4kFj5XBMq
-         n/W9DvP4ia+kDP70eRa+6wJIITVLdIS3oAO4UKGYeJ3d04SGiQ2QRFBact59s7IDgd
-         sRM0B/peII413QdO9JUngpDrG5aS8OUpyWBxiOEmCs5u/sPkOYoKXX5JGw502FRH50
-         mT/1hkJG7iDIIbtZ6e+CUG3L3NX6faW6eGyx9VW7ux0KMzKsS93AkhWfm8Ct0iu5De
-         gOnRKwnf6+1Mg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 49E60E5381B;
-        Sat,  1 Jul 2023 15:45:04 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 1 Jul 2023 11:50:05 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0612686;
+        Sat,  1 Jul 2023 08:50:04 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-565a8d74daeso1892614eaf.1;
+        Sat, 01 Jul 2023 08:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688226604; x=1690818604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AWux/IF/aECwza6GtENWenn3smgX2WPjU/KjFJmhyNc=;
+        b=l9wb+bOH/n1H8L5N4d9tmf6kooHd3qjzenIY3zLrw0SuFKjc3azDJMYM/nFuXtPALu
+         fwfbHUh51ekSOCL0alqQpF3e466+djZhphZEUWSITdvB9evWLVWX3S1vayFR1fHc0Mtj
+         n7ZX2GfQe/QBd/TwwXrWkReGea1vgdFTgof4jKIefEcFhEjqTqd+zrrL/o1LQbT+9Dm5
+         1xHsTtQpLYq5NU02jWZYFM3rSVBROZyKfM4GbiF2MmL52G7plaPLkKKb94bkg5vip0pw
+         uhuOLwcqa0/voIsYdbUoYe4XmH0WUWkrykf4nrE5GHvaPQ8XSl25Mw/i8qE8oaDRYIuB
+         7Etg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688226604; x=1690818604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AWux/IF/aECwza6GtENWenn3smgX2WPjU/KjFJmhyNc=;
+        b=G8H8XRzJQ+C9Jklfp2Fva9+GCHy3bvSZMGymmVfzAIzkVXVsk3RQ1SYWfcONdMS9Zn
+         I++zxSI5QS9XH3ZZeuu7pYGGeuLzSyu+bvhHcIISF0gmX2rg68tW2sn2jsVZmIkUdCmI
+         fErMstMqIWOLhOqQTYgYxEk0hFL34MKz+yKK1OF9CqAQ0ElPPfNznR22CbptdUlynUzK
+         jfuOh9cUxeCXvepeT7uM3n4a4EqJR9x6ryu/mJv+4KbVkyqiu8MhIjaxMPwssI+b0LTI
+         ZxaNMuvyHVJDFYCPmEcTZPb+t9K+89SxhT5JbOCt7z+lQKGfWRkRwvsQQhMwVU3FomHD
+         qD0A==
+X-Gm-Message-State: AC+VfDw/3DM8IjhO4rzhtJkBPIVqmpQyR9IdoxBDkUeCfqG5Plf6kwZR
+        YvR4V2Yo/BPWUCzx+aQYA8hh9udrXP69b1NQPyI=
+X-Google-Smtp-Source: ACHHUZ5p3Qamj32aSw4TXw6zcYs7G/XAByy351uI6wBsUAb95PSUxyzPUUUpESCbgaw4X1aoUbKIgnqr0SYz7yzOjiQ=
+X-Received: by 2002:a05:6820:447:b0:560:c558:b6f9 with SMTP id
+ p7-20020a056820044700b00560c558b6f9mr6089123oou.2.1688226604145; Sat, 01 Jul
+ 2023 08:50:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V Patches for the 6.5 Merge Window, Part 1
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168822630429.22742.3829252189849990649.git-patchwork-notify@kernel.org>
-Date:   Sat, 01 Jul 2023 15:45:04 +0000
-References: <mhng-ebcc1b82-5dd0-4f2d-824e-8d9250374abf@palmer-ri-x1c9>
-In-Reply-To: <mhng-ebcc1b82-5dd0-4f2d-824e-8d9250374abf@palmer-ri-x1c9>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230628-topic-a635-v2-1-5494c881b8be@linaro.org>
+In-Reply-To: <20230628-topic-a635-v2-1-5494c881b8be@linaro.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Sat, 1 Jul 2023 08:49:52 -0700
+Message-ID: <CAF6AEGsH0BZd_yyn7UtJ3cLbbw2A5qdg8gQ6SORzQKjsMsnvHA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/adreno: Assign revn to A635
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, Jun 30, 2023 at 4:12=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro=
+.org> wrote:
+>
+> Recently, a WARN_ON() was introduced to ensure that revn is filled before
+> adreno_is_aXYZ is called. This however doesn't work very well when revn i=
+s
+> 0 by design (such as for A635). Fill it in as a stopgap solution for
+> -fixes.
+>
+> Fixes: cc943f43ece7 ("drm/msm/adreno: warn if chip revn is verified befor=
+e being set")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Changes in v2:
+> - add fixes
+> - Link to v1: https://lore.kernel.org/r/20230628-topic-a635-v1-1-5056e09c=
+08fb@linaro.org
+> ---
+>  drivers/gpu/drm/msm/adreno/adreno_device.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm=
+/msm/adreno/adreno_device.c
+> index cb94cfd137a8..8ea7eae9fc52 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> @@ -345,6 +345,7 @@ static const struct adreno_info gpulist[] =3D {
+>                 .address_space_size =3D SZ_16G,
+>         }, {
+>                 .rev =3D ADRENO_REV(6, 3, 5, ANY_ID),
+> +               .revn =3D 635,
+>                 .fw =3D {
+>                         [ADRENO_FW_SQE] =3D "a660_sqe.fw",
+>                         [ADRENO_FW_GMU] =3D "a660_gmu.bin",
+>
 
-This pull request was applied to riscv/linux.git (fixes)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+hmm, I realized a problem with this, it would change what
+MSM_PARAM_GPU_ID and more importantly MSM_PARAM_CHIP_ID return..  The
+former should be "harmless", although it isn't a good idea for uabi
+changes to be a side effect of a fix.  The latter is more problematic.
 
-On Fri, 30 Jun 2023 08:40:50 -0700 (PDT) you wrote:
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-> 
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.5-mw1
-> 
-> [...]
+I think I'm leaning more towards reverting commit cc943f43ece7
+("drm/msm/adreno: warn if chip revn is verified before being set") for
+-fixes.  I'm still thinking about options for a longer term fix.
 
-Here is the summary with links:
-  - [GIT,PULL] RISC-V Patches for the 6.5 Merge Window, Part 1
-    https://git.kernel.org/riscv/c/533925cb7604
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+BR,
+-R
 
 
+> ---
+> base-commit: 5c875096d59010cee4e00da1f9c7bdb07a025dc2
+> change-id: 20230628-topic-a635-1b3c2c987417
+>
+> Best regards,
+> --
+> Konrad Dybcio <konrad.dybcio@linaro.org>
+>
