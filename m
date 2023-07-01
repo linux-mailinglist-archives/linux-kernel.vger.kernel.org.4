@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6487449F4
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 16:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5779B7449FD
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 16:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjGAOkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 10:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S229609AbjGAOmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 10:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjGAOkc (ORCPT
+        with ESMTP id S229531AbjGAOmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 10:40:32 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DCC35B3;
-        Sat,  1 Jul 2023 07:40:31 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b7ef3e74edso14541555ad.0;
-        Sat, 01 Jul 2023 07:40:31 -0700 (PDT)
+        Sat, 1 Jul 2023 10:42:04 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C90FB2
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 07:42:03 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b69ff54321so47235271fa.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 07:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688222430; x=1690814430;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uyUkD0mJUU/Zf9ldB9gHD2S/2d4V8ANSTIaihttQl0A=;
-        b=IcDsm+rZ3hWCxWysGUBDBD5VD+zraq6+jUeIaKn/hFtcy9Dgr5iufxyQz/ygOH39mE
-         dKiGEbAwOz8eJHxxFR55WRU7m202fAw12RiTvxzs5RHo6nbhnTtdSl9vjLQDwuPpFr/z
-         TvqWtGPj6ulYtEAoYGwMzX2zyPasm2e1wbpEnozvkdR6lQUJ35w0J1Jy+siGUmFf5UjH
-         cyNBZHheeVh8SCGH/hLqLeKWYGlmlyi9zqpcgdb7nIIezPoxwuP697JcW0aUKS6/EOTW
-         Q8u1XdaYb+ICRxwdlNWbA5XSaRkEE1dnWAZEsbucaG8pYUT7P2RSzJAMx5thpCWC2gsn
-         w6hw==
+        d=linaro.org; s=google; t=1688222522; x=1690814522;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BXnw/FEpPPpZ+WG4ZVob38IzcodUEaUVz8j/V8IP3fU=;
+        b=EFLeI3PJZGpGQqlzawDupl04jL4AqEfMYNSBPa9G6ZoTmxnVbQFf5bhfUYdwdYSB45
+         OZIjbKBhe9focaUCsALj7DjgvvLrBPbsV2IJV6nOaqO6riOEd2TVktjYb/P0arrBmgUb
+         KpnsGzupfQaUcgD9TGykQUrwZ/XvcXun/7GMn2IBCbZOHAHgJyvLdCqm4q//eFtlgJMe
+         PqRvP//yXPHazOav8hFEUSUdGFMd4IHLjHpAYMX7bHh4YRT6KymSCnoXXHYOqAoc4NQP
+         1BgawP0FLeWVjogQje8c/+ueSQF10FXyWSHMkW3ssrcvT3M/s1t+/JuZOX/21KI7dZZb
+         gYzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688222430; x=1690814430;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uyUkD0mJUU/Zf9ldB9gHD2S/2d4V8ANSTIaihttQl0A=;
-        b=Dwfa4vS5bwhszpWcehLGWzNrDOU2SuuwhftLNa6b+ZgMGTvEgXTmZK9KYUShYPYkBT
-         2Ycv77pRsuTGK/eNaDKGro+BypCutH9mLjsqtUawmH1w7oKzEYOH7lEzsh9DeOSRs8Ho
-         nyMkxMsF672nQAM/85oL97rwlL2n6rVlxPMx19bzkVRm2au21fKscrfmDZzQ6IXvS+6v
-         fDViTm1tIQkjuUI8ky/Dzt2wV+ulqRF8/WnUegRNPWUmgmwH7/TM84pZrZvqHORWfmjB
-         ne3vZ+J49/u2jLRiHqo6T+Hr2Cyeczgq/hssgBjulq39XPvFvlAawEeSApWDpJu1YSzM
-         RFpA==
-X-Gm-Message-State: ABy/qLbxblR9j4A7Hop/HIHaoyQjQflz9Wx3msXxNszK/WLCACMvFJRw
-        x6lrtGY65HV05XAMRmTF6Pc=
-X-Google-Smtp-Source: APBJJlEqX62QMvHa1JAPHGFp7Jlctzos+OPSmcIe4d+nG9szuHOt9QyZ+r1VUb70YbR27S9Oc5PE2w==
-X-Received: by 2002:a17:90a:e60f:b0:262:e742:f40a with SMTP id j15-20020a17090ae60f00b00262e742f40amr3306132pjy.44.1688222430467;
-        Sat, 01 Jul 2023 07:40:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903120c00b001a69c1c78e7sm12361682plh.71.2023.07.01.07.40.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jul 2023 07:40:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 1 Jul 2023 07:40:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v2 6/6] watchdog/hardlockup: Define
- HARDLOCKUP_DETECTOR_ARCH
-Message-ID: <7cfc15f1-d8d0-4418-b7a1-5aa9e90e3fb3@roeck-us.net>
-References: <20230616150618.6073-1-pmladek@suse.com>
- <20230616150618.6073-7-pmladek@suse.com>
+        d=1e100.net; s=20221208; t=1688222522; x=1690814522;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BXnw/FEpPPpZ+WG4ZVob38IzcodUEaUVz8j/V8IP3fU=;
+        b=aN5IVNDovv4BbBZLnMu/Dx4xLJLOZEaBFqd0G1zchfQfrVHWNYBGvaprsJDDRbz+uD
+         Fbyafej6w06G7D5EC9XFyIDBt9aAMdCPJUq1aq/5GfBBqe2jZqtsb04NreBpoWqT6mjN
+         68EcR+lfJwEA/p3XVSl2UtdfyT+y6wYtwB7TcV++d/GEElMeNBqXP++aySJICUuk9Sdp
+         6qHNRZIt2V9G8fdF5dvecEh73xi3JPOOOrP6UFZiWO/sHZD8oUTrEuQP7ORDrW+suBpr
+         eYlEYyG77iOGea25fBVTIuIDFF0h2kOARDImYWcqc0nvtao8+fI61za3fIaLefHcYy7K
+         l3vw==
+X-Gm-Message-State: ABy/qLatVdqtbGKqQRAvUFyCQpyhOn8Je/bRZEI02tYACM/Zw9AXAEfV
+        CgHbepLKyXOXedYDJo8QT970Tw==
+X-Google-Smtp-Source: APBJJlFgxcpnuG9pkZhBLIAnPiRu5vZzw3WH4/SWTKfNj2SJgXp0DmGQyw1cH/Pa56vLVz7wyMBM2Q==
+X-Received: by 2002:a05:6512:15a8:b0:4fb:7933:dd4f with SMTP id bp40-20020a05651215a800b004fb7933dd4fmr5371505lfb.56.1688222521704;
+        Sat, 01 Jul 2023 07:42:01 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id 20-20020ac24834000000b004f60f2979e6sm3413409lft.83.2023.07.01.07.42.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jul 2023 07:42:01 -0700 (PDT)
+Message-ID: <cd7b98b9-7a32-72f5-3997-6c332c295067@linaro.org>
+Date:   Sat, 1 Jul 2023 16:41:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616150618.6073-7-pmladek@suse.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] clk: qcom: gcc-sm7150: Add CLK_OPS_PARENT_ENABLE to sdcc2
+ rcg
+Content-Language: en-US
+To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
+        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        davidwronek@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230630191944.20282-1-danila@jiaxyga.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230630191944.20282-1-danila@jiaxyga.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 05:06:18PM +0200, Petr Mladek wrote:
-> The HAVE_ prefix means that the code could be enabled. Add another
-> variable for HAVE_HARDLOCKUP_DETECTOR_ARCH without this prefix.
-> It will be set when it should be built. It will make it compatible
-> with the other hardlockup detectors.
+On 30.06.2023 21:19, Danila Tikhonov wrote:
+> Set .flags = CLK_OPS_PARENT_ENABLE to fix "gcc_sdcc2_apps_clk_src: rcg
+> didn't update its configuration" error.
 > 
-> The change allows to clean up dependencies of PPC_WATCHDOG
-> and HAVE_HARDLOCKUP_DETECTOR_PERF definitions for powerpc.
-> 
-> As a result HAVE_HARDLOCKUP_DETECTOR_PERF has the same dependencies
-> on arm, x86, powerpc architectures.
-> 
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Fixes: a808d58ddf29 ("clk: qcom: Add Global Clock Controller (GCC) driver for SM7150")
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 > ---
-...
-> --- a/include/linux/nmi.h
-> +++ b/include/linux/nmi.h
-> @@ -9,7 +9,7 @@
->  #include <asm/irq.h>
->  
->  /* Arch specific watchdogs might need to share extra watchdog-related APIs. */
-> -#if defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HARDLOCKUP_DETECTOR_SPARC64)
-> +#if defined(CONFIG_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HARDLOCKUP_DETECTOR_SPARC64)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-This results in:
-
-arch/powerpc/platforms/pseries/mobility.c: In function 'pseries_migrate_partition':
-arch/powerpc/platforms/pseries/mobility.c:753:17: error: implicit declaration of function 'watchdog_hardlockup_set_timeout_pct'; did you mean 'watchdog_hardlockup_stop'? [-Werror=implicit-function-declaration]
-  753 |                 watchdog_hardlockup_set_timeout_pct(factor);
-
-with ppc64_defconfig -CONFIG_HARDLOCKUP_DETECTOR, because the dummy 
-for watchdog_hardlockup_set_timeout_pct() is still defined in
-arch/powerpc/include/asm/nmi.h which is no longer included.
-
-Guenter
-
->  #include <asm/nmi.h>
->  #endif
+Konrad
+>  drivers/clk/qcom/gcc-sm7150.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/clk/qcom/gcc-sm7150.c b/drivers/clk/qcom/gcc-sm7150.c
+> index 6b628178f62c..6da87f0436d0 100644
+> --- a/drivers/clk/qcom/gcc-sm7150.c
+> +++ b/drivers/clk/qcom/gcc-sm7150.c
+> @@ -739,6 +739,7 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
+>  		.parent_data = gcc_parent_data_6,
+>  		.num_parents = ARRAY_SIZE(gcc_parent_data_6),
+>  		.ops = &clk_rcg2_floor_ops,
+> +		.flags = CLK_OPS_PARENT_ENABLE,
+>  	},
+>  };
 >  
