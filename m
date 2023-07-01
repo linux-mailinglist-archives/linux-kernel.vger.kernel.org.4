@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E5F7447E8
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D55C7447E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 10:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjGAIGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jul 2023 04:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S229907AbjGAIGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 04:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjGAIGk (ORCPT
+        with ESMTP id S229607AbjGAIGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 1 Jul 2023 04:06:40 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF4FE50;
-        Sat,  1 Jul 2023 01:06:38 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QtPsN1sKQz4f3q32;
-        Sat,  1 Jul 2023 16:06:32 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgA30JOH3p9kdvLGMw--.57184S7;
-        Sat, 01 Jul 2023 16:06:34 +0800 (CST)
-From:   linan666@huaweicloud.com
-To:     song@kernel.org, guoqing.jiang@cloud.ionos.com, xni@redhat.com,
-        colyli@suse.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
-        houtao1@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v2 3/3] md/raid10: use dereference_rdev_and_rrdev() to get devices
-Date:   Sat,  1 Jul 2023 16:05:29 +0800
-Message-Id: <20230701080529.2684932-4-linan666@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230701080529.2684932-1-linan666@huaweicloud.com>
-References: <20230701080529.2684932-1-linan666@huaweicloud.com>
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE51B1B0
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 01:06:37 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51d805cb33aso3012677a12.3
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 01:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688198796; x=1690790796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F2AOA85WPLNeq59zZIQIWUFQQzF6b4WaPXnHpsoj/pM=;
+        b=uTt9U+aYLjgWdXce3eySEIwUYyScwz33iTbz8S7vol+S7QzIP9b1Fio3ugyjMzlTEM
+         H35JObt6DdDe+ZAcrodw8uN/VW+NQ0CqZ3BQL4MYQyK/VG/jqB9fXAiem+0ABDpT8SMD
+         jtIdYLOMBEssloGgEwn0cZsSLT3+MKV5fWePDdwy5GOGUNilj/gsbg/gPIl5znH0T4Wu
+         vzEsOA4OW+uHY00syfFg4Kk7fezNivoQaQSTeCBtNOfjXPeHitfb0gcotxrQzmejiOg3
+         Ym29/2O6Y8KtJR8Z70kir6HCS6nh0pKIyzJxpXQqPSeCQaqa/GXYh7L3Bhc+EOvvhCfl
+         rA7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688198796; x=1690790796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F2AOA85WPLNeq59zZIQIWUFQQzF6b4WaPXnHpsoj/pM=;
+        b=I0Uby/1i2XUv16auSquBGloRbfd5CB6MYLlnQsD+SZmAtNImMLdYLa92xTF+/i0MBx
+         PLIiw6gUiotJ6cbnRn9xSsylewyd6LvlcxSTiimyh1gvYhLQdn6aYGmWSj18/o4MRTP5
+         3tkF5bEP+AuNgXALIEUzN+qxiUm5bhcy7GCb4sdVSYBgUqTLvYjjROs75AKI51nvWqBf
+         mIWZmg61W+19LMRwVyuoWlyw99tKXo+ldO9W/PA8N5Km0R5E/j1SlVlIHVXpPf9Zhgsm
+         vO56LHaKiK990owS/70k65UzYJGD4/SHFtpwkPayGZe1pH9J2RdV5dZWdKm/ul+fhOjC
+         /n6g==
+X-Gm-Message-State: ABy/qLZ7QL9446uCo5X/CT5+V8+M4aDXm+xGbofFvqKLO3eOXBY99mMz
+        z76rNIrrze/7P6HzBUpDnRcPug==
+X-Google-Smtp-Source: APBJJlEAcfboaxVqaehIP+kbquc2c7WH/RTZTv63cSm62Jc7muAl9JsCRYIb9E82IwV3w1SZdW4oEA==
+X-Received: by 2002:a05:6402:64d:b0:51d:9605:28fd with SMTP id u13-20020a056402064d00b0051d960528fdmr2861016edx.26.1688198796353;
+        Sat, 01 Jul 2023 01:06:36 -0700 (PDT)
+Received: from [192.168.10.214] ([217.169.179.6])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170906850c00b00992f81122e1sm1268309ejx.21.2023.07.01.01.06.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jul 2023 01:06:35 -0700 (PDT)
+Message-ID: <05d97994-49a4-1618-890f-9f5c70c201fa@linaro.org>
+Date:   Sat, 1 Jul 2023 10:06:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgA30JOH3p9kdvLGMw--.57184S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFyruw43Jw4kXw15Xr47Arb_yoW8ur1xpa
-        n8Ka4ftF4UW3y7tF1DJF4UG3WFyr1xtayfAryfZ39xZ343JrWrJ3W8GryYqr98ZFZ5uFy5
-        Xr15Kan5Ga48Xa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrV
-        ACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWU
-        JVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2
-        ka0xkIwI1lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-        AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
-        2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-        C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
-        nUUI43ZEXa7IU1BOJ7UUUUU==
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 03/11] arm64: dts: qcom: msm8939: Add missing
+ 'cache-unified' to L2
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Benjamin Li <benl@squareup.com>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Zac Crosby <zac@squareup.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Jun Nie <jun.nie@linaro.org>, Max Chen <mchen@squareup.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        alsa-devel@alsa-project.org, iommu@lists.linux.dev,
+        linux-usb@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Andy Gross <andy.gross@linaro.org>
+References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
+ <20230627-topic-more_bindings-v1-3-6b4b6cd081e5@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230627-topic-more_bindings-v1-3-6b4b6cd081e5@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Nan <linan122@huawei.com>
+On 27/06/2023 18:24, Konrad Dybcio wrote:
+> Add the missing property to fix the dt checker warning:
+> 
+> qcom/apq8039-t2.dtb: l2-cache: 'cache-unified' is a required property
+> 
+> Fixes: 61550c6c156c ("arm64: dts: qcom: Add msm8939 SoC")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/msm8939.dtsi | 2 ++
 
-Commit 2ae6aaf76912 ("md/raid10: fix io loss while replacement replace
-rdev") reads replacement first to prevent io loss. However, there are same
-issue in wait_blocked_dev() and raid10_handle_discard(), too. Fix it by
-using dereference_rdev_and_rrdev() to get devices.
 
-Fixes: d30588b2731f ("md/raid10: improve raid10 discard request")
-Fixes: f2e7e269a752 ("md/raid10: pull the code that wait for blocked dev into one function")
-Signed-off-by: Li Nan <linan122@huawei.com>
----
- drivers/md/raid10.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index a6c3806be903..cbaec6fce1d7 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -1375,11 +1375,9 @@ static void wait_blocked_dev(struct mddev *mddev, struct r10bio *r10_bio)
- 	blocked_rdev = NULL;
- 	rcu_read_lock();
- 	for (i = 0; i < conf->copies; i++) {
--		struct md_rdev *rdev = rcu_dereference(conf->mirrors[i].rdev);
--		struct md_rdev *rrdev = rcu_dereference(
--			conf->mirrors[i].replacement);
--		if (rdev == rrdev)
--			rrdev = NULL;
-+		struct md_rdev *rdev, *rrdev;
-+
-+		rdev = dereference_rdev_and_rrdev(&conf->mirrors[i], &rrdev);
- 		if (rdev && unlikely(test_bit(Blocked, &rdev->flags))) {
- 			atomic_inc(&rdev->nr_pending);
- 			blocked_rdev = rdev;
-@@ -1815,15 +1813,12 @@ static int raid10_handle_discard(struct mddev *mddev, struct bio *bio)
- 	 */
- 	rcu_read_lock();
- 	for (disk = 0; disk < geo->raid_disks; disk++) {
--		struct md_rdev *rdev = rcu_dereference(conf->mirrors[disk].rdev);
--		struct md_rdev *rrdev = rcu_dereference(
--			conf->mirrors[disk].replacement);
-+		struct md_rdev *rdev, *rrdev;
- 
-+		rdev = dereference_rdev_and_rrdev(&conf->mirrors[disk], &rrdev);
- 		r10_bio->devs[disk].bio = NULL;
- 		r10_bio->devs[disk].repl_bio = NULL;
- 
--		if (rdev == rrdev)
--			rrdev = NULL;
- 		if (rdev && (test_bit(Faulty, &rdev->flags)))
- 			rdev = NULL;
- 		if (rrdev && (test_bit(Faulty, &rrdev->flags)))
--- 
-2.39.2
+Best regards,
+Krzysztof
 
