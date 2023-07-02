@@ -2,169 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D2F744C99
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 10:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86084744C96
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 10:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjGBICB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 04:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S229712AbjGBIBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 04:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjGBIB5 (ORCPT
+        with ESMTP id S229516AbjGBIBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 04:01:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF9B10F0;
-        Sun,  2 Jul 2023 01:01:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 2 Jul 2023 04:01:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D001E4D
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 01:01:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F3BC60B61;
-        Sun,  2 Jul 2023 08:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024EEC433C9;
-        Sun,  2 Jul 2023 08:01:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688284912;
-        bh=AGKqBcZVtUqtvMJ8Dh1+gcTfNZM2gdiklSmLMXwux7I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Xjk0DMbLF2rO0mvw36w3NspsZoHzJxg1ZXKVygmiDr7KmRnYY3yam0NxSCStS2ujI
-         N4CH0bnMzAljQPJWG0cn54Jr72J/w0Oqfjm4GsMxuE3yLV7xRT4ZoGQCKZu+Z3bDyq
-         CUwPm9o2UqDTXXZIqdE5cVDyE+bFqb++4EAuoC/07yKb4za7Ef/2n39TC4FXRMPKih
-         6paXYKTbQkzc4do2iuNOu7HQkJ8yYFalmFhKCt5TXBphJw9xntLvTRLecDzg6IMNsC
-         OBQGrRBlwbZasDO/DXj7OqYZQ85hX8YJ0HK+4TIE+coip4dpM05UTCE9OMIyyzGgK3
-         zZZL6EAUCAhng==
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-c4d1b491095so888527276.0;
-        Sun, 02 Jul 2023 01:01:51 -0700 (PDT)
-X-Gm-Message-State: ABy/qLYYCyAdQRDChV1Ny2EoUbuVdTfM82PImAIdyI8ThAEMiSxuaUzJ
-        Le/tRoQ7VWJ37zkAvUe554mxSf4GdkuRK1Y7UUM=
-X-Google-Smtp-Source: APBJJlG4lzrHr5iy8DcyCDkqnYXfI6vr0OVREPdey5QbxLbrrL8xS3Y8SB3wQ09H+WYqmrGTTSOxoFpm+TOui/fO7vs=
-X-Received: by 2002:a25:c504:0:b0:c01:dcdd:ed50 with SMTP id
- v4-20020a25c504000000b00c01dcdded50mr7607295ybe.14.1688284911003; Sun, 02 Jul
- 2023 01:01:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230627144339.144478-1-Julia.Lawall@inria.fr> <20230627144339.144478-16-Julia.Lawall@inria.fr>
-In-Reply-To: <20230627144339.144478-16-Julia.Lawall@inria.fr>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Sun, 2 Jul 2023 11:01:24 +0300
-X-Gmail-Original-Message-ID: <CAFCwf13PXmSODKeNSPOyAH08QA-ovNzW5PEgFLMtg8AVAMD0GA@mail.gmail.com>
-Message-ID: <CAFCwf13PXmSODKeNSPOyAH08QA-ovNzW5PEgFLMtg8AVAMD0GA@mail.gmail.com>
-Subject: Re: [PATCH v2 15/24] habanalabs: use vmalloc_array and vcalloc
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     keescook@chromium.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        christophe.jaillet@wanadoo.fr, kuba@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EEA501F74B;
+        Sun,  2 Jul 2023 08:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688284885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zpcCLpQK1AelFei2rWyD5MrmZOT7dE4hA/bhjP+g5wk=;
+        b=qZ4pd+6M+ScjTbqcTKI1/AAr2RUtJEY/8KfcQixAxM2JVj8g5vo4F344tPv4tuh2Vlf6pr
+        Z5zo4KJQ9mEgAKwRTKTB2Zck+ENGNoyPAgtiMqiKoCvst0RrIRFy6DxoqaW/Y6bQleYmCz
+        y1xfHnPa14wv8cknVYPiqFHunYhJDCI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688284885;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zpcCLpQK1AelFei2rWyD5MrmZOT7dE4hA/bhjP+g5wk=;
+        b=5aONhPudfbHYypCyLAc7rWzWvKWBQaObx/tItXvmacM952aEcd6ic14hRcAKJ3+JKhYs85
+        XlglkeJLpWOfbGCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C0F851348D;
+        Sun,  2 Jul 2023 08:01:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n47OLdUuoWQ5agAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 02 Jul 2023 08:01:25 +0000
+Date:   Sun, 02 Jul 2023 10:01:25 +0200
+Message-ID: <87mt0e7ne2.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     dengxiang <dengxiang@nfschina.com>
+Cc:     tiwai@suse.com, yangyingliang@huawei.com, perex@perex.cz,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] ALSA: hda/realtek: Add quirks for Unis H3C Desktop B760 & Q760
+In-Reply-To: <20230701080430.2560118-1-dengxiang@nfschina.com>
+References: <20230701080430.2560118-1-dengxiang@nfschina.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 5:44=E2=80=AFPM Julia Lawall <Julia.Lawall@inria.fr=
-> wrote:
->
-> Use vmalloc_array and vcalloc to protect against
-> multiplication overflows.
->
-> The changes were done using the following Coccinelle
-> semantic patch:
->
-> // <smpl>
-> @initialize:ocaml@
-> @@
->
-> let rename alloc =3D
->   match alloc with
->     "vmalloc" -> "vmalloc_array"
->   | "vzalloc" -> "vcalloc"
->   | _ -> failwith "unknown"
->
-> @@
->     size_t e1,e2;
->     constant C1, C2;
->     expression E1, E2, COUNT, x1, x2, x3;
->     typedef u8;
->     typedef __u8;
->     type t =3D {u8,__u8,char,unsigned char};
->     identifier alloc =3D {vmalloc,vzalloc};
->     fresh identifier realloc =3D script:ocaml(alloc) { rename alloc };
-> @@
->
-> (
->       alloc(x1*x2*x3)
-> |
->       alloc(C1 * C2)
-> |
->       alloc((sizeof(t)) * (COUNT), ...)
-> |
-> -     alloc((e1) * (e2))
-> +     realloc(e1, e2)
-> |
-> -     alloc((e1) * (COUNT))
-> +     realloc(COUNT, e1)
-> |
-> -     alloc((E1) * (E2))
-> +     realloc(E1, E2)
-> )
-> // </smpl>
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->
+On Sat, 01 Jul 2023 10:04:30 +0200,
+dengxiang wrote:
+> 
+> These models use NSIWAY amplifiers for internal speaker, but cannot put
+> sound outside from these amplifiers. So eapd verbs are needed to initialize
+> the amplifiers. They can be added during boot to get working sound out
+> of internal speaker.
+> 
 > ---
-> v2: Use vmalloc_array and vcalloc instead of array_size.
-> This also leaves a multiplication of a constant by a sizeof
-> as is.  Two patches are thus dropped from the series.
->
->  drivers/accel/habanalabs/common/device.c     |    3 ++-
->  drivers/accel/habanalabs/common/state_dump.c |    7 ++++---
->  2 files changed, 6 insertions(+), 4 deletions(-)
->
-> diff -u -p a/drivers/accel/habanalabs/common/device.c b/drivers/accel/hab=
-analabs/common/device.c
-> --- a/drivers/accel/habanalabs/common/device.c
-> +++ b/drivers/accel/habanalabs/common/device.c
-> @@ -2594,7 +2594,8 @@ static void hl_capture_user_mappings(str
->          */
->         vfree(pgf_info->user_mappings);
->         pgf_info->user_mappings =3D
-> -                       vzalloc(pgf_info->num_of_user_mappings * sizeof(s=
-truct hl_user_mapping));
-> +                       vcalloc(pgf_info->num_of_user_mappings,
-> +                               sizeof(struct hl_user_mapping));
->         if (!pgf_info->user_mappings) {
->                 pgf_info->num_of_user_mappings =3D 0;
->                 goto finish;
-> diff -u -p a/drivers/accel/habanalabs/common/state_dump.c b/drivers/accel=
-/habanalabs/common/state_dump.c
-> --- a/drivers/accel/habanalabs/common/state_dump.c
-> +++ b/drivers/accel/habanalabs/common/state_dump.c
-> @@ -272,7 +272,8 @@ static u32 *hl_state_dump_read_sync_obje
->         base_addr =3D sds->props[SP_SYNC_OBJ_BASE_ADDR] +
->                         sds->props[SP_NEXT_SYNC_OBJ_ADDR] * index;
->
-> -       sync_objects =3D vmalloc(sds->props[SP_SYNC_OBJ_AMOUNT] * sizeof(=
-u32));
-> +       sync_objects =3D vmalloc_array(sds->props[SP_SYNC_OBJ_AMOUNT],
-> +                                    sizeof(u32));
->         if (!sync_objects)
->                 return NULL;
->
-> @@ -453,8 +454,8 @@ hl_state_dump_alloc_read_sm_block_monito
->         s64 base_addr; /* Base addr can be negative */
->         int i;
->
-> -       monitors =3D vmalloc(sds->props[SP_MONITORS_AMOUNT] *
-> -                          sizeof(struct hl_mon_state_dump));
-> +       monitors =3D vmalloc_array(sds->props[SP_MONITORS_AMOUNT],
-> +                                sizeof(struct hl_mon_state_dump));
->         if (!monitors)
->                 return NULL;
->
->
+> V4:
+> - put at the right position to keep the PCI SSID order for the whole.
+> V3:
+> - do some adjustment for eapd verbs and keep the capital letters for
+>   ALC_* enums.
+> v2:
+> - remove warning about unused variable 'spec'.
+> 
+> Signed-off-by: dengxiang <dengxiang@nfschina.com>
 
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by tag must be put before the line '---'.
+But, above all....
+
+> @@ -11772,6 +11780,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+>  	SND_PCI_QUIRK(0x1043, 0x1bf3, "ASUS N76VZ", ALC662_FIXUP_BASS_MODE4_CHMAP),
+>  	SND_PCI_QUIRK(0x1043, 0x8469, "ASUS mobo", ALC662_FIXUP_NO_JACK_DETECT),
+>  	SND_PCI_QUIRK(0x105b, 0x0cd6, "Foxconn", ALC662_FIXUP_ASUS_MODE2),
+> +	SND_PCI_QUIRK(0x10ec, 0x0897, "UNIS H3C X500S", ALC897_FIXUP_UNIS_H3C_X500S),
+
+Now I noticed that 10ec is a generic vendor id for Realtek, so it's
+not really specific to your device.  It implies that your BIOS is
+still not mature.
+
+I'm fine to take the change for the model name, so that the workaround
+can be added via model option, but rather avoid applying the quirk
+from this SSID.
+
+Note that there are already a few similar entries, but those are only
+for the early reference boards.
+
+
+thanks,
+
+Takashi
