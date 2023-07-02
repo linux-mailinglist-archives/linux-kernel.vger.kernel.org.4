@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA13745205
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C23745201
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjGBUCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 16:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        id S229584AbjGBUCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 16:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbjGBUCA (ORCPT
+        with ESMTP id S233134AbjGBUBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 16:02:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842E05FDF;
-        Sun,  2 Jul 2023 12:58:59 -0700 (PDT)
+        Sun, 2 Jul 2023 16:01:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AA4E6F;
+        Sun,  2 Jul 2023 12:58:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D245160C74;
-        Sun,  2 Jul 2023 19:57:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5442CC433C9;
-        Sun,  2 Jul 2023 19:57:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98F8A60CA0;
+        Sun,  2 Jul 2023 19:58:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF00C433C7;
+        Sun,  2 Jul 2023 19:57:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688327876;
-        bh=M9NtEIl64nDsKbemZul2F308cM8vsEwL8bCzuitqG1U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qkgHcCV0YsWgTp4JHbO8RAjjX04pRnS3/p5/jbeCJA1Nu/YnrnS1qHDtQO4dYXeKm
-         WUF9FyteaX03xhi3WvW88jDoH/Q+BWgdrohTw272d9BOf9+Vz6FQFqwivHmS3iBx/u
-         +X7qfsmusuCYiFvfVPaz5x4+zTv/OtJmpOTxH8EJg4HAlauezAvmhTgIUVf0tdlb92
-         +WjYg1gybL0Xsv0g183t2bJwTMBuQy4zNk9E+ylOvg7YZgKbGLuXKWZxjjq3lkap7N
-         5ryhZ+uE0sy4ERgtmFs6EumjMTs02+K6IIcy9bLWrTigYvXC7NuEPdDvCO+3q6i3Gz
-         o0yj8WW+16DAA==
+        s=k20201202; t=1688327880;
+        bh=VuzZTMQKxt1IN4NGGKlGKeYAECnDfJTl4X36BNMWVaQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RbS/yhOyc7DVOp+m1Mo3VfBI+KtPved5rwKIrACS2xpIhnC/ugYTO+W1kKtvRbMtU
+         fmpY9IOJzinnpNKWKT/Jd/j3wgJfaOt+ytKiB2uJkel37HO372m7o4aa3z4RuEXQGt
+         +HhAsZp0e/5K7nxskglO3TfLFJ2uSzqnegebonCtl4121QwNHPW8xS5oIf1y8wGBed
+         L15RLIsgkZsg4JTV7PT8y7TLWA6/Ec5fV10ss5/H+UQMOsrd72mFfWxNnOyfBIByFi
+         jv8j2AHB1CwJv2Wn+VzvIzt+CTl1iJ53TDAGHAmVAmfC+OPYrClyjzQVMi9lTpSrsh
+         qdunWTH/jgWNw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+Cc:     Shigeru Yoshida <syoshida@redhat.com>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>, frederic@kernel.org,
         quic_neeraju@quicinc.com, joel@joelfernandes.org,
         josh@joshtriplett.org, boqun.feng@gmail.com, rcu@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 3/3] rcu: Mark rcu_cpu_kthread() accesses to ->rcu_cpu_has_work
-Date:   Sun,  2 Jul 2023 15:57:50 -0400
-Message-Id: <20230702195750.1793345-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 1/3] rcu-tasks: Avoid pr_info() with spin lock in cblist_init_generic()
+Date:   Sun,  2 Jul 2023 15:57:54 -0400
+Message-Id: <20230702195756.1793443-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702195750.1793345-1-sashal@kernel.org>
-References: <20230702195750.1793345-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.3.11
+X-stable-base: Linux 6.1.37
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,42 +60,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+From: Shigeru Yoshida <syoshida@redhat.com>
 
-[ Upstream commit a24c1aab652ebacf9ea62470a166514174c96fe1 ]
+[ Upstream commit 5fc8cbe4cf0fd34ded8045c385790c3bf04f6785 ]
 
-The rcu_data structure's ->rcu_cpu_has_work field can be modified by
-any CPU attempting to wake up the rcuc kthread.  Therefore, this commit
-marks accesses to this field from the rcu_cpu_kthread() function.
+pr_info() is called with rtp->cbs_gbl_lock spin lock locked.  Because
+pr_info() calls printk() that might sleep, this will result in BUG
+like below:
 
-This data race was reported by KCSAN.  Not appropriate for backporting
-due to failure being unlikely.
+[    0.206455] cblist_init_generic: Setting adjustable number of callback queues.
+[    0.206463]
+[    0.206464] =============================
+[    0.206464] [ BUG: Invalid wait context ]
+[    0.206465] 5.19.0-00428-g9de1f9c8ca51 #5 Not tainted
+[    0.206466] -----------------------------
+[    0.206466] swapper/0/1 is trying to lock:
+[    0.206467] ffffffffa0167a58 (&port_lock_key){....}-{3:3}, at: serial8250_console_write+0x327/0x4a0
+[    0.206473] other info that might help us debug this:
+[    0.206473] context-{5:5}
+[    0.206474] 3 locks held by swapper/0/1:
+[    0.206474]  #0: ffffffff9eb597e0 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic.constprop.0+0x14/0x1f0
+[    0.206478]  #1: ffffffff9eb579c0 (console_lock){+.+.}-{0:0}, at: _printk+0x63/0x7e
+[    0.206482]  #2: ffffffff9ea77780 (console_owner){....}-{0:0}, at: console_emit_next_record.constprop.0+0x111/0x330
+[    0.206485] stack backtrace:
+[    0.206486] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-00428-g9de1f9c8ca51 #5
+[    0.206488] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
+[    0.206489] Call Trace:
+[    0.206490]  <TASK>
+[    0.206491]  dump_stack_lvl+0x6a/0x9f
+[    0.206493]  __lock_acquire.cold+0x2d7/0x2fe
+[    0.206496]  ? stack_trace_save+0x46/0x70
+[    0.206497]  lock_acquire+0xd1/0x2f0
+[    0.206499]  ? serial8250_console_write+0x327/0x4a0
+[    0.206500]  ? __lock_acquire+0x5c7/0x2720
+[    0.206502]  _raw_spin_lock_irqsave+0x3d/0x90
+[    0.206504]  ? serial8250_console_write+0x327/0x4a0
+[    0.206506]  serial8250_console_write+0x327/0x4a0
+[    0.206508]  console_emit_next_record.constprop.0+0x180/0x330
+[    0.206511]  console_unlock+0xf7/0x1f0
+[    0.206512]  vprintk_emit+0xf7/0x330
+[    0.206514]  _printk+0x63/0x7e
+[    0.206516]  cblist_init_generic.constprop.0.cold+0x24/0x32
+[    0.206518]  rcu_init_tasks_generic+0x5/0xd9
+[    0.206522]  kernel_init_freeable+0x15b/0x2a2
+[    0.206523]  ? rest_init+0x160/0x160
+[    0.206526]  kernel_init+0x11/0x120
+[    0.206527]  ret_from_fork+0x1f/0x30
+[    0.206530]  </TASK>
+[    0.207018] cblist_init_generic: Setting shift to 1 and lim to 1.
 
+This patch moves pr_info() so that it is called without
+rtp->cbs_gbl_lock locked.
+
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+Tested-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/tree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/rcu/tasks.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index a565dc5c54440..fbba4161060cd 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -2455,12 +2455,12 @@ static void rcu_cpu_kthread(unsigned int cpu)
- 		*statusp = RCU_KTHREAD_RUNNING;
- 		local_irq_disable();
- 		work = *workp;
--		*workp = 0;
-+		WRITE_ONCE(*workp, 0);
- 		local_irq_enable();
- 		if (work)
- 			rcu_core();
- 		local_bh_enable();
--		if (*workp == 0) {
-+		if (!READ_ONCE(*workp)) {
- 			trace_rcu_utilization(TPS("End CPU kthread@rcu_wait"));
- 			*statusp = RCU_KTHREAD_WAITING;
- 			return;
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index c8409601fec38..74da2ecfbfa65 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -233,7 +233,6 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+ 	if (rcu_task_enqueue_lim < 0) {
+ 		rcu_task_enqueue_lim = 1;
+ 		rcu_task_cb_adjust = true;
+-		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
+ 	} else if (rcu_task_enqueue_lim == 0) {
+ 		rcu_task_enqueue_lim = 1;
+ 	}
+@@ -264,6 +263,10 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+ 		raw_spin_unlock_rcu_node(rtpcp); // irqs remain disabled.
+ 	}
+ 	raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
++
++	if (rcu_task_cb_adjust)
++		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
++
+ 	pr_info("%s: Setting shift to %d and lim to %d.\n", __func__, data_race(rtp->percpu_enqueue_shift), data_race(rtp->percpu_enqueue_lim));
+ }
+ 
 -- 
 2.39.2
 
