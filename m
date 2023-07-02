@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF833745140
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6CB74514C
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjGBTp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S231320AbjGBTpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbjGBToO (ORCPT
+        with ESMTP id S232382AbjGBToR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:44:14 -0400
+        Sun, 2 Jul 2023 15:44:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A4210C8;
-        Sun,  2 Jul 2023 12:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824A530E9;
+        Sun,  2 Jul 2023 12:42:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 526BD60C8D;
-        Sun,  2 Jul 2023 19:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE51FC433CA;
-        Sun,  2 Jul 2023 19:41:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E7ED60DD8;
+        Sun,  2 Jul 2023 19:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5551DC433C7;
+        Sun,  2 Jul 2023 19:41:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326915;
-        bh=HuPXQr0v5KXu1FG8dgHpjBC/sC0xhbsLU1wrOl+bFvM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MbhcG00dXReapYHX3pcQ+duvxBpa0piBAs7Wo5GeUHmFYdBwrpITUDkMCdYdozQff
-         V0rbZ41f516MLl15s1h5nKNpmMZxKKojnpns/uXwuEDZ5c9xc2vGb1hCFDyC5UYeii
-         D0iO2ta6IhBISRPYTAOSmB2nI4M5LA3RXr6SDXGmsUiZOz6xkTKmpdlReAbKSYAOJD
-         kVF5fEKMLdjRLfIGAHXo4vGW3gv4o3cHiAczFJ3ZQTPNnBX/9YEIFeB9tZKnqrp2Lw
-         iVVsEk1VA4omE8GAiXrdkI3ptDMGCJD2XSYl7KrDuXVF1G/ZW804sVJt8Kv900imC0
-         SVvHUfFX8J2NA==
+        s=k20201202; t=1688326919;
+        bh=2To/3OutwuyyzXNuw5tPzVrpnakJP+Ykc9RSFUTFj4k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Cezqfyc8rwdzBuBrDzZbvs22LHI1PQ71n4kLWUo4xZrqmvlRflaQr7StUOBpl16p0
+         2ErsNVMBWRDYd43U8iBOomQ/ILCN69y4lcuX3jjq694vWbA6hlcLsosFwl2Wc93Tyz
+         5xMg+1alVTzQeyzIjlUEgOL43kIitSs8HLxykL85H4OZsCMS6lJ3z4uRjwHx2581CX
+         rArdbdAQOwVH2qlZQQWZ5qo9vfumwqw6VpuraG5vV+/8LMO/KiKpY91cN6OhswpYej
+         VnUf+5lhMqOgj3RHImHCvE9XR3EwGgcOP/Jf6K2kaeLKW1ZS2Je2GInp8Wn4mT/UN1
+         jS+EaAHS35KQg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>,
-        Sasha Levin <sashal@kernel.org>, clm@fb.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 10/10] btrfs: abort transaction at update_ref_for_cow() when ref count is zero
-Date:   Sun,  2 Jul 2023 15:41:39 -0400
-Message-Id: <20230702194139.1778398-10-sashal@kernel.org>
+Cc:     David Woodhouse <dwmw@amazon.co.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Helge Deller <deller@gmx.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 1/7] cpu/hotplug: Reset task stack state in _cpu_up()
+Date:   Sun,  2 Jul 2023 15:41:50 -0400
+Message-Id: <20230702194156.1778977-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702194139.1778398-1-sashal@kernel.org>
-References: <20230702194139.1778398-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.119
+X-stable-base: Linux 5.10.186
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -60,51 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-[ Upstream commit eced687e224eb3cc5a501cf53ad9291337c8dbc5 ]
+[ Upstream commit 6d712b9b3a58018259fb40ddd498d1f7dfa1f4ec ]
 
-At update_ref_for_cow() we are calling btrfs_handle_fs_error() if we find
-that the extent buffer has an unexpected ref count of zero, however we can
-simply use btrfs_abort_transaction(), which achieves the same purposes: to
-turn the fs to error state, abort the current transaction and turn the fs
-to RO mode as well. Besides that, btrfs_abort_transaction() also prints a
-stack trace which makes it more useful.
+Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
+ensured that the shadow call stack and KASAN poisoning were removed from
+a CPU's stack each time that CPU is brought up, not just once.
 
-Also, as this is a very unexpected situation, indicating a serious
-corruption/inconsistency, tag the if branch as 'unlikely', set the error
-code to -EUCLEAN instead of -EROFS, and log an explicit message.
+This is not incorrect. However, with parallel bringup the idle thread setup
+will happen at a different step. As a consequence the cleanup in
+bringup_cpu() would be too late.
 
-Reviewed-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
+which already ensures that the new CPU's stack is available, purely to
+allow for early failure. This occurs when the CPU to be brought up is
+in the CPUHP_OFFLINE state, which should correctly do the cleanup any
+time the CPU has been taken down to the point where such is needed.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Michael Kelley <mikelley@microsoft.com>
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Tested-by: Helge Deller <deller@gmx.de> # parisc
+Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
+Link: https://lore.kernel.org/r/20230512205257.027075560@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/ctree.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ kernel/cpu.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
-index 1a19354382b2b..df74db69cbbfc 100644
---- a/fs/btrfs/ctree.c
-+++ b/fs/btrfs/ctree.c
-@@ -291,9 +291,13 @@ static noinline int update_ref_for_cow(struct btrfs_trans_handle *trans,
- 					       &refs, &flags);
- 		if (ret)
- 			return ret;
--		if (refs == 0) {
--			ret = -EROFS;
--			btrfs_handle_fs_error(fs_info, ret, NULL);
-+		if (unlikely(refs == 0)) {
-+			btrfs_crit(fs_info,
-+		"found 0 references for tree block at bytenr %llu level %d root %llu",
-+				   buf->start, btrfs_header_level(buf),
-+				   btrfs_root_id(root));
-+			ret = -EUCLEAN;
-+			btrfs_abort_transaction(trans, ret);
- 			return ret;
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 008b50da22246..705d330600485 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -553,12 +553,6 @@ static int bringup_cpu(unsigned int cpu)
+ 	struct task_struct *idle = idle_thread_get(cpu);
+ 	int ret;
+ 
+-	/*
+-	 * Reset stale stack state from the last time this CPU was online.
+-	 */
+-	scs_task_reset(idle);
+-	kasan_unpoison_task_stack(idle);
+-
+ 	/*
+ 	 * Some architectures have to walk the irq descriptors to
+ 	 * setup the vector space for the cpu which comes online.
+@@ -1274,6 +1268,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
+ 			ret = PTR_ERR(idle);
+ 			goto out;
  		}
- 	} else {
++
++		/*
++		 * Reset stale stack state from the last time this CPU was online.
++		 */
++		scs_task_reset(idle);
++		kasan_unpoison_task_stack(idle);
+ 	}
+ 
+ 	cpuhp_tasks_frozen = tasks_frozen;
 -- 
 2.39.2
 
