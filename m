@@ -2,96 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC350744CE5
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A5D744CEB
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjGBJQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 05:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S229776AbjGBJUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 05:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjGBJQZ (ORCPT
+        with ESMTP id S229460AbjGBJUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 05:16:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4D51AC;
-        Sun,  2 Jul 2023 02:16:24 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qv3Hn5sfCz6D8fQ;
-        Sun,  2 Jul 2023 17:13:09 +0800 (CST)
-Received: from localhost (10.48.51.211) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 2 Jul
- 2023 10:16:19 +0100
-Date:   Sun, 2 Jul 2023 17:16:14 +0800
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     George Stark <gnstark@sberdevices.ru>
-CC:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
-        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
-        <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>
-Subject: Re: [PATCH v3 4/5] meson saradc: add channel labels
-Message-ID: <20230702171614.00000480@Huawei.com>
-In-Reply-To: <20230627224017.1724097-5-gnstark@sberdevices.ru>
-References: <20230627224017.1724097-1-gnstark@sberdevices.ru>
-        <20230627224017.1724097-5-gnstark@sberdevices.ru>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Sun, 2 Jul 2023 05:20:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44741AC;
+        Sun,  2 Jul 2023 02:20:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DD1D60B93;
+        Sun,  2 Jul 2023 09:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E3EC43395;
+        Sun,  2 Jul 2023 09:20:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688289639;
+        bh=OoxJTr497VHioUOadb8LISKib9/DxBLCZJxT7FykF9g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bL0RniYz/c2H9vpv4pnuaegmDqeFYDlUS2BEZ7GDJrxaZs9kAQm8I1PMBYfdWmWpL
+         Q4BwNtmNN7cjEb9ZEBMxfdH6HGTTH7ldQIhsTRnan2H8upACk1UfBKxzWVDIqZK7EC
+         aoJ9kyx0fO+f5T4QELXyDFR3OOW71En9FO9CRQCv8gCGAKA+8DvNDYz/5JckqAS+Yl
+         vdPmulOGE4uWEYbOL2mghdaRMKPAWPkzRISV58zSqCf0nVYb8PmGRuSaqq5toObf3+
+         udZE9XFmwFXy7ZVJQy1bsEEI0vrmLPLd+BMr1MqiYnB2kpaKuFh8RCPJN3a206Hxl9
+         OIBmWKxePHZ8A==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2b69f216c73so50938281fa.3;
+        Sun, 02 Jul 2023 02:20:39 -0700 (PDT)
+X-Gm-Message-State: ABy/qLYQ/gaK092RUztfq/Xg0bUMGQqLLMO/j0Ob3oO03h0F2n+9UNqS
+        g9W5bA6Mb7VVIAMv3+DQwO1BZrytKHggI+lm7Q==
+X-Google-Smtp-Source: APBJJlFzKkAXMTAQCIn36i2e8A9159bcyumoyoBjKkUas8tkWmueWlSltNowd8sa4B/xy0FSyk17VqHCj3F5LJNwJpU=
+X-Received: by 2002:a05:6512:ea0:b0:4f8:6882:ae9d with SMTP id
+ bi32-20020a0565120ea000b004f86882ae9dmr5936084lfb.69.1688289637554; Sun, 02
+ Jul 2023 02:20:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.51.211]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230630100321.1951138-1-jstephan@baylibre.com>
+ <20230630100321.1951138-3-jstephan@baylibre.com> <CAAOTY_-qu2RWr496wXxc1Cp14eZfzKt4QgEH8fJns2LOjpwi8Q@mail.gmail.com>
+In-Reply-To: <CAAOTY_-qu2RWr496wXxc1Cp14eZfzKt4QgEH8fJns2LOjpwi8Q@mail.gmail.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Sun, 2 Jul 2023 17:20:25 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9SFRMb7d3c62SVDnZY00hRAZ=9wBi9QCcv1UKuc8iBtQ@mail.gmail.com>
+Message-ID: <CAAOTY_9SFRMb7d3c62SVDnZY00hRAZ=9wBi9QCcv1UKuc8iBtQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] media: platform: mediatek: isp_30: add mediatek
+ ISP3.0 sensor interface
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Julien Stephan <jstephan@baylibre.com>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        devicetree@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 01:37:17 +0300
-George Stark <gnstark@sberdevices.ru> wrote:
+Hi, Julien:
 
-> Add attribute 'label' to all iio channels.
+Chun-Kuang Hu <chunkuang.hu@kernel.org> =E6=96=BC 2023=E5=B9=B47=E6=9C=882=
+=E6=97=A5 =E9=80=B1=E6=97=A5 =E4=B8=8A=E5=8D=887:35=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> Hi, Julien:
+>
+> Julien Stephan <jstephan@baylibre.com> =E6=96=BC 2023=E5=B9=B46=E6=9C=883=
+0=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:05=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > From: Louis Kuo <louis.kuo@mediatek.com>
+> >
+> > This will add the mediatek ISP3.0 seninf (sensor interface) driver foun=
+d
+> > on several Mediatek SoCs such as the mt8365.
+> >
+> > Then seninf module has 4 physical CSI-2 inputs. Depending on the soc th=
+ey
+> > may not be all connected.
+> >
+> > Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+> > Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
+> > Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> >
+>
+> [snip]
+>
+> > +
+> > +static const struct mtk_seninf_conf seninf_8365_conf =3D {
+> > +       .model =3D "mtk-camsys-3.0",
+> > +       .nb_inputs =3D 4,
+> > +       .nb_muxes =3D 6,
+> > +       .nb_outputs =3D 4,
+> > +};
+> > +
+> > +static const struct of_device_id mtk_seninf_of_match[] =3D {
+> > +       {
+> > +               .compatible =3D "mediatek,mt8365-seninf",
+> > +               .data =3D &seninf_8365_conf,
+>
+> Now only support one SoC, so it's necessary to select the SoC data and
+> you could directly place the data in the code. After support other
 
-Why?  Reasoning is more useful here than a simple statement of 'what'.
+Typo.
 
-> 
-> Signed-off-by: George Stark <GNStark@sberdevices.ru>
-> ---
->  drivers/iio/adc/meson_saradc.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
-> index b87f05dfb322..85970fe852af 100644
-> --- a/drivers/iio/adc/meson_saradc.c
-> +++ b/drivers/iio/adc/meson_saradc.c
-> @@ -1058,8 +1058,20 @@ static int meson_sar_adc_calib(struct iio_dev *indio_dev)
->  	return ret;
->  }
->  
-> +static int read_label(struct iio_dev *indio_dev,
-> +		      struct iio_chan_spec const *chan,
-> +		      char *label)
-> +{
-> +	if (chan->type == IIO_TEMP)
-> +		return sprintf(label, "%s\n", "temp-sensor");
-> +	if (chan->type == IIO_VOLTAGE)
-> +		return sprintf(label, "channel-%d\n", chan->channel);
-> +	return 0;
-> +}
-> +
->  static const struct iio_info meson_sar_adc_iio_info = {
->  	.read_raw = meson_sar_adc_iio_info_read_raw,
-> +	.read_label = read_label,
->  };
->  
->  static const struct meson_sar_adc_param meson_sar_adc_meson8_param = {
+Now only support one SoC, so it's not necessary to select the SoC data
+and you could directly place the data in the code.
 
+Regards,
+Chun-Kuang.
+
+> SoC, so we could know what should be placed in struct mtg_seninf_conf
+> (Now we have no any information).
+>
+> Regards,
+> Chun-Kuang.
+>
+> > +       },
+> > +       {
+> > +       },
+> > +};
+> > +MODULE_DEVICE_TABLE(of, mtk_seninf_of_match);
