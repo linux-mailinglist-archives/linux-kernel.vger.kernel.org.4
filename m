@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26643744DB3
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EC8744DB7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjGBNUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 09:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
+        id S229896AbjGBNcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 09:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBNUF (ORCPT
+        with ESMTP id S229523AbjGBNcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 09:20:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EAFE55
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 06:19:17 -0700 (PDT)
+        Sun, 2 Jul 2023 09:32:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE6EE55
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 06:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688303956;
+        s=mimecast20190719; t=1688304682;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=eRFmQdlxw9jHZzmDSJKkdmLa+U9dm/bDEqnPuYhGWmc=;
-        b=Fpx6A1qDo6eWH+40Jkc4em2IxiMG4TvurWxVncBRSbZmUgBWCYHUq+coN6ogd3qWycpCvH
-        UL6sbruL7pfkum/Wf/lr9jT7jpNzsIWn5tlZujKd5AgfKFXGOu5/9WdGhj/g2gt1tFcbRR
-        Z5mt/Nyif6knwGnVeUC4vYUXe4d3je8=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=IhA8PQHFplolrCTEWNVaJX0ddk8c61/nnX2OVi4x/HY=;
+        b=UABScuxgmirjOGvuuFsG142DfxKUAjyzu4XBAuBOHVRDq/NoruXfY0yCDBtCA1h/RETt4D
+        U65Sz0qXs1BWQtei59rB8NvWNy27T5LeE6N0bC94pXGOIcntFbGDbuwC8YbNpz8Q+PpfwT
+        mSjiIRw1+iK2poslvqwRQ7g1GocRIZU=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-292-OrUhQA0JOlWiSb9UKi8EKQ-1; Sun, 02 Jul 2023 09:19:15 -0400
-X-MC-Unique: OrUhQA0JOlWiSb9UKi8EKQ-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7623a4864c2so418324585a.3
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 06:19:15 -0700 (PDT)
+ us-mta-359-5yzpMcFgNt2xpQmlGx_PTw-1; Sun, 02 Jul 2023 09:31:21 -0400
+X-MC-Unique: 5yzpMcFgNt2xpQmlGx_PTw-1
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b885d53a09so3257668a34.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688303955; x=1690895955;
+        d=1e100.net; s=20221208; t=1688304680; x=1690896680;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eRFmQdlxw9jHZzmDSJKkdmLa+U9dm/bDEqnPuYhGWmc=;
-        b=GUJkEvvylee/vUQ29KLhFBr1CJWraBzgsQw+NgAvipc4X8GGh9pjeBa7m2wRMsUKTD
-         LruyPA6EydHHpxx+75QidzaHqJ52S2ox/uOzje1g1xlU8vYHzqTtmQxwhb2Hj6ERAuqf
-         3LlBMmrJYExQcKgMlmeOy68whmHnta71Yq/+nTzrG+zp5YIml3QDSFgtpWMD5YSBWafG
-         SWiEF5GqGWkJurIADm4khLJ330xpC8E9sPH0R841AkL9KQAFDORwXeznn4vb4bWDBtjJ
-         vrrsIGGsTjCjsoEtNylJOu/ZVbN5fJihD0Isx+v1a/biTPDwfarJsRUfBKAu8qtIkJrE
-         KjoQ==
-X-Gm-Message-State: ABy/qLbEb9IJo6dtBhbv9/C+H/qmTwGe/ustx4yHYpPehZoIrJ7F8DPs
-        1zwSCNjAmMEKUxjPx4OBfvLd594peuCbGnq0bX76vLinwkh4K/PrNWQ7tktZXEUxdAIQjaLWejR
-        YDuESzeB2+laHS9ErC3aJG3LK3CyjVYYq
-X-Received: by 2002:a05:620a:2586:b0:75e:b8b2:864d with SMTP id x6-20020a05620a258600b0075eb8b2864dmr7886252qko.69.1688303955087;
-        Sun, 02 Jul 2023 06:19:15 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFuneZVSX6IXVYJYJruLlFIEsmVSI1DeaBt104pBOCwhHWqqS8FYyR68vARnn6WBmVRLSJZ2Q==
-X-Received: by 2002:a05:620a:2586:b0:75e:b8b2:864d with SMTP id x6-20020a05620a258600b0075eb8b2864dmr7886241qko.69.1688303954891;
-        Sun, 02 Jul 2023 06:19:14 -0700 (PDT)
+        bh=IhA8PQHFplolrCTEWNVaJX0ddk8c61/nnX2OVi4x/HY=;
+        b=GAUcBBc5L4IE3iDHko2yey6kn0MMaJm/e7minwWC6gvo0MAZFVPCof1GfnBgrJhPmb
+         yGUUXPBoz8XeNSTlVbRGnjxYieM4FkuwmLt02jVJ3/v2iNxW6nDtXJW4eQ5B2/7rORHa
+         eYfN959RpsfseM8PDzt9csVORTosV737EgtyUMtK7MWHxHy8+alIVeyo2K/kmRVfNdyd
+         7s+hfKoYS+hEnXhfCA3OkL/thE0vhOfJnZG374xHrk85yfHJJtbQSZ62N4E+6vNGeaG6
+         xMWchIWoOkT/enZMyKadjSIYAbvKJ1NwNx50oRwkUcDksbf4PiZK1mLZDbCWP4U5f9lh
+         GrLg==
+X-Gm-Message-State: AC+VfDwQE8zqX2veZ/Pw/WgU2Tidmn9nBwI6MVgn7AkuTAxEBgb9rw1Z
+        HvjzcxXk+Ul6UhUTNILY2EgQgC5O5a0JC3jroKWiqHYOXvnYZCHq8Csk4xCf9b1tqBwO8ntd2fL
+        32e/Q6+OCeuiGqcJlfsb71flq
+X-Received: by 2002:a05:6808:150f:b0:3a3:6f81:49e0 with SMTP id u15-20020a056808150f00b003a36f8149e0mr8282882oiw.6.1688304680428;
+        Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6jHs6x35k/Ksnct8fSfwL+ZA8Dffms9gAWwn/v+wOt1OUbuK6xkMVZcapNkzJw/IkWcnNogw==
+X-Received: by 2002:a05:6808:150f:b0:3a3:6f81:49e0 with SMTP id u15-20020a056808150f00b003a36f8149e0mr8282873oiw.6.1688304680123;
+        Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id m4-20020ae9f204000000b007628f6e0833sm9145999qkg.100.2023.07.02.06.19.14
+        by smtp.gmail.com with ESMTPSA id ev14-20020a0562140a8e00b00631fea4d5c2sm10206248qvb.98.2023.07.02.06.31.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 06:19:14 -0700 (PDT)
+        Sun, 02 Jul 2023 06:31:19 -0700 (PDT)
 From:   Tom Rix <trix@redhat.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] regulator: set variables clkin_name and xin_name storage-class-specifier to static
-Date:   Sun,  2 Jul 2023 09:19:10 -0400
-Message-Id: <20230702131910.3437751-1-trix@redhat.com>
+To:     keguang.zhang@gmail.com, daniel.lezcano@linaro.org,
+        tglx@linutronix.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] clocksource/drivers/loongson1: set variable ls1x_timer_lock storage-class-specifier to static
+Date:   Sun,  2 Jul 2023 09:31:13 -0400
+Message-Id: <20230702133113.3438049-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,33 +77,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 smatch reports
-drivers/regulator/raa215300.c:41:12: warning: symbol
-  'clkin_name' was not declared. Should it be static?
-drivers/regulator/raa215300.c:42:12: warning: symbol
-  'xin_name' was not declared. Should it be static?
+drivers/clocksource/timer-loongson1-pwm.c:31:1: warning: symbol
+  'ls1x_timer_lock' was not declared. Should it be static?
 
-These variables are only used in their defining file, so it should be static.
+This variable is only used in its defining file, so it should be static.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/regulator/raa215300.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clocksource/timer-loongson1-pwm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/raa215300.c b/drivers/regulator/raa215300.c
-index 24a1c89f5dbc..d21c6c207226 100644
---- a/drivers/regulator/raa215300.c
-+++ b/drivers/regulator/raa215300.c
-@@ -38,8 +38,8 @@
- #define RAA215300_REG_BLOCK_EN_RTC_EN	BIT(6)
- #define RAA215300_RTC_DEFAULT_ADDR	0x6f
+diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
+index 6335fee03017..244d66835508 100644
+--- a/drivers/clocksource/timer-loongson1-pwm.c
++++ b/drivers/clocksource/timer-loongson1-pwm.c
+@@ -28,7 +28,7 @@
  
--const char *clkin_name = "clkin";
--const char *xin_name = "xin";
-+static const char *clkin_name = "clkin";
-+static const char *xin_name = "xin";
- static struct clk *clk;
+ #define CNTR_WIDTH		24
  
- static const struct regmap_config raa215300_regmap_config = {
+-DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
++static DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
+ 
+ struct ls1x_clocksource {
+ 	void __iomem *reg_base;
 -- 
 2.27.0
 
