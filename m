@@ -2,70 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEFC745051
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580C5745053
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjGBTRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S230437AbjGBTRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjGBTR3 (ORCPT
+        with ESMTP id S230138AbjGBTRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:17:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0199D9;
-        Sun,  2 Jul 2023 12:17:13 -0700 (PDT)
-Message-ID: <0c02e976-0da6-8ed8-4546-4df7af4ebed5@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688325430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bcRkV1JsdAB+1QeSMkNj7SU4PliDC9ED89IW5fPJQLc=;
-        b=cln18HT5XkWRzeQ6oUlGUJ234pgfk+6U1z7i3GWmYV4eQjqUZO5sz7JD65DQOEF2CqnmtE
-        94waio+VxYSc7kjlSBpPuvetqEbMPgKALT6NNIV4i7W9jSBtEuQJuyfJgQf+FVpCkh73ul
-        tCYh94u++ADCaAq7m02N5/rLTFXIRVZAmxOtx8JY/6VlVJyE5cBp/dzaO0kBT+Dx1Nh9B8
-        DoHsN2oCZEvwAsE3e4dAOmFScSXdRUCsepnCQMGMIWuvrxLliba4C9L33C1bXBtCjYVRZm
-        O3RmpbtJ6dc5fKbVSjZznDRbQirmlIDGxU8kBz6w0olg8fWZZiiEUk9jWtx53w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688325430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bcRkV1JsdAB+1QeSMkNj7SU4PliDC9ED89IW5fPJQLc=;
-        b=6ZF0sry1dcNvmgR8l0d/9AAjahUM5CPICbkZrcc9y8f2C+AoKOyoPfBmA4IY4encveZXmZ
-        PZa+03/IJp4zUQAw==
-Date:   Sun, 2 Jul 2023 21:17:01 +0200
+        Sun, 2 Jul 2023 15:17:53 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A6C59B;
+        Sun,  2 Jul 2023 12:17:46 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 362JHXHa017494;
+        Sun, 2 Jul 2023 21:17:33 +0200
+Date:   Sun, 2 Jul 2023 21:17:33 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     thomas@t-8ch.de, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 10/14] tools/nolibc: __sysret: support syscalls who
+ return a pointer
+Message-ID: <20230702191733.GI16233@1wt.eu>
+References: <cover.1687957589.git.falcon@tinylab.org>
+ <72d948095d22c3ba4e69d98877addcea49a326c6.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Aravindhan Gunasekaran <aravindhan.gunasekaran@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Mallikarjuna Chilakala <mallikarjuna.chilakala@intel.com>,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <20230619100858.116286-2-florian.kauer@linutronix.de>
- <36b57ea5-baff-f964-3088-e1b186532cfe@web.de>
-Content-Language: en-US
-From:   Florian Kauer <florian.kauer@linutronix.de>
-Subject: Re: [PATCH net v2 1/6] igc: Rename qbv_enable to
- taprio_offload_enable
-In-Reply-To: <36b57ea5-baff-f964-3088-e1b186532cfe@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <72d948095d22c3ba4e69d98877addcea49a326c6.1687957589.git.falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,35 +43,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markus,
-
-On 02.07.23 18:55, Markus Elfring wrote:
->> The rename should reduce this confusion.
+On Wed, Jun 28, 2023 at 09:39:56PM +0800, Zhangjin Wu wrote:
+> To support syscalls (e.g. mmap()) who return a pointer and to allow the
+> pointer as big as possible, we should convert the negated errno value to
+> unsigned long (uintptr_t), otherwise, in signed long, a potential big
+> pointer (whose highest bit is 1) will be treated as a failure.
 > 
-> Would the wording “Reduce this confusion by renaming a variable at three places”
-> be more appropriate for a subsequent change description?
-> 
-> See also:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.4#n94
+> tools/include/nolibc/errno.h defines the MAX_ERRNO, let's use it
+> directly.
 
-Thanks for pointing that out (also in your other mail for this series).
-I will be more careful regarding the use of imperative mood.
+It might or might not work, it's an ABI change that, if validated, at
+least needs a much more detailed explanation. What matters is not what
+errno values we're willing to consider as an error, but what the
+*syscalls* themselves return as an error. If a syscall says "< 0 is an
+error equal to -errno", it means that we must treat it as an error,
+and extract its value to get errno. If that errno is larger than
+MAX_ERRNO it just means we don't know what the error is.
 
-> 
->>                                          Since it is a pure
->> rename, it has no impact on functionality.
->>
->> Fixes: e17090eb2494 ("igc: allow BaseTime 0 enrollment for Qbv")
-> 
-> How does such information fit together?
+Syscalls that return pointer use that -MAX_ERRNO range to encode errors
+(such as mmap()). I just do not know if there is a convention saying that
+other ones also restrict themselves to that range or not. If you find
+some info which guarantees that it's the case for all of them, then by
+all means let's proceed like this, but in this case it should be mentioned
+in the comment why we think it's valid to do this. For now it's presented
+as an opportunity only.
 
-The referenced commit introduced an issue into the kernel by
-introducing a variable that does not exactly describe its actual purpose.
-It is not only a cosmetic change, but in my view this confusion
-was related to other issues (see the other patches). So, it seemed to be worth
-fixing alongside with the other fixes, even if it does not directly impact
-functionality if it is applied or not (until someone else comes along,
-also gets confused and introduces another bug...).
+Also, the rest of the commit message regarding uintptr_t (which we don't
+use), bit values and modular arithmetics is extremely confusing and not
+needed at all. What matters is only to know if we need to consider only
+values -MAX_ERRNO..-1 as error or all negative ones. If so, then it's
+obvious that ret >= (unsigned long)-MAX_ERRNO catches them all, as the
+current mmap() function already does with -4095UL.
 
-Thanks,
-Florian
+I just don't know where to check if we can generalize that test. In the
+worst case we could have two __sys_ret(), the current one and a second
+one for pointers. But I would suspect we could generalize due to ptrace,
+as there it makes sense to be able to detect failures, even unknown ones.
+I just need something more convincing than an intuition for a commit
+message and to take such a change :-/
+
+Thanks!
+Willy
