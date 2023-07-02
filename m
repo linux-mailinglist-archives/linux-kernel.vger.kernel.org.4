@@ -2,71 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C70744D46
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6108D744D50
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjGBKbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 06:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        id S229681AbjGBKkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 06:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjGBKbs (ORCPT
+        with ESMTP id S229460AbjGBKkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 06:31:48 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A751135;
-        Sun,  2 Jul 2023 03:31:47 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-307d58b3efbso3821591f8f.0;
-        Sun, 02 Jul 2023 03:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688293906; x=1690885906;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+9HNwsfm1QcsCZ6i0OtSLp++3UaVesUVHugZWgXamS4=;
-        b=XIxUYIDaYrAcbCaZjAOJQA6qry3INr7EmhUAmmfwz7ZGkmJXBwZ389ldYtx44Fxt9E
-         2CsHd48uhVy09DoBYa3O0J7jURA7Q9V0BindDZkXmr9VDg8Yawltw8Ks89Q69MIx7AO2
-         t4sQsgFCAd+iUrPCyKy8ZOpwqw/JQ78AZ/+RMC88gCrkSL58CaGHgeRgORFGnjuLmYms
-         g3Znk8LwmFb8aJTd5kOU2IwmB8EnWAtTsL0EVPclr0MkQEjtZWT3pKZnVNPlbM2Vskap
-         qOFYX0QlMOVct8XAl+bjkUlJ09FCa7Z17yXTyFTTigR7JUVqRLpme8hjkEYMO7tiHqFg
-         l4uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688293906; x=1690885906;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+9HNwsfm1QcsCZ6i0OtSLp++3UaVesUVHugZWgXamS4=;
-        b=U+f4Eu0syy2ofjUeZkAdckUDztc8fEs/opr1HBcGI89S55p1rtxQ5oKPVYNmumYo21
-         bmdg2PhAbUo3yxbIougtWTtYxui6n8Bx2KEc0RS5qKOHLAqMufihegzt6v0Ct2OFY2Yz
-         9woRp0D877biA0P+aGj3sk808XE9wUUYoekEpjLfsGR5tc8O1sDE5rBHfuorOtrvprhd
-         ArPmr+Udz26pZofj6fLDnAdp6eYva6LHKAXA2h3KeYhMXppXtZ/iWPnv6EIRg/7eCC8y
-         7x9Lokz6IBxCsgxS97bbNKVQD8VZZaArxF3jnVspdNW6BRcOanAIhGEFDF+aDE64m+44
-         wV/g==
-X-Gm-Message-State: ABy/qLZaVzYdY0sDV9zt11Txs+1DPsa6JEdfvniMoqmLCT30HU33eKgn
-        S3G0hjQa3l+q682ILaTOjBQ=
-X-Google-Smtp-Source: APBJJlFdbrMVw4b6z234EX++g7sa7brYPo9YLyT5rx35Vbecfts+aFRsmuqCwHuvCLX2q+adLIcNtg==
-X-Received: by 2002:adf:e80f:0:b0:313:e20c:b8e8 with SMTP id o15-20020adfe80f000000b00313e20cb8e8mr5448993wrm.30.1688293905642;
-        Sun, 02 Jul 2023 03:31:45 -0700 (PDT)
-Received: from localhost ([2a01:e0a:32f:1f0:ae0b:3bc8:c743:b2d8])
-        by smtp.gmail.com with ESMTPSA id p19-20020a05600c205300b003fbc2c0addbsm7265041wmg.42.2023.07.02.03.31.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 03:31:45 -0700 (PDT)
-From:   Raphael Gallais-Pou <rgallaispou@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: st: add buswidth property to stm32f429-disco
-Date:   Sun,  2 Jul 2023 12:35:16 +0200
-Message-ID: <20230702103516.139440-1-rgallaispou@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Sun, 2 Jul 2023 06:40:11 -0400
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6984E54;
+        Sun,  2 Jul 2023 03:40:09 -0700 (PDT)
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Qv5D72bvpz56;
+        Sun,  2 Jul 2023 12:40:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1688294407; bh=Vt2OuD2YgoWjYb9mB0pJty47mCq/a7jrF/gXYo2tnkw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pvHYkXhaHjIchq0Yun+6ber7npZhKtrjaVMrDvWHA9Jp2YzB9Z6G/w0Kzt45ovPpF
+         ge58y/gZeUu49F+HhLpIZQWXpTv8RFiip2OmSehiATfoIHQaqnAWfx6qbYdtOlzFPK
+         8zKNzo6okTLvzCUCv1y/H9ZhKZOo51f5/Wlhi3bep0shZrsrPMFGGNT4nVBTL9mDcT
+         /7LrHGuhptDWK84OjIa93hRQd35vzlS3f4NtBKUGTGR9prsSgcKLfVLVHH7AZeA+/8
+         iFxi8sU4f+mPHmBofuX+RICpYIoTkD3cOmUj49IuPlpnodwshsitZaVLDl/tnsxZXr
+         NAyq9gpoYIz/g==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.8 at mail
+Date:   Sun, 2 Jul 2023 12:40:05 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] i2c: at91: constify at91_twi_pdata
+Message-ID: <ZKFUBUyCqZBNUMfz@qmqm.qmqm.pl>
+References: <6ac87dcbb660ae892bf8740c78d3eca7625d6db6.1687814664.git.mirq-linux@rere.qmqm.pl>
+ <20230629223825.27q75s2a3eyiapgy@intel.intel>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230629223825.27q75s2a3eyiapgy@intel.intel>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +52,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ili9341 is left without a mandatory buswidth to properly communicate
-between the SI bus and the display. Add the device-tree property.
+On Fri, Jun 30, 2023 at 12:38:25AM +0200, Andi Shyti wrote:
+> Hi Michal,
+> 
+> [...]
+> 
+> > -static struct at91_twi_pdata *at91_twi_get_driver_data(
+> > +static const struct at91_twi_pdata *at91_twi_get_driver_data(
+> >  					struct platform_device *pdev)
+> >  {
+> >  	if (pdev->dev.of_node) {
+> > @@ -189,9 +189,9 @@ static struct at91_twi_pdata *at91_twi_get_driver_data(
+> >  		match = of_match_node(atmel_twi_dt_ids, pdev->dev.of_node);
+> >  		if (!match)
+> >  			return NULL;
+> > -		return (struct at91_twi_pdata *)match->data;
+> > +		return match->data;
+> >  	}
+> > -	return (struct at91_twi_pdata *) platform_get_device_id(pdev)->driver_data;
+> > +	return (const void *) platform_get_device_id(pdev)->driver_data;
+> 
+> the const's always confuse me... do you get an error here? Is
+> this cast really needed?
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
----
- arch/arm/boot/dts/stm32f429-disco.dts | 1 +
- 1 file changed, 1 insertion(+)
+platform_device_id.driver_data is an ulong, not a void pointer. So, the
+cast is needed. It could be just (void *), but I think it's better to
+document the constness in the code.
 
-diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
-index 3b81228d46a2..5eaf95afc8c7 100644
---- a/arch/arm/boot/dts/stm32f429-disco.dts
-+++ b/arch/arm/boot/dts/stm32f429-disco.dts
-@@ -197,6 +197,7 @@ display: display@1{
- 		spi-3wire;
- 		spi-max-frequency = <10000000>;
- 		dc-gpios = <&gpiod 13 0>;
-+		buswidth = <8>;
- 		port {
- 			panel_in_rgb: endpoint {
- 			remote-endpoint = <&ltdc_out_rgb>;
 -- 
-2.41.0
-
+Micha³ Miros³aw
