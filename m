@@ -2,172 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D7F745025
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 20:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E2C745029
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjGBS5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 14:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+        id S229950AbjGBTAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjGBS5o (ORCPT
+        with ESMTP id S229569AbjGBTAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 14:57:44 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AAFE5B;
-        Sun,  2 Jul 2023 11:57:16 -0700 (PDT)
-Date:   Sun, 2 Jul 2023 20:57:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688324230; bh=67ILj3chIboW2gmsBz04V0Mib+VgnjMHIAk/zViRZ/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I4wmFcsE48BwNsSf/NiYdrV2MaT8cgcaO8c1oFIG9IFyjeQvnkNvSB3BFW6Eszhte
-         e8k9qEe8ohCQcD7VshlVt7ULvk7BOT3Cf3/BZMVcIMX8bkU9ULaLkLPcLUGJhas/pQ
-         fG68qTYRXpNDXQe8ka2YkquxZxqTDRlGvbLWswV8=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 03/11] tools/nolibc: include crt.h before arch.h
-Message-ID: <e1cf8fd3-f8cd-4c3c-9f8c-24bbc0a7cde3@t-8ch.de>
-References: <cover.1687976753.git.falcon@tinylab.org>
- <c61b5bc53895e8c6b2f30d59f86067973e6bbce0.1687976753.git.falcon@tinylab.org>
+        Sun, 2 Jul 2023 15:00:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F137C9;
+        Sun,  2 Jul 2023 12:00:02 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 362IhR2T017895;
+        Sun, 2 Jul 2023 18:59:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=/NKhnKPAkOIjwgGep2FwfHXblRybmSNKwotdC8ielXo=;
+ b=BhiqxySCcude6qbdT3cXBTTKA4VuK4PTLakNQ6mLOiCNqS7dBGTCsL0FG6OyNTafSoA+
+ wtK8+/T5rlejPF9QUyvFObPYTVT8fnZ9jVxEPGKkvecwI90PMhqThcLh5p1xlkrnlb4x
+ HeCr9j0b1Jcizo9ASN1YRiHwRs0vaRDFBUU1lW/T++x4jEInsRwdcf0oSanZvlBnkWSq
+ zMUx2S5Egu+KwdmEGaM3PR+3kaKRbr72PydSJVF8nBXasdve0srKbdjU7WWSdPPB3ik9
+ Xv/KIqlU3yOclA9RS9FaXNBkQEJ1wyXoq20imHFNrRo/gJHFqljQ/Md3OUausjG48ob7 pQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rj9gttncu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Jul 2023 18:59:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 362IxoXV017281
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 2 Jul 2023 18:59:50 GMT
+Received: from [10.216.46.140] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Sun, 2 Jul 2023
+ 11:59:44 -0700
+Message-ID: <7e32cf95-1565-5736-cc3e-c70e8d8f3ca7@quicinc.com>
+Date:   Mon, 3 Jul 2023 00:29:41 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c61b5bc53895e8c6b2f30d59f86067973e6bbce0.1687976753.git.falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v9 06/10] usb: dwc3: qcom: Add support to read IRQ's
+ related to multiport
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-7-quic_kriskura@quicinc.com>
+ <ZJryrhuUrL5APh4o@hovoldconsulting.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZJryrhuUrL5APh4o@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: YPF_-Xdm1kEP_tddtics2ka_LlhP6sQL
+X-Proofpoint-ORIG-GUID: YPF_-Xdm1kEP_tddtics2ka_LlhP6sQL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-02_15,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ malwarescore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307020181
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-29 02:54:35+0800, Zhangjin Wu wrote:
-> The crt.h provides a new _start_c() function, which is required by the
-> new assembly _start entry of arch-<ARCH>.h (included by arch.h), let's
-> include crt.h before arch.h.
-> 
-> This '#include "crt.h"' doesn't let the new _start_c() work immediately,
-> but it is a base of the coming patches to move most of the assembly
-> _start operations to the _start_c() function for every supported
-> architecture.
 
-Why don't the arch-*.h files include this new header?
-They are the users of the new symbol.
 
+On 6/27/2023 8:01 PM, Johan Hovold wrote:
+> On Wed, Jun 21, 2023 at 10:06:24AM +0530, Krishna Kurapati wrote:
+>> Add support to read Multiport IRQ's related to quad port controller
+>> of SA8295 Device.
 > 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/include/nolibc/Makefile | 1 +
->  tools/include/nolibc/nolibc.h | 1 +
->  tools/include/nolibc/signal.h | 1 +
->  tools/include/nolibc/stdio.h  | 1 +
->  tools/include/nolibc/stdlib.h | 1 +
->  tools/include/nolibc/sys.h    | 1 +
->  tools/include/nolibc/time.h   | 1 +
->  tools/include/nolibc/unistd.h | 1 +
->  8 files changed, 8 insertions(+)
+> Please use a more descriptive summary and commit message; "read" is to
+> vague. You're looking up interrupts from the devicetree. Also this
+> should not just be about SA8295.
 > 
-> diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-> index 875e13e3c851..00471e59b11e 100644
-> --- a/tools/include/nolibc/Makefile
-> +++ b/tools/include/nolibc/Makefile
-> @@ -37,6 +37,7 @@ NARCH            = $(or $(NARCH_$(ARCH)),$(ARCH))
->  arch_file := arch-$(NARCH).h
->  all_files := \
->  		compiler.h \
-> +		crt.h \
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/dwc3-qcom.c | 108 +++++++++++++++++++++++++++++------
+>>   1 file changed, 91 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>> index 3de43df6bbe8..3ab48a6925fe 100644
+>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>> @@ -74,9 +74,9 @@ struct dwc3_qcom {
+>>   	struct reset_control	*resets;
+>>   
+>>   	int			hs_phy_irq;
+>> -	int			dp_hs_phy_irq;
+>> -	int			dm_hs_phy_irq;
+>> -	int			ss_phy_irq;
+>> +	int			dp_hs_phy_irq[4];
+>> +	int			dm_hs_phy_irq[4];
+>> +	int			ss_phy_irq[2];
+> 
+> As has already been pointed out, you should use a define for these. And
+> you already have DWC3_MAX_PORTS.
+> 
+> The driver should not be hardcoding the fact that there are only two SS
+> ports on this particular SoC that you're interested in.
+> 
+>>   	enum usb_device_speed	usb2_speed;
+>>   
+>>   	struct extcon_dev	*edev;
+> 
+>> @@ -535,6 +535,80 @@ static int dwc3_qcom_get_irq(struct platform_device *pdev,
+>>   	return ret;
+>>   }
+>>   
+>> +static int dwc3_qcom_setup_mp_irq(struct platform_device *pdev)
+>> +{
+>> +	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+>> +	char irq_name[15];
+>> +	int irq;
+>> +	int ret;
+>> +	int i;
+>> +
+>> +	for (i = 0; i < 4; i++) {
+> 
+> DWC3_MAX_PORTS here too and similar below.
+> 
+>> +		if (qcom->dp_hs_phy_irq[i])
+>> +			continue;
+> 
+> This is not very nice. You should try to integrate the current lookup
+> code as I told you to do with the PHY lookups. That is, use a single
+> loop for all HS/SS IRQs, and pick the legacy name if the number of ports
+> is 1.
+> 
+> Of course, you added the xhci capability parsing to the core driver so
+> that information is not yet available, but you need it in the glue
+> driver also...
+> 
+> As I mentioned earlier, you can infer the number of ports from the
+> interrupt names. Alternatively, you can infer it from the compatible
+> string. In any case, you should not need to ways to determine the same
+> information in the glue driver, then in the core part, and then yet
+> again in the xhci driver...
+> 
+Hi Johan,
 
-This should be part of the patch adding the file.
+  The reason why I didn't integrate this with the original function was 
+the ACPI stuff. The MP devices have no ACPI variant. And I think for 
+clarity sake its best to keep these two functions separated.
 
->  		ctype.h \
->  		errno.h \
->  		nolibc.h \
-> diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-> index 1f8d821000ac..2cc9ccd90d56 100644
-> --- a/tools/include/nolibc/nolibc.h
-> +++ b/tools/include/nolibc/nolibc.h
-> @@ -93,6 +93,7 @@
->  #define _NOLIBC_H
->  
->  #include "std.h"
-> +#include "crt.h"
->  #include "arch.h"
->  #include "types.h"
->  #include "sys.h"
-> diff --git a/tools/include/nolibc/signal.h b/tools/include/nolibc/signal.h
-> index 137552216e46..f0a1418c1cb2 100644
-> --- a/tools/include/nolibc/signal.h
-> +++ b/tools/include/nolibc/signal.h
-> @@ -8,6 +8,7 @@
->  #define _NOLIBC_SIGNAL_H
->  
->  #include "std.h"
-> +#include "crt.h"
->  #include "arch.h"
->  #include "types.h"
->  #include "sys.h"
-> diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-> index 0eef91daf289..89d3749b3620 100644
-> --- a/tools/include/nolibc/stdio.h
-> +++ b/tools/include/nolibc/stdio.h
-> @@ -10,6 +10,7 @@
->  #include <stdarg.h>
->  
->  #include "std.h"
-> +#include "crt.h"
->  #include "arch.h"
->  #include "errno.h"
->  #include "types.h"
-> diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-> index 902162f80337..0ff7fac40bd4 100644
-> --- a/tools/include/nolibc/stdlib.h
-> +++ b/tools/include/nolibc/stdlib.h
-> @@ -8,6 +8,7 @@
->  #define _NOLIBC_STDLIB_H
->  
->  #include "std.h"
-> +#include "crt.h"
->  #include "arch.h"
->  #include "types.h"
->  #include "sys.h"
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index 2c302f3feb71..b6c33c40c037 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -24,6 +24,7 @@
->  #include <linux/reboot.h> /* for LINUX_REBOOT_* */
->  #include <linux/prctl.h>
->  
-> +#include "crt.h"
->  #include "arch.h"
->  #include "errno.h"
->  #include "types.h"
-> diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
-> index 84655361b9ad..bbe8f9aa3e9b 100644
-> --- a/tools/include/nolibc/time.h
-> +++ b/tools/include/nolibc/time.h
-> @@ -8,6 +8,7 @@
->  #define _NOLIBC_TIME_H
->  
->  #include "std.h"
-> +#include "crt.h"
->  #include "arch.h"
->  #include "types.h"
->  #include "sys.h"
-> diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
-> index e38f3660c051..f1677224bb5a 100644
-> --- a/tools/include/nolibc/unistd.h
-> +++ b/tools/include/nolibc/unistd.h
-> @@ -8,6 +8,7 @@
->  #define _NOLIBC_UNISTD_H
->  
->  #include "std.h"
-> +#include "crt.h"
->  #include "arch.h"
->  #include "types.h"
->  #include "sys.h"
-> -- 
-> 2.25.1
+Regards,
+Krishna,
+
+>> +
+>> +		sprintf(irq_name, "dp%d_hs_phy_irq", i+1);
 > 
+> Spaces around binary operators. Does not checkpatch warn about that?
+> 
+>> +		irq = dwc3_qcom_get_irq(pdev, irq_name, -1);
+>> +		if (irq > 0) {
+>> +			irq_set_status_flags(irq, IRQ_NOAUTOEN);
+>> +			ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
+>> +					qcom_dwc3_resume_irq,
+>> +					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+>> +					irq_name, qcom);
+>> +			if (ret) {
+>> +				dev_err(qcom->dev, "%s failed: %d\n", irq_name, ret);
+>> +				return ret;
+>> +			}
+>> +		}
+>> +
+>> +		qcom->dp_hs_phy_irq[i] = irq;
+>> +	}
+>> +
+>> +	for (i = 0; i < 4; i++) {
+>> +		if (qcom->dm_hs_phy_irq[i])
+>> +			continue;
+>> +
+>> +		sprintf(irq_name, "dm%d_hs_phy_irq", i+1);
+>> +		irq = dwc3_qcom_get_irq(pdev, irq_name, -1);
+>> +		if (irq > 0) {
+>> +			irq_set_status_flags(irq, IRQ_NOAUTOEN);
+>> +			ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
+>> +					qcom_dwc3_resume_irq,
+>> +					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+>> +					irq_name, qcom);
+>> +			if (ret) {
+>> +				dev_err(qcom->dev, "%s failed: %d\n", irq_name, ret);
+>> +				return ret;
+>> +			}
+>> +		}
+>> +
+>> +		qcom->dm_hs_phy_irq[i] = irq;
+>> +	}
+>> +
+>> +	for (i = 0; i < 2; i++) {
+>> +		if (qcom->ss_phy_irq[i])
+>> +			continue;
+>> +
+>> +		sprintf(irq_name, "ss%d_phy_irq", i+1);
+>> +		irq = dwc3_qcom_get_irq(pdev, irq_name, -1);
+>> +		if (irq > 0) {
+>> +			irq_set_status_flags(irq, IRQ_NOAUTOEN);
+>> +			ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
+>> +					qcom_dwc3_resume_irq,
+>> +					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+>> +					irq_name, qcom);
+>> +			if (ret) {
+>> +				dev_err(qcom->dev, "%s failed: %d\n", irq_name, ret);
+>> +				return ret;
+>> +			}
+>> +		}
+>> +
+>> +		qcom->ss_phy_irq[i] = irq;
+>> +	}
+> 
+> So the above should all be merged in either a single helper looking up
+> all the interrupts for a port and resused for the non-MP case.
+> 
+I agree, Will merge all under some common helper function.
+
+Thanks,
+Krishna,
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int dwc3_qcom_setup_irq(struct platform_device *pdev)
+>>   {
+>>   	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+>> @@ -570,7 +644,7 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
+>>   			dev_err(qcom->dev, "dp_hs_phy_irq failed: %d\n", ret);
+>>   			return ret;
+>>   		}
+>> -		qcom->dp_hs_phy_irq = irq;
+>> +		qcom->dp_hs_phy_irq[0] = irq;
+>>   	}
+>>   
+>>   	irq = dwc3_qcom_get_irq(pdev, "dm_hs_phy_irq",
+>> @@ -585,7 +659,7 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
+>>   			dev_err(qcom->dev, "dm_hs_phy_irq failed: %d\n", ret);
+>>   			return ret;
+>>   		}
+>> -		qcom->dm_hs_phy_irq = irq;
+>> +		qcom->dm_hs_phy_irq[0] = irq;
+>>   	}
+>>   
+>>   	irq = dwc3_qcom_get_irq(pdev, "ss_phy_irq",
+>> @@ -600,10 +674,10 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
+>>   			dev_err(qcom->dev, "ss_phy_irq failed: %d\n", ret);
+>>   			return ret;
+>>   		}
+>> -		qcom->ss_phy_irq = irq;
+>> +		qcom->ss_phy_irq[0] = irq;
+>>   	}
+>>   
+>> -	return 0;
+>> +	return dwc3_qcom_setup_mp_irq(pdev);;
+> 
+> Stray ;
+> 
+>>   }
+>>   
+>>   static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
+> 
+> Johan
