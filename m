@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A4774509B
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D1A74509F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjGBTkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S231219AbjGBTkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjGBTjz (ORCPT
+        with ESMTP id S231152AbjGBTj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:39:55 -0400
+        Sun, 2 Jul 2023 15:39:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D841708;
-        Sun,  2 Jul 2023 12:39:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830E51713;
+        Sun,  2 Jul 2023 12:39:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AA4460CD4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E5EE60CB9;
+        Sun,  2 Jul 2023 19:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BED4C433CB;
         Sun,  2 Jul 2023 19:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F79CC433C9;
-        Sun,  2 Jul 2023 19:39:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326747;
-        bh=jvnL9nJ59DFNmrdN6Y6tqV1NmAFjnvOmzEZrnINq1RQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rYdM4767zu/2Fd/sk7o5hkpN8dwQovBANU0KCAAofPMRXktMcawrHYqg4SdtaZlyp
-         IfDQ0CseKKIqlRGglDOu8R6QS/5PzWkrrElGgizT32mUF9CkRXBSqz3gVtdIUppC6q
-         cQoloKHG89Nw9pQHS10Lvltnp+tXkFtVGDVfLJsxHPYn0u0mOc6AMVVGmIER3vva17
-         5mVa+KHp3dULdAZHzzXHVaCBjkLFeyTn1Xrb2fGINjZfmjPd9h6Yhdl/PbHgLqRJuv
-         z/H8Gym/CM58HmZvWp/eDGulNsV1u6/ln28iYE3L9OhOFAk0meXOdamA5seCF2EvvE
-         uk/fjW9oAte+A==
+        s=k20201202; t=1688326749;
+        bh=qbSmFjkxX3HUcFYifbkogWWlpPQjlc1XuGkAs7z+xus=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=A8GVO2PWCoelwP6GOJDM6eAGJPmAOtwe5fP7TwGURIHyjMAU5N2CuEFuHdMJwZJbZ
+         R4iKCnURDXQznGvpNGI7ZLv9s/ZilZYTE4nNodI4I4Mt2ZA/ov04OVEXsnYJ1syB7h
+         IJmKwB5lGxCE/xdtXbAcDaOAM1AZor0ASqG68GT7AaFDn8M+jBfY0pNDwYJKblIzmO
+         7kai64nnYittYJCFRHmVNDxzOpepE9uXt7VS2eaYWudRLSlTZGWyd5QYYx5cANWSax
+         mfRNWXSIXrAKXZowyOhQ6O+LZR1jD/fNlLDkmQwLosqhqx6YytoHiRBfr11iZwYw98
+         NVhLevtUWchew==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, dave@stgolabs.net,
-        josh@joshtriplett.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, joel@joelfernandes.org,
-        rcu@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 1/3] refscale: Move shutdown from wait_event() to wait_event_idle()
-Date:   Sun,  2 Jul 2023 15:39:02 -0400
-Message-Id: <20230702193904.1775957-1-sashal@kernel.org>
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, hannes@cmpxchg.org,
+        mhocko@kernel.org, tj@kernel.org, lizefan.x@bytedance.com,
+        shuah@kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 2/3] selftests: cgroup: Add 'malloc' failures checks in test_memcontrol
+Date:   Sun,  2 Jul 2023 15:39:03 -0400
+Message-Id: <20230702193904.1775957-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230702193904.1775957-1-sashal@kernel.org>
+References: <20230702193904.1775957-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,40 +65,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
 
-[ Upstream commit 6bc6e6b27524304aadb9c04611ddb1c84dd7617a ]
+[ Upstream commit c83f320e55a49abd90629f42a72897afd579e0de ]
 
-The ref_scale_shutdown() kthread/function uses wait_event() to wait for
-the refscale test to complete.  However, although the read-side tests
-are normally extremely fast, there is no law against specifying a very
-large value for the refscale.loops module parameter or against having
-a slow read-side primitive.  Either way, this might well trigger the
-hung-task timeout.
+There are several 'malloc' calls in test_memcontrol, which can be
+unsuccessful. This patch will add 'malloc' failures checking to
+give more details about test's fail reasons and avoid possible
+undefined behavior during the future null dereference (like the
+one in alloc_anon_50M_check_swap function).
 
-This commit therefore replaces those wait_event() calls with calls to
-wait_event_idle(), which do not trigger the hung-task timeout.
-
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Acked-by: Shakeel Butt <shakeelb@google.com>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/refscale.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/cgroup/test_memcontrol.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
-index 435c884c02b5c..d49a9d66e0000 100644
---- a/kernel/rcu/refscale.c
-+++ b/kernel/rcu/refscale.c
-@@ -795,7 +795,7 @@ ref_scale_cleanup(void)
- static int
- ref_scale_shutdown(void *arg)
- {
--	wait_event(shutdown_wq, shutdown_start);
-+	wait_event_idle(shutdown_wq, shutdown_start);
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 8833359556f38..fe4f9f4302822 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -98,6 +98,11 @@ static int alloc_anon_50M_check(const char *cgroup, void *arg)
+ 	int ret = -1;
  
- 	smp_mb(); // Wake before output.
- 	ref_scale_cleanup();
+ 	buf = malloc(size);
++	if (buf == NULL) {
++		fprintf(stderr, "malloc() failed\n");
++		return -1;
++	}
++
+ 	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+ 		*ptr = 0;
+ 
+@@ -211,6 +216,11 @@ static int alloc_anon_noexit(const char *cgroup, void *arg)
+ 	char *buf, *ptr;
+ 
+ 	buf = malloc(size);
++	if (buf == NULL) {
++		fprintf(stderr, "malloc() failed\n");
++		return -1;
++	}
++
+ 	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+ 		*ptr = 0;
+ 
+@@ -759,6 +769,11 @@ static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
+ 	int ret = -1;
+ 
+ 	buf = malloc(size);
++	if (buf == NULL) {
++		fprintf(stderr, "malloc() failed\n");
++		return -1;
++	}
++
+ 	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+ 		*ptr = 0;
+ 
 -- 
 2.39.2
 
