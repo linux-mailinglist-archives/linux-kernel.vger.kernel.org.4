@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EE3744E46
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51264744E4B
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjGBPQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 11:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S229828AbjGBPT4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 2 Jul 2023 11:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjGBPQA (ORCPT
+        with ESMTP id S229608AbjGBPTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 11:16:00 -0400
-Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6179E69
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 08:15:58 -0700 (PDT)
-Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b8959fb3c7so2462165ad.0
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 08:15:58 -0700 (PDT)
+        Sun, 2 Jul 2023 11:19:55 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1375E67;
+        Sun,  2 Jul 2023 08:19:53 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-570114e1feaso44222037b3.3;
+        Sun, 02 Jul 2023 08:19:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688310958; x=1690902958;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Uqx05DsOQphTiupSJnXSJDQY0vj7xZsIgdvTNkwdc4I=;
-        b=hJrczI7TRE22C8DE0Kckxd62rU5bFcmOQ/hO3fECzTVJIpfZtedcn8FDTvK6/cxM3E
-         UUcpAdBnijkoKtMyZ6WLeiO2tttGTCVwTODNDVNzzsLxSsqfLLLe23iNdkKW0mW+DuKY
-         FhYXZOQRs6En7r9vu2k778iLSZIKO1APd9rclk0u/8AYSHSDcCrG11uoCdDEzTH1l+i5
-         8CTpNWo+Giv7Zny8CI+/TsGTfdbLSozus4k+6EtM7yvKvT8kCVDZCuLLgtH+djhFj/Rj
-         X6LlGNGjtqk+Sl4x1iAX2W+T1XX0eT+Y1qwNN3uPcdTZ8hmm0DskpktWdkp0kws9RJag
-         jEOA==
-X-Gm-Message-State: ABy/qLYMdBHSYxhXb1PJUT+zfBVwjWkFJjPsfFy9TdFzxmux9NC0i39r
-        aoAZNtDgHPyoDwZSG9fKBlT34mUEcDDRzxPAqgG3q8xhfj8Z
-X-Google-Smtp-Source: APBJJlGq9lPKarcsUF7brIRq5xJr+f1dOKBFojk/wn5gzcGstP+bS9/Z+X3ogEpttE7OoTGn0J2Nzuo+izXpAWX/Up0fjn2Y/sb+
+        d=1e100.net; s=20221208; t=1688311192; x=1690903192;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lA0AATQIntht8ovYiSqRkAVw2huhiXPrFEZu7hngS5s=;
+        b=PWmBIm98eUSslPqxLP1OD16CvkhAWyncZH5TIw/fJNukl8QHMnvGR0Aqpd1YfOGJpW
+         Dv0Par1vTxQA1RULNiINlsfwpAfmZdRMCX8fHEtWV+cr3B9mfyR/des3qXHjOdjaHPnp
+         Sdx+8bryo8bkIhlfavi4Rasmk5vn1OhUyq5Emb+OkpL4Ppf7alZaR1/uTlgV/Xp6sB/0
+         62fIlzByW6b+n6OiFMYnL/WCqfnuYFwGUH4yWMq/G9xBj5Li6QV5i7srZyiM4thOh3md
+         3KkJZ3smedZbni6R5H1X54wUiqyqc1N6L24DL9W8LkusjkUKsQjkDDNEiqFdy+I4sWNq
+         RIXw==
+X-Gm-Message-State: ABy/qLbX9aKaevPMrImWO3uLVZLVwC4QZrdCyyHCENNQVBkn0oFmhcTN
+        AaLUx3o7HyZ82dj2aUvk/T/toE1all2hSg==
+X-Google-Smtp-Source: APBJJlHTwjXQA7zU9vKisuUQWHmJGHqve8YE6S2er3CudneQoX+UvxvHno9TjNPrKa54w65fI2/18Q==
+X-Received: by 2002:a81:de41:0:b0:576:bfd7:1dac with SMTP id o1-20020a81de41000000b00576bfd71dacmr8601041ywl.24.1688311192406;
+        Sun, 02 Jul 2023 08:19:52 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id t201-20020a8183d2000000b005731dbd4928sm4522808ywf.69.2023.07.02.08.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 08:19:52 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bd6446528dcso4100747276.2;
+        Sun, 02 Jul 2023 08:19:51 -0700 (PDT)
+X-Received: by 2002:a25:6902:0:b0:bac:f397:dda5 with SMTP id
+ e2-20020a256902000000b00bacf397dda5mr7995451ybc.10.1688311191548; Sun, 02 Jul
+ 2023 08:19:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:e847:b0:1b8:919e:bd with SMTP id
- t7-20020a170902e84700b001b8919e00bdmr1177364plg.13.1688310958243; Sun, 02 Jul
- 2023 08:15:58 -0700 (PDT)
-Date:   Sun, 02 Jul 2023 08:15:58 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000efc64705ff8286a1@google.com>
-Subject: [syzbot] [wireless?] WARNING in rate_control_rate_init (2)
-From:   syzbot <syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
+References: <168503771547.404.3649540312110626967.tip-bot2@tip-bot2>
+In-Reply-To: <168503771547.404.3649540312110626967.tip-bot2@tip-bot2>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 2 Jul 2023 17:19:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWs5zXW8xRQCgNHJSeFbJTE6JMjO-T1fi9dgP3ugnWhfQ@mail.gmail.com>
+Message-ID: <CAMuHMdWs5zXW8xRQCgNHJSeFbJTE6JMjO-T1fi9dgP3ugnWhfQ@mail.gmail.com>
+Subject: Re: [tip: x86/misc] x86/csum: Improve performance of `csum_partial`
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-tip-commits@vger.kernel.org,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,100 +69,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Noah,
 
-syzbot found the following issue on:
+On Thu, May 25, 2023 at 8:04 PM tip-bot2 for Noah Goldstein
+<tip-bot2@linutronix.de> wrote:
+> The following commit has been merged into the x86/misc branch of tip:
+>
+> Commit-ID:     688eb8191b475db5acfd48634600b04fd3dda9ad
+> Gitweb:        https://git.kernel.org/tip/688eb8191b475db5acfd48634600b04fd3dda9ad
+> Author:        Noah Goldstein <goldstein.w.n@gmail.com>
+> AuthorDate:    Wed, 10 May 2023 20:10:02 -05:00
+> Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+> CommitterDate: Thu, 25 May 2023 10:55:18 -07:00
+>
+> x86/csum: Improve performance of `csum_partial`
+>
+> 1) Add special case for len == 40 as that is the hottest value. The
+>    nets a ~8-9% latency improvement and a ~30% throughput improvement
+>    in the len == 40 case.
+>
+> 2) Use multiple accumulators in the 64-byte loop. This dramatically
+>    improves ILP and results in up to a 40% latency/throughput
+>    improvement (better for more iterations).
+>
+> Results from benchmarking on Icelake. Times measured with rdtsc()
+>  len   lat_new   lat_old      r    tput_new  tput_old      r
+>    8      3.58      3.47  1.032        3.58      3.51  1.021
+>   16      4.14      4.02  1.028        3.96      3.78  1.046
+>   24      4.99      5.03  0.992        4.23      4.03  1.050
+>   32      5.09      5.08  1.001        4.68      4.47  1.048
+>   40      5.57      6.08  0.916        3.05      4.43  0.690
+>   48      6.65      6.63  1.003        4.97      4.69  1.059
+>   56      7.74      7.72  1.003        5.22      4.95  1.055
+>   64      6.65      7.22  0.921        6.38      6.42  0.994
+>   96      9.43      9.96  0.946        7.46      7.54  0.990
+>  128      9.39     12.15  0.773        8.90      8.79  1.012
+>  200     12.65     18.08  0.699       11.63     11.60  1.002
+>  272     15.82     23.37  0.677       14.43     14.35  1.005
+>  440     24.12     36.43  0.662       21.57     22.69  0.951
+>  952     46.20     74.01  0.624       42.98     53.12  0.809
+> 1024     47.12     78.24  0.602       46.36     58.83  0.788
+> 1552     72.01    117.30  0.614       71.92     96.78  0.743
+> 2048     93.07    153.25  0.607       93.28    137.20  0.680
+> 2600    114.73    194.30  0.590      114.28    179.32  0.637
+> 3608    156.34    268.41  0.582      154.97    254.02  0.610
+> 4096    175.01    304.03  0.576      175.89    292.08  0.602
+>
+> There is no such thing as a free lunch, however, and the special case
+> for len == 40 does add overhead to the len != 40 cases. This seems to
+> amount to be ~5% throughput and slightly less in terms of latency.
+>
+> Testing:
+> Part of this change is a new kunit test. The tests check all
+> alignment X length pairs in [0, 64) X [0, 512).
+> There are three cases.
+>     1) Precomputed random inputs/seed. The expected results where
+>        generated use the generic implementation (which is assumed to be
+>        non-buggy).
+>     2) An input of all 1s. The goal of this test is to catch any case
+>        a carry is missing.
+>     3) An input that never carries. The goal of this test si to catch
+>        any case of incorrectly carrying.
+>
+> More exhaustive tests that test all alignment X length pairs in
+> [0, 8192) X [0, 8192] on random data are also available here:
+> https://github.com/goldsteinn/csum-reproduction
+>
+> The reposity also has the code for reproducing the above benchmark
+> numbers.
+>
+> Signed-off-by: Noah Goldstein <goldstein.w.n@gmail.com>
+> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-HEAD commit:    6e2332e0ab53 Merge tag 'cgroup-for-6.5' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e1c60b280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f24c1070268858
-dashboard link: https://syzkaller.appspot.com/bug?extid=62d7eef57b09bfebcd84
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171c0767280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10113ebd280000
+Thanks for your patch, which is now commit 688eb8191b475db5 ("x86/csum:
+Improve performance of `csum_partial`") in linus/master stable/master
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-6e2332e0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5c6bc163c340/vmlinux-6e2332e0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f1e705993336/bzImage-6e2332e0.xz
+> Link: https://lore.kernel.org/all/20230511011002.935690-1-goldstein.w.n%40gmail.com
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com
+This does not seem to be a message sent to a public mailing list
+archived at lore (yet).
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5126 at net/mac80211/rate.c:48 rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
-Modules linked in:
-CPU: 0 PID: 5126 Comm: syz-executor279 Not tainted 6.4.0-syzkaller-01647-g6e2332e0ab53 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
-Code: f7 48 c7 c2 00 84 7f 8b be 09 03 00 00 48 c7 c7 c0 83 7f 8b c6 05 f9 bc d6 04 01 e8 22 ac d6 f7 e9 d8 fd ff ff e8 a8 16 f6 f7 <0f> 0b e8 c1 32 83 00 31 ff 89 c3 89 c6 e8 b6 12 f6 f7 85 db 75 27
-RSP: 0018:ffffc90003197280 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8881070796c0 RCX: 0000000000000000
-RDX: ffff88802a51cb80 RSI: ffffffff898db228 RDI: 0000000000000005
-RBP: ffff8880255c0000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
-R13: 0000000000000000 R14: ffff888021f30de0 R15: ffff888032530000
-FS:  000055555570f300(0000) GS:ffff88806b600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000080 CR3: 000000001f594000 CR4: 0000000000350ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- sta_apply_auth_flags.constprop.0+0x424/0x4a0 net/mac80211/cfg.c:1678
- sta_apply_parameters+0xaf8/0x16f0 net/mac80211/cfg.c:2005
- ieee80211_add_station+0x3d0/0x620 net/mac80211/cfg.c:2070
- rdev_add_station net/wireless/rdev-ops.h:201 [inline]
- nl80211_new_station+0x1258/0x1b20 net/wireless/nl80211.c:7564
- genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
- genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
- genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
- sock_sendmsg_nosec net/socket.c:725 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:748
- ____sys_sendmsg+0x722/0x900 net/socket.c:2504
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2587
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc033504a69
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe0868f2d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 000000000000ae5a RCX: 00007fc033504a69
-RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007ffe0868f478 R09: 00007ffe0868f478
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe0868f2ec
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+On m68k (ARAnyM):
 
+    KTAP version 1
+    # Subtest: checksum
+    1..3
+    # test_csum_fixed_random_inputs: ASSERTION FAILED at
+lib/checksum_kunit.c:243
+    Expected result == expec, but
+        result == 54991 (0xd6cf)
+        expec == 33316 (0x8224)
+    not ok 1 test_csum_fixed_random_inputs
+    # test_csum_all_carry_inputs: ASSERTION FAILED at lib/checksum_kunit.c:267
+    Expected result == expec, but
+        result == 255 (0xff)
+        expec == 65280 (0xff00)
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Endianness issue in the test?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+    not ok 2 test_csum_all_carry_inputs
+    # test_csum_no_carry_inputs: ASSERTION FAILED at lib/checksum_kunit.c:306
+    Expected result == expec, but
+        result == 64515 (0xfc03)
+        expec == 0 (0x0)
+    not ok 3 test_csum_no_carry_inputs
+# checksum: pass:0 fail:3 skip:0 total:3
+# Totals: pass:0 fail:3 skip:0 total:3
+not ok 1 checksum
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+Gr{oetje,eeting}s,
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+                        Geert
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
