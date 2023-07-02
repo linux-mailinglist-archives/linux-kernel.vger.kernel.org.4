@@ -2,57 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D397451F9
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EDE7451FB
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjGBUBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 16:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
+        id S233113AbjGBUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 16:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbjGBT5f (ORCPT
+        with ESMTP id S233170AbjGBUBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:57:35 -0400
+        Sun, 2 Jul 2023 16:01:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4FE1BFA;
-        Sun,  2 Jul 2023 12:55:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C981BCC;
+        Sun,  2 Jul 2023 12:58:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4552E60D29;
-        Sun,  2 Jul 2023 19:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10644C433C9;
-        Sun,  2 Jul 2023 19:53:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 920C660C87;
+        Sun,  2 Jul 2023 19:57:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6B7C433C7;
+        Sun,  2 Jul 2023 19:57:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688327589;
-        bh=HsjOsyZpM0XOvf7Yw5OEliG1tMtf61Syx8aBjyVFuTs=;
+        s=k20201202; t=1688327866;
+        bh=4y9MrXKgJtTEJJlZHSjciMrEjHEkk2Ac2XXS2rPb57c=;
         h=From:To:Cc:Subject:Date:From;
-        b=tqCaR/ZOxU65zgiAhirB2u1HT1q5nQJdy18uVkp9GqoSl3SadVDDD9xAt3/4EMVUA
-         mF/SbIpU/rwyvQhdx4YYblJ/y8eySFDVKRTBGKh6V0nieZj5yWiBVCjGSb24Hacrjm
-         8jwWSxngd5ATsdyMxFHt7DpfoFEnipeP5Ukaso3cVjWLBzHu8E+hke5r7Q/1kBEkfr
-         rzqmTpNfx6Af85CfJMHQ5RLn/Zr9HsX/O2Qo171yn1rEnpGG3i4FrsTWAA4I6PIhW+
-         4Z5iDC2DjywQmZz7S/J7Lh/geIvipx5jeWe8zmTppQ9TaNvJ0lwKCsRl06eL7dfgac
-         AIJBvJw3SNyJg==
+        b=BupqXY0Dk2PyEDkrfKpUdV6KkAMr/VP4DFTwyzIRLElMMEdoquPk9QaCyjHKC+k3s
+         AUhhI5w8Dn+6to4+ItvOCDFW7XiN5za8UA0wQx2F+IOoSUBlFfP+Ue0VPjF8VKxngm
+         sMGQhqD0scpwikgVUcb/wDwA1+lZT9bLyNJgkF0WjRcK+LhMovNzZErABOAvMcc168
+         5JTsbz1xIQqdHNS5hWlqX4eGf3HZd+CSxbfqHz71EuZlEluvZ0s07pk/wJI5JyJa8g
+         EFs/cvyV/9tRzvfwsDp+LzUr1E3VQGeMTHnzmqNdAWECB8o7pGYkByixxWFsaEIvVU
+         93aDY0kgmiS9A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steve Capper <steve.capper@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sasha Levin <sashal@kernel.org>, anshuman.khandual@arm.com,
-        wangkefeng.wang@huawei.com, quic_zhenhuah@quicinc.com,
-        chenfeiyang@loongson.cn, bhe@redhat.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4] arm64: mm: fix VA-range sanity check
-Date:   Sun,  2 Jul 2023 15:53:02 -0400
-Message-Id: <20230702195306.1788976-1-sashal@kernel.org>
+Cc:     Shigeru Yoshida <syoshida@redhat.com>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, joel@joelfernandes.org,
+        josh@joshtriplett.org, boqun.feng@gmail.com, rcu@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 1/4] rcu-tasks: Avoid pr_info() with spin lock in cblist_init_generic()
+Date:   Sun,  2 Jul 2023 15:57:39 -0400
+Message-Id: <20230702195743.1793074-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.249
+X-stable-base: Linux 6.4.1
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -64,104 +60,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Shigeru Yoshida <syoshida@redhat.com>
 
-[ Upstream commit ab9b4008092c86dc12497af155a0901cc1156999 ]
+[ Upstream commit 5fc8cbe4cf0fd34ded8045c385790c3bf04f6785 ]
 
-Both create_mapping_noalloc() and update_mapping_prot() sanity-check
-their 'virt' parameter, but the check itself doesn't make much sense.
-The condition used today appears to be a historical accident.
+pr_info() is called with rtp->cbs_gbl_lock spin lock locked.  Because
+pr_info() calls printk() that might sleep, this will result in BUG
+like below:
 
-The sanity-check condition:
+[    0.206455] cblist_init_generic: Setting adjustable number of callback queues.
+[    0.206463]
+[    0.206464] =============================
+[    0.206464] [ BUG: Invalid wait context ]
+[    0.206465] 5.19.0-00428-g9de1f9c8ca51 #5 Not tainted
+[    0.206466] -----------------------------
+[    0.206466] swapper/0/1 is trying to lock:
+[    0.206467] ffffffffa0167a58 (&port_lock_key){....}-{3:3}, at: serial8250_console_write+0x327/0x4a0
+[    0.206473] other info that might help us debug this:
+[    0.206473] context-{5:5}
+[    0.206474] 3 locks held by swapper/0/1:
+[    0.206474]  #0: ffffffff9eb597e0 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic.constprop.0+0x14/0x1f0
+[    0.206478]  #1: ffffffff9eb579c0 (console_lock){+.+.}-{0:0}, at: _printk+0x63/0x7e
+[    0.206482]  #2: ffffffff9ea77780 (console_owner){....}-{0:0}, at: console_emit_next_record.constprop.0+0x111/0x330
+[    0.206485] stack backtrace:
+[    0.206486] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-00428-g9de1f9c8ca51 #5
+[    0.206488] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
+[    0.206489] Call Trace:
+[    0.206490]  <TASK>
+[    0.206491]  dump_stack_lvl+0x6a/0x9f
+[    0.206493]  __lock_acquire.cold+0x2d7/0x2fe
+[    0.206496]  ? stack_trace_save+0x46/0x70
+[    0.206497]  lock_acquire+0xd1/0x2f0
+[    0.206499]  ? serial8250_console_write+0x327/0x4a0
+[    0.206500]  ? __lock_acquire+0x5c7/0x2720
+[    0.206502]  _raw_spin_lock_irqsave+0x3d/0x90
+[    0.206504]  ? serial8250_console_write+0x327/0x4a0
+[    0.206506]  serial8250_console_write+0x327/0x4a0
+[    0.206508]  console_emit_next_record.constprop.0+0x180/0x330
+[    0.206511]  console_unlock+0xf7/0x1f0
+[    0.206512]  vprintk_emit+0xf7/0x330
+[    0.206514]  _printk+0x63/0x7e
+[    0.206516]  cblist_init_generic.constprop.0.cold+0x24/0x32
+[    0.206518]  rcu_init_tasks_generic+0x5/0xd9
+[    0.206522]  kernel_init_freeable+0x15b/0x2a2
+[    0.206523]  ? rest_init+0x160/0x160
+[    0.206526]  kernel_init+0x11/0x120
+[    0.206527]  ret_from_fork+0x1f/0x30
+[    0.206530]  </TASK>
+[    0.207018] cblist_init_generic: Setting shift to 1 and lim to 1.
 
-	if ((virt >= PAGE_END) && (virt < VMALLOC_START)) {
-		[ ... warning here ... ]
-		return;
-	}
+This patch moves pr_info() so that it is called without
+rtp->cbs_gbl_lock locked.
 
-... can only be true for the KASAN shadow region or the module region,
-and there's no reason to exclude these specifically for creating and
-updateing mappings.
-
-When arm64 support was first upstreamed in commit:
-
-  c1cc1552616d0f35 ("arm64: MMU initialisation")
-
-... the condition was:
-
-	if (virt < VMALLOC_START) {
-		[ ... warning here ... ]
-		return;
-	}
-
-At the time, VMALLOC_START was the lowest kernel address, and this was
-checking whether 'virt' would be translated via TTBR1.
-
-Subsequently in commit:
-
-  14c127c957c1c607 ("arm64: mm: Flip kernel VA space")
-
-... the condition was changed to:
-
-	if ((virt >= VA_START) && (virt < VMALLOC_START)) {
-		[ ... warning here ... ]
-		return;
-	}
-
-This appear to have been a thinko. The commit moved the linear map to
-the bottom of the kernel address space, with VMALLOC_START being at the
-halfway point. The old condition would warn for changes to the linear
-map below this, and at the time VA_START was the end of the linear map.
-
-Subsequently we cleaned up the naming of VA_START in commit:
-
-  77ad4ce69321abbe ("arm64: memory: rename VA_START to PAGE_END")
-
-... keeping the erroneous condition as:
-
-	if ((virt >= PAGE_END) && (virt < VMALLOC_START)) {
-		[ ... warning here ... ]
-		return;
-	}
-
-Correct the condition to check against the start of the TTBR1 address
-space, which is currently PAGE_OFFSET. This simplifies the logic, and
-more clearly matches the "outside kernel range" message in the warning.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Steve Capper <steve.capper@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Link: https://lore.kernel.org/r/20230615102628.1052103-1-mark.rutland@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+Tested-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/mm/mmu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/rcu/tasks.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 5cf575f23af28..8e934bb44f12e 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -399,7 +399,7 @@ static phys_addr_t pgd_pgtable_alloc(int shift)
- static void __init create_mapping_noalloc(phys_addr_t phys, unsigned long virt,
- 				  phys_addr_t size, pgprot_t prot)
- {
--	if ((virt >= PAGE_END) && (virt < VMALLOC_START)) {
-+	if (virt < PAGE_OFFSET) {
- 		pr_warn("BUG: not creating mapping for %pa at 0x%016lx - outside kernel range\n",
- 			&phys, virt);
- 		return;
-@@ -426,7 +426,7 @@ void __init create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
- static void update_mapping_prot(phys_addr_t phys, unsigned long virt,
- 				phys_addr_t size, pgprot_t prot)
- {
--	if ((virt >= PAGE_END) && (virt < VMALLOC_START)) {
-+	if (virt < PAGE_OFFSET) {
- 		pr_warn("BUG: not updating mapping for %pa at 0x%016lx - outside kernel range\n",
- 			&phys, virt);
- 		return;
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index 5f4fc8184dd0b..65df1aaf0ce9b 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -241,7 +241,6 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+ 	if (rcu_task_enqueue_lim < 0) {
+ 		rcu_task_enqueue_lim = 1;
+ 		rcu_task_cb_adjust = true;
+-		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
+ 	} else if (rcu_task_enqueue_lim == 0) {
+ 		rcu_task_enqueue_lim = 1;
+ 	}
+@@ -272,6 +271,10 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
+ 		raw_spin_unlock_rcu_node(rtpcp); // irqs remain disabled.
+ 	}
+ 	raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
++
++	if (rcu_task_cb_adjust)
++		pr_info("%s: Setting adjustable number of callback queues.\n", __func__);
++
+ 	pr_info("%s: Setting shift to %d and lim to %d.\n", __func__, data_race(rtp->percpu_enqueue_shift), data_race(rtp->percpu_enqueue_lim));
+ }
+ 
 -- 
 2.39.2
 
