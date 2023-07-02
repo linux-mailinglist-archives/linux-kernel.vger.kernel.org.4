@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736BE74501A
+	by mail.lfdr.de (Postfix) with ESMTP id C78B274501C
 	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 20:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjGBS41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 14:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
+        id S230242AbjGBS4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 14:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjGBS4X (ORCPT
+        with ESMTP id S230110AbjGBS4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 14:56:23 -0400
+        Sun, 2 Jul 2023 14:56:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0188DC6;
-        Sun,  2 Jul 2023 11:56:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8003F121;
+        Sun,  2 Jul 2023 11:56:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4747260DDA;
-        Sun,  2 Jul 2023 18:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AB996C433C8;
-        Sun,  2 Jul 2023 18:53:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EF0060DDD;
+        Sun,  2 Jul 2023 18:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 78969C433C8;
+        Sun,  2 Jul 2023 18:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688323981;
-        bh=4Adse8C3SvGQMVKiLfwOhrOqgOGS7oHnNq6KbrrSBtQ=;
+        s=k20201202; t=1688323983;
+        bh=NXJWNqcTIbq5svjCIgwegCWmmE+lJo+SDOM9IQE/VeE=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tVQPesappFIJltnhvjcMAKKfjEixsaEJGNT7elFjbn7N8CtE7ycDWegjhHVtWr8Fi
-         oc05/6CZkiv0qlUSr+g/wzyBiIIXxCqxlR8XiP8psa9pC6zvHpM7uihrFleYHLfJlk
-         ZZusq6d4CnmA79eK+Dm26goyEiZrxYatfSSt31PL5BQ/SND5/Im3kJJ4Xt3PpsGfeK
-         maYv/LW7AMgj37WC0l+E570/dUziJSIiJcaeJIxTtlQK6D7jX8DDfJg4nwufaEdjdD
-         TmueIhVpjrZsyNFxhXKBKIPWN/sd/5uGmk4qaes8ybZak627pp2Zo2KBpVpoSu6GqG
-         p/dMbZ+HeXKfA==
+        b=gfrXTGD8YLsdXoU2p6MDo+WGIssQVtdSN3kq3PFPN51PDEFA6izh1jrpZtNBOz1YS
+         PkrW2Nnj/k9AysRjYzrHxCcGuEj7H0HZea8rgdqYyroeQ4NbHq7QwON9u5o7PpX/LG
+         3AlFyN+kqJgG09hBAr381DCGwZNiETb8pEu4c6c9JrUWM1BxiPD0zXr2BfWTb/2jGe
+         j+5lLpfZ24qkVZ53bbJSq5+46ksRC5c+gsTUUXK1lF43IUlNSp6YlnbxkxV/au3iSm
+         Lxs9jbzmc61VvEPUFOpIr+y7sOznOBv9BGrtFom0mnB38wE7M9h98szDfC4UMS29dL
+         8/cG68x8c7HzA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97510C0C40E;
-        Sun,  2 Jul 2023 18:53:01 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.5-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 66171C395F1;
+        Sun,  2 Jul 2023 18:53:03 +0000 (UTC)
+Subject: Re: [GIT PULL] vfs fixes
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZKFlfZS3y0eBI63e@sai>
-References: <ZKFlfZS3y0eBI63e@sai>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZKFlfZS3y0eBI63e@sai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc1
-X-PR-Tracked-Commit-Id: 6fb605c41d731d511b33045d0cd713d706970b6d
+In-Reply-To: <20230702-wohlklang-heilkraft-839e2439651b@brauner>
+References: <20230702-wohlklang-heilkraft-839e2439651b@brauner>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230702-wohlklang-heilkraft-839e2439651b@brauner>
+X-PR-Tracked-Remote: git@gitolite.kernel.org:pub/scm/linux/kernel/git/vfs/vfs tags/v6.5/vfs.fixes
+X-PR-Tracked-Commit-Id: dff745c1221a402b4921d54f292288373cff500c
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5def00ca25fa5697cfe352e675dc7c03116b2403
-Message-Id: <168832398161.18363.11198634422500174686.pr-tracker-bot@kernel.org>
-Date:   Sun, 02 Jul 2023 18:53:01 +0000
-To:     Wolfram Sang <wsa@kernel.org>
+X-PR-Merge-Commit-Id: 28c7980fa14a3fbd8926686cfffb89b9542b0da1
+Message-Id: <168832398341.18363.7184591957538463075.pr-tracker-bot@kernel.org>
+Date:   Sun, 02 Jul 2023 18:53:03 +0000
+To:     Christian Brauner <brauner@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andi Shyti <andi.shyti@kernel.org>
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 2 Jul 2023 13:54:37 +0200:
+The pull request you sent on Sun,  2 Jul 2023 13:28:43 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc1
+> git@gitolite.kernel.org:pub/scm/linux/kernel/git/vfs/vfs tags/v6.5/vfs.fixes
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5def00ca25fa5697cfe352e675dc7c03116b2403
+https://git.kernel.org/torvalds/c/28c7980fa14a3fbd8926686cfffb89b9542b0da1
 
 Thank you!
 
