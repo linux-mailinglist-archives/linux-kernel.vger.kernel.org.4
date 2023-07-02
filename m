@@ -2,249 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70485744E43
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EE3744E46
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjGBPJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 11:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
+        id S229848AbjGBPQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 11:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjGBPJo (ORCPT
+        with ESMTP id S229808AbjGBPQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 11:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01C3E67;
-        Sun,  2 Jul 2023 08:09:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D66A60C23;
-        Sun,  2 Jul 2023 15:09:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D361C433C8;
-        Sun,  2 Jul 2023 15:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688310582;
-        bh=qYxj8FKfyA8BqS7gNXhxOkvG6rseYZjPp8at5kUg6i8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k/E3kpP3brDnwOLzcQB/glehVf910J9kZBduzkziouCApRzWe8sIVg9Jzr2Pn9o6v
-         5DIHykwGgSgW3odLVCt0CBx1W7GecvRkzpHFEHGHIjuWVfOFVpyBcUFFT11w/hp//J
-         zN5p3dgGPW/Joq2VI9/wpvEaD9NEGYKLXBPrOl3O1XmTHNwCfphubQzYFy+qn8wSYV
-         Jm0M8KgOBLM4XnHjwIgvJW2jCtlxhPYmLIy+TIjfdcCTejkgmHPLoSpjF1U2o5TZME
-         CRdXv7SHclHEiuG7Zjs4oZH0g2OaSO7eSagu0D1aRSnw+xucXGnehisxHx4GbSgq6f
-         nzg7O7cGyZ3fg==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-558a79941c6so2188969eaf.3;
-        Sun, 02 Jul 2023 08:09:42 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz3NSpfcKy20qGsRQEMm+maK4QZCpzx2hy3fjBmOvZSDkdZlBgu
-        7QmoFfH/Lm49ipHbDNgXQK262n6aPAeJ2Q8vxeU=
-X-Google-Smtp-Source: ACHHUZ6n1ermOSxbljVqr3hVEwhRKvJS33Dp2Z4Y1CWhUSGNXZ0dMcsgPlHYAgAJMl6OCg1henpeTUHlMbyt8aA93RY=
-X-Received: by 2002:a4a:3307:0:b0:565:afcf:fd9c with SMTP id
- q7-20020a4a3307000000b00565afcffd9cmr5842787ooq.3.1688310581745; Sun, 02 Jul
- 2023 08:09:41 -0700 (PDT)
+        Sun, 2 Jul 2023 11:16:00 -0400
+Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6179E69
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 08:15:58 -0700 (PDT)
+Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b8959fb3c7so2462165ad.0
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 08:15:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688310958; x=1690902958;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Uqx05DsOQphTiupSJnXSJDQY0vj7xZsIgdvTNkwdc4I=;
+        b=hJrczI7TRE22C8DE0Kckxd62rU5bFcmOQ/hO3fECzTVJIpfZtedcn8FDTvK6/cxM3E
+         UUcpAdBnijkoKtMyZ6WLeiO2tttGTCVwTODNDVNzzsLxSsqfLLLe23iNdkKW0mW+DuKY
+         FhYXZOQRs6En7r9vu2k778iLSZIKO1APd9rclk0u/8AYSHSDcCrG11uoCdDEzTH1l+i5
+         8CTpNWo+Giv7Zny8CI+/TsGTfdbLSozus4k+6EtM7yvKvT8kCVDZCuLLgtH+djhFj/Rj
+         X6LlGNGjtqk+Sl4x1iAX2W+T1XX0eT+Y1qwNN3uPcdTZ8hmm0DskpktWdkp0kws9RJag
+         jEOA==
+X-Gm-Message-State: ABy/qLYMdBHSYxhXb1PJUT+zfBVwjWkFJjPsfFy9TdFzxmux9NC0i39r
+        aoAZNtDgHPyoDwZSG9fKBlT34mUEcDDRzxPAqgG3q8xhfj8Z
+X-Google-Smtp-Source: APBJJlGq9lPKarcsUF7brIRq5xJr+f1dOKBFojk/wn5gzcGstP+bS9/Z+X3ogEpttE7OoTGn0J2Nzuo+izXpAWX/Up0fjn2Y/sb+
 MIME-Version: 1.0
-References: <20230629160351.2996541-1-masahiroy@kernel.org> <CAJFTR8QzTPzyuKfEpkBP-2f3o5zPCLHvALWk2RFfAfXeiK10Yw@mail.gmail.com>
-In-Reply-To: <CAJFTR8QzTPzyuKfEpkBP-2f3o5zPCLHvALWk2RFfAfXeiK10Yw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 3 Jul 2023 00:09:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASU5m9P7G3zwWdrFydxk-GZq2uKZ2HOfFncB_4AXN+isQ@mail.gmail.com>
-Message-ID: <CAK7LNASU5m9P7G3zwWdrFydxk-GZq2uKZ2HOfFncB_4AXN+isQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kconfig: menuconfig: simplify global jump key assignment
-To:     Jesse T <mr.bossman075@gmail.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a17:902:e847:b0:1b8:919e:bd with SMTP id
+ t7-20020a170902e84700b001b8919e00bdmr1177364plg.13.1688310958243; Sun, 02 Jul
+ 2023 08:15:58 -0700 (PDT)
+Date:   Sun, 02 Jul 2023 08:15:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000efc64705ff8286a1@google.com>
+Subject: [syzbot] [wireless?] WARNING in rate_control_rate_init (2)
+From:   syzbot <syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 12:58=E2=80=AFPM Jesse T <mr.bossman075@gmail.com> w=
-rote:
->
-> On Thu, Jun 29, 2023 at 12:03=E2=80=AFPM Masahiro Yamada <masahiroy@kerne=
-l.org> wrote:
-> >
-> > Commit 95ac9b3b585d ("menuconfig: Assign jump keys per-page instead
-> > of globally") injects a lot of hacks to the bottom of the textbox
-> > infrastructure.
-> >
-> > I reverted many of them without changing the behavior. (almost)
-> > Now, the key markers are inserted when constructing the search result
-> > instead of updating the text buffer on-the-fly.
-> >
-> > The buffer passed to the textbox got back to a constant string.
-> > The ugly casts from (const char *) to (char *) went away.
-> >
-> > A disadvantage is that the same key numbers might be diplayed multiple
-> > times in the dialog if you use a huge window (but I believe it is
-> > unlikely to happen).
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/kconfig/lkc.h              |  1 +
-> >  scripts/kconfig/lxdialog/dialog.h  | 10 ++--
-> >  scripts/kconfig/lxdialog/textbox.c | 68 +++++++++--------------
-> >  scripts/kconfig/mconf.c            | 86 +++++++++++++++++-------------
-> >  scripts/kconfig/menu.c             | 22 ++++++--
-> >  5 files changed, 97 insertions(+), 90 deletions(-)
-> >
-> > diff --git a/scripts/kconfig/lkc.h b/scripts/kconfig/lkc.h
-> > index e7118d62a45f..d5c27180ce91 100644
-> > --- a/scripts/kconfig/lkc.h
-> > +++ b/scripts/kconfig/lkc.h
-> > @@ -101,6 +101,7 @@ const char *menu_get_prompt(struct menu *menu);
-> >  struct menu *menu_get_parent_menu(struct menu *menu);
-> >  bool menu_has_help(struct menu *menu);
-> >  const char *menu_get_help(struct menu *menu);
-> > +int get_jump_key(void);
-> >  struct gstr get_relations_str(struct symbol **sym_arr, struct list_hea=
-d *head);
-> >  void menu_get_ext_help(struct menu *menu, struct gstr *help);
-> >
-> > diff --git a/scripts/kconfig/lxdialog/dialog.h b/scripts/kconfig/lxdial=
-og/dialog.h
-> > index 347daf25fdc8..cd1b59c24b21 100644
-> > --- a/scripts/kconfig/lxdialog/dialog.h
-> > +++ b/scripts/kconfig/lxdialog/dialog.h
-> > @@ -196,13 +196,9 @@ int first_alpha(const char *string, const char *ex=
-empt);
-> >  int dialog_yesno(const char *title, const char *prompt, int height, in=
-t width);
-> >  int dialog_msgbox(const char *title, const char *prompt, int height,
-> >                   int width, int pause);
-> > -
-> > -
-> > -typedef void (*update_text_fn)(char *buf, size_t start, size_t end, vo=
-id
-> > -                              *_data);
-> > -int dialog_textbox(const char *title, char *tbuf, int initial_height,
-> > -                  int initial_width, int *keys, int *_vscroll, int *_h=
-scroll,
-> > -                  update_text_fn update_text, void *data);
-> > +int dialog_textbox(const char *title, const char *tbuf, int initial_he=
-ight,
-> > +                  int initial_width, int *_vscroll, int *_hscroll,
-> > +                  int (*extra_key_cb)(int, int, int, void *), void *da=
-ta);
-> >  int dialog_menu(const char *title, const char *prompt,
-> >                 const void *selected, int *s_scroll);
-> >  int dialog_checklist(const char *title, const char *prompt, int height=
-,
-> > diff --git a/scripts/kconfig/lxdialog/textbox.c b/scripts/kconfig/lxdia=
-log/textbox.c
-> > index bc4d4fb1dc75..e6cd7bb83746 100644
-> > --- a/scripts/kconfig/lxdialog/textbox.c
-> > +++ b/scripts/kconfig/lxdialog/textbox.c
-> > @@ -10,8 +10,8 @@
-> >
-> >  static int hscroll;
-> >  static int begin_reached, end_reached, page_length;
-> > -static char *buf;
-> > -static char *page;
-> > +static const char *buf, *page;
-> > +static int start, end;
-> >
-> >  /*
-> >   * Go back 'n' lines in text. Called by dialog_textbox().
-> > @@ -98,21 +98,10 @@ static void print_line(WINDOW *win, int row, int wi=
-dth)
-> >  /*
-> >   * Print a new page of text.
-> >   */
-> > -static void print_page(WINDOW *win, int height, int width, update_text=
-_fn
-> > -                      update_text, void *data)
-> > +static void print_page(WINDOW *win, int height, int width)
-> >  {
-> >         int i, passed_end =3D 0;
-> >
-> > -       if (update_text) {
-> > -               char *end;
-> > -
-> > -               for (i =3D 0; i < height; i++)
-> > -                       get_line();
-> > -               end =3D page;
-> > -               back_lines(height);
-> > -               update_text(buf, page - buf, end - buf, data);
-> > -       }
-> > -
-> >         page_length =3D 0;
-> >         for (i =3D 0; i < height; i++) {
-> >                 print_line(win, i, width);
-> > @@ -142,24 +131,26 @@ static void print_position(WINDOW *win)
-> >   * refresh window content
-> >   */
-> >  static void refresh_text_box(WINDOW *dialog, WINDOW *box, int boxh, in=
-t boxw,
-> > -                            int cur_y, int cur_x, update_text_fn updat=
-e_text,
-> > -                            void *data)
-> > +                            int cur_y, int cur_x)
->
-> The change for refresh_text_box is very large.
-> Is there an easy way to split the change of `refresh_text_box` and
-> everything else
-> while still maintaining bisectability?
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    6e2332e0ab53 Merge tag 'cgroup-for-6.5' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e1c60b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f24c1070268858
+dashboard link: https://syzkaller.appspot.com/bug?extid=62d7eef57b09bfebcd84
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171c0767280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10113ebd280000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-6e2332e0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5c6bc163c340/vmlinux-6e2332e0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f1e705993336/bzImage-6e2332e0.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+62d7eef57b09bfebcd84@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5126 at net/mac80211/rate.c:48 rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
+Modules linked in:
+CPU: 0 PID: 5126 Comm: syz-executor279 Not tainted 6.4.0-syzkaller-01647-g6e2332e0ab53 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:rate_control_rate_init+0x548/0x740 net/mac80211/rate.c:48
+Code: f7 48 c7 c2 00 84 7f 8b be 09 03 00 00 48 c7 c7 c0 83 7f 8b c6 05 f9 bc d6 04 01 e8 22 ac d6 f7 e9 d8 fd ff ff e8 a8 16 f6 f7 <0f> 0b e8 c1 32 83 00 31 ff 89 c3 89 c6 e8 b6 12 f6 f7 85 db 75 27
+RSP: 0018:ffffc90003197280 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff8881070796c0 RCX: 0000000000000000
+RDX: ffff88802a51cb80 RSI: ffffffff898db228 RDI: 0000000000000005
+RBP: ffff8880255c0000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
+R13: 0000000000000000 R14: ffff888021f30de0 R15: ffff888032530000
+FS:  000055555570f300(0000) GS:ffff88806b600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000080 CR3: 000000001f594000 CR4: 0000000000350ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ sta_apply_auth_flags.constprop.0+0x424/0x4a0 net/mac80211/cfg.c:1678
+ sta_apply_parameters+0xaf8/0x16f0 net/mac80211/cfg.c:2005
+ ieee80211_add_station+0x3d0/0x620 net/mac80211/cfg.c:2070
+ rdev_add_station net/wireless/rdev-ops.h:201 [inline]
+ nl80211_new_station+0x1258/0x1b20 net/wireless/nl80211.c:7564
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
+ sock_sendmsg_nosec net/socket.c:725 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:748
+ ____sys_sendmsg+0x722/0x900 net/socket.c:2504
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2558
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2587
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc033504a69
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe0868f2d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 000000000000ae5a RCX: 00007fc033504a69
+RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 00007ffe0868f478 R09: 00007ffe0868f478
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe0868f2ec
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
-I do not think the change is large or complicated.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-It just stopped passing down 'update_text' and 'data'.
-The same pattern.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-The point is this is revert of 95ac9b3b585d
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-The revert should not be split.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-> > @@ -351,11 +333,9 @@ int dialog_textbox(const char *title, char *tbuf, =
-int initial_height,
-> >                         on_key_resize();
-> >                         goto do_resize;
-> >                 default:
-> > -                       for (i =3D 0; keys[i]; i++) {
-> > -                               if (key =3D=3D keys[i]) {
-> > -                                       done =3D true;
-> > -                                       break;
-> > -                               }
-> > +                       if (extra_key_cb(key, start, end, data)) {
->
-> `extra_key_cb` is null when not used, on the help page this will segfault=
-.
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-
-Thanks.
-I will fix it.
-
-
-
-
-> > diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
-> > index b90fff833588..5578b8bc8a23 100644
-> > --- a/scripts/kconfig/menu.c
-> > +++ b/scripts/kconfig/menu.c
-> > @@ -701,6 +701,11 @@ static void get_dep_str(struct gstr *r, struct exp=
-r *expr, const char *prefix)
-> >         }
-> >  }
-> >
-> > +int __attribute__((weak)) get_jump_key(void)
->
-> This seems like a non-optimal solution, otherwise fine.
-
-
-Do you have a better idea?
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+If you want to undo deduplication, reply with:
+#syz undup
