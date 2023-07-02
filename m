@@ -2,55 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA527744C74
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 08:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F017744C8E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 09:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjGBGmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 02:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S229644AbjGBHuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 03:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBGmM (ORCPT
+        with ESMTP id S229516AbjGBHuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 02:42:12 -0400
-Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1F2C3;
-        Sat,  1 Jul 2023 23:42:06 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:2991:0:640:bb47:0])
-        by forward500c.mail.yandex.net (Yandex) with ESMTP id C314A5E97C;
-        Sun,  2 Jul 2023 09:42:00 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id ufJuntUDda60-5bVh6QB7;
-        Sun, 02 Jul 2023 09:41:59 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1688280120;
-        bh=XiUBoiw+8W0drTZxJpGsrmWe6kl6B1XHyd8+N0mErnk=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=jIJ2sLrtjo9QdXxGAw0kf9pBVRsfZn2SjCyf+pFyXLmPIkKZNzjIG7rMBCwL6Eoqj
-         dhDl21QNwghiAmKPhS6UAV60RM636dbPORMcZzA4hmU5pmexnlGNeDcvo+8kaC0wI6
-         uZdslIR39olm1oxX8P36oYw1V9HVli+puHQiALFU=
-Authentication-Results: mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <b0315095-0634-1eeb-fbd7-86f44d00d659@yandex.ru>
-Date:   Sun, 2 Jul 2023 11:41:56 +0500
+        Sun, 2 Jul 2023 03:50:06 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2BA10E6
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 00:49:41 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso2707811a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 00:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688284179; x=1690876179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OvxoQCcibS+AeU+E0ygHuM6m7OcRFNmks4L94pMdxYI=;
+        b=ZtZXwH2MeGsjV8yFfBnJjWlbkQzmf4oSMr3YNv3pBErULIxGVXHyX3fa05xeDAaUcR
+         FtoTrbYdH97gMy7NhtyE8jKvgcB1m+5PJkZ4pXFp36b0WrwMVW6GCTQcPyG4IlQXpqXQ
+         H/ebOzOmkPiqEc0GPETYzScw6NtBD80CoFCeZsaEbxFyao3c8ckIcEa0TOig5Yem7olB
+         ZcWNGsHW1+0NGnU8lRyK3+5ISROloHE8U32K27k2x/fwd5k1v7bGEMkA1AQWRJwFJDL/
+         L+31h03h+9svZnYKFBNrm7BV89IrZm+nrmZcwQLIpy4JgKzUOM0XNEe/tCbIVfif9nfS
+         gkIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688284179; x=1690876179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OvxoQCcibS+AeU+E0ygHuM6m7OcRFNmks4L94pMdxYI=;
+        b=OZUXap7R+ORaoOEkrpnjQDr7yc/ZE3q7Dxfq1lPVJvDFZdDIPVKGXDIlNUwyHcVyz9
+         wi+KNTJ8rzkkZLColUOnmCt6AYzTPtZNV9DgRWZJBsltShAXPjQcFjL5ptFNI+Ms83XI
+         2iKJg0Zfh2Od85+wsqBu1r33YEotpdcoFCxBIZBmpzPxU3xsCk8Mpb8qizOzTvnFSAvv
+         iey+26n0ERvKq0FFX/KVywD3dfgD/0AgRealK0WXUmBE5gLzNbiaq3kcJlx6fsmQhqHs
+         TMSVtRw7h48hS0IajVJ1+Mph5ckP42l6iz5rOwnxW4E9FkPWBhOQwla1MQK68VzY4T6J
+         PMlA==
+X-Gm-Message-State: ABy/qLbZ/jmwQFr8jnyMdD2zzMRB/GZQEuHaLRb1s7Ze+/3AMlXEmQD8
+        rrcfELW5etMFTLSI7SWCSV8U+Hv4Pxbf5HIRC65A
+X-Google-Smtp-Source: APBJJlGufhzK/2ECRJBm7gDRrro6kXoBCSrchWDG2fH7jB9xtkPCg+JFTBP6i6pSVuIMpszBV7lZcb+qPuqMMarDNGE=
+X-Received: by 2002:a05:6a20:8e14:b0:123:4ffe:4018 with SMTP id
+ y20-20020a056a208e1400b001234ffe4018mr9366994pzj.60.1688284179674; Sun, 02
+ Jul 2023 00:49:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/2] v3: F_OFD_GETLK extension to read lock info
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-References: <20230622165225.2772076-1-stsp2@yandex.ru>
- <b18c49ada119b6904b92375a847ce8c764cb1663.camel@kernel.org>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <b18c49ada119b6904b92375a847ce8c764cb1663.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230627113652.65283-1-maxime.coquelin@redhat.com> <20230627113652.65283-2-maxime.coquelin@redhat.com>
+In-Reply-To: <20230627113652.65283-2-maxime.coquelin@redhat.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Sun, 2 Jul 2023 15:49:28 +0800
+Message-ID: <CACycT3vvOaNcrigbaqbGKJM9KxKR3nGmOQRDUfd1e08+XDp1rA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] vduse: validate block features only with block devices
+To:     Maxime Coquelin <maxime.coquelin@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Marchand <david.marchand@redhat.com>,
+        Cindy Lu <lulu@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Netdev <netdev@vger.kernel.org>, xuanzhuo@linux.alibaba.com,
+        Eugenio Perez Martin <eperezma@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,20 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 27, 2023 at 7:37=E2=80=AFPM Maxime Coquelin
+<maxime.coquelin@redhat.com> wrote:
+>
+> This patch is preliminary work to enable network device
+> type support to VDUSE.
+>
+> As VIRTIO_BLK_F_CONFIG_WCE shares the same value as
+> VIRTIO_NET_F_HOST_TSO4, we need to restrict its check
+> to Virtio-blk device type.
+>
+> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
+> ---
 
-27.06.2023 21:23, Jeff Layton пишет:
-> I've taken the first two patches into my locks-next branch, so they
-> should end up in linux-next soon. Adding support for testing this to
-> fstests is a hard requirement before this will be merged into mainline.
-The test-suite is entirely broken.
-I posted the patch:
+Reviewed-by: Xie Yongji <xieyongji@bytedance.com>
 
-https://marc.info/?l=fstests&m=168811805324487&w=2
-
-And the question:
-https://marc.info/?l=fstests&m=168811862324941&w=2
-
-But no reaction.
-Unless someone helps with reviewing,
-nothing will likely happen.
-
+Thanks,
+Yongji
