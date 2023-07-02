@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8183174520B
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E91D745203
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbjGBUCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 16:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
+        id S231418AbjGBUCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 16:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233168AbjGBUCd (ORCPT
+        with ESMTP id S233210AbjGBUBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 16:02:33 -0400
+        Sun, 2 Jul 2023 16:01:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E449D658F;
-        Sun,  2 Jul 2023 12:59:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A35FCD;
+        Sun,  2 Jul 2023 12:58:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D9C660CD4;
-        Sun,  2 Jul 2023 19:58:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858B0C433C9;
-        Sun,  2 Jul 2023 19:58:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8A4D60CE8;
+        Sun,  2 Jul 2023 19:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3658BC433C7;
+        Sun,  2 Jul 2023 19:58:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688327881;
-        bh=z3A5ljEUSSZkh8GQc8qKZuVT9cEm6l5xTVXcd9Kwxgk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kVMqbc9m31VPhvnwXjYbH0xRHUTAHF1kr1wFLMWzzO4TzcxzngAby3qeJCfszUHPD
-         g7c3DiK41dxiTp5N7IxjE5hYBGCHgBuq8ohNje2SkwaZKyHlSTLJqKCb9VjUkFnEZi
-         qxxZS9dkQuOX0Q2M38QDQkwrDA/8Yhoqf3GJieotL0lS/P4rAsU9SFmZ0Oh7G4/eKq
-         Lj5zBnDFNjvZhk0vcit3ILeR2Dqj56DZ40nKKEq6XCsUA1RQVf/ImxAJzJG/nrsLHB
-         X1MusNDCrfoOe/bkom4ojnPO1t7WESOQEkoJtwhpLeR/aafCa+548HTKxe2JbSx1LE
-         HHw8Un2PoCMcQ==
+        s=k20201202; t=1688327886;
+        bh=Mq0xtGMxfVEcqHzBb9BECNePlXHRNFvBmtA81QNno+4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BhbcJt5gYRCOkCaUCAvYTOrtRXEkINdX8qoD2F8Hg/YvMvwBq+svABBnwcIJt2nHN
+         td/v87wLSp9nCuLiwdrIcRnoIq0NgzyGckRrwQ5opkZwK853i0TpPa++HYYb+IaYnh
+         TJW6dk3vkVsCJyqF12IoKk/fWVyO60H/9tWYfGYQnN7JssBNej4+IXFAtpGIApdugU
+         H/CHo6R23sToFiaXbGV62YSPG5msYq2q/l95Mn4g2gdXxD6DQAMyYGeZwvke2BPCtv
+         TNTxtK3cjmLUBPnXU5NjlTSgfusK8nNQDd95rZBUCWNaZOACil/Ua8nooj0PbV+e2J
+         8BJ7VxV/SPC1w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>, frederic@kernel.org,
         quic_neeraju@quicinc.com, joel@joelfernandes.org,
         josh@joshtriplett.org, boqun.feng@gmail.com, rcu@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 2/3] rcu: Mark additional concurrent load from ->cpu_no_qs.b.exp
-Date:   Sun,  2 Jul 2023 15:57:55 -0400
-Message-Id: <20230702195756.1793443-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15] rcu: Mark rcu_cpu_kthread() accesses to ->rcu_cpu_has_work
+Date:   Sun,  2 Jul 2023 15:58:03 -0400
+Message-Id: <20230702195803.1793491-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702195756.1793443-1-sashal@kernel.org>
-References: <20230702195756.1793443-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.37
+X-stable-base: Linux 5.15.119
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -62,26 +60,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-[ Upstream commit 9146eb25495ea8bfb5010192e61e3ed5805ce9ef ]
+[ Upstream commit a24c1aab652ebacf9ea62470a166514174c96fe1 ]
 
-The per-CPU rcu_data structure's ->cpu_no_qs.b.exp field is updated
-only on the instance corresponding to the current CPU, but can be read
-more widely.  Unmarked accesses are OK from the corresponding CPU, but
-only if interrupts are disabled, given that interrupt handlers can and
-do modify this field.
-
-Unfortunately, although the load from rcu_preempt_deferred_qs() is always
-carried out from the corresponding CPU, interrupts are not necessarily
-disabled.  This commit therefore upgrades this load to READ_ONCE.
-
-Similarly, the diagnostic access from synchronize_rcu_expedited_wait()
-might run with interrupts disabled and from some other CPU.  This commit
-therefore marks this load with data_race().
-
-Finally, the C-language access in rcu_preempt_ctxt_queue() is OK as
-is because interrupts are disabled and this load is always from the
-corresponding CPU.  This commit adds a comment giving the rationale for
-this access being safe.
+The rcu_data structure's ->rcu_cpu_has_work field can be modified by
+any CPU attempting to wake up the rcuc kthread.  Therefore, this commit
+marks accesses to this field from the rcu_cpu_kthread() function.
 
 This data race was reported by KCSAN.  Not appropriate for backporting
 due to failure being unlikely.
@@ -89,45 +72,28 @@ due to failure being unlikely.
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/tree_exp.h    | 2 +-
- kernel/rcu/tree_plugin.h | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ kernel/rcu/tree.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index e25321dbb068e..aa3ec3c3b9f75 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -641,7 +641,7 @@ static void synchronize_rcu_expedited_wait(void)
- 					"O."[!!cpu_online(cpu)],
- 					"o."[!!(rdp->grpmask & rnp->expmaskinit)],
- 					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
--					"D."[!!(rdp->cpu_no_qs.b.exp)]);
-+					"D."[!!data_race(rdp->cpu_no_qs.b.exp)]);
- 			}
- 		}
- 		pr_cont(" } %lu jiffies s: %lu root: %#lx/%c\n",
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index e3142ee35fc6a..044026abfdd7f 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -257,6 +257,8 @@ static void rcu_preempt_ctxt_queue(struct rcu_node *rnp, struct rcu_data *rdp)
- 	 * GP should not be able to end until we report, so there should be
- 	 * no need to check for a subsequent expedited GP.  (Though we are
- 	 * still in a quiescent state in any case.)
-+	 *
-+	 * Interrupts are disabled, so ->cpu_no_qs.b.exp cannot change.
- 	 */
- 	if (blkd_state & RCU_EXP_BLKD && rdp->cpu_no_qs.b.exp)
- 		rcu_report_exp_rdp(rdp);
-@@ -941,7 +943,7 @@ notrace void rcu_preempt_deferred_qs(struct task_struct *t)
- {
- 	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
- 
--	if (rdp->cpu_no_qs.b.exp)
-+	if (READ_ONCE(rdp->cpu_no_qs.b.exp))
- 		rcu_report_exp_rdp(rdp);
- }
- 
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index df016f6d0662c..48f3e90c5de53 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2826,12 +2826,12 @@ static void rcu_cpu_kthread(unsigned int cpu)
+ 		*statusp = RCU_KTHREAD_RUNNING;
+ 		local_irq_disable();
+ 		work = *workp;
+-		*workp = 0;
++		WRITE_ONCE(*workp, 0);
+ 		local_irq_enable();
+ 		if (work)
+ 			rcu_core();
+ 		local_bh_enable();
+-		if (*workp == 0) {
++		if (!READ_ONCE(*workp)) {
+ 			trace_rcu_utilization(TPS("End CPU kthread@rcu_wait"));
+ 			*statusp = RCU_KTHREAD_WAITING;
+ 			return;
 -- 
 2.39.2
 
