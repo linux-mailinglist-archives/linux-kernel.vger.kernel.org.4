@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3868744CF5
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C21A744CFE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjGBJ1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 05:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S229826AbjGBJdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 05:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjGBJ1b (ORCPT
+        with ESMTP id S229460AbjGBJdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 05:27:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5621CE4D
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 02:27:30 -0700 (PDT)
+        Sun, 2 Jul 2023 05:33:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E4DE4D;
+        Sun,  2 Jul 2023 02:33:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4BEF60BAA
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 09:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B256C433C7;
-        Sun,  2 Jul 2023 09:27:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDCE860BAA;
+        Sun,  2 Jul 2023 09:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DC4C433C8;
+        Sun,  2 Jul 2023 09:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688290049;
-        bh=aztMAMD4OWWotTcUcWcq9B4VxqpXV7yvEBBwkcTZyW8=;
+        s=k20201202; t=1688290420;
+        bh=UH1n2yTthj3B7p1yEhf0i44VbnEaiSmdNcGTKxmKXBU=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DS2vUhLKDMJ3RwZQNxjAqd24o0UXge1LGSBLrZ8SO69fCueSbWRg2m3gcMqJJRMt/
-         s5DmqM7j5gxtwulu7M7oiWUtNo6/jPEekdwiwST6XJDnayVJBXdwR8DDTCydHvPwfi
-         LgwnkXxjPjeRuIFZgzS29Kx1ql/qGfDOyeTCdY2IMQDYcV6T9yzHs3S//iCuBNmmNV
-         NLjAkKxnGSoywF8P8OXsoBt2VfNGR8oztpKUTXOwKtGyfRTD+wqqM/tUjRMablM5bX
-         0ao3hGz96LVBkrFJkWHEdoXn5wP0SiXrE8QVvLYyUxmhCfdpWIhw1RMvSo6ORoXbCA
-         26Phvnk+2eDkw==
-Message-ID: <09016817-0f5f-54ed-cac4-9674f7723725@kernel.org>
-Date:   Sun, 2 Jul 2023 11:27:23 +0200
+        b=uTdpnM2eJ5SHjIeMagktSTtN8dJrOcIgCvlR4Km4jkNuqP6r3TGNihxgv0kVR0Quq
+         /er/ZPufRiDHyQhVjQ7iaE8ohRYXP763kkPiZu+SXoDCoZ1X4aZ50vLUIkJc3s4BfJ
+         DC6JbT5Req2e+ySIX/L6zFbS3WIAo0/yApEvAy1LGqQeD2BNuPnclCPIeuwWWR3dTt
+         l2zCXB426dzneu37ZoYHxcS6f8Tx62x4vy5Hf1rOJ2B08X6IG8uwEyd8V83gs9eNes
+         7HIpA/x3OH/pQP4azqgTkNL3vkb1gq3NGr/sb3N/ux1uuIkEcSFxHMlxEMAWGQKb/V
+         M469fc2Q+4LTA==
+Message-ID: <b907701b-8c5f-095d-0bce-919e1f6bb893@kernel.org>
+Date:   Sun, 2 Jul 2023 11:33:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 6/6] dt-bindings: Add YAML schemas for Marvell Odyssey DDR
- PMU
+Subject: Re: [PATCH 1/3] dt-bindings: reset: Add compatible and DT bindings
+ for Meson-C3 Reset Controller
 Content-Language: en-US
-To:     Gowthami Thiagarajan <gthiagarajan@marvell.com>, will@kernel.org,
-        mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     sgoutham@marvell.com, bbhushan2@marvell.com, gcherian@marvell.com,
-        lcherian@marvell.com
-References: <20230630120351.1143773-1-gthiagarajan@marvell.com>
- <20230630120351.1143773-7-gthiagarajan@marvell.com>
+To:     zelong dong <zelong.dong@amlogic.com>, narmstrong@baylibre.com,
+        p.zabel@pengutronix.de, khilman@baylibre.com,
+        Rob Herring <robh+dt@kernel.org>,
+        martin.blumenstingl@googlemail.com
+Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, jbrunet@baylibre.com,
+        devicetree@vger.kernel.org, kelvin.zhang@amlogic.com
+References: <20230630121059.28748-1-zelong.dong@amlogic.com>
+ <20230630121059.28748-2-zelong.dong@amlogic.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230630120351.1143773-7-gthiagarajan@marvell.com>
+In-Reply-To: <20230630121059.28748-2-zelong.dong@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,31 +64,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 14:03, Gowthami Thiagarajan wrote:
-> Add device tree bindings for Marvell Odyssey DDR PMU.
+On 30/06/2023 14:10, zelong dong wrote:
+> From: Zelong Dong <zelong.dong@amlogic.com>
+> 
+> Add new compatible and DT bindings for Amlogic's Meson-C3 Reset Controller
+> 
+> Change-Id: Ie8941818bde5b736689e43367f66827c5bc0449e
 
-For all patches:
-1. A nit, subject: drop second/last, redundant "YAML schemas for". The
-"dt-bindings" prefix is already stating that these are bindings.
+Please run scripts/checkpatch.pl and fix reported warnings. Some
+warnings can be ignored, but the code here looks like it needs a fix.
+Feel free to get in touch if the warning is not clear.
 
-2. Please use subject prefixes matching the subsystem. You can get them
-for example with `git log --oneline -- DIRECTORY_OR_FILE` on the
-directory your patch is touching.
+> Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
 
-3. Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC.  It might happen, that command when run on an
-older kernel, gives you outdated entries.  Therefore please be sure you
-base your patches on recent Linux kernel.
-
-You missed at least DT list (maybe more), so this won't be tested by our
-tools. Performing review on untested code might be a waste of time, thus
-I will skip this patch entirely till you follow the process allowing the
-patch to be tested.
-
-Please kindly resend and include all necessary To/Cc entries.
-
-
->  
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
 Best regards,
 Krzysztof
