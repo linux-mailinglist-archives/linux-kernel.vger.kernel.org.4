@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BD4744DFD
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E5E744E01
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjGBNpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 09:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S229737AbjGBNrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 09:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBNpV (ORCPT
+        with ESMTP id S229523AbjGBNq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 09:45:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E4BE55
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 06:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688305468;
+        Sun, 2 Jul 2023 09:46:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FCE127;
+        Sun,  2 Jul 2023 06:46:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E35C760C22;
+        Sun,  2 Jul 2023 13:46:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C31C433CD;
+        Sun,  2 Jul 2023 13:46:56 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Zk5MeBPw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1688305613;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=CQPmY3YgKkcmXgnTKyyGhzbqz5W1ZZqveUHs3/0dmWg=;
-        b=YxvNe237GKBDvIvRrtkSSbrQUbBY8L/mJFdDxQyuY4ybMTcF9VcXXLN9KvOKCpIpMZ0SFT
-        y5igGxH0JyU2em1yHaBJhKx5Du2sTRnRSwGPJ5+SSaF2H0sXzmCutbXfjiruSO3hxUHOpf
-        xSbPx1XrHXrhoQvrZIKAl8FldXdG6rI=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-628-_L14SLDAP9W8p_ANxPXNTQ-1; Sun, 02 Jul 2023 09:44:27 -0400
-X-MC-Unique: _L14SLDAP9W8p_ANxPXNTQ-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635e91cba88so39209106d6.0
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 06:44:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688305467; x=1690897467;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CQPmY3YgKkcmXgnTKyyGhzbqz5W1ZZqveUHs3/0dmWg=;
-        b=GnMUBI5B0V6W2ll0OVUG9ZkHfxXDgdjwk/A/q8odguH6ss5xPL033Sbi/i5N7zp8ew
-         PsJn2P3Osb1IW4Xjarv7DVq+hjZrIqkiumyx0eFImEnL9CeCDpzea8fCpNJbGEJOspr6
-         5BnZqPjuXl/6vcmtk3k4LLmWQF+nQJyeJDmF7y3vruUoLDZxXPjnbOmPK8Hm7YU6Qktl
-         RP3ROFybKCkxce46MJjckiUP3gXCll/0Cd7wfQbqpEJ2Hj71JLfsQva4hIvFx3fv9Eq9
-         rO2edE/PR+/BLG6Qi1FZQoAfJqb2NORwvvlgD84QsR2/1fTI/KXoTMohlp99u9SsQ1VY
-         euvA==
-X-Gm-Message-State: ABy/qLbB8oTyTjRUBfyz8ZrjJvD5KyFgbjSAZeAjBFxe5+1Vmz8icBUW
-        JxW5hpXMnhKXOx42kpW81xsW1gylb0NDeIlRQU+kQm/76o1llywVIZrygTy3yhALmhmin0FD7xy
-        X9gbuatx/b4L+WO9XLTZRsISq
-X-Received: by 2002:a05:6214:5194:b0:631:f964:7ab with SMTP id kl20-20020a056214519400b00631f96407abmr10042635qvb.60.1688305467301;
-        Sun, 02 Jul 2023 06:44:27 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlH9Hw7Cw7EnZSWaMX/eP2Tdd0HP/I5KQYDhe7mnH4i7QSQGHSQxDgxErkRJk4MklEI+1ytGlw==
-X-Received: by 2002:a05:6214:5194:b0:631:f964:7ab with SMTP id kl20-20020a056214519400b00631f96407abmr10042627qvb.60.1688305467128;
-        Sun, 02 Jul 2023 06:44:27 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id ep8-20020a05621418e800b00630182f0191sm10227585qvb.1.2023.07.02.06.44.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 06:44:26 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     djrscally@gmail.com, hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] platform/x86: int3472/discrete: set variable skl_int3472_regulator_second_sensor storage-class-specifier to static
-Date:   Sun,  2 Jul 2023 09:44:19 -0400
-Message-Id: <20230702134419.3438361-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DgyTZpYH4n9IkxjItDbDmUhF/fhQUb1wwAJFpzqh190=;
+        b=Zk5MeBPwfSW2n6S0hurtfsv37B2KBfPoDKpwtPYaU4YjNrbK5UeNyWtPg3kZ9sEIzGgYmG
+        eMZisM2BYTvZL15MxAQ08AXbrj/1WgSB83k0VM3+pD11YYEeiEDpHcVIq5sGjpA68cUOVr
+        roKu6D7dy7GuGSzfcBs0KssjpjyC7eA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e873d92c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 2 Jul 2023 13:46:52 +0000 (UTC)
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-44357f34e2dso1151245137.3;
+        Sun, 02 Jul 2023 06:46:52 -0700 (PDT)
+X-Gm-Message-State: ABy/qLY3auxrqaLVcA6rMI+UM4RwdLmOhNkskQpdTgaF2micpxcJONfo
+        gBKFa2qxJ3Iru/wP6BiQcOwvqWPFZL7NPG0qM7c=
+X-Google-Smtp-Source: APBJJlGqQFeoUfE02AmvsH2pJ+qPAs8UdnGuzSAglr4yxRzNPQyJCtBP9XKz1B4Kp4ZazFDt6bCHMPcaSpg4TPOUzY0=
+X-Received: by 2002:a67:f94c:0:b0:443:7e49:c023 with SMTP id
+ u12-20020a67f94c000000b004437e49c023mr3929865vsq.6.1688305609944; Sun, 02 Jul
+ 2023 06:46:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <e5b76a4f-81ae-5b09-535f-114149be5069@gmail.com>
+ <79196679-fb65-e5ad-e836-2c43447cfacd@gmail.com> <10f2a5ee-91e2-1241-9e3b-932c493e61b6@leemhuis.info>
+In-Reply-To: <10f2a5ee-91e2-1241-9e3b-932c493e61b6@leemhuis.info>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sun, 2 Jul 2023 15:46:38 +0200
+X-Gmail-Original-Message-ID: <CAHmME9onMWdJVUerf86V0kpmNKByt+VC=SUfys+GFryGq1ziHQ@mail.gmail.com>
+Message-ID: <CAHmME9onMWdJVUerf86V0kpmNKByt+VC=SUfys+GFryGq1ziHQ@mail.gmail.com>
+Subject: Re: Fwd: RCU stalls with wireguard over bonding over igb on Linux 6.3.0+
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Eric DeVolder <eric.devolder@oracle.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        David R <david@unsolicited.net>,
+        Boris Ostrovsky <boris.ovstrosky@oracle.com>,
+        Miguel Luis <miguel.luis@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux RCU <rcu@vger.kernel.org>,
+        Wireguard Mailing List <wireguard@lists.zx2c4.com>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        "Manuel 'satmd' Leiner" <manuel.leiner@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-drivers/platform/x86/intel/int3472/clk_and_regulator.c:263:28: warning: symbol
-  'skl_int3472_regulator_second_sensor' was not declared. Should it be static?
+I've got an overdue patch that I still need to submit to netdev, which
+I suspect might actually fix this.
 
-This variable is only used in its defining file, so it should be static.
+Can you let me know if
+https://git.zx2c4.com/wireguard-linux/patch/?id=54d5e4329efe0d1dba8b4a58720d29493926bed0
+solves the problem?
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/platform/x86/intel/int3472/clk_and_regulator.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/platform/x86/intel/int3472/clk_and_regulator.c b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-index 61aeca804ba2..ef4b3141efcd 100644
---- a/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-+++ b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-@@ -260,7 +260,7 @@ static_assert(ARRAY_SIZE(skl_int3472_regulator_map_supplies) ==
-  * This DMI table contains the name of the second sensor. This is used to add
-  * entries for the second sensor to the supply_map.
-  */
--const struct dmi_system_id skl_int3472_regulator_second_sensor[] = {
-+static const struct dmi_system_id skl_int3472_regulator_second_sensor[] = {
- 	{
- 		/* Lenovo Miix 510-12IKB */
- 		.matches = {
--- 
-2.27.0
-
+Jason
