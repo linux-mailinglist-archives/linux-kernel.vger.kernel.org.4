@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB97D744DA7
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26643744DB3
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjGBNB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 09:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
+        id S229808AbjGBNUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 09:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjGBNB5 (ORCPT
+        with ESMTP id S229523AbjGBNUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 09:01:57 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602FD135;
-        Sun,  2 Jul 2023 06:01:56 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so41229355e9.3;
-        Sun, 02 Jul 2023 06:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688302915; x=1690894915;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zzka9CnRuiGxtiFqL9JgKk46K47spIoim848zQhRx/I=;
-        b=b1WNUNT4oTwKh77H5nT3jfqCE3yGRMR6EkAhEAFqi7jR/T1jTcluVilYz655Q0pIYX
-         T2+nS0EnBCIcSSafc/OxQJqxPWnGwo/JC6P82Lk9Y+ViWTeTIaVmFbB1YsyrSArw55Jp
-         Q7EzB3uerrUwVEzqSXYRtc1Hx75rNfVpJAO+Yed1N5X5PhwnNJfvuoajZAZddgo589/9
-         PqorW4chq2JgOvNZaWYMjFQISh+CFw/Ln+QEMnujnKV72B1XldfUSU76VI+6G39hvJOs
-         coOn32UVkkeyRyID1QqcL6Ao82nPtI+qhfOVXnJgbPlxM8inX6eahd0mnV3MBG1w1nin
-         Zg4A==
+        Sun, 2 Jul 2023 09:20:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EAFE55
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 06:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688303956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eRFmQdlxw9jHZzmDSJKkdmLa+U9dm/bDEqnPuYhGWmc=;
+        b=Fpx6A1qDo6eWH+40Jkc4em2IxiMG4TvurWxVncBRSbZmUgBWCYHUq+coN6ogd3qWycpCvH
+        UL6sbruL7pfkum/Wf/lr9jT7jpNzsIWn5tlZujKd5AgfKFXGOu5/9WdGhj/g2gt1tFcbRR
+        Z5mt/Nyif6knwGnVeUC4vYUXe4d3je8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-292-OrUhQA0JOlWiSb9UKi8EKQ-1; Sun, 02 Jul 2023 09:19:15 -0400
+X-MC-Unique: OrUhQA0JOlWiSb9UKi8EKQ-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7623a4864c2so418324585a.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 06:19:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688302915; x=1690894915;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zzka9CnRuiGxtiFqL9JgKk46K47spIoim848zQhRx/I=;
-        b=dKjHIwJdB4KTrxmig7pqaU/BgHKekoBRcR6cUfv/80iwGxzLOA96eQBr0toeCEbeJd
-         o3tRy7Pv+3SJ5M7bMCp5/jRh7N2a4DcUEFRaHIg5k4dyku0Nx/9H5XIUMLV7LuG3yBe8
-         44gLNlymvSJT0vv7manJyuMJqqnzQ2cKmq8Om5jsYt3YFcv62KGi3LaYtbtf1hj/Jcxd
-         1/MgCYVxyZOVp+9yBeOd+OrkJh7KEIgNIbIucABlbE2vFJbMyqG5Mf30kPLdtiE+VXvB
-         lME+NYNFkPylI8oeLsrjrslqb1lzY1Gc7mt5G+a5hdsRXJLPXMai67KKLlpGfnNzYNAn
-         xHlw==
-X-Gm-Message-State: AC+VfDxSMznpH/dddddpe4jyoI7gHT4atN5CFlefHhH9+IeH6tw3x5TR
-        nWqtnE1ZpJcYYUqHYLif29CMH5QCQgY=
-X-Google-Smtp-Source: ACHHUZ57l2NYdjFz6gnbDv5RtxHSLeNECuh+UmIbNVUXxycz4UEWnF6Th5b5Yk8FZNtDi4ojGzHT9g==
-X-Received: by 2002:a05:600c:2213:b0:3fa:e92e:7a7b with SMTP id z19-20020a05600c221300b003fae92e7a7bmr6995851wml.15.1688302914474;
-        Sun, 02 Jul 2023 06:01:54 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:32f:1f0:ae0b:3bc8:c743:b2d8? ([2a01:e0a:32f:1f0:ae0b:3bc8:c743:b2d8])
-        by smtp.gmail.com with ESMTPSA id y17-20020a1c4b11000000b003f90a604885sm24277641wma.34.2023.07.02.06.01.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jul 2023 06:01:54 -0700 (PDT)
-Message-ID: <ae400e28-0cd4-cdf8-811d-843e62cd4a95@gmail.com>
-Date:   Sun, 2 Jul 2023 15:05:25 +0200
+        d=1e100.net; s=20221208; t=1688303955; x=1690895955;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eRFmQdlxw9jHZzmDSJKkdmLa+U9dm/bDEqnPuYhGWmc=;
+        b=GUJkEvvylee/vUQ29KLhFBr1CJWraBzgsQw+NgAvipc4X8GGh9pjeBa7m2wRMsUKTD
+         LruyPA6EydHHpxx+75QidzaHqJ52S2ox/uOzje1g1xlU8vYHzqTtmQxwhb2Hj6ERAuqf
+         3LlBMmrJYExQcKgMlmeOy68whmHnta71Yq/+nTzrG+zp5YIml3QDSFgtpWMD5YSBWafG
+         SWiEF5GqGWkJurIADm4khLJ330xpC8E9sPH0R841AkL9KQAFDORwXeznn4vb4bWDBtjJ
+         vrrsIGGsTjCjsoEtNylJOu/ZVbN5fJihD0Isx+v1a/biTPDwfarJsRUfBKAu8qtIkJrE
+         KjoQ==
+X-Gm-Message-State: ABy/qLbEb9IJo6dtBhbv9/C+H/qmTwGe/ustx4yHYpPehZoIrJ7F8DPs
+        1zwSCNjAmMEKUxjPx4OBfvLd594peuCbGnq0bX76vLinwkh4K/PrNWQ7tktZXEUxdAIQjaLWejR
+        YDuESzeB2+laHS9ErC3aJG3LK3CyjVYYq
+X-Received: by 2002:a05:620a:2586:b0:75e:b8b2:864d with SMTP id x6-20020a05620a258600b0075eb8b2864dmr7886252qko.69.1688303955087;
+        Sun, 02 Jul 2023 06:19:15 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFuneZVSX6IXVYJYJruLlFIEsmVSI1DeaBt104pBOCwhHWqqS8FYyR68vARnn6WBmVRLSJZ2Q==
+X-Received: by 2002:a05:620a:2586:b0:75e:b8b2:864d with SMTP id x6-20020a05620a258600b0075eb8b2864dmr7886241qko.69.1688303954891;
+        Sun, 02 Jul 2023 06:19:14 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id m4-20020ae9f204000000b007628f6e0833sm9145999qkg.100.2023.07.02.06.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 06:19:14 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] regulator: set variables clkin_name and xin_name storage-class-specifier to static
+Date:   Sun,  2 Jul 2023 09:19:10 -0400
+Message-Id: <20230702131910.3437751-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] staging: fbtft: ili9341: use macro
- FBTFT_REGISTER_SPI_DRIVER
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230702080324.120137-1-rgallaispou@gmail.com>
- <2023070254-embark-subplot-4dd4@gregkh>
-Content-Language: en-US, fr
-From:   =?UTF-8?Q?Rapha=c3=abl_Gallais-Pou?= <rgallaispou@gmail.com>
-In-Reply-To: <2023070254-embark-subplot-4dd4@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+smatch reports
+drivers/regulator/raa215300.c:41:12: warning: symbol
+  'clkin_name' was not declared. Should it be static?
+drivers/regulator/raa215300.c:42:12: warning: symbol
+  'xin_name' was not declared. Should it be static?
 
-Le 02/07/2023 à 14:02, Greg Kroah-Hartman a écrit :
-> On Sun, Jul 02, 2023 at 10:03:24AM +0200, Raphael Gallais-Pou wrote:
->> Using FBTFT_REGISTER_DRIVER resolves to a NULL struct spi_device_id. This
->> ultimately causes the module to an early exit at probe time.
-> 
-> So this doesn't work at all today?  Has it ever worked?  What commit
-> does thi fix?
+These variables are only used in their defining file, so it should be static.
 
-I tested again with only a tweak in my device-tree. The early exit in 
-the driver's code is caused by a missing field. So regarding this 
-particular driver the macro works.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/regulator/raa215300.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-It resolves to set spi_driver.id_table = NULL, which yields a warning in 
-__spi_register_driver(). So I guess this patch only fixes a warning.
+diff --git a/drivers/regulator/raa215300.c b/drivers/regulator/raa215300.c
+index 24a1c89f5dbc..d21c6c207226 100644
+--- a/drivers/regulator/raa215300.c
++++ b/drivers/regulator/raa215300.c
+@@ -38,8 +38,8 @@
+ #define RAA215300_REG_BLOCK_EN_RTC_EN	BIT(6)
+ #define RAA215300_RTC_DEFAULT_ADDR	0x6f
+ 
+-const char *clkin_name = "clkin";
+-const char *xin_name = "xin";
++static const char *clkin_name = "clkin";
++static const char *xin_name = "xin";
+ static struct clk *clk;
+ 
+ static const struct regmap_config raa215300_regmap_config = {
+-- 
+2.27.0
 
-> 
->> In addition the MODULE_ALIASes can be dropped.
-> 
-> Why?  When you say "also" or "in addition", that's a huge hint it should
-> be a separate patch.
-I did not find any reference to those aliases in the kernel, which led 
-me to remove those.
-
-If you think they are still necessary, I'll split them in an upcoming v2.
-
-Thanks for your insights,
-
-Raphaël
-> 
-> thanks,
-> 
-> greg k-h
