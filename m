@@ -2,55 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261F4744D4C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C70744D46
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjGBKeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 06:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S229922AbjGBKbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 06:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjGBKeT (ORCPT
+        with ESMTP id S229554AbjGBKbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 06:34:19 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70A7135;
-        Sun,  2 Jul 2023 03:34:18 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qv53V1fv4z6J6n8;
-        Sun,  2 Jul 2023 18:32:38 +0800 (CST)
-Received: from localhost (10.48.51.211) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 2 Jul
- 2023 11:34:13 +0100
-Date:   Sun, 2 Jul 2023 18:34:09 +0800
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Waqar Hameed <waqar.hameed@axis.com>
-CC:     Jonathan Cameron <jic23@kernel.org>, <devicetree@vger.kernel.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <kernel@axis.com>,
+        Sun, 2 Jul 2023 06:31:48 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A751135;
+        Sun,  2 Jul 2023 03:31:47 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-307d58b3efbso3821591f8f.0;
+        Sun, 02 Jul 2023 03:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688293906; x=1690885906;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+9HNwsfm1QcsCZ6i0OtSLp++3UaVesUVHugZWgXamS4=;
+        b=XIxUYIDaYrAcbCaZjAOJQA6qry3INr7EmhUAmmfwz7ZGkmJXBwZ389ldYtx44Fxt9E
+         2CsHd48uhVy09DoBYa3O0J7jURA7Q9V0BindDZkXmr9VDg8Yawltw8Ks89Q69MIx7AO2
+         t4sQsgFCAd+iUrPCyKy8ZOpwqw/JQ78AZ/+RMC88gCrkSL58CaGHgeRgORFGnjuLmYms
+         g3Znk8LwmFb8aJTd5kOU2IwmB8EnWAtTsL0EVPclr0MkQEjtZWT3pKZnVNPlbM2Vskap
+         qOFYX0QlMOVct8XAl+bjkUlJ09FCa7Z17yXTyFTTigR7JUVqRLpme8hjkEYMO7tiHqFg
+         l4uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688293906; x=1690885906;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+9HNwsfm1QcsCZ6i0OtSLp++3UaVesUVHugZWgXamS4=;
+        b=U+f4Eu0syy2ofjUeZkAdckUDztc8fEs/opr1HBcGI89S55p1rtxQ5oKPVYNmumYo21
+         bmdg2PhAbUo3yxbIougtWTtYxui6n8Bx2KEc0RS5qKOHLAqMufihegzt6v0Ct2OFY2Yz
+         9woRp0D877biA0P+aGj3sk808XE9wUUYoekEpjLfsGR5tc8O1sDE5rBHfuorOtrvprhd
+         ArPmr+Udz26pZofj6fLDnAdp6eYva6LHKAXA2h3KeYhMXppXtZ/iWPnv6EIRg/7eCC8y
+         7x9Lokz6IBxCsgxS97bbNKVQD8VZZaArxF3jnVspdNW6BRcOanAIhGEFDF+aDE64m+44
+         wV/g==
+X-Gm-Message-State: ABy/qLZaVzYdY0sDV9zt11Txs+1DPsa6JEdfvniMoqmLCT30HU33eKgn
+        S3G0hjQa3l+q682ILaTOjBQ=
+X-Google-Smtp-Source: APBJJlFdbrMVw4b6z234EX++g7sa7brYPo9YLyT5rx35Vbecfts+aFRsmuqCwHuvCLX2q+adLIcNtg==
+X-Received: by 2002:adf:e80f:0:b0:313:e20c:b8e8 with SMTP id o15-20020adfe80f000000b00313e20cb8e8mr5448993wrm.30.1688293905642;
+        Sun, 02 Jul 2023 03:31:45 -0700 (PDT)
+Received: from localhost ([2a01:e0a:32f:1f0:ae0b:3bc8:c743:b2d8])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c205300b003fbc2c0addbsm7265041wmg.42.2023.07.02.03.31.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 03:31:45 -0700 (PDT)
+From:   Raphael Gallais-Pou <rgallaispou@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <kernel@lists.axis.com>
-Subject: Re: [PATCH 1/2] dt-bindings: iio: proximity: Add bindings for
- Murata IRS-D200
-Message-ID: <20230702183409.0000021f@Huawei.com>
-In-Reply-To: <pndwmzz1yqu.fsf@axis.com>
-References: <cover.1686926857.git.waqarh@axis.com>
-        <9487391b0565434761055b39ba04900bd839580a.1686926857.git.waqarh@axis.com>
-        <20230617135532.328dc3c8@jic23-huawei>
-        <pndwmzz1yqu.fsf@axis.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: st: add buswidth property to stm32f429-disco
+Date:   Sun,  2 Jul 2023 12:35:16 +0200
+Message-ID: <20230702103516.139440-1-rgallaispou@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.51.211]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,42 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Jun 2023 12:41:06 +0200
-Waqar Hameed <waqar.hameed@axis.com> wrote:
+The ili9341 is left without a mandatory buswidth to properly communicate
+between the SI bus and the display. Add the device-tree property.
 
-> On Sat, Jun 17, 2023 at 13:55 +0100 Jonathan Cameron <jic23@kernel.org> wrote:
-> 
-> > On Fri, 16 Jun 2023 17:10:42 +0200
-> > Waqar Hameed <waqar.hameed@axis.com> wrote:
-> >  
-> >> Murata IRS-D200 is a PIR sensor for human detection. It uses the I2C bus
-> >> for communication with interrupt support. Add devicetree bindings
-> >> requiring the compatible string, I2C slave address (reg) and interrupts.
-> >> 
-> >> Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>  
-> >
-> > This device will have some power supplies, so I'd expect those to be both
-> > listed and marked as required (maybe some are optional?)  
-> 
-> Right, will add that here (and call `devm_regulator_get_enable()` in
-> driver's probe).
-> 
-> [...]
-> 
-> >> +required:
-> >> +  - compatible
-> >> +  - reg
-> >> +  - interrupts  
-> >
-> > If it is possible to remove interrupts from requires  - and hence have
-> > at least a partly functional driver doing basic reading of the sensor
-> > then that is usually a good idea.   Far too many board designers seem
-> > to decide that they don't need to wire up interrupt liness
-> > If it's really hard then don't worry too much.  
-> 
-> I see. It would be possible, but would also require some work. Let's
-> leave it for now then?
+Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+---
+ arch/arm/boot/dts/stm32f429-disco.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sure - as long as you review the patches when they come in :)
+diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
+index 3b81228d46a2..5eaf95afc8c7 100644
+--- a/arch/arm/boot/dts/stm32f429-disco.dts
++++ b/arch/arm/boot/dts/stm32f429-disco.dts
+@@ -197,6 +197,7 @@ display: display@1{
+ 		spi-3wire;
+ 		spi-max-frequency = <10000000>;
+ 		dc-gpios = <&gpiod 13 0>;
++		buswidth = <8>;
+ 		port {
+ 			panel_in_rgb: endpoint {
+ 			remote-endpoint = <&ltdc_out_rgb>;
+-- 
+2.41.0
 
-Jonathan
