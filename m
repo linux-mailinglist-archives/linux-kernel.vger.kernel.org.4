@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EE2745073
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C0C745076
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjGBTi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S230451AbjGBTic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjGBTiX (ORCPT
+        with ESMTP id S229852AbjGBTiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:38:23 -0400
+        Sun, 2 Jul 2023 15:38:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71457C2;
-        Sun,  2 Jul 2023 12:38:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5FD7D9;
+        Sun,  2 Jul 2023 12:38:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06D6A60C83;
-        Sun,  2 Jul 2023 19:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF1FC433CB;
-        Sun,  2 Jul 2023 19:38:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A57760C7A;
+        Sun,  2 Jul 2023 19:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D806BC433CA;
+        Sun,  2 Jul 2023 19:38:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326701;
-        bh=3ddPsNWnWsc3KRBZaY4Vr9/bzTKlhYTv6uETFRaOq8s=;
+        s=k20201202; t=1688326702;
+        bh=0Gc8JN2bcaLif+Exbg4sFXgL2Sb5gM6PzQoioJyn+NA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=swEjSXAgRXiIopacl91hbTOwDMjDrc6y3DNnnjUqMXK5AHTE9P4PiYraeh/qkKPpy
-         LFU61xnhYWFCq7PNgt7zvtiGXLu1f2Ibl9/L6nrF1E9BubdMz5Zze9Yyo9PzZajrSL
-         +/v1ENHjPeSQJm0TSyxDQFbxhn6HCyfww4eF7v6QdreEGgYAx6yiM3h5z6FavPNaab
-         eptLMU1Fhn5qTVYUidx9gVz4HgXhHFfSofhXAYY6wSTvNvRDYHa6Ncs2PzS41fSJx8
-         X2IdyRbACYJAlA8aBtuUg/ux9YG5pIXGSASlUelQm93vZazjLJzrh+l76UJQm/xuT/
-         t3s3In0eXNosw==
+        b=SFOFyjJ0qzFwjLFbOFDU+qwzkbuBfJhXVXYqiaWEbm/kq6PJV1w2qqDXA4on6MPPL
+         equbZ0u+Yasad785HLGyL+F3c+lYOlWr47x3dnzJmZGkDuLSGcr4Nji5E/AS37DP5L
+         y3ge9Vx6ubDZTcZNfgmAZDctPJs3mjffWQzEo4LJN+s3+y7L6l5tcnwZ68QXgH4tRy
+         IuT10FF/TorLZPZRfBbGTj+LK4prIMWcq4gurrhiJuWI3dGRsuBuI+oTZpGsojaG6U
+         +MOmRqHMKbHUsIfpkXvb3YSI9Dx8cofZNdm+ZIc1KmOGYWU5SXTckKXOfSJvor76YN
+         L++OVp6VjyCkg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Sterba <dsterba@suse.com>,
+Cc:     Danila Chernetsov <listdansp@mail.ru>,
+        Namjae Jeon <linkinjeon@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 03/16] fs: use UB-safe check for signed addition overflow in remap_verify_area
-Date:   Sun,  2 Jul 2023 15:38:02 -0400
-Message-Id: <20230702193815.1775684-3-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, anton@tuxera.com,
+        linux-ntfs-dev@lists.sourceforge.net
+Subject: [PATCH AUTOSEL 6.4 04/16] ntfs: do not dereference a null ctx on error
+Date:   Sun,  2 Jul 2023 15:38:03 -0400
+Message-Id: <20230702193815.1775684-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702193815.1775684-1-sashal@kernel.org>
 References: <20230702193815.1775684-1-sashal@kernel.org>
@@ -60,78 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Sterba <dsterba@suse.com>
+From: Danila Chernetsov <listdansp@mail.ru>
 
-[ Upstream commit b7a9a503c38d665c05a789132b632d81ec0b2703 ]
+[ Upstream commit aa4b92c5234878d55da96d387ea4d3695ca5e4ab ]
 
-The following warning pops up with enabled UBSAN in tests fstests/generic/303:
+In ntfs_mft_data_extend_allocation_nolock(), if an error condition occurs
+prior to 'ctx' being set to a non-NULL value, avoid dereferencing the NULL
+'ctx' pointer in error handling.
 
-  [23127.529395] UBSAN: Undefined behaviour in fs/read_write.c:1725:7
-  [23127.529400] signed integer overflow:
-  [23127.529403] 4611686018427322368 + 9223372036854775807 cannot be represented in type 'long long int'
-  [23127.529412] CPU: 4 PID: 26180 Comm: xfs_io Not tainted 5.2.0-rc2-1.ge195904-vanilla+ #450
-  [23127.556999] Hardware name: empty empty/S3993, BIOS PAQEX0-3 02/24/2008
-  [23127.557001] Call Trace:
-  [23127.557060]  dump_stack+0x67/0x9b
-  [23127.557070]  ubsan_epilogue+0x9/0x40
-  [23127.573496]  handle_overflow+0xb3/0xc0
-  [23127.573514]  do_clone_file_range+0x28f/0x2a0
-  [23127.573547]  vfs_clone_file_range+0x35/0xb0
-  [23127.573564]  ioctl_file_clone+0x8d/0xc0
-  [23127.590144]  do_vfs_ioctl+0x300/0x700
-  [23127.590160]  ksys_ioctl+0x70/0x80
-  [23127.590203]  ? trace_hardirqs_off_thunk+0x1a/0x1c
-  [23127.590210]  __x64_sys_ioctl+0x16/0x20
-  [23127.590215]  do_syscall_64+0x5c/0x1d0
-  [23127.590224]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-  [23127.590231] RIP: 0033:0x7ff6d7250327
-  [23127.590241] RSP: 002b:00007ffe3a38f1d8 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
-  [23127.590246] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007ff6d7250327
-  [23127.590249] RDX: 00007ffe3a38f220 RSI: 000000004020940d RDI: 0000000000000003
-  [23127.590252] RBP: 0000000000000000 R08: 00007ffe3a3c80a0 R09: 00007ffe3a3c8080
-  [23127.590255] R10: 000000000fa99fa0 R11: 0000000000000206 R12: 0000000000000000
-  [23127.590260] R13: 0000000000000000 R14: 3fffffffffff0000 R15: 00007ff6d750a20c
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-As loff_t is a signed type, we should use the safe overflow checks
-instead of relying on compiler implementation.
-
-The bogus values are intentional and the test is supposed to verify the
-boundary conditions.
-
-Signed-off-by: David Sterba <dsterba@suse.com>
-Message-Id: <20230523162628.17071-1-dsterba@suse.com>
+Signed-off-by: Danila Chernetsov <listdansp@mail.ru>
+Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Christian Brauner <brauner@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/remap_range.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ fs/ntfs/mft.c | 36 +++++++++++++++++++-----------------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
 
-diff --git a/fs/remap_range.c b/fs/remap_range.c
-index 1331a890f2f29..87ae4f0dc3aa0 100644
---- a/fs/remap_range.c
-+++ b/fs/remap_range.c
-@@ -15,6 +15,7 @@
- #include <linux/mount.h>
- #include <linux/fs.h>
- #include <linux/dax.h>
-+#include <linux/overflow.h>
- #include "internal.h"
- 
- #include <linux/uaccess.h>
-@@ -101,10 +102,12 @@ static int generic_remap_checks(struct file *file_in, loff_t pos_in,
- static int remap_verify_area(struct file *file, loff_t pos, loff_t len,
- 			     bool write)
- {
-+	loff_t tmp;
+diff --git a/fs/ntfs/mft.c b/fs/ntfs/mft.c
+index 48030899dc6ec..0155f106ec344 100644
+--- a/fs/ntfs/mft.c
++++ b/fs/ntfs/mft.c
+@@ -1955,36 +1955,38 @@ static int ntfs_mft_data_extend_allocation_nolock(ntfs_volume *vol)
+ 				"attribute.%s", es);
+ 		NVolSetErrors(vol);
+ 	}
+-	a = ctx->attr;
 +
- 	if (unlikely(pos < 0 || len < 0))
- 		return -EINVAL;
- 
--	if (unlikely((loff_t) (pos + len) < 0))
-+	if (unlikely(check_add_overflow(pos, len, &tmp)))
- 		return -EINVAL;
- 
- 	return security_file_permission(file, write ? MAY_WRITE : MAY_READ);
+ 	if (ntfs_rl_truncate_nolock(vol, &mft_ni->runlist, old_last_vcn)) {
+ 		ntfs_error(vol->sb, "Failed to truncate mft data attribute "
+ 				"runlist.%s", es);
+ 		NVolSetErrors(vol);
+ 	}
+-	if (mp_rebuilt && !IS_ERR(ctx->mrec)) {
+-		if (ntfs_mapping_pairs_build(vol, (u8*)a + le16_to_cpu(
++	if (ctx) {
++		a = ctx->attr;
++		if (mp_rebuilt && !IS_ERR(ctx->mrec)) {
++			if (ntfs_mapping_pairs_build(vol, (u8 *)a + le16_to_cpu(
+ 				a->data.non_resident.mapping_pairs_offset),
+ 				old_alen - le16_to_cpu(
+-				a->data.non_resident.mapping_pairs_offset),
++					a->data.non_resident.mapping_pairs_offset),
+ 				rl2, ll, -1, NULL)) {
+-			ntfs_error(vol->sb, "Failed to restore mapping pairs "
++				ntfs_error(vol->sb, "Failed to restore mapping pairs "
+ 					"array.%s", es);
+-			NVolSetErrors(vol);
+-		}
+-		if (ntfs_attr_record_resize(ctx->mrec, a, old_alen)) {
+-			ntfs_error(vol->sb, "Failed to restore attribute "
++				NVolSetErrors(vol);
++			}
++			if (ntfs_attr_record_resize(ctx->mrec, a, old_alen)) {
++				ntfs_error(vol->sb, "Failed to restore attribute "
+ 					"record.%s", es);
++				NVolSetErrors(vol);
++			}
++			flush_dcache_mft_record_page(ctx->ntfs_ino);
++			mark_mft_record_dirty(ctx->ntfs_ino);
++		} else if (IS_ERR(ctx->mrec)) {
++			ntfs_error(vol->sb, "Failed to restore attribute search "
++				"context.%s", es);
+ 			NVolSetErrors(vol);
+ 		}
+-		flush_dcache_mft_record_page(ctx->ntfs_ino);
+-		mark_mft_record_dirty(ctx->ntfs_ino);
+-	} else if (IS_ERR(ctx->mrec)) {
+-		ntfs_error(vol->sb, "Failed to restore attribute search "
+-				"context.%s", es);
+-		NVolSetErrors(vol);
+-	}
+-	if (ctx)
+ 		ntfs_attr_put_search_ctx(ctx);
++	}
+ 	if (!IS_ERR(mrec))
+ 		unmap_mft_record(mft_ni);
+ 	up_write(&mft_ni->runlist.lock);
 -- 
 2.39.2
 
