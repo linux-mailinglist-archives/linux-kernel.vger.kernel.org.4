@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF5F7451EA
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3B87451C7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjGBT7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
+        id S233152AbjGBT5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbjGBT6D (ORCPT
+        with ESMTP id S233184AbjGBT4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:58:03 -0400
+        Sun, 2 Jul 2023 15:56:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7350E72;
-        Sun,  2 Jul 2023 12:55:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACC810E7;
+        Sun,  2 Jul 2023 12:54:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE0AF60D33;
-        Sun,  2 Jul 2023 19:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6086C433CB;
-        Sun,  2 Jul 2023 19:52:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7242860D30;
+        Sun,  2 Jul 2023 19:52:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A623C433C8;
+        Sun,  2 Jul 2023 19:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688327551;
-        bh=3oBo9b4OOMDk8OZgtBNz38WSFFZGUZPGHvKC7GUR0+I=;
+        s=k20201202; t=1688327558;
+        bh=Iax6EQNl3nV8dvg3zTxmifmdZl1AMnCjTSfh71Ffx6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kYs5lENvrkIufYtxuJbQg4EQLmyF5TIAmarKlNxjf8LpbGJpRqCzlnvECXmP6i+XH
-         nYKEq7nCxqMOud3biD1FOBUsSqfZ9CgD8nVo2v/DC5upXJpgBC4O4798AjUKW5hGi/
-         x6OWFhYJCHmOg0khH9LhcrAOQ8qFGIjjGqY5yW4HwTSwhtwi/aMmywFaS84rZykkJG
-         rXdipoC1esuq9jVWlkBnzI5J9tbojGNoGuimPlNQUvj2uEJq5IQOypA66Gr3Bj1brI
-         T1GawYhVla5Jd+FLRM69ZxZc9+Kp+IqVsnH5W/bAe5aQBM+Vf99wSsDlkKcZkqlHN4
-         moVNf4Ftp26EA==
+        b=ma0LKWrfQ64hinsyNTCKYjPiWdjNcd3FGZGnntci9cM4Xc35IA6Kneqg/hfXxLPTS
+         MG2oXRPuYmUw8raPINgG9ooKTUSu21jN9Vb6YimdVQo89YNJaMSM7RoG1i/8pdzRZt
+         Hpbm0sr4mZdQQ8/mHS0U+gm5RJWXVvAqxqtdtkeYvqD59/Vuf46FfgOHnYpS8QEWmw
+         vSdXeEmNfcbkTdZhkIajkf9uxSPLXtiMFvaYwc/EDHURZYBePEXJ2A6vkfgiLQQEcu
+         2spRmwzUy6y4Gx56q3UD5kgnk9Z4n2LsVn032HdMr5t22LuXZggHFLtw2xmLsHMbMz
+         /UruLHqNh0aUA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mario Limonciello <mario.limonciello@amd.com>, evilsnoo@proton.me,
-        ruinairas1992@gmail.com, nmschulte@gmail.com,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 4/6] ACPI: resource: Remove "Zen" specific match and quirks
-Date:   Sun,  2 Jul 2023 15:52:21 -0400
-Message-Id: <20230702195223.1788563-4-sashal@kernel.org>
+Cc:     Youngmin Nam <youngmin.nam@samsung.com>,
+        SEO HOYOUNG <hy50.seo@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>, will@kernel.org,
+        broonie@kernel.org, anshuman.khandual@arm.com, jpoimboe@kernel.org,
+        kristina.martsenko@arm.com, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.15 5/6] arm64: set __exception_irq_entry with __irq_entry as a default
+Date:   Sun,  2 Jul 2023 15:52:22 -0400
+Message-Id: <20230702195223.1788563-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702195223.1788563-1-sashal@kernel.org>
 References: <20230702195223.1788563-1-sashal@kernel.org>
@@ -63,130 +64,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Youngmin Nam <youngmin.nam@samsung.com>
 
-[ Upstream commit a9c4a912b7dc7ff922d4b9261160c001558f9755 ]
+[ Upstream commit f6794950f0e5ba37e3bbedda4d6ab0aad7395dd3 ]
 
-commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
-AMD Zen platforms") attempted to overhaul the override logic so it
-didn't apply on X86 AMD Zen systems.  This was intentional so that
-systems would prefer DSDT values instead of default MADT value for
-IRQ 1 on Ryzen 6000 systems which typically uses ActiveLow for IRQ1.
+filter_irq_stacks() is supposed to cut entries which are related irq entries
+from its call stack.
+And in_irqentry_text() which is called by filter_irq_stacks()
+uses __irqentry_text_start/end symbol to find irq entries in callstack.
 
-This turned out to be a bad assumption because several vendors
-add Interrupt Source Override but don't fix the DSDT. A pile of
-quirks was collecting that proved this wasn't sustaintable.
+But it doesn't work correctly as without "CONFIG_FUNCTION_GRAPH_TRACER",
+arm64 kernel doesn't include gic_handle_irq which is entry point of arm64 irq
+between __irqentry_text_start and __irqentry_text_end as we discussed in below link.
+https://lore.kernel.org/all/CACT4Y+aReMGLYua2rCLHgFpS9io5cZC04Q8GLs-uNmrn1ezxYQ@mail.gmail.com/#t
 
-Furthermore some vendors have used ActiveHigh for IRQ1.
-To solve this problem revert the following commits:
-* commit 17bb7046e7ce ("ACPI: resource: Do IRQ override on all TongFang
-GMxRGxx")
-* commit f3cb9b740869 ("ACPI: resource: do IRQ override on Lenovo 14ALC7")
-* commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
-* commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
-* commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen
-platforms")
+This problem can makes unintentional deep call stack entries especially
+in KASAN enabled situation as below.
 
-Reported-by: evilsnoo@proton.me
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217394
-Reported-by: ruinairas1992@gmail.com
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217406
-Reported-by: nmschulte@gmail.com
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217336
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: Werner Sembach <wse@tuxedocomputers.com>
-Tested-by: Chuanhong Guo <gch981213@gmail.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+[ 2479.383395]I[0:launcher-loader: 1719] Stack depot reached limit capacity
+[ 2479.383538]I[0:launcher-loader: 1719] WARNING: CPU: 0 PID: 1719 at lib/stackdepot.c:129 __stack_depot_save+0x464/0x46c
+[ 2479.385693]I[0:launcher-loader: 1719] pstate: 624000c5 (nZCv daIF +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
+[ 2479.385724]I[0:launcher-loader: 1719] pc : __stack_depot_save+0x464/0x46c
+[ 2479.385751]I[0:launcher-loader: 1719] lr : __stack_depot_save+0x460/0x46c
+[ 2479.385774]I[0:launcher-loader: 1719] sp : ffffffc0080073c0
+[ 2479.385793]I[0:launcher-loader: 1719] x29: ffffffc0080073e0 x28: ffffffd00b78a000 x27: 0000000000000000
+[ 2479.385839]I[0:launcher-loader: 1719] x26: 000000000004d1dd x25: ffffff891474f000 x24: 00000000ca64d1dd
+[ 2479.385882]I[0:launcher-loader: 1719] x23: 0000000000000200 x22: 0000000000000220 x21: 0000000000000040
+[ 2479.385925]I[0:launcher-loader: 1719] x20: ffffffc008007440 x19: 0000000000000000 x18: 0000000000000000
+[ 2479.385969]I[0:launcher-loader: 1719] x17: 2065726568207475 x16: 000000000000005e x15: 2d2d2d2d2d2d2d20
+[ 2479.386013]I[0:launcher-loader: 1719] x14: 5d39313731203a72 x13: 00000000002f6b30 x12: 00000000002f6af8
+[ 2479.386057]I[0:launcher-loader: 1719] x11: 00000000ffffffff x10: ffffffb90aacf000 x9 : e8a74a6c16008800
+[ 2479.386101]I[0:launcher-loader: 1719] x8 : e8a74a6c16008800 x7 : 00000000002f6b30 x6 : 00000000002f6af8
+[ 2479.386145]I[0:launcher-loader: 1719] x5 : ffffffc0080070c8 x4 : ffffffd00b192380 x3 : ffffffd0092b313c
+[ 2479.386189]I[0:launcher-loader: 1719] x2 : 0000000000000001 x1 : 0000000000000004 x0 : 0000000000000022
+[ 2479.386231]I[0:launcher-loader: 1719] Call trace:
+[ 2479.386248]I[0:launcher-loader: 1719]  __stack_depot_save+0x464/0x46c
+[ 2479.386273]I[0:launcher-loader: 1719]  kasan_save_stack+0x58/0x70
+[ 2479.386303]I[0:launcher-loader: 1719]  save_stack_info+0x34/0x138
+[ 2479.386331]I[0:launcher-loader: 1719]  kasan_save_free_info+0x18/0x24
+[ 2479.386358]I[0:launcher-loader: 1719]  ____kasan_slab_free+0x16c/0x170
+[ 2479.386385]I[0:launcher-loader: 1719]  __kasan_slab_free+0x10/0x20
+[ 2479.386410]I[0:launcher-loader: 1719]  kmem_cache_free+0x238/0x53c
+[ 2479.386435]I[0:launcher-loader: 1719]  mempool_free_slab+0x1c/0x28
+[ 2479.386460]I[0:launcher-loader: 1719]  mempool_free+0x7c/0x1a0
+[ 2479.386484]I[0:launcher-loader: 1719]  bvec_free+0x34/0x80
+[ 2479.386514]I[0:launcher-loader: 1719]  bio_free+0x60/0x98
+[ 2479.386540]I[0:launcher-loader: 1719]  bio_put+0x50/0x21c
+[ 2479.386567]I[0:launcher-loader: 1719]  f2fs_write_end_io+0x4ac/0x4d0
+[ 2479.386594]I[0:launcher-loader: 1719]  bio_endio+0x2dc/0x300
+[ 2479.386622]I[0:launcher-loader: 1719]  __dm_io_complete+0x324/0x37c
+[ 2479.386650]I[0:launcher-loader: 1719]  dm_io_dec_pending+0x60/0xa4
+[ 2479.386676]I[0:launcher-loader: 1719]  clone_endio+0xf8/0x2f0
+[ 2479.386700]I[0:launcher-loader: 1719]  bio_endio+0x2dc/0x300
+[ 2479.386727]I[0:launcher-loader: 1719]  blk_update_request+0x258/0x63c
+[ 2479.386754]I[0:launcher-loader: 1719]  scsi_end_request+0x50/0x304
+[ 2479.386782]I[0:launcher-loader: 1719]  scsi_io_completion+0x88/0x160
+[ 2479.386808]I[0:launcher-loader: 1719]  scsi_finish_command+0x17c/0x194
+[ 2479.386833]I[0:launcher-loader: 1719]  scsi_complete+0xcc/0x158
+[ 2479.386859]I[0:launcher-loader: 1719]  blk_mq_complete_request+0x4c/0x5c
+[ 2479.386885]I[0:launcher-loader: 1719]  scsi_done_internal+0xf4/0x1e0
+[ 2479.386910]I[0:launcher-loader: 1719]  scsi_done+0x14/0x20
+[ 2479.386935]I[0:launcher-loader: 1719]  ufshcd_compl_one_cqe+0x578/0x71c
+[ 2479.386963]I[0:launcher-loader: 1719]  ufshcd_mcq_poll_cqe_nolock+0xc8/0x150
+[ 2479.386991]I[0:launcher-loader: 1719]  ufshcd_intr+0x868/0xc0c
+[ 2479.387017]I[0:launcher-loader: 1719]  __handle_irq_event_percpu+0xd0/0x348
+[ 2479.387044]I[0:launcher-loader: 1719]  handle_irq_event_percpu+0x24/0x74
+[ 2479.387068]I[0:launcher-loader: 1719]  handle_irq_event+0x74/0xe0
+[ 2479.387091]I[0:launcher-loader: 1719]  handle_fasteoi_irq+0x174/0x240
+[ 2479.387118]I[0:launcher-loader: 1719]  handle_irq_desc+0x7c/0x2c0
+[ 2479.387147]I[0:launcher-loader: 1719]  generic_handle_domain_irq+0x1c/0x28
+[ 2479.387174]I[0:launcher-loader: 1719]  gic_handle_irq+0x64/0x158
+[ 2479.387204]I[0:launcher-loader: 1719]  call_on_irq_stack+0x2c/0x54
+[ 2479.387231]I[0:launcher-loader: 1719]  do_interrupt_handler+0x70/0xa0
+[ 2479.387258]I[0:launcher-loader: 1719]  el1_interrupt+0x34/0x68
+[ 2479.387283]I[0:launcher-loader: 1719]  el1h_64_irq_handler+0x18/0x24
+[ 2479.387308]I[0:launcher-loader: 1719]  el1h_64_irq+0x68/0x6c
+[ 2479.387332]I[0:launcher-loader: 1719]  blk_attempt_bio_merge+0x8/0x170
+[ 2479.387356]I[0:launcher-loader: 1719]  blk_mq_attempt_bio_merge+0x78/0x98
+[ 2479.387383]I[0:launcher-loader: 1719]  blk_mq_submit_bio+0x324/0xa40
+[ 2479.387409]I[0:launcher-loader: 1719]  __submit_bio+0x104/0x138
+[ 2479.387436]I[0:launcher-loader: 1719]  submit_bio_noacct_nocheck+0x1d0/0x4a0
+[ 2479.387462]I[0:launcher-loader: 1719]  submit_bio_noacct+0x618/0x804
+[ 2479.387487]I[0:launcher-loader: 1719]  submit_bio+0x164/0x180
+[ 2479.387511]I[0:launcher-loader: 1719]  f2fs_submit_read_bio+0xe4/0x1c4
+[ 2479.387537]I[0:launcher-loader: 1719]  f2fs_mpage_readpages+0x888/0xa4c
+[ 2479.387563]I[0:launcher-loader: 1719]  f2fs_readahead+0xd4/0x19c
+[ 2479.387587]I[0:launcher-loader: 1719]  read_pages+0xb0/0x4ac
+[ 2479.387614]I[0:launcher-loader: 1719]  page_cache_ra_unbounded+0x238/0x288
+[ 2479.387642]I[0:launcher-loader: 1719]  do_page_cache_ra+0x60/0x6c
+[ 2479.387669]I[0:launcher-loader: 1719]  page_cache_ra_order+0x318/0x364
+[ 2479.387695]I[0:launcher-loader: 1719]  ondemand_readahead+0x30c/0x3d8
+[ 2479.387722]I[0:launcher-loader: 1719]  page_cache_sync_ra+0xb4/0xc8
+[ 2479.387749]I[0:launcher-loader: 1719]  filemap_read+0x268/0xd24
+[ 2479.387777]I[0:launcher-loader: 1719]  f2fs_file_read_iter+0x1a0/0x62c
+[ 2479.387806]I[0:launcher-loader: 1719]  vfs_read+0x258/0x34c
+[ 2479.387831]I[0:launcher-loader: 1719]  ksys_pread64+0x8c/0xd0
+[ 2479.387857]I[0:launcher-loader: 1719]  __arm64_sys_pread64+0x48/0x54
+[ 2479.387881]I[0:launcher-loader: 1719]  invoke_syscall+0x58/0x158
+[ 2479.387909]I[0:launcher-loader: 1719]  el0_svc_common+0xf0/0x134
+[ 2479.387935]I[0:launcher-loader: 1719]  do_el0_svc+0x44/0x114
+[ 2479.387961]I[0:launcher-loader: 1719]  el0_svc+0x2c/0x80
+[ 2479.387985]I[0:launcher-loader: 1719]  el0t_64_sync_handler+0x48/0x114
+[ 2479.388010]I[0:launcher-loader: 1719]  el0t_64_sync+0x190/0x194
+[ 2479.388038]I[0:launcher-loader: 1719] Kernel panic - not syncing: kernel: panic_on_warn set ...
+
+So let's set __exception_irq_entry with __irq_entry as a default.
+Applying this patch, we can see gic_hande_irq is included in Systemp.map as below.
+
+* Before
+ffffffc008010000 T __do_softirq
+ffffffc008010000 T __irqentry_text_end
+ffffffc008010000 T __irqentry_text_start
+ffffffc008010000 T __softirqentry_text_start
+ffffffc008010000 T _stext
+ffffffc00801066c T __softirqentry_text_end
+ffffffc008010670 T __entry_text_start
+
+* After
+ffffffc008010000 T __irqentry_text_start
+ffffffc008010000 T _stext
+ffffffc008010000 t gic_handle_irq
+ffffffc00801013c t gic_handle_irq
+ffffffc008010294 T __irqentry_text_end
+ffffffc008010298 T __do_softirq
+ffffffc008010298 T __softirqentry_text_start
+ffffffc008010904 T __softirqentry_text_end
+ffffffc008010908 T __entry_text_start
+
+Signed-off-by: Youngmin Nam <youngmin.nam@samsung.com>
+Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20230424010436.779733-1-youngmin.nam@samsung.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/resource.c | 60 -----------------------------------------
- 1 file changed, 60 deletions(-)
+ arch/arm64/include/asm/exception.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-index b0c7ae50a8d79..1ea1c419d3316 100644
---- a/drivers/acpi/resource.c
-+++ b/drivers/acpi/resource.c
-@@ -424,52 +424,6 @@ static const struct dmi_system_id asus_laptop[] = {
- 	{ }
- };
+diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
+index 0e6535aa78c2f..17cdc802c71dd 100644
+--- a/arch/arm64/include/asm/exception.h
++++ b/arch/arm64/include/asm/exception.h
+@@ -8,16 +8,11 @@
+ #define __ASM_EXCEPTION_H
  
--static const struct dmi_system_id lenovo_laptop[] = {
--	{
--		.ident = "LENOVO IdeaPad Flex 5 14ALC7",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
--		},
--	},
--	{
--		.ident = "LENOVO IdeaPad Flex 5 16ALC7",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "82RA"),
--		},
--	},
--	{ }
--};
--
--static const struct dmi_system_id tongfang_gm_rg[] = {
--	{
--		.ident = "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Stellaris 15 Gen4 AMD",
--		.matches = {
--			DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
--		},
--	},
--	{ }
--};
--
--static const struct dmi_system_id maingear_laptop[] = {
--	{
--		.ident = "MAINGEAR Vector Pro 2 15",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-15A3070T"),
--		}
--	},
--	{
--		.ident = "MAINGEAR Vector Pro 2 17",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-17A3070T"),
--		},
--	},
--	{ }
--};
--
- static const struct dmi_system_id lg_laptop[] = {
- 	{
- 		.ident = "LG Electronics 17U70P",
-@@ -493,10 +447,6 @@ struct irq_override_cmp {
- static const struct irq_override_cmp override_table[] = {
- 	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
- 	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
--	{ lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
--	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
--	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
--	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
- 	{ lg_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
- };
+ #include <asm/esr.h>
+-#include <asm/kprobes.h>
+ #include <asm/ptrace.h>
  
-@@ -516,16 +466,6 @@ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
- 			return entry->override;
- 	}
+ #include <linux/interrupt.h>
  
--#ifdef CONFIG_X86
--	/*
--	 * IRQ override isn't needed on modern AMD Zen systems and
--	 * this override breaks active low IRQs on AMD Ryzen 6000 and
--	 * newer systems. Skip it.
--	 */
--	if (boot_cpu_has(X86_FEATURE_ZEN))
--		return false;
+-#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ #define __exception_irq_entry	__irq_entry
+-#else
+-#define __exception_irq_entry	__kprobes
 -#endif
--
- 	return true;
- }
  
+ static inline unsigned long disr_to_esr(u64 disr)
+ {
 -- 
 2.39.2
 
