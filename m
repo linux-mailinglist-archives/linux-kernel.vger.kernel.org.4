@@ -2,109 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7BC744D26
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656E9744D2A
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjGBKBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 06:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S229834AbjGBKEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 06:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjGBKBG (ORCPT
+        with ESMTP id S229533AbjGBKEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 06:01:06 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7061612A;
-        Sun,  2 Jul 2023 03:01:05 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 362A0htD025062;
-        Sun, 2 Jul 2023 10:00:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5NmKF6Dtx0WFynYD1yu40PVvG4JCk6q71/bw+brbYBQ=;
- b=InBenrzxEFA2ymyHsGBsP/PdrU4oMr75nYfwf3+iyT1UP31Kf4cXDSqlVVwUnAtxdduq
- eDKCcnNfAAD3g+n6qfQNS2FHdnOSPiD879YZxjo+tLARMm2MK7VhvJ7AOBGpRBG+x2mb
- vxiDYUbZf1nJ++cSGg0IIe/meDEkRlJYkxedwey4NrmbwdoDyIHVtToQhdZUnBdC15HN
- koU+ryVVDC8fhDxWZVgwthQNQ9oilyMRVjq6RfOxoJIRWl56dgV/WDyrbsENRHhQRepn
- /BSx4YQ7VELIRtv1XUkV49mUK+OGPeMsuevBv1NYtes0I8pdNk0Tjl+GOdQOXZqXhqnM oA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rjbfqj17y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 02 Jul 2023 10:00:42 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 362A0fR8023359
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 2 Jul 2023 10:00:41 GMT
-Received: from [10.253.13.42] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Sun, 2 Jul 2023
- 03:00:39 -0700
-Message-ID: <a5929836-2da4-af9b-7310-73bdc05c8e83@quicinc.com>
-Date:   Sun, 2 Jul 2023 18:00:36 +0800
+        Sun, 2 Jul 2023 06:04:22 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA789E54;
+        Sun,  2 Jul 2023 03:04:19 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qv4MR54xHz6D9BC;
+        Sun,  2 Jul 2023 18:01:23 +0800 (CST)
+Received: from localhost (10.48.51.211) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 2 Jul
+ 2023 11:04:13 +0100
+Date:   Sun, 2 Jul 2023 18:04:09 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Kim Seer Paller <kimseer.paller@analog.com>
+CC:     <jic23@kernel.org>, <lars@metafoo.de>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <Michael.Hennerich@analog.com>,
+        <andy.shevchenko@gmail.com>, <robh@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>, <conor+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v8 2/2] iio: adc: max14001: New driver
+Message-ID: <20230702180315.00003dbe@Huawei.com>
+In-Reply-To: <20230622143227.30147-2-kimseer.paller@analog.com>
+References: <20230622143227.30147-1-kimseer.paller@analog.com>
+        <20230622143227.30147-2-kimseer.paller@analog.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] net: phy: at803x: add qca8081 fifo reset on the link
- down
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <hkallweit1@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230629034846.30600-1-quic_luoj@quicinc.com>
- <20230629034846.30600-4-quic_luoj@quicinc.com>
- <e1cf3666-fecc-4272-b91b-5921ada45ade@lunn.ch>
- <0f3990de-7c72-99d8-5a93-3b7eaa066e49@quicinc.com>
- <924ebd8b-2e1f-4060-8c66-4f4746e88696@lunn.ch>
- <7144731c-f4ae-99b6-d32a-1d0e39bc9ee7@quicinc.com>
- <d4043e1f-d683-48c2-af79-9fea14ab7cc1@lunn.ch>
- <49f8ca40-e079-ad00-256e-08a61ffced22@quicinc.com>
- <34ef466e-df95-4be4-8366-64baf5f04cca@lunn.ch>
-From:   Jie Luo <quic_luoj@quicinc.com>
-In-Reply-To: <34ef466e-df95-4be4-8366-64baf5f04cca@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wgnCkkoHbDD_nWmzAIDnJ0jGv4qPCOrR
-X-Proofpoint-ORIG-GUID: wgnCkkoHbDD_nWmzAIDnJ0jGv4qPCOrR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-02_08,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- mlxlogscore=661 phishscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- spamscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307020093
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.48.51.211]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 22 Jun 2023 22:32:27 +0800
+Kim Seer Paller <kimseer.paller@analog.com> wrote:
+
+> The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
+> binary inputs.
+> 
+> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306211545.7b6CdqsL-lkp@intel.com/
+
+Hi, 
+
+Two outstanding comments that I think I raised in earlier reviews..
+
+Jonathan
+
+> diff --git a/drivers/iio/adc/max14001.c b/drivers/iio/adc/max14001.c
+> new file mode 100644
+> index 000000000000..a21ebcde71fa
+> --- /dev/null
+> +++ b/drivers/iio/adc/max14001.c
+
+...
+
+> +static int max14001_read(void *context, unsigned int reg_addr, unsigned int *data)
+> +{
+> +	struct max14001_state *st = context;
+> +	int ret;
+> +
+> +	struct spi_transfer xfers[] = {
+> +		{
+> +			.tx_buf = &st->spi_tx_buffer,
+> +			.len = sizeof(st->spi_tx_buffer),
+> +			.cs_change = 1,
+> +		}, {
+> +			.rx_buf = &st->spi_rx_buffer,
+> +			.len = sizeof(st->spi_rx_buffer),
+> +		},
+> +	};
+> +
+> +	/*
+> +	 * Convert transmit buffer to big-endian format and reverse transmit
+> +	 * buffer to align with the LSB-first input on SDI port.
+> +	 */
+> +	st->spi_tx_buffer = cpu_to_be16(bitrev16(FIELD_PREP(MAX14001_ADDR_MASK,
+> +								reg_addr)));
+> +
+> +	ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Align received data from the receive buffer, reversing and reordering
+> +	 * it to match the expected MSB-first format.
+> +	 */
+> +	*data = (__force u16)(be16_to_cpu(bitrev16(st->spi_rx_buffer))) &
+> +							MAX14001_DATA_MASK;
+> +
+These sequences still confuse me a lot because I'd expect the values in tx
+to have the opposite operations applied to those for rx and that's not the
+case.
+
+Let's take a le system. 
+tx = cpu_to_be16(bitrev16(x))
+   = cpu_to_be16((__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8));
+   = __bitrev8(x & 0xff) | (__bitrev8(x >> 8) << 8)
+or swap all the bits in each byte, but don't swap the bytes.
+
+rx = cpu_to_be16(bitrev16(x))
+   = be16_to_cpu(((__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)_
+   = __bitrev8(x & 0xff) | __bitrev(x >> 8)
+   
+also swap all the bits in each byte, but don't swap the bytes.
+
+So it is the reverse because the bytes swaps unwind themselves somewhat.
+For a be system cpu_to_be16 etc are noop.
+tx = (__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)
+rx = (__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)
+
+So in this case swap all 16 bits.
+
+Now, given I'd expected them to be reversed for the tx vs rx case.
+E.g.
+tx = cpu_to_be16(bitrev16(x))
+As above.
+For rx, le host
+rx = bitrev16(be16_to_cpu(x))
+   = __bitrev8((x >> 8) & 0xff) << 8) |  __bitrev8((((x & 0xff) << 8) >> 8)
+same as above (if you swap the two terms I think.
+
+For be the be16_to_cpu is a noop again, so it's just bitrev16(x) as expected.
+
+Hence if I've understood this correctly you could reverse the terms so that
+it was 'obvious' you were doing the opposite for the tx term vs the rx one
+without making the slightest bit of difference....
+   
+hmm. Might be worth doing simply to avoid questions.
 
 
-On 7/2/2023 12:21 AM, Andrew Lunn wrote:
->> Hi Andrew,
->> it is the PLL related registers, there is no PHY ID existed in MII register
->> 2, 3 of this block, so it can't be instantiated as the generic PHY device.
-> 
-> Well, phylib is going to scan those ID registers, and if it finds
-> something other than 0xffff 0xffff in those two ID registers it is
-> going to think a PHY is there. And then if there is no driver using
-> that ID, it will instantiate a generic PHY.
-> 
-> You might be able to see this in /sys/bus/mdio_bus, especially if you
-> don't have a DT node representing the MDIO bus.
-> 
->        Andrew
-Okay, understand it. thanks Andrew for pointing this.
-i will check it.
+> +	return 0;
+> +}
+> +static int max14001_reg_update(struct max14001_state *st,
+> +				unsigned int reg_addr,
+> +				unsigned int mask,
+> +				unsigned int val)
+> +{
+> +	int ret;
+> +	unsigned int reg_data;
+> +
+> +	/* Enable SPI Registers Write */
+> +	ret = max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = max14001_read(st, reg_addr, &reg_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	reg_data |= FIELD_PREP(mask, val);
+
+This is still a problem if the compiler happens to fail to figure out
+that mask is a compile time constant.  Given it only ever takes one value
+I'd suggest either calling the FIELD_PREP at the caller, or just 
+pushing all this code inline so that you can put the definition
+inline.
+
+> +
+> +	ret = max14001_write(st, reg_addr, reg_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Write Verification Register */
+> +	ret = max14001_write_verification_reg(st, reg_addr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Disable SPI Registers Write */
+> +	return max14001_write(st, MAX14001_WEN, 0);
+> +}
+
+
