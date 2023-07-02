@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AD67451D4
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D397451F9
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbjGBT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S231978AbjGBUBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 16:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjGBT5b (ORCPT
+        with ESMTP id S233140AbjGBT5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:57:31 -0400
+        Sun, 2 Jul 2023 15:57:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7394D2717;
-        Sun,  2 Jul 2023 12:54:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4FE1BFA;
+        Sun,  2 Jul 2023 12:55:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9322560D39;
-        Sun,  2 Jul 2023 19:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505B7C433C8;
-        Sun,  2 Jul 2023 19:53:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4552E60D29;
+        Sun,  2 Jul 2023 19:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10644C433C9;
+        Sun,  2 Jul 2023 19:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688327582;
-        bh=r0zYZxj9/IaNbgddhz1ACL6b2rqL7CSMxin//8+/PBo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iWySwZPV9n9QucSuFCLMZWuGUgVj40Ur1kzmKsyLuhJVkxPPFF46r4+iFJveWiY9p
-         G9d8irq85YNaQbnid6EX3iJfZbzyRyquwCk1rP9DiilpRgJPOuyvC3dJgTVvfI5KR6
-         F1/YxxCNvc2wQg6VvZFXTUVaMwevlmL23C/npf/8oroL+fVhKMed3E+xIWU7b8awj6
-         OMNuGwXc6EbPdWyAm7vvW1O1dax8HrC9vDA1P93Q3XftbyxV5VNtBa+wfkXQBOGcyw
-         Kv4MhuZqL6oXtX3INi0lITgo5C7QR4x+b2Eiuma+svPoTaDcQ9u0s7WD1hWZKC4+Vc
-         G9tIZluUUJMag==
+        s=k20201202; t=1688327589;
+        bh=HsjOsyZpM0XOvf7Yw5OEliG1tMtf61Syx8aBjyVFuTs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tqCaR/ZOxU65zgiAhirB2u1HT1q5nQJdy18uVkp9GqoSl3SadVDDD9xAt3/4EMVUA
+         mF/SbIpU/rwyvQhdx4YYblJ/y8eySFDVKRTBGKh6V0nieZj5yWiBVCjGSb24Hacrjm
+         8jwWSxngd5ATsdyMxFHt7DpfoFEnipeP5Ukaso3cVjWLBzHu8E+hke5r7Q/1kBEkfr
+         rzqmTpNfx6Af85CfJMHQ5RLn/Zr9HsX/O2Qo171yn1rEnpGG3i4FrsTWAA4I6PIhW+
+         4Z5iDC2DjywQmZz7S/J7Lh/geIvipx5jeWe8zmTppQ9TaNvJ0lwKCsRl06eL7dfgac
+         AIJBvJw3SNyJg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mark Rutland <mark.rutland@arm.com>,
@@ -45,16 +45,14 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
         wangkefeng.wang@huawei.com, quic_zhenhuah@quicinc.com,
         chenfeiyang@loongson.cn, bhe@redhat.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 5/5] arm64: mm: fix VA-range sanity check
-Date:   Sun,  2 Jul 2023 15:52:47 -0400
-Message-Id: <20230702195247.1788860-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4] arm64: mm: fix VA-range sanity check
+Date:   Sun,  2 Jul 2023 15:53:02 -0400
+Message-Id: <20230702195306.1788976-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702195247.1788860-1-sashal@kernel.org>
-References: <20230702195247.1788860-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.186
+X-stable-base: Linux 5.4.249
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -143,10 +141,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 3284709ef5676..78f9fb638c9cd 100644
+index 5cf575f23af28..8e934bb44f12e 100644
 --- a/arch/arm64/mm/mmu.c
 +++ b/arch/arm64/mm/mmu.c
-@@ -421,7 +421,7 @@ static phys_addr_t pgd_pgtable_alloc(int shift)
+@@ -399,7 +399,7 @@ static phys_addr_t pgd_pgtable_alloc(int shift)
  static void __init create_mapping_noalloc(phys_addr_t phys, unsigned long virt,
  				  phys_addr_t size, pgprot_t prot)
  {
@@ -155,7 +153,7 @@ index 3284709ef5676..78f9fb638c9cd 100644
  		pr_warn("BUG: not creating mapping for %pa at 0x%016lx - outside kernel range\n",
  			&phys, virt);
  		return;
-@@ -448,7 +448,7 @@ void __init create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+@@ -426,7 +426,7 @@ void __init create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
  static void update_mapping_prot(phys_addr_t phys, unsigned long virt,
  				phys_addr_t size, pgprot_t prot)
  {
