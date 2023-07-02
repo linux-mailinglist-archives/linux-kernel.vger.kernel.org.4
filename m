@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B99744BF1
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 03:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8B6744BF2
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 03:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjGBBCt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 1 Jul 2023 21:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S229677AbjGBBDY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 1 Jul 2023 21:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjGBBCs (ORCPT
+        with ESMTP id S229579AbjGBBDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 21:02:48 -0400
+        Sat, 1 Jul 2023 21:03:22 -0400
 Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9C1172B;
-        Sat,  1 Jul 2023 18:02:47 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bd0a359ca35so2967026276.3;
-        Sat, 01 Jul 2023 18:02:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1081717;
+        Sat,  1 Jul 2023 18:03:21 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-c1061f0c282so3473275276.1;
+        Sat, 01 Jul 2023 18:03:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688259767; x=1690851767;
+        d=1e100.net; s=20221208; t=1688259801; x=1690851801;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kANjNnclVCsfgygTcdj+03tBXimKIyR8Ds3CCIEhaFY=;
-        b=F5IpATF7vFhMvQ6mBpAlHc7JP64GtwDZWBTCNMgq23iU3lWE4GudbOHgBK6RRgvTAb
-         rVKJFzxlcUAYijANIadqdAv8OteX39xPOs1ZWm7eaDG/QgGQa6yoJx0hA0+Rd/kpEHfr
-         PFv6TBA8+EKTVFqY0T2Q7P5W8aHTo9ku1fvTCXupYYiHkXSwCFsDidyzSQAX298hKCdd
-         OjXuWLtjy87hfdNhrKCNlgeakQbltZbBSyOBskkbAJNMAUwx6W7/vNsSA0aIml7xvgi6
-         L6LRpLiL/zFVQu8LYyQuucW6mAUVtB/bGEC5wZd1WbmqQmAl10gGlE6AAaZLTvkd8t0V
-         F81w==
-X-Gm-Message-State: ABy/qLYT0mBDrIuIPBaxgPerAt7foCQTZOcfM4vMtz1gW6uPOJtRLH44
-        RTtCbHgfWCNV2m1QakHrcEY3ObhP0FrsV5UxdHA=
-X-Google-Smtp-Source: APBJJlGhunK8g8oACRYiiwUe8l3UZfj6iA8veJOSvmqQlAy6GORRMqy6ZjwcJoiyA1ARxgkZ9d23V3EAGOWi8HiX9uA=
-X-Received: by 2002:a25:2144:0:b0:bff:7eb7:c275 with SMTP id
- h65-20020a252144000000b00bff7eb7c275mr5050789ybh.52.1688259766660; Sat, 01
- Jul 2023 18:02:46 -0700 (PDT)
+        bh=YISIQ4kX+3nn5eGakgs6KQe060/aOoCfkYgWQRhUhis=;
+        b=GUU4MYq8JeY88O49Duth0jiWw9cuU5FTRQM7IM/ExmOIQ64jgQivBVH3+ADiFeUbD7
+         3BGk9Vjdvyu5FXoCRs18NRioVNyy9bmFtYqCz165ci4Xyw+HMNCVWAr+v3ZgVtACMYCB
+         TsDid6ZNSQHEW5wp/5JisCGHVgfPfT6T/vpHwnWFGmnd9/qqJU8npHju5AhzHiIYP43k
+         kEBl3Z/oRo+ATx4RJp/hCbmhNqMStFbju9M5a4f+o2barddupHG00d7AXY9wmwUgjFw8
+         6jWwo5NyPMYHKqMdrZoB422fP9YTEfolm2yaZe5QTfEMDMTIdfkAaCGGg394qXoZYs8Q
+         X7XA==
+X-Gm-Message-State: ABy/qLZaKuqgYLMfdO01Tj/zkXKnXAAz2pJg1qok+p2Cc5DIZPloNgMg
+        PLswbxHyCHdN+RbCxNWZqy5Es69OaPaghD92bOA=
+X-Google-Smtp-Source: APBJJlGYZBlKaynTrbK3zEsbCXsSxnOjOQU+pP12MZ1eAExGaOMFTUd6s9Zf4/VK2MZlDJ5SFBrPoA+RmQPgubRp7i0=
+X-Received: by 2002:a25:69cd:0:b0:c4e:c503:d5f6 with SMTP id
+ e196-20020a2569cd000000b00c4ec503d5f6mr728260ybc.64.1688259801114; Sat, 01
+ Jul 2023 18:03:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230628200141.2739587-1-namhyung@kernel.org>
-In-Reply-To: <20230628200141.2739587-1-namhyung@kernel.org>
+References: <20230630-perf-libdw-symfs-v2-1-469760dd4d5b@axis.com> <CAM9d7cjF+g5Ww22bDviHqFa42dC1JjhGw1cM7POvTziY2wyCgA@mail.gmail.com>
+In-Reply-To: <CAM9d7cjF+g5Ww22bDviHqFa42dC1JjhGw1cM7POvTziY2wyCgA@mail.gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Sat, 1 Jul 2023 18:02:35 -0700
-Message-ID: <CAM9d7ci8n=u_rSp4JHLxmZT2hDb26XFS=hEnX3oT2_=3dqD8Xg@mail.gmail.com>
-Subject: Re: [PATCHSET 0/4] perf lock contention: Add CSV style output support (v2)
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
+Date:   Sat, 1 Jul 2023 18:03:09 -0700
+Message-ID: <CAM9d7cgMGrmHf7b+AV7onyifJmXsPvcEg2pZuNRcXMA4F+tYcQ@mail.gmail.com>
+Subject: Re: [PATCH v2] perf: unwind: Fix symfs with libdw
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        Hao Luo <haoluo@google.com>
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -63,44 +64,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 1:01 PM Namhyung Kim <namhyung@kernel.org> wrote:
+On Sat, Jul 1, 2023 at 11:13 AM Namhyung Kim <namhyung@kernel.org> wrote:
 >
 > Hello,
 >
-> This is v2 of perf lock contention CSV output change.
-> I've added --output option and a test case according to Ian's feedback.
->
-> Sometimes we want to process the output by external programs.  Let's add
-> the -x option to specify the field separator like perf stat.
->
->   $ sudo ./perf lock con -ab -x, sleep 1
->   # output: contended, total wait, max wait, avg wait, type, caller
->   19, 194232, 21415, 10222, spinlock, process_one_work+0x1f0
->   15, 162748, 23843, 10849, rwsem:R, do_user_addr_fault+0x40e
->   4, 86740, 23415, 21685, rwlock:R, ep_poll_callback+0x2d
->   1, 84281, 84281, 84281, mutex, iwl_mvm_async_handlers_wk+0x135
->   8, 67608, 27404, 8451, spinlock, __queue_work+0x174
->   3, 58616, 31125, 19538, rwsem:W, do_mprotect_pkey+0xff
->   3, 52953, 21172, 17651, rwlock:W, do_epoll_wait+0x248
->   2, 30324, 19704, 15162, rwsem:R, do_madvise+0x3ad
->   1, 24619, 24619, 24619, spinlock, rcu_core+0xd4
->
-> The first line is a comment that shows the output format.  Each line is
-> separated by the given string ("," in this case).  The time is printed
-> in nsec without the unit so that it can be parsed easily.
->
-> The code is available at 'perf/lock-con-csv-v2' branch in
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
->
-> Thanks,
-> Namhyung
->
->
-> Namhyung Kim (4):
->   perf lock: Remove stale comments
->   perf lock contention: Add -x option for CSV style output
->   perf lock contention: Add --output option
->   perf test: Test perf lock contention CSV output
+> On Fri, Jun 30, 2023 at 2:11 AM Vincent Whitchurch
+> <vincent.whitchurch@axis.com> wrote:
+> >
+> > Pass the full path including the symfs (if any) to libdw.  Without this
+> > unwinding fails with errors like this when a symfs is used:
+> >
+> >   unwind: failed with 'No such file or directory'"
+> >
+> > Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
 Applied to perf-tools-next, thanks!
