@@ -2,105 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E94745273
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 23:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857EF74527D
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 23:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjGBVO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 17:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S229844AbjGBVdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 17:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGBVOz (ORCPT
+        with ESMTP id S229504AbjGBVdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 17:14:55 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D22E54;
-        Sun,  2 Jul 2023 14:14:54 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b89bc52cd1so104695ad.1;
-        Sun, 02 Jul 2023 14:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688332494; x=1690924494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cN3JSQg0LROpUkwJ5OAt46ArJ76XLCWxuJ783Zv6aE=;
-        b=qNRV+7gEAgLRd0BVi+m3pRcVO+/d+b5oGaeVl1fFnDRuUoRPGVqqftO11e96GC+Qc5
-         uXYQxHRpPnTqhcG+RxWF4goVgc4BxE6jWfNxqc0UPD9Cj3+foqNIQkkkcufr/nKV1Lz1
-         ZlYd6sl2l/nVsXt7o729HPLWIkePUH/FYSLt11xQnwtEpHEHB+loOzSRTqmdt9ccfyfy
-         ie9J+S3IXtb7hZCCA/3mqRMOMCZ+SPSZEDUvgIUmRuvNaj6aXfhg1qGaeznNhJ4s8FFR
-         mwfXohBLWijFhh9g8lFsUUHmfjU1TKf+mLPnm933y2DGz43E1h77WS2aZCWiERxyM15r
-         NHLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688332494; x=1690924494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4cN3JSQg0LROpUkwJ5OAt46ArJ76XLCWxuJ783Zv6aE=;
-        b=GqJmIyhGMZ8z8u1Zehn43fvyn+C3Fe+Z1XvUlxpUrOiuEUl5xz0xZnpJEc7bOWveQr
-         2eaZJWxKLsXf6QRc2yZj8wf8Kl9uboOAdn9V4eymKq9vM4CcZli6plo7Lgo7C9OsYOki
-         cUNPs6m9C0Ha1FxqPO31v7Ic4/W+mVr+6xIINx9VdThaudr8p5SxhsI9fDUgW0MSR5FE
-         mufHt9a0dyFw1fTgEZ3aORyZcyzdIBAQMhs24ahOG3kSVS2PfTBoA0fcVwQhwbLPEvT6
-         pOkbG2CP4JenFzBWMhJ/AUu7e8HKgImVWT/EqVu1RU9KEo/9uHdKiqJtLuf0q4YN8/jc
-         4GAQ==
-X-Gm-Message-State: ABy/qLZfUT8AwPDJprChSZM7EWYMlGlOsNQpYeOhb8JxdCipxRTT7SfP
-        KLq9Sgs+Ev2VSAz+QyvEJE4=
-X-Google-Smtp-Source: APBJJlEO623g2YL+Etf09gJJ8RoSXjsIxGh2Un45Tya8tBOsXcBssWyK7ePBW1oLinExeAWuul/jQg==
-X-Received: by 2002:a17:90b:350e:b0:260:ea8f:613d with SMTP id ls14-20020a17090b350e00b00260ea8f613dmr7140457pjb.20.1688332493730;
-        Sun, 02 Jul 2023 14:14:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k7-20020a17090a658700b00262eccfa29fsm11721292pjj.33.2023.07.02.14.14.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 14:14:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Joe Perches <joe@perches.com>
-Cc:     Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] checkpatch: Add old hwmon APIs to deprecated list
-Date:   Sun,  2 Jul 2023 14:14:50 -0700
-Message-Id: <20230702211450.3789779-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+        Sun, 2 Jul 2023 17:33:22 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75941E42;
+        Sun,  2 Jul 2023 14:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1688333582; x=1688938382; i=deller@gmx.de;
+ bh=zoNTrcu17OXpgIuGcZIvxt9ubX9C4LB/Hqt+z3ZP4h4=;
+ h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
+ b=qgg3fznCpQ4W/OcwDrNJayMCh8Ol98cpiE5MyjMFIHFjjnhCiBW9L81hlhyeqEv8xataUdQ
+ 9aQqoQLu4K1mOBy8LCmPpmUcEAPBMLxq/joVhflPGQIPybJodl1qq4KKmdF2IsQuVL1swV80v
+ DO8RYs7tpqiP6O6p00Q9CRF1sHeMUZmeR/wX8PBi0jmC1VFb6cLHYeBf5T+LdyNEUCki1g0ND
+ +mbIyoWOfrWe+QO5kx6cdZNc9EBu88vlCxsPIRvEd0tg0wDG27nPtJPP3uj0BMOWCed04kWcL
+ 8aiFa4UrxfGlDL1ZZNnOW9RaydFpR0IMl8k+GAF+gyLGOfjWEyAg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.159.131]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6Udt-1qMPHb348n-006zoJ; Sun, 02
+ Jul 2023 23:33:02 +0200
+Message-ID: <5fd98a09-4792-1433-752d-029ae3545168@gmx.de>
+Date:   Sun, 2 Jul 2023 23:33:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
+Content-Language: en-US
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, linux@roeck-us.net,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John David Anglin <dave.anglin@bell.net>
+References: <20230629184151.888604958@linuxfoundation.org>
+ <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
+ <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
+ <2023063001-overlying-browse-de1a@gregkh>
+ <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
+In-Reply-To: <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:6Yhl0DRuuLPKEMiY143f2N6rriAfbId77ULH2KXnQFOoo9YEc5p
+ Rz5/9HFqMpYPYjBVkGk/n+l7DxusKZ02OVttxqO9kGoN9frimC9B+8vF2w7xGxO76aPhbDn
+ DPl3LuBRAWIS5FGRyjQcHNq7e6SNXi6kiSZjeDYT673dH1UN9nLhgH8LiLpgf/DXiSduPEB
+ oRkBMg2OIB7RMHjP0DCYA==
+UI-OutboundReport: notjunk:1;M01:P0:rlpGPtRtE0g=;fcye9KtAlNqbjwGrLOMOoEcB/Xz
+ /V9Q95CRG/a7Nqt63mKJQOEJgcFkTX+BOdS5MsNeSLGoeTQJBPjTFd1+UL9uoZCW68uYtezg1
+ owTp56q/sLiY7yE071UeyCAC1O7hB3unjU+uTaI0+iMsin+/3iWqxK4qltVF/kxBDHSu0C4YH
+ Dfa0GVTsLv56I4DWbO4VwFDXvkw21vuzjooCodPvS7GGNQ1faN4UwKtv+DTNdJd29lzym2dDh
+ iLwFFSF0j/Wd1TD6Cs16/pwtJLAIsyrcOSV+MBjUWCQI81Xuu31Pt3cYIa+7PqZPJgmjT5HOG
+ znFbIlcX+/of13qiEG+V3KyvMzRGRSTnOXG20BnRaXNUOMv+WHdMZs/nutmCcKoMJcc4Kb22r
+ YTPXn1r5XtlQRumCOqi0tr7YhSp5Aq7GUjs4iRwZt6hPeXO6dFAmb16u9q3Hw3sUUIZ/0xr6P
+ OO1YjQNq3cmWxZAVQiSGqzqersipjdfF6b+BmiP0KF50GhrYnpu5z6VEJmHJidacPR20NXu/f
+ TejHkDlzM4ppHXRuIiAepuD5ZZJFp6IiyWPYoqJTlp5gr0tNp4rNsdhpfdgG3U7GMZkkStqVd
+ QV6NSAfglPl0DFmbX1NC1jx+tpbK27JPVrQNUDMCEY8cHumAaZcil+y4GmKxB9tEZvKOybt9z
+ VAAd4fpJvl/Vk+pPGJZPO66eAtvDL7OIa2wpWkysOIGvhBWp3oIRNB6PyN6jdmW94lbAhPhFL
+ B5CBOkv6fiXFA9Qurhc55SI9Yw/alfS4JFOMbsQK+M6QE3Yl5l0J8LxUTHJ7RfVansIZJFSdr
+ uD8XrwE969R5iJ9N5rMc5GiJKMKZJyQTHX/Fdl0W/jkQ8dXuGVRUiRmkHmGmxHKtWle5Qbkc5
+ 1tOWV4A2+oGKmh2XB31m+QEolqdJppXIuBa2fTMYScTXgHH6v2bfjLUN3c3RAZtCFy4dVuN/P
+ yyLZplnytkfcg0pyygcbp9hODLQ=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hwmon_device_register() and [devm_]hwmon_device_register_with_groups()
-have been deprecated. All hardware monitoring drivers should use
-[devm_]hwmon_device_register_with_info() instead.
+Hi Linus,
 
-The problem with the old API functions is that they require sysfs attribute
-handling in driver code. The new API handles sysfs attributes in the
-hwmon core. Using the new API typically reduces driver code size by 20-40%.
+On 6/30/23 08:56, Helge Deller wrote:
+> On 6/30/23 08:29, Greg Kroah-Hartman wrote:
+>> On Thu, Jun 29, 2023 at 11:16:21PM -0700, Linus Torvalds wrote:
+>>> On Thu, 29 Jun 2023 at 22:31, Naresh Kamboju <naresh.kamboju@linaro.or=
+g> wrote:
+>>>>
+>>>> arch/parisc/mm/fault.c: In function 'do_page_fault':
+>>>> arch/parisc/mm/fault.c:292:22: error: 'prev' undeclared (first use in=
+ this function)
+>>>> =C2=A0=C2=A0 292 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!prev || !(prev->vm_flag=
+s & VM_GROWSUP))
+>>>
+>>> Bah. "prev" should be "prev_vma" here.
+>>>
+>>> I've pushed out the fix. Greg, apologies. It's
+>>>
+>>> =C2=A0=C2=A0=C2=A0 ea3f8272876f parisc: fix expand_stack() conversion
+>>>
+>>> and Naresh already pointed to the similarly silly sparc32 fix.
+>>
+>> Ah, I saw it hit your repo before your email here, sorry about that.
+>> Now picked up.
+>
+> I've just cherry-picked ea3f8272876f on top of -rc2, built and run-teste=
+d it,
+> and everything is OK on parisc.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- scripts/checkpatch.pl | 3 +++
- 1 file changed, 3 insertions(+)
+Actually, your changes seems to trigger...:
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 7bfa4d39d17f..6d97f1a6028e 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -842,6 +842,9 @@ our %deprecated_apis = (
- 	"kunmap"				=> "kunmap_local",
- 	"kmap_atomic"				=> "kmap_local_page",
- 	"kunmap_atomic"				=> "kunmap_local",
-+	"hwmon_device_register"			=> "hwmon_device_register_with_info",
-+	"hwmon_device_register_with_groups"	=> "hwmon_device_register_with_info",
-+	"devm_hwmon_device_register_with_groups"=> "devm_hwmon_device_register_with_info",
- );
- 
- #Create a search pattern for all these strings to speed up a loop below
--- 
-2.39.2
+root@debian:~# /usr/bin/ls /usr/bin/*
+-bash: /usr/bin/ls: Argument list too long
 
+or with a long gcc argument list:
+gcc: fatal error: cannot execute '/usr/lib/gcc/hppa-linux-gnu/12/cc1': exe=
+cv: Argument list too long
+
+I'm trying to understand what's missing, but maybe you have some idea?
+
+Helge
