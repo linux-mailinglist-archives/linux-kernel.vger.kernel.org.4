@@ -2,137 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCE3745310
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 01:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC94745313
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 01:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjGBXgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 19:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S229761AbjGBXiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 19:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjGBXge (ORCPT
+        with ESMTP id S229445AbjGBXiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 19:36:34 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F39E40;
-        Sun,  2 Jul 2023 16:36:33 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b6a084a34cso56200641fa.1;
-        Sun, 02 Jul 2023 16:36:33 -0700 (PDT)
+        Sun, 2 Jul 2023 19:38:17 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5637E44;
+        Sun,  2 Jul 2023 16:38:16 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-51452556acdso2133794a12.2;
+        Sun, 02 Jul 2023 16:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688340991; x=1690932991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aHFK0zYmI9rlbwJHus0Wv+AFb/pa/A+qTUs5Ldro9ys=;
-        b=PHvb5Cg8BbZDJ4YrFM5VPTFAHADQN6xV3I+4zRrZKdXeKuUeFGmiP3paqBW/qHRqU3
-         eJDAMHnrU5E4y+/bBFH/Ivu2mMqcD2lcvlTa25sIX/04Dhbtio9Khh9T75r+htEUQuzK
-         JKngACNRLS8BtF13CE8Inhypux4V9yA0toA8P/jou3SP028huxGXw3d4qrAOoyPtFbrC
-         H0Y0kNusvB0n6bymhMEoSls7TUFGk+BUrwS01wTkjjLXtujw1f/YG1bZwTatZ+xoIMZp
-         Rcuq8xp87ril7dNXgBcR3aGxObq7J9fL8xgDynNd3Yh+jqOx9RB+hTofE2CD/eL+3frR
-         n9fw==
+        d=gmail.com; s=20221208; t=1688341096; x=1690933096;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=65jMXDvPf/Qj+THtJErSPUJIq6P3A0R/jH1TvPSuwd0=;
+        b=eS/E2Qtqe53v13qJkSP5jC/FyeaBq38i1/QQ7JVDnKJd8fBhk7s9JR4UMg5XhfFpb1
+         Tp/RifilTKmY9L6LcVCsMjyqRRNquCKlryYl9k9ddTF5mRU7cNqllHN3QxuN9IopdR2/
+         c7erU5huwGacsq85Gv5wTAcVIRfER14xAIhovJYT9NmPjfG+HwA8fdcmvbh/+V+2ArX3
+         GWWMEWL9xlgKJnBF6Lv5ywTiZtTOP3hqqAuixQ5/5/4qmEdsC9IIhDheCX+2yobFKUS+
+         J1r6rDwvTWXX77M0y2uRSWcv6F6Us5fNrNeB5PDafz25yThLbWJOepD3aDbphUpda1rn
+         c6EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688340991; x=1690932991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aHFK0zYmI9rlbwJHus0Wv+AFb/pa/A+qTUs5Ldro9ys=;
-        b=T0wNqywozC8q1O8AKKQM8FvnWzcH+8ARp3vzBzGH5wHCEbI7XHsrT4gM9qoDGiUqy6
-         AG2F0hhEThzp8kmxNjsKB7xK3iA8t+PXo+4tWPL8N/78/9y0wNx1hpaUdLFeoKn71JpF
-         9Rn+9a5Tw2Uf4rfDv5rvUsGOM9jnneEH+bGaK96A0UP56z+aVrGDABO+HUO/YEnpc8Ug
-         IRuR2Awz15ts9g6s14x5sVjb8SkUVQZzj6kgm5fcik8l5eeA7yYVo4UCshynZJLN4gFx
-         IbDF8ceKR+67L0oAx1eSIdn6EX4itMLkgkZ/c2BEY4JGo8WHj3qLfXqrPQK0iaw4auhx
-         0SdA==
-X-Gm-Message-State: ABy/qLY8PMR3VByubvy/m7VAnj4DdBNz3vcHlF90vTBTMHX8vLVk4gPJ
-        JY6EUhDIwrt+N8utUMHd6W0FQSxG4K84gsmI+M4=
-X-Google-Smtp-Source: APBJJlGN/fuohbhJPjsFEtjooRsxjY/wQdtV8zUm4WJTk+M+D0zxJeC/LQFxPvO+NnqdjcxdO89yJzErPM02gej3v08=
-X-Received: by 2002:a2e:80d9:0:b0:2b6:a3a0:5f7 with SMTP id
- r25-20020a2e80d9000000b002b6a3a005f7mr5158743ljg.9.1688340991083; Sun, 02 Jul
- 2023 16:36:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688341096; x=1690933096;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=65jMXDvPf/Qj+THtJErSPUJIq6P3A0R/jH1TvPSuwd0=;
+        b=Q+S5AKne3WiKDtB5z2KajFoCWFlE1pGOhBTZwb/2mW6qwdbivKgpUqeRSN44UAi5+t
+         WanJhWV3RdB9JroK3Ia3A5xtXwPTX3Aul4z2zuMMEarKqlAVld3Xci+aUOQTHHeDVQ0l
+         fZplYGz+iarasxbi9iBueMABMLjGKtvIAZ/J3ie4bxicNVXIyWxR7HX2NogCtCjFp9Oi
+         PN65zVB1/RCFpzi5BAVC3V3OXCUhy+2MOYfdRRI3z1UDNM1GufkeQe7linvawbCHSfLN
+         isHS8nYPxHBjMUiE0d+b6dC0iOQij9Notp4H9XTNVMmR8zBJoDLj6McB6nfSWamdLLFI
+         jcdg==
+X-Gm-Message-State: ABy/qLbZRMQnDx/r1jrkHoa/5zqaodiCuJkTeh/obnutwU+Szerl1LZc
+        HqlTa0jCpzuoGZhJl0huAXg=
+X-Google-Smtp-Source: APBJJlEh9wCyLD0icdeFz1oX98Xq0nzyLJDgjmNTzR22tfYoI+ZKtiz1DTjru/TwKPIOw43OAJuUAw==
+X-Received: by 2002:a17:90a:35b:b0:263:5c6a:1956 with SMTP id 27-20020a17090a035b00b002635c6a1956mr5348022pjf.25.1688341096178;
+        Sun, 02 Jul 2023 16:38:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id co21-20020a17090afe9500b00262dbf8648esm12790495pjb.34.2023.07.02.16.38.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 16:38:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dde6077b-83e8-24fa-440a-180ce8123080@roeck-us.net>
+Date:   Sun, 2 Jul 2023 16:38:14 -0700
 MIME-Version: 1.0
-References: <20230702130310.3437437-1-trix@redhat.com>
-In-Reply-To: <20230702130310.3437437-1-trix@redhat.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 2 Jul 2023 18:36:19 -0500
-Message-ID: <CAH2r5mtuyXgfkNk65y0JjkUfaxxUuWHYOPuAXO8f_sp4_VDFAA@mail.gmail.com>
-Subject: Re: [PATCH] smb: client: remove unused variable 'server'
-To:     Tom Rix <trix@redhat.com>
-Cc:     sfrench@samba.org, pc@manguebit.com, lsahlber@redhat.com,
-        sprasad@microsoft.com, tom@talpey.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
-        Colin Ian King <colin.i.king@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cocci <cocci@systeme.lip6.fr>
+Cc:     Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230702211450.3789779-1-linux@roeck-us.net>
+ <676aae2eb65d228796d6f18e86d261ed96540a87.camel@perches.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] checkpatch: Add old hwmon APIs to deprecated list
+In-Reply-To: <676aae2eb65d228796d6f18e86d261ed96540a87.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good catch - but this was removed a few days ago by Colin's patch
+On 7/2/23 15:42, Joe Perches wrote:
+> On Sun, 2023-07-02 at 14:14 -0700, Guenter Roeck wrote:
+>> hwmon_device_register() and [devm_]hwmon_device_register_with_groups()
+>> have been deprecated. All hardware monitoring drivers should use
+>> [devm_]hwmon_device_register_with_info() instead.
+>>
+>> The problem with the old API functions is that they require sysfs attribute
+>> handling in driver code. The new API handles sysfs attributes in the
+>> hwmon core. Using the new API typically reduces driver code size by 20-40%.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Seems sensible, thanks.
+> 
+> But how big an effort is it to convert all the existing uses
+> and remove the code?  There are less than 200 uses.
+> 
+> Perhaps it's not that onerous.
+> Is it something that coccinelle could do reasonably well?
+> 
+> $ git grep -w hwmon_device_register | wc -l
+> 49
+> 
+> $ git grep -w hwmon_device_register_with_groups | wc -l
+> 22
+> 
+> $ git grep -w devm_hwmon_device_register_with_groups | wc -l
+> 108
+> 
 
-smfrench@smfrench-ThinkPad-P52:~/cifs-2.6$ git log fs/smb/client/dfs.c
-commit dfbf0ee092a5d7a9301c81e815b5e50b7c0aeeda
-Author: Colin Ian King <colin.i.king@gmail.com>
-Date:   Fri Jun 30 12:33:37 2023 +0100
+Unfortunately that doesn't work, because the parameters are completely
+different. Coccinelle is god, but not that good.
 
-    smb: client: remove redundant pointer 'server'
+The _with_info API implements sysfs attributes in the hwmon core.
+The older APIs implement sysfs attributes in the individual drivers.
+I have converted a number of drivers, but it is a lot of work, and it
+can only be done safely if one has access to hardware to test the result.
 
-    The pointer 'server' is assigned but never read, the pointer is
-    redundant and can be removed. Cleans up clang scan build warning:
+Problem is that I still see submissions using the old API, with arguments
+such as "this other driver uses it". On top of that, there have been attempts
+to abuse the with_info API by providing only the (old) groups argument.
+Commit ddaefa209c4a ("hwmon: Make chip parameter for with_info API mandatory")
+made that impossible, and commit aededf875a23 ("Documentation/hwmon:
+Remove description of deprecated registration functions") removed the old API
+calls from the documentation. Unfortunately that is still insufficient.
+The next step would be to print a warning if the with_groups API is used,
+but I don't want to go that far yet.
 
-    fs/smb/client/dfs.c:217:3: warning: Value stored to 'server' is
-    never read [deadcode.DeadStores]
+Guenter
 
-    Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-    Signed-off-by: Steve French <stfrench@microsoft.com>
+>> ---..
+>>   scripts/checkpatch.pl | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+>> index 7bfa4d39d17f..6d97f1a6028e 100755
+>> --- a/scripts/checkpatch.pl
+>> +++ b/scripts/checkpatch.pl
+>> @@ -842,6 +842,9 @@ our %deprecated_apis = (
+>>   	"kunmap"				=> "kunmap_local",
+>>   	"kmap_atomic"				=> "kmap_local_page",
+>>   	"kunmap_atomic"				=> "kunmap_local",
+>> +	"hwmon_device_register"			=> "hwmon_device_register_with_info",
+>> +	"hwmon_device_register_with_groups"	=> "hwmon_device_register_with_info",
+>> +	"devm_hwmon_device_register_with_groups"=> "devm_hwmon_device_register_with_info",
+>>   );
+>>   
+>>   #Create a search pattern for all these strings to speed up a loop below
+> 
 
-On Sun, Jul 2, 2023 at 8:43=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> gcc with W=3D1 reports
-> fs/smb/client/dfs.c: In function =E2=80=98__dfs_mount_share=E2=80=99:
-> fs/smb/client/dfs.c:146:33: error: variable =E2=80=98server
->   set but not used [-Werror=3Dunused-but-set-variable]
->   146 |         struct TCP_Server_Info *server;
->       |                                 ^~~~~~
->
-> This variable is not used, so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  fs/smb/client/dfs.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/fs/smb/client/dfs.c b/fs/smb/client/dfs.c
-> index 26d14dd0482e..1403a2d1ab17 100644
-> --- a/fs/smb/client/dfs.c
-> +++ b/fs/smb/client/dfs.c
-> @@ -143,7 +143,6 @@ static int __dfs_mount_share(struct cifs_mount_ctx *m=
-nt_ctx)
->         struct smb3_fs_context *ctx =3D mnt_ctx->fs_ctx;
->         char *ref_path =3D NULL, *full_path =3D NULL;
->         struct dfs_cache_tgt_iterator *tit;
-> -       struct TCP_Server_Info *server;
->         struct cifs_tcon *tcon;
->         char *origin_fullpath =3D NULL;
->         char sep =3D CIFS_DIR_SEP(cifs_sb);
-> @@ -214,7 +213,6 @@ static int __dfs_mount_share(struct cifs_mount_ctx *m=
-nt_ctx)
->         } while (rc =3D=3D -EREMOTE);
->
->         if (!rc) {
-> -               server =3D mnt_ctx->server;
->                 tcon =3D mnt_ctx->tcon;
->
->                 spin_lock(&tcon->tc_lock);
-> --
-> 2.27.0
->
-
-
---=20
-Thanks,
-
-Steve
