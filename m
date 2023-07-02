@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EB97450D2
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D733745184
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjGBTmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
+        id S232355AbjGBTvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjGBTmK (ORCPT
+        with ESMTP id S232726AbjGBTut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:42:10 -0400
+        Sun, 2 Jul 2023 15:50:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1021738;
-        Sun,  2 Jul 2023 12:41:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE447AB3;
+        Sun,  2 Jul 2023 12:46:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBD7F60C81;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 000D260C90;
+        Sun,  2 Jul 2023 19:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE172C433CB;
         Sun,  2 Jul 2023 19:40:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24E2C433C7;
-        Sun,  2 Jul 2023 19:40:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326836;
-        bh=uaWp8a1zwVsgrZZAqBBqvVXx6+HOy4XjWCEKR+CBq58=;
+        s=k20201202; t=1688326837;
+        bh=8hzbXpeCK4HcEryMW/YHb7rJOCxLtUYy75UHyDvoKsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PmVemTQU8kVCNFeuQndZJnHBZLylcm25sioZklYbFoAv9ORcxc1t6ONKrqlolAYIm
-         UMnNwBYPYPGj6ZPt9ItxWstOeMM/MVn2M8rE2A7Whz7N2jcmE4GEQoY1KAMxkvUpuE
-         fYS9/TyUhhbDW/hoHJGTq41sqjOSgIhGShOEvbc36ga/ixus41TE0Z89bB2orutRIL
-         7acHDBFMzubii8TZJIcVZQ46hjGmKkngTQP8hi4dq1LNCDtRrurzERrR8noYzXSMdt
-         04CWbI4elHqwR5I7Dycc20F34LROShq6UFcqlfqbQRPX7QBFyRocyJFcTPGjrDl6Fs
-         lVGGEUGRsHHHw==
+        b=KmmeCb/doN/nrBDfnJwwtTBVI8mbrjWpHvCRxZT0knXaikCUClYvr4X5Rnmu3zyKL
+         dP5vAzHH5lUol3dWf1TiP7/svlOrK8ipdAH1lwZGI0G0bi9QO9umb1bu9IbQ5aW33k
+         lKuEzyVmHL9cJTeL0TIT+k/IzzEybWlm2V2i+P8Gl89aaTNL9I7h5mmGgFfLCU55bG
+         KniCqxB68eZwEBUA3/IjZE1MwrirqE5WTSPhFEAdAiwrCBIlNhpS2cmHFbWI+5kKMR
+         xSClPksGj8NaFq/G9rZMQKIme3MLiPuKxgJOCiclsy8rPHCV+mepbbwnB2pSOfQmRo
+         whXphp05YNwRg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Muralidhara M K <muralidhara.mk@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Sasha Levin <sashal@kernel.org>, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        bhelgaas@google.com, linux@roeck-us.net, mario.limonciello@amd.com,
-        linux-pci@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 04/15] x86/amd_nb: Add MI200 PCI IDs
-Date:   Sun,  2 Jul 2023 15:40:09 -0400
-Message-Id: <20230702194020.1776895-4-sashal@kernel.org>
+Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.4 05/15] debugobjects: Recheck debug_objects_enabled before reporting
+Date:   Sun,  2 Jul 2023 15:40:10 -0400
+Message-Id: <20230702194020.1776895-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702194020.1776895-1-sashal@kernel.org>
 References: <20230702194020.1776895-1-sashal@kernel.org>
@@ -63,105 +60,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit e15885689cf4bc92356e52ea6ef38379a749819a ]
+[ Upstream commit 8b64d420fe2450f82848178506d3e3a0bd195539 ]
 
-The AMD MI200 series accelerators are data center GPUs. They include
-unified memory controllers and a data fabric similar to those used in
-AMD x86 CPU products. The memory controllers report errors using MCA,
-though these errors are generally handled through GPU drivers that
-directly manage the accelerator device.
+syzbot is reporting false a positive ODEBUG message immediately after
+ODEBUG was disabled due to OOM.
 
-In some configurations, memory errors from these devices will be
-reported through MCA and managed by x86 CPUs. The OS is expected to
-handle these errors in similar fashion to MCA errors originating from
-memory controllers on the CPUs. In Linux, this flow includes passing MCA
-errors to a notifier chain with handlers in the EDAC subsystem.
+  [ 1062.309646][T22911] ODEBUG: Out of memory. ODEBUG disabled
+  [ 1062.886755][ T5171] ------------[ cut here ]------------
+  [ 1062.892770][ T5171] ODEBUG: assert_init not available (active state 0) object: ffffc900056afb20 object type: timer_list hint: process_timeout+0x0/0x40
 
-The AMD64 EDAC module requires information from the memory controllers
-and data fabric in order to provide detailed decoding of memory errors.
-The information is read from hardware registers accessed through
-interfaces in the data fabric.
+  CPU 0 [ T5171]                CPU 1 [T22911]
+  --------------                --------------
+  debug_object_assert_init() {
+    if (!debug_objects_enabled)
+      return;
+    db = get_bucket(addr);
+                                lookup_object_or_alloc() {
+                                  debug_objects_enabled = 0;
+                                  return NULL;
+                                }
+                                debug_objects_oom() {
+                                  pr_warn("Out of memory. ODEBUG disabled\n");
+                                  // all buckets get emptied here, and
+                                }
+    lookup_object_or_alloc(addr, db, descr, false, true) {
+      // this bucket is already empty.
+      return ERR_PTR(-ENOENT);
+    }
+    // Emits false positive warning.
+    debug_print_object(&o, "assert_init");
+  }
 
-The accelerator data fabrics are visible to the host x86 CPUs as PCI
-devices just like x86 CPU data fabrics are already. However, the
-accelerator fabrics have new and unique PCI IDs.
+Recheck debug_object_enabled in debug_print_object() to avoid that.
 
-Add PCI IDs for the MI200 series of accelerator devices in order to
-enable EDAC support. The data fabrics of the accelerator devices will be
-enumerated as any other fabric already supported.  System-specific
-implementation details will be handled within the AMD64 EDAC module.
-
-  [ bp: Scrub off marketing speak. ]
-
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Co-developed-by: Muralidhara M K <muralidhara.mk@amd.com>
-Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230515113537.1052146-2-muralimk@amd.com
+Reported-by: syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/492fe2ae-5141-d548-ebd5-62f5fe2e57f7@I-love.SAKURA.ne.jp
+Closes: https://syzkaller.appspot.com/bug?extid=7937ba6a50bdd00fffdf
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/amd_nb.c | 5 +++++
- include/linux/pci_ids.h  | 1 +
- 2 files changed, 6 insertions(+)
+ lib/debugobjects.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 7e331e8f36929..8fd955414b089 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -23,6 +23,7 @@
- #define PCI_DEVICE_ID_AMD_19H_M10H_ROOT	0x14a4
- #define PCI_DEVICE_ID_AMD_19H_M60H_ROOT	0x14d8
- #define PCI_DEVICE_ID_AMD_19H_M70H_ROOT	0x14e8
-+#define PCI_DEVICE_ID_AMD_MI200_ROOT	0x14bb
- #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
-@@ -37,6 +38,7 @@
- #define PCI_DEVICE_ID_AMD_19H_M60H_DF_F4 0x14e4
- #define PCI_DEVICE_ID_AMD_19H_M70H_DF_F4 0x14f4
- #define PCI_DEVICE_ID_AMD_19H_M78H_DF_F4 0x12fc
-+#define PCI_DEVICE_ID_AMD_MI200_DF_F4	0x14d4
+diff --git a/lib/debugobjects.c b/lib/debugobjects.c
+index 984985c39c9b0..a517256a270b7 100644
+--- a/lib/debugobjects.c
++++ b/lib/debugobjects.c
+@@ -498,6 +498,15 @@ static void debug_print_object(struct debug_obj *obj, char *msg)
+ 	const struct debug_obj_descr *descr = obj->descr;
+ 	static int limit;
  
- /* Protect the PCI config register pairs used for SMN. */
- static DEFINE_MUTEX(smn_mutex);
-@@ -53,6 +55,7 @@ static const struct pci_device_id amd_root_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M60H_ROOT) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M70H_ROOT) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_MI200_ROOT) },
- 	{}
- };
- 
-@@ -81,6 +84,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M60H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M78H_DF_F3) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_MI200_DF_F3) },
- 	{}
- };
- 
-@@ -101,6 +105,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_MI200_DF_F4) },
- 	{}
- };
- 
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 95f33dadb2be2..a99b1fcfc6174 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -568,6 +568,7 @@
- #define PCI_DEVICE_ID_AMD_19H_M60H_DF_F3 0x14e3
- #define PCI_DEVICE_ID_AMD_19H_M70H_DF_F3 0x14f3
- #define PCI_DEVICE_ID_AMD_19H_M78H_DF_F3 0x12fb
-+#define PCI_DEVICE_ID_AMD_MI200_DF_F3	0x14d3
- #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
- #define PCI_DEVICE_ID_AMD_LANCE		0x2000
- #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
++	/*
++	 * Don't report if lookup_object_or_alloc() by the current thread
++	 * failed because lookup_object_or_alloc()/debug_objects_oom() by a
++	 * concurrent thread turned off debug_objects_enabled and cleared
++	 * the hash buckets.
++	 */
++	if (!debug_objects_enabled)
++		return;
++
+ 	if (limit < 5 && descr != descr_test) {
+ 		void *hint = descr->debug_hint ?
+ 			descr->debug_hint(obj->object) : NULL;
 -- 
 2.39.2
 
