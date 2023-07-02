@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62047450FE
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 109927450F5
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjGBTnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S231910AbjGBTnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbjGBTmw (ORCPT
+        with ESMTP id S231891AbjGBTm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:42:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5568019B2;
-        Sun,  2 Jul 2023 12:41:56 -0700 (PDT)
+        Sun, 2 Jul 2023 15:42:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC9E1FCA;
+        Sun,  2 Jul 2023 12:41:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48F8F60C8E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73BD060CEB;
+        Sun,  2 Jul 2023 19:40:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30240C433C9;
         Sun,  2 Jul 2023 19:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5CDC433C7;
-        Sun,  2 Jul 2023 19:40:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326856;
-        bh=HMTZTFH8s1sjSLwgQdmysxVEBfsNNOe004+DhT05PLE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fSCHM0VxVy02PbmqXbu8GStctwwIfdnczyDUwkPT3O51oyAz/dsqaU0rbnPPEQdY7
-         nmUiCIxaXUVKyNBmiPGiJY63y2SlAz9yUMNSbVyPONg4b3aWqlRMdIXJvraY664Ie5
-         H/ejtcry1YULI88Hls3iIvdo2/o6i4Kp4TBsFpYjKG/vgtJ8CxxisQypD3egwOwVQ8
-         VeBhPMs7AyTKCL4KNTmdyJnQQlpRQs4KQFeNnkJpuOkKS2auKVjd3aZx+NboabAQRa
-         87lLQyxtrIK+ahW8roJd3u25oWxsgjU8hSridLHRMAm3QhXRT5yJRsu60TCFpAo9JN
-         iM+i4uV5qMG/g==
+        s=k20201202; t=1688326857;
+        bh=JFeSh/oDK27uQvNlEL1wYsjP7uTVL3tAH3G0j5bfwqM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oV4921w+tJysIXVgcgkX9UePKZ/Coyy6cZhALlCrgTMG6nu8PMl1bOc78V93/5kbe
+         hQCH0g0hRzpfFf4eCX7JN2fBc5fkwdOEVm5Su/pFz+himFJXT7wa3Q3HA9qV7VLO85
+         /UIr96kNyRuD0AjWljxequcJ7GpdqQf4+Y7x/JejMOybDedtJOONKZ2jJqeORHFeA8
+         Jxof9t1KrdDG2X9FE/1Jr/eSJ0CyRqIXXHlTmvJq+toW8v8eI+42f7bHrdCjuX6I2y
+         XNceUW7kIvJ74pbAkIqCEWWrCDFBxKNR64dQRw/Br6xiudoCIK0Kze4R+K+sKFQbq7
+         +gCY0ZAR2oITA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Woodhouse <dwmw@amazon.co.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Helge Deller <deller@gmx.de>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 6.3 01/14] cpu/hotplug: Reset task stack state in _cpu_up()
-Date:   Sun,  2 Jul 2023 15:40:40 -0400
-Message-Id: <20230702194053.1777356-1-sashal@kernel.org>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        io-uring@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 02/14] io_uring: annotate offset timeout races
+Date:   Sun,  2 Jul 2023 15:40:41 -0400
+Message-Id: <20230702194053.1777356-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230702194053.1777356-1-sashal@kernel.org>
+References: <20230702194053.1777356-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.3.11
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,69 +60,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit 6d712b9b3a58018259fb40ddd498d1f7dfa1f4ec ]
+[ Upstream commit 5498bf28d8f2bd63a46ad40f4427518615fb793f ]
 
-Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
-ensured that the shadow call stack and KASAN poisoning were removed from
-a CPU's stack each time that CPU is brought up, not just once.
+It's racy to read ->cached_cq_tail without taking proper measures
+(usually grabbing ->completion_lock) as timeout requests with CQE
+offsets do, however they have never had a good semantics for from
+when they start counting. Annotate racy reads with data_race().
 
-This is not incorrect. However, with parallel bringup the idle thread setup
-will happen at a different step. As a consequence the cleanup in
-bringup_cpu() would be too late.
-
-Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
-which already ensures that the new CPU's stack is available, purely to
-allow for early failure. This occurs when the CPU to be brought up is
-in the CPUHP_OFFLINE state, which should correctly do the cleanup any
-time the CPU has been taken down to the point where such is needed.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Tested-by: Helge Deller <deller@gmx.de> # parisc
-Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
-Link: https://lore.kernel.org/r/20230512205257.027075560@linutronix.de
+Reported-by: syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/4de3685e185832a92a572df2be2c735d2e21a83d.1684506056.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cpu.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ io_uring/timeout.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6c0a92ca6bb59..43e0a77f21e81 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -591,12 +591,6 @@ static int bringup_cpu(unsigned int cpu)
- 	struct task_struct *idle = idle_thread_get(cpu);
- 	int ret;
- 
--	/*
--	 * Reset stale stack state from the last time this CPU was online.
--	 */
--	scs_task_reset(idle);
--	kasan_unpoison_task_stack(idle);
--
- 	/*
- 	 * Some architectures have to walk the irq descriptors to
- 	 * setup the vector space for the cpu which comes online.
-@@ -1383,6 +1377,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
- 			ret = PTR_ERR(idle);
- 			goto out;
- 		}
-+
-+		/*
-+		 * Reset stale stack state from the last time this CPU was online.
-+		 */
-+		scs_task_reset(idle);
-+		kasan_unpoison_task_stack(idle);
+diff --git a/io_uring/timeout.c b/io_uring/timeout.c
+index 826a51bca3e49..495eeaebce0c0 100644
+--- a/io_uring/timeout.c
++++ b/io_uring/timeout.c
+@@ -543,7 +543,7 @@ int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
+ 		goto add;
  	}
  
- 	cpuhp_tasks_frozen = tasks_frozen;
+-	tail = ctx->cached_cq_tail - atomic_read(&ctx->cq_timeouts);
++	tail = data_race(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts);
+ 	timeout->target_seq = tail + off;
+ 
+ 	/* Update the last seq here in case io_flush_timeouts() hasn't.
 -- 
 2.39.2
 
