@@ -2,128 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF41F744D99
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D55744D9D
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 14:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjGBMhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 08:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S229947AbjGBMkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 08:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjGBMhb (ORCPT
+        with ESMTP id S229460AbjGBMj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 08:37:31 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940A312A;
-        Sun,  2 Jul 2023 05:37:30 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qFwKN-0000ey-Ek; Sun, 02 Jul 2023 14:37:19 +0200
-Message-ID: <10f2a5ee-91e2-1241-9e3b-932c493e61b6@leemhuis.info>
-Date:   Sun, 2 Jul 2023 14:37:18 +0200
+        Sun, 2 Jul 2023 08:39:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E20812A;
+        Sun,  2 Jul 2023 05:39:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E60660BD8;
+        Sun,  2 Jul 2023 12:39:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C0FC433C8;
+        Sun,  2 Jul 2023 12:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688301597;
+        bh=Gs10fttTgnhj5fhjLDWFZ0nrwMhadhZS6+ukxYV05Bw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jyxA0qYizBtdPmWrk2kjuW65B0CjVfIE8CbaJzq8Km7bcrnlErGRNRnEwesmL9cIf
+         gwFhHQokKhnVJYn9t/qYRVj7c55uJlu7pjrdZBCZJRwqCLlYDK3rsIowy9krOr3gvY
+         8VtLI43tqlGvp/Ard9XCx9MM8Fq5KuzjRMH7dQZg=
+Date:   Sun, 2 Jul 2023 14:39:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        security@kernel.org, corbet@lwn.net, workflows@vger.kernel.org
+Subject: Re: [PATCH 2/2] Documentation: security-bugs.rst: clarify CVE
+ handling
+Message-ID: <2023070213-capacity-moneybags-3668@gregkh>
+References: <2023063020-throat-pantyhose-f110@gregkh>
+ <2023063022-retouch-kerosene-7e4a@gregkh>
+ <202306301114.E199B136@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: RCU stalls with wireguard over bonding over igb on Linux
- 6.3.0+
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Eric DeVolder <eric.devolder@oracle.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        David R <david@unsolicited.net>,
-        Boris Ostrovsky <boris.ovstrosky@oracle.com>,
-        Miguel Luis <miguel.luis@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux RCU <rcu@vger.kernel.org>,
-        Wireguard Mailing List <wireguard@lists.zx2c4.com>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Manuel 'satmd' Leiner <manuel.leiner@gmx.de>
-References: <e5b76a4f-81ae-5b09-535f-114149be5069@gmail.com>
- <79196679-fb65-e5ad-e836-2c43447cfacd@gmail.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <79196679-fb65-e5ad-e836-2c43447cfacd@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688301450;33a91d3a;
-X-HE-SMSGID: 1qFwKN-0000ey-Ek
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202306301114.E199B136@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.07.23 13:57, Bagas Sanjaya wrote:
-> [also Cc: original reporter]
+On Fri, Jun 30, 2023 at 11:18:37AM -0700, Kees Cook wrote:
+> On Fri, Jun 30, 2023 at 09:14:21AM +0200, Greg Kroah-Hartman wrote:
+> > The kernel security team does NOT assign CVEs, so document that properly
+> > and provide the "if you want one, ask MITRE for it" response that we
+> > give on a weekly basis in the document, so we don't have to constantly
+> > say it to everyone who asks.
+> > 
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  Documentation/process/security-bugs.rst | 11 ++++-------
+> >  1 file changed, 4 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
+> > index f12ac2316ce7..8b80e1eb7d79 100644
+> > --- a/Documentation/process/security-bugs.rst
+> > +++ b/Documentation/process/security-bugs.rst
+> > @@ -79,13 +79,10 @@ not contribute to actually fixing any potential security problems.
+> >  CVE assignment
+> >  --------------
+> >  
+> > -The security team does not normally assign CVEs, nor do we require them
+> > -for reports or fixes, as this can needlessly complicate the process and
+> > -may delay the bug handling. If a reporter wishes to have a CVE identifier
+> > -assigned ahead of public disclosure, they will need to contact the private
+> > -linux-distros list, described above. When such a CVE identifier is known
+> > -before a patch is provided, it is desirable to mention it in the commit
+> > -message if the reporter agrees.
+> > +The security team does not assign CVEs, nor do we require them for
+> > +reports or fixes, as this can needlessly complicate the process and may
+> > +delay the bug handling.  If a reporter wishes to have a CVE identifier
+> > +assigned, they should contact MITRE directly.
+> 
+> Hmm. The language about "assigned ahead of public disclosure" was added
+> intentionally due to trouble we'd had with coordination when a CVE was
+> needed, etc. Additionally, it IS preferred to have a CVE in a patch when
+> it IS known ahead of time, so I think that should be kept. How about
+> this:
+> 
+> 
+> diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
+> index 82e29837d589..2f4060d49b31 100644
+> --- a/Documentation/process/security-bugs.rst
+> +++ b/Documentation/process/security-bugs.rst
+> @@ -81,13 +81,12 @@ the email Subject line with "[vs]" as described in the linux-distros wiki:
+>  CVE assignment
+>  --------------
+>  
+> -The security team does not normally assign CVEs, nor do we require them
+> -for reports or fixes, as this can needlessly complicate the process and
+> -may delay the bug handling. If a reporter wishes to have a CVE identifier
+> -assigned ahead of public disclosure, they will need to contact the private
+> -linux-distros list, described above. When such a CVE identifier is known
+> -before a patch is provided, it is desirable to mention it in the commit
+> -message if the reporter agrees.
+> +The security team does not assign CVEs, nor do we require them for reports
+> +or fixes, as this can needlessly complicate the process and may delay
+> +the bug handling. If a reporter wishes to have a CVE identifier assigned
+> +ahead of public disclosure, they will need to contact MITRE directly.
+> +When such a CVE identifier is known before a patch is provided, it is
+> +desirable to mention it in the commit message if the reporter agrees.
 
-BTW: I think you CCed too many developers here. There are situations
-where this can makes sense, but it's rare. And if you do this too often
-people might start to not really look into your mails or might even
-ignore them completely.
+I can not, in good faith, with the current mess that MITRE is going
+through, tell anyone that they should contact MITRE ahead of public
+disclosure, sorry.
 
-Normally it's enough to write the mail to (1) the people in the
-signed-off-by-chain, (2) the maintainers of the subsystem that merged a
-commit, and (3) the lists for all affected subsystems; leave it up to
-developers from the first two groups to CC the maintainers of the third
-group.
+All I can say is "if you really want one, go ask them for one", as
+everyone keeps asking us for one to pad their resume/CV.
 
-> On 7/2/23 10:31, Bagas Sanjaya wrote:
->> I notice a regression report on Bugzilla [1]. Quoting from it:
->>
->>> I've spent the last week on debugging a problem with my attempt to upgrade my kernel from 6.2.8 to 6.3.8 (now also with 
-> [...]
->> See Bugzilla for the full thread.
->>
->> Anyway, I'm adding it to regzbot to make sure it doesn't fall through cracks
->> unnoticed:
->>
->> #regzbot introduced: fed8d8773b8ea6 https://bugzilla.kernel.org/show_bug.cgi?id=217620
->> #regzbot title: correcting acpi_is_processor_usable() check causes RCU stalls with wireguard over bonding+igb
->> #regzbot link: https://bugs.gentoo.org/909066
+Also note that many non-US-based companies are not allowed to contact a
+US-government-backed entity for potential security issues for obvious
+reasons.
 
-> satmd: Can you repeat bisection to confirm that fed8d8773b8ea6 is
-> really the culprit?
+So I don't want to even give a hint that we support or request this at
+all, or that it is something that changelog texts should contain for
+security issues (for the obvious reason of them being a "hint" one way
+or another.)
 
-I'd be careful to ask people that, as that might mean a lot of work for
-them. Best to leave things like that to developers, unless it's pretty
-obvious that something went sideways.
+External groups may wish to play the CVE "game" as it facilitates their
+engineering procedures to get changes past managers, but that's not
+anything that we should be encouraging at all for all of the various
+geopolitical and corporate reasons involved in that mess.
 
-> Thorsten: It seems like the reporter concluded bisection to the
-> (possibly) incorrect culprit.
+thanks,
 
-What makes your think so? I just looked at bugzilla and it (for now)
-seems reverting fed8d8773b8ea6 ontop of 6.4 fixed things for the
-reporter, which is a pretty strong indicator that this change really
-causes the trouble somehow.
-
-/me really wonders what's he's missing
-
-> What can I do in this case besides
-> asking to repeat bisection?
-
-Not much apart from updating regzbot state (e.g. something like "regzbot
-introduced v6.3..v6.4") and a reply to your initial report (ideally with
-a quick apology) to let everyone know it was a false alarm.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+greg k-h
