@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7252744D1F
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7BC744D26
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjGBJ6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 05:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S229833AbjGBKBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 06:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjGBJ6N (ORCPT
+        with ESMTP id S229533AbjGBKBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 05:58:13 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEC610D0
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 02:58:10 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666eba6f3d6so1684079b3a.3
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 02:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688291890; x=1690883890;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kkAY8od4kopgBrvcbw1hFpjzgJzWLikggNI5ytXC3Uk=;
-        b=loY2CFs4lCMCrbHrZ0yHjXW0d09bE4yUX16zdqny9IfQYSrLVevitIgjVjuraQ1Gi1
-         WAmfNin9IKUl2GQp00jw/CWIWhYqGbAHp8jvoeWHdW2tcmtEKvfGCCrVB8hx6Q4Sjqqf
-         HIaVcB+YtGA+M3GO+XfmBpZplhMaqD7hiiyflwP4RFdvBAZ38PNOqc3mzDurTK86p+je
-         M1nxappZcfZ3mae9G8be5IBvNUlyRsR6sVYEV+W25NJWKZ4q+aoamrJnQ3X1ZRNQGXL6
-         Qmj/bbGQGyhVgTzIthLGGC/bHbI5sBzTGrTmwXacCHk2kbdGKz+PNnTZBecgIiHh5zI9
-         UFTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688291890; x=1690883890;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kkAY8od4kopgBrvcbw1hFpjzgJzWLikggNI5ytXC3Uk=;
-        b=LJS/movjWqoUHqTUf2XpxpuSTlC7QDb4JYRoJuFGiusbFvFrW69OLCepGGPeVvDV8Z
-         aGG1IVBDfrS/JeqUMsclLugEUoVR/cOR8NHY1R459as6zTe9rIbJTLoDexqvLYDmzOye
-         nWDOvZtSKcOMEX0mlXZiEv53BT3ANjreVku2AKjTVdPBG7iJo9ga22lEdKELRXGs7xJg
-         wdXXM99awvTfeNpAY4MzyJhOXGTGSoQLuKjUJathzI3eaGIU8LN+o78V8GeuaX0YIG7m
-         2kJYFDLhWyyNrzHE+rTGZJGkDtH1VDLFHPLjVApoRJwexPDeH90eoHf8cTuM2rqiw5Yk
-         QKRw==
-X-Gm-Message-State: ABy/qLbnEJs2nYi2KLZHfEF7i5Wj6HPv5r1BJSg5pyIp5C/Jw7+RvvYc
-        dW0yDdkKAlPKpoNxd+/qPkF3eA==
-X-Google-Smtp-Source: APBJJlEXSgBPi382cT8u7InSOCN1bAAjdhLBtHtZTpazMFigPk1oiVbNh/c+TMlLCxgtWsKVe0Y3jA==
-X-Received: by 2002:a05:6a00:2d87:b0:682:4de1:adcc with SMTP id fb7-20020a056a002d8700b006824de1adccmr7473435pfb.12.1688291890230;
-        Sun, 02 Jul 2023 02:58:10 -0700 (PDT)
-Received: from PF2E59YH-BKX.inc.bytedance.com ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id u26-20020a62ed1a000000b006827d86ca0csm1605095pfh.55.2023.07.02.02.58.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 02:58:09 -0700 (PDT)
-From:   Yunhui Cui <cuiyunhui@bytedance.com>
-To:     ardb@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com, cuiyunhui@bytedance.com
-Subject: [PATCH v2 3/3] riscv: obtain SMBIOS entry from FFI.
-Date:   Sun,  2 Jul 2023 17:57:34 +0800
-Message-Id: <20230702095735.860-3-cuiyunhui@bytedance.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20230702095735.860-1-cuiyunhui@bytedance.com>
-References: <20230702095735.860-1-cuiyunhui@bytedance.com>
+        Sun, 2 Jul 2023 06:01:06 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7061612A;
+        Sun,  2 Jul 2023 03:01:05 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 362A0htD025062;
+        Sun, 2 Jul 2023 10:00:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5NmKF6Dtx0WFynYD1yu40PVvG4JCk6q71/bw+brbYBQ=;
+ b=InBenrzxEFA2ymyHsGBsP/PdrU4oMr75nYfwf3+iyT1UP31Kf4cXDSqlVVwUnAtxdduq
+ eDKCcnNfAAD3g+n6qfQNS2FHdnOSPiD879YZxjo+tLARMm2MK7VhvJ7AOBGpRBG+x2mb
+ vxiDYUbZf1nJ++cSGg0IIe/meDEkRlJYkxedwey4NrmbwdoDyIHVtToQhdZUnBdC15HN
+ koU+ryVVDC8fhDxWZVgwthQNQ9oilyMRVjq6RfOxoJIRWl56dgV/WDyrbsENRHhQRepn
+ /BSx4YQ7VELIRtv1XUkV49mUK+OGPeMsuevBv1NYtes0I8pdNk0Tjl+GOdQOXZqXhqnM oA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rjbfqj17y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Jul 2023 10:00:42 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 362A0fR8023359
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 2 Jul 2023 10:00:41 GMT
+Received: from [10.253.13.42] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Sun, 2 Jul 2023
+ 03:00:39 -0700
+Message-ID: <a5929836-2da4-af9b-7310-73bdc05c8e83@quicinc.com>
+Date:   Sun, 2 Jul 2023 18:00:36 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/3] net: phy: at803x: add qca8081 fifo reset on the link
+ down
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <hkallweit1@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230629034846.30600-1-quic_luoj@quicinc.com>
+ <20230629034846.30600-4-quic_luoj@quicinc.com>
+ <e1cf3666-fecc-4272-b91b-5921ada45ade@lunn.ch>
+ <0f3990de-7c72-99d8-5a93-3b7eaa066e49@quicinc.com>
+ <924ebd8b-2e1f-4060-8c66-4f4746e88696@lunn.ch>
+ <7144731c-f4ae-99b6-d32a-1d0e39bc9ee7@quicinc.com>
+ <d4043e1f-d683-48c2-af79-9fea14ab7cc1@lunn.ch>
+ <49f8ca40-e079-ad00-256e-08a61ffced22@quicinc.com>
+ <34ef466e-df95-4be4-8366-64baf5f04cca@lunn.ch>
+From:   Jie Luo <quic_luoj@quicinc.com>
+In-Reply-To: <34ef466e-df95-4be4-8366-64baf5f04cca@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wgnCkkoHbDD_nWmzAIDnJ0jGv4qPCOrR
+X-Proofpoint-ORIG-GUID: wgnCkkoHbDD_nWmzAIDnJ0jGv4qPCOrR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-02_08,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxlogscore=661 phishscore=0 clxscore=1015 impostorscore=0 mlxscore=0
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307020093
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we bringup with coreboot on riscv, we need to obtain
-the entry address of SMBIOS through the FFI scheme.
 
-Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
----
- arch/riscv/kernel/ffi.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/arch/riscv/kernel/ffi.c b/arch/riscv/kernel/ffi.c
-index c5ac2b5d9148..c44f943a1cb5 100644
---- a/arch/riscv/kernel/ffi.c
-+++ b/arch/riscv/kernel/ffi.c
-@@ -8,6 +8,7 @@
- #include <linux/of.h>
- #include <linux/of_fdt.h>
- #include <linux/libfdt.h>
-+#include <linux/ffi.h>
- 
- u64 acpi_rsdp;
- 
-@@ -34,4 +35,7 @@ void __init ffi_acpi_root_pointer(void)
- void __init ffi_init(void)
- {
- 	ffi_acpi_root_pointer();
-+#if CONFIG_FDT_FW_INTERFACE
-+	ffi_smbios_root_pointer();
-+#endif
- }
--- 
-2.20.1
-
+On 7/2/2023 12:21 AM, Andrew Lunn wrote:
+>> Hi Andrew,
+>> it is the PLL related registers, there is no PHY ID existed in MII register
+>> 2, 3 of this block, so it can't be instantiated as the generic PHY device.
+> 
+> Well, phylib is going to scan those ID registers, and if it finds
+> something other than 0xffff 0xffff in those two ID registers it is
+> going to think a PHY is there. And then if there is no driver using
+> that ID, it will instantiate a generic PHY.
+> 
+> You might be able to see this in /sys/bus/mdio_bus, especially if you
+> don't have a DT node representing the MDIO bus.
+> 
+>        Andrew
+Okay, understand it. thanks Andrew for pointing this.
+i will check it.
