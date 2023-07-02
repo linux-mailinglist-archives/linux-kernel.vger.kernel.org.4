@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43F67450C2
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62047450FE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjGBTl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S232135AbjGBTnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjGBTlY (ORCPT
+        with ESMTP id S231779AbjGBTmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:41:24 -0400
+        Sun, 2 Jul 2023 15:42:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BD51FCB;
-        Sun,  2 Jul 2023 12:40:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5568019B2;
+        Sun,  2 Jul 2023 12:41:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5516160C75;
-        Sun,  2 Jul 2023 19:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72755C433C9;
-        Sun,  2 Jul 2023 19:40:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48F8F60C8E;
+        Sun,  2 Jul 2023 19:40:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5CDC433C7;
+        Sun,  2 Jul 2023 19:40:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326852;
-        bh=AibRHF3+wnb0aqVi5rHkyG/9K3JaqbyxVTR4d+bai4E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fSKon93UcJ/WhBZZmdg/F9qZJAZ4YUJnIQqsJYrll0c6wHes8yXBgN5MOl7nOqDWE
-         xalqJo+1myA2dck8A5A3MlhO25JG2jT9ZvUZff8nyd+XfbwpD6UHgnIcNLhIeyEn+P
-         oK7BttXc35YxLEzu3X6PKas3ZHSO23e0AvqCVvwzyHLfa8iB2sXMS0DXLOuiplGzga
-         qRggs/kaDFKiWoodSxTD8QOkXAloVZJBczFGhyzytzVhoSsyR+QZN6GcRtzp7VM+RZ
-         hi7/GNUecUv4/tWw+nIqKMO12qQnFPjouLjaVPqU12L3qg44DaiJsU+HjsciULlVHN
-         W4qBFA5J+61Cg==
+        s=k20201202; t=1688326856;
+        bh=HMTZTFH8s1sjSLwgQdmysxVEBfsNNOe004+DhT05PLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fSCHM0VxVy02PbmqXbu8GStctwwIfdnczyDUwkPT3O51oyAz/dsqaU0rbnPPEQdY7
+         nmUiCIxaXUVKyNBmiPGiJY63y2SlAz9yUMNSbVyPONg4b3aWqlRMdIXJvraY664Ie5
+         H/ejtcry1YULI88Hls3iIvdo2/o6i4Kp4TBsFpYjKG/vgtJ8CxxisQypD3egwOwVQ8
+         VeBhPMs7AyTKCL4KNTmdyJnQQlpRQs4KQFeNnkJpuOkKS2auKVjd3aZx+NboabAQRa
+         87lLQyxtrIK+ahW8roJd3u25oWxsgjU8hSridLHRMAm3QhXRT5yJRsu60TCFpAo9JN
+         iM+i4uV5qMG/g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sandeep Dhavale <dhavale@google.com>,
-        Will Shiu <Will.Shiu@mediatek.com>,
-        Gao Xiang <xiang@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>, chao@kernel.org,
-        matthias.bgg@gmail.com, linux-erofs@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.4 15/15] erofs: Fix detection of atomic context
-Date:   Sun,  2 Jul 2023 15:40:20 -0400
-Message-Id: <20230702194020.1776895-15-sashal@kernel.org>
+Cc:     David Woodhouse <dwmw@amazon.co.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Helge Deller <deller@gmx.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3 01/14] cpu/hotplug: Reset task stack state in _cpu_up()
+Date:   Sun,  2 Jul 2023 15:40:40 -0400
+Message-Id: <20230702194053.1777356-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702194020.1776895-1-sashal@kernel.org>
-References: <20230702194020.1776895-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.1
+X-stable-base: Linux 6.3.11
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -65,98 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sandeep Dhavale <dhavale@google.com>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-[ Upstream commit 12d0a24afd9ea58e581ea64d64e066f2027b28d9 ]
+[ Upstream commit 6d712b9b3a58018259fb40ddd498d1f7dfa1f4ec ]
 
-Current check for atomic context is not sufficient as
-z_erofs_decompressqueue_endio can be called under rcu lock
-from blk_mq_flush_plug_list(). See the stacktrace [1]
+Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
+ensured that the shadow call stack and KASAN poisoning were removed from
+a CPU's stack each time that CPU is brought up, not just once.
 
-In such case we should hand off the decompression work for async
-processing rather than trying to do sync decompression in current
-context. Patch fixes the detection by checking for
-rcu_read_lock_any_held() and while at it use more appropriate
-!in_task() check than in_atomic().
+This is not incorrect. However, with parallel bringup the idle thread setup
+will happen at a different step. As a consequence the cleanup in
+bringup_cpu() would be too late.
 
-Background: Historically erofs would always schedule a kworker for
-decompression which would incur the scheduling cost regardless of
-the context. But z_erofs_decompressqueue_endio() may not always
-be in atomic context and we could actually benefit from doing the
-decompression in z_erofs_decompressqueue_endio() if we are in
-thread context, for example when running with dm-verity.
-This optimization was later added in patch [2] which has shown
-improvement in performance benchmarks.
+Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
+which already ensures that the new CPU's stack is available, purely to
+allow for early failure. This occurs when the CPU to be brought up is
+in the CPUHP_OFFLINE state, which should correctly do the cleanup any
+time the CPU has been taken down to the point where such is needed.
 
-==============================================
-[1] Problem stacktrace
-[name:core&]BUG: sleeping function called from invalid context at kernel/locking/mutex.c:291
-[name:core&]in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 1615, name: CpuMonitorServi
-[name:core&]preempt_count: 0, expected: 0
-[name:core&]RCU nest depth: 1, expected: 0
-CPU: 7 PID: 1615 Comm: CpuMonitorServi Tainted: G S      W  OE      6.1.25-android14-5-maybe-dirty-mainline #1
-Hardware name: MT6897 (DT)
-Call trace:
- dump_backtrace+0x108/0x15c
- show_stack+0x20/0x30
- dump_stack_lvl+0x6c/0x8c
- dump_stack+0x20/0x48
- __might_resched+0x1fc/0x308
- __might_sleep+0x50/0x88
- mutex_lock+0x2c/0x110
- z_erofs_decompress_queue+0x11c/0xc10
- z_erofs_decompress_kickoff+0x110/0x1a4
- z_erofs_decompressqueue_endio+0x154/0x180
- bio_endio+0x1b0/0x1d8
- __dm_io_complete+0x22c/0x280
- clone_endio+0xe4/0x280
- bio_endio+0x1b0/0x1d8
- blk_update_request+0x138/0x3a4
- blk_mq_plug_issue_direct+0xd4/0x19c
- blk_mq_flush_plug_list+0x2b0/0x354
- __blk_flush_plug+0x110/0x160
- blk_finish_plug+0x30/0x4c
- read_pages+0x2fc/0x370
- page_cache_ra_unbounded+0xa4/0x23c
- page_cache_ra_order+0x290/0x320
- do_sync_mmap_readahead+0x108/0x2c0
- filemap_fault+0x19c/0x52c
- __do_fault+0xc4/0x114
- handle_mm_fault+0x5b4/0x1168
- do_page_fault+0x338/0x4b4
- do_translation_fault+0x40/0x60
- do_mem_abort+0x60/0xc8
- el0_da+0x4c/0xe0
- el0t_64_sync_handler+0xd4/0xfc
- el0t_64_sync+0x1a0/0x1a4
-
-[2] Link: https://lore.kernel.org/all/20210317035448.13921-1-huangjianan@oppo.com/
-
-Reported-by: Will Shiu <Will.Shiu@mediatek.com>
-Suggested-by: Gao Xiang <xiang@kernel.org>
-Signed-off-by: Sandeep Dhavale <dhavale@google.com>
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
-Link: https://lore.kernel.org/r/20230621220848.3379029-1-dhavale@google.com
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Michael Kelley <mikelley@microsoft.com>
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Tested-by: Helge Deller <deller@gmx.de> # parisc
+Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
+Link: https://lore.kernel.org/r/20230512205257.027075560@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/erofs/zdata.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/cpu.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 160b3da43aecd..e5dddaa1f25d3 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -1452,7 +1452,7 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
- 	if (atomic_add_return(bios, &io->pending_bios))
- 		return;
- 	/* Use (kthread_)work and sync decompression for atomic contexts only */
--	if (in_atomic() || irqs_disabled()) {
-+	if (!in_task() || irqs_disabled() || rcu_read_lock_any_held()) {
- #ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
- 		struct kthread_worker *worker;
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 6c0a92ca6bb59..43e0a77f21e81 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -591,12 +591,6 @@ static int bringup_cpu(unsigned int cpu)
+ 	struct task_struct *idle = idle_thread_get(cpu);
+ 	int ret;
  
+-	/*
+-	 * Reset stale stack state from the last time this CPU was online.
+-	 */
+-	scs_task_reset(idle);
+-	kasan_unpoison_task_stack(idle);
+-
+ 	/*
+ 	 * Some architectures have to walk the irq descriptors to
+ 	 * setup the vector space for the cpu which comes online.
+@@ -1383,6 +1377,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
+ 			ret = PTR_ERR(idle);
+ 			goto out;
+ 		}
++
++		/*
++		 * Reset stale stack state from the last time this CPU was online.
++		 */
++		scs_task_reset(idle);
++		kasan_unpoison_task_stack(idle);
+ 	}
+ 
+ 	cpuhp_tasks_frozen = tasks_frozen;
 -- 
 2.39.2
 
