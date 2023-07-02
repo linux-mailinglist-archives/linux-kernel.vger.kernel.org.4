@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252A5744C52
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 07:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA527744C74
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 08:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjGBFWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 01:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        id S229631AbjGBGmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 02:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjGBFWu (ORCPT
+        with ESMTP id S229523AbjGBGmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 01:22:50 -0400
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4851DE4D
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jul 2023 22:22:48 -0700 (PDT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-53fa00ed93dso4316374a12.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jul 2023 22:22:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688275367; x=1690867367;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5kS+epQmaaIeMaJpTN3AeDp9xO6+JvCmCnd1M7Xkrms=;
-        b=gyhc/CNJdd+lIMtCgTPRtfSxiKxuywVUTsepWWhltTxJntJva/9yhvtG1rUag2qvJZ
-         3ebtjMpHAFX0zB+X4n8fJmVgrX9ziCoV9gadqSfNMUGbgX8EqCLGMu4i2z82obUR5Cm+
-         fLTQfqqh0E5/OeBFloGib+1dqTZ4qo/fJ/aEADyEdb4oEaI2QUwPjRrg7JyZDnZVVqIB
-         ctU1Et333nZyfruNRb2fVTOkp8LdOENmZ/nGh2bTb/WX9cE982RoT9u2JtoNHlsudB+1
-         FBwl+ZsD13D7Sbh3RznOoyFAa6agRk0f/jc0EXnl9YZAJauLK/r5z0VxSwytnxDdIkKN
-         MnJw==
-X-Gm-Message-State: ABy/qLYcTNE4ffCotbtc8pzWccJRcveZKXyjjkM5NpYQYmxlaoF7npj/
-        3gg7FCAjCCUhW+pclCIe2Tz4Nlfg9wgWPAQZGbRsAd50O25a
-X-Google-Smtp-Source: APBJJlFm3oWWgEc37UKNJQ/lBbB9nU9nWqQf2XZI3TBmh7pqyc484SxQm/JSo0pcF1dq2SMewv1dcs6oCeNNN0EuMzgr6UATiTZM
+        Sun, 2 Jul 2023 02:42:12 -0400
+Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1F2C3;
+        Sat,  1 Jul 2023 23:42:06 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:2991:0:640:bb47:0])
+        by forward500c.mail.yandex.net (Yandex) with ESMTP id C314A5E97C;
+        Sun,  2 Jul 2023 09:42:00 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id ufJuntUDda60-5bVh6QB7;
+        Sun, 02 Jul 2023 09:41:59 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1688280120;
+        bh=XiUBoiw+8W0drTZxJpGsrmWe6kl6B1XHyd8+N0mErnk=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=jIJ2sLrtjo9QdXxGAw0kf9pBVRsfZn2SjCyf+pFyXLmPIkKZNzjIG7rMBCwL6Eoqj
+         dhDl21QNwghiAmKPhS6UAV60RM636dbPORMcZzA4hmU5pmexnlGNeDcvo+8kaC0wI6
+         uZdslIR39olm1oxX8P36oYw1V9HVli+puHQiALFU=
+Authentication-Results: mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <b0315095-0634-1eeb-fbd7-86f44d00d659@yandex.ru>
+Date:   Sun, 2 Jul 2023 11:41:56 +0500
 MIME-Version: 1.0
-X-Received: by 2002:a63:d005:0:b0:52c:999a:fce2 with SMTP id
- z5-20020a63d005000000b0052c999afce2mr4237893pgf.10.1688275367618; Sat, 01 Jul
- 2023 22:22:47 -0700 (PDT)
-Date:   Sat, 01 Jul 2023 22:22:47 -0700
-In-Reply-To: <00000000000055cd8405f84c5386@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000091ecc005ff7a3d93@google.com>
-Subject: Re: [syzbot] WARNING in class_register
-From:   syzbot <syzbot+ca3d9f693dfa69f61371@syzkaller.appspotmail.com>
-To:     dvyukov@google.com, gregkh@linuxfoundation.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/2] v3: F_OFD_GETLK extension to read lock info
+Content-Language: en-US
+To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+References: <20230622165225.2772076-1-stsp2@yandex.ru>
+ <b18c49ada119b6904b92375a847ce8c764cb1663.camel@kernel.org>
+From:   stsp <stsp2@yandex.ru>
+In-Reply-To: <b18c49ada119b6904b92375a847ce8c764cb1663.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,34 +58,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-driver core: class : fix slab-use-after-free Read in class_register()
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+27.06.2023 21:23, Jeff Layton пишет:
+> I've taken the first two patches into my locks-next branch, so they
+> should end up in linux-next soon. Adding support for testing this to
+> fstests is a hard requirement before this will be merged into mainline.
+The test-suite is entirely broken.
+I posted the patch:
 
-#syz fix: exact-commit-title
+https://marc.info/?l=fstests&m=168811805324487&w=2
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+And the question:
+https://marc.info/?l=fstests&m=168811862324941&w=2
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=ca3d9f693dfa69f61371
+But no reaction.
+Unless someone helps with reviewing,
+nothing will likely happen.
 
----
-[1] I expect the commit to be present in:
-
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
