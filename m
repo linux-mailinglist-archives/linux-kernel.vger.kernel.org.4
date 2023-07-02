@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C48F744BF3
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 03:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E7A744BF4
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 03:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjGBBDp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 1 Jul 2023 21:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S229726AbjGBBIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jul 2023 21:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjGBBDn (ORCPT
+        with ESMTP id S229523AbjGBBIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jul 2023 21:03:43 -0400
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED64172B;
-        Sat,  1 Jul 2023 18:03:42 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-bd6446528dcso3458682276.2;
-        Sat, 01 Jul 2023 18:03:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688259822; x=1690851822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eH/EyizLb9FjbDE2YkuFGN61mm1+iiCI7p0+/Tx7qko=;
-        b=eTkDHVEHnqb1cFndxc83Izo7UTblTdrMziB0sCIaRfNNp0m6sidfrCQL2TSua9Z5Kh
-         7iI715oaYE+8AIdKNgBP2euBpJLksxIJUjEF+hLftHoKENBQt8N0y02O+2W/pAGw8a6F
-         A/qCmiIzBPfgo56PCZ0UH6OgX0093rS0HJYTRnbzX9Ady6gS+yC2ytJWpMH/8Tng/3Lf
-         X1zR99N5K2eCPw8ilBGrIYM681hIG1Ecq7cRfVB6fIQzeNiGs0cyG1i7IX6PoXR6BYHd
-         yYJOFQ6KOMWsoSSOZCMjVqpBmKBlj9or6x2UFUiK/TDKALLpk0ZImQabRrcJh/wgpXmS
-         Mo+A==
-X-Gm-Message-State: ABy/qLZmsn4ffIc1yFi5nN22uH+3H7LzfaE5ca/06cDOeJk/o/QXcsKO
-        WRQFLjiXd80BzzZohByopOyNGa/qDDuHP+DHV2Y=
-X-Google-Smtp-Source: APBJJlHHOWkKr0/zYtKwSsGlZrlHf2gh3VIuCvw6n4ajuNSjpGTn7JNs3X/0SJDBYrayzKCUV9OilaY/HevRe3yRQi4=
-X-Received: by 2002:a25:ae84:0:b0:bb1:6e29:a84d with SMTP id
- b4-20020a25ae84000000b00bb16e29a84dmr6865225ybj.53.1688259821849; Sat, 01 Jul
- 2023 18:03:41 -0700 (PDT)
+        Sat, 1 Jul 2023 21:08:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6301717;
+        Sat,  1 Jul 2023 18:08:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF88B601BE;
+        Sun,  2 Jul 2023 01:08:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3ADEC433C8;
+        Sun,  2 Jul 2023 01:08:41 +0000 (UTC)
+Date:   Sat, 1 Jul 2023 21:08:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] tracing/probes: Fix to avoid double count of the
+ string length on the array
+Message-ID: <20230701210840.5cb46a79@rorschach.local.home>
+In-Reply-To: <168804801788.2028538.4620519547242506783.stgit@mhiramat.roam.corp.google.com>
+References: <8819b154-2ba1-43c3-98a2-cbde20892023@moroto.mountain>
+        <168804801788.2028538.4620519547242506783.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230630085230.437-1-ravi.bangoria@amd.com> <CAM9d7chYnT2s1V1juP+EyewJfRD+2qHGs2pwghh=k3kFf1P9BA@mail.gmail.com>
-In-Reply-To: <CAM9d7chYnT2s1V1juP+EyewJfRD+2qHGs2pwghh=k3kFf1P9BA@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Sat, 1 Jul 2023 18:03:30 -0700
-Message-ID: <CAM9d7ciV--mPi_MFQdsa8eoGp82NB0B5BmVccP_kMB65wGJafg@mail.gmail.com>
-Subject: Re: [PATCH v3] perf evsel amd: Fix IBS error message
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, peterz@infradead.org, irogers@google.com,
-        jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 11:17 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Ravi,
->
-> On Fri, Jun 30, 2023 at 1:53 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
-> >
-> > AMD IBS can do per-process profiling[1] and is no longer restricted to
-> > per-cpu or systemwide only. Remove stale error message. Also, checking
-> > just exclude_kernel is not sufficient since IBS does not support any
-> > privilege filters. So include all exclude_* checks. And finally, move
-> > these checks under tools/perf/arch/x86/ from generic code.
-> >
-> > Before:
-> >   $ sudo ./perf record -e ibs_op//k -C 0
-> >   Error:
-> >   AMD IBS may only be available in system-wide/per-cpu mode.  Try
-> >   using -a, or -C and workload affinity
-> >
-> > After:
-> >   $ sudo ./perf record -e ibs_op//k -C 0
-> >   Error:
-> >   AMD IBS doesn't support privilege filtering. Try again without
-> >   the privilege modifiers (like 'k') at the end.
-> >
-> > [1] https://git.kernel.org/torvalds/c/30093056f7b2
-> >
-> > Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
->
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+On Thu, 29 Jun 2023 23:13:37 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-Applied to perf-tools-next, thanks!
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> If there is an array is specified with the ustring or symstr, the length of
+
+ "If there is an array specified with ustring or .." or "If an array is specified with ustring"
+
+I prefer the latter.
+
+> the strings are accumlated on both of 'ret' and 'total', which means the
+> length is double counted.
+> Just set the length to the 'ret' value to aviud double count.
+
+					"avoid"
+
+> 
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/all/8819b154-2ba1-43c3-98a2-cbde20892023@moroto.mountain/
+> Fixes: 88903c464321 ("tracing/probe: Add ustring type for user-space string")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  kernel/trace/trace_probe_tmpl.h |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+> index 00707630788d..4735c5cb76fa 100644
+> --- a/kernel/trace/trace_probe_tmpl.h
+> +++ b/kernel/trace/trace_probe_tmpl.h
+> @@ -156,11 +156,11 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+>  			code++;
+>  			goto array;
+>  		case FETCH_OP_ST_USTRING:
+> -			ret += fetch_store_strlen_user(val + code->offset);
+> +			ret = fetch_store_strlen_user(val + code->offset);
+>  			code++;
+>  			goto array;
+>  		case FETCH_OP_ST_SYMSTR:
+> -			ret += fetch_store_symstrlen(val + code->offset);
+> +			ret = fetch_store_symstrlen(val + code->offset);
+
+Other than the above,
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
+
+
+>  			code++;
+>  			goto array;
+>  		default:
+
