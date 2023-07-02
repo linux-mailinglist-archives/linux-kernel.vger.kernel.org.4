@@ -2,445 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2C4744D94
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 14:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FF8744D95
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 14:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjGBMVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 08:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S229699AbjGBM1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 08:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjGBMU6 (ORCPT
+        with ESMTP id S229460AbjGBM1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 08:20:58 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4352D101;
-        Sun,  2 Jul 2023 05:20:56 -0700 (PDT)
+        Sun, 2 Jul 2023 08:27:41 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF52127
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 05:27:39 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso1794200b3a.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 05:27:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1688300456; x=1719836456;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rq8735iOG5vYAi4oR+PYcweJfAUXtrauEJjLHOf55GU=;
-  b=jVEr+/Uizzb2mLYHUH+81t8iiXKE0BfN8vKKIB8aoWD3h10lQ980fKj0
-   pRMtYDV9UnOE3JcXUU7AVY3V8rAvVBhmL9a5eXcteYAB6cJRe4KwF4I91
-   fOj0r30xee5yBak5DjmHJQvb6wsVGacZOIyABHh0pEUdo8Rv4RYjNtVnn
-   c=;
-X-IronPort-AV: E=Sophos;i="6.01,176,1684800000"; 
-   d="scan'208";a="342222044"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1box-1dm6-7f722725.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 12:20:54 +0000
-Received: from EX19D017EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1box-1dm6-7f722725.us-east-1.amazon.com (Postfix) with ESMTPS id E64F9882BA;
-        Sun,  2 Jul 2023 12:20:51 +0000 (UTC)
-Received: from EX19D044EUA002.ant.amazon.com (10.252.50.212) by
- EX19D017EUA003.ant.amazon.com (10.252.50.129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Sun, 2 Jul 2023 12:20:50 +0000
-Received: from [192.168.156.52] (10.85.143.178) by
- EX19D044EUA002.ant.amazon.com (10.252.50.212) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Sun, 2 Jul 2023 12:20:44 +0000
-Message-ID: <98aeb2ce-7a3e-116b-f16d-6c6f98aa9ac3@amazon.com>
-Date:   Sun, 2 Jul 2023 15:20:39 +0300
+        d=gmail.com; s=20221208; t=1688300859; x=1690892859;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zXacy/ibfEE4463MMOkzH0g2Qngy9APl/d9Z2BDtCxo=;
+        b=HTHDYOKcfKX0L7TZwlsiGResZFtHUFuWE9/61jqpVmVZ0cBbmrJAfD3TfV06vq8auO
+         LoYEOFXWQP9dYEvnRvrjmeiQSi+W2bK9C/t1IcnAkXjbMAdFA9/aLoPSyeHjrjw36DKo
+         Y9K+P0NEVXc+vwZ7U6G/fIz8xOU6R5eryq5+EBbq5wfMrgzGECz+7ldZW9yplHzNJ1rD
+         1OhZUZVIlTREUM841n6UBFWz3yMAZDHhwRf+eIN+3k84cbE9CzC44fBcz1YTEbhCcwkg
+         ONfjRdMhTxeXXrgn2G5TyxCV64ZhhrmRB5DHTjChBssRI2ibmPbIyfko3XVQYmeQmXnQ
+         f9Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688300859; x=1690892859;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zXacy/ibfEE4463MMOkzH0g2Qngy9APl/d9Z2BDtCxo=;
+        b=OnlDIWDUj5eU8SvRCKQ9SjnKnPOFQ5iPqth4FKPNzdDJdXIczJgz/UD0tb3TgZnUOd
+         AkfB3XfVBPGX7PcjOcwmOq4LkK7xd8ISg0Q++oCtS0WMGvXXBb+gK7b1LG31KDvnVqGt
+         rivA+iFITaBXCkuXdviDb3xmheGUMaCIKDqXLUr4rVEhPStElHFdfHbAf99RLZb4WB8T
+         QFRLHVF+cRxZW0waDN+14O06XRK+ZqmTytNlBjkFTtOvMZ3ZXmqh+qUVWdUrQo/rO2i6
+         0JxuFbSjjGadZXEg3TtQV4UKV9scteg+EAx9eq85zJKOrHOHgaI4x8NgTtI8NMp0CMuB
+         XtgA==
+X-Gm-Message-State: ABy/qLYnCerGFqp/mvXH5eYIDUudF+aCZQ8L/VElSTw35LD7UfXeLaIl
+        1Ljdb6zUWyETrbOchTv7o40=
+X-Google-Smtp-Source: APBJJlFyk3HIH5rOtkgOujWwazVhnbb78+e3ETKdDoKg9fiJKbMQx7gEgmT9fyzAW8TTws0ZIQt1QQ==
+X-Received: by 2002:a05:6a00:b81:b0:662:f0d0:a77d with SMTP id g1-20020a056a000b8100b00662f0d0a77dmr8629430pfj.30.1688300859135;
+        Sun, 02 Jul 2023 05:27:39 -0700 (PDT)
+Received: from [192.168.0.103] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id 9-20020aa79109000000b0066a31111ccdsm6522887pfh.65.2023.07.02.05.27.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 05:27:38 -0700 (PDT)
+Message-ID: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
+Date:   Sun, 2 Jul 2023 19:27:33 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 1/5] pps: add pulse-width calculation in nsec
 Content-Language: en-US
-To:     Rodolfo Giometti <giometti@enneenne.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <ronenk@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <amitlavi@amazon.com>, <almogbs@amazon.com>, <farbere@amazon.com>
-References: <20230625142134.33690-1-farbere@amazon.com>
- <20230625142134.33690-2-farbere@amazon.com>
- <6b6dd2ae-a30d-4f25-f696-c01f2e5a4a1e@enneenne.com>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <6b6dd2ae-a30d-4f25-f696-c01f2e5a4a1e@enneenne.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.85.143.178]
-X-ClientProxiedBy: EX19D032UWB004.ant.amazon.com (10.13.139.136) To
- EX19D044EUA002.ant.amazon.com (10.252.50.212)
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jacob Young <jacobly.alt@gmail.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Memory corruption in multithreaded user space program while
+ calling fork
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/2023 5:27 PM, Rodolfo Giometti wrote:
-> On 25/06/23 16:21, Eliav Farber wrote:
->> This change adds PPS pulse-width calculation in nano seconds.
->> Width time can be calculated for both assert time and reset time.
->>
->> Calculation can be done only if capture ASSERT and capture CLEAR modes
->> are both enabled.
->>
->> Assert width is calculated as:
->>    clear-time - assert-time
->> and clear width is calculated as:
->>    assert-time - clear-time
->>
->> Read-only sysfs were added to get the last pulse-width time and event
->> sequence.
->> Examples:
->>   * cat /sys/class/pps/pps0/pulse_width_assert
->>     20001450#85
->>   * cat /sys/class/pps/pps1/pulse_width_clear
->>     979893314#16
->>
->> Signed-off-by: Eliav Farber <farbere@amazon.com>
->> ---
->>   drivers/pps/kapi.c         | 49 ++++++++++++++++++++++++++++++++++++++
->>   drivers/pps/pps.c          |  9 +++++++
->>   drivers/pps/sysfs.c        | 30 +++++++++++++++++++++++
->>   include/linux/pps_kernel.h |  3 +++
->>   include/uapi/linux/pps.h   | 19 +++++++++++++++
->>   5 files changed, 110 insertions(+)
->>
->> diff --git a/drivers/pps/kapi.c b/drivers/pps/kapi.c
->> index d9d566f70ed1..deeecfc0a3ee 100644
->> --- a/drivers/pps/kapi.c
->> +++ b/drivers/pps/kapi.c
->> @@ -82,6 +82,14 @@ struct pps_device *pps_register_source(struct 
->> pps_source_info *info,
->>               goto pps_register_source_exit;
->>       }
->>
->> +     if ((info->mode & PPS_WIDTHBOTH) &&
->> +         ((info->mode & PPS_CAPTUREBOTH) != PPS_CAPTUREBOTH)) {
->> +             pr_err("%s: width can't be calculated without both 
->> captures (mode = 0x%x)\n",
->> +                    info->name, info->mode);
->> +             err = -EINVAL;
->> +             goto pps_register_source_exit;
->> +     }
->
-> See the comment below where you define PPS_WIDTHBOTH.
->
->>       /* Allocate memory for the new PPS source struct */
->>       pps = kzalloc(sizeof(struct pps_device), GFP_KERNEL);
->>       if (pps == NULL) {
->> @@ -143,6 +151,39 @@ void pps_unregister_source(struct pps_device *pps)
->>   }
->>   EXPORT_SYMBOL(pps_unregister_source);
->>
->> +static u64 pps_ktime_sub(struct pps_ktime *ts1, struct pps_ktime *ts2)
->> +{
->> +     if (ts1->sec == ts2->sec)
->> +             return (ts1->nsec > ts2->nsec) ? (ts1->nsec - 
->> ts2->nsec) : (ts2->nsec - ts1->nsec);
->> +
->> +     if (ts1->sec > ts2->sec)
->> +             return (ts1->sec - ts2->sec) * NSEC_PER_SEC + ts1->nsec 
->> - ts2->nsec;
->> +
->> +     return (ts2->sec - ts1->sec) * NSEC_PER_SEC + ts2->nsec - 
->> ts1->nsec;
->> +}
->> +
->> +static void pps_calc_clear_width(struct pps_device *pps)
->> +{
->> +     if (pps->clear_sequence == 0)
->> +             return;
->> +
->> +     pps->clear_width.sequence++;
->
-> I don't understand the meaning of this field... regarding assert and 
-> clear it
-> states the n-th sample but in this case...? Why do you need it?
+Hi,
 
-For assert and clear, the sequence parameter is basically the counter
-of assert/clear events.
-Similarly, I wanted to have a counter for the number of pulses which
-there width was counted.
-The sequence was used by me in the sysfs to show the pulse counter and
-pulse width in nano-seconds.
-Will counter make more sense instead of sequence?
-Initially, I used the assert_sequence and clear_sequence as the pulse
-counter, but there were few cases to handle.
-In case first interrupt happened during a pulse, then
-assert_sequence != clear_sequence, but if not then
-assert_sequence == clear_sequence.
-So I preferred to add an new independent value.
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
->> +     pps->clear_width.nsec = pps_ktime_sub(&pps->assert_tu, 
->> &pps->clear_tu);
->> +     dev_dbg(pps->dev, "PPS clear width = %llu#%u\n",
->> +             pps->clear_width.nsec, pps->clear_width.sequence);
->> +}
->> +
->> +static void pps_calc_assert_width(struct pps_device *pps)
->> +{
->> +     if (pps->assert_sequence == 0)
->> +             return;
->> +
->> +     pps->assert_width.sequence++;
->
-> Ditto.
->
->> +     pps->assert_width.nsec = pps_ktime_sub(&pps->clear_tu, 
->> &pps->assert_tu);
->> +     dev_dbg(pps->dev, "PPS assert width = %llu#%u\n",
->> +             pps->assert_width.nsec, pps->assert_width.sequence);
->> +}
->> +
->>   /* pps_event - register a PPS event into the system
->>    * @pps: the PPS device
->>    * @ts: the event timestamp
->> @@ -191,6 +232,10 @@ void pps_event(struct pps_device *pps, struct 
->> pps_event_time *ts, int event,
->>               dev_dbg(pps->dev, "capture assert seq #%u\n",
->>                       pps->assert_sequence);
->>
->> +             /* Calculate clear pulse-width */
->> +             if (pps->params.mode & PPS_WIDTHCLEAR)
->> +                     pps_calc_clear_width(pps);
->> +
->>               captured = ~0;
->>       }
->>       if (event & pps->params.mode & PPS_CAPTURECLEAR) {
->> @@ -205,6 +250,10 @@ void pps_event(struct pps_device *pps, struct 
->> pps_event_time *ts, int event,
->>               dev_dbg(pps->dev, "capture clear seq #%u\n",
->>                       pps->clear_sequence);
->>
->> +             /* Calculate assert pulse-width */
->> +             if (pps->params.mode & PPS_WIDTHASSERT)
->> +                     pps_calc_assert_width(pps);
->> +
->>               captured = ~0;
->>       }
->>
->> diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
->> index 5d19baae6a38..8299a272af11 100644
->> --- a/drivers/pps/pps.c
->> +++ b/drivers/pps/pps.c
->> @@ -195,6 +195,11 @@ static long pps_cdev_ioctl(struct file *file,
->>               fdata.info.clear_tu = pps->clear_tu;
->>               fdata.info.current_mode = pps->current_mode;
->>
->> +             memcpy(&fdata.info.assert_width, &pps->assert_width,
->> +                    sizeof(struct pps_kwidth));
->> +             memcpy(&fdata.info.clear_width, &pps->clear_width,
->> +                    sizeof(struct pps_kwidth));
->> +
->>               spin_unlock_irq(&pps->lock);
->>
->>               err = copy_to_user(uarg, &fdata, sizeof(struct 
->> pps_fdata));
->> @@ -283,6 +288,10 @@ static long pps_cdev_compat_ioctl(struct file 
->> *file,
->>                               sizeof(struct pps_ktime_compat));
->>               memcpy(&compat.info.clear_tu, &pps->clear_tu,
->>                               sizeof(struct pps_ktime_compat));
->> +             memcpy(&compat.info.assert_width, &pps->assert_width,
->> +                    sizeof(struct pps_kwidth_compat));
->> +             memcpy(&compat.info.clear_width, &pps->clear_width,
->> +                    sizeof(struct pps_kwidth_compat));
->>
->>               spin_unlock_irq(&pps->lock);
->>
->> diff --git a/drivers/pps/sysfs.c b/drivers/pps/sysfs.c
->> index 134bc33f6ad0..3e34de77dba6 100644
->> --- a/drivers/pps/sysfs.c
->> +++ b/drivers/pps/sysfs.c
->> @@ -79,6 +79,34 @@ static ssize_t path_show(struct device *dev, 
->> struct device_attribute *attr,
->>   }
->>   static DEVICE_ATTR_RO(path);
->>
->> +static ssize_t pulse_width_assert_show(struct device *dev,
->> +                                    struct device_attribute *attr,
->> +                                    char *buf)
->> +{
->> +     struct pps_device *pps = dev_get_drvdata(dev);
->> +
->> +     if (!(pps->info.mode & PPS_WIDTHASSERT))
->> +             return 0;
->> +
->> +     return sprintf(buf, "%llu#%u\n",
->> +                    pps->assert_width.nsec, 
->> pps->assert_width.sequence);
->> +}
->> +static DEVICE_ATTR_RO(pulse_width_assert);
->> +
->> +static ssize_t pulse_width_clear_show(struct device *dev,
->> +                                   struct device_attribute *attr,
->> +                                   char *buf)
->> +{
->> +     struct pps_device *pps = dev_get_drvdata(dev);
->> +
->> +     if (!(pps->info.mode & PPS_WIDTHCLEAR))
->> +             return 0;
->> +
->> +     return sprintf(buf, "%llu#%u\n",
->> +                    pps->clear_width.nsec, pps->clear_width.sequence);
->> +}
->> +static DEVICE_ATTR_RO(pulse_width_clear);
->> +
->>   static struct attribute *pps_attrs[] = {
->>       &dev_attr_assert.attr,
->>       &dev_attr_clear.attr,
->> @@ -86,6 +114,8 @@ static struct attribute *pps_attrs[] = {
->>       &dev_attr_echo.attr,
->>       &dev_attr_name.attr,
->>       &dev_attr_path.attr,
->> +     &dev_attr_pulse_width_assert.attr,
->> +     &dev_attr_pulse_width_clear.attr,
->>       NULL,
->>   };
->>
->> diff --git a/include/linux/pps_kernel.h b/include/linux/pps_kernel.h
->> index 78c8ac4951b5..15f2338095c6 100644
->> --- a/include/linux/pps_kernel.h
->> +++ b/include/linux/pps_kernel.h
->> @@ -51,6 +51,9 @@ struct pps_device {
->>       struct pps_ktime clear_tu;
->>       int current_mode;                       /* PPS mode at event 
->> time */
->>
->> +     struct pps_kwidth assert_width;         /* PPS assert 
->> pulse-width time and event seq # */
->> +     struct pps_kwidth clear_width;          /* PPS clear 
->> pulse-width time and event seq # */
->> +
->>       unsigned int last_ev;                   /* last PPS event id */
->>       wait_queue_head_t queue;                /* PPS event queue */
->>
->> diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
->> index 009ebcd8ced5..dd93dac0afc1 100644
->> --- a/include/uapi/linux/pps.h
->> +++ b/include/uapi/linux/pps.h
->> @@ -64,12 +64,24 @@ struct pps_ktime_compat {
->>   } __attribute__((packed, aligned(4)));
->>   #define PPS_TIME_INVALID    (1<<0)  /* used to specify 
->> timeout==NULL */
->>
->> +struct pps_kwidth {
->> +     __u64 nsec;
->> +     __u32 sequence;
->> +};
->> +
->> +struct pps_kwidth_compat {
->> +     __u64 nsec;
->> +     __u32 sequence;
->> +} __attribute__((packed, aligned(4)));
->
-> Why do you need a new type? Since both assert_width and clear_width 
-> are time
-> quantities as far as assert_tu and clear_tu, they can be of the same 
-> type, can't
-> they? Or, at least they can simply be __u64 since having an 
-> assert_width or
-> clear_width longer than 1 second is a non-sense...
+> After upgrading to kernel version 6.4.0 from 6.3.9, I noticed frequent but random crashes in a user space program.  After a lot of reduction, I have come up with the following reproducer program:
+> 
+> $ uname -a
+> Linux jacob 6.4.1-gentoo #1 SMP PREEMPT_DYNAMIC Sat Jul  1 19:02:42 EDT 2023 x86_64 AMD Ryzen 9 7950X3D 16-Core Processor AuthenticAMD GNU/Linux
+> $ cat repro.c
+> #define _GNU_SOURCE
+> #include <sched.h>
+> #include <sys/wait.h>
+> #include <unistd.h>
+> 
+> void *threadSafeAlloc(size_t n) {
+>     static size_t end_index = 0;
+>     static char buffer[1 << 25];
+>     size_t start_index = __atomic_load_n(&end_index, __ATOMIC_SEQ_CST);
+>     while (1) {
+>         if (start_index + n > sizeof(buffer)) _exit(1);
+>         if (__atomic_compare_exchange_n(&end_index, &start_index, start_index + n, 1, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)) return buffer + start_index;
+>     }
+> }
+> 
+> int thread(void *arg) {
+>     size_t i;
+>     size_t n = 1 << 7;
+>     char *items;
+>     (void)arg;
+>     while (1) {
+>         items = threadSafeAlloc(n);
+>         for (i = 0; i != n; i += 1) items[i] = '@';
+>         for (i = 0; i != n; i += 1) if (items[i] != '@') _exit(2);
+>     }
+> }
+> 
+> int main(void) {
+>     static size_t stacks[2][1 << 9];
+>     size_t i;
+>     for (i = 0; i != 2; i += 1) clone(&thread, &stacks[i] + 1, CLONE_THREAD | CLONE_VM | CLONE_SIGHAND, NULL);
+>     while (1) {
+>         if (fork() == 0) _exit(0);
+>         (void)wait(NULL);
+>     }
+> }
+> $ cc repro.c
+> $ ./a.out
+> $ echo $?
+> 2
+> 
+> After tuning the various parameters for my computer, exit code 2, which indicates that memory corruption was detected, occurs approximately 99% of the time.  Exit code 1, which occurs approximately 1% of the time, means it ran out of statically-allocated memory before reproducing the issue, and increasing the memory usage any more only leads to diminishing returns.  There is also something like a 0.1% chance that it segfaults due to memory corruption elsewhere than in the statically-allocated buffer.
+> 
+> With this reproducer in hand, I was able to perform the following bisection:
+> 
+> git bisect start
+> # status: waiting for both good and bad commits
+> # bad: [6995e2de6891c724bfeb2db33d7b87775f913ad1] Linux 6.4
+> git bisect bad 6995e2de6891c724bfeb2db33d7b87775f913ad1
+> # status: waiting for good commit(s), bad commit known
+> # good: [457391b0380335d5e9a5babdec90ac53928b23b4] Linux 6.3
+> git bisect good 457391b0380335d5e9a5babdec90ac53928b23b4
+> # good: [d42b1c47570eb2ed818dc3fe94b2678124af109d] Merge tag 'devicetree-for-6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+> git bisect good d42b1c47570eb2ed818dc3fe94b2678124af109d
+> # bad: [58390c8ce1bddb6c623f62e7ed36383e7fa5c02f] Merge tag 'iommu-updates-v6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu
+> git bisect bad 58390c8ce1bddb6c623f62e7ed36383e7fa5c02f
+> # good: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+> git bisect good 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+> # bad: [86e98ed15b3e34460d1b3095bd119b6fac11841c] Merge tag 'cgroup-for-6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup
+> git bisect bad 86e98ed15b3e34460d1b3095bd119b6fac11841c
+> # bad: [7fa8a8ee9400fe8ec188426e40e481717bc5e924] Merge tag 'mm-stable-2023-04-27-15-30' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> git bisect bad 7fa8a8ee9400fe8ec188426e40e481717bc5e924
+> # bad: [0120dd6e4e202e19a0e011e486fb2da40a5ea279] zram: make zram_bio_discard more self-contained
+> git bisect bad 0120dd6e4e202e19a0e011e486fb2da40a5ea279
+> # good: [fce0b4213edb960859dcc65ea414c8efb11948e1] mm/page_alloc: add helper for checking if check_pages_enabled
+> git bisect good fce0b4213edb960859dcc65ea414c8efb11948e1
+> # bad: [59f876fb9d68a4d8c20305d7a7a0daf4ee9478a8] mm: avoid passing 0 to __ffs()
+> git bisect bad 59f876fb9d68a4d8c20305d7a7a0daf4ee9478a8
+> # good: [0050d7f5ee532f92e8ab1efcec6547bfac527973] afs: split afs_pagecache_valid() out of afs_validate()
+> git bisect good 0050d7f5ee532f92e8ab1efcec6547bfac527973
+> # good: [2ac0af1b66e3b66307f53b1cc446514308ec466d] mm: fall back to mmap_lock if vma->anon_vma is not yet set
+> git bisect good 2ac0af1b66e3b66307f53b1cc446514308ec466d
+> # skip: [0d2ebf9c3f7822e7ba3e4792ea3b6b19aa2da34a] mm/mmap: free vm_area_struct without call_rcu in exit_mmap
+> git bisect skip 0d2ebf9c3f7822e7ba3e4792ea3b6b19aa2da34a
+> # skip: [70d4cbc80c88251de0a5b3e8df3275901f1fa99a] powerc/mm: try VMA lock-based page fault handling first
+> git bisect skip 70d4cbc80c88251de0a5b3e8df3275901f1fa99a
+> # good: [444eeb17437a0ef526c606e9141a415d3b7dfddd] mm: prevent userfaults to be handled under per-vma lock
+> git bisect good 444eeb17437a0ef526c606e9141a415d3b7dfddd
+> # bad: [e06f47a16573decc57498f2d02f9af3bb3e84cf2] s390/mm: try VMA lock-based page fault handling first
+> git bisect bad e06f47a16573decc57498f2d02f9af3bb3e84cf2
+> # skip: [0bff0aaea03e2a3ed6bfa302155cca8a432a1829] x86/mm: try VMA lock-based page fault handling first
+> git bisect skip 0bff0aaea03e2a3ed6bfa302155cca8a432a1829
+> # skip: [cd7f176aea5f5929a09a91c661a26912cc995d1b] arm64/mm: try VMA lock-based page fault handling first
+> git bisect skip cd7f176aea5f5929a09a91c661a26912cc995d1b
+> # good: [52f238653e452e0fda61e880f263a173d219acd1] mm: introduce per-VMA lock statistics
+> git bisect good 52f238653e452e0fda61e880f263a173d219acd1
+> # bad: [c7f8f31c00d187a2c71a241c7f2bd6aa102a4e6f] mm: separate vma->lock from vm_area_struct
+> git bisect bad c7f8f31c00d187a2c71a241c7f2bd6aa102a4e6f
+> # only skipped commits left to test
+> # possible first bad commit: [c7f8f31c00d187a2c71a241c7f2bd6aa102a4e6f] mm: separate vma->lock from vm_area_struct
+> # possible first bad commit: [0d2ebf9c3f7822e7ba3e4792ea3b6b19aa2da34a] mm/mmap: free vm_area_struct without call_rcu in exit_mmap
+> # possible first bad commit: [70d4cbc80c88251de0a5b3e8df3275901f1fa99a] powerc/mm: try VMA lock-based page fault handling first
+> # possible first bad commit: [cd7f176aea5f5929a09a91c661a26912cc995d1b] arm64/mm: try VMA lock-based page fault handling first
+> # possible first bad commit: [0bff0aaea03e2a3ed6bfa302155cca8a432a1829] x86/mm: try VMA lock-based page fault handling first
+> 
+> I do not usually see any kernel log output while running the program, just occasional logs about user space segfaults.
 
-For each pulse I wanted to save width in nsec (without sec) and
-counter.
-I need it twice for both assert and clear, hence I added a new
-structure for it.
+See Bugzilla for the full thread.
 
->>   struct pps_kinfo {
->>       __u32 assert_sequence;          /* seq. num. of assert event */
->>       __u32 clear_sequence;           /* seq. num. of clear event */
->>       struct pps_ktime assert_tu;     /* time of assert event */
->>       struct pps_ktime clear_tu;      /* time of clear event */
->>       int current_mode;               /* current mode bits */
->> +     struct pps_kwidth assert_width; /* assert pulse-width time and 
->> seq. num. */
->> +     struct pps_kwidth clear_width;  /* clear pulse-width time and 
->> seq. num. */
->>   };
->
-> Altering this structure may break userspace code... also rfc2783 at 
-> section-3.2
-> states that:
->
->    The API defines these new data structures:
->
->       typedef struct {
->           pps_seq_t   assert_sequence;        /* assert event seq # */
->           pps_seq_t   clear_sequence;         /* clear event seq # */
->           pps_timeu_t assert_tu;
->           pps_timeu_t clear_tu;
->           int         current_mode;           /* current mode bits */
->       } pps_info_t;
->
-> So, I'm not willing to change this structure just to add this new data 
-> that I
-> don't even know where it's used...
->
-> If you just read these information via sysfs, please drop these part.
+Jacob: Can you repeat bisection please? Why did you skip VMA lock-based
+page fault commits in your bisection?
 
-ACK. I'll drop this part.
+Anyway, I'm adding it to regzbot:
 
->>   struct pps_kinfo_compat {
->> @@ -78,6 +90,8 @@ struct pps_kinfo_compat {
->>       struct pps_ktime_compat assert_tu;      /* time of assert event */
->>       struct pps_ktime_compat clear_tu;       /* time of clear event */
->>       int current_mode;                       /* current mode bits */
->> +     struct pps_kwidth_compat assert_width;  /* assert pulse-width 
->> time and seq. num. */
->> +     struct pps_kwidth_compat clear_width;   /* clear pulse-width 
->> time and seq. num. */
->>   };
->>
->>   struct pps_kparams {
->> @@ -96,6 +110,11 @@ struct pps_kparams {
->>   #define PPS_CAPTURECLEAR    0x02    /* capture clear events */
->>   #define PPS_CAPTUREBOTH             0x03    /* capture assert and 
->> clear events */
->>
->> +/* Pulse-width calculation */
->> +#define PPS_WIDTHASSERT              0x04    /* calculate assert 
->> width */
->> +#define PPS_WIDTHCLEAR               0x08    /* calculate clear 
->> width */
->> +#define PPS_WIDTHBOTH                0x0c    /* calculate assert and 
->> clear width */
->> +
->
-> I don't understand why a process should ask for just PPS_WIDTHASSERT or
-> PPS_WIDTHCLEAR... I think you can avoid defining these values and just 
-> enabling
-> pulse width calculation when both assert and clear events are available. 
+#regzbot introduced: 0bff0aaea03e2a..c7f8f31c00d187 https://bugzilla.kernel.org/show_bug.cgi?id=217624
+#regzbot title: Memory corruption in multithreaded user space program while calling fork (possibly caused by trying VMA lock-based page fault)
 
-ACK. I'll drop the new defines and enable width calculation when
-PPS_CAPTUREASSERT and PPS_CAPTURECLEAR are both defined.
+Thanks.
 
->>   #define PPS_OFFSETASSERT    0x10    /* apply compensation for 
->> assert event */
->>   #define PPS_OFFSETCLEAR             0x20    /* apply compensation 
->> for clear event */
->
-> However, the real point is: since an userpsace program can retrieve 
-> the time of
-> assert and clear events, why it cannot compute the pulses width by 
-> itself? :)
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217624
 
-The userpsace program can retrieve the time of assert and clear events,
-but it is not always clear how to compute it.
-Initially that was how I did it:
-Read both times, make sure sequence of both times was identical, and
-then compute: clear_time – assert_time.
-But as I mentioned, when using wide pulses, it might be that when
-driver starts, it is a the middle of a pulse.
-In that case clear_time will be captured first (seq #1).
-Then assert_time is captured (seq #1).
-However, assert pulse width can only be calculated for the second
-clear-time sequence and first assert-time sequence.
-So to simplify this for the user, I added the calculation to the
-driver.
-Hope this was clear.
-Please let me know if this satisfies you, and then I’ll share a second
-version of patches which fixes all the other comments you gave.
-
----
-Regards, Eliav
-
+-- 
+An old man doll... just what I always wanted! - Clara
