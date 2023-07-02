@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6FD745245
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D43C745247
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjGBU1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 16:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S231475AbjGBU1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 16:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjGBU1B (ORCPT
+        with ESMTP id S230154AbjGBU1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 16:27:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC11E6C
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 13:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688329568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RAuoFBXJGbrEK7r6lFPsWq6Du417iZcQuP9Eu+SLXPs=;
-        b=i5fSoVu+JxqByZczP9BaA4ZzoS0GqFf+8xE8AawGSmRBduJMlCjrmAp5oE6/cUuhlsAojk
-        m0GV/9c20cisBi0W9YZdBt+HQi1Kg4mIFXvi3BQahLrczryA9EAg5eiM83pdqvbOdHk9tR
-        yoMAmaxJY5rZoZEq11IODMgfKsFmeGU=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-547-GxYXjdKhP1GKRvyq0MRVWg-1; Sun, 02 Jul 2023 16:26:07 -0400
-X-MC-Unique: GxYXjdKhP1GKRvyq0MRVWg-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-635f63d0c1aso25925696d6.3
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 13:26:06 -0700 (PDT)
+        Sun, 2 Jul 2023 16:27:09 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B181BB;
+        Sun,  2 Jul 2023 13:27:07 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-262dc1ced40so2750506a91.3;
+        Sun, 02 Jul 2023 13:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688329627; x=1690921627;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8B4WrtCYoTmVa52PhsRUk66XUMg6SOWiGbPZJFW4hIM=;
+        b=KhDPtFUoJepkvVi6txtEt6PI24/0d970AovfZmFqY62J873sFmql2oyO9aeVGp7B6F
+         H0iO9WWw5dIQJC1cVA8XeYlyc+6wX0ubLk3JcLnLFSWifZVOkX/JYuxzkflWvAY1nvT2
+         w1rZfTC822gbv7M4ccL3ktGN9vhDEC+1BmHwJ8rcK6nkZonxEhOdrMwoEiiSacOFgnrc
+         08EEpjfR42anO5KKVYiYddE0eUCLg1i9ComtqxKbYDj0NptLTRQspKi1wrog0fLiq+Uh
+         YN2kfx9E8EY5xhC/18SgCCQiOeBW2TjfcNq2V0kNGi+XEm9Gag7t6gKNNRMj1ge5KtEM
+         kEjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688329566; x=1690921566;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RAuoFBXJGbrEK7r6lFPsWq6Du417iZcQuP9Eu+SLXPs=;
-        b=XXGVJonOeRmmdYz94hslAckgG8T3hU5wMjcbjmxQ/MoIc/Y+225CO23gW3ACe5AsbI
-         mO86F4PkE8NCn08JEUQEOTdsgk1UD/qTDYtJwmzqWNgYJH2WUNNckLYtsrAT6UpjR6TL
-         GU1mPfxE27nJ4vfefZhYlgLbaH+g+LWLdPX6E332UfsaJmMJjUhvwow5HYYzmSII3sDh
-         FZ4UOZ/gnum3LewN8k31Yk/fVPSWNmvhCQNC/15552RRr7x+GKJZ0cGi0vaxJJJ6YXFm
-         o6eHnlG4xIaHOB+SzDd74G2eKp1lRailic3kK2iMxM1XH32SGkchHnRihomW/rx8vyC9
-         kNZA==
-X-Gm-Message-State: ABy/qLbDwoOAIYp3MSHDYJ7pw73gpj08OQG0vqSHQ0l7T27cRU/0QrOv
-        38kbDdGlSUM1vYVnZIJGxVG7Z7Mj2uQX2WbI+VFTwx80XE1/TaPpWtlPPv/Fgmj40qxjqOlm7ar
-        onnTihPo1vErUr01lpoMv/AzvMEePIA18
-X-Received: by 2002:ad4:5fcd:0:b0:635:a1f5:5458 with SMTP id jq13-20020ad45fcd000000b00635a1f55458mr10055506qvb.12.1688329566473;
-        Sun, 02 Jul 2023 13:26:06 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHAdOVmOK/0+cxD45eADjdrnL8vXwAqDR93DNfpbltexe47gg5n3KhEGJTHpGhBn8F7/mMyLw==
-X-Received: by 2002:ad4:5fcd:0:b0:635:a1f5:5458 with SMTP id jq13-20020ad45fcd000000b00635a1f55458mr10055495qvb.12.1688329566186;
-        Sun, 02 Jul 2023 13:26:06 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id g10-20020ad4510a000000b0063623c266easm4430335qvp.3.2023.07.02.13.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 13:26:05 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        jing.cai@mediatek.com, sean.wang@mediatek.com,
-        chris.lu@mediatek.com
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] Bluetooth: btmtk: fix handling of CONFIG_DEV_COREDUMP not being defined
-Date:   Sun,  2 Jul 2023 16:26:03 -0400
-Message-Id: <20230702202603.3442724-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20221208; t=1688329627; x=1690921627;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8B4WrtCYoTmVa52PhsRUk66XUMg6SOWiGbPZJFW4hIM=;
+        b=MvXkl3KOoma8BGOUY6oiAoDApIZMk2bcuQRW1JuQ+6H6LkxkGpUSCH2H7PqOaurtV/
+         MIeDS0COLySI0yNoYgXYLXLuofeLkhfs5LY/R+zGXe+//MsCOOIYfSv2kaq3m9pdy/1K
+         2F1hDidR49u8d7UQ7qjTqq7P0Fvnx6FrTQxPzl8hUJrNzlbdEbDcuGebjncDra7CF4PG
+         uIqZwkuRtaCs23NzA7XWuUFka39ujWAQncgjhGUUOlzMquUaRQtZ9sYPkIfZyDs81Oes
+         S8o1FjSHryEB3TAKjnYAZgWN8hobZsqDsn1IaTB+h5sA/sq1L9Da49n9S8IvATmMaugj
+         JCTg==
+X-Gm-Message-State: ABy/qLbU5D6QvcUV1pceVYfba+mTmZV5XCVk+58orzOGtAm4wh2DSUpC
+        5TShwezXIMPyL0Zn/qt4ZmyAZ13cIsg/8lf3BsI=
+X-Google-Smtp-Source: APBJJlHOTYJM54sHy8B+1rzwxBwtmHJGYyaedvVUP8j0NkZfgvBxzzX6puk7kjY6CndbKmB1kmPnGzk9Xopipip5lMQ=
+X-Received: by 2002:a17:90a:fd0d:b0:25e:a643:adeb with SMTP id
+ cv13-20020a17090afd0d00b0025ea643adebmr8352786pjb.39.1688329627106; Sun, 02
+ Jul 2023 13:27:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+References: <20230629160351.2996541-1-masahiroy@kernel.org> <CAJFTR8Q-EMzajOU+tnKyp_s3BJTrMJkynUiR3C8pxSEUH9WUEw@mail.gmail.com>
+In-Reply-To: <CAJFTR8Q-EMzajOU+tnKyp_s3BJTrMJkynUiR3C8pxSEUH9WUEw@mail.gmail.com>
+From:   Jesse T <mr.bossman075@gmail.com>
+Date:   Sun, 2 Jul 2023 16:26:56 -0400
+Message-ID: <CAJFTR8TY5abKDJX6K9yi_WA8ZxDyLAPHWUV82P0m3uukPSw95g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kconfig: menuconfig: simplify global jump key assignment
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,49 +68,516 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_DEV_COREDUMP is not defined, there is this error
-drivers/bluetooth/btmtk.c: In function ‘btmtk_process_coredump’:
-drivers/bluetooth/btmtk.c:386:44: error: ‘struct hci_dev’ has no member named ‘dump’
-  386 |                 schedule_delayed_work(&hdev->dump.dump_timeout,
-      |                                            ^~
+On Sun, Jul 2, 2023 at 3:32=E2=80=AFPM Jesse T <mr.bossman075@gmail.com> wr=
+ote:
+>
+> On Thu, Jun 29, 2023 at 12:03=E2=80=AFPM Masahiro Yamada <masahiroy@kerne=
+l.org> wrote:
+> >
+> > Commit 95ac9b3b585d ("menuconfig: Assign jump keys per-page instead
+> > of globally") injects a lot of hacks to the bottom of the textbox
+> > infrastructure.
+> >
+> > I reverted many of them without changing the behavior. (almost)
+> > Now, the key markers are inserted when constructing the search result
+> > instead of updating the text buffer on-the-fly.
+> >
+> > The buffer passed to the textbox got back to a constant string.
+> > The ugly casts from (const char *) to (char *) went away.
+> >
+> > A disadvantage is that the same key numbers might be diplayed multiple
+> > times in the dialog if you use a huge window (but I believe it is
+> > unlikely to happen).
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/kconfig/lkc.h              |  1 +
+> >  scripts/kconfig/lxdialog/dialog.h  | 10 ++--
+> >  scripts/kconfig/lxdialog/textbox.c | 68 +++++++++--------------
+> >  scripts/kconfig/mconf.c            | 86 +++++++++++++++++-------------
+> >  scripts/kconfig/menu.c             | 22 ++++++--
+> >  5 files changed, 97 insertions(+), 90 deletions(-)
+> >
+> > diff --git a/scripts/kconfig/lkc.h b/scripts/kconfig/lkc.h
+> > index e7118d62a45f..d5c27180ce91 100644
+> > --- a/scripts/kconfig/lkc.h
+> > +++ b/scripts/kconfig/lkc.h
+> > @@ -101,6 +101,7 @@ const char *menu_get_prompt(struct menu *menu);
+> >  struct menu *menu_get_parent_menu(struct menu *menu);
+> >  bool menu_has_help(struct menu *menu);
+> >  const char *menu_get_help(struct menu *menu);
+> > +int get_jump_key(void);
+> >  struct gstr get_relations_str(struct symbol **sym_arr, struct list_hea=
+d *head);
+> >  void menu_get_ext_help(struct menu *menu, struct gstr *help);
+> >
+> > diff --git a/scripts/kconfig/lxdialog/dialog.h b/scripts/kconfig/lxdial=
+og/dialog.h
+> > index 347daf25fdc8..cd1b59c24b21 100644
+> > --- a/scripts/kconfig/lxdialog/dialog.h
+> > +++ b/scripts/kconfig/lxdialog/dialog.h
+> > @@ -196,13 +196,9 @@ int first_alpha(const char *string, const char *ex=
+empt);
+> >  int dialog_yesno(const char *title, const char *prompt, int height, in=
+t width);
+> >  int dialog_msgbox(const char *title, const char *prompt, int height,
+> >                   int width, int pause);
+> > -
+> > -
+> > -typedef void (*update_text_fn)(char *buf, size_t start, size_t end, vo=
+id
+> > -                              *_data);
+> > -int dialog_textbox(const char *title, char *tbuf, int initial_height,
+> > -                  int initial_width, int *keys, int *_vscroll, int *_h=
+scroll,
+> > -                  update_text_fn update_text, void *data);
+> > +int dialog_textbox(const char *title, const char *tbuf, int initial_he=
+ight,
+> > +                  int initial_width, int *_vscroll, int *_hscroll,
+> > +                  int (*extra_key_cb)(int, int, int, void *), void *da=
+ta);
+> >  int dialog_menu(const char *title, const char *prompt,
+> >                 const void *selected, int *s_scroll);
+> >  int dialog_checklist(const char *title, const char *prompt, int height=
+,
+> > diff --git a/scripts/kconfig/lxdialog/textbox.c b/scripts/kconfig/lxdia=
+log/textbox.c
+> > index bc4d4fb1dc75..e6cd7bb83746 100644
+> > --- a/scripts/kconfig/lxdialog/textbox.c
+> > +++ b/scripts/kconfig/lxdialog/textbox.c
+> > @@ -10,8 +10,8 @@
+> >
+> >  static int hscroll;
+> >  static int begin_reached, end_reached, page_length;
+> > -static char *buf;
+> > -static char *page;
+> > +static const char *buf, *page;
+> > +static int start, end;
+> >
+> >  /*
+> >   * Go back 'n' lines in text. Called by dialog_textbox().
+> > @@ -98,21 +98,10 @@ static void print_line(WINDOW *win, int row, int wi=
+dth)
+> >  /*
+> >   * Print a new page of text.
+> >   */
+> > -static void print_page(WINDOW *win, int height, int width, update_text=
+_fn
+> > -                      update_text, void *data)
+> > +static void print_page(WINDOW *win, int height, int width)
+> >  {
+> >         int i, passed_end =3D 0;
+> >
+> > -       if (update_text) {
+> > -               char *end;
+> > -
+> > -               for (i =3D 0; i < height; i++)
+> > -                       get_line();
+> > -               end =3D page;
+> > -               back_lines(height);
+> > -               update_text(buf, page - buf, end - buf, data);
+> > -       }
+> > -
+> >         page_length =3D 0;
+> >         for (i =3D 0; i < height; i++) {
+> >                 print_line(win, i, width);
+> > @@ -142,24 +131,26 @@ static void print_position(WINDOW *win)
+> >   * refresh window content
+> >   */
+> >  static void refresh_text_box(WINDOW *dialog, WINDOW *box, int boxh, in=
+t boxw,
+> > -                            int cur_y, int cur_x, update_text_fn updat=
+e_text,
+> > -                            void *data)
+> > +                            int cur_y, int cur_x)
+> >  {
+> > -       print_page(box, boxh, boxw, update_text, data);
+> > +       start =3D page - buf;
+> > +
+> > +       print_page(box, boxh, boxw);
+> >         print_position(dialog);
+> >         wmove(dialog, cur_y, cur_x);    /* Restore cursor position */
+> >         wrefresh(dialog);
+> > +
+> > +       end =3D page - buf;
+> >  }
+> >
+> >  /*
+> >   * Display text from a file in a dialog box.
+> >   *
+> >   * keys is a null-terminated array
+> > - * update_text() may not add or remove any '\n' or '\0' in tbuf
+> >   */
+> > -int dialog_textbox(const char *title, char *tbuf, int initial_height,
+> > -                  int initial_width, int *keys, int *_vscroll, int *_h=
+scroll,
+> > -                  update_text_fn update_text, void *data)
+> > +int dialog_textbox(const char *title, const char *tbuf, int initial_he=
+ight,
+> > +                  int initial_width, int *_vscroll, int *_hscroll,
+> > +                  int (*extra_key_cb)(int, int, int, void *), void *da=
+ta)
+> >  {
+> >         int i, x, y, cur_x, cur_y, key =3D 0;
+> >         int height, width, boxh, boxw;
+> > @@ -239,8 +230,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >
+> >         /* Print first page of text */
+> >         attr_clear(box, boxh, boxw, dlg.dialog.atr);
+> > -       refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x, update_=
+text,
+> > -                        data);
+> > +       refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+> >
+> >         while (!done) {
+> >                 key =3D wgetch(dialog);
+> > @@ -259,8 +249,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                                 begin_reached =3D 1;
+> >                                 page =3D buf;
+> >                                 refresh_text_box(dialog, box, boxh, box=
+w,
+> > -                                                cur_y, cur_x, update_t=
+ext,
+> > -                                                data);
+> > +                                                cur_y, cur_x);
+> >                         }
+> >                         break;
+> >                 case 'G':       /* Last page */
+> > @@ -270,8 +259,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                         /* point to last char in buf */
+> >                         page =3D buf + strlen(buf);
+> >                         back_lines(boxh);
+> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+,
+> > -                                        cur_x, update_text, data);
+> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+, cur_x);
+> >                         break;
+> >                 case 'K':       /* Previous line */
+> >                 case 'k':
+> > @@ -280,8 +268,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                                 break;
+> >
+> >                         back_lines(page_length + 1);
+> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+,
+> > -                                        cur_x, update_text, data);
+> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+, cur_x);
+> >                         break;
+> >                 case 'B':       /* Previous page */
+> >                 case 'b':
+> > @@ -290,8 +277,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                         if (begin_reached)
+> >                                 break;
+> >                         back_lines(page_length + boxh);
+> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+,
+> > -                                        cur_x, update_text, data);
+> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+, cur_x);
+> >                         break;
+> >                 case 'J':       /* Next line */
+> >                 case 'j':
+> > @@ -300,8 +286,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                                 break;
+> >
+> >                         back_lines(page_length - 1);
+> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+,
+> > -                                        cur_x, update_text, data);
+> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+, cur_x);
+> >                         break;
+> >                 case KEY_NPAGE: /* Next page */
+> >                 case ' ':
+> > @@ -310,8 +295,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                                 break;
+> >
+> >                         begin_reached =3D 0;
+> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+,
+> > -                                        cur_x, update_text, data);
+> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+, cur_x);
+> >                         break;
+> >                 case '0':       /* Beginning of line */
+> >                 case 'H':       /* Scroll left */
+> > @@ -326,8 +310,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                                 hscroll--;
+> >                         /* Reprint current page to scroll horizontally =
+*/
+> >                         back_lines(page_length);
+> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+,
+> > -                                        cur_x, update_text, data);
+> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+, cur_x);
+> >                         break;
+> >                 case 'L':       /* Scroll right */
+> >                 case 'l':
+> > @@ -337,8 +320,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
+nt initial_height,
+> >                         hscroll++;
+> >                         /* Reprint current page to scroll horizontally =
+*/
+> >                         back_lines(page_length);
+> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+,
+> > -                                        cur_x, update_text, data);
+> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
+, cur_x);
+> >                         break;
+> >                 case KEY_ESC:
+> >                         if (on_key_esc(dialog) =3D=3D KEY_ESC)
+> > @@ -351,11 +333,9 @@ int dialog_textbox(const char *title, char *tbuf, =
+int initial_height,
+> >                         on_key_resize();
+> >                         goto do_resize;
+> >                 default:
+> > -                       for (i =3D 0; keys[i]; i++) {
+> > -                               if (key =3D=3D keys[i]) {
+> > -                                       done =3D true;
+> > -                                       break;
+> > -                               }
+> > +                       if (extra_key_cb(key, start, end, data)) {
+> > +                               done =3D true;
+> > +                               break;
+> >                         }
+> >                 }
+> >         }
+> > diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
+> > index 53d8834d12fe..7adfd6537279 100644
+> > --- a/scripts/kconfig/mconf.c
+> > +++ b/scripts/kconfig/mconf.c
+> > @@ -288,6 +288,7 @@ static int single_menu_mode;
+> >  static int show_all_options;
+> >  static int save_and_exit;
+> >  static int silent;
+> > +static int jump_key;
+> >
+> >  static void conf(struct menu *menu, struct menu *active_menu);
+> >
+> > @@ -348,19 +349,19 @@ static void reset_subtitle(void)
+> >         set_dialog_subtitles(subtitles);
+> >  }
+> >
+> > -static int show_textbox_ext(const char *title, char *text, int r, int =
+c, int
+> > -                           *keys, int *vscroll, int *hscroll, update_t=
+ext_fn
+> > -                           update_text, void *data)
+> > +static int show_textbox_ext(const char *title, const char *text, int r=
+, int c,
+> > +                           int *vscroll, int *hscroll,
+> > +                           int (*extra_key_cb)(int, int, int, void *),
+> > +                           void *data)
+> >  {
+> >         dialog_clear();
+> > -       return dialog_textbox(title, text, r, c, keys, vscroll, hscroll=
+,
+> > -                             update_text, data);
+> > +       return dialog_textbox(title, text, r, c, vscroll, hscroll,
+> > +                             extra_key_cb, data);
+> >  }
+> >
+> >  static void show_textbox(const char *title, const char *text, int r, i=
+nt c)
+> >  {
+> > -       show_textbox_ext(title, (char *) text, r, c, (int []) {0}, NULL=
+, NULL,
+> > -                        NULL, NULL);
+> > +       show_textbox_ext(title, text, r, c, NULL, NULL, NULL, NULL);
+> >  }
+> >
+> >  static void show_helptext(const char *title, const char *text)
+> > @@ -381,35 +382,51 @@ static void show_help(struct menu *menu)
+> >
+> >  struct search_data {
+> >         struct list_head *head;
+> > -       struct menu **targets;
+> > -       int *keys;
+> > +       struct menu *target;
+> >  };
+> >
+> > -static void update_text(char *buf, size_t start, size_t end, void *_da=
+ta)
+> > +static int next_key(int key)
+> > +{
+> > +       key++;
+> > +
+> > +       if (key > '9')
+> > +               key =3D '1';
+> > +
+> > +       return key;
+> > +}
+> > +
+> > +static int handle_search_keys(int key, int start, int end, void *_data=
+)
+> >  {
+> >         struct search_data *data =3D _data;
+> >         struct jump_key *pos;
+> > -       int k =3D 0;
+> > +
+> > +       if (key < '1' || key > '9')
+> > +               return 0;
+> >
+> >         list_for_each_entry(pos, data->head, entries) {
+> > -               if (pos->offset >=3D start && pos->offset < end) {
+Sorry forgot to mention this, but start and end should be size_t.
+You get -Wsign-compare.
 
-The runtime IS_ENABLED(CONFIG_DEV_COREDUMP) is not enough to
-prevent the compiletime error of accessing the dump element of hci_dev.
-So switch to #ifdef.
-
-Fixes: 872f8c253cb9 ("Bluetooth: btusb: mediatek: add MediaTek devcoredump support")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/bluetooth/btmtk.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-index 786f775196ae..12769e95bf55 100644
---- a/drivers/bluetooth/btmtk.c
-+++ b/drivers/bluetooth/btmtk.c
-@@ -369,11 +369,9 @@ EXPORT_SYMBOL_GPL(btmtk_register_coredump);
- 
- int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
- {
-+	int err = 0;
-+#ifdef CONFIG_DEV_COREDUMP
- 	struct btmediatek_data *data = hci_get_priv(hdev);
--	int err;
--
--	if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
--		return 0;
- 
- 	switch (data->cd_info.state) {
- 	case HCI_DEVCOREDUMP_IDLE:
-@@ -407,7 +405,7 @@ int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
- 
- 	if (err < 0)
- 		kfree_skb(skb);
--
-+#endif
- 	return err;
- }
- EXPORT_SYMBOL_GPL(btmtk_process_coredump);
--- 
-2.27.0
-
+> > -                       char header[4];
+> > +               if (pos->offset >=3D start) {
+> > +                       if (pos->offset >=3D end)
+> > +                               break;
+> >
+> > -                       if (k < JUMP_NB) {
+> > -                               int key =3D '0' + (pos->index % JUMP_NB=
+) + 1;
+> > -
+> > -                               sprintf(header, "(%c)", key);
+> > -                               data->keys[k] =3D key;
+> > -                               data->targets[k] =3D pos->target;
+> > -                               k++;
+> > -                       } else {
+> > -                               sprintf(header, "   ");
+> > +                       if (key =3D=3D '1' + (pos->index % JUMP_NB)) {
+> > +                               data->target =3D pos->target;
+> > +                               return 1;
+> >                         }
+> > -
+> > -                       memcpy(buf + pos->offset, header, sizeof(header=
+) - 1);
+> >                 }
+> >         }
+> > -       data->keys[k] =3D 0;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +int get_jump_key(void)
+> > +{
+> > +       int cur_key;
+> > +
+> > +       cur_key =3D jump_key;
+>
+> There should also be a check to see if jump_key is valid.
+> jump_key can be set to 0 and will have weird effects.
+>
+> > +
+> > +       jump_key =3D next_key(cur_key);
+> > +
+> > +       return cur_key;
+> >  }
+> >
+> >  static void search_conf(void)
+> > @@ -456,26 +473,23 @@ static void search_conf(void)
+> >         sym_arr =3D sym_re_search(dialog_input);
+> >         do {
+> >                 LIST_HEAD(head);
+> > -               struct menu *targets[JUMP_NB];
+> > -               int keys[JUMP_NB + 1], i;
+> >                 struct search_data data =3D {
+> >                         .head =3D &head,
+>
+>                          .target =3D NULL,
+> We check if target is null later on, we can make it more explicit
+>
+> > -                       .targets =3D targets,
+> > -                       .keys =3D keys,
+> >                 };
+> >                 struct jump_key *pos, *tmp;
+> >
+> > +               jump_key =3D '1';
+> >                 res =3D get_relations_str(sym_arr, &head);
+> >                 set_subtitle();
+> >                 dres =3D show_textbox_ext("Search Results", str_get(&re=
+s), 0, 0,
+> > -                                       keys, &vscroll, &hscroll, &upda=
+te_text,
+> > -                                       &data);
+> > +                                       &vscroll, &hscroll,
+> > +                                       handle_search_keys, &data);
+> >                 again =3D false;
+> > -               for (i =3D 0; i < JUMP_NB && keys[i]; i++)
+> > -                       if (dres =3D=3D keys[i]) {
+> > -                               conf(targets[i]->parent, targets[i]);
+> > -                               again =3D true;
+> > -                       }
+> > +               if (dres >=3D '1' && dres <=3D '9') {
+> > +                       assert(data.target !=3D NULL);
+> > +                       conf(data.target->parent, data.target);
+> > +                       again =3D true;
+> > +               }
+> >                 str_free(&res);
+> >                 list_for_each_entry_safe(pos, tmp, &head, entries)
+> >                         free(pos);
+>
+> while here the formatting on the above line is one extra tab indented.
+>
+>
+> > diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
+> > index b90fff833588..5578b8bc8a23 100644
+> > --- a/scripts/kconfig/menu.c
+> > +++ b/scripts/kconfig/menu.c
+> > @@ -701,6 +701,11 @@ static void get_dep_str(struct gstr *r, struct exp=
+r *expr, const char *prefix)
+> >         }
+> >  }
+> >
+> > > > +int __attribute__((weak)) get_jump_key(void)
+> > > This seems like a non-optimal solution, otherwise fine.
+> > Do you have a better idea?
+>
+> I do not.
+>
+> > +{
+> > +       return -1;
+> > +}
+> > +
+> >  static void get_prompt_str(struct gstr *r, struct property *prop,
+> >                            struct list_head *head)
+> >  {
+> > @@ -743,11 +748,22 @@ static void get_prompt_str(struct gstr *r, struct=
+ property *prop,
+> >         }
+> >
+> >         str_printf(r, "  Location:\n");
+> > -       for (j =3D 4; --i >=3D 0; j +=3D 2) {
+> > +       for (j =3D 0; --i >=3D 0; j++) {
+> > +               int jk =3D -1;
+> > +               int indent =3D 2 * j + 4;
+> > +
+> >                 menu =3D submenu[i];
+> > -               if (jump && menu =3D=3D location)
+> > +               if (jump && menu =3D=3D location) {
+> >                         jump->offset =3D strlen(r->s);
+> > -               str_printf(r, "%*c-> %s", j, ' ', menu_get_prompt(menu)=
+);
+> > +                       jk =3D get_jump_key();
+> > +               }
+> > +
+> > +               if (jk >=3D 0) {
+> > +                       str_printf(r, "(%c)", jk);
+> > +                       indent -=3D 3;
+> > +               }
+> > +
+> > +               str_printf(r, "%*c-> %s", indent, ' ', menu_get_prompt(=
+menu));
+> >                 if (menu->sym) {
+> >                         str_printf(r, " (%s [=3D%s])", menu->sym->name =
+?
+> >                                 menu->sym->name : "<choice>",
+> > --
+> > 2.39.2
+> >
