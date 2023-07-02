@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCA3744CDC
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492F4744CE0
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjGBJIJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 2 Jul 2023 05:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S229516AbjGBJLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 05:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjGBJIH (ORCPT
+        with ESMTP id S229460AbjGBJLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 05:08:07 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01161AC;
-        Sun,  2 Jul 2023 02:08:06 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-579ed2829a8so5466977b3.1;
-        Sun, 02 Jul 2023 02:08:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688288885; x=1690880885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5OBtu7Z4+GE6q0l8ikA7nuhp09YCEyCrOF7iEJtpDP4=;
-        b=ko56/etOz/98NHqsuAD5G8XKmyJ1FEdD+DPKRXLSDq7UA9OLXmtn145xq75CF07aea
-         Y0jxDEkhUlZHlgLCQYRSQZYzXzlcuj2qnsnU7kAfnH8gz/sgB1t+InAJeb/Ud2BV8QAI
-         js6hSOxEBdSlvkLw0utwWuev0+pt55BczexZNB4aRVqollcJUka6YrvRvrF4dcjs01RT
-         lotEIDjeotDDz+WSNBWJot8cdXs3QuJUn4WW1CymU8J5/rT8E3OFKhk9DzDIZlaDuuea
-         n/CVeEPJufR7nPVG11JVehsHllzZdFJvfJPVxgumftBsfuuNmGVd2THrsn0g6ZF1el9L
-         j7Eg==
-X-Gm-Message-State: ABy/qLYHdFfUdpVDGkUsCgCneUjmsOS3A+fA7QX9ooiJe8Z8SOmk2FJN
-        lcNUskOKdjx/j6Z8d0r2lKhUnrqHhlGkNoeh
-X-Google-Smtp-Source: APBJJlFHohJ3A9y5XwEOe1lswJoZMXLBEJsfI6Q9pVf+182NwTbV/XNJKvlW8IwvWk7ggGkBmWyInA==
-X-Received: by 2002:a81:6e03:0:b0:577:3663:e478 with SMTP id j3-20020a816e03000000b005773663e478mr7881854ywc.8.1688288885516;
-        Sun, 02 Jul 2023 02:08:05 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id l189-20020a0dfbc6000000b0055a931afe48sm4424990ywf.8.2023.07.02.02.08.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jul 2023 02:08:05 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c4d04d50c4cso492228276.1;
-        Sun, 02 Jul 2023 02:08:05 -0700 (PDT)
-X-Received: by 2002:a25:26c4:0:b0:c40:f090:98bf with SMTP id
- m187-20020a2526c4000000b00c40f09098bfmr6398754ybm.28.1688288884964; Sun, 02
- Jul 2023 02:08:04 -0700 (PDT)
+        Sun, 2 Jul 2023 05:11:48 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5FAA1;
+        Sun,  2 Jul 2023 02:11:47 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qv3DF4H6rz6J6qZ;
+        Sun,  2 Jul 2023 17:10:05 +0800 (CST)
+Received: from localhost (10.48.51.211) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 2 Jul
+ 2023 10:11:40 +0100
+Date:   Sun, 2 Jul 2023 17:11:36 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     George Stark <gnstark@sberdevices.ru>
+CC:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>,
+        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
+        <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>
+Subject: Re: [PATCH v3 0/5] meson saradc: add iio channels to read channel 7
+ mux inputs
+Message-ID: <20230702171136.00003950@Huawei.com>
+In-Reply-To: <20230627224017.1724097-1-gnstark@sberdevices.ru>
+References: <20230627224017.1724097-1-gnstark@sberdevices.ru>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230701214503.550549-1-javierm@redhat.com> <20230701214503.550549-2-javierm@redhat.com>
- <393ca142-5226-4779-a963-c34fb0464c59@app.fastmail.com>
-In-Reply-To: <393ca142-5226-4779-a963-c34fb0464c59@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 2 Jul 2023 11:07:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWLRBePox24kBHBMhzKWZX2ncXCD_8JBZrWcbwo0eBZ1Q@mail.gmail.com>
-Message-ID: <CAMuHMdWLRBePox24kBHBMhzKWZX2ncXCD_8JBZrWcbwo0eBZ1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] fbdev: Split frame buffer support in FB and
- FB_CORE symbols
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.51.211]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Wed, 28 Jun 2023 01:37:13 +0300
+George Stark <gnstark@sberdevices.ru> wrote:
 
-On Sun, Jul 2, 2023 at 12:25 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Sat, Jul 1, 2023, at 23:44, Javier Martinez Canillas wrote:
-> > Currently the CONFIG_FB option has to be enabled even if no legacy fbdev
-> > drivers are needed (e.g: only to have support for framebuffer consoles).
-> >
-> > The DRM subsystem has a fbdev emulation layer, but depends on CONFIG_FB
-> > and so it can only be enabled if that dependency is enabled as well.
-> >
-> > That means fbdev drivers have to be explicitly disabled if users want to
-> > enable CONFIG_FB, only to use fbcon and/or the DRM fbdev emulation layer.
-> >
-> > This patch introduces a non-visible CONFIG_FB_CORE symbol that could be
-> > enabled just to have core support needed for CONFIG_DRM_FBDEV_EMULATION,
-> > allowing CONFIG_FB to be disabled (and automatically disabling all the
-> > fbdev drivers).
-> >
-> > Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> From: George Stark <GNStark@sberdevices.ru>
+> 
+> Changelog:
+> 
+> v1->v2:
+> split refactoring patch [1] into 4 smaller patches, fix comment style
+> 
+> [1] https://lore.kernel.org/lkml/20230621062715.455652-2-gnstark@sberdevices.ru/
+> 
+> v2->v3:
+> remove patch 'meson saradc: unite iio channel array definitions' [1] after discussion
+> 
+> patch 'meson saradc: add enum for iio channel array indexes'
+>   - change enum items prefix from INDEX_ to NUM_ since name 'channel index' is
+>   more relevant to channel array index in iio world and with 2 tables our array index is
+>   not always equal to channel number
+>   - resolve conflicts after deleting [1]
+>   - update commit message, previous patch [2]
+>   - return channel number for temp channel. It wasn't used and isn't used currently
+>   but may need later
+> 
+> patch meson saradc: support reading from channel 7 mux inputs
+>   - resolve conflicts after deleting [1]
+>   - update commit message, previous patch [3]
+>   - add routine find_channel_by_num to get channel by channel number
+> 
+> [1] https://lore.kernel.org/lkml/20230623022334.791026-4-gnstark@sberdevices.ru/
+> [2] https://lore.kernel.org/lkml/20230623022334.791026-5-gnstark@sberdevices.ru/
+> [3] https://lore.kernel.org/lkml/20230623022334.791026-7-gnstark@sberdevices.ru/
+> 
+> George Stark (5):
+>   meson saradc: move enums declaration before variables declaration
+>   meson saradc: move meson_sar_adc_set_chan7_mux routine upper
+>   meson saradc: add enum for iio channel numbers
+>   meson saradc: add channel labels
+>   meson saradc: support reading from channel 7 mux inputs
 
-> > @@ -59,7 +69,7 @@ config FIRMWARE_EDID
-> >
-> >  config FB_DEVICE
-> >       bool "Provide legacy /dev/fb* device"
-> > -     depends on FB
-> > +     select FB_CORE
-> >       default y
-> >       help
-> >         Say Y here if you want the legacy /dev/fb* device file and
->
-> These are now the only user visible sub-options when CONFIG_FB is
-> disabled. I missed FIRMWARE_EDID earlier, but this also looks like
-> it can clearly be left as depending on FB since nothing else calls
-> fb_firmware_edid. In fact, it looks like all of fbmon.c could be
-> left out since none of its exported symbols are needed for DRM.
->
-> That would leave CONFIG_FB_DEVICE as the only user visible option
-> for DRM-only configs, which is slightly odd for the menuconfig,
-> so I still wonder if that could be done differently.
->
-> Is there actually a point in configurations for kernels with FB=y,
-> DRM=n and FB_DEVICE=n? If we don't expect that to be a useful
-> configuration, an easier way would be to have CONFIG_FB turn it
-> on implicitly and instead have a user-visible Kconfig option
-> below CONFIG_DRM_FBDEV_EMULATION that allows controlling the
-> creation of /dev/fb*.
+iio: adc: meson: ....
+to make it clear these are changing the IIO driver.
 
-Such a combination would allow the user to still have a text console
-on a legacy fbdev, while not having to worry about possible security
-ramifications of providing fbdev userspace access.
+Jonathan
+`
+> 
+>  drivers/iio/adc/meson_saradc.c | 165 +++++++++++++++++++++++++--------
+>  1 file changed, 126 insertions(+), 39 deletions(-)
+> 
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
