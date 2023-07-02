@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1631C744EB4
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 19:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4007C744EB7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 19:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjGBRJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 13:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
+        id S229780AbjGBRRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 13:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjGBRJI (ORCPT
+        with ESMTP id S229569AbjGBRR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 13:09:08 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AA218B;
-        Sun,  2 Jul 2023 10:09:07 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666e64e97e2so1941452b3a.1;
-        Sun, 02 Jul 2023 10:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688317747; x=1690909747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z+OWP9mTxDvq9/9bth4FmWGXzG9JshUYvadC+k3pbKI=;
-        b=ZVyrOGeve1JC9HcQiHoQdbvXMQQTytqcF/KiU8fKLltcPhsse4n5HTwiyMvQhljliR
-         s1IVCuu6koKhsEdyWBaUxXSCO8oTtb66/TwczesKLJuaSZJgN2lMsN88Q6Tc8H0fDUG6
-         /9v43LvZtrsA4/OI+zFrNUc/vgFvwHoIoj6Pe8uYLgZiCm154zi97U1diiXMv2DSQBKJ
-         vF8nlC95f4lTtbaaPoq6xUOz9dRuldyAm+FLxKKPhjcfW6XpJ5UhLkFnRrOBp7CMyQsR
-         f/oSivF6WYQBkX6Ohfa5icWdiAv09HTNuLhgxTlH3zR/dbm3LN2+2FU+yR0JAVB7DX23
-         NQjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688317747; x=1690909747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z+OWP9mTxDvq9/9bth4FmWGXzG9JshUYvadC+k3pbKI=;
-        b=AnmfkGl/qVa3tpWW0PHYqyzydopeqaO2QHmp9kO3pI7hxMiDzfVNuf2w9jWBFxisLI
-         7sKEwCL82HJ8bfHhqs7C6u6LVeBlTXdDHPMSG4x6eNk8coJwMB9vol5mokcIkbUSl7Gi
-         2p0UYVPqjflw6qMWgwMT57fWwrGP946IW+vb206p+F/xkMP73Kxx6dQT/8fuuznpOnin
-         +w7pVK2dW1caoSUFyrx0Kiud2M9A/7bO64PDGsFENgnumkhl5NhjrzT1RQZQ04r8bpiK
-         t/HU1jvCXHmvvcVR/IATEkRLhg/YitMdF+hmnt99d6SOpHtPB/+Fry77FUuf3F1dXpkC
-         gJSw==
-X-Gm-Message-State: AC+VfDyk7nLSwL3u/40Kbek1TpHC6Ka8pAk2dWTeLD5G3n9UNsQS3p5j
-        +7Z+v4uhxBWq/NiX+3LXSMDPzlRzG9MMY5Md
-X-Google-Smtp-Source: ACHHUZ6zNpcL400rejZP8WVfHTOBPgX7UQQM75jRZ95xOEUskQQTr6+lWtrSDfrshGyjDYtB+4CTQw==
-X-Received: by 2002:a05:6a20:970a:b0:12c:518:b8de with SMTP id hr10-20020a056a20970a00b0012c0518b8demr6434565pzc.17.1688317747087;
-        Sun, 02 Jul 2023 10:09:07 -0700 (PDT)
-Received: from fedora.. ([123.139.60.254])
-        by smtp.gmail.com with ESMTPSA id z2-20020a656642000000b005302682a668sm11847188pgv.17.2023.07.02.10.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 10:09:06 -0700 (PDT)
-From:   Pairman Guo <pairmanxlr@gmail.com>
-To:     paul@paul-moore.com
-Cc:     jmorris@namei.org, serge@hallyn.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pairman Guo <pairmanxlr@gmail.com>
-Subject: [PATCH] LSM: Fix typo in a comment
-Date:   Mon,  3 Jul 2023 01:08:57 +0800
-Message-ID: <20230702170857.15603-1-pairmanxlr@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Sun, 2 Jul 2023 13:17:29 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5328C3;
+        Sun,  2 Jul 2023 10:17:27 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 362HHF1L016977;
+        Sun, 2 Jul 2023 19:17:15 +0200
+Date:   Sun, 2 Jul 2023 19:17:15 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH v5 5/5] selftests/nolibc: riscv: customize makefile for
+ rv32
+Message-ID: <20230702171715.GD16233@1wt.eu>
+References: <cover.1687176996.git.falcon@tinylab.org>
+ <2ebfb48c66b18a5fd7d0bd6b7c832a5d8ce6486f.1687176996.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ebfb48c66b18a5fd7d0bd6b7c832a5d8ce6486f.1687176996.git.falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi maintainers,
+On Mon, Jun 19, 2023 at 08:29:38PM +0800, Zhangjin Wu wrote:
+> Both riscv64 and riscv32 have:
+> 
+> * the same arch/riscv source code tree
+> * the same tools/include/nolibc/arch-riscv.h
+> * the same ARCH=riscv value passed to top-level kernel Makefile
+> 
+> The only differences are:
+> 
+> * riscv64 uses defconfig, riscv32 uses rv32_defconfig
+> * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
+> * riscv32 has different compiler options (-march= and -mabi=)
+> 
+> So, riscv32 can share most of the settings with riscv64, add riscv32
+> support like the original ARCH=riscv support.
+> 
+> To align with x86, the default riscv is reserved for riscv64 and a new
+> riscv64 is also added to allow users pass ARCH=riscv64 directly.
+> 
+> Since top-level kernel Makefile only accept ARCH=riscv, to make kernel
+> happy, let's set kernel specific KARCH as riscv for both riscv32 and
+> riscv64.
+> 
+> And since they share the same arch-riscv.h, let's set nolibc specific
+> NARCH as riscv too.
+> 
+> Usage:
+> 
+>     $ make defconfig ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
+>     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
 
-In the description of function definition security_file_lock(),
-the line "@cmd: fnctl command" has a typo where "fnctl" should be
-"fcntl". This patch fixes the typo.
+I'm hesitating on this one. Till now the ARCH variable taken on input
+was *exactly* the one used by the kernel. We include some scripts very
+early and we don't control the possible usage of ARCH. There's also
+this at the top of the makefile:
 
-Please merge if it is the case. Thanks in advance.
+  # when run as make -C tools/ nolibc_<foo> the arch is not set
+  ifeq ($(ARCH),)
+  include $(srctree)/scripts/subarch.include
+  ARCH = $(SUBARCH)
+  endif
 
-Signed-off-by: Pairman Guo <pairmanxlr@gmail.com>
----
- security/security.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So as you can see $(ARCH) is still very intimate with the kernel's.
+For x86 it's no big deal because the i386 and x86_64 names are real
+valid archs. The difficulty we're having with riscv is that 32 and 64
+are two distinct archs for all tools but not for the kernel, and it
+looks like the only difference is in the config itself.
 
-diff --git a/security/security.c b/security/security.c
-index b720424ca37d..adaa7043c172 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -2717,7 +2717,7 @@ int security_file_lock(struct file *file, unsigned int cmd)
- /**
-  * security_file_fcntl() - Check if fcntl() op is allowed
-  * @file: file
-- * @cmd: fnctl command
-+ * @cmd: fcntl command
-  * @arg: command argument
-  *
-  * Check permission before allowing the file operation specified by @cmd from
--- 
-2.41.0
+Given that we call all tools explicitly and that the kernel does a lot
+of implicit things with $(ARCH), I'm wondering if it wouldn't be more
+robust for the long term to instead add a "VARIANT" variable for the
+test only that would enforce "riscv32" or "riscv64" where needed (note
+that I'm not sold on this variable's name, it's to illustrate). Because
+if you look closely, you'll note that the nolibc source does not use
+this difference since its arch is always equal to the kernel's, and
+only the test requires it. I wouldn't be shocked by having more test
+options than we have architectures, and I noticed in another series
+that you were also proposing to extend config options, so I think it
+goes in the same direction. Then we could have in the test's Makefile
+a check for this VARIANT being set, which would preset ARCH when
+defined, and being used to configure Qemu. Maybe it could more or
+less look like this (for the selftest Makefile I mean) :
 
+  # maps variants to nominal archs
+  ARCH_VARIANT_riscv32 = riscv
+  ARCH_VARIANT_riscv64 = riscv
+
+  # default variants for some archs
+  DEF_VARIANT_riscv    = riscv64
+
+  VARIANT :=
+  ARCH    ?= $(or $(ARCH_VARIANT_$(VARIANT)),$(VARIANT))
+  VARIANT ?= $(or $(DEF_VARIANT_$(ARCH)),$(ARCH))
+
+Modulo the possible typos above, you probably get the idea. If ARCH is
+set, it will be used and automatically set the variant to the default
+one for the arch. And if VARIANT is set, it will set the correct
+default ARCH. It's possible to force the two in conflicting ways that
+will not work but we don't care, it's like for the rest of the variables.
+But at least we're never passing invalid values into ARCH anymore and I
+find this much safer.
+
+What do you think ?
+
+Thanks,
+Willy
