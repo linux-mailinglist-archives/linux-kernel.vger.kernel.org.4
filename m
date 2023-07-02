@@ -2,582 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D43C745247
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4BB74524E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjGBU1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 16:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        id S229988AbjGBUex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 16:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjGBU1J (ORCPT
+        with ESMTP id S229638AbjGBUev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 16:27:09 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B181BB;
-        Sun,  2 Jul 2023 13:27:07 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-262dc1ced40so2750506a91.3;
-        Sun, 02 Jul 2023 13:27:07 -0700 (PDT)
+        Sun, 2 Jul 2023 16:34:51 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494791BB;
+        Sun,  2 Jul 2023 13:34:50 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc656873eso41204155e9.1;
+        Sun, 02 Jul 2023 13:34:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688329627; x=1690921627;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8B4WrtCYoTmVa52PhsRUk66XUMg6SOWiGbPZJFW4hIM=;
-        b=KhDPtFUoJepkvVi6txtEt6PI24/0d970AovfZmFqY62J873sFmql2oyO9aeVGp7B6F
-         H0iO9WWw5dIQJC1cVA8XeYlyc+6wX0ubLk3JcLnLFSWifZVOkX/JYuxzkflWvAY1nvT2
-         w1rZfTC822gbv7M4ccL3ktGN9vhDEC+1BmHwJ8rcK6nkZonxEhOdrMwoEiiSacOFgnrc
-         08EEpjfR42anO5KKVYiYddE0eUCLg1i9ComtqxKbYDj0NptLTRQspKi1wrog0fLiq+Uh
-         YN2kfx9E8EY5xhC/18SgCCQiOeBW2TjfcNq2V0kNGi+XEm9Gag7t6gKNNRMj1ge5KtEM
-         kEjA==
+        d=gmail.com; s=20221208; t=1688330089; x=1690922089;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yvg/Dz+ngCo9wUyyn2qqxMxHRVROa94hvtqB678m5ns=;
+        b=WRAuT1028PJAU5XcNf8frWsaeFpeSg5aymy03jh49/ACaAAxdHCa/F/m17Fl32s6O0
+         2SF45VaCH7afPRasXn1eeaOb+8opW9SunkxVaD4ZuUc8i8V7Glu2NCFZjC9eRlFQXFx/
+         CDpsF8S9QfljP6TXf13YDU7p912tY1fDTcbGbSeQDFR+aP74TrVP0xRHFEw4qLErvaWQ
+         jBZvcmhrYDgBO1JsKc9X9G0IA6izqebHu6MRK6SWkZb4wdw/wncHDfrNty5KjF17WOYK
+         Gtl51dQlsfjdzpLwyK10XNos+1xOdqZSL1fqxueeNo2rvYM2IOXIe4v0D3SVz7kJCE2K
+         41Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688329627; x=1690921627;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8B4WrtCYoTmVa52PhsRUk66XUMg6SOWiGbPZJFW4hIM=;
-        b=MvXkl3KOoma8BGOUY6oiAoDApIZMk2bcuQRW1JuQ+6H6LkxkGpUSCH2H7PqOaurtV/
-         MIeDS0COLySI0yNoYgXYLXLuofeLkhfs5LY/R+zGXe+//MsCOOIYfSv2kaq3m9pdy/1K
-         2F1hDidR49u8d7UQ7qjTqq7P0Fvnx6FrTQxPzl8hUJrNzlbdEbDcuGebjncDra7CF4PG
-         uIqZwkuRtaCs23NzA7XWuUFka39ujWAQncgjhGUUOlzMquUaRQtZ9sYPkIfZyDs81Oes
-         S8o1FjSHryEB3TAKjnYAZgWN8hobZsqDsn1IaTB+h5sA/sq1L9Da49n9S8IvATmMaugj
-         JCTg==
-X-Gm-Message-State: ABy/qLbU5D6QvcUV1pceVYfba+mTmZV5XCVk+58orzOGtAm4wh2DSUpC
-        5TShwezXIMPyL0Zn/qt4ZmyAZ13cIsg/8lf3BsI=
-X-Google-Smtp-Source: APBJJlHOTYJM54sHy8B+1rzwxBwtmHJGYyaedvVUP8j0NkZfgvBxzzX6puk7kjY6CndbKmB1kmPnGzk9Xopipip5lMQ=
-X-Received: by 2002:a17:90a:fd0d:b0:25e:a643:adeb with SMTP id
- cv13-20020a17090afd0d00b0025ea643adebmr8352786pjb.39.1688329627106; Sun, 02
- Jul 2023 13:27:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688330089; x=1690922089;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yvg/Dz+ngCo9wUyyn2qqxMxHRVROa94hvtqB678m5ns=;
+        b=POYpO63yqgeNEHIOTUacI0IHLf3J5auIjOljDUYIqjGtTZNJVcJGtRhwfrU2J220XE
+         9m15a6OWJNuGkyEHz84zAn5itU1aSeSEpJ3lnKA/V8fKqC7AYe1PPrlwdz6v3nTYq8tV
+         wRKijvgUjzOKSIWEnvLoc/GKZV1fwOG46G2f3f9nH9RAoI9EOHOC0ii/TbIFbCsQ72fW
+         sXt5TFgyDvlqe9gpgVZAJV48U3ZsBS5zuiY6rIpLZQHYqywzzVvWL/jpTO3L+h+pA0kl
+         o16AwrIhOPI6V5Op9uNCHkhWYWODW49x/0VEqkRSB2dxXD425D50ZPuNs3Pwm0yTnHfF
+         V0Vw==
+X-Gm-Message-State: ABy/qLaHbr2HlKE95xDn/V0coPScvh/sAP1sEXD25rXlWXxrDfI36m/8
+        ffxjK0Jax6kv6zf4EEuXEnU=
+X-Google-Smtp-Source: APBJJlGzS7TciTEjs6LQCNA3YXFxldql65XXU9EVde2fyF0mE5fThlIpT9OvJC846uGs60vlWULrcw==
+X-Received: by 2002:adf:f049:0:b0:314:1249:d5d7 with SMTP id t9-20020adff049000000b003141249d5d7mr9949195wro.16.1688330088392;
+        Sun, 02 Jul 2023 13:34:48 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:b4ae:ae48:2e1b:1dcd])
+        by smtp.gmail.com with ESMTPSA id f1-20020a5d5681000000b0030647449730sm24000478wrv.74.2023.07.02.13.34.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 13:34:47 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v10 0/6] Add non-coherent DMA support for AX45MP
+Date:   Sun,  2 Jul 2023 21:34:23 +0100
+Message-Id: <20230702203429.237615-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230629160351.2996541-1-masahiroy@kernel.org> <CAJFTR8Q-EMzajOU+tnKyp_s3BJTrMJkynUiR3C8pxSEUH9WUEw@mail.gmail.com>
-In-Reply-To: <CAJFTR8Q-EMzajOU+tnKyp_s3BJTrMJkynUiR3C8pxSEUH9WUEw@mail.gmail.com>
-From:   Jesse T <mr.bossman075@gmail.com>
-Date:   Sun, 2 Jul 2023 16:26:56 -0400
-Message-ID: <CAJFTR8TY5abKDJX6K9yi_WA8ZxDyLAPHWUV82P0m3uukPSw95g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kconfig: menuconfig: simplify global jump key assignment
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 2, 2023 at 3:32=E2=80=AFPM Jesse T <mr.bossman075@gmail.com> wr=
-ote:
->
-> On Thu, Jun 29, 2023 at 12:03=E2=80=AFPM Masahiro Yamada <masahiroy@kerne=
-l.org> wrote:
-> >
-> > Commit 95ac9b3b585d ("menuconfig: Assign jump keys per-page instead
-> > of globally") injects a lot of hacks to the bottom of the textbox
-> > infrastructure.
-> >
-> > I reverted many of them without changing the behavior. (almost)
-> > Now, the key markers are inserted when constructing the search result
-> > instead of updating the text buffer on-the-fly.
-> >
-> > The buffer passed to the textbox got back to a constant string.
-> > The ugly casts from (const char *) to (char *) went away.
-> >
-> > A disadvantage is that the same key numbers might be diplayed multiple
-> > times in the dialog if you use a huge window (but I believe it is
-> > unlikely to happen).
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/kconfig/lkc.h              |  1 +
-> >  scripts/kconfig/lxdialog/dialog.h  | 10 ++--
-> >  scripts/kconfig/lxdialog/textbox.c | 68 +++++++++--------------
-> >  scripts/kconfig/mconf.c            | 86 +++++++++++++++++-------------
-> >  scripts/kconfig/menu.c             | 22 ++++++--
-> >  5 files changed, 97 insertions(+), 90 deletions(-)
-> >
-> > diff --git a/scripts/kconfig/lkc.h b/scripts/kconfig/lkc.h
-> > index e7118d62a45f..d5c27180ce91 100644
-> > --- a/scripts/kconfig/lkc.h
-> > +++ b/scripts/kconfig/lkc.h
-> > @@ -101,6 +101,7 @@ const char *menu_get_prompt(struct menu *menu);
-> >  struct menu *menu_get_parent_menu(struct menu *menu);
-> >  bool menu_has_help(struct menu *menu);
-> >  const char *menu_get_help(struct menu *menu);
-> > +int get_jump_key(void);
-> >  struct gstr get_relations_str(struct symbol **sym_arr, struct list_hea=
-d *head);
-> >  void menu_get_ext_help(struct menu *menu, struct gstr *help);
-> >
-> > diff --git a/scripts/kconfig/lxdialog/dialog.h b/scripts/kconfig/lxdial=
-og/dialog.h
-> > index 347daf25fdc8..cd1b59c24b21 100644
-> > --- a/scripts/kconfig/lxdialog/dialog.h
-> > +++ b/scripts/kconfig/lxdialog/dialog.h
-> > @@ -196,13 +196,9 @@ int first_alpha(const char *string, const char *ex=
-empt);
-> >  int dialog_yesno(const char *title, const char *prompt, int height, in=
-t width);
-> >  int dialog_msgbox(const char *title, const char *prompt, int height,
-> >                   int width, int pause);
-> > -
-> > -
-> > -typedef void (*update_text_fn)(char *buf, size_t start, size_t end, vo=
-id
-> > -                              *_data);
-> > -int dialog_textbox(const char *title, char *tbuf, int initial_height,
-> > -                  int initial_width, int *keys, int *_vscroll, int *_h=
-scroll,
-> > -                  update_text_fn update_text, void *data);
-> > +int dialog_textbox(const char *title, const char *tbuf, int initial_he=
-ight,
-> > +                  int initial_width, int *_vscroll, int *_hscroll,
-> > +                  int (*extra_key_cb)(int, int, int, void *), void *da=
-ta);
-> >  int dialog_menu(const char *title, const char *prompt,
-> >                 const void *selected, int *s_scroll);
-> >  int dialog_checklist(const char *title, const char *prompt, int height=
-,
-> > diff --git a/scripts/kconfig/lxdialog/textbox.c b/scripts/kconfig/lxdia=
-log/textbox.c
-> > index bc4d4fb1dc75..e6cd7bb83746 100644
-> > --- a/scripts/kconfig/lxdialog/textbox.c
-> > +++ b/scripts/kconfig/lxdialog/textbox.c
-> > @@ -10,8 +10,8 @@
-> >
-> >  static int hscroll;
-> >  static int begin_reached, end_reached, page_length;
-> > -static char *buf;
-> > -static char *page;
-> > +static const char *buf, *page;
-> > +static int start, end;
-> >
-> >  /*
-> >   * Go back 'n' lines in text. Called by dialog_textbox().
-> > @@ -98,21 +98,10 @@ static void print_line(WINDOW *win, int row, int wi=
-dth)
-> >  /*
-> >   * Print a new page of text.
-> >   */
-> > -static void print_page(WINDOW *win, int height, int width, update_text=
-_fn
-> > -                      update_text, void *data)
-> > +static void print_page(WINDOW *win, int height, int width)
-> >  {
-> >         int i, passed_end =3D 0;
-> >
-> > -       if (update_text) {
-> > -               char *end;
-> > -
-> > -               for (i =3D 0; i < height; i++)
-> > -                       get_line();
-> > -               end =3D page;
-> > -               back_lines(height);
-> > -               update_text(buf, page - buf, end - buf, data);
-> > -       }
-> > -
-> >         page_length =3D 0;
-> >         for (i =3D 0; i < height; i++) {
-> >                 print_line(win, i, width);
-> > @@ -142,24 +131,26 @@ static void print_position(WINDOW *win)
-> >   * refresh window content
-> >   */
-> >  static void refresh_text_box(WINDOW *dialog, WINDOW *box, int boxh, in=
-t boxw,
-> > -                            int cur_y, int cur_x, update_text_fn updat=
-e_text,
-> > -                            void *data)
-> > +                            int cur_y, int cur_x)
-> >  {
-> > -       print_page(box, boxh, boxw, update_text, data);
-> > +       start =3D page - buf;
-> > +
-> > +       print_page(box, boxh, boxw);
-> >         print_position(dialog);
-> >         wmove(dialog, cur_y, cur_x);    /* Restore cursor position */
-> >         wrefresh(dialog);
-> > +
-> > +       end =3D page - buf;
-> >  }
-> >
-> >  /*
-> >   * Display text from a file in a dialog box.
-> >   *
-> >   * keys is a null-terminated array
-> > - * update_text() may not add or remove any '\n' or '\0' in tbuf
-> >   */
-> > -int dialog_textbox(const char *title, char *tbuf, int initial_height,
-> > -                  int initial_width, int *keys, int *_vscroll, int *_h=
-scroll,
-> > -                  update_text_fn update_text, void *data)
-> > +int dialog_textbox(const char *title, const char *tbuf, int initial_he=
-ight,
-> > +                  int initial_width, int *_vscroll, int *_hscroll,
-> > +                  int (*extra_key_cb)(int, int, int, void *), void *da=
-ta)
-> >  {
-> >         int i, x, y, cur_x, cur_y, key =3D 0;
-> >         int height, width, boxh, boxw;
-> > @@ -239,8 +230,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >
-> >         /* Print first page of text */
-> >         attr_clear(box, boxh, boxw, dlg.dialog.atr);
-> > -       refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x, update_=
-text,
-> > -                        data);
-> > +       refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
-> >
-> >         while (!done) {
-> >                 key =3D wgetch(dialog);
-> > @@ -259,8 +249,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                                 begin_reached =3D 1;
-> >                                 page =3D buf;
-> >                                 refresh_text_box(dialog, box, boxh, box=
-w,
-> > -                                                cur_y, cur_x, update_t=
-ext,
-> > -                                                data);
-> > +                                                cur_y, cur_x);
-> >                         }
-> >                         break;
-> >                 case 'G':       /* Last page */
-> > @@ -270,8 +259,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                         /* point to last char in buf */
-> >                         page =3D buf + strlen(buf);
-> >                         back_lines(boxh);
-> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-,
-> > -                                        cur_x, update_text, data);
-> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-, cur_x);
-> >                         break;
-> >                 case 'K':       /* Previous line */
-> >                 case 'k':
-> > @@ -280,8 +268,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                                 break;
-> >
-> >                         back_lines(page_length + 1);
-> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-,
-> > -                                        cur_x, update_text, data);
-> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-, cur_x);
-> >                         break;
-> >                 case 'B':       /* Previous page */
-> >                 case 'b':
-> > @@ -290,8 +277,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                         if (begin_reached)
-> >                                 break;
-> >                         back_lines(page_length + boxh);
-> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-,
-> > -                                        cur_x, update_text, data);
-> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-, cur_x);
-> >                         break;
-> >                 case 'J':       /* Next line */
-> >                 case 'j':
-> > @@ -300,8 +286,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                                 break;
-> >
-> >                         back_lines(page_length - 1);
-> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-,
-> > -                                        cur_x, update_text, data);
-> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-, cur_x);
-> >                         break;
-> >                 case KEY_NPAGE: /* Next page */
-> >                 case ' ':
-> > @@ -310,8 +295,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                                 break;
-> >
-> >                         begin_reached =3D 0;
-> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-,
-> > -                                        cur_x, update_text, data);
-> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-, cur_x);
-> >                         break;
-> >                 case '0':       /* Beginning of line */
-> >                 case 'H':       /* Scroll left */
-> > @@ -326,8 +310,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                                 hscroll--;
-> >                         /* Reprint current page to scroll horizontally =
-*/
-> >                         back_lines(page_length);
-> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-,
-> > -                                        cur_x, update_text, data);
-> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-, cur_x);
-> >                         break;
-> >                 case 'L':       /* Scroll right */
-> >                 case 'l':
-> > @@ -337,8 +320,7 @@ int dialog_textbox(const char *title, char *tbuf, i=
-nt initial_height,
-> >                         hscroll++;
-> >                         /* Reprint current page to scroll horizontally =
-*/
-> >                         back_lines(page_length);
-> > -                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-,
-> > -                                        cur_x, update_text, data);
-> > +                       refresh_text_box(dialog, box, boxh, boxw, cur_y=
-, cur_x);
-> >                         break;
-> >                 case KEY_ESC:
-> >                         if (on_key_esc(dialog) =3D=3D KEY_ESC)
-> > @@ -351,11 +333,9 @@ int dialog_textbox(const char *title, char *tbuf, =
-int initial_height,
-> >                         on_key_resize();
-> >                         goto do_resize;
-> >                 default:
-> > -                       for (i =3D 0; keys[i]; i++) {
-> > -                               if (key =3D=3D keys[i]) {
-> > -                                       done =3D true;
-> > -                                       break;
-> > -                               }
-> > +                       if (extra_key_cb(key, start, end, data)) {
-> > +                               done =3D true;
-> > +                               break;
-> >                         }
-> >                 }
-> >         }
-> > diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
-> > index 53d8834d12fe..7adfd6537279 100644
-> > --- a/scripts/kconfig/mconf.c
-> > +++ b/scripts/kconfig/mconf.c
-> > @@ -288,6 +288,7 @@ static int single_menu_mode;
-> >  static int show_all_options;
-> >  static int save_and_exit;
-> >  static int silent;
-> > +static int jump_key;
-> >
-> >  static void conf(struct menu *menu, struct menu *active_menu);
-> >
-> > @@ -348,19 +349,19 @@ static void reset_subtitle(void)
-> >         set_dialog_subtitles(subtitles);
-> >  }
-> >
-> > -static int show_textbox_ext(const char *title, char *text, int r, int =
-c, int
-> > -                           *keys, int *vscroll, int *hscroll, update_t=
-ext_fn
-> > -                           update_text, void *data)
-> > +static int show_textbox_ext(const char *title, const char *text, int r=
-, int c,
-> > +                           int *vscroll, int *hscroll,
-> > +                           int (*extra_key_cb)(int, int, int, void *),
-> > +                           void *data)
-> >  {
-> >         dialog_clear();
-> > -       return dialog_textbox(title, text, r, c, keys, vscroll, hscroll=
-,
-> > -                             update_text, data);
-> > +       return dialog_textbox(title, text, r, c, vscroll, hscroll,
-> > +                             extra_key_cb, data);
-> >  }
-> >
-> >  static void show_textbox(const char *title, const char *text, int r, i=
-nt c)
-> >  {
-> > -       show_textbox_ext(title, (char *) text, r, c, (int []) {0}, NULL=
-, NULL,
-> > -                        NULL, NULL);
-> > +       show_textbox_ext(title, text, r, c, NULL, NULL, NULL, NULL);
-> >  }
-> >
-> >  static void show_helptext(const char *title, const char *text)
-> > @@ -381,35 +382,51 @@ static void show_help(struct menu *menu)
-> >
-> >  struct search_data {
-> >         struct list_head *head;
-> > -       struct menu **targets;
-> > -       int *keys;
-> > +       struct menu *target;
-> >  };
-> >
-> > -static void update_text(char *buf, size_t start, size_t end, void *_da=
-ta)
-> > +static int next_key(int key)
-> > +{
-> > +       key++;
-> > +
-> > +       if (key > '9')
-> > +               key =3D '1';
-> > +
-> > +       return key;
-> > +}
-> > +
-> > +static int handle_search_keys(int key, int start, int end, void *_data=
-)
-> >  {
-> >         struct search_data *data =3D _data;
-> >         struct jump_key *pos;
-> > -       int k =3D 0;
-> > +
-> > +       if (key < '1' || key > '9')
-> > +               return 0;
-> >
-> >         list_for_each_entry(pos, data->head, entries) {
-> > -               if (pos->offset >=3D start && pos->offset < end) {
-Sorry forgot to mention this, but start and end should be size_t.
-You get -Wsign-compare.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-> > -                       char header[4];
-> > +               if (pos->offset >=3D start) {
-> > +                       if (pos->offset >=3D end)
-> > +                               break;
-> >
-> > -                       if (k < JUMP_NB) {
-> > -                               int key =3D '0' + (pos->index % JUMP_NB=
-) + 1;
-> > -
-> > -                               sprintf(header, "(%c)", key);
-> > -                               data->keys[k] =3D key;
-> > -                               data->targets[k] =3D pos->target;
-> > -                               k++;
-> > -                       } else {
-> > -                               sprintf(header, "   ");
-> > +                       if (key =3D=3D '1' + (pos->index % JUMP_NB)) {
-> > +                               data->target =3D pos->target;
-> > +                               return 1;
-> >                         }
-> > -
-> > -                       memcpy(buf + pos->offset, header, sizeof(header=
-) - 1);
-> >                 }
-> >         }
-> > -       data->keys[k] =3D 0;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +int get_jump_key(void)
-> > +{
-> > +       int cur_key;
-> > +
-> > +       cur_key =3D jump_key;
->
-> There should also be a check to see if jump_key is valid.
-> jump_key can be set to 0 and will have weird effects.
->
-> > +
-> > +       jump_key =3D next_key(cur_key);
-> > +
-> > +       return cur_key;
-> >  }
-> >
-> >  static void search_conf(void)
-> > @@ -456,26 +473,23 @@ static void search_conf(void)
-> >         sym_arr =3D sym_re_search(dialog_input);
-> >         do {
-> >                 LIST_HEAD(head);
-> > -               struct menu *targets[JUMP_NB];
-> > -               int keys[JUMP_NB + 1], i;
-> >                 struct search_data data =3D {
-> >                         .head =3D &head,
->
->                          .target =3D NULL,
-> We check if target is null later on, we can make it more explicit
->
-> > -                       .targets =3D targets,
-> > -                       .keys =3D keys,
-> >                 };
-> >                 struct jump_key *pos, *tmp;
-> >
-> > +               jump_key =3D '1';
-> >                 res =3D get_relations_str(sym_arr, &head);
-> >                 set_subtitle();
-> >                 dres =3D show_textbox_ext("Search Results", str_get(&re=
-s), 0, 0,
-> > -                                       keys, &vscroll, &hscroll, &upda=
-te_text,
-> > -                                       &data);
-> > +                                       &vscroll, &hscroll,
-> > +                                       handle_search_keys, &data);
-> >                 again =3D false;
-> > -               for (i =3D 0; i < JUMP_NB && keys[i]; i++)
-> > -                       if (dres =3D=3D keys[i]) {
-> > -                               conf(targets[i]->parent, targets[i]);
-> > -                               again =3D true;
-> > -                       }
-> > +               if (dres >=3D '1' && dres <=3D '9') {
-> > +                       assert(data.target !=3D NULL);
-> > +                       conf(data.target->parent, data.target);
-> > +                       again =3D true;
-> > +               }
-> >                 str_free(&res);
-> >                 list_for_each_entry_safe(pos, tmp, &head, entries)
-> >                         free(pos);
->
-> while here the formatting on the above line is one extra tab indented.
->
->
-> > diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
-> > index b90fff833588..5578b8bc8a23 100644
-> > --- a/scripts/kconfig/menu.c
-> > +++ b/scripts/kconfig/menu.c
-> > @@ -701,6 +701,11 @@ static void get_dep_str(struct gstr *r, struct exp=
-r *expr, const char *prefix)
-> >         }
-> >  }
-> >
-> > > > +int __attribute__((weak)) get_jump_key(void)
-> > > This seems like a non-optimal solution, otherwise fine.
-> > Do you have a better idea?
->
-> I do not.
->
-> > +{
-> > +       return -1;
-> > +}
-> > +
-> >  static void get_prompt_str(struct gstr *r, struct property *prop,
-> >                            struct list_head *head)
-> >  {
-> > @@ -743,11 +748,22 @@ static void get_prompt_str(struct gstr *r, struct=
- property *prop,
-> >         }
-> >
-> >         str_printf(r, "  Location:\n");
-> > -       for (j =3D 4; --i >=3D 0; j +=3D 2) {
-> > +       for (j =3D 0; --i >=3D 0; j++) {
-> > +               int jk =3D -1;
-> > +               int indent =3D 2 * j + 4;
-> > +
-> >                 menu =3D submenu[i];
-> > -               if (jump && menu =3D=3D location)
-> > +               if (jump && menu =3D=3D location) {
-> >                         jump->offset =3D strlen(r->s);
-> > -               str_printf(r, "%*c-> %s", j, ' ', menu_get_prompt(menu)=
-);
-> > +                       jk =3D get_jump_key();
-> > +               }
-> > +
-> > +               if (jk >=3D 0) {
-> > +                       str_printf(r, "(%c)", jk);
-> > +                       indent -=3D 3;
-> > +               }
-> > +
-> > +               str_printf(r, "%*c-> %s", indent, ' ', menu_get_prompt(=
-menu));
-> >                 if (menu->sym) {
-> >                         str_printf(r, " (%s [=3D%s])", menu->sym->name =
-?
-> >                                 menu->sym->name : "<choice>",
-> > --
-> > 2.39.2
-> >
+Hi All,
+
+non-coherent DMA support for AX45MP
+====================================
+
+On the Andes AX45MP core, cache coherency is a specification option so it
+may not be supported. In this case DMA will fail. To get around with this
+issue this patch series does the below:
+
+1] Andes alternative ports is implemented as errata which checks if the
+IOCP is missing and only then applies to CMO errata. One vendor specific
+SBI EXT (ANDES_SBI_EXT_IOCP_SW_WORKAROUND) is implemented as part of
+errata.
+
+Below are the configs which Andes port provides (and are selected by
+RZ/Five):
+      - ERRATA_ANDES
+      - ERRATA_ANDES_CMO
+
+OpenSBI patch supporting ANDES_SBI_EXT_IOCP_SW_WORKAROUND SBI is now
+part v1.3 release.
+
+2] Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+block that allows dynamic adjustment of memory attributes in the runtime.
+It contains a configurable amount of PMA entries implemented as CSR
+registers to control the attributes of memory locations in interest.
+OpenSBI configures the PMA regions as required and creates a reserve memory
+node and propagates it to the higher boot stack.
+
+Currently OpenSBI (upstream) configures the required PMA region and passes
+this a shared DMA pool to Linux.
+
+    reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        pma_resv0@58000000 {
+            compatible = "shared-dma-pool";
+            reg = <0x0 0x58000000 0x0 0x08000000>;
+            no-map;
+            linux,dma-default;
+        };
+    };
+
+The above shared DMA pool gets appended to Linux DTB so the DMA memory
+requests go through this region.
+
+3] We provide callbacks to synchronize specific content between memory and
+cache.
+
+4] RZ/Five SoC selects the below configs
+        - AX45MP_L2_CACHE
+        - DMA_GLOBAL_POOL
+        - ERRATA_ANDES
+        - ERRATA_ANDES_CMO
+
+----------x---------------------x--------------------x---------------x----
+
+Note,
+- Ive used GCC 12.2.0 for compilation
+- Tested all the IP blocks on RZ/Five which use DMA
+- Patch series is dependent on the series from Arnd,
+  https://patchwork.kernel.org/project/linux-riscv/cover/20230327121317.4081816-1-arnd@kernel.org/.
+  (Ive rebased Arnd's series on v6.4-rc-1)
+- Patches applies on top of palmer/for-next (669ee914f515)
+- Ive pushed the complete tree here https://github.com/prabhakarlad/linux/commits/rzfive-cmo-v10
+- Previously the function pointer approach was NAKed by Christoph Hellwig
+  but based on the discussion on #riscv Ive implemented this approach.
+
+v9 -> v10
+* Included RB/TB tags from Conor
+* Fixed review comments pointed by Geert to rename cache callbacks
+* Dropped preserving the cache lines in ax45mp_dma_cache_inv() callback
+
+v8 -> v9
+* Dropped adding ALTERNATIVE_3
+* Implemented function pointer support for nonstandard noncoherent systems
+* Added a new config option CONFIG_RISCV_NONSTANDARD_CACHE_OPS
+* Updated Andes errata code to drop patching the calls as we no more use
+  ALTERNATIVE_X() macro.
+* Updated Andes CMO code to use function pointer for doing cache management.
+
+v7 -> v8
+* Dropped using function pointers and switched to ALTERNATIVE_X()
+* Added new patches (#1, #2)
+
+v6 -> v7
+* Reworked the code based on Arnd's work
+* Fixed review comments pointed by Arnd
+* Fixed review comments pointed by Conor
+
+v5.1 -> v6
+* Dropped use of ALTERNATIVE_x() macro
+* Now switched to used function pointers for CMO
+* Moved driver to drivers/cache folder
+
+v5 -> v5.1
+* https://patchwork.kernel.org/project/linux-riscv/list/?series=708610&state=%2A&archive=both
+
+v4 -> v5
+* Rebased ALTERNATIVE_3() macro on top of Andrew's patches
+* Rebased the changes on top of Heiko's alternative call patches
+* Dropped configuring the PMA from Linux
+* Dropped configuring the L2 cache from Linux and dropped the binding for same
+* Now using runtime patching mechanism instead of compile time config
+
+RFC v3 -> v4
+* Implemented ALTERNATIVE_3() macro
+* Now using runtime patching mechanism instead of compile time config
+* Added Andes CMO as and errata
+* Fixed comments pointed by Geert
+
+RFC v2-> RFC v3
+* Fixed review comments pointed by Conor
+* Move DT binding into cache folder
+* Fixed DT binding check issue
+* Added andestech,ax45mp-cache.h header file
+* Now passing the flags for the PMA setup as part of andestech,pma-regions
+  property.
+* Added andestech,inst/data-prefetch and andestech,tag/data-ram-ctl
+  properties to configure the L2 cache.
+* Registered the cache driver as platform driver
+
+RFC v1-> RFC v2
+* Moved out the code from arc/riscv to drivers/soc/renesas
+* Now handling the PMA setup as part of the L2 cache
+* Now making use of dma-noncoherent.c instead SoC specific implementation.
+* Dropped arch_dma_alloc() and arch_dma_free()
+* Switched to RISCV_DMA_NONCOHERENT
+* Included DT binding doc
+
+RFC v2: https://patchwork.kernel.org/project/linux-renesas-soc/cover/20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+RFC v1: https://patchwork.kernel.org/project/linux-renesas-soc/cover/20220906102154.32526-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (6):
+  riscv: asm: vendorid_list: Add Andes Technology to the vendors list
+  riscv: errata: Add Andes alternative ports
+  riscv: mm: dma-noncoherent: nonstandard cache operations support
+  dt-bindings: cache: andestech,ax45mp-cache: Add DT binding
+    documentation for L2 cache controller
+  cache: Add L2 cache management for Andes AX45MP RISC-V core
+  soc: renesas: Kconfig: Select the required configs for RZ/Five SoC
+
+ .../cache/andestech,ax45mp-cache.yaml         |  81 +++++++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/Kconfig                            |   7 +
+ arch/riscv/Kconfig.errata                     |  21 ++
+ arch/riscv/errata/Makefile                    |   1 +
+ arch/riscv/errata/andes/Makefile              |   1 +
+ arch/riscv/errata/andes/errata.c              |  66 ++++++
+ arch/riscv/include/asm/alternative.h          |   3 +
+ arch/riscv/include/asm/dma-noncoherent.h      |  28 +++
+ arch/riscv/include/asm/errata_list.h          |   5 +
+ arch/riscv/include/asm/vendorid_list.h        |   1 +
+ arch/riscv/kernel/alternative.c               |   5 +
+ arch/riscv/mm/dma-noncoherent.c               |  43 ++++
+ arch/riscv/mm/pmem.c                          |  13 ++
+ drivers/Kconfig                               |   2 +
+ drivers/Makefile                              |   1 +
+ drivers/cache/Kconfig                         |  11 +
+ drivers/cache/Makefile                        |   3 +
+ drivers/cache/ax45mp_cache.c                  | 213 ++++++++++++++++++
+ drivers/soc/renesas/Kconfig                   |   4 +
+ 20 files changed, 516 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+ create mode 100644 arch/riscv/errata/andes/Makefile
+ create mode 100644 arch/riscv/errata/andes/errata.c
+ create mode 100644 arch/riscv/include/asm/dma-noncoherent.h
+ create mode 100644 drivers/cache/Kconfig
+ create mode 100644 drivers/cache/Makefile
+ create mode 100644 drivers/cache/ax45mp_cache.c
+
+-- 
+2.34.1
+
