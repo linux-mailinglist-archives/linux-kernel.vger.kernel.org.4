@@ -2,87 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F4D744E92
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 18:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F310B744E9C
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 18:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjGBQUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 12:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
+        id S229928AbjGBQ2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 12:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjGBQUn (ORCPT
+        with ESMTP id S229644AbjGBQ2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 12:20:43 -0400
-Received: from qs51p00im-qukt01080501.me.com (qs51p00im-qukt01080501.me.com [17.57.155.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668BFE62
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 09:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1688314841; bh=tikfUA3+VXi/hwqJ7CqZ/vgC+Mb6/V7T56yDg/1Q3/I=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=NWpYhx20spcAAG+lHyg2puSmMYdYYu11/fTgg+Fu4Bp1ajCyd83by4TKOi2Okc2hV
-         XPTlgRvEWvFDVsImdV8xwrQANmh+bmXhNT7FgnHLJYv7I/arVr3Pl1TzfRuMnOsbN8
-         3mgoHI4zyqdDHLjbygRWrPgweYqJ2IPO2tNMW4N80gitl/KVbR/rdbw2nsjN1oMxZn
-         IgZJapw0EqB/08flrnDxmG7PkwoN1DSElCcoOCDnMAaDqfCPVg6iroTNN8jCnH9PHZ
-         /N83/qfmaFxyOIcw1dUMXJkUDiOuWFE9+6utSh2pdm9Y9b0airqnLkAldJMykE2gqd
-         u6vREY2zh73VQ==
-Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-        by qs51p00im-qukt01080501.me.com (Postfix) with ESMTPSA id AEDF6198028B;
-        Sun,  2 Jul 2023 16:20:40 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     avolmat@me.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ARM: dts: st: correct led level in stih418-b2264.dts
-Date:   Sun,  2 Jul 2023 16:19:35 +0000
-Message-Id: <20230702161936.134429-4-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230702161936.134429-1-avolmat@me.com>
-References: <20230702161936.134429-1-avolmat@me.com>
+        Sun, 2 Jul 2023 12:28:42 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A246FE61;
+        Sun,  2 Jul 2023 09:28:41 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 362GS2oc016328;
+        Sun, 2 Jul 2023 18:28:02 +0200
+Date:   Sun, 2 Jul 2023 18:28:02 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
+Message-ID: <20230702162802.GA16233@1wt.eu>
+References: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
+ <20230530135433.405051-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: HywNm_p0YEdWCCbmxWq_YEsGX7TzKvOu
-X-Proofpoint-GUID: HywNm_p0YEdWCCbmxWq_YEsGX7TzKvOu
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.790,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-12=5F02:2020-02-14=5F02,2022-01-12=5F02,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 bulkscore=0 spamscore=0
- phishscore=0 suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=661 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2307020155
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530135433.405051-1-falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The state of the green led on the stih418-b2264 is currently
-inverted.  Correct this by fixing the GPIO active state.
+Hi Zhangjin, Arnd,
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- arch/arm/boot/dts/st/stih418-b2264.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, May 30, 2023 at 09:54:33PM +0800, Zhangjin Wu wrote:
+> > And then do the selection inside of the actual lseek,
+> > something like
+> > 
+> > static __attribute__((unused))
+> > off_t lseek(int fd, off_t offset, int whence)
+> > {
+> >         off_t ret = -ENOSYS;
+> > 
+> >         if (BITS_PER_LONG == 32)
+> >                ret = sys_llseek(fd, offset, whence);
+> > 
+> >         if (ret == -ENOSYS)
+> >                ret = sys_lseek(fd, offset, whence);
+> > 
+> >         if (ret < 0) {
+> >                 SET_ERRNO(-ret);
+> >                 ret = -1;
+> >         }
+> >         return ret;
+> >        
+> > }
+> 
+> Yes, It is clearer, thanks. will learn carefully about the kernel types.
 
-diff --git a/arch/arm/boot/dts/st/stih418-b2264.dts b/arch/arm/boot/dts/st/stih418-b2264.dts
-index d4874282cfba..fdc16e9f5822 100644
---- a/arch/arm/boot/dts/st/stih418-b2264.dts
-+++ b/arch/arm/boot/dts/st/stih418-b2264.dts
-@@ -76,7 +76,7 @@ aliases {
- 	leds {
- 		compatible = "gpio-leds";
- 		led-green {
--			gpios = <&pio1 3 GPIO_ACTIVE_HIGH>;
-+			gpios = <&pio1 3 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
- 		};
- 	};
--- 
-2.34.1
+I, too, like Arnd's proposal here. I tend to use a similar approach in
+other projects when possible. Often the limit is the types definition,
+which is necessary to define even empty static inline functions. The
+only thing is that due to the reliance on -ENOSYS above, the compiler
+cannot fully optimize the code away, particularly when both syscalls
+are defined, which may result in the compiler emitting the code for
+both calls on 32-bit platforms. But the idea is there anyway, and it
+may possibly just need a few adjustments based on BITS_PER_LONG after
+checking the emitted code.
 
+> > For the loff_t selection, there is no real need to handle the
+> > fallback, so this could just be an if()/else to select 32-bit
+> > or 64-bit, but for the time_t ones the fallback is required
+> > for pre-5.6 kernels.
+> >
+> 
+> Ok, will test it on the pre-5.6 versions too.
+> 
+> Hi, Willy, what's your suggestion about the oldest kernel versions we plan to
+> support? ;-)
+
+Like I said last time, since the code is included in the kernel, we
+expect userland developers to use this one to build their code, even
+if it's meant to work on older kernels. At the very least I want that
+supported kernels continue to work, and then as long as it does not
+require particular efforts, it's nice to continue to work on older
+ones (think LTS distros, late upgraders of legacy systems etc).
+
+Thanks,
+Willy
