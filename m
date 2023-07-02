@@ -2,122 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857EF74527D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 23:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEBF745289
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 23:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjGBVdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 17:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S229852AbjGBVpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 17:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGBVdW (ORCPT
+        with ESMTP id S229504AbjGBVpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 17:33:22 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75941E42;
-        Sun,  2 Jul 2023 14:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1688333582; x=1688938382; i=deller@gmx.de;
- bh=zoNTrcu17OXpgIuGcZIvxt9ubX9C4LB/Hqt+z3ZP4h4=;
- h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
- b=qgg3fznCpQ4W/OcwDrNJayMCh8Ol98cpiE5MyjMFIHFjjnhCiBW9L81hlhyeqEv8xataUdQ
- 9aQqoQLu4K1mOBy8LCmPpmUcEAPBMLxq/joVhflPGQIPybJodl1qq4KKmdF2IsQuVL1swV80v
- DO8RYs7tpqiP6O6p00Q9CRF1sHeMUZmeR/wX8PBi0jmC1VFb6cLHYeBf5T+LdyNEUCki1g0ND
- +mbIyoWOfrWe+QO5kx6cdZNc9EBu88vlCxsPIRvEd0tg0wDG27nPtJPP3uj0BMOWCed04kWcL
- 8aiFa4UrxfGlDL1ZZNnOW9RaydFpR0IMl8k+GAF+gyLGOfjWEyAg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.159.131]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6Udt-1qMPHb348n-006zoJ; Sun, 02
- Jul 2023 23:33:02 +0200
-Message-ID: <5fd98a09-4792-1433-752d-029ae3545168@gmx.de>
-Date:   Sun, 2 Jul 2023 23:33:01 +0200
+        Sun, 2 Jul 2023 17:45:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C459B;
+        Sun,  2 Jul 2023 14:45:08 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-160-45-219.reb.o2.cz [85.160.45.219])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 317D1289;
+        Sun,  2 Jul 2023 23:44:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1688334262;
+        bh=L0A+CSse+ZZwGQMatO+vsGlMTevU2JMdn5WBMdfzOV4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T1HvoVZ11BcOHAHEvl7vpuazlvFHRehT5cbf0Sta9E/ro/z4XOy7gxC6I2oMLIK85
+         EPX2Wyxtqm1Z9rtqpbO/Ni3Grje1p1rT/PrXjvzDljtRELCYlWasTJ8f9COUApRejT
+         yhpGN+D69GehW88NBL9TqaLstgfHwv9naVF+1xNc=
+Date:   Mon, 3 Jul 2023 00:45:05 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
+        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
+        tomi.valkeinen@ideasonboard.com,
+        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
+Subject: Re: [PATCH v5 04/11] media: bcm2835-unicam: Add support for
+ CCP2/CSI2 camera interface
+Message-ID: <20230702214505.GB16995@pendragon.ideasonboard.com>
+References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220208155027.891055-5-jeanmichel.hautbois@ideasonboard.com>
+ <YhihbncnSlmvrn/D@valkosipuli.retiisi.eu>
+ <20230702152356.GA16995@pendragon.ideasonboard.com>
+ <ZKG/bej80eL13Qqp@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
-Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, linux@roeck-us.net,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John David Anglin <dave.anglin@bell.net>
-References: <20230629184151.888604958@linuxfoundation.org>
- <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <2023063001-overlying-browse-de1a@gregkh>
- <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
-In-Reply-To: <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6Yhl0DRuuLPKEMiY143f2N6rriAfbId77ULH2KXnQFOoo9YEc5p
- Rz5/9HFqMpYPYjBVkGk/n+l7DxusKZ02OVttxqO9kGoN9frimC9B+8vF2w7xGxO76aPhbDn
- DPl3LuBRAWIS5FGRyjQcHNq7e6SNXi6kiSZjeDYT673dH1UN9nLhgH8LiLpgf/DXiSduPEB
- oRkBMg2OIB7RMHjP0DCYA==
-UI-OutboundReport: notjunk:1;M01:P0:rlpGPtRtE0g=;fcye9KtAlNqbjwGrLOMOoEcB/Xz
- /V9Q95CRG/a7Nqt63mKJQOEJgcFkTX+BOdS5MsNeSLGoeTQJBPjTFd1+UL9uoZCW68uYtezg1
- owTp56q/sLiY7yE071UeyCAC1O7hB3unjU+uTaI0+iMsin+/3iWqxK4qltVF/kxBDHSu0C4YH
- Dfa0GVTsLv56I4DWbO4VwFDXvkw21vuzjooCodPvS7GGNQ1faN4UwKtv+DTNdJd29lzym2dDh
- iLwFFSF0j/Wd1TD6Cs16/pwtJLAIsyrcOSV+MBjUWCQI81Xuu31Pt3cYIa+7PqZPJgmjT5HOG
- znFbIlcX+/of13qiEG+V3KyvMzRGRSTnOXG20BnRaXNUOMv+WHdMZs/nutmCcKoMJcc4Kb22r
- YTPXn1r5XtlQRumCOqi0tr7YhSp5Aq7GUjs4iRwZt6hPeXO6dFAmb16u9q3Hw3sUUIZ/0xr6P
- OO1YjQNq3cmWxZAVQiSGqzqersipjdfF6b+BmiP0KF50GhrYnpu5z6VEJmHJidacPR20NXu/f
- TejHkDlzM4ppHXRuIiAepuD5ZZJFp6IiyWPYoqJTlp5gr0tNp4rNsdhpfdgG3U7GMZkkStqVd
- QV6NSAfglPl0DFmbX1NC1jx+tpbK27JPVrQNUDMCEY8cHumAaZcil+y4GmKxB9tEZvKOybt9z
- VAAd4fpJvl/Vk+pPGJZPO66eAtvDL7OIa2wpWkysOIGvhBWp3oIRNB6PyN6jdmW94lbAhPhFL
- B5CBOkv6fiXFA9Qurhc55SI9Yw/alfS4JFOMbsQK+M6QE3Yl5l0J8LxUTHJ7RfVansIZJFSdr
- uD8XrwE969R5iJ9N5rMc5GiJKMKZJyQTHX/Fdl0W/jkQ8dXuGVRUiRmkHmGmxHKtWle5Qbkc5
- 1tOWV4A2+oGKmh2XB31m+QEolqdJppXIuBa2fTMYScTXgHH6v2bfjLUN3c3RAZtCFy4dVuN/P
- yyLZplnytkfcg0pyygcbp9hODLQ=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZKG/bej80eL13Qqp@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Sakari,
 
-On 6/30/23 08:56, Helge Deller wrote:
-> On 6/30/23 08:29, Greg Kroah-Hartman wrote:
->> On Thu, Jun 29, 2023 at 11:16:21PM -0700, Linus Torvalds wrote:
->>> On Thu, 29 Jun 2023 at 22:31, Naresh Kamboju <naresh.kamboju@linaro.or=
-g> wrote:
->>>>
->>>> arch/parisc/mm/fault.c: In function 'do_page_fault':
->>>> arch/parisc/mm/fault.c:292:22: error: 'prev' undeclared (first use in=
- this function)
->>>> =C2=A0=C2=A0 292 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!prev || !(prev->vm_flag=
-s & VM_GROWSUP))
->>>
->>> Bah. "prev" should be "prev_vma" here.
->>>
->>> I've pushed out the fix. Greg, apologies. It's
->>>
->>> =C2=A0=C2=A0=C2=A0 ea3f8272876f parisc: fix expand_stack() conversion
->>>
->>> and Naresh already pointed to the similarly silly sparc32 fix.
->>
->> Ah, I saw it hit your repo before your email here, sorry about that.
->> Now picked up.
->
-> I've just cherry-picked ea3f8272876f on top of -rc2, built and run-teste=
-d it,
-> and everything is OK on parisc.
+On Sun, Jul 02, 2023 at 06:18:21PM +0000, Sakari Ailus wrote:
+> On Sun, Jul 02, 2023 at 06:23:56PM +0300, Laurent Pinchart wrote:
+> > On Fri, Feb 25, 2022 at 11:29:18AM +0200, Sakari Ailus wrote:
+> > > On Tue, Feb 08, 2022 at 04:50:20PM +0100, Jean-Michel Hautbois wrote:
+> > > > Add driver for the Unicam camera receiver block on BCM283x processors.
+> > > > It is represented as two video device nodes: unicam-image and
+> > > > unicam-embedded which are connected to an internal subdev (named
+> > > > unicam-subdev) in order to manage streams routing.
+> > > > 
+> > > > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > > > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> > > > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> > > > 
+> > > > ---
+> > > > v4:
+> > > >   - Add the vendor prefox for DT name
+> > > >   - Use the reg-names in DT parsing
+> > > >   - Remove MAINTAINERS entry
+> > > > 
+> > > > v3 main changes:
+> > > >   - Change code organization
+> > > >   - Remove unused variables
+> > > >   - Correct the fmt_meta functions
+> > > >   - Rewrite the start/stop streaming
+> > > >     - You can now start the image node alone, but not the metadata one
+> > > >     - The buffers are allocated per-node
+> > > >     - only the required stream is started, if the route exists and is
+> > > >       enabled
+> > > >   - Prefix the macros with UNICAM_ to not have too generic names
+> > > >   - Drop colorspace support
+> > > >     -> This is causing issues in the try-fmt v4l2-compliance test
+> > > >   test VIDIOC_G_FMT: OK
+> > > > 	fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
+> > > > 	fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc, pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
+> > > >   test VIDIOC_TRY_FMT: FAIL
+> > > > 	fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
+> > > > 	fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc, pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
+> > > >   test VIDIOC_S_FMT: FAIL
+> > > > 
+> > > > v2: Remove the unicam_{info,debug,error} macros and use
+> > > > dev_dbg/dev_err instead.
+> > > > ---
+> > > >  drivers/media/platform/Kconfig                |    1 +
+> > > >  drivers/media/platform/Makefile               |    2 +
+> > > >  drivers/media/platform/bcm2835/Kconfig        |   21 +
+> > > >  drivers/media/platform/bcm2835/Makefile       |    3 +
+> > > >  .../platform/bcm2835/bcm2835-unicam-regs.h    |  253 ++
+> > > >  .../media/platform/bcm2835/bcm2835-unicam.c   | 2570 +++++++++++++++++
+> > > >  6 files changed, 2850 insertions(+)
+> > > >  create mode 100644 drivers/media/platform/bcm2835/Kconfig
+> > > >  create mode 100644 drivers/media/platform/bcm2835/Makefile
+> > > >  create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam-regs.h
+> > > >  create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam.c
+> > 
+> > [snip]
+> > 
+> > > > diff --git a/drivers/media/platform/bcm2835/bcm2835-unicam-regs.h b/drivers/media/platform/bcm2835/bcm2835-unicam-regs.h
+> > > > new file mode 100644
+> > > > index 000000000000..b8d297076a02
+> > > > --- /dev/null
+> > > > +++ b/drivers/media/platform/bcm2835/bcm2835-unicam-regs.h
+> > 
+> > [snip]
+> > 
+> > > > +static int unicam_connect_of_subdevs(struct unicam_device *unicam)
+> > > > +{
+> > > > +	struct v4l2_fwnode_endpoint ep = { };
+> > > > +	struct fwnode_handle *ep_handle;
+> > > > +	struct v4l2_async_subdev *asd;
+> > > > +	unsigned int lane;
+> > > > +	int ret = -EINVAL;
+> > > > +
+> > > > +	if (of_property_read_u32(unicam->dev->of_node, "brcm,num-data-lanes",
+> > > > +				 &unicam->max_data_lanes) < 0) {
+> > > 
+> > > As you're already using fwnode API below, you could use
+> > > device_property_read_u32() here.
+> > > 
+> > > You can then replace of_device.h by mod_devicetable.h. Up to you.
+> > > 
+> > > > +		dev_err(unicam->dev, "DT property %s not set\n",
+> > > > +			"brcm,num-data-lanes");
+> > > > +		return -EINVAL;
+> > > > +	}
+> > > > +
+> > > > +	/* Get the local endpoint and remote device. */
+> > > > +	ep_handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(unicam->dev),
+> > > > +						    0, 0,
+> > > > +						    FWNODE_GRAPH_ENDPOINT_NEXT);
+> > > > +	if (!ep_handle) {
+> > > > +		dev_err(unicam->dev, "No endpoint\n");
+> > > > +		return -ENODEV;
+> > > > +	}
+> > > > +
+> > > > +	/* Parse the local endpoint and validate its configuration. */
+> > > > +	if (v4l2_fwnode_endpoint_alloc_parse(ep_handle, &ep)) {
+> > > 
+> > > As you don't need link-frequencies property parsing, you should use
+> > > v4l2_fwnode_endpoint_parse(). That avoids having to call
+> > > v4l2_fwnode_endpoint_free().
+> > > 
+> > > > +		dev_err(unicam->dev, "could not parse endpoint\n");
+> > > > +		goto cleanup_exit;
+> > > > +	}
+> > > > +
+> > > > +	dev_dbg(unicam->dev, "parsed local endpoint, bus_type %u\n",
+> > > > +		ep.bus_type);
+> > > > +
+> > > > +	unicam->bus_type = ep.bus_type;
+> > > > +
+> > > > +	switch (ep.bus_type) {
+> > > > +	case V4L2_MBUS_CSI2_DPHY:
+> > > > +		switch (ep.bus.mipi_csi2.num_data_lanes) {
+> > > > +		case 1:
+> > > > +		case 2:
+> > > > +		case 4:
+> > > > +			break;
+> > > > +
+> > > > +		default:
+> > > > +			dev_err(unicam->dev, "%u data lanes not supported\n",
+> > > > +				ep.bus.mipi_csi2.num_data_lanes);
+> > > > +			goto cleanup_exit;
+> > > > +		}
+> > > > +
+> > > > +		for (lane = 0; lane < ep.bus.mipi_csi2.num_data_lanes; lane++) {
+> > > > +			if (ep.bus.mipi_csi2.data_lanes[lane] != lane + 1) {
+> > > > +				dev_err(unicam->dev, "data lanes reordering not supported\n");
+> > > > +				goto cleanup_exit;
+> > > > +			}
+> > > > +		}
+> > > > +
+> > > > +		if (ep.bus.mipi_csi2.num_data_lanes > unicam->max_data_lanes) {
+> > > > +			dev_err(unicam->dev, "endpoint requires %u data lanes when %u are supported\n",
+> > > > +				ep.bus.mipi_csi2.num_data_lanes,
+> > > > +				unicam->max_data_lanes);
+> > > > +		}
+> > > > +
+> > > > +		unicam->active_data_lanes = ep.bus.mipi_csi2.num_data_lanes;
+> > > > +		unicam->bus_flags = ep.bus.mipi_csi2.flags;
+> > > > +
+> > > > +		break;
+> > > > +
+> > > > +	case V4L2_MBUS_CCP2:
+> > > > +		if (ep.bus.mipi_csi1.clock_lane != 0 ||
+> > > > +		    ep.bus.mipi_csi1.data_lane != 1) {
+> > > > +			dev_err(unicam->dev, "unsupported lanes configuration\n");
+> > > 
+> > > If the hardware doesn't support lane remapping for CCP2, then that should
+> > > be reflected in DT bindings, i.e. data-lanes isn't relevant. There's no
+> > > need to check that here.
+> > 
+> > Should the above check for CSI-2 be dropped as well then ?
+> 
+> Same for CSI-2, too: if there's nothing to configure there (lane remapping)
+> there's no need to validate that part of the DT either.
 
-Actually, your changes seems to trigger...:
+OK, I'll drop that.
 
-root@debian:~# /usr/bin/ls /usr/bin/*
--bash: /usr/bin/ls: Argument list too long
+> > > > +			goto cleanup_exit;
+> > > > +		}
+> > > > +
+> > > > +		unicam->max_data_lanes = 1;
+> > > > +		unicam->active_data_lanes = 1;
+> > > > +		unicam->bus_flags = ep.bus.mipi_csi1.strobe;
+> > > > +		break;
+> > > > +
+> > > > +	default:
+> > > > +		/* Unsupported bus type */
+> > > > +		dev_err(unicam->dev, "unsupported bus type %u\n",
+> > > > +			ep.bus_type);
+> > > > +		goto cleanup_exit;
+> > > > +	}
+> > > > +
+> > > > +	dev_dbg(unicam->dev, "%s bus, %u data lanes, flags=0x%08x\n",
+> > > > +		unicam->bus_type == V4L2_MBUS_CSI2_DPHY ? "CSI-2" : "CCP2",
+> > > > +		unicam->active_data_lanes, unicam->bus_flags);
+> > > 
+> > > V4l2-fwnode already prints this information I believe.
+> > 
+> > True. It does so with pr_debug() though, it would be nice to use
+> > dev_dbg(). That's a candidate for a separate fix of course.
+> 
+> The reason for using pr_debug() is that the device isn't used by the fwnode
+> framework. Would you add that just for debug prints? Note that the device
+> nodes themselves are already being printed so it adds little to the
+> usefulness of the messages.
 
-or with a long gcc argument list:
-gcc: fatal error: cannot execute '/usr/lib/gcc/hppa-linux-gnu/12/cc1': exe=
-cv: Argument list too long
+I'll send patches, we can discuss their usefulness there.
 
-I'm trying to understand what's missing, but maybe you have some idea?
+-- 
+Regards,
 
-Helge
+Laurent Pinchart
