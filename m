@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE75744F82
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 19:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADE3744F84
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 19:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjGBR4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 13:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S230061AbjGBR4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 13:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjGBRz5 (ORCPT
+        with ESMTP id S229914AbjGBRz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 13:55:57 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E924EE5F;
-        Sun,  2 Jul 2023 10:55:50 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        Sun, 2 Jul 2023 13:55:58 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5E2E5C;
+        Sun,  2 Jul 2023 10:55:52 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QvGts2SHHz9sbv;
-        Sun,  2 Jul 2023 19:55:49 +0200 (CEST)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QvGtt6CD6z9sTH;
+        Sun,  2 Jul 2023 19:55:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1688320549;
+        s=MBO0001; t=1688320550;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+F9Qzm6IdvX+YdAxJq37HDn1fqo5BDQOBMr0dvLlSyw=;
-        b=kY6yKlEzhagJ9p+DAc9ZPZDEkC5M+2MaRy9XAhQy8JfO8vk17IuZvkHmDWDFIfpuTdfArn
-        xA0XeUYlDCCHJY7uZbCABfEfE0lC8Uyn2OtWHZuftxqVlAEqZRrHFMPGKa40aMoPAiU5GK
-        kpHYeVzuYgU8/VwZrnsCpFxEQkaM2qQwuHJtA+FKeFS/4yAAC9cqLgoVkJBPCOGD2zAVK6
-        KLKBEDRcU/CZOmsUWsJnd2wb0jRIwcoOqw4H2UlR/06pGoTBpoZrNqeJm4duYzvnEQ3gz1
-        VTLQctSrCeKsVpPxDADfs4ZVrj20qGgfNjwdx5Zqsa2MHF/SXXEHRTXEmMOaoQ==
+        bh=UYJXelK6HIvlm3HnYGcGVVQzmR308v13RIhh/o3PQBg=;
+        b=wRnKIno8Zl+53XIRjFS/8DvIMFh/37nriSsfDYkfGAlw21nTdvJibyZt4RnMnZR1e9tHYF
+        7RMMtijVm50jTOmFB6PEe3/ub0M+hcZ4k631WaO1xGrVo+JoPF4zguI2fRs1/JCe52ouZm
+        DKraCXnpZ5aRTKrMUHhoMGtl+yRxPz+v8tOd+UbVD8AOolKtk37+icYAiK0LFTOtFJswDo
+        B8J3BybMON/yOnjd8eEknhxYazb96n5d7oxERavE96v1qGNRidH0zoqBu93j/+a33RFfK9
+        jiRVtflKB9bi6Foq3a4iwZcwYtUH+3RmC8cFM2qs7TnfQUPEPlnF/JXPQq4HWg==
 From:   Frank Oltmanns <frank@oltmanns.dev>
-Date:   Sun, 02 Jul 2023 19:55:21 +0200
-Subject: [PATCH v3 2/8] clk: sunxi-ng: a64: allow pll-mipi to set parent's
- rate
+Date:   Sun, 02 Jul 2023 19:55:22 +0200
+Subject: [PATCH v3 3/8] clk: sunxi-ng: Add feature to find closest rate
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230702-pll-mipi_set_rate_parent-v3-2-46dcb8aa9cbc@oltmanns.dev>
+Message-Id: <20230702-pll-mipi_set_rate_parent-v3-3-46dcb8aa9cbc@oltmanns.dev>
 References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
 In-Reply-To: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
 To:     Maxime Ripard <maxime@cerno.tech>,
@@ -53,20 +52,19 @@ To:     Maxime Ripard <maxime@cerno.tech>,
 Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Frank Oltmanns <frank@oltmanns.dev>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=806; i=frank@oltmanns.dev;
- h=from:subject:message-id; bh=6KqjBLS1Ov/nYPswsTAdcoLKG7a0XW4Ac8QXs1cSwVw=;
- b=owEB7QES/pANAwAIAZppogiUStPHAcsmYgBkobobka0bAipDKc0Ze1hPtisyY07V9gb2U08jO
- +hyzuXZYXiJAbMEAAEIAB0WIQQC/SV7f5DmuaVET5aaaaIIlErTxwUCZKG6GwAKCRCaaaIIlErT
- x12uC/9Ae6iMuCUPFpbZhqbKawdVnd6iFNqSqi/GCBjcMh2wXjRh0Du7zQZb7G5dt8d4AoCVdgM
- E1uD3Pf/FEtfKS1x1GMSN7UDx8gvDrI6b7cO/aMqvjInHWsuFHYVctDs+5Vxg+tMbODzLNF5mwv
- ZFy5Ytup/8Lw0cOtFcr4x3nief+pu6PmuRdl6lMHjXqqpV81nGrai/KxjY6OygCe/nSNG/jZ5wk
- GYpgO8+eIrtxDj1SnLIeHT/9C8loZ61RY9AfzKrX8bkc1FH0IfXKq+smvrEtGkVWOq/swT27tOA
- OwWLJqeyRwVgyeOSYafi4gFH1UplHB9k3cyuvN2sxqOFeqR1tj/b6yZcdoCPn69a5L6PElAwFyB
- QhLKejkhqq20rsae+CiDd7HmZCuQjMraBkv1knNdATdPbvAw0CpB1CKAszC1h0VS7f/+wSssRMH
- //RwPC3wEg1bGdQRfMM2/EG8+sAfGB+WwKpVc0Pq02k1lV/OQzPbBanP0TtlQUK6XPmyg=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=879; i=frank@oltmanns.dev;
+ h=from:subject:message-id; bh=nq4as25RxVF9/y/5G9YYRABH8Ort2KDG2xy+iJVw8Qw=;
+ b=owEB7QES/pANAwAIAZppogiUStPHAcsmYgBkoboba3wAEwXiJymkTQCoONbsAf4+BrEkd06OO
+ xBG/cEzMmKJAbMEAAEIAB0WIQQC/SV7f5DmuaVET5aaaaIIlErTxwUCZKG6GwAKCRCaaaIIlErT
+ x9SuC/9IAekMRGvkUFyioDP+R5cgyY2CuyinjuaOp0VgYfQ2L+COWJOmDq9LIovGIVqXAOQ5L7v
+ DrS2cT4q70H59JbgSrrZeEBfBheXAJ3QNS/akazcMZcm7ulkWFzVP0ilQuBE6+wrnakWecHFhJ9
+ ZH1edZU3VQjYxxwGIv92yGgrIL35slkPSUKmKCI9T37rEWfcF6JPdj9uNwJqcPY0xA6WwC6aGp2
+ ikVcRryVFPL6nRz/kOZi44V/vAvY3iq1E2uBvocLkS2oxkgIj/tCQhwaYUVcV8mwUlbME/mIrBB
+ MsoBRhtI2TbZHbwbkaYIi9cn9XupxSO5a1f6VzW5h6pQ4gYMA4W/uHFKhcRI/7UKhkgYNGU/Llz
+ VxKUCr7JPGfK1QreusM1xbgovRYi5t4XYoidsU3pxDYqnHqOwhhUp9imprHKxbqXOJyQuD0GTrS
+ JZE5pMquaDSg8rj5OQKZGErmrLjSV5V2YwJ4BbvA++WgfAEWCKR28Q4x9nvYr/cbuuBYw=
 X-Developer-Key: i=frank@oltmanns.dev; a=openpgp;
  fpr=02FD257B7F90E6B9A5444F969A69A208944AD3C7
-X-Rspamd-Queue-Id: 4QvGts2SHHz9sbv
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -77,28 +75,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nkm clock now supports setting the parent's rate. Utilize this
-option to find the optimal rate for pll-mipi.
+The default behaviour of clocks in the sunxi-ng driver is to select a
+clock rate that is closest to but less than the requested rate.
+
+Add the CCU_FEATURE_CLOSEST_RATE flag, which can be used to allow clocks
+to find the closest rate instead.
 
 Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
 ---
- drivers/clk/sunxi-ng/ccu-sun50i-a64.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/sunxi-ng/ccu_common.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
-index 41519185600a..a139a5c438d4 100644
---- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
-@@ -179,7 +179,8 @@ static struct ccu_nkm pll_mipi_clk = {
- 	.common		= {
- 		.reg		= 0x040,
- 		.hw.init	= CLK_HW_INIT("pll-mipi", "pll-video0",
--					      &ccu_nkm_ops, CLK_SET_RATE_UNGATE),
-+					      &ccu_nkm_ops,
-+					      CLK_SET_RATE_UNGATE | CLK_SET_RATE_PARENT),
- 	},
- };
+diff --git a/drivers/clk/sunxi-ng/ccu_common.h b/drivers/clk/sunxi-ng/ccu_common.h
+index fbf16c6b896d..5ad219f041d5 100644
+--- a/drivers/clk/sunxi-ng/ccu_common.h
++++ b/drivers/clk/sunxi-ng/ccu_common.h
+@@ -18,6 +18,7 @@
+ #define CCU_FEATURE_MMC_TIMING_SWITCH	BIT(6)
+ #define CCU_FEATURE_SIGMA_DELTA_MOD	BIT(7)
+ #define CCU_FEATURE_KEY_FIELD		BIT(8)
++#define CCU_FEATURE_CLOSEST_RATE	BIT(9)
  
+ /* MMC timing mode switch bit */
+ #define CCU_MMC_NEW_TIMING_MODE		BIT(30)
 
 -- 
 2.41.0
