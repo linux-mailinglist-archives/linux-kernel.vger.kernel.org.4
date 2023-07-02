@@ -2,154 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF8D744D5A
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BFE744D5F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 12:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjGBKrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 06:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S229960AbjGBK4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 06:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjGBKrP (ORCPT
+        with ESMTP id S229875AbjGBK4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 06:47:15 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52648E54
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 03:47:13 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso3887614a12.0
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 03:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688294832; x=1690886832;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=doP8CZZyrslCenSYjdf6T/PIt+tCk5F92Ar2E5adtJ0=;
-        b=ctacEYA1JK6veFXxDJZFud4r7LN4mBV0X0v7BsVcyc/h8oYdZJGgjQKfYbSclowoaF
-         CKs9o5FIk4V/q8HdhxLVMS+Sr42LMHv+2sZCF8mC1KhKgvnJZh+69V4xD+YDMSYvsewV
-         WNWMQiagaIhorzQIhS7+M2H2kyDkr2sPp+GZv66P5t8ubtR95qYQhfzLtRQeKW8MHomL
-         kxGBUQyE83nuOB1+LLo9XvcMNl6hbj18QP9Xo/33e2Bs36JK0zpsHisRQmtKmyQue+sl
-         1pvQidSX7rfr4UOtgA2F6PKiRNJXHbHYojIpxZC8qxgeo+7dS0ixvkqrlbOm2SrYriy4
-         k1NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688294832; x=1690886832;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=doP8CZZyrslCenSYjdf6T/PIt+tCk5F92Ar2E5adtJ0=;
-        b=j4UjqBen/PNT/Cvfm9TVhkyfhPMMoWnIGnrz9XoDDSiMJqqu90FhGshtQ1c9vL/bZA
-         gcRqPKaNjgclO+Tu0chx9VJffZQupFijdNaXuLVQT8Yj+UfjzckwfSmITzFyYuLO3Cqi
-         noZdtNrsn5wRQ9KYHzs9MC/R8TZtBIBb67oSZjh385n4teruhH8RaeUmTquqKQ0PPLHK
-         puzEl2N3564PzsIPtkuu85YprRc2fKfGEyTafa9xTsHlahf4diG5UDtj1rYX+l5Fq6bp
-         YQB5EydU1UVckLSwxBq7sAX+Z/ZAKQWcKaBTGTSh6x7ULh1cisahoXtCrdGN/Yr4Tl15
-         YAgg==
-X-Gm-Message-State: ABy/qLZrvp5JSsEH9lFCKAL53uviHJtlQU7doRgXJW2Ps2I2FEs51diU
-        5MRbj5YXmrreY7CgmiFwIePx4Q==
-X-Google-Smtp-Source: APBJJlEUDjmuQNgaEKhIauAAnEoZ97aP9Ydyy4Asa0tJshbXlejAZ3SysQ8kzJrnLsVizDYxGEaxCQ==
-X-Received: by 2002:aa7:ca57:0:b0:51d:96de:af6f with SMTP id j23-20020aa7ca57000000b0051d96deaf6fmr5497089edt.0.1688294831756;
-        Sun, 02 Jul 2023 03:47:11 -0700 (PDT)
-Received: from [192.168.10.214] ([217.169.179.6])
-        by smtp.gmail.com with ESMTPSA id q14-20020a056402040e00b0051d890b2407sm8550077edv.81.2023.07.02.03.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jul 2023 03:47:11 -0700 (PDT)
-Message-ID: <889bbee2-db9c-c1dd-dc8a-cdc436f1dfd8@linaro.org>
-Date:   Sun, 2 Jul 2023 12:47:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/4] dt-bindings: media: add mediatek ISP3.0 camsv
-Content-Language: en-US
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sun, 2 Jul 2023 06:56:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AC0E7D;
+        Sun,  2 Jul 2023 03:56:29 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qv5Y41bTFz6J6lR;
+        Sun,  2 Jul 2023 18:54:48 +0800 (CST)
+Received: from localhost (10.48.51.211) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 2 Jul
+ 2023 11:56:22 +0100
+Date:   Sun, 2 Jul 2023 18:56:18 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Olivier Moysan <olivier.moysan@foss.st.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20230628145412.1610260-1-jstephan@baylibre.com>
- <20230628145412.1610260-4-jstephan@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230628145412.1610260-4-jstephan@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/7] iio: add iio backend device type
+Message-ID: <20230702185618.00002453@Huawei.com>
+In-Reply-To: <20230623140944.2613002-1-olivier.moysan@foss.st.com>
+References: <20230623140944.2613002-1-olivier.moysan@foss.st.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.48.51.211]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 16:52, Julien Stephan wrote:
-> From: Phi-bang Nguyen <pnguyen@baylibre.com>
+On Fri, 23 Jun 2023 16:09:36 +0200
+Olivier Moysan <olivier.moysan@foss.st.com> wrote:
+
+> This RFC re-opens an old discussion regarding channel scaling
+> management in STM32 DFSDM driver [1]
 > 
-> This adds the bindings, for the ISP3.0 camsv module embedded in
-> some Mediatek SoC, such as the mt8365
+> The DFSDM is a peripheral provided by the STM32MP1x SoC family.
+> One objective is also to prepare the introduction of its successor in
+> the STM32MP12x SoC family: the MDF (Multi-function Digital Filter).
+> The MDF driver will have the same requirements as the DFSDM regarding
+> channel scaling management. So, the solution proposed here will apply
+> also for the future MDF driver.
+> 
+> [1]
+> https://patchwork.kernel.org/project/linux-iio/patch/20200204101008.11411-5-olivier.moysan@st.com/
+> 
+> As a short reminder of our previous discussion, the two main options
+> emerging were the following ones:
+> 
+> - Option1: Use the DFSDM as an hardware accelerator and expose the
+> scaled channels on SD modulator side.
+> Drawbak: this solution is leading to an very complex datapath, especially
+> for scan mode.
+> 
+> - Option2: Introduce a new IIO device type (so-called backend)
+> Retrieve scaling information from SD modulator scaling to expose a single
+> IIO device on DFSDM side. This solution is derivated from rcar-gyroadc
+> example, but with a more standard approach.
+> This was discussed in 
+> https://lore.kernel.org/lkml/20210919191414.09270f4e@jic23-huawei/
 
-Thank you for your patch. There is something to discuss/improve.
+Naming probably needs a rethink given the actual hardware we are talking about
+here is normally called a frontend and so people will be confused...
 
+I'm traveling at the moment, so only going to take a fairly superficial first
+look at what you have here.
 
-> +
-> +description:
-> +  The CAMSV is a set of DMA engines connected to the SENINF CSI-2
-> +  receivers. The number of CAMSVs depend on the SoC model.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8365-camsv
-> +
-> +  reg:
-> +    maxItems: 3
+Jonathan
 
-Describe the items (items with description) instead.
-
-> +
-
-...
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mediatek,mt8365-clk.h>
-> +    #include <dt-bindings/memory/mediatek,mt8365-larb-port.h>
-> +    #include <dt-bindings/power/mediatek,mt8365-power.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        camsv1: camsv@15050000 {
-> +            compatible = "mediatek,mt8365-camsv";
-> +            reg = <0 0x15050000 0 0x0040>,
-> +            <0 0x15050208 0 0x0020>,
-> +            <0 0x15050400 0 0x0100>;
-
-Fix the alignment.
-
-> +            interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_LOW>;
-> +            clocks = <&camsys CLK_CAM>,
-> +            <&camsys CLK_CAMTG>,
-> +            <&camsys CLK_CAMSV0>;
-
-Everywhere...
-
-
-Best regards,
-Krzysztof
+> 
+> The patchset proposed in this RFC implements option2 (backend) solution.
+> These patches provide a minimal API implemented as a template.
+> The intented use of this API is illustrated through the DFSDM channel
+> scaling support basic implementation.
+> 
+> For sake of simplicity I did not include the related DT binding
+> in this serie. 
+> 
+> Below are some use case examples.
+> 
+> * DFSDM with SD modulator backend:
+>   -------------------------------
+> This use case corresponds to the example implemented in this RFC.
+> The channel attributes are retrieved from backend by the dfsdm, and
+> the resulting scaling is exposed through DFSDM IIO device sysfs
+> 
+> - Single channel:
+> +-------------+  ch attr   +--------+  sysfs (compound scaling)
+> | sd0 backend | ---------> | dfsdm0 | -------------------------->
+> +-------------+            +--------+
+> 
+> - Scan mode:
+> +-------------+  ch attr   +-------------+  sysfs (compound scaling)
+> | sd1 backend | ---------> |   dfsdm1    | -------------------------->
+> +-------------+            +-------------+
+>                              ^
+>                              |
+> +-------------+  ch attr     |
+> | sd2 backend |--------------+
+> +-------------+
+> 
+> 
+> * Voltage divider in front of an adc:
+>   ----------------------------------
+> By way of example, here is a comparison on scaling management with
+> a iio-rescale device, and how it could be managed with a backend device.
+> 
+> - iio-rescale implementation
+> Scaling is exposed both on ADC and iio-rescale IIO devices.
+> On iio-rescale device we get the compound scaling
+> 
+> +---------------------------+  ch attr   +------+  sysfs
+> |     iio-rescale (div)     | <--------- | adc0 | ------->
+> +---------------------------+            +------+
+>   |
+>   | sysfs (compound scaling)
+>   v
+> 
+> - Backend implementation:
+> Compound scaling is exposed on ADC IIO device.
+> No scaling exposed on backend device
+> 
+> +---------------+  ch attr   +------+  sysfs (compound scaling)
+> | backend (div) | ---------> | adc0 | -------------------------->
+> +---------------+            +------+
+> 
+> 
+> * Cascaded backends:
+>   -----------------
+> Backends may be cascaded to allow computation of the whole chain scaling
+> This is not part of this RFC, but it is identified as a potential
+> future use case.
+> 
+> +---------------+  attr   +-------------+  attr   +--------+  sysfs
+> | backend (div) | ------> | sd0 backend | ------> | dfsdm0 | ------->
+> +---------------+         +-------------+         +--------+
+> 
+> Olivier Moysan (7):
+>   iio: introduce iio backend device
+>   of: property: add device link support for io-backends
+>   iio: adc: stm32-dfsdm: manage dfsdm as a channel provider
+>   iio: adc: stm32-dfsdm: adopt generic channel bindings
+>   iio: adc: sd_adc_modulator: change to iio backend device
+>   iio: adc: stm32-dfsdm: add scaling support to dfsdm
+>   ARM: dts: stm32: add dfsdm iio suppport
+> 
+>  arch/arm/boot/dts/stm32mp157c-ev1.dts |  62 +++++++++
+>  drivers/iio/Makefile                  |   2 +
+>  drivers/iio/adc/sd_adc_modulator.c    |  92 +++++++++++---
+>  drivers/iio/adc/stm32-dfsdm-adc.c     | 176 ++++++++++++++++----------
+>  drivers/iio/industrialio-backend.c    |  59 +++++++++
+>  drivers/of/property.c                 |   2 +
+>  include/linux/iio/backend.h           |  29 +++++
+>  7 files changed, 336 insertions(+), 86 deletions(-)
+>  create mode 100644 drivers/iio/industrialio-backend.c
+>  create mode 100644 include/linux/iio/backend.h
+> 
 
