@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B216744D1D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B1D744D21
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjGBJ6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 05:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S229959AbjGBJ6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 05:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbjGBJ55 (ORCPT
+        with ESMTP id S229914AbjGBJ62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 05:57:57 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C197CE54
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 02:57:55 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-54fd6aa3b0dso1785940a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 02:57:55 -0700 (PDT)
+        Sun, 2 Jul 2023 05:58:28 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D145E6F
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 02:58:03 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666fb8b1bc8so2898573b3a.1
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 02:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688291875; x=1690883875;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XF2+x8StAqIQZEEXXA77vQxRC4bKZrb2UmGw9jTVMxg=;
-        b=C8mJIVmo9Gt8KrJx133l1TXUl96CjQQdawYTJqjV0B/dmrVnXbEotILm4dSXCEO+LE
-         9Ej+UK5HJQrDCB7aDdtABsSPT1gpEHjUABBtbOKkrTOnXS+OtygyvUJnmMUti2fldsuk
-         LYuM+dNsVpvyn4VRdWlnqWoLRubroBSgNcRzK3Loq3wizKTdyajAHSbzjtTG5BPh00Ys
-         njN7jgXWvlJfMrw1ZFIIR4kvKAqQ5TCf94B/vkUVxpiDCWmI5J515CPvcj5cOBDrNX7x
-         20EwZMgumErRPjsjQPjjzOdyrCNEI6qDtDdu0oda8rhwk1EFVuDeKFlL8tHtqbgJrxlX
-         tV2g==
+        d=bytedance.com; s=google; t=1688291883; x=1690883883;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HYya50tJlu2Jrm7C5TXSsOJP4LQItfiIbIJ4JgEwpvU=;
+        b=dzNuDndr8OWQUYpcU4HBzRoL+dFRpF38ULyIKffCwwmFwEkqZUg68qO63QTl2NQyjm
+         l2xUZLlLcqNHMuPSoLs1p4guToErWKm36lUkbve/lgDYYHao3X9Dtr3t+FJS7J3UAf0A
+         zOfPjY2zeKIkh5UNg9OhPcRuECi0coMOY4qxPoOtIywALalB/NB/IOm8Lnv2hF/GRXN/
+         Gywkv9Pe7pmsqYQYqbbGPfgz2HidIpRStPKtO1uoYCvht0hi0HbBi3EZz192GmZ5vnCC
+         Q9aBUBY8238CSLdJntuG4ABygKt3itorUNa5c6juQBqnAQ5NMA9GApqvXEYJlSclb5yI
+         ePvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688291875; x=1690883875;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XF2+x8StAqIQZEEXXA77vQxRC4bKZrb2UmGw9jTVMxg=;
-        b=DE97EGPmN3Md8FsLpdeK8PC5Qbs1AMXhwySEfPuVhDgqYZFYg5vJlLj+wxlhIbeoUf
-         ZqL7rh51HZx6Brce8qE1pbunMcHYjxlodYfBjH5IfrpPLZdVIVVhxLG04r0+XR+f2N6E
-         ur9GR+imctpvp/W7k3twZVbAYwmUBak9g84WetPsr89mFQRqO0cNNAv5/ETZ6JHgi+zi
-         kPrMIZh5N+4gVn97h1R9RYZf1wHLdyVW1DGqgEQqageWWS4dyMxlXZkn99aGjn4Xpqd3
-         J5Utq0l2J6YrN7LdWBDnClTjtttEbgeDzW5uRUDonWiDPRvgGDV8boB7NY1MPBTGeYyc
-         3p7g==
-X-Gm-Message-State: ABy/qLYgIX3adz0qmACILdzv8srVY+kvVZnGp/70WvxR99n3IgkvLjSu
-        ytuEVlvT7MLv0C0EHmy7v7UOdA==
-X-Google-Smtp-Source: APBJJlF4yLaj8jr7OTR8FcXH/r/O+yqMJrHgHcjvBx+h67R5YAj78AaIxs+XMdOOaBezarVJelvXvA==
-X-Received: by 2002:a05:6a20:3257:b0:12c:1193:a563 with SMTP id hm23-20020a056a20325700b0012c1193a563mr5325675pzc.58.1688291875230;
-        Sun, 02 Jul 2023 02:57:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688291883; x=1690883883;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HYya50tJlu2Jrm7C5TXSsOJP4LQItfiIbIJ4JgEwpvU=;
+        b=bIAOEDeY+T95ghZjj7SuTsfcgOoRDdgGEb/F7UdVW8PoKNA+Yj9yA2vRoZw2CxBzl0
+         ugLFfPAk0XzhM4INkOdL8GgTn5FJBpEXbHrrQZW4yz0RoArKHhYJia1qpmFaUEW30u18
+         enMn2e6LnF7ihFiS8ia1nN/33wkYWGzvFMOcS+3UJgFk2rhu5j7zwTG+ZCx5ygp7ucLO
+         DXsLhRc194Av8uuslr5VHiWXMPzHnn740JOJXXwT84nYcj8ivU3E94WzfizuzVy5uCLa
+         oly6gUEPV/Ul6hVdc7DajobC/Mw5P4P0L/q+lMcA2nXLvnrMThgOh1kS80p5h1n8YMiM
+         Tk4Q==
+X-Gm-Message-State: ABy/qLa9KxsXbXm/Na7GWxPMuq/zIuFLo7tKe33+duoo9vuFj5h+5Io0
+        y0t0wy++LBl2pA8kBKOIRoxJLw==
+X-Google-Smtp-Source: APBJJlFlQxumS1ONslw4qPitjTJdc8b7vX961ozrSCLVfevwcHg41jW+SnpRdwMB5I70RzXkqLlreA==
+X-Received: by 2002:a05:6a20:6a22:b0:12e:6ba3:1f6f with SMTP id p34-20020a056a206a2200b0012e6ba31f6fmr963985pzk.23.1688291882787;
+        Sun, 02 Jul 2023 02:58:02 -0700 (PDT)
 Received: from PF2E59YH-BKX.inc.bytedance.com ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id u26-20020a62ed1a000000b006827d86ca0csm1605095pfh.55.2023.07.02.02.57.47
+        by smtp.gmail.com with ESMTPSA id u26-20020a62ed1a000000b006827d86ca0csm1605095pfh.55.2023.07.02.02.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 02:57:54 -0700 (PDT)
+        Sun, 02 Jul 2023 02:58:02 -0700 (PDT)
 From:   Yunhui Cui <cuiyunhui@bytedance.com>
 To:     ardb@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
         aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
@@ -58,10 +60,12 @@ To:     ardb@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
         tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org, geshijian@bytedance.com,
         weidong.wd@bytedance.com, cuiyunhui@bytedance.com
-Subject: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-Date:   Sun,  2 Jul 2023 17:57:32 +0800
-Message-Id: <20230702095735.860-1-cuiyunhui@bytedance.com>
+Subject: [PATCH v2 2/3] firmware: introduce FFI for SMBIOS entry.
+Date:   Sun,  2 Jul 2023 17:57:33 +0800
+Message-Id: <20230702095735.860-2-cuiyunhui@bytedance.com>
 X-Mailer: git-send-email 2.37.3.windows.1
+In-Reply-To: <20230702095735.860-1-cuiyunhui@bytedance.com>
+References: <20230702095735.860-1-cuiyunhui@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,142 +78,280 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. We need to enable the ACPI function on RISC-V. When booting with
-Coreboot, we encounter two problems:
-a. Coreboot does not support EFI
-b. On RISC-V, only the DTS channel can be used.
+1. Some bootloaders do not support EFI, and the transfer of
+firmware information can only be done through DTS,
+such as Coreboot.
 
-2. Based on this, we have added an interface for obtaining firmware
-information transfer through FDT, named FFI.
+2. Some arches do not have a reserved address segment that
+can be used to pass firmware parameters like x86.
 
-3. We not only use FFI to pass ACPI RSDP, but also pass other
-firmware information as an extension.
+3. Based on this, we have added an interface to obtain firmware
+information through FDT, named FFI.
+
+4. We not only use FFI to pass SMBIOS entry,
+but also pass other firmware information as an extension.
 
 Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
 ---
- MAINTAINERS                   |  6 ++++++
- arch/riscv/Kconfig            | 10 ++++++++++
- arch/riscv/include/asm/acpi.h |  9 +++++++++
- arch/riscv/include/asm/ffi.h  |  9 +++++++++
- arch/riscv/kernel/Makefile    |  1 +
- arch/riscv/kernel/ffi.c       | 37 +++++++++++++++++++++++++++++++++++
- arch/riscv/kernel/setup.c     |  2 ++
- 7 files changed, 74 insertions(+)
- create mode 100644 arch/riscv/include/asm/ffi.h
- create mode 100644 arch/riscv/kernel/ffi.c
+ MAINTAINERS                 |   6 ++
+ drivers/firmware/Kconfig    |  11 ++++
+ drivers/firmware/Makefile   |   1 +
+ drivers/firmware/dmi_scan.c | 128 +++++++++++++++++-------------------
+ drivers/firmware/ffi.c      |  36 ++++++++++
+ include/linux/ffi.h         |  15 +++++
+ 6 files changed, 128 insertions(+), 69 deletions(-)
+ create mode 100644 drivers/firmware/ffi.c
+ create mode 100644 include/linux/ffi.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index cd5388a33410..e592f489e757 100644
+index e592f489e757..9b886ef36587 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -18363,6 +18363,12 @@ F:	arch/riscv/boot/dts/
- X:	arch/riscv/boot/dts/allwinner/
- X:	arch/riscv/boot/dts/renesas/
+@@ -7871,6 +7871,12 @@ F:	arch/x86/platform/efi/
+ F:	drivers/firmware/efi/
+ F:	include/linux/efi*.h
  
-+RISC-V FDT FIRMWARE INTERFACE (FFI) SUPPORT
++FDT FIRMWARE INTERFACE (FFI)
 +M:	Yunhui Cui cuiyunhui@bytedance.com
 +S:	Maintained
-+F:	arch/riscv/include/asm/ffi.h
-+F:	arch/riscv/kernel/ffi.c
++F:	drivers/firmware/ffi.c
++F:	include/linux/ffi.h
 +
- RISC-V PMU DRIVERS
- M:	Atish Patra <atishp@atishpatra.org>
- R:	Anup Patel <anup@brainfault.org>
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index b49793cf34eb..2e1c40fb2300 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -785,6 +785,16 @@ config EFI
- 	  allow the kernel to be booted as an EFI application. This
- 	  is only useful on systems that have UEFI firmware.
+ EXTERNAL CONNECTOR SUBSYSTEM (EXTCON)
+ M:	MyungJoo Ham <myungjoo.ham@samsung.com>
+ M:	Chanwoo Choi <cw00.choi@samsung.com>
+diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+index b59e3041fd62..ea0149fb4683 100644
+--- a/drivers/firmware/Kconfig
++++ b/drivers/firmware/Kconfig
+@@ -303,6 +303,17 @@ config TURRIS_MOX_RWTM
+ 	  other manufacturing data and also utilize the Entropy Bit Generator
+ 	  for hardware random number generation.
  
-+config FFI
-+	bool "Fdt firmware interface"
-+	depends on OF
-+	default y
-+	help
-+	  Added an interface to obtain firmware information transfer
-+	  through FDT, named FFI. Some bootloaders do not support EFI,
-+	  such as coreboot.
-+	  We can pass firmware information through FFI, such as ACPI.
++config FDT_FW_INTERFACE
++       bool "An interface for passing firmware info through FDT"
++       depends on OF && OF_FLATTREE
++       default n
++       help
++         When some bootloaders do not support EFI, and the arch does not
++         support SMBIOS_ENTRY_POINT_SCAN_START, then you can enable this option
++         to support the transfer of firmware information, such as smbios tables.
 +
- config CC_HAVE_STACKPROTECTOR_TLS
- 	def_bool $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=tp -mstack-protector-guard-offset=0)
- 
-diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-index f71ce21ff684..f9d1625dd159 100644
---- a/arch/riscv/include/asm/acpi.h
-+++ b/arch/riscv/include/asm/acpi.h
-@@ -15,6 +15,8 @@
- /* Basic configuration for ACPI */
- #ifdef CONFIG_ACPI
- 
-+#include <asm/ffi.h>
++         Say Y here if you want to pass firmware information by FDT.
 +
- typedef u64 phys_cpuid_t;
- #define PHYS_CPUID_INVALID INVALID_HARTID
+ source "drivers/firmware/arm_ffa/Kconfig"
+ source "drivers/firmware/broadcom/Kconfig"
+ source "drivers/firmware/cirrus/Kconfig"
+diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
+index 28fcddcd688f..3b8b5d0868a6 100644
+--- a/drivers/firmware/Makefile
++++ b/drivers/firmware/Makefile
+@@ -33,6 +33,7 @@ obj-y				+= cirrus/
+ obj-y				+= meson/
+ obj-$(CONFIG_GOOGLE_FIRMWARE)	+= google/
+ obj-y				+= efi/
++obj-$(CONFIG_FDT_FW_INTERFACE)	+= ffi.o
+ obj-y				+= imx/
+ obj-y				+= psci/
+ obj-y				+= smccc/
+diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
+index 015c95a825d3..64c1ceffe373 100644
+--- a/drivers/firmware/dmi_scan.c
++++ b/drivers/firmware/dmi_scan.c
+@@ -6,6 +6,7 @@
+ #include <linux/ctype.h>
+ #include <linux/dmi.h>
+ #include <linux/efi.h>
++#include <linux/ffi.h>
+ #include <linux/memblock.h>
+ #include <linux/random.h>
+ #include <asm/dmi.h>
+@@ -628,31 +629,56 @@ static int __init dmi_present(const u8 *buf)
+ }
  
-@@ -66,6 +68,13 @@ int acpi_get_riscv_isa(struct acpi_table_header *table,
- 		       unsigned int cpu, const char **isa);
+ /*
+- * Check for the SMBIOS 3.0 64-bit entry point signature. Unlike the legacy
+- * 32-bit entry point, there is no embedded DMI header (_DMI_) in here.
++ * According to the DMTF SMBIOS reference spec v3.0.0, it is
++ * allowed to define both the 64-bit entry point (smbios3) and
++ * the 32-bit entry point (smbios), in which case they should
++ * either both point to the same SMBIOS structure table, or the
++ * table pointed to by the 64-bit entry point should contain a
++ * superset of the table contents pointed to by the 32-bit entry
++ * point (section 5.2)
++ * This implies that the 64-bit entry point should have
++ * precedence if it is defined and supported by the OS. If we
++ * have the 64-bit entry point, but fail to decode it, fall
++ * back to the legacy one (if available)
+  */
+-static int __init dmi_smbios3_present(const u8 *buf)
++static int __init dmi_sacn_smbios(unsigned long smbios3, unsigned long smbios)
+ {
+-	if (memcmp(buf, "_SM3_", 5) == 0 &&
+-	    buf[6] >= 24 && buf[6] <= 32 &&
+-	    dmi_checksum(buf, buf[6])) {
+-		dmi_ver = get_unaligned_be24(buf + 7);
+-		dmi_num = 0;			/* No longer specified */
+-		dmi_len = get_unaligned_le32(buf + 12);
+-		dmi_base = get_unaligned_le64(buf + 16);
+-		smbios_entry_point_size = buf[6];
+-		memcpy(smbios_entry_point, buf, smbios_entry_point_size);
++	char __iomem *p;
++	char buf[32];
++	#define INVALID_TABLE_ADDR (~0UL)
  
- static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
+-		if (dmi_walk_early(dmi_decode) == 0) {
+-			pr_info("SMBIOS %d.%d.%d present.\n",
+-				dmi_ver >> 16, (dmi_ver >> 8) & 0xFF,
+-				dmi_ver & 0xFF);
+-			dmi_format_ids(dmi_ids_string, sizeof(dmi_ids_string));
+-			pr_info("DMI: %s\n", dmi_ids_string);
++	if (smbios3 != INVALID_TABLE_ADDR) {
++		p = dmi_early_remap(smbios3, 32);
++		if (p == NULL)
++			return -1;
++		memcpy_fromio(buf, p, 32);
++		dmi_early_unmap(p, 32);
 +
-+#define ACPI_HAVE_ARCH_GET_ROOT_POINTER
-+static inline u64 acpi_arch_get_root_pointer(void)
-+{
-+	return acpi_rsdp;
-+}
++		if (!dmi_smbios3_present(buf)) {
++			dmi_available = 1;
+ 			return 0;
+ 		}
+ 	}
+-	return 1;
 +
- #else
- static inline void acpi_init_rintc_map(void) { }
- static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-diff --git a/arch/riscv/include/asm/ffi.h b/arch/riscv/include/asm/ffi.h
++	if (smbios == INVALID_TABLE_ADDR)
++		return -1;
++
++	/*
++	 * This is called as a core_initcall() because it isn't
++	 * needed during early boot.  This also means we can
++	 * iounmap the space when we're done with it.
++	 */
++	p = dmi_early_remap(smbios, 32);
++	if (p == NULL)
++		return -1;
++	memcpy_fromio(buf, p, 32);
++	dmi_early_unmap(p, 32);
++
++	if (!dmi_present(buf)) {
++		dmi_available = 1;
++		return 0;
++	}
++	return -1;
+ }
+ 
+ static void __init dmi_scan_machine(void)
+@@ -660,58 +686,22 @@ static void __init dmi_scan_machine(void)
+ 	char __iomem *p, *q;
+ 	char buf[32];
+ 
++#ifdef CONFIG_FDT_FW_INTERFACE
++	if (dmi_sacn_smbios(ffi.smbios3, ffi.smbios))
++		goto error;
++#endif
+ 	if (efi_enabled(EFI_CONFIG_TABLES)) {
+-		/*
+-		 * According to the DMTF SMBIOS reference spec v3.0.0, it is
+-		 * allowed to define both the 64-bit entry point (smbios3) and
+-		 * the 32-bit entry point (smbios), in which case they should
+-		 * either both point to the same SMBIOS structure table, or the
+-		 * table pointed to by the 64-bit entry point should contain a
+-		 * superset of the table contents pointed to by the 32-bit entry
+-		 * point (section 5.2)
+-		 * This implies that the 64-bit entry point should have
+-		 * precedence if it is defined and supported by the OS. If we
+-		 * have the 64-bit entry point, but fail to decode it, fall
+-		 * back to the legacy one (if available)
+-		 */
+-		if (efi.smbios3 != EFI_INVALID_TABLE_ADDR) {
+-			p = dmi_early_remap(efi.smbios3, 32);
+-			if (p == NULL)
+-				goto error;
+-			memcpy_fromio(buf, p, 32);
+-			dmi_early_unmap(p, 32);
+-
+-			if (!dmi_smbios3_present(buf)) {
+-				dmi_available = 1;
+-				return;
+-			}
+-		}
+-		if (efi.smbios == EFI_INVALID_TABLE_ADDR)
++		if (dmi_sacn_smbios(efi.smbios3, efi.smbios))
+ 			goto error;
+-
+-		/* This is called as a core_initcall() because it isn't
+-		 * needed during early boot.  This also means we can
+-		 * iounmap the space when we're done with it.
+-		 */
+-		p = dmi_early_remap(efi.smbios, 32);
+-		if (p == NULL)
+-			goto error;
+-		memcpy_fromio(buf, p, 32);
+-		dmi_early_unmap(p, 32);
+-
+-		if (!dmi_present(buf)) {
+-			dmi_available = 1;
+-			return;
+-		}
+ 	} else if (IS_ENABLED(CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK)) {
+ 		p = dmi_early_remap(SMBIOS_ENTRY_POINT_SCAN_START, 0x10000);
+ 		if (p == NULL)
+ 			goto error;
+ 
+ 		/*
+-		 * Same logic as above, look for a 64-bit entry point
+-		 * first, and if not found, fall back to 32-bit entry point.
+-		 */
++		* Same logic as above, look for a 64-bit entry point
++		* first, and if not found, fall back to 32-bit entry point.
++		*/
+ 		memcpy_fromio(buf, p, 16);
+ 		for (q = p + 16; q < p + 0x10000; q += 16) {
+ 			memcpy_fromio(buf + 16, q, 16);
+@@ -724,12 +714,12 @@ static void __init dmi_scan_machine(void)
+ 		}
+ 
+ 		/*
+-		 * Iterate over all possible DMI header addresses q.
+-		 * Maintain the 32 bytes around q in buf.  On the
+-		 * first iteration, substitute zero for the
+-		 * out-of-range bytes so there is no chance of falsely
+-		 * detecting an SMBIOS header.
+-		 */
++		* Iterate over all possible DMI header addresses q.
++		* Maintain the 32 bytes around q in buf.  On the
++		* first iteration, substitute zero for the
++		* out-of-range bytes so there is no chance of falsely
++		* detecting an SMBIOS header.
++		*/
+ 		memset(buf, 0, 16);
+ 		for (q = p; q < p + 0x10000; q += 16) {
+ 			memcpy_fromio(buf + 16, q, 16);
+diff --git a/drivers/firmware/ffi.c b/drivers/firmware/ffi.c
 new file mode 100644
-index 000000000000..847af02abd87
+index 000000000000..169802b4a7a8
 --- /dev/null
-+++ b/arch/riscv/include/asm/ffi.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_FFI_H
-+#define _ASM_FFI_H
-+
-+extern u64 acpi_rsdp;
-+extern void ffi_init(void);
-+
-+#endif /* _ASM_FFI_H */
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 506cc4a9a45a..274e06f4da33 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -92,6 +92,7 @@ obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
- obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
- 
- obj-$(CONFIG_EFI)		+= efi.o
-+obj-$(CONFIG_FFI)              += ffi.o
- obj-$(CONFIG_COMPAT)		+= compat_syscall_table.o
- obj-$(CONFIG_COMPAT)		+= compat_signal.o
- obj-$(CONFIG_COMPAT)		+= compat_vdso/
-diff --git a/arch/riscv/kernel/ffi.c b/arch/riscv/kernel/ffi.c
-new file mode 100644
-index 000000000000..c5ac2b5d9148
---- /dev/null
-+++ b/arch/riscv/kernel/ffi.c
-@@ -0,0 +1,37 @@
++++ b/drivers/firmware/ffi.c
+@@ -0,0 +1,36 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * ffi.c - FDT FIRMWARE INTERFACE
-+ */
 +
 +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
 +#include <linux/of.h>
 +#include <linux/of_fdt.h>
 +#include <linux/libfdt.h>
++#include <linux/ffi.h>
 +
-+u64 acpi_rsdp;
++#define FFI_INVALID_TABLE_ADDR	(~0UL)
 +
-+void __init ffi_acpi_root_pointer(void)
++struct ffi __read_mostly ffi = {
++	.smbios	= FFI_INVALID_TABLE_ADDR,
++	.smbios3 = FFI_INVALID_TABLE_ADDR,
++};
++EXPORT_SYMBOL(ffi);
++
++void __init ffi_smbios_root_pointer(void)
 +{
 +	int cfgtbl, len;
 +	fdt64_t *prop;
@@ -219,40 +361,36 @@ index 000000000000..c5ac2b5d9148
 +		pr_info("firmware table not found.\n");
 +		return;
 +	}
-+
-+	prop = fdt_getprop_w(initial_boot_params, cfgtbl, "acpi_phy_ptr", &len);
++	prop = fdt_getprop_w(initial_boot_params, cfgtbl, "smbios_phy_ptr", &len);
 +	if (!prop || len != sizeof(u64))
-+		pr_info("acpi_rsdp not found.\n");
++		pr_info("smbios entry point not found.\n");
 +	else
-+		acpi_rsdp = fdt64_to_cpu(*prop);
++		ffi.smbios = fdt64_to_cpu(*prop);
 +
-+	pr_debug("acpi rsdp: %llx\n", acpi_rsdp);
++	pr_info("smbios root pointer: %lx\n", ffi.smbios);
 +}
 +
-+void __init ffi_init(void)
-+{
-+	ffi_acpi_root_pointer();
-+}
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 971fe776e2f8..5a933d6b6acb 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -36,6 +36,7 @@
- #include <asm/thread_info.h>
- #include <asm/kasan.h>
- #include <asm/efi.h>
-+#include <asm/ffi.h>
- 
- #include "head.h"
- 
-@@ -279,6 +280,7 @@ void __init setup_arch(char **cmdline_p)
- 	parse_early_param();
- 
- 	efi_init();
-+	ffi_init();
- 	paging_init();
- 
- 	/* Parse the ACPI tables for possible boot-time configuration */
+diff --git a/include/linux/ffi.h b/include/linux/ffi.h
+new file mode 100644
+index 000000000000..95298a805222
+--- /dev/null
++++ b/include/linux/ffi.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _LINUX_FFI_H
++#define _LINUX_FFI_H
++
++extern struct ffi {
++	unsigned long smbios;  /* SMBIOS table (32 bit entry point) */
++	unsigned long smbios3;  /* SMBIOS table (64 bit entry point) */
++	unsigned long flags;
++
++} ffi;
++
++void ffi_smbios_root_pointer(void);
++
++#endif /* _LINUX_FFI_H */
 -- 
 2.20.1
 
