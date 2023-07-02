@@ -2,145 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A525744DBC
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FCB744DC3
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjGBNhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 09:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        id S229932AbjGBNmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 09:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBNhp (ORCPT
+        with ESMTP id S229460AbjGBNmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 09:37:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16333126;
-        Sun,  2 Jul 2023 06:37:44 -0700 (PDT)
+        Sun, 2 Jul 2023 09:42:54 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59854E55;
+        Sun,  2 Jul 2023 06:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688305064; x=1719841064;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NNYHHNeDxU7dioHFvNlo1mYkVhxo+/tO2nZb1qvzOxA=;
-  b=kTeDSRoJjm9ILvV4uNEIOK1brJqt2l0YaeODHqtleb/ZFJHDUOhJfss1
-   BrlJAxsVpDLSvOtBYI4n3o8948ZmKTHplkSTOWFje/m74b7DH0wvoqana
-   ivj6raXDQjx8qUcXATuyvIsWylsVxg/03a3SfsZn0Ql/iHnHB/4JfPdML
-   4rqiq13Ms5UXVaZn/LXK4Wa5Evn9fV5aWl5GzWM1ygcSITYedQRS9THrq
-   1tM87Atc4e5Lbfr/Glmj3A1l7wprh2fVADzMu5C4WpQdY0T3d+Fz7pb+H
-   XrdC6Nd1kIgRag/sNY4J1Z/S7enlWqBGmFUFu5zfh+YsHGq81OIogY35N
+  t=1688305373; x=1719841373;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UK/nzE9dIxgjFsCrj7Qj4taBTpYmWjk/fOAoL8aT+a8=;
+  b=HbG6wspr+sm+MlF1m56EfzLrkqojL3/iuEvoBaWW57OIX+Slgg0U5WLt
+   oYLhf0XSvmLh2DzlfYRp2hhtltLT1FNmQNnDvKuFNL/hq21C6lvUwqJ8n
+   miEehIXgj/SLO044vykPyxLXfnMW5O365MhwKZqZVtv2gCYtJGya1w1tJ
+   Qxdo65qSgZajmYfLRtxQGWo82tWOb7ADhOdaawRG2Tjqj9noA2RIk3WT5
+   eTUvKitrPcxy2HNDTT+/tpWmcs2mufc2fCJVrwwuAKWeucHzRzfqYss+U
+   kHX6GpVgdQfHPX4Y0CzYsHaDKe4lbFtxwRlXzVO2JhjvGSynPgiWZdeOq
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="343035014"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="393440818"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="343035014"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 06:37:43 -0700
+   d="scan'208";a="393440818"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 06:42:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="753476256"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="964889090"
 X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="753476256"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jul 2023 06:37:40 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qFxGl-000GgD-1r;
-        Sun, 02 Jul 2023 13:37:39 +0000
-Date:   Sun, 2 Jul 2023 21:37:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vivek Pernamitta <quic_vpernami@quicinc.com>, mhi@lists.linux.dev
-Cc:     oe-kbuild-all@lists.linux.dev, mrana@quicinc.com,
-        quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
-        Vivek Pernamitta <quic_vpernami@quicinc.com>,
+   d="scan'208";a="964889090"
+Received: from naamamex-mobl.ger.corp.intel.com (HELO [10.249.95.54]) ([10.249.95.54])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 06:42:49 -0700
+Message-ID: <ec3f0f2d-c8d4-3df7-7ff4-5c841a050be3@linux.intel.com>
+Date:   Sun, 2 Jul 2023 16:42:46 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [Intel-wired-lan] [PATCH net v2 1/6] igc: Rename qbv_enable to
+ taprio_offload_enable
+Content-Language: en-US
+To:     Florian Kauer <florian.kauer@linutronix.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1] net: mhi : Add support to enable ethernet interface
-Message-ID: <202307022148.nlp4Fazk-lkp@intel.com>
-References: <1688118281-13032-1-git-send-email-quic_vpernami@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1688118281-13032-1-git-send-email-quic_vpernami@quicinc.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Aravindhan Gunasekaran <aravindhan.gunasekaran@intel.com>,
+        Malli C <mallikarjuna.chilakala@intel.com>
+Cc:     netdev@vger.kernel.org, kurt@linutronix.de,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+References: <20230619100858.116286-1-florian.kauer@linutronix.de>
+ <20230619100858.116286-2-florian.kauer@linutronix.de>
+From:   "naamax.meir" <naamax.meir@linux.intel.com>
+In-Reply-To: <20230619100858.116286-2-florian.kauer@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vivek,
+On 6/19/2023 13:08, Florian Kauer wrote:
+> In the current implementation the flags adapter->qbv_enable
+> and IGC_FLAG_TSN_QBV_ENABLED have a similar name, but do not
+> have the same meaning. The first one is used only to indicate
+> taprio offload (i.e. when igc_save_qbv_schedule was called),
+> while the second one corresponds to the Qbv mode of the hardware.
+> However, the second one is also used to support the TX launchtime
+> feature, i.e. ETF qdisc offload. This leads to situations where
+> adapter->qbv_enable is false, but the flag IGC_FLAG_TSN_QBV_ENABLED
+> is set. This is prone to confusion.
+> 
+> The rename should reduce this confusion. Since it is a pure
+> rename, it has no impact on functionality.
+> 
+> Fixes: e17090eb2494 ("igc: allow BaseTime 0 enrollment for Qbv")
+> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
+> Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
+> ---
+>   drivers/net/ethernet/intel/igc/igc.h      | 2 +-
+>   drivers/net/ethernet/intel/igc/igc_main.c | 2 +-
+>   drivers/net/ethernet/intel/igc/igc_tsn.c  | 2 +-
+>   3 files changed, 3 insertions(+), 3 deletions(-)
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v6.4 next-20230630]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vivek-Pernamitta/net-mhi-Add-support-to-enable-ethernet-interface/20230630-174659
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/1688118281-13032-1-git-send-email-quic_vpernami%40quicinc.com
-patch subject: [PATCH V1] net: mhi : Add support to enable ethernet interface
-config: i386-randconfig-i062-20230702 (https://download.01.org/0day-ci/archive/20230702/202307022148.nlp4Fazk-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230702/202307022148.nlp4Fazk-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307022148.nlp4Fazk-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/mhi_net.c:327:37: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected unsigned char [usertype] *addr @@     got unsigned char const *dev_addr @@
-   drivers/net/mhi_net.c:327:37: sparse:     expected unsigned char [usertype] *addr
-   drivers/net/mhi_net.c:327:37: sparse:     got unsigned char const *dev_addr
-
-vim +327 drivers/net/mhi_net.c
-
-   320	
-   321	static int mhi_net_newlink(struct mhi_device *mhi_dev, struct net_device *ndev, bool eth_dev)
-   322	{
-   323		struct mhi_net_dev *mhi_netdev;
-   324		int err;
-   325	
-   326		if (eth_dev) {
- > 327			eth_random_addr(ndev->dev_addr);
-   328			if (!is_valid_ether_addr(ndev->dev_addr))
-   329				return -EADDRNOTAVAIL;
-   330		}
-   331	
-   332		mhi_netdev = netdev_priv(ndev);
-   333	
-   334		dev_set_drvdata(&mhi_dev->dev, mhi_netdev);
-   335		mhi_netdev->ndev = ndev;
-   336		mhi_netdev->mdev = mhi_dev;
-   337		mhi_netdev->skbagg_head = NULL;
-   338		mhi_netdev->mru = mhi_dev->mhi_cntrl->mru;
-   339		mhi_netdev->ethernet_if = eth_dev;
-   340	
-   341		INIT_DELAYED_WORK(&mhi_netdev->rx_refill, mhi_net_rx_refill_work);
-   342		u64_stats_init(&mhi_netdev->stats.rx_syncp);
-   343		u64_stats_init(&mhi_netdev->stats.tx_syncp);
-   344	
-   345		/* Start MHI channels */
-   346		err = mhi_prepare_for_transfer(mhi_dev);
-   347		if (err)
-   348			return err;
-   349	
-   350		/* Number of transfer descriptors determines size of the queue */
-   351		mhi_netdev->rx_queue_sz = mhi_get_free_desc_count(mhi_dev, DMA_FROM_DEVICE);
-   352	
-   353		err = register_netdev(ndev);
-   354		if (err)
-   355			return err;
-   356	
-   357		return 0;
-   358	}
-   359	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
