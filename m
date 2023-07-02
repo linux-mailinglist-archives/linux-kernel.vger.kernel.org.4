@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E88745190
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7B07451B7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjGBTza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S232876AbjGBT5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbjGBTzM (ORCPT
+        with ESMTP id S232664AbjGBT4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:55:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6662C4239
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 12:52:53 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D8691EC06FB;
-        Sun,  2 Jul 2023 21:51:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1688327509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=w0w8XPim6KMn9DZVnNkvLqAnmMWZmkQq6mxkDd+M/Ws=;
-        b=nLSGLTePOIqxHe3Ow81qh5nCjy93v2Qx1T6n2v/X9UdfY9EazR6kHcFYz/QGBB7ilGT03i
-        YIktuYNypMiW9JmEoeAwWfa1bFmMwvNJX4vD8Uh6V/oRODHuYIeA4v57T27ulBkuywSTas
-        9Bh8eZE2dY5tU6SzlJkKML99tGdRPTY=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id M_3_5DR8hx3p; Sun,  2 Jul 2023 19:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1688327504; bh=w0w8XPim6KMn9DZVnNkvLqAnmMWZmkQq6mxkDd+M/Ws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LY2p4/OrG4GjdS6xlm1/VRBypHrp3dPWcPbc3bP3MEjQb8K4vROZjEbJ/klY9e2Dz
-         m8JkPA1J7uSmhriYf3F3KvI56bqMBuNIs6eCbVuBjkj08jLs9oKioVEZHYJors6aRD
-         oMQA5uUmYTPoq2//nHlvhMC/F8IaUh+vdsuXJxn/6ttsOSMpIyDVFUKOfbntNjb+uC
-         AYEhBb+Fp+YaJj3WMg5H9eMxTk3mZ/zNhQsUqCm5ZnDEidjOQcE6AK8IdLJyydUSvI
-         D1xG1887QKbH1/tN9Jpz7BUd5d8+/SWRkX0tv3/VVqCeKT9geGu0Q57+NPFtqtv4Kj
-         47DXotpFkbar26M7fnNb7lKKqsz/xNj7M4a9qR6GmQMzSMBf5IyqZcYoDbFP6KyFAJ
-         ASdz3s/1qGoaVSDHF+DC0dxFXrw/frlEaWTDfEQHIJxFaWHzI74eoPyu0J3NU4MRgS
-         UOG1G7XEX3uhK84TSxU4w5Ogknkymtj83wHrMFluaqajAfXR8LXqPQRH0Lqr+1MaMl
-         F/hNzh5rbFFqsGeX3LtB7iAb3fI1eoJAYZxYl2QRx3Ta33nZK87sV8BSAAO2aa8/+T
-         nGQoOG4ucHdoEaRnNi1UfTu4C8A4vcn8Cg3RTkRCHaRq0DD7/H9fnLc6eg3PF/mnFI
-         7Yi1gpiyInI7Po2oGgjTQHs8=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        Sun, 2 Jul 2023 15:56:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CC73A87;
+        Sun,  2 Jul 2023 12:54:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A878440E0187;
-        Sun,  2 Jul 2023 19:51:36 +0000 (UTC)
-Date:   Sun, 2 Jul 2023 21:51:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     syzbot <syzbot+3ea47fc22e48e9ec4324@syzkaller.appspotmail.com>
-Cc:     dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [syzbot] upstream build error (20)
-Message-ID: <20230702195130.GAZKHVQnvKIjc9FB05@fat_crate.local>
-References: <0000000000003dab1305ff859d21@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4781260CD4;
+        Sun,  2 Jul 2023 19:52:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942E0C433C7;
+        Sun,  2 Jul 2023 19:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688327523;
+        bh=69V9Ig/HA5N66PRbyZIkRjsDTHBKFg/+k5b9bW4I/b4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mrR8GS2jQ1CNBQXA7/vBTPQfR0g+bf3gSFfKONJXzwEzUTSnlACs2T0n6YnoQXnpd
+         Pfn/RaMMA6AjoWbtqNBGdBjHaW/ibP7oumvdUHmbkU3pX2ZP+OAcIdbiWaM7IGh3lY
+         9O1FDcOervM000OSbsxCghoNOSNKqvhNqm/9rgQ2bEivURgEHHXFnWwHRJZP148nH9
+         LKdgxPwGVg28yFPTYItTwCz6ShhskmdIQ1FtiqkJLkC0Lyww87cSolDUj69gijDPYR
+         /q0TnOK6v+SriF1W6OpjcNxNodM6IFacPpMXNG4pJA4TVstZ5b4J1Hc6OxaRxlNE0Y
+         Djgegvs1X6FdA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        mario.limonciello@amd.com, andriy.shevchenko@linux.intel.com,
+        mail@mariushoch.de, linux-acpi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 1/9] ACPI: x86: Add skip i2c clients quirk for Nextbook Ares 8A
+Date:   Sun,  2 Jul 2023 15:51:48 -0400
+Message-Id: <20230702195159.1788402-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0000000000003dab1305ff859d21@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.1.37
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 02, 2023 at 11:56:57AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    77b1a7f7a05c Merge tag 'mm-nonmm-stable-2023-06-24-19-23' ..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1701aabd280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=dbdd409f194c6563
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3ea47fc22e48e9ec4324
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3ea47fc22e48e9ec4324@syzkaller.appspotmail.com
-> 
-> ./arch/x86/include/asm/mem_encrypt.h:23:20: error: static declaration of 'mem_encrypt_init' follows non-static declaration
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
-> 
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
-> 
-> If you want to undo deduplication, reply with:
-> #syz undup
+From: Hans de Goede <hdegoede@redhat.com>
 
-#syz fix: 0a9567ac5e6a ("x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=n build")
+[ Upstream commit 69d6b37695c1f2320cfa330e1e1636d50dd5040a ]
 
+The Nextbook Ares 8A is a x86 ACPI tablet which ships with Android x86
+as factory OS. Its DSDT contains a bunch of I2C devices which are not
+actually there (the Android x86 kernel fork ignores I2C devices described
+in the DSDT).
+
+On this specific model this just not cause resource conflicts, one of
+the probe() calls for the non existing i2c_clients actually ends up
+toggling a GPIO or executing a _PS3 after a failed probe which turns
+the tablet off.
+
+Add a ACPI_QUIRK_SKIP_I2C_CLIENTS for the Nextbook Ares 8 to the
+acpi_quirk_skip_dmi_ids table to avoid the bogus i2c_clients and
+to fix the tablet turning off during boot because of this.
+
+Also add the "10EC5651" HID for the RealTek ALC5651 codec used
+in this tablet to the list of HIDs for which not to skipi2c_client
+instantiation, since the Intel SST sound driver relies on
+the codec being instantiated through ACPI.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/acpi/x86/utils.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+index e45285d4e62a4..0b65c0d3f5a80 100644
+--- a/drivers/acpi/x86/utils.c
++++ b/drivers/acpi/x86/utils.c
+@@ -330,7 +330,7 @@ static const struct dmi_system_id acpi_quirk_skip_dmi_ids[] = {
+ 					ACPI_QUIRK_SKIP_ACPI_AC_AND_BATTERY),
+ 	},
+ 	{
+-		/* Nextbook Ares 8 */
++		/* Nextbook Ares 8 (BYT version)*/
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "Insyde"),
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "M890BAP"),
+@@ -338,6 +338,16 @@ static const struct dmi_system_id acpi_quirk_skip_dmi_ids[] = {
+ 		.driver_data = (void *)(ACPI_QUIRK_SKIP_I2C_CLIENTS |
+ 					ACPI_QUIRK_SKIP_ACPI_AC_AND_BATTERY),
+ 	},
++	{
++		/* Nextbook Ares 8A (CHT version)*/
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Insyde"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "CherryTrail"),
++			DMI_MATCH(DMI_BIOS_VERSION, "M882"),
++		},
++		.driver_data = (void *)(ACPI_QUIRK_SKIP_I2C_CLIENTS |
++					ACPI_QUIRK_SKIP_ACPI_AC_AND_BATTERY),
++	},
+ 	{
+ 		/* Whitelabel (sold as various brands) TM800A550L */
+ 		.matches = {
+@@ -356,6 +366,7 @@ static const struct dmi_system_id acpi_quirk_skip_dmi_ids[] = {
+ #if IS_ENABLED(CONFIG_X86_ANDROID_TABLETS)
+ static const struct acpi_device_id i2c_acpi_known_good_ids[] = {
+ 	{ "10EC5640", 0 }, /* RealTek ALC5640 audio codec */
++	{ "10EC5651", 0 }, /* RealTek ALC5651 audio codec */
+ 	{ "INT33F4", 0 },  /* X-Powers AXP288 PMIC */
+ 	{ "INT33FD", 0 },  /* Intel Crystal Cove PMIC */
+ 	{ "INT34D3", 0 },  /* Intel Whiskey Cove PMIC */
 -- 
-Regards/Gruss,
-    Boris.
+2.39.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
