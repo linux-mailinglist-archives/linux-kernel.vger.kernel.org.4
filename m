@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B715B745016
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 20:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD22A74500F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 20:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjGBS4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 14:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S230282AbjGBSxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 14:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjGBS4X (ORCPT
+        with ESMTP id S230319AbjGBSxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 14:56:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C124171D;
-        Sun,  2 Jul 2023 11:56:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89DBB60DDB;
-        Sun,  2 Jul 2023 18:53:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EF49DC433C8;
-        Sun,  2 Jul 2023 18:52:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688323980;
-        bh=oLOrAjaFmnoNaDsCAUaBwFcwNuxFar/iOGYWCHAB/KU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=OOz4fodrrB7Pt7x51N+HrShn/D4cwjqbZjVdExxwbnD9ZQ39uFO4jBar93QZZ4fJk
-         Qezg0ls70gnoWons47HvA7bhsqd2gg8ufkqr24MTQB/SqeCEylsKGKmZ7QlRvXt8ci
-         i0Ay4orXf5uCIpN6YZX1Y3AxDzkGz1IkI00S+/pA3kyCOi4WvBBe9dQalDZfJE2p4F
-         N6pNte2uzYZdzkJN1ES8YMFHkYHNDwA6mT+bxFdCBi/3MXmSYJ0FV/UmTmMvaGXXbG
-         zJYPZWZCToZgz6IGHwPDbwm3CI4xG64z0M43qRHNwimId25pZwFUVQQUjfXjbaezgu
-         Yyl4otz3uf2cQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DC663C395F1;
-        Sun,  2 Jul 2023 18:52:59 +0000 (UTC)
-Subject: Re: [GIT PULL] parisc architecture fixes & updates for v6.5-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZKGOzzDGM1925iYg@p100>
-References: <ZKGOzzDGM1925iYg@p100>
-X-PR-Tracked-List-Id: <linux-parisc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZKGOzzDGM1925iYg@p100>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/parisc-for-6.5-rc1
-X-PR-Tracked-Commit-Id: 4ad1218bed3d1ea4c5fd28588f8628b92df30ad7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ed77ac92a17c5138c5b5d792ab226c3188217053
-Message-Id: <168832397989.18363.5170179806380861488.pr-tracker-bot@kernel.org>
-Date:   Sun, 02 Jul 2023 18:52:59 +0000
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Sun, 2 Jul 2023 14:53:32 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ED8137
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 11:53:10 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51d7f350758so4808982a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 11:53:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688323983; x=1690915983;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AGR+gmEwpH8OpAM+s2Yo943Xz+OPgJSs9ljWlvL2KmA=;
+        b=E3OBMzDkJphhRHjhbLI1UWgnDAD0k071R4U63r2UlqgzwjJ9kzGlv6XdCIjm7VF5m8
+         zEkTcUmfVife8O3s0Vi5xOcSgNC2lnwVFHj2NCazrvdIzAtuVE5kTLU1DfY/Od0boN3T
+         UeEtQSlkwXZUrwkIft6ezW6Lmqr3qgYpGmh8xjitGaH4qKMMqN09tiMwlTcn5M1MTEim
+         s7TgJjXoSbSbDc5TE/fNcM47LFRFI6ACXfFlmIiHpcDiM4ytM6XEJdcAu1HJEDybk0iI
+         bgWlxmROS4LpvCuqcvPN73tSmkq6+5nfFK3P6arajHjkVMT07iqnueYnaRJlJjahjgqI
+         tKtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688323983; x=1690915983;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AGR+gmEwpH8OpAM+s2Yo943Xz+OPgJSs9ljWlvL2KmA=;
+        b=k12JNUGMHbwu/rZ7TOsKWIheXFVlREwF8RlSAN/ObBt9tsPyjtypaHf5AYigxZPYFV
+         IO303qA0tRAEWfdIe44sqN1r9lyqbeKUVO4B4z4Kw1btYjKRUUwZNNe1nKyTtW7qA1CK
+         stNH9lkjiyIOLJg1kDFZ5yVRIg6V0QqFM3Zo/N5n1iJlgPOrzO44VAM5gL6gnEML6PUQ
+         7SOmFqSHBNggoTUNj9Q6xQ27yXe0287Zqu7ry9rbykS1dbD/eJqMim8OwsWW7TPkpW+q
+         yetH309IVzYwz88GnxG1uFNszuaSWAoKmNsyRLlzbUbiwMXqLEalKn4Cu/bhCCajsV0k
+         AjQQ==
+X-Gm-Message-State: ABy/qLZZdjbJzWfhV6XSUeONQKeTFOLt+mLB8FhNkgWTOA7/pTGfZKBF
+        Bos3LhIRN73foRZPQgLAQpkd7g==
+X-Google-Smtp-Source: APBJJlGOQOExFqZtw+X3/bQt6Aef7O8fjpVmLAcgoZAiCoK44krLlc5NNQjWUVPE2kO9WFY93T4woA==
+X-Received: by 2002:aa7:d7cc:0:b0:51a:5c1d:5c06 with SMTP id e12-20020aa7d7cc000000b0051a5c1d5c06mr5556137eds.42.1688323983111;
+        Sun, 02 Jul 2023 11:53:03 -0700 (PDT)
+Received: from krzk-bin.. ([217.169.179.6])
+        by smtp.gmail.com with ESMTPSA id w14-20020a056402070e00b0051ddf53c623sm4336447edx.2.2023.07.02.11.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 11:53:02 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: marvell: minor whitespace cleanup around '='
+Date:   Sun,  2 Jul 2023 20:53:01 +0200
+Message-Id: <20230702185301.44505-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,15 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 2 Jul 2023 16:50:55 +0200:
+The DTS code coding style expects exactly one space before and after '='
+sign.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/parisc-for-6.5-rc1
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ed77ac92a17c5138c5b5d792ab226c3188217053
-
-Thank you!
-
+diff --git a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
+index c9ce1010c415..8c61b027eb2c 100644
+--- a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
++++ b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
+@@ -144,7 +144,7 @@ i2c0: i2c@11000{
+ 				clocks = <&cnm_clock>;
+ 				clock-names = "core";
+ 				interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
+-				clock-frequency=<100000>;
++				clock-frequency = <100000>;
+ 
+ 				pinctrl-names = "default", "gpio";
+ 				pinctrl-0 = <&i2c0_pins>;
+@@ -163,7 +163,7 @@ i2c1: i2c@11100{
+ 				clocks = <&cnm_clock>;
+ 				clock-names = "core";
+ 				interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
+-				clock-frequency=<100000>;
++				clock-frequency = <100000>;
+ 
+ 				pinctrl-names = "default", "gpio";
+ 				pinctrl-0 = <&i2c1_pins>;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+
