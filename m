@@ -2,118 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2B4744EBA
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 19:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E397C744EBC
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 19:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjGBRSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 13:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
+        id S229821AbjGBRUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 13:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjGBRR7 (ORCPT
+        with ESMTP id S229671AbjGBRUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 13:17:59 -0400
-Received: from mail-pf1-f207.google.com (mail-pf1-f207.google.com [209.85.210.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D5FE5F
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 10:17:57 -0700 (PDT)
-Received: by mail-pf1-f207.google.com with SMTP id d2e1a72fcca58-6826902bc8dso2724902b3a.1
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 10:17:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688318276; x=1690910276;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oxkh1rlVYSPaTWCnwoOH+MUQYhTKlCRUMgq6i3k0l+U=;
-        b=ICj2WtVhzD/fJST7mfMcY7frlpKYSdyspqUejDW9BWk9mkDMsT4tyD3XoYdhQ8wiwF
-         JXONF7yd/T5+7fn2opK8ayxGBaBgmWMq4UnzIkZveHU2tezKzC/hWJDsGn5TVspZn7NO
-         ikjYpkqq6Ci4wdkxazBkzlQWPiMy2blNyYiE6+CRWudBVBPy7ugyBGcXzpHba/WGv2W0
-         Drojqys5TtH8GAteBqDdbKWCQhegGo+aE3eqw/06IyO/IsQcxPLuaq2XRKSxNanovDDZ
-         dIEmObSXW+BHSY+MZcH3lU2V8PTx8VDEG7n1WJE0QpMkMVd0dl42C5OZx3A36YLJXvE4
-         t/2w==
-X-Gm-Message-State: AC+VfDy6wZlAUzIf9egUOewLuKiMb6qY7FeRTjAp0DcxHXM680NOcRHC
-        oX1++4lFWmsEdVtLH8urIpLTPXzxAF4TkwcX0BI75K1dtEvK
-X-Google-Smtp-Source: ACHHUZ4jxb0ETuqCVb4he+NlUfpEskuZySMvmo5XV6rQfDo7VVCnw06aWXEwh5ekbYKojx9vSqDqIU3H59qStqGeN+2/jKzA1D58
+        Sun, 2 Jul 2023 13:20:13 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E672C3;
+        Sun,  2 Jul 2023 10:20:12 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 362HJxGJ017048;
+        Sun, 2 Jul 2023 19:19:59 +0200
+Date:   Sun, 2 Jul 2023 19:19:59 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v5 0/5] nolibc: add part2 of support for rv32
+Message-ID: <20230702171959.GE16233@1wt.eu>
+References: <cover.1687176996.git.falcon@tinylab.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6a00:198f:b0:67a:a9bf:f88b with SMTP id
- d15-20020a056a00198f00b0067aa9bff88bmr9254326pfl.3.1688318276496; Sun, 02 Jul
- 2023 10:17:56 -0700 (PDT)
-Date:   Sun, 02 Jul 2023 10:17:56 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002373f005ff843b58@google.com>
-Subject: [syzbot] [mm?] [reiserfs?] kernel panic: stack is corrupted in ___slab_alloc
-From:   syzbot <syzbot+cf0693aee9ea61dda749@syzkaller.appspotmail.com>
-To:     42.hyeyoo@gmail.com, akpm@linux-foundation.org, cl@linux.com,
-        iamjoonsoo.kim@lge.com, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        penberg@kernel.org, reiserfs-devel@vger.kernel.org,
-        rientjes@google.com, roman.gushchin@linux.dev,
-        syzkaller-bugs@googlegroups.com, vbabka@suse.cz
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1687176996.git.falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Zhangjin,
 
-syzbot found the following issue on:
+On Mon, Jun 19, 2023 at 08:22:43PM +0800, Zhangjin Wu wrote:
+> Hi, Willy
+> 
+> This is the revision of the v4 part2 of support for rv32 [1], this
+> further split the generic KARCH code out of the old rv32 compile patch
+> and also add kernel specific KARCH and nolibc specific NARCH for
+> tools/include/nolibc/Makefile too.
+(...)
+> [1]: https://lore.kernel.org/linux-riscv/cover.1686128703.git.falcon@tinylab.org/
+> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/
+> 
+> Zhangjin Wu (5):
+>   tools/nolibc: fix up #error compile failures with -ENOSYS
+>   tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
 
-HEAD commit:    e8f75c0270d9 Merge tag 'x86_sgx_for_v6.5' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=168b84fb280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a98ec7f738e43bd4
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf0693aee9ea61dda749
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10310670a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1220c777280000
+I already queued these two ones to relieve you from them while we
+discuss the arch customization.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f27c1d41217a/disk-e8f75c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/843ae5d5c810/vmlinux-e8f75c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/da48bc4c0ec1/bzImage-e8f75c02.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/658601e354e4/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cf0693aee9ea61dda749@syzkaller.appspotmail.com
-
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: ___slab_alloc+0x12c3/0x1400 mm/slub.c:3270
-CPU: 0 PID: 5009 Comm: syz-executor248 Not tainted 6.4.0-syzkaller-01406-ge8f75c0270d9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- panic+0x686/0x730 kernel/panic.c:340
- __stack_chk_fail+0x19/0x20 kernel/panic.c:759
- ___slab_alloc+0x12c3/0x1400 mm/slub.c:3270
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Thanks,
+Willy
