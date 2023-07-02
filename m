@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4A874510C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048F2745111
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjGBToE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S231545AbjGBToR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbjGBTnD (ORCPT
+        with ESMTP id S232069AbjGBTnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:43:03 -0400
+        Sun, 2 Jul 2023 15:43:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8992319BB;
-        Sun,  2 Jul 2023 12:42:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBE02122;
+        Sun,  2 Jul 2023 12:42:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93AD860D56;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA1A60CF9;
+        Sun,  2 Jul 2023 19:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA65C433C7;
         Sun,  2 Jul 2023 19:41:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B422C433C8;
-        Sun,  2 Jul 2023 19:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326890;
-        bh=FyNZHDThtCmH2fNOWa5ZeWTS4+PHEiFkEvpKVKX4btk=;
+        s=k20201202; t=1688326891;
+        bh=N/N7KV2ya6gMiKA/u+eeu8WR2lgqm6LYdipuZUuUgbE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WL83shFRaaXApNSRyOS8EzbTpJSee+E2uhFjMVtWUYcpXAp1SLSv9RY61w/JmGVjb
-         kjozkOEdO0dmzCQSDsA8smT7NPHpLjHjwzXr5cXkGnT4ZI3SE7X7IuRIi43SFYW84K
-         CEtaqvNCqI/sF/QnR9vLhDgP/DeqTygOMzCUNEoYgq0d0ATkKCXQXoOe1vYHyUsUm+
-         FlUDpEJANvhPMEtLl/o71TsM0w6LM4mddb/PtiV8XediY8YSI7p3CWR7zgWv2LoqN3
-         IzXiqPihnyjweFcgOflZSop/a29LJg7753/lY5JD3qeWMN5Rslp/6RhVn73UkcUlhD
-         R7Epp9JG7Y1KQ==
+        b=GA6pGdrApKSEM2fnxl2NqHUCcqcLs8qx02gDHJIed8TwjKajcWKKxOgYlVkCoJ5jg
+         hRs2bI63KPHHmvyG1jbUD5RWkENMQe6BFx8YplP34r3acYewihwe5Zlh6IJFgvCWuf
+         xkZm8ERRzIS8Odz7MHFp/VIQPzfea9fV0zh2jVVNx2dGitDsMVah4oVUQ/e9Z7VyFW
+         dDfoiRZF8ybWPLKrbtg2PYFVo5N40Lpc96oPpkXNrBeIQa0lvlyqBiXaT7qEgGkJ23
+         q9LB4tyPpSLxGovx/1XqgYWxcRHFzGtrIXZZWvtD/gHSvSmowZOfdt9xlf9f2UIb+m
+         dyC6AICida6LA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yu Kuai <yukuai3@huawei.com>, Song Liu <song@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-raid@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 07/12] md/raid10: prevent soft lockup while flush writes
-Date:   Sun,  2 Jul 2023 15:41:12 -0400
-Message-Id: <20230702194118.1777794-7-sashal@kernel.org>
+Cc:     Yu Kuai <yukuai3@huawei.com>, Christoph Hellwig <hch@lst.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        dgilbert@interlog.com, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 08/12] scsi: sg: fix blktrace debugfs entries leakage
+Date:   Sun,  2 Jul 2023 15:41:13 -0400
+Message-Id: <20230702194118.1777794-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702194118.1777794-1-sashal@kernel.org>
 References: <20230702194118.1777794-1-sashal@kernel.org>
@@ -60,75 +63,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-[ Upstream commit 010444623e7f4da6b4a4dd603a7da7469981e293 ]
+[ Upstream commit db59133e927916d8a25ee1fd8264f2808040909d ]
 
-Currently, there is no limit for raid1/raid10 plugged bio. While flushing
-writes, raid1 has cond_resched() while raid10 doesn't, and too many
-writes can cause soft lockup.
+sg_ioctl() support to enable blktrace, which will create debugfs entries
+"/sys/kernel/debug/block/sgx/", however, there is no guarantee that user
+will remove these entries through ioctl, and deleting sg device doesn't
+cleanup these blktrace entries.
 
-Follow up soft lockup can be triggered easily with writeback test for
-raid10 with ramdisks:
+This problem can be fixed by cleanup blktrace while releasing
+request_queue, however, it's not a good idea to do this special handling
+in common layer just for sg device.
 
-watchdog: BUG: soft lockup - CPU#10 stuck for 27s! [md0_raid10:1293]
-Call Trace:
- <TASK>
- call_rcu+0x16/0x20
- put_object+0x41/0x80
- __delete_object+0x50/0x90
- delete_object_full+0x2b/0x40
- kmemleak_free+0x46/0xa0
- slab_free_freelist_hook.constprop.0+0xed/0x1a0
- kmem_cache_free+0xfd/0x300
- mempool_free_slab+0x1f/0x30
- mempool_free+0x3a/0x100
- bio_free+0x59/0x80
- bio_put+0xcf/0x2c0
- free_r10bio+0xbf/0xf0
- raid_end_bio_io+0x78/0xb0
- one_write_done+0x8a/0xa0
- raid10_end_write_request+0x1b4/0x430
- bio_endio+0x175/0x320
- brd_submit_bio+0x3b9/0x9b7 [brd]
- __submit_bio+0x69/0xe0
- submit_bio_noacct_nocheck+0x1e6/0x5a0
- submit_bio_noacct+0x38c/0x7e0
- flush_pending_writes+0xf0/0x240
- raid10d+0xac/0x1ed0
-
-Fix the problem by adding cond_resched() to raid10 like what raid1 did.
-
-Note that unlimited plugged bio still need to be optimized, for example,
-in the case of lots of dirty pages writeback, this will take lots of
-memory and io will spend a long time in plug, hence io latency is bad.
+Fix this problem by shutdown bltkrace in sg_device_destroy(), where the
+device is deleted and all the users close the device, also grab a
+scsi_device reference from sg_add_device() to prevent scsi_device to be
+freed before sg_device_destroy();
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Signed-off-by: Song Liu <song@kernel.org>
-Link: https://lore.kernel.org/r/20230529131106.2123367-2-yukuai1@huaweicloud.com
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
+Link: https://lore.kernel.org/r/20230610022003.2557284-3-yukuai1@huaweicloud.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/raid10.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/sg.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 67398394cc9c9..dfe69420c0fbc 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -921,6 +921,7 @@ static void flush_pending_writes(struct r10conf *conf)
- 			else
- 				submit_bio_noacct(bio);
- 			bio = next;
-+			cond_resched();
- 		}
- 		blk_finish_plug(&plug);
- 	} else
-@@ -1140,6 +1141,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
- 		else
- 			submit_bio_noacct(bio);
- 		bio = next;
-+		cond_resched();
- 	}
- 	kfree(plug);
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index 12344be14232b..3d7c27f0bd688 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -1496,6 +1496,10 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
+ 	int error;
+ 	unsigned long iflags;
+ 
++	error = scsi_device_get(scsidp);
++	if (error)
++		return error;
++
+ 	error = -ENOMEM;
+ 	cdev = cdev_alloc();
+ 	if (!cdev) {
+@@ -1553,6 +1557,7 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
+ out:
+ 	if (cdev)
+ 		cdev_del(cdev);
++	scsi_device_put(scsidp);
+ 	return error;
  }
+ 
+@@ -1560,6 +1565,7 @@ static void
+ sg_device_destroy(struct kref *kref)
+ {
+ 	struct sg_device *sdp = container_of(kref, struct sg_device, d_ref);
++	struct request_queue *q = sdp->device->request_queue;
+ 	unsigned long flags;
+ 
+ 	/* CAUTION!  Note that the device can still be found via idr_find()
+@@ -1567,6 +1573,9 @@ sg_device_destroy(struct kref *kref)
+ 	 * any other cleanup.
+ 	 */
+ 
++	blk_trace_remove(q);
++	scsi_device_put(sdp->device);
++
+ 	write_lock_irqsave(&sg_index_lock, flags);
+ 	idr_remove(&sg_index_idr, sdp->index);
+ 	write_unlock_irqrestore(&sg_index_lock, flags);
 -- 
 2.39.2
 
