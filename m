@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA7774525E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 22:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102CF74526C
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 23:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjGBUfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 16:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S229772AbjGBVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 17:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjGBUfD (ORCPT
+        with ESMTP id S229569AbjGBVBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 16:35:03 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DAEE56;
-        Sun,  2 Jul 2023 13:34:56 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3142ee41fd2so1139871f8f.3;
-        Sun, 02 Jul 2023 13:34:56 -0700 (PDT)
+        Sun, 2 Jul 2023 17:01:54 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0C6E50;
+        Sun,  2 Jul 2023 14:01:49 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b69dcf45faso59676531fa.0;
+        Sun, 02 Jul 2023 14:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688330095; x=1690922095;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Urzo+tFsGAkOnz5ecpB6iDl1xPRU1BRxrnQ2HFHQvFc=;
-        b=JzpxMDAE4UcE4qgKpe2qIYa1+chuZrFCRU5IBISMlKC+1W5ZrRnTTJtoWOhZPEWjE9
-         P0DG8/CQ4j8Ufs9qfrVLSY4zr7NrFnk6Qosqy8NxOCFg707x3R5WyAqWo2zE4NCAbWig
-         SReNgwntctr7AaU1AiUNleX6xt0G/S0OQ1kXb5qFn8qk1SqDuNwh4HhRAVGqmFmWZsjM
-         6VLRcowSvOLGLgfSGWzZ3rlAzkmQ+vZynmeC1ceyDimJfuOW/DQGb4q9lPbGPVl6ugMR
-         N/JgfMbzQV1ZJob2PK/kRlxrzoa/OJtEUzVg0lsHRctldfKLmKQdicP344vj6D4OYyXg
-         bU2g==
+        d=gmail.com; s=20221208; t=1688331708; x=1690923708;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qPrwKD2vC5NS8xYzadC5R8793tIJJPfKOj8ZgAaE1/8=;
+        b=fcEdYIVFqtV3ksnfrhdmkh8b5pYRZIeLox+CAPwKYwhOa8E4xx1oT8Q8G6uB/2Zqwl
+         yZ09vfF0DZPP1VlkBnQaHwqIoSjU8HLnAc+yif5GoJHtJFGsbXT5YAGMwWc1U2dW3jnP
+         b6qDyabpl0zgvJuN5bscvMMhEKop6dESTw7m5UrqCxTDjXJoXfjx0pGDsFKhHhH4hdrh
+         KVSekeYvFV1P7v6gpFDW13eW/oLfg7WpIr5fOYrV1BUb4kruYk8H9K0aY7+GZM7/Y4/x
+         ZYbMATfTuUes7b+1UEPNJrQfE4/FD1iuPR+KA1XPynRy/sImQD23y+/UO4Ks52ykd0K3
+         2+wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688330095; x=1690922095;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Urzo+tFsGAkOnz5ecpB6iDl1xPRU1BRxrnQ2HFHQvFc=;
-        b=C2Qyz+6t382NWfYKtp0bbRp19HH7sayonoTUk+ppSoIGi0mByj9nWMu4E/wXGUYEv0
-         TYqwEnNRkSz6UK2PbWHabtqX8qPYRLl6OrgKVpTbNAy830xLYOWgQmvI1sURogQAG+nZ
-         f8BQG4uiTikvKKzlRJBhHIV3HdIGyX6i/kyujg9aiFe3mChDBnzNv9PYRsHSGgEZycDV
-         XqgaltEch1KJtjyHDq2CM5IeLxZD/cbNYb4rYO6ZYsyHuCY/d6as8IhgYy52WeRK1Ob4
-         XtvuPxakcwv6JlKWki95XY3khbDPxadoebJy4kqeAIicQryS9SJXyT/4tk3BwP4KYlf1
-         Kalw==
-X-Gm-Message-State: ABy/qLZm2auINwSQg9guab/OLExv9ct6UHLuHxWemKC4ajqEvIflTfyq
-        I3zGkr4TbB/S/zMzdHfV9N0=
-X-Google-Smtp-Source: APBJJlElm9XqeQdO3+GTDFDpJLzuHY/UR2rcUieG+OuqysMrqplFSVn/oZ4mIw5L5cVrvaghmfyvnw==
-X-Received: by 2002:adf:f504:0:b0:30f:be04:5b5e with SMTP id q4-20020adff504000000b0030fbe045b5emr6227046wro.37.1688330095191;
-        Sun, 02 Jul 2023 13:34:55 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:b4ae:ae48:2e1b:1dcd])
-        by smtp.gmail.com with ESMTPSA id f1-20020a5d5681000000b0030647449730sm24000478wrv.74.2023.07.02.13.34.54
+        d=1e100.net; s=20221208; t=1688331708; x=1690923708;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qPrwKD2vC5NS8xYzadC5R8793tIJJPfKOj8ZgAaE1/8=;
+        b=E4rt3HxgUrjFgIo6yw0377bSG8hBXXCp3EvM03KFR3HGaISbOwQXdTMFe8QGqhvw4C
+         jqlgAq465n2OXJnFKFikNqtsv6ulaEwfSSuWkGuqdaINUDF8WlXLv/lDDSOfXqylQVj4
+         VZx72/n4dTJSJqN3AtkndQSJxRh+tNKFp+g1Eep9nbaQo8oBpjxX2/ojQYeba3bJk9S7
+         4eNvLga0pqn6yEyWEGVRdLae5L8NBX96qkJfGQ+8AG1a8juSzpXGsavYOO9ho/WsP9kZ
+         W+08gvE7nVhDoQsQm8l82eiyA3yPXH0KNRf2308bXgAgqx0peZokhjdWc80kP8BX0EWo
+         sFKA==
+X-Gm-Message-State: ABy/qLbrwlbUFHqfq4gKMrJUATICCd/GLz0IPGibak7ciPC4niz+9bld
+        TXy+CV/y1JdhX28Q8k/TmCCxdT1QXGOxL2Zn
+X-Google-Smtp-Source: APBJJlF/l24lgW6oXkxIU6vVYWv/TCFoLr2NIpLZXKneI0vSTz7FRtG87gjBS1C1VYnU8uBED4fsnw==
+X-Received: by 2002:a19:ca42:0:b0:4f8:54f3:a6c0 with SMTP id h2-20020a19ca42000000b004f854f3a6c0mr4329909lfj.11.1688331707744;
+        Sun, 02 Jul 2023 14:01:47 -0700 (PDT)
+Received: from valmont.froyen.eu ([2a01:799:ba5:6500::80f])
+        by smtp.gmail.com with ESMTPSA id w5-20020a05651204c500b004fbae51d1a5sm776018lfq.295.2023.07.02.14.01.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 13:34:54 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v10 6/6] soc: renesas: Kconfig: Select the required configs for RZ/Five SoC
-Date:   Sun,  2 Jul 2023 21:34:29 +0100
-Message-Id: <20230702203429.237615-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230702203429.237615-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20230702203429.237615-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Sun, 02 Jul 2023 14:01:47 -0700 (PDT)
+From:   Valentin David <valentin.david@gmail.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        valentin.david@gmail.com
+Subject: [PATCH] Bluetooth: btusb: Add device 0489:e0f5 as MT7922 device
+Date:   Sun,  2 Jul 2023 23:01:38 +0200
+Message-ID: <20230702210138.226929-1-valentin.david@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,50 +71,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Asus ROG Ally gaming computer has a MediaTek MT7922 chip that uses USB id
+0489:e0f5 and needs to be added to the table. Without this, the device is
+not usable and gives the following error:
 
-Explicitly select the required Cache management and Errata configs
-required for the RZ/Five SoC.
+Bluetooth: hci0: Opcode 0x c03 failed: -110
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Conor Dooley <conor.dooley@microchip.com> # tyre-kicking on a d1
+Output from /sys/kernel/debug/usb/devices:
+
+T:  Bus=01 Lev=01 Prnt=01 Port=03 Cnt=03 Dev#=  4 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0489 ProdID=e0f5 Rev= 1.00
+S:  Manufacturer=MediaTek Inc.
+S:  Product=Wireless_Device
+S:  SerialNumber=000000000
+C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
+A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
+I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
+E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
 ---
-v9 -> v10
-* No change
+ drivers/bluetooth/btusb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-v8 -> v9
-* No change
-
-v7 -> v8
-* Included RB tag from Geert
-
-v6 -> v7
-* Included RB tag from Conor
-
-v5 -> v6
-* New patch
----
- drivers/soc/renesas/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index de31589ed054..67604f24973e 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -334,6 +334,10 @@ if RISCV
- config ARCH_R9A07G043
- 	bool "RISC-V Platform support for RZ/Five"
- 	select ARCH_RZG2L
-+	select AX45MP_L2_CACHE
-+	select DMA_GLOBAL_POOL
-+	select ERRATA_ANDES
-+	select ERRATA_ANDES_CMO
- 	help
- 	  This enables support for the Renesas RZ/Five SoC.
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 2a8e2bb038f5..b36967205de6 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -625,6 +625,9 @@ static const struct usb_device_id blacklist_table[] = {
+ 	{ USB_DEVICE(0x0489, 0xe0f2), .driver_info = BTUSB_MEDIATEK |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x0489, 0xe0f5), .driver_info = BTUSB_MEDIATEK |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
  
+ 	/* Additional Realtek 8723AE Bluetooth devices */
+ 	{ USB_DEVICE(0x0930, 0x021d), .driver_info = BTUSB_REALTEK },
 -- 
-2.34.1
+2.41.0
 
