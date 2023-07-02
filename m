@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EC8744DB7
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE25744DBD
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjGBNcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 09:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S229791AbjGBNiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 09:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBNcH (ORCPT
+        with ESMTP id S229675AbjGBNiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 09:32:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE6EE55
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 06:31:23 -0700 (PDT)
+        Sun, 2 Jul 2023 09:38:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77121E55
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 06:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688304682;
+        s=mimecast20190719; t=1688305034;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IhA8PQHFplolrCTEWNVaJX0ddk8c61/nnX2OVi4x/HY=;
-        b=UABScuxgmirjOGvuuFsG142DfxKUAjyzu4XBAuBOHVRDq/NoruXfY0yCDBtCA1h/RETt4D
-        U65Sz0qXs1BWQtei59rB8NvWNy27T5LeE6N0bC94pXGOIcntFbGDbuwC8YbNpz8Q+PpfwT
-        mSjiIRw1+iK2poslvqwRQ7g1GocRIZU=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fscz16jdu5EOdDpNFofgtOkAvApauMfws1a+RHlsQn0=;
+        b=bqeo8LtrpydN8VC2qwddEFpcycLwhrbnIww6vqV/wB6qO9EyliH/c9a0h3rBAFIjFcQN1B
+        KRg+e2CZbvDOtiO0c9BrAoRHLYmVSCwb7E8tQ83EWs4YykVBKkU/dCavmwbG1NtiH6fjh+
+        Rp38ZlCft/tq20LsRM5Li/xxt9rY5Ls=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-359-5yzpMcFgNt2xpQmlGx_PTw-1; Sun, 02 Jul 2023 09:31:21 -0400
-X-MC-Unique: 5yzpMcFgNt2xpQmlGx_PTw-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b885d53a09so3257668a34.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
+ us-mta-128-QnXM37-INmW6g0ehERDcXw-1; Sun, 02 Jul 2023 09:37:13 -0400
+X-MC-Unique: QnXM37-INmW6g0ehERDcXw-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a355cf318so259584766b.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 06:37:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688304680; x=1690896680;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IhA8PQHFplolrCTEWNVaJX0ddk8c61/nnX2OVi4x/HY=;
-        b=GAUcBBc5L4IE3iDHko2yey6kn0MMaJm/e7minwWC6gvo0MAZFVPCof1GfnBgrJhPmb
-         yGUUXPBoz8XeNSTlVbRGnjxYieM4FkuwmLt02jVJ3/v2iNxW6nDtXJW4eQ5B2/7rORHa
-         eYfN959RpsfseM8PDzt9csVORTosV737EgtyUMtK7MWHxHy8+alIVeyo2K/kmRVfNdyd
-         7s+hfKoYS+hEnXhfCA3OkL/thE0vhOfJnZG374xHrk85yfHJJtbQSZ62N4E+6vNGeaG6
-         xMWchIWoOkT/enZMyKadjSIYAbvKJ1NwNx50oRwkUcDksbf4PiZK1mLZDbCWP4U5f9lh
-         GrLg==
-X-Gm-Message-State: AC+VfDwQE8zqX2veZ/Pw/WgU2Tidmn9nBwI6MVgn7AkuTAxEBgb9rw1Z
-        HvjzcxXk+Ul6UhUTNILY2EgQgC5O5a0JC3jroKWiqHYOXvnYZCHq8Csk4xCf9b1tqBwO8ntd2fL
-        32e/Q6+OCeuiGqcJlfsb71flq
-X-Received: by 2002:a05:6808:150f:b0:3a3:6f81:49e0 with SMTP id u15-20020a056808150f00b003a36f8149e0mr8282882oiw.6.1688304680428;
-        Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6jHs6x35k/Ksnct8fSfwL+ZA8Dffms9gAWwn/v+wOt1OUbuK6xkMVZcapNkzJw/IkWcnNogw==
-X-Received: by 2002:a05:6808:150f:b0:3a3:6f81:49e0 with SMTP id u15-20020a056808150f00b003a36f8149e0mr8282873oiw.6.1688304680123;
-        Sun, 02 Jul 2023 06:31:20 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id ev14-20020a0562140a8e00b00631fea4d5c2sm10206248qvb.98.2023.07.02.06.31.19
+        d=1e100.net; s=20221208; t=1688305032; x=1690897032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fscz16jdu5EOdDpNFofgtOkAvApauMfws1a+RHlsQn0=;
+        b=X+aQ/RyETrshNeWsrlCwdv0CCnNndjnavarCr7rFDcbfwlREs8O5zsvHOvePoTLefF
+         Pg0Uv3wiZavINW+G+377SBmh7TBlwVsQA3w5r7iyFqnLOeXtSUrvt03Rv3OvYeMv8mD7
+         QF/562mRP9DYi2BqZ2nkhE7q/HnxPn04HNWzN6qfe6HlJUSrS2Gsb+3UHz8q12jqYvUG
+         dSdSTpIJKBFT8UwzKwWyIxdQ7Jn2exPZAbJYvTQp+W+RXZ4vjpKEdv9n2TEc/HmrCQ5B
+         UFDTgQG4lUTNokJF10ty+Dj6XD79YENnadRPVZGizzOkh/HoBzOv/UVBdKEXLUhu887g
+         WbVA==
+X-Gm-Message-State: AC+VfDyh1ljdxZFBjPynGDfyMfNIlJI6f6jd0zXwW9YwjJjv9vt+IQUC
+        siVXTiZIh9j1+yLtlhyhFvIPX/2hCfV8ZdLRliOiohl3hgM4blatdocSGuHARuyEZJ0008vkOsg
+        j0iYX3/tQLs9s4xa5pAlBCoBb
+X-Received: by 2002:a17:906:b811:b0:979:65f0:cced with SMTP id dv17-20020a170906b81100b0097965f0ccedmr5934777ejb.17.1688305031943;
+        Sun, 02 Jul 2023 06:37:11 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFGgYm6Pej4shREErdqqtoaKfnv59VDi8oQbzHD5HcPb5WjgVVGyKQF1QNN/hdRhbN02rqoIg==
+X-Received: by 2002:a17:906:b811:b0:979:65f0:cced with SMTP id dv17-20020a170906b81100b0097965f0ccedmr5934769ejb.17.1688305031706;
+        Sun, 02 Jul 2023 06:37:11 -0700 (PDT)
+Received: from redhat.com ([2.52.134.224])
+        by smtp.gmail.com with ESMTPSA id x26-20020a1709065ada00b00992025654c1sm7342793ejs.179.2023.07.02.06.37.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 06:31:19 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     keguang.zhang@gmail.com, daniel.lezcano@linaro.org,
-        tglx@linutronix.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] clocksource/drivers/loongson1: set variable ls1x_timer_lock storage-class-specifier to static
-Date:   Sun,  2 Jul 2023 09:31:13 -0400
-Message-Id: <20230702133113.3438049-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 02 Jul 2023 06:37:11 -0700 (PDT)
+Date:   Sun, 2 Jul 2023 09:37:06 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Maxime Coquelin <maxime.coquelin@redhat.com>
+Cc:     xieyongji@bytedance.com, jasowang@redhat.com,
+        david.marchand@redhat.com, lulu@redhat.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
+Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
+Message-ID: <20230702093530-mutt-send-email-mst@kernel.org>
+References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627113652.65283-1-maxime.coquelin@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-drivers/clocksource/timer-loongson1-pwm.c:31:1: warning: symbol
-  'ls1x_timer_lock' was not declared. Should it be static?
+On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
+> This small series enables virtio-net device type in VDUSE.
+> With it, basic operation have been tested, both with
+> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+> adding VDUSE support using split rings layout (merged in
+> DPDK v23.07-rc1).
+> 
+> Control queue support (and so multiqueue) has also been
+> tested, but requires a Kernel series from Jason Wang
+> relaxing control queue polling [1] to function reliably.
+> 
+> [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
 
-This variable is only used in its defining file, so it should be static.
+Jason promised to post a new version of that patch.
+Right Jason?
+For now let's make sure CVQ feature flag is off?
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/clocksource/timer-loongson1-pwm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
-index 6335fee03017..244d66835508 100644
---- a/drivers/clocksource/timer-loongson1-pwm.c
-+++ b/drivers/clocksource/timer-loongson1-pwm.c
-@@ -28,7 +28,7 @@
- 
- #define CNTR_WIDTH		24
- 
--DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
-+static DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
- 
- struct ls1x_clocksource {
- 	void __iomem *reg_base;
--- 
-2.27.0
+> RFC -> v1 changes:
+> ==================
+> - Fail device init if it does not support VERSION_1 (Jason)
+> 
+> Maxime Coquelin (2):
+>   vduse: validate block features only with block devices
+>   vduse: enable Virtio-net device type
+> 
+>  drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> -- 
+> 2.41.0
 
