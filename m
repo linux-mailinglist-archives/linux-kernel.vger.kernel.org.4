@@ -2,180 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03F8745308
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 01:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4BB74530C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 01:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjGBX23 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 2 Jul 2023 19:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S230011AbjGBXbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 19:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGBX22 (ORCPT
+        with ESMTP id S229899AbjGBXbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 19:28:28 -0400
-Received: from ste-pvt-msa2.bahnhof.se (ste-pvt-msa2.bahnhof.se [213.80.101.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721F9E40;
-        Sun,  2 Jul 2023 16:28:24 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 1F9BC3F4EA;
-        Mon,  3 Jul 2023 01:28:21 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Score: -1.91
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from ste-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (ste-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FD9DfBm3SItY; Mon,  3 Jul 2023 01:28:19 +0200 (CEST)
-Received: by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id D59743F358;
-        Mon,  3 Jul 2023 01:28:17 +0200 (CEST)
-Received: from [192.168.0.132] (port=50956)
-        by tnonline.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <forza@tnonline.net>)
-        id 1qG6UK-0005AA-2x;
-        Mon, 03 Jul 2023 01:28:17 +0200
-Date:   Mon, 3 Jul 2023 01:28:16 +0200 (GMT+02:00)
-From:   Forza <forza@tnonline.net>
-To:     Uladzislau Rezki <urezki@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Stable <stable@vger.kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
-Message-ID: <cf07f03.70397026.18918ef7f95@tnonline.net>
-In-Reply-To: <ZHClGA9szxSqzDf8@pc636>
-References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com> <fcf1d04.faed4a1a.18844d8e78f@tnonline.net> <ZGwcVTpQNBoJHBB+@debian.me> <ZGyVVQxnw6Tn7Xb8@pc636> <c9db92d.faed4a1c.1884c5550fb@tnonline.net> <20230524091357.GH32559@suse.cz> <ZHClGA9szxSqzDf8@pc636>
-Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
- kernel 6.3.x
+        Sun, 2 Jul 2023 19:31:02 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E571E43
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 16:31:01 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98e39784a85so690716566b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 16:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688340659; x=1690932659;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a/JDLP8CymZmDlmvB9dj/413Y4QC83ykfU77d78w06M=;
+        b=LdrV6yOAytJccBHsFBgKwQH0pa7PQjGxtiGXkdLx0F/5401wQHfTHAU5RFT3qsFu5y
+         W/pP4/DUnFUO/WlSkcgPafKXMIqOUHPxJVbaHsAOPITja9TZTu8etqW5O8BRP5487hXl
+         Cvm84Szqtd9TjoMY8tfoU5m4WpeOMwJ9X37dg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688340659; x=1690932659;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a/JDLP8CymZmDlmvB9dj/413Y4QC83ykfU77d78w06M=;
+        b=d0IHdX41lz3yfYL0Jxelhjl9E2DofsEFhqWehPIQhhyErCiZMlJpkL/ThYONPyveCB
+         DJlc0OSIR/Sr3oyRITgFdu7It8CwHU0PoX+pF03Y5tmkTn43OfiopVyZhQerNW/dt/de
+         YHWaOFwbsdq2F6wkRH9+Y2POa2AmZSDg+fCXkLsHBGGgmp/U9WAoBudLZnZq0Gx1+VrW
+         SUKvYdApaa3beRtPUs7TQrKqGdcJNOCU0yN1+t6afUJWljXc5tt68ZDwzwFUEDX8IN+g
+         eDQmfFxeIvSLaCHNyYhiyHrW9O/qzxN6llCwRumbjMYqv09WafUyIRq/B5o00NTCVJHv
+         n+OQ==
+X-Gm-Message-State: AC+VfDzBw+acu92Jqk305IDVHEE5U4F32mbDD4oyy73EbH/MD2Tx/2pa
+        gweYGkduqMB6Es95cy4nhCIDh97JfVCEQK8lwST78YkB
+X-Google-Smtp-Source: ACHHUZ4wfR9hC55FXIlQ6gROGQX0Va1sOafCtsrUQ4smq1HpXtEI3rhO3q1qAwsd4MsawYY6BvlzVg==
+X-Received: by 2002:a17:907:720c:b0:988:565f:bf46 with SMTP id dr12-20020a170907720c00b00988565fbf46mr9172152ejc.32.1688340659430;
+        Sun, 02 Jul 2023 16:30:59 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id a23-20020a170906245700b00992b0745548sm4877411ejb.152.2023.07.02.16.30.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 16:30:58 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-51dd0205b2cso6775682a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 16:30:57 -0700 (PDT)
+X-Received: by 2002:aa7:c541:0:b0:51d:a4fa:c62c with SMTP id
+ s1-20020aa7c541000000b0051da4fac62cmr9098498edr.0.1688340657183; Sun, 02 Jul
+ 2023 16:30:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8BIT
-X-Mailer: R2Mail2
+References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
+ <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
+ <2023063001-overlying-browse-de1a@gregkh> <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
+ <5fd98a09-4792-1433-752d-029ae3545168@gmx.de> <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 2 Jul 2023 16:30:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com>
+Message-ID: <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com>
+Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
+To:     Helge Deller <deller@gmx.de>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, linux@roeck-us.net,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John David Anglin <dave.anglin@bell.net>
+Content-Type: multipart/mixed; boundary="00000000000021bec905ff897138"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--00000000000021bec905ff897138
+Content-Type: text/plain; charset="UTF-8"
 
+On Sun, 2 Jul 2023 at 15:45, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Would you mind just verifying that yes, that commit on mainline is
+> broken for you, and the previous one works?
 
----- From: Uladzislau Rezki <urezki@gmail.com> -- Sent: 2023-05-26 - 14:24 ----
+Also, while I looked at it again, and still didn't understand why
+parisc would be different here, I *did* realize that because parisc
+has a stack that grows up, the debug warning I added for GUP won't
+trigger.
 
-> On Wed, May 24, 2023 at 11:13:57AM +0200, David Sterba wrote:
->> This looks like a different set of problems, though all of them seem to
->> start on the compression write path in btrfs.
->> 
->> On Wed, May 24, 2023 at 07:57:19AM +0200, Forza wrote:
->> > [   8.641506] 8021q: adding VLAN 0 to HW filter on device enp4s0
->> > [   13.841691] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
->> > [   13.841705] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
->> > [13917.280527] ------------[ cut here ]------------
->> > [13917.280753] default_enter_idle leaked IRQ state
->> > [13917.281004] WARNING: CPU: 3 PID: 0 at drivers/cpuidle/cpuidle.c:269 cpuidle_enter_state+0x3bb/0x430
->> 
->> 
-... Snip
->> 
->> And again, so something is going wrong
->> 
-> Indeed.
-> 
-> I suggest you run your kernel with CONFIG_KASAN=y to see if there are
-> any use-after-free or out-of-bounds bugs.
-> 
-> --
-> Uladzislau Rezki
+So if I got that execve() logic wrong for STACK_GROWSUP (which I
+clearly must have), then exactly because it's grows-up, a GUP failure
+wouldn't warn about not expanding the stack.
 
+IOW, would you mind applying something like this on top of the current
+kernel, and let me know if it warns?
 
-Pardon the delay... I have enabled KASAN and UBSAN on this kernel. It produced a lot of output and plenty of warnings for misalignment. 
+.. and here I thought ia64 would be the pain-point. Silly me.
 
-The full dmesg is at https://paste.tnonline.net/files/aBoUMuTd5KBC_dmesg.ubsan.txt (approx 1.7MiB)
+                  Linus
 
-The full kernel .conf is. at https://paste.tnonline.net/files/z1mX8TWFgZQ3_kernel.conf-kasan-ubsan.txt
+--00000000000021bec905ff897138
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljm2eq3m0>
+X-Attachment-Id: f_ljm2eq3m0
 
-A small exctract around what I think is the  default_enter_idle leaked IRQ event. Is this helpful?
-
-================================================================================
-Jul 03 00:33:57 git kernel: UBSAN: misaligned-access in net/ipv4/tcp_ipv4.c:1848:13
-Jul 03 00:33:57 git kernel: member access within misaligned address 000000007604d82f for type 'const struct tcphdr'
-Jul 03 00:33:57 git kernel: which requires 4 byte alignment
-Jul 03 00:33:57 git kernel: CPU: 2 PID: 29 Comm: ksoftirqd/2 Not tainted 6.3.10-ksan-ubsan #8
-Jul 03 00:33:57 git kernel: Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-Jul 03 00:33:57 git kernel: Call Trace:
-Jul 03 00:33:57 git kernel:  <TASK>
-Jul 03 00:33:57 git kernel:  dump_stack_lvl+0x86/0xd0
-Jul 03 00:33:57 git kernel:  ubsan_type_mismatch_common+0xdf/0x240
-Jul 03 00:33:57 git kernel:  __ubsan_handle_type_mismatch_v1+0x44/0x60
-Jul 03 00:33:57 git kernel:  tcp_add_backlog+0x1fac/0x3ab0
-Jul 03 00:33:57 git kernel:  ? sk_filter_trim_cap+0xcc/0xb60
-Jul 03 00:33:57 git kernel:  ? __pfx_tcp_add_backlog+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock+0x10/0x10
-Jul 03 00:33:57 git kernel:  tcp_v4_rcv+0x3583/0x4c40
-Jul 03 00:33:57 git kernel:  ? __pfx_tcp_v4_rcv+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
-Jul 03 00:33:57 git kernel:  ip_protocol_deliver_rcu+0x6c/0x480
-Jul 03 00:33:57 git kernel:  ip_local_deliver_finish+0x2ae/0x4d0
-Jul 03 00:33:57 git kernel:  ? __pfx_ip_local_deliver+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx_ip_local_deliver+0x10/0x10
-Jul 03 00:33:57 git kernel:  ip_local_deliver+0x1ba/0x380
-Jul 03 00:33:57 git kernel:  ? __pfx_ip_local_deliver+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? ipv4_dst_check+0x104/0x250
-Jul 03 00:33:57 git kernel:  ? __ubsan_handle_type_mismatch_v1+0x44/0x60
-Jul 03 00:33:57 git kernel:  ip_sublist_rcv_finish+0x172/0x380
-Jul 03 00:33:57 git kernel: ------------[ cut here ]------------
-Jul 03 00:33:57 git kernel:  ip_sublist_rcv+0x3cd/0x900
-Jul 03 00:33:57 git kernel: default_enter_idle leaked IRQ state
-Jul 03 00:33:57 git kernel:  ? __pfx_ip_sublist_rcv+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __ubsan_handle_type_mismatch_v1+0x44/0x60
-Jul 03 00:33:57 git kernel:  ? ip_rcv_core+0x972/0x1b20
-Jul 03 00:33:57 git kernel:  ip_list_rcv+0x318/0x750
-Jul 03 00:33:57 git kernel:  ? __pfx_ip_list_rcv+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx_ip_list_rcv+0x10/0x10
-Jul 03 00:33:57 git kernel:  __netif_receive_skb_list_core+0x5ad/0x1170
-Jul 03 00:33:57 git kernel:  ? tcp_gro_receive+0x1f45/0x2990
-Jul 03 00:33:57 git kernel:  ? __pfx___netif_receive_skb_list_core+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? kvm_clock_read+0x16/0x40
-Jul 03 00:33:57 git kernel:  ? ktime_get_with_offset+0xd0/0x1f0
-Jul 03 00:33:57 git kernel:  netif_receive_skb_list_internal+0x76f/0x1530
-Jul 03 00:33:57 git kernel:  ? __pfx_netif_receive_skb_list_internal+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? dev_gro_receive+0x67f/0x4900
-Jul 03 00:33:57 git kernel:  ? free_unref_page+0x2fd/0x680
-Jul 03 00:33:57 git kernel:  ? put_page+0x69/0x2b0
-Jul 03 00:33:57 git kernel:  ? __pfx_eth_type_trans+0x10/0x10
-Jul 03 00:33:57 git kernel:  napi_gro_receive+0x77b/0xdc0
-Jul 03 00:33:57 git kernel:  receive_buf+0x1001/0xac40
-Jul 03 00:33:57 git kernel:  ? _raw_spin_lock_irqsave+0xaa/0x180
-Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx_receive_buf+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? _raw_spin_unlock_irqrestore+0x40/0x80
-Jul 03 00:33:57 git kernel:  ? trace_hardirqs_on+0x2d/0xd0
-Jul 03 00:33:57 git kernel:  ? detach_buf_split+0x27e/0xa70
-Jul 03 00:33:57 git kernel:  ? virtqueue_get_buf_ctx_split+0x3c3/0x1400
-Jul 03 00:33:57 git kernel:  ? virtqueue_enable_cb_delayed+0x5d0/0x1180
-Jul 03 00:33:57 git kernel:  virtnet_poll+0x7c7/0x2030
-Jul 03 00:33:57 git kernel:  ? __pfx_virtnet_poll+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx__raw_spin_lock+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __run_timers+0x43d/0xf70
-Jul 03 00:33:57 git kernel:  __napi_poll.constprop.0+0xd4/0x840
-Jul 03 00:33:57 git kernel:  net_rx_action+0x7a0/0x26e0
-Jul 03 00:33:57 git kernel:  ? __pfx_net_rx_action+0x10/0x10
-Jul 03 00:33:57 git kernel:  __do_softirq+0x277/0x95d
-Jul 03 00:33:57 git kernel:  ? __pfx___do_softirq+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx_run_ksoftirqd+0x10/0x10
-Jul 03 00:33:57 git kernel:  ? __pfx_run_ksoftirqd+0x10/0x10
-Jul 03 00:33:57 git kernel:  run_ksoftirqd+0x2c/0x40
-Jul 03 00:33:57 git kernel:  smpboot_thread_fn+0x380/0xbc0
-Jul 03 00:33:57 git kernel:  ? __kthread_parkme+0xdc/0x280
-Jul 03 00:33:57 git kernel:  ? schedule+0x158/0x360
-Jul 03 00:33:57 git kernel:  ? __pfx_smpboot_thread_fn+0x10/0x10
-Jul 03 00:33:57 git kernel:  kthread+0x259/0x3d0
-Jul 03 00:33:57 git kernel:  ? __pfx_kthread+0x10/0x10
-Jul 03 00:33:57 git kernel:  ret_from_fork+0x2c/0x50
-Jul 03 00:33:57 git kernel:  </TASK>
-Jul 03 00:33:57 git kernel: ================================================================================
-
+IG1tL2d1cC5jIHwgNiArKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDEg
+ZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9tbS9ndXAuYyBiL21tL2d1cC5jCmluZGV4IGVmMjk2
+NDE2NzFjNy4uNjY1MjAxOTQwMDZiIDEwMDY0NAotLS0gYS9tbS9ndXAuYworKysgYi9tbS9ndXAu
+YwpAQCAtMTE2OCwxMSArMTE2OCwxNSBAQCBzdGF0aWMgbG9uZyBfX2dldF91c2VyX3BhZ2VzKHN0
+cnVjdCBtbV9zdHJ1Y3QgKm1tLAogCiAJCS8qIGZpcnN0IGl0ZXJhdGlvbiBvciBjcm9zcyB2bWEg
+Ym91bmQgKi8KIAkJaWYgKCF2bWEgfHwgc3RhcnQgPj0gdm1hLT52bV9lbmQpIHsKLQkJCXZtYSA9
+IGZpbmRfdm1hKG1tLCBzdGFydCk7CisJCQlzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnByZXYgPSBO
+VUxMOworCQkJdm1hID0gZmluZF92bWFfcHJldihtbSwgc3RhcnQsICZwcmV2KTsKIAkJCWlmICh2
+bWEgJiYgKHN0YXJ0IDwgdm1hLT52bV9zdGFydCkpIHsKIAkJCQlXQVJOX09OX09OQ0Uodm1hLT52
+bV9mbGFncyAmIFZNX0dST1dTRE9XTik7CiAJCQkJdm1hID0gTlVMTDsKIAkJCX0KKwkJCWlmICgh
+dm1hICYmIHByZXYgJiYgc3RhcnQgPj0gcHJldi0+dm1fZW5kKQorCQkJCVdBUk5fT05fT05DRShw
+cmV2LT52bV9mbGFncyAmIFZNX0dST1dTVVApOworCiAJCQlpZiAoIXZtYSAmJiBpbl9nYXRlX2Fy
+ZWEobW0sIHN0YXJ0KSkgewogCQkJCXJldCA9IGdldF9nYXRlX3BhZ2UobW0sIHN0YXJ0ICYgUEFH
+RV9NQVNLLAogCQkJCQkJZ3VwX2ZsYWdzLCAmdm1hLAo=
+--00000000000021bec905ff897138--
