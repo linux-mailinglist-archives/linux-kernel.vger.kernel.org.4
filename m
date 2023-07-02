@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226AC745174
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E73745177
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjGBTqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S232466AbjGBTrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjGBTpT (ORCPT
+        with ESMTP id S232699AbjGBTpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:45:19 -0400
+        Sun, 2 Jul 2023 15:45:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC5E3A89;
-        Sun,  2 Jul 2023 12:42:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75BB3C2A;
+        Sun,  2 Jul 2023 12:42:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 740AB60CF9;
-        Sun,  2 Jul 2023 19:42:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0475EC433C7;
-        Sun,  2 Jul 2023 19:42:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C531A60C8C;
+        Sun,  2 Jul 2023 19:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7351EC433C7;
+        Sun,  2 Jul 2023 19:42:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326949;
-        bh=Ia4fmT+Si/PFwr2soXt58gSzgoBhlcuIetIqaM4LkSk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AOuwYpAKnlb6QBSgLG0+QZbtYIi0YAqvJRrBoiGUvMLARQ4uw1Nk4ioD8v2ORDXuc
-         aGoz17FvsF1xMOA8pB5fKulZcigEoRAFj8mxBamil7FBullW8OD/H5MjwQ3hWmvKq9
-         Wxi5SBgNA9wl4Ed1syGpoKZ1mpLvHnFFz1AOINehXsACIP5EdutTFs3ottLvrp09l9
-         uNFvCA/vtRCa8khHQ+c8IrAZJJ6Xa7/EWzgMWQR8t/TmvYFR6CW21z5/zj2jsneLpi
-         V+faKVQX0+m8UHTjX0GYfLTwltFgKZWSFeQTFfM8gSiTT8DhinyF2NAQCcY35Tm0/F
-         IkDxy5ju7pq/w==
+        s=k20201202; t=1688326953;
+        bh=rkaZj6OX91dzWLu+RQ8mn7ezGZqVz24/ckZySYJX/f0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Jt6pKFIoNmdlI4lagDxlccs8GmJvo1fLvfCBT5J6GloyybMgaFYly/3j/bXw+tik1
+         OI8Zj6erxlo4eeiOKXWGXlA1+Rj79IyhEEI9vwukQlc6uGR8MLw6Yczk2p/FKYfvlo
+         aoHaHSp98a+GMaYI7ONBFsDqk6a2h+JVlorCzuZLeQ303fZPKDIx6jHIuhAkNy1Uk2
+         hhEmqHaVThoOoCC2tvOnmOuAd2bnOyW+OQfulbwsZYRTELA6Sqt6rL3U11d11JpNhv
+         itDqsIVwfI2qX0xSqyJrHhCQNnyLzPVrKtR0DSJKD/fMmiz1ZmuJNVwL/pbTPxshIv
+         penRqxkyi30eQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, ebiederm@xmission.com
-Subject: [PATCH AUTOSEL 4.19 5/5] posix-timers: Ensure timer ID search-loop limit is valid
-Date:   Sun,  2 Jul 2023 15:42:19 -0400
-Message-Id: <20230702194219.1779408-5-sashal@kernel.org>
+Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 1/5] debugobjects: Recheck debug_objects_enabled before reporting
+Date:   Sun,  2 Jul 2023 15:42:26 -0400
+Message-Id: <20230702194230.1779535-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702194219.1779408-1-sashal@kernel.org>
-References: <20230702194219.1779408-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.288
+X-stable-base: Linux 4.14.320
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -61,113 +58,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit 8ce8849dd1e78dadcee0ec9acbd259d239b7069f ]
+[ Upstream commit 8b64d420fe2450f82848178506d3e3a0bd195539 ]
 
-posix_timer_add() tries to allocate a posix timer ID by starting from the
-cached ID which was stored by the last successful allocation.
+syzbot is reporting false a positive ODEBUG message immediately after
+ODEBUG was disabled due to OOM.
 
-This is done in a loop searching the ID space for a free slot one by
-one. The loop has to terminate when the search wrapped around to the
-starting point.
+  [ 1062.309646][T22911] ODEBUG: Out of memory. ODEBUG disabled
+  [ 1062.886755][ T5171] ------------[ cut here ]------------
+  [ 1062.892770][ T5171] ODEBUG: assert_init not available (active state 0) object: ffffc900056afb20 object type: timer_list hint: process_timeout+0x0/0x40
 
-But that's racy vs. establishing the starting point. That is read out
-lockless, which leads to the following problem:
+  CPU 0 [ T5171]                CPU 1 [T22911]
+  --------------                --------------
+  debug_object_assert_init() {
+    if (!debug_objects_enabled)
+      return;
+    db = get_bucket(addr);
+                                lookup_object_or_alloc() {
+                                  debug_objects_enabled = 0;
+                                  return NULL;
+                                }
+                                debug_objects_oom() {
+                                  pr_warn("Out of memory. ODEBUG disabled\n");
+                                  // all buckets get emptied here, and
+                                }
+    lookup_object_or_alloc(addr, db, descr, false, true) {
+      // this bucket is already empty.
+      return ERR_PTR(-ENOENT);
+    }
+    // Emits false positive warning.
+    debug_print_object(&o, "assert_init");
+  }
 
-CPU0	  	      	     	   CPU1
-posix_timer_add()
-  start = sig->posix_timer_id;
-  lock(hash_lock);
-  ...				   posix_timer_add()
-  if (++sig->posix_timer_id < 0)
-      			             start = sig->posix_timer_id;
-     sig->posix_timer_id = 0;
+Recheck debug_object_enabled in debug_print_object() to avoid that.
 
-So CPU1 can observe a negative start value, i.e. -1, and the loop break
-never happens because the condition can never be true:
-
-  if (sig->posix_timer_id == start)
-     break;
-
-While this is unlikely to ever turn into an endless loop as the ID space is
-huge (INT_MAX), the racy read of the start value caught the attention of
-KCSAN and Dmitry unearthed that incorrectness.
-
-Rewrite it so that all id operations are under the hash lock.
-
-Reported-by: syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Reported-by: syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/87bkhzdn6g.ffs@tglx
+Link: https://lore.kernel.org/r/492fe2ae-5141-d548-ebd5-62f5fe2e57f7@I-love.SAKURA.ne.jp
+Closes: https://syzkaller.appspot.com/bug?extid=7937ba6a50bdd00fffdf
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched/signal.h |  2 +-
- kernel/time/posix-timers.c   | 31 ++++++++++++++++++-------------
- 2 files changed, 19 insertions(+), 14 deletions(-)
+ lib/debugobjects.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 660d78c9af6c8..6a55b30ae742b 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -127,7 +127,7 @@ struct signal_struct {
- #ifdef CONFIG_POSIX_TIMERS
+diff --git a/lib/debugobjects.c b/lib/debugobjects.c
+index bacb00a9cd9f9..b6217c797554b 100644
+--- a/lib/debugobjects.c
++++ b/lib/debugobjects.c
+@@ -280,6 +280,15 @@ static void debug_print_object(struct debug_obj *obj, char *msg)
+ 	struct debug_obj_descr *descr = obj->descr;
+ 	static int limit;
  
- 	/* POSIX.1b Interval Timers */
--	int			posix_timer_id;
-+	unsigned int		next_posix_timer_id;
- 	struct list_head	posix_timers;
- 
- 	/* ITIMER_REAL timer for the process */
-diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 1234868b3b03e..8768ce2c4bf52 100644
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -159,25 +159,30 @@ static struct k_itimer *posix_timer_by_id(timer_t id)
- static int posix_timer_add(struct k_itimer *timer)
- {
- 	struct signal_struct *sig = current->signal;
--	int first_free_id = sig->posix_timer_id;
- 	struct hlist_head *head;
--	int ret = -ENOENT;
-+	unsigned int cnt, id;
- 
--	do {
 +	/*
-+	 * FIXME: Replace this by a per signal struct xarray once there is
-+	 * a plan to handle the resulting CRIU regression gracefully.
++	 * Don't report if lookup_object_or_alloc() by the current thread
++	 * failed because lookup_object_or_alloc()/debug_objects_oom() by a
++	 * concurrent thread turned off debug_objects_enabled and cleared
++	 * the hash buckets.
 +	 */
-+	for (cnt = 0; cnt <= INT_MAX; cnt++) {
- 		spin_lock(&hash_lock);
--		head = &posix_timers_hashtable[hash(sig, sig->posix_timer_id)];
--		if (!__posix_timers_find(head, sig, sig->posix_timer_id)) {
-+		id = sig->next_posix_timer_id;
++	if (!debug_objects_enabled)
++		return;
 +
-+		/* Write the next ID back. Clamp it to the positive space */
-+		sig->next_posix_timer_id = (id + 1) & INT_MAX;
-+
-+		head = &posix_timers_hashtable[hash(sig, id)];
-+		if (!__posix_timers_find(head, sig, id)) {
- 			hlist_add_head_rcu(&timer->t_hash, head);
--			ret = sig->posix_timer_id;
-+			spin_unlock(&hash_lock);
-+			return id;
- 		}
--		if (++sig->posix_timer_id < 0)
--			sig->posix_timer_id = 0;
--		if ((sig->posix_timer_id == first_free_id) && (ret == -ENOENT))
--			/* Loop over all possible ids completed */
--			ret = -EAGAIN;
- 		spin_unlock(&hash_lock);
--	} while (ret == -ENOENT);
--	return ret;
-+	}
-+	/* POSIX return code when no timer ID could be allocated */
-+	return -EAGAIN;
- }
- 
- static inline void unlock_timer(struct k_itimer *timr, unsigned long flags)
+ 	if (limit < 5 && descr != descr_test) {
+ 		void *hint = descr->debug_hint ?
+ 			descr->debug_hint(obj->object) : NULL;
 -- 
 2.39.2
 
