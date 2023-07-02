@@ -2,114 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FF9744CB9
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 10:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 097F5744CDA
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjGBI30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 04:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S229657AbjGBJE5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 2 Jul 2023 05:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBI3Y (ORCPT
+        with ESMTP id S229460AbjGBJE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 04:29:24 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D317110E7
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 01:29:22 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-992ca792065so325209966b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 01:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688286561; x=1690878561;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w1biNblKgtJgfVRZwDEOvjX/I6fTJ7KpT17Ok3nZx5M=;
-        b=uMqJUTA42zzTNobzfwK8XPREa/a9vj3Xfc/7KWipp1cnp/Jg0XeVY+x4k214j2yY2p
-         QoGg5zzyWZV0KJSDggJXTP6f6mbFRRUdjqNSf2NxLj7/wA9SRfIAm46ygvQ63r2uEXpX
-         fNoQjpgZVebllbu86RL5eRXcyUHR8Qhpzzihk9iDeJafk2zy7kZGgIGhfVity3Cmmwg0
-         pLKzBMIuwWp2HAWLosqYLZF9VyQAZld2sBX35Cf/wCq5foc92YcnAyZQjJYvz2dvD+H2
-         e3pIDjwRFmrF+Bh5CEoYUtwBR6uYTLkmSgeZBlRZgUB4OyFMScKs8aVTjco9NECFFkB6
-         sGog==
+        Sun, 2 Jul 2023 05:04:56 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BBD1A2
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 02:04:54 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-bfe6ea01ff5so3709807276.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 02:04:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688286561; x=1690878561;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w1biNblKgtJgfVRZwDEOvjX/I6fTJ7KpT17Ok3nZx5M=;
-        b=R1z4kVKwjsh81xN9S7N+s3QbFI7ix87kJ1119AGIBuijPfg93VQjzDYCtzjiQbNvoL
-         puFGYwG+KLbOk4hL90pVB6yUDu1GMSaZLfg5Nywahp+QL3MY/xmJYlfv0pJSbpO6MITD
-         g6aBtVrvKPmtz6D/gvcM9Tro/UG7vcE7wyytR+cxl8B6odlfpwj6qo7Qi2IwNCp8EqEC
-         hF9bUgZHdbI9bXjPhorZo5cF0pio9Jwnb6Nz0M5PgRndd2f3BkFdj3HOyNucKE/ccvUb
-         RJdDuk89+js442XTBOzYb7cP1+dETG/PDYW5JSm8zfIzn5Kgl+eSiN/kaQqA8ecl+UJG
-         hIUw==
-X-Gm-Message-State: ABy/qLa6dAeWB94SrdxhIl8sQpOzYFPGE2svbZlGOQ0kxzlZQ5vE4Z4Q
-        cDw4NK1S0JdsbfL7zD1KMuqTnA==
-X-Google-Smtp-Source: APBJJlEq7536nmIYj1sWz/vSWp1KlO2nfy5GE5f1MJ94C2mivpQ6trVaYeegVFmTsikSDWcGy6GDVg==
-X-Received: by 2002:a17:906:e48:b0:988:882b:9a3 with SMTP id q8-20020a1709060e4800b00988882b09a3mr5395799eji.36.1688286561035;
-        Sun, 02 Jul 2023 01:29:21 -0700 (PDT)
-Received: from [192.168.10.214] ([217.169.179.6])
-        by smtp.gmail.com with ESMTPSA id s22-20020aa7cb16000000b0051bed498851sm9043073edt.54.2023.07.02.01.29.19
+        d=1e100.net; s=20221208; t=1688288693; x=1690880693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r0rKPpyZ8Vpl4zrPLQreT82vhpL2lp3WXuUoTDayFbI=;
+        b=l7w7iSmwlSqjesxgJ1uci5nV+Jds0YC91PSXyuddGLO2xQpku+SE9t1trR5RsT8Y+s
+         iJnD5AXQBXOJSU2rHPB1UiBnN6h25ilVuRZTLMSNB0f5N+64CxoPPeDMNAmm2Ndy8YOf
+         D4aVdBGAEgSfUSUO/DAfmNUf269CNMyt6xSR7L+ALDIpfg6ukvH6rXFWZRh0t00+Kjv1
+         aIohCqwCbVk6GoMuSIAD0AAG39jLABrPEK8i/lQQsr9yY/grYnAlaG7Jj5+OHS7oX7lq
+         M7sYnhkoD0cSTt5Eme/S5W38twJosG9lK/hwOqCGaJ4GlRy2hfM4i6QnUZP9pdmyHlZB
+         hpWQ==
+X-Gm-Message-State: ABy/qLYPgCFNyFSd+ApNNrUGkqvnDl5usrygcLsbkif3uYZqErns11sg
+        4qTZLqaXQNUpDSr3oETrrsj3JcT9K8sN6t2T
+X-Google-Smtp-Source: APBJJlEHtDoQBhh+t7X5wpNp3LInGZiGaqHbjrM1Cak0uXhkVKlASKotxanR159RY2/IdTQNLMHqRw==
+X-Received: by 2002:a25:ccd6:0:b0:bc6:cf90:a286 with SMTP id l205-20020a25ccd6000000b00bc6cf90a286mr7061667ybf.36.1688288693103;
+        Sun, 02 Jul 2023 02:04:53 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id 127-20020a250b85000000b00be8e8772025sm3772516ybl.45.2023.07.02.02.04.52
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jul 2023 01:29:20 -0700 (PDT)
-Message-ID: <29af84dc-7db8-0c43-07b6-eb743cf25e57@linaro.org>
-Date:   Sun, 2 Jul 2023 10:29:18 +0200
+        Sun, 02 Jul 2023 02:04:52 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5776312eaddso23157987b3.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 02:04:52 -0700 (PDT)
+X-Received: by 2002:a0d:d649:0:b0:570:65df:21dc with SMTP id
+ y70-20020a0dd649000000b0057065df21dcmr7384264ywd.3.1688288692547; Sun, 02 Jul
+ 2023 02:04:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 00/21] Add Qualcomm Minidump kernel driver related
- support
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     corbet@lwn.net, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com, mathieu.poirier@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
-        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Alex Elder <elder@linaro.org>
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
- <2023062814-chance-flounder-f002@gregkh>
- <CAL_JsqLO9yey2-4FcWsaGxijiS6hGL0SH9VoMuiyei-u9=Cv=w@mail.gmail.com>
- <cc30660f-dd72-aade-6346-a93c6ad4b695@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cc30660f-dd72-aade-6346-a93c6ad4b695@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230701214503.550549-1-javierm@redhat.com> <20230701214503.550549-3-javierm@redhat.com>
+ <2e1af219-a31c-4284-b50a-662f65c8a736@app.fastmail.com>
+In-Reply-To: <2e1af219-a31c-4284-b50a-662f65c8a736@app.fastmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 2 Jul 2023 11:04:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWQ3FcmyCd-mWOWVAXzgoOX8wBD8-LbRwjNkC=sz3y27g@mail.gmail.com>
+Message-ID: <CAMuHMdWQ3FcmyCd-mWOWVAXzgoOX8wBD8-LbRwjNkC=sz3y27g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drm: Make fbdev emulation select FB_CORE instead
+ of depends on FB
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 18:04, Mukesh Ojha wrote:
->>
->>> We don't add layers when they are not needed, and never when there is no
->>> actual user.  If you need the extra "complexity" later, then add it
->>> later when it is needed as who knows when that will ever be.
->>>
->>> Please redo this series based on that, thanks.
->>
->> My bigger issue with this whole series is what would this all look
->> like if every SoC vendor upstreamed their own custom dumping
->> mechanism. That would be a mess. (I have similar opinions on the
->> $soc-vendor hypervisors.)
+Hi Arnd,
 
-Mukesh,
+On Sun, Jul 2, 2023 at 12:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Sat, Jul 1, 2023, at 23:44, Javier Martinez Canillas wrote:
+> > Now that the fbdev core has been split in FB_CORE and FB, make DRM fbdev
+> > emulation layer to just select the former.
+> >
+> > This allows to disable the CONFIG_FB option if is not needed, which will
+> > avoid the need to explicitly disable each of the legacy fbdev drivers.
+> >
+> > Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> > ---
+> >
+> > Changes in v2:
+> > - Make CONFIG_DRM_FBDEV_EMULATION to select FB_CORE (Thomas Zimmermann).
+> >
+> >  drivers/gpu/drm/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> > index afb3b2f5f425..d9b1710e3ad0 100644
+> > --- a/drivers/gpu/drm/Kconfig
+> > +++ b/drivers/gpu/drm/Kconfig
+> > @@ -132,7 +132,7 @@ config DRM_DEBUG_MODESET_LOCK
+> >  config DRM_FBDEV_EMULATION
+> >       bool "Enable legacy fbdev support for your modesetting driver"
+> >       depends on DRM_KMS_HELPER
+> > -     depends on FB=y || FB=DRM_KMS_HELPER
+> > +     select FB_CORE
+>
+> This will unfortunately force FB_CORE=y even with DRM=m, it would be nice
+> to allow both to be loadable modules. Any of these should work:
+>
+> a) Add another hidden symbol like
+>
+> config DRM_FB_CORE
+>       def_tristate DRM && DRM_FBDEV_EMULATION
+>       select FB_CORE
 
-LPC CFP is still open. There will be also Android and Kernel Debugging
-LPC microconference tracks. Coming with a unified solution could be a
-great topic for LPC. Solutions targeting only one user are quite often
-frowned upon.
+More complexity to keep track of...
 
-Best regards,
-Krzysztof
+>
+> b) move the 'select' to DRM
+>
+> config DRM
+>       tristate "Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)"
+>       select FB_CORE if DRM_FBDEV_EMULATION
 
+I prefer this one, as it keeps the select close to the user.
+
+BTW, the tristate help text can use some overhaul ;-)
+
+> c) Remove the 'select' and instead use the default
+>
+> config FB_CORE
+>      def_tristate FB || (DRM && DRM_FBDEV_EMULATION)
+
+Adding it here means this patch would touch two subsystems.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
