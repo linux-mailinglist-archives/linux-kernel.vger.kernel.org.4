@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10CE74514D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 595FE74514F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjGBTpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S232760AbjGBTpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbjGBToX (ORCPT
+        with ESMTP id S232454AbjGBToY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:44:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2102A30F5;
-        Sun,  2 Jul 2023 12:42:23 -0700 (PDT)
+        Sun, 2 Jul 2023 15:44:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4703581;
+        Sun,  2 Jul 2023 12:42:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A63960D57;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99D5D60C8F;
+        Sun,  2 Jul 2023 19:42:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BCC3C433C9;
         Sun,  2 Jul 2023 19:42:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06087C433CA;
-        Sun,  2 Jul 2023 19:41:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326920;
-        bh=qYbDD+a9cXTp5yjAjoNjoJZIPLLE/xIlfna+VD73tWc=;
+        s=k20201202; t=1688326922;
+        bh=mHqtrWmHQvosHAEQF48HnB7AOxcHyS2luVsj9VQzs10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WP25apsBR1D0Ag63Fwa5apxHU825MfkR15ES6UXKOD7Pb+x5WTSaV8oVHSD2za30b
-         BKd4hMEuD6iLh8oI5hg21x4b2vs1uBLnXgLVKDuBEZ4e8I4O1N8GbG+PTwQFTJGwTd
-         EduV0kOHHBD8EA2ZDO7vylLHjFnHIVsomUjMBXjUwWMC9toYQMSH6xw1aLySmcQbFc
-         HUt2kktuf4PHwNSjAxdmuncbhcEbHVGJJ5FLDEsogS6Qbs0peuhzz7vYcE1HLfTkyH
-         VL1m7d1TmipJeTyieWrykHxlHu48UJGXhFQNEF23iGCE9Urr4ffXKpaYSnlOQibdeY
-         EBC3cvC30+eYg==
+        b=FuS01kaXAGC42uztd9CRFORt8MK60b3r//IoTF6aGBAoUvUUrcI6bY5N5cxxdrMPB
+         oPzb6V8x5y51nXWW87QjU/4ToieGOWlT2fxKkKmcRgeHhi+WdpvbO+v7AMpHj9c6L6
+         TxOafu4kxMoWHc6NZ6wa6OEtY0BWxBIXRR+o/i/HLdbUgt0ulhMvaZo0dbZ7mZI5KS
+         PHNqjBtQ3UpSSqaH3znQUq1xYi/9xmwXO7Yeq+hGcRyQVKyLfjLfcw3phJ9NdbXDdY
+         JJlR06+kkJcoV7VnbjyTzxDLEwuHe1KEQ8XsE1rFt5QL0TLYnxDelGVts9mWdvfJw1
+         WZESVrBvTkcQA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.10 2/7] debugobjects: Recheck debug_objects_enabled before reporting
-Date:   Sun,  2 Jul 2023 15:41:51 -0400
-Message-Id: <20230702194156.1778977-2-sashal@kernel.org>
+Cc:     Zhong Jinghua <zhongjinghua@huawei.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>, josef@toxicpanda.com,
+        linux-block@vger.kernel.org, nbd@other.debian.org
+Subject: [PATCH AUTOSEL 5.10 3/7] nbd: Add the maximum limit of allocated index in nbd_dev_add
+Date:   Sun,  2 Jul 2023 15:41:52 -0400
+Message-Id: <20230702194156.1778977-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702194156.1778977-1-sashal@kernel.org>
 References: <20230702194156.1778977-1-sashal@kernel.org>
@@ -50,8 +50,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.10.186
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,72 +60,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Zhong Jinghua <zhongjinghua@huawei.com>
 
-[ Upstream commit 8b64d420fe2450f82848178506d3e3a0bd195539 ]
+[ Upstream commit f12bc113ce904777fd6ca003b473b427782b3dde ]
 
-syzbot is reporting false a positive ODEBUG message immediately after
-ODEBUG was disabled due to OOM.
+If the index allocated by idr_alloc greater than MINORMASK >> part_shift,
+the device number will overflow, resulting in failure to create a block
+device.
 
-  [ 1062.309646][T22911] ODEBUG: Out of memory. ODEBUG disabled
-  [ 1062.886755][ T5171] ------------[ cut here ]------------
-  [ 1062.892770][ T5171] ODEBUG: assert_init not available (active state 0) object: ffffc900056afb20 object type: timer_list hint: process_timeout+0x0/0x40
+Fix it by imiting the size of the max allocation.
 
-  CPU 0 [ T5171]                CPU 1 [T22911]
-  --------------                --------------
-  debug_object_assert_init() {
-    if (!debug_objects_enabled)
-      return;
-    db = get_bucket(addr);
-                                lookup_object_or_alloc() {
-                                  debug_objects_enabled = 0;
-                                  return NULL;
-                                }
-                                debug_objects_oom() {
-                                  pr_warn("Out of memory. ODEBUG disabled\n");
-                                  // all buckets get emptied here, and
-                                }
-    lookup_object_or_alloc(addr, db, descr, false, true) {
-      // this bucket is already empty.
-      return ERR_PTR(-ENOENT);
-    }
-    // Emits false positive warning.
-    debug_print_object(&o, "assert_init");
-  }
-
-Recheck debug_object_enabled in debug_print_object() to avoid that.
-
-Reported-by: syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/492fe2ae-5141-d548-ebd5-62f5fe2e57f7@I-love.SAKURA.ne.jp
-Closes: https://syzkaller.appspot.com/bug?extid=7937ba6a50bdd00fffdf
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20230605122159.2134384-1-zhongjinghua@huaweicloud.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/debugobjects.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/block/nbd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-index 4c39678c03ee5..4dd9283f6fea0 100644
---- a/lib/debugobjects.c
-+++ b/lib/debugobjects.c
-@@ -501,6 +501,15 @@ static void debug_print_object(struct debug_obj *obj, char *msg)
- 	const struct debug_obj_descr *descr = obj->descr;
- 	static int limit;
- 
-+	/*
-+	 * Don't report if lookup_object_or_alloc() by the current thread
-+	 * failed because lookup_object_or_alloc()/debug_objects_oom() by a
-+	 * concurrent thread turned off debug_objects_enabled and cleared
-+	 * the hash buckets.
-+	 */
-+	if (!debug_objects_enabled)
-+		return;
-+
- 	if (limit < 5 && descr != descr_test) {
- 		void *hint = descr->debug_hint ?
- 			descr->debug_hint(obj->object) : NULL;
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index b6940f0a9c905..e0f805ca0e727 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -1723,7 +1723,8 @@ static int nbd_dev_add(int index)
+ 		if (err == -ENOSPC)
+ 			err = -EEXIST;
+ 	} else {
+-		err = idr_alloc(&nbd_index_idr, nbd, 0, 0, GFP_KERNEL);
++		err = idr_alloc(&nbd_index_idr, nbd, 0,
++				(MINORMASK >> part_shift) + 1, GFP_KERNEL);
+ 		if (err >= 0)
+ 			index = err;
+ 	}
 -- 
 2.39.2
 
