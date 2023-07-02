@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FCB744DC3
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BD4744DFD
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 15:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjGBNmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 09:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S229704AbjGBNpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 09:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjGBNmy (ORCPT
+        with ESMTP id S229523AbjGBNpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 09:42:54 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59854E55;
-        Sun,  2 Jul 2023 06:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688305373; x=1719841373;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UK/nzE9dIxgjFsCrj7Qj4taBTpYmWjk/fOAoL8aT+a8=;
-  b=HbG6wspr+sm+MlF1m56EfzLrkqojL3/iuEvoBaWW57OIX+Slgg0U5WLt
-   oYLhf0XSvmLh2DzlfYRp2hhtltLT1FNmQNnDvKuFNL/hq21C6lvUwqJ8n
-   miEehIXgj/SLO044vykPyxLXfnMW5O365MhwKZqZVtv2gCYtJGya1w1tJ
-   Qxdo65qSgZajmYfLRtxQGWo82tWOb7ADhOdaawRG2Tjqj9noA2RIk3WT5
-   eTUvKitrPcxy2HNDTT+/tpWmcs2mufc2fCJVrwwuAKWeucHzRzfqYss+U
-   kHX6GpVgdQfHPX4Y0CzYsHaDKe4lbFtxwRlXzVO2JhjvGSynPgiWZdeOq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="393440818"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="393440818"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 06:42:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="964889090"
-X-IronPort-AV: E=Sophos;i="6.01,176,1684825200"; 
-   d="scan'208";a="964889090"
-Received: from naamamex-mobl.ger.corp.intel.com (HELO [10.249.95.54]) ([10.249.95.54])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 06:42:49 -0700
-Message-ID: <ec3f0f2d-c8d4-3df7-7ff4-5c841a050be3@linux.intel.com>
-Date:   Sun, 2 Jul 2023 16:42:46 +0300
+        Sun, 2 Jul 2023 09:45:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E4BE55
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 06:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688305468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CQPmY3YgKkcmXgnTKyyGhzbqz5W1ZZqveUHs3/0dmWg=;
+        b=YxvNe237GKBDvIvRrtkSSbrQUbBY8L/mJFdDxQyuY4ybMTcF9VcXXLN9KvOKCpIpMZ0SFT
+        y5igGxH0JyU2em1yHaBJhKx5Du2sTRnRSwGPJ5+SSaF2H0sXzmCutbXfjiruSO3hxUHOpf
+        xSbPx1XrHXrhoQvrZIKAl8FldXdG6rI=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-628-_L14SLDAP9W8p_ANxPXNTQ-1; Sun, 02 Jul 2023 09:44:27 -0400
+X-MC-Unique: _L14SLDAP9W8p_ANxPXNTQ-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635e91cba88so39209106d6.0
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 06:44:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688305467; x=1690897467;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CQPmY3YgKkcmXgnTKyyGhzbqz5W1ZZqveUHs3/0dmWg=;
+        b=GnMUBI5B0V6W2ll0OVUG9ZkHfxXDgdjwk/A/q8odguH6ss5xPL033Sbi/i5N7zp8ew
+         PsJn2P3Osb1IW4Xjarv7DVq+hjZrIqkiumyx0eFImEnL9CeCDpzea8fCpNJbGEJOspr6
+         5BnZqPjuXl/6vcmtk3k4LLmWQF+nQJyeJDmF7y3vruUoLDZxXPjnbOmPK8Hm7YU6Qktl
+         RP3ROFybKCkxce46MJjckiUP3gXCll/0Cd7wfQbqpEJ2Hj71JLfsQva4hIvFx3fv9Eq9
+         rO2edE/PR+/BLG6Qi1FZQoAfJqb2NORwvvlgD84QsR2/1fTI/KXoTMohlp99u9SsQ1VY
+         euvA==
+X-Gm-Message-State: ABy/qLbB8oTyTjRUBfyz8ZrjJvD5KyFgbjSAZeAjBFxe5+1Vmz8icBUW
+        JxW5hpXMnhKXOx42kpW81xsW1gylb0NDeIlRQU+kQm/76o1llywVIZrygTy3yhALmhmin0FD7xy
+        X9gbuatx/b4L+WO9XLTZRsISq
+X-Received: by 2002:a05:6214:5194:b0:631:f964:7ab with SMTP id kl20-20020a056214519400b00631f96407abmr10042635qvb.60.1688305467301;
+        Sun, 02 Jul 2023 06:44:27 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH9Hw7Cw7EnZSWaMX/eP2Tdd0HP/I5KQYDhe7mnH4i7QSQGHSQxDgxErkRJk4MklEI+1ytGlw==
+X-Received: by 2002:a05:6214:5194:b0:631:f964:7ab with SMTP id kl20-20020a056214519400b00631f96407abmr10042627qvb.60.1688305467128;
+        Sun, 02 Jul 2023 06:44:27 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id ep8-20020a05621418e800b00630182f0191sm10227585qvb.1.2023.07.02.06.44.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 06:44:26 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     djrscally@gmail.com, hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] platform/x86: int3472/discrete: set variable skl_int3472_regulator_second_sensor storage-class-specifier to static
+Date:   Sun,  2 Jul 2023 09:44:19 -0400
+Message-Id: <20230702134419.3438361-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [Intel-wired-lan] [PATCH net v2 1/6] igc: Rename qbv_enable to
- taprio_offload_enable
-Content-Language: en-US
-To:     Florian Kauer <florian.kauer@linutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Aravindhan Gunasekaran <aravindhan.gunasekaran@intel.com>,
-        Malli C <mallikarjuna.chilakala@intel.com>
-Cc:     netdev@vger.kernel.org, kurt@linutronix.de,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-References: <20230619100858.116286-1-florian.kauer@linutronix.de>
- <20230619100858.116286-2-florian.kauer@linutronix.de>
-From:   "naamax.meir" <naamax.meir@linux.intel.com>
-In-Reply-To: <20230619100858.116286-2-florian.kauer@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,27 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/2023 13:08, Florian Kauer wrote:
-> In the current implementation the flags adapter->qbv_enable
-> and IGC_FLAG_TSN_QBV_ENABLED have a similar name, but do not
-> have the same meaning. The first one is used only to indicate
-> taprio offload (i.e. when igc_save_qbv_schedule was called),
-> while the second one corresponds to the Qbv mode of the hardware.
-> However, the second one is also used to support the TX launchtime
-> feature, i.e. ETF qdisc offload. This leads to situations where
-> adapter->qbv_enable is false, but the flag IGC_FLAG_TSN_QBV_ENABLED
-> is set. This is prone to confusion.
-> 
-> The rename should reduce this confusion. Since it is a pure
-> rename, it has no impact on functionality.
-> 
-> Fixes: e17090eb2494 ("igc: allow BaseTime 0 enrollment for Qbv")
-> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
-> Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
-> ---
->   drivers/net/ethernet/intel/igc/igc.h      | 2 +-
->   drivers/net/ethernet/intel/igc/igc_main.c | 2 +-
->   drivers/net/ethernet/intel/igc/igc_tsn.c  | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
+smatch reports
+drivers/platform/x86/intel/int3472/clk_and_regulator.c:263:28: warning: symbol
+  'skl_int3472_regulator_second_sensor' was not declared. Should it be static?
 
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+This variable is only used in its defining file, so it should be static.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/platform/x86/intel/int3472/clk_and_regulator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/platform/x86/intel/int3472/clk_and_regulator.c b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+index 61aeca804ba2..ef4b3141efcd 100644
+--- a/drivers/platform/x86/intel/int3472/clk_and_regulator.c
++++ b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+@@ -260,7 +260,7 @@ static_assert(ARRAY_SIZE(skl_int3472_regulator_map_supplies) ==
+  * This DMI table contains the name of the second sensor. This is used to add
+  * entries for the second sensor to the supply_map.
+  */
+-const struct dmi_system_id skl_int3472_regulator_second_sensor[] = {
++static const struct dmi_system_id skl_int3472_regulator_second_sensor[] = {
+ 	{
+ 		/* Lenovo Miix 510-12IKB */
+ 		.matches = {
+-- 
+2.27.0
+
