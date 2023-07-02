@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA6B744CED
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D450744CF2
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 11:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjGBJV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 05:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S229800AbjGBJZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 05:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjGBJV1 (ORCPT
+        with ESMTP id S229460AbjGBJZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 05:21:27 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C494F1AC;
-        Sun,  2 Jul 2023 02:21:26 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qv3Pz27jmz6D9CM;
-        Sun,  2 Jul 2023 17:18:31 +0800 (CST)
-Received: from localhost (10.48.51.211) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 2 Jul
- 2023 10:21:20 +0100
-Date:   Sun, 2 Jul 2023 17:21:16 +0800
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     George Stark <gnstark@sberdevices.ru>
-CC:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
-        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
-        <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>
-Subject: Re: [PATCH v3 5/5] meson saradc: support reading from channel 7 mux
- inputs
-Message-ID: <20230702172116.00006f33@Huawei.com>
-In-Reply-To: <20230627224017.1724097-6-gnstark@sberdevices.ru>
-References: <20230627224017.1724097-1-gnstark@sberdevices.ru>
-        <20230627224017.1724097-6-gnstark@sberdevices.ru>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Sun, 2 Jul 2023 05:25:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76E1E4D
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 02:25:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72B6D60B42
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 09:25:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97BE9C433C9;
+        Sun,  2 Jul 2023 09:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688289931;
+        bh=8hDKfzE3cEwfFRozXD3BGJYPuuNWm2Nh8JXbaScWBSI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qmKeQNtJ2QlDBnHPDX9FvdOpup5M/lv4f1F1I5nbokYjJwVB6YfkOVAef4Zxmod0M
+         vv/xsigGs5nwurl2Cdn+Rs30XrgAWPfC2iAcwQlo7r8VH5gF/8hu/7KmqIep+e/tK1
+         AtAEmHvYnbjM8wj67zB2ZEE1AIEwl0GwXQfNhkZPiy/wgBE0kSkbIw+sX/SW8IV75E
+         kQLk0dEC4vjqHGJkJr0yTcR+J1QqF7Rv0xnklWDlpn+YXpm3wHU8vy70LIZ3eF7H0i
+         4jsA9qk8p04fUJmRDdZash13edEixLvFj7MWiYkW7L5HRYaLUIVfQhTd6UXbJK+hXn
+         MyjPnpkahKkGA==
+Message-ID: <4ba70074-b8ff-ccfb-37df-8e7a187582df@kernel.org>
+Date:   Sun, 2 Jul 2023 11:25:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/6] dt-bindings: perf: marvell: Add YAML schemas for
+ Marvell PEM pmu
+Content-Language: en-US
+To:     Gowthami Thiagarajan <gthiagarajan@marvell.com>, will@kernel.org,
+        mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     sgoutham@marvell.com, bbhushan2@marvell.com, gcherian@marvell.com,
+        lcherian@marvell.com
+References: <20230630120351.1143773-1-gthiagarajan@marvell.com>
+ <20230630120351.1143773-3-gthiagarajan@marvell.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230630120351.1143773-3-gthiagarajan@marvell.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.51.211]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,78 +62,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 01:37:18 +0300
-George Stark <gnstark@sberdevices.ru> wrote:
-
-> Add iio channel for every channel 7 mux input.
-> Meson saradc channel 7 is connected to a mux that can switch channel
-> input to well-known sources like Vdd, GND and several Vdd dividers.
+On 30/06/2023 14:03, Gowthami Thiagarajan wrote:
+> Add device tree bindings for Marvell PEM performance monitor unit
 > 
-> Signed-off-by: George Stark <GNStark@sberdevices.ru>
-> ---
->  drivers/iio/adc/meson_saradc.c | 83 ++++++++++++++++++++++++++++++++--
->  1 file changed, 79 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
-> index 4a9dacedb6c3..c99a55944ece 100644
-> --- a/drivers/iio/adc/meson_saradc.c
-> +++ b/drivers/iio/adc/meson_saradc.c
-> @@ -163,6 +163,7 @@
->  #define MESON_SAR_ADC_MAX_FIFO_SIZE				32
->  #define MESON_SAR_ADC_TIMEOUT					100 /* ms */
->  #define MESON_SAR_ADC_VOLTAGE_AND_TEMP_CHANNEL			6
-> +#define MESON_SAR_ADC_VOLTAGE_AND_MUX_CHANNEL			7
->  #define MESON_SAR_ADC_TEMP_OFFSET				27
->  
->  /* temperature sensor calibration information in eFuse */
-> @@ -202,6 +203,19 @@
->  	.datasheet_name = "TEMP_SENSOR",				\
->  }
->  
-> +#define MESON_SAR_ADC_MUX(_chan, _sel) {				\
-> +	.type = IIO_VOLTAGE,						\
-> +	.channel = _chan,						\
-> +	.indexed = 1,							\
-> +	.address = MESON_SAR_ADC_VOLTAGE_AND_MUX_CHANNEL,		\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |			\
-> +				BIT(IIO_CHAN_INFO_AVERAGE_RAW),		\
-> +	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),		\
-> +	.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_CALIBBIAS) |	\
-> +				BIT(IIO_CHAN_INFO_CALIBSCALE),		\
-> +	.datasheet_name = "SAR_ADC_MUX_"#_sel,				\
-> +}
-> +
->  enum meson_sar_adc_avg_mode {
->  	NO_AVERAGING = 0x0,
->  	MEAN_AVERAGING = 0x1,
-> @@ -235,6 +249,27 @@ enum meson_sar_adc_channel_index {
->  	NUM_CHAN_7,
->  	NUM_CHAN_TEMP,
->  	NUM_CHAN_SOFT_TIMESTAMP,
+> Signed-off-by: Gowthami Thiagarajan <gthiagarajan@marvell.com>
+> Signed-off-by: Linu Cherian <lcherian@marvell.com>
 
-Silly question... Why does this device have timestamp channels?
-It has no buffer support so they don't 'do anything'.
-If it had then putting other channels after that might have broken
-things if not done very carefully (hence I went looking)
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-> +	NUM_MUX_0_VSS,
-> +	NUM_MUX_1_VDD_DIV4,
-> +	NUM_MUX_2_VDD_DIV2,
-> +	NUM_MUX_3_VDD_MUL3_DIV4,
-> +	NUM_MUX_4_VDD,
-> +};
-...
+You missed at least DT list (maybe more), so this won't be tested by our
+tools. Performing review on untested code might be a waste of time, thus
+I will skip this patch entirely till you follow the process allowing the
+patch to be tested.
 
->  static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
-> @@ -247,6 +282,11 @@ static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
->  	MESON_SAR_ADC_CHAN(NUM_CHAN_6),
->  	MESON_SAR_ADC_CHAN(NUM_CHAN_7),
->  	IIO_CHAN_SOFT_TIMESTAMP(NUM_CHAN_SOFT_TIMESTAMP),
-> +	MESON_SAR_ADC_MUX(NUM_MUX_0_VSS, 0),
-> +	MESON_SAR_ADC_MUX(NUM_MUX_1_VDD_DIV4, 1),
-> +	MESON_SAR_ADC_MUX(NUM_MUX_2_VDD_DIV2, 2),
-> +	MESON_SAR_ADC_MUX(NUM_MUX_3_VDD_MUL3_DIV4, 3),
-> +	MESON_SAR_ADC_MUX(NUM_MUX_4_VDD, 4),
->  };
+Please kindly resend and include all necessary To/Cc entries.
 
-Jonathan
+
+Best regards,
+Krzysztof
+
