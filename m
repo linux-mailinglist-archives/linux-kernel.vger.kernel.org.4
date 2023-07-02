@@ -2,153 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC89745048
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F28C745049
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjGBTQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S230348AbjGBTQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGBTQe (ORCPT
+        with ESMTP id S229952AbjGBTQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 2 Jul 2023 15:16:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6ED100
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 12:15:45 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB049C2
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 12:15:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688325344;
+        s=mimecast20190719; t=1688325346;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4kLj8dmTPlNd9hpuLLmsoj1kmn9VFM9AznQMmSVeuFI=;
-        b=Rs/DzK4YH0/554twzALjT2p64PL12lDZUgTHiMFjPDhi6B3nQtrNC95DWl8sDKWSIb2IKG
-        3k56AFlU4BWkVqnpmA3w7XU5ULF/P0sAyQZOiBfUsDaZ+AGorLzwjsuA8rDtbe0OEW0fzO
-        IF9rmNaDn+nAZNx4c/+X1rk/Tw1Gunc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JDcEAV6QwSsPTLZL87iLrwMThHt45oSghNV/E5+yNmU=;
+        b=bt93jACT9sz4hZfiEOe+oBmltfKCjExU0UW9xoHTBEai2BP6/92jdlX8DKC1bksUUflJW0
+        UlN5uBffHJ4NpVlL3G4CfptRZwbiZ8KxuRBcKgmaL5MDnw6KX8O+IfszBOEVk7h7Wb4Kte
+        CJd6YrspfUw2Iaf382mWXW0gjZpdMbE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-240-YgKrx6fCN7iu9X5EJuXWCQ-1; Sun, 02 Jul 2023 15:15:43 -0400
-X-MC-Unique: YgKrx6fCN7iu9X5EJuXWCQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fb416d7731so18920145e9.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 12:15:43 -0700 (PDT)
+ us-mta-67-HmTHNCLPOImiiRU9P5r4iQ-1; Sun, 02 Jul 2023 15:15:44 -0400
+X-MC-Unique: HmTHNCLPOImiiRU9P5r4iQ-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-313f2430134so1703983f8f.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 12:15:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688325342; x=1690917342;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4kLj8dmTPlNd9hpuLLmsoj1kmn9VFM9AznQMmSVeuFI=;
-        b=CKKUxYKSFqgX2Bsz532IdRnFrJwVYskfC6Y/zfJ94HkBu5ZUxkKK7I6xL6UtmqgcVg
-         re4d4dJnFSvsDbR9+PdVLnf1qzLYIb2XRRaNCJdf4G7gOaHUm+jhzoDjcPRAkrygCP3e
-         ST+tSk3ymQqI7z7K14f5fZdDwz6Oa0EeoG/wADF7oHF+jaCRy3Jnlt3ZrMJCe1rcQSpT
-         82LiAVrSh9bC0NFBfE5zHS41XDDS8Zt8G3R8Ujj8oe9vhwMjErpKMCJpIGAItPSUoH9X
-         mTJa14M3jy4Tkf2MVd1VOXx0X0Y2r4pwnUrDxgyItLd1k5EefUi5LpyRBjcdV+WDpq0S
-         OXRg==
-X-Gm-Message-State: AC+VfDy06WwdDa1FX+JeH3nPCaHme3vhVGhzzMw8m8htX2RK6TzJPbis
-        TVQ8H0QxQFotTSeStk24lHcw4PJboyLopvwpbWOM6oqb6Gtkhil5P0nWkaVcDQz91tRsvm+PTkN
-        No671zIw4JiF+Jj5pQkxoS6XG8DMN74vhUAEKJpgotAwRRH1PdRTL0o8LqO5scPe50n9qbSrpBk
-        5MWzD53bs=
-X-Received: by 2002:a05:600c:294a:b0:3fa:770c:5918 with SMTP id n10-20020a05600c294a00b003fa770c5918mr5858784wmd.9.1688325342041;
-        Sun, 02 Jul 2023 12:15:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7zvHRJ6y1/LCj1vDiagN6ACwcdgHIj6l3XviwcGwUovId3cFIYrKqPqTFSB9KPelIQ9jAP7w==
-X-Received: by 2002:a05:600c:294a:b0:3fa:770c:5918 with SMTP id n10-20020a05600c294a00b003fa770c5918mr5858748wmd.9.1688325341581;
-        Sun, 02 Jul 2023 12:15:41 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688325343; x=1690917343;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JDcEAV6QwSsPTLZL87iLrwMThHt45oSghNV/E5+yNmU=;
+        b=d+U8nbV1O9DZPSs2Zmpny0eQuVe6IhuP/nzynURg2h1xHHsQfEKeL+vAqXraqo55aL
+         Uqdpm39LMG8rvuxiyMXwsRWfLRQtvJ56zZ/6kv0Hx8y7GiPYhVXaLTNraE0SrUE52EMw
+         SNVqHfGZYayJTLdHVRouGHw8CVlD3KAWFytpsvq041SVkOJPR8L4jdwWJgiIlu3W0mSe
+         5RW9uJ1oBY1VWI0S84akQSDXKTdMnsJMiKwQwWWNsS5Y9izaZkdA/xWLAWM8AQHI9uEt
+         de2B0keMDfigyeqooFGYi0+n9WmmfN9JWd0Z/CzO3YAF8cuqD3z3Sz8qokqsPvsaeb76
+         2MgQ==
+X-Gm-Message-State: ABy/qLa+m8avV4Hkfd6XBLkNQ9sOEDzxllsQLivVn3gZSNwSyh46bQKJ
+        lZnBQ641unI3lYxbrz/mzPg8g7PUAqFMm2oAZVNLB781roelHm5+aIkCor8UD1asOQthy4oh1wu
+        zPlWCQwElV5ovYhHloKAFCR3ABdkYTiMHZEJlZfM5cSsE7Et1+46lq5Sn+ejcfZqxNTy0oVFk0s
+        cOeFfIxrY=
+X-Received: by 2002:adf:dd0a:0:b0:314:1a98:ebc0 with SMTP id a10-20020adfdd0a000000b003141a98ebc0mr6619312wrm.26.1688325343477;
+        Sun, 02 Jul 2023 12:15:43 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEDpCbRzZteK5K4atZLapgedVl0F/kvFEX2HZm5FHmLp8U7TVJXppcUN0K6Sz/ypkNYMZhM6Q==
+X-Received: by 2002:adf:dd0a:0:b0:314:1a98:ebc0 with SMTP id a10-20020adfdd0a000000b003141a98ebc0mr6619298wrm.26.1688325343187;
+        Sun, 02 Jul 2023 12:15:43 -0700 (PDT)
 Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g11-20020a7bc4cb000000b003fbab76165asm14144231wmk.48.2023.07.02.12.15.40
+        by smtp.gmail.com with ESMTPSA id g11-20020a7bc4cb000000b003fbab76165asm14144231wmk.48.2023.07.02.12.15.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 12:15:41 -0700 (PDT)
+        Sun, 02 Jul 2023 12:15:42 -0700 (PDT)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Arnd Bergmann <arnd@arndb.de>,
         Javier Martinez Canillas <javierm@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
         David Airlie <airlied@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
-        Ingo Molnar <mingo@redhat.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        x86@kernel.org
-Subject: [PATCH v3 0/3] Allow disabling all native fbdev drivers and only keeping DRM emulation
-Date:   Sun,  2 Jul 2023 21:15:17 +0200
-Message-ID: <20230702191529.768248-1-javierm@redhat.com>
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v3 1/3] drm: Improve Kconfig symbol prompt and help texts
+Date:   Sun,  2 Jul 2023 21:15:18 +0200
+Message-ID: <20230702191529.768248-2-javierm@redhat.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230702191529.768248-1-javierm@redhat.com>
+References: <20230702191529.768248-1-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series splits the fbdev core support in two different Kconfig
-symbols: FB and FB_CORE. The motivation for this is to allow CONFIG_FB to
-be disabled, while still having the the core fbdev support needed for the
-CONFIG_DRM_FBDEV_EMULATION to be enabled. The motivation is automatically
-disabling all fbdev drivers instead of having to be disabled individually.
+The current text were not changed since the original Linux-2.6.12-rc2 git
+import. Let's improve it and make that more aligned with the DRM/KMS docs.
 
-The reason for doing this is that now with simpledrm, there's no need for
-the legacy fbdev (e.g: efifb or vesafb) drivers anymore and many distros
-now disable them. But it would simplify the config a lot fo have a single
-Kconfig symbol to disable all fbdev drivers.
+Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-I've built tested with possible combinations of CONFIG_FB, CONFIG_FB_CORE,
-CONFIG_DRM_FBDEV_EMULATION and CONFIG_FB_DEVICE symbols set to 'y' or 'n'.
+(no changes since v1)
 
-Patch #1 is just a cleanup for the DRM symbol prompt and help texts, patch
-DRM symbol to select FB_CORE if CONFIG_DRM_FBDEV_EMULATION was enabled.
+ drivers/gpu/drm/Kconfig | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-This is a v3 of the patch-set that addresses issues pointed out by Arnd
-Bergmann, Thomas Zimmermann and Geert Uytterhoeven in the previous v2:
-
-https://lists.freedesktop.org/archives/dri-devel/2023-July/411660.html
-
-Changes in v3:
-- Really make a hidden symbol by removing the prompt (Arnd Bergmann).
-- Change FB_CORE to config instead of menuconfig (Arnd Bergmann).
-- Keep "depends on FB" for FIRMWARE_EDID (Arnd Bergmann).
-- Compile out fb_backlight.o and fbmon.o that are only needed for FB
-  (Arnd Bergmann).
-- Make FB_DEVICE to depend on FB_CORE instead of selecting it.
-- Make the DRM symbol to select FB_CORE if DRM_FBDEV_EMULATION is
-  enabled (Arnd Bergmann).
-- Also make DRM select FB_SYS_HELPERS_DEFERRED if DRM_FBDEV_EMULATION
-- Make DRM_FBDEV_EMULATION to depend on DRM instead of DRM_KMS_HELPER.
-
-Changes in v2:
-- Keep "depends on FB" for FB_DDC, FB_HECUBA, FB_SVGALIB, FB_MACMODES,
-  FB_BACKLIGHT, FB_MODE_HELPERS and FB_TILEBLITTING (Arnd Bergmann).
-- Don't change the fb.o object name (Arnd Bergmann).
-- Make FB_CORE a non-visible Kconfig symbol instead (Thomas Zimmermann).
-- Make CONFIG_DRM_FBDEV_EMULATION to select FB_CORE (Thomas Zimmermann).
-
-Javier Martinez Canillas (3):
-  drm: Improve Kconfig symbol prompt and help texts
-  fbdev: Split frame buffer support in FB and FB_CORE symbols
-  drm: Make FB_CORE to be selected if DRM fbdev emulation is enabled
-
- arch/x86/Makefile                 |  2 +-
- arch/x86/video/Makefile           |  2 +-
- drivers/gpu/drm/Kconfig           | 29 ++++++++++++----------
- drivers/video/console/Kconfig     |  2 +-
- drivers/video/fbdev/Kconfig       | 40 +++++++++++++++++++------------
- drivers/video/fbdev/core/Makefile |  8 +++----
- 6 files changed, 49 insertions(+), 34 deletions(-)
-
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index afb3b2f5f425..373f85e174c2 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -3,10 +3,11 @@
+ # Drm device configuration
+ #
+ # This driver provides support for the
+-# Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
++# Direct Rendering Infrastructure (DRI) that is composed of the Direct
++# Rendering Manager (DRM) and Kernel Mode Settings (KMS) subsystems.
+ #
+ menuconfig DRM
+-	tristate "Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)"
++	tristate "Direct Rendering Manager (DRM) and Kernel Mode Settings (KMS)"
+ 	depends on (AGP || AGP=n) && !EMULATED_CMPXCHG && HAS_DMA
+ 	select DRM_PANEL_ORIENTATION_QUIRKS
+ 	select HDMI
+@@ -19,13 +20,16 @@ menuconfig DRM
+ 	select VIDEO_CMDLINE
+ 	select VIDEO_NOMODESET
+ 	help
+-	  Kernel-level support for the Direct Rendering Infrastructure (DRI)
+-	  introduced in XFree86 4.0. If you say Y here, you need to select
+-	  the module that's right for your graphics card from the list below.
+-	  These modules provide support for synchronization, security, and
+-	  DMA transfers. Please see <http://dri.sourceforge.net/> for more
+-	  details.  You should also select and configure AGP
+-	  (/dev/agpgart) support if it is available for your platform.
++	  Kernel-level support for the Direct Rendering Infrastructure (DRI),
++	  that is composed of the Direct Rendering Manager (DRM) and Kernel
++	  Mode Settings (KMS) subsystems.
++
++	  If you say Y here, you need to select the module that's right for
++	  your graphics card from the list below. These modules provide support
++	  for synchronization, security, and DMA transfers.
++
++	  Please see <https://www.kernel.org/doc/html/latest/gpu/index.html>
++	  for more details about the Linux DRM and KMS subsystems.
+ 
+ config DRM_MIPI_DBI
+ 	tristate
 -- 
 2.41.0
 
