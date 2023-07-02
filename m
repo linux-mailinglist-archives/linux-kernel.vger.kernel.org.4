@@ -2,271 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055C3744E4E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D5B744E51
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjGBPYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 11:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
+        id S229852AbjGBPZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 11:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjGBPX6 (ORCPT
+        with ESMTP id S229523AbjGBPZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 11:23:58 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DBCE69;
-        Sun,  2 Jul 2023 08:23:57 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-160-45-201.reb.o2.cz [85.160.45.201])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E4800289;
-        Sun,  2 Jul 2023 17:23:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1688311393;
-        bh=Go/q4Bj5k2u8R/kaZnLH8yaLYq0EaAahz6vsxOCVh6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wjAq7ZSxEo1iSsG1n+Qy8B/aqndzIF8zMPLSp5ENLpYgXp1OCfrR9LP9bwbXwDY6v
-         UH1/BU5aUQs2/XZH8/Bi8e/smxkNk2Umq0AXZ6asilmQGdGIZlu4y+2qx0IDOq92Bc
-         m+sCnlXP1fZ+qYD3xpqedwmSZOKmJPRDI6An2eNU=
-Date:   Sun, 2 Jul 2023 18:23:56 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
-        tomi.valkeinen@ideasonboard.com,
-        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
-Subject: Re: [PATCH v5 04/11] media: bcm2835-unicam: Add support for
- CCP2/CSI2 camera interface
-Message-ID: <20230702152356.GA16995@pendragon.ideasonboard.com>
-References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
- <20220208155027.891055-5-jeanmichel.hautbois@ideasonboard.com>
- <YhihbncnSlmvrn/D@valkosipuli.retiisi.eu>
+        Sun, 2 Jul 2023 11:25:03 -0400
+Received: from mail-pj1-f80.google.com (mail-pj1-f80.google.com [209.85.216.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02F9E69
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 08:25:01 -0700 (PDT)
+Received: by mail-pj1-f80.google.com with SMTP id 98e67ed59e1d1-262f7a3bc80so4751492a91.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 08:25:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688311501; x=1690903501;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OVi90bVdhDhHrv1hOyRkeWClh+SrPWe4I4jxHii48pI=;
+        b=KbZHddNvDVSwXzr88hQXGdaEAo+wJ/07Fy0P4Lu+p7vEuTjQ0LSEnt80HDEZegGlBl
+         HA2CzFSJiK6MWcygSCLIgFKL26/EWU33VMgdphldFwjNLEFFrgorX6MxA+AmxSpd/mUW
+         lM1dPv09Z8KP+HJ98UAja6YtXgwtgvb9r0jyavz2eDB+HucVWHyXe5eh/xK7uG9gsGyh
+         d1QcC9CLygUCkCSdbw1NbuYcSEzGWIiZkcxosO9bjiNHvEqlbB6A8lCcoCkvURGvXDay
+         Fv1nQWgZ9bbHgvP2LwdlTRBqjhLFQu733QWrjq1E9QoqXnvWQjOTwHAqcJRMm5mNIGvG
+         +xzQ==
+X-Gm-Message-State: ABy/qLYkh1b/Bjb6FnryoJvkJL5SWZaO/OKfz+yMf7Qut+t36XJOPLjL
+        rw2ScV0JJFHG59ADa2FQqP3c8/i1safHO9itk2eMxzMbLKuF
+X-Google-Smtp-Source: APBJJlGlo52aN0k88SOj5tWHpgSVkGmHRxkoy9lHKvk3R/YTSqO426XHN7xWBwwvpOs0MoDnCE26pHnQJF4EgsTwkPzZ7gDD4DzF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YhihbncnSlmvrn/D@valkosipuli.retiisi.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:90a:13c8:b0:263:2f09:20c3 with SMTP id
+ s8-20020a17090a13c800b002632f0920c3mr5595730pjf.9.1688311501333; Sun, 02 Jul
+ 2023 08:25:01 -0700 (PDT)
+Date:   Sun, 02 Jul 2023 08:25:01 -0700
+In-Reply-To: <00000000000046238c05f69776ab@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004eab7a05ff82a700@google.com>
+Subject: Re: [syzbot] [ntfs?] kernel BUG in ntfs_end_buffer_async_read
+From:   syzbot <syzbot+72ba5fe5556d82ad118b@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+syzbot has found a reproducer for the following issue on:
 
-On Fri, Feb 25, 2022 at 11:29:18AM +0200, Sakari Ailus wrote:
-> On Tue, Feb 08, 2022 at 04:50:20PM +0100, Jean-Michel Hautbois wrote:
-> > Add driver for the Unicam camera receiver block on BCM283x processors.
-> > It is represented as two video device nodes: unicam-image and
-> > unicam-embedded which are connected to an internal subdev (named
-> > unicam-subdev) in order to manage streams routing.
-> > 
-> > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-> > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> > 
-> > ---
-> > v4:
-> >   - Add the vendor prefox for DT name
-> >   - Use the reg-names in DT parsing
-> >   - Remove MAINTAINERS entry
-> > 
-> > v3 main changes:
-> >   - Change code organization
-> >   - Remove unused variables
-> >   - Correct the fmt_meta functions
-> >   - Rewrite the start/stop streaming
-> >     - You can now start the image node alone, but not the metadata one
-> >     - The buffers are allocated per-node
-> >     - only the required stream is started, if the route exists and is
-> >       enabled
-> >   - Prefix the macros with UNICAM_ to not have too generic names
-> >   - Drop colorspace support
-> >     -> This is causing issues in the try-fmt v4l2-compliance test
-> >   test VIDIOC_G_FMT: OK
-> > 	fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
-> > 	fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc, pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
-> >   test VIDIOC_TRY_FMT: FAIL
-> > 	fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
-> > 	fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc, pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
-> >   test VIDIOC_S_FMT: FAIL
-> > 
-> > v2: Remove the unicam_{info,debug,error} macros and use
-> > dev_dbg/dev_err instead.
-> > ---
-> >  drivers/media/platform/Kconfig                |    1 +
-> >  drivers/media/platform/Makefile               |    2 +
-> >  drivers/media/platform/bcm2835/Kconfig        |   21 +
-> >  drivers/media/platform/bcm2835/Makefile       |    3 +
-> >  .../platform/bcm2835/bcm2835-unicam-regs.h    |  253 ++
-> >  .../media/platform/bcm2835/bcm2835-unicam.c   | 2570 +++++++++++++++++
-> >  6 files changed, 2850 insertions(+)
-> >  create mode 100644 drivers/media/platform/bcm2835/Kconfig
-> >  create mode 100644 drivers/media/platform/bcm2835/Makefile
-> >  create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam-regs.h
-> >  create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam.c
+HEAD commit:    dfab92f27c60 Merge tag 'nfs-for-6.5-1' of git://git.linux-..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=137d57bf280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=71a52faf60231bc7
+dashboard link: https://syzkaller.appspot.com/bug?extid=72ba5fe5556d82ad118b
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c987eca80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=144a738f280000
 
-[snip]
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/32f183ec0f2c/disk-dfab92f2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e8f47f491184/vmlinux-dfab92f2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ad90306c0fe6/bzImage-dfab92f2.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/bcae16df5190/mount_0.gz
 
-> > diff --git a/drivers/media/platform/bcm2835/bcm2835-unicam-regs.h b/drivers/media/platform/bcm2835/bcm2835-unicam-regs.h
-> > new file mode 100644
-> > index 000000000000..b8d297076a02
-> > --- /dev/null
-> > +++ b/drivers/media/platform/bcm2835/bcm2835-unicam-regs.h
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+72ba5fe5556d82ad118b@syzkaller.appspotmail.com
 
-[snip]
+------------[ cut here ]------------
+kernel BUG at fs/ntfs/aops.c:130!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 21 Comm: ksoftirqd/1 Not tainted 6.4.0-syzkaller-10096-gdfab92f27c60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:ntfs_end_buffer_async_read+0xc7f/0x1540 fs/ntfs/aops.c:130
+Code: ff e8 95 97 c8 fe 4c 89 ff 48 c7 c6 e0 6b 3a 8b e8 86 3b 09 ff 0f 0b e8 7f 97 c8 fe 0f 0b e8 78 97 c8 fe 0f 0b e8 71 97 c8 fe <0f> 0b e8 6a 97 c8 fe 4c 89 ff e8 b2 99 ff ff 48 89 c7 48 c7 c6 20
+RSP: 0018:ffffc900001b7b10 EFLAGS: 00010246
+RAX: ffffffff82c35a7f RBX: 0000000000000010 RCX: ffff888014e59dc0
+RDX: 0000000080000100 RSI: 0000000000020211 RDI: 0000000000001000
+RBP: ffff8880771e8270 R08: ffffffff82c3547a R09: 1ffff1100ee3d00a
+R10: dffffc0000000000 R11: ffffed100ee3d00b R12: 0000000000000000
+R13: 0000000000020211 R14: 0000000000000001 R15: ffffea0001d76500
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc42b480940 CR3: 00000000219c3000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ end_bio_bh_io_sync+0xb7/0x110 fs/buffer.c:2794
+ req_bio_endio block/blk-mq.c:766 [inline]
+ blk_update_request+0x53f/0x1020 block/blk-mq.c:911
+ blk_mq_end_request+0x50/0x310 block/blk-mq.c:1032
+ blk_complete_reqs block/blk-mq.c:1110 [inline]
+ blk_done_softirq+0x103/0x150 block/blk-mq.c:1115
+ __do_softirq+0x2ab/0x908 kernel/softirq.c:553
+ run_ksoftirqd+0xc5/0x120 kernel/softirq.c:921
+ smpboot_thread_fn+0x533/0x9f0 kernel/smpboot.c:164
+ kthread+0x2b8/0x350 kernel/kthread.c:389
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ntfs_end_buffer_async_read+0xc7f/0x1540 fs/ntfs/aops.c:130
+Code: ff e8 95 97 c8 fe 4c 89 ff 48 c7 c6 e0 6b 3a 8b e8 86 3b 09 ff 0f 0b e8 7f 97 c8 fe 0f 0b e8 78 97 c8 fe 0f 0b e8 71 97 c8 fe <0f> 0b e8 6a 97 c8 fe 4c 89 ff e8 b2 99 ff ff 48 89 c7 48 c7 c6 20
+RSP: 0018:ffffc900001b7b10 EFLAGS: 00010246
+RAX: ffffffff82c35a7f RBX: 0000000000000010 RCX: ffff888014e59dc0
+RDX: 0000000080000100 RSI: 0000000000020211 RDI: 0000000000001000
+RBP: ffff8880771e8270 R08: ffffffff82c3547a R09: 1ffff1100ee3d00a
+R10: dffffc0000000000 R11: ffffed100ee3d00b R12: 0000000000000000
+R13: 0000000000020211 R14: 0000000000000001 R15: ffffea0001d76500
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc42b480940 CR3: 00000000219c3000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-> > +static int unicam_connect_of_subdevs(struct unicam_device *unicam)
-> > +{
-> > +	struct v4l2_fwnode_endpoint ep = { };
-> > +	struct fwnode_handle *ep_handle;
-> > +	struct v4l2_async_subdev *asd;
-> > +	unsigned int lane;
-> > +	int ret = -EINVAL;
-> > +
-> > +	if (of_property_read_u32(unicam->dev->of_node, "brcm,num-data-lanes",
-> > +				 &unicam->max_data_lanes) < 0) {
-> 
-> As you're already using fwnode API below, you could use
-> device_property_read_u32() here.
-> 
-> You can then replace of_device.h by mod_devicetable.h. Up to you.
-> 
-> > +		dev_err(unicam->dev, "DT property %s not set\n",
-> > +			"brcm,num-data-lanes");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/* Get the local endpoint and remote device. */
-> > +	ep_handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(unicam->dev),
-> > +						    0, 0,
-> > +						    FWNODE_GRAPH_ENDPOINT_NEXT);
-> > +	if (!ep_handle) {
-> > +		dev_err(unicam->dev, "No endpoint\n");
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	/* Parse the local endpoint and validate its configuration. */
-> > +	if (v4l2_fwnode_endpoint_alloc_parse(ep_handle, &ep)) {
-> 
-> As you don't need link-frequencies property parsing, you should use
-> v4l2_fwnode_endpoint_parse(). That avoids having to call
-> v4l2_fwnode_endpoint_free().
-> 
-> > +		dev_err(unicam->dev, "could not parse endpoint\n");
-> > +		goto cleanup_exit;
-> > +	}
-> > +
-> > +	dev_dbg(unicam->dev, "parsed local endpoint, bus_type %u\n",
-> > +		ep.bus_type);
-> > +
-> > +	unicam->bus_type = ep.bus_type;
-> > +
-> > +	switch (ep.bus_type) {
-> > +	case V4L2_MBUS_CSI2_DPHY:
-> > +		switch (ep.bus.mipi_csi2.num_data_lanes) {
-> > +		case 1:
-> > +		case 2:
-> > +		case 4:
-> > +			break;
-> > +
-> > +		default:
-> > +			dev_err(unicam->dev, "%u data lanes not supported\n",
-> > +				ep.bus.mipi_csi2.num_data_lanes);
-> > +			goto cleanup_exit;
-> > +		}
-> > +
-> > +		for (lane = 0; lane < ep.bus.mipi_csi2.num_data_lanes; lane++) {
-> > +			if (ep.bus.mipi_csi2.data_lanes[lane] != lane + 1) {
-> > +				dev_err(unicam->dev, "data lanes reordering not supported\n");
-> > +				goto cleanup_exit;
-> > +			}
-> > +		}
-> > +
-> > +		if (ep.bus.mipi_csi2.num_data_lanes > unicam->max_data_lanes) {
-> > +			dev_err(unicam->dev, "endpoint requires %u data lanes when %u are supported\n",
-> > +				ep.bus.mipi_csi2.num_data_lanes,
-> > +				unicam->max_data_lanes);
-> > +		}
-> > +
-> > +		unicam->active_data_lanes = ep.bus.mipi_csi2.num_data_lanes;
-> > +		unicam->bus_flags = ep.bus.mipi_csi2.flags;
-> > +
-> > +		break;
-> > +
-> > +	case V4L2_MBUS_CCP2:
-> > +		if (ep.bus.mipi_csi1.clock_lane != 0 ||
-> > +		    ep.bus.mipi_csi1.data_lane != 1) {
-> > +			dev_err(unicam->dev, "unsupported lanes configuration\n");
-> 
-> If the hardware doesn't support lane remapping for CCP2, then that should
-> be reflected in DT bindings, i.e. data-lanes isn't relevant. There's no
-> need to check that here.
 
-Should the above check for CSI-2 be dropped as well then ?
-
-> > +			goto cleanup_exit;
-> > +		}
-> > +
-> > +		unicam->max_data_lanes = 1;
-> > +		unicam->active_data_lanes = 1;
-> > +		unicam->bus_flags = ep.bus.mipi_csi1.strobe;
-> > +		break;
-> > +
-> > +	default:
-> > +		/* Unsupported bus type */
-> > +		dev_err(unicam->dev, "unsupported bus type %u\n",
-> > +			ep.bus_type);
-> > +		goto cleanup_exit;
-> > +	}
-> > +
-> > +	dev_dbg(unicam->dev, "%s bus, %u data lanes, flags=0x%08x\n",
-> > +		unicam->bus_type == V4L2_MBUS_CSI2_DPHY ? "CSI-2" : "CCP2",
-> > +		unicam->active_data_lanes, unicam->bus_flags);
-> 
-> V4l2-fwnode already prints this information I believe.
-
-True. It does so with pr_debug() though, it would be nice to use
-dev_dbg(). That's a candidate for a separate fix of course.
-
-> > +
-> > +	/* Initialize and register the async notifier. */
-> > +	v4l2_async_nf_init(&unicam->notifier);
-> > +
-> > +	asd = v4l2_async_nf_add_fwnode_remote(&unicam->notifier, ep_handle,
-> > +					      struct v4l2_async_subdev);
-> > +
-> > +	fwnode_handle_put(ep_handle);
-> > +	ep_handle = NULL;
-> > +
-> > +	if (IS_ERR(asd)) {
-> > +		ret = PTR_ERR(asd);
-> > +		goto cleanup_exit;
-> > +	}
-> > +
-> > +	unicam->notifier.ops = &unicam_async_ops;
-> > +
-> > +	ret = v4l2_async_nf_register(&unicam->v4l2_dev, &unicam->notifier);
-> > +	if (ret) {
-> > +		dev_err(unicam->dev, "Error registering device notifier: %d\n", ret);
-> > +		goto cleanup_exit;
-> > +	}
-> > +
-> > +	return 0;
-> > +
-> > +cleanup_exit:
-> > +	v4l2_fwnode_endpoint_free(&ep);
-> > +	fwnode_handle_put(ep_handle);
-> > +
-> > +	return ret;
-> > +}
-
-[snip]
-
--- 
-Regards,
-
-Laurent Pinchart
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
