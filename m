@@ -2,103 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14191744CB6
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 10:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FF9744CB9
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 10:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjGBI0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 04:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
+        id S229846AbjGBI30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 04:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBI0m (ORCPT
+        with ESMTP id S229523AbjGBI3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 04:26:42 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B932E60
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 01:26:40 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 4CA973200971;
-        Sun,  2 Jul 2023 04:26:37 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 02 Jul 2023 04:26:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688286396; x=1688372796; bh=n1
-        OAwnbouJPcmFjXmnwM28XOGx38UWuTFQPscs6uCCQ=; b=GXzA+4H2ZMijL+2oCC
-        8YU5cRAGGY1Emj0IwNGVM24HkbWCYrdJwTl1w5xJ/o3jiz6rHE77IGzy+uM30isj
-        y+pVEzWZ95N9J+H5NAWRcgw/qG0zDsSVNmELeVyjtG8chKEf4Eqsl69mHstI/OYZ
-        A4RIlP4lXzSMs3/haHYx8GyZUKW16k5CefgBs718oIaEu7CHvfRyeDHHhSBNDaSx
-        Ik6cqv/M4Ni5+gQWP/7z6sckDiEZtYWHNyzlcMYe0VYdIiDrfEiNCSyUNdVEpe1b
-        F5d1JDHWReTFcWJBXMF7e0pk9jdNnvEPpoRlLZJCXJNwjI8Y+7l/fzm6N0dyNt3v
-        IyMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688286396; x=1688372796; bh=n1OAwnbouJPcm
-        FjXmnwM28XOGx38UWuTFQPscs6uCCQ=; b=fNweE2//QCkB0xkOKsCpLE0kL1F2Z
-        q7U/tdlttFwc95osmFnoIoBbx8z2eAgv7Tl8ktzAw6uJQIhVUBLvlGxNksHcAEwK
-        7VeLKuWlFrhT0kIOXRY4kb7iM+wfTwg4Ni8qTBEPQuXIGZHRFkJnb9lUApa3UdgA
-        7AZTR65Dx7xgBbVhrSC/j0aPa+iyVjLMWPCvRUl42oJf27I8WjqCnVgljaBIuM2p
-        IHUfbk4TSo3lvcp8UTyGKmraWA6J6uOMoKlHdMreaFQahlnAXlVCAqbcHh9VbZXA
-        E7bVR7vLDqLyGswRSjgh2jCjQqN9/uaZ4ThoSliWsK1/iet9GPhOTdt4w==
-X-ME-Sender: <xms:vDShZMez6tner3VDtDcWXdINOjGnc1lV44EHAeCVaXV7utCZRlr6-w>
-    <xme:vDShZONx3TvZNZDWR1mrwYGsnuGsKo3Q4WG15is2nxfGwYs6jvPGUYxoWJlOrQJAC
-    CjS7lBkijtWbEWAU6M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddtgddtgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpefhtdelhfettdetvdetvdeuueegvdeuleeuudevhfeuhfeugfdvtdevvedvfffh
-    udenucffohhmrghinheplhhinhgrrhhordhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:vDShZNjHP0CGhSURlPR64SfyqXTLcj8q9K-IMlENKbGnIUxH6XVXqg>
-    <xmx:vDShZB-Tt3hIaUqT4zwfEKHO9l-6yRPc-Rv9Zkdmtg4Y2WCdulpXxg>
-    <xmx:vDShZItCLxPbrfFZxQB1F4L6-vXG5gVaTuuOOerlwX6ngMXZ6qDSTA>
-    <xmx:vDShZCXKCzPagZxtQofNJWmheRjZ4BFGaEV6AZ5r9krCOhCiftc8gw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5D94BB60086; Sun,  2 Jul 2023 04:26:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <d41a6d08-981b-481b-9108-fe91afaa0f82@app.fastmail.com>
-In-Reply-To: <CA+G9fYsuc8D98BtW9rX0ahS9Rfqyn-5CALYWTy6fr_ypJqEErA@mail.gmail.com>
-References: <CA+G9fYsuc8D98BtW9rX0ahS9Rfqyn-5CALYWTy6fr_ypJqEErA@mail.gmail.com>
-Date:   Sun, 02 Jul 2023 10:26:15 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     "Frederic Weisbecker" <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Anders Roxell" <anders.roxell@linaro.org>,
-        "Dan Carpenter" <dan.carpenter@linaro.org>
-Subject: Re: qemu-arm64: Unexpected kernel BRK exception at EL1 - WARNING: CPU: 3 PID:
- 0 at kernel/context_tracking.c:128 ct_kernel_exit.constprop
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 2 Jul 2023 04:29:24 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D317110E7
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 01:29:22 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-992ca792065so325209966b.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 01:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688286561; x=1690878561;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w1biNblKgtJgfVRZwDEOvjX/I6fTJ7KpT17Ok3nZx5M=;
+        b=uMqJUTA42zzTNobzfwK8XPREa/a9vj3Xfc/7KWipp1cnp/Jg0XeVY+x4k214j2yY2p
+         QoGg5zzyWZV0KJSDggJXTP6f6mbFRRUdjqNSf2NxLj7/wA9SRfIAm46ygvQ63r2uEXpX
+         fNoQjpgZVebllbu86RL5eRXcyUHR8Qhpzzihk9iDeJafk2zy7kZGgIGhfVity3Cmmwg0
+         pLKzBMIuwWp2HAWLosqYLZF9VyQAZld2sBX35Cf/wCq5foc92YcnAyZQjJYvz2dvD+H2
+         e3pIDjwRFmrF+Bh5CEoYUtwBR6uYTLkmSgeZBlRZgUB4OyFMScKs8aVTjco9NECFFkB6
+         sGog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688286561; x=1690878561;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1biNblKgtJgfVRZwDEOvjX/I6fTJ7KpT17Ok3nZx5M=;
+        b=R1z4kVKwjsh81xN9S7N+s3QbFI7ix87kJ1119AGIBuijPfg93VQjzDYCtzjiQbNvoL
+         puFGYwG+KLbOk4hL90pVB6yUDu1GMSaZLfg5Nywahp+QL3MY/xmJYlfv0pJSbpO6MITD
+         g6aBtVrvKPmtz6D/gvcM9Tro/UG7vcE7wyytR+cxl8B6odlfpwj6qo7Qi2IwNCp8EqEC
+         hF9bUgZHdbI9bXjPhorZo5cF0pio9Jwnb6Nz0M5PgRndd2f3BkFdj3HOyNucKE/ccvUb
+         RJdDuk89+js442XTBOzYb7cP1+dETG/PDYW5JSm8zfIzn5Kgl+eSiN/kaQqA8ecl+UJG
+         hIUw==
+X-Gm-Message-State: ABy/qLa6dAeWB94SrdxhIl8sQpOzYFPGE2svbZlGOQ0kxzlZQ5vE4Z4Q
+        cDw4NK1S0JdsbfL7zD1KMuqTnA==
+X-Google-Smtp-Source: APBJJlEq7536nmIYj1sWz/vSWp1KlO2nfy5GE5f1MJ94C2mivpQ6trVaYeegVFmTsikSDWcGy6GDVg==
+X-Received: by 2002:a17:906:e48:b0:988:882b:9a3 with SMTP id q8-20020a1709060e4800b00988882b09a3mr5395799eji.36.1688286561035;
+        Sun, 02 Jul 2023 01:29:21 -0700 (PDT)
+Received: from [192.168.10.214] ([217.169.179.6])
+        by smtp.gmail.com with ESMTPSA id s22-20020aa7cb16000000b0051bed498851sm9043073edt.54.2023.07.02.01.29.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 01:29:20 -0700 (PDT)
+Message-ID: <29af84dc-7db8-0c43-07b6-eb743cf25e57@linaro.org>
+Date:   Sun, 2 Jul 2023 10:29:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 00/21] Add Qualcomm Minidump kernel driver related
+ support
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     corbet@lwn.net, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com, mathieu.poirier@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
+        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Alex Elder <elder@linaro.org>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <2023062814-chance-flounder-f002@gregkh>
+ <CAL_JsqLO9yey2-4FcWsaGxijiS6hGL0SH9VoMuiyei-u9=Cv=w@mail.gmail.com>
+ <cc30660f-dd72-aade-6346-a93c6ad4b695@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cc30660f-dd72-aade-6346-a93c6ad4b695@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023, at 10:42, Naresh Kamboju wrote:
+On 30/06/2023 18:04, Mukesh Ojha wrote:
+>>
+>>> We don't add layers when they are not needed, and never when there is no
+>>> actual user.  If you need the extra "complexity" later, then add it
+>>> later when it is needed as who knows when that will ever be.
+>>>
+>>> Please redo this series based on that, thanks.
+>>
+>> My bigger issue with this whole series is what would this all look
+>> like if every SoC vendor upstreamed their own custom dumping
+>> mechanism. That would be a mess. (I have similar opinions on the
+>> $soc-vendor hypervisors.)
 
-> Links:
->  - 
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4-8686-ge55e5df193d2/testrun/17999853/suite/log-parser-test/tests/
->  - 
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4-8686-ge55e5df193d2/testrun/17999906/suite/log-parser-test/tests/
+Mukesh,
 
-I can't see which build artifacts correspond to the logs. Can you link to the
-vmlinux file?
+LPC CFP is still open. There will be also Android and Kernel Debugging
+LPC microconference tracks. Coming with a unified solution could be a
+great topic for LPC. Solutions targeting only one user are quite often
+frowned upon.
 
-       Arnd
+Best regards,
+Krzysztof
+
