@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048F2745111
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE63745118
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjGBToR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S232410AbjGBToV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbjGBTnH (ORCPT
+        with ESMTP id S232090AbjGBTnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 2 Jul 2023 15:43:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBE02122;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B872137;
         Sun,  2 Jul 2023 12:42:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA1A60CF9;
-        Sun,  2 Jul 2023 19:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA65C433C7;
-        Sun,  2 Jul 2023 19:41:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76BFA60DB5;
+        Sun,  2 Jul 2023 19:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D272C433C8;
+        Sun,  2 Jul 2023 19:41:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326891;
-        bh=N/N7KV2ya6gMiKA/u+eeu8WR2lgqm6LYdipuZUuUgbE=;
+        s=k20201202; t=1688326894;
+        bh=TBuX7D5DT9ayEsecwGU5wss8qZIQldBK8gN7a6H8FTA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GA6pGdrApKSEM2fnxl2NqHUCcqcLs8qx02gDHJIed8TwjKajcWKKxOgYlVkCoJ5jg
-         hRs2bI63KPHHmvyG1jbUD5RWkENMQe6BFx8YplP34r3acYewihwe5Zlh6IJFgvCWuf
-         xkZm8ERRzIS8Odz7MHFp/VIQPzfea9fV0zh2jVVNx2dGitDsMVah4oVUQ/e9Z7VyFW
-         dDfoiRZF8ybWPLKrbtg2PYFVo5N40Lpc96oPpkXNrBeIQa0lvlyqBiXaT7qEgGkJ23
-         q9LB4tyPpSLxGovx/1XqgYWxcRHFzGtrIXZZWvtD/gHSvSmowZOfdt9xlf9f2UIb+m
-         dyC6AICida6LA==
+        b=JPm+oR46f5HJFsMYWbl+T9HIzOdP/z880eUjY5ixoLLGyxx/bIXbZ7RLFhg3U05KX
+         oFt2hI8qbPsIbABJ3OrDjGYRYDF7BlT4NmH2pHo3SmKPnkTuUCJOyT0i6MFVMQmVt6
+         zOOjqzU9VwdlXl3Fv9B3SzYhUEK3ITsLRHMFXYb6L3VLWCIcq1JugchuJ5DQ37oIyf
+         Rf+A/hVaH3uagb/J2Gl/Ue83qlmzNtA8E6A/MLipid/Gfh7MlUWNRgcd5lmt6iUZcD
+         OBIXI1URZOfBSwsRo7Pp8QAdHdveU+yfOEL15TgUBBj0D3tLIS5i1KGgoNFlQsdgU7
+         k51iV8cSG1l5A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yu Kuai <yukuai3@huawei.com>, Christoph Hellwig <hch@lst.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        dgilbert@interlog.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 08/12] scsi: sg: fix blktrace debugfs entries leakage
-Date:   Sun,  2 Jul 2023 15:41:13 -0400
-Message-Id: <20230702194118.1777794-8-sashal@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, ebiederm@xmission.com
+Subject: [PATCH AUTOSEL 6.1 09/12] posix-timers: Ensure timer ID search-loop limit is valid
+Date:   Sun,  2 Jul 2023 15:41:14 -0400
+Message-Id: <20230702194118.1777794-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702194118.1777794-1-sashal@kernel.org>
 References: <20230702194118.1777794-1-sashal@kernel.org>
@@ -51,8 +51,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.37
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,75 +61,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-[ Upstream commit db59133e927916d8a25ee1fd8264f2808040909d ]
+[ Upstream commit 8ce8849dd1e78dadcee0ec9acbd259d239b7069f ]
 
-sg_ioctl() support to enable blktrace, which will create debugfs entries
-"/sys/kernel/debug/block/sgx/", however, there is no guarantee that user
-will remove these entries through ioctl, and deleting sg device doesn't
-cleanup these blktrace entries.
+posix_timer_add() tries to allocate a posix timer ID by starting from the
+cached ID which was stored by the last successful allocation.
 
-This problem can be fixed by cleanup blktrace while releasing
-request_queue, however, it's not a good idea to do this special handling
-in common layer just for sg device.
+This is done in a loop searching the ID space for a free slot one by
+one. The loop has to terminate when the search wrapped around to the
+starting point.
 
-Fix this problem by shutdown bltkrace in sg_device_destroy(), where the
-device is deleted and all the users close the device, also grab a
-scsi_device reference from sg_add_device() to prevent scsi_device to be
-freed before sg_device_destroy();
+But that's racy vs. establishing the starting point. That is read out
+lockless, which leads to the following problem:
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-Link: https://lore.kernel.org/r/20230610022003.2557284-3-yukuai1@huaweicloud.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+CPU0	  	      	     	   CPU1
+posix_timer_add()
+  start = sig->posix_timer_id;
+  lock(hash_lock);
+  ...				   posix_timer_add()
+  if (++sig->posix_timer_id < 0)
+      			             start = sig->posix_timer_id;
+     sig->posix_timer_id = 0;
+
+So CPU1 can observe a negative start value, i.e. -1, and the loop break
+never happens because the condition can never be true:
+
+  if (sig->posix_timer_id == start)
+     break;
+
+While this is unlikely to ever turn into an endless loop as the ID space is
+huge (INT_MAX), the racy read of the start value caught the attention of
+KCSAN and Dmitry unearthed that incorrectness.
+
+Rewrite it so that all id operations are under the hash lock.
+
+Reported-by: syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com
+Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Link: https://lore.kernel.org/r/87bkhzdn6g.ffs@tglx
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/sg.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/linux/sched/signal.h |  2 +-
+ kernel/time/posix-timers.c   | 31 ++++++++++++++++++-------------
+ 2 files changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 12344be14232b..3d7c27f0bd688 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -1496,6 +1496,10 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
- 	int error;
- 	unsigned long iflags;
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index 20099268fa257..669e8cff40c74 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -135,7 +135,7 @@ struct signal_struct {
+ #ifdef CONFIG_POSIX_TIMERS
  
-+	error = scsi_device_get(scsidp);
-+	if (error)
-+		return error;
+ 	/* POSIX.1b Interval Timers */
+-	int			posix_timer_id;
++	unsigned int		next_posix_timer_id;
+ 	struct list_head	posix_timers;
+ 
+ 	/* ITIMER_REAL timer for the process */
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 808a247205a9a..4431aecb8b12c 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -140,25 +140,30 @@ static struct k_itimer *posix_timer_by_id(timer_t id)
+ static int posix_timer_add(struct k_itimer *timer)
+ {
+ 	struct signal_struct *sig = current->signal;
+-	int first_free_id = sig->posix_timer_id;
+ 	struct hlist_head *head;
+-	int ret = -ENOENT;
++	unsigned int cnt, id;
+ 
+-	do {
++	/*
++	 * FIXME: Replace this by a per signal struct xarray once there is
++	 * a plan to handle the resulting CRIU regression gracefully.
++	 */
++	for (cnt = 0; cnt <= INT_MAX; cnt++) {
+ 		spin_lock(&hash_lock);
+-		head = &posix_timers_hashtable[hash(sig, sig->posix_timer_id)];
+-		if (!__posix_timers_find(head, sig, sig->posix_timer_id)) {
++		id = sig->next_posix_timer_id;
 +
- 	error = -ENOMEM;
- 	cdev = cdev_alloc();
- 	if (!cdev) {
-@@ -1553,6 +1557,7 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
- out:
- 	if (cdev)
- 		cdev_del(cdev);
-+	scsi_device_put(scsidp);
- 	return error;
++		/* Write the next ID back. Clamp it to the positive space */
++		sig->next_posix_timer_id = (id + 1) & INT_MAX;
++
++		head = &posix_timers_hashtable[hash(sig, id)];
++		if (!__posix_timers_find(head, sig, id)) {
+ 			hlist_add_head_rcu(&timer->t_hash, head);
+-			ret = sig->posix_timer_id;
++			spin_unlock(&hash_lock);
++			return id;
+ 		}
+-		if (++sig->posix_timer_id < 0)
+-			sig->posix_timer_id = 0;
+-		if ((sig->posix_timer_id == first_free_id) && (ret == -ENOENT))
+-			/* Loop over all possible ids completed */
+-			ret = -EAGAIN;
+ 		spin_unlock(&hash_lock);
+-	} while (ret == -ENOENT);
+-	return ret;
++	}
++	/* POSIX return code when no timer ID could be allocated */
++	return -EAGAIN;
  }
  
-@@ -1560,6 +1565,7 @@ static void
- sg_device_destroy(struct kref *kref)
- {
- 	struct sg_device *sdp = container_of(kref, struct sg_device, d_ref);
-+	struct request_queue *q = sdp->device->request_queue;
- 	unsigned long flags;
- 
- 	/* CAUTION!  Note that the device can still be found via idr_find()
-@@ -1567,6 +1573,9 @@ sg_device_destroy(struct kref *kref)
- 	 * any other cleanup.
- 	 */
- 
-+	blk_trace_remove(q);
-+	scsi_device_put(sdp->device);
-+
- 	write_lock_irqsave(&sg_index_lock, flags);
- 	idr_remove(&sg_index_idr, sdp->index);
- 	write_unlock_irqrestore(&sg_index_lock, flags);
+ static inline void unlock_timer(struct k_itimer *timr, unsigned long flags)
 -- 
 2.39.2
 
