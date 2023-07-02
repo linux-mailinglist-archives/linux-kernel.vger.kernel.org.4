@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782D1744E54
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF92744E58
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 17:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjGBP15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 11:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S229837AbjGBPfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 11:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGBP14 (ORCPT
+        with ESMTP id S229523AbjGBPfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 11:27:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177D3E67;
-        Sun,  2 Jul 2023 08:27:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0D8360C1F;
-        Sun,  2 Jul 2023 15:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B63C433C7;
-        Sun,  2 Jul 2023 15:27:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688311673;
-        bh=VM5onG+VbkQgUqgIDtQ44kWkgFnGQ04Jet0hC14QD8I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rWi1bTNctFWA20DS1DJ5f4/THEP3AJjqO/48oOH+vCV2aRoqSFosiR7Vn7mWxjBj3
-         bn7F1FQaEZLkFLXpl4VEJTGZQrHxR7A5rkMtoYT7PANYUgXm4Qoh5nTTZUqrrl3VZ6
-         kfOwge0zwyeeX1JYQPZ2VeXMBOhuJ/QjxtfV1la1cAXgTW71dvhZeXrcAAw7w5eZKV
-         vi2o09ymPM6A5imjQCGP5MImkTVkIb6s8sABgrHUbA4QFC15dCiGPVrOVxOZBam4h8
-         V+QruXtS2lQlG2vtu40Tvcu35HDoDKbySvgQJp5JYE6E6wtH9WW5wHhPSOS4Ih/xlh
-         xWxTKUSnFsxyQ==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3909756b8b1so1885195b6e.1;
-        Sun, 02 Jul 2023 08:27:53 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzFXzx8+t483Qlxal4wbBtOk5mQu0QL2mEU/uoBt2uqVLssjyZm
-        EOpKGcx4BVB7z8qvxVCUVFny67nxohi5jU8wpGI=
-X-Google-Smtp-Source: ACHHUZ4/tr3MkXDmNRc5e6apwmXmV39o1g74FFALKNrkdJAhapiro33bZhsIuv3YBKbbFq0rvr512/Xt0fshwDfEsoc=
-X-Received: by 2002:a05:6808:3d0:b0:3a3:7ddd:1abc with SMTP id
- o16-20020a05680803d000b003a37ddd1abcmr5662529oie.36.1688311673183; Sun, 02
- Jul 2023 08:27:53 -0700 (PDT)
+        Sun, 2 Jul 2023 11:35:36 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F34AE69
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 08:35:35 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5728df0a7d9so44451047b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 08:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google; t=1688312134; x=1690904134;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8HK/wrSX5ldIZqomEmAxF+1M9WN0YB3jXi2+hEI4hrg=;
+        b=eiVt0+3ZYtOex8/Q262QUkD8yO54TEKnIlojZ3iJyFecJpxx/hHFMOO2+Z+5RVMam1
+         EbNVYeQRI1but0ux0fabyQ2maNA4NrkvvAs0Dq3rgyhlh3GQ12pvVjqtOh+poZrIwZNv
+         t2M69Ols7woVvNIRJfGxLxpaGA2pHl5JYAuvWnjjpbyN+xMwe5YnEKMv3f7kA8T7P8Hz
+         ihwfrCIoN3S6DSDtIaSeEOdhTZxEIvqtVzqx1J72Px6ZuKfcORIDu6RWjSDB8NHOPJ+x
+         9XTkp+li26FCS5ghT1LO6OBFyKhNItLIdyBiKOzuWKvlsxuzdT4Aw0WUFHo4+f8jkit+
+         8OcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688312134; x=1690904134;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8HK/wrSX5ldIZqomEmAxF+1M9WN0YB3jXi2+hEI4hrg=;
+        b=GsRYM1blbC7d0/MQ7+0lM/UOIa9w/qhY9DJ8Pdh30AAO/2fyPQjZqQnejXp5fF3oCq
+         38VwYfJGEyEmbRcY0c/85R7wPYAcJLTJLTnEyb/87ZCf6sMZ9znRngJl9Prw8aiiA11L
+         vl5+VHO4y0NkIT4QnX+7/CxcN6CXoCrfd+hjKhZKAMLDMG6z7pPj4syGAVSyR8XbhUq+
+         /Wdsk4GlBdW6HOEeqIHZQCOI6Dzc28wEsfmzLeK270tHBqOMCzFAhUk2+tCvjJ6VSO4J
+         15alqT5tKDZvweDeGKDi+XYPUAiam7WEXSrYWhHYgfYoUH+miUmVG0PF+xiqYcc/XBEE
+         bJRg==
+X-Gm-Message-State: ABy/qLYO5RYjgCYya0L99R/oD7aptoUonMijM2SngPv7u1uPq0K/3HJ6
+        ydYW7xNiH78mhfkK6VY//MO8M4hO7Igzw7hDLN+OAFvgvgY4CsAk
+X-Google-Smtp-Source: APBJJlF0b4377s+5bE0gPOT9vWcP0qN6qywjYOogZGjLDkgFAsoWN98kiIjISETvk66UZU5XS6FurxP1uZdzb1IyRhQ=
+X-Received: by 2002:a81:5302:0:b0:56d:31a1:bd9b with SMTP id
+ h2-20020a815302000000b0056d31a1bd9bmr7933811ywb.41.1688312134647; Sun, 02 Jul
+ 2023 08:35:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230629160351.2996541-1-masahiroy@kernel.org>
- <20230629160351.2996541-2-masahiroy@kernel.org> <CAJFTR8Txd-6-=5RSoHhgg1a6mr4rEAUv2Ta1F5OLsC3NC4U-Sw@mail.gmail.com>
-In-Reply-To: <CAJFTR8Txd-6-=5RSoHhgg1a6mr4rEAUv2Ta1F5OLsC3NC4U-Sw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 3 Jul 2023 00:27:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASSNW80XJZtX8H2ov8kfZ+ZwP1-ue4QHAKTJr8xRqswwg@mail.gmail.com>
-Message-ID: <CAK7LNASSNW80XJZtX8H2ov8kfZ+ZwP1-ue4QHAKTJr8xRqswwg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kconfig: menuconfig: remove jump_key::index
-To:     Jesse T <mr.bossman075@gmail.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230701094723.29379-1-johan+linaro@kernel.org>
+In-Reply-To: <20230701094723.29379-1-johan+linaro@kernel.org>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Sun, 2 Jul 2023 10:35:23 -0500
+Message-ID: <CAKXuJqjyjbRi2H=A_d=RgMOKSy=ZRqr0YVqsFObMYKtp66RyHA@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: codecs: wcd938x: fix soundwire initialisation race
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,134 +73,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 1:09=E2=80=AFPM Jesse T <mr.bossman075@gmail.com> wr=
-ote:
+On Sat, Jul 1, 2023 at 4:48=E2=80=AFAM Johan Hovold <johan+linaro@kernel.or=
+g> wrote:
 >
-> On Thu, Jun 29, 2023 at 12:03=E2=80=AFPM Masahiro Yamada <masahiroy@kerne=
-l.org> wrote:
-> >
-> > You do not need to remember the index of each jump key because you can
-> > count it up after a key is pressed.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/kconfig/expr.h  | 1 -
-> >  scripts/kconfig/mconf.c | 7 ++++---
-> >  scripts/kconfig/menu.c  | 8 --------
-> >  3 files changed, 4 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/scripts/kconfig/expr.h b/scripts/kconfig/expr.h
-> > index 9c9caca5bd5f..4a9a23b1b7e1 100644
-> > --- a/scripts/kconfig/expr.h
-> > +++ b/scripts/kconfig/expr.h
-> > @@ -275,7 +275,6 @@ struct jump_key {
-> >         struct list_head entries;
-> >         size_t offset;
-> >         struct menu *target;
-> > -       int index;
-> >  };
-> >
-> >  extern struct file *file_list;
-> > diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
-> > index 7adfd6537279..fcb91d69c774 100644
-> > --- a/scripts/kconfig/mconf.c
-> > +++ b/scripts/kconfig/mconf.c
-> > @@ -22,8 +22,6 @@
-> >  #include "lkc.h"
-> >  #include "lxdialog/dialog.h"
-> >
-> > -#define JUMP_NB                        9
-> > -
-> >  static const char mconf_readme[] =3D
-> >  "Overview\n"
-> >  "--------\n"
-> > @@ -399,6 +397,7 @@ static int handle_search_keys(int key, int start, i=
-nt end, void *_data)
-> >  {
-> >         struct search_data *data =3D _data;
-> >         struct jump_key *pos;
-> > +       int index =3D '1';
-> >
-> >         if (key < '1' || key > '9')
-> >                 return 0;
-> > @@ -408,11 +407,13 @@ static int handle_search_keys(int key, int start,=
- int end, void *_data)
-> >                         if (pos->offset >=3D end)
-> >                                 break;
-> >
-> > -                       if (key =3D=3D '1' + (pos->index % JUMP_NB)) {
-> > +                       if (key =3D=3D index) {
-> >                                 data->target =3D pos->target;
-> >                                 return 1;
-> >                         }
-> >                 }
-> > +
-> > +               index =3D next_key(index);
-> >         }
-> >
-> >         return 0;
-> > diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
-> > index 5578b8bc8a23..198eb1367e7a 100644
-> > --- a/scripts/kconfig/menu.c
-> > +++ b/scripts/kconfig/menu.c
-> > @@ -735,15 +735,7 @@ static void get_prompt_str(struct gstr *r, struct =
-property *prop,
-> >         }
-> >         if (head && location) {
-> >                 jump =3D xmalloc(sizeof(struct jump_key));
-> > -
-> >                 jump->target =3D location;
-> > -
-> > -               if (list_empty(head))
-> > -                       jump->index =3D 0;
-> > -               else
-> > -                       jump->index =3D list_entry(head->prev, struct j=
-ump_key,
-> > -                                                entries)->index + 1;
-> > -
-> >                 list_add_tail(&jump->entries, head);
-> >         }
-> >
-> > --
-> > 2.39.2
-> >
+> Make sure that the soundwire device used for register accesses has been
+> enumerated and initialised before trying to read the codec variant
+> during component probe.
 >
-> Looks good!
-> Reviewed-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> This specifically avoids interpreting (a masked and shifted) -EBUSY
+> errno as the variant:
 >
-> One slight off-topic question.
-> The names of the menu-based config programs have names similar to their
-> corresponding file gconfig ('gconf'), xconfig ('qconf'), menuconfig ('mco=
-nf'),
-> and nconfig ('nconf'). The only exceptions to this one-letter naming are =
-mconfig
-> is not memuconfig and qconfig isn't xconfig. Would it be possible to
-> add an alias
-> to fix this?
-
-I also wondered the same question in the past.
-
-I think xconfig was implemented differently at first,
-then later it was rewritten based on Qt.
-The former developers kept the target name 'xconfig'
-to avoid unneeded impacts, but the internal implementation
-changed a lot. So, it is a historical reason, I guess.
-
-I do not think it would be rewritten
-based on yet another library, but
-I just convinced myself "it's just a name" after all.
-
-
-
+>         wcd938x_codec audio-codec: ASoC: error at soc_component_read_no_l=
+ock on audio-codec for register: [0x000034b0] -16
 >
-> Side-side note config isn't in the docs.
+> in case the soundwire device has not yet been initialised, which in turn
+> prevents some headphone controls from being registered.
 >
-> Thanks,
-> Jesse Taube
+> Fixes: 8d78602aa87a ("ASoC: codecs: wcd938x: add basic driver")
+> Cc: stable@vger.kernel.org      # 5.14
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Reported-by: Steev Klimaszewski <steev@kali.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  sound/soc/codecs/wcd938x.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+> index e3ae4fb2c4db..4571588fad62 100644
+> --- a/sound/soc/codecs/wcd938x.c
+> +++ b/sound/soc/codecs/wcd938x.c
+> @@ -3080,9 +3080,18 @@ static int wcd938x_irq_init(struct wcd938x_priv *w=
+cd, struct device *dev)
+>  static int wcd938x_soc_codec_probe(struct snd_soc_component *component)
+>  {
+>         struct wcd938x_priv *wcd938x =3D snd_soc_component_get_drvdata(co=
+mponent);
+> +       struct sdw_slave *tx_sdw_dev =3D wcd938x->tx_sdw_dev;
+>         struct device *dev =3D component->dev;
+> +       unsigned long time_left;
+>         int ret, i;
+>
+> +       time_left =3D wait_for_completion_timeout(&tx_sdw_dev->initializa=
+tion_complete,
+> +                                               msecs_to_jiffies(2000));
+> +       if (!time_left) {
+> +               dev_err(dev, "soundwire device init timeout\n");
+> +               return -ETIMEDOUT;
+> +       }
+> +
+>         snd_soc_component_init_regmap(component, wcd938x->regmap);
+>
+>         ret =3D pm_runtime_resume_and_get(dev);
+> --
+> 2.39.3
+>
 
+Thank you!  Tested with this and the other patch applied on my X13s
+with a pair of Apple EarPods with 3.5mm Headphone Plug, audio is quite
+nice through them.
 
-
---=20
-Best Regards
-Masahiro Yamada
+Tested-by: Steev Klimaszewski <steev@kali.org>
