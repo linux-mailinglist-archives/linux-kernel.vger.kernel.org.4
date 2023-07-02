@@ -2,60 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F94A745294
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 23:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF529745298
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 23:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjGBV4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 17:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S229706AbjGBV6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 17:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGBV4Q (ORCPT
+        with ESMTP id S229504AbjGBV6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 17:56:16 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3677199;
-        Sun,  2 Jul 2023 14:56:14 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4QvNDD1j6bzyRn;
-        Mon,  3 Jul 2023 00:56:12 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1688334972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GIoZtByUNhlU10VrOWYtiq8GJHf45DIsQmvwz8ddK94=;
-        b=dGH2ktLIsDztIQF1Q+x4oo+yUSjrMSFHk1yLy5vwYBMWvWGDGEPGBK7JB2idGNB8rHqBA2
-        b31u9xfOTPcqxHz7SKBET00Jpa+ZEsIIzMF9Ht/TrRAHjUcrBJcUTROa14dCuY7Lwc3ywH
-        tTrjZiH6k/kP6s1nqEtLVyCkd+P7gyc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1688334972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GIoZtByUNhlU10VrOWYtiq8GJHf45DIsQmvwz8ddK94=;
-        b=K66opfKBs4D+0rW4grq3Al3AszDlrOlqH1DqJMsUQ5LmNgt/gk8kJjQpenJR18jwLMZlIz
-        uK85aA1iLuMzM+sCqbdw0YRnMtcFCjrz9f2n61FdxUK9na++4E46vcp7rwrj5kMl7L0cv5
-        1gJVTIaXO+cxDaEyi06RD2M/1U32trs=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1688334972; a=rsa-sha256; cv=none;
-        b=JOAtr1NB0Mv5AvWexIDaeqBCSTZN+K0CxoCC372fmNpOlB6XXDrC7XVct+iPa/A3TLt8x1
-        m04yaxmcrkYiNHhTiRfEyr4J0kal7mzrkZFgX070mka5rpUAtjCkEuV42Y//O0SF2+CSxz
-        /dufW6Ofzi9gLZuss+9qUE7KJBJKp18=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 74C92634C93;
-        Mon,  3 Jul 2023 00:56:11 +0300 (EEST)
-Date:   Sun, 2 Jul 2023 21:56:11 +0000
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        Sun, 2 Jul 2023 17:58:48 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8A1A0;
+        Sun,  2 Jul 2023 14:58:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-160-45-219.reb.o2.cz [85.160.45.219])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C1A1D6DE;
+        Sun,  2 Jul 2023 23:58:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1688335081;
+        bh=/F3MR+siIPaM7Qz0PatyRFuaTx7oNSi+Uycs119vjuw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rVi+ErgbvKTganQ2G4U4xJbq6FNeBJYpQWIwPktCkC2gIj1eRFl2zfygGCWjW0mnR
+         Yx38Vw++3poVeXy4Moff5JCHJsrromRW6YI6lEVf88IM9pZ/wd6R3+KXICMnUUvHvt
+         gzdVN1zV2gWbtpZaWxV4ipCAERU4EJOYk/iyXHh0=
+Date:   Mon, 3 Jul 2023 00:58:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
 Cc:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
         dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
@@ -66,34 +38,29 @@ Cc:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
         bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
 Subject: Re: [PATCH v5 04/11] media: bcm2835-unicam: Add support for
  CCP2/CSI2 camera interface
-Message-ID: <ZKHye/4kARSHqsIJ@valkosipuli.retiisi.eu>
+Message-ID: <20230702215845.GD9285@pendragon.ideasonboard.com>
 References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
  <20220208155027.891055-5-jeanmichel.hautbois@ideasonboard.com>
  <YhihbncnSlmvrn/D@valkosipuli.retiisi.eu>
  <20230702152356.GA16995@pendragon.ideasonboard.com>
  <ZKG/bej80eL13Qqp@valkosipuli.retiisi.eu>
  <20230702214505.GB16995@pendragon.ideasonboard.com>
- <20230702214711.GC16995@pendragon.ideasonboard.com>
+ <ZKHx8LZW6PUtu1sd@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230702214711.GC16995@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZKHx8LZW6PUtu1sd@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
-
-On Mon, Jul 03, 2023 at 12:47:11AM +0300, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> On Mon, Jul 03, 2023 at 12:45:07AM +0300, Laurent Pinchart wrote:
+On Sun, Jul 02, 2023 at 09:53:52PM +0000, Sakari Ailus wrote:
+> On Mon, Jul 03, 2023 at 12:45:05AM +0300, Laurent Pinchart wrote:
 > > On Sun, Jul 02, 2023 at 06:18:21PM +0000, Sakari Ailus wrote:
 > > > On Sun, Jul 02, 2023 at 06:23:56PM +0300, Laurent Pinchart wrote:
 > > > > On Fri, Feb 25, 2022 at 11:29:18AM +0200, Sakari Ailus wrote:
@@ -251,15 +218,45 @@ On Mon, Jul 03, 2023 at 12:47:11AM +0300, Laurent Pinchart wrote:
 > > > there's no need to validate that part of the DT either.
 > > 
 > > OK, I'll drop that.
+> > 
+> > > > > > +			goto cleanup_exit;
+> > > > > > +		}
+> > > > > > +
+> > > > > > +		unicam->max_data_lanes = 1;
+> > > > > > +		unicam->active_data_lanes = 1;
+> > > > > > +		unicam->bus_flags = ep.bus.mipi_csi1.strobe;
+> > > > > > +		break;
+> > > > > > +
+> > > > > > +	default:
+> > > > > > +		/* Unsupported bus type */
+> > > > > > +		dev_err(unicam->dev, "unsupported bus type %u\n",
+> > > > > > +			ep.bus_type);
+> > > > > > +		goto cleanup_exit;
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	dev_dbg(unicam->dev, "%s bus, %u data lanes, flags=0x%08x\n",
+> > > > > > +		unicam->bus_type == V4L2_MBUS_CSI2_DPHY ? "CSI-2" : "CCP2",
+> > > > > > +		unicam->active_data_lanes, unicam->bus_flags);
+> > > > > 
+> > > > > V4l2-fwnode already prints this information I believe.
+> > > > 
+> > > > True. It does so with pr_debug() though, it would be nice to use
+> > > > dev_dbg(). That's a candidate for a separate fix of course.
+> > > 
+> > > The reason for using pr_debug() is that the device isn't used by the fwnode
+> > > framework. Would you add that just for debug prints? Note that the device
+> > > nodes themselves are already being printed so it adds little to the
+> > > usefulness of the messages.
+> > 
+> > I'll send patches, we can discuss their usefulness there.
 > 
-> Actually, I'm wondering if it would make sense to tell the parsing
-> functions whether lane reordering is supported or not. The checks could
-> then be moved to the framework. What do you think ?
+> I presume this would change to a few APIs, including the users?
+> 
+> In order to spare time, how about discussing it first? :-)
 
-I'm not sure how useful this check would be in the first place: if you have
-hardware that can reorder the lanes, the framework doesn't know what to
-check there (if anything) and otherwise there's little point in the
-entire check.
+I had already written the patches, so I can as well post them :-)
 
 -- 
-Sakari Ailus
+Regards,
+
+Laurent Pinchart
