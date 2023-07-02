@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE56E745127
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487EA745131
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jul 2023 21:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbjGBTon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 15:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        id S232571AbjGBTpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 15:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjGBTnq (ORCPT
+        with ESMTP id S232281AbjGBTnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 15:43:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B4C2699;
-        Sun,  2 Jul 2023 12:42:13 -0700 (PDT)
+        Sun, 2 Jul 2023 15:43:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9B32D78;
+        Sun,  2 Jul 2023 12:42:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4145A60CFA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86B8260DBA;
+        Sun,  2 Jul 2023 19:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC2AC433B8;
         Sun,  2 Jul 2023 19:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB55C433CA;
-        Sun,  2 Jul 2023 19:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326904;
-        bh=Z4LG20jeT0VQU2aBk4OYDZKMS7Lybxxg5skDHPSn63k=;
+        s=k20201202; t=1688326906;
+        bh=yVHyuAQwbddOgOeH+c8P7Dgkm6CzNqDGXYcb2WkFfUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CWbq/lSCsg0lRNZY8hbJUrcwdoNf9klX0YSYgakOcd0E48iB0/yeVXLNZE45JGgIG
-         97ylG8J6noy/RvFHd0ZgYjpuC37cVZdBNJ7fsg8eqWzQvFSxrd+tnnX5c+uSiUQeDj
-         y33MgwXizEm/g98MwNTMEJm13CX3QUnAYm+guEEv9Y/fCddlS9myN0InVaHxHvIyQB
-         fyiLZxHRPmQGdJdRNk1yYCABvyUeT6/De81uVd5VmWOm2hyCjLzuC+E+dUQlvFxmzG
-         xsjXO3xwiKPexlGImPehdtH2sOeBCN8x1nrN6XuY8mVrwvMh3wTDAhVXgzyqMQtQjS
-         /9su6oQm7sSTw==
+        b=j97GLtWr2YBSgqFcAcD2Q1Mtvz+v/1hUHxsKrEXNQwEtkIqXlR2AMGDvTpVRMMVn5
+         87MRgkYRo5o9V/Bb73ry1qYu4dDCgxwpDu3XkB0g2Y6L63W7f3Onv1/GYq4BnIZups
+         w0PR1a+6B/akMQssxze0zD0L21h6ac7j7lPeUzSaAnG63j3CJQSrMIsQhCDXe2lp87
+         kuRTs9snssyqtazWXPC6wtzpLn4lUk9ChliXDwRKLIva8sPtPQfg7f8l3N7EhsbiWN
+         7Bj4Dg/maryR4JfZ9LalgFkXQnFEX8SUzvF+bJkcZgRrsR9KlzSoeONqHZ2zS542Cl
+         rnzBtPFtdijoQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhong Jinghua <zhongjinghua@huawei.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>, josef@toxicpanda.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org
-Subject: [PATCH AUTOSEL 5.15 03/10] nbd: Add the maximum limit of allocated index in nbd_dev_add
-Date:   Sun,  2 Jul 2023 15:41:32 -0400
-Message-Id: <20230702194139.1778398-3-sashal@kernel.org>
+Cc:     Yu Kuai <yukuai3@huawei.com>, Peter Neuwirth <reddunur@online.de>,
+        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-raid@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 04/10] md: fix data corruption for raid456 when reshape restart while grow up
+Date:   Sun,  2 Jul 2023 15:41:33 -0400
+Message-Id: <20230702194139.1778398-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702194139.1778398-1-sashal@kernel.org>
 References: <20230702194139.1778398-1-sashal@kernel.org>
@@ -50,8 +49,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.15.119
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,39 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhong Jinghua <zhongjinghua@huawei.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-[ Upstream commit f12bc113ce904777fd6ca003b473b427782b3dde ]
+[ Upstream commit 873f50ece41aad5c4f788a340960c53774b5526e ]
 
-If the index allocated by idr_alloc greater than MINORMASK >> part_shift,
-the device number will overflow, resulting in failure to create a block
-device.
+Currently, if reshape is interrupted, echo "reshape" to sync_action will
+restart reshape from scratch, for example:
 
-Fix it by imiting the size of the max allocation.
+echo frozen > sync_action
+echo reshape > sync_action
 
-Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20230605122159.2134384-1-zhongjinghua@huaweicloud.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+This will corrupt data before reshape_position if the array is growing,
+fix the problem by continue reshape from reshape_position.
+
+Reported-by: Peter Neuwirth <reddunur@online.de>
+Link: https://lore.kernel.org/linux-raid/e2f96772-bfbc-f43b-6da1-f520e5164536@online.de/
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Signed-off-by: Song Liu <song@kernel.org>
+Link: https://lore.kernel.org/r/20230512015610.821290-3-yukuai1@huaweicloud.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/md/md.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index e563aa407e888..d379a047d4273 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1715,7 +1715,8 @@ static struct nbd_device *nbd_dev_add(int index, unsigned int refs)
- 		if (err == -ENOSPC)
- 			err = -EEXIST;
- 	} else {
--		err = idr_alloc(&nbd_index_idr, nbd, 0, 0, GFP_KERNEL);
-+		err = idr_alloc(&nbd_index_idr, nbd, 0,
-+				(MINORMASK >> part_shift) + 1, GFP_KERNEL);
- 		if (err >= 0)
- 			index = err;
- 	}
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index bd0c9dfac9815..8e5a566991fe7 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -4869,11 +4869,21 @@ action_store(struct mddev *mddev, const char *page, size_t len)
+ 			return -EINVAL;
+ 		err = mddev_lock(mddev);
+ 		if (!err) {
+-			if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
++			if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
+ 				err =  -EBUSY;
+-			else {
++			} else if (mddev->reshape_position == MaxSector ||
++				   mddev->pers->check_reshape == NULL ||
++				   mddev->pers->check_reshape(mddev)) {
+ 				clear_bit(MD_RECOVERY_FROZEN, &mddev->recovery);
+ 				err = mddev->pers->start_reshape(mddev);
++			} else {
++				/*
++				 * If reshape is still in progress, and
++				 * md_check_recovery() can continue to reshape,
++				 * don't restart reshape because data can be
++				 * corrupted for raid456.
++				 */
++				clear_bit(MD_RECOVERY_FROZEN, &mddev->recovery);
+ 			}
+ 			mddev_unlock(mddev);
+ 		}
 -- 
 2.39.2
 
