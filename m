@@ -2,139 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BC5746152
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A408746154
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjGCRVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S230457AbjGCRWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjGCRU6 (ORCPT
+        with ESMTP id S229709AbjGCRWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:20:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B941A2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:20:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49CA660C5D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 17:20:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71A6C433C7;
-        Mon,  3 Jul 2023 17:20:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688404856;
-        bh=y9wEsiZXyMPaTL1dz0sjw4tTNmtFP1iOCMu/WZMYAGg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F5kWLy04Vh29pBF15GMTK7VVXipussQgzPetfQjHeO20xmumzR4NpUqShnMI933JV
-         XKBQC7oZK0AqKopK6UkhPJp5hpWQMTWlAevajrAL7RkbYLfVSwTjR1i1WBgxX5r9lI
-         ryIrrZz0TFpyN7O/tQpIFhwvZ6efHdsxaWD73fGu1Gawr2PUL/SqtuJMhoo6lKIVJG
-         gNSh2equqVnL7yINCYDD5HdP+KQhWUXdmSJI4iyrfeHbjMkyfKNetwF+EYOn49Ivqp
-         qprxxVTyG1inisDIKQkc/X1MTtAJctew+DyJxLcFWrIVU+DFfs364JbroMwVdfCD0q
-         mAliLxNMjk2dg==
-Date:   Mon, 3 Jul 2023 18:20:52 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Marc Zyngier <maz@kernel.org>, lkp <oliver.sang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com
-Subject: Re: [mm] 408579cd62: WARNING:suspicious_RCU_usage
-Message-ID: <20230703-regalia-preachy-136bf396e320@spud>
-References: <ZKIsoMOT71uwCIZX@xsang-OptiPlex-9020>
- <CAHk-=wg1_8L+e09_RuX=Z_49oLn8=w82YzCk+kybS-ymSd_zbA@mail.gmail.com>
- <20230703-dupe-frying-79ae2ccf94eb@spud>
- <CAHk-=wg+jqA6nt36TxAfoqWskRAzhVfzBejcK6PNYXC+QcwyiA@mail.gmail.com>
+        Mon, 3 Jul 2023 13:22:30 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82722E5D;
+        Mon,  3 Jul 2023 10:22:29 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-34570ed4cb8so19598995ab.1;
+        Mon, 03 Jul 2023 10:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688404949; x=1690996949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+ZjGjSll49/jZeLYkpeh0rYqtB4VgUifEJvJI0PHuY=;
+        b=sG82R9IIfRC+r7VHJWyoYwzrsjdOAeHozBdMICRaGv4fPNi1oXuSy18AOsm2hqYjpK
+         jg1bnoDRgNSXA1hszhHWemoLtyfE4QZU3N688i5ClRS6es18D6LKso844bUiPPs9662Q
+         /21eCy3gHHQAM4KbaeyNrE+aZPxFLO9wC6MiE3TrXtgOP3Evlu1TxzkYAIjO6gSrb2PX
+         P0vZyP00cXJutjWBgyFY0d05IoTWpgU3QGGGGLRlLNtNAO19UxTwX7hZxCy7pWa2cZRu
+         EgWxXgO/8INyP1NHXgwcIXGrAFauDELaaOa3W7zSvYTZTBsmOJvd515kSMCPEzd0Cwi3
+         knQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688404949; x=1690996949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n+ZjGjSll49/jZeLYkpeh0rYqtB4VgUifEJvJI0PHuY=;
+        b=Ap6dovoUOx7d7EqCw1BgfY6SgOQziUmljp0QRsy5JpkOwg5uzQbr8ntUmb0V5EQOua
+         RysO4W0/dmVSxVK6cwl2DIsfErfrc0pRIgEPTYHucDh1duLUoRZIIaRSZYUASJYMo6Sf
+         dI4IiKq/H6oLCz8F2xQypsdt6xuxVkTPj1UKJZ/ZTE7DChyRsIaIRjOYE9RlfJ/Gn8tr
+         EizV7fs2COT+lNCNRSqunGJanulEWe8vcv4PWWTY7FTw0BdnPvs56XIAVPXnzN2IxLVF
+         iaHqjW+QqmX7k/CqWa+4Nbd/rJaL83F8XGtxyTGQ614S0vfhEowFodxRqeYb+nCeBVdZ
+         CwzA==
+X-Gm-Message-State: AC+VfDytqQxd7wtV95LNq17/+HyKN/cXzhv4L/x+5uTVtQyosZ34uLSO
+        /yzzlkNbUf0lhQ9gXIqFnzI=
+X-Google-Smtp-Source: ACHHUZ781J9cXqGVW9tjuylQx29kjih2s55K6UlGRS5TLBvfDm9HBUYQF3weel+frtIdPTko2fo0Aw==
+X-Received: by 2002:a05:6602:5a:b0:783:72b9:ed67 with SMTP id z26-20020a056602005a00b0078372b9ed67mr11193837ioz.10.1688404948785;
+        Mon, 03 Jul 2023 10:22:28 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id ed22-20020a056638291600b0042b3e2e5ca1sm1033860jab.122.2023.07.03.10.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 10:22:28 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Kees Cook <keescook@chromium.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH 0/2] kyber, blk-wbt: Replace strlcpy with strscpy
+Date:   Mon,  3 Jul 2023 17:21:57 +0000
+Message-ID: <20230703172159.3668349-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hjaB+7n9azmsAWzn"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg+jqA6nt36TxAfoqWskRAzhVfzBejcK6PNYXC+QcwyiA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series replaces strlcpy in the kyber and blk-wbt tracing subsystems wherever trivial
+replacement is possible, i.e return value from strlcpy is unused. The patches
+themselves are independent of each other and are applied to different subsystems. They are
+included as a series for ease of review.
 
---hjaB+7n9azmsAWzn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Note to reviewers: MAINTAINERS file does not specify clear ownership of
+these files so I have addressed these to the latest committer for these
+files: Jens Axboe <axboe@kernel.dk>.
 
-On Mon, Jul 03, 2023 at 10:07:28AM -0700, Linus Torvalds wrote:
-> On Mon, 3 Jul 2023 at 10:00, Conor Dooley <conor@kernel.org> wrote:
-> >
-> > I'm not entirely sure if it is related, as stuff in the guts of mm like
-> > this is beyond me, but I've been seeing similar warnings on RISC-V.
->=20
-> No, that RISC-V warning is also about bad RCU usage, but that's a
-> different thing.
->=20
-> >         RCU used illegally from offline CPU!
-> >         rcu_scheduler_active =3D 1, debug_locks =3D 1
-> >         1 lock held by swapper/1/0:
-> >          #0: ffffffff8169ceb0 (rcu_read_lock){....}-{1:2}, at: rcu_lock=
-_acquire+0x0/0x32
-> >
-> >         stack backtrace:
-> >         CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-10173-ga901a356=
-8fd2 #1
-> >         Hardware name: riscv-virtio,qemu (DT)
-> >         Call Trace:
-> >         [<ffffffff80006a20>] show_stack+0x2c/0x38
-> >         [<ffffffff80af3ee0>] dump_stack_lvl+0x5e/0x80
-> >         [<ffffffff80af3f16>] dump_stack+0x14/0x1c
-> >         [<ffffffff80083ff0>] lockdep_rcu_suspicious+0x19e/0x232
-> >         [<ffffffff80ad4802>] mtree_load+0x18a/0x3b6
-> >         [<ffffffff80091632>] __irq_get_desc_lock+0x2c/0x82
-> >         [<ffffffff80094722>] enable_percpu_irq+0x36/0x9e
-> >         [<ffffffff800087d4>] riscv_ipi_enable+0x32/0x4e
-> >         [<ffffffff80008692>] smp_callin+0x24/0x66
->=20
-> This is also triggering on the maple tree sanity checks, but it' sa
-> different maple tree, and a different code sequence.
->=20
-> And a different case of suspicious RCU usage - not a lack of locking,
-> but simply using RCU before marking the CPU online.
+Azeem Shaikh (2):
+  kyber: Replace strlcpy with strscpy
+  blk-wbt: Replace strlcpy with strscpy
 
-Ah, I probably should've known from the
-         RCU used illegally from offline CPU!
-that it was different.
+ include/trace/events/kyber.h | 8 ++++----
+ include/trace/events/wbt.h   | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-> I suspect the riscv_ipi_enable() in the RISC-V version of smp_callin()
-> needs to be moved down to below the
->=20
->         set_cpu_online(curr_cpuid, 1);
->=20
-> or was there some reason why it needed to be done quite _that_ early
-> in commit 832f15f42646 ("RISC-V: Treat IPIs as normal Linux IRQs")?
->=20
-> Added guilty parties to the cc.
+-- 
+2.41.0.255.g8b1d071c50-goog
 
-Taking the rationale & potential problems out of the equation, that
-code movement does suppress the complaints from rcu/maple tree,
-thanks.
-
-Cheers,
-Conor.
-
---hjaB+7n9azmsAWzn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKMDdAAKCRB4tDGHoIJi
-0vOUAQDBe61dBL/6jJbuB/pVGpJGxz/CKpKb4hJOugvgpYOqqQD+KfqWfJ+Mmzq7
-JApu5eNi1KLT0/lMstGHqiDDKL5CsQo=
-=eiiF
------END PGP SIGNATURE-----
-
---hjaB+7n9azmsAWzn--
