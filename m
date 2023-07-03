@@ -2,155 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8411745D96
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623E3745DA4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbjGCNjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S231602AbjGCNou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGCNjJ (ORCPT
+        with ESMTP id S229608AbjGCNor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:39:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6DAFF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:39:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29FE660F3C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 13:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89553C433C8;
-        Mon,  3 Jul 2023 13:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688391547;
-        bh=5BHJbjZKEETjKoB5GMWkncTJkxJQC1SM5qkWcI1ACqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1lzI9OYKSgXX0ZMNbeTJuWljSDayrIsaavvPs86Pq2IQkzIDcyeL8+m5dum8tBg8M
-         4JiyI6DIFUThem1z1+Q1twtZZqJ0zPT7v3C92/STXefGAYTVeBHSKH1AoUaOkIuPOb
-         fyZDruYRhPRX0JJ7oWIyJWnSKVEGzXzymgf5zPeI=
-Date:   Mon, 3 Jul 2023 15:38:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rodolfo Giometti <giometti@enneenne.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] include/uapi pps.h: drop not needed PPS_MAX_SOURCES
- define
-Message-ID: <2023070327-gangway-comic-6e15@gregkh>
-References: <20230630071826.105501-1-giometti@enneenne.com>
- <20230630071826.105501-2-giometti@enneenne.com>
- <2023063017-traverse-accustom-97f4@gregkh>
- <56e461b4-2cd8-ec89-86b2-68544826cf73@enneenne.com>
- <2023063015-immerse-broadside-3dab@gregkh>
- <ca137a28-28a3-f563-52e9-4ee0ef1daa9f@enneenne.com>
+        Mon, 3 Jul 2023 09:44:47 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAD5FF;
+        Mon,  3 Jul 2023 06:44:46 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-767582c6c72so184847785a.2;
+        Mon, 03 Jul 2023 06:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688391886; x=1690983886;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G7iro2GHx1a3c60XNEoVW/HAjkmFVpakGmamlmOOxIc=;
+        b=cXdeXZ6GqAxqyH0uJjEn2RAg03TvsArQ75VrnIwnE7rIMi9uv6LBZ3RTnnxHADB4jj
+         ovtvfWGwCKJGJEPojnhkw/tkjCaRp8IYZlHIysSFYjhbMsqOkyPNu2jFOx66yYityes8
+         2mIIkdhokkQspRkk/7I7oDxl0/EZ5HQCG75Ve5Gdfhf5FuKCG0LuyUKCV4zM8f0Fwboz
+         g5C2pz5/PsEtDKWBy6mS5jxFDGv8cwGGS959St0Z7WqVoUjQRzErOUmE1XB5p19hMn6l
+         +2uocAspOrIKJz09Q/W6pl7blgTav0mYcPcKIn0L81EpzZhHnyrStinEYGg31KYSWxWa
+         ZMdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688391886; x=1690983886;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G7iro2GHx1a3c60XNEoVW/HAjkmFVpakGmamlmOOxIc=;
+        b=gzfcQzkhPfA8vVzccBZ0zikXlVZRB05745KdK85o/XsvcFublGOOLKsLY4SkmyNBQ+
+         Xh3ulIdP5ob3X4oTOi4/RVfrK9JFqoX2RJ8Yr4Svz7uL5jxKql8QVuujjF3Rx/Ez+a2b
+         FHy4y+nWNYI4VPw9IMhNU8bm75pkaN1zOnLAN6jyyCGaXlg1M0zpTTa7P4Ttqrycw64O
+         DyqiUNZ9WRc2EmdnwhLFif0WnOM3cdnHf4lGJ+eDSbSKK+yQdObvnhUxVyBLLB18T09C
+         PKOI+k9COVWf9PoFz6ElWIRC1MknHGqeGrRpx+N9yFF5dYk4e/tKRIskQwl4PRMQAoqT
+         J15w==
+X-Gm-Message-State: ABy/qLZUc1KiQz6NF9liHXeEbHHTY2GoLSfEU7sPZ6nng95OCLzlXO3e
+        Oc2sP7cOzR4OodM6lR93jHPcPexxD784jBzx7yfaFvbQYh628g==
+X-Google-Smtp-Source: APBJJlENU0m+bm59PWE3lnOd/3BBVpgliodVhUrbnQ6Oe9WB+uCq0MJUIUqcUYZRvuBI9U8as07cVF/lcyc4f3a8sW4=
+X-Received: by 2002:ad4:444c:0:b0:626:3a98:95a with SMTP id
+ l12-20020ad4444c000000b006263a98095amr11116093qvt.22.1688391885920; Mon, 03
+ Jul 2023 06:44:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca137a28-28a3-f563-52e9-4ee0ef1daa9f@enneenne.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230703092336.268371-1-zegao@tencent.com>
+In-Reply-To: <20230703092336.268371-1-zegao@tencent.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Mon, 3 Jul 2023 21:44:10 +0800
+Message-ID: <CALOAHbDrHtBe5LDPUqT2SPtK9P3+a+mDxLYOwQc2ea8T605=2A@mail.gmail.com>
+Subject: Re: [PATCH v2] fprobe: add unlock to match a succeeded ftrace_test_recursion_trylock
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Ze Gao <zegao@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 03:29:50PM +0200, Rodolfo Giometti wrote:
-> On 30/06/23 14:53, Greg Kroah-Hartman wrote:
-> > On Fri, Jun 30, 2023 at 09:50:33AM +0200, Rodolfo Giometti wrote:
-> > > On 30/06/23 09:31, Greg Kroah-Hartman wrote:
-> > > > On Fri, Jun 30, 2023 at 09:18:26AM +0200, Rodolfo Giometti wrote:
-> > > > > Userspace PPS clients should not known about how many PPS sources can
-> > > > > be defined within the system (nor the rfc2783 say so), so we can
-> > > > > safely drop this define since is not used anymore in the kernel too.
-> > > > > 
-> > > > > Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
-> > > > > ---
-> > > > >    drivers/pps/pps.c        | 6 +++---
-> > > > >    include/uapi/linux/pps.h | 1 -
-> > > > >    2 files changed, 3 insertions(+), 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
-> > > > > index 5d19baae6a38..1a6131608036 100644
-> > > > > --- a/drivers/pps/pps.c
-> > > > > +++ b/drivers/pps/pps.c
-> > > > > @@ -354,7 +354,7 @@ int pps_register_cdev(struct pps_device *pps)
-> > > > >    	 * Get new ID for the new PPS source.  After idr_alloc() calling
-> > > > >    	 * the new source will be freely available into the kernel.
-> > > > >    	 */
-> > > > > -	err = idr_alloc(&pps_idr, pps, 0, PPS_MAX_SOURCES, GFP_KERNEL);
-> > > > > +	err = idr_alloc(&pps_idr, pps, 0, MINORMASK, GFP_KERNEL);
-> > > > >    	if (err < 0) {
-> > > > >    		if (err == -ENOSPC) {
-> > > > >    			pr_err("%s: too many PPS sources in the system\n",
-> > > > > @@ -449,7 +449,7 @@ EXPORT_SYMBOL(pps_lookup_dev);
-> > > > >    static void __exit pps_exit(void)
-> > > > >    {
-> > > > >    	class_destroy(pps_class);
-> > > > > -	unregister_chrdev_region(pps_devt, PPS_MAX_SOURCES);
-> > > > > +	unregister_chrdev_region(pps_devt, MINORMASK);
-> > > > >    }
-> > > > >    static int __init pps_init(void)
-> > > > > @@ -463,7 +463,7 @@ static int __init pps_init(void)
-> > > > >    	}
-> > > > >    	pps_class->dev_groups = pps_groups;
-> > > > > -	err = alloc_chrdev_region(&pps_devt, 0, PPS_MAX_SOURCES, "pps");
-> > > > > +	err = alloc_chrdev_region(&pps_devt, 0, MINORMASK, "pps");
-> > > > >    	if (err < 0) {
-> > > > >    		pr_err("failed to allocate char device region\n");
-> > > > >    		goto remove_class;
-> > > > > diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
-> > > > > index 90f2e86020ba..8a4096f18af1 100644
-> > > > > --- a/include/uapi/linux/pps.h
-> > > > > +++ b/include/uapi/linux/pps.h
-> > > > > @@ -26,7 +26,6 @@
-> > > > >    #include <linux/types.h>
-> > > > >    #define PPS_VERSION		"5.3.6"
-> > > > > -#define PPS_MAX_SOURCES		MINORMASK
-> > > > 
-> > > > Why change this in patch 1, and then delete this here?
-> > > > 
-> > > > That makes no sense.
-> > > 
-> > > I did it in two steps to be clear that the first step is about a better
-> > > redefinition of the PPS_MAX_SOURCES define, while the second step is about
-> > > the fact it's now that define is useless.
-> > 
-> > Better to just convert everything in patch one, and then in patch 2
-> > delete the .h #define.  That way, when userspace breaks, you can revert
-> > just the last patch :)
-> 
-> I'm puzzled since I did as you say... patch 1/2 increases PPS_MAX_SOURCES
-> value while patch 2/2 drops PPS_MAX_SOURCES define.
+On Mon, Jul 3, 2023 at 5:23=E2=80=AFPM Ze Gao <zegao2021@gmail.com> wrote:
+>
+> Unlock ftrace recursion lock when fprobe_kprobe_handler() is failed
+> because of some running kprobe.
+>
+> Fixes: 3cc4e2c5fbae ("fprobe: make fprobe_kprobe_handler recursion free")
+> Reported-by: Yafang <laoar.shao@gmail.com>
+> Closes: https://lore.kernel.org/linux-trace-kernel/CALOAHbC6UpfFOOibdDiC7=
+xFc5YFUgZnk3MZ=3D3Ny6we=3DAcrNbew@mail.gmail.com/
+> Signed-off-by: Ze Gao <zegao@tencent.com>
 
-Ah, I thought patch 1/2 renamed it.
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
 
-But why increase it if you are removing it?
+> ---
+>  kernel/trace/fprobe.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 18d36842faf5..93b3e361bb97 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -102,12 +102,14 @@ static void fprobe_kprobe_handler(unsigned long ip,=
+ unsigned long parent_ip,
+>
+>         if (unlikely(kprobe_running())) {
+>                 fp->nmissed++;
+> -               return;
+> +               goto recursion_unlock;
+>         }
+>
+>         kprobe_busy_begin();
+>         __fprobe_handler(ip, parent_ip, ops, fregs);
+>         kprobe_busy_end();
+> +
+> +recursion_unlock:
+>         ftrace_test_recursion_unlock(bit);
+>  }
+>
+> --
+> 2.40.1
+>
 
-> > > > And if this is exported to userspace, removing it should break things,
-> > > > right?  If not, why was it there in the first place?
-> > > 
-> > > In reality such define is not stated within the PPS RFC2783, so userspace
-> > > programs whose relies on such define are broken.
-> > 
-> > RFC's do not document Linux kernel apis.
-> 
-> It's true, but well written PPS clients should relay only on PPS API which
-> in turn doesn't states that define. :P
 
-Are you sure?  Have you audited the clients?  if so, please document
-that in the changelog text.
-
-> > So if any userspace code breaks, you have to put this back, sorry.
-> 
-> If you think that patch 2 is not good, no problem, just drop it, but please
-> just consider applying patch 1, since increasing PPS_MAX_SOURCES value is
-> good.
-
-You can't change a uapi value either without breaking things :(
-
-thanks,
-
-greg k-h
+--=20
+Regards
+Yafang
