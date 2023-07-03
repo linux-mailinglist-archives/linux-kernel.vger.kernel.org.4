@@ -2,37 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1DB7454E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CF6745519
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjGCFet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 01:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S230162AbjGCFxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 01:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjGCFef (ORCPT
+        with ESMTP id S230025AbjGCFwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 01:34:35 -0400
+        Mon, 3 Jul 2023 01:52:50 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F8A180;
-        Sun,  2 Jul 2023 22:34:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9DBB2
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 22:52:49 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QvZP50w9Cz4wxq;
-        Mon,  3 Jul 2023 15:34:33 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QvZp748N2z4wy0;
+        Mon,  3 Jul 2023 15:52:47 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
 To:     Nicholas Piggin <npiggin@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Colin Ian King <colin.i.king@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230608095849.1147969-1-colin.i.king@gmail.com>
-References: <20230608095849.1147969-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH][next] powerpc/powernv/sriov: perform null check on iov before dereferencing iov
-Message-Id: <168836201891.50010.6948846603017935484.b4-ty@ellerman.id.au>
-Date:   Mon, 03 Jul 2023 15:26:58 +1000
+        Rob Herring <robh@kernel.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230609183244.1767325-1-robh@kernel.org>
+References: <20230609183244.1767325-1-robh@kernel.org>
+Subject: Re: [PATCH] powerpc: fsl_rio: Use of_range_to_resource() for "ranges" parsing
+Message-Id: <168836201902.50010.6190167965224825737.b4-ty@ellerman.id.au>
+Date:   Mon, 03 Jul 2023 15:26:59 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -45,23 +43,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Jun 2023 10:58:49 +0100, Colin Ian King wrote:
-> Currently pointer iov is being dereferenced before the null check of iov
-> which can lead to null pointer dereference errors. Fix this by moving the
-> iov null check before the dereferencing.
+On Fri, 09 Jun 2023 12:32:44 -0600, Rob Herring wrote:
+> "ranges" is a standard property with common parsing functions. Users
+> shouldn't be implementing their own parsing of it. Refactor the FSL RapidIO
+> "ranges" parsing to use of_range_to_resource() instead.
 > 
-> Detected using cppcheck static analysis:
-> linux/arch/powerpc/platforms/powernv/pci-sriov.c:597:12: warning: Either
-> the condition '!iov' is redundant or there is possible null pointer
-> dereference: iov. [nullPointerRedundantCheck]
->  num_vfs = iov->num_vfs;
->            ^
+> One change is the original code would look for "#size-cells" and
+> "#address-cells" in the parent node if not found in the port child
+> nodes. That is non-standard behavior and not necessary AFAICT. In 2011
+> in commit 54986964c13c ("powerpc/85xx: Update SRIO device tree nodes")
+> there was an ABI break. The upstream .dts files have been correct since
+> at least that point.
 > 
 > [...]
 
 Applied to powerpc/next.
 
-[1/1] powerpc/powernv/sriov: perform null check on iov before dereferencing iov
-      https://git.kernel.org/powerpc/c/f4f913c980bc6abe0ccfe88fe3909c125afe4a2d
+[1/1] powerpc: fsl_rio: Use of_range_to_resource() for "ranges" parsing
+      https://git.kernel.org/powerpc/c/c4ae1799a5a358388acb610512c68666f8758364
 
 cheers
