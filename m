@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9A6745F9A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAEA745F9C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbjGCPNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
+        id S231585AbjGCPOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjGCPNf (ORCPT
+        with ESMTP id S229494AbjGCPOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:13:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D6DEE;
-        Mon,  3 Jul 2023 08:13:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 3 Jul 2023 11:14:16 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A996AFD;
+        Mon,  3 Jul 2023 08:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1dry4yStP7R+lFUBsIqEAanf2sgiJUFqT925Vnhzd/8=; b=jIczw6TIczw+NZuhX+R0pmyY1w
+        Ij+QI+Wqb3Zap6jh36hJtKCXnRpyyuN17o7fgrqa5/shRGMdQoBpzjcc3C6v+DKUNYmiQD4fU+iRX
+        QLOoJ7DOinxcJEsqbJNRiQrl+7YjM6Uj7aqBxb7pbB5HZasnrexBCYK62Ci7rOQhwzK13/awnJm9b
+        ZydCSNdYDJMbclQcgvrx5GZ1RuOlCLFXn4e6ifu7GNYpRe0LL3KjGGf2AQix6nWx1EfM7Dsc6zGxi
+        io8OvM2e0REzHq/2ktzXnau3WMTrGXnMjz0BVM3eLo+lOTVyuZThcGCZXKwzyIZSPDioGgWwJNR9Q
+        L09TQFcw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qGLFe-00A6np-3C;
+        Mon, 03 Jul 2023 15:14:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 157D21FEE2;
-        Mon,  3 Jul 2023 15:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688397212; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1XYK3JhaJ5qtklFAcL4Ab0ZphGfyNSKUJRl9bXh8Qy4=;
-        b=QeARC4sb7YbOE+ALTChd9oaZA8hY9iv5xC38X5FoNJmV+o4mDkYfyLUdxAEA53Rkf+aTfH
-        ftJNjdXD4iSJT8TJNqq2Of4ByFWe4tc6ntnKmRydnp8Gqkij4RoKxGdvTZWSy1zE+VhTdm
-        AHB3Aga0lAYwOK7aEqJCsfVuib4zhSY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688397212;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1XYK3JhaJ5qtklFAcL4Ab0ZphGfyNSKUJRl9bXh8Qy4=;
-        b=y8e7fSN/9HksPzkl1REx3A8LCD+/eOHDCXc06HcfDANJBzndAGA3sxwwCZU1TFnPptAwld
-        lLx2rBLFRlqY7cCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9C451358E;
-        Mon,  3 Jul 2023 15:13:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wpZmLJvlomTlVgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 03 Jul 2023 15:13:31 +0000
-Date:   Mon, 03 Jul 2023 17:13:31 +0200
-Message-ID: <87o7kt3u5g.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Shenghao Ding <13916275206@139.com>
-Cc:     broonie@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
-        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com
-Subject: Re: [PATCH v1 1/3] ALSA: hda/tas2781: Add tas2781 HDA driver
-In-Reply-To: <20230702081857.799693-1-13916275206@139.com>
-References: <20230702081857.799693-1-13916275206@139.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9CB1B30023F;
+        Mon,  3 Jul 2023 17:14:05 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D7BB52028E983; Mon,  3 Jul 2023 17:14:05 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 17:14:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the block tree
+Message-ID: <20230703151405.GM4253@hirez.programming.kicks-ass.net>
+References: <20230328104719.65133586@canb.auug.org.au>
+ <20230412073416.73a8ea1a@canb.auug.org.au>
+ <20230411215518.u2fgi7napfcwyuce@treble>
+ <4959d0b8-96fe-7fe5-8b36-7e0a266d1d17@kernel.dk>
+ <20230412001400.yraku5fwsjdchxvk@treble>
+ <20230412114400.GB628377@hirez.programming.kicks-ass.net>
+ <20230412162517.gji52t34zlvcu5bh@treble>
+ <20230616124354.GD4253@hirez.programming.kicks-ass.net>
+ <20230703110405.GU38236@hirez.programming.kicks-ass.net>
+ <c47b8ba6-1384-8864-8767-949ec45c3bbe@kernel.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c47b8ba6-1384-8864-8767-949ec45c3bbe@kernel.dk>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,98 +70,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 02 Jul 2023 10:18:55 +0200,
-Shenghao Ding wrote:
+On Mon, Jul 03, 2023 at 08:18:38AM -0600, Jens Axboe wrote:
+> On 7/3/23 5:04?AM, Peter Zijlstra wrote:
+> > On Fri, Jun 16, 2023 at 02:43:55PM +0200, Peter Zijlstra wrote:
+> > 
+> >> I've been getting reports from some anonymous people still using ancient
+> >> GCCs (10.4) that also need the following:
+> > 
+> > Jens, will you pick this up or should I route it through the objtool
+> > tree?
 > 
-> Integrate tas2781 configs for Lenovo Laptops. All of the tas2781s in the
-> laptop will be aggregated as one speaker. The code support realtek as the
-> primary codec.
+> Sorry, guess it was waiting on me. Would be great if you could route it
+> through the objtool tree. Thanks!
 
-It's not only that -- you changed the struct name used in the code,
-too.  Please describe it, too.
-
-> @@ -5883,7 +5883,7 @@ static void alc_fixup_headset_mode_alc255_no_hp_mic(struct hda_codec *codec,
->  		struct alc_spec *spec = codec->spec;
->  		spec->parse_flags |= HDA_PINCFG_HEADSET_MIC;
->  		alc255_set_default_jack_type(codec);
-> -	} 
-> +	}
->  	else
->  		alc_fixup_headset_mode(codec, fix, action);
->  }
-
-This change is irrelevant with your code, and should be fixed
-individually.  Please drop the hunk.
-
-> @@ -9255,6 +9317,12 @@ static const struct hda_fixup alc269_fixups[] = {
->  		.chained = true,
->  		.chain_id = ALC255_FIXUP_DELL1_MIC_NO_PRESENCE,
->  	},
-> +	[ALC287_FIXUP_TAS2781_I2C] = {
-> +		.type = HDA_FIXUP_FUNC,
-> +		.v.func = tas2781_fixup_i2c,
-> +		.chained = true,
-> +		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
-> +	},
-
-So this is supposed to be Lenovo-specific, and maybe better to rename,
-e.g. ALC287_FIXUP_LENOVO_TAS2781_I2C or such?
-
-
-> @@ -9813,6 +9881,33 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
->  	SND_PCI_QUIRK(0x17aa, 0x3853, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
->  	SND_PCI_QUIRK(0x17aa, 0x3855, "Legion 7 16ITHG6", ALC287_FIXUP_LEGION_16ITHG6),
->  	SND_PCI_QUIRK(0x17aa, 0x3869, "Lenovo Yoga7 14IAL7", ALC287_FIXUP_YOGA9_14IAP7_BASS_SPK_PIN),
-> +	SND_PCI_QUIRK(0x17aa, 0x387d, "Yoga S780-16 pro Quad AAC",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x387e, "Yoga S780-16 pro Quad YC",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x3881, "YB9 dual powe mode2 YC",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x3884, "Y780 YG DUAL",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x3886, "Y780 VECO DUAL",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38a7, "Y780P AMD YG dual",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38a8, "Y780P AMD VECO dual",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38ba, "Yoga S780-14.5 Air AMD quad YC",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38bb, "Yoga S780-14.5 Air AMD quad AAC",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38be, "Yoga S980-14.5 proX YC Dual",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38bf, "Yoga S980-14.5 proX LX Dual",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38c3, "Y980 DUAL", ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38cb, "Y790 YG DUAL",
-> +		ALC287_FIXUP_TAS2781_I2C),
-> +	SND_PCI_QUIRK(0x17aa, 0x38cd, "Y790 VECO DUAL",
-> +		ALC287_FIXUP_TAS2781_I2C),
-
-Please keep one entry per line.  Let's ignore the checkpatch
-complaints.
-
-> @@ -10728,6 +10823,17 @@ static int patch_alc269(struct hda_codec *codec)
->  		codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
->  	}
->  
-> +	/* FIXME: Laptop 0x17aa38be will get the wrong fixup_id and
-> +	 * enter into the wrong entry.
-> +	 * Correct the wrong entry.
-> +	 */
-> +	if (codec->fixup_id == ALC287_FIXUP_YOGA7_14ITL_SPEAKERS &&
-> +		codec->core.vendor_id == 0x10ec0287 &&
-> +		codec->core.subsystem_id == 0x17aa38be) {
-> +		codec_dbg(codec, "Clear wrong fixup for 17aa38be\n");
-> +		codec->fixup_id = ALC287_FIXUP_TAS2781_I2C;
-> +	}
-
-Why this is needed at all?  IOW, which entry causes this wrong
-attribute?
-
-
-thanks,
-
-Takashi
+Will do! Thanks!
