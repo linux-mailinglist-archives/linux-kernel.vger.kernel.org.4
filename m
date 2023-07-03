@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA1174558B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEE8745588
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjGCGkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S230185AbjGCGis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjGCGkM (ORCPT
+        with ESMTP id S229680AbjGCGiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:40:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E71BA
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:40:11 -0700 (PDT)
+        Mon, 3 Jul 2023 02:38:46 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8954CC;
+        Sun,  2 Jul 2023 23:38:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688366411; x=1719902411;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qRRI6WYI96+ffAms4d/TTxkbZxBfypgffVQGm3K8psA=;
-  b=XovCDu1MMBLbwWzdEaU5ZP9p5qZ9nOdKATYWt0+jjdzqWjZtqM2/QCYi
-   uu4NDcyyHShK+hz6IonhDAVV44UhwVdxoGfy5IzNLiF77A9CMeGSoV7Yz
-   bXCxhMTNv283IGo0Zg4pPgVt28rrfvIZC4s/17Q7VqEszOOWVX91XP7fG
-   zk3qLNyI/J+fSiNMNCv0Sma7YDSWGWFrFm1gXU8T+A0J2p65nqudeI1JC
-   RGitrKzc6h4UNtVY/sImotyH8f3ZgLpjykDoWjDV1i75ccdlDR8TWSiSy
-   e94+H3W1l+H8PY+pQKRYa/R5XvwJXcAdDCB6rsrxqBryw8DKXriMvSuQw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="366289190"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688366325; x=1719902325;
+  h=message-id:subject:from:to:date:in-reply-to:references:
+   content-transfer-encoding:mime-version;
+  bh=XY0H3vpbe1CY3a8pLjAJo9l/2ZEaI81wluzp+nLFyyA=;
+  b=Nm8cC+UcdK+MtJbLCv+oMI+hYS4ae0SdCNuXDtbYW6q3JiRTSZBG8R3E
+   mkoR1YT2cnPj/JAmzfQjYm2C4D7y9T4NukGqwGDQpUtHrzEbxyOoVo4di
+   /dOfueqk7llbRvCq9SWLGcf4CtGCoLuCwCdRhE7ms3ctlCGC/x7cyUW3A
+   TAuEktgxx1zLy0zTmAdE9mZfxnRKR4Al+bYo4pYXIMBoR2tHrnWHt/8zd
+   m4I2vhDXucrmhE1zkgrGBE6UXl5udo7ZUKlwEyMr9TSXxRSTdCjht1+cY
+   O8de/AkpMDCjnrOvc897ILZygwuSR4Wk6nieKHmgQuRwRRodbr5B50Ru0
+   w==;
 X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="366289190"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 23:40:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="695708675"
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="695708675"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
-  by orsmga006.jf.intel.com with ESMTP; 02 Jul 2023 23:40:06 -0700
-From:   kah.jing.lee@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>, catalin.marinas@arm.com,
-        conor+dt@kernel.org, kah.jing.lee@intel.com,
-        krzysztof.kozlowski@linaro.org, Markus.Elfring@web.de,
-        robh+dt@kernel.org, will@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-Subject: [PATCH v3 1/1] arm64: dts: agilex/stratix10: Updated QSPI Flash layout for UBIFS
-Date:   Mon,  3 Jul 2023 14:38:33 +0800
-Message-Id: <20230703063832.1342543-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230703063309.1342330-1-kah.jing.lee@intel.com>
-References: <20230703063309.1342330-1-kah.jing.lee@intel.com>
+   d="scan'208";a="221002744"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Jul 2023 23:38:45 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sun, 2 Jul 2023 23:38:44 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Sun, 2 Jul 2023 23:38:42 -0700
+Message-ID: <590ccbc8e32e7c85392ba331a83d00ad81eae0c8.camel@microchip.com>
+Subject: Re: [PATCH 1/2] arm64: dts: microchip: minor whitespace cleanup
+ around '='
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 3 Jul 2023 08:38:41 +0200
+In-Reply-To: <20230702185108.43959-1-krzysztof.kozlowski@linaro.org>
+References: <20230702185108.43959-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,66 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-
-Non-UBIFS related boot and fpga data should be stored in qspi_boot (mtd0)
-while keeping the rootfs with UBIFS in the root partition "mtd1".
-Thus, update the QSPI flash layout to support UBIFS in the mtd root
-partition.
-
-Signed-off-by: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
-
----
-v2: Update subject prefix
-v3: Update commit messages
----
- arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts | 8 ++++----
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts     | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-index 38ae674f2f02..12b960b9183c 100644
---- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-+++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-@@ -202,12 +202,12 @@ partitions {
- 
- 			qspi_boot: partition@0 {
- 				label = "Boot and fpga data";
--				reg = <0x0 0x03FE0000>;
-+				reg = <0x0 0x04200000>;
- 			};
- 
--			qspi_rootfs: partition@3FE0000 {
--				label = "Root Filesystem - JFFS2";
--				reg = <0x03FE0000 0x0C020000>;
-+			root: partition@4200000 {
-+				label = "Root Filesystem - UBIFS";
-+				reg = <0x04200000 0x0BE00000>;
- 			};
- 		};
- 	};
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-index 07c3f8876613..608017e6e36a 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-@@ -128,12 +128,12 @@ partitions {
- 
- 			qspi_boot: partition@0 {
- 				label = "Boot and fpga data";
--				reg = <0x0 0x03FE0000>;
-+				reg = <0x0 0x04200000>;
- 			};
- 
--			qspi_rootfs: partition@3FE0000 {
--				label = "Root Filesystem - JFFS2";
--				reg = <0x03FE0000 0x0C020000>;
-+			root: partition@4200000 {
-+				label = "Root Filesystem - UBIFS";
-+				reg = <0x04200000 0x0BE00000>;
- 			};
- 		};
- 	};
--- 
-2.25.1
+T24gU3VuLCAyMDIzLTA3LTAyIGF0IDIwOjUxICswMjAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
+b3RlOgo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2ht
+ZW50cyB1bmxlc3MgeW91IGtub3cgdGhlCj4gY29udGVudCBpcyBzYWZlCj4gCj4gVGhlIERUUyBj
+b2RlIGNvZGluZyBzdHlsZSBleHBlY3RzIGV4YWN0bHkgb25lIHNwYWNlIGJlZm9yZSBhbmQgYWZ0
+ZXIgJz0nCj4gc2lnbi4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxr
+cnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+Cj4gLS0tCj4gwqBhcmNoL2FybTY0L2Jvb3Qv
+ZHRzL21pY3JvY2hpcC9zcGFyeDUuZHRzaSB8IDEyICsrKysrKy0tLS0tLQo+IMKgMSBmaWxlIGNo
+YW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEv
+YXJjaC9hcm02NC9ib290L2R0cy9taWNyb2NoaXAvc3Bhcng1LmR0c2kKPiBiL2FyY2gvYXJtNjQv
+Ym9vdC9kdHMvbWljcm9jaGlwL3NwYXJ4NS5kdHNpCj4gaW5kZXggNDk5NjQ5OWNjNzM4Li4yNDA3
+NWNkOTE0MjAgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9taWNyb2NoaXAvc3Bh
+cng1LmR0c2kKPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21pY3JvY2hpcC9zcGFyeDUuZHRz
+aQo+IEBAIC00NjksMTQgKzQ2OSwxNCBAQCBzZXJkZXM6IHNlcmRlc0AxMDgwODAwMCB7Cj4gCj4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN3aXRjaDogc3dpdGNoQDYwMDAwMDAwMCB7
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb21wYXRp
+YmxlID0gIm1pY3JvY2hpcCxzcGFyeDUtc3dpdGNoIjsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID3CoMKgIDwweDYgMCAweDQwMTAwMD4sCj4gLcKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCA8MHg2IDB4MTAwMDQwMDAgMHg3ZmMwMDA+LAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgPDB4NiAweDExMDEwMDAwIDB4YWYw
+MDAwPjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVn
+ID0gPDB4NiAwIDB4NDAxMDAwPiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgPDB4NiAweDEwMDA0MDAwIDB4N2ZjMDAwPiwKPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgPDB4
+NiAweDExMDEwMDAwIDB4YWYwMDAwPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHJlZy1uYW1lcyA9ICJjcHUiLCAiZGV2IiwgImdjYiI7Cj4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbnRlcnJ1cHQtbmFtZXMg
+PSAieHRyIiwgImZkbWEiLCAicHRwIjsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgaW50ZXJydXB0cyA9wqDCoMKgIDxHSUNfU1BJIDMwIElSUV9UWVBFX0xF
+VkVMX0hJR0g+LAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDxHSUNfU1BJIDI1IElSUV9UWVBFX0xF
+VkVMX0hJR0g+LAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDxHSUNfU1BJIDI3IElSUV9UWVBFX0xF
+VkVMX0hJR0g+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBpbnRlcnJ1cHRzID0gPEdJQ19TUEkgMzAgSVJRX1RZUEVfTEVWRUxfSElHSD4sCj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgPEdJQ19TUEkgMjUgSVJRX1RZUEVfTEVWRUxfSElHSD4sCj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgPEdJQ19TUEkgMjcgSVJRX1RZUEVfTEVWRUxfSElHSD47Cj4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXNldHMgPSA8JnJlc2V0IDA+Owo+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVzZXQtbmFtZXMgPSAi
+c3dpdGNoIjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfTsKPiAtLQo+IDIuMzQu
+MQo+IApSZXZpZXdlZC1ieTogU3RlZW4gSGVnZWx1bmQgPFN0ZWVuLkhlZ2VsdW5kQG1pY3JvY2hp
+cC5jb20+CgpCUgpTdGVlbgo=
 
