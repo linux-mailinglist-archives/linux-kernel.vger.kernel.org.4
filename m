@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A549745556
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE13574555C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjGCGQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S230043AbjGCGS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjGCGQT (ORCPT
+        with ESMTP id S229771AbjGCGS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:16:19 -0400
+        Mon, 3 Jul 2023 02:18:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0F7B6;
-        Sun,  2 Jul 2023 23:16:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76B2BF;
+        Sun,  2 Jul 2023 23:18:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F8060C5D;
-        Mon,  3 Jul 2023 06:16:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5377C433C9;
-        Mon,  3 Jul 2023 06:16:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7485B60DC6;
+        Mon,  3 Jul 2023 06:18:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36CFFC433C8;
+        Mon,  3 Jul 2023 06:18:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688364977;
-        bh=8iby7AbCF9UWP65IdF9RbSVrQ14JOfsYIuXL0MfM8Vs=;
+        s=k20201202; t=1688365104;
+        bh=b02O7hMAe/0cdSzPP3WCdlJ3T6kG6Hi5gr453ff6ODI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KOUuBLgip3qcxF+EfRwDVVYUwV0m/+HSMAtVW/Q8kEKIVVgbH4e1uTn1f9yUPd8KO
-         RrG4ABQtMs2/nAkNgC/A1nN0UeofcH2n7sV4hhlcniXsh016PmdsfbJ7kY5A7PFqLS
-         UwvGc0nrXX5KGkeSMgmZBStk5mH7ov3T8uLx7aPLX+FynAu0SN6wzXvoLwAzl0s9Q7
-         BVV+U4dtv9bxS1BLSy9TGRofyFDSQuIRC2GDG8nXb86OmLH5CaCe2YUUCYo9dXYVKY
-         NIlID3jiDSZZlw6K31RpmUPpeJ84gOYDenFv6+2vW2p8HMa8dsEWG/QSkeDiRetiyh
-         7TZypdiFjjvEA==
-Date:   Mon, 3 Jul 2023 08:16:10 +0200
+        b=AaWAZ0MzR5WlM8LsDfCGcJYsVnapu6kw3CisOBlzAeBV65fsgiHj4cTCvUVhiPIXg
+         OWZalDz2U4a5HKVY1ries+snvEPAN5HyGHqmrzszj1Tsai1ox2Wns/gdYr+nnOXCkN
+         hSoOzk1I0NMqkaFaP9CvULBEZ+pw4Cnt1hmw6Yctc6sxyRegJ0XgDy3Q/2nvH7qLUe
+         lXK15gu9WWAliwPVRDZWqp8FG1w7v7J73PeQpU1dmRKdTp1gtpuqigtK6c2oa6xSyg
+         GHkI4K0Bsl8GHo4vYtDDdrF+8+xgRj04wNrn+uNUySINBhEzFIfI2OtIm3OrbcFGHZ
+         cJBJvLinemqQQ==
+Date:   Mon, 3 Jul 2023 08:18:16 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -49,12 +49,10 @@ Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Akihiro Tsukada <tskd08@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 3/4] lib/math/int_log: Replace LGPL-2.1-or-later
- boilerplate with SPDX identifier
-Message-ID: <20230703081610.5ffea861@sal.lan>
-In-Reply-To: <20230619172019.21457-4-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 0/4] ASoC: remove copy of intlog10()
+Message-ID: <20230703081816.37028ab7@sal.lan>
+In-Reply-To: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
 References: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
-        <20230619172019.21457-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -69,64 +67,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, 19 Jun 2023 20:20:18 +0300
+Em Mon, 19 Jun 2023 20:20:15 +0300
 Andy Shevchenko <andriy.shevchenko@linux.intel.com> escreveu:
 
-> Replace license boilerplate in udftime.c with SPDX identifier for
-> LGPL-2.1-or-later.
+> The first three patches moves intlog10() to be available in entire
+> kernel. The last one removes copy of it in one driver. Besides already
+> good Lines of Code (LoC) statistics the upcoming users, if any, can
+> utilize the exported functions.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> The series can be routed either via ASoC tree or media tree.
+> 
+> Note, int_log.h is separated from math.h due to licensing.
+> I dunno if we can mix two in a single header file. In any
+> case we may do it later on.
+> 
+> Andy Shevchenko (4):
+>   lib/math: Move dvb_math.c into lib/math/int_log.c
+>   lib/math/int_log: Use ARRAY_SIZE(logtable) where makes sense
+>   lib/math/int_log: Replace LGPL-2.1-or-later boilerplate with SPDX
+>     identifier
+>   ASoC: nau8825: Replace copied'n'pasted intlog10()
+
+It probably makes sense to apply it at ASoC tree, as the relevant
+change is there.
+
+I have just one small nit on patch 1/4, which should be trivial to
+solve. Once done, feel free to merge it with  my ack:
 
 Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-> ---
->  include/linux/int_log.h | 11 +----------
->  lib/math/int_log.c      | 11 +----------
->  2 files changed, 2 insertions(+), 20 deletions(-)
 > 
-> diff --git a/include/linux/int_log.h b/include/linux/int_log.h
-> index 332306202464..0a6f58c38b61 100644
-> --- a/include/linux/int_log.h
-> +++ b/include/linux/int_log.h
-> @@ -1,17 +1,8 @@
-> +/* SPDX-License-Identifier: LGPL-2.1-or-later */
->  /*
->   * Provides fixed-point logarithm operations.
->   *
->   * Copyright (C) 2006 Christoph Pfister (christophpfister@gmail.com)
-> - *
-> - * This library is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU Lesser General Public License as
-> - * published by the Free Software Foundation; either version 2.1 of
-> - * the License, or (at your option) any later version.
-> - *
-> - * This program is distributed in the hope that it will be useful,
-> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> - * GNU Lesser General Public License for more details.
->   */
->  
->  #ifndef __LINUX_INT_LOG_H
-> diff --git a/lib/math/int_log.c b/lib/math/int_log.c
-> index ea98fc0b3fe2..8f9da3a2ad39 100644
-> --- a/lib/math/int_log.c
-> +++ b/lib/math/int_log.c
-> @@ -1,17 +1,8 @@
-> +// SPDX-License-Identifier: LGPL-2.1-or-later
->  /*
->   * Provides fixed-point logarithm operations.
->   *
->   * Copyright (C) 2006 Christoph Pfister (christophpfister@gmail.com)
-> - *
-> - * This library is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU Lesser General Public License as
-> - * published by the Free Software Foundation; either version 2.1 of
-> - * the License, or (at your option) any later version.
-> - *
-> - * This program is distributed in the hope that it will be useful,
-> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> - * GNU Lesser General Public License for more details.
->   */
->  
->  #include <linux/bitops.h>
+>  Documentation/driver-api/media/dtv-common.rst |  2 +-
+>  drivers/media/dvb-core/Makefile               |  2 +-
+>  drivers/media/dvb-frontends/af9013_priv.h     |  2 +-
+>  drivers/media/dvb-frontends/af9033_priv.h     |  2 +-
+>  drivers/media/dvb-frontends/cxd2820r_priv.h   |  2 +-
+>  drivers/media/dvb-frontends/cxd2841er.c       |  2 +-
+>  .../cxd2880/cxd2880_tnrdmd_dvbt2_mon.c        |  2 +-
+>  .../cxd2880/cxd2880_tnrdmd_dvbt_mon.c         |  2 +-
+>  .../media/dvb-frontends/cxd2880/cxd2880_top.c |  2 +-
+>  drivers/media/dvb-frontends/dib7000p.c        |  2 +-
+>  drivers/media/dvb-frontends/dib8000.c         |  2 +-
+>  drivers/media/dvb-frontends/dib9000.c         |  2 +-
+>  drivers/media/dvb-frontends/drxk_hard.c       |  2 +-
+>  drivers/media/dvb-frontends/lgdt3305.c        |  2 +-
+>  drivers/media/dvb-frontends/lgdt3306a.c       |  2 +-
+>  drivers/media/dvb-frontends/lgdt330x.c        |  2 +-
+>  drivers/media/dvb-frontends/m88ds3103_priv.h  |  2 +-
+>  drivers/media/dvb-frontends/mn88443x.c        |  2 +-
+>  drivers/media/dvb-frontends/mn88472_priv.h    |  2 +-
+>  drivers/media/dvb-frontends/mn88473_priv.h    |  2 +-
+>  drivers/media/dvb-frontends/or51132.c         |  2 +-
+>  drivers/media/dvb-frontends/or51211.c         |  2 +-
+>  drivers/media/dvb-frontends/rtl2830_priv.h    |  2 +-
+>  drivers/media/dvb-frontends/rtl2832_priv.h    |  2 +-
+>  drivers/media/dvb-frontends/si2165.c          |  2 +-
+>  drivers/media/dvb-frontends/stv0367.c         |  2 +-
+>  drivers/media/dvb-frontends/tc90522.c         |  2 +-
+>  drivers/media/dvb-frontends/tda10048.c        |  2 +-
+>  include/{media/dvb_math.h => linux/int_log.h} | 18 +---
+>  lib/math/Makefile                             |  2 +-
+>  .../dvb-core/dvb_math.c => lib/math/int_log.c | 26 ++----
+>  sound/soc/codecs/nau8825.c                    | 93 +------------------
+>  32 files changed, 45 insertions(+), 150 deletions(-)
+>  rename include/{media/dvb_math.h => linux/int_log.h} (63%)
+>  rename drivers/media/dvb-core/dvb_math.c => lib/math/int_log.c (84%)
+> 
