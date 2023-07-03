@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110E7746225
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D1E746227
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjGCSUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S231260AbjGCSU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjGCSUR (ORCPT
+        with ESMTP id S231167AbjGCSUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:20:17 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4131AE67
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:20:15 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b69923a715so73476221fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 11:20:15 -0700 (PDT)
+        Mon, 3 Jul 2023 14:20:22 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AC2E6D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:20:16 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b6adef5c22so73346751fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 11:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688408413; x=1691000413;
+        d=linaro.org; s=google; t=1688408415; x=1691000415;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6nV+W23ixU/gsOOwjBJ3HxinzG6QROQL9vhOLjLD7/c=;
-        b=hBPfrZheoomPOR+k1h07sXx3Y/6OjceP3l2BrMg2f8BhDAOnz9JGggba3WBM/AVPMe
-         r7GPJ5j7UyAIyeT7ZMIS103fKWaqWNPx2ILu9XqTf8Kx3uFxo/ZHV0Uf1PbB/N1feMo6
-         5IIx9cn+JA7yeeijtQX88W8geHebsVNs9YNfoFE6yuX3drB08iGMroOP69/NWHS52OrY
-         UclsqeO3ZEN/aS/uV1a2NUk3DepG6U3YijgHcjWubIRHEEWWvPXFK9tUU6LGyx66vK1e
-         bsygjdC8yIWpJjL5bZDgarum040OP2LLekzRln5+vzez73etfBkLzl8Bl3QoMNByt6Kn
-         /Pmg==
+        bh=IgXZ+eRdRJHN8xsGvQGmmBaJDurThI2IbqW/jpkrGj0=;
+        b=uceXZfbYZOlKkij7wFKMEyEmOpiTzp3vyUd3NWusgPamjZjrHdpgJB50UATD5qUJVN
+         yp9pOw3lJ8SjlVVYm3i9XTH4z67lRQT9XmOFr7EK/+QEn1B6pJDUG73+Fk6XQW/t23a2
+         v09orOz49sLAu/xYaPDQBEPMjCS1afCRFuR+6U78OnhG8jZvNRC5lXe/en01U6Gg1WjL
+         cR/IIlBbTerGBIy2WAlGeTDhO/9b5YhATd9fyCETx5k0HZbk0ht0bbpSYpR6r3Gp5+fp
+         f7D1r7AhCXIxdpsTXe8BO2DYWL2ll75pKS9vibr74/hVWcznEJImkXoQYS89pdVafroc
+         C2QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688408413; x=1691000413;
+        d=1e100.net; s=20221208; t=1688408415; x=1691000415;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6nV+W23ixU/gsOOwjBJ3HxinzG6QROQL9vhOLjLD7/c=;
-        b=SrVXs19IkqChNS4NGtX5ju77DRUN4AeZ0cGzn6vsRG4orsiETASW3dS2nbK70GAUPV
-         J1q57GaT+fZN36HWvED6Gy/sX87t2wi55Z3GRHkHJ76k18g09ME8bs6Z5SwQSA5V3ow8
-         y6n74FvRH564L043J5XMB9iJOjHifViZxL15+YTSjxwWyb1d/AyY9F5aA5+KN997N30D
-         bIT7a/4Q+cBzyUoiuEe/brUjaDV6qGu6XlyXQQWDOAcgeU1jiw2s2xAIkB1oE4dyXWvV
-         A7vKJkhor9fM+AqubP0QMxXznz55sZJ8c/RK+Xbruv4tKHzNYeKrvBlyPCt00TVQwTbj
-         Rk/A==
-X-Gm-Message-State: ABy/qLbNka/cboYgEDg09Pivl6+XAco6SQ7ceeHfO22155h1B/h6wW7S
-        TQWxx5TO+duQvbQyaCvCLyJs3g==
-X-Google-Smtp-Source: APBJJlGrLSA6uun2H5C7lzAMO2VxYu0WZk/tJL9rMjsBoujWnevzEjOM4VTdVpgPfs1y8SfG+lyQkQ==
-X-Received: by 2002:a2e:7a11:0:b0:2b6:a19e:5153 with SMTP id v17-20020a2e7a11000000b002b6a19e5153mr8108582ljc.15.1688408413644;
-        Mon, 03 Jul 2023 11:20:13 -0700 (PDT)
+        bh=IgXZ+eRdRJHN8xsGvQGmmBaJDurThI2IbqW/jpkrGj0=;
+        b=IcdtuUIYSN4Yxxp18I069BZKM3KjFJSqSAniIVGgOw/3FqarEdGuGHaE0mrSDzMO/U
+         vnQ4oQ76Q0Srpa37F7TgVL6kWQO0bCECscz8Rg14Ijei5YWifO+OGw0ftjqI9Ce2m2vk
+         j6citQ6SmDBvwOKNBLV1iPmsxXpAxIIGUtx28q880zuuAy+lYhP0iJ7xT/eeii4+LYGE
+         BUC2ZscAV9DlfggFG2SM264JizFLkrGidO8smpHcQ957hQB4Zz3UoTZdNM+RLxlFL8o+
+         ohVh+SwPmZTTzFNAji7ntrDqtEHFomozQjHQBccaZ+TSsQlyS3D/bz1etDHkDKq2Kvp8
+         6yZg==
+X-Gm-Message-State: ABy/qLbMLo+gfDug0WLaaRXcL58CMSGu4OR3zohTI1Py37J+f/MtxZKV
+        9H3VYcGxxjkm6w5WgY/NwXUAmQ==
+X-Google-Smtp-Source: APBJJlGO0FKQ32so8WWSWQSzDz/qJL9MkbQlG8vOXtueV2IcSk0985GL6XUv9PMX3DwtmNejitKBIQ==
+X-Received: by 2002:a2e:9143:0:b0:2b4:6eb0:2a27 with SMTP id q3-20020a2e9143000000b002b46eb02a27mr8806972ljg.17.1688408415010;
+        Mon, 03 Jul 2023 11:20:15 -0700 (PDT)
 Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id s9-20020a2e9c09000000b002b6995f38a2sm4946224lji.100.2023.07.03.11.20.12
+        by smtp.gmail.com with ESMTPSA id s9-20020a2e9c09000000b002b6995f38a2sm4946224lji.100.2023.07.03.11.20.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 11:20:13 -0700 (PDT)
+        Mon, 03 Jul 2023 11:20:14 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 03 Jul 2023 20:20:07 +0200
-Subject: [PATCH v2 3/8] clk: qcom: gcc-msm8998: Control MMSS and GPUSS
- GPLL0 outputs properly
+Date:   Mon, 03 Jul 2023 20:20:08 +0200
+Subject: [PATCH v2 4/8] clk: qcom: mmcc-msm8998: Properly consume GPLL0
+ inputs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230622-topic-8998clk-v2-3-6222fbc2916b@linaro.org>
+Message-Id: <20230622-topic-8998clk-v2-4-6222fbc2916b@linaro.org>
 References: <20230622-topic-8998clk-v2-0-6222fbc2916b@linaro.org>
 In-Reply-To: <20230622-topic-8998clk-v2-0-6222fbc2916b@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -74,11 +74,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688408407; l=3382;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688408407; l=4937;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=t/yKGa//yIWyr0eUqgxiqgLvRVjuxq7khyy0L6VwrLU=;
- b=HoYPHPJnk0lOO6Hc8Rh3ktspFtE9vgXAD7FBr8jeDugiD0WzNx4S2Efdic/bsr7zNcNSzrJlq
- 8303bTIwgimC7yIxEYNL+pS65ffRsKVhKNMvMBOepk9qQakiP4IW4Fr
+ bh=pNpFd/werWG+oLvuHHpeYrlGmkALZ/dmf7xfH7d+kHc=;
+ b=VW4i1+gxxDJfK3DsiUrdpLeAHClFLSCtu4j6f+S5L06ubK/8moZi9q4rRdK2cSupBisds/iH7
+ KHuuZiZqwb6AZ12Wzu9X4/WrbFYWG53iiaAox16NU35zKUvncwcDm8W
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,117 +91,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Up until now, we've been relying on some non-descript hardware magic
-to pinkypromise turn the clocks on for us. While new SoCs shine with
-that feature, MSM8998 can not always be fully trusted.
+Up until now, the GPLL0_DIV MMSS input has been modeled as a fixed
+child of MMSS_GPLL0_DIV that's always-on. Properly representing the
+former in the GCC driver makes us unable to keep doing so.
 
-Register the MMSS and GPUSS GPLL0 legs with the CCF to allow for manual
-enable voting.
+Consume MSS_GPLL0_DIV through fw_name ("gpll0_div") as well as add a
+fixed .name link to keep backwards compatibility.
 
 Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/qcom/gcc-msm8998.c | 58 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ drivers/clk/qcom/mmcc-msm8998.c | 35 ++++++++---------------------------
+ 1 file changed, 8 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/clk/qcom/gcc-msm8998.c b/drivers/clk/qcom/gcc-msm8998.c
-index be024f8093c5..cccb19cae481 100644
---- a/drivers/clk/qcom/gcc-msm8998.c
-+++ b/drivers/clk/qcom/gcc-msm8998.c
-@@ -25,6 +25,9 @@
- #include "reset.h"
- #include "gdsc.h"
+diff --git a/drivers/clk/qcom/mmcc-msm8998.c b/drivers/clk/qcom/mmcc-msm8998.c
+index 4490594bde69..040c495e91e4 100644
+--- a/drivers/clk/qcom/mmcc-msm8998.c
++++ b/drivers/clk/qcom/mmcc-msm8998.c
+@@ -46,19 +46,6 @@ enum {
+ 	P_DPLINK,
+ };
  
-+#define GCC_MMSS_MISC	0x0902C
-+#define GCC_GPU_MISC	0x71028
-+
- static struct pll_vco fabia_vco[] = {
- 	{ 250000000, 2000000000, 0 },
- 	{ 125000000, 1000000000, 1 },
-@@ -1367,6 +1370,22 @@ static struct clk_branch gcc_boot_rom_ahb_clk = {
+-static struct clk_fixed_factor gpll0_div = {
+-	.mult = 1,
+-	.div = 2,
+-	.hw.init = &(struct clk_init_data){
+-		.name = "mmss_gpll0_div",
+-		.parent_data = &(const struct clk_parent_data){
+-			.fw_name = "gpll0"
+-		},
+-		.num_parents = 1,
+-		.ops = &clk_fixed_factor_ops,
+-	},
+-};
+-
+ static const struct clk_div_table post_div_table_fabia_even[] = {
+ 	{ 0x0, 1 },
+ 	{ 0x1, 2 },
+@@ -354,7 +341,7 @@ static const struct parent_map mmss_xo_gpll0_gpll0_div_map[] = {
+ static const struct clk_parent_data mmss_xo_gpll0_gpll0_div[] = {
+ 	{ .fw_name = "xo" },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static const struct parent_map mmss_xo_mmpll0_gpll0_gpll0_div_map[] = {
+@@ -368,7 +355,7 @@ static const struct clk_parent_data mmss_xo_mmpll0_gpll0_gpll0_div[] = {
+ 	{ .fw_name = "xo" },
+ 	{ .hw = &mmpll0_out_even.clkr.hw },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static const struct parent_map mmss_xo_mmpll0_mmpll1_gpll0_gpll0_div_map[] = {
+@@ -384,7 +371,7 @@ static const struct clk_parent_data mmss_xo_mmpll0_mmpll1_gpll0_gpll0_div[] = {
+ 	{ .hw = &mmpll0_out_even.clkr.hw },
+ 	{ .hw = &mmpll1_out_even.clkr.hw },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static const struct parent_map mmss_xo_mmpll0_mmpll5_gpll0_gpll0_div_map[] = {
+@@ -400,7 +387,7 @@ static const struct clk_parent_data mmss_xo_mmpll0_mmpll5_gpll0_gpll0_div[] = {
+ 	{ .hw = &mmpll0_out_even.clkr.hw },
+ 	{ .hw = &mmpll5_out_even.clkr.hw },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static const struct parent_map mmss_xo_mmpll0_mmpll3_mmpll6_gpll0_gpll0_div_map[] = {
+@@ -418,7 +405,7 @@ static const struct clk_parent_data mmss_xo_mmpll0_mmpll3_mmpll6_gpll0_gpll0_div
+ 	{ .hw = &mmpll3_out_even.clkr.hw },
+ 	{ .hw = &mmpll6_out_even.clkr.hw },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static const struct parent_map mmss_xo_mmpll4_mmpll7_mmpll10_gpll0_gpll0_div_map[] = {
+@@ -436,7 +423,7 @@ static const struct clk_parent_data mmss_xo_mmpll4_mmpll7_mmpll10_gpll0_gpll0_di
+ 	{ .hw = &mmpll7_out_even.clkr.hw },
+ 	{ .hw = &mmpll10_out_even.clkr.hw },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static const struct parent_map mmss_xo_mmpll0_mmpll7_mmpll10_gpll0_gpll0_div_map[] = {
+@@ -454,7 +441,7 @@ static const struct clk_parent_data mmss_xo_mmpll0_mmpll7_mmpll10_gpll0_gpll0_di
+ 	{ .hw = &mmpll7_out_even.clkr.hw },
+ 	{ .hw = &mmpll10_out_even.clkr.hw },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static const struct parent_map mmss_xo_mmpll0_mmpll4_mmpll7_mmpll10_gpll0_gpll0_div_map[] = {
+@@ -474,7 +461,7 @@ static const struct clk_parent_data mmss_xo_mmpll0_mmpll4_mmpll7_mmpll10_gpll0_g
+ 	{ .hw = &mmpll7_out_even.clkr.hw },
+ 	{ .hw = &mmpll10_out_even.clkr.hw },
+ 	{ .fw_name = "gpll0" },
+-	{ .hw = &gpll0_div.hw },
++	{ .fw_name = "gpll0_div", .name = "gcc_mmss_gpll0_div_clk" },
+ };
+ 
+ static struct clk_rcg2 byte0_clk_src = {
+@@ -2544,10 +2531,6 @@ static struct clk_branch vmem_ahb_clk = {
  	},
  };
  
-+static struct clk_branch gcc_mmss_gpll0_div_clk = {
-+	.halt_check = BRANCH_HALT_DELAY,
-+	.clkr = {
-+		.enable_reg = 0x5200c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_mmss_gpll0_div_clk",
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&gpll0_out_main.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
- static struct clk_branch gcc_mmss_gpll0_clk = {
- 	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
-@@ -1395,6 +1414,38 @@ static struct clk_branch gcc_mss_gpll0_div_clk_src = {
- 	},
+-static struct clk_hw *mmcc_msm8998_hws[] = {
+-	&gpll0_div.hw,
+-};
+-
+ static struct gdsc video_top_gdsc = {
+ 	.gdscr = 0x1024,
+ 	.pd = {
+@@ -2855,8 +2838,6 @@ static const struct qcom_cc_desc mmcc_msm8998_desc = {
+ 	.num_resets = ARRAY_SIZE(mmcc_msm8998_resets),
+ 	.gdscs = mmcc_msm8998_gdscs,
+ 	.num_gdscs = ARRAY_SIZE(mmcc_msm8998_gdscs),
+-	.clk_hws = mmcc_msm8998_hws,
+-	.num_clk_hws = ARRAY_SIZE(mmcc_msm8998_hws),
  };
  
-+static struct clk_branch gcc_gpu_gpll0_div_clk = {
-+	.halt_check = BRANCH_HALT_DELAY,
-+	.clkr = {
-+		.enable_reg = 0x5200c,
-+		.enable_mask = BIT(3),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_gpu_gpll0_div_clk",
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&gpll0_out_main.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gcc_gpu_gpll0_clk = {
-+	.halt_check = BRANCH_HALT_DELAY,
-+	.clkr = {
-+		.enable_reg = 0x5200c,
-+		.enable_mask = BIT(4),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_gpu_gpll0_clk",
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&gpll0_out_main.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
- static struct clk_branch gcc_blsp1_ahb_clk = {
- 	.halt_reg = 0x17004,
- 	.halt_check = BRANCH_HALT_VOTED,
-@@ -3080,6 +3131,9 @@ static struct clk_regmap *gcc_msm8998_clocks[] = {
- 	[AGGRE2_SNOC_NORTH_AXI] = &aggre2_snoc_north_axi_clk.clkr,
- 	[SSC_XO] = &ssc_xo_clk.clkr,
- 	[SSC_CNOC_AHBS_CLK] = &ssc_cnoc_ahbs_clk.clkr,
-+	[GCC_MMSS_GPLL0_DIV_CLK] = &gcc_mmss_gpll0_div_clk.clkr,
-+	[GCC_GPU_GPLL0_DIV_CLK] = &gcc_gpu_gpll0_div_clk.clkr,
-+	[GCC_GPU_GPLL0_CLK] = &gcc_gpu_gpll0_clk.clkr,
- };
- 
- static struct gdsc *gcc_msm8998_gdscs[] = {
-@@ -3235,6 +3289,10 @@ static int gcc_msm8998_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	/* Disable the GPLL0 active input to MMSS and GPU via MISC registers */
-+	regmap_write(regmap, GCC_MMSS_MISC, 0x10003);
-+	regmap_write(regmap, GCC_GPU_MISC, 0x10003);
-+
- 	return qcom_cc_really_probe(pdev, &gcc_msm8998_desc, regmap);
- }
- 
+ static const struct of_device_id mmcc_msm8998_match_table[] = {
 
 -- 
 2.41.0
