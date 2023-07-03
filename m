@@ -2,137 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56907460E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EC47460EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjGCQpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 12:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57592 "EHLO
+        id S230034AbjGCQql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 12:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGCQpy (ORCPT
+        with ESMTP id S229505AbjGCQqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 12:45:54 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C79E4C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 09:45:52 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbd200d354so126645e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 09:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688402751; x=1690994751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WIZi7WSUj5zt9VC6bktr7YIsYiDd+mTiSVUb4X7VtZ0=;
-        b=jYXFWK6VOpcbn+eI6/P+dWhvQNc85l3QYtlgjNcpNGaVWfeh3UJvBx8ikx/gci5Lqp
-         CWH+MVIBPZF2rmaHMyLs1frMOfPg1UbY6KbhFQDUHN3J4oMz7aKvix9uzLfmnlm6v6Hx
-         YgNqx6qnHG3vJEclkN6NaOiiDGsCctGDPcrPLhyT+Xwo/5EDu4/FZLp8Ju+YJvBmy/Kb
-         Y5D4O59TZlrt9x3puMA+/hVNMkJm2d+xxYF7l0hQpjjWvVV9MvBzhrUgnYVhU9XnRQZa
-         yqbRR1gx4Gc+ltHUXfS5F0F8Q+SCnl+E0rgZn8i8Gwpj/on1h9z7U0UmIVe7ko5k5voK
-         Aeeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688402751; x=1690994751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WIZi7WSUj5zt9VC6bktr7YIsYiDd+mTiSVUb4X7VtZ0=;
-        b=YDtVyyZbQ0BvPpd9vG8v3ELoQQVnlqq6rMyuc41vkN4dTT8/c1IJYhrwVdNrmZLM0W
-         1M0Es6WwKPAAUl1jhfmWIZbmXCq5YLXlGld0qQKen+kHzE1Yu2VXy2s7zmTnwfnMqyeV
-         AHeBeys7Lh3TeYJwRbAlbJY/lhee3JLOzae2lV4YjhzVmlWBIP4E6fKR4hd9e5qIUdwn
-         ynknDAmyZ6Dz1IBfuWmNEbgbEsa6zKtWBWoPOM9qW+Ix3Bttn/s03q1BH07o0GpHPLif
-         Dy8U6VlGbwanakUYXG5nx9TPzmvLHQji13KEAkrOLsaJttAUt38NbG4z1LgDKQHNNOKY
-         stng==
-X-Gm-Message-State: ABy/qLYPyZfFiNVZ0zocyQ61qZer5wND6+pWiQH4Dif62iS8QfKs4vwh
-        j9Jr8ScN/G85uuNq1SuiX2RNkXlo/AUv0eAKbFWXAg==
-X-Google-Smtp-Source: APBJJlHX0y4s+ANB3JfUPXoeBFi0QrSiAmjRJP4Q82Rb+fE8gIq2PIexpyRlwOsJIBKCMdtRpRZ5fuWw7sWJmUqulrY=
-X-Received: by 2002:a05:600c:3b08:b0:3fb:c838:c681 with SMTP id
- m8-20020a05600c3b0800b003fbc838c681mr197236wms.4.1688402751236; Mon, 03 Jul
- 2023 09:45:51 -0700 (PDT)
+        Mon, 3 Jul 2023 12:46:40 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F23E41;
+        Mon,  3 Jul 2023 09:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=hGh0RjSMKjqK2Wktq8A3Dwgw/Zxp8Whsd7BqywESmC8=; b=qtKB0VE7XS/zPSFAFKc+aThafR
+        LCQB1gwLxwZEa/ooBzb8rCnkiW1tM9mPEEeOLJkzdv9W87fOp6flmOmoy3/9pjSNdzzhYNyyNausq
+        pVBILaIj/KPN8JD21o365Av1uppESQ171x5jOgt4L1Cou6adKhr8WQswXFXZ5K8u/cuc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qGMgz-000Unb-El; Mon, 03 Jul 2023 18:46:25 +0200
+Date:   Mon, 3 Jul 2023 18:46:25 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     leitao@debian.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, sergey.senozhatsky@gmail.com,
+        pmladek@suse.com, tj@kernel.or,
+        Dave Jones <davej@codemonkey.org.uk>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] netconsole: Append kernel version to message
+Message-ID: <4b2746ad-1835-43e6-a2fc-7063735daa46@lunn.ch>
+References: <20230703154155.3460313-1-leitao@debian.org>
 MIME-Version: 1.0
-References: <0000000000003dab1305ff859d21@google.com> <20230702195130.GAZKHVQnvKIjc9FB05@fat_crate.local>
-In-Reply-To: <20230702195130.GAZKHVQnvKIjc9FB05@fat_crate.local>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 3 Jul 2023 18:45:39 +0200
-Message-ID: <CANp29Y4ySB6_s8zqO3zgskzx5y6ECUVobYxje-k3V2hSEiULGQ@mail.gmail.com>
-Subject: Re: [syzbot] upstream build error (20)
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     syzbot <syzbot+3ea47fc22e48e9ec4324@syzkaller.appspotmail.com>,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703154155.3460313-1-leitao@debian.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 2, 2023 at 9:51=E2=80=AFPM Borislav Petkov <bp@alien8.de> wrote=
-:
->
-> On Sun, Jul 02, 2023 at 11:56:57AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    77b1a7f7a05c Merge tag 'mm-nonmm-stable-2023-06-24-19-2=
-3' ..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1701aabd280=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Ddbdd409f194=
-c6563
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D3ea47fc22e48e=
-9ec4324
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
-tils for Debian) 2.35.2
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+3ea47fc22e48e9ec4324@syzkaller.appspotmail.com
-> >
-> > ./arch/x86/include/asm/mem_encrypt.h:23:20: error: static declaration o=
-f 'mem_encrypt_init' follows non-static declaration
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >
-> > If the bug is already fixed, let syzbot know by replying with:
-> > #syz fix: exact-commit-title
-> >
-> > If you want to change bug's subsystems, reply with:
-> > #syz set subsystems: new-subsystem
-> > (See the list of subsystem names on the web dashboard)
-> >
-> > If the bug is a duplicate of another bug, reply with:
-> > #syz dup: exact-subject-of-another-report
-> >
-> > If you want to undo deduplication, reply with:
-> > #syz undup
->
-> #syz fix: 0a9567ac5e6a ("x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=3Dn=
- build")
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Cc: Dave Jones <davej@codemonkey.org.uk>
 
-Thank you for letting syzbot know the fixing commit!
-Syzbot expects to see only the title, so here's an update:
+Signed-off-by should come last.
 
-#syz fix: x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=3Dn build
+> +#ifdef CONFIG_NETCONSOLE_UNAME
+> +static void send_ext_msg_udp_uname(struct netconsole_target *nt,
+> +				   const char *msg, unsigned int len)
+> +{
+> +	unsigned int newlen;
+> +	char *newmsg;
+> +	char *uname;
+> +
+> +	uname = init_utsname()->release;
+> +
+> +	newmsg = kasprintf(GFP_KERNEL, "%s;%s", uname, msg);
+> +	if (!newmsg)
+> +		/* In case of ENOMEM, just ignore this entry */
+> +		return;
 
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
->
-> --
+Hi Breno
+
+Why not just send the message without uname appended. You probably
+want to see the OOM messages...
+
+Also, what context are we in here? Should that be GFP_ATOMIC, which
+net/core/netpoll.c is using to allocate the skbs?
+
+> +static inline void send_msg_udp(struct netconsole_target *nt,
+> +				const char *msg, unsigned int len)
+> +{
+> +#ifdef CONFIG_NETCONSOLE_UNAME
+> +	send_ext_msg_udp_uname(nt, msg, len);
+> +#else
+> +	send_ext_msg_udp(nt, msg, len);
+> +#endif
+
+Please use
+
+if (IS_ENABLED(CONFIG_NETCONSOLE_UNAME)) {} else {}
+
+so the code is compiled and then thrown away. That nakes build testing
+more efficient.
+
+     Andrew
