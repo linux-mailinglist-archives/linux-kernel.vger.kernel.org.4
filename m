@@ -2,84 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB19745E17
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DA1745E19
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjGCOBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S230106AbjGCOC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjGCOBe (ORCPT
+        with ESMTP id S229614AbjGCOC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:01:34 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF31E51
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:01:32 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-98e011f45ffso421314266b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688392891; x=1690984891;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bUE0bM1sDOp6MPisSkuzWwyMeYVq/1zyln32/5b5tEg=;
-        b=goLuj1TOEgVpZvK/5+2sS9RbaP8Vko8GqbFUpvx+9CNLm5m7aWbqVKk8i2+bacp9iR
-         zmlDeblmjKWvbhlun/ruzo6OjjPbTh1D8wrFiuNhGZ75PLbvRFs5ziFdtprny1vU8gfk
-         FSCDb8Mwj6ebLUC9O9IfvsW3HSK4eS8FAC46L4pSNCHWPKXVVPBIiI082EgAXUOvjm8G
-         YUaYzwMv199gha9I8AIUAAEPBrRfYWox/rbBdI0QZvE47O7qI7XG8tlyieFZ55RTMfRR
-         yJiV+h1h6epUYz16WyI8/oHjDTY5y0NBB3AfhVxH2KtU7WRchJEhmFCajAo90Py6ckkP
-         o0QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688392891; x=1690984891;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bUE0bM1sDOp6MPisSkuzWwyMeYVq/1zyln32/5b5tEg=;
-        b=J1u3cVEKTZIzEYo/NurrY5nL7I+Al1Rk6MZbp3ZaFxXXU+ccTuKMUYb+Ev4PY5B3f+
-         YlruBQPkSEn5LFrt02VmHxWnS4CknOOY7LbGf7eTOd4puiX/afYSA0b1fRZ2y8tBrzEm
-         TchN/qoaqMBCxqP8MK0q3V4iJiixZB9NZC2ayzdnh0gyrH+jvTk7SG1J4ZJNS65x5IPS
-         XhHeQMDOudtmLjFU6quZWo2lf25zMOGFMhePlhLuyM1MqDNU/FGbFIFIc7jOK0q918s2
-         vot+T5/aOFB5zgLzSidtn7XHQrCCznCL18LMlRUo2+eisZ/WtrulSoe8hhY0bI4n8kvA
-         knxA==
-X-Gm-Message-State: ABy/qLYpd5/yAXJi6oioUAke0XBxHHaF0c3vmHvnW8jK1chk1xwOP5Js
-        +W2exWnWx2lf3d0PBGD3MpbjVA==
-X-Google-Smtp-Source: APBJJlHGvFqx6TD6S61lpdBhdysquQ6+RTWy0Shfl3va7Ffm35xODQYP4aNmlAMNal/uiDV7boqIqQ==
-X-Received: by 2002:a17:906:738d:b0:98e:1f6a:5259 with SMTP id f13-20020a170906738d00b0098e1f6a5259mr6504086ejl.75.1688392891158;
-        Mon, 03 Jul 2023 07:01:31 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n14-20020a170906118e00b0098ce63e36e9sm12221218eja.16.2023.07.03.07.01.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 07:01:30 -0700 (PDT)
-Message-ID: <b8d3e99b-157e-4f7d-1f5e-a702acd8e819@linaro.org>
-Date:   Mon, 3 Jul 2023 16:01:28 +0200
+        Mon, 3 Jul 2023 10:02:27 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B7106;
+        Mon,  3 Jul 2023 07:02:23 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1688392922tdq088by
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 03 Jul 2023 22:02:00 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: ILHsT53NKPhCMmoSN0mc34nVN2tnvUayvI7MBzxx9zHYJyKQV9kkg57EgKUt6
+        GZxsvMMNxRk+hppQv+Ccai8JrA53fYikH0nzWzLw9W2Oe2OE3mTkXcYVJmycpa2A5v2IEZl
+        zr6Gq/Uh/PqcXof015OmnqK0s0OThKUf8SWSCzIxMg5V3kgkVzSxe0v2KP+o0cNiGApqcQR
+        poIvP6Qeq3+eD6I18peAL8xDBg9t6cXFJwnRj00HSPrWJZfebEZQi+VufEIF7tpIR+wOnsM
+        f78VG+JZKiq3roX8r1RChbNM4+6/Lpm0SmkWGM8zQ+nyitI10KUouywQTTwFgd37WmB1Um5
+        X3aP0k3/O4ARQ1M0eR01OWKWSiFZoUPgj4mvbwu8WzmWc9bI7RrkKs+GJpLiQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15298407468080028086
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, thomas@t-8ch.de
+Subject: Re: [PATCH v5 06/14] tools/nolibc: arch-*.h: clean up multiple whitespaces
+Date:   Mon,  3 Jul 2023 22:02:00 +0800
+Message-Id: <20230703140200.499769-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230702184453.GF16233@1wt.eu>
+References: <20230702184453.GF16233@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/5] dt-bindings: serial: geni-qcom: Allow no qup-core icc
- path
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
- <20230703-topic-8250_qup_icc-v1-2-fea39aa07525@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230703-topic-8250_qup_icc-v1-2-fea39aa07525@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,45 +52,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 15:31, Konrad Dybcio wrote:
-> Some SoCs (like SM8150 and SM8250) don't seem to provide a qup-core path.
-> Allow such case.
+Hi, Willy
+
+> Hi Zhangjin,
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/serial/qcom,serial-geni-qcom.yaml     | 26 +++++++++++++++-------
->  1 file changed, 18 insertions(+), 8 deletions(-)
+> On Wed, Jun 28, 2023 at 09:19:33PM +0800, Zhangjin Wu wrote:
+> > To align with Linux code style and let scripts/checkpatch.pl happy, the
+> > multiple whitespaces in arch-<ARCH>.h files are cleaned up.
+> > 
+> > Most of them are modified by these commands automatically:
+> > 
+> >     $ sed -i -e '/#define my_syscall/,/})/{s/        /\t/g}' tools/include/nolibc/arch-*.h
+> >     $ sed -i -e '/#define my_syscall/,/})/{s/ *\\$/\t\\/g}' tools/include/nolibc/arch-*.h
+> > 
+> > And checked with:
+> > 
+> >     $ grep '  *\\$' tools/include/nolibc/arch-*.h
 > 
-> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
-> index dd33794b3534..a0acba57bc06 100644
-> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
-> @@ -25,14 +25,6 @@ properties:
->    clock-names:
->      const: se
->  
-> -  interconnects:
-> -    maxItems: 2
-> -
-> -  interconnect-names:
-> -    items:
-> -      - const: qup-core
-> -      - const: qup-config
+> I'm surprised by this one, I never saw checkpatch complain here. For me,
+> putting a tab after a non-tab is an error. It makes the code harder to
+> edit and re-align, and diffs are harder to read on lines whose lengths
+> varies by +/-1 around a multiple of 8 as it makes the post-tab stuff
+> zigzag. You made me recheck the coding style file, and there's nothing
+> about alignment there, only about indent (and indent uses tabs here).
+> There are also other parts which use spaces for alignment (albeit not
+> that many), so unless there is a solid reason for changing that, I'd
+> rather not do it, as for me it's the exact opposite of a cleanup as it
+> will cause me quite some discomfort.
+>
 
-Instead please keep the definition of the fields in top-level properties
-with the widest constraints, e.g.
-interconnects:
-  minItems: 1
-  maxItems: 2
+Willy, it is not about alignment, just rechecked it, it is code indent
+related:
 
-interconnect-names:
-  minItems: 1
-  items:
-   - const: qup-core
-   - const: qup-config
+    #32: FILE: tools/include/nolibc/arch-mips.h:160:
+    +^I                                                                      \$
+    
+    ERROR: code indent should use tabs where possible
+    #44: FILE: tools/include/nolibc/arch-mips.h:172:
+    +^I          "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"  \$
 
-If there was allOf:if:then per variant, this could be further customized.
+The first one is here:
 
-Best regards,
-Krzysztof
+	register long _arg6 = (long)(arg6);                                   \
+	<--     whitespaces                                                -->\
+	__asm__  volatile (                                                   \
 
+And the second one:
+
+		: "memory", "cc", "at", "v1", "hi", "lo",                     \
+	<-spaces->"t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"  \
+
+These two lines indent with "one tab + more than 8 whitespaces", the
+other lines also have whitespaces code indent, but not more than 8, so,
+not reported.
+
+I have tried to replace whitespaces with tabs in the first one, but the first
+one can not align with the other lines, so, the current modify method is
+applied.
+
+To only touch minimal lines, this may work (reserve the post-whitespaces):
+
+    $ sed -i -e '/^\t*        /{s/        /\t/g}' tools/include/nolibc/arch-*.h
+
+It will only fix up the lines the reported. The cleanup of the post-whitespaces
+is not necessary and it does touch too many lines.
+
+Sorry to disturb you with such cleanups, since I have seen the similar
+reports when we added the arch-arm.h (for my_syscall6), because the code
+style aligns with the others, so, I did touch it, but again encounter
+the same issues with arch-mips.h and to avoid the future reports, I
+checked the whole arch-xxx.h, and found more such reports, so, we
+prepared such a patch.
+
+To be honest, I do prefer post-tabs to whitespaces (less key press, less code
+size ;-)), but as you pointed out, post-tabs have more side-effects, we
+shouldn't touch them, Thanks.
+
+> > Besides, more multiple whitespaces are cleaned up:
+> > 
+> > - convert "__asm__  volatile" to "__asm__ volatile"
+> 
+> I totally agree on this one, it's very likely the result of a mechanical
+> change.
+
+Ok, will split it to a standalone patch, one error report one patch.
+
+> 
+> > - "foo _num  bar" should be "foo _num bar"
+> 
+> In theory yes, except that for those where it appears it was only to
+> keep all declarations aligned given that this _num was shorter by one
+> char than all other local names. Especially when it comes to enumerating
+> register names, you definitely want to keep them aligned. It's sufficiently
+> difficult to avoid mistakes there, any help for visual check counts.
+>
+
+Agree, let's keep it as before.
+
+Thanks,
+Zhangjin
+
+> Willy
