@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A66745F4B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348D1745F4E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjGCO76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
+        id S231318AbjGCPAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjGCO7z (ORCPT
+        with ESMTP id S230063AbjGCPAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:59:55 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B404E75
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:59:49 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fb41682472so6865203e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:59:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688396387; x=1690988387;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aJbV4N7RLwElD/TMXfmSwrFrJd7AnATyySwRyBz/hoQ=;
-        b=kOaT+uWHkgGk5HsBjYPxtWaMuXM6HogvNgwkhgIFSBRHBuJClwWuaLflr2ViTkbWzn
-         2SWHjIDcWmbniM/GIIZpNhJO+hmRiv8qeF52E6aMUzNIcz4hY3UaoTvoKyOFNudLmSsZ
-         MqPtoyThQLWFMDxtHLowi8cHb0nZ9P3KmTfOgw/SJGEpGT4o1P3tkrFca1/isGr2w7gW
-         EcYDNVIuH5yYlgfZ3Rmw7Kh0KL7tpTBna8+J9BEbYvJyOFY6X/ksJwzthrspvqDVL3Tp
-         S8hq6Jo7Uk6ob/UmN33PHobQ5N/WwopdAiJ4jZd+gkN67NV56ELFJI5tqFhgsfGuCNah
-         VlMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688396387; x=1690988387;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aJbV4N7RLwElD/TMXfmSwrFrJd7AnATyySwRyBz/hoQ=;
-        b=Qa6ovePrjh+ol0Y5wiXGfZLig+8Jl0Tgns2YwB/5zrvWOZxpGqQ9xqY8RS5QSHcaoE
-         uMCzh2+ZmJ3fUrK41ZmSxDsZMCIDBwFCfs1Udsi/drQBrVO8JF/OMwNqmuYDt154G4RM
-         LBGa/EU4TwnwmC55p49IHbS6Sw8V1ipsVup0yA0TMoMOfr1vvdMrIAY5UyoJh0PdmTQo
-         H2/o0GOc84GghL8sOT/be0VpMpi9mS2KJF1frf3PLZ20KcvHOz5WjJ+bhcH32PcSXraf
-         TGIY6LwKLxZBqAjyVYaH9s0Vk1PBCLa3IEUYjXKetdXPr2ShQw6Cm3yXDt4KieHxTLQk
-         Rp2A==
-X-Gm-Message-State: ABy/qLZ35dhL4mlK8zpQdzNMpe/ou+SngpVXC2P+JMsrZesS3CzqO9Pu
-        JFW0Cre2xDZiyjV5yKGquUsPqA==
-X-Google-Smtp-Source: APBJJlG9ApmvdjqzfVKnyOdHThzxebr1CwTamo13HN9k60suQ2wP0Gn6o8umombS4pOFRzHYJohAjQ==
-X-Received: by 2002:a05:6512:31d6:b0:4fb:96ed:93b3 with SMTP id j22-20020a05651231d600b004fb96ed93b3mr9651485lfe.65.1688396387608;
-        Mon, 03 Jul 2023 07:59:47 -0700 (PDT)
-Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id y16-20020a197510000000b004fba5eb0a64sm2013958lfe.42.2023.07.03.07.59.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 07:59:47 -0700 (PDT)
-Message-ID: <0d468d08-6410-e424-b4f3-5245cdb0334a@linaro.org>
-Date:   Mon, 3 Jul 2023 16:59:45 +0200
+        Mon, 3 Jul 2023 11:00:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AB4E41;
+        Mon,  3 Jul 2023 08:00:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA1160F58;
+        Mon,  3 Jul 2023 15:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B0FFC433C7;
+        Mon,  3 Jul 2023 15:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688396429;
+        bh=lIdqQ67i0FMsC0cUxCJ5AfsUJuPaQdWJi5CbAOYuFN0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lqQaODny3PFiok3uuUGZ6RZMrVppXRyHc0EQzS5vSky8C1535Ew23fb+VpDMsh2R7
+         5G/6V33iXSD8GKWOU6nSjt58XiHiRJEMJbTMC22aAfAnFPfltISAUNDBXp2f41ebzV
+         oXxIdeuZvhu1IP9Wo5ArwWXnq2rsDUVMmG3METKA=
+Date:   Mon, 3 Jul 2023 17:00:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Kees Cook <keescook@chromium.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, security@kernel.org, corbet@lwn.net,
+        workflows@vger.kernel.org
+Subject: Re: [PATCH 2/2] Documentation: security-bugs.rst: clarify CVE
+ handling
+Message-ID: <2023070335-groggily-catfish-9ad5@gregkh>
+References: <2023063020-throat-pantyhose-f110@gregkh>
+ <2023063022-retouch-kerosene-7e4a@gregkh>
+ <202306301114.E199B136@keescook>
+ <2023070213-capacity-moneybags-3668@gregkh>
+ <ZKJJoK4kyOCEYcOR@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 02/10] dt-bindings: power: Add rpm power domains for SDX75
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        sboyd@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688395346-3126-3-git-send-email-quic_rohiagar@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1688395346-3126-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZKJJoK4kyOCEYcOR@1wt.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +58,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3.07.2023 16:42, Rohit Agarwal wrote:
-> Add RPM power domain bindings for the SDX75 SoC.
+On Mon, Jul 03, 2023 at 06:08:00AM +0200, Willy Tarreau wrote:
+> On Sun, Jul 02, 2023 at 02:39:49PM +0200, Greg Kroah-Hartman wrote:
+> > On Fri, Jun 30, 2023 at 11:18:37AM -0700, Kees Cook wrote:
+> > > On Fri, Jun 30, 2023 at 09:14:21AM +0200, Greg Kroah-Hartman wrote:
+> > > > The kernel security team does NOT assign CVEs, so document that properly
+> > > > and provide the "if you want one, ask MITRE for it" response that we
+> > > > give on a weekly basis in the document, so we don't have to constantly
+> > > > say it to everyone who asks.
+> > > > 
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > ---
+> > > >  Documentation/process/security-bugs.rst | 11 ++++-------
+> > > >  1 file changed, 4 insertions(+), 7 deletions(-)
+> > > > 
+> > > > diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
+> > > > index f12ac2316ce7..8b80e1eb7d79 100644
+> > > > --- a/Documentation/process/security-bugs.rst
+> > > > +++ b/Documentation/process/security-bugs.rst
+> > > > @@ -79,13 +79,10 @@ not contribute to actually fixing any potential security problems.
+> > > >  CVE assignment
+> > > >  --------------
+> > > >  
+> > > > -The security team does not normally assign CVEs, nor do we require them
+> > > > -for reports or fixes, as this can needlessly complicate the process and
+> > > > -may delay the bug handling. If a reporter wishes to have a CVE identifier
+> > > > -assigned ahead of public disclosure, they will need to contact the private
+> > > > -linux-distros list, described above. When such a CVE identifier is known
+> > > > -before a patch is provided, it is desirable to mention it in the commit
+> > > > -message if the reporter agrees.
+> > > > +The security team does not assign CVEs, nor do we require them for
+> > > > +reports or fixes, as this can needlessly complicate the process and may
+> > > > +delay the bug handling.  If a reporter wishes to have a CVE identifier
+> > > > +assigned, they should contact MITRE directly.
+> > > 
+> > > Hmm. The language about "assigned ahead of public disclosure" was added
+> > > intentionally due to trouble we'd had with coordination when a CVE was
+> > > needed, etc. Additionally, it IS preferred to have a CVE in a patch when
+> > > it IS known ahead of time, so I think that should be kept. How about
+> > > this:
+> > > 
+> > > 
+> > > diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
+> > > index 82e29837d589..2f4060d49b31 100644
+> > > --- a/Documentation/process/security-bugs.rst
+> > > +++ b/Documentation/process/security-bugs.rst
+> > > @@ -81,13 +81,12 @@ the email Subject line with "[vs]" as described in the linux-distros wiki:
+> > >  CVE assignment
+> > >  --------------
+> > >  
+> > > -The security team does not normally assign CVEs, nor do we require them
+> > > -for reports or fixes, as this can needlessly complicate the process and
+> > > -may delay the bug handling. If a reporter wishes to have a CVE identifier
+> > > -assigned ahead of public disclosure, they will need to contact the private
+> > > -linux-distros list, described above. When such a CVE identifier is known
+> > > -before a patch is provided, it is desirable to mention it in the commit
+> > > -message if the reporter agrees.
+> > > +The security team does not assign CVEs, nor do we require them for reports
+> > > +or fixes, as this can needlessly complicate the process and may delay
+> > > +the bug handling. If a reporter wishes to have a CVE identifier assigned
+> > > +ahead of public disclosure, they will need to contact MITRE directly.
+> > > +When such a CVE identifier is known before a patch is provided, it is
+> > > +desirable to mention it in the commit message if the reporter agrees.
+> > 
+> > I can not, in good faith, with the current mess that MITRE is going
+> > through, tell anyone that they should contact MITRE ahead of public
+> > disclosure, sorry.
+> > 
+> > All I can say is "if you really want one, go ask them for one", as
+> > everyone keeps asking us for one to pad their resume/CV.
+> > 
+> > Also note that many non-US-based companies are not allowed to contact a
+> > US-government-backed entity for potential security issues for obvious
+> > reasons.
+> > 
+> > So I don't want to even give a hint that we support or request this at
+> > all, or that it is something that changelog texts should contain for
+> > security issues (for the obvious reason of them being a "hint" one way
+> > or another.)
+> > 
+> > External groups may wish to play the CVE "game" as it facilitates their
+> > engineering procedures to get changes past managers, but that's not
+> > anything that we should be encouraging at all for all of the various
+> > geopolitical and corporate reasons involved in that mess.
 > 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
->  include/dt-bindings/power/qcom-rpmpd.h                  | 8 ++++++++
->  2 files changed, 9 insertions(+)
+> I generally agree with your points above, and these can be easily
+> summarized by indicating that the patch will not wait for this, and
+> suggesting that MITRE is not the only possible source:
 > 
-> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-> index afad313..58e1be8 100644
-> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
-> @@ -40,6 +40,7 @@ properties:
->        - qcom,sdm845-rpmhpd
->        - qcom,sdx55-rpmhpd
->        - qcom,sdx65-rpmhpd
-> +      - qcom,sdx75-rpmhpd
->        - qcom,sm6115-rpmpd
->        - qcom,sm6125-rpmpd
->        - qcom,sm6350-rpmhpd
-> diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
-> index 1bf8e87..8092d0d 100644
-> --- a/include/dt-bindings/power/qcom-rpmpd.h
-> +++ b/include/dt-bindings/power/qcom-rpmpd.h
-> @@ -57,6 +57,14 @@
->  #define SDX65_CX_AO	4
->  #define SDX65_MXC	5
->  
-> +/* SDX75 Power Domain Indexes */
-> +#define SDX75_CX	0
-> +#define SDX75_CX_AO	1
-> +#define SDX75_MSS	2
-> +#define SDX75_MX	3
-> +#define SDX75_MX_AO	4
-> +#define SDX75_MXC	5
-Please instead introduce a set of defines without the SoC prefix
-(i.e. CX, CX_AO, MX etc.). We've been putting this off for too long
-and you're the first unlucky guy that submitted new RPMhPD support after
-we've concluded it'd be the way to go! :D Sadly, we can't replace the
-existing ones retroactively..
+>   The security team does not assign CVEs, nor do we require them for
+>   reports or fixes, as this can needlessly complicate the process and may
+>   delay the bug handling.  If a reporter wishes to have a CVE identifier
+>   assigned, they should find one by themselves, for example by contacting
+>   MITRE directly.  However under no circumstances will a patch inclusion
+>   be delayed to wait for a CVE identifier to arrive.
+> 
+> This puts the responsibility for finding one in time on the reporter
+> depending on what they expect, and if they want it in the commit
+> message, they'd rather have one before reporting the problem.
 
-Konrad
-> +
->  /* SM6350 Power Domain Indexes */
->  #define SM6350_CX	0
->  #define SM6350_GFX	1
+Oh, nice wording, let me steal that!  :)
+
+thanks,
+
+greg k-h
