@@ -2,129 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6897460A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE3A7460A7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjGCQWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 12:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S230094AbjGCQWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 12:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGCQWC (ORCPT
+        with ESMTP id S229534AbjGCQWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 12:22:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFE1AD;
-        Mon,  3 Jul 2023 09:22:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93E8760FBC;
-        Mon,  3 Jul 2023 16:21:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C142EC433C9;
-        Mon,  3 Jul 2023 16:21:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688401319;
-        bh=vgOJfFEIDfdRkuFQPBdlwrwSFvJWLpp+9lkvO+4Uylw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dazKdJY2e/WIRBKy3jXvSi37rbBPFup6sqCFVlh4JTzH4d0DGeVb/SxxkdEMr5gO1
-         x/CO12NK2Dg6ctrBfDmnXvt4mXV4yrl5mfGXXqLQIXuimFCU+UIX/drsJq/sHscVWE
-         KpwQlkYZHYsTfY4+ZkKrEZBHdg/BgY331kc9MQ+Va4t/8F7D60PDN3c1ZSxytlnJTm
-         69ERyDnPz2cEVMq9DAymBzouppAFJc8LBa5cx+bI80mBboqb9rmov68pPof9TjtqYT
-         WPm8f+5P8avwKFGzWHZUlSrVsrGimUHvuiI8ocK4q6/E2/wwdYzJ9b61D2cBbPtph+
-         7eZ///LiXr7aA==
-Date:   Mon, 3 Jul 2023 11:21:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Achal Verma <a-verma1@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: j721e: Fix delay before PERST# deassert
-Message-ID: <20230703162156.GA525196@bhelgaas>
+        Mon, 3 Jul 2023 12:22:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1D25E42;
+        Mon,  3 Jul 2023 09:22:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F10A2F4;
+        Mon,  3 Jul 2023 09:23:16 -0700 (PDT)
+Received: from [10.57.27.93] (unknown [10.57.27.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E29FE3F663;
+        Mon,  3 Jul 2023 09:22:30 -0700 (PDT)
+Message-ID: <4e16fb56-7628-8b2f-182b-170a85168cb8@arm.com>
+Date:   Mon, 3 Jul 2023 17:22:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703112914.68806-1-a-verma1@ti.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 03/17] PM: EM: Refactor em_pd_get_efficient_state() to
+ be more flexible
+Content-Language: en-US
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org
+References: <20230512095743.3393563-1-lukasz.luba@arm.com>
+ <20230512095743.3393563-4-lukasz.luba@arm.com>
+ <418bef75-883c-2442-3376-03fd7537c734@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <418bef75-883c-2442-3376-03fd7537c734@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In subject, "Fix" doesn't convey much information.  Does it increase?
-Decrease?  How much time are we talking about?  PERST# deassert is at
-one end of the delay; what event is at the other end?
 
-Some of these useful bits of information could appear in the subject
-line.
 
-On Mon, Jul 03, 2023 at 04:59:14PM +0530, Achal Verma wrote:
-> As per the PCIe Card Electromechanical specification REV. 3.0, PERST#
-
-I think the current rev of this spec is r5.0.  Can you cite that
-instead?  I think the relevant section is r5.0, sec 2.9.2.
-
-> signal should be de-asserted after minimum 100ms from the time power-rails
-> become stable. Current delay of 100us is observed to be not enough on some
-> custom platform implemented using TI's K3 SOCs.
-
-Is this delay for the benefit of the Root Port or for the attached
-Endpoint?  If the latter, my guess is that some Endpoints might
-tolerate the current shorter delay, while others might require more,
-and it doesn't sound like "TI's K3 SoC" would be relevant here.
-
-> So, to ensure 100ms delay to give sufficient time for power-rails and
-> refclk to become stable, change delay from 100us to 100ms.
+On 5/30/23 12:06, Dietmar Eggemann wrote:
+> On 12/05/2023 11:57, Lukasz Luba wrote:
+>> Prepare em_pd_get_efficient_state() for the upcoming changes and
+>> make it possible to re-use. Return an index for the best performance
 > 
-> From PCIe Card Electromechanical specification REV. 3.0 section 2.6.2:
-> TPVPERL: Power stable to PERST# inactive - 100ms
-> T-PERST-CLK: REFCLK stable before PERST# inactive - 100 usec.
+> Don't get the `possible to re-use`? Did you mean `possible to be
+> re-used`? But then `re-used` for what?
 
-Numbers like 100ms that come from the PCIe specs should have #defines
-for them.  If we don't have one already, can you add one, please?
+The function will no longer get a pointer to 'struct em_perf_domain'
+but instead to 'struct em_perf_state'. It would also require to
+get the number of states from 'pd->nr_perf_states'.
 
-> Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
-> Signed-off-by: Achal Verma <a-verma1@ti.com>
-> ---
->  drivers/pci/controller/cadence/pci-j721e.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+This is preparation for handling 2 tables:
+modifiable (a) and default (b).
+
+Then it also returns and ID not the pointer to state.
+It all makes it more generic and ready for those 2 tables.
+
 > 
-> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-> index e70213c9060a..fa2b4c11d2c4 100644
-> --- a/drivers/pci/controller/cadence/pci-j721e.c
-> +++ b/drivers/pci/controller/cadence/pci-j721e.c
-> @@ -499,13 +499,12 @@ static int j721e_pcie_probe(struct platform_device *pdev)
->  		/*
->  		 * "Power Sequencing and Reset Signal Timings" table in
->  		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
-> -		 * indicates PERST# should be deasserted after minimum of 100us
-> -		 * once REFCLK is stable. The REFCLK to the connector in RC
-> -		 * mode is selected while enabling the PHY. So deassert PERST#
-> -		 * after 100 us.
-> +		 * indicates PERST# should be deasserted after minimum of 100ms
-> +		 * after power rails achieve specified operating limits and
-> +		 * within this period reference clock should also become stable.
->  		 */
->  		if (gpiod) {
-> -			usleep_range(100, 200);
-> +			msleep(100);
->  			gpiod_set_value_cansleep(gpiod, 1);
->  		}
->  
-> -- 
-> 2.25.1
+>> state. The function arguments that are introduced should allow to
+>> work on different performance state arrays. The caller of
+>> em_pd_get_efficient_state() should be able to use the index either
+>> on the default or the modifiable EM table.
 > 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> This describes the WHAT but not the WHY.
+
+I will add that description as 'why' in the header. I wanted to
+avoid mentioning in the patch description something which
+is coming in the next patch.
+
