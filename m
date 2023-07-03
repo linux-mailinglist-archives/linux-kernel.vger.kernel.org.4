@@ -2,34 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317E4745512
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000EB7454E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjGCFws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 01:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S230041AbjGCFer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 01:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjGCFwq (ORCPT
+        with ESMTP id S229783AbjGCFee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 01:52:46 -0400
+        Mon, 3 Jul 2023 01:34:34 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7F4B2
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 22:52:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44881B7
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 22:34:33 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QvZp44F45z4wxs;
-        Mon,  3 Jul 2023 15:52:44 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QvZP44WYcz4wxn;
+        Mon,  3 Jul 2023 15:34:32 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <20230521225103.19197-1-rdunlap@infradead.org>
-References: <20230521225103.19197-1-rdunlap@infradead.org>
-Subject: Re: [PATCH v2 RESEND] powerpc/embedded6xx: select MPC10X_BRIDGE only if PCI is set
-Message-Id: <168836201882.50010.697016860186007941.b4-ty@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
+References: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] powerpc/signal32: Force inlining of __unsafe_save_user_regs() and save_tm_user_regs_unsafe()
+Message-Id: <168836201884.50010.14478880824891760898.b4-ty@ellerman.id.au>
 Date:   Mon, 03 Jul 2023 15:26:58 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -43,20 +42,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 21 May 2023 15:51:03 -0700, Randy Dunlap wrote:
-> When CONFIG_SMP is not set, CONFIG_BROKEN_ON_SMP is set, and
-> CONFIG_PCI is not set, there can be a kconfig warning:
+On Mon, 05 Jun 2023 10:58:35 +0200, Christophe Leroy wrote:
+> Looking at generated code for handle_signal32() shows calls to a
+> function called __unsafe_save_user_regs.constprop.0 while user access
+> is open.
 > 
-> WARNING: unmet direct dependencies detected for PPC_INDIRECT_PCI
->   Depends on [n]: PCI [=n]
->   Selected by [y]:
->   - MPC10X_BRIDGE [=y]
+> And that __unsafe_save_user_regs.constprop.0 function has two nops at
+> the begining, allowing it to be traced, which is unexpected during
+> user access open window.
 > 
 > [...]
 
 Applied to powerpc/next.
 
-[1/1] powerpc/embedded6xx: select MPC10X_BRIDGE only if PCI is set
-      https://git.kernel.org/powerpc/c/05d1c49c0339bab1c5d94a3d5146c8efc8385dd2
+[1/1] powerpc/signal32: Force inlining of __unsafe_save_user_regs() and save_tm_user_regs_unsafe()
+      https://git.kernel.org/powerpc/c/a03b1a0b19398a47489fdcef02ec19c2ba05a15d
 
 cheers
