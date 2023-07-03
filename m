@@ -2,91 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EFD745993
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF532745996
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjGCKFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S229698AbjGCKFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjGCKEz (ORCPT
+        with ESMTP id S231301AbjGCKFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:04:55 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37B8E74
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:04:06 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 008413200909;
-        Mon,  3 Jul 2023 06:04:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 03 Jul 2023 06:04:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688378641; x=1688465041; bh=XD
-        MTdubj4bFh9b2AITgPBVqq5Be93OkL1yTP/pmBOI8=; b=gb2LnScsr4wdBbRVZd
-        Vrn4qPQGFGMPWyKRGLG4OBK8+basSfJduDyWmZvhDc1vg0xk7LDG6/a7fWVxZLlM
-        +tkl7cQ4LKmKSAuGNRHyhL/2ew4kHyMk0WJ/dsEe2g0TVkbUBUtni9OJ9vmUVVG5
-        z4V4p6f5j2HFVetEskzkcfHb+RGmgm2FfVSSv6W0NuSuFsBUn/ctzvbYPYAWuC2e
-        59HWu7ruHlqgPI5imbTIxVVXQuNTkefIdFTww+4rXFV4Qblz3z+1rCL7WyMlMdIR
-        Z34bBcq8ybXctQdgALhWsBb/kk9fLmd9b4fNlJwl3zlTDxXCumDR806WbR5Ul9l2
-        ZcMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688378641; x=1688465041; bh=XDMTdubj4bFh9
-        b2AITgPBVqq5Be93OkL1yTP/pmBOI8=; b=NKEZ8MHL9NSJNbGwY6IsT+NL5twVY
-        IDVrUISXktuA5JqoKrpZr0pJgHJOluJt3209N7TeBTao+WlsOiKz+CaLXK8Pjrqd
-        nZ6UBvoJEbxWNKThdj4yEWJKecb5P+pqhZZVRJrCELgsqBvoRDbb2uncqc51Odj4
-        wQQTg5H4lPGL7M1FiveMVTu0CynVZFFiDHoWC2IkR8G6ZsJZv+RZjnjzZP2YLkNg
-        WnNsNohjZ+u7MJlw76n7LsoedzhR/oYE1pOWpBeo+oig8/sZ1RwPCn2ctdJ6lCDb
-        fiG2FpOILvXpYWRbc6hq+V+atlPrMqoD9LuLyfrE5Bl0BPLff4D3zIKlg==
-X-ME-Sender: <xms:EZ2iZPiWTZq13Ce0HXPfkBl6CZ55J2pfuJsDelQzNnj0nmNOQp8dYg>
-    <xme:EZ2iZMAzQu33ZmGrd0QvySCxXQXmD-fJAOr6nptTPQVgxKmGc8l0v2irUHILK_OBD
-    7eQvCdYNprHLTnE3eE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddvgddvvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffjeduteevtedvtddvgfffleefvdekhfefgeelvedtkeffffegveehheefvdfh
-    ieenucffohhmrghinhepthhugihsuhhithgvrdgtohhmpdhkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
-    rghrnhgusgdruggv
-X-ME-Proxy: <xmx:EZ2iZPHgDqySQjJzdyzMtvX6Vln9_kBPl4E-q68uJSyvkeDspsEhxA>
-    <xmx:EZ2iZMS4fUGzwjkYUcOSPV3ApY9FnEhJmXdXrrGA08WhIPn4BiVJEg>
-    <xmx:EZ2iZMyHe1_C4n2rkr66sLurO18JZjluY2Do5C67T-l1dFZrs2fyKg>
-    <xmx:EZ2iZDmqrtwa4eac932opdvCUPhETbpHlc_bdx8WJaftO-OQPNKqrg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 380D5B60086; Mon,  3 Jul 2023 06:04:01 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
-Mime-Version: 1.0
-Message-Id: <cd9d8682-08b6-4307-9eb7-9ac838d62eb2@app.fastmail.com>
-In-Reply-To: <ZKKaOeRj5Quf00S2@FVFF77S0Q05N>
-References: <CA+G9fYsuc8D98BtW9rX0ahS9Rfqyn-5CALYWTy6fr_ypJqEErA@mail.gmail.com>
- <d41a6d08-981b-481b-9108-fe91afaa0f82@app.fastmail.com>
- <CA+G9fYt0Sh-0vFQSWjJz0di-vAc-Ke-bwjqyGM=d_M==x6OnOg@mail.gmail.com>
- <ZKKaOeRj5Quf00S2@FVFF77S0Q05N>
-Date:   Mon, 03 Jul 2023 12:03:38 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Mark Rutland" <mark.rutland@arm.com>,
-        "Naresh Kamboju" <naresh.kamboju@linaro.org>
-Cc:     "open list" <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "Frederic Weisbecker" <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Anders Roxell" <anders.roxell@linaro.org>,
-        "Dan Carpenter" <dan.carpenter@linaro.org>,
-        "Kees Cook" <keescook@chromium.org>
-Subject: Re: qemu-arm64: Unexpected kernel BRK exception at EL1 - WARNING: CPU: 3 PID:
- 0 at kernel/context_tracking.c:128 ct_kernel_exit.constprop
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Mon, 3 Jul 2023 06:05:00 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D4C10EB;
+        Mon,  3 Jul 2023 03:04:13 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 363A3xSs023937;
+        Mon, 3 Jul 2023 12:03:59 +0200
+Date:   Mon, 3 Jul 2023 12:03:59 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, david.laight@aculab.com, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 10/14] tools/nolibc: __sysret: support syscalls who
+ return a pointer
+Message-ID: <ZKKdD/p4UkEavru6@1wt.eu>
+References: <20230702191733.GI16233@1wt.eu>
+ <20230703083651.491785-1-falcon@tinylab.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703083651.491785-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,53 +42,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023, at 11:51, Mark Rutland wrote:
-> On Mon, Jul 03, 2023 at 12:02:22PM +0530, Naresh Kamboju wrote:
->> On Sun, 2 Jul 2023 at 13:56, Arnd Bergmann <arnd@arndb.de> wrote:
->> > On Sat, Jul 1, 2023, at 10:42, Naresh Kamboju wrote:
->> >
->> 
->> Here is the build artifacts location with kselftest merge configs.
->> https://storage.tuxsuite.com/public/linaro/lkft/builds/2Rum1V78RQJMftEanwtN28dApDO/
->
-> In your .config here, I note you have:
->
-> | CONFIG_UBSAN_TRAP=y
->
-> Can you try this with CONFIG_UBSAN_TRAP=n ?
->
->> [   56.150153] Modules linked in: crct10dif_ce sm3_ce sm3 sha3_ce
->> sha512_ce sha512_arm64 cfg80211 bluetooth rfkill sch_fq_codel fuse drm
->> [   56.151781] CPU: 0 PID: 438 Comm: seccomp_bpf Not tainted 6.4.0 #1
->> [   56.152043] Hardware name: linux,dummy-virt (DT)
->> [   56.152396] pstate: 41400005 (nZcv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
->> [   56.152667] pc : alloc_pid+0x3b4/0x3c8
->> [   56.154243] lr : alloc_pid+0x140/0x3c8
->
-> Looking at objdump, that's:
->
-> | ffff8000800d73b0 <alloc_pid>:
-> | ...
-> | ffff8000800d7764:       d4207d00        brk     #0x3e8
->
-> ... and addr2line fingers this as:
->
-> | [mark@lakrids:~/tmp-naresh-kamboju]% usekorg 10.3.0 
-> aarch64-linux-addr2line -ife vmlinux ffff8000800d7764                   
->        
-> | alloc_pid
-> | /builds/linux/kernel/pid.c:244
->
-> ... which appears to be:
->
-> | 244                 pid->numbers[i].nr = nr;
->
-> Full objdump of the function below; as above I suspect this is UBSAN triggering
-> a __builtin_trap() on an out-of-range access.
+On Mon, Jul 03, 2023 at 04:36:51PM +0800, Zhangjin Wu wrote:
+> > Syscalls that return pointer use that -MAX_ERRNO range to encode errors
+> > (such as mmap()). I just do not know if there is a convention saying that
+> > other ones also restrict themselves to that range or not. If you find
+> > some info which guarantees that it's the case for all of them, then by
+> > all means let's proceed like this, but in this case it should be mentioned
+> > in the comment why we think it's valid to do this. For now it's presented
+> > as an opportunity only.
+> 
+> Currently, I only found a prove-in-use case in musl:
+> 
+>     https://elixir.bootlin.com/musl/latest/source/src/internal/syscall_ret.c:
+> 
+>     #include <errno.h>
+>     #include "syscall.h"
+> 
+>     long __syscall_ret(unsigned long r)
+>     {
+>     	if (r > -4096UL) {
+>     		errno = -r;
+>     		return -1;
+>     	}
+>     	return r;
+>     }
+> 
+> Our new implementation (based on the one used by mmap()) is almostly the same
+> as musl. Not sure if this is enough. I have tried to 'git blame' on
+> __syscall_ret() of musl to find some clue, but failed, because the function has
+> been added before importing into its git repo.
 
-It looks like a fix has already made it into mainline now, so it
-should be fixed on the latest linux-next:
+OK, we already used the glibc-saved registers in the past to determine
+the official list of clobbered registers (and the ABI spec was even
+updated based on this). Here, musl is sufficiently deployed to consider
+this as valid. You can simply go that route and mention in the commit
+message that while you found no official reference stating that this is
+valid for int/long returns, you found at least one other implementation
+relying on this (i.e. if the kernel ever changes it will cause breakage).
 
-https://lore.kernel.org/lkml/20230630180418.gonna.286-kees@kernel.org/
+> > Also, the rest of the commit message regarding uintptr_t (which we don't
+> > use), bit values and modular arithmetics is extremely confusing and not
+> > needed at all. What matters is only to know if we need to consider only
+> > values -MAX_ERRNO..-1 as error or all negative ones. If so, then it's
+> > obvious that ret >= (unsigned long)-MAX_ERRNO catches them all, as the
+> > current mmap() function already does with -4095UL.
+> >
+> 
+> Yes, will clean up the commit message, but at first, let's continue get
+> more information about which one is ok:
+> 
+> - -MAX_ERRNO..-1 as error, for sys_mmap (we know in nolibc) currently
+> 
+> - all negative ones, for others currently
 
-     arnd
+You can double-check in glibc for example, but I'm starting to guess
+you'll find the same test as above, i.e. errors are exclusively >-4096,
+regardless of the expected return type.
+
+Thanks!
+Willy
