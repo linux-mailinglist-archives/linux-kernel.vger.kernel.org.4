@@ -2,213 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F847463B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 22:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6397463B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 22:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbjGCUKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 16:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S231452AbjGCULP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 16:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjGCUKt (ORCPT
+        with ESMTP id S230144AbjGCULO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 16:10:49 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C46E72
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 13:10:48 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-346099c6f43so187405ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 13:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688415048; x=1691007048;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RUC3FVpBPWS4ikSEsOA9mN51Dh3oGNvpuz1E7SS7pW8=;
-        b=W6kvFMDOO6Pl9UTrtrK/jSx6v+0H/Opp73681u2iMUCVFXuT7Xje1tIpNGfz1OaDyI
-         VdpgH4fgCf20sjpsoiuAFEmhPPa/1fgffTYdj3vIWsjrtTf4ZIMPAEEyEqn+TESCrxYC
-         jVL2jjdqW4g19xqp7Vk9iXwlYXhOWERqW+jJ3fewh0u57Q7HtZ97zNAqbygOMecYkgKy
-         NccrUgeF/Q7ybFa8mpZs8LHdguO00gPjBTZKJWSCFvpT5ELfqEGN2UYpwWiGp9MgkG1C
-         nAq90GyIebUccUhPv31VP1GCX2PPuXAyDPp29hvB62v4WAQLF1I6bkjPIgquivizEeAX
-         DoYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688415048; x=1691007048;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RUC3FVpBPWS4ikSEsOA9mN51Dh3oGNvpuz1E7SS7pW8=;
-        b=JpltNjZv2KF9Bh9NdZhTHj1e6rmAAHwLIhZTIRR12Eq7oJ5782ZpcBUb6aASbIQHG3
-         Ucdvk6hUB2XmwRxUsZjafbZ0l3M27uB0zzDibGQtkF4PmJ2QJOPKm3/bIpr/jUpCmXIY
-         AvQFvAVXp2Cpss98UJvmPt3gsZwugIN2BlOdwwryuMS1LzlWrjtVH62O51nnolZgkWkF
-         ZlKKzSy2q8egCkUwGvFEYlk56oH/2o4eYFGR/egYUhMvJvIrf532gZlNmoXUMHiEPT0g
-         15JowZjq7nherIVeE5v26CcDNSZVYTANhAKGOtpsLb3wljTibKshfOvKTL1Fl2ROuSKJ
-         UhEw==
-X-Gm-Message-State: ABy/qLabTO7gNpx3eaREAnAPI2AC24QGLaRuWjMHJruA3IRBREZlvJHR
-        R3sXZ6F3oSCtr1tDN2xwNyG/sA==
-X-Google-Smtp-Source: APBJJlFfY6YmIHiIaFwzFZfADRfTPdrEmECH4yvf25yM58GDY9iJ7h2R/a1TW56egdogUK+tAz/sNA==
-X-Received: by 2002:a05:6e02:1d03:b0:33b:71e6:d6b4 with SMTP id i3-20020a056e021d0300b0033b71e6d6b4mr18168ila.14.1688415047707;
-        Mon, 03 Jul 2023 13:10:47 -0700 (PDT)
-Received: from [2620:0:1008:15:17fc:1b56:71df:89b7] ([2620:0:1008:15:17fc:1b56:71df:89b7])
-        by smtp.gmail.com with ESMTPSA id f4-20020aa78b04000000b0066884d4efdbsm14887991pfd.12.2023.07.03.13.10.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 13:10:47 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 13:10:46 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Matteo Rizzo <matteorizzo@google.com>
-cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, jannh@google.com
-Subject: Re: [PATCH] mm/slub: refactor freelist to use custom type
-In-Reply-To: <20230703143820.152479-1-matteorizzo@google.com>
-Message-ID: <abd3f78b-5027-f859-27c8-296108ec8e92@google.com>
-References: <20230703143820.152479-1-matteorizzo@google.com>
+        Mon, 3 Jul 2023 16:11:14 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535A7E7C;
+        Mon,  3 Jul 2023 13:11:10 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:10:88d9::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A24846606F85;
+        Mon,  3 Jul 2023 21:11:07 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688415069;
+        bh=QsWmngxpO2lX8BoPrdzImKUh6ZfldvuIGfNK2479/4g=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=eOvXh7lofZ3ufRaXxHkOOMCrvE9OpytXe82KeK+E2ePtxPtnDl1gGsry+aOqoyRgO
+         e2CtPn3Z8HcQYLxzt3Kmp1Nk2ftXA6ArEkbkCSbOw/aebUHyD2iUj0yimit2M8rN7q
+         zwsqQszdWCfFDQhhlj5TYKWK8zWyjULDhlgD7OgiBENNkNzE98KrZht65w1aLElj98
+         H7kSy1iociMdQMKGljTc4G7FvlsVoasMOwqdNwrfANRc0NNsruDJpUhKYhzmE7yv7s
+         qK0PzoUTZjzjvkO4jxkFTfBX3/yqdZGf2ATQOlonkvo/57z4dMgoI+jo46gAeYJMgj
+         +mw8+nJn8TpoQ==
+Message-ID: <8979514b025a60133c18a14be08df1aff3d091d2.camel@collabora.com>
+Subject: Re: [PATCH v4,09/11] media: mediatek: vcodec: fix unreasonable
+ parameter definition and style
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        =?ISO-8859-1?Q?N=EDcolas?= "F . R . A . Prado" 
+        <nfraprado@collabora.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Date:   Mon, 03 Jul 2023 16:10:58 -0400
+In-Reply-To: <20230626035346.30654-10-yunfei.dong@mediatek.com>
+References: <20230626035346.30654-1-yunfei.dong@mediatek.com>
+         <20230626035346.30654-10-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023, Matteo Rizzo wrote:
+Le lundi 26 juin 2023 =C3=A0 11:53 +0800, Yunfei Dong a =C3=A9crit=C2=A0:
+> Fix unreasonable coding style.
+> Fix unreasonable parameter definition.
+>=20
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-> From: Jann Horn <jannh@google.com>
-> 
-> Currently the SLUB code represents encoded freelist entries as "void*".
-> That's misleading, those things are encoded under
-> CONFIG_SLAB_FREELIST_HARDENED so that they're not actually dereferencable.
-> 
-> Give them their own type, and split freelist_ptr() into one function per
-> direction (one for encoding, one for decoding).
-> 
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-I don't feel strongly about this.
-
-> Signed-off-by: Jann Horn <jannh@google.com>
-> Co-developed-by: Matteo Rizzo <matteorizzo@google.com>
-> Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
 > ---
->  include/linux/slub_def.h |  6 ++++++
->  mm/slub.c                | 37 ++++++++++++++++++++++++++-----------
->  2 files changed, 32 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/slub_def.h b/include/linux/slub_def.h
-> index deb90cf4bffb..c747820a55b4 100644
-> --- a/include/linux/slub_def.h
-> +++ b/include/linux/slub_def.h
-> @@ -43,6 +43,12 @@ enum stat_item {
->  };
->  
->  #ifndef CONFIG_SLUB_TINY
-> +/*
-> + * freeptr_t represents a SLUB freelist pointer, which might be encoded
-> + * and not dereferenceable if CONFIG_SLAB_FREELIST_HARDENED is enabled.
-> + */
-> +typedef struct { unsigned long v; } freeptr_t;
-
-Seems strange this would only appear for configs without CONFIG_SLUB_TINY.
-
-Since lots of files include linux/slab.h I think this may start to be used 
-in non-slab code.  Not sure why it needs to be added to the header file?
-
-> +
+>  .../media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h   | 4 ++--
+>  .../media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h   | 8 ++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h =
+b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h
+> index a18ba8f32d41..1a0375dd5b6d 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h
+> @@ -19,7 +19,7 @@
+>  #define IS_VDEC_INNER_RACING(capability) ((capability) & MTK_VCODEC_INNE=
+R_RACING)
+> =20
 >  /*
->   * When changing the layout, make sure freelist and tid are still compatible
->   * with this_cpu_cmpxchg_double() alignment requirements.
-> diff --git a/mm/slub.c b/mm/slub.c
-> index e3b5d5c0eb3a..26d0ca02b61d 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -365,8 +365,8 @@ static struct workqueue_struct *flushwq;
->   * with an XOR of the address where the pointer is held and a per-cache
->   * random number.
+> - * struct mtk_vdec_format_types - Structure used to get supported
+> + * enum mtk_vdec_format_types - Structure used to get supported
+>   *		  format types according to decoder capability
 >   */
-> -static inline void *freelist_ptr(const struct kmem_cache *s, void *ptr,
-> -				 unsigned long ptr_addr)
-> +static inline freeptr_t freelist_ptr_encode(const struct kmem_cache *s,
-> +					    void *ptr, unsigned long ptr_addr)
->  {
->  #ifdef CONFIG_SLAB_FREELIST_HARDENED
->  	/*
-> @@ -379,25 +379,40 @@ static inline void *freelist_ptr(const struct kmem_cache *s, void *ptr,
->  	 * calls get_freepointer() with an untagged pointer, which causes the
->  	 * freepointer to be restored incorrectly.
->  	 */
-> -	return (void *)((unsigned long)ptr ^ s->random ^
-> -			swab((unsigned long)kasan_reset_tag((void *)ptr_addr)));
-> +	return (freeptr_t){.v = (unsigned long)ptr ^ s->random ^
-> +			swab((unsigned long)kasan_reset_tag((void *)ptr_addr))};
->  #else
-> -	return ptr;
-> +	return (freeptr_t){.v = (unsigned long)ptr};
->  #endif
->  }
->  
-> +static inline void *freelist_ptr_decode(const struct kmem_cache *s,
-> +					freeptr_t ptr, unsigned long ptr_addr)
-> +{
-> +	void *decoded;
-> +
-> +#ifdef CONFIG_SLAB_FREELIST_HARDENED
-> +	/* See the comment in freelist_ptr_encode */
-> +	decoded = (void *)(ptr.v ^ s->random ^
-> +		swab((unsigned long)kasan_reset_tag((void *)ptr_addr)));
-> +#else
-> +	decoded = (void *)ptr.v;
-> +#endif
-> +	return decoded;
-> +}
-> +
->  /* Returns the freelist pointer recorded at location ptr_addr. */
->  static inline void *freelist_dereference(const struct kmem_cache *s,
->  					 void *ptr_addr)
->  {
-> -	return freelist_ptr(s, (void *)*(unsigned long *)(ptr_addr),
-> +	return freelist_ptr_decode(s, *(freeptr_t *)(ptr_addr),
->  			    (unsigned long)ptr_addr);
->  }
->  
->  static inline void *get_freepointer(struct kmem_cache *s, void *object)
->  {
->  	object = kasan_reset_tag(object);
-> -	return freelist_dereference(s, object + s->offset);
-> +	return freelist_dereference(s, (freeptr_t *)(object + s->offset));
->  }
->  
->  #ifndef CONFIG_SLUB_TINY
-> @@ -421,15 +436,15 @@ __no_kmsan_checks
->  static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
->  {
->  	unsigned long freepointer_addr;
-> -	void *p;
-> +	freeptr_t p;
->  
->  	if (!debug_pagealloc_enabled_static())
->  		return get_freepointer(s, object);
->  
->  	object = kasan_reset_tag(object);
->  	freepointer_addr = (unsigned long)object + s->offset;
-> -	copy_from_kernel_nofault(&p, (void **)freepointer_addr, sizeof(p));
-> -	return freelist_ptr(s, p, freepointer_addr);
-> +	copy_from_kernel_nofault(&p, (freeptr_t *)freepointer_addr, sizeof(p));
-> +	return freelist_ptr_decode(s, p, freepointer_addr);
->  }
->  
->  static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
-> @@ -441,7 +456,7 @@ static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
->  #endif
->  
->  	freeptr_addr = (unsigned long)kasan_reset_tag((void *)freeptr_addr);
-> -	*(void **)freeptr_addr = freelist_ptr(s, fp, freeptr_addr);
-> +	*(freeptr_t *)freeptr_addr = freelist_ptr_encode(s, fp, freeptr_addr);
->  }
->  
->  /* Loop over all objects in a slab */
-> 
-> base-commit: a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451
-> -- 
-> 2.41.0.255.g8b1d071c50-goog
-> 
-> 
+>  enum mtk_vdec_format_types {
+> @@ -258,7 +258,7 @@ struct mtk_vcodec_dec_dev {
+>  	const struct mtk_vcodec_dec_pdata *vdec_pdata;
+> =20
+>  	struct mtk_vcodec_fw *fw_handler;
+> -	unsigned long id_counter;
+> +	u64 id_counter;
+> =20
+>  	/* decoder hardware mutex lock */
+>  	struct mutex dec_mutex[MTK_VDEC_HW_MAX];
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h =
+b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h
+> index a88ef9078848..4804d8531a4e 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h
+> @@ -32,13 +32,13 @@
+>   */
+>  struct mtk_vcodec_enc_pdata {
+>  	bool uses_ext;
+> -	unsigned long min_bitrate;
+> -	unsigned long max_bitrate;
+> +	u64 min_bitrate;
+> +	u64 max_bitrate;
+>  	const struct mtk_video_fmt *capture_formats;
+>  	size_t num_capture_formats;
+>  	const struct mtk_video_fmt *output_formats;
+>  	size_t num_output_formats;
+> -	int core_id;
+> +	u8 core_id;
+>  	bool uses_34bit;
+>  };
+> =20
+> @@ -208,7 +208,7 @@ struct mtk_vcodec_enc_dev {
+>  	const struct mtk_vcodec_enc_pdata *venc_pdata;
+> =20
+>  	struct mtk_vcodec_fw *fw_handler;
+> -	unsigned long id_counter;
+> +	u64 id_counter;
+> =20
+>  	/* encoder hardware mutex lock */
+>  	struct mutex enc_mutex;
+
