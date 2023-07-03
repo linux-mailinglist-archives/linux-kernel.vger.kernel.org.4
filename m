@@ -2,109 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37DE746131
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0B6746138
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjGCRLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S230335AbjGCRNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjGCRLl (ORCPT
+        with ESMTP id S230128AbjGCRNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:11:41 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90402E3;
-        Mon,  3 Jul 2023 10:11:40 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1b03fb998c8so4602219fac.3;
-        Mon, 03 Jul 2023 10:11:40 -0700 (PDT)
+        Mon, 3 Jul 2023 13:13:32 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF25E4C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:13:31 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-401f4408955so407711cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 10:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688404300; x=1690996300;
+        d=google.com; s=20221208; t=1688404411; x=1690996411;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Kr9Z+jCllCPo2TEYaCvE923MwG2oQxSBRUlumqGiOe0=;
-        b=mc3vghlEgnyFSk7D/jcCzO1QYJfy+2euI1l4LO1kbhRa4eL0G6ATMGOIHPLt8GD0jx
-         zRQKc5SeLq+nxXCqR1dT16rQ2tv5IBKfzaf19Oun31eJ0gpYwWFq4U3+EEUkopkrmMXQ
-         lgfetNCzYXf54MlXaz9PQBGph+wF6oPowkOccv70aUjWyk+PBj9pwgz38X/IlIu24qkW
-         j1MWVKyn0h0w5sAOxevm5sRjcKHd1OGHQ6nendorq5p7peQY0w+YMjof4BhFvo0Y2xrM
-         eCf+Ak49M7VAWhauwX9EVTNeUgSXUqcY6m9DCpMZUfemv+qtTnTG0XHv0UPn+QJnjxwg
-         hr2w==
+        bh=iHhUcDMJ3GqqYqX8PUUmG05Gp9eg0kW+H85LcvU0FfM=;
+        b=pcu1plunE/NwYXd0zKabq0kXC4lBKk8tohnsKuaUuvE/HlEsyL08J8Rrncb6tdHXMG
+         cmz9bCoXUDR/JwJsqsmr71QjeYmcARqtrt1DQSYI9zPV/Sf5pJYJl6xLdKaxJCKOgvFr
+         tnh9hlLbsw7q44xoXUaYM2Dl0zsM+CLmFGB60IzLiGOE4Gp49zPEcLGoPRuAw7HPala5
+         LXBec5FoBaHgoeX5sfQUdYjUsvGaUbSYJ1wRZy1H8aMdOztF5ksEydpAKeoXbOIbsEEp
+         30O8WuSAIYDTIkOI+/A0q8zA+SIzSI2JSocnTIfxpIswqs5WknnfbaYV8cHM0P31259d
+         HXkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688404300; x=1690996300;
+        d=1e100.net; s=20221208; t=1688404411; x=1690996411;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Kr9Z+jCllCPo2TEYaCvE923MwG2oQxSBRUlumqGiOe0=;
-        b=HUs5s5kITgL0fCujWISjtVhrfX/vMUdkup8cv4MFBRVNlEcFSSfQ+k3fAoFMyhB1W3
-         Kr6f1G2e990n9W2vqX5WRRiHrkX9N6CV/GskQ31WrY63xYuBc0ypepD7cy5bPa7mKWpe
-         vG63k+hMQldwn7/ZnzjLFVcBNlkV0TPzQLCd3ds0YOqLD1FEHDoWdGjpbbuFNOOfA2Lp
-         VH145t+mzbD32qIe08J0O/1k7gcE86/MS5v4Xnnj4/bZEtH9EIMfkueH6zQLUhJ17+lL
-         Bxr3ZDpRiwe1Voyx52DeT3ln0QOoX/0eKsLTKXR9XkrgCLxiKiw6MO2atOnR8tGvnFjT
-         S8yQ==
-X-Gm-Message-State: ABy/qLasz0zGzvG2OJqOcPjLeAqBmw8+hNVLxKPraGiz7oMu5SI03uMZ
-        Zs/E2mL2O9E7C+nq9KNx35/ohL2A3r1NKW+DcFWN1TNGZfM=
-X-Google-Smtp-Source: APBJJlGEUk7iZHT3ezXIJ+HAfuI51ogHZ6tS108CpDDo0YFCiXk0x8jA4twCBfPnwekP5IQeIzEClEKqljHuEuypaUk=
-X-Received: by 2002:a05:6870:1495:b0:1b3:84a4:630d with SMTP id
- k21-20020a056870149500b001b384a4630dmr6215525oab.40.1688404299874; Mon, 03
- Jul 2023 10:11:39 -0700 (PDT)
+        bh=iHhUcDMJ3GqqYqX8PUUmG05Gp9eg0kW+H85LcvU0FfM=;
+        b=Fr/M8wBWZxJq2EkmOv0USgvvPB3zpjxu1yqgeKXzgIheuL0Pd/MRG21wRhpAgOXdp4
+         aHpukwwcputwXz8JxjwJzL1+f7WgkrqMpQE4zNVUtGG6SdQB6WdzsxLPsgh+/9Ei8i1t
+         MP4BcqCqD+SFu9tGkdBh08kwIdtMbKz0t/24WTn58zfgBHdDuFebATHLW2FneSRaZsIZ
+         ws+maZ620vBeTqeHyaUyxtF3ljeFJhTunF6p9HeBWZQ2xwTfQS+e3Zo84JpDfojQtYvh
+         OTufj7+bL5nTR/EESrqn+QHFfv6L4UVgUum4+FplQ3my7XRdna6r/t0COZ8A8nZgr2Ck
+         vlHA==
+X-Gm-Message-State: ABy/qLaHepmkEIpcK58JRJqvJXqQLiBL2OLN/xFfOSjpQo+0UpjFE5FU
+        AvvsUkNGNGj090d5LvxTtqIaTESu+hwpTnQU+ewXIQ==
+X-Google-Smtp-Source: APBJJlGYc95qxttE9/8PAmxKfxDwWHEqgj+xMhW5O9ooJIFZZ/PHyQ6aNbFx0eU2JgiJSidSG/eG84BaW6wvypRKK3A=
+X-Received: by 2002:ac8:574c:0:b0:3e8:684b:195d with SMTP id
+ 12-20020ac8574c000000b003e8684b195dmr44qtx.10.1688404410592; Mon, 03 Jul 2023
+ 10:13:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAMo8Bf+rgAnzMF732rzNgWbnmijFbr1yd5aCiY1Hcf4qdpj6FQ@mail.gmail.com>
- <8ea68c1e-fffc-6443-d2a7-d540f9b5bb16@web.de>
-In-Reply-To: <8ea68c1e-fffc-6443-d2a7-d540f9b5bb16@web.de>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Mon, 3 Jul 2023 10:11:28 -0700
-Message-ID: <CAMo8Bf+ABwfqfi2hnyCdwooiogN7JMvq_tS0ZDYkytkYZ5gE9w@mail.gmail.com>
-Subject: Re: [PATCH] xtensa: ISS: fix etherdev leak in error return path
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     Minjie Du <duminjie@vivo.com>, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, opensource.kernel@vivo.com,
-        11162212@vivo.com, Chris Zankel <chris@zankel.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Yang Yingliang <yangyingliang@huawei.com>
+References: <20230612130256.4572-1-linyunsheng@huawei.com> <20230612130256.4572-5-linyunsheng@huawei.com>
+ <20230614101954.30112d6e@kernel.org> <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
+ <20230615095100.35c5eb10@kernel.org> <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
+ <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com> <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
+ <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com> <20230616122140.6e889357@kernel.org>
+ <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com> <20230619110705.106ec599@kernel.org>
+ <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+ <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org> <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+ <47b79e77-461b-8fe9-41fb-b69a6b205ef2@kernel.org>
+In-Reply-To: <47b79e77-461b-8fe9-41fb-b69a6b205ef2@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 3 Jul 2023 19:13:19 +0200
+Message-ID: <CANn89iKAvrf92Fy8a_M+V9eya6OHokey2_yxQ3JiCT87fKND_w@mail.gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 9:02=E2=80=AFAM Markus Elfring <Markus.Elfring@web.d=
-e> wrote:
+On Mon, Jul 3, 2023 at 4:45=E2=80=AFPM David Ahern <dsahern@kernel.org> wro=
+te:
 >
-> > > We fixed a bug where the variable dev
-> > > was not freed before return.
-> =E2=80=A6
-> > >  arch/xtensa/platforms/iss/network.c | 1 +
-> =E2=80=A6
-> > Applied to my xtensa tree with the following commit message:
+> On 7/3/23 12:22 AM, Mina Almasry wrote:
+> > tcpdump is able to access the header of these skbs which is in host
+> > memory, but not the payload in device memory. Here is an example
+> > session with my netcat-like test for device memory TCP:
+> > https://pastebin.com/raw/FRjKf0kv
 > >
-> >    xtensa: ISS: fix etherdev leak in error return path
-> >
-> >    iss_net_configure frees etherdev in all error return paths except on=
-e
-> >    where register_netdevice fails. Add missing free_netdev to that path=
-.
+> > tcpdump seems to work, and the length of the packets above is correct.
+> > tcpdump -A however isn't able to print the payload of the packets:
+> > https://pastebin.com/raw/2PcNxaZV
 >
-> * Did you add the tag =E2=80=9CFixes=E2=80=9D because of the completed re=
-source cleanup
->   for the implementation of the function =E2=80=9Ciss_net_configure=E2=80=
-=9D?
+> That is my expectation. The tcpdump is just an easy example of accessing
+> the skb page frags. skb_copy_and_csum_bits used by icmp is another
+> example that can walk frags wanting access to device memory. You did not
+> cause a panic or trip a WARN_ON for example with the tcpdump?
 >
-> * How do you think about to replace any statements by the source code
->   =E2=80=9Cgoto err_free_netdev;=E2=80=9D here?
 
-I've scrapped that patch and committed the other one instead. See
+Change for af_packet was not too hard :)
 
-https://lore.kernel.org/lkml/CAMo8BfKe1nR+UP1WiUWFX0E7GSEfHsF8bZapsUYu3NFTn=
-A8_AQ@mail.gmail.com/
-https://lore.kernel.org/lkml/20230703170335.1340104-1-jcmvbkbc@gmail.com/
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index a2dbeb264f260e5b8923ece9aac99fe19ddfeb62..aa4133d1b1e0676e408499ea453=
+4b51262394432
+100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2152,7 +2152,7 @@ static int packet_rcv(struct sk_buff *skb,
+struct net_device *dev,
+                }
+        }
 
---=20
-Thanks.
--- Max
+-       snaplen =3D skb->len;
++       snaplen =3D skb->devmem ? skb_headlen(skb) : skb->len;
+
+        res =3D run_filter(skb, sk, snaplen);
+        if (!res)
+@@ -2275,7 +2275,7 @@ static int tpacket_rcv(struct sk_buff *skb,
+struct net_device *dev,
+                }
+        }
+
+-       snaplen =3D skb->len;
++       snaplen =3D skb->devmem ? skb_headlen(skb) : skb->len;
+
+        res =3D run_filter(skb, sk, snaplen);
+        if (!res)
+
+
+And a generic change in pskb_may_pull() ( __pskb_pull_tail() more
+exactly) was enough to cover most other cases.
