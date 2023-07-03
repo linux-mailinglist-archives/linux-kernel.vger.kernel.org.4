@@ -2,141 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5448E7458BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3C87458BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjGCJsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S229949AbjGCJsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjGCJsB (ORCPT
+        with ESMTP id S231147AbjGCJs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:48:01 -0400
+        Mon, 3 Jul 2023 05:48:28 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD5812C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:47:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F52BDD
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:47:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688377631;
+        s=mimecast20190719; t=1688377664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQYvI6ljDyvAPteF7vHttZ7BlwUysjnknTWk4YxwxHU=;
-        b=OXGnk2OFv2M4zfq5ULC+GXQrG7SFR98Ph0d1dv7Y0ivFYktJLl0TCcmAZU/+kiupPg7A8L
-        uDe1Ddybkw/Mw4pVNr5U1tjIT0VqiFbsSXBbi6mXKFkT/yb/0uKNwC9OOv1rMPKzrkVRfT
-        6UFgd8q4f/yzD4fntY7vIXGdh23QusQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HjDG9EDRPV/EgTnmORU7tSN/WwduSfYwcySr89RNbmQ=;
+        b=XevY0B9acFPUlUDDGGO4K+yE49U5510mJuI/jo6tuXwOITXnVggxN5yKwtnRHja4Sn9mcT
+        C+QOygQwLTIuroTm5MToyKIHnQH5JmSimZdqP2qvzGntt0lWdDWUKQsyGWtb/g/h9wAhHB
+        IOgHAwZljDkfkUTLTg4z1nHhfOg7uWY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-283-EKcbYDlwOFybgvkHILiBCA-1; Mon, 03 Jul 2023 05:47:10 -0400
-X-MC-Unique: EKcbYDlwOFybgvkHILiBCA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-31421c900b7so1839314f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:47:09 -0700 (PDT)
+ us-mta-647-2bnoMkHmPF2_hjSH3FAYKQ-1; Mon, 03 Jul 2023 05:47:41 -0400
+X-MC-Unique: 2bnoMkHmPF2_hjSH3FAYKQ-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-765a44ce88aso247632485a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:47:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688377629; x=1690969629;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jQYvI6ljDyvAPteF7vHttZ7BlwUysjnknTWk4YxwxHU=;
-        b=E6d//wwJGv1IkEKoO31RrZnwp+vCUDuKJgr1pNclQOO87K2c2YVlQeqy7aAvjeKKWV
-         9q9IH3+UP2Qtd9IRoUYsju1QsFvXGBULKfQI/MvECeCLmo2niXw1hyb8C1Vf7VY5rSqd
-         9CcajbyFglAsz+AOFn7l+JIHnIbIQs7nknGRjc38Pv9cAxrq5dhEf1EdA3mMNpiUk5lt
-         R2ZMmpb+w+rF0xw8Ijp7hWVxSqhn91Nqih6nl7nEJuvVMAGIFcL4D7fZbHqrAAABKHkR
-         Xca6c2HngrBuFkc0r0p81nu4uFF8WUfoj41/rOihhpZew56x2ChQ6Wl1UMuMl0aw0b/b
-         iSvA==
-X-Gm-Message-State: ABy/qLYsRqAHH7PSCZ9urDgGW4FeRWUz/sgFwKlXoWjgUQ/Q2Y1bRiEE
-        HM7OYAXPv2yAHol2d2+ArqaAxkgLAVEP/8BOrqyylcRgL60ljLPfu45rYI3t96yV0y++S4tKvCe
-        5xu/E8mOGZzSHsyhLNSPYayUi
-X-Received: by 2002:a5d:4534:0:b0:314:2c7a:d100 with SMTP id j20-20020a5d4534000000b003142c7ad100mr5055541wra.42.1688377629044;
-        Mon, 03 Jul 2023 02:47:09 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGG0GHYwylwnn0jpLdeMbAvNq2FJCyP9ZUsj6QJxVdOBpddConGhzUf2Sdb3/sXjz+tUMYmuA==
-X-Received: by 2002:a5d:4534:0:b0:314:2c7a:d100 with SMTP id j20-20020a5d4534000000b003142c7ad100mr5055530wra.42.1688377628771;
-        Mon, 03 Jul 2023 02:47:08 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m1-20020adffe41000000b003143853590csm1617613wrs.104.2023.07.03.02.47.08
+        d=1e100.net; s=20221208; t=1688377660; x=1690969660;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HjDG9EDRPV/EgTnmORU7tSN/WwduSfYwcySr89RNbmQ=;
+        b=dzQzSSoBFxkXG6lQK9Od5Qr3w4ntxVnyV86LsUYxBRIpsVEM3I256DcPld5MZrramQ
+         f0N+u/7I4HHkInx/prx/fB86utM1IIgeO4TBDnI6riVR7wEn+Mtl3AwAJbYfe6Ktlne2
+         pMfOCT0+Ec+7fSviUmU4we4L0zBu21RtfQhF6PfMOJFnPIPpaFjYdUgM+iwDYxIy/TjZ
+         Qiw2mOHrTYBlTC4zGXcIa2z4qYlc7sOAjCOB8GHItoE0rdQ+7611eXkP9K9H6zp5AXNc
+         jDFx3RLCnTbpRh5uYtZHdc8G3o4VpXwB3Z4m2NmHa4pEm6SJeNXxlOahT3tHEbVI6cKh
+         iBuA==
+X-Gm-Message-State: AC+VfDzhcUxdbx+wfIqUNubKKV0tXzPndbrbpSsC1lXZphr1aSucGP0O
+        EXk+AzYXjs4pwW8XeILIq/jMLtkajPCvUQh4leYkwaKgDRb/jQXrc+vVC8wLD534atMpXmiNOKj
+        L7VvrRHiFgr1hLaBNLNwmz/mq
+X-Received: by 2002:a05:620a:4512:b0:760:6fcb:77db with SMTP id t18-20020a05620a451200b007606fcb77dbmr12149703qkp.36.1688377660640;
+        Mon, 03 Jul 2023 02:47:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6oc0M0BEGnNlJlDoPddT1lpfCp+vKZ5LRV7f3/EvDr6CxKSrEtsmk9NDvnPCRDOAI1JRyhyw==
+X-Received: by 2002:a05:620a:4512:b0:760:6fcb:77db with SMTP id t18-20020a05620a451200b007606fcb77dbmr12149691qkp.36.1688377660331;
+        Mon, 03 Jul 2023 02:47:40 -0700 (PDT)
+Received: from fedora.redhat.com ([2a06:c701:4b84:700:e5a3:9a79:b307:264a])
+        by smtp.gmail.com with ESMTPSA id da34-20020a05620a362200b0075b2af4a076sm405815qkb.16.2023.07.03.02.47.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 02:47:08 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 1/3] drm: Improve Kconfig symbol prompt and help texts
-In-Reply-To: <96d91373-f955-2209-5cd7-7e1ecacf73f9@suse.de>
-References: <20230702191529.768248-1-javierm@redhat.com>
- <20230702191529.768248-2-javierm@redhat.com>
- <96d91373-f955-2209-5cd7-7e1ecacf73f9@suse.de>
-Date:   Mon, 03 Jul 2023 11:47:07 +0200
-Message-ID: <87lefxz5r8.fsf@minerva.mail-host-address-is-not-set>
+        Mon, 03 Jul 2023 02:47:39 -0700 (PDT)
+From:   Dana Elfassy <delfassy@redhat.com>
+X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
+To:     shuah@kernel.org, eballetbo@kernel.org, usama.anjum@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dana Elfassy <dangel101@gmail.com>
+Subject: [PATCHv2] selftests/input: add tests for the EVIOCSCLOCKID ioctl
+Date:   Mon,  3 Jul 2023 12:47:22 +0300
+Message-ID: <20230703094722.909348-1-dangel101@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
+This patch introduces tests for the EVIOCSCLOCKID ioctl, for full
+coverage of the different clkids
 
-> Hi Javier
->
-> Am 02.07.23 um 21:15 schrieb Javier Martinez Canillas:
+Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+---
+Changes in v2:
+- Replaced clkids numerical values with their equivalent definition
 
-[...]
+This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
 
->> -	  Kernel-level support for the Direct Rendering Infrastructure (DRI)
->> -	  introduced in XFree86 4.0. If you say Y here, you need to select
->> -	  the module that's right for your graphics card from the list below.
->> -	  These modules provide support for synchronization, security, and
->> -	  DMA transfers. Please see <http://dri.sourceforge.net/> for more
->> -	  details.  You should also select and configure AGP
->> -	  (/dev/agpgart) support if it is available for your platform.
->> +	  Kernel-level support for the Direct Rendering Infrastructure (DRI),
->> +	  that is composed of the Direct Rendering Manager (DRM) and Kernel
->> +	  Mode Settings (KMS) subsystems.
->
-> It's slightly off, as KMS is part of DRM. I'd just drop any mention of KMS.
->
-> But TBH instead of these small fixes, we should first discuss how we
+ tools/testing/selftests/input/evioc-test.c | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Right, I'll just drop this patch and we can cleanup the text later.
-
-> organize the menu structures. For example, the DRM drivers are all 
-> listed in the graphics menu. They might as well go into a DRM menu.
->
-> The framebuffer will be split into drivers and 'core'. The core options 
-> (FB_DEVICE, FIRMWARE_EDID, FB_*_ENDIAN) probably deserve a separate menu.
->
-
-Yes, that is what we agreed with Arnd and Geert. To add a new Kconfig in
-drivers/video/fbdev/core/Kconfig and drivers/video/fbdev/Kconfig source it.
-
-> And there's the framebuffer console, which has its own menu. We need to 
-> show it even if only DRM is supported. Plus the other consoles.
->
-> I'm not sure what drivers/auxdisplay is, it might fit here as well.
->
-
-That seems to be for simple character-based displays. And agree that could
-be in framebuffer console as well. So we should improve the menu structure
-before attempting to complicate with more options like adding the FB_CORE.
-
-> It would be nice to rethink the overall menu.
->
-> Best regards
-> Thomas
->
-
+diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+index ad7b93fe39cf..83ce1a3c9b84 100644
+--- a/tools/testing/selftests/input/evioc-test.c
++++ b/tools/testing/selftests/input/evioc-test.c
+@@ -17,6 +17,7 @@
+ #include <sys/stat.h>
+ #include <time.h>
+ #include <unistd.h>
++#include <linux/time.h>
+ 
+ #include "../kselftest_harness.h"
+ 
+@@ -234,4 +235,33 @@ TEST(eviocsrep_set_repeat_settings)
+ 	selftest_uinput_destroy(uidev);
+ }
+ 
++TEST(eviocsclockid_set_clockid)
++{
++	struct selftest_uinput *uidev;
++	int clkid = CLOCK_REALTIME;
++	int rc;
++
++	rc = selftest_uinput_create_device(&uidev, -1);
++	ASSERT_EQ(0, rc);
++	ASSERT_NE(NULL, uidev);
++
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	clkid = CLOCK_MONOTONIC;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	clkid = CLOCK_BOOTTIME;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(0, rc);
++
++	// case default
++	clkid = -1;
++	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
++	ASSERT_EQ(-1, rc);
++
++	selftest_uinput_destroy(uidev);
++}
++
+ TEST_HARNESS_MAIN
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.41.0
 
