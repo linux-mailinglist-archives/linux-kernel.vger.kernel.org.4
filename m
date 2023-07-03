@@ -2,89 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8941074562F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B156A745631
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjGCHdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S229839AbjGCHdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjGCHdj (ORCPT
+        with ESMTP id S231159AbjGCHdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:33:39 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD404CC;
-        Mon,  3 Jul 2023 00:33:38 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 54C165C01DE;
-        Mon,  3 Jul 2023 03:33:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 03 Jul 2023 03:33:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688369618; x=1688456018; bh=J8
-        flT4uVwabCGQeQmBFkpV16dPIUdp4ZLz6nwezejdw=; b=T0MWScLTzpFcrejycr
-        kvRVo8BePOpUwszcGM5KaDPNKfVn5VXVo+5CJeJtdxBkiwcjzqlz1GMBJ8/l5nvS
-        eHLRnL3tTWgX1ddT5Y5f96dNo9ZdZ2hp+F15sGa/MtiUMj+RzoVDSC7r+IWuE0Kx
-        a7OnZOonq4TLp5ST2La6aRGOHMaf/HN00iudcQcCRKIiTWr222pZxJJs7WLLAs7A
-        UpFXU0k4D/7IwO3QMcXvYcOWd2SX2DJxrQimAOZag1JXtfQb6FqCOgCgOS3IrZCs
-        VfRY3MnSZ9K4A7ZZfYvjngqI2dsUqUV4qTgO9OrHYaumP/C5aTp4+lrBPR+R4bK6
-        dqYg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688369618; x=1688456018; bh=J8flT4uVwabCG
-        QeQmBFkpV16dPIUdp4ZLz6nwezejdw=; b=Sb7Ype4TPScCOigmMRlteOWq1esYz
-        fVXZL0hrTj0t6TzO1x/OD/588IIOJhvjqSsHrqU46OUG/SyCH0myxRHkhwagnkJs
-        KYP94O55C3I+bPJPHNut19abhWoJx2d0kQE37jpKhyMyw5fMi9frkcXqfjU8suZA
-        lg26TohbrOaoNq8r9OD5Zq9rqVGilHtR7RXe8rRqzyjXd4yyRlE3dol252kyr/tl
-        cWUtjbui2qKjrhol7gNhljh3l1tPWP2MzTm2Gs0O/WMql3bh1jON19/f17NxX9gr
-        0eMs5O39aPa0BaHjfKcCqpmp20wjEIwfB7MZDRVCCPETcWepHkqbjtsHg==
-X-ME-Sender: <xms:0nmiZB8Kol-3sh7Zs2wbgyYgnMM3_LTE4ZZh-DUpsas3dPTOUzpthg>
-    <xme:0nmiZFtFoMvLfQuh13W-bnwjO4zJWDrrxAtlln8CXuZjZfuIe_ZFdxpjQ7fSS8_kI
-    M423N7dQf-tWLNK9EI>
-X-ME-Received: <xmr:0nmiZPCh0YKF1TgAdGI3gvKd-Bm7vfElRGOwrSwPKM-eqSiBM6CmFKeUZKQzDUUhWXx4dHjNi-pA49U_m3lG2w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddugdduudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
-    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:0nmiZFf_4rjFoWLhMmwIUuA_ABqyo4uSxJm9eDdAxRvhUAOEd51BrQ>
-    <xmx:0nmiZGOmhrwDaC67JBmt09YUOJEDdxndVVbAExyrsqhF28e1Ns9Meg>
-    <xmx:0nmiZHlm_PyNmh3iSZ4x7pur2Rl-agXBbUDuXhfX7CJBdNQ4_Tk2BA>
-    <xmx:0nmiZHGXvwDI8CWeUU6rjJ4whkdXRtxSfLMXPe_OcykgeYTUBavzRg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Jul 2023 03:33:37 -0400 (EDT)
-Date:   Mon, 3 Jul 2023 09:33:35 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Roman Beranek <me@crly.cz>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/8] clk: sunxi-ng: nkm: Support finding closest rate
-Message-ID: <bdsz257w7jsm6ll6asi3cc422seqek7atkuz6ij6e7xiykhtrs@uotz2efqjaks>
-References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
- <20230702-pll-mipi_set_rate_parent-v3-5-46dcb8aa9cbc@oltmanns.dev>
+        Mon, 3 Jul 2023 03:33:46 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB7DE52;
+        Mon,  3 Jul 2023 00:33:45 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 7288A1D2D;
+        Mon,  3 Jul 2023 07:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1688369312;
+        bh=vyFL1oZhfU5xO720PsZEshxb54c3khK1/6rIHMavdPI=;
+        h=Date:To:CC:From:Subject;
+        b=uOhK/kSSM6jkXirF69xA1s7lI7dreMO3txzGArfuqppEp4wtSSKADULERPejg29Bm
+         QjmaEVbhj8CFldZIBrA0EpnM2JBZfc+Hyc5LNA8RcjbiPZeMYxCnt5wmNB0LSifyr0
+         5eFrTLYpXCTr4H/KE0SFl7Bnp3UN2AefFxVAxW1s=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id E6539439;
+        Mon,  3 Jul 2023 07:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1688369623;
+        bh=vyFL1oZhfU5xO720PsZEshxb54c3khK1/6rIHMavdPI=;
+        h=Date:To:CC:From:Subject;
+        b=QM8izealV0gY8ReiLgWMkj4fwLg19nsJU9F1M4IIJf/KJQwzKK5YVeAtdKtOHZirI
+         L7pxwKyW/FDF2b4ror+a0Np/uF+VIlZMxpoxeFamamlpaQw5W6CMD6jgc0zPs2rx52
+         USb/HzLlpHam/MOz4K02x77DYYGN8/aVe8OG5r9g=
+Received: from [192.168.211.138] (192.168.211.138) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 3 Jul 2023 10:33:43 +0300
+Message-ID: <5ce7410b-3715-dabb-0135-139f86546337@paragon-software.com>
+Date:   Mon, 3 Jul 2023 11:33:42 +0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ejboz6oq3z7jtb3u"
-Content-Disposition: inline
-In-Reply-To: <20230702-pll-mipi_set_rate_parent-v3-5-46dcb8aa9cbc@oltmanns.dev>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     <ntfs3@lists.linux.dev>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <dan.carpenter@linaro.org>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH] fs/ntfs3: Correct mode for label entry inside /proc/fs/ntfs3/
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.211.138]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,102 +65,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ejboz6oq3z7jtb3u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/super.c | 7 ++++---
+  1 file changed, 4 insertions(+), 3 deletions(-)
 
-On Sun, Jul 02, 2023 at 07:55:24PM +0200, Frank Oltmanns wrote:
-> When finding the best rate for a NKM clock, consider rates that are
-> higher than the requested rate, if the CCU_FEATURE_CLOSEST_RATE flag is
-> set.
->=20
-> Accommodate ccu_mux_helper_determine_rate to this change.
->=20
-> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
-> ---
->  drivers/clk/sunxi-ng/ccu_mux.c | 23 +++++++++++++++-----
->  drivers/clk/sunxi-ng/ccu_nkm.c | 48 +++++++++++++++++++++++++++++++-----=
-------
->  2 files changed, 54 insertions(+), 17 deletions(-)
->=20
-> diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mu=
-x.c
-> index 1d557e323169..8594d6a4addd 100644
-> --- a/drivers/clk/sunxi-ng/ccu_mux.c
-> +++ b/drivers/clk/sunxi-ng/ccu_mux.c
-> @@ -113,7 +113,7 @@ int ccu_mux_helper_determine_rate(struct ccu_common *=
-common,
->  	}
-> =20
->  	for (i =3D 0; i < clk_hw_get_num_parents(hw); i++) {
-> -		unsigned long tmp_rate, parent_rate;
-> +		unsigned long tmp_rate, parent_rate, best_diff =3D ULONG_MAX;
->  		struct clk_hw *parent;
-> =20
->  		parent =3D clk_hw_get_parent_by_index(hw, i);
-> @@ -139,10 +139,23 @@ int ccu_mux_helper_determine_rate(struct ccu_common=
- *common,
->  			goto out;
->  		}
-> =20
-> -		if ((req->rate - tmp_rate) < (req->rate - best_rate)) {
-> -			best_rate =3D tmp_rate;
-> -			best_parent_rate =3D parent_rate;
-> -			best_parent =3D parent;
-> +		if (common->features & CCU_FEATURE_CLOSEST_RATE) {
-> +			unsigned long tmp_diff =3D req->rate > tmp_rate ?
-> +						 req->rate - tmp_rate :
-> +						 tmp_rate - req->rate;
-> +
-> +			if (tmp_diff < best_diff) {
-> +				best_rate =3D tmp_rate;
-> +				best_parent_rate =3D parent_rate;
-> +				best_parent =3D parent;
-> +				best_diff =3D tmp_diff;
-> +			}
-> +		} else {
-> +			if ((req->rate - tmp_rate) < (req->rate - best_rate)) {
-> +				best_rate =3D tmp_rate;
-> +				best_parent_rate =3D parent_rate;
-> +				best_parent =3D parent;
-> +			}
->  		}
->  	}
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index e36769eac7de..1a02072b6b0e 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -1548,11 +1548,12 @@ static int ntfs_fill_super(struct super_block 
+*sb, struct fs_context *fc)
+      /* Create /proc/fs/ntfs3/.. */
+      if (proc_info_root) {
+          struct proc_dir_entry *e = proc_mkdir(sb->s_id, proc_info_root);
++        static_assert((S_IRUGO | S_IWUSR) == 0644);
+          if (e) {
+-            proc_create_data("volinfo", S_IFREG | S_IRUGO, e,
++            proc_create_data("volinfo", S_IRUGO, e,
+                       &ntfs3_volinfo_fops, sb);
+-            proc_create_data("label", S_IFREG | S_IRUGO | S_IWUGO,
+-                     e, &ntfs3_label_fops, sb);
++            proc_create_data("label", S_IRUGO | S_IWUSR, e,
++                     &ntfs3_label_fops, sb);
+              sbi->procdir = e;
+          }
+      }
+-- 
+2.34.1
 
-Like I said in the previous patch, I think we could do something like:
 
-bool ccu_is_better_rate(struct ccu_common *common,
-     			unsigned long target_rate,
-			unsigned long current_rate,
-			unsigned long best_rate)
-{
-	if (common->features & CCU_FEATURE_CLOSEST_RATE)
-		return abs(current_rate - target_rate) < abs(best_rate - target_rate);
-
-	return current_rate <=3D target_rate && current_rate > best_rate;
-}
-
-Then, the code above would look like:
-
-if (ccu_is_better_rate(common, req->rate, tmp_rate, best_rate)) {
-	best_rate =3D tmp_rate;
-	best_parent_rate =3D parent_rate;
-	best_parent =3D parent;
-}
-
-It's simpler, and we can share it easily between drivers.
-Maxime
-
---ejboz6oq3z7jtb3u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZKJ5zwAKCRDj7w1vZxhR
-xdGRAQCfdSMP0AmxDYNOFCwEyrvdngVMFpzQiw2Gv4Ylt8jloQD9H+OntEHbw5su
-pLfUl0NLhCH+MeIH67M6dKsWNVwEsws=
-=V/JR
------END PGP SIGNATURE-----
-
---ejboz6oq3z7jtb3u--
