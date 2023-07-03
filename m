@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0297454C2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9A77454C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjGCFTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 01:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S229944AbjGCFTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 01:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjGCFTC (ORCPT
+        with ESMTP id S229599AbjGCFTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Jul 2023 01:19:02 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8D11AC;
-        Sun,  2 Jul 2023 22:19:00 -0700 (PDT)
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D991B0;
+        Sun,  2 Jul 2023 22:19:01 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 25F3F60174;
-        Mon,  3 Jul 2023 07:18:58 +0200 (CEST)
+        by domac.alu.hr (Postfix) with ESMTP id A9CA660171;
+        Mon,  3 Jul 2023 07:18:59 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1688361538; bh=YrRwssvEZf7TEjeYffqKvvPzOJpbpuQXW2iU38aXF1Y=;
+        t=1688361539; bh=YrRwssvEZf7TEjeYffqKvvPzOJpbpuQXW2iU38aXF1Y=;
         h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=m7MXUPZA5UnauwU6zesw56WCc+DpfX7cJoMbwYM0hFP+qfI6GLtZaxWaZMCKuP/tp
-         YQ6cFyFib37FQWBXhCqucczAoC1wayKY28bdvjMSNGM8gIWfBQYvjDTeFgj5OL1JD4
-         ijjMn5J7/yR7D209nz1rFrgAyQTEngIX1hWfYmOH9rHztysyoDLdv1ktB1JIKZ1u0Z
-         HlfWSYDwG7zfYC7tpXkgTt6qlJOT/C8zWEF6izapWH0dmenu0kn513xZs7K6X81tTv
-         Saey0AVuFuh0JjI3UXfPbDWH/JSz8PvxTpoFGiaPUgPdF7V19wwkYSu8qbbX+i/gCx
-         L8gcWNShFw4tw==
+        b=CkGyc98cih6y1+GqDH4Sq4aZWeuJYIzAn2XgUJ1tivrJNXuwGA1fUwdjpgEfzXX4C
+         gYaJ5An1Ep/XtzGBwiZdRhTV2VMpfrIGUx3dZVEh3TELCRUHXYgCE6C6I8tW3JlqRA
+         lMvHL8MjN6+rvCOs+x/pagm6NjZ3W5RnFTgHqztEY4BieK+X3frE+vR1eU6f5MvR7G
+         NjCuLj1i2shhc8XiNzcNQhuY0raFB7MNumWHNax/q+5Zc2QIU3OrATyw/6Ek+hz1Ie
+         yTjuIjyVIcbIRCB5bX45G1317okBlP9gDrOxRqKd1YXuMOiQFlUK0ccSxfR2RT5gSs
+         V6ji2o2HejKcw==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
         by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JDCTbZ3jgSbF; Mon,  3 Jul 2023 07:18:55 +0200 (CEST)
+        with ESMTP id 87-Kur6UvLhF; Mon,  3 Jul 2023 07:18:57 +0200 (CEST)
 Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 7866B60171;
-        Mon,  3 Jul 2023 07:18:34 +0200 (CEST)
+        by domac.alu.hr (Postfix) with ESMTPSA id 1F10A60173;
+        Mon,  3 Jul 2023 07:18:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1688361535; bh=YrRwssvEZf7TEjeYffqKvvPzOJpbpuQXW2iU38aXF1Y=;
+        t=1688361537; bh=YrRwssvEZf7TEjeYffqKvvPzOJpbpuQXW2iU38aXF1Y=;
         h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=P73OlW3YHMZFWS3ahRxQ2sZR5Jj8Sw+norYEwt2u0iO6AXcAG4ut4Gnw+E13qpjFp
-         NRH1OnTjRo2+cCiD3dFEK8qztad/o/6y5iYH5owkQCIdLgApy84Pjim476VGPTb95f
-         EnvDsOhRc7SEpA4zynOG5CezxA7xq4FKK774FK/UigDc/CL8ONDJDPqLYbQ08aXwOZ
-         qLxidDgMH/Djj+qBNY08F21t/gIHD4UhI4xLy8+3mi1qJzvrH0vtysE67DR5/ieM40
-         ZKa3Fh8qEdMLdoV8Os5MyyJIzX8i/XevVr94U8n4BOWBhpfSnz97llsw2+XzDjHfk0
-         QnWCdp3yxhd+Q==
-Message-ID: <6fbd0c06-0e1a-d2a9-cfdf-c953e559fec1@alu.unizg.hr>
-Date:   Mon, 3 Jul 2023 07:18:34 +0200
+        b=J8a7mj3/pI57LDpgBwNlMtIZiRmAmiZhSz/AIY89EcSCVOwPBbGlzmPjd0Y+EoMDp
+         rpet5V5QZ2+IicQZQ/YzTU+Wg0V+y6ii1cXUpna00aL+R7YZPVTiD0SQdzPr22LgH6
+         Jz8kqxscTLwtKQQxQctJn7/3RwJxn0U87PixpOPY5jdtiMio2HAWLgNoz7g98ocDjS
+         RA/m6aMb3yUnfFZRhzQWe70vY+xeT1Hw9pQ48yPanrxS2I3Q/lHdtUCVxlfip2NK8+
+         PdbXNUdQVS8VLAJIugaXKghXvBKDrKdvNKpL57p6RE38zzIhnoUkrsBsGYwGn4UCK8
+         pMgtqXG2KebcA==
+Message-ID: <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr>
+Date:   Mon, 3 Jul 2023 07:18:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
