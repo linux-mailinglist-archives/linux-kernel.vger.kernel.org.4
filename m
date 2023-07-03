@@ -2,63 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DB274597D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BDE745982
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjGCKAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
+        id S231284AbjGCKAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbjGCKAC (ORCPT
+        with ESMTP id S231781AbjGCKAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:00:02 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806ADE79;
-        Mon,  3 Jul 2023 02:56:23 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36373cuo019843;
-        Mon, 3 Jul 2023 02:56:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=WYDMzLE60YbEI5+R2XflYqsOuUQedahohgc583ZN6m0=;
- b=F4dbLV6D3NVckHU+pF+nJ5qOTTVVmiUq9ekqTrGA2Oz+mGLAJFkmNtCiFlSdlljLD/5D
- jDt8MiL5LikaeDOynOTa4cW3u+7/r47qt9/nKYciRFmKZNS0Fd5lLVWtydXcflWnmy6R
- bnXcz1zVEkC4freVeRRVXBbOwHNnuYb0BK3X26pR45345n2HrkDgTm2ktlBtIcYYmkYD
- ie+jZi1MBMBCMPFW+udeJ1I4nFyJ5d2hEQtOcbXPS4IhjSAnS7wI6jsYTPlSVpNdFtvW
- qkjBwsyjV2si1v8vXlVyvt5A7drjPL7UBRYVnq0O3Lg1o/ga4D4x8bjkAvgFigkjLGmy Pw== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3rjknj47kx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 02:56:08 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 3 Jul
- 2023 02:56:06 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 3 Jul 2023 02:56:06 -0700
-Received: from localhost.localdomain (unknown [10.28.36.166])
-        by maili.marvell.com (Postfix) with ESMTP id 81B6D3F704B;
-        Mon,  3 Jul 2023 02:56:03 -0700 (PDT)
-From:   Suman Ghosh <sumang@marvell.com>
-To:     <sgoutham@marvell.com>, <gakula@marvell.com>,
-        <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Suman Ghosh <sumang@marvell.com>
-Subject: [net PATCH V2] octeontx2-pf: Add additional check for MCAM rules.
-Date:   Mon, 3 Jul 2023 15:26:00 +0530
-Message-ID: <20230703095600.2048397-1-sumang@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Jul 2023 06:00:15 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 282241FDE;
+        Mon,  3 Jul 2023 02:56:43 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 3639uRd9023860;
+        Mon, 3 Jul 2023 11:56:27 +0200
+Date:   Mon, 3 Jul 2023 11:56:27 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux@weissschuh.net,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
+Message-ID: <ZKKbS3cwKcHgnGwu@1wt.eu>
+References: <ZKJ35DyPOG+LAy5j@1wt.eu>
+ <20230703080647.491363-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: v0qMJWj0MbiEzDfMj5chV-hBJXZM0fsN
-X-Proofpoint-ORIG-GUID: v0qMJWj0MbiEzDfMj5chV-hBJXZM0fsN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_08,2023-06-30_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703080647.491363-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,61 +42,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to hardware limitation, MCAM drop rule with
-ether_type == 802.1Q and vlan_id == 0 is not supported. Hence rejecting
-such rules.
+On Mon, Jul 03, 2023 at 04:06:47PM +0800, Zhangjin Wu wrote:
+> > >     /* get absolute path of myself, nolibc has no realpath() currently */
+> > >     #ifndef NOLIBC
+> > >             realpath(argv[0], exe);
+> > >     #else
+> > >             /* assume absolute path has no "./" */
+> > >             if (strncmp(argv[0], "./", 2) != 0)
+> > >                     strncat(exe, argv[0], strlen(argv[0]) + 1);
+> > >             else {
+> > >                     pwd = getenv("PWD");
+> > >                     /* skip the ending '\0' */
+> > >                     strncat(exe, getenv("PWD"), strlen(pwd));
+> > >                     /* skip the first '.' */
+> > >                     strncat(exe, argv[0] + 1, strlen(argv[0]));
+> > >             }
+> > >     #endif
+> > 
+> > No, please, not like this. Just copy argv[0] (the pointer not the
+> > contents) and you're fine:
+> >
+> >     static const char *argv0;
+> > 
+> >     int main(int argc, char **argv, char **envp)
+> >     {
+> >             argv0 = argv[0];
+> >             ...
+> >     }
+> > 
+> > Nothing more, nothing less. Your program will always have its correct
+> > path when being called unless someone purposely forces it to something
+> > different, which is not our concern at all since this is a test program.
+> > And I'd rather call it "argv0" which exactly tells us what it contains
+> > than "exe" which can be misleading for that precise reason.
+> >
+> 
+> Yeah, locally, I just used a global argv0 pointer directly, but
+> chroot_exe("./nolibc-test") not work when run 'libc-test' in host
+> system, that is why I tried to get an absolute path ;-)
+> 
+>     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(exe), -1, ENOTDIR); break;
+> 
+>     -->
+> 
+>     19 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
 
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
----
-Changes since v1:
-- Updated commit message
+Then we have a problem somewhere else and the test should be debugger
+instead. Are you sure there isn't a successful chdir() test before it
+for example, that would change the directory ? If so maybe we just need
+to save the current dir before calling it and restore it later.
 
- .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c |  7 +++++++
- .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c    | 13 +++++++++++++
- 2 files changed, 20 insertions(+)
+> I removed the "proc ?" check manually to test if it also work with
+> CONFIG_PROC_FS=n. it doesn't work, without absolute path, we need to add
+> the ENOENT errno back to the errno check list.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-index 10e11262d48a..49ba27875111 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-@@ -871,6 +871,13 @@ static int otx2_prepare_flow_request(struct ethtool_rx_flow_spec *fsp,
- 			if (be16_to_cpu(fsp->m_ext.vlan_etype) != 0xFFFF)
- 				return -EINVAL;
- 
-+			/* Drop rule with vlan_etype == 802.1Q
-+			 * and vlan_id == 0 is not supported
-+			 */
-+			if (vlan_etype == ETH_P_8021Q && !fsp->m_ext.vlan_tci &&
-+			    fsp->ring_cookie == RX_CLS_FLOW_DISC)
-+				return -EINVAL;
-+
- 			vlan_etype = be16_to_cpu(fsp->h_ext.vlan_etype);
- 			/* Only ETH_P_8021Q and ETH_P_802AD types supported */
- 			if (vlan_etype != ETH_P_8021Q &&
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-index 044cc211424e..6c0fdc2bad73 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-@@ -604,6 +604,19 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
- 			return -EOPNOTSUPP;
- 		}
- 
-+		if (!match.mask->vlan_id) {
-+			struct flow_action_entry *act;
-+			int i;
-+
-+			flow_action_for_each(i, act, &rule->action) {
-+				if (act->id == FLOW_ACTION_DROP) {
-+					netdev_err(nic->netdev, "vlan tpid 0x%x with vlan_id %d is not supported for DROP rule.\n",
-+						   ntohs(match.key->vlan_tpid), match.key->vlan_id);
-+					return -EOPNOTSUPP;
-+				}
-+			}
-+		}
-+
- 		if (match.mask->vlan_id ||
- 		    match.mask->vlan_dei ||
- 		    match.mask->vlan_priority) {
--- 
-2.25.1
+Same as above.
 
+> I'm not sure if the other syscalls require an absolute path, so, the
+> realpath() is called in this proposed method.
+
+No, please do not overengineer tests. That's only hiding the dust under
+the carpet and people adding more tests later that will randomly fail
+will have a very hard time trying to figure what's happening under the
+hood. If a test doesn't work as expected, we must not try to work around
+it, but arrange to fix it.
+
+Thanks,
+Willy
