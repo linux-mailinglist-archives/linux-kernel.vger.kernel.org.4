@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB521745E80
+	by mail.lfdr.de (Postfix) with ESMTP id A2596745E7F
 	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjGCO0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S229791AbjGCO0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjGCO0G (ORCPT
+        with ESMTP id S229709AbjGCOZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:26:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30176B3
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688394323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZHqn83Z4nuY+pmIfzFaoPwoFjguWWUwYIDMm/eINnuY=;
-        b=Mv/FYPczBDOKFYEX90k9g6S6XSFSOgNw+bg9VXeaj1/1d8WdwMJVQi1GbUVGGe4WDW1byo
-        ims2MGJgSiqQvTyzlLtbapMtJ7gXHFjCJ8dhLxbkjgZgeGfEeCBFf5bY3s3tAwbXKjggeV
-        7o2yZeY+8JzYJAe1liTNus37BuLYxYU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-204-lyG-mLyyMWCT9OVj9mlS3Q-1; Mon, 03 Jul 2023 10:25:18 -0400
-X-MC-Unique: lyG-mLyyMWCT9OVj9mlS3Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D43BB3813F2C;
-        Mon,  3 Jul 2023 14:25:17 +0000 (UTC)
-Received: from eperezma.remote.csb (unknown [10.39.192.105])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6F7F32014E17;
-        Mon,  3 Jul 2023 14:25:16 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     mst@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Dragos Tatulea <dtatulea@nvidia.com>,
-        virtualization@lists.linux-foundation.org, leiyang@redhat.com,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Jason Wang <jasowang@redhat.com>
-Subject: [PATCH] mlx5_vdpa: offer VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK
-Date:   Mon,  3 Jul 2023 16:25:14 +0200
-Message-Id: <20230703142514.363256-1-eperezma@redhat.com>
+        Mon, 3 Jul 2023 10:25:58 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161DE60
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:25:56 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so6952874e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688394355; x=1690986355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nR1JIau5H5rAt0KfiJQqEOPzQsDB3hDcj43jCj7PzkM=;
+        b=XFE+lKHhuGUEIXWBw4DftRQl+i6fw+3/N8iyJEyTVXO/98D+spWfUSRMZkOBzRB7XD
+         SVy0VcHTVh3QPXv7kxJne6o5fqL3GZiaQFO++JNMFeRepJqynHenV0O034CMh9uoIW98
+         3eMoo0trZx4+MaUFqSa4g3yHawk7gA3t/hSkfYiMt2OjtYYCvfYPWSfo6Q9GEVwCym70
+         zbuAaKlA+ADuKSHEK1cnjcXRJucspTr5/ZfBpsvtMkMYK7Y82HGwwaRrmeo49u5tu5b7
+         Ng30EYNhd/PVblqQP8XZpOJ/xz2DCMyHC8JUj2IION+iBaAl2z/a2PwglkKDZ1kjMh7m
+         uJYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688394355; x=1690986355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nR1JIau5H5rAt0KfiJQqEOPzQsDB3hDcj43jCj7PzkM=;
+        b=l69bVFfg3m00JFeJQ0+f9hENNPJlWsuX5Nzcnm1LATeb3ywJqvggzlGSV1IpNGjbEx
+         wNQh0vyqgKvCSZBF+bSpLErih/TdZxFtmkGbj4+g04xEBVXbf6jKOpRmY645ADVMYbJi
+         PJx1q/flRnKSWKfhdYkN7Xei22sEjZdPun1lMkUzvw8FjoCM6zXVpIF+PHvT3ag3X53B
+         zH7PqV8gRhdJaMZiL+Sz+2v2wmhfKP3ekMz0EueykAvrYACnFOkBzIqcOo8xT9H+FSB1
+         ZLSM2J8jogWQ4smgW1YKOsT9w2FWhIDEsX7mDqU7cTvp7b2qAp0C8qvbBAHh59MaOBqy
+         zIFw==
+X-Gm-Message-State: ABy/qLYv6tYmyelBy0rooClktBK3CRKbXQmBz+MbaiuqCWov8+b8zyrW
+        RQFx0Al5EenimccBjq92aQ449Q==
+X-Google-Smtp-Source: APBJJlHM/qj4pCS4sZLl2C1DpzpOgZRb5FHLaQjBC5mgZoHK2+2jKTCEi/ZXgIu5NMvCycfbRNL82A==
+X-Received: by 2002:a19:8c1d:0:b0:4f4:b13a:d683 with SMTP id o29-20020a198c1d000000b004f4b13ad683mr6185895lfd.69.1688394354995;
+        Mon, 03 Jul 2023 07:25:54 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id v16-20020ac25610000000b004fb763b5171sm3815903lfd.86.2023.07.03.07.25.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 07:25:54 -0700 (PDT)
+Message-ID: <643629e2-0da9-44ac-68bf-1867fad8a9ee@linaro.org>
+Date:   Mon, 3 Jul 2023 17:25:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 5/5] arm64: dts: qcom: sm8250: Add interconnects and
+ power-domains to QUPs
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
+ <20230703-topic-8250_qup_icc-v1-5-fea39aa07525@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230703-topic-8250_qup_icc-v1-5-fea39aa07525@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Offer this backend feature as mlx5 is compatible with it. It allows it
-to do live migration with CVQ, dynamically switching between passthrough
-and shadow virtqueue.
+On 03/07/2023 16:31, Konrad Dybcio wrote:
+> Describe the interconnect paths related to QUPs and add the power-domains
+> powering them.
+> 
+> This is required for icc sync_state, as otherwise QUP access is gated.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8250.dtsi | 150 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 150 insertions(+)
 
-Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
----
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 9138ef2fb2c8..5f309a16b9dc 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -7,6 +7,7 @@
- #include <uapi/linux/virtio_net.h>
- #include <uapi/linux/virtio_ids.h>
- #include <uapi/linux/vdpa.h>
-+#include <uapi/linux/vhost_types.h>
- #include <linux/virtio_config.h>
- #include <linux/auxiliary_bus.h>
- #include <linux/mlx5/cq.h>
-@@ -2499,6 +2500,11 @@ static void unregister_link_notifier(struct mlx5_vdpa_net *ndev)
- 		flush_workqueue(ndev->mvdev.wq);
- }
- 
-+static u64 mlx5_vdpa_get_backend_features(const struct vdpa_device *vdpa)
-+{
-+	return BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK);
-+}
-+
- static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev, u64 features)
- {
- 	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
-@@ -3140,6 +3146,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
- 	.get_vq_align = mlx5_vdpa_get_vq_align,
- 	.get_vq_group = mlx5_vdpa_get_vq_group,
- 	.get_device_features = mlx5_vdpa_get_device_features,
-+	.get_backend_features = mlx5_vdpa_get_backend_features,
- 	.set_driver_features = mlx5_vdpa_set_driver_features,
- 	.get_driver_features = mlx5_vdpa_get_driver_features,
- 	.set_config_cb = mlx5_vdpa_set_config_cb,
 -- 
-2.39.3
+With best wishes
+Dmitry
 
