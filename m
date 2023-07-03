@@ -2,152 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7B4745C32
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0476B745C30
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjGCM2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
+        id S230105AbjGCM1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbjGCM1z (ORCPT
+        with ESMTP id S229783AbjGCM1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:27:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAB011F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 05:27:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Mon, 3 Jul 2023 08:27:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74208109
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 05:27:44 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A85D60F14
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 12:27:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9CBC433C7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 12:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688387272;
-        bh=2EVs3kXtnpDKdNK9AnLY5wZF5XzWUsZ/2zmOx02LYSE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=az4MYr7MKdkVdiJl9mNOIZmGAK/AevdEKU+MPp+qMQA74XX8Pwhyjnr+UDWj367s8
-         XMOHC3orgnuJFPC6+VCf6PEZJ14pOvDH39DedpuzYBUXPyZO6wuZzPN5Lg1b2dgscZ
-         jGUdSJXaROGGpCyB6bC/ehAuyEff5GndLAnoEfCvJXQ93GRIcMeW+uiNq188Mh4KUO
-         m4a2W0liFVl7rpP73dh6XWwMDHVYNRWypF/OK9BWDKK7VubbODZRIV41G0M2ZyJQa2
-         VO1Us1ppfNwI7xInklCRyx9N3MuveLazo/v70cIOh7MWYKKrX0Myxdm10Sk59QBxrj
-         XYVmJ9xnZ3Vgw==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5728df0a7d9so55253087b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 05:27:52 -0700 (PDT)
-X-Gm-Message-State: ABy/qLbNGGafJvQhPgnsJkz2nf9PqqtYbdFxShEtMZWBmNpv8tE6r8Hp
-        99kVMjFYMGzlmYlZ4fjd3ia43gN4OJYFq5YWQA0=
-X-Google-Smtp-Source: APBJJlHGkXOiyDljiw0WPQ1cdzbR+bOTDjupgspEK/of6mYU3V8vuOADTtRzC4cI8DvchQrkLfIr6EaRTZ1NFO100Vg=
-X-Received: by 2002:a25:d216:0:b0:c21:caaf:bd47 with SMTP id
- j22-20020a25d216000000b00c21caafbd47mr10459923ybg.2.1688387271590; Mon, 03
- Jul 2023 05:27:51 -0700 (PDT)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9AF026606F62;
+        Mon,  3 Jul 2023 13:27:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688387263;
+        bh=IYmaR1gBv2Z6QkDpfBcedcjRv/kOAondXl4MM4fFhuA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=euJkwVk9pVBuvYPXT553LlXbUOV0xnScSibtSeZtd4z3vvdxQqfYaj0nn6j6d6Jd+
+         6C4TudC+AKmUpJ0VpLKdNXep6r5kzS70XnpkUO0RhzmOtVwLyIt5WU9LFfrLoKROik
+         CMDMlJgC4OYJfZQroYoDW6G/exl2oSTs4ajBCJgHp5jUS6Xt1PKkdsCezh97+4ZViW
+         xkAA+v03YAVHKL/so+eOfakM/uvyy/UBioeG1fT5i3YjmaD8oOjsYXLf2QgZppkOHT
+         aW/pTKRkG3DgL+NX31ZMt8lx6vqCdfeACC/MbxXOJIE3zrQFPQUlVxfcC6ceW7kUxS
+         wDIxUsbdllGaA==
+Message-ID: <8b576880-1c78-84d7-ee46-641c65cdf35d@collabora.com>
+Date:   Mon, 3 Jul 2023 14:27:40 +0200
 MIME-Version: 1.0
-References: <20230620182528.669526-2-gregkh@linuxfoundation.org> <1caf16e9-f066-f889-278c-fe1c242930c3@habana.ai>
-In-Reply-To: <1caf16e9-f066-f889-278c-fe1c242930c3@habana.ai>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon, 3 Jul 2023 15:27:25 +0300
-X-Gmail-Original-Message-ID: <CAFCwf11fOZpzh5ZTizzW6ZnnvEbq4oG3upp9CNmstSZj5P4ofw@mail.gmail.com>
-Message-ID: <CAFCwf11fOZpzh5ZTizzW6ZnnvEbq4oG3upp9CNmstSZj5P4ofw@mail.gmail.com>
-Subject: Re: [PATCH] accel: make accel_class a static const structure
-To:     Tomer Tayar <ttayar@habana.ai>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Ivan Orlov <ivan.orlov0322@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] ASoC: mediatek: mt8188: add constraints for PCM
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>
+Cc:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+References: <20230629075910.21982-1-trevor.wu@mediatek.com>
+ <5995e77b-ea8e-4e88-8ca2-f716df9c9579@sirena.org.uk>
+ <0e8b5ca298a01b16da0419928a30af6371e923ca.camel@mediatek.com>
+ <6cda3265-7444-46a1-8b2e-75706a839670@sirena.org.uk>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <6cda3265-7444-46a1-8b2e-75706a839670@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 3:09=E2=80=AFPM Tomer Tayar <ttayar@habana.ai> wrote=
-:
->
-> On 20/06/2023 21:25, Greg Kroah-Hartman wrote:
-> > From: Ivan Orlov <ivan.orlov0322@gmail.com>
-> >
-> > Now that the driver core allows for struct class to be in read-only
-> > memory, move the accel_class structure to be declared at build time
-> > placing it into read-only memory, instead of having to be dynamically
-> > allocated at boot time.
-> >
-> > Cc: Oded Gabbay <ogabbay@kernel.org>
-> > Cc: dri-devel@lists.freedesktop.org
-> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
-> Reviewed-by: Tomer Tayar <ttayar@habana.ai>
-Thanks Tomer.
-Applied to habanalabs-next for 6.6.
-Oded
->
-> Thanks,
-> Tomer
->
-> > ---
-> >   drivers/accel/drm_accel.c | 21 ++++++++-------------
-> >   1 file changed, 8 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/accel/drm_accel.c b/drivers/accel/drm_accel.c
-> > index 4a9baf02439e..2dc187e1ee41 100644
-> > --- a/drivers/accel/drm_accel.c
-> > +++ b/drivers/accel/drm_accel.c
-> > @@ -21,7 +21,6 @@ static DEFINE_SPINLOCK(accel_minor_lock);
-> >   static struct idr accel_minors_idr;
-> >
-> >   static struct dentry *accel_debugfs_root;
-> > -static struct class *accel_class;
-> >
-> >   static struct device_type accel_sysfs_device_minor =3D {
-> >       .name =3D "accel_minor"
-> > @@ -32,23 +31,19 @@ static char *accel_devnode(const struct device *dev=
-, umode_t *mode)
-> >       return kasprintf(GFP_KERNEL, "accel/%s", dev_name(dev));
-> >   }
-> >
-> > +static const struct class accel_class =3D {
-> > +     .name =3D "accel",
-> > +     .devnode =3D accel_devnode,
-> > +};
-> > +
-> >   static int accel_sysfs_init(void)
-> >   {
-> > -     accel_class =3D class_create("accel");
-> > -     if (IS_ERR(accel_class))
-> > -             return PTR_ERR(accel_class);
-> > -
-> > -     accel_class->devnode =3D accel_devnode;
-> > -
-> > -     return 0;
-> > +     return class_register(&accel_class);
-> >   }
-> >
-> >   static void accel_sysfs_destroy(void)
-> >   {
-> > -     if (IS_ERR_OR_NULL(accel_class))
-> > -             return;
-> > -     class_destroy(accel_class);
-> > -     accel_class =3D NULL;
-> > +     class_unregister(&accel_class);
-> >   }
-> >
-> >   static int accel_name_info(struct seq_file *m, void *data)
-> > @@ -116,7 +111,7 @@ void accel_debugfs_init(struct drm_minor *minor, in=
-t minor_id)
-> >   void accel_set_device_instance_params(struct device *kdev, int index)
-> >   {
-> >       kdev->devt =3D MKDEV(ACCEL_MAJOR, index);
-> > -     kdev->class =3D accel_class;
-> > +     kdev->class =3D &accel_class;
-> >       kdev->type =3D &accel_sysfs_device_minor;
-> >   }
-> >
->
->
+Il 30/06/23 13:00, Mark Brown ha scritto:
+> On Fri, Jun 30, 2023 at 05:29:23AM +0000, Trevor Wu (吳文良) wrote:
+>> On Thu, 2023-06-29 at 16:06 +0100, Mark Brown wrote:
+> 
+>>> This commit message isn't entirely clear.  The effect of the commit
+>>> is
+>>> to restrict the configurations supported when using a nau8825 but
+>>> it's
+>>> not clear what a nau8825 has to do with this or why we're doing this
+>>> in
+>>> general.  What exactly do you mean when saying that "only a limited
+>>> number of parameters are necessary" and what makes this the case?
+> 
+>> For instance, some userspace frameworks only support specific sampling
+>> rates such as 48kHz on Chromebook, making other parameters unnecessary.
+>> By restricting the configuration, unexpected usage can be prevented and
+>> the alsa_conformance_test process which checks all parameters provided
+>> by an ALSA driver can be sped up.
+> 
+> That's a userspace policy decision, we shouldn't be enforcing this in
+> the kernel - even for Chromebooks people can install other OSs on them
+> which may make different decisions, and it's always possible that the
+> ChromeOS people might change their mind later.  If they're only
+> interested in testing 48kHz and it's slowing things down unreasonably
+> to test more then they should just only test 48kHz rather than changing
+> the driver to work around it.
+> 
+>> Would it be more beneficial to establish the criteria as a general rule
+>> for this machine driver, while limiting the use of the machine driver
+>> solely to the Chromebook project? Or do you just suggest that I add
+>> more details in the commit messages?
+> 
+> I think we just shouldn't do this, it's policy for ChromeOS rather than
+> something that's actually needed.  If we were doing this it would need a
+> much clearer commit message and we should be restricting things to
+> Chromebooks only.
+
+I agree with Mark. Except for me it's not a *should not* but a *shall not*.
+
+Such other configurations are supported by the hardware and it is the driver's
+duty to support all of them - otherwise I deem the driver to be *incomplete*.
+It's then the userspace's duty to properly use the sound APIs and request the
+right sampling rate for specific usecases.
+
+Chromebooks aren't special at all in this regard.
+
+Regards,
+Angelo
