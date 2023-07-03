@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74597455D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2197455D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjGCHRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S229949AbjGCHRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjGCHRO (ORCPT
+        with ESMTP id S230059AbjGCHRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:17:14 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A35CC;
-        Mon,  3 Jul 2023 00:17:12 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-262c42d3fafso2510014a91.0;
-        Mon, 03 Jul 2023 00:17:12 -0700 (PDT)
+        Mon, 3 Jul 2023 03:17:33 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A800E52
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:17:28 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbca6a9ae4so112855e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:17:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688368632; x=1690960632;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a3Enva+kpSAh7J7zWVKEgVuWagbPlUEDjh6vpwFm8Qw=;
-        b=mFYhq6nvqCmn3YD3p47/y5FcGh5RRbWC8X+vXRIOhN3lJRumHSFCF9t405TkT2R2mi
-         CiG28lziNtnLeFYfgbu3XlobCn/yEL38fSJ3iYo7j/haUbZ8F/d5SKPlQQ2vjl2rkGBw
-         1FOCeDgWIHVQdftbBB35Lqc6OU1ulZri8cc31oCRCFBn1nXDYAAnJGQukAAHOv+hQihb
-         dttdPyuAt0oiAfGwdbOt+5nHipA5aSevTPHJl9rHCUUUgUQW0pdfe1lu7GHDUzhh+zZu
-         zWkHbSgQPACBwjj3S5kyypC2wyOJIWgrAKVloDfump/Q/sQuSla3fkAvV+I8aij9McSw
-         FJoQ==
+        d=google.com; s=20221208; t=1688368647; x=1690960647;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0hnHpIHP0MmQmToWJQ8RUHzi1Z6asIXxH+8Z3t+Oc5Y=;
+        b=f+vC2qqRJ4L/52WXXcA1asyIc04MjD5qn+Y65UadnaS1mXhEJuE3SirfDdtwJ+fBN+
+         y60N8wlB5pmmdjfySRhx9tKirmmVcYs89SIYvZ6PtYf4Zy3F503B5G1Yf6qLo2TCFI0x
+         R6Vd7D9buMyp4XpyZdI/bqsFX2MFmNYEc5ppvWpZrHVLawn3LuC+ivzOCQRgpzIszm2d
+         0H9y8fMzRmLTyjVrfF+0jBApzlB906WMzvwxLbSemYbDot7BBu755/9VkT7hpqJITMBp
+         /z+MHdkDKdL4Azu3x/DXV6k9QXGJrg+FfJVUC+CTOIf4cL8bh3CHWAjNnXjsR9ZgiErT
+         kKXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688368632; x=1690960632;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688368647; x=1690960647;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a3Enva+kpSAh7J7zWVKEgVuWagbPlUEDjh6vpwFm8Qw=;
-        b=kgWpi2/HD9wtd6jZapyjePtpuNC+YVQ2W48/GRIbPAkl9aqhJYexfFdK5sayuSNt3Y
-         G34byseJ3+CsuG9ktEt3HJJhHHBym1z1k9wYK2RKxJozVVckxvy/LTnABqKpVFDtspGH
-         EWAYydc4PCKzjDWG69/MlKUWnaKssyENyJeI9Zb11qIw355glYhrghnJPVRDdku8yjwX
-         ZwAJAVxkwXjVwUPkHkjSmdLzSXddxvQVdP5vYPHYXpVq8YOc0egYnDo9cfoXwfZbVYhz
-         rHq1jTZZ28czj21VTPp7MhxCjC6UJXKxQOi3wgtqtoGZz9pkYQkIvJO8YRhQGlVSfcX5
-         /a0A==
-X-Gm-Message-State: ABy/qLY9hZ528qJBTGjtfJq2e7CWJti/PCEoRGdPxw2/zis7j+Hgkipf
-        CDBoiqxMiLmTrH9hK5ytp7GzrY4oF7wA5Q==
-X-Google-Smtp-Source: APBJJlHzxPw10D3waPBbWfVVxWU9jwHoIKg542XPuKfqp7GmZCZh1hbw326mOVAFWd+xOgtfUaptPQ==
-X-Received: by 2002:a17:90b:3b8a:b0:261:219b:13b3 with SMTP id pc10-20020a17090b3b8a00b00261219b13b3mr14102946pjb.16.1688368632103;
-        Mon, 03 Jul 2023 00:17:12 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.16])
-        by smtp.googlemail.com with ESMTPSA id x30-20020a17090a6c2100b0026358dfd2a3sm7012630pjj.24.2023.07.03.00.17.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 00:17:11 -0700 (PDT)
-From:   Ze Gao <zegao2021@gmail.com>
-X-Google-Original-From: Ze Gao <zegao@tencent.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, Ze Gao <zegao2021@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Ze Gao <zegao@tencent.com>, Yafang <laoar.shao@gmail.com>
-Subject: [PATCH] fprobe: add unlock to match a succeeded ftrace_test_recursion_trylock
-Date:   Mon,  3 Jul 2023 15:16:40 +0800
-Message-Id: <20230703071640.106204-1-zegao@tencent.com>
-X-Mailer: git-send-email 2.40.1
+        bh=0hnHpIHP0MmQmToWJQ8RUHzi1Z6asIXxH+8Z3t+Oc5Y=;
+        b=GvfJ/EzVK35wVFjlbEbLwAEE9uw1N7tOyNny/AWQvafDXQ61mOR0FSj+1lRNdA6fV5
+         o3zLuBQcl3iqMAvRE89blGNnGNBBzPJ6G2HZWm1Lj2/cjrSLGkKv+Oyat3AYInPXB9MQ
+         Ll003fnh5npzbdGuIh+7KPVZ63WeCWzykuKUjS5iARyV0WIpXptQ7gX+fbPddD5yjboI
+         z9CT/s/V+tpGX8C+HY6caiu+NZC2tomemeMkDlimbTWS9fSF4LSxcqY7K03Cp5Z2afmR
+         PO2zehg5LTEflUOpgGuk49d49/uq3A1N8Cu7P+eHYQ3rxoJOch4pe9A6rOZxWT4iQ4SH
+         9Svw==
+X-Gm-Message-State: ABy/qLbKHAPo2roW3EuESw0jEJudFBsq/tXmZUf2JLvbWgsVrNVUm0Th
+        UNetMGP/N1N0l6kg9+2qYuzzCDBRq7QzDwbNW3tICw==
+X-Google-Smtp-Source: APBJJlEe0MMNIljnBBhTRv0r9bOqt1AjvoM9bTpWOot0Iink8OeixsF6Dur+PsQx8Zz7AKZwBHUumOblvvNlLVruqcc=
+X-Received: by 2002:a05:600c:34c2:b0:3f7:e4d8:2569 with SMTP id
+ d2-20020a05600c34c200b003f7e4d82569mr110181wmq.5.1688368646788; Mon, 03 Jul
+ 2023 00:17:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000002373f005ff843b58@google.com> <1bb83e9d-6d7e-3c80-12f6-847bf2dc865e@google.com>
+In-Reply-To: <1bb83e9d-6d7e-3c80-12f6-847bf2dc865e@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 3 Jul 2023 09:17:11 +0200
+Message-ID: <CACT4Y+akPvTGG0WdPdSuUFU6ZuQkRbVZByiROzqwyPVd8Pz8fQ@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] [reiserfs?] kernel panic: stack is corrupted in ___slab_alloc
+To:     David Rientjes <rientjes@google.com>
+Cc:     syzbot <syzbot+cf0693aee9ea61dda749@syzkaller.appspotmail.com>,
+        42.hyeyoo@gmail.com, Andrew Morton <akpm@linux-foundation.org>,
+        cl@linux.com, iamjoonsoo.kim@lge.com, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        penberg@kernel.org, reiserfs-devel@vger.kernel.org,
+        roman.gushchin@linux.dev, syzkaller-bugs@googlegroups.com,
+        Vlastimil Babka <vbabka@suse.cz>, Jan Kara <jack@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes: 3cc4e2c5fbae ("fprobe: make fprobe_kprobe_handler recursion free")
-Reported-by: Yafang <laoar.shao@gmail.com>
-Closes: https://lore.kernel.org/linux-trace-kernel/CALOAHbC6UpfFOOibdDiC7xFc5YFUgZnk3MZ=3Ny6we=AcrNbew@mail.gmail.com/
-Signed-off-by: Ze Gao <zegao@tencent.com>
----
- kernel/trace/fprobe.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Mon, 3 Jul 2023 at 09:14, 'David Rientjes' via syzkaller-bugs
+<syzkaller-bugs@googlegroups.com> wrote:
+>
+> On Sun, 2 Jul 2023, syzbot wrote:
+>
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    e8f75c0270d9 Merge tag 'x86_sgx_for_v6.5' of git://git.ker..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=168b84fb280000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a98ec7f738e43bd4
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=cf0693aee9ea61dda749
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10310670a80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1220c777280000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/f27c1d41217a/disk-e8f75c02.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/843ae5d5c810/vmlinux-e8f75c02.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/da48bc4c0ec1/bzImage-e8f75c02.xz
+> > mounted in repro: https://storage.googleapis.com/syzbot-assets/658601e354e4/mount_0.gz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+cf0693aee9ea61dda749@syzkaller.appspotmail.com
+> >
+> > Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: ___slab_alloc+0x12c3/0x1400 mm/slub.c:3270
+> > CPU: 0 PID: 5009 Comm: syz-executor248 Not tainted 6.4.0-syzkaller-01406-ge8f75c0270d9 #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+> >  panic+0x686/0x730 kernel/panic.c:340
+> >  __stack_chk_fail+0x19/0x20 kernel/panic.c:759
+> >  ___slab_alloc+0x12c3/0x1400 mm/slub.c:3270
+> >
+>
+> This is happening during while mounting reiserfs, so I'm inclined to think
+> it's more of a reisterfs issue than a slab allocator issue :/
 
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index 18d36842faf5..93b3e361bb97 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -102,12 +102,14 @@ static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
- 
- 	if (unlikely(kprobe_running())) {
- 		fp->nmissed++;
--		return;
-+		goto recursion_unlock;
- 	}
- 
- 	kprobe_busy_begin();
- 	__fprobe_handler(ip, parent_ip, ops, fregs);
- 	kprobe_busy_end();
-+
-+recursion_unlock:
- 	ftrace_test_recursion_unlock(bit);
- }
- 
--- 
-2.40.1
 
+Now we can make it official :)
+
+#syz set subsystems: reiserfs
+
+To remove from open mm issues:
+
+https://syzkaller.appspot.com/upstream/s/mm
+
+to reiserfs issues:
+
+https://syzkaller.appspot.com/upstream/s/reiserfs
