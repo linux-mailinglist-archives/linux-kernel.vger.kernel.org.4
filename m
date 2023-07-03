@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46E6746258
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEF574625B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjGCS0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S230417AbjGCS1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjGCS0q (ORCPT
+        with ESMTP id S229701AbjGCS1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:26:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04947D7;
-        Mon,  3 Jul 2023 11:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688408806; x=1719944806;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=loPr+dzJ18Fhw1+ezR3lKISk94Z2wAYPGf8y4ACIrKE=;
-  b=kWtc2nsl+9L+/nOEZXpTFwYRvliVyo3wZ46DdDLeLmwlVNvZbZBwFIpt
-   +dr3BbEDZYiH4VUfhMCuou6XCCqQL1si5//5u9M/4gbu65ijc6QMtPp7d
-   OCSpRvZNbnZrtB0oBDMDOk2io65OFHeR38TcbdC/+e4IuQsgk17H8V+wH
-   7Gq7/AXflJHC/q0n1aZDCu2TLo709g1yXRNFKo8TSsFWn0TLQ/4/zInRD
-   JbZCyyfgLQn8QAKhQfXc6ad3ERN37FdeEjEIXtVb1AUco9DrPRv3kQWGY
-   pEkRHfAy6/ILF81TuK9D9azvplAWM186+LBNbEdyfPu7G5GrLlT5ed85B
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="428985376"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="428985376"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 11:26:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="712635074"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="712635074"
-Received: from lbates-mobl.amr.corp.intel.com (HELO [10.212.242.115]) ([10.212.242.115])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 11:26:44 -0700
-Message-ID: <f29fb57f-f59f-9101-74b6-e48e738963c5@intel.com>
-Date:   Mon, 3 Jul 2023 11:26:43 -0700
+        Mon, 3 Jul 2023 14:27:32 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9E9E3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:27:31 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-be49ca27e1fso5274143276.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 11:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688408851; x=1691000851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0isKEjHX7MEXue9Pz1Ccur/ZC63GmueF0VlBtGm8EoI=;
+        b=w1rSlYr2bJam65DS0lPRCw3JfxRfPJVIeGkLawuH0QVACpcv1cEbmN3yS/9d9Jhd2y
+         gWuA/6yRdVojMzVcjWIoMQnCRFrBdHsUCri4YQmwmCGqvmVgnRUjcImEV42CF9p2HNUt
+         RNIJjoJMpBM8Yqs72KNbG+Q7Vclm2QBRCgMhwvmKmKBAHfyzQgGK9V+bBOc5xngTKVY+
+         R4t792TUWP12OJYQgjh6dTgC1nO4V6mOoZVzPzmVhbvkDRUxjx7H8hIFK+KllI/p1SSS
+         NKySvyUZum+exg7sN4tpowuv7DwRGfJ+F1AbKfbFzZFthr0ez+mTc3XlVxhYkdNO0qgi
+         O3+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688408851; x=1691000851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0isKEjHX7MEXue9Pz1Ccur/ZC63GmueF0VlBtGm8EoI=;
+        b=WW/9D/Lzxhk4FPJwi3HwrxDlJ09rR5LH3wYSsLkOjkH0VtRFnhpQvyEjaT18qGGZlC
+         iOWf+fIbyDHDQ9rJd7pnvASy1dgQ+1zW96NFpHoimaf1Dfyy15OFpjINvvvzrWX11JBn
+         4Sui/FjoBswp/jTk3d9Pfnpy7QLel0Qk1nwa802yqT6OJlFJTD1n0wZQnNApG53AEhwW
+         OFUw0xNpMOwLygojBfD19Sg9gJGONmb/FaEC1TD31KstxP67fmPmwUAYnz0HsHpBo7CC
+         dQn80oe9b5JBFsZwvsAlEefoPfHCto9ys5vmGR2s01fRHy84XTg4VGTTBsT6A4P4smlb
+         LWrA==
+X-Gm-Message-State: ABy/qLar57Z7EnOf41wPPzoyB1Xd4NdP0tRzlT0BxbbLCtcWHDPC0qWj
+        3qbuO39BePdib5RVTrAzn6jVFqSxWryCtbTFFne1LWw+B26fvlrtIqqFoA==
+X-Google-Smtp-Source: APBJJlEcsiSJampqWvnjg3CAmKUIwmDnEsqWjNRvFLw+nAO0EpYIPr1eboqaZF2mndFRhRVNL+SZzDgLqiS3KzAbWO4=
+X-Received: by 2002:a05:6902:603:b0:c40:e589:7c09 with SMTP id
+ d3-20020a056902060300b00c40e5897c09mr9113458ybt.26.1688408850615; Mon, 03 Jul
+ 2023 11:27:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Content-Language: en-US
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ying Huang <ying.huang@intel.com>,
-        Dan J Williams <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
- <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
- <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
- <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
- <20230630183020.GA4253@hirez.programming.kicks-ass.net>
- <20230630190514.GH3436214@ls.amr.corp.intel.com>
- <ZJ9IKALhz1Q6ogu1@google.com>
- <20230703104942.GG4253@hirez.programming.kicks-ass.net>
- <eb83e722-0379-1451-9c9c-9b9de33cb4cb@intel.com>
- <20230703150330.GA83892@hirez.programming.kicks-ass.net>
- <20230703175556.nn5xozz7dzxjocqm@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230703175556.nn5xozz7dzxjocqm@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
+ <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info> <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
+In-Reply-To: <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 3 Jul 2023 11:27:19 -0700
+Message-ID: <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
+Subject: Re: Fwd: Memory corruption in multithreaded user space program while
+ calling fork
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jacob Young <jacobly.alt@gmail.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,40 +78,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/3/23 10:55, kirill.shutemov@linux.intel.com wrote:
->> I'm thikning we want something along the lines of the Xen preemptible
->> hypercalls, except less crazy. Where the caller does:
->>
->> 	for (;;) {
->> 		ret = tdcall(fn, args);
->> 		if (ret == -EAGAIN) {
->> 			cond_resched();
->> 			continue;
->> 		}
->> 		break;
->> 	}
->>
->> And then the TDX black box provides a guarantee that any one tdcall (or
->> seamcall or whatever) never takes more than X ns (possibly even
->> configurable) and we get to raise a bug report if we can prove it
->> actually takes longer.
-> TDG.VP.VMCALL TDCALL can take arbitrary amount of time as it handles over
-> control to the host/VMM.
-> 
-> But I'm not quite follow how it is different from the host stopping
-> scheduling vCPU on a random instruction. It can happen at any point and
-> TDCALL is not special from this PoV.
+On Mon, Jul 3, 2023 at 11:08=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Mon, Jul 3, 2023 at 2:53=E2=80=AFAM Linux regression tracking (Thorste=
+n
+> Leemhuis) <regressions@leemhuis.info> wrote:
+> >
+> > On 02.07.23 14:27, Bagas Sanjaya wrote:
+> > > I notice a regression report on Bugzilla [1]. Quoting from it:
+> > >
+> > >> After upgrading to kernel version 6.4.0 from 6.3.9, I noticed freque=
+nt but random crashes in a user space program.  After a lot of reduction, I=
+ have come up with the following reproducer program:
+> > > [...]
+> > >> After tuning the various parameters for my computer, exit code 2, wh=
+ich indicates that memory corruption was detected, occurs approximately 99%=
+ of the time.  Exit code 1, which occurs approximately 1% of the time, mean=
+s it ran out of statically-allocated memory before reproducing the issue, a=
+nd increasing the memory usage any more only leads to diminishing returns. =
+ There is also something like a 0.1% chance that it segfaults due to memory=
+ corruption elsewhere than in the statically-allocated buffer.
+> > >>
+> > >> With this reproducer in hand, I was able to perform the following bi=
+section:
+> > > [...]
+> > >
+> > > See Bugzilla for the full thread.
+> >
+> > Additional details from
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D217624#c5 :
+> >
+> > ```
+> > I can confirm that v6.4 with 0bff0aaea03e2a3ed6bfa302155cca8a432a1829
+> > reverted no longer causes any memory corruption with either my
+> > reproducer or the original program.
+> > ```
+> >
+> > FWIW: 0bff0aaea03 ("x86/mm: try VMA lock-based page fault handling
+> > first") [merged for v6.4-rc1, authored by Suren Baghdasaryan [already C=
+Ced]]
+> >
+> > That's the same commit that causes build problems with go:
+> >
+> > https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel=
+.org/
+>
+> Thanks! I'll investigate this later today. After discussing with
+> Andrew, we would like to disable CONFIG_PER_VMA_LOCK by default until
+> the issue is fixed. I'll post a patch shortly.
 
-Well, for one, if the host stops the vCPU on a random instruction the
-host has to restore all the vCPU state.  *ALL* of it.  That means that
-after the host hands control back, the guest is perfectly ready to take
-all the interrupts that are pending.
+Posted at: https://lore.kernel.org/all/20230703182150.2193578-1-surenb@goog=
+le.com/
 
-These TDCALLs are *VERY* different.  The guest gets control back and has
-some amount of its state zapped, RBP being the most annoying current
-example of state that is lost.  So the guest resumes control here and
-must handle all of its interrupts with some of its state (and thus
-ability to cleanly handle the interrupt) gone.
-
-The instructions after state is lost are very much special.  Just look
-at the syscall gap.
+>
+> >
+> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat=
+)
+> > --
+> > Everything you wanna know about Linux kernel regression tracking:
+> > https://linux-regtracking.leemhuis.info/about/#tldr
+> > If I did something stupid, please tell me, as explained on that page.
+> >
+> > #regzbot introduced: 0bff0aaea03e2a3
