@@ -2,45 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4127459E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1CE7459F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjGCKOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S230101AbjGCKQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjGCKOn (ORCPT
+        with ESMTP id S229597AbjGCKQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:14:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4208DD;
-        Mon,  3 Jul 2023 03:14:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B1862F4;
-        Mon,  3 Jul 2023 03:15:24 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.27.109])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBBC33F762;
-        Mon,  3 Jul 2023 03:14:39 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 11:14:37 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Junhao He <hejunhao3@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Will Deacon <will@kernel.org>, zhangshaokun@hisilicon.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 6.4 11/12] drivers/perf: hisi: Add support for
- HiSilicon H60PA and PAv3 PMU driver
-Message-ID: <ZKKfjW6Ix9dg11QZ@FVFF77S0Q05N>
-References: <20230702195057.1787686-1-sashal@kernel.org>
- <20230702195057.1787686-11-sashal@kernel.org>
+        Mon, 3 Jul 2023 06:16:46 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF2DBC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:16:19 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31438512cafso690473f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688379378; x=1690971378;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KHna20O5nuwmYMQaQmDisbtnuP0SS9Nya9vSK5lPsIM=;
+        b=D51JaqYyHlucBw7NXpCblfBlLZtkeRJxiAkudc6DBT/DtQEDrb1FYnMMibCzrI8sk1
+         H/x/VwgSSbWnJwtbWC8lJqvxt9b7A3UmUuUfhOLCyQyJTWCN4Mv1v8xfMgW/xlbkWdZI
+         yDj0Q+VahUAxGkQFoUlnGeuLBcP9mA0tUgVAXo8QHQjlnn3BPdTzbCWbgNRT5/UGS3Re
+         /28ME7WC6JEVV7WtL2QEJOi/AvMqij1E+ak6798ICJ/Y8cY8AUKzQtt1+on7GKr3ZVHk
+         ic7heDchy2bwzeczoMHnAV6OH95ba8TlEvMf1OjzowxZtvNvVfvBcoQyzY3Uhq0gBndb
+         gxDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688379378; x=1690971378;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KHna20O5nuwmYMQaQmDisbtnuP0SS9Nya9vSK5lPsIM=;
+        b=CdQy9K2dfhMIceftgsl24AUel+kkHQlNhLmMqwthZViMXmlID+6dRQvs5cMLmhMMTh
+         LF13xvqsFb4ufokA1y/fI9jM78EIYYlyMarsSXQKz9OxqG+bnb3RWWzyBR/X+Giong2B
+         DiYjqm9Yb+W7B5JS/XIu7fUvGv7nj35UbfqyBnWMD2d72VvrmrxRxbDpaUIsprXchLwy
+         SWMTbpm5dLqJpg95yHqe7JNrJj6Zt7tndn4lkslrlU0PU+Aiv5Nfkxq+PhhORUctWSWu
+         +oKI+lFVy7ZUFVPTSe641Kaa9/90/uOaQBCng0tFg7OyFRrdd15M/Afp8yTEErTMgZL3
+         cHIw==
+X-Gm-Message-State: ABy/qLZ9FQPo2pyGMswRaKvF1cUBRipFGWgpeg3+mPBQGkWONhvGGQKS
+        n9pifNg0XnpSv1I9MqrVs8baQMdDgfdE3343EqwHQw==
+X-Google-Smtp-Source: APBJJlEyPHaw9RDOWtWuuNTrLxiqJdK1Y9rx8u7ncpQxqzZArAv5IjOfEjZY7gyHfQ9l2BG3z28vd3wfUHh72kONM4Y=
+X-Received: by 2002:adf:fe8f:0:b0:314:ca7:f30b with SMTP id
+ l15-20020adffe8f000000b003140ca7f30bmr8267188wrr.54.1688379378380; Mon, 03
+ Jul 2023 03:16:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230702195057.1787686-11-sashal@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230702-headway-dreamlike-d7ba39ac4910@spud>
+ <CAEEQ3wnzf=iDDHJATo2vdVz-SDNYRGBEEb7sXUyGojgP4ZAgaA@mail.gmail.com> <20230703-glorified-headless-16e998608eaa@wendy>
+In-Reply-To: <20230703-glorified-headless-16e998608eaa@wendy>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Mon, 3 Jul 2023 18:16:07 +0800
+Message-ID: <CAEEQ3wnjYK+Jj9Ce_yEHPL_z3eYn4OKP85YLXnVeaPd+SA3DJw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>, ardb@kernel.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
+        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
+        weidong.wd@bytedance.com, alexghiti@rivosinc.com,
+        sunilvl@ventanamicro.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,297 +79,370 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 02, 2023 at 03:50:56PM -0400, Sasha Levin wrote:
-> From: Junhao He <hejunhao3@huawei.com>
-> 
-> [ Upstream commit 1a51688474c0d395b864e98236335fba712e29bf ]
-> 
-> Compared to the original PA device, H60PA offers higher bandwidth.
-> The H60PA is a new device and we use HID to differentiate them.
-> 
-> The events supported by PAv3 and PAv2 are different. The PAv3 PMU
-> removed some events which are supported by PAv2 PMU. The older PA
-> PMU driver will probe v3 as v2. Therefore PA events displayed by
-> "perf list" cannot work properly. We add the HISI0275 HID for PAv3
-> PMU to distinguish different.
-> 
-> For each H60PA PMU, except for the overflow interrupt register, other
-> functions of the H60PA PMU are the same as the original PA PMU module.
-> It has 8-programable counters and each counter is free-running.
-> Interrupt is supported to handle counter (64-bits) overflow.
-> 
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> Link: https://lore.kernel.org/r/20230615125926.29832-2-hejunhao3@huawei.com
-> Signed-off-by: Will Deacon <will@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 127 +++++++++++++++++---
->  drivers/perf/hisilicon/hisi_uncore_pmu.h    |   8 ++
->  2 files changed, 120 insertions(+), 15 deletions(-)
+Hi Conor,
 
-Why is this being backported to stable?
+On Mon, Jul 3, 2023 at 4:13=E2=80=AFPM Conor Dooley <conor.dooley@microchip=
+.com> wrote:
+>
+> Hey,
+>
+> On Mon, Jul 03, 2023 at 03:19:01PM +0800, =E8=BF=90=E8=BE=89=E5=B4=94 wro=
+te:
+> > On Sun, Jul 2, 2023 at 9:48=E2=80=AFPM Conor Dooley <conor@kernel.org> =
+wrote:
+> > >
+> > > %subject: riscv: obtain ACPI RSDP from FFI.
+> > >
+> > > This subject is a bit unhelpful because FFI would commonly mean "fore=
+ign
+> > > function interface" & you have not yet introduced it. It seems like i=
+t
+> > > would be better to do s/FFI/devicetree/ or similar.
+> >
+> > FFI: FDT FIRMWARE INTERFACE.
+> >
+> > You are right, s/FFI/devicetree/ is of course possible=EF=BC=8C but I a=
+ctually
+> > want to use FFI as a general solution, put all relevant codes under
+> > driver/firmware/, and use RISC-V arch to call general codes.
+>
+> Yes, I read the patchset. It's still unhelpful to someone reading
+> $subject because nobody knows what your version of FFI is IMO.
+>
+> > In this case, only one Kconfig CONFIG_FDT_FW_INTERFACE is enough=EF=BC=
+=8C and
+> > The FFI code will be placed first in the patchset.
+> >
+> > But Ard's suggestion is to put the part of SMBIOS in the generic code,
+> > and put the FFI for ACPI in the RISCV arch.
+> >
+> > Please see  the v1:
+> > https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1=
+-cuiyunhui@bytedance.com/
+>
+> I read this too, I was following along with the discussion on the v1.
 
-This patch adds supoprt for new HW, and is clearly not a fix, so it's not clear
-to me why it has been selected.
+Okay,  I will take your suggestion=EF=BC=8C to do s/FFI/devicetree/.
+This needs to be confirmed with you:
+Continue to follow the current code structure, patch 1/3 is placed in
+arch/riscv/, and 2/3 is placed under driver/firmware?
+
+>
+> > Put the following to /driver/firmware/ffi.c , What do you think?
+> > void __init ffi_acpi_root_pointer(void)
+> > {
+> >     ...
+> > }
+>
+> Usually the NOP versions just go in the headers.
+>
+> > > Please also drop the full stop from the commit messages ;)
+> > Okay, thanks.
+> >
+> > >
+> > > Please use a cover letter for multi-patch series & include changelogs=
+.
+> > OK, On v3 I would use.
+> >
+> > >
+> > > +CC Sunil, Alex:
+> > >
+> > > Can you guys please take a look at this & see if it is something that=
+ we
+> > > want to do (ACPI without EFI)?
+> > >
+> > > On Sun, Jul 02, 2023 at 05:57:32PM +0800, Yunhui Cui wrote:
+> > > > 1. We need to enable the ACPI function on RISC-V.
+> > >
+> > > RISC-V already supports ACPI, the "we" in this commit message is
+> > > confusing. Who is "we"? Bytedance?
+>
+> Who is the "we"?
+
+"We" are people who need to use ACPI on RISC-V systems, including
+ByteDance of course.
+
+>
+> > > > When booting with
+> > > > Coreboot, we encounter two problems:
+> > > > a. Coreboot does not support EFI
+> > >
+> > >
+> > > > b. On RISC-V, only the DTS channel can be used.
+> > >
+> > > We support ACPI, so this seems inaccurate. Could you explain it bette=
+r
+> > > please?
+> >
+> > Yes, Sunil already supports ACPI, But it is based on EDK2 boot which
+> > supports EFI.
+> > In fact, We use Coreboot which has the features of a and b above.
+>
+> My point is that the commit message has gaps in it.
+> This point b & point 1 make it seem like this patch adds ACPI support to
+> an architecture that only supports devicetree. "DTS channel" needs to be
+> explained further, to be frank I have no idea what that means. Does it
+> mean that coreboot on RISC-V only supports DT, or that the RISC-V linux
+> kernel requires a mini-DT when booting with EFI?
+
+Yeah=EF=BC=8C Coreboot only supports DT, do not support EFI.
+The first half sentence has already said "When booting with Coreboot,
+we encounter two problems:"
+
+How about changing the commit log to the following?
+
+riscv: obtain ACPI RSDP from devicetree.
+
+On RISC-V, when using Coreboot to start, since Coreboot only supports
+DTS but not EFI, and
+RISC-V does not have a reserved address segment.
+When the system enables ACPI, ACPI RSDP needs to be passed through DTS
+
+>
+> > > > 2. Based on this, we have added an interface for obtaining firmware
+> > > > information transfer through FDT, named FFI.
+> > >
+> > > Please use the long form of "FFI" before using the short form, since =
+you
+> > > are inventing this & noone knows what it means yet.
+> > >
+> > > > 3. We not only use FFI to pass ACPI RSDP, but also pass other
+> > > > firmware information as an extension.
+> > >
+> > > This patch doesn't do that though?
+> >
+> > Similar problems may be encountered on other arches, which is also the
+> > purpose of this sentence.
+>
+> Right, but that has nothing to do with this patch? This patch only
+> implements the ACPI side of things for RISC-V, it doesn't do the SMBIOS
+> stuff. Leave that for the patch that actually does that please.
+
+Okay, Modify it to the above commit log and there will be no such problem.
+
+> > > > +RISC-V FDT FIRMWARE INTERFACE (FFI) SUPPORT
+> > > > +M:     Yunhui Cui cuiyunhui@bytedance.com
+> > > > +S:     Maintained
+> > > > +F:     arch/riscv/include/asm/ffi.h
+> > > > +F:     arch/riscv/kernel/ffi.c
+> > >
+> > > Please add this in alphabetical order, these entries have recently be=
+en
+> > > resorted. That said, maintainers entry for a trivial file in arch cod=
+e
+> > > seems a wee bit odd, seems like it would be better suited rolled up i=
+nto
+> > > your other entry for the interface, like how Ard's one looks for EFI?
+> > >
+> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > index b49793cf34eb..2e1c40fb2300 100644
+> > > > --- a/arch/riscv/Kconfig
+> > > > +++ b/arch/riscv/Kconfig
+> > > > @@ -785,6 +785,16 @@ config EFI
+> > > >         allow the kernel to be booted as an EFI application. This
+> > > >         is only useful on systems that have UEFI firmware.
+> > > >
+> > > > +config FFI
+> > > > +     bool "Fdt firmware interface"
+> > > > +     depends on OF
+> > > > +     default y
+> > > > +     help
+> > > > +       Added an interface to obtain firmware information transfer
+> > > > +       through FDT, named FFI. Some bootloaders do not support EFI=
+,
+> > > > +       such as coreboot.
+> > > > +       We can pass firmware information through FFI, such as ACPI.
+> > >
+> > > I don't understand your Kconfig setup. Why don't you just have one
+> > > option (the one from patch 2/3), instead of adding 2 different but
+> > > similarly named options?
+> > OK, let me try it=EF=BC=8C and use the Kconfig CONFIG_FDT_FW_INTERFACE.=
+  EFI
+> > seems to use two...
+>
+> It doesn't use two different options, AFAIR. There's an EFI option in
+> the arch Kconfigs and then a menu in drivers/firmware/efi/Kconfig that
+> allows enabling sub-components. You've got two entries that appear
+> unrelated, despite parsing the same DT bits.
+
+OKay, I'll update it on v3.
+
+>
+> >
+> > > >  config CC_HAVE_STACKPROTECTOR_TLS
+> > > >       def_bool $(cc-option,-mstack-protector-guard=3Dtls -mstack-pr=
+otector-guard-reg=3Dtp -mstack-protector-guard-offset=3D0)
+> > > >
+> > > > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm=
+/acpi.h
+> > > > index f71ce21ff684..f9d1625dd159 100644
+> > > > --- a/arch/riscv/include/asm/acpi.h
+> > > > +++ b/arch/riscv/include/asm/acpi.h
+> > > > @@ -15,6 +15,8 @@
+> > > >  /* Basic configuration for ACPI */
+> > > >  #ifdef CONFIG_ACPI
+> > > >
+> > > > +#include <asm/ffi.h>
+> > > > +
+> > > >  typedef u64 phys_cpuid_t;
+> > > >  #define PHYS_CPUID_INVALID INVALID_HARTID
+> > > >
+> > > > @@ -66,6 +68,13 @@ int acpi_get_riscv_isa(struct acpi_table_header =
+*table,
+> > > >                      unsigned int cpu, const char **isa);
+> > > >
+> > > >  static inline int acpi_numa_get_nid(unsigned int cpu) { return NUM=
+A_NO_NODE; }
+> > > > +
+> > > > +#define ACPI_HAVE_ARCH_GET_ROOT_POINTER
+> > >
+> > > How come this is not set in Kconfig like HAVE_FOO options usually are=
+?
+>
+> > This is modeled after x86 historical code.
+> > See arch/x86/include/asm/acpi.h
+>
+> Is that a good reason for propagating the pattern? Is there a benefit to
+> this, other than "x86 did this"?
+
+I smiled when I read this sentence=EF=BC=8CI haven't thought of a better wa=
+y yet =EF=BC=9A-=EF=BC=89
+
+
+>
+> > > > +static inline u64 acpi_arch_get_root_pointer(void)
+> > > > +{
+> > > > +     return acpi_rsdp;
+> > > > +}
+> > > > +
+> > > >  #else
+> > > >  static inline void acpi_init_rintc_map(void) { }
+> > > >  static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int =
+cpu)
+> > > > diff --git a/arch/riscv/include/asm/ffi.h b/arch/riscv/include/asm/=
+ffi.h
+> > > > new file mode 100644
+> > > > index 000000000000..847af02abd87
+> > > > --- /dev/null
+> > > > +++ b/arch/riscv/include/asm/ffi.h
+> > > > @@ -0,0 +1,9 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +
+> > > > +#ifndef _ASM_FFI_H
+> > > > +#define _ASM_FFI_H
+> > > > +
+> > > > +extern u64 acpi_rsdp;
+> > >
+> > > /stuff/linux/drivers/acpi/osl.c:178:22: error: redefinition of 'acpi_=
+rsdp' with a different type: 'unsigned long' vs 'u64' (aka 'unsigned long l=
+ong')
+> > >
+> > > Fails to build when Kexec is enabled.
+> >
+> > Rename my acpi_rsdp to arch_acpi_rsdp? WDYT?
+>
+> You could do s/arch/riscv/ either, that'd match what we prefix a lot of
+> stuff with.
+
+ Sorry, I don't quite understand what you mean. Could you tell me in detail=
+?
+
+>
+> > > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefil=
+e
+> > > > index 506cc4a9a45a..274e06f4da33 100644
+> > > > --- a/arch/riscv/kernel/Makefile
+> > > > +++ b/arch/riscv/kernel/Makefile
+> > > > @@ -92,6 +92,7 @@ obj-$(CONFIG_CRASH_CORE)    +=3D crash_core.o
+> > > >  obj-$(CONFIG_JUMP_LABEL)     +=3D jump_label.o
+> > > >
+> > > >  obj-$(CONFIG_EFI)            +=3D efi.o
+> > > > +obj-$(CONFIG_FFI)              +=3D ffi.o
+> > >
+> > > This file uses tabs for alignment, not spaces.
+> > Okay, got it.
+> >
+> > >
+> > > >  obj-$(CONFIG_COMPAT)         +=3D compat_syscall_table.o
+> > > >  obj-$(CONFIG_COMPAT)         +=3D compat_signal.o
+> > > >  obj-$(CONFIG_COMPAT)         +=3D compat_vdso/
+> > > > diff --git a/arch/riscv/kernel/ffi.c b/arch/riscv/kernel/ffi.c
+> > > > new file mode 100644
+> > > > index 000000000000..c5ac2b5d9148
+> > > > --- /dev/null
+> > > > +++ b/arch/riscv/kernel/ffi.c
+>
+> > > > +void __init ffi_init(void)
+> > > > +{
+> > > > +     ffi_acpi_root_pointer();
+> > >
+> > > What happens if, on a system with "normal" ACPI support, ffi_init() i=
+s
+> > > called & ffi_acpi_root_pointer() calls things like fdt_path_offset()?
+> >
+> > According to the current logic, get it from FFI is enabled, if can
+> > not,  continue to use =E2=80=9Cnormal=E2=80=9D ACPI.
+>
+> I find it hard to understand what you mean here. Do you mean something
+> like "The calls to fdt_path_offset() will use the mini EFI DT and are
+> harmless. If the config table is not present, it will continue to use
+> \"normal\" ACPI."?
+
+acpi_os_get_root_pointer()
+{
+        pa =3D acpi_arch_get_root_pointer();
+        if (pa)
+                return pa;
+
+        ...//efi logic
+}
+
+Even if acpi_arch_get_root_pointer returns 0, it does not affect the
+next efi logic.
+
+>
+> > > > +}
+> > > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > > > index 971fe776e2f8..5a933d6b6acb 100644
+> > > > --- a/arch/riscv/kernel/setup.c
+> > > > +++ b/arch/riscv/kernel/setup.c
+> > > > @@ -36,6 +36,7 @@
+> > > >  #include <asm/thread_info.h>
+> > > >  #include <asm/kasan.h>
+> > > >  #include <asm/efi.h>
+> > > > +#include <asm/ffi.h>
+> > > >
+> > > >  #include "head.h"
+> > > >
+> > > > @@ -279,6 +280,7 @@ void __init setup_arch(char **cmdline_p)
+> > > >       parse_early_param();
+> > > >
+> > > >       efi_init();
+> > > > +     ffi_init();
+> > >
+> > > What provides ffi_init() if CONFIG_FFI is disabled?
+>
+> > Ok=EF=BC=8C Modified on v3,  put it with the CONFIG_FFI
+>
+> Sorry, what does this mean?
+
+I mean thanks for the idea, I'll update it in v3.
+#ifdef CONFIG_FDT_FW_INTERFACE
+    ffi_init();
+#endif
+
+
+>
+> >
+> > >
+> > > >       paging_init();
+> > > >
+> > > >       /* Parse the ACPI tables for possible boot-time configuration=
+ */
+>
+> Cheers,
+> Conor.
+
 
 Thanks,
-Mark.
-
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
-> index 71b6687d66960..d941e746b4248 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
-> @@ -22,9 +22,15 @@
->  #define PA_TT_CTRL			0x1c08
->  #define PA_TGTID_CTRL			0x1c14
->  #define PA_SRCID_CTRL			0x1c18
-> +
-> +/* H32 PA interrupt registers */
->  #define PA_INT_MASK			0x1c70
->  #define PA_INT_STATUS			0x1c78
->  #define PA_INT_CLEAR			0x1c7c
-> +
-> +#define H60PA_INT_STATUS		0x1c70
-> +#define H60PA_INT_MASK			0x1c74
-> +
->  #define PA_EVENT_TYPE0			0x1c80
->  #define PA_PMU_VERSION			0x1cf0
->  #define PA_EVENT_CNT0_L			0x1d00
-> @@ -46,6 +52,12 @@ HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_cmd, config1, 32, 22);
->  HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_msk, config1, 43, 33);
->  HISI_PMU_EVENT_ATTR_EXTRACTOR(tracetag_en, config1, 44, 44);
->  
-> +struct hisi_pa_pmu_int_regs {
-> +	u32 mask_offset;
-> +	u32 clear_offset;
-> +	u32 status_offset;
-> +};
-> +
->  static void hisi_pa_pmu_enable_tracetag(struct perf_event *event)
->  {
->  	struct hisi_pmu *pa_pmu = to_hisi_pmu(event->pmu);
-> @@ -219,40 +231,40 @@ static void hisi_pa_pmu_disable_counter(struct hisi_pmu *pa_pmu,
->  static void hisi_pa_pmu_enable_counter_int(struct hisi_pmu *pa_pmu,
->  					   struct hw_perf_event *hwc)
->  {
-> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
->  	u32 val;
->  
->  	/* Write 0 to enable interrupt */
-> -	val = readl(pa_pmu->base + PA_INT_MASK);
-> +	val = readl(pa_pmu->base + regs->mask_offset);
->  	val &= ~(1 << hwc->idx);
-> -	writel(val, pa_pmu->base + PA_INT_MASK);
-> +	writel(val, pa_pmu->base + regs->mask_offset);
->  }
->  
->  static void hisi_pa_pmu_disable_counter_int(struct hisi_pmu *pa_pmu,
->  					    struct hw_perf_event *hwc)
->  {
-> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
->  	u32 val;
->  
->  	/* Write 1 to mask interrupt */
-> -	val = readl(pa_pmu->base + PA_INT_MASK);
-> +	val = readl(pa_pmu->base + regs->mask_offset);
->  	val |= 1 << hwc->idx;
-> -	writel(val, pa_pmu->base + PA_INT_MASK);
-> +	writel(val, pa_pmu->base + regs->mask_offset);
->  }
->  
->  static u32 hisi_pa_pmu_get_int_status(struct hisi_pmu *pa_pmu)
->  {
-> -	return readl(pa_pmu->base + PA_INT_STATUS);
-> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
-> +
-> +	return readl(pa_pmu->base + regs->status_offset);
->  }
->  
->  static void hisi_pa_pmu_clear_int_status(struct hisi_pmu *pa_pmu, int idx)
->  {
-> -	writel(1 << idx, pa_pmu->base + PA_INT_CLEAR);
-> -}
-> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
->  
-> -static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
-> -	{ "HISI0273", },
-> -	{}
-> -};
-> -MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
-> +	writel(1 << idx, pa_pmu->base + regs->clear_offset);
-> +}
->  
->  static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->  				   struct hisi_pmu *pa_pmu)
-> @@ -276,6 +288,10 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->  	pa_pmu->ccl_id = -1;
->  	pa_pmu->sccl_id = -1;
->  
-> +	pa_pmu->dev_info = device_get_match_data(&pdev->dev);
-> +	if (!pa_pmu->dev_info)
-> +		return -ENODEV;
-> +
->  	pa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(pa_pmu->base)) {
->  		dev_err(&pdev->dev, "ioremap failed for pa_pmu resource.\n");
-> @@ -314,6 +330,32 @@ static const struct attribute_group hisi_pa_pmu_v2_events_group = {
->  	.attrs = hisi_pa_pmu_v2_events_attr,
->  };
->  
-> +static struct attribute *hisi_pa_pmu_v3_events_attr[] = {
-> +	HISI_PMU_EVENT_ATTR(tx_req,	0x0),
-> +	HISI_PMU_EVENT_ATTR(tx_dat,	0x1),
-> +	HISI_PMU_EVENT_ATTR(tx_snp,	0x2),
-> +	HISI_PMU_EVENT_ATTR(rx_req,	0x7),
-> +	HISI_PMU_EVENT_ATTR(rx_dat,	0x8),
-> +	HISI_PMU_EVENT_ATTR(rx_snp,	0x9),
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group hisi_pa_pmu_v3_events_group = {
-> +	.name = "events",
-> +	.attrs = hisi_pa_pmu_v3_events_attr,
-> +};
-> +
-> +static struct attribute *hisi_h60pa_pmu_events_attr[] = {
-> +	HISI_PMU_EVENT_ATTR(rx_flit,	0x50),
-> +	HISI_PMU_EVENT_ATTR(tx_flit,	0x65),
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group hisi_h60pa_pmu_events_group = {
-> +	.name = "events",
-> +	.attrs = hisi_h60pa_pmu_events_attr,
-> +};
-> +
->  static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
->  
->  static struct attribute *hisi_pa_pmu_cpumask_attrs[] = {
-> @@ -337,6 +379,12 @@ static const struct attribute_group hisi_pa_pmu_identifier_group = {
->  	.attrs = hisi_pa_pmu_identifier_attrs,
->  };
->  
-> +static struct hisi_pa_pmu_int_regs hisi_pa_pmu_regs = {
-> +	.mask_offset = PA_INT_MASK,
-> +	.clear_offset = PA_INT_CLEAR,
-> +	.status_offset = PA_INT_STATUS,
-> +};
-> +
->  static const struct attribute_group *hisi_pa_pmu_v2_attr_groups[] = {
->  	&hisi_pa_pmu_v2_format_group,
->  	&hisi_pa_pmu_v2_events_group,
-> @@ -345,6 +393,46 @@ static const struct attribute_group *hisi_pa_pmu_v2_attr_groups[] = {
->  	NULL
->  };
->  
-> +static const struct hisi_pmu_dev_info hisi_h32pa_v2 = {
-> +	.name = "pa",
-> +	.attr_groups = hisi_pa_pmu_v2_attr_groups,
-> +	.private = &hisi_pa_pmu_regs,
-> +};
-> +
-> +static const struct attribute_group *hisi_pa_pmu_v3_attr_groups[] = {
-> +	&hisi_pa_pmu_v2_format_group,
-> +	&hisi_pa_pmu_v3_events_group,
-> +	&hisi_pa_pmu_cpumask_attr_group,
-> +	&hisi_pa_pmu_identifier_group,
-> +	NULL
-> +};
-> +
-> +static const struct hisi_pmu_dev_info hisi_h32pa_v3 = {
-> +	.name = "pa",
-> +	.attr_groups = hisi_pa_pmu_v3_attr_groups,
-> +	.private = &hisi_pa_pmu_regs,
-> +};
-> +
-> +static struct hisi_pa_pmu_int_regs hisi_h60pa_pmu_regs = {
-> +	.mask_offset = H60PA_INT_MASK,
-> +	.clear_offset = H60PA_INT_STATUS, /* Clear on write */
-> +	.status_offset = H60PA_INT_STATUS,
-> +};
-> +
-> +static const struct attribute_group *hisi_h60pa_pmu_attr_groups[] = {
-> +	&hisi_pa_pmu_v2_format_group,
-> +	&hisi_h60pa_pmu_events_group,
-> +	&hisi_pa_pmu_cpumask_attr_group,
-> +	&hisi_pa_pmu_identifier_group,
-> +	NULL
-> +};
-> +
-> +static const struct hisi_pmu_dev_info hisi_h60pa = {
-> +	.name = "h60pa",
-> +	.attr_groups = hisi_h60pa_pmu_attr_groups,
-> +	.private = &hisi_h60pa_pmu_regs,
-> +};
-> +
->  static const struct hisi_uncore_ops hisi_uncore_pa_ops = {
->  	.write_evtype		= hisi_pa_pmu_write_evtype,
->  	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
-> @@ -375,7 +463,7 @@ static int hisi_pa_pmu_dev_probe(struct platform_device *pdev,
->  	if (ret)
->  		return ret;
->  
-> -	pa_pmu->pmu_events.attr_groups = hisi_pa_pmu_v2_attr_groups;
-> +	pa_pmu->pmu_events.attr_groups = pa_pmu->dev_info->attr_groups;
->  	pa_pmu->num_counters = PA_NR_COUNTERS;
->  	pa_pmu->ops = &hisi_uncore_pa_ops;
->  	pa_pmu->check_event = 0xB0;
-> @@ -400,8 +488,9 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> -	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%u_pa%u",
-> -			      pa_pmu->sicl_id, pa_pmu->index_id);
-> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_%s%u",
-> +			      pa_pmu->sicl_id, pa_pmu->dev_info->name,
-> +			      pa_pmu->index_id);
->  	if (!name)
->  		return -ENOMEM;
->  
-> @@ -435,6 +524,14 @@ static int hisi_pa_pmu_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
-> +	{ "HISI0273", (kernel_ulong_t)&hisi_h32pa_v2 },
-> +	{ "HISI0275", (kernel_ulong_t)&hisi_h32pa_v3 },
-> +	{ "HISI0274", (kernel_ulong_t)&hisi_h60pa },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
-> +
->  static struct platform_driver hisi_pa_pmu_driver = {
->  	.driver = {
->  		.name = "hisi_pa_pmu",
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> index 07890a8e96ca7..772857b99dc5e 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> @@ -62,6 +62,13 @@ struct hisi_uncore_ops {
->  	void (*disable_filter)(struct perf_event *event);
->  };
->  
-> +/* Describes the HISI PMU chip features information */
-> +struct hisi_pmu_dev_info {
-> +	const char *name;
-> +	const struct attribute_group **attr_groups;
-> +	void *private;
-> +};
-> +
->  struct hisi_pmu_hwevents {
->  	struct perf_event *hw_events[HISI_MAX_COUNTERS];
->  	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
-> @@ -72,6 +79,7 @@ struct hisi_pmu_hwevents {
->  struct hisi_pmu {
->  	struct pmu pmu;
->  	const struct hisi_uncore_ops *ops;
-> +	const struct hisi_pmu_dev_info *dev_info;
->  	struct hisi_pmu_hwevents pmu_events;
->  	/* associated_cpus: All CPUs associated with the PMU */
->  	cpumask_t associated_cpus;
-> -- 
-> 2.39.2
-> 
+Yunhui
