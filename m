@@ -2,109 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF8374566C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA9374566B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjGCHvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        id S230003AbjGCHv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjGCHvi (ORCPT
+        with ESMTP id S229581AbjGCHv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:51:38 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D7BC5
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:51:09 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-313f61890fbso4581354f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688370668; x=1690962668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3fS/IGGRRITwIPRcoIR6LDhq8Lu4B/gXKK5zsRtePeA=;
-        b=DdvTlJ+dtiJCsFyLdnYP5xkCkkKypgTEbA86g9KlFE6MNjI6Zg/e77/svNL8AxL7or
-         wKSJS1fv9nflviz+nJ2oYa75SLer+3OCd0N6oQleC505bLia+dIz+v3FhxWdBpjB8dLR
-         qAl95eI6/+iRfB1kcSTEmL7pbzowOgK6B5et20aP1+9TJKcZnnuZKpRMs83ePEnpF9s5
-         UxCJuccPtrOR6KWLWMf6YnYpaRduMh7VfTf86HEuwoREyoKnxBAObyElpRPkRI5I4EPb
-         ps13JfoxszIZEG5LNSyruQzCTtAZyzQnlj8XdYSYSpvp9W6OTJ7KC5BQnhxsLqFCG7UF
-         6CJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688370668; x=1690962668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3fS/IGGRRITwIPRcoIR6LDhq8Lu4B/gXKK5zsRtePeA=;
-        b=W2z1F6S6pUDuVokYl6j+vEsoeYf721XtD1fvVhOY5SekiAALEAy2NZXWDf7JzSI6Re
-         61veAecQ5wiMmJ+bAUqS/U6EWeqjwhK606iTdSAfQ6QB1p6afw+pvmxLHAGdI7hYiBBk
-         6dTB2N2xN/06FjXZFS3jH5kH9CTZeRlFB1DHCWs4Cte3hftnbeDwYgE7JzLDWvmsaPEe
-         8zn9uVA5sYZIhiYSoc6qT3Csdpnb80zRRgdLBEDITK3b+PfFXwr9BpBdnhAurZckCVS8
-         Kt0h5hEvj08pJ+Ci97UxAAHgOE0Ifusp2Z5iiLzb1Bfyxr5VHWD/n/J9Q7P9DU7mpscR
-         rsvQ==
-X-Gm-Message-State: ABy/qLZoMbeURbP556Y4GXcr7HK7jAcutCmaOVKa+XoTRqmi/9+qx97D
-        FNr4l1ke5wE4r9nuGECgcHTZIWYE/0U+B3ca82mowA==
-X-Google-Smtp-Source: APBJJlH9nqm8zH113ZN2JVzKufZ4X+bFV71Z5uEllOB1mvUR+W7B5XHL4I9sgAPAbxKnG9qHeNCgxwmmvSmgPIWpbBk=
-X-Received: by 2002:a5d:4003:0:b0:314:2b0a:dab7 with SMTP id
- n3-20020a5d4003000000b003142b0adab7mr5423229wrp.29.1688370667957; Mon, 03 Jul
- 2023 00:51:07 -0700 (PDT)
+        Mon, 3 Jul 2023 03:51:26 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7A4C1;
+        Mon,  3 Jul 2023 00:51:25 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 889F85C0162;
+        Mon,  3 Jul 2023 03:51:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 03 Jul 2023 03:51:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688370684; x=1688457084; bh=a0
+        67LZeVQMZ0ZGZuHnF8xunPWCpSqz/3yx++wdTK+PY=; b=5NHvHuLq0dgHv63G5Q
+        xjzRYMt7Fz+fd81h/Fp/o+E6EKXn+zjbYSxLdZJEY15Oim+yaMEdkT3E4vC+WAv9
+        S4PvQ+qNyBZj1Rpq1R8/ejs3ZfCoBSQLqWPNlseoKC2ud84pI8wBJx3T4DrLamvx
+        kTaoIfeGXit3N60tQP/z0Gri2Na8dNFNXQLWPAxnIdpEWZYbVMLwWBZUIz6IO3nW
+        vCsiyJEP6BR6JS4NorHOSDKewU+KKyvfPZkeGo5btzhV//JGw8f8mAP+XnZBYPhI
+        xHe4S3HkuefmJN8IWcVrOMWswG06ca57vXS0H5EE2A8UkksWc7Vt3prF4hk2tegT
+        fw9w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688370684; x=1688457084; bh=a067LZeVQMZ0Z
+        GZuHnF8xunPWCpSqz/3yx++wdTK+PY=; b=RwR4v3kX1fVK6CV8QYHrqz1fcdteT
+        Jp/SeajvzwpZvwM5HBwo/8AMyHe5w++KVtikm7R+XGValtuENeo8QlYUplOCEyGT
+        d0Sl9I9b1w+mzbzmIEFtMnpcPmbPQGpEPxhfeM9/pDeEe2COQ5fx/G4OMuZC6tqI
+        vOB7Zq4uBkaJF5/ZuNaf2x9NOhCxuzfj7SweN3llxxpTZ8QCAgoiUi8bwfcPmi6x
+        1in6lFf/hIiWMCCUl9ggzfVb9XfywMtrYsxENqfiMBm2q+ea6LnvjP5wNgWhI6sP
+        s0kB6TNOgkXnmRk/J6KAdPkilZy66xDpcKPOeWOUVo1mggfAVaMG/LBEQ==
+X-ME-Sender: <xms:_H2iZKvVyQDzfy-hM4B6v7j2GKx7MjEutKoh_qH8eKpY9oI-spnMeg>
+    <xme:_H2iZPe3gTeK-fgu9sEQfD6HoZcAKM8Kuj4pB7M2BhUyM-ocbnsrX36v7PtsbJQaq
+    cfKmN4CB-AeBCdenoc>
+X-ME-Received: <xmr:_H2iZFyWl-4PzIDpaDmCoxpUmLI7NgxKcWJ6_5-8-RYxuVaVyZNa4hX4kTSq99yrRrfIxEhTvHoxpszZLL0voQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddugdduvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtgfdukeeigeeuhfelheeftdfhgfegfefgudeuiefhueeuleekveetvdei
+    tddvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:_H2iZFMZVXHpea2NUZwbbgo8x0ZKaEfkm6-7wm_rtM5jlOVYnv753g>
+    <xmx:_H2iZK8exEQ5gUPSQmPL2Lr-zzvd4uCzKQbFUS9OakzvEptTyzBLiA>
+    <xmx:_H2iZNXmTAdFPRs8Rv5Qp5QXhhwkHyZlK60qGGRz4Q20dPtUh0ni3Q>
+    <xmx:_H2iZL26uxViSrdJkOHGYdnMlVW43x_tp98-B8CpuVe8MKgGf6dAkg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Jul 2023 03:51:23 -0400 (EDT)
+Date:   Mon, 3 Jul 2023 09:51:22 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Oltmanns <frank@oltmanns.dev>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Roman Beranek <me@crly.cz>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/8] clk: sunxi-ng: Consider alternative parent rates
+ when determining NKM clock rate
+Message-ID: <tz2mcnyn32kedmkme2abaohhlveu37rohghddgg5njzw3534jq@qg3pevlpy4si>
+References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
 MIME-Version: 1.0
-References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230702095735.860-3-cuiyunhui@bytedance.com>
- <20230702-confiding-aqueduct-25c3c2852de3@spud>
-In-Reply-To: <20230702-confiding-aqueduct-25c3c2852de3@spud>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Mon, 3 Jul 2023 15:50:57 +0800
-Message-ID: <CAEEQ3wkaazkV9MrfvWQMSXixtqahgdYVe=GT9ZZJnW-r1AQ1aA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2 3/3] riscv: obtain SMBIOS entry from FFI.
-To:     Conor Dooley <conor@kernel.org>
-Cc:     ardb@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3lrrl2y36lc5sskn"
+Content-Disposition: inline
+In-Reply-To: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
 
-On Sun, Jul 2, 2023 at 8:42=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
->
-> Hey,
->
-> On Sun, Jul 02, 2023 at 05:57:34PM +0800, Yunhui Cui wrote:
-> > When we bringup with coreboot on riscv, we need to obtain
-> > the entry address of SMBIOS through the FFI scheme.
->
-> What do you need it for?
-RISC-V will be server-oriented, and the system needs to be managed
-based on SMBIOS.
+--3lrrl2y36lc5sskn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi,
 
+On Sun, Jul 02, 2023 at 07:55:19PM +0200, Frank Oltmanns wrote:
+> Changes in v3:
+>  - Use dedicated function for finding the best rate in cases where an
+>    nkm clock supports setting its parent's rate, streamlining it with
+>    the structure that is used in other sunxi-ng ccus such as ccu_mp
+>    (PATCH 1).
+>  - Therefore, remove the now obsolete comments that were introduced in
+>    v2 (PATCH 1).
+>  - Remove the dedicated function for calculating the optimal parent rate
+>    for nkm clocks that was introduced in v2. Instead use a simple
+>    calculation and require the parent clock to select the closest rate to
+>    achieve optimal results (PATCH 1).
+>  - Therefore, add support to set the closest rate for nm clocks (because
+>    pll-mipi's parent pll-video0 is an nm clock) and all clock types that
+>    are descendants of a64's pll-video0, i.e., nkm, mux, and div (PATCH 3
+>    et. seq.).
+>  - Link to v2: https://lore.kernel.org/all/20230611090143.132257-1-frank@oltmanns.dev/
 
-> >
-> > @@ -34,4 +35,7 @@ void __init ffi_acpi_root_pointer(void)
-> >  void __init ffi_init(void)
-> >  {
-> >       ffi_acpi_root_pointer();
-> > +#if CONFIG_FDT_FW_INTERFACE
-> > +     ffi_smbios_root_pointer();
-> > +#endif
->
-> Please stub this function so that we don't need ifdeffery here.
-OK, I will update it on V3.
+Thanks so much for that new version. I know it's been a long discussion,
+but it definitely moves in the right direction and we're fairly close to
+a final version now.
 
-Thanks,
-Yunhui
+Maxime
+
+--3lrrl2y36lc5sskn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZKJ9+gAKCRDj7w1vZxhR
+xSpUAQCzJTw/bSuVBopvVdY76PIZRdtNoVFQA435YDTBIoKiZAEApHbj+QVUdSkK
+bLpQ/UPDveZ4umuDTdkAThnns04rdQk=
+=bWgY
+-----END PGP SIGNATURE-----
+
+--3lrrl2y36lc5sskn--
