@@ -2,125 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6831C74565F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F7A745664
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjGCHsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S230037AbjGCHuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjGCHsW (ORCPT
+        with ESMTP id S229581AbjGCHuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:48:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF61C2;
-        Mon,  3 Jul 2023 00:48:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C84D160DDF;
-        Mon,  3 Jul 2023 07:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2891AC433C9;
-        Mon,  3 Jul 2023 07:48:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688370500;
-        bh=RNMHeuYF/T054Bixv9qGLbviyZ5intw9e4cOmr/ZaUM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sT0zp/0cY+MBAHRS4qTxPT/Rk6jXkyvtsclI8ywOR29Ym6ZfEAbf9YtSn3hfavLwK
-         jCDgpaAMM715SEEGFCHVagvrP2fmSYUiEz0FEmvS5dAfDMPs1gaBHxIw9gG2B9UVEc
-         3bZzXfy348jOwhMY7lihk3v6v7qi+ptq/j+aruDT0fmVmEwKoIvqI1A2r58HkGZq7k
-         vuOvIPrVl+EDIpn/Kc+/DN5ycigmNiQDRl60mrCHypIwfPJ4ngRO9dap89YH1zsFDY
-         cuh27CGcUikP+NHbH+Z7Qb7FoMexlN53g+1JbGGDZj/SvYLjdxvHp9Lps/GWaz9TT8
-         Vguv1FJajJL9Q==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qGEIU-0007iB-0x;
-        Mon, 03 Jul 2023 09:48:34 +0200
-Date:   Mon, 3 Jul 2023 09:48:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Stable@vger.kernel.org
-Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
- number
-Message-ID: <ZKJ9UrB8FRkLzLc-@hovoldconsulting.com>
-References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
+        Mon, 3 Jul 2023 03:50:13 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF3BC2;
+        Mon,  3 Jul 2023 00:50:11 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1541C5C0190;
+        Mon,  3 Jul 2023 03:50:08 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 03 Jul 2023 03:50:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688370608; x=1688457008; bh=fO
+        iPJH964JbMWdWtw/Lr9kGAyKHEcXeffDI0IDClADA=; b=5O0eNBSbTrxUjX2Ym5
+        2u/+TXoHE2iMdhZX+ASAVWARZj5IBBR4e6LlS2VMSj4qq7G0KRAVlcyChqscWeL1
+        7Gv2OxxhpEH0zRSYCNekH8XrQAzQmKaRH/PQBy1CKNGj6HeRBDyjSVFTnsMIvYLU
+        0MC7mkInIfkH8N6GeKImgYTaFwxgkoQ6OvjNTOV8cbFfdTDDF25pexDPe9S05WB/
+        xwAv8l7IsHSl9XgwawXulUOhD3Q5rCVT9foeNLtv38pZ3TsnbF+QvBds/y3mkhuN
+        eRXJmdZONUuVVEp20TGJo9TIcJpY0GVvwrnwZMVIsfqPuzjLGBEi0I9HxKnX6cAq
+        ThnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688370608; x=1688457008; bh=fOiPJH964JbMW
+        dWtw/Lr9kGAyKHEcXeffDI0IDClADA=; b=k5ZNUpnkNASHl1XDqlS0QZv9vvXJr
+        7Z1rRQXtqwyocnI/q3J8KaodIeVfDQjC/s5MP9qN0KyFq1nPd+Ss4yDaoPJiwEKH
+        1cuIF4YnOqEiZla8KBt/Gb/C+OL4pvDt5lQExuAhenB7s5DwJUVkPpZ6j8+xy4U7
+        CyY8wp6M9c4itQxebu/5/KM0IKcPxEGeoJzAhgmluzrwXGgRd75TM/lbEJClXxd6
+        13YOFWcM4GzADROWDLJJDij32zSyQdwm2ToZkzo5+CtL8aj1Ed+K8ldiheZ/cuEz
+        jsHuqFO7RXFsSuYpXjzhGZtnZaiP07bODiTKe4yOuMbPj8TyzRbWonzkQ==
+X-ME-Sender: <xms:r32iZKOsudebHk-m8NJf4QR533FMlUe21lZ5MiBfdvnM_OX5GtNrOQ>
+    <xme:r32iZI8PY3MIUAVeP7Qyxttf3KBeZwA_OPL2txhHJ0Tx7L7SzAEO-o20E_Dzan87J
+    ILfhjudCg-7O2Nkz7E>
+X-ME-Received: <xmr:r32iZBRyXHLZcWAeFO7kNBdBOagQkz5OchkrXdSC_a-kdaoe_pjj08B8F82TTO_0MyMxcOUsXj4lmS4wt_I9fA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddugdduvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:r32iZKv2LYdeX2BOhDNDOxeQlQx4T_t4kpqIU5rBUub3vzhGvx9iTQ>
+    <xmx:r32iZCdtF8aSx9QlwgnqDj7gTzHoTGaVkUvHPrwFVBCdLDhJWkKDJA>
+    <xmx:r32iZO0f5VZe50vN6Rq0IcMhTYV9Dzymww-DtIb2BLHtplYkLkogYA>
+    <xmx:sH2iZDWX3yDYWX15_5Qrq96uLHK6r_AHEMR63PLG-Ti0vIgl3jF43Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Jul 2023 03:50:06 -0400 (EDT)
+Date:   Mon, 3 Jul 2023 09:50:05 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Oltmanns <frank@oltmanns.dev>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Roman Beranek <me@crly.cz>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 8/8] clk: sunxi-ng: a64: select closest rate for
+ pll-video0
+Message-ID: <lfcpuv5euy5w6e7jzn6fm2qusjj52w2hhn5sosqvoz54zc56py@5wh2eea3rrs3>
+References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
+ <20230702-pll-mipi_set_rate_parent-v3-8-46dcb8aa9cbc@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="scpwnkcrk67jfkfn"
 Content-Disposition: inline
-In-Reply-To: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230702-pll-mipi_set_rate_parent-v3-8-46dcb8aa9cbc@oltmanns.dev>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:24:04AM +0100, Srinivas Kandagatla wrote:
-> For some reason we ended up with a setup without this flag.
-> This resulted in inconsistent sound card devices numbers which
->  are also not starting as expected at dai_link->id.
->  (Ex: MultiMedia1 pcm ended up with device number 4 instead of 0)
-> 
-> With this patch patch now the MultiMedia1 PCM ends up with device number 0
-> as expected.
 
-This appears to fix the intermittent probe breakage that I see every
-five boots or so:
+--scpwnkcrk67jfkfn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[   11.843320] q6apm-dai 3000000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 23
-[   11.867467] snd-sc8280xp sound: ASoC: adding FE link failed
-[   11.867574] snd-sc8280xp sound: ASoC: topology: could not load header: -517
-[   11.867725] qcom-apm gprsvc:service:2:1: tplg component load failed-517
-[   11.867933] qcom-apm gprsvc:service:2:1: ASoC: error at snd_soc_component_probe on gprsvc:service:2:1: -22
-[   11.868379] snd-sc8280xp sound: ASoC: failed to instantiate card -22
-[   11.873645] snd-sc8280xp: probe of sound failed with error -22
-
-and which I've reported here:
-
-	https://lore.kernel.org/lkml/ZIHMMFtuDtvdpFAZ@hovoldconsulting.com/
-
-as unrelated changes in timings resulting from that series made the
-problem much harder (but not impossible) to hit.
-
-With this fix, I've rebooted 20+ times without hitting the issue once.
-
-I'm guessing that you found this issue while investigated that probe
-race, Srini? It does look related, and it does seem to make the problem
-go away, but I'm not comfortable claiming that the intermittent probe
-breakage has been resolved without some analysis to back that up.
-
-> Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
-> Cc: <Stable@vger.kernel.org>
-
-I noticed that Mark dropped this to avoid regressions in stable, but if
-this indeed fixes the probe race then we may want to consider
-backporting it after all.
-
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  sound/soc/qcom/qdsp6/q6apm-dai.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-> index 5eb0b864c740..c90db6daabbd 100644
-> --- a/sound/soc/qcom/qdsp6/q6apm-dai.c
-> +++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-> @@ -840,6 +840,7 @@ static const struct snd_soc_component_driver q6apm_fe_dai_component = {
->  	.pointer	= q6apm_dai_pointer,
->  	.trigger	= q6apm_dai_trigger,
->  	.compress_ops	= &q6apm_dai_compress_ops,
-> +	.use_dai_pcm_id = true,
+On Sun, Jul 02, 2023 at 07:55:27PM +0200, Frank Oltmanns wrote:
+> @@ -541,7 +542,7 @@ static const char * const tcon1_parents[] = { "pll-video0", "pll-video1" };
+>  static const u8 tcon1_table[] = { 0, 2, };
+>  static struct ccu_div tcon1_clk = {
+>  	.enable		= BIT(31),
+> -	.div		= _SUNXI_CCU_DIV(0, 4),
+> +	.div		= _SUNXI_CCU_DIV_FLAGS(0, 4, CLK_DIVIDER_ROUND_CLOSEST),
+>  	.mux		= _SUNXI_CCU_MUX_TABLE(24, 2, tcon1_table),
+>  	.common		= {
+>  		.reg		= 0x11c,
+> @@ -549,6 +550,7 @@ static struct ccu_div tcon1_clk = {
+>  						      tcon1_parents,
+>  						      &ccu_div_ops,
+>  						      CLK_SET_RATE_PARENT),
+> +		.features	= CCU_FEATURE_CLOSEST_RATE,
+>  	},
 >  };
->  
->  static int q6apm_dai_probe(struct platform_device *pdev)
 
-Johan
+I'm not super comfortable with having to set it twice for dividers (or
+composite clocks). Could we set CLK_DIVIDER_ROUND_CLOSEST automatically
+if CCU_FEATURE_CLOSEST_RATE is set?
+
+I'm guessing we would need it for muxes as well?
+
+Maxime
+
+--scpwnkcrk67jfkfn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZKJ9rQAKCRDj7w1vZxhR
+xfKdAQDoedHfL48OImEDGH6Me5/cxerV8zCFt0MPDatzDChGWAEAs70t/UrLzho6
+FXnXOCNE5lVTqlIl/hE5si3bdNAfXwU=
+=lwbj
+-----END PGP SIGNATURE-----
+
+--scpwnkcrk67jfkfn--
