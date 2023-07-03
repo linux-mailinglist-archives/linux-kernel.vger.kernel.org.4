@@ -2,123 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD37745593
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F8A74559A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbjGCGqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S230335AbjGCGsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjGCGp7 (ORCPT
+        with ESMTP id S230299AbjGCGry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:45:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A29CE
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688366699;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ovluAHTmtFvydqG5OYZ6GVGeRDsdOvDwQZe/fLVcLSo=;
-        b=PiKIt3UUtdh9SKfsUFd3OdUxoUgcBdbJXWDUac3NH1zd2eYkmx+0xPnoPzPgXRIfEEEOW0
-        +jZxhEUvEfGSPnYiOYWY6VRPs1dX9LEuDjL6wnTm0g3ES3Cd2hab4j5f4b9ySx9On8oAAA
-        jzs7DbF7ijtwAysEK+CTBh4zMfJ720E=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-567-atnsiuKvMZyNCkwLAkav9Q-1; Mon, 03 Jul 2023 02:44:58 -0400
-X-MC-Unique: atnsiuKvMZyNCkwLAkav9Q-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b699c5f238so32979351fa.3
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 23:44:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688366696; x=1690958696;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ovluAHTmtFvydqG5OYZ6GVGeRDsdOvDwQZe/fLVcLSo=;
-        b=NWzkihIHhfvGf0xHyemHo7tCMgbLZ0bJXG+6sToO5ekPpgV4OJEtNTdBGX3vwMtmjj
-         Mf/NvcEmkxPHwd031PwM5JkqUB3MRlG8/FF9SdGh2faUxazbG5KVUtAtxTmGRQ9040b8
-         WP7ux9ROcQFWcSMRBrd8EuSZ4Ib1vN/l6Oydy0OOCyZFzHcmnLdYrTRefurjHtG6p1Z7
-         prFKMdlrE+ENgxE8lE98R8kxhPRVMs+m8q09NTmKgmUUSyvQmT6J0XdV0OjcTX7CU8mq
-         GRTeip4L2ENweHNkvhO6Bg/WwFJObn2KtFfJLSGLaPOz4K5iQvt1F8tBVVQXpOv4iXnA
-         k30A==
-X-Gm-Message-State: ABy/qLYY116aKL5rlap8vLHrjgVGvYOY0WDKeKVVnxYns8wZPfnMns8J
-        ZQHuf8bYS/IrGhH4KxM1MjOJRRCWZF29IhD002wIaZk/SprFCi2omqSfR6GtZ3QK9+E2qfbuVx5
-        NnB6NHduBw0X7z1KZZ0QHuBtMqK6DlmuX47DRq6XT
-X-Received: by 2002:a2e:910c:0:b0:2b6:a22f:9fb9 with SMTP id m12-20020a2e910c000000b002b6a22f9fb9mr6009890ljg.27.1688366696672;
-        Sun, 02 Jul 2023 23:44:56 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHlynqGGlx9Jhthcs4p2/VB3UnNVeBKpKxmHTXOyGfI54rO4NRmFnzaCGXKfgksJmq0cNXrTsUIyES6jnl+V9A=
-X-Received: by 2002:a2e:910c:0:b0:2b6:a22f:9fb9 with SMTP id
- m12-20020a2e910c000000b002b6a22f9fb9mr6009887ljg.27.1688366696399; Sun, 02
- Jul 2023 23:44:56 -0700 (PDT)
+        Mon, 3 Jul 2023 02:47:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237CDE43;
+        Sun,  2 Jul 2023 23:47:53 -0700 (PDT)
+Received: from [192.168.43.110] (unknown [116.71.174.96])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 24DBB660297B;
+        Mon,  3 Jul 2023 07:47:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688366870;
+        bh=90Czpk7xjgiSE+C5Q1cQigH8jDccb9HqLzCtvzTM+Sg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=If01X33wkula4geSXjruOsp6MgkIKUn5vFjpXkEzy9VuhpWCNIXTqj0Emqf4hOwbg
+         f9pG7S3y6wo+Mrgfxm9VfwAlMSNZZAZ/6woKa/Gwyp1lBM8Rc83ACJyTxUoxqzBYLw
+         /7eKs45mJ3ABS/VMQ+ENqPEnX64gflfhyb+Z/d4E+j0+pkXNA1x7WX+1rSX0vh+Ef1
+         FWhFBh4tXKO8w2pHOmrdtPL89PbjFzNkYoFUaEYD4ISYXlSho0lovHAwxfZRu21YGB
+         fWemHqcmyzEwUnf3SZH089I2DBzOEmmfQgLYAj8uPgDiE3FnCfvlaJAiI1FkwNpOl0
+         FaMCwbsjxDrVg==
+Message-ID: <49015b82-2f7f-fa34-d56a-2f427f38f28f@collabora.com>
+Date:   Mon, 3 Jul 2023 11:47:37 +0500
 MIME-Version: 1.0
-References: <20230627113652.65283-1-maxime.coquelin@redhat.com> <20230702093530-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230702093530-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 3 Jul 2023 14:44:45 +0800
-Message-ID: <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Maxime Coquelin <maxime.coquelin@redhat.com>,
-        xieyongji@bytedance.com, david.marchand@redhat.com,
-        lulu@redhat.com, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v22 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Andrei Vagin <avagin@gmail.com>
+References: <20230628095426.1886064-1-usama.anjum@collabora.com>
+ <20230628095426.1886064-3-usama.anjum@collabora.com>
+ <ZJ7uOqPIJwMiCuOI@gmail.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZJ7uOqPIJwMiCuOI@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 2, 2023 at 9:37=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com> =
-wrote:
->
-> On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
-> > This small series enables virtio-net device type in VDUSE.
-> > With it, basic operation have been tested, both with
-> > virtio-vdpa and vhost-vdpa using DPDK Vhost library series
-> > adding VDUSE support using split rings layout (merged in
-> > DPDK v23.07-rc1).
-> >
-> > Control queue support (and so multiqueue) has also been
-> > tested, but requires a Kernel series from Jason Wang
-> > relaxing control queue polling [1] to function reliably.
-> >
-> > [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0Wv=
-jGRr3whU+QasUg@mail.gmail.com/T/
->
-> Jason promised to post a new version of that patch.
-> Right Jason?
+On 6/30/23 8:01 PM, Andrei Vagin wrote:
+> On Wed, Jun 28, 2023 at 02:54:23PM +0500, Muhammad Usama Anjum wrote:
+>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>> the info about page table entries. The following operations are supported
+>> in this ioctl:
+>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT), swapped
+>>   (PAGE_IS_SWAPPED) or page has pfn zero (PAGE_IS_PFNZERO).
+>> - Find pages which have been written-to and/or write protect the pages
+>>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
+>>
+>> This IOCTL can be extended to get information about more PTE bits. The
+>> entire address range passed by user [start, end) is scanned until either
+>> the user provided buffer is full or max_pages have been found.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> <snip>
+> 
+>> +
+>> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
+>> +{
+>> +	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
+>> +	unsigned long long start, end, walk_start, walk_end;
+>> +	unsigned long empty_slots, vec_index = 0;
+>> +	struct mmu_notifier_range range;
+>> +	struct page_region __user *vec;
+>> +	struct pagemap_scan_private p;
+>> +	struct pm_scan_arg arg;
+>> +	int ret = 0;
+>> +
+>> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+>> +		return -EFAULT;
+>> +
+>> +	start = untagged_addr((unsigned long)arg.start);
+>> +	end = untagged_addr((unsigned long)arg.end);
+>> +	vec = (struct page_region __user *)untagged_addr((unsigned long)arg.vec);
+>> +
+>> +	ret = pagemap_scan_args_valid(&arg, start, end, vec);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
+>> +	p.found_pages = 0;
+>> +	p.required_mask = arg.required_mask;
+>> +	p.anyof_mask = arg.anyof_mask;
+>> +	p.excluded_mask = arg.excluded_mask;
+>> +	p.return_mask = arg.return_mask;
+>> +	p.flags = arg.flags;
+>> +	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
+>> +		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+>> +	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
+>> +	p.vec_buf = NULL;
+>> +	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+>> +
+>> +	/*
+>> +	 * Allocate smaller buffer to get output from inside the page walk
+>> +	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>> +	 * we want to return output to user in compact form where no two
+>> +	 * consecutive regions should be continuous and have the same flags.
+>> +	 * So store the latest element in p.cur_buf between different walks and
+>> +	 * store the p.cur_buf at the end of the walk to the user buffer.
+>> +	 */
+>> +	if (IS_PM_SCAN_GET(p.flags)) {
+>> +		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
+>> +					  GFP_KERNEL);
+>> +		if (!p.vec_buf)
+>> +			return -ENOMEM;
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_WP(p.flags)) {
+>> +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+>> +					mm, start, end);
+>> +		mmu_notifier_invalidate_range_start(&range);
+>> +	}
+>> +
+>> +	walk_start = walk_end = start;
+>> +	while (walk_end < end && !ret) {
+>> +		if (IS_PM_SCAN_GET(p.flags)) {
+>> +			p.vec_buf_index = 0;
+>> +
+>> +			/*
+>> +			 * All data is copied to cur_buf first. When more data
+>> +			 * is found, we push cur_buf to vec_buf and copy new
+>> +			 * data to cur_buf. Subtract 1 from length as the
+>> +			 * index of cur_buf isn't counted in length.
+>> +			 */
+>> +			empty_slots = arg.vec_len - vec_index;
+>> +			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
+>> +		}
+>> +
+>> +		ret = mmap_read_lock_killable(mm);
+>> +		if (ret)
+>> +			goto return_status;
+>> +
+>> +		walk_end = min((walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK, end);
+>> +
+>> +		ret = walk_page_range(mm, walk_start, walk_end,
+>> +				      &pagemap_scan_ops, &p);
+>> +		mmap_read_unlock(mm);
+>> +
+>> +		if (ret && ret != PM_SCAN_FOUND_MAX_PAGES &&
+>> +		    ret != PM_SCAN_END_WALK)
+>> +			goto return_status;
+>> +
+>> +		walk_start = walk_end;
+>> +		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
+>> +			if (copy_to_user(&vec[vec_index], p.vec_buf,
+>> +					 p.vec_buf_index * sizeof(*p.vec_buf))) {
+>> +				/*
+>> +				 * Return error even though the OP succeeded
+>> +				 */
+>> +				ret = -EFAULT;
+>> +				goto return_status;
+>> +			}
+>> +			vec_index += p.vec_buf_index;
+>> +		}
+>> +	}
+>> +
+>> +	if (p.cur_buf.len) {
+>> +		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
+>> +			ret = -EFAULT;
+>> +			goto return_status;
+>> +		}
+>> +		vec_index++;
+>> +	}
+>> +
+>> +	ret = vec_index;
+>> +
+>> +return_status:
+>> +	arg.start = (unsigned long)walk_end;
+> 
+> This doesn't look right. pagemap_scan_pmd_entry can stop early. For
+> example, it can happen when it hits the max_pages limit. Do I miss
+> something?
+The walk_page_range() calls pagemap_scan_pmd_entry(). So whatever status is
+returned from pagemap_scan_pmd_entry(), walk_page_range() returns to this
+function where we are handling the status code. After while loop starts,
+there is only 1 return path. Hence there isn't any path missing where we'll
+miss setting arg.start.
 
-Yes.
+> 
+>> +	if (copy_to_user(&uarg->start, &arg.start, sizeof(arg.start)))
+>> +		ret = -EFAULT;
+>> +
+>> +	if (IS_PM_SCAN_WP(p.flags))
+>> +		mmu_notifier_invalidate_range_end(&range);
+>> +
+>> +	kfree(p.vec_buf);
+>> +	return ret;
+>> +}
+>> +
 
-> For now let's make sure CVQ feature flag is off?
-
-We can do that and relax on top of my patch.
-
-Thanks
-
->
-> > RFC -> v1 changes:
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > - Fail device init if it does not support VERSION_1 (Jason)
-> >
-> > Maxime Coquelin (2):
-> >   vduse: validate block features only with block devices
-> >   vduse: enable Virtio-net device type
-> >
-> >  drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
-> >  1 file changed, 11 insertions(+), 4 deletions(-)
-> >
-> > --
-> > 2.41.0
->
-
+-- 
+BR,
+Muhammad Usama Anjum
