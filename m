@@ -2,139 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20827454B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0297454C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 07:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjGCFLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 01:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S229927AbjGCFTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 01:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjGCFK5 (ORCPT
+        with ESMTP id S229593AbjGCFTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 01:10:57 -0400
-Received: from mail-pg1-f208.google.com (mail-pg1-f208.google.com [209.85.215.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464C01AD
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 22:10:56 -0700 (PDT)
-Received: by mail-pg1-f208.google.com with SMTP id 41be03b00d2f7-53f06f7cc74so4330620a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 22:10:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688361056; x=1690953056;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4YgwqQw+JpJISLuLYsEf1BHzE6jomArvjGBNVJo9gEw=;
-        b=QLlCYOVXTrf8nsc4Lyi+VRuyudk2hgc+iwuDs8+R3BwlCda987OryhaF30VJnGc6Tf
-         lEypfxiUgHmfTzPOlq/taQcO3VUPvU4LrISPS/Ei+ySgIlba4xqIyEq/Qt0V4Mtv0tgZ
-         sbSsudK3BvcDyu9n5/wH1GxEZr/8BRSZZPQSiu+wgFQvyZWEhxHrfsAuf4HD6rj+GNcy
-         CFlN1csHwvW0apbJpGufPqFsIVSBYtddHrS8+/8tf5fJi40m83ZCPQY4Ct/l/9aRtkTd
-         fq3mt9ZesgBDJsdNW7WjN9GM9zBKFxGf0Bxev9Fw7bD93qsmUfYRAPGJ5M4ZVC9Fmg7M
-         f9Sw==
-X-Gm-Message-State: ABy/qLaaw0QFuS39jfabd+URcWjmo9FOWi3N2wbSdpv1l8oGwPj7ikw9
-        abKFEZ5JIiLcq6tWkHp2uGjux/x08R8eNTkM2dwhDu6DvWrk
-X-Google-Smtp-Source: APBJJlHBwi9RPXMmLxjnT6KJHIY23HB9A0FdNupuJFMKG/FcW3AAqKLalXHqDYx+a+POlQvaxhvcLXnn2aoWgmpdGK4JKYycIjwX
+        Mon, 3 Jul 2023 01:19:02 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8D11AC;
+        Sun,  2 Jul 2023 22:19:00 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 25F3F60174;
+        Mon,  3 Jul 2023 07:18:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1688361538; bh=YrRwssvEZf7TEjeYffqKvvPzOJpbpuQXW2iU38aXF1Y=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=m7MXUPZA5UnauwU6zesw56WCc+DpfX7cJoMbwYM0hFP+qfI6GLtZaxWaZMCKuP/tp
+         YQ6cFyFib37FQWBXhCqucczAoC1wayKY28bdvjMSNGM8gIWfBQYvjDTeFgj5OL1JD4
+         ijjMn5J7/yR7D209nz1rFrgAyQTEngIX1hWfYmOH9rHztysyoDLdv1ktB1JIKZ1u0Z
+         HlfWSYDwG7zfYC7tpXkgTt6qlJOT/C8zWEF6izapWH0dmenu0kn513xZs7K6X81tTv
+         Saey0AVuFuh0JjI3UXfPbDWH/JSz8PvxTpoFGiaPUgPdF7V19wwkYSu8qbbX+i/gCx
+         L8gcWNShFw4tw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JDCTbZ3jgSbF; Mon,  3 Jul 2023 07:18:55 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 7866B60171;
+        Mon,  3 Jul 2023 07:18:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1688361535; bh=YrRwssvEZf7TEjeYffqKvvPzOJpbpuQXW2iU38aXF1Y=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=P73OlW3YHMZFWS3ahRxQ2sZR5Jj8Sw+norYEwt2u0iO6AXcAG4ut4Gnw+E13qpjFp
+         NRH1OnTjRo2+cCiD3dFEK8qztad/o/6y5iYH5owkQCIdLgApy84Pjim476VGPTb95f
+         EnvDsOhRc7SEpA4zynOG5CezxA7xq4FKK774FK/UigDc/CL8ONDJDPqLYbQ08aXwOZ
+         qLxidDgMH/Djj+qBNY08F21t/gIHD4UhI4xLy8+3mi1qJzvrH0vtysE67DR5/ieM40
+         ZKa3Fh8qEdMLdoV8Os5MyyJIzX8i/XevVr94U8n4BOWBhpfSnz97llsw2+XzDjHfk0
+         QnWCdp3yxhd+Q==
+Message-ID: <6fbd0c06-0e1a-d2a9-cfdf-c953e559fec1@alu.unizg.hr>
+Date:   Mon, 3 Jul 2023 07:18:34 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6a00:2d9a:b0:676:50ce:7a12 with SMTP id
- fb26-20020a056a002d9a00b0067650ce7a12mr11651720pfb.1.1688361055767; Sun, 02
- Jul 2023 22:10:55 -0700 (PDT)
-Date:   Sun, 02 Jul 2023 22:10:55 -0700
-In-Reply-To: <000000000000a3d67705ff730522@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb51b905ff8e301e@google.com>
-Subject: Re: [syzbot] [btrfs?] kernel BUG in prepare_to_merge
-From:   syzbot <syzbot+ae97a827ae1c3336bbb4@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LLVM <llvm@lists.linux.dev>,
+        linux-kbuild@vger.kernel.org,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
+ <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook>
+ <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
+ <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
+Content-Language: en-US
+In-Reply-To: <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 7/3/23 05:58, Guenter Roeck wrote:
+> On 7/2/23 20:26, Guenter Roeck wrote:
+>> On 7/2/23 20:20, Kees Cook wrote:
+>>> On Mon, Jul 03, 2023 at 08:44:37AM +0700, Bagas Sanjaya wrote:
+>>>> On Sun, Jul 02, 2023 at 06:36:12PM +0200, Mirsad Goran Todorovac wrote:
+>>>>> Hi,
+>>>>>
+>>>>> After new git pull the kernel in Torvalds tree with default debug config
+>>>>> failed to boot with error that occurs prior to mounting filesystems, so there
+>>>>> is no log safe for the screenshot(s) here:
+>>>>>
+>>>>> [1] https://domac.alu.unizg.hr/~mtodorov/linux/crashes/2023-07-02/
+>>>>>
+>>>>> Bisect shows the first bad commit is 2d47c6956ab3 (v6.4-rc2-1-g2d47c6956ab3):
+>>>>>
+>>>>> # good: [98be618ad03010b1173fc3c35f6cbb4447ee2b07] Merge tag 'Smack-for-6.5' of https://github.com/cschaufler/smack-next
+>>>>> git bisect good 98be618ad03010b1173fc3c35f6cbb4447ee2b07
+>>>>> # bad: [f4a0659f823e5a828ea2f45b4849ea8e2dd2984c] drm/i2c: tda998x: Replace all non-returning strlcpy with strscpy
+>>>>> git bisect bad f4a0659f823e5a828ea2f45b4849ea8e2dd2984c
+>>>>> .
+>>>>> .
+>>>>> .
+>>>>> # bad: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
+>>>>> git bisect bad 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c
+>>>>> # first bad commit: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
+>>>>>
+>>>>> The architecture is Ubuntu 22.04 with lshw and config give in the attachment.
+>>>>
+>>>> Can you show early kernel log (something like dmesg)?
+>>>>
+>>>> Anyway, I'm adding it to regzbot:
+>>>>
+>>>> #regzbot ^introduced: 2d47c6956ab3c8
+>>>> #regzbot title: Linux kernel fails to boot due to UBSAN_BOUNDS tightening
+>>>
+>>> I'm confused. Commit 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c isn't in the v6.4
+>>> tree... it's only in Linus's ToT.
+>>>
+>>
+>> In ToT:
+>>
+>> $ git describe 2d47c6956ab3
+>> v6.4-rc2-1-g2d47c6956ab3
+>>
+>> $ git describe --contains 2d47c6956ab3
+>> next-20230616~2^2~51
+>> $ git describe --contains --match 'v*' 2d47c6956ab3
+>> fatal: cannot describe '2d47c6956ab3c8b580a59d7704aab3e2a4882b6c'
+>>
+>> "git describe" always shows the parent tree, which I guess was based on
+>> v6.4-rc2.
+>>
+> 
+> Ah, sorry, I didn't realize that the subject claims that the problem
+> would be in 6.4.1. That indeed does not match the bisect results.
 
-HEAD commit:    995b406c7e97 Merge tag 'csky-for-linus-6.5' of https://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1172e02ca80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71a52faf60231bc7
-dashboard link: https://syzkaller.appspot.com/bug?extid=ae97a827ae1c3336bbb4
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11e6ddf0a80000
+I apologise for confusion. In fact, I have cloned the Torvalds tree after
+6.4.1 was released, but I actually cloned the Torvalds tree, not the 6.4.1
+from the stable branch as the Subject line might have misled.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/01122b567c73/disk-995b406c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/75b7a37e981e/vmlinux-995b406c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/758b5afcf092/bzImage-995b406c.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/96451b8f418b/mount_0.gz
+But I think the text explained that the Torvalds tree was cloned
+and the method:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ae97a827ae1c3336bbb4@syzkaller.appspotmail.com
+] After new git pull the kernel in Torvalds tree with default debug config
+] failed to boot with error that occurs prior to mounting filesystems, so there
+] is no log safe for the screenshot(s) here:
 
-assertion failed: root->reloc_root == reloc_root, in fs/btrfs/relocation.c:1919
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/relocation.c:1919!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 7760 Comm: syz-executor.5 Not tainted 6.4.0-syzkaller-10098-g995b406c7e97 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:prepare_to_merge+0xbb2/0xc40 fs/btrfs/relocation.c:1919
-Code: fe e9 f5 f7 ff ff e8 9d ab eb fd 48 c7 c7 a0 67 4b 8b 48 c7 c6 40 77 4b 8b 48 c7 c2 20 68 4b 8b b9 7f 07 00 00 e8 0e 7a 17 07 <0f> 0b e8 57 b9 19 07 f3 0f 1e fa e8 6e ab eb fd 43 80 3c 2f 00 74
-RSP: 0018:ffffc9000bf47760 EFLAGS: 00010246
-RAX: 000000000000004f RBX: ffff88807b35e030 RCX: ab28d7f10bef9500
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc9000bf47870 R08: ffffffff816f481c R09: 1ffff920017e8ea0
-R10: dffffc0000000000 R11: fffff520017e8ea1 R12: ffff88807b35e000
-R13: ffff888021ffc000 R14: ffff888021ffc560 R15: ffff888021ffc558
-FS:  00007fef4adf9700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f846a5fe000 CR3: 000000001ec2d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- relocate_block_group+0xa5d/0xcd0 fs/btrfs/relocation.c:3749
- btrfs_relocate_block_group+0x7ab/0xd70 fs/btrfs/relocation.c:4087
- btrfs_relocate_chunk+0x12c/0x3b0 fs/btrfs/volumes.c:3283
- __btrfs_balance+0x1b06/0x2690 fs/btrfs/volumes.c:4018
- btrfs_balance+0xbdb/0x1120 fs/btrfs/volumes.c:4402
- btrfs_ioctl_balance+0x496/0x7c0 fs/btrfs/ioctl.c:3604
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xf8/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fef4a08c389
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fef4adf9168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fef4a1abf80 RCX: 00007fef4a08c389
-RDX: 00000000200003c0 RSI: 00000000c4009420 RDI: 0000000000000005
-RBP: 00007fef4a0d7493 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffec9c8752f R14: 00007fef4adf9300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:prepare_to_merge+0xbb2/0xc40 fs/btrfs/relocation.c:1919
-Code: fe e9 f5 f7 ff ff e8 9d ab eb fd 48 c7 c7 a0 67 4b 8b 48 c7 c6 40 77 4b 8b 48 c7 c2 20 68 4b 8b b9 7f 07 00 00 e8 0e 7a 17 07 <0f> 0b e8 57 b9 19 07 f3 0f 1e fa e8 6e ab eb fd 43 80 3c 2f 00 74
-RSP: 0018:ffffc9000bf47760 EFLAGS: 00010246
-RAX: 000000000000004f RBX: ffff88807b35e030 RCX: ab28d7f10bef9500
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc9000bf47870 R08: ffffffff816f481c R09: 1ffff920017e8ea0
-R10: dffffc0000000000 R11: fffff520017e8ea1 R12: ffff88807b35e000
-R13: ffff888021ffc000 R14: ffff888021ffc560 R15: ffff888021ffc558
-FS:  00007fef4adf9700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f22c0e44000 CR3: 000000001ec2d000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+I will try to be more consistent and precise the next time.
 
+Sorry again for the confusion.
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+I am right now cloning directly from the Torvalds tree for the third time
+and with the Ubuntu generic production kernel and the result is the same:
+crash in boot for 2d47c6956ab3.
+
+Best regards,
+Mirsad Todorovac
