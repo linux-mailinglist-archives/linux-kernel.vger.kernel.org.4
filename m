@@ -2,88 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821BA745DE2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99804745DE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjGCNxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S231313AbjGCNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjGCNxe (ORCPT
+        with ESMTP id S231157AbjGCNxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:53:34 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884B1173D;
-        Mon,  3 Jul 2023 06:53:03 -0700 (PDT)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363DnIBt028914;
-        Mon, 3 Jul 2023 13:53:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=kOVkRocUNzoCE3Ax5Q0vzHkYAKeyWtHflf+V2JFhZf0=;
- b=WSqkNri2m9NCeihrVBP6yvMLLxokRAhAPwE5nq8IHC11BIj6hBy4kM/cLhGUPJ0Aws+L
- IaAOSJPcLoSi5mt6qdJ2cpRENfqcPgpkrqJeUWhx53xYIpQjYDeS8gk5ArkQS8Qtln0+
- SmKrS3h6HipdWrqsb2yLg48vImYgVHGsw9LhTWBpGxjqaeN7bcH5TOd9Bxc4VjJFi9Sg
- /MDDJldL7sPoKpfq/cyP+J0ZfvcqayENH03fQU/tpkD9x0xJlhqCir6jP2oJy80ZWx52
- XQ64MlU819bKKvphteaiy/V2AcuppDdgHvzs9E/x0xMHp2oVUR2+ck34S89nJXR1KZy3 hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rkyj20345-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 13:53:00 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 363Do6g2032231;
-        Mon, 3 Jul 2023 13:53:00 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rkyj2033k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 13:53:00 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3639lk2o015520;
-        Mon, 3 Jul 2023 13:52:58 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3rjbdds0dg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 13:52:58 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 363DquFh20775468
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Jul 2023 13:52:56 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4DF3920043;
-        Mon,  3 Jul 2023 13:52:56 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 156D52004B;
-        Mon,  3 Jul 2023 13:52:56 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Jul 2023 13:52:56 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 2/2] PCI/sysfs: Make I/O resource depend on HAS_IOPORT
-Date:   Mon,  3 Jul 2023 15:52:55 +0200
-Message-Id: <20230703135255.2202721-3-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230703135255.2202721-1-schnelle@linux.ibm.com>
-References: <20230703135255.2202721-1-schnelle@linux.ibm.com>
+        Mon, 3 Jul 2023 09:53:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1137810C0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:53:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BD382F4;
+        Mon,  3 Jul 2023 06:54:25 -0700 (PDT)
+Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F41E43F73F;
+        Mon,  3 Jul 2023 06:53:40 -0700 (PDT)
+From:   Ryan Roberts <ryan.roberts@arm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>
+Cc:     Ryan Roberts <ryan.roberts@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v2 0/5] variable-order, large folios for anonymous memory
+Date:   Mon,  3 Jul 2023 14:53:25 +0100
+Message-Id: <20230703135330.1865927-1-ryan.roberts@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: OYsUJTNEEXc8g8Xp-t235-NITmdmGW0i
-X-Proofpoint-GUID: AiZlJ6jjpZ_9lAPf1U_VHBVqIkV4mYdl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_11,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- mlxlogscore=999 impostorscore=0 mlxscore=0 priorityscore=1501
- clxscore=1015 adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307030122
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,41 +50,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If legacy I/O spaces are not supported simply return an error when
-trying to access them via pci_resource_io(). This allows inb() and
-friends to become undefined when they are known at compile time to be
-non-functional in a later patch.
+Hi All,
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- drivers/pci/pci-sysfs.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This is v2 of a series to implement variable order, large folios for anonymous
+memory. The objective of this is to improve performance by allocating larger
+chunks of memory during anonymous page faults. See [1] for background.
 
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index ab32a91f287b..d9eede2dbc0e 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -1083,6 +1083,7 @@ static ssize_t pci_resource_io(struct file *filp, struct kobject *kobj,
- 			       struct bin_attribute *attr, char *buf,
- 			       loff_t off, size_t count, bool write)
- {
-+#ifdef CONFIG_HAS_IOPORT
- 	struct pci_dev *pdev = to_pci_dev(kobj_to_dev(kobj));
- 	int bar = (unsigned long)attr->private;
- 	unsigned long port = off;
-@@ -1116,6 +1117,9 @@ static ssize_t pci_resource_io(struct file *filp, struct kobject *kobj,
- 		return 4;
- 	}
- 	return -EINVAL;
-+#else
-+	return -ENXIO;
-+#endif
- }
- 
- static ssize_t pci_read_resource_io(struct file *filp, struct kobject *kobj,
--- 
-2.39.2
+I've significantly reworked and simplified the patch set based on comments from
+Yu Zhao (thanks for all your feedback!). I've also renamed the feature to
+VARIABLE_THP, on Yu's advice.
+
+The last patch is for arm64 to explicitly override the default
+arch_wants_pte_order() and is intended as an example. If this series is accepted
+I suggest taking the first 4 patches through the mm tree and the arm64 change
+could be handled through the arm64 tree separately. Neither has any build
+dependency on the other.
+
+The one area where I haven't followed Yu's advice is in the determination of the
+size of folio to use. It was suggested that I have a single preferred large
+order, and if it doesn't fit in the VMA (due to exceeding VMA bounds, or there
+being existing overlapping populated PTEs, etc) then fallback immediately to
+order-0. It turned out that this approach caused a performance regression in the
+Speedometer benchmark. With my v1 patch, there were significant quantities of
+memory which could not be placed in the 64K bucket and were instead being
+allocated for the 32K and 16K buckets. With the proposed simplification, that
+memory ended up using the 4K bucket, so page faults increased by 2.75x compared
+to the v1 patch (although due to the 64K bucket, this number is still a bit
+lower than the baseline). So instead, I continue to calculate a folio order that
+is somewhere between the preferred order and 0. (See below for more details).
+
+The patches are based on top of v6.4 plus Matthew Wilcox's set_ptes() series
+[2], which is a hard dependency. I have a branch at [3].
+
+
+Changes since v1 [1]
+--------------------
+
+  - removed changes to arch-dependent vma_alloc_zeroed_movable_folio()
+  - replaced with arch-independent alloc_anon_folio()
+      - follows THP allocation approach
+  - no longer retry with intermediate orders if allocation fails
+      - fallback directly to order-0
+  - remove folio_add_new_anon_rmap_range() patch
+      - instead add its new functionality to folio_add_new_anon_rmap()
+  - remove batch-zap pte mappings optimization patch
+      - remove enabler folio_remove_rmap_range() patch too
+      - These offer real perf improvement so will submit separately
+  - simplify Kconfig
+      - single FLEXIBLE_THP option, which is independent of arch
+      - depends on TRANSPARENT_HUGEPAGE
+      - when enabled default to max anon folio size of 64K unless arch
+        explicitly overrides
+  - simplify changes to do_anonymous_page():
+      - no more retry loop
+
+
+Performance
+-----------
+
+Below results show 3 benchmarks; kernel compilation with 8 jobs, kernel
+compilation with 80 jobs, and speedometer 2.0 (a javascript benchmark running in
+Chromium). All cases are running on Ampere Altra with 1 NUMA node enabled,
+Ubuntu 22.04 and XFS filesystem. Each benchmark is repeated 15 times over 5
+reboots and averaged.
+
+'anonfolio-lkml-v1' is the v1 patchset at [1]. 'anonfolio-lkml-v2' is this v2
+patchset. 'anonfolio-lkml-v2-simple-order' is anonfolio-lkml-v2 but with the
+order selection simplification that Yu Zhao suggested - I'm trying to justify
+here why I did not follow the advice.
+
+
+Kernel compilation with 8 jobs:
+
+| kernel                         |   real-time |   kern-time |   user-time |
+|:-------------------------------|------------:|------------:|------------:|
+| baseline-4k                    |        0.0% |        0.0% |        0.0% |
+| anonfolio-lkml-v1              |       -5.3% |      -42.9% |       -0.6% |
+| anonfolio-lkml-v2-simple-order |       -4.4% |      -36.5% |       -0.4% |
+| anonfolio-lkml-v2              |       -4.8% |      -38.6% |       -0.6% |
+
+We can see that the simple-order approach is responsible for a regression of
+0.4%.
+
+
+Kernel compilation with 80 jobs:
+
+| kernel                         |   real-time |   kern-time |   user-time |
+|:-------------------------------|------------:|------------:|------------:|
+| baseline-4k                    |        0.0% |        0.0% |        0.0% |
+| anonfolio-lkml-v1              |       -4.6% |      -45.7% |        1.4% |
+| anonfolio-lkml-v2-simple-order |       -4.7% |      -40.2% |       -0.1% |
+| anonfolio-lkml-v2              |       -5.0% |      -42.6% |       -0.3% |
+
+simple-order costs 0.3 % here. v2 is actually performing higher than v1 due to
+fixing the v1 regression on user-time.
+
+
+Speedometer 2.0:
+
+| kernel                         |   runs_per_min |
+|:-------------------------------|---------------:|
+| baseline-4k                    |           0.0% |
+| anonfolio-lkml-v1              |           0.7% |
+| anonfolio-lkml-v2-simple-order |          -0.9% |
+| anonfolio-lkml-v2              |           0.5% |
+
+simple-order regresses performance by 0.9% vs the baseline, for a total negative
+swing of 1.6% vs v1. This is fixed by keeping the more complex order selection
+mechanism from v1.
+
+
+The remaining (kernel time) performance gap between v1 and v2 for the above
+benchmarks is due to the removal of the "batch zap" patch in v2. Adding that
+back in gives us the performance back. I intend to submit that as a separate
+series once this series is accepted.
+
+
+[1] https://lore.kernel.org/linux-mm/20230626171430.3167004-1-ryan.roberts@arm.com/
+[2] https://lore.kernel.org/linux-mm/20230315051444.3229621-1-willy@infradead.org/
+[3] https://gitlab.arm.com/linux-arm/linux-rr/-/tree/features/granule_perf/anonfolio-lkml_v2
+
+Thanks,
+Ryan
+
+
+Ryan Roberts (5):
+  mm: Non-pmd-mappable, large folios for folio_add_new_anon_rmap()
+  mm: Allow deferred splitting of arbitrary large anon folios
+  mm: Default implementation of arch_wants_pte_order()
+  mm: FLEXIBLE_THP for improved performance
+  arm64: mm: Override arch_wants_pte_order()
+
+ arch/arm64/Kconfig               |  12 +++
+ arch/arm64/include/asm/pgtable.h |   4 +
+ arch/arm64/mm/mmu.c              |   8 ++
+ include/linux/pgtable.h          |  13 +++
+ mm/Kconfig                       |  10 ++
+ mm/memory.c                      | 168 ++++++++++++++++++++++++++++---
+ mm/rmap.c                        |  28 ++++--
+ 7 files changed, 222 insertions(+), 21 deletions(-)
+
+--
+2.25.1
 
