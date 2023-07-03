@@ -2,130 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098A8746109
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AE774610C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjGCQ6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 12:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S230200AbjGCRAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjGCQ6l (ORCPT
+        with ESMTP id S229656AbjGCRAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 12:58:41 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AE3E58;
-        Mon,  3 Jul 2023 09:58:40 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-3458a08310aso21144185ab.3;
-        Mon, 03 Jul 2023 09:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688403520; x=1690995520;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m1gGSJ/PiSm4A8FwJkg4VqG00mespObQU5IonWWaF9g=;
-        b=QNZQrObPBCtp+tU5MHKcTh+qpIMP3vzmk6S9GmJmVXTQxWjwzmpKPrmHMR5vtDFyy3
-         mOuxxon0KoZMts8WAWOhZKXPspHs2qkLYGURMzbMmjmC9uLojgaWxJ4A8wnvF+ukYLbH
-         KJ9qF9SyjepD4AUQ+fvMqrizZtBHWnGh0v3YN68/v8TvFjpmZakB0Giw9u4Q4rTtfCvk
-         HTbXmIkejDe2nbCk4hF4t+KkTwSKY1eUKC9B4kOnPf38rdhUVYTH10GLB7OSXhCS8scM
-         Mph7mosXnf8jKkrnTC9N/8jK7sE69TknnZp5UoYC2Y0AEM34RQDqo3B+UWhEFkjuVBcF
-         ZBvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688403520; x=1690995520;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m1gGSJ/PiSm4A8FwJkg4VqG00mespObQU5IonWWaF9g=;
-        b=GR/RGMkOlWaE+aIcqpORwKkuibK+s7ZA0BZtx1MxYv4o6jhlJgoxmGSzg1Yqu9j2Fc
-         /GC9zWPyxdBJBnPa1aV7m3fCzy3COom48WtCmcfwYqCZ0wX8lhRM74JpvQ2X6WMCEatI
-         L+UEzWKTPtC7k1e2awk7GPuL6B5lagrD+6gWUGsEnuEJBKWSXnIqsQFGpv6CF0okyw7+
-         ZizD8bFvp6bRToWfYLZnvLMX8o7XeWB8GBSFqNAx2FaJ+FND7NRsOyiKrQ7lWybN0VkK
-         J4IfO7kzzitDzzricqSx7SegzlYQ52UNXtsADB6qHKQNnURtaQfnxH7JPyBa+SMvm/si
-         c8Wg==
-X-Gm-Message-State: ABy/qLY8YV0I8E2vwKRk95Ej3MyRfVepNFuja5ge4MJoEn1R2syD2E8Z
-        3pXo24Yydny5VF94n0jRbOc=
-X-Google-Smtp-Source: APBJJlHa5vJLvAEYbpRNrOoLf2BjlUjeDhQGrJYzACaFmghuRs0GfggMClE9APrML1QXzaijwQhFng==
-X-Received: by 2002:a92:c912:0:b0:345:6c70:a7cd with SMTP id t18-20020a92c912000000b003456c70a7cdmr11077327ilp.1.1688403519855;
-        Mon, 03 Jul 2023 09:58:39 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id r5-20020a056638100500b0042319c38763sm6627058jab.15.2023.07.03.09.58.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 09:58:39 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf: Replace strlcpy with strscpy
-Date:   Mon,  3 Jul 2023 16:58:16 +0000
-Message-ID: <20230703165817.2840457-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+        Mon, 3 Jul 2023 13:00:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05FDE59
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:00:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC8760FE2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 17:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F33FC433C8;
+        Mon,  3 Jul 2023 17:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688403611;
+        bh=//yrLXOg5TqYrAFmFL24fVBml9kYTjoKzuUZX6y5S6w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mpwNyCjd+rRiQGr5kZBzM9s7A9Jb7xNRlCiNinnKOGvlQqME2gi6Xev7vBLHESaa0
+         nrsjU+qtJxAKZkOp11kDkNeocZQPjidRG5fRRFwPwKSMJdjiFtbBhj8353/cVTzmWw
+         ZIpNCgr4/phED4JxzkDAm1Zn3kK0T46SA2P66PQaLZ+lB6y9R9zIb/zwxd9nKE4u7H
+         WUEVTqGPUKDrhqHFEXGygC0GdhfJeA8+q6KAHdQ3QZ8E+kp3IrcQr0gezbg+ns3mqn
+         +t9M2gl7NfDv/0tJOFMp6X3oz8pX/YOZq4f6AfF2P/Y3x1XRciEub3szLd/xAdCWEm
+         HAiGkK0ffQqRQ==
+Date:   Mon, 3 Jul 2023 18:00:08 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     lkp <oliver.sang@intel.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com
+Subject: Re: [mm] 408579cd62: WARNING:suspicious_RCU_usage
+Message-ID: <20230703-dupe-frying-79ae2ccf94eb@spud>
+References: <ZKIsoMOT71uwCIZX@xsang-OptiPlex-9020>
+ <CAHk-=wg1_8L+e09_RuX=Z_49oLn8=w82YzCk+kybS-ymSd_zbA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="JjwO+J+xFJKXPHGH"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg1_8L+e09_RuX=Z_49oLn8=w82YzCk+kybS-ymSd_zbA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+--JjwO+J+xFJKXPHGH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- kernel/events/core.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hey Linus,
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 78ae7b6f90fd..2554f5fc70dc 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -8249,7 +8249,7 @@ static void perf_event_comm_event(struct perf_comm_event *comm_event)
- 	unsigned int size;
- 
- 	memset(comm, 0, sizeof(comm));
--	strlcpy(comm, comm_event->task->comm, sizeof(comm));
-+	strscpy(comm, comm_event->task->comm, sizeof(comm));
- 	size = ALIGN(strlen(comm)+1, sizeof(u64));
- 
- 	comm_event->comm = comm;
-@@ -8704,7 +8704,7 @@ static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
- 	}
- 
- cpy_name:
--	strlcpy(tmp, name, sizeof(tmp));
-+	strscpy(tmp, name, sizeof(tmp));
- 	name = tmp;
- got_name:
- 	/*
-@@ -9128,7 +9128,7 @@ void perf_event_ksymbol(u16 ksym_type, u64 addr, u32 len, bool unregister,
- 	    ksym_type == PERF_RECORD_KSYMBOL_TYPE_UNKNOWN)
- 		goto err;
- 
--	strlcpy(name, sym, KSYM_NAME_LEN);
-+	strscpy(name, sym, KSYM_NAME_LEN);
- 	name_len = strlen(name) + 1;
- 	while (!IS_ALIGNED(name_len, sizeof(u64)))
- 		name[name_len++] = '\0';
--- 
-2.41.0.255.g8b1d071c50-goog
+On Sun, Jul 02, 2023 at 09:34:35PM -0700, Linus Torvalds wrote:
+> On Sun, 2 Jul 2023 at 19:04, kernel test robot <oliver.sang@intel.com> wr=
+ote:
+> >
+> > commit: 408579cd627a15bd703fe3eeb8485fd02726e9d3 ("mm: Update do_vmi_al=
+ign_munmap() return semantics")
+> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> >
+> > in testcase: boot
+> >
+> > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2=
+ -m 16G
+> >
+> > caused below changes (please refer to attached dmesg/kmsg for entire lo=
+g/backtrace):
+> >
+> >
+> >
+> > If you fix the issue, kindly add following tag
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+
+I'm not entirely sure if it is related, as stuff in the guts of mm like
+this is beyond me, but I've been seeing similar warnings on RISC-V. This
+is the only hit on lore for "lib/maple_tree.c:{860,816} suspicious
+rcu_dereference_check() usage!", so I figured it might be. Apologies if
+not!
+
+	Running RCU synchronous self tests
+	Running RCU synchronous self tests
+	RCU Tasks: Setting shift to 4 and lim to 1 rcu_task_cb_adjust=3D1.
+	RCU Tasks Trace: Setting shift to 4 and lim to 1 rcu_task_cb_adjust=3D1.
+	Running RCU-tasks wait API self tests
+	riscv: ELF compat mode supported
+	ASID allocator using 16 bits (65536 entries)
+	rcu: Hierarchical SRCU implementation.
+	rcu:     Max phase no-delay instances is 1000.
+	EFI services will not be available.
+	Callback from call_rcu_tasks_trace() invoked.
+	smp: Bringing up secondary CPUs ...
+=09
+	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+	WARNING: suspicious RCU usage
+	6.4.0-10173-ga901a3568fd2 #1 Not tainted
+	-----------------------------
+	lib/maple_tree.c:860 suspicious rcu_dereference_check() usage!
+=09
+	other info that might help us debug this:
+=09
+=09
+	RCU used illegally from offline CPU!
+	rcu_scheduler_active =3D 1, debug_locks =3D 1
+	1 lock held by swapper/1/0:
+	 #0: ffffffff8169ceb0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x=
+0/0x32
+=09
+	stack backtrace:
+	CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-10173-ga901a3568fd2 #1
+	Hardware name: riscv-virtio,qemu (DT)
+	Call Trace:
+	[<ffffffff80006a20>] show_stack+0x2c/0x38
+	[<ffffffff80af3ee0>] dump_stack_lvl+0x5e/0x80
+	[<ffffffff80af3f16>] dump_stack+0x14/0x1c
+	[<ffffffff80083ff0>] lockdep_rcu_suspicious+0x19e/0x232
+	[<ffffffff80ad4802>] mtree_load+0x18a/0x3b6
+	[<ffffffff80091632>] __irq_get_desc_lock+0x2c/0x82
+	[<ffffffff80094722>] enable_percpu_irq+0x36/0x9e
+	[<ffffffff800087d4>] riscv_ipi_enable+0x32/0x4e
+	[<ffffffff80008692>] smp_callin+0x24/0x66
+=09
+	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+	WARNING: suspicious RCU usage
+	6.4.0-10173-ga901a3568fd2 #1 Not tainted
+	-----------------------------
+	lib/maple_tree.c:816 suspicious rcu_dereference_check() usage!
+=09
+	other info that might help us debug this:
+=09
+=09
+	RCU used illegally from offline CPU!
+	rcu_scheduler_active =3D 1, debug_locks =3D 1
+	1 lock held by swapper/1/0:
+	 #0: ffffffff8169ceb0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x=
+0/0x32
+=09
+	stack backtrace:
+	CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-10173-ga901a3568fd2 #1
+	Hardware name: riscv-virtio,qemu (DT)
+	Call Trace:
+	[<ffffffff80006a20>] show_stack+0x2c/0x38
+	[<ffffffff80af3ee0>] dump_stack_lvl+0x5e/0x80
+	[<ffffffff80af3f16>] dump_stack+0x14/0x1c
+	[<ffffffff80083ff0>] lockdep_rcu_suspicious+0x19e/0x232
+	[<ffffffff80ad4932>] mtree_load+0x2ba/0x3b6
+	[<ffffffff80091632>] __irq_get_desc_lock+0x2c/0x82
+	[<ffffffff80094722>] enable_percpu_irq+0x36/0x9e
+	[<ffffffff800087d4>] riscv_ipi_enable+0x32/0x4e
+	[<ffffffff80008692>] smp_callin+0x24/0x66
+	smp: Brought up 1 node, 16 CPUs
+
+> > [  215.088258][    T1] WARNING: suspicious RCU usage
+>=20
+> I think the
+>=20
+>         validate_mm(mm);
+>=20
+> call (mm/mmap.c:2561) needs to be moved up to before the
+>=20
+>         if (unlock)
+>                 mmap_read_unlock(mm);
+>=20
+> that is just a couple of lines earlier.
+>=20
+> Can you verify that that fixes the warning?
+
+I can't speak for Oliver & LKP, but that change didn't fix it for me,
+although my issue could be different of course.
+
+Cheers,
+Conor.
 
 
+--JjwO+J+xFJKXPHGH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKL+mAAKCRB4tDGHoIJi
+0qKKAQDqS6I7F37/NzWIj4jIr022FOr5u7VJilRRoqh6o9rLrAEAmsXFUU/acvWF
+mPKHEcxWheXwpH3t1MFFYptFjMf4RQI=
+=HGhi
+-----END PGP SIGNATURE-----
+
+--JjwO+J+xFJKXPHGH--
