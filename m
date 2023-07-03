@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F19745838
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE4974583C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjGCJSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S230052AbjGCJTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjGCJSJ (ORCPT
+        with ESMTP id S229644AbjGCJTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:18:09 -0400
+        Mon, 3 Jul 2023 05:19:30 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE133196;
-        Mon,  3 Jul 2023 02:17:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9840018D;
+        Mon,  3 Jul 2023 02:19:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
         In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=t7o2rmfPLhYslNYoOujyShh3+93sZwFvRpTrs9N8Hs0=; b=eh1FxzZh0WVr/7S3QujKESedO+
-        iriMrAMMgptzM94W6Mw1Wa94rchrJ95WRI0uKb3eB6OuhDeF+j+81wcFeKAtM3uZRddcQfW9lSiaF
-        3vYQnI7fqvPo9MLMp9eHSj/fxyMPUQx06FYB9KW9N07yub5zfJwqY0Dd+D+n5YUK1uPp0Tcm967bC
-        gIJBC41tnMEjvsP33FktRQVPMeMcpTdmLj07Egtqf0qcRvYdd1Q3aJr7ZpHqOSkI2nDPkcpqo08TC
-        cpaJGGf8SlCDJbZAX0HHErNIDXMxDAtPDGivvM1zwlvWl7VXB2hoH1W6X/kwJUXV4m42YD3SpuKYe
-        pBAMKQSQ==;
+        bh=SGJKKlGPHOOO++xI1ULSrW0mAjDOrbHmkxIaOKoddPI=; b=VuVjK31kSCz1duS2onqd9u5Rsl
+        8C+Qbwt7+6JMMwiQEFQPW/uqVYXGekqN6HBtj95A15MwxAf+y/9gt+LXfW7IjepxYDQmHwuyzEgiR
+        9UPMbVM7Su7YdqCAq8B1jjmxg0v8CbwGzyB3GAimQZuR2GeMsLqEc/wvCHTOY+C8smw4/lLp29erB
+        xALaaV9pDddh3Xa9fBx86XvTbPzbp/AgfL30j3DVnCXXmJKxjPRUUpVxMXDReTd9tv4a+tiT5xYQH
+        jUDPHy4GNrin5aD+lbzGUdY6vQemH5U7OG4kGo0LqXaT4bjBBp5qe0ss32LiZTpONzr5GVCE/J4dG
+        6mLPGPHw==;
 Received: from [2001:8b0:10b:5:86a3:26f9:cd4a:d44b] (helo=u3832b3a9db3152.ant.amazon.com)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qGFgr-0085o0-2O; Mon, 03 Jul 2023 09:17:49 +0000
-Message-ID: <77ce6f91f163f333d4b2146e6ea66b7f5fe38d9e.camel@infradead.org>
-Subject: Re: [PATCH AUTOSEL 6.4 01/15] cpu/hotplug: Reset task stack state
- in _cpu_up()
+        id 1qGFiO-0085rM-MF; Mon, 03 Jul 2023 09:19:24 +0000
+Message-ID: <937d902965db22fa54668c985a09dc4c07dbb0b1.camel@infradead.org>
+Subject: Re: [EXTERNAL] [PATCH AUTOSEL 6.4 02/15] x86/smpboot: Implement a
+ bit spinlock to protect the realmode stack
 From:   David Woodhouse <dwmw2@infradead.org>
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
         Michael Kelley <mikelley@microsoft.com>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
         Helge Deller <deller@gmx.de>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Date:   Mon, 03 Jul 2023 10:17:48 +0100
-In-Reply-To: <20230702194020.1776895-1-sashal@kernel.org>
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        usama.arif@bytedance.com, brgerst@gmail.com, jgross@suse.com,
+        jpoimboe@kernel.org, thomas.lendacky@amd.com
+Date:   Mon, 03 Jul 2023 10:19:23 +0100
+In-Reply-To: <20230702194020.1776895-2-sashal@kernel.org>
 References: <20230702194020.1776895-1-sashal@kernel.org>
+         <20230702194020.1776895-2-sashal@kernel.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-6A6huHxieyiyGhNnwQ9y"
+        boundary="=-FpwvptRCF8S1OMYGfgb3"
 User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
@@ -60,32 +63,27 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---=-6A6huHxieyiyGhNnwQ9y
+--=-FpwvptRCF8S1OMYGfgb3
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Sun, 2023-07-02 at 15:40 -0400, Sasha Levin wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+> From: Thomas Gleixner <tglx@linutronix.de>
 >=20
-> [ Upstream commit 6d712b9b3a58018259fb40ddd498d1f7dfa1f4ec ]
+> [ Upstream commit f6f1ae9128d2a080ecdd55f85e8a0ca3ed1d58eb ]
 >=20
-> Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()"=
-)
-> ensured that the shadow call stack and KASAN poisoning were removed from
-> a CPU's stack each time that CPU is brought up, not just once.
+> Parallel AP bringup requires that the APs can run fully parallel through
+> the early startup code including the real mode trampoline.
 >=20
-> This is not incorrect.
+> To prepare for this implement a bit-spinlock to serialize access to the
+> real mode stack so that parallel upcoming APs are not going to corrupt ea=
+ch
+> others stack while going through the real mode startup code.
 
-No really, it *wasn't* incorrect. This isn't a bugfix that needs
-backporting; it's preparation for the parallel CPU bringup which I
-*hope* you aren't planning to backport in its entirety :)
+This is also preparation for the parallel CPU bringup and (again,
+unless I'm missing something) doesn't need to be backported to stable.
 
-Unless I'm missing something, I don't think you want this for stable
-(in any of the trees it was just sent out for).
-
-
-
---=-6A6huHxieyiyGhNnwQ9y
+--=-FpwvptRCF8S1OMYGfgb3
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -177,24 +175,24 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwNzAzMDkxNzQ4WjAvBgkqhkiG9w0BCQQxIgQgb7Mc8oYX
-AS9JwSrAMOtY6hYliQi1OkPru/Wu1G3izfwwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwNzAzMDkxOTIzWjAvBgkqhkiG9w0BCQQxIgQgJ/hMeuK6
+gJRmiPpsglBPBOonpawDEQVr3h3icewhMjAwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCLutgunfJ9rZYQhkYTA59Orqq2N2tv6DAZ
-5cLONNq7gB91iJakHrUsg2W9197/JEMvxahnh2XkwO595U568jxJY7WpsukW4R7MbOBQyQ1/7HnP
-acYaaljwbJFag/LVJtzhr+pdarWl2aPG8RzjAEDjbzHEDYyHyiktWwWubyZt039xQEu2LfWTOhX4
-9I2wBdPHrPOguP3UkNE12+iA7f3L/dIbyF72jbKD7J5iOnctyXXbfxikrOCajBcJx8GfL9pgiOSi
-4Anc3KGIGIrjMmybJHkFabUTbsp2a59vSDMuQViDjUnRQvEP76aQkugznRyZP/myHThCT0zOZ/VS
-4R9lf8rGFHVqTw2m7QJqAxsIIeKbDkEqoxdezbYUy5RE6nlyuvHw+AWWh+2rnO+3mXLsUwWM++4M
-YbQhrKxdfx3jdaqhIDj/tCrsxOhczGVT4WIvZW+aFh2GZrEnhlsiA/1U7wzeTP554LC07P4YY1fA
-UjahEnGv/uelJvrClSGBWf9IFNqkAKSOF/nTqMBsnyG1CTqRCVH+NoLT+G3CZJR3erLcWfSBxJMP
-cO0YSx1xB7j9rZevZDZ82MjBCD8FV0XUeF6sXiB5gr0ebCGXP/qFQdADfcivV+tRsrz3dEYBqhra
-xX51Ygl5FeI5/THPDmXpFEenBrP000h8zXjUGHOHkgAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAWnnnOkDdsW7HSXIhlD/hPBOp0Z0UtrQDp
+nvUXZeDhBVRP+yfM+8ymXxJuzQa3GPw3dAzgisCFxYRzrJ+lLikCS7OiyeER197cJfJk/lKqzG+W
+pWiMpeFlRvysYfaALnX3bOCAGWmTSjZ7Gcjo9/4KUzDu0ueubMh+xAGnIEnARVSj4VT+h9RSvmNY
+glKaEFJAzjEt+RCSkvy7HC/Y0XaHO9Zb3xF1nVs9zfUIWo7+8bpGQFysiVa2miq/+jx7Sum+52Qe
+S9EpsixI+yvAKZpmHCxD1JhgtXl9WRU9Y7CuBgDcdDnqQOynWudA1LUsFZxHiZ9GVhI2fSVdOd3A
+X50qS/O+qzLO9rzOte4mCxUJzVI3WPXss/XvDf33VpUAVrBiX7D3+6QLZ8JsRltaK7D6xANqqJaG
+NNLBbf/g3HZPx3KW6LFF91+y6jUSWTm0H6M+uREflgjJCTKYkHKSzwxHnMGMRUPAxJbkDxbaJh04
+TS3i34+lgOt+sGno5nP2bb+3wZ4PG56GrAfrb2CucOl+poB2zFbHq0fiXab1dS7aKHUErTb9o6YL
+Qad4iPZQl/9wX8pzVj66D3rKcXE2CNJSKnCrNxSuy52P7nIi1RPUcaa5RKonx1eU2MxOA5ox50a1
+/mR3tPvG+TxWCeChL59sRWtBztgpTJe4EVytE/iLCAAAAAAAAA==
 
 
---=-6A6huHxieyiyGhNnwQ9y--
+--=-FpwvptRCF8S1OMYGfgb3--
