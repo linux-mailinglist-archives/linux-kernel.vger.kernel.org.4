@@ -2,191 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6087458A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA077458A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjGCJpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
+        id S230402AbjGCJpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjGCJpS (ORCPT
+        with ESMTP id S230253AbjGCJpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:45:18 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5A1E58
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:45:12 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so39461465e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:45:12 -0700 (PDT)
+        Mon, 3 Jul 2023 05:45:05 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1E0CD
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:45:03 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc6ab5ff5so37240885e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688377511; x=1690969511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rYrikqEYLAou4pnYR2Aq6pNjv0Vdk8l8/0T1K6ojTeg=;
-        b=2tXF85BjqNH/+g3RjKxu5KayJ5sZPo7Hf7CG6Rs2NqvX6hmkBrEvQuTxNo1lYNPDKz
-         KV4Z4oA24Y7BjKB1xYxChMdvy2tp1kH/12HdWcz5qmLpAZIBPVOGp9zwKIIzZGmg8rQu
-         fOe4HZ+2Gn94vJCDnNBMYLltoSeL+WUWEuLSdbeIYaqbbFxE0TAHBIsbsNejzaTJpM67
-         /wcm95xGEECPHfT6Cd4x3kpsl+CaCDtNBghXs/fIVeMZJ/s5Uay3fW9SHeoLBOKLLmtJ
-         el1gtaSLGON+Ih6l8SaFeLZm9ybTSF/jxT6c1RT6i5Rv0//NC/vZ2yPsP3Zh+aURel4c
-         EwJQ==
+        d=linaro.org; s=google; t=1688377502; x=1690969502;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=no5CNBoDiHbRpIdNDqGhGyPr6ei7bZTn4+f7d7VDLXc=;
+        b=xkgubruoESKN/GtLWkW/pO8GAXTpNxtqdt3mkSG0Dm+hen+SCiJFXipuXZqfurrZpP
+         YZiJo8Vef7ujaFBzVZhoyB/Hq5WI8+oFCV1DM5tPIps6dUHiOMdUrDXOYNYkBenWIbXI
+         5TMMBjcZbTGCSBZjUvM75AMt+NeR3p/2aOQ4FEPiNX9a+mM+jv3PQECB3hQErv/FdvbY
+         BG+TLP1myXUvwIybjz4AYhc4Agt7+2cUw5XskwP8e7s2MIUQhSa2ouU+d/d6R25H3rJX
+         5z4OuZ4PLGOrb09Nw4nUQ0GgnbirV/oKer8bu0t80MGvPtfxMo9trPd6YPAwjC2uArlg
+         JsTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688377511; x=1690969511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688377502; x=1690969502;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rYrikqEYLAou4pnYR2Aq6pNjv0Vdk8l8/0T1K6ojTeg=;
-        b=NYxHOTcGoG21PeuUuCrK2uAChh2QlGAyw81ugyHulAmE8HQLIIRgSDqeAZ7qEmGthc
-         0wvVoMdsXlIV3uNvc/LsIvni/N56rGPzwlK8J6ERidxbMaGL/fdyh+x5M6xvdBreFo4e
-         PJtiZSX5HkSXWdpGH1qcubfwJ2RhwzP19P5bqv8CdEAn+tA/4SXGokj7wulDMwxf+PiA
-         LkWB4Y9EyNAWtvZf+sO2z1weMwx/sPGY3EdLIe1pQn40hLGklshjFE0CNe3YW8CFc3tf
-         WS227H7nG9kAcP9vlPuWuiqG46mCrq8+PU2Y7WnkMm68rK/TvdxBDXvf4YBQ4bh3nmj2
-         d+pw==
-X-Gm-Message-State: AC+VfDzJT7mXazZ/3/Om7GP9CIOWPzGfevsXTP2wVuVnIP1Vynq2tNbC
-        u8rjpPp340lqZCAicryNaQnvCHAEhlAB8rvCsQNLsQ==
-X-Google-Smtp-Source: ACHHUZ68NLQzXNzGeeF7k2ifsyB3gqwunDPHxpAfWYOPgJw1xDOPD6ZNy0ihSYOsi4YSHukqztCwt/Z/vGICPKx+RDA=
-X-Received: by 2002:a05:600c:3787:b0:3fa:8c67:fc43 with SMTP id
- o7-20020a05600c378700b003fa8c67fc43mr8267813wmr.32.1688377510814; Mon, 03 Jul
- 2023 02:45:10 -0700 (PDT)
+        bh=no5CNBoDiHbRpIdNDqGhGyPr6ei7bZTn4+f7d7VDLXc=;
+        b=OVwt2nGhn+mOYaBts4Fm8wxyJb77+K75w3C3pW7KOBebK7JQAntUKNh/1Zd5Z6PtrC
+         BwygJ0oeHyPKfRKhraevk5dPf+edT3ITvloT3Q8q/hZDwuJeypzqOwsFp3uLSprR4l6q
+         jCfOedZs9T437wAUBwwlgkYE5Dp15TgXqCJ0YoV7tYi4Mfylq/8MteVSpjdhVpo1tX9L
+         joqw+tQmkT1f6E9VM+5KGkceLutGzMo3ypLfM+yDrEFdCDXjEF8ifGMZPLBL4WX0XT0O
+         WnjgFJr9RG4y+OMI/F7PesZq88BV5bMFmnlYaoh4SGDyvcpkFNjTqqmkX1cnEHjBiiQN
+         9IrA==
+X-Gm-Message-State: AC+VfDx533FcBGpkeblSmjpFur0ftjsfBfTzqsNN3YifbQL2YBzBvZRF
+        ITybWGi5P5tsSMHd6qFlYlwq8A==
+X-Google-Smtp-Source: ACHHUZ4dcr3T2QoMLtrwInlyHyprQa/n0BPg7j2w2hcYPJlKf2GFgPLbqJanRTpxLpT/KBJmIgof2A==
+X-Received: by 2002:a05:600c:252:b0:3fb:c462:1833 with SMTP id 18-20020a05600c025200b003fbc4621833mr8369946wmj.30.1688377502347;
+        Mon, 03 Jul 2023 02:45:02 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id i7-20020a05600c290700b003fbb346279dsm13805286wmd.38.2023.07.03.02.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 02:45:01 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230702185327.44625-1-krzysztof.kozlowski@linaro.org>
+References: <20230702185327.44625-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] arm64: dts: amlogic: minor whitespace cleanup around
+ '='
+Message-Id: <168837750146.1068586.11226295971012110711.b4-ty@linaro.org>
+Date:   Mon, 03 Jul 2023 11:45:01 +0200
 MIME-Version: 1.0
-References: <20230630083013.102334-1-alexghiti@rivosinc.com>
- <20230630083013.102334-9-alexghiti@rivosinc.com> <20230630-f714cc46ee65cc65318f2ada@orel>
-In-Reply-To: <20230630-f714cc46ee65cc65318f2ada@orel>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Mon, 3 Jul 2023 11:45:00 +0200
-Message-ID: <CAHVXubh97QyXbiQ6wcaEOkPBKJwzCzm77FgQ+eHEYFFEQyToJw@mail.gmail.com>
-Subject: Re: [PATCH v3 08/10] Documentation: admin-guide: Add riscv sysctl_perf_user_access
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 1:16=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Fri, Jun 30, 2023 at 10:30:11AM +0200, Alexandre Ghiti wrote:
-> > riscv now uses this sysctl so document its usage for this architecture.
-> >
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > ---
-> >  Documentation/admin-guide/sysctl/kernel.rst | 26 +++++++++++++++++----
-> >  1 file changed, 22 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentatio=
-n/admin-guide/sysctl/kernel.rst
-> > index d85d90f5d000..c376692b372b 100644
-> > --- a/Documentation/admin-guide/sysctl/kernel.rst
-> > +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> > @@ -941,16 +941,34 @@ enabled, otherwise writing to this file will retu=
-rn ``-EBUSY``.
-> >  The default value is 8.
-> >
-> >
-> > -perf_user_access (arm64 only)
-> > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +perf_user_access (arm64 and riscv only)
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +Controls user space access for reading perf event counters.
-> >
-> > -Controls user space access for reading perf event counters. When set t=
-o 1,
-> > -user space can read performance monitor counter registers directly.
-> > +arm64
-> > +=3D=3D=3D=3D=3D
-> >
-> >  The default value is 0 (access disabled).
->
-> Should add a blank line here.
+Hi,
 
-Done, thanks
+On Sun, 02 Jul 2023 20:53:27 +0200, Krzysztof Kozlowski wrote:
+> Use space after '=' sign to match DTS coding style.
+> 
+> 
 
->
-> > +When set to 1, user space can read performance monitor counter registe=
-rs
-> > +directly.
-> >
-> >  See Documentation/arm64/perf.rst for more information.
-> >
-> > +riscv
-> > +=3D=3D=3D=3D=3D
-> > +
-> > +When set to 0, user access is disabled.
-> > +
-> > +When set to 1, user space can read performance monitor counter registe=
-rs
-> > +directly only through perf, any direct access without perf interventio=
-n will
->
-> Remove 'directly only'
->
-> (It can't be both "direct" and "through" at the same time.)
->
-> > +trigger an illegal instruction.
-> > +
-> > +The default value is 2,
->
-> This is no longer true.
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.6/arm64-dt)
 
-Damn, sorry about that.
+[1/1] arm64: dts: amlogic: minor whitespace cleanup around '='
+      https://git.kernel.org/amlogic/c/75831c457ea135e01259af8bfa3fcf40c244256c
 
->
-> > which enables legacy mode (user space has direct
-> > +access to cycle and insret CSRs only). Note that this legacy value
-> > +is deprecated and will be removed once all userspace applications are =
-fixed.
-> > +
-> > +Note that the time CSR is for now always accessible to all modes.
->
-> s/always accessible/always directly accessible/
->
-> Also, remove 'for now'. While we may change this in the future, I'm not
-> sure if the 'for now' helps much. Maybe a "This may change in the future.=
-"
-> type of sentence? Or, just nothing (for now :-) and we'll modify this
-> document if it changes later.
+These changes has been applied on the intermediate git tree [1].
 
-I won't say anything about the future, thanks!
+The v6.6/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
 
-I also harmonized the "user space" and "userspace" in this document
-with what arm64 does.
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
 
-Thanks
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
 
->
-> Thanks,
-> drew
->
-> >
-> >  pid_max
-> >  =3D=3D=3D=3D=3D=3D=3D
-> > --
-> > 2.39.2
-> >
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
+
