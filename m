@@ -2,49 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9086746264
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6628E746265
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjGCSbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S231129AbjGCSbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjGCSbK (ORCPT
+        with ESMTP id S230097AbjGCSbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:31:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66B9121;
-        Mon,  3 Jul 2023 11:31:09 -0700 (PDT)
+        Mon, 3 Jul 2023 14:31:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D3A121
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:31:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43EFC60FFA;
-        Mon,  3 Jul 2023 18:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA58C433C8;
-        Mon,  3 Jul 2023 18:31:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688409068;
-        bh=WFAyaT1zBQm/iWkDAeWv3kb/dymBVkbMfUBLGKdYW5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BIqHRpak3i1WBkOOcQxmz4zZdBFnodO6CT37vQwO5m5E+wUrsVrXulKzpa/4z81PD
-         skZl5ufsvgnuzsxzWOY80tKuIx2yNZH+G2KsmvAGu+SIKT0uEgxVftqsCU7JSpk/yh
-         V5ICfyIS94uH0WzUDD2bK4J/+7GBLctk6Lcl6yf0=
-Date:   Mon, 3 Jul 2023 20:31:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, mike.kravetz@oracle.com,
-        Ackerley Tng <ackerleytng@google.com>
-Subject: Re: [PATCH 6.3.y] mm/hugetlb: revert use of page_cache_next_miss()
-Message-ID: <2023070356-paddling-grip-b31a@gregkh>
-References: <20230629211817.194786-1-sidhartha.kumar@oracle.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0B2260FFB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BA7C433C7;
+        Mon,  3 Jul 2023 18:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688409095;
+        bh=xOd6z6GLzShOy0vSnm82XHqZ/VJeHK3iTQUpUdu1pXQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kBgGE0ZKDk2FVPCeBvzCxuOo+OjbOzJobgivXBkW9io+6Zfoa3Vo6Y54wjHjHSq4z
+         9SqHoqh/ipjUQhNtVpwRiKmTWNoyUs6iJbvFapn3+dcLDexh0UkFF3TGRuFyK37NZt
+         Kmk1jLDRGHPURtXygJTIXuAl4dz/hF0l5OEHdrxEJHrWd0z/TAjNIY8i1B5QBnYgeA
+         bi/u2hoNDrIx6EXKsHMQN7W0x06hOcO5t8gppm0ax5CK1z5CkxcLRFmaX50CuxfVMp
+         oZVP6MvrKEZti3KsxrFC0r51d5VE9Q/UQ+JNsfIbtk31ZB0lV0VRz8gzYwZ95vCqxU
+         kDEcCpnKoaUrA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGOKi-00AEn7-K8;
+        Mon, 03 Jul 2023 19:31:32 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Conor Dooley <conor@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] risc-v: Fix order of IPI enablement vs RCU startup
+Date:   Mon,  3 Jul 2023 19:31:26 +0100
+Message-Id: <20230703183126.1567625-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629211817.194786-1-sidhartha.kumar@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, conor@kernel.org, apatel@ventanamicro.com, palmer@rivosinc.com, torvalds@linux-foundation.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,40 +65,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 05:18:17PM -0400, Sidhartha Kumar wrote:
-> commit fd4aed8d985a3236d0877ff6d0c80ad39d4ce81a upstream
-> 
-> Ackerley Tng reported an issue with hugetlbfs fallocate as noted in the
-> Closes tag.  The issue showed up after the conversion of hugetlb page
-> cache lookup code to use page_cache_next_miss.  User visible effects are:
-> 
-> - hugetlbfs fallocate incorrectly returns -EEXIST if pages are presnet
->   in the file.
-> - hugetlb pages will not be included in core dumps if they need to be
->   brought in via GUP.
-> - userfaultfd UFFDIO_COPY will not notice pages already present in the
->   cache.  It may try to allocate a new page and potentially return
->   ENOMEM as opposed to EEXIST.
-> 
-> Revert the use page_cache_next_miss() in hugetlb code.
-> 
-> The upstream fix[2] cannot be used used directly as the return value for
-> filemap_get_folio() has been changed between 6.3 and upstream.
-> 
-> Closes: https://lore.kernel.org/linux-mm/cover.1683069252.git.ackerleytng@google.com
-> Fixes: d0ce0e47b323 ("mm/hugetlb: convert hugetlb fault paths to use alloc_hugetlb_folio()")
-> Cc: <stable@vger.kernel.org> #v6.3
-> Reported-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> 
-> [1] https://lore.kernel.org/linux-mm/cover.1683069252.git.ackerleytng@google.com/
-> [2] https://lore.kernel.org/lkml/20230621230255.GD4155@monkey/
-> ---
-> 
->  fs/hugetlbfs/inode.c |  8 +++-----
->  mm/hugetlb.c         | 11 +++++------
->  2 files changed, 8 insertions(+), 11 deletions(-)
+Conor reports that risc-v tries to enable IPIs before telling the
+core code to enable RCU. With the introduction of the mapple tree
+as a backing store for the irq descriptors, this results in
+a very shouty boot sequence, as RCU is legitimately upset.
 
-Now queued up, thanks.
+Restore some sanity by moving the risc_ipi_enable() call after
+notify_cpu_starting(), which explicitly enables RCU on the calling
+CPU.
 
-greg k-h
+Fixes: 832f15f42646 ("RISC-V: Treat IPIs as normal Linux IRQs")
+Reported-by: Conor Dooley <conor@kernel.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20230703-dupe-frying-79ae2ccf94eb@spud
+Cc: Anup Patel <apatel@ventanamicro.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+---
+ arch/riscv/kernel/smpboot.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index bb0b76e1a6d4..f4d6acb38dd0 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -238,10 +238,11 @@ asmlinkage __visible void smp_callin(void)
+ 	mmgrab(mm);
+ 	current->active_mm = mm;
+ 
+-	riscv_ipi_enable();
+-
+ 	store_cpu_topology(curr_cpuid);
+ 	notify_cpu_starting(curr_cpuid);
++
++	riscv_ipi_enable();
++
+ 	numa_add_cpu(curr_cpuid);
+ 	set_cpu_online(curr_cpuid, 1);
+ 	probe_vendor_features(curr_cpuid);
+-- 
+2.34.1
+
