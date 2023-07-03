@@ -2,134 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EA57459FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F75745A05
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjGCKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S231161AbjGCKTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbjGCKRa (ORCPT
+        with ESMTP id S229989AbjGCKS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:17:30 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D2BD3;
-        Mon,  3 Jul 2023 03:17:13 -0700 (PDT)
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1363C60003;
-        Mon,  3 Jul 2023 10:17:09 +0000 (UTC)
-Message-ID: <2ab8ca7c-a648-f73c-1815-086274af6013@ghiti.fr>
-Date:   Mon, 3 Jul 2023 12:17:09 +0200
+        Mon, 3 Jul 2023 06:18:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C91DBE;
+        Mon,  3 Jul 2023 03:18:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DF572F4;
+        Mon,  3 Jul 2023 03:19:40 -0700 (PDT)
+Received: from [10.57.38.117] (unknown [10.57.38.117])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 429EE3F762;
+        Mon,  3 Jul 2023 03:18:53 -0700 (PDT)
+Message-ID: <997819c6-0798-e2f9-b94b-fedfbab7fdd8@arm.com>
+Date:   Mon, 3 Jul 2023 11:18:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] riscv: pageattr: Fixup synchronization problem between
- init_mm and active_mm
-To:     guoren@kernel.org, palmer@rivosinc.com, paul.walmsley@sifive.co,
-        zong.li@sifive.com, atishp@atishpatra.org, jszhang@kernel.org,
-        bjorn@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-References: <20230629082032.3481237-1-guoren@kernel.org>
-Content-Language: en-US
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230629082032.3481237-1-guoren@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI
+ address
+Content-Language: en-GB
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     dlemoal@kernel.org, Dan Carpenter <dan.carpenter@linaro.org>,
+        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guo,
-
-On 29/06/2023 10:20, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> The machine_kexec() uses set_memory_x to add the executable attribute to the
-> page table entry of control_code_buffer. It only modifies the init_mm but not
-> the current->active_mm. The current kexec process won't use init_mm directly,
-> and it depends on minor_pagefault, which is removed by commit 7d3332be011e4
-
-
-Is the removal of minor_pagefault an issue? I'm not sure I understand 
-this part of the changelog.
-
-
-> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") of 64BIT. So,
-> when it met pud mapping on an MMU_SV39 machine, it caused the following:
->
->   kexec_core: Starting new kernel
->   Will call new kernel at 00300000 from hart id 0
->   FDT image at 747c7000
->   Bye...
->   Unable to handle kernel paging request at virtual address ffffffda23b0d000
->   Oops [#1]
->   Modules linked in:
->   CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
->   Hardware name: Sophgo Mango (DT)
->   epc : 0xffffffda23b0d000
->    ra : machine_kexec+0xa6/0xb0
->   epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
->    gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
->    t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
->    s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
->    a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
->    a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
->    s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
->    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
->    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
->    s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
->    t5 : ffffffff815351b0 t6 : ffffffc80c173b50
->   status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
->
-> Yes, Using set_memory_x API after boot has the limitation, and at least we
-> should synchronize the current->active_mm to fix the problem.
->
-> Fixes: d3ab332a5021 ("riscv: add ARCH_HAS_SET_MEMORY support")
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
+On 2023-07-03 09:58, Rick Wertenbroek wrote:
+> A 32-bit mask was used on the 64-bit PCI address used for mapping MSIs.
+> This would result in the upper 32 bits being unintentionally zeroed and
+> MSIs getting mapped to incorrect PCI addresses if the address had any
+> of the upper bits set.
+> 
+> Replace 32-bit mask by appropriate 64-bit mask.
+> 
+> Fixes: dc73ed0f1b8b ("PCI: rockchip: Fix window mapping and address translation for endpoint")
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/linux-pci/8d19e5b7-8fa0-44a4-90e2-9bb06f5eb694@moroto.mountain/
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> Cc: stable@vger.kernel.org
 > ---
->   arch/riscv/mm/pageattr.c | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
-> index ea3d61de065b..23d169c4ee81 100644
-> --- a/arch/riscv/mm/pageattr.c
-> +++ b/arch/riscv/mm/pageattr.c
-> @@ -123,6 +123,13 @@ static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
->   				     &masks);
->   	mmap_write_unlock(&init_mm);
+>   drivers/pci/controller/pcie-rockchip.h | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
+> index fe0333778fd9..627d08b34827 100644
+> --- a/drivers/pci/controller/pcie-rockchip.h
+> +++ b/drivers/pci/controller/pcie-rockchip.h
+> @@ -158,7 +158,9 @@
+>   #define PCIE_RC_CONFIG_THP_CAP		(PCIE_RC_CONFIG_BASE + 0x274)
+>   #define   PCIE_RC_CONFIG_THP_CAP_NEXT_MASK	GENMASK(31, 20)
 >   
-> +	if (current->active_mm != &init_mm) {
-> +		mmap_write_lock(current->active_mm);
-> +		ret =  walk_page_range_novma(current->active_mm, start, end,
-> +					     &pageattr_ops, NULL, &masks);
-> +		mmap_write_unlock(current->active_mm);
-> +	}
-> +
->   	flush_tlb_kernel_range(start, end);
+> -#define PCIE_ADDR_MASK			0xffffff00
+> +#define MAX_AXI_IB_ROOTPORT_REGION_NUM		3
+> +#define MIN_AXI_ADDR_BITS_PASSED		8
+> +#define PCIE_ADDR_MASK			GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+
+Nit: this probably wants to be GENMASK_ULL(), otherwise it might throw a 
+warning if compile-tested for 32-bit.
+
+Thanks,
+Robin.
+
+>   #define PCIE_CORE_AXI_CONF_BASE		0xc00000
+>   #define PCIE_CORE_OB_REGION_ADDR0	(PCIE_CORE_AXI_CONF_BASE + 0x0)
+>   #define   PCIE_CORE_OB_REGION_ADDR0_NUM_BITS	0x3f
+> @@ -185,8 +187,6 @@
+>   #define AXI_WRAPPER_TYPE1_CFG			0xb
+>   #define AXI_WRAPPER_NOR_MSG			0xc
 >   
->   	return ret;
-
-
-I don't understand: any page table inherits the entries of 
-swapper_pg_dir (see pgd_alloc()), so any kernel page table entry is 
-"automatically" synchronized, so why should we synchronize one 4K entry 
-explicitly? A PGD entry would need to be synced, but not a PTE entry.
-
+> -#define MAX_AXI_IB_ROOTPORT_REGION_NUM		3
+> -#define MIN_AXI_ADDR_BITS_PASSED		8
+>   #define PCIE_RC_SEND_PME_OFF			0x11960
+>   #define ROCKCHIP_VENDOR_ID			0x1d87
+>   #define PCIE_LINK_IS_L2(x) \
