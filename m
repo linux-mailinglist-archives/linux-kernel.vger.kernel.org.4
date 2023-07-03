@@ -2,135 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00477456F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FD87456F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbjGCIHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S231251AbjGCIHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbjGCIGs (ORCPT
+        with ESMTP id S231336AbjGCIHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:06:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95381E72;
-        Mon,  3 Jul 2023 01:06:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 553C060CF9;
-        Mon,  3 Jul 2023 08:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19BAC433C8;
-        Mon,  3 Jul 2023 08:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688371554;
-        bh=H5Ol2bCcQqFdyg09aatCLPI6rS9AzzMNSSBC2BX7O1I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oIOJhIeWjUIxznyHbsEeDY5V8fSvW8F5I5Zbpq9mqcP+T9XMyqXGDJ6dnFtL+EpBE
-         np9qw2ScLgM6bAjcqjJXKWwDm0NcSYh6kAwd3tjWQzihkTEC8PCC/wlM34zRiZ76fR
-         IH1IfE8iJIfMYy63dWPg67elzEENbAfi73ipG9gU6GCYimHHRZ5bMbi3NScPVLVY5w
-         cE2xhZG5eHjXKDxqe0iqx9hbVE1hByEZZAycdUD0Qwj32j6GACr3Opb5Kq0i1SMaUR
-         nFuHse6zHojgdslFv3lrJ3tW767gbbXbcE1hXPdxFSbAuQg+xkjaqn/ISyMbad0I9F
-         zPicWmzxLkokg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1qGEZD-00A68h-Sj;
-        Mon, 03 Jul 2023 09:05:52 +0100
-Date:   Mon, 03 Jul 2023 09:05:52 +0100
-Message-ID: <875y71zafz.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-oxnas@groups.io,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: Re: [PATCH v2 13/15] irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
-In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-13-fb6ab3dea87c@linaro.org>
-References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
-        <20230630-topic-oxnas-upstream-remove-v2-13-fb6ab3dea87c@linaro.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: neil.armstrong@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de, miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, peppe.cavallaro@st.com, alexandre.torgue@foss.st.com, joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl, andy@kernel.org, sre@kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-mtd@lists.infradead.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, linux-oxnas@groups.io, krzysztof.kozlowski@linaro.org, arnd@arndb.de, daniel@makrotopia.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 04:07:24 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD33D1710;
+        Mon,  3 Jul 2023 01:07:10 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1688371613txz6f5uw
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 03 Jul 2023 16:06:52 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: C46Rb8GPIEdHxAFCE3BvkSlNOAIZKwGCuo6b9oMnIg2+3RsnASJ4Odgdn480K
+        D9O/zHQs9+SI0waAap24x1DtHFT1YhLFoXm+IHocqEYwW6JswgvloZwfQAJN6UsHkvyaP9x
+        QyBfBnAjQS8LVnCs302OFPUOYjidAiN/QvVkBaZGWrOwLLOZotAu8RmowxqfgV/oY7Kp6Rx
+        q2GZuLW+0aFiIafX5uuKHRaz+7efPvRT8FTu1WQZrCDywPojQ0HrrqkoL49Q1GenSQ+3x14
+        g/7TqCVqZOHLLlXzTLGfS0VAr0TFd7f+RwSYEOw4TIw4AtYEt2zSett+Kx0g+o/bTv4XZtb
+        qQevDcOllpzai0lcp+5UgkPNFxGHTFnhRL6r+g56jEEFEc4T7w=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 351077419301285196
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux@weissschuh.net,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
+Date:   Mon,  3 Jul 2023 16:06:47 +0800
+Message-Id: <20230703080647.491363-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZKJ35DyPOG+LAy5j@1wt.eu>
+References: <ZKJ35DyPOG+LAy5j@1wt.eu>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 17:58:38 +0100,
-Neil Armstrong <neil.armstrong@linaro.org> wrote:
+Hi, Willy
+
+> On Mon, Jul 03, 2023 at 02:03:23PM +0800, Zhangjin Wu wrote:
+> > > > - the others, for kernel without procfs
+> > > >   let it pass even with 'worst case' kernel configs
+> > > 
+> > > You should include /dev/zero, which is commonly used to allocate anonymous
+> > > memory and is more likely present and readable than any of the other files.
+> > > And another file of choice is obviously argv[0] ;-)  In this case you don't
+> > > need any of the other extra ones. Thus I could suggest that you try in this
+> > > order:
+> > > 
+> > >     /dev/zero, /proc/self/exe, /proc/1/exe, argv[0]
+> > > 
+> > > and be done with it. That doesn't prevent one from extending the list if
+> > > really needed later, but I doubt it would be needed. Also, it's already
+> > > arranged in a read-write, then read-only fallbacks mode, so if we later
+> > > need to add more complex tests involving writes, the writable /dev/zero
+> > > will have precedence.
+> > >
+> > 
+> > Cool, both /dev/zero and argv[0] are very good candidates ;-)
+> > 
+> > Just verified both of them, works perfectly.
+> > 
+> > - /dev/zero
+> > 
+> >   we need to mknod it in prepare()
 > 
-> Due to lack of maintenance and stall of development for a few years now,
-> and since no new features will ever be added upstream, remove support
-> for OX810 and OX820 IRQ controller.
+> Indeed.
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Daniel Golle <daniel@makrotopia.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/irqchip/irq-versatile-fpga.c | 1 -
->  1 file changed, 1 deletion(-)
+> >   and also, in test_mmap_munmap(),
+> >   stat() return a zero size of /dev/zero, in this case, we should assign
+> >   a non-zero file_size ourselves.
+> > 
+> >     -       file_size = stat_buf.st_size;
+> >     +       /* file size of the special /dev/zero is 0, let's assign one manually */
+> >     +       if (i == 0)
+> >     +               file_size = 3*page_size - 1;
+> >     +       else
+> >     +               file_size = stat_buf.st_size;
 > 
-> diff --git a/drivers/irqchip/irq-versatile-fpga.c b/drivers/irqchip/irq-versatile-fpga.c
-> index ba543ed9c154..5018a06060e6 100644
-> --- a/drivers/irqchip/irq-versatile-fpga.c
-> +++ b/drivers/irqchip/irq-versatile-fpga.c
-> @@ -242,5 +242,4 @@ static int __init fpga_irq_of_init(struct device_node *node,
->  }
->  IRQCHIP_DECLARE(arm_fpga, "arm,versatile-fpga-irq", fpga_irq_of_init);
->  IRQCHIP_DECLARE(arm_fpga_sic, "arm,versatile-sic", fpga_irq_of_init);
-> -IRQCHIP_DECLARE(ox810se_rps, "oxsemi,ox810se-rps-irq", fpga_irq_of_init);
->  #endif
+> OK but why this -1 ? That doesn't sound right, unless you explicitly want
+> a file size that's not multiple of a page size for whatever reason ?
+>
 
-Acked-by: Marc Zyngier <maz@kernel.org>
+Just make sure the file size is a litle random, not just aligned with
+PAGE_SIZE, it is ok without '-1' ;-)
 
-Feel free to route this via the SoC tree as part of the removal
-series.
+> > - argv[0]
+> > 
+> >   since nolibc has no realpath() currently, we can simply
+> >   support the current path and the absolute path like this:
+> > 
+> >     nolibc-test.c:
+> > 
+> >     /* assigned as argv[0] in main(), will be used by some tests */
+> >     static char exe[PATH_MAX + 1];
+> > 
+> >     main():
+> > 
+> >     /* get absolute path of myself, nolibc has no realpath() currently */
+> >     #ifndef NOLIBC
+> >             realpath(argv[0], exe);
+> >     #else
+> >             /* assume absolute path has no "./" */
+> >             if (strncmp(argv[0], "./", 2) != 0)
+> >                     strncat(exe, argv[0], strlen(argv[0]) + 1);
+> >             else {
+> >                     pwd = getenv("PWD");
+> >                     /* skip the ending '\0' */
+> >                     strncat(exe, getenv("PWD"), strlen(pwd));
+> >                     /* skip the first '.' */
+> >                     strncat(exe, argv[0] + 1, strlen(argv[0]));
+> >             }
+> >     #endif
+> 
+> No, please, not like this. Just copy argv[0] (the pointer not the
+> contents) and you're fine:
+>
+>     static const char *argv0;
+> 
+>     int main(int argc, char **argv, char **envp)
+>     {
+>             argv0 = argv[0];
+>             ...
+>     }
+> 
+> Nothing more, nothing less. Your program will always have its correct
+> path when being called unless someone purposely forces it to something
+> different, which is not our concern at all since this is a test program.
+> And I'd rather call it "argv0" which exactly tells us what it contains
+> than "exe" which can be misleading for that precise reason.
+>
 
-Thanks,
+Yeah, locally, I just used a global argv0 pointer directly, but
+chroot_exe("./nolibc-test") not work when run 'libc-test' in host
+system, that is why I tried to get an absolute path ;-)
 
-	M.
+    CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(exe), -1, ENOTDIR); break;
 
--- 
-Without deviation from the norm, progress is not possible.
+    -->
+
+    19 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
+
+I removed the "proc ?" check manually to test if it also work with
+CONFIG_PROC_FS=n. it doesn't work, without absolute path, we need to add
+the ENOENT errno back to the errno check list.
+
+I'm not sure if the other syscalls require an absolute path, so, the
+realpath() is called in this proposed method.
+
+> > A full functional realpath() is a little complex, such as '../' support and
+> > even symlink support, let's delay its requirement at current stage ;-)
+> 
+> Please do not even engage into this, and keep in mind that the sole
+> purpose of this test program is to help developers simply add tests to
+> the set of existing ones. If the program becomes complex for doing stuff
+> that is out of its scope, it will become much harder to extend and users
+> will lose interest and motivation for updating it.
+> 
+> > one or both of them may also help the other test cases:
+> > 
+> > - chroot_exe (used '/init' before)
+> > 
+> >     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(proc ? "/proc/self/exe" : exe), -1, ENOTDIR); break;
+> > 
+> > - chmod_exe (replace the one: chmod_tmpdir in another patchset)
+> > 
+> >     CASE_TEST(chmod_exe);       EXPECT_SYSZR(1, chmod(proc ? "/proc/self/exe" : exe, 0555)); break;
+> > 
+> >     It should be safe enough to only remove the writable attribute for the test
+> >     program.
+> > 
+> > - stat_timestamps (used '/init' before)
+> > 
+> >     if (stat("/proc/self/", &st) && stat(exe, &st) && stat("/dev/zero", &st) && stat("/", &st))
+> 
+> Indeed, why not!
+>
+
+Ok, without absolute path, the chroot_exe() will be changed back to
+something like this:
+
+    CASE_TEST(chroot_exe);        EXPECT_SYSER2(1, chroot(proc ? "/proc/self/exe" : argv0), -1, ENOTDIR, ENOENT); break;
+
+Best regards,
+Zhangjin
+
+> > Will update the related patches with them.
+> 
+> OK thanks!
+> Willy
