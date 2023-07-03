@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544E0745B84
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2B2745B87
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjGCLsE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jul 2023 07:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S231298AbjGCLtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbjGCLsA (ORCPT
+        with ESMTP id S229928AbjGCLs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:48:00 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585C0E8;
-        Mon,  3 Jul 2023 04:47:59 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-c581c758ad8so462454276.1;
-        Mon, 03 Jul 2023 04:47:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688384878; x=1690976878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uD1lL3AqZw/En4NSEtQUIk0MJ/LF3aM3VljhUrwO4vc=;
-        b=Ff4nKiI7X+aipZ2NYKbJGJxt9kSyAAnHy0+Yg9Tp+nLLzVHEgpqaDHhYrFzCkV0s9V
-         PFGYkVbAfYudPcJnPJjNO2Rxt5KYeoBoeZbuTDuS3knCVlLwQjz4EcDocD//lxNpTw91
-         RZGd0JbpLAgdXSxHHfBJ7+Yxk7pDTw3AHixr+P6xb0BH9GclhI+WO1zLXLYkvJsFStvD
-         7BcV1WafUVa38c4aLTmmly13EMa479wWgWo1oeyUwQWI1qikHLyNPUQBj1gXxlwiA0Om
-         xzvudNUOVH72m//cFBjrvo5lejtrcqs/MNsuMkl9VVKqD34hRJby1JvCKrnmUSr99mt9
-         +bSQ==
-X-Gm-Message-State: ABy/qLZOgIH3LMYxI7o81xn2FdAlrOhK91wM0BOo/TN3/YQBnWYQBjol
-        AtduZm+vjcZ/StcAo6OpD3y2E8EBkepCkw==
-X-Google-Smtp-Source: APBJJlGFWI1JcRTOQW+ynB1DvGK1KlIBWnJYCxAaHXBBOIVpFD5TCvLn/iHkeZAKee1nfP2vuTLvqA==
-X-Received: by 2002:a5b:44a:0:b0:c21:1a86:d2b7 with SMTP id s10-20020a5b044a000000b00c211a86d2b7mr8292929ybp.55.1688384878388;
-        Mon, 03 Jul 2023 04:47:58 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id 4-20020a250704000000b00c3a96009bdfsm2265366ybh.35.2023.07.03.04.47.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 04:47:58 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-579dd20b1c8so25056017b3.1;
-        Mon, 03 Jul 2023 04:47:58 -0700 (PDT)
-X-Received: by 2002:a25:26cb:0:b0:c39:db28:6a50 with SMTP id
- m194-20020a2526cb000000b00c39db286a50mr8508785ybm.36.1688384878017; Mon, 03
- Jul 2023 04:47:58 -0700 (PDT)
+        Mon, 3 Jul 2023 07:48:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADC1E8;
+        Mon,  3 Jul 2023 04:48:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2247460F03;
+        Mon,  3 Jul 2023 11:48:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD04C433C7;
+        Mon,  3 Jul 2023 11:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688384936;
+        bh=94E1xNeUaIhmByKLDdNMrVR1xm0w+a+Mcuf+Blcmadc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WbI6uLApPdI5dT9UVGlzwVzAKqDwBkfbJje5v74MQrn25edivWB2mBcmuQhny5Btt
+         f0SF+P1kYRMTnOyNdM0bSQkbYxL6R+gxLAdRD2sMaYYI/2q47d3BmAIIc7InTkbm+z
+         PzZZ5TyPUMkwOShlfNTsksnsVZg5JfRgZo2+RmlA1uUhFdCxyjx6j7pJZiQ5DLkqWi
+         YGr0jG96eySZaUmlVuxVOyK+3CFFeknltvP0Dwdy8b6t5pbNogHWoMFaMrWeQMm5W2
+         pDjSKb2MoXUxAc2LOu9dMKvHzFEXFr7tCimrdivOf3r524jlPSS9z7IbKV0SM+bOn3
+         CemdKD6+pQKYg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Sagar Biradar <sagar.biradar@microchip.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Gilbert Wu <gilbert.wu@microchip.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: aacraid: avoid -Warray-bounds warning
+Date:   Mon,  3 Jul 2023 13:48:46 +0200
+Message-Id: <20230703114851.1194510-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com> <20230622113341.657842-5-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230622113341.657842-5-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Jul 2023 13:47:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXW9Vrk8y+UOAHaRdAkEwy6gXNGgdRAawPLrEqDHB+cvQ@mail.gmail.com>
-Message-ID: <CAMuHMdXW9Vrk8y+UOAHaRdAkEwy6gXNGgdRAawPLrEqDHB+cvQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] arm64: dts: renesas: r9a09g011: Add CSI nodes
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 1:34 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The Renesas RZ/V2M comes with 6 Clocked Serial Interface (CSI)
-> IPs (CSI0, CSI1, CSI2, CSI3, CSI4, CSI5), but Linux is only
-> allowed access to CSI0 and CSI4.
->
-> This commit adds SoC specific device tree support for CSI0 and
-> CSI4.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> ---
->
-> v2: no changes
+From: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.6.
+The one-element array in aac_aifcmd is actually meant as a flexible array,
+and causes an overflow warning that can be avoided using the normal
+flex arrays:
 
-Gr{oetje,eeting}s,
+drivers/scsi/aacraid/commsup.c:1166:17: error: array index 1 is past the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+                                (((__le32 *)aifcmd->data)[1] == cpu_to_le32(3));
+                                            ^             ~
 
-                        Geert
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/scsi/aacraid/aacraid.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+index 7c6efde75da66..73b6ac0c01f54 100644
+--- a/drivers/scsi/aacraid/aacraid.h
++++ b/drivers/scsi/aacraid/aacraid.h
+@@ -2618,7 +2618,7 @@ struct aac_hba_info {
+ struct aac_aifcmd {
+ 	__le32 command;		/* Tell host what type of notify this is */
+ 	__le32 seqnum;		/* To allow ordering of reports (if necessary) */
+-	u8 data[1];		/* Undefined length (from kernel viewpoint) */
++	u8 data[];		/* Undefined length (from kernel viewpoint) */
+ };
+ 
+ /**
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
