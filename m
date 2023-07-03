@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE13574555C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95ADF74555E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjGCGS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
+        id S229771AbjGCGTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjGCGS0 (ORCPT
+        with ESMTP id S230146AbjGCGSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:18:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76B2BF;
-        Sun,  2 Jul 2023 23:18:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 3 Jul 2023 02:18:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2742B12E;
+        Sun,  2 Jul 2023 23:18:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7485B60DC6;
-        Mon,  3 Jul 2023 06:18:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36CFFC433C8;
-        Mon,  3 Jul 2023 06:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688365104;
-        bh=b02O7hMAe/0cdSzPP3WCdlJ3T6kG6Hi5gr453ff6ODI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AaWAZ0MzR5WlM8LsDfCGcJYsVnapu6kw3CisOBlzAeBV65fsgiHj4cTCvUVhiPIXg
-         OWZalDz2U4a5HKVY1ries+snvEPAN5HyGHqmrzszj1Tsai1ox2Wns/gdYr+nnOXCkN
-         hSoOzk1I0NMqkaFaP9CvULBEZ+pw4Cnt1hmw6Yctc6sxyRegJ0XgDy3Q/2nvH7qLUe
-         lXK15gu9WWAliwPVRDZWqp8FG1w7v7J73PeQpU1dmRKdTp1gtpuqigtK6c2oa6xSyg
-         GHkI4K0Bsl8GHo4vYtDDdrF+8+xgRj04wNrn+uNUySINBhEzFIfI2OtIm3OrbcFGHZ
-         cJBJvLinemqQQ==
-Date:   Mon, 3 Jul 2023 08:18:16 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Uwe =?UTF-8?B?S2xlaW5lLUs=?= =?UTF-8?B?w7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        David Lin <CTLIN0@nuvoton.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Antti Palosaari <crope@iki.fi>, Sergey Kozlov <serjk@netup.ru>,
-        Abylay Ospan <aospan@netup.ru>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
-        Michael Krufky <mkrufky@linuxtv.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Akihiro Tsukada <tskd08@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 0/4] ASoC: remove copy of intlog10()
-Message-ID: <20230703081816.37028ab7@sal.lan>
-In-Reply-To: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
-References: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A3BD31FD70;
+        Mon,  3 Jul 2023 06:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688365117; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GUoBaQDxjkZi1Sem7EpqwhIMMA5Ih8do3OoTKvP4LWw=;
+        b=MtQcbPcdhzin7AFReIh58w+BF26CTYT8jrPqHE+Rm845NDzAQzwbPCvgiFHBPOzGAH6QNE
+        KYl8ANZ7hlETd+MP0AqPJ55A0Tjwb/UsHztNkgEVWinsbLlJiVIVhzkSPT5SC5x4wqG6UA
+        iMY2V/q1flzCFuw9K5pBNKA4WzpcWVA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688365117;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GUoBaQDxjkZi1Sem7EpqwhIMMA5Ih8do3OoTKvP4LWw=;
+        b=DD0ZzlPyk8Vzs7/j6rh7vTx8Sfq+Yi2XW8geOrAO5zjz+LClrftyp0ZK47ls78snspzfSw
+        3nKxMKiuwxIz+eDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 94FCE138FC;
+        Mon,  3 Jul 2023 06:18:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fbtTJD1oomSpMwAAMHmgww
+        (envelope-from <dwagner@suse.de>); Mon, 03 Jul 2023 06:18:37 +0000
+Date:   Mon, 3 Jul 2023 08:18:37 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>
+Subject: Re: [PATCH blktests v2 0/3] More fixes for FC enabling
+Message-ID: <exbq2w5c2ny24pxjprhiozbcaftqwumq6o4cvq2sjy6bqi4lvi@nqkeh2vs5seu>
+References: <20230628151623.11340-1-dwagner@suse.de>
+ <aji2laz4lypl4lspduoeef4uviuoysl5rweu25zmzplj3psg7f@ryxrnjorfsr2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aji2laz4lypl4lspduoeef4uviuoysl5rweu25zmzplj3psg7f@ryxrnjorfsr2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, 19 Jun 2023 20:20:15 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> escreveu:
-
-> The first three patches moves intlog10() to be available in entire
-> kernel. The last one removes copy of it in one driver. Besides already
-> good Lines of Code (LoC) statistics the upcoming users, if any, can
-> utilize the exported functions.
+On Mon, Jul 03, 2023 at 05:43:01AM +0000, Shinichiro Kawasaki wrote:
+> On Jun 28, 2023 / 17:16, Daniel Wagner wrote:
+> > I (think) address all the feedback I got from Sagi and Shinichiro except one.
+> > The _have_nvme_cli_context() (previously _nvme_cli_support_context()) function
+> > is still there. I didn't find any other good way to achieve this and I found in
+> > blktests another function doing the same: _have_fio_zbd_zonemode().
 > 
-> The series can be routed either via ASoC tree or media tree.
-> 
-> Note, int_log.h is separated from math.h due to licensing.
-> I dunno if we can mix two in a single header file. In any
-> case we may do it later on.
-> 
-> Andy Shevchenko (4):
->   lib/math: Move dvb_math.c into lib/math/int_log.c
->   lib/math/int_log: Use ARRAY_SIZE(logtable) where makes sense
->   lib/math/int_log: Replace LGPL-2.1-or-later boilerplate with SPDX
->     identifier
->   ASoC: nau8825: Replace copied'n'pasted intlog10()
+> I found that the latest blktests fix for the hostnqn/hostid issue created
+> conflict with the 2nd patch in this series. Sorry about that. (Actually, I guess
+> this series could be enough for the issue...)
 
-It probably makes sense to apply it at ASoC tree, as the relevant
-change is there.
+No problem.
 
-I have just one small nit on patch 1/4, which should be trivial to
-solve. Once done, feel free to merge it with  my ack:
+> Daniel, I can fix the conflict and repost the series to the list. Or you can fix
+> the conflict by yourself. Please let me know your preference.
 
-Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+I'll rebase and fixup the conflict. Also give it another quick test run just to
+make sure all still works.
 
-> 
->  Documentation/driver-api/media/dtv-common.rst |  2 +-
->  drivers/media/dvb-core/Makefile               |  2 +-
->  drivers/media/dvb-frontends/af9013_priv.h     |  2 +-
->  drivers/media/dvb-frontends/af9033_priv.h     |  2 +-
->  drivers/media/dvb-frontends/cxd2820r_priv.h   |  2 +-
->  drivers/media/dvb-frontends/cxd2841er.c       |  2 +-
->  .../cxd2880/cxd2880_tnrdmd_dvbt2_mon.c        |  2 +-
->  .../cxd2880/cxd2880_tnrdmd_dvbt_mon.c         |  2 +-
->  .../media/dvb-frontends/cxd2880/cxd2880_top.c |  2 +-
->  drivers/media/dvb-frontends/dib7000p.c        |  2 +-
->  drivers/media/dvb-frontends/dib8000.c         |  2 +-
->  drivers/media/dvb-frontends/dib9000.c         |  2 +-
->  drivers/media/dvb-frontends/drxk_hard.c       |  2 +-
->  drivers/media/dvb-frontends/lgdt3305.c        |  2 +-
->  drivers/media/dvb-frontends/lgdt3306a.c       |  2 +-
->  drivers/media/dvb-frontends/lgdt330x.c        |  2 +-
->  drivers/media/dvb-frontends/m88ds3103_priv.h  |  2 +-
->  drivers/media/dvb-frontends/mn88443x.c        |  2 +-
->  drivers/media/dvb-frontends/mn88472_priv.h    |  2 +-
->  drivers/media/dvb-frontends/mn88473_priv.h    |  2 +-
->  drivers/media/dvb-frontends/or51132.c         |  2 +-
->  drivers/media/dvb-frontends/or51211.c         |  2 +-
->  drivers/media/dvb-frontends/rtl2830_priv.h    |  2 +-
->  drivers/media/dvb-frontends/rtl2832_priv.h    |  2 +-
->  drivers/media/dvb-frontends/si2165.c          |  2 +-
->  drivers/media/dvb-frontends/stv0367.c         |  2 +-
->  drivers/media/dvb-frontends/tc90522.c         |  2 +-
->  drivers/media/dvb-frontends/tda10048.c        |  2 +-
->  include/{media/dvb_math.h => linux/int_log.h} | 18 +---
->  lib/math/Makefile                             |  2 +-
->  .../dvb-core/dvb_math.c => lib/math/int_log.c | 26 ++----
->  sound/soc/codecs/nau8825.c                    | 93 +------------------
->  32 files changed, 45 insertions(+), 150 deletions(-)
->  rename include/{media/dvb_math.h => linux/int_log.h} (63%)
->  rename drivers/media/dvb-core/dvb_math.c => lib/math/int_log.c (84%)
-> 
+> Other than that, I think the three patches are good enough to apply.
+
+Great!
