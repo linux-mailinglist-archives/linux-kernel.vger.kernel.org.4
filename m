@@ -2,97 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FD47461A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42565746178
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjGCR6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S230256AbjGCRet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGCR6R (ORCPT
+        with ESMTP id S229932AbjGCRer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:58:17 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C05DE42;
-        Mon,  3 Jul 2023 10:58:16 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363HTxu4007963;
-        Mon, 3 Jul 2023 10:58:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=rO9msHe5GoTW/2jab/WC344uV+LBik+7BQx9cJi4P2c=;
- b=W7L+6k0speInyUMuaedP8ILsSVTjcEhHLo3iswMTABzBr1aLmKcISn2Y2zMx07JTtkHM
- 6sjJfs9X9TeENbFE/E97R5l1PTa/EYlr2CS/3ZZs4heAbY2DoY5+oaEaK3xw6Stv3V4p
- otZe8m9szpFltf3RzJ380a9aanrMErXfgioOtblKQfMABrJQnmjYZ1HAW9DOxtAW0i7q
- GLUBF4HNyuqI0gsk3NH7Snz7bN09JPVJA/BEHnRSeCv5WemaGMcSBsD/5HRTODyYU7zB
- I2rV/hq/Yw1ydrYHRnSNHsjBfxJ9h+uTe89iU+Kv34qbl4V9Xg2cQpmrsuzYP8pMZY+L Dw== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3rjknj5fuh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 10:58:10 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 3 Jul
- 2023 10:58:07 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 3 Jul 2023 10:58:07 -0700
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id 0AC0F3F7433;
-        Mon,  3 Jul 2023 10:31:16 -0700 (PDT)
-From:   Hariprasad Kelam <hkelam@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <davem@davemloft.net>, <sgoutham@marvell.com>,
-        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
-        <sbhatta@marvell.com>
-Subject: [PATCH] octeontx-af: fix hardware timestamp configuration
-Date:   Mon, 3 Jul 2023 23:01:16 +0530
-Message-ID: <20230703173116.5093-1-hkelam@marvell.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: ggcPEox8V5fvdzvTPHmYRj-nvSW53row
-X-Proofpoint-ORIG-GUID: ggcPEox8V5fvdzvTPHmYRj-nvSW53row
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_13,2023-06-30_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 3 Jul 2023 13:34:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F802E5D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:34:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B80760FE8
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 17:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA0BC433C8;
+        Mon,  3 Jul 2023 17:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688405685;
+        bh=1zve+hWveRnQsj6AkpxQ15rXfh1FCEn24VOyA8/pC34=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pVqLWF52Tg9xTT87v0lmtarJI1WS/rF52kgqYjB3kncmX0SKRvVHRIeP/idcR+adJ
+         qOUc7IfGwBwcHOdiJWLBfdQGejr5fA/DYAjjBfwWNuBLeHgj9CHORM4hZ5gWvtZcVi
+         PnOWcLfgF337e+otuu0x1U1z+6l6ofm8KXFxwtXcGrJ20CSgAbSpiPpt244FZ58vhU
+         kGoqkihd8GLiVXJ5h/2GPsGD2y+igsuTnCCaNYFZ/RSVANdsu56UXAc31RaeFRrgrD
+         3oYuobQlhbRO36tvrpOmMTxp4ZI0fFR6Y02QVtW+G7DHBElu+/jYqqyshWHpX0vFB/
+         xAUJTxSEP9XHA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGNRj-00AE4U-3T;
+        Mon, 03 Jul 2023 18:34:43 +0100
+Date:   Mon, 03 Jul 2023 18:34:42 +0100
+Message-ID: <861qhoyk3x.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        lkp <oliver.sang@intel.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com
+Subject: Re: [mm] 408579cd62: WARNING:suspicious_RCU_usage
+In-Reply-To: <20230703-regalia-preachy-136bf396e320@spud>
+References: <ZKIsoMOT71uwCIZX@xsang-OptiPlex-9020>
+        <CAHk-=wg1_8L+e09_RuX=Z_49oLn8=w82YzCk+kybS-ymSd_zbA@mail.gmail.com>
+        <20230703-dupe-frying-79ae2ccf94eb@spud>
+        <CAHk-=wg+jqA6nt36TxAfoqWskRAzhVfzBejcK6PNYXC+QcwyiA@mail.gmail.com>
+        <20230703-regalia-preachy-136bf396e320@spud>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: conor@kernel.org, torvalds@linux-foundation.org, apatel@ventanamicro.com, palmer@rivosinc.com, oliver.sang@intel.com, Liam.Howlett@oracle.com, linux-kernel@vger.kernel.org, lkp@lists.01.org, lkp@intel.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAC block on CN10K (RPM) supports hardware timestamp configuration. The
-previous patch which added timestamp configuration support has a bug.
-Though the netdev driver requests to disable timestamp configuration,
-the driver is always enabling it.
+On Mon, 03 Jul 2023 18:20:52 +0100,
+Conor Dooley <conor@kernel.org> wrote:
+> 
+> [1  <text/plain; us-ascii (quoted-printable)>]
+> On Mon, Jul 03, 2023 at 10:07:28AM -0700, Linus Torvalds wrote:
+> > On Mon, 3 Jul 2023 at 10:00, Conor Dooley <conor@kernel.org> wrote:
+> > >
+> > > I'm not entirely sure if it is related, as stuff in the guts of mm like
+> > > this is beyond me, but I've been seeing similar warnings on RISC-V.
+> > 
+> > No, that RISC-V warning is also about bad RCU usage, but that's a
+> > different thing.
+> > 
+> > >         RCU used illegally from offline CPU!
+> > >         rcu_scheduler_active = 1, debug_locks = 1
+> > >         1 lock held by swapper/1/0:
+> > >          #0: ffffffff8169ceb0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x32
+> > >
+> > >         stack backtrace:
+> > >         CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-10173-ga901a3568fd2 #1
+> > >         Hardware name: riscv-virtio,qemu (DT)
+> > >         Call Trace:
+> > >         [<ffffffff80006a20>] show_stack+0x2c/0x38
+> > >         [<ffffffff80af3ee0>] dump_stack_lvl+0x5e/0x80
+> > >         [<ffffffff80af3f16>] dump_stack+0x14/0x1c
+> > >         [<ffffffff80083ff0>] lockdep_rcu_suspicious+0x19e/0x232
+> > >         [<ffffffff80ad4802>] mtree_load+0x18a/0x3b6
+> > >         [<ffffffff80091632>] __irq_get_desc_lock+0x2c/0x82
+> > >         [<ffffffff80094722>] enable_percpu_irq+0x36/0x9e
+> > >         [<ffffffff800087d4>] riscv_ipi_enable+0x32/0x4e
+> > >         [<ffffffff80008692>] smp_callin+0x24/0x66
+> > 
+> > This is also triggering on the maple tree sanity checks, but it' sa
+> > different maple tree, and a different code sequence.
+> > 
+> > And a different case of suspicious RCU usage - not a lack of locking,
+> > but simply using RCU before marking the CPU online.
+> 
+> Ah, I probably should've known from the
+>          RCU used illegally from offline CPU!
+> that it was different.
+> 
+> > I suspect the riscv_ipi_enable() in the RISC-V version of smp_callin()
+> > needs to be moved down to below the
+> > 
+> >         set_cpu_online(curr_cpuid, 1);
+> > 
+> > or was there some reason why it needed to be done quite _that_ early
+> > in commit 832f15f42646 ("RISC-V: Treat IPIs as normal Linux IRQs")?
+> > 
+> > Added guilty parties to the cc.
+> 
+> Taking the rationale & potential problems out of the equation, that
+> code movement does suppress the complaints from rcu/maple tree,
+> thanks.
 
-This patch fixes the same.
+Comparing with what we do on arm64, a less radical change would be to
+move the IPI init after notify_cpu_starting(), which explicitly
+enables RCU usage.
 
-Fixes: d1489208681d ("octeontx2-af: cn10k: RPM hardware timestamp configuration")
-Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Something like:
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c
-index 4b8559ac0404..095b2cc4a699 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c
-@@ -763,7 +763,7 @@ static int rvu_cgx_ptp_rx_cfg(struct rvu *rvu, u16 pcifunc, bool enable)
- 	cgxd = rvu_cgx_pdata(cgx_id, rvu);
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index bb0b76e1a6d4..f4d6acb38dd0 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -238,10 +238,11 @@ asmlinkage __visible void smp_callin(void)
+ 	mmgrab(mm);
+ 	current->active_mm = mm;
  
- 	mac_ops = get_mac_ops(cgxd);
--	mac_ops->mac_enadis_ptp_config(cgxd, lmac_id, true);
-+	mac_ops->mac_enadis_ptp_config(cgxd, lmac_id, enable);
- 	/* If PTP is enabled then inform NPC that packets to be
- 	 * parsed by this PF will have their data shifted by 8 bytes
- 	 * and if PTP is disabled then no shift is required
--- 
-2.17.1
+-	riscv_ipi_enable();
+-
+ 	store_cpu_topology(curr_cpuid);
+ 	notify_cpu_starting(curr_cpuid);
++
++	riscv_ipi_enable();
++
+ 	numa_add_cpu(curr_cpuid);
+ 	set_cpu_online(curr_cpuid, 1);
+ 	probe_vendor_features(curr_cpuid);
 
+which I obviously haven't tested at all.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
