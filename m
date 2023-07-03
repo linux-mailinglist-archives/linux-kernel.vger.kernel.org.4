@@ -2,125 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1657464F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4929746500
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjGCVj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 17:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S231174AbjGCVnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 17:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjGCVj4 (ORCPT
+        with ESMTP id S229517AbjGCVnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:39:56 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E64188;
-        Mon,  3 Jul 2023 14:39:54 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-992acf67388so460008566b.1;
-        Mon, 03 Jul 2023 14:39:53 -0700 (PDT)
+        Mon, 3 Jul 2023 17:43:19 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A5BE49
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 14:43:18 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8054180acso39588755ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 14:43:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688420392; x=1691012392;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XnScrT58IPOQ6IQbOdPCDhwqrpLVze5GGMmWKWocEXk=;
-        b=LahOVHAz96Sa6CSzDyFSP2EGSTtFxXNGkYEM7psXzzUn4I0xK0jR/ot8miWlbf8VhZ
-         0aXWpjD13wvDMn0q09VXQZqUhu8b82DFvLqu2lFsuJXxvJQSbMdxT2Kf34a1AF9LXSSC
-         nTk57a75pitsnVtWVkJGI+gnZDLiWfAk+bLOGMf3V/VvxsDHXuN2hxidQGTndXoCnVMj
-         ZW9JgP+37opkIzy4FWrnEe5Fj0npnnhe36b9/j35R2rr3TS/65sW2lFQ4EcFiIASPRq3
-         4klScZw+x3Ft4RfNhKzqgW+BZyo5i7LgxG6IITFMTmddRvLgmG9LXnkcVhEXJe5qdXag
-         ip0g==
+        d=ziepe.ca; s=google; t=1688420598; x=1691012598;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zb/tmr/noeY2rNeZVS/rd5RWOm9XHi+842eE/ic0+a0=;
+        b=AiAmewfofTMCDjim2n5Tw+1ZtqlOIk0bXi6iRE5v5TlHNIye7/DkwQc6W3qq8LjOIp
+         Xqa4BLwykqMBs3rTWLQCqB46cY7yk3e1UlXmD3dachyhxKT3HwGyQ5ZQUBoEeRTg6FWt
+         V3FoZeb/Pfcslwv6G9ml4ZN+Vhlb3NLpYwVIhyIi4T14lqPagW7Xqsj1Vy9HAv94g+UV
+         eCE+uAt/Ww3sa8lilIbrUy2CO/y3njkzPQf1M1G2yc4qYYfB6dr/PTXL5EfFbJB+6aSL
+         RGoqXV5w3f2vXm8fzuxp5DSKfDMzQA8c3OkoqHlFbZHcWSFOF/jGyPHFIwQaqg3O6Ipn
+         SNTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688420392; x=1691012392;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1688420598; x=1691012598;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XnScrT58IPOQ6IQbOdPCDhwqrpLVze5GGMmWKWocEXk=;
-        b=UgeYuUzY5MNM6IK8xaaW8qo/ZTqCnNHd66LrArj213qaj55/x9jmcG78JCJbvhO70X
-         zXOYwi5o8S6q8/cgdFh8T1wNEqYoQWfdp61BEMSVn5KMLhaCim5aefFNMN1VLWKSgDHh
-         9snY0jV72DsDfM8LHSkVNypP22Z8Ag809108Nd1FN6kkrYMJNBHOgxwSaz+WN56tYy22
-         44EHZ8jMGSXX0i9++Y+7ElW5aDGoo4ZUCEBg4vfPWq2nG8vkqZliB68TT10Ty6B6bJEx
-         9kKkDN52zbr0vukQEul6ESNPTOQ6FIRdraprpAArT+FubYN87H1r2rDqaJW9grgG0Jqn
-         Wwww==
-X-Gm-Message-State: ABy/qLaoO80AxriJLOHRmhMNQ4NQAa7c7AK/ZAtIe8o1uqWQHhFe4u/k
-        gMy8hos8xPS8NqdriQmmjm4=
-X-Google-Smtp-Source: APBJJlGO1qyHaeLZOpX30YXuB+PvL4nj5I05rml9JAoJPSbWxMR93SCt8P8az4jvQ84AYVZ1KvVN7g==
-X-Received: by 2002:a17:907:76ab:b0:992:d013:1132 with SMTP id jw11-20020a17090776ab00b00992d0131132mr6507534ejc.1.1688420392253;
-        Mon, 03 Jul 2023 14:39:52 -0700 (PDT)
-Received: from [192.168.0.131] ([194.183.54.57])
-        by smtp.gmail.com with ESMTPSA id ci8-20020a170906c34800b00982d0563b11sm12332470ejb.197.2023.07.03.14.39.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 14:39:51 -0700 (PDT)
-Message-ID: <6895344b-fe6f-f79e-806b-d77f20ea76e5@gmail.com>
-Date:   Mon, 3 Jul 2023 23:39:49 +0200
+        bh=zb/tmr/noeY2rNeZVS/rd5RWOm9XHi+842eE/ic0+a0=;
+        b=e2AzJ39aygkwS7P+K/nxYF4waohTfbBcWigHWCs/t/Iry637I4yF5bzDHrArgZkSIV
+         RLktEp29Rtt8s7SZWWcFcm6cunUlAyVJAX3nbtp0DjsaZe2RoeX5AAGCCK8hTgrSKoSB
+         DhAsw6VETK/Agu3ej7EenjAn4ZeFUTYxINHlsObdIAE4c0rZmrcImNPBatDOOIgzPvoD
+         hMJADm1l8f9S9ZpavBwJSE4glTP2me0/9Bio7IbJnqWOBzpkVwItkmxycTeLKfwPx3yT
+         SC2fmmmJO5iCW3WoxHrbLjbl8YvHGRFVRZ8Ymb4AoS/UCSDCtvZ6+27n2Hi1NCnRSfDh
+         A8Gg==
+X-Gm-Message-State: ABy/qLYu79PqR/e31aST46LWH7ktN3rNNWQN+y2M8kyYOgM0i+r9XTFv
+        +1B3UiFvPYh8mxqu99a1f15g7Q==
+X-Google-Smtp-Source: APBJJlFY5Wk4ycN3RNcdbeJSOzZJDY4GA9boj1G/G7OddE78CxDwcF9OafgCPpqmAI1xuqydRL+o/g==
+X-Received: by 2002:a17:902:c1cd:b0:1b8:400a:48f2 with SMTP id c13-20020a170902c1cd00b001b8400a48f2mr12348909plc.62.1688420597872;
+        Mon, 03 Jul 2023 14:43:17 -0700 (PDT)
+Received: from ziepe.ca (ip-216-194-73-131.syban.net. [216.194.73.131])
+        by smtp.gmail.com with ESMTPSA id h23-20020a17090aea9700b0025dc5749b4csm14888942pjz.21.2023.07.03.14.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 14:43:17 -0700 (PDT)
+Received: from jgg by jggl with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qGRKG-000BU8-Jc;
+        Mon, 03 Jul 2023 18:43:16 -0300
+Date:   Mon, 3 Jul 2023 18:43:16 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Message-ID: <ZKNA9Pkg2vMJjHds@ziepe.ca>
+References: <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
+ <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com>
+ <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
+ <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
+ <20230616122140.6e889357@kernel.org>
+ <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
+ <20230619110705.106ec599@kernel.org>
+ <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+ <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+ <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/2] led: led-class: Read max-brightness from
- devicetree
-Content-Language: en-US
-To:     Astrid Rost <astrid.rost@axis.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>
-Cc:     kernel@axis.com, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230703130313.548519-1-astrid.rost@axis.com>
- <20230703130313.548519-3-astrid.rost@axis.com>
-From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
-In-Reply-To: <20230703130313.548519-3-astrid.rost@axis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Astrid,
-
-Thanks for the update.
-
-On 7/3/23 15:03, Astrid Rost wrote:
-> Normally, the maximum brightness is determined by the hardware, and this
-> property is not required. This property is used to set a software limit.
-> It could happen that an LED is made so bright that it gets damaged or
-> causes damage due to restrictions in a specific system, such as mounting
-> conditions.
-> Note that this flag is mainly used for PWM-LEDs, where it is not possible
-> to map brightness to current. Drivers for other controllers should use
-> led-max-microamp.
+On Sun, Jul 02, 2023 at 11:22:33PM -0700, Mina Almasry wrote:
+> On Sun, Jul 2, 2023 at 9:20 PM David Ahern <dsahern@kernel.org> wrote:
+> >
+> > On 6/29/23 8:27 PM, Mina Almasry wrote:
+> > >
+> > > Hello Jakub, I'm looking into device memory (peer-to-peer) networking
+> > > actually, and I plan to pursue using the page pool as a front end.
+> > >
+> > > Quick description of what I have so far:
+> > > current implementation uses device memory with struct pages; I am
+> > > putting all those pages in a gen_pool, and we have written an
+> > > allocator that allocates pages from the gen_pool. In the driver, we
+> > > use this allocator instead of alloc_page() (the driver in question is
+> > > gve which currently doesn't use the page pool). When the driver is
+> > > done with the p2p page, it simply decrements the refcount on it and
+> > > the page is freed back to the gen_pool.
 > 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
-> ---
->   drivers/leds/led-class.c | 4 ++++
->   1 file changed, 4 insertions(+)
+> Quick update here, I was able to get my implementation working with
+> the page pool as a front end with the memory provider API Jakub wrote
+> here:
+> https://github.com/kuba-moo/linux/tree/pp-providers
 > 
-> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
-> index 9255bc11f99d..ce652abf9336 100644
-> --- a/drivers/leds/led-class.c
-> +++ b/drivers/leds/led-class.c
-> @@ -457,6 +457,10 @@ int led_classdev_register_ext(struct device *parent,
->   			if (fwnode_property_present(init_data->fwnode,
->   						    "retain-state-shutdown"))
->   				led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
-> +
-> +			fwnode_property_read_u32(init_data->fwnode,
-> +				"max-brightness",
-> +				&led_cdev->max_brightness);
->   		}
->   	} else {
->   		proposed_name = led_cdev->name;
+> The main complication indeed was the fact that my device memory pages
+> are ZONE_DEVICE pages, which are incompatible with the page_pool due
+> to the union in struct page. I thought of a couple of approaches to
+> resolve that.
+> 
+> 1. Make my device memory pages non-ZONE_DEVICE pages. 
 
-For the whole set:
+Hard no on this from a mm perspective.. We need P2P memory to be
+properly tagged and have the expected struct pages to be DMA mappable
+and otherwise, you totally break everything if you try to do this..
 
-Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> 2. Convert the pages from ZONE_DEVICE pages to page_pool pages and
+> vice versa as they're being inserted and removed from the page pool.
 
--- 
-Best regards,
-Jacek Anaszewski
+This is kind of scary, it is very, very, fragile to rework the pages
+like this. Eg what happens when the owning device unplugs and needs to
+revoke these pages? I think it would likely crash..
+
+I think it also technically breaks the DMA API as we may need to look
+into the pgmap to do cache ops on some architectures.
+
+I suggest you try to work with 8k folios and then the tail page's
+struct page is empty enough to store the information you need..
+Or allocate per page memory and do a memdesc like thing..
+
+Though overall, you won't find devices creating struct pages for their
+P2P memory today, so I'm not sure what the purpose is. Jonathan
+already got highly slammed for proposing code to the kernel that was
+unusable. Please don't repeat that. Other than a special NVMe use case
+the interface for P2P is DMABUF right now and it is not struct page
+backed.
+
+Even if we did get to struct pages for device memory, it is highly
+likely cases you are interested in will be using larger than 4k
+folios, so page pool would need to cope with this nicely as well.
+
+Jason
