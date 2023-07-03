@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A067E745720
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40279745725
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjGCIS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
+        id S231418AbjGCITV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjGCIS4 (ORCPT
+        with ESMTP id S231396AbjGCITP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:18:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D949E5F;
-        Mon,  3 Jul 2023 01:18:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE7CC1FB;
-        Mon,  3 Jul 2023 01:19:35 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E52483F73F;
-        Mon,  3 Jul 2023 01:18:50 -0700 (PDT)
-Message-ID: <3a0fff38-b364-a6b4-1d10-41311e2073b4@arm.com>
-Date:   Mon, 3 Jul 2023 09:18:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] perf report: Don't add to histogram when there is no
- thread found
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
-References: <20230626161059.324046-1-james.clark@arm.com>
- <20230626161059.324046-3-james.clark@arm.com> <ZJonE3ZZ2cBUq0U8@google.com>
- <CAP-5=fX+FDAkFoMhQY27_+fiRp_UDruP8qWTdjvqU5-uE0SdWA@mail.gmail.com>
- <CAM9d7cj4xr6oTDKvxbNTVUewyZFTBchQS36KC0nN4i4HjCsq5w@mail.gmail.com>
- <CAP-5=fUTzn06DM7o-1qBx7Tauo2Q2ACHmYcvwTmrTOJpzS2=oQ@mail.gmail.com>
- <d5618d0b-1441-0c04-4b09-768bfe7b7ee7@arm.com>
- <CAM9d7cjx2zinztBYiYaU6iqKzuV3vcJA6wtY71aicFbr5sy9zA@mail.gmail.com>
- <CAM9d7chKj4pnhtuuA6wN6TBLUYq_9bTxvr6dRT7CKW3CfQ1Avg@mail.gmail.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <CAM9d7chKj4pnhtuuA6wN6TBLUYq_9bTxvr6dRT7CKW3CfQ1Avg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Mon, 3 Jul 2023 04:19:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2751BC;
+        Mon,  3 Jul 2023 01:19:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4154C60E03;
+        Mon,  3 Jul 2023 08:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753B2C433C7;
+        Mon,  3 Jul 2023 08:19:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688372348;
+        bh=S6K5lbYba39Qtr6yqajXnkhBq5MftnwZTHANEwn50OU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YxwKUOyiwj2JWrtI4HkQ8chRNGbJZYVqAQLc170isvJdA41at3zf8JLdHNDCeTSF4
+         SG84RUYvLC1foPz7IHr+CPyUhHLQSQ9x4/J5BCNK+JvgnCr69/0BwrFfLNoIDrVQWd
+         lx2+4USKiENJ3DKmrb971MZ7TFvj9zT0Hix0XhLF8hAUcORaLwsDIV2GBS/e8HOFJH
+         oXIxdyApz2cGITzJCk7IX+6+E0T5YAxPadke81wJy78GCLpNvsK9QqK2Z7jZE2hRru
+         wTvmnW3tWJ816231stuf6uc4nXLmpbR1xi3F1n3FrrJOkasrpAjLIcmMA7Gf22vFSp
+         VRvlid3jrNxfQ==
+Date:   Mon, 3 Jul 2023 17:19:05 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, Ze Gao <zegao@tencent.com>,
+        Yafang <laoar.shao@gmail.com>
+Subject: Re: [PATCH] fprobe: add unlock to match a succeeded
+ ftrace_test_recursion_trylock
+Message-Id: <20230703171905.ef83b1a7f4db82012db471fc@kernel.org>
+In-Reply-To: <20230703071640.106204-1-zegao@tencent.com>
+References: <20230703071640.106204-1-zegao@tencent.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,63 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon,  3 Jul 2023 15:16:40 +0800
+Ze Gao <zegao2021@gmail.com> wrote:
+
+Good catch! but please add description here, something like;
+
+----
+Unlock ftrace recursion lock when fprobe_kprobe_handler() is failed
+because another kprobe is running.
+----
+
+The code itself is OK to me.
 
 
-On 30/06/2023 22:02, Namhyung Kim wrote:
-> On Wed, Jun 28, 2023 at 1:06 PM Namhyung Kim <namhyung@kernel.org> wrote:
->>
->> On Wed, Jun 28, 2023 at 3:34 AM James Clark <james.clark@arm.com> wrote:
->>>
->>>
->>>
->>> On 27/06/2023 18:19, Ian Rogers wrote:
->>>> On Tue, Jun 27, 2023 at 9:58 AM Namhyung Kim <namhyung@kernel.org> wrote:
->>>>>
->>>>> On Tue, Jun 27, 2023 at 9:43 AM Ian Rogers <irogers@google.com> wrote:
->>>>>>
->>>>>> On Mon, Jun 26, 2023 at 5:02 PM Namhyung Kim <namhyung@kernel.org> wrote:
->>>>>>>
->>>>>>> On Mon, Jun 26, 2023 at 05:10:58PM +0100, James Clark wrote:
->>>>>>>> thread__find_map() chooses to exit without assigning a thread to the
->>>>>>>> addr_location in some scenarios, for example when there are samples from
->>>>>>>> a guest and perf_guest == false. This results in a segfault when adding
->>>>>>>> to the histogram because it uses unguarded accesses to the thread member
->>>>>>>> of the addr_location.
->>>>>>>
->>>>>>> Looking at the commit 0dd5041c9a0ea ("perf addr_location: Add
->>>>>>> init/exit/copy functions") that introduced the change, I'm not sure if
->>>>>>> it's the intend behavior.
->>>>>>>
->>>>>>> It might change maps and map, but not thread.  Then I think no reason
->>>>>>> to not set the al->thread at the beginning.
->>>>>>>
->>>>>>> How about this?  Ian?
->>>>>>> (I guess we can get rid of the duplicate 'al->map = NULL' part)
->>>>>>
->>>>>> It seemed strange that we were failing to find a map (the function's
->>>>>> purpose) but then populating the address_location. The change below
->>>>>> brings back that somewhat odd behavior. I'm okay with reverting to the
->>>>>> old behavior, clearly there were users relying on it. We should
->>>>>> probably also copy maps and not just thread, as that was the previous
->>>>>> behavior.
->>>>>
->>>>> Probably.  But it used to support samples without maps and I think
->>>>> that's why it ignores the return value of thread__find_map().  So
->>>>> we can expect al.map is NULL and maybe fine to leave it for now.
->>>>>
->>>>> As machine__resolve() returns -1 if it gets no thread, we should set
->>>>> al.thread when it returns 0.
->>>>>
->>>>> Can I get your Acked-by?
->>>>
->>>> Yep:
->>>> Acked-by: Ian Rogers <irogers@google.com>
->>>
->>> Looks good to me too. Should I resend the set with this change instead
->>> of my one?
->>
->> No, I can take care of that.  I'll take this as your Acked-by. :)
+> Fixes: 3cc4e2c5fbae ("fprobe: make fprobe_kprobe_handler recursion free")
+> Reported-by: Yafang <laoar.shao@gmail.com>
+> Closes: https://lore.kernel.org/linux-trace-kernel/CALOAHbC6UpfFOOibdDiC7xFc5YFUgZnk3MZ=3Ny6we=AcrNbew@mail.gmail.com/
+> Signed-off-by: Ze Gao <zegao@tencent.com>
+> ---
+>  kernel/trace/fprobe.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> This part is applied to perf-tools-next, thanks!
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 18d36842faf5..93b3e361bb97 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -102,12 +102,14 @@ static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  
+>  	if (unlikely(kprobe_running())) {
+>  		fp->nmissed++;
+> -		return;
+> +		goto recursion_unlock;
+>  	}
+>  
+>  	kprobe_busy_begin();
+>  	__fprobe_handler(ip, parent_ip, ops, fregs);
+>  	kprobe_busy_end();
+> +
+> +recursion_unlock:
+>  	ftrace_test_recursion_unlock(bit);
+>  }
+>  
+> -- 
+> 2.40.1
+> 
 
-Thanks Namhyung
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
