@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BDE745982
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06822745981
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjGCKAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S231766AbjGCKAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjGCKAP (ORCPT
+        with ESMTP id S231778AbjGCKAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Jul 2023 06:00:15 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 282241FDE;
-        Mon,  3 Jul 2023 02:56:43 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3639uRd9023860;
-        Mon, 3 Jul 2023 11:56:27 +0200
-Date:   Mon, 3 Jul 2023 11:56:27 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux@weissschuh.net,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
-Message-ID: <ZKKbS3cwKcHgnGwu@1wt.eu>
-References: <ZKJ35DyPOG+LAy5j@1wt.eu>
- <20230703080647.491363-1-falcon@tinylab.org>
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2870C1FE2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:56:43 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b69dcf45faso67410931fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688378202; x=1690970202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yFcxpzOhBBd54XFri+2kajvhzFonIIEcAtw+w2KHC+0=;
+        b=ET94rEvWPCEzRWltZoBAcSq+oQ9T70y45rUYR0l/HS1wT3srLw67FMqpCQGbnb4gnE
+         Mu1pWz/TTFsQV2wohpWYqUjj641KolURlSDad+HNDXKIjgznxSqc/2bfzxvwwLrApVex
+         LW0nGe0BGPBkRdcVVL/symNezzzi1hm02UmXy2dTazmcZc3LLKe3iydt4rbihjh4KNUO
+         S/4D9wnpRbY0lAcwyoZGqtqrqj2ElVzXqOxIzxGQQ/L/9YtHO/KZUI/5UE6C38AUK0/S
+         Xt12x2v6o0Zldgr9DqfMKCNdLSlmfS202tg7Hq8vdp38/Sf2v1wBeE/P8XypVMx+Fmyv
+         Z9Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688378202; x=1690970202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yFcxpzOhBBd54XFri+2kajvhzFonIIEcAtw+w2KHC+0=;
+        b=Q6vGkRLkmPc/R91Zk5f/IYYHFSIik002QgqAAx8LvBtaAODQm6lk4Ck0LP3EIjxj2D
+         6elN6MUoReOeN+dgiUOqXcki6kaf/gpatzDL9D0Qch9WddHYPQTWfNiSpQdONhZFXilm
+         2Z71k9CXcwBPrwKZJyuoGkl52aNX/B2tJELuyqxyrtqU28T7hTGvjy0xg5kWUb6TxJwb
+         /pognUgBZ88yowr/1c3KSjPq/5yYAO5MmjJ6pv79Yh6F4LBjH7AlgLCff6naIVqqg7HI
+         4TqZRh3go2LvZS0VoOV9qaOiRGvDl//RulwhU4ABQX5dUh94jYsJQzUqnAnCLg65yY//
+         QXFQ==
+X-Gm-Message-State: ABy/qLZYpiVJ1WuHgOKVI1CvrE2OsS/Aii7OfeFKvbZlxLsjWUuGHmD5
+        e5uMxznqSd456Qe7s0HCiflwnw==
+X-Google-Smtp-Source: APBJJlFiPp5D+M8CDsBXsrjtixc558rhCoZDaYFSfKBuUGv/1G4z1yLHFUp1S2TWgfy3NbzIeXdBmA==
+X-Received: by 2002:a2e:3318:0:b0:2b6:e794:5cea with SMTP id d24-20020a2e3318000000b002b6e7945ceamr1783785ljc.27.1688378202049;
+        Mon, 03 Jul 2023 02:56:42 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id y3-20020a2e7d03000000b002b6eeb204a1sm87134ljc.83.2023.07.03.02.56.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 02:56:41 -0700 (PDT)
+Message-ID: <0f4f5a4d-379b-c00c-6bf2-58c08fcc4551@linaro.org>
+Date:   Mon, 3 Jul 2023 11:56:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703080647.491363-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: minor whitespace cleanup around '='
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230702185051.43867-1-krzysztof.kozlowski@linaro.org>
+ <e09af830-d114-7ee6-0cab-e6812bc10fd4@linaro.org>
+ <ZKKXGE95Sv-eLQa8@hovoldconsulting.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZKKXGE95Sv-eLQa8@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 04:06:47PM +0800, Zhangjin Wu wrote:
-> > >     /* get absolute path of myself, nolibc has no realpath() currently */
-> > >     #ifndef NOLIBC
-> > >             realpath(argv[0], exe);
-> > >     #else
-> > >             /* assume absolute path has no "./" */
-> > >             if (strncmp(argv[0], "./", 2) != 0)
-> > >                     strncat(exe, argv[0], strlen(argv[0]) + 1);
-> > >             else {
-> > >                     pwd = getenv("PWD");
-> > >                     /* skip the ending '\0' */
-> > >                     strncat(exe, getenv("PWD"), strlen(pwd));
-> > >                     /* skip the first '.' */
-> > >                     strncat(exe, argv[0] + 1, strlen(argv[0]));
-> > >             }
-> > >     #endif
-> > 
-> > No, please, not like this. Just copy argv[0] (the pointer not the
-> > contents) and you're fine:
-> >
-> >     static const char *argv0;
-> > 
-> >     int main(int argc, char **argv, char **envp)
-> >     {
-> >             argv0 = argv[0];
-> >             ...
-> >     }
-> > 
-> > Nothing more, nothing less. Your program will always have its correct
-> > path when being called unless someone purposely forces it to something
-> > different, which is not our concern at all since this is a test program.
-> > And I'd rather call it "argv0" which exactly tells us what it contains
-> > than "exe" which can be misleading for that precise reason.
-> >
+On 3.07.2023 11:38, Johan Hovold wrote:
+> On Mon, Jul 03, 2023 at 11:30:24AM +0200, Konrad Dybcio wrote:
+>> On 2.07.2023 20:50, Krzysztof Kozlowski wrote:
+>>> The DTS code coding style expects exactly one space before and after '='
+>>> sign.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
 > 
-> Yeah, locally, I just used a global argv0 pointer directly, but
-> chroot_exe("./nolibc-test") not work when run 'libc-test' in host
-> system, that is why I tried to get an absolute path ;-)
+> [...]
+>  
+>>> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+>>> index 895cafc11480..c4209e2d4b4e 100644
+>>> --- a/arch/arm64/boot/dts/qcom/msm8939.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+>>> @@ -155,7 +155,7 @@ CPU7: cpu@3 {
+>>>  
+>>>  		idle-states {
+>>>  			CPU_SLEEP_0: cpu-sleep-0 {
+>>> -				compatible ="qcom,idle-state-spc", "arm,idle-state";
+>>> +				compatible = "qcom,idle-state-spc", "arm,idle-state";
+>> Will conflict with:
+>>
+>> https://lore.kernel.org/linux-arm-msm/20230627-topic-more_bindings-v1-2-6b4b6cd081e5@linaro.org/
+>>
+>> there are also a couple of entries with property =\n\t{n}[a-z]
+>>
+>> Otherwise lgtm
+>  
+> Konrad, please remember to trim irrelevant context from your replies
+> (e.g. so that we don't have to skim through thousands of lines to find
+> a single comment).
+My actual reply begins at line 77, which is considerably less than
+thousands and is concluded by my signoff, which signifies the end
+of the message.
+
+Konrad
 > 
->     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(exe), -1, ENOTDIR); break;
-> 
->     -->
-> 
->     19 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
-
-Then we have a problem somewhere else and the test should be debugger
-instead. Are you sure there isn't a successful chdir() test before it
-for example, that would change the directory ? If so maybe we just need
-to save the current dir before calling it and restore it later.
-
-> I removed the "proc ?" check manually to test if it also work with
-> CONFIG_PROC_FS=n. it doesn't work, without absolute path, we need to add
-> the ENOENT errno back to the errno check list.
-
-Same as above.
-
-> I'm not sure if the other syscalls require an absolute path, so, the
-> realpath() is called in this proposed method.
-
-No, please do not overengineer tests. That's only hiding the dust under
-the carpet and people adding more tests later that will randomly fail
-will have a very hard time trying to figure what's happening under the
-hood. If a test doesn't work as expected, we must not try to work around
-it, but arrange to fix it.
-
-Thanks,
-Willy
+> Johan
