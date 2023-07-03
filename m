@@ -2,1309 +2,669 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308BC745860
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855FA745864
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjGCJai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S230183AbjGCJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjGCJaf (ORCPT
+        with ESMTP id S229481AbjGCJbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:30:35 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EC412E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:30:28 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4faaaa476a9so6598121e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688376627; x=1690968627;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=W36AD8V7qIokAbh1GeKq+01IJUQx49r60Ksbt1eElPA=;
-        b=I6hYeNhz05YPQHZzgl9MlzJhHpBqYAgFsuIc/3pDuTDtQAuKv9XEvuw5Y9mjus2a/D
-         40jD1P9kDs4Odhx5z47aDrsCSDj882Gy5acxtWkBo2mrBL3ffndNGE1xhSCKFKMhnb6X
-         Aa/cPIFRbmBb8wJ1q/WaIoO7XUoX6oqTkkmbTadwimAcwwPBa6M8+F19IM+IHl+bEgS3
-         UTMr1BjIj4NqZ7S3OC78/G903z4kjSOLYPZ7PaQSNy6GMYiVZLmzap6esczSyzsD25Kl
-         x0ZFKKphv6mxScXiNMEZRMC/8TdFAqiYoHsJOh0k00y8IY3q7YcJ7jfL3ONTAlxtJ+zS
-         CYEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688376627; x=1690968627;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W36AD8V7qIokAbh1GeKq+01IJUQx49r60Ksbt1eElPA=;
-        b=NBZ7G2OTtifa/RBF7qOnM2RuQRHcMIUDB5bqPn1yu6jvNIlt2HO79nvx/IyxhACMJb
-         lCT8igInupViV/fjdyxBXjkU0lCw7+4perQf/sI8rklMygn/q5TDMFKTpxC0yIrqsPjE
-         GOAbw+KXdUrMKjaELdRIs0YCcJHojlpt6GuiRDiqB545AedfXa15uJOQriTp5oVQQeb7
-         5GrLfUSnekFi40O+U6TpQy1BgUCEVbCWQ0fFBT2JDq9QKzaIcMDXup9PT7K3CD/ZLVnR
-         jF3UA0bYws8HaNRxuYamWpaPhrV4c2zFAocM1HijCx1/nunYFNvaNu6Onox5h7GnYJnl
-         iTUg==
-X-Gm-Message-State: ABy/qLagIIF1KQzUtG31tBI0ddnvS8n6cTvfB/mpByJphRPbPTvQWmpd
-        iUEfFEPrLbkYeI2cy0yBivjwIQ==
-X-Google-Smtp-Source: APBJJlFW39vBZBh6TYl0r5Bx+a1nodD78Ub3w8OV/EBuP4OH846wWlnaKkGjtVGfvQF2hHo/FAnUiA==
-X-Received: by 2002:a05:6512:3494:b0:4f8:65ef:afcd with SMTP id v20-20020a056512349400b004f865efafcdmr5527346lfr.17.1688376626497;
-        Mon, 03 Jul 2023 02:30:26 -0700 (PDT)
-Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id u4-20020ac248a4000000b004f873ca4139sm2962735lfg.71.2023.07.03.02.30.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 02:30:26 -0700 (PDT)
-Message-ID: <e09af830-d114-7ee6-0cab-e6812bc10fd4@linaro.org>
-Date:   Mon, 3 Jul 2023 11:30:24 +0200
+        Mon, 3 Jul 2023 05:31:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB95CD;
+        Mon,  3 Jul 2023 02:31:00 -0700 (PDT)
+Received: from [192.168.43.110] (unknown [116.71.191.217])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 65E216606F57;
+        Mon,  3 Jul 2023 10:30:46 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688376659;
+        bh=w0YKyzQE0llhRjeo3PCXYRlQ1d3QGoB4qd/RGVz6sos=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=OidjyY4PvZPf8xwFy1Cebaujb5ufeFlWana6wOekGuauXeIy6Sp7pbAgyMKlEjxCU
+         Cee/KL3B22KRXKEhszE5x/jDM9NCwWhS0Rd0rFieMGCEcGPFf7otZvArWCrRUdxkBJ
+         b1GwdmaWZs0FCvxlgjLMw2k6eUMEXu/G0ugAVfLwbtE3QD8I/M0HZ9IIs2auOPuFqd
+         dvdSTU1sShSAMO95gKvJ4RPeU8lCLC5owpQdngicC0Swuio1sgBqRYGlxAWwKNN9EC
+         bhpssWzj/WSSGWyhmY6wmnYgftXm5UVvO9gLqRJPImklzd7h60Exibe7e7wsQ7Vhfh
+         e34SZN9gTxXcg==
+Message-ID: <1705991c-ea7c-f78c-421d-2900463985ab@collabora.com>
+Date:   Mon, 3 Jul 2023 14:30:41 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: minor whitespace cleanup around '='
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230702185051.43867-1-krzysztof.kozlowski@linaro.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v22 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230628095426.1886064-1-usama.anjum@collabora.com>
+ <20230628095426.1886064-3-usama.anjum@collabora.com>
+ <CABb0KFFDCZ9E3sTukmdk3jViOJmP33xOoVNg37ACoynD97ZpwA@mail.gmail.com>
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230702185051.43867-1-krzysztof.kozlowski@linaro.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFFDCZ9E3sTukmdk3jViOJmP33xOoVNg37ACoynD97ZpwA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2.07.2023 20:50, Krzysztof Kozlowski wrote:
-> The DTS code coding style expects exactly one space before and after '='
-> sign.
+On 6/28/23 5:11 PM, Michał Mirosław wrote:
+> Hi Muhammad,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/ipq8074.dtsi         |   8 +-
->  .../dts/qcom/msm8916-samsung-serranove.dts    |   6 +-
->  arch/arm64/boot/dts/qcom/msm8939.dtsi         |  14 +-
->  .../boot/dts/qcom/msm8953-xiaomi-daisy.dts    |   2 +-
->  .../boot/dts/qcom/msm8953-xiaomi-vince.dts    |   2 +-
->  arch/arm64/boot/dts/qcom/msm8996.dtsi         |   6 +-
->  .../dts/qcom/msm8996pro-xiaomi-natrium.dts    |   2 +-
->  arch/arm64/boot/dts/qcom/msm8998.dtsi         |  18 +-
->  arch/arm64/boot/dts/qcom/qcm2290.dtsi         |   2 +-
->  arch/arm64/boot/dts/qcom/qcs404.dtsi          |   8 +-
->  arch/arm64/boot/dts/qcom/sa8540p.dtsi         |   2 +-
->  .../sc7280-herobrine-audio-rt5682-3mic.dtsi   |   2 +-
->  arch/arm64/boot/dts/qcom/sc7280.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sc8180x.dtsi         |   2 +-
->  arch/arm64/boot/dts/qcom/sdm630.dtsi          |  10 +-
->  .../dts/qcom/sdm845-oneplus-enchilada.dts     |   2 +-
->  arch/arm64/boot/dts/qcom/sdx75.dtsi           |   4 +-
->  arch/arm64/boot/dts/qcom/sm6115.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sm8250.dtsi          | 198 +++++++++---------
->  arch/arm64/boot/dts/qcom/sm8350.dtsi          | 196 ++++++++---------
->  arch/arm64/boot/dts/qcom/sm8450.dtsi          | 194 ++++++++---------
->  arch/arm64/boot/dts/qcom/sm8550.dtsi          | 196 ++++++++---------
->  22 files changed, 439 insertions(+), 439 deletions(-)
+> I'd really like to reduce the number of conditionals in this code by a
+> third. I believe it is possible if we agree to rework the API a bit
+> (making it always a GET operation with optional WP) and relax some of
+> the restrictions on the input values.
+I have discussed this multiple times in revisions that why we need the GET,
+GET+WP and WP operations. We cannot remove only WP operation. Please
+consult previous revisions on why we need exclusive WP operation without GET.
+
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> index 68839acbd613..00ed71936b47 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> @@ -794,10 +794,10 @@ frame@b128000 {
->  
->  		pcie1: pci@10000000 {
->  			compatible = "qcom,pcie-ipq8074";
-> -			reg =  <0x10000000 0xf1d>,
-> -			       <0x10000f20 0xa8>,
-> -			       <0x00088000 0x2000>,
-> -			       <0x10100000 0x1000>;
-> +			reg = <0x10000000 0xf1d>,
-> +			      <0x10000f20 0xa8>,
-> +			      <0x00088000 0x2000>,
-> +			      <0x10100000 0x1000>;
->  			reg-names = "dbi", "elbi", "parf", "config";
->  			device_type = "pci";
->  			linux,pci-domain = <1>;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-> index 15dc246e84e2..126e8b5cf49f 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-> @@ -219,9 +219,9 @@ magnetometer@2e {
->  		compatible = "yamaha,yas537";
->  		reg = <0x2e>;
->  
-> -		mount-matrix =  "0",  "1",  "0",
-> -				"1",  "0",  "0",
-> -				"0",  "0", "-1";
-> +		mount-matrix = "0",  "1",  "0",
-> +			       "1",  "0",  "0",
-> +			       "0",  "0", "-1";
->  	};
->  };
->  
-> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> index 895cafc11480..c4209e2d4b4e 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> @@ -155,7 +155,7 @@ CPU7: cpu@3 {
->  
->  		idle-states {
->  			CPU_SLEEP_0: cpu-sleep-0 {
-> -				compatible ="qcom,idle-state-spc", "arm,idle-state";
-> +				compatible = "qcom,idle-state-spc", "arm,idle-state";
-Will conflict with:
+> Also please include *all* changes you make in a patch in the changelog
+> - I just noticed e.g. a `mmu_notifier` code that I haven't seen before
+> in the review.
+mmu_notifier code was added v16. I'll try to write more longer specific
+changelog.
 
-https://lore.kernel.org/linux-arm-msm/20230627-topic-more_bindings-v1-2-6b4b6cd081e5@linaro.org/
+> 
+> A general request from me would be to move all the page classification
+> code to one place. That would mean replacing:
+> 
+>> +               bitmap = PM_SCAN_FLAGS(is_written, false,
+>> +                                      pmd_present(*pmd), is_swap_pmd(*pmd),
+>> +                                      pmd_present(*pmd) && is_zero_pfn(pmd_pfn(*pmd)));
+> 
+> With:
+> 
+>        category_flags = pmd_page_category_flags(*pmd);
+> 
+> ... and adding a pmd_page_category_flags() and pte/hugepage versions
+> together at the top. The idea here is to separate concerns: split
+> classification of pages from the code acting on the classification
+> results and be able to easily understand (and review for correctness)
+> how corresponding classes are derived from PTE and PMD values.
+This is just a cosmetic change. I don't think we should keep on doing
+cosmetic change when code is already readable and obvious. At this rate I
+would keep doing cosmetic changes on the argument that we are making is
+more easier to read. I've been working on this patch and particularly
+task_mmu.c file from last 1 year. The current code is in same flavor as the
+rest of the `task_mmu.c` file. All the functions above are using #ifdef THP.
 
-there are also a couple of entries with property =\n\t{n}[a-z]
+> 
+> I'd prefer the naming of the functions and variables to follow that it
+> is a classification result, not a generic "bitmap" or "flags", so that
+> it's harder to confuse them with page flags as used elsewhere in the
+> kernel.
+> 
+> (inline review follows)
+> 
+> BTW, thanks for doing this!
+> 
+> On Wed, 28 Jun 2023 at 12:00, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+> [...]
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index 507cd4e59d07..be747fb89827 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+> [...]
+>> +#define PM_SCAN_REQUIRE_UFFD   (1ULL << 63)
+>> +
+>> +#define PM_SCAN_FOUND_MAX_PAGES        (1)
+>> +#define PM_SCAN_END_WALK       (-256)
+> [...]
+>> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end,
+>> +                                 struct mm_walk *walk)
+>> +{
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +
+>> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(vma) ||
+>> +           !userfaultfd_wp_use_markers(vma)))
+>> +               return -EPERM;
+> 
+> p->vma_can_wp = userfaultfd_wp_async(vma) && userfaultfd_wp_use_markers(vma);
+> 
+> And then use that in classification functions and for skipping WP for
+> pages not prepared for that. The PM_SCAN_REQUIRE_UFFD won't be needed
+> then.
+No we don't want to skip, but return error if a VMA isn't setup to use WP
+Async. Even after adding this new `vma_can_wp` variable. We'll have to
+check in every test_walk() if UFFD is initialized on the VMA for every VMA.
+At max, `vma_can_wp` can be setup to hold the true or false for
+PM_SCAN_REQUIRE_UFFD which makes it cosmetic change again.
 
-Otherwise lgtm
+> 
+>> +
+>> +       if (vma->vm_flags & VM_PFNMAP)
+>> +               return 1;
+> 
+> Why do we skip VM_PFNMAP vmas? This will skip over at least VDSO and
+> VVAR pages. Those two are not that big a problem, but it should be at
+> least documented what ranges are skipped and why.
+We are following pagemap_read(). We don't want to expose any additional
+information which pagemap_read() doesn't show.
 
-Konrad
->  				entry-latency-us = <130>;
->  				exit-latency-us = <150>;
->  				min-residency-us = <2000>;
-> @@ -1644,7 +1644,7 @@ sdhc_2: mmc@7864900 {
->  			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
->  				 <&gcc GCC_SDCC2_APPS_CLK>,
->  				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> -			clock-names =  "iface", "core", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			resets = <&gcc GCC_SDCC2_BCR>;
->  			pinctrl-0 = <&sdc2_default>;
->  			pinctrl-1 = <&sdc2_sleep>;
-> @@ -1731,7 +1731,7 @@ blsp_i2c2: i2c@78b6000 {
->  			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
-> -			clock-names =  "core", "iface";
-> +			clock-names = "core", "iface";
->  			dmas = <&blsp_dma 6>, <&blsp_dma 7>;
->  			dma-names = "tx", "rx";
->  			pinctrl-0 = <&blsp_i2c2_default>;
-> @@ -1765,7 +1765,7 @@ blsp_i2c3: i2c@78b7000 {
->  			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
-> -			clock-names =  "core", "iface";
-> +			clock-names = "core", "iface";
->  			dmas = <&blsp_dma 8>, <&blsp_dma 9>;
->  			dma-names = "tx", "rx";
->  			pinctrl-0 = <&blsp_i2c3_default>;
-> @@ -1799,7 +1799,7 @@ blsp_i2c4: i2c@78b8000 {
->  			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
-> -			clock-names =  "core", "iface";
-> +			clock-names = "core", "iface";
->  			dmas = <&blsp_dma 10>, <&blsp_dma 11>;
->  			dma-names = "tx", "rx";
->  			pinctrl-0 = <&blsp_i2c4_default>;
-> @@ -1833,7 +1833,7 @@ blsp_i2c5: i2c@78b9000 {
->  			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&gcc GCC_BLSP1_QUP5_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
-> -			clock-names =  "core", "iface";
-> +			clock-names = "core", "iface";
->  			dmas = <&blsp_dma 12>, <&blsp_dma 13>;
->  			dma-names = "tx", "rx";
->  			pinctrl-0 = <&blsp_i2c5_default>;
-> @@ -1867,7 +1867,7 @@ blsp_i2c6: i2c@78ba000 {
->  			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&gcc GCC_BLSP1_QUP6_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
-> -			clock-names =  "core", "iface";
-> +			clock-names = "core", "iface";
->  			dmas = <&blsp_dma 14>, <&blsp_dma 15>;
->  			dma-names = "tx", "rx";
->  			pinctrl-0 = <&blsp_i2c6_default>;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dts b/arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dts
-> index 1d672e608653..790d19c99af1 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dts
-> @@ -17,7 +17,7 @@ / {
->  	compatible = "xiaomi,daisy", "qcom,msm8953";
->  	chassis-type = "handset";
->  	qcom,msm-id = <293 0>;
-> -	qcom,board-id= <0x1000b 0x9>;
-> +	qcom,board-id = <0x1000b 0x9>;
->  
->  	chosen {
->  		#address-cells = <2>;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts b/arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts
-> index b5be55034fd3..0956c866d6cb 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts
-> @@ -20,7 +20,7 @@ / {
->  	compatible = "xiaomi,vince", "qcom,msm8953";
->  	chassis-type = "handset";
->  	qcom,msm-id = <293 0>;
-> -	qcom,board-id= <0x1000b 0x08>;
-> +	qcom,board-id = <0x1000b 0x08>;
->  
->  	gpio-keys {
->  		compatible = "gpio-keys";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> index 0cb2d4f08c3a..f51bcd16fdca 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> @@ -1138,9 +1138,9 @@ mdss_dsi1_phy: phy@996400 {
->  
->  			mdss_hdmi: mdss_hdmi-tx@9a0000 {
->  				compatible = "qcom,mdss_hdmi-tx-8996";
-> -				reg =	<0x009a0000 0x50c>,
-> -					<0x00070000 0x6158>,
-> -					<0x009e0000 0xfff>;
-> +				reg = <0x009a0000 0x50c>,
-> +				      <0x00070000 0x6158>,
-> +				      <0x009e0000 0xfff>;
->  				reg-names = "core_physical",
->  					    "qfprom_physical",
->  					    "hdcp_physical";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dts b/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dts
-> index 7957c8823f0d..5e3fd1637f44 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dts
-> @@ -106,7 +106,7 @@ &slpi_pil {
->  &sound {
->  	compatible = "qcom,apq8096-sndcard";
->  	model = "natrium";
-> -	audio-routing =	"RX_BIAS", "MCLK";
-> +	audio-routing = "RX_BIAS", "MCLK";
->  
->  	mm1-dai-link {
->  		link-name = "MultiMedia1";
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> index f0e943ff0046..d5cb244d00d0 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -909,10 +909,10 @@ anoc2_smmu: iommu@16c0000 {
->  
->  		pcie0: pci@1c00000 {
->  			compatible = "qcom,pcie-msm8998", "qcom,pcie-msm8996";
-> -			reg =	<0x01c00000 0x2000>,
-> -				<0x1b000000 0xf1d>,
-> -				<0x1b000f20 0xa8>,
-> -				<0x1b100000 0x100000>;
-> +			reg = <0x01c00000 0x2000>,
-> +			      <0x1b000000 0xf1d>,
-> +			      <0x1b000f20 0xa8>,
-> +			      <0x1b100000 0x100000>;
->  			reg-names = "parf", "dbi", "elbi", "config";
->  			device_type = "pci";
->  			linux,pci-domain = <0>;
-> @@ -2074,11 +2074,11 @@ sram@290000 {
->  
->  		spmi_bus: spmi@800f000 {
->  			compatible = "qcom,spmi-pmic-arb";
-> -			reg =	<0x0800f000 0x1000>,
-> -				<0x08400000 0x1000000>,
-> -				<0x09400000 0x1000000>,
-> -				<0x0a400000 0x220000>,
-> -				<0x0800a000 0x3000>;
-> +			reg = <0x0800f000 0x1000>,
-> +			      <0x08400000 0x1000000>,
-> +			      <0x09400000 0x1000000>,
-> +			      <0x0a400000 0x220000>,
-> +			      <0x0800a000 0x3000>;
->  			reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
->  			interrupt-names = "periph_irq";
->  			interrupts = <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-> index 0ed11e80e5e2..1d1de156f8f0 100644
-> --- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-> @@ -790,7 +790,7 @@ gpi_dma0: dma-controller@4a00000 {
->  				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>;
-> -			dma-channels =  <10>;
-> +			dma-channels = <10>;
->  			dma-channel-mask = <0x1f>;
->  			iommus = <&apps_smmu 0xf6 0x0>;
->  			#dma-cells = <3>;
-> diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> index 972f753847e1..f2568aff14c8 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> @@ -1459,10 +1459,10 @@ glink-edge {
->  
->  		pcie: pci@10000000 {
->  			compatible = "qcom,pcie-qcs404";
-> -			reg =  <0x10000000 0xf1d>,
-> -			       <0x10000f20 0xa8>,
-> -			       <0x07780000 0x2000>,
-> -			       <0x10001000 0x2000>;
-> +			reg = <0x10000000 0xf1d>,
-> +			      <0x10000f20 0xa8>,
-> +			      <0x07780000 0x2000>,
-> +			      <0x10001000 0x2000>;
->  			reg-names = "dbi", "elbi", "parf", "config";
->  			device_type = "pci";
->  			linux,pci-domain = <0>;
-> diff --git a/arch/arm64/boot/dts/qcom/sa8540p.dtsi b/arch/arm64/boot/dts/qcom/sa8540p.dtsi
-> index bacbdec56281..96b2c59ad02b 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8540p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8540p.dtsi
-> @@ -207,7 +207,7 @@ &pcie3a {
->  
->  	linux,pci-domain = <2>;
->  
-> -	interrupts =  <GIC_SPI 567 IRQ_TYPE_LEVEL_HIGH>;
-> +	interrupts = <GIC_SPI 567 IRQ_TYPE_LEVEL_HIGH>;
->  	interrupt-names = "msi";
->  
->  	interrupt-map = <0 0 0 1 &intc 0 0 GIC_SPI 541 IRQ_TYPE_LEVEL_HIGH>,
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682-3mic.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682-3mic.dtsi
-> index 485f9942e128..a90c70b1b73e 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682-3mic.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682-3mic.dtsi
-> @@ -13,7 +13,7 @@ sound: sound {
->  		compatible = "google,sc7280-herobrine";
->  		model = "sc7280-rt5682-max98360a-3mic";
->  
-> -		audio-routing =	"VA DMIC0", "vdd-micb",
-> +		audio-routing = "VA DMIC0", "vdd-micb",
->  				"VA DMIC1", "vdd-micb",
->  				"VA DMIC2", "vdd-micb",
->  				"VA DMIC3", "vdd-micb",
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index a0e8db8270e7..925428a5f6ae 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -2449,7 +2449,7 @@ lpass_cpu: audio@3987000 {
->  				 <&apps_smmu 0x1821 0>,
->  				 <&apps_smmu 0x1832 0>;
->  
-> -			power-domains =	<&rpmhpd SC7280_LCX>;
-> +			power-domains = <&rpmhpd SC7280_LCX>;
->  			power-domain-names = "lcx";
->  			required-opps = <&rpmhpd_opp_nom>;
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> index be78a933d8eb..3c1314e12d08 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> @@ -2252,7 +2252,7 @@ opp-177000000 {
->  		};
->  
->  		gmu: gmu@2c6a000 {
-> -			compatible="qcom,adreno-gmu-680.1", "qcom,adreno-gmu";
-> +			compatible = "qcom,adreno-gmu-680.1", "qcom,adreno-gmu";
->  
->  			reg = <0 0x02c6a000 0 0x30000>,
->  			      <0 0x0b290000 0 0x10000>,
-> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> index bba0f366ef03..759b3a5964cc 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> @@ -1196,11 +1196,11 @@ sram@290000 {
->  
->  		spmi_bus: spmi@800f000 {
->  			compatible = "qcom,spmi-pmic-arb";
-> -			reg =	<0x0800f000 0x1000>,
-> -				<0x08400000 0x1000000>,
-> -				<0x09400000 0x1000000>,
-> -				<0x0a400000 0x220000>,
-> -				<0x0800a000 0x3000>;
-> +			reg = <0x0800f000 0x1000>,
-> +			      <0x08400000 0x1000000>,
-> +			      <0x09400000 0x1000000>,
-> +			      <0x0a400000 0x220000>,
-> +			      <0x0800a000 0x3000>;
->  			reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
->  			interrupt-names = "periph_irq";
->  			interrupts = <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts b/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-> index 623a826b18a3..62fe72ff3763 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-> @@ -57,7 +57,7 @@ &pmi8998_charger {
->  
->  &sound {
->  	model = "OnePlus 6";
-> -	audio-routing =	"RX_BIAS", "MCLK",
-> +	audio-routing = "RX_BIAS", "MCLK",
->  			"AMIC2", "MIC BIAS2",
->  			"AMIC3", "MIC BIAS4",
->  			"AMIC4", "MIC BIAS1",
-> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> index 21d5d55da5eb..7d39a615f4f7 100644
-> --- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> @@ -484,14 +484,14 @@ qupv3_se1_2uart_active: qupv3-se1-2uart-active-state {
->  				tx-pins {
->  					pins = "gpio12";
->  					function = "qup_se1_l2_mira";
-> -					drive-strength= <2>;
-> +					drive-strength = <2>;
->  					bias-disable;
->  				};
->  
->  				rx-pins {
->  					pins = "gpio13";
->  					function = "qup_se1_l3_mira";
-> -					drive-strength= <2>;
-> +					drive-strength = <2>;
->  					bias-disable;
->  				};
->  			};
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 55118577bf92..7d30b504441a 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -1052,7 +1052,7 @@ gpi_dma0: dma-controller@4a00000 {
->  				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>;
-> -			dma-channels =  <10>;
-> +			dma-channels = <10>;
->  			dma-channel-mask = <0xf>;
->  			iommus = <&apps_smmu 0xf6 0x0>;
->  			#dma-cells = <3>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index 1efa07f2caff..bd8b7b399156 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -3059,7 +3059,7 @@ in-ports {
->  				port@7 {
->  					reg = <7>;
->  					funnel_swao_in_funnel_merg: endpoint {
-> -						remote-endpoint= <&funnel_merg_out_funnel_swao>;
-> +						remote-endpoint = <&funnel_merg_out_funnel_swao>;
->  					};
->  				};
->  			};
-> @@ -5298,104 +5298,104 @@ apps_smmu: iommu@15000000 {
->  			reg = <0 0x15000000 0 0x100000>;
->  			#iommu-cells = <2>;
->  			#global-interrupts = <2>;
-> -			interrupts =    <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 697 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 697 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
->  		adsp: remoteproc@17300000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index ec451c616f3e..bdba349e0a2a 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -3077,104 +3077,104 @@ apps_smmu: iommu@15000000 {
->  			reg = <0 0x15000000 0 0x100000>;
->  			#iommu-cells = <2>;
->  			#global-interrupts = <2>;
-> -			interrupts =    <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 697 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 697 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
->  		adsp: remoteproc@17300000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 5cd7296c7660..1820d4327624 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -3810,103 +3810,103 @@ apps_smmu: iommu@15000000 {
->  			reg = <0 0x15000000 0 0x100000>;
->  			#iommu-cells = <2>;
->  			#global-interrupts = <1>;
-> -			interrupts =    <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 697 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 697 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
->  		intc: interrupt-controller@17100000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 41d60af93692..6e8aba256931 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -1600,7 +1600,7 @@ uart7: serial@a9c000 {
->  				pinctrl-0 = <&qup_uart7_default>;
->  				interrupts = <GIC_SPI 579 IRQ_TYPE_LEVEL_HIGH>;
->  				interconnect-names = "qup-core", "qup-config";
-> -				interconnects =	<&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
->  						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>;
->  				status = "disabled";
->  			};
-> @@ -3517,103 +3517,103 @@ apps_smmu: iommu@15000000 {
->  			reg = <0 0x15000000 0 0x100000>;
->  			#iommu-cells = <2>;
->  			#global-interrupts = <1>;
-> -			interrupts =	<GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 706 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 689 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> -					<GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 322 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 323 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 325 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 333 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 706 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 689 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 690 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 691 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 692 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
->  		intc: interrupt-controller@17100000 {
+> 
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int pagemap_scan_output(unsigned long bitmap,
+>> +                              struct pagemap_scan_private *p,
+>> +                              unsigned long addr, unsigned int n_pages)
+>> +{
+>> +       struct page_region *cur_buf = &p->cur_buf;
+>> +
+>> +       if (!n_pages)
+>> +               return -EINVAL;
+> 
+> How can this happen?
+This was there to check validity of n_pages before proceeding. By doing
+static analysis, I can see that it isn't needed anymore and can be removed.
+
+> 
+>> +       bitmap &= p->return_mask;
+>> +
+>> +       if (cur_buf->flags == bitmap &&
+>> +           cur_buf->start + cur_buf->len * PAGE_SIZE == addr) {
+> 
+> BTW, maybe the ranges returned to the user could also use start .. end
+> form, and then this would be simplified to `cur->flags ==
+> categories_to_report && cur->end == addr`.
+> 
+>> +               cur_buf->len += n_pages;
+>> +               p->found_pages += n_pages;
+>> +       } else {
+>> +               if (cur_buf->len) {
+>> +                       if (p->vec_buf_index >= p->vec_buf_len)
+>> +                               return PM_SCAN_END_WALK;
+>> +
+>> +                       memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
+>> +                              sizeof(*p->vec_buf));
+>> +                       p->vec_buf_index++;
+>> +               }
+>> +
+>> +               cur_buf->start = addr;
+>> +               cur_buf->len = n_pages;
+>> +               cur_buf->flags = bitmap;
+>> +               p->found_pages += n_pages;
+>> +       }
+>> +
+>> +       if (p->found_pages == p->max_pages)
+>> +               return PM_SCAN_FOUND_MAX_PAGES;
+> 
+> Since we now return the address the walk ended at, what is the
+> difference for PM_SCAN_END_WALK and PM_SCAN_FOUND_MAX_PAGES, and do we
+> still need any of those instead of -ENOSPC or `n_pages !=
+> scan_output(...)` check?
+Yes, we need two different return codes from here to judge if we need to wp
+the current range or not. When PM_SCAN_FOUND_MAX_PAGES is returned we need
+to wp the current range. But when END_WALK is returned we don't need to
+perform wp and return.
+
+> 
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +                                 unsigned long end, struct mm_walk *walk)
+>> +{
+>> +       bool is_written, flush = false, interesting = true;
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +       unsigned long bitmap, addr = end;
+>> +       pte_t *pte, *orig_pte, ptent;
+>> +       spinlock_t *ptl;
+>> +       int ret = 0;
+>> +
+>> +       arch_enter_lazy_mmu_mode();
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +       ptl = pmd_trans_huge_lock(pmd, vma);
+>> +       if (ptl) {
+>> +               unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +               if (n_pages > p->max_pages - p->found_pages)
+>> +                       n_pages = p->max_pages - p->found_pages;
+>> +
+>> +               is_written = !is_pmd_uffd_wp(*pmd);
+>> +
+>> +               bitmap = PM_SCAN_FLAGS(is_written, false,
+>> +                                      pmd_present(*pmd), is_swap_pmd(*pmd),
+>> +                                      pmd_present(*pmd) && is_zero_pfn(pmd_pfn(*pmd)));
+>> +
+>> +               if (IS_PM_SCAN_GET(p->flags))
+>> +                       interesting = pagemap_scan_is_interesting_page(bitmap, p);
+>> +
+>> +               if (interesting) {
+>> +                       /*
+>> +                        * Break huge page into small pages if the WP operation
+>> +                        * need to be performed is on a portion of the huge page.
+>> +                        */
+>> +                       if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +                           n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +                               spin_unlock(ptl);
+>> +
+>> +                               split_huge_pmd(vma, pmd, start);
+>> +                               goto process_smaller_pages;
+>> +                       }
+>> +
+>> +                       if (IS_PM_SCAN_GET(p->flags))
+>> +                               ret = pagemap_scan_output(bitmap, p, start, n_pages);
+>> +
+>> +                       if (IS_PM_SCAN_WP(p->flags) && is_written && ret >= 0) {
+>> +                               make_uffd_wp_pmd(vma, start, pmd);
+>> +                               flush_tlb_range(vma, start, end);
+>> +                       }
+>> +               }
+>> +
+>> +               spin_unlock(ptl);
+>> +               arch_leave_lazy_mmu_mode();
+>> +
+>> +               return ret;
+>> +       }
+> 
+> Could you split the THP code and use it here like:
+> 
+> enter_lazy_mmu();
+> 
+> ret = scan_thp(...);
+> if (ret != -ENOTTY) {
+>   leave_lazy_mmu();
+>   return ret;
+> }
+> 
+> To avoid having #ifdef here, it can be moved to the scan_thp() only
+> (either in the body or having a dummy `return -ENOTTY;` version in an
+> #else block).
+I'm following the flavour of code in this file as explained above. This
+isn't needed.
+
+> 
+> BTW, there's no `cond_resched()` in the THP case - is that intentional?
+AFAIU, processing of THP here is fast as compared to 512 iterations over
+smaller pages. So cond_resched() isn't present here. But overall, I've not
+seen cond_resched() being used after THPs.
+
+> 
+>> +
+>> +process_smaller_pages:
+>> +#endif
+>> +
+>> +       orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+>> +       if (!pte) {
+>> +               walk->action = ACTION_AGAIN;
+>> +               return 0;
+>> +       }
+>> +
+>> +       for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+>> +               ptent = ptep_get(pte);
+>> +               is_written = !is_pte_uffd_wp(ptent);
+>> +
+>> +               bitmap = PM_SCAN_FLAGS(is_written, pagemap_scan_is_file(vma, ptent, addr),
+>> +                                      pte_present(ptent), is_swap_pte(ptent),
+>> +                                      pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
+>> +
+>> +               if (IS_PM_SCAN_GET(p->flags)) {
+>> +                       interesting = pagemap_scan_is_interesting_page(bitmap, p);
+> 
+> If we consider GET as always done, this can be:
+> 
+> if (!is_interesting) continue;
+> 
+> And that would simplify the code greatly.
+> 
+>> +                       if (interesting)
+>> +                               ret = pagemap_scan_output(bitmap, p, addr, 1);
+>> +               }
+>> +
+>> +               if (IS_PM_SCAN_WP(p->flags) && is_written && interesting &&
+>> +                   ret >= 0) {
+>> +                       make_uffd_wp_pte(vma, addr, pte);
+>> +                       flush = true;
+>> +               }
+>> +       }
+>> +
+>> +       if (flush)
+>> +               flush_tlb_range(vma, start, addr);
+> 
+> Would optimizing the TLB flush range be beneficial here? If yes, the
+> loop above could do:
+> 
+> flush_start = end;
+> flush_end = end;
+> ...
+> for (...) {
+>   if (mark_wp) {
+>     make_wp();
+>     if (flush_start > addr)
+>       flush_start = addr;
+>     flush_end = addr;
+>   }
+> }
+> 
+> to reduce the flushed range.
+Just tried this. There is some bug or hidden restriction. It isn't working.
+Maybe we can look at it latter. Reducing the flush size may actually be
+beneficial.
+
+> 
+>> +
+>> +       pte_unmap_unlock(orig_pte, ptl);
+>> +       arch_leave_lazy_mmu_mode();
+>> +
+>> +       cond_resched();
+>> +       return ret;
+>> +}
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+>> +                                     unsigned long start, unsigned long end,
+>> +                                     struct mm_walk *walk)
+>> +{
+>> +       unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +       bool is_written, interesting = true;
+>> +       struct hstate *h = hstate_vma(vma);
+>> +       unsigned long bitmap;
+>> +       spinlock_t *ptl;
+>> +       int ret = 0;
+>> +       pte_t ptent;
+>> +
+>> +       if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
+>> +               return -EINVAL;
+> 
+> Shouldn't this be checked after the `n_pages` is reduced? BTW, maybe
+> check it only if the page `is_written` to avoid the conditional for
+> all walks where WP is not used?
+No, we (you and me) had reached to this current state after discussion. We
+are returning -EINVAL here for the user to understand that he had not
+passed the entire hugetlb page address range when specified WP op.
+
+> 
+>> +
+>> +       if (n_pages > p->max_pages - p->found_pages)
+>> +               n_pages = p->max_pages - p->found_pages;
+> [...]
+> 
+> Proposing the relaxed API (and, while at it, less generic constant and
+> field names) below.
+> 
+>> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned long start,
+>> +                                  unsigned long end, struct page_region __user *vec)
+>> +{
+>> +       /* Detect illegal size, flags, len and masks */
+>> +       if (arg->size != sizeof(struct pm_scan_arg))
+>> +               return -EINVAL;
+> 
+>> +       if (!arg->flags)
+>> +               return -EINVAL;
+>> +       if (arg->flags & ~PM_SCAN_OPS)
+>> +               return -EINVAL;
+> 
+> if (arg->flags & ~PM_SCAN_FLAGS)
+>   return -EINVAL;
+We need if (!flags) condition for the case when flag is zero.
+
+> 
+>> +       if (!(end - start))
+>> +               return -EINVAL;
+> 
+> Remove. Nothing bad will happen when trying to scan an empty range.
+We should return error. It is user's fault for not providing the correct range.
+
+> 
+>> +       if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+>> +            arg->return_mask) & ~PM_SCAN_BITS_ALL)
+>> +               return -EINVAL;
+> 
+> if ((...) & ~PM_SCAN_PAGE_CATEGORIES)
+>   return -EINVAL;
+> 
+>> +       if (!arg->required_mask && !arg->anyof_mask &&
+>> +           !arg->excluded_mask)
+>> +               return -EINVAL;
+> 
+> Remove. Will inspect all pages then.
+> 
+>> +       if (!arg->return_mask)
+>> +               return -EINVAL;
+> 
+> Remove. Will not return any ranges then. (But will WP, if requested.)
+> 
+>> +       /* Validate memory range */
+>> +       if (!IS_ALIGNED(start, PAGE_SIZE))
+>> +               return -EINVAL;
+>> +       if (!access_ok((void __user *)start, end - start))
+>> +               return -EFAULT;
+> 
+>> +       if (IS_PM_SCAN_GET(arg->flags)) {
+> 
+> Remove. Do GET always.
+> 
+>> +               if (arg->vec_len == 0)
+>> +                       return -EINVAL;
+> 
+> Remove. Will end the walk at the first matching page (and return its
+> address in `start`).
+> 
+>> +               if (!vec)
+>> +                       return -EINVAL;
+>> +               if (!access_ok((void __user *)vec,
+>> +                              arg->vec_len * sizeof(struct page_region)))
+>> +                       return -EFAULT;
+> 
+> Check only if vec_len != 0. BTW, return EFAULT for `!vec`.
+> 
+>> +       }
+>> +
+>> +       if (IS_PM_SCAN_WP(arg->flags) && !IS_PM_SCAN_GET(arg->flags) &&
+>> +           arg->max_pages)
+>> +               return -EINVAL;
+> 
+> With return_mask == 0, arg->max_pages will be ignored anyway. We can
+> just document that this limits the pages reported in the output
+> vector. (And from that follows that if not returning anything, the
+> value doesn't make a difference.)
+I'm sorry. I don't see any value in channgig the interface again. The
+interface is based on requirement, not the simplification of the code.
+
+> 
+> [...]
+>> +       p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
+>> +       p.found_pages = 0;
+>> +       p.required_mask = arg.required_mask;
+>> +       p.anyof_mask = arg.anyof_mask;
+>> +       p.excluded_mask = arg.excluded_mask;
+>> +       p.return_mask = arg.return_mask;
+>> +       p.flags = arg.flags;
+>> +       p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
+>> +                   PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+>> +       p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
+>> +       p.vec_buf = NULL;
+>> +       p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+> 
+> This needs to be less by 1 to account for the entry in p.cur_buf.
+No, that would be bug.
+
+> 
+>> +       /*
+>> +        * Allocate smaller buffer to get output from inside the page walk
+>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>> +        * we want to return output to user in compact form where no two
+>> +        * consecutive regions should be continuous and have the same flags.
+>> +        * So store the latest element in p.cur_buf between different walks and
+>> +        * store the p.cur_buf at the end of the walk to the user buffer.
+>> +        */
+>> +       if (IS_PM_SCAN_GET(p.flags)) {
+> 
+> if (p.vec_len != 0)
+No, this is wrong.
+
+> 
+>> +               p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
+>> +                                         GFP_KERNEL);
+>> +               if (!p.vec_buf)
+>> +                       return -ENOMEM;
+>> +       }
+>> +
+>> +       if (IS_PM_SCAN_WP(p.flags)) {
+>> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+>> +                                       mm, start, end);
+>> +               mmu_notifier_invalidate_range_start(&range);
+>> +       }
+> 
+> Please add a comment why this is needed.
+This was added when we had left using change_pmd_range(). This is a
+notification that protection for the range has been changed.
+
+> 
+>> +       walk_start = walk_end = start;
+>> +       while (walk_end < end && !ret) {
+>> +               if (IS_PM_SCAN_GET(p.flags)) {
+> 
+> if (p.vec_len)
+> 
+>> +                       p.vec_buf_index = 0;
+>> +
+>> +                       /*
+>> +                        * All data is copied to cur_buf first. When more data
+>> +                        * is found, we push cur_buf to vec_buf and copy new
+>> +                        * data to cur_buf. Subtract 1 from length as the
+>> +                        * index of cur_buf isn't counted in length.
+>> +                        */
+>> +                       empty_slots = arg.vec_len - vec_index;
+>> +                       p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
+>> +               }
+>> +
+>> +               ret = mmap_read_lock_killable(mm);
+>> +               if (ret)
+>> +                       goto return_status;
+> 
+> This could be _interruptible() now as we can return early overwriting
+> `start` so that userspace can detect that the walk was interrupted by
+> a signal (start != end).
+> 
+>> +               walk_end = min((walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK, end);
+>> +
+>> +               ret = walk_page_range(mm, walk_start, walk_end,
+>> +                                     &pagemap_scan_ops, &p);
+>> +               mmap_read_unlock(mm);
+>> +
+>> +               if (ret && ret != PM_SCAN_FOUND_MAX_PAGES &&
+>> +                   ret != PM_SCAN_END_WALK)
+>> +                       goto return_status;
+> 
+> So now there is no difference in the two special error values.
+Inside pagemap_scan_pmd_entry() the purpose is different.
+
+> 
+>> +               walk_start = walk_end;
+>> +               if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
+> 
+> `if (p.vec_buf_index)` should be enough, as if not reporting the
+> ranges, the index will never increase.
+Agreed. Will update.
+
+> 
+>> +                       if (copy_to_user(&vec[vec_index], p.vec_buf,
+>> +                                        p.vec_buf_index * sizeof(*p.vec_buf))) {
+>> +                               /*
+>> +                                * Return error even though the OP succeeded
+>> +                                */
+>> +                               ret = -EFAULT;
+>> +                               goto return_status;
+>> +                       }
+>> +                       vec_index += p.vec_buf_index;
+> 
+> p.vec_buf_index = 0;
+> 
+> ... so that there is no need to do that at every start of the loop iteration.
+Okay.
+
+> 
+>> +               }
+>> +       }
+>> +
+>> +       if (p.cur_buf.len) {
+>> +               if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
+>> +                       ret = -EFAULT;
+>> +                       goto return_status;
+>> +               }
+>> +               vec_index++;
+>> +       }
+>> +
+>> +       ret = vec_index;
+>> +
+>> +return_status:
+> 
+> The label name looks too narrowing, considering what is being done
+> here now. Maybe just 'out', as there is no other non-trivial exit path
+> from the function?
+Okay.
+
+> 
+>> +       arg.start = (unsigned long)walk_end;
+>> +       if (copy_to_user(&uarg->start, &arg.start, sizeof(arg.start)))
+>> +               ret = -EFAULT;
+>> +
+>> +       if (IS_PM_SCAN_WP(p.flags))
+>> +               mmu_notifier_invalidate_range_end(&range);
+> 
+> With removal of the OP_GET, there is only a single flag left. I don't
+> think it is useful then to hide it behind a macro. It should be
+> readable as `p.flags & PM_SCAN_DO_WP`.
+> 
+> [...]
+>> +/* Bits are set in flags of the page_region and masks in pm_scan_args */
+>> +#define PAGE_IS_WRITTEN                (1 << 0)
+>> +#define PAGE_IS_FILE           (1 << 1)
+>> +#define PAGE_IS_PRESENT                (1 << 2)
+>> +#define PAGE_IS_SWAPPED                (1 << 3)
+>> +#define PAGE_IS_PFNZERO                (1 << 4)
+> 
+> Please add PAGE_IS_UFFD_WP_ENABLED (or a shorter name) - this would be
+> populated from `p->vma_can_wp` in the `test_walk` implementation
+> above.
+> 
+> Best Regards
+> Michał Mirosław
+
+-- 
+BR,
+Muhammad Usama Anjum
