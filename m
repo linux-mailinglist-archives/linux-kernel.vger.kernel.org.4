@@ -2,99 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A437459FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EA57459FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjGCKRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S229818AbjGCKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjGCKRF (ORCPT
+        with ESMTP id S231262AbjGCKRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:17:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68B9C9;
-        Mon,  3 Jul 2023 03:17:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47A1360EAD;
-        Mon,  3 Jul 2023 10:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27205C433C9;
-        Mon,  3 Jul 2023 10:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688379422;
-        bh=Ny5BGLb0fUO45nms2Ulce0zlZ8XNNtXNnuA6dwqjEBI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N48t31dmHrvPkjWqY/Baq5NMlwFHpF/7g/ejXfLwkkPN42h5TOXItvma+bxHIp+jm
-         Be0k1GcbbozhqawxgxQ9ckWmybPEkUlvoR9e3y1UyKVALxXzW/pPdkR9hHqr/iSdT4
-         KtIfKN2z/s/hK/pY0Q2lVADesdGmfW/yun/6rNax7EQfnaHXhp7uGAetlmtb6hRiFF
-         9pVWWJ+WHTLS+XS6sXe/ol5Nn/BuiOV3HkRU1rK+AcUuxMlj0YftQB0xU7RSHNZe3q
-         YdkBiGSeWYiXLYG+WOf3YVelcAYE+XuLl6TwnNB5nt1TDV7sYP7EF9CUqrn7ooo++S
-         butW0UvCnz+qA==
-Date:   Mon, 3 Jul 2023 12:16:57 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Andrew Yang <andrew.yang@mediatek.com>, linux-mm@kvack.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        wsd_upstream@mediatek.com, casper.li@mediatek.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH] fs: drop_caches: draining pages before dropping caches
-Message-ID: <20230703-freifahrt-dachwohnung-49d858588e88@brauner>
-References: <20230630092203.16080-1-andrew.yang@mediatek.com>
+        Mon, 3 Jul 2023 06:17:30 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D2BD3;
+        Mon,  3 Jul 2023 03:17:13 -0700 (PDT)
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1363C60003;
+        Mon,  3 Jul 2023 10:17:09 +0000 (UTC)
+Message-ID: <2ab8ca7c-a648-f73c-1815-086274af6013@ghiti.fr>
+Date:   Mon, 3 Jul 2023 12:17:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230630092203.16080-1-andrew.yang@mediatek.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] riscv: pageattr: Fixup synchronization problem between
+ init_mm and active_mm
+To:     guoren@kernel.org, palmer@rivosinc.com, paul.walmsley@sifive.co,
+        zong.li@sifive.com, atishp@atishpatra.org, jszhang@kernel.org,
+        bjorn@kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230629082032.3481237-1-guoren@kernel.org>
+Content-Language: en-US
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230629082032.3481237-1-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Really more suitable for -mm to review.
+Hi Guo,
 
-On Fri, Jun 30, 2023 at 05:22:02PM +0800, Andrew Yang wrote:
-> We expect a file page access after dropping caches should be a major
-> fault, but sometimes it's still a minor fault. That's because a file
-> page can't be dropped if it's in a per-cpu pagevec. Draining all pages
-> from per-cpu pagevec to lru list before trying to drop caches.
-> 
-> Signed-off-by: Andrew Yang <andrew.yang@mediatek.com>
+On 29/06/2023 10:20, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The machine_kexec() uses set_memory_x to add the executable attribute to the
+> page table entry of control_code_buffer. It only modifies the init_mm but not
+> the current->active_mm. The current kexec process won't use init_mm directly,
+> and it depends on minor_pagefault, which is removed by commit 7d3332be011e4
+
+
+Is the removal of minor_pagefault an issue? I'm not sure I understand 
+this part of the changelog.
+
+
+> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") of 64BIT. So,
+> when it met pud mapping on an MMU_SV39 machine, it caused the following:
+>
+>   kexec_core: Starting new kernel
+>   Will call new kernel at 00300000 from hart id 0
+>   FDT image at 747c7000
+>   Bye...
+>   Unable to handle kernel paging request at virtual address ffffffda23b0d000
+>   Oops [#1]
+>   Modules linked in:
+>   CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
+>   Hardware name: Sophgo Mango (DT)
+>   epc : 0xffffffda23b0d000
+>    ra : machine_kexec+0xa6/0xb0
+>   epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
+>    gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
+>    t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
+>    s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
+>    a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
+>    a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
+>    s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
+>    s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+>    s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+>    s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
+>    t5 : ffffffff815351b0 t6 : ffffffc80c173b50
+>   status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
+>
+> Yes, Using set_memory_x API after boot has the limitation, and at least we
+> should synchronize the current->active_mm to fix the problem.
+>
+> Fixes: d3ab332a5021 ("riscv: add ARCH_HAS_SET_MEMORY support")
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 > ---
->  fs/drop_caches.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/fs/drop_caches.c b/fs/drop_caches.c
-> index e619c31b6bd9..b9575957a7c2 100644
-> --- a/fs/drop_caches.c
-> +++ b/fs/drop_caches.c
-> @@ -10,6 +10,7 @@
->  #include <linux/writeback.h>
->  #include <linux/sysctl.h>
->  #include <linux/gfp.h>
-> +#include <linux/swap.h>
->  #include "internal.h"
->  
->  /* A global variable is a bit ugly, but it keeps the code simple */
-> @@ -59,6 +60,7 @@ int drop_caches_sysctl_handler(struct ctl_table *table, int write,
->  		static int stfu;
->  
->  		if (sysctl_drop_caches & 1) {
-> +			lru_add_drain_all();
->  			iterate_supers(drop_pagecache_sb, NULL);
->  			count_vm_event(DROP_PAGECACHE);
->  		}
-> -- 
-> 2.18.0
-> 
+>   arch/riscv/mm/pageattr.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+> index ea3d61de065b..23d169c4ee81 100644
+> --- a/arch/riscv/mm/pageattr.c
+> +++ b/arch/riscv/mm/pageattr.c
+> @@ -123,6 +123,13 @@ static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+>   				     &masks);
+>   	mmap_write_unlock(&init_mm);
+>   
+> +	if (current->active_mm != &init_mm) {
+> +		mmap_write_lock(current->active_mm);
+> +		ret =  walk_page_range_novma(current->active_mm, start, end,
+> +					     &pageattr_ops, NULL, &masks);
+> +		mmap_write_unlock(current->active_mm);
+> +	}
+> +
+>   	flush_tlb_kernel_range(start, end);
+>   
+>   	return ret;
+
+
+I don't understand: any page table inherits the entries of 
+swapper_pg_dir (see pgd_alloc()), so any kernel page table entry is 
+"automatically" synchronized, so why should we synchronize one 4K entry 
+explicitly? A PGD entry would need to be synced, but not a PTE entry.
+
