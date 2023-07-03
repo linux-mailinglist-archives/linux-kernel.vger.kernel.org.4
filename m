@@ -2,129 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2197455D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E147455D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjGCHRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S230221AbjGCHSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjGCHRd (ORCPT
+        with ESMTP id S230011AbjGCHSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:17:33 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A800E52
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:17:28 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbca6a9ae4so112855e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688368647; x=1690960647;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0hnHpIHP0MmQmToWJQ8RUHzi1Z6asIXxH+8Z3t+Oc5Y=;
-        b=f+vC2qqRJ4L/52WXXcA1asyIc04MjD5qn+Y65UadnaS1mXhEJuE3SirfDdtwJ+fBN+
-         y60N8wlB5pmmdjfySRhx9tKirmmVcYs89SIYvZ6PtYf4Zy3F503B5G1Yf6qLo2TCFI0x
-         R6Vd7D9buMyp4XpyZdI/bqsFX2MFmNYEc5ppvWpZrHVLawn3LuC+ivzOCQRgpzIszm2d
-         0H9y8fMzRmLTyjVrfF+0jBApzlB906WMzvwxLbSemYbDot7BBu755/9VkT7hpqJITMBp
-         /z+MHdkDKdL4Azu3x/DXV6k9QXGJrg+FfJVUC+CTOIf4cL8bh3CHWAjNnXjsR9ZgiErT
-         kKXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688368647; x=1690960647;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0hnHpIHP0MmQmToWJQ8RUHzi1Z6asIXxH+8Z3t+Oc5Y=;
-        b=GvfJ/EzVK35wVFjlbEbLwAEE9uw1N7tOyNny/AWQvafDXQ61mOR0FSj+1lRNdA6fV5
-         o3zLuBQcl3iqMAvRE89blGNnGNBBzPJ6G2HZWm1Lj2/cjrSLGkKv+Oyat3AYInPXB9MQ
-         Ll003fnh5npzbdGuIh+7KPVZ63WeCWzykuKUjS5iARyV0WIpXptQ7gX+fbPddD5yjboI
-         z9CT/s/V+tpGX8C+HY6caiu+NZC2tomemeMkDlimbTWS9fSF4LSxcqY7K03Cp5Z2afmR
-         PO2zehg5LTEflUOpgGuk49d49/uq3A1N8Cu7P+eHYQ3rxoJOch4pe9A6rOZxWT4iQ4SH
-         9Svw==
-X-Gm-Message-State: ABy/qLbKHAPo2roW3EuESw0jEJudFBsq/tXmZUf2JLvbWgsVrNVUm0Th
-        UNetMGP/N1N0l6kg9+2qYuzzCDBRq7QzDwbNW3tICw==
-X-Google-Smtp-Source: APBJJlEe0MMNIljnBBhTRv0r9bOqt1AjvoM9bTpWOot0Iink8OeixsF6Dur+PsQx8Zz7AKZwBHUumOblvvNlLVruqcc=
-X-Received: by 2002:a05:600c:34c2:b0:3f7:e4d8:2569 with SMTP id
- d2-20020a05600c34c200b003f7e4d82569mr110181wmq.5.1688368646788; Mon, 03 Jul
- 2023 00:17:26 -0700 (PDT)
+        Mon, 3 Jul 2023 03:18:09 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050:0:465::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD53D1;
+        Mon,  3 Jul 2023 00:18:08 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QvchX60f1z9sjF;
+        Mon,  3 Jul 2023 09:18:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1688368684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s49PEfI7MhDVEMN05ePg89l0ItdtrliBG6hMnAeGVV8=;
+        b=Fxgi1Y96IJVqi26F2MmaPhR7m4XncGfSOyIShKc8dtDXTEB7MCr5qbBxGBllJl2GFtajQi
+        1e4ympDSfBNTJIGaL4nT4Gjn8Z2k4BxaHwyzP+AyDDpnuou65Gbyq5peRYuW5xIkRcUe1X
+        A+jwnDsgLLC2AfBmlUno0Fblv7nYZzM08nJ5jqNZLjsUI1Q+Ae3hk2B/l5WkbLWMvLzQGb
+        Z2+pcB3l4d0Yuq+yI7uaMWGi7KE4NJGP9xNiQROTiduJnPBNLQ/XEtKdvQXjyE0nQK5GCL
+        3TEdxiOPyMgG7XptsOapCCu2oByc8gh+pXSw7P+mNeN3WYxnZYf0zIfj6LdAOA==
+References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
+ <20230702-pll-mipi_set_rate_parent-v3-5-46dcb8aa9cbc@oltmanns.dev>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Frank Oltmanns <frank@oltmanns.dev>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Roman Beranek <me@crly.cz>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/8] clk: sunxi-ng: nkm: Support finding closest rate
+In-reply-to: <20230702-pll-mipi_set_rate_parent-v3-5-46dcb8aa9cbc@oltmanns.dev>
+Date:   Mon, 03 Jul 2023 09:17:43 +0200
+Message-ID: <87wmzhsbu0.fsf@oltmanns.dev>
 MIME-Version: 1.0
-References: <0000000000002373f005ff843b58@google.com> <1bb83e9d-6d7e-3c80-12f6-847bf2dc865e@google.com>
-In-Reply-To: <1bb83e9d-6d7e-3c80-12f6-847bf2dc865e@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 3 Jul 2023 09:17:11 +0200
-Message-ID: <CACT4Y+akPvTGG0WdPdSuUFU6ZuQkRbVZByiROzqwyPVd8Pz8fQ@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] [reiserfs?] kernel panic: stack is corrupted in ___slab_alloc
-To:     David Rientjes <rientjes@google.com>
-Cc:     syzbot <syzbot+cf0693aee9ea61dda749@syzkaller.appspotmail.com>,
-        42.hyeyoo@gmail.com, Andrew Morton <akpm@linux-foundation.org>,
-        cl@linux.com, iamjoonsoo.kim@lge.com, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        penberg@kernel.org, reiserfs-devel@vger.kernel.org,
-        roman.gushchin@linux.dev, syzkaller-bugs@googlegroups.com,
-        Vlastimil Babka <vbabka@suse.cz>, Jan Kara <jack@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 4QvchX60f1z9sjF
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 09:14, 'David Rientjes' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
+
+On 2023-07-02 at 19:55:24 +0200, Frank Oltmanns <frank@oltmanns.dev> wrote:
+> When finding the best rate for a NKM clock, consider rates that are
+> higher than the requested rate, if the CCU_FEATURE_CLOSEST_RATE flag is
+> set.
 >
-> On Sun, 2 Jul 2023, syzbot wrote:
+> Accommodate ccu_mux_helper_determine_rate to this change.
 >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    e8f75c0270d9 Merge tag 'x86_sgx_for_v6.5' of git://git.ker..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=168b84fb280000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a98ec7f738e43bd4
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=cf0693aee9ea61dda749
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10310670a80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1220c777280000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/f27c1d41217a/disk-e8f75c02.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/843ae5d5c810/vmlinux-e8f75c02.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/da48bc4c0ec1/bzImage-e8f75c02.xz
-> > mounted in repro: https://storage.googleapis.com/syzbot-assets/658601e354e4/mount_0.gz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+cf0693aee9ea61dda749@syzkaller.appspotmail.com
-> >
-> > Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: ___slab_alloc+0x12c3/0x1400 mm/slub.c:3270
-> > CPU: 0 PID: 5009 Comm: syz-executor248 Not tainted 6.4.0-syzkaller-01406-ge8f75c0270d9 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
-> >  panic+0x686/0x730 kernel/panic.c:340
-> >  __stack_chk_fail+0x19/0x20 kernel/panic.c:759
-> >  ___slab_alloc+0x12c3/0x1400 mm/slub.c:3270
-> >
+> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+> ---
+>  drivers/clk/sunxi-ng/ccu_mux.c | 23 +++++++++++++++-----
+>  drivers/clk/sunxi-ng/ccu_nkm.c | 48 +++++++++++++++++++++++++++++++-----------
+>  2 files changed, 54 insertions(+), 17 deletions(-)
 >
-> This is happening during while mounting reiserfs, so I'm inclined to think
-> it's more of a reisterfs issue than a slab allocator issue :/
+> diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mux.c
+> index 1d557e323169..8594d6a4addd 100644
+> --- a/drivers/clk/sunxi-ng/ccu_mux.c
+> +++ b/drivers/clk/sunxi-ng/ccu_mux.c
+> @@ -113,7 +113,7 @@ int ccu_mux_helper_determine_rate(struct ccu_common *common,
+>  	}
+>
+>  	for (i = 0; i < clk_hw_get_num_parents(hw); i++) {
+> -		unsigned long tmp_rate, parent_rate;
+> +		unsigned long tmp_rate, parent_rate, best_diff = ULONG_MAX;
+>  		struct clk_hw *parent;
+>
+>  		parent = clk_hw_get_parent_by_index(hw, i);
+> @@ -139,10 +139,23 @@ int ccu_mux_helper_determine_rate(struct ccu_common *common,
+>  			goto out;
+>  		}
+>
+> -		if ((req->rate - tmp_rate) < (req->rate - best_rate)) {
+> -			best_rate = tmp_rate;
+> -			best_parent_rate = parent_rate;
+> -			best_parent = parent;
+> +		if (common->features & CCU_FEATURE_CLOSEST_RATE) {
+> +			unsigned long tmp_diff = req->rate > tmp_rate ?
+> +						 req->rate - tmp_rate :
+> +						 tmp_rate - req->rate;
+> +
+> +			if (tmp_diff < best_diff) {
+> +				best_rate = tmp_rate;
+> +				best_parent_rate = parent_rate;
+> +				best_parent = parent;
+> +				best_diff = tmp_diff;
+> +			}
+> +		} else {
+> +			if ((req->rate - tmp_rate) < (req->rate - best_rate)) {
+> +				best_rate = tmp_rate;
+> +				best_parent_rate = parent_rate;
+> +				best_parent = parent;
+> +			}
+>  		}
+>  	}
+>
+> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nkm.c
+> index d83843e69c25..36d9e987e4d8 100644
+> --- a/drivers/clk/sunxi-ng/ccu_nkm.c
+> +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
+> @@ -18,9 +18,11 @@ struct _ccu_nkm {
+>  };
+>
+>  static unsigned long ccu_nkm_find_best_with_parent_adj(unsigned long *parent, unsigned long rate,
+> -						       struct _ccu_nkm *nkm, struct clk_hw *phw)
+> +						       struct _ccu_nkm *nkm, struct clk_hw *phw,
+> +						       unsigned long features)
+>  {
+> -	unsigned long best_rate = 0, best_parent_rate = *parent, tmp_parent = *parent;
+> +	unsigned long best_rate = 0, best_parent_rate = 0, tmp_parent = *parent;
+> +	unsigned long best_diff = ULONG_MAX;
+>  	unsigned long best_n = 0, best_k = 0, best_m = 0;
+>  	unsigned long _n, _k, _m;
+>
+> @@ -28,16 +30,26 @@ static unsigned long ccu_nkm_find_best_with_parent_adj(unsigned long *parent, un
+>  		for (_n = nkm->min_n; _n <= nkm->max_n; _n++) {
+>  			for (_m = nkm->min_m; _m <= nkm->max_m; _m++) {
+>  				unsigned long tmp_rate;
+> +				unsigned long tmp_diff;
+>
+>  				tmp_parent = clk_hw_round_rate(phw, rate * _m / (_n * _k));
+>
+>  				tmp_rate = tmp_parent * _n * _k / _m;
+> -				if (tmp_rate > rate)
+> -					continue;
+>
+> -				if ((rate - tmp_rate) < (rate - best_rate)) {
+> +				if (features & CCU_FEATURE_CLOSEST_RATE) {
+> +					tmp_diff = rate > tmp_rate ?
+> +						   rate - tmp_rate :
+> +						   tmp_rate - rate;
+> +				} else {
+> +					if (tmp_rate > rate)
+> +						continue;
+> +					tmp_diff = rate - tmp_diff;
 
+Sorry, this should of course be tmp_diff = rate - tmp_rate. I'll fix
+that in v4. Also I'll do tests on my phone where
+CCU_FEATURE_CLOSEST_RATE is not set (i.e., without PATCH 8), so see if
+it replicates the old behaviour. I'll also look into adding kunit tests,
+so that this doesn't happen again. I'm not sure if this is feasible, but
+I'll ask here for advise, if/when I encounter obstacles.
 
-Now we can make it official :)
+Best regards,
+  Frank
 
-#syz set subsystems: reiserfs
-
-To remove from open mm issues:
-
-https://syzkaller.appspot.com/upstream/s/mm
-
-to reiserfs issues:
-
-https://syzkaller.appspot.com/upstream/s/reiserfs
+> +				}
+> +
+> +				if (tmp_diff < best_diff) {
+>  					best_rate = tmp_rate;
+>  					best_parent_rate = tmp_parent;
+> +					best_diff = tmp_diff;
+>  					best_n = _n;
+>  					best_k = _k;
+>  					best_m = _m;
+> @@ -56,9 +68,10 @@ static unsigned long ccu_nkm_find_best_with_parent_adj(unsigned long *parent, un
+>  }
+>
+>  static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
+> -				       struct _ccu_nkm *nkm)
+> +				       struct _ccu_nkm *nkm, unsigned long features)
+>  {
+>  	unsigned long best_rate = 0;
+> +	unsigned long best_diff = ULONG_MAX;
+>  	unsigned long best_n = 0, best_k = 0, best_m = 0;
+>  	unsigned long _n, _k, _m;
+>
+> @@ -66,13 +79,23 @@ static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
+>  		for (_n = nkm->min_n; _n <= nkm->max_n; _n++) {
+>  			for (_m = nkm->min_m; _m <= nkm->max_m; _m++) {
+>  				unsigned long tmp_rate;
+> +				unsigned long tmp_diff;
+>
+>  				tmp_rate = parent * _n * _k / _m;
+>
+> -				if (tmp_rate > rate)
+> -					continue;
+> -				if ((rate - tmp_rate) < (rate - best_rate)) {
+> +				if (features & CCU_FEATURE_CLOSEST_RATE) {
+> +					tmp_diff = rate > tmp_rate ?
+> +						   rate - tmp_rate :
+> +						   tmp_rate - rate;
+> +				} else {
+> +					if (tmp_rate > rate)
+> +						continue;
+> +					tmp_diff = rate - tmp_diff;
+> +				}
+> +
+> +				if (tmp_diff < best_diff) {
+>  					best_rate = tmp_rate;
+> +					best_diff = tmp_diff;
+>  					best_n = _n;
+>  					best_k = _k;
+>  					best_m = _m;
+> @@ -164,9 +187,10 @@ static unsigned long ccu_nkm_round_rate(struct ccu_mux_internal *mux,
+>  		rate *= nkm->fixed_post_div;
+>
+>  	if (!clk_hw_can_set_rate_parent(&nkm->common.hw))
+> -		rate = ccu_nkm_find_best(*parent_rate, rate, &_nkm);
+> +		rate = ccu_nkm_find_best(*parent_rate, rate, &_nkm, nkm->common.features);
+>  	else
+> -		rate = ccu_nkm_find_best_with_parent_adj(parent_rate, rate, &_nkm, parent_hw);
+> +		rate = ccu_nkm_find_best_with_parent_adj(parent_rate, rate, &_nkm, parent_hw,
+> +							 nkm->common.features);
+>
+>  	if (nkm->common.features & CCU_FEATURE_FIXED_POSTDIV)
+>  		rate /= nkm->fixed_post_div;
+> @@ -201,7 +225,7 @@ static int ccu_nkm_set_rate(struct clk_hw *hw, unsigned long rate,
+>  	_nkm.min_m = 1;
+>  	_nkm.max_m = nkm->m.max ?: 1 << nkm->m.width;
+>
+> -	ccu_nkm_find_best(&parent_rate, rate, &_nkm);
+> +	ccu_nkm_find_best(parent_rate, rate, &_nkm, nkm->common.features);
+>
+>  	spin_lock_irqsave(nkm->common.lock, flags);
