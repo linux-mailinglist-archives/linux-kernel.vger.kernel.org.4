@@ -2,98 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5C9746175
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7155374616F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjGCRaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
+        id S230189AbjGCR3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjGCRad (ORCPT
+        with ESMTP id S229888AbjGCR3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:30:33 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266B8E5D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:30:32 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so8321977a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 10:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688405430; x=1690997430;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CrS/MpuWOEjZGLSDInBYEukcytiKIRhK8AvJ7Dhgwl8=;
-        b=AJkYUWLzRRpXGP3wlCexBptPwNnatNTc7igkz+o8cRwv9+1oMYA3C6ips1xNmuVzq2
-         ja6+S1uPJJChIBXCC+NxyFAgQLmaGyt59nw78LrPb00wYw4XkrR7tpqqV5ccr5TchBpo
-         D1TvpylEA9Y/zgZpGt7ZALZIKF+rXktKsw/MI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688405430; x=1690997430;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CrS/MpuWOEjZGLSDInBYEukcytiKIRhK8AvJ7Dhgwl8=;
-        b=Els9o8+1HSYaYYjNEAwPGmAjfiBlGkEoIZQHd7fgoyre5cPXW78GikJbOrsKF+e5C2
-         GZvvYTcFhQ1XCFdN9FKyM5PylI3xN8Wx38XPX1Ws7FCBECftNYHvc9+9ynlgrmI2Uima
-         c6IQiaSBMppeefEqECrG7mCv1Q3p6LYBXoTipkuU8Krx7O/ZW0c5Kxb+Dd4WqkMlNRO8
-         hqqYYe68r11wODxcNVkCPEkPfH/xtUsA0iQ9Nr1eaUI+IvX84eDOfQ/tD1eixf+DiI1K
-         OrvWlm8hzf3riVqyZxwHCHGId/naC9uT252u3tEd6QHWGeyR37tpD4dmtncCtaYRsCZP
-         8lIA==
-X-Gm-Message-State: ABy/qLaRAQm2N048CN2GsEqsjDModws45Lcz1QCIVJFccDgttT3NUd3r
-        AkSppq70LjzJdav82BNKKh/GzA00vCdw67L0yIDKdHuJ
-X-Google-Smtp-Source: APBJJlEmKTkR1ucdyiklbffnki18GrNatIHvsgQ3qG6GrTeE9g518xEvkwrWdrmGBbAgv11RNRTzyA==
-X-Received: by 2002:a05:6402:2145:b0:51e:1a58:eac0 with SMTP id bq5-20020a056402214500b0051e1a58eac0mr885140edb.12.1688405430412;
-        Mon, 03 Jul 2023 10:30:30 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05640200d500b0051bfc7763c2sm10841507edu.25.2023.07.03.10.30.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 10:30:29 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-51d80c5c834so8429264a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 10:30:29 -0700 (PDT)
-X-Received: by 2002:a05:6402:4494:b0:51a:4c1e:c94a with SMTP id
- er20-20020a056402449400b0051a4c1ec94amr18268322edb.2.1688405429462; Mon, 03
- Jul 2023 10:30:29 -0700 (PDT)
+        Mon, 3 Jul 2023 13:29:37 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28974E59;
+        Mon,  3 Jul 2023 10:29:34 -0700 (PDT)
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7C1BC1BF204;
+        Mon,  3 Jul 2023 17:29:30 +0000 (UTC)
+Message-ID: <bfd22ddd-797f-f05c-157d-9f64078efb1b@ovn.org>
+Date:   Mon, 3 Jul 2023 19:30:18 +0200
 MIME-Version: 1.0
-References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <2023063001-overlying-browse-de1a@gregkh> <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
- <5fd98a09-4792-1433-752d-029ae3545168@gmx.de> <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
- <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com>
- <9b35a19d-800c-f9f9-6b45-cf2038ef235f@roeck-us.net> <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
- <2a2387bf-f589-6856-3583-d3d848a17d34@roeck-us.net> <CAHk-=wgczy0dxK9vg-YWbq6YLP2gP8ix7Ys9K+Mr=S2NEj+hGw@mail.gmail.com>
- <c21e8e95-3353-fc57-87fd-271b2c9cc000@roeck-us.net> <CAHk-=wj+F8oGK_Hx6YSPJpwL-xyL+-q2SxtxYE0abtZa_jSkLw@mail.gmail.com>
- <7146f74d-8638-46c7-8e8c-15abc97a379f@gmx.de> <CAHk-=wjqp09i1053vqFc41Ftegkrh0pD+MKY-3ptdYu3FUh6Bw@mail.gmail.com>
- <964806c4-db73-a70b-2168-24168e4b5aab@roeck-us.net>
-In-Reply-To: <964806c4-db73-a70b-2168-24168e4b5aab@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Jul 2023 10:30:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh-hZr6N-ONO3mmUOwPDrOJ_N3NYXD3bsk4bm-1jaD2mw@mail.gmail.com>
-Message-ID: <CAHk-=wh-hZr6N-ONO3mmUOwPDrOJ_N3NYXD3bsk4bm-1jaD2mw@mail.gmail.com>
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Helge Deller <deller@gmx.de>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John David Anglin <dave.anglin@bell.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     i.maximets@ovn.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+Subject: Re: [RFC bpf-next] xsk: honor SO_BINDTODEVICE on bind
+Content-Language: en-US
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+References: <20230630145831.2988845-1-i.maximets@ovn.org>
+ <CAJ8uoz1TGjWuJKkZ8C9ZrQB0CDasik3A=qJs=xwdQP8cbn97VQ@mail.gmail.com>
+ <04ed302e-067e-d372-370b-3fef1cf8c7f2@ovn.org>
+ <c6944b25-7ac4-0b75-75b1-465c8a705d02@ovn.org>
+ <CAJ8uoz0ChXfavPKAkjsj8URKp3sJPPcd_dqiHsxP0iG6NjiVzg@mail.gmail.com>
+ <297fdd01-f1c6-6733-534c-8ed50b74c3ae@ovn.org>
+ <CAJ8uoz1zNs0JAD9MmStY_s=w5n_6Ea1iu8ebihAn99RpBAEcvg@mail.gmail.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+In-Reply-To: <CAJ8uoz1zNs0JAD9MmStY_s=w5n_6Ea1iu8ebihAn99RpBAEcvg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 10:19, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> FWIW, my qemu boot tests didn't find any problems with other architectures.
+On 7/3/23 13:19, Magnus Karlsson wrote:
+> On Mon, 3 Jul 2023 at 13:16, Ilya Maximets <i.maximets@ovn.org> wrote:
+>>
+>> On 7/3/23 12:24, Magnus Karlsson wrote:
+>>> On Mon, 3 Jul 2023 at 12:13, Ilya Maximets <i.maximets@ovn.org> wrote:
+>>>>
+>>>> On 7/3/23 12:06, Ilya Maximets wrote:
+>>>>> On 7/3/23 11:48, Magnus Karlsson wrote:
+>>>>>> On Fri, 30 Jun 2023 at 16:58, Ilya Maximets <i.maximets@ovn.org> wrote:
+>>>>>>>
+>>>>>>> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
+>>>>>>> A privileged process might create the socket and pass it to a
+>>>>>>> non-privileged process for later use.  However, that process will be
+>>>>>>> able to bind the socket to any network interface.  Even though it will
+>>>>>>> not be able to receive any traffic without modification of the BPF map,
+>>>>>>> the situation is not ideal.
+>>>>>>>
+>>>>>>> Sockets already have a mechanism that can be used to restrict what
+>>>>>>> interface they can be attached to.  That is SO_BINDTODEVICE.
+>>>>>>>
+>>>>>>> To change the binding the process will need CAP_NET_RAW.
+>>>>>>>
+>>>>>>> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
+>>>>>>> workflow when non-privileged process is using AF_XDP.
+>>>>>>
+>>>>>> Rebinding an AF_XDP socket is not allowed today. Any such attempt will
+>>>>>> return an error from bind. So if I understand the purpose of
+>>>>>> SO_BINDTODEVICE correctly, you could say that this option is always
+>>>>>> set for an AF_XDP socket and it is not possible to toggle it. The only
+>>>>>> way to "rebind" an AF_XDP socket is to close it and open a new one.
+>>>>>> This was a conscious design decision from day one as it would be very
+>>>>>> hard to support this, especially in zero-copy mode.
+>>>>>
+>>>>> Hi, Magnus.
+>>>>>
+>>>>> The purpose of this patch is not to allow re-binding.  The use case is
+>>>>> following:
+>>>>>
+>>>>> 1. First process creates a bare socket with socket(AF_XDP, ...).
+>>>>> 2. First process loads the XSK program to the interface.
+>>>>> 3. First process adds the socket fd to a BPF map.
+>>>>> 4. First process sends socket fd to a second process.
+>>>>> 5. Second process allocates UMEM.
+>>>>> 6. Second process binds socket to the interface.
+>>>>
+>>>> 7. Second process sends/receives the traffic. :)
+>>>>
+>>>>>
+>>>>> The idea is that the first process will call SO_BINDTODEVICE before
+>>>>> sending socket fd to a second process, so the second process is limited
+>>>>> in to which interface it can bind the socket.
+>>>>>
+>>>>> Does that make sense?
+>>>
+>>> Thanks for explaining this to me. Yes, that makes sense and seems
+>>> useful. Could you please send a v2 and include the flow (1-7) above in
+>>> your commit message? Would be good to add one step with the setsockopt
+>>> SO_BINDTODEVICE before step #4 just to be clear. With those changes
+>>> please feel free to include my ack:
+>>>
+>>>  Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+>>
+>> Thanks!  I'll update the commit message with the steps above to make it
+>> more clear.
+>>
+>> I was planning to send a non-RFC version of this patch once the tree is
+>> open (in a week).  Or are the rules for bpf-next different?
+> 
+> Bpf-next is always open I believe.
 
-Thanks. This whole "let's get the stack expansion locking right"
-wasn't exactly buttery smooth, but given all our crazy architectures
-it was not entirely unexpected.
+OK.  I'll update the commit message and send a formal patch then.  Thanks!
 
-Let's hope it really is all done now,
+> 
+>>>
+>>> Thank you!
+>>>
+>>>>> This workflow allows the second process to have no capabilities
+>>>>> as long as it has sufficient RLIMIT_MEMLOCK.
+>>>>
+>>>> Note that steps 1-7 are working just fine today.  i.e. the umem
+>>>> registration, bind, ring mapping and traffic send/receive do not
+>>>> require any extra capabilities.
+>>>>
+>>>> We may restrict the bind() call to require CAP_NET_RAW and then
+>>>> allow it for sockets that had SO_BINDTODEVICE as an alternative.
+>>>> But restriction will break the current uAPI.
+>>>>
+>>>>>
+>>>>> Best regards, Ilya Maximets.
+>>>>>
+>>>>>>
+>>>>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>>>>>>> ---
+>>>>>>>
+>>>>>>> Posting as an RFC for now to probably get some feedback.
+>>>>>>> Will re-post once the tree is open.
+>>>>>>>
+>>>>>>>  Documentation/networking/af_xdp.rst | 9 +++++++++
+>>>>>>>  net/xdp/xsk.c                       | 6 ++++++
+>>>>>>>  2 files changed, 15 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
+>>>>>>> index 247c6c4127e9..1cc35de336a4 100644
+>>>>>>> --- a/Documentation/networking/af_xdp.rst
+>>>>>>> +++ b/Documentation/networking/af_xdp.rst
+>>>>>>> @@ -433,6 +433,15 @@ start N bytes into the buffer leaving the first N bytes for the
+>>>>>>>  application to use. The final option is the flags field, but it will
+>>>>>>>  be dealt with in separate sections for each UMEM flag.
+>>>>>>>
+>>>>>>> +SO_BINDTODEVICE setsockopt
+>>>>>>> +--------------------------
+>>>>>>> +
+>>>>>>> +This is a generic SOL_SOCKET option that can be used to tie AF_XDP
+>>>>>>> +socket to a particular network interface.  It is useful when a socket
+>>>>>>> +is created by a privileged process and passed to a non-privileged one.
+>>>>>>> +Once the option is set, kernel will refuse attempts to bind that socket
+>>>>>>> +to a different interface.  Updating the value requires CAP_NET_RAW.
+>>>>>>> +
+>>>>>>>  XDP_STATISTICS getsockopt
+>>>>>>>  -------------------------
+>>>>>>>
+>>>>>>> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+>>>>>>> index 5a8c0dd250af..386ff641db0f 100644
+>>>>>>> --- a/net/xdp/xsk.c
+>>>>>>> +++ b/net/xdp/xsk.c
+>>>>>>> @@ -886,6 +886,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+>>>>>>>         struct sock *sk = sock->sk;
+>>>>>>>         struct xdp_sock *xs = xdp_sk(sk);
+>>>>>>>         struct net_device *dev;
+>>>>>>> +       int bound_dev_if;
+>>>>>>>         u32 flags, qid;
+>>>>>>>         int err = 0;
+>>>>>>>
+>>>>>>> @@ -899,6 +900,11 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+>>>>>>>                       XDP_USE_NEED_WAKEUP))
+>>>>>>>                 return -EINVAL;
+>>>>>>>
+>>>>>>> +       bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
+>>>>>>> +
+>>>>>>> +       if (bound_dev_if && bound_dev_if != sxdp->sxdp_ifindex)
+>>>>>>> +               return -EINVAL;
+>>>>>>> +
+>>>>>>>         rtnl_lock();
+>>>>>>>         mutex_lock(&xs->mutex);
+>>>>>>>         if (xs->state != XSK_READY) {
+>>>>>>> --
+>>>>>>> 2.40.1
+>>>>>>>
+>>>>>>>
+>>>>>
+>>>>
+>>
 
-            Linus
