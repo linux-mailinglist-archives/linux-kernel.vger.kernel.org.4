@@ -2,88 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBB5745732
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877E5745735
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjGCIUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S231425AbjGCIUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbjGCIUY (ORCPT
+        with ESMTP id S229845AbjGCIUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:20:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE8AE47
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:20:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5392860E8D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A7E17C43215;
-        Mon,  3 Jul 2023 08:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688372422;
-        bh=GAdkZrdoKWD7YyzDP8ANymefO04wUe7jKXHOYI0JvAo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JOvpxdIGeaV0pdDRSr0O5u0avi/sD+ggbLk1bJO5icXqWRlhcCGWiUmErpMum5SN2
-         UmenbWL94IdusSUdkoxIcOmb8uFVJVDSvRrFWDFyvfuKGj4+UkEdb4O3cBOZ67sFOs
-         X4k0VsnwUdlE7L4UN+C8F0yolhb5FkqbVPq8VmNtHUDZ/4LiOlYT0BbrXwvjut4iM/
-         4b8kECPQ41MhyrEat0zPWUnaBjOG4pdlfO5HN36CjEZqu2SFZVWKbS0mZOLsJjF1u+
-         N3qbafx/sjDRzdgsXrMPXwWN+uhFVVLMVKjGBV08nyDdUK55oh2E/ECNlxWn8+0PaN
-         V2s7G2bqmU4OA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D0ACC691F1;
-        Mon,  3 Jul 2023 08:20:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 3 Jul 2023 04:20:49 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C449E5E;
+        Mon,  3 Jul 2023 01:20:44 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 10:20:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1688372442; bh=eG4hejjueR/OQipmldkNjJWTBqfgbdBdHjpVICVNdr0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p8f5qUhQgUw3BKlidU3AXrWYiHHDaz7jEDMYnxmlvtjEohc3c2srqggGtDLtyNAq/
+         T+MgazLr1nJ4pjFOEwyQUt/HAQeTXb3Yna3H2VuxXyjsjl7LQ6T01StoBhB6MF5NsI
+         cpL4Jg4WFmpvkMoBE8Quz23HqZywFRmblvYwCKEw=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
+Message-ID: <f74a85a5-ea9a-4819-a95e-aa9525bf84f9@t-8ch.de>
+References: <ZKJ35DyPOG+LAy5j@1wt.eu>
+ <20230703080647.491363-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: bridge: keep ports without IFF_UNICAST_FLT in
- BR_PROMISC mode
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168837242257.9798.3078714826638477204.git-patchwork-notify@kernel.org>
-Date:   Mon, 03 Jul 2023 08:20:22 +0000
-References: <20230630164118.1526679-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230630164118.1526679-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, roopa@nvidia.com,
-        razor@blackwall.org, idosch@nvidia.com, mst@redhat.com,
-        vyasevic@redhat.com, bridge@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703080647.491363-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 2023-07-03 16:06:47+0800, Zhangjin Wu wrote:
+> Hi, Willy
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+> [..]
 
-On Fri, 30 Jun 2023 19:41:18 +0300 you wrote:
-> According to the synchronization rules for .ndo_get_stats() as seen in
-> Documentation/networking/netdevices.rst, acquiring a plain spin_lock()
-> should not be illegal, but the bridge driver implementation makes it so.
+> > > - argv[0]
+> > > 
+> > >   since nolibc has no realpath() currently, we can simply
+> > >   support the current path and the absolute path like this:
+> > > 
+> > >     nolibc-test.c:
+> > > 
+> > >     /* assigned as argv[0] in main(), will be used by some tests */
+> > >     static char exe[PATH_MAX + 1];
+> > > 
+> > >     main():
+> > > 
+> > >     /* get absolute path of myself, nolibc has no realpath() currently */
+> > >     #ifndef NOLIBC
+> > >             realpath(argv[0], exe);
+> > >     #else
+> > >             /* assume absolute path has no "./" */
+> > >             if (strncmp(argv[0], "./", 2) != 0)
+> > >                     strncat(exe, argv[0], strlen(argv[0]) + 1);
+> > >             else {
+> > >                     pwd = getenv("PWD");
+> > >                     /* skip the ending '\0' */
+> > >                     strncat(exe, getenv("PWD"), strlen(pwd));
+> > >                     /* skip the first '.' */
+> > >                     strncat(exe, argv[0] + 1, strlen(argv[0]));
+> > >             }
+> > >     #endif
+> > 
+> > No, please, not like this. Just copy argv[0] (the pointer not the
+> > contents) and you're fine:
+> >
+> >     static const char *argv0;
+> > 
+> >     int main(int argc, char **argv, char **envp)
+> >     {
+> >             argv0 = argv[0];
+> >             ...
+> >     }
+> > 
+> > Nothing more, nothing less. Your program will always have its correct
+> > path when being called unless someone purposely forces it to something
+> > different, which is not our concern at all since this is a test program.
+> > And I'd rather call it "argv0" which exactly tells us what it contains
+> > than "exe" which can be misleading for that precise reason.
+> >
 > 
-> After running these commands, I am being faced with the following
-> lockdep splat:
+> Yeah, locally, I just used a global argv0 pointer directly, but
+> chroot_exe("./nolibc-test") not work when run 'libc-test' in host
+> system, that is why I tried to get an absolute path ;-)
 > 
-> [...]
+>     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(exe), -1, ENOTDIR); break;
+> 
+>     -->
+> 
+>     19 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
+> 
+> I removed the "proc ?" check manually to test if it also work with
+> CONFIG_PROC_FS=n. it doesn't work, without absolute path, we need to add
+> the ENOENT errno back to the errno check list.
+> 
+> I'm not sure if the other syscalls require an absolute path, so, the
+> realpath() is called in this proposed method.
+> 
+> > > A full functional realpath() is a little complex, such as '../' support and
+> > > even symlink support, let's delay its requirement at current stage ;-)
+> > 
+> > Please do not even engage into this, and keep in mind that the sole
+> > purpose of this test program is to help developers simply add tests to
+> > the set of existing ones. If the program becomes complex for doing stuff
+> > that is out of its scope, it will become much harder to extend and users
+> > will lose interest and motivation for updating it.
+> > 
+> > > one or both of them may also help the other test cases:
+> > > 
+> > > - chroot_exe (used '/init' before)
+> > > 
+> > >     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(proc ? "/proc/self/exe" : exe), -1, ENOTDIR); break;
+> > > 
+> > > - chmod_exe (replace the one: chmod_tmpdir in another patchset)
+> > > 
+> > >     CASE_TEST(chmod_exe);       EXPECT_SYSZR(1, chmod(proc ? "/proc/self/exe" : exe, 0555)); break;
+> > > 
+> > >     It should be safe enough to only remove the writable attribute for the test
+> > >     program.
+> > > 
+> > > - stat_timestamps (used '/init' before)
+> > > 
+> > >     if (stat("/proc/self/", &st) && stat(exe, &st) && stat("/dev/zero", &st) && stat("/", &st))
+> > 
+> > Indeed, why not!
+> >
+> 
+> Ok, without absolute path, the chroot_exe() will be changed back to
+> something like this:
+> 
+>     CASE_TEST(chroot_exe);        EXPECT_SYSER2(1, chroot(proc ? "/proc/self/exe" : argv0), -1, ENOTDIR, ENOENT); break;
 
-Here is the summary with links:
-  - [net] net: bridge: keep ports without IFF_UNICAST_FLT in BR_PROMISC mode
-    https://git.kernel.org/netdev/net/c/6ca3c005d060
+Are you sure the ENOENT is really correct?
+I played with this before and got ENOENT because before the chroot test
+we have a testcase that does chdir("/").
+And therefore the relative name in argv[0] was not resolving correctly
+anymore against the changed working directory.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+(You can also test this by executing *only* the chroot test and it
+should work)
 
+In general chroot() should work just fine with relative paths.
 
+This is really a lot of complexity and discussion only to avoid
+depending on procfs for the tests.
+
+Thomas
