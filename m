@@ -2,53 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DA1745FCF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8BC745FD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbjGCP0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        id S229892AbjGCP1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjGCP0q (ORCPT
+        with ESMTP id S229944AbjGCP1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:26:46 -0400
-Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCBFE58
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:26:44 -0700 (PDT)
-Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 2023070315264213e82ac5c40c75b1c8
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 03 Jul 2023 17:26:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=michael.haener@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=2C7Jb3Bpb/V3uMa0SnRT1zOU30LU1+kgf+2BdMTB4Bs=;
- b=VYSdB0sKL1CzSzgny3f6oQ5l1zmCH+5Ft+xdAJM48epFlTcrtIovvx5CH44BokaDgGbVb/
- Qparvi12ltQMSAOXklARVSYS6s+dYq3tZ72jGWXOTfmIvRdW4XMqxUE4F4MqwL0yOOLm4t72
- H+1YntpC2MQ0S3k3pBrjsjz+32jdk=;
-From:   "M. Haener" <michael.haener@siemens.com>
-To:     netdev@vger.kernel.org
-Cc:     Michael Haener <michael.haener@siemens.com>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Subject: [PATCH 3/3] net: dsa: mv88e632x: Add SERDES ops
-Date:   Mon,  3 Jul 2023 17:26:09 +0200
-Message-ID: <20230703152611.420381-4-michael.haener@siemens.com>
-In-Reply-To: <20230703152611.420381-1-michael.haener@siemens.com>
-References: <20230703152611.420381-1-michael.haener@siemens.com>
+        Mon, 3 Jul 2023 11:27:22 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F776E58
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:27:21 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-57026f4bccaso55471757b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 08:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688398040; x=1690990040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vB8k7kzs7pjh91ZHMLl100x28+Nou3C86dk3f4fXFw8=;
+        b=FbRPMlnUUQ0KJlxPTp1Akvy0wGc+FN2SBdB/wkaqk1dL2eUdwA5Ks9merWRmm6t4eU
+         YzJXoaMuDUeccl4n7fULsEtJ/MdFyTvYmpbeY9sGQYSPhLcZ1eMRLkGJvECDoZorSiVG
+         pz1pDjrSCl7NtgobNEPhL1buvimKffGF5y/tnO+H66sln4C22AOL8blHMFLl1wTle58F
+         j+YL1xktM/NJtvYYWYq195AJ6jqN3veWIGuL5gA3V0g8lv3Hnlfy4yJDUTjQigcmGvPZ
+         b+DQRMxLO9aFvzgyohuo033dVk5gsbyUHGGjFOkWb2TYlP43zIW8rmQJ364g7PfDY4qV
+         zQYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688398040; x=1690990040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vB8k7kzs7pjh91ZHMLl100x28+Nou3C86dk3f4fXFw8=;
+        b=bidKpJAa3unMsS6xIXZ+nKagCl/ZtgzP70q6I7a/5/JqoukRTRWA0aCzDwtMyKG50I
+         qRGqJG2oQ+B9P8WOaLUflppuCtJd0u7o3H019ZfPflETpnVUQGK2wCR+uhnd2lNLsHSC
+         dnUD/TaqrSoUEpxogcfXPG2Xxwm2ajkrcbjc2txxbbqVqpNBJSaNUE2IrCcVVoeFRK4I
+         3OJ5z/ZgiteOy13AIchZIplBRAAObQfr3kg7qqK2fAY1LcbPrN1XfuFj4nU1GqD6Halj
+         fP0EBeppXMfQie6weQ/Nt7LEJ7ND1yuK3j5EJC7s5belCV4XIpclwpSfnaj0LSbH8Lnt
+         zN7Q==
+X-Gm-Message-State: ABy/qLZlLfuKR4tDGmye9P8+HZt8Pds5x62vLsnKIY/jlJG8Pi9Gbw5n
+        VXVNotWyF+ajc4fzC/LcphfWNgeOXTGv4ZZSukHgrw==
+X-Google-Smtp-Source: APBJJlEm3pwO1G8LhaV06AkpzQLVkMoXEfWuwosTjW1Qlp15+LHR8XDJVWoHyyqjaffw3LoZM9R1mjBUJMqWyDO++Eg=
+X-Received: by 2002:a81:7c8b:0:b0:577:3adb:cf08 with SMTP id
+ x133-20020a817c8b000000b005773adbcf08mr10119135ywc.27.1688398040554; Mon, 03
+ Jul 2023 08:27:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-664519:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230630211957.1341547-1-surenb@google.com> <20230702105038.5d0f729109d329013af4caa3@linux-foundation.org>
+In-Reply-To: <20230702105038.5d0f729109d329013af4caa3@linux-foundation.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 3 Jul 2023 15:27:09 +0000
+Message-ID: <CAJuCfpH0ki9ftJzn1fTXYJWc6pwv0Mi-QW4X56HruGAJp0V5Bw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] Per-VMA lock support for swap and userfaults
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,164 +80,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Haener <michael.haener@siemens.com>
+On Sun, Jul 2, 2023 at 5:50=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
+>
+> On Fri, 30 Jun 2023 14:19:51 -0700 Suren Baghdasaryan <surenb@google.com>=
+ wrote:
+>
+> > When per-VMA locks were introduced in [1] several types of page faults
+> > would still fall back to mmap_lock to keep the patchset simple. Among t=
+hem
+> > are swap and userfault pages. The main reason for skipping those cases =
+was
+> > the fact that mmap_lock could be dropped while handling these faults an=
+d
+> > that required additional logic to be implemented.
+> > Implement the mechanism to allow per-VMA locks to be dropped for these
+> > cases.
+> > First, change handle_mm_fault to drop per-VMA locks when returning
+> > VM_FAULT_RETRY or VM_FAULT_COMPLETED to be consistent with the way
+> > mmap_lock is handled. Then change folio_lock_or_retry to accept vm_faul=
+t
+> > and return vm_fault_t which simplifies later patches. Finally allow swa=
+p
+> > and uffd page faults to be handled under per-VMA locks by dropping per-=
+VMA
+> > and retrying, the same way it's done under mmap_lock.
+> > Naturally, once VMA lock is dropped that VMA should be assumed unstable
+> > and can't be used.
+>
+> Is there any measurable performance benefit from this?
 
-The 88e632x family has several SERDES 100/1000 blocks. By adding these
-operations, these functionalities can be used.
-
-Signed-off-by: Michael Haener <michael.haener@siemens.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c   | 32 ++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/serdes.c | 39 ++++++++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/serdes.h |  9 +++++++
- 3 files changed, 80 insertions(+)
-
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 54e99cfb17c1..b889f08b9c3f 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -5197,10 +5197,26 @@ static const struct mv88e6xxx_ops mv88e6320_ops = {
- 	.reset = mv88e6352_g1_reset,
- 	.vtu_getnext = mv88e6185_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6185_g1_vtu_loadpurge,
-+	.serdes_get_lane = mv88e6320_serdes_get_lane,
-+	.serdes_pcs_get_state = mv88e6352_serdes_pcs_get_state,
-+	.serdes_pcs_config = mv88e6352_serdes_pcs_config,
-+	.serdes_pcs_an_restart = mv88e6352_serdes_pcs_an_restart,
-+	.serdes_pcs_link_up = mv88e6352_serdes_pcs_link_up,
-+	.serdes_read = mv88e6320_serdes_read,
-+	.serdes_write = mv88e6320_serdes_write,
-+	.serdes_power = mv88e6352_serdes_power,
-+	.serdes_irq_mapping = mv88e6352_serdes_irq_mapping,
-+	.serdes_irq_enable = mv88e6352_serdes_irq_enable,
-+	.serdes_irq_status = mv88e6352_serdes_irq_status,
- 	.gpio_ops = &mv88e6352_gpio_ops,
- 	.avb_ops = &mv88e6352_avb_ops,
- 	.ptp_ops = &mv88e6352_ptp_ops,
- 	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.serdes_get_sset_count = mv88e6352_serdes_get_sset_count,
-+	.serdes_get_strings = mv88e6352_serdes_get_strings,
-+	.serdes_get_stats = mv88e6352_serdes_get_stats,
-+	.serdes_get_regs_len = mv88e6352_serdes_get_regs_len,
-+	.serdes_get_regs = mv88e6352_serdes_get_regs,
- };
- 
- static const struct mv88e6xxx_ops mv88e6321_ops = {
-@@ -5243,10 +5259,26 @@ static const struct mv88e6xxx_ops mv88e6321_ops = {
- 	.reset = mv88e6352_g1_reset,
- 	.vtu_getnext = mv88e6185_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6185_g1_vtu_loadpurge,
-+	.serdes_get_lane = mv88e6320_serdes_get_lane,
-+	.serdes_pcs_get_state = mv88e6352_serdes_pcs_get_state,
-+	.serdes_pcs_config = mv88e6352_serdes_pcs_config,
-+	.serdes_pcs_an_restart = mv88e6352_serdes_pcs_an_restart,
-+	.serdes_pcs_link_up = mv88e6352_serdes_pcs_link_up,
-+	.serdes_read = mv88e6320_serdes_read,
-+	.serdes_write = mv88e6320_serdes_write,
-+	.serdes_power = mv88e6352_serdes_power,
-+	.serdes_irq_mapping = mv88e6352_serdes_irq_mapping,
-+	.serdes_irq_enable = mv88e6352_serdes_irq_enable,
-+	.serdes_irq_status = mv88e6352_serdes_irq_status,
- 	.gpio_ops = &mv88e6352_gpio_ops,
- 	.avb_ops = &mv88e6352_avb_ops,
- 	.ptp_ops = &mv88e6352_ptp_ops,
- 	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.serdes_get_sset_count = mv88e6352_serdes_get_sset_count,
-+	.serdes_get_strings = mv88e6352_serdes_get_strings,
-+	.serdes_get_stats = mv88e6352_serdes_get_stats,
-+	.serdes_get_regs_len = mv88e6352_serdes_get_regs_len,
-+	.serdes_get_regs = mv88e6352_serdes_get_regs,
- };
- 
- static const struct mv88e6xxx_ops mv88e6341_ops = {
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
-index 7b64e30600b9..8e8f264429de 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -17,6 +17,45 @@
- #include "port.h"
- #include "serdes.h"
- 
-+int mv88e6320_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
-+			  int reg, u16 *val)
-+{
-+	return mv88e6xxx_phy_page_read(chip, lane,
-+				       MV88E6320_SERDES_PAGE_FIBER,
-+				       reg, val);
-+}
-+
-+int mv88e6320_serdes_write(struct mv88e6xxx_chip *chip, int lane, int device,
-+			   int reg, u16 val)
-+{
-+	return mv88e6xxx_phy_page_write(chip, lane,
-+					MV88E6320_SERDES_PAGE_FIBER,
-+					reg, val);
-+}
-+
-+int mv88e6320_serdes_get_lane(struct mv88e6xxx_chip *chip, int port)
-+{
-+	u8 cmode = chip->ports[port].cmode;
-+	int lane = -ENODEV;
-+
-+	switch (port) {
-+	case 0:
-+		if (cmode == MV88E6XXX_PORT_STS_CMODE_100BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_1000BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_SGMII)
-+			lane = MV88E6320_PORT0_LANE;
-+		break;
-+	case 1:
-+		if (cmode == MV88E6XXX_PORT_STS_CMODE_100BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_1000BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_SGMII)
-+			lane = MV88E6320_PORT1_LANE;
-+		break;
-+	}
-+
-+	return lane;
-+}
-+
- int mv88e6352_serdes_read(struct mv88e6xxx_chip *chip, int lane,
- 			  int device, int reg, u16 *val)
- {
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.h b/drivers/net/dsa/mv88e6xxx/serdes.h
-index e71cddf63eba..5af8a1046b69 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.h
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.h
-@@ -12,6 +12,10 @@
- 
- #include "chip.h"
- 
-+#define MV88E6320_PORT0_LANE		0x0c
-+#define MV88E6320_PORT1_LANE		0x0d
-+#define MV88E6320_SERDES_PAGE_FIBER	0x01
-+
- #define MV88E6352_ADDR_SERDES		0x0f
- #define MV88E6352_SERDES_PAGE_FIBER	0x01
- #define MV88E6352_SERDES_IRQ		0x0b
-@@ -108,6 +112,7 @@
- #define MV88E6393X_ERRATA_4_8_BIT		BIT(14)
- 
- int mv88e6185_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
-+int mv88e6320_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
- int mv88e6341_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
- int mv88e6352_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
- int mv88e6390_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
-@@ -137,10 +142,14 @@ int mv88e6352_serdes_pcs_link_up(struct mv88e6xxx_chip *chip, int port,
- 				 int lane, int speed, int duplex);
- int mv88e6390_serdes_pcs_link_up(struct mv88e6xxx_chip *chip, int port,
- 				 int lane, int speed, int duplex);
-+int mv88e6320_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
-+			  int reg, u16 *val);
- int mv88e6352_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
- 			  int reg, u16 *val);
- int mv88e6390_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
- 			  int reg, u16 *val);
-+int mv88e6320_serdes_write(struct mv88e6xxx_chip *chip, int lane, int device,
-+			   int reg, u16 val);
- int mv88e6352_serdes_write(struct mv88e6xxx_chip *chip, int lane, int device,
- 			   int reg, u16 val);
- int mv88e6390_serdes_write(struct mv88e6xxx_chip *chip, int lane, int device,
--- 
-2.41.0
-
+Good point. I haven't measured it but assume it will have the same
+effect as for other page fault cases handled under per-VMA locks
+(mmap_lock contention reduction). I'll try to create a test to measure
+the effects.
+Thanks,
+Suren.
