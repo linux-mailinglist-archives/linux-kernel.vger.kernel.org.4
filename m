@@ -2,140 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80451745C01
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38F6745C05
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjGCMQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S229484AbjGCMQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjGCMQF (ORCPT
+        with ESMTP id S229932AbjGCMQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:16:05 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2091.outbound.protection.outlook.com [40.107.117.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29728194;
-        Mon,  3 Jul 2023 05:15:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gIbSWopspmw1EalAWislF9FdSSe0RUfUFzZyugLVRgv0XVAuUr/bC9R8QdOq3XBMHtQbgNMfNUPZENTdKtzY4wDioazX0Z73X02ljc3klXb1XusmzFAVadZ6g2rou1uDVUq3pv+reqaNwAtUMknOmtZ8lXUOYM6gPZgJZIbum+lcri9pb7Zf1Cv0T30c/j6HABasyMbfTlsTZHcGt5F03Fn2SFlJx1gBBpoOxfml+WBj/pZ+7XJeBX26HCJOoZf6oH6w2gsoyMqJ5twit7XyY8vdohKd52leJaXdzYI6gRhMI2PTZZDkxYjmv4MuyfdHbQMY8fODSwtEwrvdAbRYZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lmab9lxedtARErfW/eU77thoFuFbzoaAcpox67VHSVo=;
- b=Vl7VllKi7pr1y3HP0vdzbYGHpTHiYQEMPPHvMYQh/7I0+3/YO6XePJRjQCzXYJjtdczm5HCb40tozyO9CZUxt154KBic8ru0waG4p1awW06ubSRzAEJviu9HbEoN4j/ogxEVPwjAU4mHRENfLdJfgi5yxi4IDezaEWU1JJEqs8tWpfGuyzh2tMW2tFRMDSCD12PANhgsSAT/rXeesC5DK8kuA/uUHCDAjcvR1ru84cdmZKz5aA+yUHiLFuGHPalUqE+4T1k9CgnmKYFtzw0KGOWecMPjLqCNZeZl4hKRLtuwi/8wuRtSjDms6QR0c3f30U2Cr0MHfIIXDH5upKhn0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lmab9lxedtARErfW/eU77thoFuFbzoaAcpox67VHSVo=;
- b=kQMyXr7jT5yUDMySL5OKNT0X2Yu9GfDLw7CmddZ+oMntCQ1TKxnMf4VpDqXiVQEUVv5bZKXn6Wz2R8ZU8ekDQAgj9yKwGAPKj0MUvZr7m1dV2z0U+lhbcCIDFLqo7kRWJbT7N0DfO7OBzCLW6G8lEZs6rtK1emw0S/DmDedWJvKREiAXujNTSWEQ8bHPwcKAJGzaLa9kvhDx2Suk16hc0yl46eDlgx/ofYYGcuM5IYEktln+lYfPvvYhwWdafjdueEd5zDNr4V1o8EfSMDQsOJPclGvwBzeufIdg9yVKdH3tA75OQpmhXLvHa2z9jRjJHuyTNVvW7wiIPDoM3tsMZQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB4361.apcprd06.prod.outlook.com (2603:1096:4:15e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
- 2023 12:15:54 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
- 12:15:54 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     tglx@linutronix.de
-Cc:     DLG-Adam.Ward.opensource@dm.renesas.com, agross@kernel.org,
-        alexandre.torgue@foss.st.com, amitk@kernel.org,
-        andersson@kernel.org, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, bcm-kernel-feedback-list@broadcom.com,
-        chi.minghao@zte.com.cn, daniel.lezcano@linaro.org,
-        festevam@gmail.com, florian.fainelli@broadcom.com,
-        frank.li@vivo.com, hayashi.kunihiko@socionext.com, heiko@sntech.de,
-        jernej.skrabec@gmail.com, johan+linaro@kernel.org,
-        jonathanh@nvidia.com, kernel@pengutronix.de,
-        konrad.dybcio@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, miquel.raynal@bootlin.com,
-        mmayer@broadcom.com, niklas.soderlund+renesas@ragnatech.se,
-        rafael@kernel.org, rui.zhang@intel.com, s.hauer@pengutronix.de,
-        shangxiaojing@huawei.com, shawnguo@kernel.org,
-        srinivas.pandruvada@linux.intel.com, thara.gopinath@gmail.com,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        wenst@chromium.org
-Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing for devm_request_threaded_irq()
-Date:   Mon,  3 Jul 2023 20:15:41 +0800
-Message-Id: <20230703121541.17726-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <87h6qpyzkd.ffs@tglx>
-References: <87h6qpyzkd.ffs@tglx>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0014.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::9) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Mon, 3 Jul 2023 08:16:57 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8817CE69
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 05:16:43 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31297125334so3709417f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 05:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688386602; x=1690978602;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=peUQweafKnLLxk0k/IKIpDRdcCw7xS/vyg8SgVQE+Po=;
+        b=X23RBu4X8GXN5BYhCg+I+s2DZ7vEZFnY2FKP6CoZvHC6uNCxiPk+hZdjIwxtKfDRDL
+         lYZwX8VrB0BYfI7pNEb1j0uEcaTqIvJnXc1iNiLYp2SNz7kX3c4sKc8VnSY58PqVR5gK
+         +1bUqrwn7rEVZGv1C5O1AwVHF8tO93oX3XQmDfK017lyW8mlluTD7nBJ05Q3740PI6lw
+         +OvtKuJBNjylbvpCG80N7j4XUZbLg9neOisBJfFmw4jRWXFBKqFT6b54Gq/nx9CZSUec
+         S2uVhU2WBwNQqhWcS8OEtsm/34mu3vF+EOgsYE2Axg2dbFkhv7EH5ERgQO5gaDt0Ym4N
+         a06A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688386602; x=1690978602;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=peUQweafKnLLxk0k/IKIpDRdcCw7xS/vyg8SgVQE+Po=;
+        b=di74RPkj1s/Rs6/ELUqAKsYeSxGc6sDLG7oTSsei2TQ7N0llTXOMn8HVZPqMqAp48Z
+         tRmA9cuMXe2PaKggR96y2LU833ieJihg3gStuaq5BPJ7PI/KvQ0FzBYaD4lFqxKYk+sz
+         OO3FY8w050X7L7fIRcYJShIh5yLA7kjsTA5ljCswB8bzVs+xETnSTpd7Elm+KvlE6oSh
+         4UdpYEk9fKfO2LSWIoDHt1WLg8WxUH3Zmo6QMEwXc6JFoabhlm72x0BJQIS+kYJl+0he
+         retdWJQ9/CNGt+H5uA4/267ShkbrJ4zVvgk7EX95NBH1zcb2CVjfl7pjUbhKOwgYZYZV
+         xGbA==
+X-Gm-Message-State: AC+VfDzKGkhrltTyIniue+hc3srHvLTBcipkJ9d7DYPaP4jhCYYa0l8r
+        gk1U/RQj+OB/ODMLFuJkAUC3/g==
+X-Google-Smtp-Source: ACHHUZ7ZllFgiOaFcNA/5xTz3q4S6dDj6xdNTTZzk03ivO/3c4pVjeqa8Hzn3vR5YkbOio8MKVT42A==
+X-Received: by 2002:a5d:628c:0:b0:311:b18:9ca4 with SMTP id k12-20020a5d628c000000b003110b189ca4mr13570903wru.17.1688386601836;
+        Mon, 03 Jul 2023 05:16:41 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id t25-20020a7bc3d9000000b003fbb8c7c799sm12048317wmj.30.2023.07.03.05.16.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 05:16:39 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 15:16:36 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Jan Kara <jack@suse.cz>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+Subject: fs/namei.c:4875 vfs_rename() warn: variable dereferenced before
+ check 'source' (see line 4830)
+Message-ID: <a8200507-8e52-422d-85ad-22be78930099@kadam.mountain>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4361:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9445644c-7d5a-4b08-7da0-08db7bbf3fbd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fK1Zkh18aiWB4pcdzjNZL/mMfNhqoiKAdDjZ2z1GGa8FvDCvs7/gPptuZXOUPLJUPZMEPW6ddOfC++zsx+r0yK5skJbEZ3Vom6tUdx8QSP3J8rkhCAFpHeB2fp4CLEaP+qfBYLfmXdBkzlW5kwHauSRlzSfVdzlbtHyT6RxK9NfM4j5yAqp4CU2+40oxn7ca6o52PKskme4iXaUE+ZuQxC6l5MoFCeIjzRcsLWsurxHKU385pG9UcUf4RW4Qlp6p+TQeACUNeycVBmPnOsKNDG+avEg5CtOy2Um0YxIcEUJfg5SXFx971l8p/YB5nLrgfL/4hM4g1Moayp6Lwc4cDejr0AZBqFf1Jysnk+Spox5MvN6ZvoKOIaPrMUQfzJG6oJmpAb6ieWotUN5/+0T6u1tKLtnU49V8A3SGpPETIYfU0vnT6aG7iqmkWRaeM/z1BHnqrs2dPA3SYST6WuYf6koV/hL0dcU4+5x2ql9lgONEDzluJJl3SN5/H4CUsNDftaR9HXLWYM/ys7lr+z3PqXR7PKebUAjX8ovv1ASH/9iNfoz6NKcWFBPC42IeFhFQ42oMN8KaRqFGjgb6KfePrmePY+G0R/Zh9n030xRMu9N5z+Kgn43U7QO/4W+xHcDp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(346002)(39860400002)(376002)(451199021)(2906002)(41300700001)(5660300002)(8676002)(8936002)(7416002)(7406005)(558084003)(36756003)(86362001)(186003)(2616005)(478600001)(26005)(6512007)(6506007)(1076003)(6666004)(6486002)(52116002)(316002)(6916009)(4326008)(66476007)(66556008)(66946007)(38100700002)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fiNWTkYcXzDDXUuPlk5DUDkgNsZa7dpDfgxJ9nPBL1gmGcsC8muF7TZMkgXz?=
- =?us-ascii?Q?450wJrtub+VTkhJTVekNK39cEMtGUJvId2U5EaXWQVRY0HZ6j9RguyQl6AAh?=
- =?us-ascii?Q?8gQ1ki6rkmuScHUjYuFQ7TWa4AfwL4MKk4DvOpVF1SaLJ1mdOJoJTwnFDJQ2?=
- =?us-ascii?Q?ofbmXrXpGd+hOc5hhcF2P7BNGX9UlBZYELRMBlNV5U+yF3COmRcjj1E3QIXy?=
- =?us-ascii?Q?Kf07T5mKDvQ1qLyfm10w8uGuT39GUHIRCPIyEJ8ycXhylLddnMUk2yXRPEaX?=
- =?us-ascii?Q?HuEArgofSGwZ0AR1sk9H/sjq3Bib91DEcQxIfwTGo0fpPnDuKCon9g2UpNS5?=
- =?us-ascii?Q?uuQrkxSFBhhe/0Bd+GhEs67liiWGQu5Rt2md10oJvQBFuDIAr8Eo9557djBF?=
- =?us-ascii?Q?PnXAjNO4XQdcaBlipu3Ht8XPSGyYMHFPCpclOu1pLSsa6ipAVrOBt96VSan+?=
- =?us-ascii?Q?8QBI5bxpkzUyjyg5JKbWIjaVaky90goEsCJgnWfv1d/A/KramQaYpQiwP8l/?=
- =?us-ascii?Q?DpoW0ONwc6xhvRpdvwP8jksjJv9WLP1KsSSVRtHCkWgOXcJqntHQbYuvm2Cr?=
- =?us-ascii?Q?nkEqOEVKZSCUc0V0d5nR1tLZqiESk4B7+IDBbJ6pBuGL9hNNnZTW6xwIL8f9?=
- =?us-ascii?Q?sTdZCF6ApWzRu6QGBeBWCdz1OYb9mFTpUc7/htyRxPDKOPAs9+oePnXEmYY3?=
- =?us-ascii?Q?qroF8ehMsXeBfNEBtx8w7UuK0zGqIWL0ZzroZvNPpurGv0S+QiW2Kfskch93?=
- =?us-ascii?Q?0LSgdTD2WD050tlHmEDg0ozUJ6JXLr1UNCqW3rDb8hNUxBf3GHKu+DaCLA0u?=
- =?us-ascii?Q?dwNywEW4++qKnamiyIiEQNpAu0QFuVww65TFFIvtGgByraynyIjaLLAKiWz3?=
- =?us-ascii?Q?9TTIJLx6qZtbjezOE0J2BQgYcxCvJxeE7E1WePNT9dv71lIzFgfsBOU4FMz3?=
- =?us-ascii?Q?91EnobXywix4sPj6XxqhzbCmChyjrkayfhj79eHiUF58ca/IHLZZz1HapgMK?=
- =?us-ascii?Q?WbskaiK+bxRGBqbufLh+CgUpffCli3EvI4A66n7FWhzgGh8oiDTcTEdTzGf7?=
- =?us-ascii?Q?rYGUUOY9XxYh7K94/IjmfOzJ2IgJcRDYrLkjCplsBgnrRMFzj9GSunw7PhmD?=
- =?us-ascii?Q?/+QpMQwebpwX1A2yIDUlvcHxULjaHctuBZzsaHCb5PMeiRTiK+Ot8K0Th5FE?=
- =?us-ascii?Q?YwU0tdY6O2dseBU921c9OjX18GQ3QBRVkXSYx82KkxE8FWOd7UHDt6bU2+uP?=
- =?us-ascii?Q?z/D556121gwcYzeBh/IMg7C2T3IwiNK1lQcUYJGKZhGJ2shMV5R+NlgOt6ON?=
- =?us-ascii?Q?gT8VdZ1oHZC6G97+uEOzu9RxDExr/lQN82HF2qvSYQajKD5TLRWS2ZwEAjQl?=
- =?us-ascii?Q?7tmX/RrKB+NeTMI8DI1dXD0fKR+kaaGFVU52fcMZfCJ9vwlhxNddHsPwTcLd?=
- =?us-ascii?Q?nZZgWQ3yAdi3h7kJbMPDjHkMGXGWAKc99lyYhiXs2Cyj8Gx+ktbB0v5K0OO4?=
- =?us-ascii?Q?6n99wJxrFSBIZbVknVNb3naze/uFiH7dVQI9CtTGq/2X4U1rnGYicNT7rVeD?=
- =?us-ascii?Q?NqzPdkrvL0hL7uBYh32phBt8GpcjiOonu8f4NAjj?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9445644c-7d5a-4b08-7da0-08db7bbf3fbd
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 12:15:54.3356
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PbVh1lGJvenpl+KY8srJpEJq8y207ZdYP3xXMmEfy6ADffGZFGElUjMSUmgPFWRb17vgS231zfkSkAAkZc6Ytw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4361
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   995b406c7e972fab181a4bb57f3b95e59b8e5bf3
+commit: 28eceeda130f5058074dd007d9c59d2e8bc5af2e fs: Lock moved directories
+config: x86_64-randconfig-m001-20230702 (https://download.01.org/0day-ci/archive/20230703/202307030026.9sE2pk2x-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030026.9sE2pk2x-lkp@intel.com/reproduce)
 
-Here. V3 was modified according to tglx's suggestion, if there is any problem, please point out.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202307030026.9sE2pk2x-lkp@intel.com/
 
-Thx,
-Yangtao
+New smatch warnings:
+fs/namei.c:4875 vfs_rename() warn: variable dereferenced before check 'source' (see line 4830)
+
+vim +/source +4875 fs/namei.c
+
+9fe61450972d39 Christian Brauner     2021-01-21  4752  int vfs_rename(struct renamedata *rd)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4753  {
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4754  	int error;
+9fe61450972d39 Christian Brauner     2021-01-21  4755  	struct inode *old_dir = rd->old_dir, *new_dir = rd->new_dir;
+9fe61450972d39 Christian Brauner     2021-01-21  4756  	struct dentry *old_dentry = rd->old_dentry;
+9fe61450972d39 Christian Brauner     2021-01-21  4757  	struct dentry *new_dentry = rd->new_dentry;
+9fe61450972d39 Christian Brauner     2021-01-21  4758  	struct inode **delegated_inode = rd->delegated_inode;
+9fe61450972d39 Christian Brauner     2021-01-21  4759  	unsigned int flags = rd->flags;
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4760  	bool is_dir = d_is_dir(old_dentry);
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4761  	struct inode *source = old_dentry->d_inode;
+9055cba711891a Sage Weil             2011-05-24  4762  	struct inode *target = new_dentry->d_inode;
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4763  	bool new_is_dir = false;
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4764  	unsigned max_links = new_dir->i_sb->s_max_links;
+49d31c2f389acf Al Viro               2017-07-07  4765  	struct name_snapshot old_name;
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4766  
+8d3e2936375bac Miklos Szeredi        2016-12-16  4767  	if (source == target)
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4768  		return 0;
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4769  
+4609e1f18e19c3 Christian Brauner     2023-01-13  4770  	error = may_delete(rd->old_mnt_idmap, old_dir, old_dentry, is_dir);
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4771  	if (error)
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4772  		return error;
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4773  
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4774  	if (!target) {
+4609e1f18e19c3 Christian Brauner     2023-01-13  4775  		error = may_create(rd->new_mnt_idmap, new_dir, new_dentry);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4776  	} else {
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4777  		new_is_dir = d_is_dir(new_dentry);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4778  
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4779  		if (!(flags & RENAME_EXCHANGE))
+4609e1f18e19c3 Christian Brauner     2023-01-13  4780  			error = may_delete(rd->new_mnt_idmap, new_dir,
+6521f891708292 Christian Brauner     2021-01-21  4781  					   new_dentry, is_dir);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4782  		else
+4609e1f18e19c3 Christian Brauner     2023-01-13  4783  			error = may_delete(rd->new_mnt_idmap, new_dir,
+6521f891708292 Christian Brauner     2021-01-21  4784  					   new_dentry, new_is_dir);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4785  	}
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4786  	if (error)
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4787  		return error;
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4788  
+2773bf00aeb9bf Miklos Szeredi        2016-09-27  4789  	if (!old_dir->i_op->rename)
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4790  		return -EPERM;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4791  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4792  	/*
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4793  	 * If we are going to change the parent - check write permissions,
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4794  	 * we'll need to flip '..'.
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4795  	 */
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4796  	if (new_dir != old_dir) {
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4797  		if (is_dir) {
+4609e1f18e19c3 Christian Brauner     2023-01-13  4798  			error = inode_permission(rd->old_mnt_idmap, source,
+47291baa8ddfda Christian Brauner     2021-01-21  4799  						 MAY_WRITE);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4800  			if (error)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4801  				return error;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4802  		}
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4803  		if ((flags & RENAME_EXCHANGE) && new_is_dir) {
+4609e1f18e19c3 Christian Brauner     2023-01-13  4804  			error = inode_permission(rd->new_mnt_idmap, target,
+47291baa8ddfda Christian Brauner     2021-01-21  4805  						 MAY_WRITE);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4806  			if (error)
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4807  				return error;
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4808  		}
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4809  	}
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4810  
+0b3974eb04c487 Miklos Szeredi        2014-04-01  4811  	error = security_inode_rename(old_dir, old_dentry, new_dir, new_dentry,
+0b3974eb04c487 Miklos Szeredi        2014-04-01  4812  				      flags);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4813  	if (error)
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4814  		return error;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4815  
+49d31c2f389acf Al Viro               2017-07-07  4816  	take_dentry_name_snapshot(&old_name, old_dentry);
+1d2ef590148300 Al Viro               2011-09-14  4817  	dget(new_dentry);
+28eceeda130f50 Jan Kara              2023-06-01  4818  	/*
+28eceeda130f50 Jan Kara              2023-06-01  4819  	 * Lock all moved children. Moved directories may need to change parent
+28eceeda130f50 Jan Kara              2023-06-01  4820  	 * pointer so they need the lock to prevent against concurrent
+28eceeda130f50 Jan Kara              2023-06-01  4821  	 * directory changes moving parent pointer. For regular files we've
+28eceeda130f50 Jan Kara              2023-06-01  4822  	 * historically always done this. The lockdep locking subclasses are
+28eceeda130f50 Jan Kara              2023-06-01  4823  	 * somewhat arbitrary but RENAME_EXCHANGE in particular can swap
+28eceeda130f50 Jan Kara              2023-06-01  4824  	 * regular files and directories so it's difficult to tell which
+28eceeda130f50 Jan Kara              2023-06-01  4825  	 * subclasses to use.
+28eceeda130f50 Jan Kara              2023-06-01  4826  	 */
+28eceeda130f50 Jan Kara              2023-06-01  4827  	lock_two_inodes(source, target, I_MUTEX_NORMAL, I_MUTEX_NONDIR2);
+9055cba711891a Sage Weil             2011-05-24  4828  
+51cc3a6620a6ca Hugh Dickins          2021-09-02  4829  	error = -EPERM;
+51cc3a6620a6ca Hugh Dickins          2021-09-02 @4830  	if (IS_SWAPFILE(source) || (target && IS_SWAPFILE(target)))
+                                                                        ^^^^^^
+Dereferenced.
+
+51cc3a6620a6ca Hugh Dickins          2021-09-02  4831  		goto out;
+                                                                ^^^^^^^^
+51cc3a6620a6ca Hugh Dickins          2021-09-02  4832  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4833  	error = -EBUSY;
+7af1364ffa64db Eric W. Biederman     2013-10-04  4834  	if (is_local_mountpoint(old_dentry) || is_local_mountpoint(new_dentry))
+9055cba711891a Sage Weil             2011-05-24  4835  		goto out;
+9055cba711891a Sage Weil             2011-05-24  4836  
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4837  	if (max_links && new_dir != old_dir) {
+8de52778798fe3 Al Viro               2012-02-06  4838  		error = -EMLINK;
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4839  		if (is_dir && !new_is_dir && new_dir->i_nlink >= max_links)
+8de52778798fe3 Al Viro               2012-02-06  4840  			goto out;
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4841  		if ((flags & RENAME_EXCHANGE) && !is_dir && new_is_dir &&
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4842  		    old_dir->i_nlink >= max_links)
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4843  			goto out;
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4844  	}
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4845  	if (!is_dir) {
+8e6d782cab5088 J. Bruce Fields       2011-09-20  4846  		error = try_break_deleg(source, delegated_inode);
+8e6d782cab5088 J. Bruce Fields       2011-09-20  4847  		if (error)
+8e6d782cab5088 J. Bruce Fields       2011-09-20  4848  			goto out;
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4849  	}
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4850  	if (target && !new_is_dir) {
+8e6d782cab5088 J. Bruce Fields       2011-09-20  4851  		error = try_break_deleg(target, delegated_inode);
+8e6d782cab5088 J. Bruce Fields       2011-09-20  4852  		if (error)
+8e6d782cab5088 J. Bruce Fields       2011-09-20  4853  			goto out;
+8e6d782cab5088 J. Bruce Fields       2011-09-20  4854  	}
+e18275ae55e07a Christian Brauner     2023-01-13  4855  	error = old_dir->i_op->rename(rd->new_mnt_idmap, old_dir, old_dentry,
+520c8b16505236 Miklos Szeredi        2014-04-01  4856  				      new_dir, new_dentry, flags);
+51892bbb57e878 Sage Weil             2011-05-24  4857  	if (error)
+51892bbb57e878 Sage Weil             2011-05-24  4858  		goto out;
+51892bbb57e878 Sage Weil             2011-05-24  4859  
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4860  	if (!(flags & RENAME_EXCHANGE) && target) {
+8767712f26d18a Al Viro               2018-05-27  4861  		if (is_dir) {
+8767712f26d18a Al Viro               2018-05-27  4862  			shrink_dcache_parent(new_dentry);
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4863  			target->i_flags |= S_DEAD;
+8767712f26d18a Al Viro               2018-05-27  4864  		}
+d83c49f3e36cec Al Viro               2010-04-30  4865  		dont_mount(new_dentry);
+8ed936b5671bfb Eric W. Biederman     2013-10-01  4866  		detach_mounts(new_dentry);
+bc27027a73e8b8 Miklos Szeredi        2014-04-01  4867  	}
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4868  	if (!(old_dir->i_sb->s_type->fs_flags & FS_RENAME_DOES_D_MOVE)) {
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4869  		if (!(flags & RENAME_EXCHANGE))
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4870  			d_move(old_dentry, new_dentry);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4871  		else
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4872  			d_exchange(old_dentry, new_dentry);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4873  	}
+51892bbb57e878 Sage Weil             2011-05-24  4874  out:
+28eceeda130f50 Jan Kara              2023-06-01 @4875  	if (source)
+                                                            ^^^^^^
+This check could be removed.
+
+28eceeda130f50 Jan Kara              2023-06-01  4876  		inode_unlock(source);
+28eceeda130f50 Jan Kara              2023-06-01  4877  	if (target)
+5955102c9984fa Al Viro               2016-01-22  4878  		inode_unlock(target);
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4879  	dput(new_dentry);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4880  	if (!error) {
+f4ec3a3d43bcdc Al Viro               2019-04-26  4881  		fsnotify_move(old_dir, new_dir, &old_name.name, is_dir,
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4882  			      !(flags & RENAME_EXCHANGE) ? target : NULL, old_dentry);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4883  		if (flags & RENAME_EXCHANGE) {
+f4ec3a3d43bcdc Al Viro               2019-04-26  4884  			fsnotify_move(new_dir, old_dir, &old_dentry->d_name,
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4885  				      new_is_dir, NULL, new_dentry);
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4886  		}
+da1ce0670c14d8 Miklos Szeredi        2014-04-01  4887  	}
+49d31c2f389acf Al Viro               2017-07-07  4888  	release_dentry_name_snapshot(&old_name);
+0eeca28300df11 Robert Love           2005-07-12  4889  
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4890  	return error;
+^1da177e4c3f41 Linus Torvalds        2005-04-16  4891  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
