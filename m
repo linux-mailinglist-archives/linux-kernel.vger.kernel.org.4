@@ -2,75 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0306F7458C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A25E74596B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjGCJsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S229535AbjGCJ4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjGCJsu (ORCPT
+        with ESMTP id S231624AbjGCJya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:48:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3055E73;
-        Mon,  3 Jul 2023 02:48:42 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 3 Jul 2023 05:54:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D911BD0;
+        Mon,  3 Jul 2023 02:50:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 157D26602329;
-        Mon,  3 Jul 2023 10:48:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688377721;
-        bh=3nr4rR/iu3oTG2ydNtl+jv3WxDV732H20lVTt5rYlz4=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=AQNDlTnQo8nv0kUnxdjxYToKoHgGozT+EMXldZry8KOzjL30vXLsHmy0ewo7GNfwA
-         gAApfkepZBP1N8qucblQmVQZKsgIHc2ojR8WhGOqdczn0xbNdzEOllf5C3k3AkMKF2
-         z29wPgNGrX4gaba6bUKDB5pnUO2md/YMWkFeSMI2Y1ZnbsgHMQtUGT7jz5ZjFWcvKT
-         QnHgDDbUimyUfXJn5DhMgF8cDqop1f0Vm11//nP9dKPOPcw4zGgEt6Z91pIx2SVu2u
-         HPzWDx8Qxn9FYiSoT4KK9fzyzftutlTN8bqEFznw3zU4kqHbnQcj/45aSoHy3KUvSw
-         +BvRia539wk3A==
-Message-ID: <b4a8b79c-a237-b320-c88d-292fb0788fcf@collabora.com>
-Date:   Mon, 3 Jul 2023 11:48:38 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE6A460EA2;
+        Mon,  3 Jul 2023 09:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4A4C433C7;
+        Mon,  3 Jul 2023 09:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688377831;
+        bh=LyukCnfIshSTbAwDJYNp6dcmjM1EfDP7RZS9ZHZjba4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Phu15QnH/sD22ugNy9M24vhr8GopWe4IIkSHl900X+cefSZa7cs5exWNiZbmSshgj
+         98Pq8zd2VvKaRxfPXHzXW0VDh54u1tc8N1Qr6ZckDAAdaRUdDDkTPtbn2+8FR1V9jN
+         CpTiTgw/8axiXSeouIvV52Okhehg+em9wZmgXfZA73QKKLVtU117fwK6w4OK/EZ6Pj
+         Ghw7NBpI9Xf+EzR7Wf+If0mtfsFhKcwkAUsTaDylKV1cjrMwB4HSC3PFQ+g4YVKCeO
+         mZPR9sdLkTEg3zHtBk4ie1NA00jbi1DjBnhFzOyaxwrgnrBlB6q/ztLQgkPrLs39df
+         Ldmb+TDo8Bh6w==
+Date:   Mon, 3 Jul 2023 11:50:26 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: stm32f7: Add atomic_xfer method to driver
+Message-ID: <ZKKZ4qUw5pKVt1T1@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Sean Nyekjaer <sean@geanix.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230509132159.4160984-1-sean@geanix.com>
+ <ZJV0/cbjn1Qa62u+@shikoro>
+ <9BEDFE6D-AE5E-46F1-A1BF-A19C6F5130F6@geanix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] ARM: dts: mediatek: minor whitespace cleanup around
- '='
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230702185128.44052-1-krzysztof.kozlowski@linaro.org>
- <20230702185128.44052-2-krzysztof.kozlowski@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230702185128.44052-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WPJgYBpM8zD5lQRQ"
+Content-Disposition: inline
+In-Reply-To: <9BEDFE6D-AE5E-46F1-A1BF-A19C6F5130F6@geanix.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 02/07/23 20:51, Krzysztof Kozlowski ha scritto:
-> The DTS code coding style expects exactly one space before and after '='
-> sign.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+--WPJgYBpM8zD5lQRQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
+> > Will DMA actually run in atomic mode?
+
+> Atomic is mainly(only) used for writing a single register in the PMIC
+> for the stpmic.
+
+And this most probably during shutdown...
+
+> Guess that will not trigger any DMA use.
+
+... so I'd be very surprised if DMA is operational that late. I think we
+can rule that out independent of I2C messages to be trasnferred.
+
+
+--WPJgYBpM8zD5lQRQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSimeIACgkQFA3kzBSg
+KbaU9g//Y1yfLkUK08Go/WdUa65GRV80RBI3gwDyPqLJYNsFbsmajpNqt/4XihqZ
+RTLxT+tWXSUw4DnFtovhuaucFZcEdtirZLplsCrioc0cNDP5RgYibMuOxsuOig2T
+M/BJK3b4iqIZJjiT+Lcs7RyPmvRetYTpyu8w17YPt5pPVeXIbDlcC1AStvCK0ghj
+0ulGyX3VjRIgo++Dvcw2/08G5WL6MEB6sm9bvveaT1AX6eDBhfgPPB3l/d/+lBki
+Dd+8le1SnuEVfCN0TxLIZE9m9ZZLYTSH1BcBSCJT6SYPBoM7q26OVdAAAoP4uQ9S
+M6W3G6zEbHuZ0rTPRt70d2hBqAN40qmPmGZucvxIGoOxMS2rIJ6HRVvbgc3nrK4+
+CkQ5PqYb2iIRaEIHposc6ggSgyC15w1pt7lczXZTCakTlgOCRehPMBnipec1n85C
+IgzRW2Si1yHZMdt5Oe8zvsvfrLsa/vx3xBzHvPh5Ai7IoCEBIpb14B11lcRDSmVT
+pWdFwgYvCy1t6sltEo1k0WaVVKZpmP/AYWGzQzo5QLyg2q1XnTCQ09pJNlkguPsa
+lJWc89HAKgOrmnm/r+eHbZQUo3N9KKkRv4FbhMOvUOQK0Vij2R5UX3PLpM6NVPms
+zV9LzkqESaPfI7W3j311Gv5hhvyUkGKnh5UeVPgv2OMC6J0Sy/Q=
+=qlPi
+-----END PGP SIGNATURE-----
+
+--WPJgYBpM8zD5lQRQ--
