@@ -2,145 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97948745C3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A97745C3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjGCMaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
+        id S230281AbjGCMbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjGCMaM (ORCPT
+        with ESMTP id S229436AbjGCMbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:30:12 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343DE109;
-        Mon,  3 Jul 2023 05:30:11 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 3 Jul 2023 08:31:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A8C109;
+        Mon,  3 Jul 2023 05:31:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 55DCA6606F62;
-        Mon,  3 Jul 2023 13:30:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688387409;
-        bh=10ULvzLVa3uPh6pWKGK9iBRw5HZ3uis1iLD8mOYhqfw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=J5fThttroPprXqRHHKBLtoaDz50gaGczy9Po19sSzCmkUgjfbnoJtSmqWQ91atMLn
-         hbOMMYb1dA04xd3lL+5fPpFEyJ56r38hCVBntW89RuqMKWG8pes7Tzt6ecbDvH7i6L
-         vJuGuwiV3kAJ3vHwEoUeqBVJy4SAo8rUjf4MmR3OCmbF6fODUY22ZqTJKjwIDG33JS
-         hvluBaHKUorn2TK2lcjZbd2tR013Z5JllRopxhxwhs2T2BI1lc74BlILmtgKAWZQ1b
-         dK7If3bPNBXDwqAfbEIJZGag3IQ0NuPhr8Apt6UfxtmFNcyuy12rCStcLU0Su/hq3Y
-         L0z16RWX5C+Nw==
-Message-ID: <2dd412f0-86cb-3ae0-305d-0e8192b9128a@collabora.com>
-Date:   Mon, 3 Jul 2023 14:30:06 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF1E60F11;
+        Mon,  3 Jul 2023 12:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A52C433C8;
+        Mon,  3 Jul 2023 12:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688387459;
+        bh=1sPgnQytqXvJBTAK60yFSx/ZPuPS0KgjBMPm7QnUKU4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DokGZ0UVTk2qrGDH6x0dFs0utSx1dI9dPfYIFYlqMiq9wQ0v04VplU1xRkx1IaKiJ
+         +en5RWpr6Y3ZGmiVzuI71f8/H4MMrqSw2shS3BnBawra+vNWrA8t/Yd5jYWav7Wzr0
+         AXs76PS7Y7tzqe+d8JbS2uT+R61NmccuXy9v6ohnyw0mOSD3J4CwWLzOlJ4hzvB4Mv
+         Rcq3k9hOc3DGufhvC5a7F2fdSsEv1xEvN8fDASrlBdb4h0ZdstGb1FPVs4d/JbM9k7
+         PERTQi4jBjLTUNUEELAZdwQKl9nUSJt4LZc9VQvYkH3fW3n0mzfTrufaEy9muOZSyq
+         P9wryL2uqxP4w==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        John Keeping <john@keeping.me.uk>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Dan Carpenter <error27@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: functionfs: avoid memcpy() field overflow warning
+Date:   Mon,  3 Jul 2023 14:30:32 +0200
+Message-Id: <20230703123053.3117488-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/4] media: platform: mediatek: isp_30: add mediatek
- ISP3.0 sensor interface
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Julien Stephan <jstephan@baylibre.com>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20230630100321.1951138-1-jstephan@baylibre.com>
- <20230630100321.1951138-3-jstephan@baylibre.com>
- <CAAOTY_-qu2RWr496wXxc1Cp14eZfzKt4QgEH8fJns2LOjpwi8Q@mail.gmail.com>
- <CAAOTY_9SFRMb7d3c62SVDnZY00hRAZ=9wBi9QCcv1UKuc8iBtQ@mail.gmail.com>
- <20230703121853.GA16531@pendragon.ideasonboard.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230703121853.GA16531@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/07/23 14:18, Laurent Pinchart ha scritto:
-> On Sun, Jul 02, 2023 at 05:20:25PM +0800, Chun-Kuang Hu wrote:
->> Chun-Kuang Hu <chunkuang.hu@kernel.org> 於 2023年7月2日 週日 上午7:35寫道：
->>> Julien Stephan <jstephan@baylibre.com> 於 2023年6月30日 週五 下午6:05寫道：
->>>>
->>>> From: Louis Kuo <louis.kuo@mediatek.com>
->>>>
->>>> This will add the mediatek ISP3.0 seninf (sensor interface) driver found
->>>> on several Mediatek SoCs such as the mt8365.
->>>>
->>>> Then seninf module has 4 physical CSI-2 inputs. Depending on the soc they
->>>> may not be all connected.
->>>>
->>>> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
->>>> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
->>>> Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
->>>> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
->>>>
->>>
->>> [snip]
->>>
->>>> +
->>>> +static const struct mtk_seninf_conf seninf_8365_conf = {
->>>> +       .model = "mtk-camsys-3.0",
->>>> +       .nb_inputs = 4,
->>>> +       .nb_muxes = 6,
->>>> +       .nb_outputs = 4,
->>>> +};
->>>> +
->>>> +static const struct of_device_id mtk_seninf_of_match[] = {
->>>> +       {
->>>> +               .compatible = "mediatek,mt8365-seninf",
->>>> +               .data = &seninf_8365_conf,
->>>
->>> Now only support one SoC, so it's necessary to select the SoC data and
->>> you could directly place the data in the code. After support other
->>
->> Typo.
->>
->> Now only support one SoC, so it's not necessary to select the SoC data
->> and you could directly place the data in the code.
-> 
-> I think Julien has visibility on other SoCs that could use the same
-> driver, and has designed the mtk_seninf_conf structure accordingly. I'll
-> let Julien confirm (or tell I'm wrong).
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-You're not wrong.
+__ffs_func_bind_do_os_desc() copies both the CompatibleID and SubCompatibleID
+fields of the usb_ext_compat_desc structure into an array, which triggers
+a warning in the fortified memcpy():
 
-Cheers,
-Angelo
+In file included from drivers/usb/gadget/function/f_fs.c:17:
+In file included from include/linux/string.h:254:
+include/linux/fortify-string.h:592:4: error: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+                        __read_overflow2_field(q_size_field, size);
 
->>> SoC, so we could know what should be placed in struct mtg_seninf_conf
->>> (Now we have no any information).
->>>
->>>> +       },
->>>> +       {
->>>> +       },
->>>> +};
->>>> +MODULE_DEVICE_TABLE(of, mtk_seninf_of_match);
-> 
+Usually we can avoid this by using a struct_group() inside of the structure
+definition, but this might cause problems in userspace since it is in a uapi
+header.
 
+Just copy the two members individually.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/gadget/function/f_fs.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index f41a385a5c421..b8f9e52e6db6b 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2933,8 +2933,9 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
+ 		t = &func->function.os_desc_table[desc->bFirstInterfaceNumber];
+ 		t->if_id = func->interfaces_nums[desc->bFirstInterfaceNumber];
+ 		memcpy(t->os_desc->ext_compat_id, &desc->CompatibleID,
+-		       ARRAY_SIZE(desc->CompatibleID) +
+-		       ARRAY_SIZE(desc->SubCompatibleID));
++		       sizeof(desc->CompatibleID));
++		memcpy(t->os_desc->ext_compat_id + sizeof(desc->CompatibleID),
++			&desc->SubCompatibleID, sizeof(desc->SubCompatibleID));
+ 		length = sizeof(*desc);
+ 	}
+ 		break;
+-- 
+2.39.2
 
