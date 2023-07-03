@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753D77453E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAA97453F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjGCCru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 22:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S230110AbjGCCty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 22:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjGCCrs (ORCPT
+        with ESMTP id S229500AbjGCCtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 22:47:48 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12hn2212.outbound.protection.outlook.com [52.100.165.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A5E18F;
-        Sun,  2 Jul 2023 19:47:46 -0700 (PDT)
+        Sun, 2 Jul 2023 22:49:53 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2064.outbound.protection.outlook.com [40.107.94.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1BF18F;
+        Sun,  2 Jul 2023 19:49:52 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XouX/K5qVA/IqlKFFNxRT/GZbtXIPw63KD36eIFFPr7W/qD+0OFtljy4mEJWkIl5lzu/Wtn9WPiqOsyEn+MnQcY/0ca8h3u6S7+s5jNJ6dMHgADNCUMUeqlpdn6IczXP8d1lioSgk/F2rARC+gjj3hSu1fFNjiEl7FzDZ6IRlJllDvEWmgMHVBlbsXlNjG+EpLWVSIMnam6O6j4YWYj20DSwcCsTmJsVPtjMiyt6HEYHiiZqBSJTzOvMNrl9kBRg3VGP7rcB0KfUb6OrMWDZLnUhXbc0kRdzPRyT85x69InjmNK/vKwzx9CrVblqEaCFSfxEOT4Rb9mpsxNPruKWYQ==
+ b=nqL0nRLENhKew+H2pXNhRpvaLnrnQlJGzXZlf3YmMwAPeD99wSXttiAIV4GHLvISbdcI3YlrmGB7s1HsfpA76XHwYhhsQXNpLkXjWwmLxVXlJ22a2rtn12I1yhaFRXR2nTjCGEVmISxh/JT3jzfyknx4fCfn4NEWNCy9+uMYk/bZ1UT3fdJEAx/lIp9EJGAtJLfN+ddjkPtgIt2UgcOzAtvqzd74bC0Yk6AfQSIKd7zjXetcYV/4zuXlWpNQyl7n1Y8FADWq0o4i3NC8pTLuipRBJ4rQUZX1WdRsXb1duAUOhx34fxcPjPeOGPAENl0ji4vtiYSVeLKGBwafngs4LQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SKncvf/Vi4+B2gbr+MyBeAkT5AE7qUlzVoUCKtgSdVk=;
- b=Z1Vm1IcT9YAe5ItkS/YPOe49aVIBJOJbqPnRF7DCYH9hN6Akdhh5/5V2Fxe0xpb+D2yAektqwc8PudJPHahbuw9Ls6H7g1quO1V2e/meowhYmQmSrmyHCcDp8E3ZMXEcjNT7wIQTpP25umHkU4g1/At7L7TQbBmHkDSA/Qrnu2x3NWby1TSpe9tBBUi3ZvyomYkKdD+UG10WbpmED/clD17OHeZI400M6FTlxzJ5TkG36QRl5zD7AeUMns7vv3l7omPLPjI5W0Su8eyIk5TJGkSrcz24jO+ED6FOhtp+Mlb5CG8QBg4b3vyWVT3HYs3I7GDOctCHj+H+nUCz6Qxg4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 192.147.44.155) smtp.rcpttodomain=gmail.com smtp.mailfrom=tw.synaptics.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=tw.synaptics.com;
- dkim=none (message not signed); arc=none
+ bh=HGRJ+608GSDGttNDWfg1WcSB7ghGsm59d9tc3SrHv7I=;
+ b=oA3gqZDV91IAsuX/OByOSPDyMSD5u7wM16q86amD3crmsurjcohDUBEDGO+tGBv9Gd5i0i09SsKULYlzBP07Yiz2VDnOasEmPiVt4R+WsxgWGnu8wqRHIc+iW1PpHIkSCHCVGhMgcag8SuOM6Rl1OfXC9+mnQX8R8F1s5j1xvzxB4RezsMCpy3zGvuJl9mmIYIHjqOgGmG7g4KxPrtabHOsGkf5lr5Wd8OzeGCeBx03ad3Mnz3v0ea2038auqI39hJ3Pyp5x5M5Rz5DfjNO/5AVj/zFLunPqwxh6BJ6XrMnyCn7b1H5qd3ATkX/7CE8Y4LET8eMvNZT9lkenaBPGeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=tw.synaptics.com; dmarc=pass action=none
+ header.from=tw.synaptics.com; dkim=pass header.d=tw.synaptics.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SKncvf/Vi4+B2gbr+MyBeAkT5AE7qUlzVoUCKtgSdVk=;
- b=FCaZEFG1afjHzpahxgDaTU3m0URP9i1j4OjnkzBJqMzJvbQoFROA6o1C42KH9KYuTrOG2fyCtUBAEE/3f8a3zd2QPRspx1I4h5E7CaWxdAI5PSPk//+hN/Ggk9kjJVvACIfplqzNcQjUAL/XSxDIdMFCUQpj8fY6b0DVyZy0K/o=
-Received: from BN9P223CA0029.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::34)
- by SJ0PR03MB5565.namprd03.prod.outlook.com (2603:10b6:a03:27a::8) with
+ bh=HGRJ+608GSDGttNDWfg1WcSB7ghGsm59d9tc3SrHv7I=;
+ b=BQeO8vrGQx99Kpnz50F48Fe69CsYuKudolDJF1irfm91SliHHtJXSlFurrXAFDJ6CpOiAZfQ1zVp++plrypgCKRzrla+zNUqv6NPXwaiM/f6+R4kRlte52Lo7BCn4WBDTh0cB0/qC44MW194jMYtdcRJvnu+NxAUKtlSOULBZbY=
+Received: from MW4PR03MB6651.namprd03.prod.outlook.com (2603:10b6:303:12e::17)
+ by DS7PR03MB5477.namprd03.prod.outlook.com (2603:10b6:5:2c4::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
- 2023 02:47:43 +0000
-Received: from BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10b:cafe::f4) by BN9P223CA0029.outlook.office365.com
- (2603:10b6:408:10b::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.26 via Frontend
- Transport; Mon, 3 Jul 2023 02:47:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 192.147.44.155)
- smtp.mailfrom=tw.synaptics.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=tw.synaptics.com;
-Received-SPF: Pass (protection.outlook.com: domain of tw.synaptics.com
- designates 192.147.44.155 as permitted sender)
- receiver=protection.outlook.com; client-ip=192.147.44.155;
- helo=365hybrid.synaptics.com; pr=C
-Received: from 365hybrid.synaptics.com (192.147.44.155) by
- BN8NAM11FT111.mail.protection.outlook.com (10.13.177.54) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.47 via Frontend Transport; Mon, 3 Jul 2023 02:47:42 +0000
-Received: from SJC1WVP-OPEX01.synaptics-inc.local (10.20.148.252) by
- SJC1WVP-OPEX01.synaptics-inc.local (10.20.148.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.12; Sun, 2 Jul 2023 19:47:40 -0700
-Received: from sjc1uvd-bld04.synaptics.com (10.20.70.64) by
- SJC1WVP-OPEX01.synaptics-inc.local (10.20.148.252) with Microsoft SMTP Server
- id 15.2.1258.12 via Frontend Transport; Sun, 2 Jul 2023 19:47:40 -0700
-From:   Marge Yang <marge.yang@tw.synaptics.com>
-To:     <dmitry.torokhov@gmail.com>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <marge.yang@tw.synaptics.com>
-CC:     <david.chiu@tw.synaptics.com>, <derek.cheng@tw.synaptics.com>,
-        <sam.tsai@synaptics.com>, <vincent.huang@tw.synaptics.com>
-Subject: [PATCH V3] Input: synaptics-rmi4- Add a new feature for Forepad.
-Date:   Mon, 3 Jul 2023 02:47:36 +0000
-Message-ID: <20230703024736.80044-1-marge.yang@tw.synaptics.com>
-X-Mailer: git-send-email 2.25.1
+ 2023 02:49:50 +0000
+Received: from MW4PR03MB6651.namprd03.prod.outlook.com
+ ([fe80::e4a1:f780:c618:4081]) by MW4PR03MB6651.namprd03.prod.outlook.com
+ ([fe80::e4a1:f780:c618:4081%7]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 02:49:50 +0000
+From:   Marge Yang <Marge.Yang@tw.synaptics.com>
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Marge Yang <Marge.Yang@tw.synaptics.com>
+CC:     "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Chiu <David.Chiu@tw.synaptics.com>,
+        Derek Cheng <derek.cheng@tw.synaptics.com>,
+        Sam Tsai <Sam.Tsai@synaptics.com>,
+        Vincent Huang <Vincent.huang@tw.synaptics.com>
+Subject: RE: [PATCH V2] Input: synaptics-rmi4- Add a new feature for Forepad.
+Thread-Topic: [PATCH V2] Input: synaptics-rmi4- Add a new feature for Forepad.
+Thread-Index: AQHZnNVd24wMbjxTzEiZuXJ/Dr71X6+JN0SAgB5A3tA=
+Date:   Mon, 3 Jul 2023 02:49:50 +0000
+Message-ID: <MW4PR03MB6651FF948B63B6FB209DA2C6A329A@MW4PR03MB6651.namprd03.prod.outlook.com>
+References: <20230612022607.315149-1-marge.yang@tw.synaptics.com>
+ <20230613204855.bm4wxneamkd76heq@intel.intel>
+In-Reply-To: <20230613204855.bm4wxneamkd76heq@intel.intel>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbXlhbmdcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy00NTY3YTg4YS0xOTRjLTExZWUtODMwMS1mODU5NzE0OTljZGNcYW1lLXRlc3RcNDU2N2E4OGMtMTk0Yy0xMWVlLTgzMDEtZjg1OTcxNDk5Y2RjYm9keS50eHQiIHN6PSIzNDUyIiB0PSIxMzMzMjgyNjE4Nzc4NzEzOTQiIGg9Imp1QTZrSEQ5WkpWWTRsSDYzOVRZTUlQT21pST0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: true
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=tw.synaptics.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR03MB6651:EE_|DS7PR03MB5477:EE_
+x-ms-office365-filtering-correlation-id: 49a00f08-3344-4937-5eac-08db7b702ba5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L5mnJGrFCYNIZEDuvo/KIa+oAXn9q+L3zJrm79hVWcSYSKKKxCgV5p1nzi6H0Bdv5vk4F5iCRqL/pCMjWvxx/QtOiCJ4vhMFtUDj8SgXD9yt/X8USE3Rwb62Jkfk1RB9kFju+keX7GoYaDZoL6jXb2gyt0z1LHd61cwSFULL97SbaQbFW4XaWPx/jk5I7nuC1hsGVAvuplE8JAz4pKR7L5kLyHMasLITg2QBaKnEBM7UpztLho5X3i7MM6bhrNQcdDzb+W58j42G4j+EDaf0kOlm/Qplxpl05M/lyVyC/Ii0BHZbrLuVyn8oz+GvJZA49MkfJAtj+Iz58RLF8UuBUQ7YcTg7zq0iOYvWeeMfkPXnLuTATs7Hz0UtN4rbaxrWupqFAiJt7LP3WYry8AzupqdnzLdb4tEXVEvcbVmZwac84BvLy0cUp5f/0KMyEabmQuZsNErm8lLUC5IchiOyrnV+E6EKKg1SNTQAHvPwVKAx7s21OO9bOrDUFjHETYHll8lwCzmBn86HfKJy9FtT2hDuy9u1meSSnaLrlE/hihB4ZntwunHUZ81dEI5fQn5J05D4jM35TKhuFuzHn+qzl1vdYj1HjoZArC1zCPV1zawodxwqxpdM1MzLkNVOueX+
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR03MB6651.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(346002)(396003)(376002)(39850400004)(451199021)(6506007)(53546011)(76116006)(316002)(38070700005)(122000001)(66556008)(66476007)(66446008)(64756008)(38100700002)(66946007)(55016003)(4326008)(107886003)(83380400001)(186003)(26005)(9686003)(478600001)(110136005)(54906003)(2906002)(8676002)(8936002)(52536014)(5660300002)(71200400001)(86362001)(33656002)(7696005)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fNRT4KPmnyk/qoG4h97oEwO2+g9j8FwxRxPSy/ryRLcE2I/CjrLV6gBKR9II?=
+ =?us-ascii?Q?8/YvjcheHJDMMrMm97PijVQCS/B7dUK1D91Ewx6K1cvtsQ6V3zhWWw5Vo1VV?=
+ =?us-ascii?Q?TeA+x2waoq/YbiLtQpR/32xcKJIJ/mLRCOFcHf2UyPqG1ZO98BARVE+Ur9No?=
+ =?us-ascii?Q?ysglB5alVjncXhbsZhId7V7zjk7L6Com0Z+LJs1w1rDOfJL83Bo8iLp0pQzr?=
+ =?us-ascii?Q?X+kaT5gt7EpaayrLpnqZkoumCMHqxaI7/hxfrBXVOYPUioRcD7F48zKqm/x5?=
+ =?us-ascii?Q?I7tzBWgT0Gun99DOBHfK/Ra5ONxaIKgbJIQuNtnCn7lCyl39pt6UYXi33iqz?=
+ =?us-ascii?Q?MK6EjPzzUeWu7dKQ7ggW61IgTm4a+Ea6awshRpKUiB7IZ+kWRGwC9onZ7AiU?=
+ =?us-ascii?Q?e9ecUHZdmscbHw96mv68KheioGMFtdGXVnVPYZ++6JC5jBouMhO7MjrumZYG?=
+ =?us-ascii?Q?aDIlVUf8tNzoY6CclPlkn6LZsa1KHDS0lqQ6POuKwOIZMvfjb1ujieFcIZVC?=
+ =?us-ascii?Q?GJger7Szcp9f1LN15j8rmufwBQ2GOE2jYrOdvCbISP1775cZZi5kZNI3VrWc?=
+ =?us-ascii?Q?oA8SokFDuxXWeeP2K6FUF4VLZOQVL9se4hI8lU1v5tCnbFxol3j/9phrfv0B?=
+ =?us-ascii?Q?VD7XbAf4m84Tr84Vb2uuqXuvCCvCGKoMxayy9RsneAF5reLUJ4wqUQlfaiPd?=
+ =?us-ascii?Q?Oz17ue4F3G+5qmHkaaw9dG7XbV+LxI+Bbv+u/AJF3ui01QxXrJ1tMZx+yez6?=
+ =?us-ascii?Q?n5so7U3tFIFAb3ak4ascBiMBYCVjRQ2N50vkPS90EJpfi6J9/AqTF6sCLaXO?=
+ =?us-ascii?Q?q/DRBU6vddnUump/Zl1Jnl5jaGfAeX6alDb/XTqLC53OR44ZzuBwb9LnV4e2?=
+ =?us-ascii?Q?ADxysEQ7wdYvEBMReK/4TQkcLIidqCaOgcBT2ZzfvNPsLqruAieb0iCwQ8aB?=
+ =?us-ascii?Q?tmCrezGsh0PiP7N3aQUZR6xY2i16nqNT6RN6lstoJkUErdQsdawbRXa2HMMU?=
+ =?us-ascii?Q?/qSIPBnXE9zQEtn9oqxXhaENQCJuXBB021RnNPnEwIXALZG0D3vxoomB0TV5?=
+ =?us-ascii?Q?4DWydP7+qsCEbbn+njFn6qsZ0pTaSg7q4yebld+cpdLZ8H714aLnmwRYfg2H?=
+ =?us-ascii?Q?LV9N0jb6sGu+h5/xdN2lLY5YYmMm6HIR+U1GgXyRD7/MUq933AO780r2Aptv?=
+ =?us-ascii?Q?bny2Ws5+hFGi82mHQsxhG6bpBrTGBRJ3RKzjtPaRlcVDRJ05HBQL7QhZYv7Z?=
+ =?us-ascii?Q?tyr5HWkDpYfqzC1xrVIu3pod3DmBckrb1yDY4PvUyO8lwfpAPRsdMndb1SZU?=
+ =?us-ascii?Q?BYfx4TIaMsOZKUL2qfMpyK0FvSyg1t4X5cdkKOIVNhhwdrw+Rc29jyDj/jW0?=
+ =?us-ascii?Q?pnVDzSQqt0I7Ud4Sz/XUplg3zgIs/2sdvFnB8OdU1WzYTR82nwIGKjnjt1B2?=
+ =?us-ascii?Q?zqH8wxAG7s8mqO7UbY/WOdZ7EcxreRPkvD+kAgZBbwMi/S9XXh6UsJrMUBOZ?=
+ =?us-ascii?Q?EEyorovC9uCBqAnzUojTPDA7cmbAs9hjoiI0+3uOcESWW9DKAnBCYQ+WDzjW?=
+ =?us-ascii?Q?Y7Qtc316ktHWBkWfSLs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT111:EE_|SJ0PR03MB5565:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0af7b6d0-0ffe-4456-7832-08db7b6fdfb4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jutSk1O88miYqGNatqvdnGnGDlpioO+1N3wTWSfN7kB7kEgTA3KCwf9mwV2qBf4dAR4jRAdOXb7qp3tQRBjRWtPVWRsYy+p3PhuLhBOUdMfJ5OYeGEhYJgZCimnduErG9p0FgaW0qDkSqrTW13aMa3xJJaM0H2xOSLhpYD6GWyQSj3DSjaossDYd7n/VDUSu60SLAhob/tk/OY715lA7wgHTkfKLIKj00McXxgCYycog1A456EX18UWG6EWQ3vQ+UZbapX2Ute5XH5R0FM62Y7SO7SiyWwZjc7q4kJgDbk+hLfK0gp0WYQnol6wr3lMpazRSJpvXhIxJSqlzWWsOKU0pEPAbMB4497rLe+tOuTFqzSWi3p8j00gbG7mO5k0CR1dMBnMbv5kQ8F9MAkhkxxxlNTuZV0peJjN9MGAWUW+NH+wohhucpndzoU+LFHfqoDrK6X/Qu2BkQ1gZGZ1lNrSpUEBhm+cYJYkz2dHAB7yqvWuaD4fyKUw6ktlkCM/i4naOQW0Xqs5Ni4lguQyMp7HKBzGohUqCQ70uU/pBClJGJ9pdmHq4SQtGEIIQgQOeTmSPd6vkS4/pwE27Bw1l7eMD+ILkA04MsnvCKwWwsilSv34mk1AI8OpCjPRzFGXSkwW/+VpW4MX9+jJ1M//9DSU5AzHfsyPx//qzyjJkLfp+V/9xjnI99J0yVwcmHmYe3UJeaHcGTMGr6Kn7ZJ5lERBBNK0qvnfiLgZOpJ2r7c8urqShgRKHaD87n+DVTtR90uDhiDlLP/sY526EfIUY16714OfLlVeF9oJO8W0BDsimY/YmwIHrFC7pLikb7h33
-X-Forefront-Antispam-Report: CIP:192.147.44.155;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:365hybrid.synaptics.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(346002)(39850400004)(396003)(136003)(376002)(5400799015)(451199021)(36840700001)(46966006)(336012)(7049001)(41300700001)(34020700004)(82310400005)(6666004)(82740400003)(2616005)(107886003)(81166007)(356005)(83380400001)(1076003)(26005)(186003)(47076005)(36860700001)(40480700001)(110136005)(54906003)(86362001)(478600001)(316002)(2906002)(4326008)(70586007)(70206006)(8936002)(8676002)(44832011)(5660300002)(36900700001)(12100799033);DIR:OUT;SFP:1501;
 X-OriginatorOrg: tw.synaptics.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 02:47:42.6227
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR03MB6651.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49a00f08-3344-4937-5eac-08db7b702ba5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2023 02:49:50.1311
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0af7b6d0-0ffe-4456-7832-08db7b6fdfb4
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=335d1fbc-2124-4173-9863-17e7051a2a0e;Ip=[192.147.44.155];Helo=[365hybrid.synaptics.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB5565
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1AIR/RCO+CawE/zc3xXvsrUZ/Z0g6tJrYJAqBM2K6vX1FPP85jBV+FhKviYzEHZOF9um8v24smLv2/OnuUG6nQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR03MB5477
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -99,204 +124,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Forcepad devices will use F21, for click simulation
-due to lack of a metal button, so we add F21 support
-to make forcepad support click function.
+Hi Andi,
+	I have modified it and send PATCH V3.
+Thanks
+Marge Yang
 
-Signed-off-by: Marge Yang <marge.yang@tw.synaptics.com>
----
- drivers/input/rmi4/Kconfig      |   8 +++
- drivers/input/rmi4/Makefile     |   1 +
- drivers/input/rmi4/rmi_bus.c    |   3 +
- drivers/input/rmi4/rmi_driver.h |   5 +-
- drivers/input/rmi4/rmi_f21.c    | 110 ++++++++++++++++++++++++++++++++
- 5 files changed, 126 insertions(+), 1 deletion(-)
- create mode 100644 drivers/input/rmi4/rmi_f21.c
+-----Original Message-----
+From: Andi Shyti <andi.shyti@kernel.org>=20
+Sent: Wednesday, June 14, 2023 4:49 AM
+To: Marge Yang <Marge.Yang@tw.synaptics.com>
+Cc: dmitry.torokhov@gmail.com; linux-input@vger.kernel.org; linux-kernel@vg=
+er.kernel.org; David Chiu <David.Chiu@tw.synaptics.com>; Derek Cheng <derek=
+.cheng@tw.synaptics.com>; Sam Tsai <Sam.Tsai@synaptics.com>; Vincent Huang =
+<Vincent.huang@tw.synaptics.com>
+Subject: Re: [PATCH V2] Input: synaptics-rmi4- Add a new feature for Forepa=
+d.
 
-diff --git a/drivers/input/rmi4/Kconfig b/drivers/input/rmi4/Kconfig
-index c0163b983ce6..37e2ba4918fd 100644
---- a/drivers/input/rmi4/Kconfig
-+++ b/drivers/input/rmi4/Kconfig
-@@ -108,6 +108,14 @@ config RMI4_F3A
- 	  Function 3A provides GPIO support for RMI4 devices. This includes
- 	  support for buttons on TouchPads and ClickPads.
- 
-+config RMI4_F21
-+	bool "RMI4 Function 21 (PRESSURE)"
-+	help
-+	  Say Y here if you want to add support for RMI4 function 21.
-+
-+	  Function 21 provides buttons/pressure for RMI4 devices. This includes
-+	  support for buttons/pressure on PressurePad.
-+
- config RMI4_F54
- 	bool "RMI4 Function 54 (Analog diagnostics)"
- 	depends on VIDEO_DEV=y || (RMI4_CORE=m && VIDEO_DEV=m)
-diff --git a/drivers/input/rmi4/Makefile b/drivers/input/rmi4/Makefile
-index 02f14c846861..ec4f08513d8b 100644
---- a/drivers/input/rmi4/Makefile
-+++ b/drivers/input/rmi4/Makefile
-@@ -11,6 +11,7 @@ rmi_core-$(CONFIG_RMI4_F12) += rmi_f12.o
- rmi_core-$(CONFIG_RMI4_F30) += rmi_f30.o
- rmi_core-$(CONFIG_RMI4_F34) += rmi_f34.o rmi_f34v7.o
- rmi_core-$(CONFIG_RMI4_F3A) += rmi_f3a.o
-+rmi_core-$(CONFIG_RMI4_F21) += rmi_f21.o
- rmi_core-$(CONFIG_RMI4_F54) += rmi_f54.o
- rmi_core-$(CONFIG_RMI4_F55) += rmi_f55.o
- 
-diff --git a/drivers/input/rmi4/rmi_bus.c b/drivers/input/rmi4/rmi_bus.c
-index f2e093b0b998..e12033aa7517 100644
---- a/drivers/input/rmi4/rmi_bus.c
-+++ b/drivers/input/rmi4/rmi_bus.c
-@@ -369,6 +369,9 @@ static struct rmi_function_handler *fn_handlers[] = {
- #ifdef CONFIG_RMI4_F3A
- 	&rmi_f3a_handler,
- #endif
-+#ifdef CONFIG_RMI4_F21
-+	&rmi_f21_handler,
-+#endif
- #ifdef CONFIG_RMI4_F54
- 	&rmi_f54_handler,
- #endif
-diff --git a/drivers/input/rmi4/rmi_driver.h b/drivers/input/rmi4/rmi_driver.h
-index 1c6c6086c0e5..57f258371bab 100644
---- a/drivers/input/rmi4/rmi_driver.h
-+++ b/drivers/input/rmi4/rmi_driver.h
-@@ -114,7 +114,9 @@ static inline int rmi_f03_overwrite_button(struct rmi_function *fn,
- }
- static inline void rmi_f03_commit_buttons(struct rmi_function *fn) {}
- #endif
--
-+#ifdef CONFIG_RMI4_F21
-+int rmi_f21_report_pressure(struct rmi_function *fn, int i);
-+#endif
- #ifdef CONFIG_RMI4_F34
- int rmi_f34_create_sysfs(struct rmi_device *rmi_dev);
- void rmi_f34_remove_sysfs(struct rmi_device *rmi_dev);
-@@ -136,6 +138,7 @@ extern struct rmi_function_handler rmi_f12_handler;
- extern struct rmi_function_handler rmi_f30_handler;
- extern struct rmi_function_handler rmi_f34_handler;
- extern struct rmi_function_handler rmi_f3a_handler;
-+extern struct rmi_function_handler rmi_f21_handler;
- extern struct rmi_function_handler rmi_f54_handler;
- extern struct rmi_function_handler rmi_f55_handler;
- #endif
-diff --git a/drivers/input/rmi4/rmi_f21.c b/drivers/input/rmi4/rmi_f21.c
-new file mode 100644
-index 000000000000..bbb9ab12ae7c
---- /dev/null
-+++ b/drivers/input/rmi4/rmi_f21.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2012-2020 Synaptics Incorporated
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/rmi.h>
-+#include <linux/input.h>
-+#include <linux/slab.h>
-+#include "rmi_driver.h"
-+
-+#define RMI_F21_FORCE_CLICK_OFFSET	8
-+#define RMI_f21_FORCE_CLICK			0x01
-+#define RMI_f21_DATA_REGS_MAX_SIZE	1
-+#define RMI_f21_FORCEPAD_BUTTON_COUNT	1
-+
-+struct f21_data {
-+	/* Query Data */
-+	u8 data_regs[RMI_f21_DATA_REGS_MAX_SIZE];
-+	struct input_dev *input;
-+	u16 key_code;
-+};
-+
-+static irqreturn_t rmi_f21_attention(int irq, void *ctx)
-+{
-+	struct rmi_function *fn = ctx;
-+	struct f21_data *f21 = dev_get_drvdata(&fn->dev);
-+	int error;
-+
-+	error = rmi_read_block(fn->rmi_dev,
-+				fn->fd.data_base_addr+RMI_F21_FORCE_CLICK_OFFSET,
-+				f21->data_regs, 1);
-+	if (error) {
-+		dev_err(&fn->dev,
-+			"%s: Failed to read f21 data registers: %d\n",
-+			__func__, error);
-+		return IRQ_RETVAL(error);
-+	}
-+
-+	if ((f21->data_regs[0] & RMI_f21_FORCE_CLICK))
-+		input_report_key(f21->input, f21->key_code, true);
-+	else
-+		input_report_key(f21->input, f21->key_code, false);
-+	return IRQ_HANDLED;
-+}
-+
-+static int rmi_f21_config(struct rmi_function *fn)
-+{
-+	struct f21_data *f21 = dev_get_drvdata(&fn->dev);
-+	struct rmi_driver *drv = fn->rmi_dev->driver;
-+
-+	if (!f21)
-+		return 0;
-+
-+	drv->set_irq_bits(fn->rmi_dev, fn->irq_mask);
-+
-+	return 0;
-+}
-+
-+static int rmi_f21_initialize(struct rmi_function *fn, struct f21_data *f21)
-+{
-+	struct input_dev *input = f21->input;
-+	unsigned int button = BTN_LEFT;
-+
-+	f21->key_code = button;
-+	input_set_capability(input, EV_KEY, f21->key_code);
-+	input->keycode = &(f21->key_code);
-+	input->keycodesize = sizeof(f21->key_code);
-+	input->keycodemax = RMI_f21_FORCEPAD_BUTTON_COUNT;
-+
-+	__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
-+
-+	return 0;
-+}
-+
-+static int rmi_f21_probe(struct rmi_function *fn)
-+{
-+	struct rmi_device *rmi_dev = fn->rmi_dev;
-+	struct rmi_driver_data *drv_data = dev_get_drvdata(&rmi_dev->dev);
-+	struct f21_data *f21;
-+	int error;
-+
-+	if (!drv_data->input) {
-+		dev_info(&fn->dev, "f21: no input device found, ignoring\n");
-+		return -ENXIO;
-+	}
-+
-+	f21 = devm_kzalloc(&fn->dev, sizeof(*f21), GFP_KERNEL);
-+	if (!f21)
-+		return -ENOMEM;
-+
-+	f21->input = drv_data->input;
-+
-+	error = rmi_f21_initialize(fn, f21);
-+	if (error)
-+		return error;
-+
-+	dev_set_drvdata(&fn->dev, f21);
-+	return 0;
-+}
-+
-+struct rmi_function_handler rmi_f21_handler = {
-+	.driver = {
-+		.name = "rmi4_f21",
-+	},
-+	.func = 0x21,
-+	.probe = rmi_f21_probe,
-+	.config = rmi_f21_config,
-+	.attention = rmi_f21_attention,
-+};
--- 
-2.25.1
+CAUTION: Email originated externally, do not click links or open attachment=
+s unless you recognize the sender and know the content is safe.
 
+
+Hi Marge,
+
+[...]
+
+> +static irqreturn_t rmi_f21_attention(int irq, void *ctx) {
+> +     struct rmi_function *fn =3D ctx;
+> +     struct f21_data *f21 =3D dev_get_drvdata(&fn->dev);
+> +     int error;
+> +
+> +     error =3D rmi_read_block(fn->rmi_dev,
+> +                             fn->fd.data_base_addr+RMI_F21_FORCE_CLICK_O=
+FFSET,
+> +                             f21->data_regs, 1);
+> +     if (error) {
+> +             dev_err(&fn->dev,
+> +                     "%s: Failed to read f21 data registers: %d\n",
+> +                     __func__, error);
+> +             return IRQ_RETVAL(error);
+> +     }
+> +
+> +     if (!!(f21->data_regs[0] & RMI_f21_FORCE_CLICK))
+
+no need for double negation here.
+
+Andi
+
+> +             input_report_key(f21->input, f21->key_code, true);
+> +     else
+> +             input_report_key(f21->input, f21->key_code, false);
+> +     return IRQ_HANDLED;
+> +}
