@@ -2,103 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E580745D82
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC04745D83
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjGCNdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S231531AbjGCNdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbjGCNdF (ORCPT
+        with ESMTP id S231820AbjGCNdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:33:05 -0400
+        Mon, 3 Jul 2023 09:33:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B804310D4;
-        Mon,  3 Jul 2023 06:32:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB83310EA;
+        Mon,  3 Jul 2023 06:32:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D38D60F3C;
-        Mon,  3 Jul 2023 13:32:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88351C433C7;
-        Mon,  3 Jul 2023 13:32:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8765660F29;
+        Mon,  3 Jul 2023 13:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89AB0C433C8;
+        Mon,  3 Jul 2023 13:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688391151;
-        bh=7qlSX9Nell5J7ysbWiOfRWUhTOykTgPNeRvu7kTYWFI=;
+        s=k20201202; t=1688391166;
+        bh=pk+2FTd4Zcg93LZyEvVLp7It0/fYBTya/f/EBtYUFN4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z+7keICwZsDZYvzIbUYbAjua4wVC7WpRTZjY+p0UqCOPQWrv55HZV17LbtFu8q55z
-         w7+nnoVSS94ACBMalD0MKTnRFPFU8Lo8gOJYLxh/7fFg8lK8+z+7ucOmuceABT2LbP
-         OXt0TLl2OgWesEtsAtwwdogHYkJAqX6uxcjqLNOnN4FJ/q4GQ94xo2jHCEL0RlmBjG
-         3HH9mfElWZu57e7nhMbgJKjDoRJ7NCGaeytE3WK+/Oau36Zx6m+PH6EyMFWK9dN/+P
-         O5o5DDMYh20KrcIyUUvLmMh9lCta8zIFQh0t07Nl5P0Z5JSBTdsqs9+tHNT3DtqWGF
-         BFhK3s1ZBvHeQ==
-Date:   Mon, 3 Jul 2023 14:32:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <d8ade3c0-f256-48dd-9969-d5e55dadd0e4@sirena.org.uk>
-References: <ZJFukYxRbU1MZlQn@arm.com>
- <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
- <ZJLgp29mM3BLb3xa@arm.com>
- <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
- <ZJQR7slVHvjeCQG8@arm.com>
- <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
- <ZJR545en+dYx399c@arm.com>
- <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
- <ZJ2sTu9QRmiWNISy@arm.com>
- <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
+        b=B9ktR5ETbn+AAXn7P5ssFOFeAqcEeGK2LBn0WnJKo/tGi1/Hv6mWs2mxeso8jixCF
+         RTwKY54tdXE/kGBekc9qC3EbJjJUhwE1fgcy5d6Mc8uJDTxyLsAwOU3Z2GpdW5TWLW
+         go4R7lRZiQYwtq/cg1g4ZTb8bzDGC2EXvudt6dLERIOZhNT0D/6r97V7wY6npYXQHB
+         FmIeu2KkwEKzrA/PgMeCZSjXUP/1bHOzCpbiJPBXqGhJkLhI/Tpy1s0GC35cpPpDJm
+         eOlRROvlPEdkb/UR7khuqdS2lDeLRbivg0IwWcq4eg0rXDXJSdOZzBkUY+PjplMYyo
+         FoNpdJ5T0E/wA==
+Date:   Mon, 3 Jul 2023 16:32:42 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA: fix INFINIBAND_USER_ACCESS dependency
+Message-ID: <20230703133242.GB32152@unreal>
+References: <20230703113025.356682-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3loSgCLP1vFHrOSe"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
-X-Cookie: Please go away.
+In-Reply-To: <20230703113025.356682-1-arnd@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -109,51 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 03, 2023 at 01:30:06PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> After a change to the bnxt_re driver, it fails to link when
+> CONFIG_INFINIBAND_USER_ACCESS is disabled:
+> 
+> aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o: in function `bnxt_re_handler_BNXT_RE_METHOD_ALLOC_PAGE':
+> ib_verbs.c:(.text+0xd64): undefined reference to `ib_uverbs_get_ucontext_file'
+> aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o:(.rodata+0x168): undefined reference to `uverbs_idr_class'
+> aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o:(.rodata+0x1a8): undefined reference to `uverbs_destroy_def_handler'
+> 
+> The problem is that the 'bnxt_re_uapi_defs' structure is built
+> unconditionally and references a couple of functions that are never
+> really called in this configuration but instead require other functions
+> that are left out.
+> 
+> Adding an #ifdef around the new code, or a Kconfig dependency would
+> address this problem, but adding the compile-time check inside of the
+> UAPI_DEF_CHAIN_OBJ_TREE_NAMED() macro seems best because that also
+> addresses the problem in other drivers that may run into the same
+> dependency.
+> 
+> Fixes: 360da60d6c6ed ("RDMA/bnxt_re: Enable low latency push")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/rdma/uverbs_ioctl.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
 
---3loSgCLP1vFHrOSe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks,
+Acked-by: Leon Romanovsky <leon@kernel.org>
 
-On Sun, Jul 02, 2023 at 06:03:42PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2023-06-29 at 17:07 +0100, szabolcs.nagy@arm.com wrote:
+Linus, can you please apply this patch directly as it is overkill to
+send PR for one patch?
 
-> > which means x86 linux will likely end up maintaining two incompatible
-> > abis and the future one will need user code and build system changes,
-> > not just runtime changes. it is not a small incremental change to add
-> > alt shadow stack support for example.
+https://lore.kernel.org/all/20230703113025.356682-1-arnd@kernel.org
 
-> > i don't think the maintenance burden of two shadow stack abis is the
-> > right path for arm64 to follow, so the shadow stack semantics will
-> > likely become divergent not common across targets.
-
-> Unfortunately we are at a bit of an information asymmetry here because
-> the ARM spec and patches are not public. It may be part of the cause of
-> the confusion.
-
-While the descriptive text bit of the spec is not yet integrated into
-the ARM the architecture XML describing the instructions and system
-registers is there, the document is numbered DDI0601:
-
-    https://developer.arm.com/documentation/ddi0601/
-
-The GCS specific instructions and system registers are all named
-beginning with GCS, it's aarch64 only.
-
-Hopefully I should have something out next week for the kernel.
-
---3loSgCLP1vFHrOSe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSizeIACgkQJNaLcl1U
-h9D3Wwf/baVnu4r+oxpjrck31M4SQYopy428bSNBHaGoVHcoFSNJEIBylX2Zcrp+
-c+z0gkJRAjSvAfpT1mqWkw96gSlqLrDzUS6VClhMu0JZwkfmoNiqXwO2iK1jV5w9
-9ZMxbCYtfA6pSN8DHwhVkEJO1+9sI6iUJrWsXXcQBRFEeWwkeKpR8CeYL4F8hpdl
-4sOC1f2UeEJ82Rm6WPJ/ZNY/pTaGF3CWRP2WfoewkBwzMw9TevsYXdQAIOooFCOT
-5ukjmiLiGw2IuYux8Y0Gb1ZaOiOI/W95yow0cPBDS9YGj7y6ZbZqIa5PVfK1Smwf
-1QRf+xHUlAz6eiCCxHK2lZZqEP4vOw==
-=6QcV
------END PGP SIGNATURE-----
-
---3loSgCLP1vFHrOSe--
+Thanks
