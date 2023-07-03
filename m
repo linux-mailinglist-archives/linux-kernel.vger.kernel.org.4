@@ -2,107 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40279745725
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4C5745727
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbjGCITV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S231235AbjGCITp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjGCITP (ORCPT
+        with ESMTP id S230092AbjGCITo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:19:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2751BC;
-        Mon,  3 Jul 2023 01:19:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 3 Jul 2023 04:19:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B66E6F;
+        Mon,  3 Jul 2023 01:19:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4154C60E03;
-        Mon,  3 Jul 2023 08:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753B2C433C7;
-        Mon,  3 Jul 2023 08:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688372348;
-        bh=S6K5lbYba39Qtr6yqajXnkhBq5MftnwZTHANEwn50OU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YxwKUOyiwj2JWrtI4HkQ8chRNGbJZYVqAQLc170isvJdA41at3zf8JLdHNDCeTSF4
-         SG84RUYvLC1foPz7IHr+CPyUhHLQSQ9x4/J5BCNK+JvgnCr69/0BwrFfLNoIDrVQWd
-         lx2+4USKiENJ3DKmrb971MZ7TFvj9zT0Hix0XhLF8hAUcORaLwsDIV2GBS/e8HOFJH
-         oXIxdyApz2cGITzJCk7IX+6+E0T5YAxPadke81wJy78GCLpNvsK9QqK2Z7jZE2hRru
-         wTvmnW3tWJ816231stuf6uc4nXLmpbR1xi3F1n3FrrJOkasrpAjLIcmMA7Gf22vFSp
-         VRvlid3jrNxfQ==
-Date:   Mon, 3 Jul 2023 17:19:05 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Ze Gao <zegao2021@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, Ze Gao <zegao@tencent.com>,
-        Yafang <laoar.shao@gmail.com>
-Subject: Re: [PATCH] fprobe: add unlock to match a succeeded
- ftrace_test_recursion_trylock
-Message-Id: <20230703171905.ef83b1a7f4db82012db471fc@kernel.org>
-In-Reply-To: <20230703071640.106204-1-zegao@tencent.com>
-References: <20230703071640.106204-1-zegao@tencent.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3368B218F6;
+        Mon,  3 Jul 2023 08:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688372370; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UpkuB3/PahTMC3E01tkVXYrfpgLpPbrbEH63Q3jfRXo=;
+        b=aJje8umumX+wbjeh/5WR+y740OPtf3TqtEYdg8fi56N38n6f+o5F4bQKfkU1tGir/mD2Pk
+        JtD0nyrvIaIPHs9Y2dmpNwfRdR0s7ygD8MbOfwlSdp2Gs/Oj3uSPqibe8KFrjCUPMPDlFf
+        BykWceTpucFYTP0aqh27bgWta1D2FZI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688372370;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UpkuB3/PahTMC3E01tkVXYrfpgLpPbrbEH63Q3jfRXo=;
+        b=jmqiKABTTV2EIlXnmTNx//2wzH20PGtjQsULnm6Zpk+W33q4yANxojTDrMLbWEhhuyqajv
+        dYmEfZFeF01bH1CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E4FCB138FC;
+        Mon,  3 Jul 2023 08:19:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0OLxNpGEomQZbwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 03 Jul 2023 08:19:29 +0000
+Date:   Mon, 03 Jul 2023 10:19:29 +0200
+Message-ID: <877crh76ge.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>, johan+linaro@kernel.org,
+        perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, Stable@vger.kernel.org
+Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device number
+In-Reply-To: <ZKKA6K44mp_vjwtp@hovoldconsulting.com>
+References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
+        <ZKJ9UrB8FRkLzLc-@hovoldconsulting.com>
+        <ZKKA6K44mp_vjwtp@hovoldconsulting.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  3 Jul 2023 15:16:40 +0800
-Ze Gao <zegao2021@gmail.com> wrote:
-
-Good catch! but please add description here, something like;
-
-----
-Unlock ftrace recursion lock when fprobe_kprobe_handler() is failed
-because another kprobe is running.
-----
-
-The code itself is OK to me.
-
-
-> Fixes: 3cc4e2c5fbae ("fprobe: make fprobe_kprobe_handler recursion free")
-> Reported-by: Yafang <laoar.shao@gmail.com>
-> Closes: https://lore.kernel.org/linux-trace-kernel/CALOAHbC6UpfFOOibdDiC7xFc5YFUgZnk3MZ=3Ny6we=AcrNbew@mail.gmail.com/
-> Signed-off-by: Ze Gao <zegao@tencent.com>
-> ---
->  kernel/trace/fprobe.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+On Mon, 03 Jul 2023 10:03:52 +0200,
+Johan Hovold wrote:
 > 
-> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> index 18d36842faf5..93b3e361bb97 100644
-> --- a/kernel/trace/fprobe.c
-> +++ b/kernel/trace/fprobe.c
-> @@ -102,12 +102,14 @@ static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
->  
->  	if (unlikely(kprobe_running())) {
->  		fp->nmissed++;
-> -		return;
-> +		goto recursion_unlock;
->  	}
->  
->  	kprobe_busy_begin();
->  	__fprobe_handler(ip, parent_ip, ops, fregs);
->  	kprobe_busy_end();
-> +
-> +recursion_unlock:
->  	ftrace_test_recursion_unlock(bit);
->  }
->  
-> -- 
-> 2.40.1
+> On Mon, Jul 03, 2023 at 09:48:34AM +0200, Johan Hovold wrote:
+> > On Wed, Jun 28, 2023 at 10:24:04AM +0100, Srinivas Kandagatla wrote:
+> > > For some reason we ended up with a setup without this flag.
+> > > This resulted in inconsistent sound card devices numbers which
+> > >  are also not starting as expected at dai_link->id.
+> > >  (Ex: MultiMedia1 pcm ended up with device number 4 instead of 0)
+> > > 
+> > > With this patch patch now the MultiMedia1 PCM ends up with device number 0
+> > > as expected.
+> > 
+> > This appears to fix the intermittent probe breakage that I see every
+> > five boots or so:
+> > 
+> > [   11.843320] q6apm-dai 3000000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 23
+> > [   11.867467] snd-sc8280xp sound: ASoC: adding FE link failed
+> > [   11.867574] snd-sc8280xp sound: ASoC: topology: could not load header: -517
+> > [   11.867725] qcom-apm gprsvc:service:2:1: tplg component load failed-517
+> > [   11.867933] qcom-apm gprsvc:service:2:1: ASoC: error at snd_soc_component_probe on gprsvc:service:2:1: -22
+> > [   11.868379] snd-sc8280xp sound: ASoC: failed to instantiate card -22
+> > [   11.873645] snd-sc8280xp: probe of sound failed with error -22
+> > 
+> > and which I've reported here:
+> > 
+> > 	https://lore.kernel.org/lkml/ZIHMMFtuDtvdpFAZ@hovoldconsulting.com/
+> > 
+> > as unrelated changes in timings resulting from that series made the
+> > problem much harder (but not impossible) to hit.
+> > 
+> > With this fix, I've rebooted 20+ times without hitting the issue once.
+> > 
+> > I'm guessing that you found this issue while investigated that probe
+> > race, Srini? It does look related, and it does seem to make the problem
+> > go away, but I'm not comfortable claiming that the intermittent probe
+> > breakage has been resolved without some analysis to back that up.
 > 
+> Ok, scratch that. I just hit the race again also with this patch
+> applied:
+> 
+> [   11.815028] q6apm-dai 3000000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 23
+> [   11.838667] snd-sc8280xp sound: ASoC: adding FE link failed
+> [   11.838774] snd-sc8280xp sound: ASoC: topology: could not load header: -517
+> [   11.838916] qcom-apm gprsvc:service:2:1: tplg component load failed-517
+> [   11.838996] qcom-apm gprsvc:service:2:1: ASoC: error at snd_soc_component_probe on gprsvc:service:2:1: -22
+> [   11.839430] snd-sc8280xp sound: ASoC: failed to instantiate card -22
+> [   11.844801] snd-sc8280xp: probe of sound failed with error -22
+
+Isn't it rather an issue about the error code passing in qcom driver?
+How about the change like below?
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Takashi
+
+--- a/sound/soc/qcom/qdsp6/topology.c
++++ b/sound/soc/qcom/qdsp6/topology.c
+@@ -1276,10 +1276,8 @@ int audioreach_tplg_init(struct snd_soc_component *component)
+ 	}
+ 
+ 	ret = snd_soc_tplg_component_load(component, &audioreach_tplg_ops, fw);
+-	if (ret < 0) {
+-		dev_err(dev, "tplg component load failed%d\n", ret);
+-		ret = -EINVAL;
+-	}
++	if (ret < 0)
++		dev_err_probe(dev, ret, "tplg component load failed %d\n", ret);
+ 
+ 	release_firmware(fw);
+ err:
