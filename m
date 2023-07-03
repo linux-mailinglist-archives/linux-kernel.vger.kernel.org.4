@@ -2,222 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19229745A87
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855E8745A88
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjGCKpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S231302AbjGCKpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjGCKph (ORCPT
+        with ESMTP id S231168AbjGCKpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:45:37 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3B1BE
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:45:36 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so6562729e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688381134; x=1690973134;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pjB4NrZ8c1eZ9wy4QI2AE/NjqgqmbEKhUEDFiJq2p7w=;
-        b=TlPlfKd45KP7mISMhVaeiaYfkpfmTNgF7KccfXk+4B4VuulSLbBaWWPcSMwqdC2soB
-         BJoetbNMePM0Tc9tDcUnyS3SI+OwygQJM+RiVhGVYX0Q+of9bG/Nj6NAmcRqlzaezfD8
-         KQ4/m7Hw7Hygn4Flz4GkltdfFc60TLm8jCeV3r7gu9CCqLcgNIh4jR6FJoXlbQRnA0ps
-         E+4VbirLGmsQSR9vWmexTAdehyGU26fRyvVLMWFmGJJjfpQ1JZlKBGxAAsRlJVuKv6yu
-         TKYa4ZWrblOl1v8nXiMrMnNf+XrHZ/Mzciu4doSUZYINaWYh/HT2ZqX+m0AeCHclbvjW
-         mSFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688381134; x=1690973134;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pjB4NrZ8c1eZ9wy4QI2AE/NjqgqmbEKhUEDFiJq2p7w=;
-        b=LYazQVbNljKUpfdQbDtz+tRsyP3Xxbhs5o0fVO9SzMQo6Xgw94bmeBtoMbBJLWi38n
-         +4ddJD0J6F3yVvBByRCfIKI4INqw09ArlfAu1pO8R2Nw8jY4fKKSSu90pp9UBPxNvdqR
-         Xgwn5bTFPpa2W4OaML/ieMAXlo/niSB8QM0m9jK35w9YGfctOqXaAmqFW24XFMrB1i15
-         UZim5N2nQQaiChoOfIQNg64UebvNMIKYz1YHlESNRsTeIde1+ZjhTeU/f3DrYIzLpqnO
-         Zhrid46nD1UNp7KlDqSRqWmkxgFfLCY3MJsWmzRp2ngMYfYTgGFpxCCcF+e2QYh1fQel
-         Y2hg==
-X-Gm-Message-State: ABy/qLaWLD/9/homLfGK8Wg+7VZQSDl1ydy29Xbtnd/4+YfAyPEjGN6F
-        8K8NJxcIsGTt6V/AfLrRTsc=
-X-Google-Smtp-Source: APBJJlEdD3+MpWyjlMnR33XMPkiQKoNR53E6ADQXg0f5HxT8WEgff3flHClRTK0IjQCzfBp4fnQ68w==
-X-Received: by 2002:a05:6512:3a8e:b0:4fb:987b:ec3c with SMTP id q14-20020a0565123a8e00b004fb987bec3cmr7896326lfu.56.1688381134305;
-        Mon, 03 Jul 2023 03:45:34 -0700 (PDT)
-Received: from [172.16.196.206] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id n1-20020a195501000000b004fbb6dd7ad1sm138068lfe.288.2023.07.03.03.45.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 03:45:34 -0700 (PDT)
-Message-ID: <4eeaa617-202b-a69e-9a91-0c955144b36a@gmail.com>
-Date:   Mon, 3 Jul 2023 13:45:33 +0300
+        Mon, 3 Jul 2023 06:45:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83893C1;
+        Mon,  3 Jul 2023 03:45:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2D96A1FD74;
+        Mon,  3 Jul 2023 10:45:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688381135; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=caF63ymnbWmBVrCY3MqQ90BV6mN7gkQAVN98pVotegQ=;
+        b=uDAp/WRFWp1Id23i5jD0oFSMtqv/8ajkG5z5ytxiqke1V33N0kBA1HEtg5gXCHiGDOQm1C
+        IRBOlvYazIHCDAy+5oKcXmu2pZSeqNLZ5AFuSivXAQiVGqO4GwyhIfvXELO5CpyNeGG1lO
+        pxH8mJYQxwGipMI2oNTIxQPfUUTAWMg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688381135;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=caF63ymnbWmBVrCY3MqQ90BV6mN7gkQAVN98pVotegQ=;
+        b=0B6S5TivaSxyV+31peKJ5USlMrF1kX3/PNpYUF9qF79iG7tsgm9nNXWSGaPD1sAHW62lIM
+        BsqDgmKgYkcix4Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F3AFF138FC;
+        Mon,  3 Jul 2023 10:45:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 07++Oc6momSHPQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 03 Jul 2023 10:45:34 +0000
+Date:   Mon, 3 Jul 2023 12:45:33 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: print module name on refcount error
+Message-ID: <20230703124533.5fc7396d@endymion.delvare>
+In-Reply-To: <20230701175727.292b84f6@endymion.delvare>
+References: <20230626123252.73dbc139@endymion.delvare>
+        <ZJ9fvQZ4k+zFfXbN@bombadil.infradead.org>
+        <20230701175727.292b84f6@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, en-GB
-To:     Benjamin Bara <bbara93@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     support.opensource@diasemi.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com,
-        Martin Fuzzey <martin.fuzzey@flowbird.group>,
-        linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
- <20230419-dynamic-vmon-v4-10-4d3734e62ada@skidata.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH RFC v4 10/13] regulator: implement
- mon_disable_reg_set_{higher,lower}
-In-Reply-To: <20230419-dynamic-vmon-v4-10-4d3734e62ada@skidata.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/23 23:03, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+On Sat, 1 Jul 2023 17:57:27 +0200, Jean Delvare wrote:
+> On Fri, 30 Jun 2023 16:05:33 -0700, Luis Chamberlain wrote:
+> > On Mon, Jun 26, 2023 at 12:32:52PM +0200, Jean Delvare wrote:  
+> > > If module_put() triggers a refcount error, include the culprit
+> > > module name in the warning message, to easy further investigation of
+> > > the issue.
+> > > 
+> > > Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> > > Suggested-by: Michal Hocko <mhocko@suse.com>
+> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > ---
+> > >  kernel/module/main.c |    4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > --- linux-6.3.orig/kernel/module/main.c
+> > > +++ linux-6.3/kernel/module/main.c
+> > > @@ -850,7 +850,9 @@ void module_put(struct module *module)
+> > >  	if (module) {
+> > >  		preempt_disable();
+> > >  		ret = atomic_dec_if_positive(&module->refcnt);
+> > > -		WARN_ON(ret < 0);	/* Failed to put refcount */
+> > > +		WARN(ret < 0,
+> > > +		     KERN_WARNING "Failed to put refcount for module %s\n",
+> > > +		     module->name);
+> > >  		trace_module_put(module, _RET_IP_);
+> > >  		preempt_enable();
+> > >  	}
+> > 
+> > The mod struct ends up actually being allocated, we first read the ELF
+> > passed by userspace and we end up allocating space for struct module
+> > when reading the ELF section ".gnu.linkonce.this_module". We cache
+> > the ELF section index in info->index.mod, we finally copy the module
+> > into the allocated space with move_module().
+> > 
+> > In linux-next code this is much more clear now. 
+> > 
+> > What prevents us from racing to free the module and thus invalidating
+> > the name?
+> > 
+> > For instance the system call to delete_module() could hammer and
+> > so have tons of threads racing try_stop_module(), eventually one of
+> > them could win and free_module() would kick in gear.
+> > 
+> > What prevents code from racing the free with a random module_put()
+> > called by some other piece of code?
+> > 
+> > I realize this may implicate even the existing code seems racy.  
 > 
-> The mon_disable_reg_set_{higher,lower} properties disable all dt-enabled
-> monitors when the value of the regulator is changed to a higher or lower
-> one.
+> You are the maintainer so I'll trust your expertise, but this is how I
+> understand it: if we hit this WARN, this means reference counting is
+> screwed. If this is an underflow, we still have a reference to the
+> module while refcnt is zero, meaning the module could be removed at any
+> time. This is inherent to the issue we are reporting, and not related
+> to the proposed change. The name is just one field of struct module,
+> refcnt is in the very same situation already.
 > 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> ---
->   drivers/regulator/core.c | 41 +++++++++++++++++++++++++++++++++++++----
->   1 file changed, 37 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-> index b37dcafff407..74b9c12d38e9 100644
-> --- a/drivers/regulator/core.c
-> +++ b/drivers/regulator/core.c
-> @@ -3643,6 +3643,7 @@ static int _regulator_call_set_voltage(struct regulator_dev *rdev,
->   				       int min_uV, int max_uV,
->   				       unsigned *selector)
->   {
-> +	const struct regulator_desc *desc = rdev->desc;
->   	struct pre_voltage_change_data data;
->   	int ret;
->   
-> @@ -3654,7 +3655,18 @@ static int _regulator_call_set_voltage(struct regulator_dev *rdev,
->   	if (ret & NOTIFY_STOP_MASK)
->   		return -EINVAL;
->   
-> -	ret = rdev->desc->ops->set_voltage(rdev, min_uV, max_uV, selector);
-> +	if (min_uV > data.old_uV || max_uV > data.old_uV) {
-> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_higher);
-> +		if (ret)
-> +			return ret;
+> So the whole piece of code is best effort reporting and assumes (both
+> before and after my proposed change) that nobody attempted to unload
+> the module yet.
 
-Here, as per comments to previous patches, the logic would be more 
-obvious for me if this was:
-	if (desc->mon_disable_reg_set_higher &&
-	   (min_uV > data.old_uV || max_uV > data.old_uV)) {
-		ret = monitors_disable(...)
+I thought some more about it and one potential problem with my proposed
+change is if the module has indeed already been freed and the memory
+already reused for a different purpose. We are in trouble already (we
+just called atomic_dec_if_positive on a random memory location) but the
+WARN message could become very messy if the memory where module.name
+used to reside no longer contains any string terminator (binary zero).
 
-> +	}
-> +	if (min_uV < data.old_uV || max_uV < data.old_uV) {
-> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_lower);
-> +		if (ret)
-> +			return ret;
-> +	}
+So we probably want to play it safe and add a length limitation when
+printing the module name. Something like:
 
-I guess you guess what I think of the above by now :)
-
-> +
-> +	ret = desc->ops->set_voltage(rdev, min_uV, max_uV, selector);
->   	if (ret >= 0)
->   		return ret;
->   
-> @@ -3667,6 +3679,7 @@ static int _regulator_call_set_voltage(struct regulator_dev *rdev,
->   static int _regulator_call_set_voltage_sel(struct regulator_dev *rdev,
->   					   int uV, unsigned selector)
->   {
-> +	const struct regulator_desc *desc = rdev->desc;
->   	struct pre_voltage_change_data data;
->   	int ret;
->   
-> @@ -3678,7 +3691,18 @@ static int _regulator_call_set_voltage_sel(struct regulator_dev *rdev,
->   	if (ret & NOTIFY_STOP_MASK)
->   		return -EINVAL;
->   
-> -	ret = rdev->desc->ops->set_voltage_sel(rdev, selector);
-> +	if (uV > data.old_uV) {
-> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_higher);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +	if (uV < data.old_uV) {
-> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_lower);
-> +		if (ret)
-> +			return ret;
-> +	}
-
-Here I would also pull the check from monitors_disable() to these 
-callers just to explicitly show the logic.
-
-> +
-> +	ret = desc->ops->set_voltage_sel(rdev, selector);
->   	if (ret >= 0)
->   		return ret;
->   
-> @@ -3780,7 +3804,8 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
->   	int best_val = 0;
->   	unsigned int selector;
->   	int old_selector = -1;
-> -	const struct regulator_ops *ops = rdev->desc->ops;
-> +	const struct regulator_desc *desc = rdev->desc;
-> +	const struct regulator_ops *ops = desc->ops;
->   	int old_uV = regulator_get_voltage_rdev(rdev);
->   
->   	trace_regulator_set_voltage(rdev_get_name(rdev), min_uV, max_uV);
-> @@ -3819,7 +3844,7 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
->   				selector = ret;
->   				if (old_selector == selector)
->   					ret = 0;
-> -				else if (rdev->desc->vsel_step)
-> +				else if (desc->vsel_step)
->   					ret = _regulator_set_voltage_sel_step(
->   						rdev, best_val, selector);
->   				else
-> @@ -3874,6 +3899,14 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
->   out:
->   	trace_regulator_set_voltage_complete(rdev_get_name(rdev), best_val);
->   
-> +	/* if setting voltage failed, ignore monitoring error. */
-> +	if (ret)
-> +		monitors_reenable(rdev, desc->mon_disable_reg_set_higher |
-> +					desc->mon_disable_reg_set_lower);
-> +	else
-> +		ret = monitors_reenable(rdev, desc->mon_disable_reg_set_higher |
-> +					      desc->mon_disable_reg_set_lower);
-
-Here as well.
-
-> +
->   	return ret;
->   }
-
-Well, pulling the check from monitors_*() to callers will increase line 
-count quite a bit. Still, my personal take on this is that the logic is 
-easier to follow that way. I, however, am fine also with the way it is 
-done in these patches if you think the line count matters more.
-
-Yours,
-	-- Matti
-
+		WARN(ret < 0,
+		     KERN_WARNING "Failed to put refcount for module %.*s\n",
+		     (int)MODULE_NAME_LEN, module->name);
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Jean Delvare
+SUSE L3 Support
