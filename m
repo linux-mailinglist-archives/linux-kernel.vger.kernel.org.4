@@ -2,239 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6188745A85
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19229745A87
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjGCKo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S231243AbjGCKpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjGCKox (ORCPT
+        with ESMTP id S230282AbjGCKph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:44:53 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CF2C1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:44:51 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fa16c6a85cso6613498e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:44:51 -0700 (PDT)
+        Mon, 3 Jul 2023 06:45:37 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3B1BE
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:45:36 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so6562729e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:45:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688381089; x=1690973089;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/z+WW5kwnxhCfLcQaJmH1xNEQf/PAh/QQcNu6U1wyek=;
-        b=N+N/pXD6XQ24ilAe7T36rjHC/kWdO5IdIka8Ch7o4paXsRfixvo4trlwDMllISRt85
-         a3+VwQk2dGZrVCJdwKgg+HVppR3UKrY4HBNJrHeTSytI+iOLXzoLda9vU066Y/SFVkDu
-         m8f52hOiPvQDpqBrXaKK2Nfa0CNllfHxCjqTXKPeaeAPHCltP2mqeONZ6sTJkKKG1mGR
-         mBKveunaZ4YSU+7hY87RwUkvwshjMWXQI7ZyswvDwoNgIDiyY62c/FmwL18KTzRUnxkV
-         S1STKcf6JjQn3BR9EaMLVoMqi36Gw9lkJVSsSWdFdbF93Iw/yX56RXvJgq5GpX7n2RQ1
-         41fg==
+        d=gmail.com; s=20221208; t=1688381134; x=1690973134;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pjB4NrZ8c1eZ9wy4QI2AE/NjqgqmbEKhUEDFiJq2p7w=;
+        b=TlPlfKd45KP7mISMhVaeiaYfkpfmTNgF7KccfXk+4B4VuulSLbBaWWPcSMwqdC2soB
+         BJoetbNMePM0Tc9tDcUnyS3SI+OwygQJM+RiVhGVYX0Q+of9bG/Nj6NAmcRqlzaezfD8
+         KQ4/m7Hw7Hygn4Flz4GkltdfFc60TLm8jCeV3r7gu9CCqLcgNIh4jR6FJoXlbQRnA0ps
+         E+4VbirLGmsQSR9vWmexTAdehyGU26fRyvVLMWFmGJJjfpQ1JZlKBGxAAsRlJVuKv6yu
+         TKYa4ZWrblOl1v8nXiMrMnNf+XrHZ/Mzciu4doSUZYINaWYh/HT2ZqX+m0AeCHclbvjW
+         mSFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688381089; x=1690973089;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/z+WW5kwnxhCfLcQaJmH1xNEQf/PAh/QQcNu6U1wyek=;
-        b=dfml2fIpuGXKc4Pa3H0CouPOppWfKAB73vLaIrhruzfPX4EfAQTqzQ9T210jZSJ1MH
-         sFYWvAkEl1GZjC9dPLTT5KQ9Ca9D7+ie8+JbTzwJyMAdwerWxDFNlaNfNPj+JXeDa5JU
-         zC72NIBKBkKkABCKbEKDkvXJzc7FFTpNRcU0gH4DRW5AGXGsSGoRqn9zNBi9od1oDJzQ
-         e5Zz5qjVflvCOmDXIWzzBVZxseLRf02V5C6PwmsXlMOSxtmQnZuPRYQCvNBheVHMISLe
-         QQxjixu/SDv40zfhsoGHo02QURAks1RqFCYeIL5roq8PGxvzo6Ul3T2AAU9j+h0wMbRE
-         uuaw==
-X-Gm-Message-State: ABy/qLYRof0Wg5VWB/IDRVtlb4s9FeCFNFrCxR4evMT4Nk4/XvrmoTlq
-        bx9RCmdA5cE68mYr2B+bJ0KUpw==
-X-Google-Smtp-Source: APBJJlF1w7RoN0Uq19CNfqTlvPYcMoyTNYeuTkFT+ge+QXXoqsRGY+amLSuEfhQDxxk/a9Ld1x5OGw==
-X-Received: by 2002:a05:6512:3b0c:b0:4fb:8981:f08 with SMTP id f12-20020a0565123b0c00b004fb89810f08mr8023840lfv.43.1688381089517;
-        Mon, 03 Jul 2023 03:44:49 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id e5-20020a05600c218500b003fbcdba1a52sm6996330wme.3.2023.07.03.03.44.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 03:44:48 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 12:44:48 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     palmer@dabbelt.com, conor@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Evan Green <evan@rivosinc.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v3 11/11] RISC-V: provide Kconfig & commandline options
- to control parsing "riscv,isa"
-Message-ID: <20230703-57fe19b069fdacd4d9a82cf1@orel>
-References: <20230703-repayment-vocalist-e4f3eeac2b2a@wendy>
- <20230703-greedy-dividable-251fa2b809ac@wendy>
+        d=1e100.net; s=20221208; t=1688381134; x=1690973134;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pjB4NrZ8c1eZ9wy4QI2AE/NjqgqmbEKhUEDFiJq2p7w=;
+        b=LYazQVbNljKUpfdQbDtz+tRsyP3Xxbhs5o0fVO9SzMQo6Xgw94bmeBtoMbBJLWi38n
+         +4ddJD0J6F3yVvBByRCfIKI4INqw09ArlfAu1pO8R2Nw8jY4fKKSSu90pp9UBPxNvdqR
+         Xgwn5bTFPpa2W4OaML/ieMAXlo/niSB8QM0m9jK35w9YGfctOqXaAmqFW24XFMrB1i15
+         UZim5N2nQQaiChoOfIQNg64UebvNMIKYz1YHlESNRsTeIde1+ZjhTeU/f3DrYIzLpqnO
+         Zhrid46nD1UNp7KlDqSRqWmkxgFfLCY3MJsWmzRp2ngMYfYTgGFpxCCcF+e2QYh1fQel
+         Y2hg==
+X-Gm-Message-State: ABy/qLaWLD/9/homLfGK8Wg+7VZQSDl1ydy29Xbtnd/4+YfAyPEjGN6F
+        8K8NJxcIsGTt6V/AfLrRTsc=
+X-Google-Smtp-Source: APBJJlEdD3+MpWyjlMnR33XMPkiQKoNR53E6ADQXg0f5HxT8WEgff3flHClRTK0IjQCzfBp4fnQ68w==
+X-Received: by 2002:a05:6512:3a8e:b0:4fb:987b:ec3c with SMTP id q14-20020a0565123a8e00b004fb987bec3cmr7896326lfu.56.1688381134305;
+        Mon, 03 Jul 2023 03:45:34 -0700 (PDT)
+Received: from [172.16.196.206] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id n1-20020a195501000000b004fbb6dd7ad1sm138068lfe.288.2023.07.03.03.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 03:45:34 -0700 (PDT)
+Message-ID: <4eeaa617-202b-a69e-9a91-0c955144b36a@gmail.com>
+Date:   Mon, 3 Jul 2023 13:45:33 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703-greedy-dividable-251fa2b809ac@wendy>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, en-GB
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     support.opensource@diasemi.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com,
+        Martin Fuzzey <martin.fuzzey@flowbird.group>,
+        linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
+ <20230419-dynamic-vmon-v4-10-4d3734e62ada@skidata.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH RFC v4 10/13] regulator: implement
+ mon_disable_reg_set_{higher,lower}
+In-Reply-To: <20230419-dynamic-vmon-v4-10-4d3734e62ada@skidata.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 11:28:03AM +0100, Conor Dooley wrote:
-> As it says on the tin, provide Kconfig option to control parsing the
-> "riscv,isa" devicetree property. If either option is used, the kernel
-> will fall back to parsing "riscv,isa", where "riscv,isa-base" and
-> "riscv,isa-extensions" are not present.
-> The Kconfig options are set up so that the default kernel configuration
-> will enable the fallback path, without needing the commandline option.
+On 6/20/23 23:03, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
 > 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> Changes in v3:
-> - Invert the Kconfig entry. It's now default y & not hidden by
->   NONPORTABLE, but its entablement will now activate the fallback
-> - Add a commandline option to enable the fallback on kernels that do not
->   enable it in Kconfig, as Drew suggested
-> - Default the global var to the Kconfig option & override it with the
->   commandline one, rather than have checks for IS_ENABLED() and for the
->   commandline option in riscv_fill_hwcap() &
->   riscv_early_of_processor_hartid()
-> ---
->  .../admin-guide/kernel-parameters.txt          |  7 +++++++
->  arch/riscv/Kconfig                             | 18 ++++++++++++++++++
->  arch/riscv/include/asm/hwcap.h                 |  1 +
->  arch/riscv/kernel/cpu.c                        |  6 ++++++
->  arch/riscv/kernel/cpufeature.c                 | 14 +++++++++++++-
->  5 files changed, 45 insertions(+), 1 deletion(-)
+> The mon_disable_reg_set_{higher,lower} properties disable all dt-enabled
+> monitors when the value of the regulator is changed to a higher or lower
+> one.
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index d910fba25f2c..1bd435f60055 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5437,6 +5437,13 @@
->  			[KNL] Disable ring 3 MONITOR/MWAIT feature on supported
->  			CPUs.
->  
-> +	riscv_isa_fallback [RISCV]
-> +			When CONFIG_RISCV_ISA_FALLBACK is not enabled, permit
-> +			falling back to detecting extension support by parsing
-> +			"riscv,isa" property on devicetree systems when the
-> +			replacement properties are not found. See the Kconfig
-> +			entry for RISCV_ISA_FALLBACK.
-> +
->  	ro		[KNL] Mount root device read-only on boot
->  
->  	rodata=		[KNL]
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 1d39efe2b940..a9a473b67182 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -841,6 +841,24 @@ config XIP_PHYS_ADDR
->  	  be linked for and stored to.  This address is dependent on your
->  	  own flash usage.
->  
-> +config RISCV_ISA_FALLBACK
-> +	bool "Permit falling back to parsing riscv,isa for extension support by default"
-> +	default y
-> +	help
-> +	  Parsing the "riscv,isa" devicetree property has been deprecated and
-> +	  replaced by a list of explicitly defined strings. For compatibility
-> +	  with existing platforms, the kernel will fall back to parsing the
-> +	  "riscv,isa" property if the replacements are not found.
-> +
-> +	  Selecting N here will result in a kernel that does not use the
-> +	  fallback, unless the commandline "riscv_isa_fallback" parameter is
-> +	  present.
-> +
-> +	  Please see the dt-binding, located at
-> +	  Documentation/devicetree/bindings/riscv/extensions.yaml for details
-> +	  on the replacement properties of "riscv,isa-base" and
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+>   drivers/regulator/core.c | 41 +++++++++++++++++++++++++++++++++++++----
+>   1 file changed, 37 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+> index b37dcafff407..74b9c12d38e9 100644
+> --- a/drivers/regulator/core.c
+> +++ b/drivers/regulator/core.c
+> @@ -3643,6 +3643,7 @@ static int _regulator_call_set_voltage(struct regulator_dev *rdev,
+>   				       int min_uV, int max_uV,
+>   				       unsigned *selector)
+>   {
+> +	const struct regulator_desc *desc = rdev->desc;
+>   	struct pre_voltage_change_data data;
+>   	int ret;
+>   
+> @@ -3654,7 +3655,18 @@ static int _regulator_call_set_voltage(struct regulator_dev *rdev,
+>   	if (ret & NOTIFY_STOP_MASK)
+>   		return -EINVAL;
+>   
+> -	ret = rdev->desc->ops->set_voltage(rdev, min_uV, max_uV, selector);
+> +	if (min_uV > data.old_uV || max_uV > data.old_uV) {
+> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_higher);
+> +		if (ret)
+> +			return ret;
 
-nit: It's probably just me, but 'of' twists my brain a bit here. I
-think
+Here, as per comments to previous patches, the logic would be more 
+obvious for me if this was:
+	if (desc->mon_disable_reg_set_higher &&
+	   (min_uV > data.old_uV || max_uV > data.old_uV)) {
+		ret = monitors_disable(...)
 
-...the replacement properties, "riscv,isa-base" and "riscv,isa-extensions".
-
-works better (for me).
-
-> +	  "riscv,isa-extensions".
-> +
->  endmenu # "Boot options"
->  
->  config BUILTIN_DTB
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index e3cda14a486b..b7b58258f6c7 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -81,6 +81,7 @@ struct riscv_isa_ext_data {
->  
->  extern const struct riscv_isa_ext_data riscv_isa_ext[];
->  extern const size_t riscv_isa_ext_count;
-> +extern bool riscv_isa_fallback;
->  
->  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
->  
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 28d5af21f544..1acf3679600d 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -87,6 +87,12 @@ int riscv_early_of_processor_hartid(struct device_node *node, unsigned long *har
->  	return 0;
->  
->  old_interface:
-> +	if (!riscv_isa_fallback) {
-> +		pr_warn("CPU with hartid=%lu is invalid: this kernel does not parse \"riscv,isa\"",
-> +			*hart);
-> +		return -ENODEV;
 > +	}
+> +	if (min_uV < data.old_uV || max_uV < data.old_uV) {
+> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_lower);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+I guess you guess what I think of the above by now :)
+
 > +
->  	if (of_property_read_string(node, "riscv,isa", &isa)) {
->  		pr_warn("CPU with hartid=%lu has no \"riscv,isa-base\" or \"riscv,isa\" property\n",
->  			*hart);
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 2c4503fa984f..5945dfc5f806 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -471,6 +471,18 @@ static int __init riscv_fill_hwcap_from_ext_list(unsigned long *isa2hwcap)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_RISCV_ISA_FALLBACK
-> +bool __initdata riscv_isa_fallback = true;
-> +#else
-> +bool __initdata riscv_isa_fallback;
-> +static int __init riscv_isa_fallback_setup(char *__unused)
-> +{
-> +	riscv_isa_fallback = true;
-> +	return 1;
-> +}
-> +early_param("riscv_isa_fallback", riscv_isa_fallback_setup);
-> +#endif
+> +	ret = desc->ops->set_voltage(rdev, min_uV, max_uV, selector);
+>   	if (ret >= 0)
+>   		return ret;
+>   
+> @@ -3667,6 +3679,7 @@ static int _regulator_call_set_voltage(struct regulator_dev *rdev,
+>   static int _regulator_call_set_voltage_sel(struct regulator_dev *rdev,
+>   					   int uV, unsigned selector)
+>   {
+> +	const struct regulator_desc *desc = rdev->desc;
+>   	struct pre_voltage_change_data data;
+>   	int ret;
+>   
+> @@ -3678,7 +3691,18 @@ static int _regulator_call_set_voltage_sel(struct regulator_dev *rdev,
+>   	if (ret & NOTIFY_STOP_MASK)
+>   		return -EINVAL;
+>   
+> -	ret = rdev->desc->ops->set_voltage_sel(rdev, selector);
+> +	if (uV > data.old_uV) {
+> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_higher);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +	if (uV < data.old_uV) {
+> +		ret = monitors_disable(rdev, desc->mon_disable_reg_set_lower);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+Here I would also pull the check from monitors_disable() to these 
+callers just to explicitly show the logic.
+
 > +
->  void __init riscv_fill_hwcap(void)
->  {
->  	char print_str[NUM_ALPHA_EXTS + 1];
-> @@ -490,7 +502,7 @@ void __init riscv_fill_hwcap(void)
->  	} else {
->  		int ret = riscv_fill_hwcap_from_ext_list(isa2hwcap);
->  
-> -		if (ret) {
-> +		if (ret && riscv_isa_fallback) {
->  			pr_info("Falling back to deprecated \"riscv,isa\"\n");
->  			riscv_fill_hwcap_from_isa_string(isa2hwcap);
->  		}
-> -- 
-> 2.40.1
->
+> +	ret = desc->ops->set_voltage_sel(rdev, selector);
+>   	if (ret >= 0)
+>   		return ret;
+>   
+> @@ -3780,7 +3804,8 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
+>   	int best_val = 0;
+>   	unsigned int selector;
+>   	int old_selector = -1;
+> -	const struct regulator_ops *ops = rdev->desc->ops;
+> +	const struct regulator_desc *desc = rdev->desc;
+> +	const struct regulator_ops *ops = desc->ops;
+>   	int old_uV = regulator_get_voltage_rdev(rdev);
+>   
+>   	trace_regulator_set_voltage(rdev_get_name(rdev), min_uV, max_uV);
+> @@ -3819,7 +3844,7 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
+>   				selector = ret;
+>   				if (old_selector == selector)
+>   					ret = 0;
+> -				else if (rdev->desc->vsel_step)
+> +				else if (desc->vsel_step)
+>   					ret = _regulator_set_voltage_sel_step(
+>   						rdev, best_val, selector);
+>   				else
+> @@ -3874,6 +3899,14 @@ static int _regulator_do_set_voltage(struct regulator_dev *rdev,
+>   out:
+>   	trace_regulator_set_voltage_complete(rdev_get_name(rdev), best_val);
+>   
+> +	/* if setting voltage failed, ignore monitoring error. */
+> +	if (ret)
+> +		monitors_reenable(rdev, desc->mon_disable_reg_set_higher |
+> +					desc->mon_disable_reg_set_lower);
+> +	else
+> +		ret = monitors_reenable(rdev, desc->mon_disable_reg_set_higher |
+> +					      desc->mon_disable_reg_set_lower);
 
-Otherwise,
+Here as well.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> +
+>   	return ret;
+>   }
 
-Thanks,
-drew
+Well, pulling the check from monitors_*() to callers will increase line 
+count quite a bit. Still, my personal take on this is that the logic is 
+easier to follow that way. I, however, am fine also with the way it is 
+done in these patches if you think the line count matters more.
+
+Yours,
+	-- Matti
+
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
