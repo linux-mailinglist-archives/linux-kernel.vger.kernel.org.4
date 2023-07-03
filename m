@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5DE745B0C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DA0745B10
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjGCL3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        id S231135AbjGCL3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjGCL3G (ORCPT
+        with ESMTP id S230304AbjGCL3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:29:06 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B59EB3;
-        Mon,  3 Jul 2023 04:29:04 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1688383727tcbqoirx
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 03 Jul 2023 19:28:46 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: swyrzWPvyR0UF0RO9+D2wKkvOWwFtkwl5DbE4LbGBf6If03/ShndINMpFKE+a
-        udSsbo4MUKAc3KJozprcWG+at+NMo/aSGhyvZ//plSDKbOZcWuff5E2LQzRL9Ahrn9Bb1pu
-        ECzZloNOKR7611vzCgMDcq18z0eaVH+f9FT1FUMS5KMN2JntvKbbsRTTDHCMo1U3wqZACja
-        FklZZ2+IrurPCNYAZ+IhbTZFJRbYGzJcKJd884oDtvFzjDseOXnKdGGcWQlspLjMIi3/U7l
-        pYA313TZldkNJtxDU1zLApOz0/sbcC4X+xVOe/wjHrgRahJrfK3T+ykWD+nvIo+pLgbbyVX
-        JYIrPcxbR9cx+oB0iF9pBaWBMwxyK3dABc6yAltnmWtq83h49RvpFbYUKADMg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17462509331709393259
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: Re: [PATCH v5 07/14] tools/nolibc: arch-loongarch.h: shrink with SYSCALL_CLOBBERLIST
-Date:   Mon,  3 Jul 2023 19:28:46 +0800
-Message-Id: <20230703112846.497090-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230702185059.GG16233@1wt.eu>
-References: <20230702185059.GG16233@1wt.eu>
+        Mon, 3 Jul 2023 07:29:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE2FB3;
+        Mon,  3 Jul 2023 04:29:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AEE060EE0;
+        Mon,  3 Jul 2023 11:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89434C433C7;
+        Mon,  3 Jul 2023 11:29:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688383777;
+        bh=d2wojFlzaictF79/C2eTIPrC5M/dnRiRjfUH/Mw1eoo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nUMahLo3r+VIBhhgw9EZM1lZPLtdrSjd5nL0oOxGjM2Jz6jszOesNV97kv1l7t+/v
+         VoKda7YgnUEpyZrg9z9A0P85FktwcBN8nYW4pgeSL97Fs2CPCzkqr+ovp/EwvyU4mz
+         N4AzVgEhAIErNjFKCnK6FvUUs786Cw1+m/AwIcJSn0e614iJSfHOBvwFRlKPkFLBko
+         8c8ifAKmo3gCEs1RDoN5JIBRH+tLTDTw5XNh9bKcw4UsUknkqF8RPP4zK2eMQpKBuK
+         v8Y1YMqsn3Ojv52wSxQeXW24vXx+TFXLTGcIe2AoMZUlt31Veo5ppoPqI1F+7xXnih
+         TEuddLZi8VTSg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cxl: fix CONFIG_FW_LOADER dependency
+Date:   Mon,  3 Jul 2023 13:29:13 +0200
+Message-Id: <20230703112928.332321-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,42 +60,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, Jun 28, 2023 at 09:22:21PM +0800, Zhangjin Wu wrote:
-> > my_syscall<N> share a same long clobber list, define a macro for them.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/arch-loongarch.h | 25 +++++++++++--------------
-> >  1 file changed, 11 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
-> > index 292d6a58dc87..fbb4844f7993 100644
-> > --- a/tools/include/nolibc/arch-loongarch.h
-> > +++ b/tools/include/nolibc/arch-loongarch.h
-> > @@ -23,6 +23,10 @@
-> >   */
-> >  #define __ARCH_WANT_SYS_PSELECT6
-> >  
-> > +#define SYSCALL_CLOBBERLIST			\
-> > +	"memory", "$t0", "$t1", "$t2", "$t3",	\
-> > +	"$t4", "$t5", "$t6", "$t7", "$t8"
-> > +
-> 
-> That's a good idea, but please be careful when adding macro definitions,
-> we're in code that is used by user space we have no control on, and we're
-> polluting the end user's macro namespace with plenty of names. While one
-> could argue that it's unlikely that some program already defines and uses
-> SYSCALL_CLOBBERLIST, actually with low-level code it's fairly possible.
-> 
-> Till now most of the definitions were for stuff that user-space really
-> needs (e.g. STDIN_FILENO, various integer limits). If we start to declare
-> random macros for internal use, at least we should probably prefix them
-> with _NOLIBC_ or something like this to avoid the risk of collision.
->
+From: Arnd Bergmann <arnd@arndb.de>
 
-Ok, _NOLIBC_ prefix will be applied, Thanks.
+When FW_LOADER is disabled, cxl fails to link:
 
-Best regards,
-Zhangjin
+arm-linux-gnueabi-ld: drivers/cxl/core/memdev.o: in function `cxl_memdev_setup_fw_upload':
+memdev.c:(.text+0x90e): undefined reference to `firmware_upload_register'
+memdev.c:(.text+0x93c): undefined reference to `firmware_upload_unregister'
 
-> Willy
+In order to use the firmware_upload_register() function, both FW_LOADER
+and FW_UPLOAD have to be enabled, which is a bit confusing. In addition,
+the dependency is on the wrong symbol, as the caller is part of the
+cxl_core.ko module, not the cxl_mem.ko module.
+
+Fixes: 9521875bbe005 ("cxl: add a firmware update mechanism using the sysfs firmware loader")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/cxl/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
+index fcbf8295fde37..8ea1d340e4385 100644
+--- a/drivers/cxl/Kconfig
++++ b/drivers/cxl/Kconfig
+@@ -2,6 +2,8 @@
+ menuconfig CXL_BUS
+ 	tristate "CXL (Compute Express Link) Devices Support"
+ 	depends on PCI
++	select FW_LOADER
++	select FW_UPLOAD
+ 	select PCI_DOE
+ 	help
+ 	  CXL is a bus that is electrically compatible with PCI Express, but
+@@ -82,7 +84,6 @@ config CXL_PMEM
+ config CXL_MEM
+ 	tristate "CXL: Memory Expansion"
+ 	depends on CXL_PCI
+-	select FW_UPLOAD
+ 	default CXL_BUS
+ 	help
+ 	  The CXL.mem protocol allows a device to act as a provider of "System
+-- 
+2.39.2
+
