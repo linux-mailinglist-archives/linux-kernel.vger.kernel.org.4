@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F55746325
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B82746326
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjGCTAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 15:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
+        id S231488AbjGCTAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 15:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjGCTAb (ORCPT
+        with ESMTP id S230097AbjGCTAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Jul 2023 15:00:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD79CAF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 12:00:29 -0700 (PDT)
-Date:   Mon, 03 Jul 2023 19:00:27 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190C9E6B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 12:00:30 -0700 (PDT)
+Date:   Mon, 03 Jul 2023 19:00:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1688410828;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8ktIvteAh2Lu3P6dnQy0b8CeOancpHay9/2ZaeGc3ms=;
-        b=AAYiyDQhKlYNkahxuAK9qC4mIqLN7KSH+784hH6CDKpgV+mpyLg0CYP58J7T1aqoVpftt5
-        fMMG6B5J4I68zUKpFueaUF7qvN0EyuCYOBZVqdLU5W5emQHvTO8/gurEFQjuNirzuIVkJw
-        EcGVc3SDDcCGcg1+oXOMNPLfLXaqnfFu/0s9a4KmyF7wOqPh43KLht9IYooErGn2Zdv83h
-        nWOr4f/g89ctTMQZnB6ZpTHuZ7+kKifwYvtQ174jbRCaf2P3nH+uqRfOMy2+sQDNxv1vdj
-        c3E0UOaM44XvrO2/+Rh1zwkdQh+3/9uQe/6Youk+YOwqFyaH02o7uNsXYGdchw==
+        bh=HKhXlmbNlkSzh7GXP62fqrW0/HPTfBTzxq98qGCo0nU=;
+        b=jKxybCFzzcdPtLRCJ37twNCwgQ1iAYUVWhoH7Sb6zWpugXxZ4MMiioegI0SzDiR4Dyo5TN
+        FPfHIV6T2pWVRmd+vPEMtaztI64+ogpJhQHI4L9WYPSZvKNLU6ewtOohNsin7tSCG3Vphm
+        IMuLZ+2ZEuLbV2qonhmevZOFRTUZ8DR7UBMEd8JBnpAuFGDgs52A4YmR/77M0Ihn8FYKE5
+        jA6Mxy7qN0DTnoh+VjfrR/1QQ7/DnbLpYuDlLrZq+R8RbYUzi/bbnU2j45ktuD27Wa0Ah9
+        NGW1kASYw1DiyQkxsZfyJbaP4NBbU2gfWD51tcysMwozKgi73wMSGTYOjHlrfQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1688410828;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,27 +36,26 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8ktIvteAh2Lu3P6dnQy0b8CeOancpHay9/2ZaeGc3ms=;
-        b=DUKSK8EWcUGbY83C46f4k23d1dQVh0RxiH6VwIaMBY3BRnWyb1h/GjfQACLJv6sXfCmB9d
-        YlnGBlZeWM8RMUDg==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+        bh=HKhXlmbNlkSzh7GXP62fqrW0/HPTfBTzxq98qGCo0nU=;
+        b=AxRnJLj/HPe1Xnxe9odqWWubGJ6mDfg4k6JA6GjYKzwz9z0VKBHsAUsazXrlguNkesJr3P
+        cssYPH2pX6kSzNCA==
+From:   "irqchip-bot for Jonas Gorski" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/gic-v4.1: Properly lock VPEs
- when doing a directLPI invalidation
-Cc:     Kunkun Jiang <jiangkunkun@huawei.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, wanghaibin.wang@huawei.com,
-        tglx@linutronix.de
-In-Reply-To: <20230617073242.3199746-1-maz@kernel.org>
-References: <20230617073242.3199746-1-maz@kernel.org>
+Subject: [irqchip: irq/irqchip-fixes] irq-bcm6345-l1: Do not assume a fixed
+ block to cpu mapping
+Cc:     Jonas Gorski <jonas.gorski@gmail.com>, philmd@linaro.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20230629072620.62527-1-jonas.gorski@gmail.com>
+References: <20230629072620.62527-1-jonas.gorski@gmail.com>
 MIME-Version: 1.0
-Message-ID: <168841082738.404.13387349184603678805.tip-bot2@tip-bot2>
+Message-ID: <168841082817.404.2381514452871552922.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -67,161 +66,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+The following commit has been merged into the irq/irqchip-fixes branch of irq=
+chip:
 
-Commit-ID:     926846a703cbf5d0635cc06e67d34b228746554b
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/926846a703cbf5d0635cc06e67d34b228746554b
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Sat, 17 Jun 2023 08:32:42 +01:00
+Commit-ID:     55ad24857341c36616ecc1d9580af5626c226cf1
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platfo=
+rms/55ad24857341c36616ecc1d9580af5626c226cf1
+Author:        Jonas Gorski <jonas.gorski@gmail.com>
+AuthorDate:    Thu, 29 Jun 2023 09:26:20 +02:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Mon, 03 Jul 2023 19:48:04 +01:00
+CommitterDate: Mon, 03 Jul 2023 19:47:51 +01:00
 
-irqchip/gic-v4.1: Properly lock VPEs when doing a directLPI invalidation
+irq-bcm6345-l1: Do not assume a fixed block to cpu mapping
 
-We normally rely on the irq_to_cpuid_[un]lock() primitives to make
-sure nothing will change col->idx while performing a LPI invalidation.
+The irq to block mapping is fixed, and interrupts from the first block
+will always be routed to the first parent IRQ. But the parent interrupts
+themselves can be routed to any available CPU.
 
-However, these primitives do not cover VPE doorbells, and we have
-some open-coded locking for that. Unfortunately, this locking is
-pretty bogus.
+This is used by the bootloader to map the first parent interrupt to the
+boot CPU, regardless wether the boot CPU is the first one or the second
+one.
 
-Instead, extend the above primitives to cover VPE doorbells and
-convert the whole thing to it.
+When booting from the second CPU, the assumption that the first block's
+IRQ is mapped to the first CPU breaks, and the system hangs because
+interrupts do not get routed correctly.
 
-Fixes: f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between vPE affinity change and RD access")
-Reported-by: Kunkun Jiang <jiangkunkun@huawei.com>
+Fix this by passing the appropriate bcm6434_l1_cpu to the interrupt
+handler instead of the chip itself, so the handler always has the right
+block.
+
+Fixes: c7c42ec2baa1 ("irqchips/bmips: Add bcm6345-l1 interrupt controller")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: Zenghui Yu <yuzenghui@huawei.com>
-Cc: wanghaibin.wang@huawei.com
-Tested-by: Kunkun Jiang <jiangkunkun@huawei.com>
-Reviewed-by: Zenghui Yu <yuzenghui@huawei.com>
-Link: https://lore.kernel.org/r/20230617073242.3199746-1-maz@kernel.org
+Link: https://lore.kernel.org/r/20230629072620.62527-1-jonas.gorski@gmail.com
 ---
- drivers/irqchip/irq-gic-v3-its.c | 75 +++++++++++++++++++------------
- 1 file changed, 46 insertions(+), 29 deletions(-)
+ drivers/irqchip/irq-bcm6345-l1.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 1994541..5365bc3 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -273,13 +273,23 @@ static void vpe_to_cpuid_unlock(struct its_vpe *vpe, unsigned long flags)
- 	raw_spin_unlock_irqrestore(&vpe->vpe_lock, flags);
- }
- 
-+static struct irq_chip its_vpe_irq_chip;
-+
- static int irq_to_cpuid_lock(struct irq_data *d, unsigned long *flags)
+diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l=
+1.c
+index fa113cb..6341c01 100644
+--- a/drivers/irqchip/irq-bcm6345-l1.c
++++ b/drivers/irqchip/irq-bcm6345-l1.c
+@@ -82,6 +82,7 @@ struct bcm6345_l1_chip {
+ };
+=20
+ struct bcm6345_l1_cpu {
++	struct bcm6345_l1_chip	*intc;
+ 	void __iomem		*map_base;
+ 	unsigned int		parent_irq;
+ 	u32			enable_cache[];
+@@ -115,17 +116,11 @@ static inline unsigned int cpu_for_irq(struct bcm6345_l=
+1_chip *intc,
+=20
+ static void bcm6345_l1_irq_handle(struct irq_desc *desc)
  {
--	struct its_vlpi_map *map = get_vlpi_map(d);
-+	struct its_vpe *vpe = NULL;
- 	int cpu;
- 
--	if (map) {
--		cpu = vpe_to_cpuid_lock(map->vpe, flags);
-+	if (d->chip == &its_vpe_irq_chip) {
-+		vpe = irq_data_get_irq_chip_data(d);
-+	} else {
-+		struct its_vlpi_map *map = get_vlpi_map(d);
-+		if (map)
-+			vpe = map->vpe;
-+	}
-+
-+	if (vpe) {
-+		cpu = vpe_to_cpuid_lock(vpe, flags);
- 	} else {
- 		/* Physical LPIs are already locked via the irq_desc lock */
- 		struct its_device *its_dev = irq_data_get_irq_chip_data(d);
-@@ -293,10 +303,18 @@ static int irq_to_cpuid_lock(struct irq_data *d, unsigned long *flags)
- 
- static void irq_to_cpuid_unlock(struct irq_data *d, unsigned long flags)
- {
--	struct its_vlpi_map *map = get_vlpi_map(d);
-+	struct its_vpe *vpe = NULL;
-+
-+	if (d->chip == &its_vpe_irq_chip) {
-+		vpe = irq_data_get_irq_chip_data(d);
-+	} else {
-+		struct its_vlpi_map *map = get_vlpi_map(d);
-+		if (map)
-+			vpe = map->vpe;
-+	}
- 
--	if (map)
--		vpe_to_cpuid_unlock(map->vpe, flags);
-+	if (vpe)
-+		vpe_to_cpuid_unlock(vpe, flags);
- }
- 
- static struct its_collection *valid_col(struct its_collection *col)
-@@ -1433,14 +1451,29 @@ static void wait_for_syncr(void __iomem *rdbase)
- 		cpu_relax();
- }
- 
--static void direct_lpi_inv(struct irq_data *d)
-+static void __direct_lpi_inv(struct irq_data *d, u64 val)
- {
--	struct its_vlpi_map *map = get_vlpi_map(d);
- 	void __iomem *rdbase;
- 	unsigned long flags;
--	u64 val;
- 	int cpu;
- 
-+	/* Target the redistributor this LPI is currently routed to */
-+	cpu = irq_to_cpuid_lock(d, &flags);
-+	raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
-+
-+	rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
-+	gic_write_lpir(val, rdbase + GICR_INVLPIR);
-+	wait_for_syncr(rdbase);
-+
-+	raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
-+	irq_to_cpuid_unlock(d, flags);
-+}
-+
-+static void direct_lpi_inv(struct irq_data *d)
-+{
-+	struct its_vlpi_map *map = get_vlpi_map(d);
-+	u64 val;
-+
- 	if (map) {
- 		struct its_device *its_dev = irq_data_get_irq_chip_data(d);
- 
-@@ -1453,15 +1486,7 @@ static void direct_lpi_inv(struct irq_data *d)
- 		val = d->hwirq;
+-	struct bcm6345_l1_chip *intc =3D irq_desc_get_handler_data(desc);
+-	struct bcm6345_l1_cpu *cpu;
++	struct bcm6345_l1_cpu *cpu =3D irq_desc_get_handler_data(desc);
++	struct bcm6345_l1_chip *intc =3D cpu->intc;
+ 	struct irq_chip *chip =3D irq_desc_get_chip(desc);
+ 	unsigned int idx;
+=20
+-#ifdef CONFIG_SMP
+-	cpu =3D intc->cpus[cpu_logical_map(smp_processor_id())];
+-#else
+-	cpu =3D intc->cpus[0];
+-#endif
+-
+ 	chained_irq_enter(chip, desc);
+=20
+ 	for (idx =3D 0; idx < intc->n_words; idx++) {
+@@ -253,6 +248,7 @@ static int __init bcm6345_l1_init_one(struct device_node =
+*dn,
+ 	if (!cpu)
+ 		return -ENOMEM;
+=20
++	cpu->intc =3D intc;
+ 	cpu->map_base =3D ioremap(res.start, sz);
+ 	if (!cpu->map_base)
+ 		return -ENOMEM;
+@@ -271,7 +267,7 @@ static int __init bcm6345_l1_init_one(struct device_node =
+*dn,
+ 		return -EINVAL;
  	}
- 
--	/* Target the redistributor this LPI is currently routed to */
--	cpu = irq_to_cpuid_lock(d, &flags);
--	raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
--	rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
--	gic_write_lpir(val, rdbase + GICR_INVLPIR);
--
--	wait_for_syncr(rdbase);
--	raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
--	irq_to_cpuid_unlock(d, flags);
-+	__direct_lpi_inv(d, val);
+ 	irq_set_chained_handler_and_data(cpu->parent_irq,
+-						bcm6345_l1_irq_handle, intc);
++						bcm6345_l1_irq_handle, cpu);
+=20
+ 	return 0;
  }
- 
- static void lpi_update_config(struct irq_data *d, u8 clr, u8 set)
-@@ -3953,18 +3978,10 @@ static void its_vpe_send_inv(struct irq_data *d)
- {
- 	struct its_vpe *vpe = irq_data_get_irq_chip_data(d);
- 
--	if (gic_rdists->has_direct_lpi) {
--		void __iomem *rdbase;
--
--		/* Target the redistributor this VPE is currently known on */
--		raw_spin_lock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
--		rdbase = per_cpu_ptr(gic_rdists->rdist, vpe->col_idx)->rd_base;
--		gic_write_lpir(d->parent_data->hwirq, rdbase + GICR_INVLPIR);
--		wait_for_syncr(rdbase);
--		raw_spin_unlock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
--	} else {
-+	if (gic_rdists->has_direct_lpi)
-+		__direct_lpi_inv(d, d->parent_data->hwirq);
-+	else
- 		its_vpe_send_cmd(vpe, its_send_inv);
--	}
- }
- 
- static void its_vpe_mask_irq(struct irq_data *d)
