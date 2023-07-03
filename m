@@ -2,79 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F58F745D50
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC9D745D8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjGCN3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        id S231567AbjGCNfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjGCN3q (ORCPT
+        with ESMTP id S229585AbjGCNfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:29:46 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CDE10C7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:29:35 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-314172bb818so5123588f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688390973; x=1690982973;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y/VhzLPQHUerf9yIXAHQ3k56ZyHp33w08cf8vUBWG7Y=;
-        b=njVWohKchlcMEssQAmIF1k9K45Bbsrd0GbQfEH6owssZIqpB91tbfaZvQBAe2y6d1N
-         pfYh+rKJvhufICIyrpnVitykosZoAVctBURaePVLlsfTfbkyTRZHEZHi3Cwb2R1Ef2Mb
-         zPNZyr0j7/n69lqkf1LcW1BVdC45GIbm429M52QLjFBtW+HPuNBK9Brwx6z1rtL6ervi
-         J18BdPRMVF+ob1T3MaG2ubOle4LHZ6bX6GWGxuqpzeXoMdxExxR5eztZ50719pVvVZXQ
-         mget4xvTOK6HJHHZRrIizrB/mjd6/JRYFiY+unzHfnSkh5xQ/AICSlgjz/c67zA4qYd2
-         wIpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688390973; x=1690982973;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y/VhzLPQHUerf9yIXAHQ3k56ZyHp33w08cf8vUBWG7Y=;
-        b=enWd+g09T37XE2X4MM1xhlbj4ZogSYg+aVVuXtGeUg0ijH3jf7BiyhKya8OEu57hEA
-         n/ZdI2uacehMcz+6/fAORIdF8pCDFuIEbn4OT1QoIvkvZPoB3itf66XZnvW4EGS6ysc0
-         g+MOlc0bAb8o/dqD+FZ/9rJltE+ATbFU6k8sm6/Fn9N6BFRcFELRBRhUArY5NNuNjmKu
-         vgOgB7b03EVTAHrFiJdcrPv7utBsyd3uKX2ynLxPqWQfD6a1uny93LYxM0x4xvahE7+S
-         RewrErhU4sTsF180goKkqe80d519SMMVfmbDZ6QOpY0badBNtJ9nDLYD5T72Sch1IEPw
-         hGug==
-X-Gm-Message-State: ABy/qLa0Cg+zjikn6N26hkcxaCRjRO2Yjqm5f7bqi7WbqGuB2fnq1W+s
-        4iPZfYs8SDfRAdcK78A2UO7ZmA==
-X-Google-Smtp-Source: APBJJlGMsazVkHFxwQldk7Ee64dl++ep07uZano3iNOZM0/SiZWu6RXho/B4b8i2C1OknUXd7j1Nag==
-X-Received: by 2002:a5d:6986:0:b0:314:37a9:f225 with SMTP id g6-20020a5d6986000000b0031437a9f225mr2684111wru.40.1688390973573;
-        Mon, 03 Jul 2023 06:29:33 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:cf0b:9dd4:190:b74f? ([2a01:e0a:982:cbb0:cf0b:9dd4:190:b74f])
-        by smtp.gmail.com with ESMTPSA id k5-20020a5d6e85000000b003063a92bbf5sm25802354wrz.70.2023.07.03.06.29.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 06:29:33 -0700 (PDT)
-Message-ID: <e85f6dee-d62c-9f2f-b1de-8c38bb5aeb14@linaro.org>
-Date:   Mon, 3 Jul 2023 15:29:31 +0200
+        Mon, 3 Jul 2023 09:35:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BBEE3;
+        Mon,  3 Jul 2023 06:35:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 062E060F33;
+        Mon,  3 Jul 2023 13:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD0CC433C8;
+        Mon,  3 Jul 2023 13:35:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688391312;
+        bh=lPbmeFzhOOGrIsy8r8petL2/X1NI/8eaQFwx0o3iMv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KlnBad0Gn0TJ3ilZMv9LBQVhdDz5bsVYW6GySkYYRxy8SlBqqtzBeDchQM7eF10RQ
+         go8sp2tWfbkv3q5EFTo6wZZdY4UCIJlB/tVkaj+mGZSFzhNoz2/KiEvkKiz95K5Sxo
+         JOHNl/y5mB4dlbUwO09v6D3qbvUlE6INjBMhffmc=
+Date:   Mon, 3 Jul 2023 15:29:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefan.wahren@i2se.com,
+        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
+        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH v8 3/5] staging: bcm2835-camera: Register bcm2835-camera
+ with vchiq_bus_type
+Message-ID: <2023070319-daycare-pointless-abba@gregkh>
+References: <20230627201628.207483-1-umang.jain@ideasonboard.com>
+ <20230627201628.207483-4-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/3] soc: c3: Add support for power domains controller
-Content-Language: en-US
-To:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>
-References: <20230703093142.2028500-1-xianwei.zhao@amlogic.com>
- <20230703093142.2028500-3-xianwei.zhao@amlogic.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230703093142.2028500-3-xianwei.zhao@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627201628.207483-4-umang.jain@ideasonboard.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,104 +59,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 03/07/2023 11:31, =Xianwei Zhao wrote:
-> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+On Tue, Jun 27, 2023 at 10:16:26PM +0200, Umang Jain wrote:
+> Register the bcm2835-camera with the vchiq_bus_type instead of using
+> platform driver/device.
 > 
-> Add support for C3 Power controller. C3 power control
-> registers are in secure domain, and should be accessed by SMC.
+> Also the VCHIQ firmware doesn't support device enumeration, hence
+> one has to maintain a list of devices to be registered in the interface.
 > 
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 > ---
->   drivers/soc/amlogic/meson-secure-pwrc.c | 28 ++++++++++++++++++++++++-
->   1 file changed, 27 insertions(+), 1 deletion(-)
+>  .../bcm2835-camera/bcm2835-camera.c           | 16 +++++++-------
+>  .../interface/vchiq_arm/vchiq_arm.c           | 21 ++++++++++++++++---
+>  2 files changed, 26 insertions(+), 11 deletions(-)
 > 
-> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/soc/amlogic/meson-secure-pwrc.c
-> index 25b4b71df9b8..39ccc8f2e630 100644
-> --- a/drivers/soc/amlogic/meson-secure-pwrc.c
-> +++ b/drivers/soc/amlogic/meson-secure-pwrc.c
-> @@ -12,6 +12,7 @@
->   #include <linux/pm_domain.h>
->   #include <dt-bindings/power/meson-a1-power.h>
->   #include <dt-bindings/power/meson-s4-power.h>
-> +#include <dt-bindings/power/amlogic-c3-power.h>
->   #include <linux/arm-smccc.h>
->   #include <linux/firmware/meson/meson_sm.h>
->   #include <linux/module.h>
-> @@ -132,6 +133,22 @@ static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
->   	SEC_PD(S4_AUDIO,	0),
->   };
->   
-> +static struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
-> +	SEC_PD(C3_NNA,	0),
-> +	SEC_PD(C3_AUDIO,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_SDIOA,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_EMMC,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_USB_COMB, GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_SDCARD,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_ETH,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_GE2D,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_CVE,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_GDC_WRAP,	GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_ISP_TOP,		GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_MIPI_ISP_WRAP, GENPD_FLAG_ALWAYS_ON),
-> +	SEC_PD(C3_VCODEC,	0),
-> +};
+> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+> index 346d00df815a..f37b2a881d92 100644
+> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+> @@ -24,8 +24,9 @@
+>  #include <media/v4l2-event.h>
+>  #include <media/v4l2-common.h>
+>  #include <linux/delay.h>
+> -#include <linux/platform_device.h>
+>  
+> +#include "../interface/vchiq_arm/vchiq_arm.h"
+> +#include "../interface/vchiq_arm/vchiq_device.h"
+>  #include "../vchiq-mmal/mmal-common.h"
+>  #include "../vchiq-mmal/mmal-encodings.h"
+>  #include "../vchiq-mmal/mmal-vchiq.h"
+> @@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format = {
+>  	.fmt.pix.sizeimage = 1024 * 768,
+>  };
+>  
+> -static int bcm2835_mmal_probe(struct platform_device *pdev)
+> +static int bcm2835_mmal_probe(struct vchiq_device *device)
+>  {
+>  	int ret;
+>  	struct bcm2835_mmal_dev *dev;
+> @@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
+>  						       &camera_instance);
+>  		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
+>  		if (ret) {
+> -			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
+> +			dev_err(&device->dev, "%s: could not register V4L2 device: %d\n",
+>  				__func__, ret);
+>  			goto free_dev;
+>  		}
+> @@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -static void bcm2835_mmal_remove(struct platform_device *pdev)
+> +static void bcm2835_mmal_remove(struct vchiq_device *device)
+>  {
+>  	int camera;
+>  	struct vchiq_mmal_instance *instance = gdev[0]->instance;
+> @@ -1988,17 +1989,16 @@ static void bcm2835_mmal_remove(struct platform_device *pdev)
+>  	vchiq_mmal_finalise(instance);
+>  }
+>  
+> -static struct platform_driver bcm2835_camera_driver = {
+> +static struct vchiq_driver bcm2835_camera_driver = {
+>  	.probe		= bcm2835_mmal_probe,
+> -	.remove_new	= bcm2835_mmal_remove,
+> +	.remove		= bcm2835_mmal_remove,
 
-Please move this struct before _s4_
+No need to change this here, right?  That's independant of this patch
+series.
 
-> +
->   static int meson_secure_pwrc_probe(struct platform_device *pdev)
->   {
->   	int i;
-> @@ -179,7 +196,7 @@ static int meson_secure_pwrc_probe(struct platform_device *pdev)
->   	for (i = 0 ; i < match->count ; ++i) {
->   		struct meson_secure_pwrc_domain *dom = &pwrc->domains[i];
->   
-> -		if (!match->domains[i].index)
-> +		if (!match->domains[i].name)
+thanks,
 
-Is this change necessary ? If yes please move it to another patch
-and explain it's purpose. If it fixes something, add a Fixes tag so
-it can be backported.
-
-Thanks,
-Neil
-
->   			continue;
->   
->   		dom->pwrc = pwrc;
-> @@ -207,6 +224,11 @@ static struct meson_secure_pwrc_domain_data meson_secure_s4_pwrc_data = {
->   	.count = ARRAY_SIZE(s4_pwrc_domains),
->   };
->   
-> +static struct meson_secure_pwrc_domain_data amlogic_secure_c3_pwrc_data = {
-> +	.domains = c3_pwrc_domains,
-> +	.count = ARRAY_SIZE(c3_pwrc_domains),
-> +};
-
-Please move this struct before _s4_
-
-> +
->   static const struct of_device_id meson_secure_pwrc_match_table[] = {
->   	{
->   		.compatible = "amlogic,meson-a1-pwrc",
-> @@ -216,6 +238,10 @@ static const struct of_device_id meson_secure_pwrc_match_table[] = {
->   		.compatible = "amlogic,meson-s4-pwrc",
->   		.data = &meson_secure_s4_pwrc_data,
->   	},
-> +	{
-> +		.compatible = "amlogic,c3-pwrc",
-> +		.data = &amlogic_secure_c3_pwrc_data,
-> +	},
-
-Please move this entry before _s4_
-
->   	{ /* sentinel */ }
->   };
->   MODULE_DEVICE_TABLE(of, meson_secure_pwrc_match_table);
-
-Thanks,
-Neil
-
+greg k-h
