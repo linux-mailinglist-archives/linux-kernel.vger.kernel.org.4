@@ -2,147 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED943746350
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D38746358
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjGCT1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 15:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
+        id S230489AbjGCTcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 15:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjGCT1J (ORCPT
+        with ESMTP id S229914AbjGCTcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 15:27:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29157E5E;
-        Mon,  3 Jul 2023 12:27:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADDF56101C;
-        Mon,  3 Jul 2023 19:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25882C433C8;
-        Mon,  3 Jul 2023 19:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688412427;
-        bh=1sHzolJz+greNltpJ1b90I71j1+7uxRTyUkH13RNk6w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HCrJpWy4Gn4tvyVdAg3vht/JMyUo8PJFUwPFqoGXMzbUYm1aI70oiEqmiA+hOSp3v
-         2RVOdh0bQ5IHNLnVW0rkv3L7+K7QPAI+yJoOzhCKb9QlGvyPJYcEON9a6n6Bgqgr65
-         FgqJ70nWS98G+7L6UlE/ka2TS0hgP3HRqRf9tka/seu/1i/oCR9t6/Ad0FAEOqwJsl
-         /B/Zmfj5wrMWLnCu41F1IDtwRzCk0wztrMKK6UE/hZ22E5C56+Y/7/1IOhOkNn4LuA
-         foIR3AvJjs6jSG2ecDyJk9OWCn5CjJUwNnmyu9hBAJghZHFfQ4hqftlbLxCtCFhB18
-         D0eJ6GLDGIpEw==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>, stable@vger.kernel.org,
-        gregkh@linuxfoundation.org, sashal@kernel.org
-Cc:     David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        johannes@sipsolutions.net
-Subject: Re: [PATCH] kunit: tool: undo type subscripts for subprocess.Popen
-Date:   Mon,  3 Jul 2023 19:27:04 +0000
-Message-Id: <20230703192704.16500-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230610175618.82271-1-sj@kernel.org>
-References: 
+        Mon, 3 Jul 2023 15:32:47 -0400
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094AFE6B;
+        Mon,  3 Jul 2023 12:32:46 -0700 (PDT)
+References: <20230629184151.888604958@linuxfoundation.org>
+ <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
+ <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
+ <2023063001-overlying-browse-de1a@gregkh>
+ <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
+ <5fd98a09-4792-1433-752d-029ae3545168@gmx.de>
+ <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
+ <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com>
+ <9b35a19d-800c-f9f9-6b45-cf2038ef235f@roeck-us.net>
+ <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
+ <2a2387bf-f589-6856-3583-d3d848a17d34@roeck-us.net>
+ <CAHk-=wgczy0dxK9vg-YWbq6YLP2gP8ix7Ys9K+Mr=S2NEj+hGw@mail.gmail.com>
+ <c21e8e95-3353-fc57-87fd-271b2c9cc000@roeck-us.net>
+ <CAHk-=wj+F8oGK_Hx6YSPJpwL-xyL+-q2SxtxYE0abtZa_jSkLw@mail.gmail.com>
+ <7146f74d-8638-46c7-8e8c-15abc97a379f@gmx.de>
+ <CAHk-=wjqp09i1053vqFc41Ftegkrh0pD+MKY-3ptdYu3FUh6Bw@mail.gmail.com>
+ <11fef47a-4805-df0e-016e-d2a777087129@gmx.de>
+User-agent: mu4e 1.10.4; emacs 29.0.92
+From:   Sam James <sam@gentoo.org>
+To:     Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        John David Anglin <dave.anglin@bell.net>
+Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
+Date:   Mon, 03 Jul 2023 20:31:21 +0100
+In-reply-to: <11fef47a-4805-df0e-016e-d2a777087129@gmx.de>
+Message-ID: <87v8f04wpy.fsf@gentoo.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg and Sasha,
 
-On Sat, 10 Jun 2023 17:56:18 +0000 SeongJae Park <sj@kernel.org> wrote:
+Helge Deller <deller@gmx.de> writes:
 
-> On Sat, 10 Jun 2023 12:15:55 +0800 David Gow <davidgow@google.com> wrote:
-> 
-> > [-- Attachment #1: Type: text/plain, Size: 2275 bytes --]
-> > 
-> > On Sat, 10 Jun 2023 at 03:09, SeongJae Park <sj@kernel.org> wrote:
-> > >
-> > > Hi David and Brendan,
-> > >
-> > > On Tue, 2 May 2023 08:04:20 +0800 David Gow <davidgow@google.com> wrote:
-> > >
-> > > > [-- Attachment #1: Type: text/plain, Size: 1473 bytes --]
-> > > >
-> > > > On Tue, 2 May 2023 at 02:16, 'Daniel Latypov' via KUnit Development
-> > > > <kunit-dev@googlegroups.com> wrote:
-> > > > >
-> > > > > Writing `subprocess.Popen[str]` requires python 3.9+.
-> > > > > kunit.py has an assertion that the python version is 3.7+, so we should
-> > > > > try to stay backwards compatible.
-> > > > >
-> > > > > This conflicts a bit with commit 1da2e6220e11 ("kunit: tool: fix
-> > > > > pre-existing `mypy --strict` errors and update run_checks.py"), since
-> > > > > mypy complains like so
-> > > > > > kunit_kernel.py:95: error: Missing type parameters for generic type "Popen"  [type-arg]
-> > > > >
-> > > > > Note: `mypy --strict --python-version 3.7` does not work.
-> > > > >
-> > > > > We could annotate each file with comments like
-> > > > >   `# mypy: disable-error-code="type-arg"
-> > > > > but then we might still get nudged to break back-compat in other files.
-> > > > >
-> > > > > This patch adds a `mypy.ini` file since it seems like the only way to
-> > > > > disable specific error codes for all our files.
-> > > > >
-> > > > > Note: run_checks.py doesn't need to specify `--config_file mypy.ini`,
-> > > > > but I think being explicit is better, particularly since most kernel
-> > > > > devs won't be familiar with how mypy works.
-> > > > >
-> > > > > Fixes: 695e26030858 ("kunit: tool: add subscripts for type annotations where appropriate")
-> > > > > Reported-by: SeongJae Park <sj@kernel.org>
-> > > > > Link: https://lore.kernel.org/linux-kselftest/20230501171520.138753-1-sj@kernel.org
-> > > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > > > > ---
-> > > >
-> > > > Thanks for jumping on this.
-> > > >
-> > > > Looks good to me!
-> > > >
-> > > > Reviewed-by: David Gow <davidgow@google.com>
-> > >
-> > > Looks like this patch is still not merged in the mainline.  May I ask the ETA,
-> > > or any concern if you have?
-> > >
-> > >
-> > 
-> > We've got this queued for 6.5 in the kselftest/kunit tree[1], so it
-> > should land during the merge window. But I'll look into getting it
-> > applied as a fix for 6.4, beforehand.
-> 
-> Thank you for the kind answer, Gow!  I was thinking this would be treated as a
-> fix, and hence merged into the mainline before next merge window.  I'm actually
-> getting my personal test suite failures due to absence of this fix.  It's not a
-> critical problem, but it would definitely better for me if this could be merged
-> into the mainline as early as possible.
+> On 7/3/23 18:49, Linus Torvalds wrote:
+>> On Mon, 3 Jul 2023 at 00:08, Helge Deller <deller@gmx.de> wrote:
+>>>
+>>> Great, that patch fixes it!
+>>
+>> Yeah, I was pretty sure this was it, but it's good to have it
+>> confirmed. Committed.
+>
+> Thank you!
+>
+> Nice to see that Greg picked up the patch for stable that fast as well!
 
-This patch is now in the mainline (e30f65c4b3d671115bf2a9d9ef142285387f2aff).
-However, this fix is not in 6.4.y yet, so the original issue is reproducible on
-6.4.y.  Could you please add this to 6.4.y?  I confirmed the mainline commit
-can cleanly applied on latest 6.1.y tree, and it fixes the issue.
+Sorry, where? I was just about to check if it was marked for backporting
+but I can't see it in Greg's trees yet.
 
+We need it fo 6.1, 6.3, 6.4.
 
-Thanks,
-SJ
-
-> 
-> 
-> Thanks,
-> SJ
-> 
-> > 
-> > -- David
-> > 
-> > [1]: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=e30f65c4b3d671115bf2a9d9ef142285387f2aff
+(Apologies if I'm missing it somewhere obvious.)
