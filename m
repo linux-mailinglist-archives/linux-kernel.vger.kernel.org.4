@@ -2,84 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A810F74561D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE71F7455EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjGCHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
+        id S230291AbjGCHYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjGCHcl (ORCPT
+        with ESMTP id S229814AbjGCHYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:32:41 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8E293;
-        Mon,  3 Jul 2023 00:32:40 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 647091D2D;
-        Mon,  3 Jul 2023 07:18:39 +0000 (UTC)
+        Mon, 3 Jul 2023 03:24:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1E0CC;
+        Mon,  3 Jul 2023 00:24:19 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so4581268a12.0;
+        Mon, 03 Jul 2023 00:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1688368719;
-        bh=HHUtUvM6SCtPbZbJJ4cYknHmlAly3H+bxbxkIjZVMeU=;
-        h=Date:To:CC:From:Subject;
-        b=D1NMkafKJO0+0BKc+Yr+Sz4F/W6Ja8Bod3UgOsOZB11yQrVat8uX5uOv+/YIcT2gn
-         DgN4aX4ra0yl9NiactnalpSQ6HjgQJwWhP4EZGB0CEgg1h+mN2zA5R3QjaywDccpGS
-         Q3YG1dETZ82MCLK0QsKjBqVUrxaxNnjYbm4mBEig=
-Received: from [192.168.211.138] (192.168.211.138) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 3 Jul 2023 10:23:50 +0300
-Message-ID: <e41f6717-7c70-edf2-2d3a-8034840d14c5@paragon-software.com>
-Date:   Mon, 3 Jul 2023 11:23:49 +0400
+        d=gmail.com; s=20221208; t=1688369058; x=1690961058;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YMYA768Yuc+e863XYjfb4koFTu7nhhp3H7iOM5oxBd8=;
+        b=AWfclo1YRw8mHr1mBcQa6Al7/lD8qj8v4Tgi6fnK89pioGVIlQ60ccHh5jMJNntOCA
+         NnpGoMFZc6MXgHx1tehi4WvvVHBzemLSIUxOxdugmro6IaW4e3LFOZx3cQ4orgtunyJc
+         efY5RcAWN0ig2r7V4K4SjstqTNR5Kr9fa/JUxBz19Vo21EYXqKwmmFUtHMbcZi6UKJM4
+         eHWRfftpFaCbQiYIrvSezQkFtpB/Y2Q59+cpkRUI4grdA1RrMNt9gzOqBy7tOEdM2vlP
+         dO15+StPxy3lyKdjQc3vSBfsvvwmpA2iD2KnSmwoGU0IzT+Co2/GD+XPoKB0RQE8Q8Sn
+         GJRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688369058; x=1690961058;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YMYA768Yuc+e863XYjfb4koFTu7nhhp3H7iOM5oxBd8=;
+        b=CtDPcQQWJ6dIxE9vOWjZy/Gi0lpWy1LXQewk7LuJLUJpk0nAcbqauouWg1ppnvXTJ6
+         VpF+tWoGDdIy1znAIv+w/5PH9s8bKYd3z65yXS2s2YUW1CYCUAlP07JaVF3fVrqlnVT7
+         tny5slzTK6HNyhlHcmZl3hkI7puujidZlcYhNzNo9vy8Tewidl8Ars5DvRGBoP+ESbsx
+         rH0wfHssttl52e0YTbD8gyoDGnzj7Z2IRs5XalImMpejF6A3t3T7H3nknJx7W6PhDrAs
+         utJq/wh/MmsOFEvCB7ohMJTmpOpatVsczf3rH5W7TAcrJcRhf2ybtrMISg5GrogWe9RG
+         hxuw==
+X-Gm-Message-State: ABy/qLaC470NMCr8v9ka4yAaqCiNFJGPtBLSNpKF30Qr7gf8CpIFihtq
+        uxLfqGd8nrA7HBpCfQLsSUlbps1eitcBWDMLxMg=
+X-Google-Smtp-Source: APBJJlHDxu4653ZbuqiolCCAbs5HQRJeGVyhSAZ7vj84ypDu66Lq3AzthAyfxRrPKN2IAwfrFPOLHG/gBI/eS/a5Cf0=
+X-Received: by 2002:a05:6402:14cb:b0:51d:d16f:7e52 with SMTP id
+ f11-20020a05640214cb00b0051dd16f7e52mr6090296edx.29.1688369057919; Mon, 03
+ Jul 2023 00:24:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     <ntfs3@lists.linux.dev>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH 0/8] fs/ntfs3: Bugfix and refactoring
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.211.138]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
+References: <20230702133113.3438049-1-trix@redhat.com>
+In-Reply-To: <20230702133113.3438049-1-trix@redhat.com>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Mon, 3 Jul 2023 15:24:01 +0800
+Message-ID: <CAJhJPsVWQLD_OeL9E0i0e6hdt5i_TPMkvh5u_+u4e9xUbHxFcQ@mail.gmail.com>
+Subject: Re: [PATCH] clocksource/drivers/loongson1: set variable
+ ls1x_timer_lock storage-class-specifier to static
+To:     Tom Rix <trix@redhat.com>
+Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series contains various fixes and refactoring for ntfs3.
-Added more checks in record.
+> smatch reports
+> drivers/clocksource/timer-loongson1-pwm.c:31:1: warning: symbol
+>   'ls1x_timer_lock' was not declared. Should it be static?
+>
+> This variable is only used in its defining file, so it should be static.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
+
+> ---
+>  drivers/clocksource/timer-loongson1-pwm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
+> index 6335fee03017..244d66835508 100644
+> --- a/drivers/clocksource/timer-loongson1-pwm.c
+> +++ b/drivers/clocksource/timer-loongson1-pwm.c
+> @@ -28,7 +28,7 @@
+>
+>  #define CNTR_WIDTH             24
+>
+> -DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
+> +static DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
+>
+>  struct ls1x_clocksource {
+>         void __iomem *reg_base;
+> --
+> 2.27.0
+>
 
 
-Konstantin Komarov (8):
-   fs/ntfs3: Add ckeck in ni_update_parent()
-   fs/ntfs3: Write immediately updated ntfs state
-   fs/ntfs3: Minor code refactoring and formatting
-   fs/ntfs3: Don't allow to change label if volume is read-only
-   fs/ntfs3: Use kvmalloc instead of kmalloc(... __GFP_NOWARN)
-   fs/ntfs3: Add more attributes checks in mi_enum_attr()
-   fs/ntfs3: fix deadlock in mark_as_free_ex
-   fs/ntfs3: Fix shift-out-of-bounds in ntfs_fill_super
+--
+Best regards,
 
-  fs/ntfs3/attrlist.c | 15 +++++++--
-  fs/ntfs3/bitmap.c   |  3 +-
-  fs/ntfs3/frecord.c  |  6 ++++
-  fs/ntfs3/fsntfs.c   | 19 +++++-------
-  fs/ntfs3/namei.c    |  2 +-
-  fs/ntfs3/ntfs.h     |  2 +-
-  fs/ntfs3/ntfs_fs.h  |  2 ++
-  fs/ntfs3/record.c   | 74 +++++++++++++++++++++++++++++++++++----------
-  fs/ntfs3/super.c    | 38 +++++++++++++++++------
-  fs/ntfs3/xattr.c    |  3 +-
-  10 files changed, 121 insertions(+), 43 deletions(-)
-
--- 
-2.34.1
-
+Keguang Zhang
