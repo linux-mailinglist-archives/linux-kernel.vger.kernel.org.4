@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7A5745849
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEAC745850
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjGCJX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
+        id S229901AbjGCJ0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjGCJX4 (ORCPT
+        with ESMTP id S229549AbjGCJ0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:23:56 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBCFCE;
-        Mon,  3 Jul 2023 02:23:55 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b5d57d7db9so3309675a34.3;
-        Mon, 03 Jul 2023 02:23:55 -0700 (PDT)
+        Mon, 3 Jul 2023 05:26:32 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4507CD;
+        Mon,  3 Jul 2023 02:26:31 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51d7e8dd118so5318200a12.1;
+        Mon, 03 Jul 2023 02:26:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688376235; x=1690968235;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BJb09g/OfHvshX7XoMoqUcNq7uvwhDrwlKeW8QFnp6M=;
-        b=KZOVsUZ92vWvIGav63Q7cazYeOZBueY1L5SJXbcWtjgbJGrPTF/XqwTg1ZCxeT7s0D
-         cW2dg/8C+f2vUK1Bgyl5Nc4igUUQlWaxe04FeBRvk47bNKiz3tm4TrWS+5LZJJJZa9No
-         MIVcEnHlM6dg5C/TCe3avjst/ziKUV+pZxnLjfX3RPWnxCP4zZuB1dSOsa+taF9Rxr0l
-         cB7rHBJ+cJeEqd/KXKJO7bk/ynQlHzkwMC+kePYX0UOTE+7aAaRs2O5fS12I8p6qb7Fj
-         jV2Hz9skwOydu7tcGOHGQHojswrmbDQB2RoPsRVapDKhO0PUpsTtu7PWL5HzbftLHbl4
-         7v0Q==
+        d=gmail.com; s=20221208; t=1688376390; x=1690968390;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r6XhJFjT4U1VeHdjNxkEyj9oVsBY01R/+JVcfOOgqEA=;
+        b=o5CYOXGgUWy3FHAqYl5iinsBcaajRSbFuuAavb1p5+LDz9sSozz2O0WrGsvnyYTRh5
+         GscxwJeJBI/UEuaFIpzZhHmP7+kVTDj56kuDz63heHHZntQfk0NL9hrdO4fPM3HMXFwb
+         1ckd1Dp8VPLrkMXajtdPHVzLas1kv/Cl1ZkPr2un2G6XbsonDYiVZYgY//qVTL0HTIa6
+         KyF6lnj+py5ppdNpcvXLCrXhUJFo1vTlYol6vQsgULilvAB4gqfdzFvg1bqufikB2Ydx
+         S2U/JcioiTm3FP6S+cCUN+BD/tbglO52SQDNyPpXqKLXQ4RlfQVlrb7gICTXxDoJhaus
+         efHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688376235; x=1690968235;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688376390; x=1690968390;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BJb09g/OfHvshX7XoMoqUcNq7uvwhDrwlKeW8QFnp6M=;
-        b=i4R0d6bvy9S4jY1Z8VqLxgop1B79rS/yBXwjwA40Pee835ZL/AD2kME8/VsPC52dOS
-         vwnMo6IndvN9ilX+ex0bBqKZZKvjDk2OouagB5/xrO0VZU9ybKJ6cgvKnHebxm4UrK49
-         0iZC5ePka9cJTuCtCEuoa4DG4hxFKUU8ry7G7e21p57cFHOwa+H6nYgNhQ+PYwXbqF7w
-         az9B6sp0yQr4MrmJ5Ugwehar04ldRDTSPMDyAiqi2kpVX+ASGa3XDPcnYQzGV5ak6YeO
-         fxwnY3djmUpG6Ap8sU1+Rt4gBZCpgkeI4s9/9W64WzUbirkZhdLxdVRDhOBA6U0xSpQF
-         jC7g==
-X-Gm-Message-State: AC+VfDykEoJXHZxN6e1ftxSuwJe02LxjBMwGUWcvbr/2FSl3Ka9krkUY
-        fgCmLLRkkv4KeBbPobuMP8I=
-X-Google-Smtp-Source: ACHHUZ435WUYlPE5HLQZD7t8XpiGSe9lLLNGSvsArLVKY/qHdDDTOmISEZ3HbJDb6FPw+7HtzOLB8Q==
-X-Received: by 2002:a9d:6d81:0:b0:6b7:26aa:dbb3 with SMTP id x1-20020a9d6d81000000b006b726aadbb3mr7839695otp.38.1688376234977;
-        Mon, 03 Jul 2023 02:23:54 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.15])
-        by smtp.googlemail.com with ESMTPSA id p15-20020a63e64f000000b0051b0e564963sm14633495pgj.49.2023.07.03.02.23.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 02:23:54 -0700 (PDT)
-From:   Ze Gao <zegao2021@gmail.com>
-X-Google-Original-From: Ze Gao <zegao@tencent.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, Ze Gao <zegao2021@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Ze Gao <zegao@tencent.com>, Yafang <laoar.shao@gmail.com>
-Subject: [PATCH v2] fprobe: add unlock to match a succeeded ftrace_test_recursion_trylock
-Date:   Mon,  3 Jul 2023 17:23:36 +0800
-Message-Id: <20230703092336.268371-1-zegao@tencent.com>
-X-Mailer: git-send-email 2.40.1
+        bh=r6XhJFjT4U1VeHdjNxkEyj9oVsBY01R/+JVcfOOgqEA=;
+        b=SwVr+6kDgOVpWTV6mCYWSVzSQPJV9pfq5lqji1PHn3mtNsfHv5vtoLaNqiQb8T4COx
+         UVJA4KmlnMVwc7N2B5N1DSR1qQs6PHm/BYc33LtzEYYGcCX+8isolKSM62tF+9jBnxdr
+         oEnr0MMHjpYUTlqRUYsdLiuGj5MfG3HfOjYZ8GGKYC3vxs4UCxzR8/XZu0zut0YBM9AA
+         uRBIh0LmMK5i3mTF480DY7+txhMUx5Bgc4kUZpjmOzqYnLfjhXZR5U1qEmv5uaiSmPQE
+         WO34jEJOy8Zjg2CRmyzvIs2XMCxJWnK6g3fLPP2HCqpTaWKsqoiT7V9F5tfUt4i8KHs3
+         FpIg==
+X-Gm-Message-State: ABy/qLZBdZUqgx7jXznFfYeayV3G1+NGlWZMortev71wSEisue3bVPGk
+        KBotwe2FvQnnjLpcpcZdodBEIl7kMqCiovgQFj4=
+X-Google-Smtp-Source: APBJJlEAxcBioR5TJwszhz+Bruj0CP8tAOLVhJDYGJyGcBnYe3UzCfBmlz1btMn9Bek/NwwC5rd4kWsT6UDbN9fFKkU=
+X-Received: by 2002:aa7:c616:0:b0:51d:d2b9:54a0 with SMTP id
+ h22-20020aa7c616000000b0051dd2b954a0mr6631514edq.2.1688376390084; Mon, 03 Jul
+ 2023 02:26:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230703081801.900093-1-dangel101@gmail.com>
+In-Reply-To: <20230703081801.900093-1-dangel101@gmail.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Mon, 3 Jul 2023 11:26:18 +0200
+Message-ID: <CAFqH_53X+RnFppzWgowQsWZuTYX83132foRrohPTok59hO-qBg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/input: add tests for the EVIOCSCLOCKID ioctl
+To:     Dana Elfassy <delfassy@redhat.com>
+Cc:     shuah@kernel.org, usama.anjum@collabora.com, eballetbo@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dana Elfassy <dangel101@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unlock ftrace recursion lock when fprobe_kprobe_handler() is failed
-because of some running kprobe.
+Hi Dana,
 
-Fixes: 3cc4e2c5fbae ("fprobe: make fprobe_kprobe_handler recursion free")
-Reported-by: Yafang <laoar.shao@gmail.com>
-Closes: https://lore.kernel.org/linux-trace-kernel/CALOAHbC6UpfFOOibdDiC7xFc5YFUgZnk3MZ=3Ny6we=AcrNbew@mail.gmail.com/
-Signed-off-by: Ze Gao <zegao@tencent.com>
----
- kernel/trace/fprobe.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Many thanks for the patch. Only a minor comment, see below.
 
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index 18d36842faf5..93b3e361bb97 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -102,12 +102,14 @@ static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
- 
- 	if (unlikely(kprobe_running())) {
- 		fp->nmissed++;
--		return;
-+		goto recursion_unlock;
- 	}
- 
- 	kprobe_busy_begin();
- 	__fprobe_handler(ip, parent_ip, ops, fregs);
- 	kprobe_busy_end();
-+
-+recursion_unlock:
- 	ftrace_test_recursion_unlock(bit);
- }
- 
--- 
-2.40.1
+Missatge de Dana Elfassy <delfassy@redhat.com> del dia dl., 3 de jul.
+2023 a les 10:18:
+>
+> This patch introduces tests for the EVIOCSCLOCKID ioctl, for full
+> coverage of the different clkids
+>
+> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+> ---
+> This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+> [1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
+>
+>  tools/testing/selftests/input/evioc-test.c | 32 ++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>
+> diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+> index ad7b93fe39cf..81d5336d93ac 100644
+> --- a/tools/testing/selftests/input/evioc-test.c
+> +++ b/tools/testing/selftests/input/evioc-test.c
+> @@ -234,4 +234,36 @@ TEST(eviocsrep_set_repeat_settings)
+>         selftest_uinput_destroy(uidev);
+>  }
+>
+> +TEST(eviocsclockid_set_clockid)
+> +{
+> +       struct selftest_uinput *uidev;
+> +       int clkid = 0;
 
+instead of using "magic numbers" for all the CLOCK_* types I'd
+recommend to use the defined ones in include/uapi/linux/time.h, so you
+can use CLOCK_REALTIME,
+CLOCK_MONOTONIC and CLOCK_BOOTTIME in the code.
+
+> +       int rc;
+> +
+> +       rc = selftest_uinput_create_device(&uidev, -1);
+> +       ASSERT_EQ(0, rc);
+> +       ASSERT_NE(NULL, uidev);
+> +
+> +       // case CLOCK_REALTIME
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(0, rc);
+> +
+> +       // case CLOCK_MONOTONIC
+> +       clkid = 1;
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(0, rc);
+> +
+> +       // case CLOCK_BOOTTIME
+> +       clkid = 7;
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(0, rc);
+> +
+> +       // case default
+> +       clkid = -1;
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(-1, rc);
+> +
+> +       selftest_uinput_destroy(uidev);
+> +}
+> +
+>  TEST_HARNESS_MAIN
+> --
+> 2.41.0
+>
+
+Cheers,
+  Enric
