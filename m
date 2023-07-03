@@ -2,146 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66B4745EA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602F4745EA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjGCOjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S231210AbjGCOlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjGCOjQ (ORCPT
+        with ESMTP id S230043AbjGCOlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:39:16 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4755E73
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:39:11 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9922d6f003cso562666666b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688395150; x=1690987150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ewfgpd/7GQjgbZQV9CDcnJPf5yWlKoXpABMnM/ALxVs=;
-        b=t2LiKP9IdlpLX0G4leahldrhzy1nhIAc/pfiNb4QrN7xEz+oee+rIdBw/NxKLs3lwl
-         bENBVPU5QnvNnyqRN5tcPj/6Zj+KKeWe8keo7z/S9nnJb604w6qEzN9IFAqnTxq0X9RT
-         G2D/V2FB42/Eww+grdX6PjyudWUqFSbKUDVGwzpjLj4TrZ7Uxocz+NAkVSYQiZoth6AK
-         1FPanXMhOF7icclzKNTb3LX3UHijwXvQ98rD4T0mK+to9WFqtVE+67jbxV6lSX0XdDKq
-         G1UVLCkPUoA0W/Luf0yz6XSHYPkXhSW9gYNQjvu0Z/t+W0epJki9gI0+RjhqE99yKqSv
-         Yhjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688395150; x=1690987150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ewfgpd/7GQjgbZQV9CDcnJPf5yWlKoXpABMnM/ALxVs=;
-        b=FBxs+rCOb2pAHrzVpBEIZvjOHuEx8RdN8xH4dHj+Kp25bEgAKyVGq9sSY0JSFWOwx/
-         eor8J/DFESeJLK28dQ2NeX46b/5AKUrKxo6ZtD3TM6ubQZ8pI6rq/JJOYaNBosgWn8Uy
-         0ujwueCk8+6qoFaN99RZB5gcA/UDnWFPzrsVE8VUQ895E5oOI9bgg6yWf65HfTQOWJDc
-         oxt9bsEPUwjiFmfzu+vEMtJ5HpALvQUv9rHYgX6Albni4w/ZZoLoFdCAg6wHeUZ79NX5
-         U+DjHgfuAwCnJ/n9+QQTs2b7hZR668hrVa/2PI/dluGz2OGLQAAx8ckSXstUq+Mvw6fb
-         umng==
-X-Gm-Message-State: ABy/qLbkJC0XAUEoluP55/sb6OyDrrECtOyoXEh1r17FaE73/aDX6oOZ
-        /UDhK9vcxRZ3sqqnukB/XP2ERw==
-X-Google-Smtp-Source: ACHHUZ6OndtUxsKIxmSzOhgj+D7H/wO4w/Q0xlKcwOmnYyGvuvBhFFsJ8gkPcVl9r7fMzx7Fb3uZyQ==
-X-Received: by 2002:a17:906:af15:b0:987:9823:b9f with SMTP id lx21-20020a170906af1500b0098798230b9fmr7964082ejb.28.1688395150275;
-        Mon, 03 Jul 2023 07:39:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z9-20020a17090655c900b00992d0de8762sm5074198ejp.216.2023.07.03.07.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 07:39:09 -0700 (PDT)
-Message-ID: <948211aa-2315-5ed6-4c04-f1a795045997@linaro.org>
-Date:   Mon, 3 Jul 2023 16:39:08 +0200
+        Mon, 3 Jul 2023 10:41:00 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB191B5;
+        Mon,  3 Jul 2023 07:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688395259; x=1719931259;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oiAYYlrvhxpb7dxgLlbZm7axICahdWtDSJkHwBkZwWs=;
+  b=hs8JMq157Qmat2x0sPPHkBWyqlAPYj8DPDNVOV7UWIhnwXwGyulcJo+V
+   ElGrqZgsDHQIT3WvcfAz2VTK1esIojbX/r1kWkTy9RFgYLk9OM1AgO2Ea
+   XTN9ckEhppp0a23T8eYnqcdolX7TradAdWV7eERvjYdAKZYWSkGWB758h
+   XcknFTe/zVNIGlVS2P6VdawxHZ4Ng9I9+TASnuIgFnzdB88lumNks96pO
+   3pGPELetLigrhzbrlskpYtDhCHpq/sW+2pXkPCZaQiwWsHKqxLOgmj+Z8
+   8xSgLwTeTmYLNzm/xzDDnjZT5GUIG8clSba9UdeK+lYDhlJVeTu7hr3XW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="352724303"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="352724303"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 07:40:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="1049112742"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="1049112742"
+Received: from lbates-mobl.amr.corp.intel.com (HELO [10.212.242.115]) ([10.212.242.115])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 07:40:56 -0700
+Message-ID: <eb83e722-0379-1451-9c9c-9b9de33cb4cb@intel.com>
+Date:   Mon, 3 Jul 2023 07:40:55 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 3/3] dt-bindings: hwmon: add sht3x devicetree binding
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
 Content-Language: en-US
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230703140818.427403-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB6261295D96DCE88F712910B99229A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DB4PR10MB6261295D96DCE88F712910B99229A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+ <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
+ <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net>
+ <20230630190514.GH3436214@ls.amr.corp.intel.com>
+ <ZJ9IKALhz1Q6ogu1@google.com>
+ <20230703104942.GG4253@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230703104942.GG4253@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 16:08, JuenKit Yip wrote:
-> add sht3x devicetree binding files
-> 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
-> ---
-> v3:
->   - fix wildcards problem
->   - add vdd-supply property
+On 7/3/23 03:49, Peter Zijlstra wrote:
+>> There are also latency and noisy neighbor concerns, e.g. we *really* don't want
+>> to end up in a situation where creating a TDX guest for a customer can observe
+>> arbitrary latency *and* potentially be disruptive to VMs already running on the
+>> host.
+> Well, that's a quality of implementation issue with the whole TDX
+> crapola. Sounds like we want to impose latency constraints on the
+> various TDX calls. Allowing it to consume arbitrary amounts of CPU time
+> is unacceptable in any case.
 
-No improvements in subject.
-> 
->  .../bindings/hwmon/sensirion,sht3x.yaml       | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> new file mode 100644
-> index 000000000000..bef2eb492a47
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht3x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sensirion SHT3x-DIS humidity and temperature sensor
-> +
-> +maintainers:
-> +  - JuenKit Yip <JuenKit_Yip@hotmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sensirion,sht30
-> +      - sensirion,sht31
-> +      - sensirion,sht35
-> +      - sensirion,sts30
-> +      - sensirion,sts31
-> +      - sensirion,sts35
+For what it's worth, everybody knew that calling into the TDX module was
+going to be a black hole and that consuming large amounts of CPU at
+random times would drive people bat guano crazy.
 
-Your driver change suggests these are compatible, so make them such with
-oneOf and a list.
+The TDX Module ABI spec does have "Leaf Function Latency" warnings for
+some of the module calls.  But, it's basically a binary thing.  A call
+is either normal or "longer than most".
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +  
-> +  vdd-supply:
-> +    description: regulator that drives the VDD pin
+The majority of the "longer than most" cases are for initialization.
+The _most_ obscene runtime ones are chunked up and can return partial
+progress to limit latency spikes.  But I don't think folks tried as hard
+on the initialization calls since they're only called once which
+actually seems pretty reasonable to me.
 
-Missing reset-gpios. It's the second ignored comment.
+Maybe we need three classes of "Leaf Function Latency":
+1. Sane
+2. "Longer than most"
+3. Better turn the NMI watchdog off before calling this. :)
 
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-
-Best regards,
-Krzysztof
-
+Would that help?
