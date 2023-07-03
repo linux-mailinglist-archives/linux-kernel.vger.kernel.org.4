@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858D5745ACF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C56B745AD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjGCLQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        id S230032AbjGCLQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGCLQB (ORCPT
+        with ESMTP id S229977AbjGCLQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:16:01 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2466C4;
-        Mon,  3 Jul 2023 04:15:58 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1688382943tgl4kp36
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 03 Jul 2023 19:15:41 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: XBN7tc9DADJGmS+8V9nxPXH6WKrKZMAjM79vwg2x0KdxjTaUIu67ndj6OinDO
-        p6MlWsFc27/KsIPxxFcQOruUnvI1u4LL2ewAANwXpNtLTLuLWMDJvR4KMvMGtmnKUZlrVFu
-        FSfPJg+HQsPT0f3A02ZLk1P27cvupcIh3bOBiiNntHL/0UHrC4bCslREf/BO41pwwg/i9Ty
-        TR7U9+xZ7iarF6GSKdLsUO6WhP1lzKFQ3Rbfmi2T2SZSr82U7e8x67Xgolmyx8pDitACNQt
-        1aCQosEw3xPxoDEuIBBhBaxVCnUCchampVjHPcxYAOQdmXlCP5X3Wo3Uoo3OPlx21iC5z+K
-        T1utUbbyMKU6B53zxe2lHSlmb5rOWlYS5+PJiMzYvEhJlJZm53cpUg2I+Uemp02VQEYK7b6
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16507692690246045464
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: Re: [PATCH v5 10/14] tools/nolibc: __sysret: support syscalls who return a pointer
-Date:   Mon,  3 Jul 2023 19:15:41 +0800
-Message-Id: <20230703111541.496900-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZKKdD/p4UkEavru6@1wt.eu>
-References: <ZKKdD/p4UkEavru6@1wt.eu>
+        Mon, 3 Jul 2023 07:16:05 -0400
+Received: from mail-pg1-f207.google.com (mail-pg1-f207.google.com [209.85.215.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBC9DF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 04:16:00 -0700 (PDT)
+Received: by mail-pg1-f207.google.com with SMTP id 41be03b00d2f7-55afcc54d55so4435471a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 04:16:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688382959; x=1690974959;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XXNgRtmNb1bvHo0qrdCNGlVQz0VT2KR3h4bH/4bvDhQ=;
+        b=YPjo2/OiPuzbhuzy9zfWyl4n94qV5UWYH/9R8kl5Oj+ciuyi+fnO8Uovf8J+Zby4pT
+         MxgTPwrhqa9qU355lSxym5NKA87HGxe5cWmD9YUAfji5QRUtILg/ZP700WZSlxHlJ8OS
+         eoOZQAysvcO/vxEd83d1nnOlP0l06v0foCMnTD8BDbgC92nVLa7SOT6/SIp1Nyh2W3Lw
+         Ys7G6yPj3FMgsvvzDpnmgSpBDUkKflqWroSyWF7S+8TW2e2xnwHuwWCjk9eT49C29ra8
+         u/aU+5y2wj0S3wgtxEE9M4Oe8n3IwxRzuUkcauYge+YWDN54rz34hL4qwpGGGlnX4pzp
+         OYxA==
+X-Gm-Message-State: AC+VfDzi6DH9t85VBek5BHLxHgUP3DCPmdUhiJJ1kjZvqC+xY3Dd0fqA
+        hmuI05nidHWdIBVCJ7VUL6VDbS5ubRrQ7oTyJk/O2fnA3eru
+X-Google-Smtp-Source: ACHHUZ4ErtoXsFN2urYqeqVA5Ft/zMpgnov6cqPCn4we9TqXxLLnobX7TNFGJcC/bL9dzTLnmb/rFC90lP2r/EeD+9ZwMvY1LF0g
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a17:903:40c6:b0:1b3:a8f6:1231 with SMTP id
+ t6-20020a17090340c600b001b3a8f61231mr6953486pld.4.1688382959538; Mon, 03 Jul
+ 2023 04:15:59 -0700 (PDT)
+Date:   Mon, 03 Jul 2023 04:15:59 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008c5b8c05ff934a6c@google.com>
+Subject: [syzbot] [wireless?] KMSAN: uninit-value in ieee80211_rx_handlers
+From:   syzbot <syzbot+be9c824e6f269d608288@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, glider@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,158 +57,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
+Hello,
 
-> On Mon, Jul 03, 2023 at 04:36:51PM +0800, Zhangjin Wu wrote:
-> > > Syscalls that return pointer use that -MAX_ERRNO range to encode errors
-> > > (such as mmap()). I just do not know if there is a convention saying that
-> > > other ones also restrict themselves to that range or not. If you find
-> > > some info which guarantees that it's the case for all of them, then by
-> > > all means let's proceed like this, but in this case it should be mentioned
-> > > in the comment why we think it's valid to do this. For now it's presented
-> > > as an opportunity only.
-> > 
-> > Currently, I only found a prove-in-use case in musl:
-> > 
-> >     https://elixir.bootlin.com/musl/latest/source/src/internal/syscall_ret.c:
-> > 
-> >     #include <errno.h>
-> >     #include "syscall.h"
-> > 
-> >     long __syscall_ret(unsigned long r)
-> >     {
-> >     	if (r > -4096UL) {
-> >     		errno = -r;
-> >     		return -1;
-> >     	}
-> >     	return r;
-> >     }
-> > 
-> > Our new implementation (based on the one used by mmap()) is almostly the same
-> > as musl. Not sure if this is enough. I have tried to 'git blame' on
-> > __syscall_ret() of musl to find some clue, but failed, because the function has
-> > been added before importing into its git repo.
-> 
-> OK, we already used the glibc-saved registers in the past to determine
-> the official list of clobbered registers (and the ABI spec was even
-> updated based on this). Here, musl is sufficiently deployed to consider
-> this as valid. You can simply go that route and mention in the commit
-> message that while you found no official reference stating that this is
-> valid for int/long returns, you found at least one other implementation
-> relying on this (i.e. if the kernel ever changes it will cause breakage).
->
+syzbot found the following issue on:
 
-ok.
+HEAD commit:    257152fe29be string: use __builtin_memcpy() in strlcpy/str..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13ba5e6f280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c7bdd043d54243c
+dashboard link: https://syzkaller.appspot.com/bug?extid=be9c824e6f269d608288
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-> > > Also, the rest of the commit message regarding uintptr_t (which we don't
-> > > use), bit values and modular arithmetics is extremely confusing and not
-> > > needed at all. What matters is only to know if we need to consider only
-> > > values -MAX_ERRNO..-1 as error or all negative ones. If so, then it's
-> > > obvious that ret >= (unsigned long)-MAX_ERRNO catches them all, as the
-> > > current mmap() function already does with -4095UL.
-> > >
-> > 
-> > Yes, will clean up the commit message, but at first, let's continue get
-> > more information about which one is ok:
-> > 
-> > - -MAX_ERRNO..-1 as error, for sys_mmap (we know in nolibc) currently
-> > 
-> > - all negative ones, for others currently
-> 
-> You can double-check in glibc for example, but I'm starting to guess
-> you'll find the same test as above, i.e. errors are exclusively >-4096,
-> regardless of the expected return type.
->
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Your guest is definitely true ;-)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/43dcd4dfe7e1/disk-257152fe.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f3fcd9dec66c/vmlinux-257152fe.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/08620f02113d/bzImage-257152fe.xz
 
-Glibc has the same logic in its INLINE_SYSCALL() macro:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+be9c824e6f269d608288@syzkaller.appspotmail.com
 
-    https://elixir.bootlin.com/glibc/latest/source/sysdeps/unix/sysv/linux/sysdep.h
+=====================================================
+BUG: KMSAN: uninit-value in ieee80211_rx_h_action net/mac80211/rx.c:3716 [inline]
+BUG: KMSAN: uninit-value in ieee80211_rx_handlers+0xccf5/0x10320 net/mac80211/rx.c:4110
+ ieee80211_rx_h_action net/mac80211/rx.c:3716 [inline]
+ ieee80211_rx_handlers+0xccf5/0x10320 net/mac80211/rx.c:4110
+ ieee80211_invoke_rx_handlers net/mac80211/rx.c:4145 [inline]
+ ieee80211_prepare_and_rx_handle+0x563e/0x9620 net/mac80211/rx.c:4987
+ ieee80211_rx_for_interface+0x88d/0x990 net/mac80211/rx.c:5072
+ __ieee80211_rx_handle_packet net/mac80211/rx.c:5229 [inline]
+ ieee80211_rx_list+0x5737/0x6550 net/mac80211/rx.c:5364
+ ieee80211_rx_napi+0x87/0x350 net/mac80211/rx.c:5387
+ ieee80211_rx include/net/mac80211.h:4918 [inline]
+ ieee80211_tasklet_handler+0x1a0/0x310 net/mac80211/main.c:316
+ tasklet_action_common+0x391/0xd30 kernel/softirq.c:798
+ tasklet_action+0x26/0x30 kernel/softirq.c:823
+ __do_softirq+0x1b7/0x78f kernel/softirq.c:571
+ do_softirq+0x10d/0x190 kernel/softirq.c:472
+ __local_bh_enable_ip+0x99/0xa0 kernel/softirq.c:396
+ local_bh_enable+0x28/0x30 include/linux/bottom_half.h:33
+ __ieee80211_tx_skb_tid_band+0x276/0x560 net/mac80211/tx.c:6057
+ ieee80211_tx_skb_tid+0x203/0x290 net/mac80211/tx.c:6084
+ ieee80211_mgmt_tx+0x1cff/0x2070 net/mac80211/offchannel.c:965
+ rdev_mgmt_tx net/wireless/rdev-ops.h:746 [inline]
+ cfg80211_mlme_mgmt_tx+0x133b/0x1ba0 net/wireless/mlme.c:815
+ nl80211_tx_mgmt+0x1297/0x1840 net/wireless/nl80211.c:12594
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:968 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x12ed/0x1380 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x371/0x650 net/netlink/af_netlink.c:2546
+ genl_rcv+0x40/0x60 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0xf28/0x1230 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x122f/0x13d0 net/netlink/af_netlink.c:1913
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg net/socket.c:747 [inline]
+ ____sys_sendmsg+0x999/0xd50 net/socket.c:2503
+ ___sys_sendmsg+0x28d/0x3c0 net/socket.c:2557
+ __sys_sendmsg+0x222/0x3c0 net/socket.c:2586
+ __compat_sys_sendmsg net/compat.c:346 [inline]
+ __do_compat_sys_sendmsg net/compat.c:353 [inline]
+ __se_compat_sys_sendmsg net/compat.c:350 [inline]
+ __ia32_compat_sys_sendmsg+0x9d/0xe0 net/compat.c:350
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-    #undef INTERNAL_SYSCALL_ERROR_P
-    #define INTERNAL_SYSCALL_ERROR_P(val) \
-      ((unsigned long int) (val) > -4096UL)
-    
-    #ifndef SYSCALL_ERROR_LABEL
-    # define SYSCALL_ERROR_LABEL(sc_err)					\
-      ({									\
-        __set_errno (sc_err);						\
-        -1L;								\
-      })
-    #endif
-    
-    /* Define a macro which expands into the inline wrapper code for a system
-       call.  It sets the errno and returns -1 on a failure, or the syscall
-       return value otherwise.  */
-    #undef INLINE_SYSCALL
-    #define INLINE_SYSCALL(name, nr, args...)				\
-      ({									\
-        long int sc_ret = INTERNAL_SYSCALL (name, nr, args);		\
-        __glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (sc_ret))		\
-        ? SYSCALL_ERROR_LABEL (INTERNAL_SYSCALL_ERRNO (sc_ret))		\
-        : sc_ret;								\
-      })
+Uninit was stored to memory at:
+ skb_copy_from_linear_data_offset include/linux/skbuff.h:4088 [inline]
+ skb_copy_bits+0x149/0xd30 net/core/skbuff.c:2758
+ skb_copy+0x47f/0xa00 net/core/skbuff.c:1948
+ mac80211_hwsim_tx_frame_no_nl+0x18db/0x2130 drivers/net/wireless/virtual/mac80211_hwsim.c:1835
+ mac80211_hwsim_tx+0x1a9b/0x2a10 drivers/net/wireless/virtual/mac80211_hwsim.c:2046
+ drv_tx net/mac80211/driver-ops.h:35 [inline]
+ ieee80211_tx_frags+0x5e7/0xd90 net/mac80211/tx.c:1752
+ __ieee80211_tx+0x46e/0x630 net/mac80211/tx.c:1806
+ ieee80211_tx+0x52e/0x570 net/mac80211/tx.c:1986
+ ieee80211_xmit+0x54a/0x5b0 net/mac80211/tx.c:2078
+ __ieee80211_tx_skb_tid_band+0x271/0x560 net/mac80211/tx.c:6056
+ ieee80211_tx_skb_tid+0x203/0x290 net/mac80211/tx.c:6084
+ ieee80211_mgmt_tx+0x1cff/0x2070 net/mac80211/offchannel.c:965
+ rdev_mgmt_tx net/wireless/rdev-ops.h:746 [inline]
+ cfg80211_mlme_mgmt_tx+0x133b/0x1ba0 net/wireless/mlme.c:815
+ nl80211_tx_mgmt+0x1297/0x1840 net/wireless/nl80211.c:12594
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:968 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x12ed/0x1380 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x371/0x650 net/netlink/af_netlink.c:2546
+ genl_rcv+0x40/0x60 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0xf28/0x1230 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x122f/0x13d0 net/netlink/af_netlink.c:1913
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg net/socket.c:747 [inline]
+ ____sys_sendmsg+0x999/0xd50 net/socket.c:2503
+ ___sys_sendmsg+0x28d/0x3c0 net/socket.c:2557
+ __sys_sendmsg+0x222/0x3c0 net/socket.c:2586
+ __compat_sys_sendmsg net/compat.c:346 [inline]
+ __do_compat_sys_sendmsg net/compat.c:353 [inline]
+ __se_compat_sys_sendmsg net/compat.c:350 [inline]
+ __ia32_compat_sys_sendmsg+0x9d/0xe0 net/compat.c:350
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-Nothing differs.
+Uninit was created at:
+ slab_post_alloc_hook+0x12d/0xb60 mm/slab.h:716
+ slab_alloc_node mm/slub.c:3451 [inline]
+ kmem_cache_alloc_node+0x535/0xa30 mm/slub.c:3496
+ kmalloc_reserve+0x148/0x470 net/core/skbuff.c:568
+ __alloc_skb+0x318/0x740 net/core/skbuff.c:654
+ __netdev_alloc_skb+0x11a/0x6f0 net/core/skbuff.c:718
+ netdev_alloc_skb include/linux/skbuff.h:3204 [inline]
+ dev_alloc_skb include/linux/skbuff.h:3217 [inline]
+ ieee80211_mgmt_tx+0x1316/0x2070 net/mac80211/offchannel.c:907
+ rdev_mgmt_tx net/wireless/rdev-ops.h:746 [inline]
+ cfg80211_mlme_mgmt_tx+0x133b/0x1ba0 net/wireless/mlme.c:815
+ nl80211_tx_mgmt+0x1297/0x1840 net/wireless/nl80211.c:12594
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:968 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x12ed/0x1380 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x371/0x650 net/netlink/af_netlink.c:2546
+ genl_rcv+0x40/0x60 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0xf28/0x1230 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x122f/0x13d0 net/netlink/af_netlink.c:1913
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg net/socket.c:747 [inline]
+ ____sys_sendmsg+0x999/0xd50 net/socket.c:2503
+ ___sys_sendmsg+0x28d/0x3c0 net/socket.c:2557
+ __sys_sendmsg+0x222/0x3c0 net/socket.c:2586
+ __compat_sys_sendmsg net/compat.c:346 [inline]
+ __do_compat_sys_sendmsg net/compat.c:353 [inline]
+ __se_compat_sys_sendmsg net/compat.c:350 [inline]
+ __ia32_compat_sys_sendmsg+0x9d/0xe0 net/compat.c:350
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-But 'git blame' has no clue to any 'spec' or 'standard' either.
+CPU: 0 PID: 5275 Comm: syz-executor.5 Not tainted 6.4.0-syzkaller-g257152fe29be #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+=====================================================
 
-- fcb78a55058fd, linux: Consolidate INLINE_SYSCALL
 
-  Moved all of the arch specific INTERNAL_SYSCALL_ERROR_P() to common
-  header
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-- 369b849f1a382, sysdeps/unix/sysv/linux/s390/s390-32/sysdep.h (INTERNAL_SYSCALL,...
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-  Firstly defined this macro: INTERNAL_SYSCALL_ERROR_P()
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-    $ git show 369b849f1a3 | grep "define.*INTERNAL_SYSCALL_ERROR_P"
-    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned int) (val) >= 0xfffff001u)
-    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned int) (val) >= 0xfffff001u)
-    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned long) (val) >= -515L)
-    +#define INTERNAL_SYSCALL_ERROR_P(val)	((unsigned long) (val) >= -4095L)
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Willy, I plan to further use something like, is it ok for you?
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-    tools/include/nolibc/errno.h:
-
-    -#define MAX_ERRNO 4095
-    +#define MAX_ERRNO 4095UL
-
-    tools/include/nolibc/sys.h:
-
-    /* Syscall return helper for library routines
-     * set errno as -ret when ret in [-MAX_ERRNO, -1]
-     *
-     * Note, No official reference states the errno range
-     * here aligns with musl (src/internal/syscall_ret.c)
-     * and glibc (sysdeps/unix/sysv/linux/sysdep.h)
-     */
-    static __inline__ __attribute__((unused, always_inline))
-    long __sysret(unsigned long ret)
-    {
-            if (ret >= -MAX_ERRNO) {
-                    SET_ERRNO(-(long)ret);
-                    return -1;
-            }
-            return ret;
-    }
-
-Or we also directly use 4096UL here.
-
-    static __inline__ __attribute__((unused, always_inline))
-    long __sysret(unsigned long ret)
-    {
-            if (ret > -4096UL) {
-                    SET_ERRNO(-(long)ret);
-                    return -1;
-            }
-            return ret;
-    }
-
-Best regards,
-Zhangjin
-
-> Thanks!
-> Willy
+If you want to undo deduplication, reply with:
+#syz undup
