@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15187460FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5E0746102
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjGCQyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 12:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S229942AbjGCQyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 12:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGCQyF (ORCPT
+        with ESMTP id S230106AbjGCQyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 12:54:05 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B640E59;
-        Mon,  3 Jul 2023 09:54:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=UPHKo8guvj/2wEUMDLhfEXpJf9TVh5eXRfSHFXQcHBA=; b=jfLhYm02QkWxLFM1DOGstKUnu6
-        vxf4OfAXc0eXw20E7wZh78gLJoqMhjFRf/oU62RDRD0Y/siwM0bgtmZ2kq6sibM99aYXU+CHQcQNG
-        rsU+M1SG1uwJ8ms67fo8/t12u2b/say9bs/bvTXz8HTeMLMaopAm7hv8D+at9DT82tvwE4fnbVl0j
-        Mr2pP4eUO2b6zNAQJWYulIwvGpE9KSM3gh5FGaABJool2Q2cgG2uRO1EnHXaU9fPk74wyndzGM+Wb
-        aM7QxDIu3VBNC8i8qyxowsL0+J2cvUHwF9GfMOkD2QXk8TlYOgIxcjSGkz6LErLQKuS1MV/WG/x1g
-        UlY2fz/g==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qGMoH-0007Ti-On; Mon, 03 Jul 2023 18:53:57 +0200
-Received: from [178.197.249.52] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qGMoH-000UR3-82; Mon, 03 Jul 2023 18:53:57 +0200
-Subject: Re: [PATCH v3] btf: warn but return no error for NULL btf from
- __register_btf_kfunc_id_set()
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Alexander.Egorenkov@ibm.com, ast@kernel.org, jolsa@kernel.org,
-        martin.lau@linux.dev, memxor@gmail.com, olsajiri@gmail.com,
-        bpf@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230701171447.56464-1-sj@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <e1d10b8b-e9f2-267f-c8d8-55d977349c5b@iogearbox.net>
-Date:   Mon, 3 Jul 2023 18:53:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20230701171447.56464-1-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26958/Mon Jul  3 09:29:03 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 3 Jul 2023 12:54:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D78E5D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 09:54:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C697260A27
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 16:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A4F7C433C8;
+        Mon,  3 Jul 2023 16:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688403279;
+        bh=1esEcU2jcd4ZFiYLpi/Z/+JsLZfJuT+BZMzPEsrCXIU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ojMC9qMG/1wNxyKIZ1mpop6q9A4xk5udZYn6K9KVoCi5dJ57IARmF9lAF3TxHZn9V
+         X8gtizv8NR6AEQnIaiKvorF4AaFN9PPM/JiQROdJIZEjAAjPkxpwSIWkoBq1iGKo3J
+         nuxeXgU40HyB/X4fwz6zz1/wd2OoeAOcK//SFfAm57n+Tvu7lYe4y0RVbeVffvCJCZ
+         Cbt1aktoxg0uHST16e5oYlXCmaoY8tGveDk6qmae4LTSVe9cQPkd1t/OuKbc9CmgFx
+         8hkHleHMpzodLtKXJQUKzr4eNrs2y8HMd6nnh9D91n1LBWoShj6KH+S7pBCw5h/Sf9
+         5xWLKqpo+OgpQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGMou-00ADVA-VJ;
+        Mon, 03 Jul 2023 17:54:37 +0100
+Date:   Mon, 03 Jul 2023 17:54:36 +0100
+Message-ID: <863525x7eb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Chris Morgan <macromorgan@hotmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v1 1/1] irqchip/gic-v3: Enable Rockchip 3588001 erratum workaround for RK3588S
+In-Reply-To: <20230703164129.193991-1-sebastian.reichel@collabora.com>
+References: <20230703164129.193991-1-sebastian.reichel@collabora.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sebastian.reichel@collabora.com, macromorgan@hotmail.com, tglx@linutronix.de, heiko@sntech.de, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, kernel@collabora.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/23 7:14 PM, SeongJae Park wrote:
-> __register_btf_kfunc_id_set() assumes .BTF to be part of the module's
-> .ko file if CONFIG_DEBUG_INFO_BTF is enabled.  If that's not the case,
-> the function prints an error message and return an error.  As a result,
-> such modules cannot be loaded.
+On Mon, 03 Jul 2023 17:41:29 +0100,
+Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
 > 
-> However, the section could be stripped out during a build process.  It
-> would be better to let the modules loaded, because their basic
-> functionalities have no problem[1], though the BTF functionalities will
-> not be supported.  Make the function to lower the level of the message
-> from error to warn, and return no error.
+> Commit a8707f553884 ("irqchip/gic-v3: Add Rockchip 3588001 erratum
+> workaround") mentioned RK3588S (the slimmed down variant of RK3588)
+> being affected, but did not check for its compatible value. Thus the
+> quirk is not applied on RK3588S. Since the GIC ITS node got added to the
+> upstream DT, boards using RK3588S are no longer booting without this
+> quirk being applied.
 > 
-> [1] https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
-> 
-> Reported-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
-> Link: https://lore.kernel.org/bpf/87y228q66f.fsf@oc8242746057.ibm.com/
-> Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Link: https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
-> Fixes: c446fdacb10d ("bpf: fix register_btf_kfunc_id_set for !CONFIG_DEBUG_INFO_BTF")
-> Cc: <stable@vger.kernel.org> # 5.18.x
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> Signed-off-by: SeongJae Park <sj@kernel.org>
+> Fixes: 06cdac8e8407 ("arm64: dts: rockchip: add GIC ITS support to rk3588")
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
-> 
-> Changes from v2
-> (https://lore.kernel.org/bpf/20230628164611.83038-1-sj@kernel.org/)
-> - Keep the error for vmlinux case.
+> I recently got a Rock 5A and noticed this issue. Apart from it, the Indiedroid
+> Nova should also be affected (I don't have that board). There are no other
+> upstream RK3588S boards at the moment.
 
-Looks good, applied to bpf, thanks!
+What about "khadas,edge2"?
+
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 1994541eaef8..034ece9ac47c 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -4727,7 +4727,8 @@ static bool __maybe_unused its_enable_rk3588001(void *data)
+>  {
+>  	struct its_node *its = data;
+>  
+> -	if (!of_machine_is_compatible("rockchip,rk3588"))
+> +	if (!of_machine_is_compatible("rockchip,rk3588") &&
+> +	    !of_machine_is_compatible("rockchip,rk3588s"))
+>  		return false;
+>  
+>  	its->flags |= ITS_FLAGS_FORCE_NON_SHAREABLE;
+
+I don't mind taking this, but it also mean that only a new kernel will
+boot. Shouldn't you *also* fix the DT so that it advertises rk3588 as
+a fallback to rk3588s? This would ensure that an old kernel can boot
+as well.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
