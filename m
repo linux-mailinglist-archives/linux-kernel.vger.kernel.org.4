@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BFD74631B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427C074631F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjGCS5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S230011AbjGCS6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjGCS5j (ORCPT
+        with ESMTP id S229943AbjGCS6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:57:39 -0400
+        Mon, 3 Jul 2023 14:58:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9889DE72
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:57:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E375E64
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:58:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BC3A60D3A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:57:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308E3C433C9;
-        Mon,  3 Jul 2023 18:57:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0214560FF4
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B090C433C7;
+        Mon,  3 Jul 2023 18:58:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688410655;
-        bh=OIv2RRVC1eYXq8oVsIMyY5E/H7XjsncG4Xa4yBw7bo0=;
+        s=k20201202; t=1688410685;
+        bh=AK9PcQaTNxkV/SL5cfvD+YxtSuu86pJE+53SF0Jwwas=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Th//EDX6dp8QwTTAJkx2vAuz0Xmsu+TVAdd6j4CzRQipNQnecWL6XLU9cmwCw7O6L
-         JTdyL4GnWX17SlnGuWLUSLR5RMJPxTGlHyRqlGu2Q41DRcM1q7MCBoTkT5UH1Kni/f
-         J3seofPNdlRpNFpWkXPhpG/Ef23K4qslMe7muTLE+g9ME28m970zhOvbGKB3hxa7HO
-         FUJier1Z1JChEvNPo3CeHKhT1lxJvMkW/gvLn69mHyHC+PJ6kSPWLhI6bfIEegu2Pw
-         gjNFz66P1CaIA7kZxAhAiD3FmeeUjtgVqLn68YSBVd8rGaCn7TULTSicVaet8B/0Up
-         xob8zuyaCbjKg==
-Date:   Mon, 3 Jul 2023 11:57:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC net-next 0/4] net: page_pool: a couple assorted
- optimizations
-Message-ID: <20230703115734.6ee8f658@kernel.org>
-In-Reply-To: <72658bca-c2b2-b3cb-64a0-35540b247a11@intel.com>
-References: <20230629152305.905962-1-aleksander.lobakin@intel.com>
-        <20230701170155.6f72e4b8@kernel.org>
-        <72658bca-c2b2-b3cb-64a0-35540b247a11@intel.com>
-MIME-Version: 1.0
+        b=BLoUJjECcMb8kNvQXzqLTa4KDHESnLW3fAkoCfHA12EhmGnDCqYGeIcDaYsdzZsW2
+         eE1dQeoaqBw3slf8LgWyhXJx/nYZ3F352gDoP857Xy5xcEzx78tlMchOexIHK7n2eH
+         URTUG5iWEyZ1/oy7M2yykaOsta2fxtiEelJz9MjcG9Yes73h4DNh0102YxIZe5693F
+         ORwNjaGX6JcZ75U3/xfiPJXRdDyJz0Joatz0cGrja99PCUG2DmE9vuoyHI4iN4tgI4
+         jutrdZ5R3pyi4G9YAIJSacqwEwzQaN9uZ9hkl0s6YOQe7lQmZtxwMGA1/7gtYW3Deu
+         3epwaiSluCu+A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGOkN-00AFCj-Fo;
+        Mon, 03 Jul 2023 19:58:03 +0100
+Date:   Mon, 03 Jul 2023 19:58:03 +0100
+Message-ID: <86v8f0x1ok.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        apatel@ventanamicro.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] risc-v: Fix order of IPI enablement vs RCU startup
+In-Reply-To: <mhng-bb5689ac-5b69-423f-8ea5-42938d5bab85@palmer-ri-x1c9>
+References: <20230703183126.1567625-1-maz@kernel.org>
+        <mhng-bb5689ac-5b69-423f-8ea5-42938d5bab85@palmer-ri-x1c9>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: palmer@rivosinc.com, linux-kernel@vger.kernel.org, conor@kernel.org, apatel@ventanamicro.com, torvalds@linux-foundation.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,20 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 15:50:55 +0200 Alexander Lobakin wrote:
-> > The reason I did not do that is that I wasn't sure if there is no
-> > weird (netcons?) case where skb gets freed from an IRQ :(  
+On Mon, 03 Jul 2023 19:45:43 +0100,
+Palmer Dabbelt <palmer@rivosinc.com> wrote:
 > 
-> Shouldn't they use dev_kfree_skb_any() or _irq()? Usage of plain
-> kfree_skb() is not allowed in the TH :s
+> On Mon, 03 Jul 2023 11:31:26 PDT (-0700), Marc Zyngier wrote:
+> > Conor reports that risc-v tries to enable IPIs before telling the
+> > core code to enable RCU. With the introduction of the mapple tree
+> > as a backing store for the irq descriptors, this results in
+> > a very shouty boot sequence, as RCU is legitimately upset.
+> > 
+> > Restore some sanity by moving the risc_ipi_enable() call after
+> > notify_cpu_starting(), which explicitly enables RCU on the calling
+> > CPU.
+> > 
+> > Fixes: 832f15f42646 ("RISC-V: Treat IPIs as normal Linux IRQs")
+> > Reported-by: Conor Dooley <conor@kernel.org>
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > Link: https://lore.kernel.org/r/20230703-dupe-frying-79ae2ccf94eb@spud
+> > Cc: Anup Patel <apatel@ventanamicro.com>
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> > ---
+> >  arch/riscv/kernel/smpboot.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> > index bb0b76e1a6d4..f4d6acb38dd0 100644
+> > --- a/arch/riscv/kernel/smpboot.c
+> > +++ b/arch/riscv/kernel/smpboot.c
+> > @@ -238,10 +238,11 @@ asmlinkage __visible void smp_callin(void)
+> >  	mmgrab(mm);
+> >  	current->active_mm = mm;
+> > 
+> > -	riscv_ipi_enable();
+> > -
+> >  	store_cpu_topology(curr_cpuid);
+> >  	notify_cpu_starting(curr_cpuid);
+> > +
+> > +	riscv_ipi_enable();
+> > +
+> >  	numa_add_cpu(curr_cpuid);
+> >  	set_cpu_online(curr_cpuid, 1);
+> >  	probe_vendor_features(curr_cpuid);
+> 
+> Thanks.  I was going to send another PR this week anyway, I can just
+> pick this up if you want?
 
-I haven't looked at the code so I could be lying but I thought that 
-the only thing that can't run in hard IRQ context is the destructor,
-so if the caller knows there's no destructor they can free the skb.
+Yes please!
 
-I'd ask you the inverse question. If the main use case is skb xdp
-(which eh, uh, okay..) then why not make it use napi_consume_skb()?
-I don't think skb XDP can run in hard IRQ context, can it?
+	M.
 
-> Anyway, if the flag really makes no sense, I can replace it with
-> in_softirq(), it's my hobby to break weird drivers :D
+-- 
+Without deviation from the norm, progress is not possible.
