@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B156A745631
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A408745634
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjGCHdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S229604AbjGCHhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjGCHdq (ORCPT
+        with ESMTP id S229494AbjGCHhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:33:46 -0400
+        Mon, 3 Jul 2023 03:37:02 -0400
 Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB7DE52;
-        Mon,  3 Jul 2023 00:33:45 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 7288A1D2D;
-        Mon,  3 Jul 2023 07:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1688369312;
-        bh=vyFL1oZhfU5xO720PsZEshxb54c3khK1/6rIHMavdPI=;
-        h=Date:To:CC:From:Subject;
-        b=uOhK/kSSM6jkXirF69xA1s7lI7dreMO3txzGArfuqppEp4wtSSKADULERPejg29Bm
-         QjmaEVbhj8CFldZIBrA0EpnM2JBZfc+Hyc5LNA8RcjbiPZeMYxCnt5wmNB0LSifyr0
-         5eFrTLYpXCTr4H/KE0SFl7Bnp3UN2AefFxVAxW1s=
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592F4C1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:37:01 -0700 (PDT)
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id E6539439;
-        Mon,  3 Jul 2023 07:33:43 +0000 (UTC)
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id F06091D2D;
+        Mon,  3 Jul 2023 07:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1688369623;
-        bh=vyFL1oZhfU5xO720PsZEshxb54c3khK1/6rIHMavdPI=;
-        h=Date:To:CC:From:Subject;
-        b=QM8izealV0gY8ReiLgWMkj4fwLg19nsJU9F1M4IIJf/KJQwzKK5YVeAtdKtOHZirI
-         L7pxwKyW/FDF2b4ror+a0Np/uF+VIlZMxpoxeFamamlpaQw5W6CMD6jgc0zPs2rx52
-         USb/HzLlpHam/MOz4K02x77DYYGN8/aVe8OG5r9g=
+        d=paragon-software.com; s=mail; t=1688369508;
+        bh=Q1kxw7tFWb69BAN/Qf4UiHiFviYwxux4CDjZHUEvFaQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ipELvgRgCm7tKaHR3npGCFxP/Nn1HUTJ4/qAKpsmiNR72QfY/uYb4gdJ8LC6rxyYu
+         L4tWva6Cv1JvEZ7FHiT1/8P3hp7xV0tYt8zlhdb8RBV37JqR8Mk5p38KXOO91R84O7
+         DSv+o0e2cVXhp/D9/nfVbP5lpsQU6H7yIN9FnAOU=
 Received: from [192.168.211.138] (192.168.211.138) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 3 Jul 2023 10:33:43 +0300
-Message-ID: <5ce7410b-3715-dabb-0135-139f86546337@paragon-software.com>
-Date:   Mon, 3 Jul 2023 11:33:42 +0400
+ 15.1.2375.7; Mon, 3 Jul 2023 10:36:58 +0300
+Message-ID: <34e1080f-6e87-5a9f-6a0b-5ce352a4b456@paragon-software.com>
+Date:   Mon, 3 Jul 2023 11:36:57 +0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
+Subject: Re: [PATCH] fs/ntfs3: fix panic about slab-out-of-bounds caused by
+ ntfs_list_ea()
 Content-Language: en-US
-To:     <ntfs3@lists.linux.dev>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <dan.carpenter@linaro.org>
+To:     Zeng Heng <zengheng4@huawei.com>
+CC:     <weiyongjun1@huawei.com>, <xiexiuqi@huawei.com>,
+        <ntfs3@lists.linux.dev>, <liwei391@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230420074622.210011-1-zengheng4@huawei.com>
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH] fs/ntfs3: Correct mode for label entry inside /proc/fs/ntfs3/
+In-Reply-To: <20230420074622.210011-1-zengheng4@huawei.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [192.168.211.138]
 X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
  vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
-  fs/ntfs3/super.c | 7 ++++---
-  1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index e36769eac7de..1a02072b6b0e 100644
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -1548,11 +1548,12 @@ static int ntfs_fill_super(struct super_block 
-*sb, struct fs_context *fc)
-      /* Create /proc/fs/ntfs3/.. */
-      if (proc_info_root) {
-          struct proc_dir_entry *e = proc_mkdir(sb->s_id, proc_info_root);
-+        static_assert((S_IRUGO | S_IWUSR) == 0644);
-          if (e) {
--            proc_create_data("volinfo", S_IFREG | S_IRUGO, e,
-+            proc_create_data("volinfo", S_IRUGO, e,
-                       &ntfs3_volinfo_fops, sb);
--            proc_create_data("label", S_IFREG | S_IRUGO | S_IWUGO,
--                     e, &ntfs3_label_fops, sb);
-+            proc_create_data("label", S_IRUGO | S_IWUSR, e,
-+                     &ntfs3_label_fops, sb);
-              sbi->procdir = e;
-          }
-      }
--- 
-2.34.1
-
-
+On 20.04.2023 11:46, Zeng Heng wrote:
+> Here is a BUG report about linux-6.1 from syzbot, but it still remains
+> within upstream:
+>
+> BUG: KASAN: slab-out-of-bounds in ntfs_list_ea fs/ntfs3/xattr.c:191 [inline]
+> BUG: KASAN: slab-out-of-bounds in ntfs_listxattr+0x401/0x570 fs/ntfs3/xattr.c:710
+> Read of size 1 at addr ffff888021acaf3d by task syz-executor128/3632
+>
+> Call Trace:
+>   kasan_report+0x139/0x170 mm/kasan/report.c:495
+>   ntfs_list_ea fs/ntfs3/xattr.c:191 [inline]
+>   ntfs_listxattr+0x401/0x570 fs/ntfs3/xattr.c:710
+>   vfs_listxattr fs/xattr.c:457 [inline]
+>   listxattr+0x293/0x2d0 fs/xattr.c:804
+>   path_listxattr fs/xattr.c:828 [inline]
+>   __do_sys_llistxattr fs/xattr.c:846 [inline]
+>
+> Before derefering field members of `ea` in unpacked_ea_size(), we need to
+> check whether the EA_FULL struct is located in access validate range.
+>
+> Similarly, when derefering `ea->name` field member, we need to check
+> whethe the ea->name is located in access validate range, too.
+>
+> Fixes: be71b5cba2e6 ("fs/ntfs3: Add attrib operations")
+> Reported-by: syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+> ---
+>   fs/ntfs3/xattr.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+> index ff64302e87e5..27eb30453b9f 100644
+> --- a/fs/ntfs3/xattr.c
+> +++ b/fs/ntfs3/xattr.c
+> @@ -210,11 +210,15 @@ static ssize_t ntfs_list_ea(struct ntfs_inode *ni, char *buffer,
+>   	size = le32_to_cpu(info->size);
+>   
+>   	/* Enumerate all xattrs. */
+> -	for (ret = 0, off = 0; off < size; off += ea_size) {
+> +	for (ret = 0, off = 0; off + sizeof(struct EA_FULL) < size; off += ea_size) {
+>   		ea = Add2Ptr(ea_all, off);
+>   		ea_size = unpacked_ea_size(ea);
+>   
+>   		if (buffer) {
+> +			/* Check if we can use field ea->name */
+> +			if (off + ea_size > size)
+> +				break;
+> +
+>   			if (ret + ea->name_len + 1 > bytes_per_buffer) {
+>   				err = -ERANGE;
+>   				goto out;
+Thanks, your patch has been applied.
