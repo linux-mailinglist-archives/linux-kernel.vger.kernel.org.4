@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB991745385
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 03:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB90E745387
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 03:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjGCB1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 21:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S229952AbjGCB1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 21:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGCB1o (ORCPT
+        with ESMTP id S229932AbjGCB1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 21:27:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE1A12E;
-        Sun,  2 Jul 2023 18:27:43 -0700 (PDT)
+        Sun, 2 Jul 2023 21:27:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34BD12E;
+        Sun,  2 Jul 2023 18:27:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9802460CA5;
-        Mon,  3 Jul 2023 01:27:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60B2EC433C8;
-        Mon,  3 Jul 2023 01:27:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 610C960B46;
+        Mon,  3 Jul 2023 01:27:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448A4C433C9;
+        Mon,  3 Jul 2023 01:27:45 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mJm14A4X"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OLCjpCtb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1688347659;
+        t=1688347662;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vuxOFbTAgQkfyy8cx4BstQShC0WcmX6WYAC5dTJO6NQ=;
-        b=mJm14A4X2IsfgDgOG6ef2FcJixwMOAbINoDyQcvFS8mDN0nTop7I2IX7axXm0Pt9myPUEL
-        k6eROId1VosI8tJJOeqnjVG8JJhAPLiAE9Rj1tlFssS0drTu5Ce3xqrHXA1aa7DJrNtNa0
-        wFXvp9N9x7xq6axp12qHVbz8Ke48geM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 303a1b42 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 3 Jul 2023 01:27:39 +0000 (UTC)
+        bh=4Bsgk0ZPu+12ieJC1IW1q2532d2t2GK2LWiYlH0RX0w=;
+        b=OLCjpCtbQENqob1Mm1o4IxQjVDuzheVlpWKEhEeb+xnlmgOdSVXZ6VbdHA5FoKfOIQPd9x
+        4A4sEUw4+1Xhv2Ev4nrBy5uwaUg4krRsFVix8aGaTw70sZHTfOxrElwLrd7ZJn/sfVo7y9
+        UicHvYzeNtHU8N7jtNmjf3lF0plB+9M=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a32e2a99 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 3 Jul 2023 01:27:42 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Manuel Leiner <manuel.leiner@gmx.de>
-Subject: [PATCH net 1/3] wireguard: queueing: use saner cpu selection wrapping
-Date:   Mon,  3 Jul 2023 03:27:04 +0200
-Message-ID: <20230703012723.800199-2-Jason@zx2c4.com>
+        Maxim Cournoyer <maxim.cournoyer@gmail.com>
+Subject: [PATCH net 2/3] wireguard: netlink: send staged packets when setting initial private key
+Date:   Mon,  3 Jul 2023 03:27:05 +0200
+Message-ID: <20230703012723.800199-3-Jason@zx2c4.com>
 In-Reply-To: <20230703012723.800199-1-Jason@zx2c4.com>
 References: <20230703012723.800199-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,114 +58,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using `% nr_cpumask_bits` is slow and complicated, and not totally
-robust toward dynamic changes to CPU topologies. Rather than storing the
-next CPU in the round-robin, just store the last one, and also return
-that value. This simplifies the loop drastically into a much more common
-pattern.
+Packets bound for peers can queue up prior to the device private key
+being set. For example, if persistent keepalive is set, a packet is
+queued up to be sent as soon as the device comes up. However, if the
+private key hasn't been set yet, the handshake message never sends, and
+no timer is armed to retry, since that would be pointless.
+
+But, if a user later sets a private key, the expectation is that those
+queued packets, such as a persistent keepalive, are actually sent. So
+adjust the configuration logic to account for this edge case, and add a
+test case to make sure this works.
+
+Maxim noticed this with a wg-quick(8) config to the tune of:
+
+    [Interface]
+    PostUp = wg set %i private-key somefile
+
+    [Peer]
+    PublicKey = ...
+    Endpoint = ...
+    PersistentKeepalive = 25
+
+Here, the private key gets set after the device comes up using a PostUp
+script, triggering the bug.
 
 Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
 Cc: stable@vger.kernel.org
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Tested-by: Manuel Leiner <manuel.leiner@gmx.de>
+Reported-by: Maxim Cournoyer <maxim.cournoyer@gmail.com>
+Tested-by: Maxim Cournoyer <maxim.cournoyer@gmail.com>
+Link: https://lore.kernel.org/wireguard/87fs7xtqrv.fsf@gmail.com/
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/net/wireguard/queueing.c |  1 +
- drivers/net/wireguard/queueing.h | 25 +++++++++++--------------
- drivers/net/wireguard/receive.c  |  2 +-
- drivers/net/wireguard/send.c     |  2 +-
- 4 files changed, 14 insertions(+), 16 deletions(-)
+ drivers/net/wireguard/netlink.c            | 14 ++++++----
+ tools/testing/selftests/wireguard/netns.sh | 30 +++++++++++++++++++---
+ 2 files changed, 35 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/wireguard/queueing.c b/drivers/net/wireguard/queueing.c
-index 8084e7408c0a..26d235d15235 100644
---- a/drivers/net/wireguard/queueing.c
-+++ b/drivers/net/wireguard/queueing.c
-@@ -28,6 +28,7 @@ int wg_packet_queue_init(struct crypt_queue *queue, work_func_t function,
- 	int ret;
+diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
+index 43c8c84e7ea8..6d1bd9f52d02 100644
+--- a/drivers/net/wireguard/netlink.c
++++ b/drivers/net/wireguard/netlink.c
+@@ -546,6 +546,7 @@ static int wg_set_device(struct sk_buff *skb, struct genl_info *info)
+ 		u8 *private_key = nla_data(info->attrs[WGDEVICE_A_PRIVATE_KEY]);
+ 		u8 public_key[NOISE_PUBLIC_KEY_LEN];
+ 		struct wg_peer *peer, *temp;
++		bool send_staged_packets;
  
- 	memset(queue, 0, sizeof(*queue));
-+	queue->last_cpu = -1;
- 	ret = ptr_ring_init(&queue->ring, len, GFP_KERNEL);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/net/wireguard/queueing.h b/drivers/net/wireguard/queueing.h
-index 125284b346a7..1ea4f874e367 100644
---- a/drivers/net/wireguard/queueing.h
-+++ b/drivers/net/wireguard/queueing.h
-@@ -117,20 +117,17 @@ static inline int wg_cpumask_choose_online(int *stored_cpu, unsigned int id)
- 	return cpu;
- }
+ 		if (!crypto_memneq(wg->static_identity.static_private,
+ 				   private_key, NOISE_PUBLIC_KEY_LEN))
+@@ -564,14 +565,17 @@ static int wg_set_device(struct sk_buff *skb, struct genl_info *info)
+ 		}
  
--/* This function is racy, in the sense that next is unlocked, so it could return
-- * the same CPU twice. A race-free version of this would be to instead store an
-- * atomic sequence number, do an increment-and-return, and then iterate through
-- * every possible CPU until we get to that index -- choose_cpu. However that's
-- * a bit slower, and it doesn't seem like this potential race actually
-- * introduces any performance loss, so we live with it.
-+/* This function is racy, in the sense that it's called while last_cpu is
-+ * unlocked, so it could return the same CPU twice. Adding locking or using
-+ * atomic sequence numbers is slower though, and the consequences of racing are
-+ * harmless, so live with it.
-  */
--static inline int wg_cpumask_next_online(int *next)
-+static inline int wg_cpumask_next_online(int *last_cpu)
- {
--	int cpu = *next;
--
--	while (unlikely(!cpumask_test_cpu(cpu, cpu_online_mask)))
--		cpu = cpumask_next(cpu, cpu_online_mask) % nr_cpumask_bits;
--	*next = cpumask_next(cpu, cpu_online_mask) % nr_cpumask_bits;
-+	int cpu = cpumask_next(*last_cpu, cpu_online_mask);
-+	if (cpu >= nr_cpu_ids)
-+		cpu = cpumask_first(cpu_online_mask);
-+	*last_cpu = cpu;
- 	return cpu;
- }
+ 		down_write(&wg->static_identity.lock);
+-		wg_noise_set_static_identity_private_key(&wg->static_identity,
+-							 private_key);
+-		list_for_each_entry_safe(peer, temp, &wg->peer_list,
+-					 peer_list) {
++		send_staged_packets = !wg->static_identity.has_identity && netif_running(wg->dev);
++		wg_noise_set_static_identity_private_key(&wg->static_identity, private_key);
++		send_staged_packets = send_staged_packets && wg->static_identity.has_identity;
++
++		wg_cookie_checker_precompute_device_keys(&wg->cookie_checker);
++		list_for_each_entry_safe(peer, temp, &wg->peer_list, peer_list) {
+ 			wg_noise_precompute_static_static(peer);
+ 			wg_noise_expire_current_peer_keypairs(peer);
++			if (send_staged_packets)
++				wg_packet_send_staged_packets(peer);
+ 		}
+-		wg_cookie_checker_precompute_device_keys(&wg->cookie_checker);
+ 		up_write(&wg->static_identity.lock);
+ 	}
+ skip_set_private_key:
+diff --git a/tools/testing/selftests/wireguard/netns.sh b/tools/testing/selftests/wireguard/netns.sh
+index 69c7796c7ca9..405ff262ca93 100755
+--- a/tools/testing/selftests/wireguard/netns.sh
++++ b/tools/testing/selftests/wireguard/netns.sh
+@@ -514,10 +514,32 @@ n2 bash -c 'printf 0 > /proc/sys/net/ipv4/conf/all/rp_filter'
+ n1 ping -W 1 -c 1 192.168.241.2
+ [[ $(n2 wg show wg0 endpoints) == "$pub1	10.0.0.3:1" ]]
  
-@@ -159,7 +156,7 @@ static inline void wg_prev_queue_drop_peeked(struct prev_queue *queue)
+-ip1 link del veth1
+-ip1 link del veth3
+-ip1 link del wg0
+-ip2 link del wg0
++ip1 link del dev veth3
++ip1 link del dev wg0
++ip2 link del dev wg0
++
++# Make sure persistent keep alives are sent when an adapter comes up
++ip1 link add dev wg0 type wireguard
++n1 wg set wg0 private-key <(echo "$key1") peer "$pub2" endpoint 10.0.0.1:1 persistent-keepalive 1
++read _ _ tx_bytes < <(n1 wg show wg0 transfer)
++[[ $tx_bytes -eq 0 ]]
++ip1 link set dev wg0 up
++read _ _ tx_bytes < <(n1 wg show wg0 transfer)
++[[ $tx_bytes -gt 0 ]]
++ip1 link del dev wg0
++# This should also happen even if the private key is set later
++ip1 link add dev wg0 type wireguard
++n1 wg set wg0 peer "$pub2" endpoint 10.0.0.1:1 persistent-keepalive 1
++read _ _ tx_bytes < <(n1 wg show wg0 transfer)
++[[ $tx_bytes -eq 0 ]]
++ip1 link set dev wg0 up
++read _ _ tx_bytes < <(n1 wg show wg0 transfer)
++[[ $tx_bytes -eq 0 ]]
++n1 wg set wg0 private-key <(echo "$key1")
++read _ _ tx_bytes < <(n1 wg show wg0 transfer)
++[[ $tx_bytes -gt 0 ]]
++ip1 link del dev veth1
++ip1 link del dev wg0
  
- static inline int wg_queue_enqueue_per_device_and_peer(
- 	struct crypt_queue *device_queue, struct prev_queue *peer_queue,
--	struct sk_buff *skb, struct workqueue_struct *wq, int *next_cpu)
-+	struct sk_buff *skb, struct workqueue_struct *wq)
- {
- 	int cpu;
- 
-@@ -173,7 +170,7 @@ static inline int wg_queue_enqueue_per_device_and_peer(
- 	/* Then we queue it up in the device queue, which consumes the
- 	 * packet as soon as it can.
- 	 */
--	cpu = wg_cpumask_next_online(next_cpu);
-+	cpu = wg_cpumask_next_online(&device_queue->last_cpu);
- 	if (unlikely(ptr_ring_produce_bh(&device_queue->ring, skb)))
- 		return -EPIPE;
- 	queue_work_on(cpu, wq, &per_cpu_ptr(device_queue->worker, cpu)->work);
-diff --git a/drivers/net/wireguard/receive.c b/drivers/net/wireguard/receive.c
-index 7135d51d2d87..0b3f0c843550 100644
---- a/drivers/net/wireguard/receive.c
-+++ b/drivers/net/wireguard/receive.c
-@@ -524,7 +524,7 @@ static void wg_packet_consume_data(struct wg_device *wg, struct sk_buff *skb)
- 		goto err;
- 
- 	ret = wg_queue_enqueue_per_device_and_peer(&wg->decrypt_queue, &peer->rx_queue, skb,
--						   wg->packet_crypt_wq, &wg->decrypt_queue.last_cpu);
-+						   wg->packet_crypt_wq);
- 	if (unlikely(ret == -EPIPE))
- 		wg_queue_enqueue_per_peer_rx(skb, PACKET_STATE_DEAD);
- 	if (likely(!ret || ret == -EPIPE)) {
-diff --git a/drivers/net/wireguard/send.c b/drivers/net/wireguard/send.c
-index 5368f7c35b4b..95c853b59e1d 100644
---- a/drivers/net/wireguard/send.c
-+++ b/drivers/net/wireguard/send.c
-@@ -318,7 +318,7 @@ static void wg_packet_create_data(struct wg_peer *peer, struct sk_buff *first)
- 		goto err;
- 
- 	ret = wg_queue_enqueue_per_device_and_peer(&wg->encrypt_queue, &peer->tx_queue, first,
--						   wg->packet_crypt_wq, &wg->encrypt_queue.last_cpu);
-+						   wg->packet_crypt_wq);
- 	if (unlikely(ret == -EPIPE))
- 		wg_queue_enqueue_per_peer_tx(first, PACKET_STATE_DEAD);
- err:
+ # We test that Netlink/IPC is working properly by doing things that usually cause split responses
+ ip0 link add dev wg0 type wireguard
 -- 
 2.41.0
 
