@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F076D746113
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257DB746114
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjGCRBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S231218AbjGCRCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjGCRBT (ORCPT
+        with ESMTP id S230102AbjGCRBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:01:19 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC79EE58;
-        Mon,  3 Jul 2023 10:01:18 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A906621ACE;
-        Mon,  3 Jul 2023 17:01:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688403676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CxxA5KPOlxZoqVBuLA7u+rs+PuFzIjExMLh3T2z3dig=;
-        b=WwkmG+qaXYNQ/vu9q4F7pEj9wrt2bBvW6aP9mlVUwydMkr7hS3xU7fSguhVECWbugKFVwD
-        nFfsMv+fh+VCYPr0mUXkIt6MUoHAY0tHWAVVhgoa1E0ZsN/9yuDPQzhSeKss/q3dJUw1Ta
-        kHoy5ufRYv9txFxyUyUCkLRfw+3UDts=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688403676;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CxxA5KPOlxZoqVBuLA7u+rs+PuFzIjExMLh3T2z3dig=;
-        b=RCvYdmMDKz+U+kgLqNfhNNngHIe4nuoTf2Nywg7oLIDSHSzTvjaJ7eJOx50qEZOlN3bDcL
-        q6LZq+rMlUQWdcBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 995451358E;
-        Mon,  3 Jul 2023 17:01:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tSFmJdz+omSOEQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 03 Jul 2023 17:01:16 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 2DC8AA0722; Mon,  3 Jul 2023 19:01:16 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 19:01:16 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v3 0/5] quota: fix race condition between dqput() and
- dquot_mark_dquot_dirty()
-Message-ID: <20230703170116.xikrectpzdc5dmux@quack3>
-References: <20230630110822.3881712-1-libaokun1@huawei.com>
+        Mon, 3 Jul 2023 13:01:52 -0400
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A73E69
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:01:44 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id GMvbqaLPIL1SxGMvcqewci; Mon, 03 Jul 2023 19:01:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1688403696;
+        bh=vHaTg43ZN4pIqH0XjXUyIHPFQb3nQdBrMYDjetNLFHM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=UYuVx8uN3j2zQ1Mj6NoQNPv2Vn3M3UmX2kUAmwh91xHCBmSln+5lvS0Xkskkuw8kg
+         KKootEW+nAqL5ZxwXoLZAai/2L1plig0O9M/qQZjdmRNUNziTh5t8qZF7frgly9HlH
+         9fCQV1+wNvF0JqWAWyiz/WfMQf1SIQemHnDTejaK+LiFDKuia2kw7GtOpgZNd7eyQq
+         nXc84LC9poLQwvAbwB5yDUbS5nzK2cMqsvfaFSjTvyUUBSSxwu0G7kgRG9SCjiAyA7
+         ZKZMKkd/WHajeNDRsc09Xl6oUxOLrmUdvQc8k2ayx82AubPdhuOPZgyF5ZbKaUmrBq
+         XNGv8ZIj0ny/Q==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 03 Jul 2023 19:01:36 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <f97e8c26-1379-dabc-21af-ebf4b06b31e7@wanadoo.fr>
+Date:   Mon, 3 Jul 2023 19:01:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630110822.3881712-1-libaokun1@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] powerpc: powermac: Use of_get_cpu_hwid() to read CPU node
+ 'reg'
+To:     Michael Ellerman <patch-notifications@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230319145931.65499-1-robh@kernel.org>
+ <168836201902.50010.13066091729121047041.b4-ty@ellerman.id.au>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <168836201902.50010.13066091729121047041.b4-ty@ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On Fri 30-06-23 19:08:17, Baokun Li wrote:
-> Hello Honza,
+Le 03/07/2023 à 07:26, Michael Ellerman a écrit :
+> On Sun, 19 Mar 2023 09:59:31 -0500, Rob Herring wrote:
+>> Replace open coded reading of CPU nodes' "reg" properties with
+>> of_get_cpu_hwid() dedicated for this purpose.
+>>
+>>
 > 
-> This is a solution that uses dquot_srcu to avoid race condition between
-> dqput() and dquot_mark_dquot_dirty(). I performed a 12+h fault injection
-> stress test (6 VMs, 4 test threads per VM) and have not found any problems.
-> And I tested the performance based on the next branch (5c875096d590), this
-> patch set didn't degrade performance, but rather had a ~5% improvement.
+> Applied to powerpc/next.
 > 
-> V1->V2:
-> 	Modify the solution to use dquot_srcu.
-> V2->V3:
-> 	Merge some patches, optimize descriptions.
-> 	Simplify solutions, and fix some spelling errors.
+> [1/1] powerpc: powermac: Use of_get_cpu_hwid() to read CPU node 'reg'
+>        https://git.kernel.org/powerpc/c/bc1cf75027585f8d87f94e464ee5909acf885a8c
+> 
+> cheers
 > 
 
-Thanks! I've added the patches to my tree.
+Hi,
 
-								Honza
+I guess, that it does not really matter, but shouldn't the 
+of_node_put() be *after* the "reset_io = *rst;" statements to be 
+absolutely safe?
 
-> Baokun Li (5):
->   quota: factor out dquot_write_dquot()
->   quota: rename dquot_active() to inode_quota_active()
->   quota: add new helper dquot_active()
->   quota: fix dqput() to follow the guarantees dquot_srcu should provide
->   quota: simplify drop_dquot_ref()
-> 
->  fs/quota/dquot.c | 244 ++++++++++++++++++++++++-----------------------
->  1 file changed, 125 insertions(+), 119 deletions(-)
-> 
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+(This change is in my backlog and I have apparently never proposed it)
+
+CJ
