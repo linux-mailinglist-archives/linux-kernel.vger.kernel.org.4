@@ -2,83 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E9B746366
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C84746368
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjGCTgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 15:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S231308AbjGCThp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 15:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGCTgr (ORCPT
+        with ESMTP id S229943AbjGCThm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 15:36:47 -0400
-Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A15E6B;
-        Mon,  3 Jul 2023 12:36:40 -0700 (PDT)
-References: <20230629184151.888604958@linuxfoundation.org>
- <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <2023063001-overlying-browse-de1a@gregkh>
- <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
- <5fd98a09-4792-1433-752d-029ae3545168@gmx.de>
- <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
- <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com>
- <9b35a19d-800c-f9f9-6b45-cf2038ef235f@roeck-us.net>
- <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
- <2a2387bf-f589-6856-3583-d3d848a17d34@roeck-us.net>
- <CAHk-=wgczy0dxK9vg-YWbq6YLP2gP8ix7Ys9K+Mr=S2NEj+hGw@mail.gmail.com>
- <c21e8e95-3353-fc57-87fd-271b2c9cc000@roeck-us.net>
- <CAHk-=wj+F8oGK_Hx6YSPJpwL-xyL+-q2SxtxYE0abtZa_jSkLw@mail.gmail.com>
- <7146f74d-8638-46c7-8e8c-15abc97a379f@gmx.de>
- <CAHk-=wjqp09i1053vqFc41Ftegkrh0pD+MKY-3ptdYu3FUh6Bw@mail.gmail.com>
- <11fef47a-4805-df0e-016e-d2a777087129@gmx.de> <87v8f04wpy.fsf@gentoo.org>
-User-agent: mu4e 1.10.4; emacs 29.0.92
-From:   Sam James <sam@gentoo.org>
-To:     Sam James <sam@gentoo.org>
-Cc:     Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
-Date:   Mon, 03 Jul 2023 20:36:16 +0100
-In-reply-to: <87v8f04wpy.fsf@gentoo.org>
-Message-ID: <87h6qk4wjh.fsf@gentoo.org>
+        Mon, 3 Jul 2023 15:37:42 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D37412B;
+        Mon,  3 Jul 2023 12:37:38 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id C0950120029;
+        Mon,  3 Jul 2023 22:37:36 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru C0950120029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688413056;
+        bh=zfziv4Gt8zQ1NCScCv5V2gMF12e7nV9xy2Odg3hRLEI=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=Cm5PmCgRDHZm/jtio2BYObyt1f+YofEeO0AWmvdumQdIPEBGrxumw+nVEA2lV4WEB
+         JOST9H6fAhU+ob5a5z4A1YwXmxyLU27dfJs4aZeG2xQewnfn+i30DstY03tL1/ACEc
+         c3Uw85nwmCElwwQn2GOabnXFQAVjsuxxHX8fXtT7RSB0PaWLf+EIspt2nkcXmdQ3Bq
+         SJuOfKIjtBX3sKKkYFU51c3Rg/YPjaWz6WjeqbXIxeEc6tQBXv6Sybw4kzVwyl4sMa
+         4eK7iAn9GzApSu92yZt5aCTS43u1cSIkDFCLKeY6DD6wcRgsWXMh4Zm2K3u97aUJqV
+         fAXgUSyXtf51Q==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Mon,  3 Jul 2023 22:37:36 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 3 Jul
+ 2023 22:37:32 +0300
+Date:   Mon, 3 Jul 2023 22:37:36 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        =Xianwei Zhao <xianwei.zhao@amlogic.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH 2/3] soc: c3: Add support for power domains controller
+Message-ID: <20230703193736.7teaaovalia3g3ml@CAB-WSD-L081021>
+References: <20230703093142.2028500-1-xianwei.zhao@amlogic.com>
+ <20230703093142.2028500-3-xianwei.zhao@amlogic.com>
+ <e85f6dee-d62c-9f2f-b1de-8c38bb5aeb14@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <e85f6dee-d62c-9f2f-b1de-8c38bb5aeb14@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178409 [Jul 03 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:7.1.1,5.0.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/03 16:02:00 #21557037
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 03, 2023 at 03:29:31PM +0200, Neil Armstrong wrote:
+> Hi,
+> 
+> On 03/07/2023 11:31, =Xianwei Zhao wrote:
+> > From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> > 
+> > Add support for C3 Power controller. C3 power control
+> > registers are in secure domain, and should be accessed by SMC.
+> > 
+> > Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> > ---
+> >   drivers/soc/amlogic/meson-secure-pwrc.c | 28 ++++++++++++++++++++++++-
+> >   1 file changed, 27 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/soc/amlogic/meson-secure-pwrc.c
+> > index 25b4b71df9b8..39ccc8f2e630 100644
+> > --- a/drivers/soc/amlogic/meson-secure-pwrc.c
+> > +++ b/drivers/soc/amlogic/meson-secure-pwrc.c
+> > @@ -12,6 +12,7 @@
+> >   #include <linux/pm_domain.h>
+> >   #include <dt-bindings/power/meson-a1-power.h>
+> >   #include <dt-bindings/power/meson-s4-power.h>
+> > +#include <dt-bindings/power/amlogic-c3-power.h>
+> >   #include <linux/arm-smccc.h>
+> >   #include <linux/firmware/meson/meson_sm.h>
+> >   #include <linux/module.h>
+> > @@ -132,6 +133,22 @@ static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
+> >   	SEC_PD(S4_AUDIO,	0),
+> >   };
+> > +static struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
+> > +	SEC_PD(C3_NNA,	0),
+> > +	SEC_PD(C3_AUDIO,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_SDIOA,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_EMMC,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_USB_COMB, GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_SDCARD,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_ETH,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_GE2D,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_CVE,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_GDC_WRAP,	GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_ISP_TOP,		GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_MIPI_ISP_WRAP, GENPD_FLAG_ALWAYS_ON),
+> > +	SEC_PD(C3_VCODEC,	0),
+> > +};
+> 
+> Please move this struct before _s4_
+> 
+> > +
+> >   static int meson_secure_pwrc_probe(struct platform_device *pdev)
+> >   {
+> >   	int i;
+> > @@ -179,7 +196,7 @@ static int meson_secure_pwrc_probe(struct platform_device *pdev)
+> >   	for (i = 0 ; i < match->count ; ++i) {
+> >   		struct meson_secure_pwrc_domain *dom = &pwrc->domains[i];
+> > -		if (!match->domains[i].index)
+> > +		if (!match->domains[i].name)
+> 
+> Is this change necessary ? If yes please move it to another patch
+> and explain it's purpose. If it fixes something, add a Fixes tag so
+> it can be backported.
+> 
+> Thanks,
+> Neil
+> 
 
-Sam James <sam@gentoo.org> writes:
+I suppose, this change fixes the situation with SEC_PD(C3_NNA, 0)
+domain, because it has index == 0.
+May be it's better to introduce the separate struct member for that? For
+example, 'present' (true or false).
+I think code would be more readable and clean.
 
-> Helge Deller <deller@gmx.de> writes:
->
->> On 7/3/23 18:49, Linus Torvalds wrote:
->>> On Mon, 3 Jul 2023 at 00:08, Helge Deller <deller@gmx.de> wrote:
->>>>
->>>> Great, that patch fixes it!
->>>
->>> Yeah, I was pretty sure this was it, but it's good to have it
->>> confirmed. Committed.
->>
->> Thank you!
->>
->> Nice to see that Greg picked up the patch for stable that fast as well!
->
-> Sorry, where? I was just about to check if it was marked for backporting
-> but I can't see it in Greg's trees yet.
->
-> We need it fo 6.1, 6.3, 6.4.
->
-> (Apologies if I'm missing it somewhere obvious.)
+[...]
 
-.. and I was. I see it now, sorry!
+-- 
+Thank you,
+Dmitry
