@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF03474600B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F410E74600E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjGCPow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        id S230237AbjGCPrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGCPou (ORCPT
+        with ESMTP id S229505AbjGCPrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:44:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3EC2;
-        Mon,  3 Jul 2023 08:44:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08EAD60C99;
-        Mon,  3 Jul 2023 15:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFE0C433C7;
-        Mon,  3 Jul 2023 15:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688399088;
-        bh=l0DvOL//USi2lqvRXSzMngtGqd5DmqlrA9BY0bMWvHg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BGjjc3nh/maweUxqtW5ytHIKQqicf4tPzLpdutzP//U4t/Rf+bicM1Ee8zmp7NXiN
-         svZU3pec+Vvv5UjedwGopBFkgNxYsGwFxW8vJ8lk3/i68JoIV2j5sQa58FS9WQil3C
-         HMol9tR+CxyQy+NjLAVlArXdB09bnEic8ygZXN99MTKCAjB0LyLOhA7xWHwD4zgi3/
-         L9pJv2c0rdPwA12B3bGKsZ7rtNuyBtseJ9ouT0W23+z+DcR7C5fPwYa0pd5PouyhSC
-         36/9rJpInWSHt/f7cPUjfMIRQlA2FipRf+bqV4o4QHybAXByVVj283bxUwh8Z9bwGY
-         LT+IHipJRWdfg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     =?utf-8?q?Ahelenia_Ziemia=C5=84ska_=3Cnabijaczleweli=40nabijaczleweli=2E?=@vger.kernel.org,
-        =?utf-8?q?xyz=3E?=@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
-        Chung-Chiang Cheng <cccheng@synology.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] fanotify accounting for fs/splice.c
-Date:   Mon,  3 Jul 2023 17:44:15 +0200
-Message-Id: <20230703-heilkraft-wohlbefinden-1f293bd90cf3@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
+        Mon, 3 Jul 2023 11:47:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FD1C2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688399185;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1NZ1ljPvaJ3lSN+5NzJxss1L8wbkM12/fOlYD41I+hs=;
+        b=PtTctG/1ez7VXREMouolHSd2PlD6Se30N7Op8DdJPfxgP5bBxBJzvcIVFov6OwZnLzcfnC
+        4m07LnGtsvLHbgS2y/RgfnruLPqzaPRu9JR+/ZWrUPw+aLXVDzh3l0DnUmgZbZxk7JFbWU
+        d4a3vNk7sFXUPRDMF3bEAuHkMrSFy7c=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-196-VKdiPzkJPaWf69V_Z3t0Ig-1; Mon, 03 Jul 2023 11:46:24 -0400
+X-MC-Unique: VKdiPzkJPaWf69V_Z3t0Ig-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30e4943ca7fso2301800f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 08:46:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688399183; x=1690991183;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1NZ1ljPvaJ3lSN+5NzJxss1L8wbkM12/fOlYD41I+hs=;
+        b=YBqMyoJ1d48QidvRvbd1FoV4RTX9jlnoEA0ouBkV/k33ZIUhFbZz1UkguEymtiioW9
+         0q7LK8di1pMBoUsuvdedjIRv3nwK7DziisVXnvSrgwNAPFRu1YvdscWe0COg5hPRU/n1
+         D7nDN1f3b4EKJ9Eh8qRQVHjObrhekrWMR2X2XW/j6Xim8yJqk5jY+9B3dFah2GiMkYzL
+         m4OdGdcYGW2MKKL4FxcApFaOpyLRg9DCf4DoK5djGp09V6UGVtr2NK50L+jzrj/Lkv+o
+         nBg7I2xIYXOTOgq3tcs6UB/YW8nsJ/M014p+AcNq7JMd2wz1fQCpugjY550X0a5OTVRh
+         SYsQ==
+X-Gm-Message-State: ABy/qLayG3EGCyX7u5t10F0vjp0Jxj2tOoZLoAPCnsLt1piCqbkXURz8
+        H5iATg61/V92ZJ/FVTd/GzsLWOeWp6fs7pRyEzBS2IWppoEjHUFbfMHCdY1VjL37DACxE3ofxYx
+        E1wKMDtIzGZ//nyLsi+nqTdzk
+X-Received: by 2002:a5d:6b51:0:b0:314:2ff2:b051 with SMTP id x17-20020a5d6b51000000b003142ff2b051mr4571363wrw.41.1688399183196;
+        Mon, 03 Jul 2023 08:46:23 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGx6h38T6vXWijoWHBefYK9XvHRwTUZinS5fxcyNS70iY6BvXvn5QbTff33EKlYWUaKf1dIJA==
+X-Received: by 2002:a5d:6b51:0:b0:314:2ff2:b051 with SMTP id x17-20020a5d6b51000000b003142ff2b051mr4571342wrw.41.1688399182846;
+        Mon, 03 Jul 2023 08:46:22 -0700 (PDT)
+Received: from redhat.com ([2.52.13.33])
+        by smtp.gmail.com with ESMTPSA id c13-20020adfe74d000000b0030ae499da59sm10816007wrn.111.2023.07.03.08.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 08:46:22 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 11:46:18 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Dragos Tatulea <dtatulea@nvidia.com>,
+        virtualization@lists.linux-foundation.org, leiyang@redhat.com,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Jason Wang <jasowang@redhat.com>
+Subject: Re: [PATCH] mlx5_vdpa: offer VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK
+Message-ID: <20230703110241-mutt-send-email-mst@kernel.org>
+References: <20230703142514.363256-1-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1887; i=brauner@kernel.org; h=from:subject:message-id; bh=l0DvOL//USi2lqvRXSzMngtGqd5DmqlrA9BY0bMWvHg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQserNj1mHze3OnrVtvO9PQSe7GbLUVp1qNRFQWs9ddWhag e2TelI5SFgYxLgZZMUUWh3aTcLnlPBWbjTI1YOawMoEMYeDiFICJ+EszMly96Ckenbb36vGVvDmx/r orP6z5YLf1dOviG+6n5c2mbljL8L/YpId59eEfgUlndkrJ/Vgue3i3Qt/6t61dBhpekRNvT+YCAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230703142514.363256-1-eperezma@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jul 2023 16:42:05 +0200, Ahelenia ZiemiaÅ„ska wrote:
-> Previously: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
+On Mon, Jul 03, 2023 at 04:25:14PM +0200, Eugenio Pérez wrote:
+> Offer this backend feature as mlx5 is compatible with it. It allows it
+> to do live migration with CVQ, dynamically switching between passthrough
+> and shadow virtqueue.
 > 
-> In short:
->   * most read/write APIs generate ACCESS/MODIFY for the read/written file(s)
->   * except the [vm]splice/tee family
->     (actually, since 6.4, splice itself /does/ generate events but only
->      for the non-pipes being spliced from/to; this commit is Fixes:ed)
->   * userspace that registers (i|fa)notify on pipes usually relies on it
->     actually working (coreutils tail -f is the primo example)
->   * it's sub-optimal when someone with a magic syscall can fill up a
->     pipe simultaneously ensuring it will never get serviced
+> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+
+Same comment.
+
+> ---
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> [...]
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index 9138ef2fb2c8..5f309a16b9dc 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -7,6 +7,7 @@
+>  #include <uapi/linux/virtio_net.h>
+>  #include <uapi/linux/virtio_ids.h>
+>  #include <uapi/linux/vdpa.h>
+> +#include <uapi/linux/vhost_types.h>
+>  #include <linux/virtio_config.h>
+>  #include <linux/auxiliary_bus.h>
+>  #include <linux/mlx5/cq.h>
+> @@ -2499,6 +2500,11 @@ static void unregister_link_notifier(struct mlx5_vdpa_net *ndev)
+>  		flush_workqueue(ndev->mvdev.wq);
+>  }
+>  
+> +static u64 mlx5_vdpa_get_backend_features(const struct vdpa_device *vdpa)
+> +{
+> +	return BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK);
+> +}
+> +
+>  static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev, u64 features)
+>  {
+>  	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+> @@ -3140,6 +3146,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
+>  	.get_vq_align = mlx5_vdpa_get_vq_align,
+>  	.get_vq_group = mlx5_vdpa_get_vq_group,
+>  	.get_device_features = mlx5_vdpa_get_device_features,
+> +	.get_backend_features = mlx5_vdpa_get_backend_features,
+>  	.set_driver_features = mlx5_vdpa_set_driver_features,
+>  	.get_driver_features = mlx5_vdpa_get_driver_features,
+>  	.set_config_cb = mlx5_vdpa_set_config_cb,
+> -- 
+> 2.39.3
 
-Fixed the missing single-line-{} after multi-line-{} style problem that
-Amir mentioned.
-
----
-
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
-
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
-
-[1/3] splice: always fsnotify_access(in), fsnotify_modify(out) on success
-      https://git.kernel.org/vfs/vfs/c/cade9d70ce70
-[2/3] splice: fsnotify_access(fd)/fsnotify_modify(fd) in vmsplice
-      https://git.kernel.org/vfs/vfs/c/6aa55b7b85b5
-[3/3] splice: fsnotify_access(in), fsnotify_modify(out) on success in tee
-      https://git.kernel.org/vfs/vfs/c/6e7556086b19
