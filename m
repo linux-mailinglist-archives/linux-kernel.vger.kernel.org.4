@@ -2,106 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2596745E7F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5E1745E81
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjGCO0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
+        id S230030AbjGCO3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjGCOZ6 (ORCPT
+        with ESMTP id S229818AbjGCO3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:25:58 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161DE60
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:25:56 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so6952874e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688394355; x=1690986355;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nR1JIau5H5rAt0KfiJQqEOPzQsDB3hDcj43jCj7PzkM=;
-        b=XFE+lKHhuGUEIXWBw4DftRQl+i6fw+3/N8iyJEyTVXO/98D+spWfUSRMZkOBzRB7XD
-         SVy0VcHTVh3QPXv7kxJne6o5fqL3GZiaQFO++JNMFeRepJqynHenV0O034CMh9uoIW98
-         3eMoo0trZx4+MaUFqSa4g3yHawk7gA3t/hSkfYiMt2OjtYYCvfYPWSfo6Q9GEVwCym70
-         zbuAaKlA+ADuKSHEK1cnjcXRJucspTr5/ZfBpsvtMkMYK7Y82HGwwaRrmeo49u5tu5b7
-         Ng30EYNhd/PVblqQP8XZpOJ/xz2DCMyHC8JUj2IION+iBaAl2z/a2PwglkKDZ1kjMh7m
-         uJYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688394355; x=1690986355;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nR1JIau5H5rAt0KfiJQqEOPzQsDB3hDcj43jCj7PzkM=;
-        b=l69bVFfg3m00JFeJQ0+f9hENNPJlWsuX5Nzcnm1LATeb3ywJqvggzlGSV1IpNGjbEx
-         wNQh0vyqgKvCSZBF+bSpLErih/TdZxFtmkGbj4+g04xEBVXbf6jKOpRmY645ADVMYbJi
-         PJx1q/flRnKSWKfhdYkN7Xei22sEjZdPun1lMkUzvw8FjoCM6zXVpIF+PHvT3ag3X53B
-         zH7PqV8gRhdJaMZiL+Sz+2v2wmhfKP3ekMz0EueykAvrYACnFOkBzIqcOo8xT9H+FSB1
-         ZLSM2J8jogWQ4smgW1YKOsT9w2FWhIDEsX7mDqU7cTvp7b2qAp0C8qvbBAHh59MaOBqy
-         zIFw==
-X-Gm-Message-State: ABy/qLYv6tYmyelBy0rooClktBK3CRKbXQmBz+MbaiuqCWov8+b8zyrW
-        RQFx0Al5EenimccBjq92aQ449Q==
-X-Google-Smtp-Source: APBJJlHM/qj4pCS4sZLl2C1DpzpOgZRb5FHLaQjBC5mgZoHK2+2jKTCEi/ZXgIu5NMvCycfbRNL82A==
-X-Received: by 2002:a19:8c1d:0:b0:4f4:b13a:d683 with SMTP id o29-20020a198c1d000000b004f4b13ad683mr6185895lfd.69.1688394354995;
-        Mon, 03 Jul 2023 07:25:54 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id v16-20020ac25610000000b004fb763b5171sm3815903lfd.86.2023.07.03.07.25.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 07:25:54 -0700 (PDT)
-Message-ID: <643629e2-0da9-44ac-68bf-1867fad8a9ee@linaro.org>
-Date:   Mon, 3 Jul 2023 17:25:53 +0300
+        Mon, 3 Jul 2023 10:29:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE27E59;
+        Mon,  3 Jul 2023 07:29:15 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 16:29:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688394553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/4eXTSstuIJtNfCSirswPN+SDcANih1rBvCVlFV4lb4=;
+        b=Hy/0MJ7RO7NXMGP8iuM0zBhLtQFzhh2IcLKMKCoPxX90Zf0UbbR3ZrIKwIsp3qaxkKfkHw
+        d/ESnbEiW7oo784QU2dG6sMXeQmbBhHwde1mkVw8KpOda0X34/59ks1zp6OwZrCECChPoK
+        DbecWG+j0rSXCXd9+a+lX1rHQxxUFvz4vOHA3Fj9mlDky+sEYUEW0W0itWYqA0wwXQ4mEq
+        qSgwlZaT3IhJ63ujd7ti+o+TyiTjoSrvkv8iBoAUU/0IAF4OFMKHUNDYxspnppOP3LnuAo
+        SvH1a8nj82qrgfthfBggc5fZnr0FjROFvfdET955is1hp8rzscv+cgKnKrdTWg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688394553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/4eXTSstuIJtNfCSirswPN+SDcANih1rBvCVlFV4lb4=;
+        b=EzUh5gfl6vKO4+59Fotn/unNfk2mVlawDqvGPIgo5E3VDXYDEwJmsK8Mf2v+C55F1h678m
+        zfBXwIpQuHawyZAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        juri.lelli@redhat.com
+Subject: Re: Splat in kernel RT while processing incoming network packets
+Message-ID: <20230703142908.RcxjjF_E@linutronix.de>
+References: <bkw2aao62e3ppg7332dbhycgzdwr7k5brezj3bcij6zewphmnd@eigmbvjh6wuu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 5/5] arm64: dts: qcom: sm8250: Add interconnects and
- power-domains to QUPs
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
- <20230703-topic-8250_qup_icc-v1-5-fea39aa07525@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230703-topic-8250_qup_icc-v1-5-fea39aa07525@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <bkw2aao62e3ppg7332dbhycgzdwr7k5brezj3bcij6zewphmnd@eigmbvjh6wuu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 16:31, Konrad Dybcio wrote:
-> Describe the interconnect paths related to QUPs and add the power-domains
-> powering them.
-> 
-> This is required for icc sync_state, as otherwise QUP access is gated.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8250.dtsi | 150 +++++++++++++++++++++++++++++++++++
->   1 file changed, 150 insertions(+)
+On 2023-07-03 09:47:26 [-0300], Wander Lairson Costa wrote:
+> Dear all,
+Hi,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> I am writing to report a splat issue we encountered while running the
+> Real-Time (RT) kernel in conjunction with Network RPS (Receive Packet
+> Steering).
+>=20
+> During some testing of the RT kernel version 6.4.0 with Network RPS enabl=
+ed,
+> we observed a splat occurring in the SoftIRQ subsystem. The splat message=
+ is as
+> follows:
+>=20
+> [   37.168920] ------------[ cut here ]------------
+> [   37.168925] WARNING: CPU: 0 PID: 0 at kernel/softirq.c:291 do_softirq_=
+post_smp_call_flush+0x2d/0x60
+=E2=80=A6
+> [   37.169060] ---[ end trace 0000000000000000 ]---
+>=20
+> It comes from [1].
+>=20
+> The issue lies in the mechanism of RPS to defer network packets processin=
+g to
+> other CPUs. It sends an IPI to the to the target CPU. The registered call=
+back
+> is rps_trigger_softirq, which will raise a softirq, leading to the follow=
+ing
+> scenario:
+>=20
+> CPU0                                    CPU1
+> | netif_rx()                            |
+> | | enqueue_to_backlog(cpu=3D1)           |
+> | | | net_rps_send_ipi()                |
+> |                                       | flush_smp_call_function_queue()
+> |                                       | | was_pending =3D local_softirq=
+_pending()
+> |                                       | | __flush_smp_call_function_que=
+ue()
+> |                                       | | rps_trigger_softirq()
+> |                                       | | | __raise_softirq_irqoff()
+> |                                       | | do_softirq_post_smp_call_flus=
+h()
+>=20
+> That has the undesired side effect of raising a softirq in a function cal=
+l,
+> leading to the aforementioned splat.
 
--- 
-With best wishes
-Dmitry
+correct.
 
+> The kernel version is kernel-ark [1], os-build-rt branch. It is essential=
+ly the
+> upstream kernel with the PREEMPT_RT patches, and with RHEL configs. I can
+> provide the .config.
+
+It is fine, I see it.
+
+> The only solution I imagined so far was to modify RPS to process packtes =
+in a
+> kernel thread in RT. But I wonder how would be that be different than pro=
+cessing
+> them in ksoftirqd.
+>=20
+> Any inputs on the issue?
+
+Not sure how to proceed. One thing you could do is a hack similar like
+net-Avoid-the-IPI-to-free-the.patch which does it for defer_csd.
+On the other hand we could drop net-Avoid-the-IPI-to-free-the.patch and
+remove the warning because we have now commit
+   d15121be74856 ("Revert "softirq: Let ksoftirqd do its job"")
+
+Prior that, raising softirq from hardirq would wake ksoftirqd which in
+turn would collect all pending softirqs. As a consequence all following
+softirqs (networking, =E2=80=A6) would run as SCHED_OTHER and compete with
+SCHED_OTHER tasks for resources. Not good because the networking work is
+no longer processed within the networking interrupt thread. Also not a
+DDoS kind of situation where one could want to delay processing.
+
+With that change, this isn't the case anymore. Only an "unrelated" IRQ
+thread could pick up the networking work which is less then ideal. That
+is because the global softirq set is added, ksoftirq is marked for a
+wakeup and could be delayed because other tasks are busy. Then the disk
+interrupt (for instance) could pick it up as part of its threaded
+interrupt.
+
+Now that I think about, we could make the backlog pseudo device a
+thread. NAPI threading enables one thread but here we would need one
+thread per-CPU. So it would remain kind of special. But we would avoid
+clobbering the global state and delay everything to ksoftird. Processing
+it in ksoftirqd might not be ideal from performance point of view.
+
+> [1] https://elixir.bootlin.com/linux/latest/source/kernel/softirq.c#L306
+>=20
+> Cheers,
+> Wander
+
+Sebastian
