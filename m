@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FDE745B1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11217745B20
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjGCLbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S230349AbjGCLbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjGCLbV (ORCPT
+        with ESMTP id S229436AbjGCLbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:31:21 -0400
+        Mon, 3 Jul 2023 07:31:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E82B3;
-        Mon,  3 Jul 2023 04:31:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C4FC6;
+        Mon,  3 Jul 2023 04:31:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 669F760EC2;
-        Mon,  3 Jul 2023 11:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD31CC433C7;
-        Mon,  3 Jul 2023 11:31:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5381560EDF;
+        Mon,  3 Jul 2023 11:31:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441B6C433C7;
+        Mon,  3 Jul 2023 11:31:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688383879;
-        bh=4dMz6AICQADVRRk6AU4c36ys4TXGNzy34CAOZWE5z1o=;
+        s=k20201202; t=1688383907;
+        bh=TsjDdvjS8/OWRhhJmkiLl/ZF0tTAzN9y6MLUtNVZ9rw=;
         h=From:To:Cc:Subject:Date:From;
-        b=JGYuRaq5gZfzOX8EqTv+gxLLWUN2XdBFw6I4bM65b02eU9FLNa05+EkPbuIM/w/0L
-         KKTu7s2hACooo45t5NDtM88Rdku73L7/D/1UNqwCFiT456JhYx2FO6FLHa2zAdQXk4
-         kBYM+1lb9c7KI7X8CAO+I/L6fuxTwIv5D8kBj4byiLVWnJR/Y+9kCcCt/CZSdG19TK
-         6u0MLr5Qpf3fIrA27gXgGb+rRYtyqDcI2T4SQ7j6UslQf0KizBMVMnA9OEbppJPDLf
-         SHVBr8s4T3LmNTyYyYLytU73cOIVLW9itW3Pxduydln2eOH0/4tsmDNlAFniXdwStT
-         DMbLYPeHBgZ9g==
+        b=fkTJ4qZ5AL/d49j52i/ZpcisAhtjImBdHPPpTYz00V5ReU6DYoLN7zJUHLFgWUGD4
+         NQuY1GO7aMu1wuzM4wQRO9oCNMgf1mDNFgSwaqWcmMhs8l20PZB/FrdzA7E4OIUfbi
+         843ao+uUzuBxXTaUKS4ZYFMVS8HdhWJYxDOAMdw7oTm4It88405Y2YFUScoNFMQqmf
+         SpK0NWi8ys7dmk+nUZIZmTLpS7C/A1AMc14RaPmdZmqx3ERhFcfy4v/Rkn4b1BN01I
+         TsJFhqiYAfxh1C9uzFl1BA6+R+caJTK0921z7X+B/8xCQbSFBttK6DrnOBMd1hJItx
+         j18fkK/DH2KOg==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Chris Lu <chris.lu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Jing Cai <jing.cai@mediatek.com>,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        Manish Mandlik <mmandlik@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Brian Gix <brian.gix@intel.com>, Pauli Virtanen <pav@iki.fi>,
-        Iulia Tanasescu <iulia.tanasescu@nxp.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-unionfs@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] Bluetooth: coredump: fix building with coredump disabled
-Date:   Mon,  3 Jul 2023 13:30:48 +0200
-Message-Id: <20230703113112.380663-1-arnd@kernel.org>
+Subject: [PATCH] ovl: mark ovl_redirect_mode() as static again
+Date:   Mon,  3 Jul 2023 13:31:33 +0200
+Message-Id: <20230703113142.424670-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,40 +57,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The btmtk driver uses an IS_ENABLED() check to conditionally compile
-the coredump support, but this fails to build because the hdev->dump
-member is in an #ifdef:
+This function was moved to another file and is no longer marked
+static there, causing a W=1 warning:
 
-drivers/bluetooth/btmtk.c: In function 'btmtk_process_coredump':
-drivers/bluetooth/btmtk.c:386:30: error: 'struct hci_dev' has no member named 'dump'
-  386 |   schedule_delayed_work(&hdev->dump.dump_timeout,
-      |                              ^~
+fs/overlayfs/params.c:92:13: error: no previous prototype for 'ovl_redirect_mode' [-Werror=missing-prototypes]
 
-The struct member doesn't really make a huge difference in the total size,
-so just remove the #ifdef around it to avoid adding similar checks
-around each user.
+This was probably lost by accident during the refactoring, as there is
+still no caller in another file, so add back the annotation.
 
-Fixes: 872f8c253cb9e ("Bluetooth: btusb: mediatek: add MediaTek devcoredump support")
-Fixes: 9695ef876fd12 ("Bluetooth: Add support for hci devcoredump")
+Fixes: 06bcaa2dafb7e ("ovl: move all parameter handling into params.{c,h}")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- include/net/bluetooth/hci_core.h | 2 --
- 1 file changed, 2 deletions(-)
+ fs/overlayfs/params.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-index c0ca3f869c923..491ab83ccafc9 100644
---- a/include/net/bluetooth/hci_core.h
-+++ b/include/net/bluetooth/hci_core.h
-@@ -593,9 +593,7 @@ struct hci_dev {
- 	const char		*fw_info;
- 	struct dentry		*debugfs;
+diff --git a/fs/overlayfs/params.c b/fs/overlayfs/params.c
+index b8c2f6056a9a8..a63160dbb0f95 100644
+--- a/fs/overlayfs/params.c
++++ b/fs/overlayfs/params.c
+@@ -89,7 +89,7 @@ const struct constant_table ovl_parameter_redirect_dir[] = {
+ 	{}
+ };
  
--#ifdef CONFIG_DEV_COREDUMP
- 	struct hci_devcoredump	dump;
--#endif
- 
- 	struct device		dev;
- 
+-const char *ovl_redirect_mode(struct ovl_config *config)
++static const char *ovl_redirect_mode(struct ovl_config *config)
+ {
+ 	return ovl_parameter_redirect_dir[config->redirect_mode].name;
+ }
 -- 
 2.39.2
 
