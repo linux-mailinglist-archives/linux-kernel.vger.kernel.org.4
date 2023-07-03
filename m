@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC57745F77
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF25745F7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjGCPIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S231700AbjGCPJI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jul 2023 11:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjGCPIj (ORCPT
+        with ESMTP id S231381AbjGCPJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:08:39 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBDFBC;
-        Mon,  3 Jul 2023 08:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688396918; x=1719932918;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6iC3YuHe8rC5QwgP5+XpkMFQ2vyYYdvadondVp+quNw=;
-  b=eAu9v1cxR3+EOtv1W7PXDc+txBXgde67b5iQCzvBc1bri9swGmDq7Tq+
-   eSxNQxV1+xf00X9bTpd1ON13Z2nmVyRK0+DJ3ZXt+sdGl/SzhSWBOMmoA
-   GXHx81acuWZdslQHMdbPBCv4RoWKzmWq/Q1dCQGp/LGBJeKQ4pPxANhip
-   i2ER7aBOQBAlPZfXqf6BiNWbSKIT7iyGZNq9tBgENHJe/nzhGtWbY48FR
-   N5oVKkaNxWEsKhPcZVZ61lAJHcDbEz//EctgNNoZgJWLJpTjoQxuDcQtl
-   QUTSDSwWr4ub0irze+avalqpdXSqhGdDpy+LY5O3X+tpYl2LdVITluyyT
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393645900"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="393645900"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 08:08:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="721809950"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="721809950"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Jul 2023 08:08:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qGLAH-001tW4-2e;
-        Mon, 03 Jul 2023 18:08:33 +0300
-Date:   Mon, 3 Jul 2023 18:08:33 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v1 1/2] docs: printk-formats: Fix hex printing of signed
- values
-Message-ID: <ZKLkcWyY35OK/ZTw@smile.fi.intel.com>
-References: <20230703145839.14248-1-andriy.shevchenko@linux.intel.com>
+        Mon, 3 Jul 2023 11:09:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AE5E44;
+        Mon,  3 Jul 2023 08:09:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6004960F99;
+        Mon,  3 Jul 2023 15:09:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595B7C433C8;
+        Mon,  3 Jul 2023 15:08:59 +0000 (UTC)
+Date:   Mon, 3 Jul 2023 11:08:57 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Ching-lin Yu <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
+Message-ID: <20230703110857.2d051af5@rorschach.local.home>
+In-Reply-To: <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
+References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
+        <1685610013-33478-4-git-send-email-akaher@vmware.com>
+        <20230701095417.3de5baab@rorschach.local.home>
+        <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703145839.14248-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,24 +59,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 05:58:38PM +0300, Andy Shevchenko wrote:
-> The commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
-> unnecessary %h[xudi] and %hh[xudi]") obviously missed the point of sign
-> promotion for the signed values lesser than int. In such case %x prints
-> not the same as %h[h]x. Restore back those specifiers for the signed hex
-> cases.
+On Mon, 3 Jul 2023 10:13:22 +0000
+Ajay Kaher <akaher@vmware.com> wrote:
 
-FWIW, currently we luckily have only one ABI case
-drivers/power/supply/bq24190_charger.c:466
-which luckily uses unsigned value for that specifier.
+> >> +/**
+> >> + * eventfs_down_write - acquire write lock function
+> >> + * @eventfs_rwsem: a pointer to rw_semaphore
+> >> + *
+> >> + * helper function to perform write lock on eventfs_rwsem
+> >> + */
+> >> +static void eventfs_down_write(struct rw_semaphore *eventfs_rwsem)
+> >> +{
+> >> +     while (!down_write_trylock(eventfs_rwsem))
+> >> +             msleep(10);  
+> >
+> > What's this loop for? Something like that needs a very good explanation
+> > in a comment. Loops like these are usually a sign of a workaround for a
+> > bug in the design, or worse, simply hides an existing bug.
+> >  
+> 
+> Yes correct, this logic is to solve deadlock:
+> 
+> Thread 1                             Thread 2
+> down_read_nested()                                 - read lock acquired
+>                                          down_write()     - waiting for write lock to acquire
+> down_read_nested()                                  - deadlock
+> 
+> Deadlock is because rwlock wouldn’t allow read lock to be acquired if write lock is waiting.
+> down_write_trylock() wouldn’t add the write lock in waiting queue, hence helps to prevent
+> deadlock scenario.
+> 
+> I was stuck with this Deadlock, tried few methods and finally borrowed from cifs, as it’s
+> upstreamed, tested and working in cifs, please refer:
+> https://elixir.bootlin.com/linux/v6.3.1/source/fs/cifs/file.c#L438
 
-The rest is debug and error messages along with tracepoints.
-The tracepoints might have an undesired, but not critical,
-deviation. Nevertheless, promoting sign for hex values seems
-to me the wrong suggestion.
+I just looked at that code and the commit, and I honestly believe that
+is a horrible hack, and very fragile. It's in the smb code, so it was
+unlikely reviewed by anyone outside that subsystem. I really do not
+want to prolificate that solution around the kernel. We need to come up
+with something else.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I also think it's buggy (yes the cifs code is buggy!) because in the
+comment above the down_read_nested() it says:
+
+/*
+ * nested locking. NOTE: rwsems are not allowed to recurse
+ * (which occurs if the same task tries to acquire the same
+ * lock instance multiple times), but multiple locks of the
+ * same lock class might be taken, if the order of the locks
+ * is always the same. This ordering rule can be expressed
+ * to lockdep via the _nested() APIs, but enumerating the
+ * subclasses that are used. (If the nesting relationship is
+ * static then another method for expressing nested locking is
+ * the explicit definition of lock class keys and the use of
+ * lockdep_set_class() at lock initialization time.
+ * See Documentation/locking/lockdep-design.rst for more details.)
+ */
+
+So this is NOT a solution (and the cifs code should be fixed too!)
+
+Can you show me the exact backtrace where the reader lock gets taken
+again? We will have to come up with a way to not take the same lock
+twice.
+
+We can also look to see if we can implement this with RCU. What exactly
+is this rwsem protecting?
 
 
+> 
+> Looking further for your input. I will add explanation in v4.
+> 
+> 
+> >> +}
+> >> +
+
+[..]
+
+> >> + *
+> >> + * This function creates the top of the trace event directory.
+> >> + */
+> >> +struct dentry *eventfs_create_events_dir(const char *name,
+> >> +                                      struct dentry *parent,
+> >> +                                      struct rw_semaphore *eventfs_rwsem)  
+> >
+> > OK, I'm going to have to really look at this. Passing in a lock to the
+> > API is just broken. We need to find a way to solve this another way.  
+> 
+> eventfs_rwsem is a member of struct trace_array, I guess we should
+> pass pointer to trace_array.
+
+No, it should not be part of the trace_array. If we can't do this with
+RCU, then we need to add a descriptor that contains the dentry that is
+returned above, and have the lock held there. The caller of the
+eventfs_create_events_dir() should not care about locking. That's an
+implementation detail that should *not* be part of the API.
+
+That is, if you need a lock:
+
+struct eventfs_dentry {
+	struct dentry		*dentry;
+	struct rwsem		*rwsem;
+};
+
+And then get to that lock by using the container_of() macro. All
+created eventfs dentry's could have this structure, where the rwsem
+points to the top one. Again, that's only if we can't do this with RCU.
+
+-- Steve
+
+
+> 
+> 
+> > I'm about to board a plane to JFK shortly, I'm hoping to play with this
+> > while flying back.
+> >  
+> 
+> I have replied for major concerns. All other minor I will take care in v4.
+> 
+> Thanks a lot for giving time to eventfs patches.
+> 
+> - Ajay
+> 
