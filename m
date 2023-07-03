@@ -2,119 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF91745AA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937FE745AAC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjGCK43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S230177AbjGCK6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjGCK42 (ORCPT
+        with ESMTP id S229484AbjGCK6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:56:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBAEBB2;
-        Mon,  3 Jul 2023 03:56:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FBFD2F4;
-        Mon,  3 Jul 2023 03:57:09 -0700 (PDT)
-Received: from [10.57.38.117] (unknown [10.57.38.117])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E8C83F762;
-        Mon,  3 Jul 2023 03:56:24 -0700 (PDT)
-Message-ID: <a195f4b7-283a-1929-de72-c6c5319d2203@arm.com>
-Date:   Mon, 3 Jul 2023 11:56:18 +0100
+        Mon, 3 Jul 2023 06:58:38 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1484C9;
+        Mon,  3 Jul 2023 03:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688381917; x=1719917917;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aDd9Dd7JEfe7wMOXCs64FITvs+m6jxeMPO7Bg5RtL0s=;
+  b=ik0PfakRSTeHCimtnIGzMAlYS5YXdPLfqHeVSgMev13wKwMVVoO3O1tK
+   8+qYeYyEKvJza6ElXUxjx3viQNiyfIUb8/AAQfmqZsoUogAIq0aF6GPT5
+   4//c9qae6svL0hoKp9JOMyGuh8IjgNFYoJFpYBz3O+Y/1duc+gkIwJGCW
+   EoqXTgE9F5DDu7Wb4rJN23f/24WQ+iWt5F+nwipL4lhQnNKqSBPOyxOdj
+   ognVbzJPxUlLIG3idGil2Z7EZXa6TICL6ZOiERlrQTSMj1Aw42DH9gcps
+   2LVLvpdHOsP6GgLsuQhCDOtHziippfOKaBX/iVByAD1hwv5/sV2X54zqd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="360329699"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="360329699"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 03:58:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="748108247"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="748108247"
+Received: from agrabezh-mobl1.ccr.corp.intel.com (HELO tkristo-desk.intel.com) ([10.252.48.27])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 03:58:23 -0700
+From:   Tero Kristo <tero.kristo@linux.intel.com>
+To:     shuah@kernel.org, tglx@linutronix.de, x86@kernel.org, bp@alien8.de,
+        dave.hansen@linux.intel.com, mingo@redhat.com
+Cc:     ast@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, bpf@vger.kernel.org
+Subject: [PATCH 0/2] x86/BPF: Add new BPF helper call bpf_rdtsc
+Date:   Mon,  3 Jul 2023 13:57:43 +0300
+Message-Id: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/4] perf/arm_cspmu: Clean up ACPI dependency
-Content-Language: en-GB
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     will@kernel.org, mark.rutland@arm.com, suzuki.poulose@arm.com,
-        bwicaksono@nvidia.com, ilkka@os.amperecomputing.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-References: <cover.1685983270.git.robin.murphy@arm.com>
- <9d126711c7498b199b3e6f5cf48ca60ffb9df54c.1685983270.git.robin.murphy@arm.com>
- <CAMuHMdU7kiGni_T1mRU7EC-8sQn8EjhND1-POc2h2V4V8Oeuqg@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMuHMdU7kiGni_T1mRU7EC-8sQn8EjhND1-POc2h2V4V8Oeuqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+Hello,
 
-On 2023-07-03 10:21, Geert Uytterhoeven wrote:
-> Hi Robin,
-> 
-> On Mon, Jun 5, 2023 at 7:05 PM Robin Murphy <robin.murphy@arm.com> wrote:
->> Build-wise, the ACPI dependency consists of only a couple of things
->> which could probably stand being factored out into ACPI helpers anyway.
->> However for the immediate concern of working towards Devicetree support
->> here, it's easy enough to make a few tweaks to contain the affected code
->> locally, such that we can relax the Kconfig dependency.
->>
->> Reviewed-and-Tested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->> Reviewed-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> 
-> Thanks for your patch, which is now commit f9bd34e3753ea8f1
-> ("perf/arm_cspmu: Clean up ACPI dependency") upstream.
-> 
->> --- a/drivers/perf/arm_cspmu/Kconfig
->> +++ b/drivers/perf/arm_cspmu/Kconfig
->> @@ -4,8 +4,7 @@
->>
->>   config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
->>          tristate "ARM Coresight Architecture PMU"
->> -       depends on ARM64 && ACPI
->> -       depends on ACPI_APMT || COMPILE_TEST
->> +       depends on ARM64 || COMPILE_TEST
-> 
->  From looking at the code, the "arm-cs-arch-pmu" platform device can
-> be instantiated only through ACPI.  So I think it is a bit premature to
-> relax the dependency, and expose this question to people configuring
-> an ARM64 kernel without ACPI/APMT support.
-> 
-> Am I missing something?
+This patch series adds a new x86 arch specific BPF helper, bpf_rdtsc()
+which can be used for reading the hardware time stamp counter (TSC.)
+Currently the same counter is directly accessible from userspace
+(using RDTSC instruction), and kernel space using various rdtsc_*()
+APIs, however eBPF lacks the support.
 
-As was mentioned in the original cover letter on v1, these patches were 
-actually the bottom half of a branch adding DT support - the DT parts 
-are still untested and not quite complete (there's a property I don't 
-need for the thing I'm looking at, but still deserves to be hooked up in 
-general), but it seemed worth landing these prep patches since they 
-impact what Besar and Ilkka are also working on in parallel.
+The main usage for the TSC counter is for various profiling and timing
+purposes, getting accurate cycle counter values. The counter can be
+currently read from BPF programs by using the existing perf subsystem
+services (bpf_perf_event_read()), however its usage is cumbersome at
+best. Additionally, the perf subsystem provides relative value only
+for the counter, but absolute values are desired by some use cases
+like Wult [1]. The absolute value of TSC can be read with BPF programs
+currently via some kprobe / bpf_core_read() magic (see [2], [3], [4] for
+example), but this relies on accessing kernel internals and is not
+stable API, and is pretty cumbersome. Thus, this patch proposes a new
+arch x86 specific BPF helper to avoid the above issues.
 
-At this point, the kconfig could indeed be "depends on (ARM64 && 
-ACPI_APMT) || COMPILE_TEST". I can't recall why I didn't change that 
-when splitting these patches out for posting - I may have decided the 
-impact was negligible (i.e. even with DT support, it's still going to be 
-a driver most people won't care about anyway), or the visibility vs. 
-functional dependency aspect may have just slipped my mind entirely. 
-You're welcome to make that change for now if you'd like to.
+-Tero
 
-(I'm not sure how soon I'll be posting the follow-up DT patches, since 
-I'm dependent on other people to provide testing and feedback, and 
-haven't heard any news yet)
-
-Thanks,
-Robin.
+[1] https://github.com/intel/wult
+[2] https://github.com/intel/wult/blob/c92237c95b898498faf41e6644983102d1fe5156/helpers/wult-tdt-helper/tdt-bpf.c#L102
+[3] https://github.com/intel/wult/blob/c92237c95b898498faf41e6644983102d1fe5156/helpers/wult-tdt-helper/tdt-bpf.c#L133
+[4] https://github.com/intel/wult/blob/c92237c95b898498faf41e6644983102d1fe5156/helpers/wult-tdt-helper/tdt-bpf.c#L488
 
 
-> Thanks!
-> 
->>          help
->>            Provides support for performance monitoring unit (PMU) devices
->>            based on ARM CoreSight PMU architecture. Note that this PMU
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
