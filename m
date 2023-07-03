@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACAC7456FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BEB37456FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjGCIJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S231180AbjGCIKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjGCIJU (ORCPT
+        with ESMTP id S230214AbjGCIKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:09:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD1BC5;
-        Mon,  3 Jul 2023 01:09:17 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:4563:92b0:7df7:68d2] (unknown [IPv6:2a01:e0a:120:3210:4563:92b0:7df7:68d2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 3 Jul 2023 04:10:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847B1C5
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:10:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 762B8660297B;
-        Mon,  3 Jul 2023 09:09:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688371755;
-        bh=FoxyCwSED1NQb2JVKQe28H/cQr0EbCDBOFoxMI+oRmk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DX+0JyOi+UOAHjq+U7oPBEXI/iGkisjG3bkMz93iti3JlqWvZyY7i4tLWXdLS+081
-         jlqKGzRkb0RVaO4m511EhrPeVwYCMy80lMdoJPyf6+fkZPiBiKshVlu+UnXSCcsFUB
-         hezXrnKZtVJhr81Q+3PLGm63u7EYCTh0S3xPOFridHH20BYJ2maAlCpzpNz2ZHyub3
-         rudswu81kQdJXnL6gZC7bC4nmLxWYyonXo8VuAeatB1jmubCthLD4/yWeVPp0V9slO
-         4kJMv6ByOoqe7P7mp6+SXZOURXU3ybNccRmu5mydjS7FpaqNWZnPwTHTLoYesY23AL
-         VLnoLUdpeX/LA==
-Message-ID: <5cb3f216-5041-a155-5d2c-059dc1f15024@collabora.com>
-Date:   Mon, 3 Jul 2023 10:09:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 04/11] media: videobuf2: Stop define VB2_MAX_FRAME as
- global
-To:     Hsia-Jun Li <Randy.Li@synaptics.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        hverkuil-cisco@xs4all.nl, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, linux-rockchip@lists.infradead.org,
-        mchehab@kernel.org, linux-staging@lists.linux.dev,
-        ming.qian@nxp.com, kernel@collabora.com,
-        gregkh@linuxfoundation.org, tfiga@chromium.org,
-        nicolas.dufresne@collabora.com
-References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
- <20230622131349.144160-5-benjamin.gaignard@collabora.com>
- <e7444263-0ce5-1575-8cca-1e51b1cfbe9a@synaptics.com>
-Content-Language: en-US
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <e7444263-0ce5-1575-8cca-1e51b1cfbe9a@synaptics.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3AF9D1F8AC;
+        Mon,  3 Jul 2023 08:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688371835; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JF+yuK7urvWRKC3M9mc+JnxvxoWl/3dAyFeQYEcA1mc=;
+        b=zwMAnXa8uyglsATv4kQP1InR9RqwjBStdOEcr9VqmT/2YUc9BSL7juYog1lwuT7mwSR++1
+        ngQjg6wCRguej3oYDMzWahB9/1uJrNd7IT+8tUBMFR8fAXhGmUYNqV3KLaQnjL6Wn2zwEV
+        pgMHwS3qcdBmtZbvx675bvGrxMUXd5M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688371835;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JF+yuK7urvWRKC3M9mc+JnxvxoWl/3dAyFeQYEcA1mc=;
+        b=/QmjuhL4UqKQ7cg+4SmN4Rd1RdV/dSaZj2zD6a6fBFC2TJvoSh5Ib4ONvF4OG3pdHz9zF/
+        GV+uPI/FiuFQOECw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3FB6138FC;
+        Mon,  3 Jul 2023 08:10:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VlKSMnqComRKagAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 03 Jul 2023 08:10:34 +0000
+Date:   Mon, 03 Jul 2023 10:10:34 +0200
+Message-ID: <87a5wd76v9.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Tuo Li <islituo@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@outlook.com,
+        BassCheck <bass@buaa.edu.cn>
+Subject: Re: [PATCH] ALSA: hda: fix a possible null-pointer dereference due to data race in snd_hdac_regmap_sync()
+In-Reply-To: <20230703031016.1184711-1-islituo@gmail.com>
+References: <20230703031016.1184711-1-islituo@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,159 +70,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 03 Jul 2023 05:10:16 +0200,
+Tuo Li wrote:
+> 
+> The variable codec->regmap is often protected by the lock 
+> codec->regmap_lock when is accessed. However, it is accessed without 
+> holding the lock when is accessed in snd_hdac_regmap_sync():
+> 
+>   if (codec->regmap)
+> 
+> In my opinion, this may be a harmful race, because if codec->regmap is 
+> set to NULL right after the condition is checked, a null-pointer 
+> dereference can occur in the called function regcache_sync():
+> 
+>   map->lock(map->lock_arg); --> Line 360 in drivers/base/regmap/regcache.c
+> 
+> To fix this possible null-pointer dereference caused by data race, the 
+> mutex_lock coverage is extended to protect the if statement as well as the 
+> function call to regcache_sync().
+> 
+> Reported-by: BassCheck <bass@buaa.edu.cn>
+> Signed-off-by: Tuo Li <islituo@gmail.com>
 
-Le 30/06/2023 à 11:51, Hsia-Jun Li a écrit :
->
-> On 6/22/23 21:13, Benjamin Gaignard wrote:
->> CAUTION: Email originated externally, do not click links or open 
->> attachments unless you recognize the sender and know the content is 
->> safe.
->>
->>
->> After changing bufs arrays to a dynamic allocated array
->> VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
->
-> I think make it 64 which is the VB2_MAX_FRAME in Android GKI kernel is 
-> more reasonable.
->
-> It would be hard to iterate the whole array, it would go worse with a 
-> filter. Such iterate may need to go twice because you mix 
-> post-processing buffer and decoding buffer(with MV) in the same array.
+Practically seen, it's pretty harmless, as the flag is set at the very
+beginning of the codec driver probe, while snd_hdac_regmap_sync() is
+used only in the runtime PM resume that must not happen during the
+probe.  IOW, codec->regmap_lock itself isn't really meant to
+protectthe change of codec->regmap flag.
 
-Here I don't want to change drivers behavior so I keep the same value.
-If it happens that they need more buffers, like for dynamic resolution change
-feature for Verisilicon VP9 decoder, case by case patches will be needed.
+OTOH, your change makes things more consistent, so I applied the patch
+now.
 
 
->
->> Remove it from the core definitions but keep it for drivers internal
->> needs.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> ---
->>   drivers/media/common/videobuf2/videobuf2-core.c | 2 ++
->>   drivers/media/platform/amphion/vdec.c | 1 +
->>   .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c | 2 ++
->>   drivers/media/platform/qcom/venus/hfi.h | 2 ++
->>   drivers/media/platform/verisilicon/hantro_hw.h | 2 ++
->>   drivers/staging/media/ipu3/ipu3-v4l2.c | 2 ++
->>   include/media/videobuf2-core.h | 1 -
->>   include/media/videobuf2-v4l2.h | 4 ----
->>   8 files changed, 11 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c 
->> b/drivers/media/common/videobuf2/videobuf2-core.c
->> index 86e1e926fa45..899783f67580 100644
->> --- a/drivers/media/common/videobuf2/videobuf2-core.c
->> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
->> @@ -31,6 +31,8 @@
->>
->>   #include <trace/events/vb2.h>
->>
->> +#define VB2_MAX_FRAME  32
->> +
->>   static int debug;
->>   module_param(debug, int, 0644);
->>
->> diff --git a/drivers/media/platform/amphion/vdec.c 
->> b/drivers/media/platform/amphion/vdec.c
->> index 3fa1a74a2e20..b3219f6d17fa 100644
->> --- a/drivers/media/platform/amphion/vdec.c
->> +++ b/drivers/media/platform/amphion/vdec.c
->> @@ -28,6 +28,7 @@
->>
->>   #define VDEC_MIN_BUFFER_CAP            8
->>   #define VDEC_MIN_BUFFER_OUT            8
->> +#define VB2_MAX_FRAME                  32
->>
->>   struct vdec_fs_info {
->>          char name[8];
->> diff --git 
->> a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c 
->> b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
->> index 6532a69f1fa8..a1e0f24bb91c 100644
->> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
->> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
->> @@ -16,6 +16,8 @@
->>   #include "../vdec_drv_if.h"
->>   #include "../vdec_vpu_if.h"
->>
->> +#define VB2_MAX_FRAME  32
->> +
->>   /* reset_frame_context defined in VP9 spec */
->>   #define VP9_RESET_FRAME_CONTEXT_NONE0 0
->>   #define VP9_RESET_FRAME_CONTEXT_NONE1 1
->> diff --git a/drivers/media/platform/qcom/venus/hfi.h 
->> b/drivers/media/platform/qcom/venus/hfi.h
->> index f25d412d6553..bd5ca5a8b945 100644
->> --- a/drivers/media/platform/qcom/venus/hfi.h
->> +++ b/drivers/media/platform/qcom/venus/hfi.h
->> @@ -10,6 +10,8 @@
->>
->>   #include "hfi_helper.h"
->>
->> +#define VB2_MAX_FRAME                          32
->> +
->>   #define VIDC_SESSION_TYPE_VPE                  0
->>   #define VIDC_SESSION_TYPE_ENC                  1
->>   #define VIDC_SESSION_TYPE_DEC                  2
->> diff --git a/drivers/media/platform/verisilicon/hantro_hw.h 
->> b/drivers/media/platform/verisilicon/hantro_hw.h
->> index e83f0c523a30..9e8faf7ba6fb 100644
->> --- a/drivers/media/platform/verisilicon/hantro_hw.h
->> +++ b/drivers/media/platform/verisilicon/hantro_hw.h
->> @@ -15,6 +15,8 @@
->>   #include <media/v4l2-vp9.h>
->>   #include <media/videobuf2-core.h>
->>
->> +#define VB2_MAX_FRAME  32
->> +
->>   #define DEC_8190_ALIGN_MASK    0x07U
->>
->>   #define MB_DIM                 16
->> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c 
->> b/drivers/staging/media/ipu3/ipu3-v4l2.c
->> index e530767e80a5..6627b5c2d4d6 100644
->> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
->> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
->> @@ -10,6 +10,8 @@
->>   #include "ipu3.h"
->>   #include "ipu3-dmamap.h"
->>
->> +#define VB2_MAX_FRAME  32
->> +
->>   /******************** v4l2_subdev_ops ********************/
->>
->>   #define IPU3_RUNNING_MODE_VIDEO                0
->> diff --git a/include/media/videobuf2-core.h 
->> b/include/media/videobuf2-core.h
->> index 77921cf894ef..080b783d608d 100644
->> --- a/include/media/videobuf2-core.h
->> +++ b/include/media/videobuf2-core.h
->> @@ -20,7 +20,6 @@
->>   #include <media/media-request.h>
->>   #include <media/frame_vector.h>
->>
->> -#define VB2_MAX_FRAME  (32)
->>   #define VB2_MAX_PLANES (8)
->>
->>   /**
->> diff --git a/include/media/videobuf2-v4l2.h 
->> b/include/media/videobuf2-v4l2.h
->> index 5a845887850b..88a7a565170e 100644
->> --- a/include/media/videobuf2-v4l2.h
->> +++ b/include/media/videobuf2-v4l2.h
->> @@ -15,10 +15,6 @@
->>   #include <linux/videodev2.h>
->>   #include <media/videobuf2-core.h>
->>
->> -#if VB2_MAX_FRAME != VIDEO_MAX_FRAME
->> -#error VB2_MAX_FRAME != VIDEO_MAX_FRAME
->> -#endif
->> -
->>   #if VB2_MAX_PLANES != VIDEO_MAX_PLANES
->>   #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
->>   #endif
->> -- 
->> 2.39.2
->>
+Thanks!
+
+Takashi
+
+
+> ---
+>  sound/hda/hdac_regmap.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/sound/hda/hdac_regmap.c b/sound/hda/hdac_regmap.c
+> index fe3587547cfe..39610a15bcc9 100644
+> --- a/sound/hda/hdac_regmap.c
+> +++ b/sound/hda/hdac_regmap.c
+> @@ -597,10 +597,9 @@ EXPORT_SYMBOL_GPL(snd_hdac_regmap_update_raw_once);
+>   */
+>  void snd_hdac_regmap_sync(struct hdac_device *codec)
+>  {
+> -	if (codec->regmap) {
+> -		mutex_lock(&codec->regmap_lock);
+> +	mutex_lock(&codec->regmap_lock);
+> +	if (codec->regmap)
+>  		regcache_sync(codec->regmap);
+> -		mutex_unlock(&codec->regmap_lock);
+> -	}
+> +	mutex_unlock(&codec->regmap_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(snd_hdac_regmap_sync);
+> -- 
+> 2.34.1
+> 
