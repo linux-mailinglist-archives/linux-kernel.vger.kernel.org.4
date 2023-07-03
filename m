@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303F77453A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 03:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6D87453AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 03:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbjGCBgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 21:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S229928AbjGCBop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 21:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGCBgG (ORCPT
+        with ESMTP id S229482AbjGCBoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 21:36:06 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A5C12E;
-        Sun,  2 Jul 2023 18:36:02 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 50EA48086;
-        Mon,  3 Jul 2023 09:35:49 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Jul
- 2023 09:35:49 +0800
-Received: from [192.168.125.124] (113.72.144.31) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 3 Jul
- 2023 09:35:47 +0800
-Message-ID: <d490987c-0d58-b38a-1886-decba64ba6a0@starfivetech.com>
-Date:   Mon, 3 Jul 2023 09:35:47 +0800
+        Sun, 2 Jul 2023 21:44:44 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ACB180;
+        Sun,  2 Jul 2023 18:44:43 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1b09276ed49so3690492fac.1;
+        Sun, 02 Jul 2023 18:44:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688348682; x=1690940682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UzvLGBb78WzT+NSXATynEClqZXzX48pg1vFx3CiBNYw=;
+        b=EgfQCxBpZeraUfHkaZIv/3KUueE10YsB3st6/N9VVUHmBpXGlkF1oMQbJs7jId7Vn4
+         oXw66Ml4aGrmkLNX/ILmhBDoErj723nIVkc0wt8tUB8QH4xSoaWsURmkWh7cQrme+MWh
+         L5+v2D6TAc1+aXrxr9m9FEjp0cNq+FQoG75b9JPW3j7pSikxjHv8Govg86Tdv4uksxPF
+         /Z28fJZuasPG8EQtp+UN9EWMjVp6zbRxxWMASruETO83731OAPT1ESwh7H+zIu6S3emB
+         w+mJE63Cpd3UsZBK7H7SA1QrRSjquYIOKUoIO1TdPsAOmyfWFiqQz2DSTRleQft502au
+         0K5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688348682; x=1690940682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UzvLGBb78WzT+NSXATynEClqZXzX48pg1vFx3CiBNYw=;
+        b=Bie7Lk8BweLgUGxqvpoyyoe786+Of5buQM/zySHr+yzQhOVXFouFVGyGt+Ov+P2CZj
+         4gHdzYSs19B3luNhP7cgl6SOVZ6zWmuxp5afaxzs9MLVW6QOb9tm84fdVaqSKjaPDJBt
+         0fCkZAMRKfnuPmBhS8daiTl6R+ivK8HzAApU9SEYPdmr/0Tk7HDHDN8XuMjAhWwsEfUd
+         uqIN9X86XXTGEm37LIp4/p7PizNLun6TJP2Bhkpg+lkNk2hYUzMF9KO1mSvBNjNsjuN1
+         leytiM3Cq1fhrvyA5P3uWXBc1hmTWFx+VH2z5FgtH/jU0rZPRgUhWMHyU0K/y0f0po70
+         wiXw==
+X-Gm-Message-State: ABy/qLYVAsw/qu4rSJCBvbA5qS5Wzrc1ivt1TTlIj3vXfqfgawED90U5
+        kw5XoHTIrkrpfrWOg2GyKoU=
+X-Google-Smtp-Source: ACHHUZ5EH/LbCpjfBuPbXJECS5srDN10ZuIVDwU5oqq/fJO2xypvld6QtyYlm1yVBzDX95ceWp2qew==
+X-Received: by 2002:a05:6870:332a:b0:1b0:39bc:857b with SMTP id x42-20020a056870332a00b001b039bc857bmr9803374oae.16.1688348682285;
+        Sun, 02 Jul 2023 18:44:42 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id h18-20020a63f912000000b0051b36aee4f6sm13686167pgi.83.2023.07.02.18.44.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 18:44:41 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id A0FF381BD580; Mon,  3 Jul 2023 08:44:37 +0700 (WIB)
+Date:   Mon, 3 Jul 2023 08:44:37 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LLVM <llvm@lists.linux.dev>
+Cc:     linux-kbuild@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Linux Regressions <regressions@list.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
+Message-ID: <ZKIoBVzrjZ+Ybxy9@debian.me>
+References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v6 4/4] riscv: dts: starfive: add dma controller node
-To:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
-        <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230322094820.24738-1-walker.chen@starfivetech.com>
- <20230322094820.24738-5-walker.chen@starfivetech.com>
- <ZKCiOQ0IuptKO8kr@aurel32.net>
-Content-Language: en-US
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <ZKCiOQ0IuptKO8kr@aurel32.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.31]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DuHJI7yAepGavJ2H"
+Content-Disposition: inline
+In-Reply-To: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,53 +80,63 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2023/7/2 6:01, Aurelien Jarno wrote:
-> On 2023-03-22 17:48, Walker Chen wrote:
->> Add the dma controller node for the Starfive JH7110 SoC.
->> 
->> Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
->> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
->> ---
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 18 ++++++++++++++++++
->>  1 file changed, 18 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index 17220576b21c..b503b6137743 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -510,6 +510,24 @@
->>  			#gpio-cells = <2>;
->>  		};
->>  
->> +		dma: dma-controller@16050000 {
->> +			compatible = "starfive,jh7110-axi-dma";
->> +			reg = <0x0 0x16050000 0x0 0x10000>;
->> +			clocks = <&stgcrg JH7110_STGCLK_DMA1P_AXI>,
->> +				 <&stgcrg JH7110_STGCLK_DMA1P_AHB>;
->> +			clock-names = "core-clk", "cfgr-clk";
->> +			resets = <&stgcrg JH7110_STGRST_DMA1P_AXI>,
->> +				 <&stgcrg JH7110_STGRST_DMA1P_AHB>;
->> +			interrupts = <73>;
->> +			#dma-cells = <1>;
->> +			dma-channels = <4>;
->> +			snps,dma-masters = <1>;
->> +			snps,data-width = <3>;
->> +			snps,block-size = <65536 65536 65536 65536>;
->> +			snps,priority = <0 1 2 3>;
->> +			snps,axi-max-burst-len = <16>;
->> +		};
->> +
->>  		aoncrg: clock-controller@17000000 {
->>  			compatible = "starfive,jh7110-aoncrg";
->>  			reg = <0x0 0x17000000 0x0 0x10000>;
-> 
-> It appears that this patch has never been applied, although the rest of
-> the series has already been merged. Unfortunately it doesn't apply
-> anymore due to other changes to that file.
-> 
-> Could you please rebase and repost it?
-> 
-Of course I will repost it, but this depends on whether the stg clock is merged.
+--DuHJI7yAepGavJ2H
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-Walker
+On Sun, Jul 02, 2023 at 06:36:12PM +0200, Mirsad Goran Todorovac wrote:
+> Hi,
+>=20
+> After new git pull the kernel in Torvalds tree with default debug config
+> failed to boot with error that occurs prior to mounting filesystems, so t=
+here
+> is no log safe for the screenshot(s) here:
+>=20
+> [1] https://domac.alu.unizg.hr/~mtodorov/linux/crashes/2023-07-02/
+>=20
+> Bisect shows the first bad commit is 2d47c6956ab3 (v6.4-rc2-1-g2d47c6956a=
+b3):
+>=20
+> # good: [98be618ad03010b1173fc3c35f6cbb4447ee2b07] Merge tag 'Smack-for-6=
+=2E5' of https://github.com/cschaufler/smack-next
+> git bisect good 98be618ad03010b1173fc3c35f6cbb4447ee2b07
+> # bad: [f4a0659f823e5a828ea2f45b4849ea8e2dd2984c] drm/i2c: tda998x: Repla=
+ce all non-returning strlcpy with strscpy
+> git bisect bad f4a0659f823e5a828ea2f45b4849ea8e2dd2984c
+> .
+> .
+> .
+> # bad: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BO=
+UNDS on GCC
+> git bisect bad 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c
+> # first bad commit: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tig=
+hten UBSAN_BOUNDS on GCC
+>=20
+> The architecture is Ubuntu 22.04 with lshw and config give in the attachm=
+ent.
+
+Can you show early kernel log (something like dmesg)?
+
+Anyway, I'm adding it to regzbot:
+
+#regzbot ^introduced: 2d47c6956ab3c8
+#regzbot title: Linux kernel fails to boot due to UBSAN_BOUNDS tightening
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--DuHJI7yAepGavJ2H
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZKIoBQAKCRD2uYlJVVFO
+o+n+AP0YhOC9dhrJZyu3ew0uQ0GImT1B+MAHP1QZiPylXfmiewD/V1rq7c7o5O8O
+MtlmxjtW/mpWiqQR2avMzL8LQRFGWAc=
+=8ZVa
+-----END PGP SIGNATURE-----
+
+--DuHJI7yAepGavJ2H--
