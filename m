@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326167465E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 00:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129897465ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 01:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjGCWyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 18:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S230256AbjGCW76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 18:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjGCWys (ORCPT
+        with ESMTP id S229591AbjGCW75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 18:54:48 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A461E6D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 15:54:47 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-c581c758ad8so1139788276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 15:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688424886; x=1691016886;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xn7vrbu5PqDTl7a51t/U7fc8ZrLjhxJkWnIqrCoiU4U=;
-        b=JHDhTSNEp+9zhQtG4YcXd+5itchw7KMtzGCR/WqbH/Wo9oyj0oTY8/OB7a3E424ODh
-         kKOFrBha6pLgOIVALJUWPSfARD/WeIFBBhRyZArS2vXBEk3WTZA3uMH5oO820xDX+PXh
-         h2Z5gk3ut/1EnUagV/DSqR5/64A5hIlCkuNcuX1dJknUf/5JzR7SLgiyhSD/2fbIeBVF
-         2BwhNXrqoEtVV6A8mxb/HGtPf1obvpvtLI90Ree+1NVNBl9J352ZshZxqHFjuiTxg3bJ
-         Tt0uYqGBsktC9EUxRz+Wwu+gE6Te8sPujyWQFnBXgRxWsQMRiNHFEqClkEKSkVA9ja4E
-         5rIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688424886; x=1691016886;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xn7vrbu5PqDTl7a51t/U7fc8ZrLjhxJkWnIqrCoiU4U=;
-        b=dFhpfi9uAGvjg/Kp2zYxWNydDY94pL0Q09Gp9HvGEtuYwWl/HlCnrdtZ5dUXnnIxNj
-         ZuXNVwHR2szQwzF4wP2/36XQ5U7BmrW1Wb+LOhhUyYxMWZxhtb3p4dwecnODrYIxnIOQ
-         sWtTn37PAZ5bHMQAOGga92OiAH/Icnpr6HkLA+V1F5R4rY7CHl1SaAyCduko3O+rBufC
-         /DE2UDPupADq8zxp3zFVgr6WKMkMuBb+JWnBCypM9wInArmau3eZevu/PpEtVYdq9zhw
-         Mx+Ptddk32Xf6+cqbguZbOXEv2OyaaEs6L5l64gmaUwDpDLi3FJdL74stHPEx8Xpjo5o
-         Kfmg==
-X-Gm-Message-State: ABy/qLZr2/39QQUWcGiivLftI351C3THiuzvIEZ+sHTEGlhtMsLUW9zm
-        NdlNrxganzlnnwx+5OI5thkUUsYXHC9RrnTU18W+eg==
-X-Google-Smtp-Source: APBJJlEouuF8/0ggK2G6w3HPfixNJv2NGicX8j6nANc49QLXr6neO8qeecRq3vcwS8pbfEtDLyvY14QIupaAIiJQacY=
-X-Received: by 2002:a25:d0e:0:b0:c19:d3e:f629 with SMTP id 14-20020a250d0e000000b00c190d3ef629mr10625615ybn.58.1688424886624;
- Mon, 03 Jul 2023 15:54:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230628-topic-refgen-v3-0-9fbf0e605d23@linaro.org> <20230628-topic-refgen-v3-4-9fbf0e605d23@linaro.org>
-In-Reply-To: <20230628-topic-refgen-v3-4-9fbf0e605d23@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 4 Jul 2023 01:54:35 +0300
-Message-ID: <CAA8EJpp3TaNikf7=y1AS7vM99jHEKYS0Cmy2AbqUAx3DvYmovA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] drm/msm/dsi: Hook up refgen regulator
+        Mon, 3 Jul 2023 18:59:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B091CE59;
+        Mon,  3 Jul 2023 15:59:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46D7B61077;
+        Mon,  3 Jul 2023 22:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD04C433C7;
+        Mon,  3 Jul 2023 22:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688425195;
+        bh=n19GJPDF+RLlje7pvmLVRX0hBah4pwQ3Uw2aRRWrRZ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q41tQHm/ucNfOIL/xk4eormseBx/XoFSNQ/sBCLP9p8bRKBXLlTMeDv2C9WxNYU2A
+         ag6MWrItzRfy4o74hBPcXL1c44UI7AvO8OUhFYQm7aqKuhffuPPB4lLzASpkf8/yOb
+         ATknLkheeSaDMtb3KwACZcqXtpdPhmJEU+aFbflVlr3QwN1nIZNyoGz0hY7K6+F11P
+         HLwnAn2acqoPTB6pjQbXL46BF+GCYDqJhfXz7/NSn1YDYFQKI2Hlz9Wt6vE5LesJNI
+         pMK/H4L3wWGuQPJ6I/KK45Ea3lLYiUz1PJOAChsfqSTYhzfP9x+vkDvrSCBsXSNgLr
+         7hu39ueiZOINQ==
+Date:   Mon, 3 Jul 2023 23:59:47 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Krishna Manikandan <quic_mkrishn@quicinc.com>,
@@ -69,11 +52,19 @@ Cc:     Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konradybcio@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        freedreno@lists.freedesktop.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 0/4] Qualcomm REFGEN regulator
+Message-ID: <b93cb054-fd42-46e5-aef3-dc41b36a85f9@sirena.org.uk>
+References: <20230628-topic-refgen-v3-0-9fbf0e605d23@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k23AuSsl7zkPANaU"
+Content-Disposition: inline
+In-Reply-To: <20230628-topic-refgen-v3-0-9fbf0e605d23@linaro.org>
+X-Cookie: Please go away.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,18 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 21:16, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Consume the refgen supply on configurations that may use it.
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed--by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+--k23AuSsl7zkPANaU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/gpu/drm/msm/dsi/dsi_cfg.c | 2 ++
->  1 file changed, 2 insertions(+)
+On Mon, Jul 03, 2023 at 08:15:53PM +0200, Konrad Dybcio wrote:
 
--- 
-With best wishes
-Dmitry
+> Recent Qualcomm SoCs have a REFGEN (reference voltage generator) regulator
+> responsible for providing a reference voltage to some on-SoC IPs (like DSI
+> or PHYs). It can be turned off when unused to save power.
+>=20
+> This series introduces the driver for it and lets the DSI driver
+> consume it.
+
+What's the expected plan for merging this - should I be applying the DRM
+patch?
+
+--k23AuSsl7zkPANaU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSjUuIACgkQJNaLcl1U
+h9C0igf/WJJjbSuyFnIa0QzDmk6VH8wPFNOpi/ZVp1QcD4+1z709iGwd35JHzOu4
+PvcjIxjBozoxzdVo7NpW0bxnwlZl/3e+3tAOIjpHp9odr49UTBZGcu9gwenlzIp4
+11xZldpE7ka90Pq5grV11HF6wtzBvXtNqpG8Md4LfW0+WhhDTmayfNIjXgnbNrar
+9y0IPQj460708CQ2rWcG9KKoBLnyT7K+/WKKwwekESMIY7i0JCA8WojeJmccyWCd
+wuKNBHyVRv9STOoP4hw7mEOHnaKvcT6FyavOBAlTcvKzMLKmEqi1WacuoSqM0xzl
+wrH1dj9NrcRO/Ih3DFwskbtMoc3YPQ==
+=wbYK
+-----END PGP SIGNATURE-----
+
+--k23AuSsl7zkPANaU--
