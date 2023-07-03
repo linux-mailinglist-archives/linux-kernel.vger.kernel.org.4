@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5671B746008
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF03474600B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjGCPnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S230120AbjGCPow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGCPnX (ORCPT
+        with ESMTP id S229505AbjGCPou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:43:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD89C2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:43:22 -0700 (PDT)
+        Mon, 3 Jul 2023 11:44:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3EC2;
+        Mon,  3 Jul 2023 08:44:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C045860FAF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 15:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506F2C433C7;
-        Mon,  3 Jul 2023 15:43:20 +0000 (UTC)
-Date:   Mon, 3 Jul 2023 11:43:18 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Dave Wysochanski <dwysocha@redhat.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Pavel Shilovsky <pshilov@microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ajay Kaher <akaher@vmware.com>
-Subject: Buggy rwsem locking code in fs/smb/client/file.c
-Message-ID: <20230703114318.1576ea24@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08EAD60C99;
+        Mon,  3 Jul 2023 15:44:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFE0C433C7;
+        Mon,  3 Jul 2023 15:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688399088;
+        bh=l0DvOL//USi2lqvRXSzMngtGqd5DmqlrA9BY0bMWvHg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BGjjc3nh/maweUxqtW5ytHIKQqicf4tPzLpdutzP//U4t/Rf+bicM1Ee8zmp7NXiN
+         svZU3pec+Vvv5UjedwGopBFkgNxYsGwFxW8vJ8lk3/i68JoIV2j5sQa58FS9WQil3C
+         HMol9tR+CxyQy+NjLAVlArXdB09bnEic8ygZXN99MTKCAjB0LyLOhA7xWHwD4zgi3/
+         L9pJv2c0rdPwA12B3bGKsZ7rtNuyBtseJ9ouT0W23+z+DcR7C5fPwYa0pd5PouyhSC
+         36/9rJpInWSHt/f7cPUjfMIRQlA2FipRf+bqV4o4QHybAXByVVj283bxUwh8Z9bwGY
+         LT+IHipJRWdfg==
+From:   Christian Brauner <brauner@kernel.org>
+To:     =?utf-8?q?Ahelenia_Ziemia=C5=84ska_=3Cnabijaczleweli=40nabijaczleweli=2E?=@vger.kernel.org,
+        =?utf-8?q?xyz=3E?=@vger.kernel.org
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/3] fanotify accounting for fs/splice.c
+Date:   Mon,  3 Jul 2023 17:44:15 +0200
+Message-Id: <20230703-heilkraft-wohlbefinden-1f293bd90cf3@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
+References: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1887; i=brauner@kernel.org; h=from:subject:message-id; bh=l0DvOL//USi2lqvRXSzMngtGqd5DmqlrA9BY0bMWvHg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQserNj1mHze3OnrVtvO9PQSe7GbLUVp1qNRFQWs9ddWhag e2TelI5SFgYxLgZZMUUWh3aTcLnlPBWbjTI1YOawMoEMYeDiFICJ+EszMly96Ckenbb36vGVvDmx/r orP6z5YLf1dOviG+6n5c2mbljL8L/YpId59eEfgUlndkrJ/Vgue3i3Qt/6t61dBhpekRNvT+YCAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I just reviewed a patch that copied a solution from
-fs/smb/client/file.c (original was fs/cifs/file.c), which is really
-just hiding a bug. And because this code could have possibly caused
-this buggy solution to be repeated, I believe it should be fixed,
-before others use it as precedent in other areas of the kernel.
+On Mon, 03 Jul 2023 16:42:05 +0200, Ahelenia Ziemiańska wrote:
+> Previously: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
+> 
+> In short:
+>   * most read/write APIs generate ACCESS/MODIFY for the read/written file(s)
+>   * except the [vm]splice/tee family
+>     (actually, since 6.4, splice itself /does/ generate events but only
+>      for the non-pipes being spliced from/to; this commit is Fixes:ed)
+>   * userspace that registers (i|fa)notify on pipes usually relies on it
+>     actually working (coreutils tail -f is the primo example)
+>   * it's sub-optimal when someone with a magic syscall can fill up a
+>     pipe simultaneously ensuring it will never get serviced
+> 
+> [...]
 
-Commit d46b0da7a33dd ("cifs: Fix cifsInodeInfo lock_sem deadlock when
-reconnect occurs") has in its change log:
+Fixed the missing single-line-{} after multi-line-{} style problem that
+Amir mentioned.
 
-    There's a deadlock that is possible and can easily be seen with
-    a test where multiple readers open/read/close of the same file
-    and a disruption occurs causing reconnect.  The deadlock is due
-    a reader thread inside cifs_strict_readv calling down_read and
-    obtaining lock_sem, and then after reconnect inside
-    cifs_reopen_file calling down_read a second time.  If in
-    between the two down_read calls, a down_write comes from
-    another process, deadlock occurs.
-    
-            CPU0                    CPU1
-            ----                    ----
-    cifs_strict_readv()
-     down_read(&cifsi->lock_sem);
-                                   _cifsFileInfo_put
-                                      OR
-                                   cifs_new_fileinfo
-                                    down_write(&cifsi->lock_sem);
-    cifs_reopen_file()
-     down_read(&cifsi->lock_sem);
-    
-    Fix the above by changing all down_write(lock_sem) calls to
-    down_write_trylock(lock_sem)/msleep() loop, which in turn
-    makes the second down_read call benign since it will never
-    block behind the writer while holding lock_sem.
+---
 
-And hides the bug by wrapping the down_write() with:
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-+void
-+cifs_down_write(struct rw_semaphore *sem)
-+{
-+       while (!down_write_trylock(sem))
-+               msleep(10);
-+}
-+
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-The comment above down_read_nested() has:
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-/*
- * nested locking. NOTE: rwsems are not allowed to recurse
- * (which occurs if the same task tries to acquire the same
- * lock instance multiple times), but multiple locks of the
- * same lock class might be taken, if the order of the locks
- * is always the same. This ordering rule can be expressed
- * to lockdep via the _nested() APIs, but enumerating the
- * subclasses that are used. (If the nesting relationship is
- * static then another method for expressing nested locking is
- * the explicit definition of lock class keys and the use of
- * lockdep_set_class() at lock initialization time.
- * See Documentation/locking/lockdep-design.rst for more details.)
- */
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-As the NOTE above states, down_read() is not a recursive lock, which
-appears to be what cifs is using it for. I wonder if it could be
-converted to using RCU instead.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
 
-I'm just bringing this to everyone's attention because that code really
-needs to be fixed.
-
--- Steve
+[1/3] splice: always fsnotify_access(in), fsnotify_modify(out) on success
+      https://git.kernel.org/vfs/vfs/c/cade9d70ce70
+[2/3] splice: fsnotify_access(fd)/fsnotify_modify(fd) in vmsplice
+      https://git.kernel.org/vfs/vfs/c/6aa55b7b85b5
+[3/3] splice: fsnotify_access(in), fsnotify_modify(out) on success in tee
+      https://git.kernel.org/vfs/vfs/c/6e7556086b19
