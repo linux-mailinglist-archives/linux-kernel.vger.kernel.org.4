@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C812D745581
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02424745585
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjGCGfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
+        id S230101AbjGCGgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjGCGfL (ORCPT
+        with ESMTP id S229482AbjGCGgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:35:11 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEB5BA
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688366110; x=1719902110;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/dPeAlBJmTopWuro2rTiMptBTV2ZiXDs8660987yeQg=;
-  b=hUYO6GbxH8pzd00tx6/rJjrj7iOAtxFOP6i5NF00wXLiKuVFIEKiaDt1
-   gdRhiAmQk8jPE6rwS6F86ggY3JSDp+IqZ4unMuyqZ8tPxFD1JQbv1eLEi
-   LH4ohLHodqd2Digu0EF2hT8fJXKmMMWOmySisV4LdyYjwPmt1FsVAj24h
-   2OcUFNqFzPJyN01+6354D9/enVnbksTHKWozX+zPxs3rrpcnMBtQZ6fKV
-   mqCn0cSYnjWUVJ2mBx1PyyzNN1gc2IXzvfjYkiweieWIni/pk3gky0ZZd
-   9+XQ55dob+zz8nij4id3OrSe+KQ2SJfT3I+o3fze5u2QFKpPz+OS+BD1O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="428846994"
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="428846994"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 23:35:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="788399197"
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="788399197"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Jul 2023 23:35:06 -0700
-From:   kah.jing.lee@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>, catalin.marinas@arm.com,
-        conor+dt@kernel.org, kah.jing.lee@intel.com,
-        krzysztof.kozlowski@linaro.org, Markus.Elfring@web.de
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org, will@kernel.org
-Subject: [PATCH v3 0/1]: Enable UBIFS support
-Date:   Mon,  3 Jul 2023 14:33:11 +0800
-Message-Id: <20230703063309.1342330-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Jul 2023 02:36:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE94BA;
+        Sun,  2 Jul 2023 23:36:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF9B660D57;
+        Mon,  3 Jul 2023 06:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7DFC433C7;
+        Mon,  3 Jul 2023 06:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688366202;
+        bh=UBJc1auuOFFqvw5warnQODe8BuMVkWvGCoyhmOm3m2o=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=hUWZeNfBu6atkNDe2zOlByfT5AtCmGTcbwIOBL1Cb61CjjOUhLRbMuIxdtRrukK2K
+         ROIL+eJjO6UIT4CJWK3q8QjnFx1uk2L1Y+12iW+3bR67o1+7r5LzLqnFJANJLmm1Xe
+         fPPml0S3pekKtrd7TRD93WSRJPvhchW8DDVdFonnEljD8IdeIekNdQyqMslu0Vp2x/
+         Dy25yWrRRzSY6DaPtQgDKFNtj+3GSIoJWKf+MB50tJ0zSYnqcyQADNg038pKlT1plC
+         +x6d60jfXuksl9MN+le6Fume9/5l/UBMv2jLaiAZApG7zMwoTF8Tx5tD0YulNcj7hK
+         QG71EKMY/JcFQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        linux-fsdevel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH 0/2] Two cross-compilation kselftest fixes
+In-Reply-To: <20230629162301.1234157-1-bjorn@kernel.org>
+References: <20230629162301.1234157-1-bjorn@kernel.org>
+Date:   Mon, 03 Jul 2023 08:36:38 +0200
+Message-ID: <87ilb11oy1.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,25 +58,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
 
-Hi,
-The patch is to update the qspi mtd partition range for UBIFS on
-socfpga platform - Agilex and Stratix10 boards.
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>
+> When you're cross-building kselftest, in this case RISC-V:
+>
+>   | make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-gnu- O=3D/tmp/kselfte=
+st \
+>   |   HOSTCC=3Dgcc FORMAT=3D SKIP_TARGETS=3D"arm64 ia64 powerpc sparc64 x=
+86 \
+>   |   sgx" -C tools/testing/selftests gen_tar
+>
+> the components (paths) that fail to build are skipped. In this case,
+> openat2 failed due to missing library support, and proc due to an
+> x86-64 only test.
+>
+> This tiny series addresses the problems above.
 
-Alif Zakuan Yuslaimi (1):
-  arm64: dts: agilex/stratix10: Updated QSPI Flash layout for UBIFS
+Shuah,
 
----
-v2: Update subject prefix and defconfig config place
-v3: Update commit message and drop defconfig patch since users can configure
-    in menuconfig
----
+Alexey submitted a series [1] that makes the 2nd patch of this series
+unnecessary . It's on Andrew's -mm tree.
 
- arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts | 8 ++++----
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts     | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Patch 1 is still relevant. I guess it can go via your tree, or the
+RISC-V tree.
 
--- 
-2.25.1
 
+Bj=C3=B6rn
+
+[1] https://lore.kernel.org/all/20230630183434.17434-2-adobriyan@gmail.com/
