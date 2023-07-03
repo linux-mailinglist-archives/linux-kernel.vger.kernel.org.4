@@ -2,142 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C827463EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 22:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF187463F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 22:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjGCUSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 16:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        id S230156AbjGCUTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 16:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbjGCUR4 (ORCPT
+        with ESMTP id S229653AbjGCUTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 16:17:56 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F74DE70
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 13:17:55 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b82afd519fso381885ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 13:17:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688415474; x=1691007474;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M1oX1CfdxJh2QCcl3/DLFnwZiVfUuA9OMZRWZ3EO/94=;
-        b=xSLVADKndPZ0kY+x4ESRJlpoZAVzR4TY3YjkqLF1Hk/DhmnHaBsKsRR5MAsprR8yTg
-         kDJTc0gIXXIXAJ/Ulo+S23CUqdNHby/32ubaUn30tcZOs3uhjyQPWFoEOxnEuC/juxJV
-         zo30mDnfTmv4xELZ3I05WiIGyAUhGo92NTwDNdXqlewgrvNqKWIeGk83RYWLvVlyzUry
-         RB6N4FowyeKXfBeqTnFA1Fzui6ZsSR+KehYXra9P13eVoIg81VdDNYRRgGoW6dlj9uPY
-         B3OjbSylm2ySCim1uOBfw0mBWsOVkWJfwYC4sg1AzlEIIxAjZcOvita9Q0/EKbIJQIt1
-         X/tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688415474; x=1691007474;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M1oX1CfdxJh2QCcl3/DLFnwZiVfUuA9OMZRWZ3EO/94=;
-        b=S4NzZfvYGXEdwh8PaH2DhjOsMuIO7a0un9x90wrMaLLJ6Raux3rO5vq4/5PRcLvdaQ
-         UIGoYd+uDCBu28iLUlo7dwKwjOR06m+u/MQBi2+LPFOBdLeJhEyReeOreWKa5Jh5HMnN
-         5WLJvnAzLV+R5n+UGabBd238R8L+ntpMQpYqYUxUOo/BBjaW4b3T9E4EQ8saICQ16HIu
-         neIE2lC3kxiwoDiAkdMeNXZ+GYXMSu3jylJGicCqxnvObb0dDwT2mv+1EJBsT8ZDxGIK
-         0/RntEHaTBael4RdOKdmVw+y/0U+UxVBytlo3gddylgmhz5VG5nnKqbny9Je3dcgFWvA
-         LTfw==
-X-Gm-Message-State: ABy/qLalAxxRP0yP9JO3bQ3J7HUMODCUcPvxygrwf+5ET1GfcyjHkijP
-        Y1DwL639Oxh/6YULBIyN+hfc+gkKlcbIvBD+5LknMA==
-X-Google-Smtp-Source: APBJJlHQXopX54fvX7CKUl1nWzeJsezc2kAAc7nqyiwzFaW+CH27dFqDPk6GxjU2uLlr/lONGgf7xQ==
-X-Received: by 2002:a17:903:22cf:b0:1b3:db56:9ca9 with SMTP id y15-20020a17090322cf00b001b3db569ca9mr24700plg.2.1688415474481;
-        Mon, 03 Jul 2023 13:17:54 -0700 (PDT)
-Received: from [2620:0:1008:15:17fc:1b56:71df:89b7] ([2620:0:1008:15:17fc:1b56:71df:89b7])
-        by smtp.gmail.com with ESMTPSA id q14-20020a170902dace00b001b893b689a0sm2600392plx.84.2023.07.03.13.17.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 13:17:54 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 13:17:53 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Julian Pidancet <julian.pidancet@oracle.com>
-cc:     Christoph Lameter <cl@linux.com>,
-        "Lameter, Christopher" <cl@os.amperecomputing.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v2] mm/slub: disable slab merging in the default
- configuration
-In-Reply-To: <CTSGWINSM18Q.3HQ1DN27GNA1R@imme>
-Message-ID: <8813897d-4a52-37a0-fe44-a9157716be9b@google.com>
-References: <20230629221910.359711-1-julian.pidancet@oracle.com> <38083ed2-333b-e245-44e4-2f355e4f9249@google.com> <CTSGWINSM18Q.3HQ1DN27GNA1R@imme>
+        Mon, 3 Jul 2023 16:19:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236BBE47;
+        Mon,  3 Jul 2023 13:19:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB4A360F1D;
+        Mon,  3 Jul 2023 20:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C3BC433C8;
+        Mon,  3 Jul 2023 20:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688415543;
+        bh=Bho0HWTGqswebYZftJzWBw9tCtS4GbuUl26UGY4111o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EaDV6colSSZJy2r0pAUsx/HkfOAC9iNVGAjWUQ+NcHJotEHb4Dt7xm2sZNUtTZ5O1
+         Cnqv93NYqRASXTUGHtl4eX48mhKGWzEaeqh6Cz8xlWfV77D3ssdGOY2CDGyjbIqfZ9
+         Wa1n7PT17REJTkUsOhNf4KvBIGF0RctiqvuT7hMmBvhorppJyg3CS/2Vdn4iHatPrv
+         2XcOn1ybTkRA4y7WMULaa90YFKbI6zj6vdtotb7XblYXqp654pplVE9MBwuTxNzNwM
+         DwF1Xwp1nzeOGPVD1QMLYBFI0W4UgRiGmhcudhsXhqoVSF3URniRcfV+ryXfHqNqL5
+         NTrTp54zDpccQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] remoteproc updates for v6.5
+Date:   Mon,  3 Jul 2023 13:22:46 -0700
+Message-ID: <20230703202248.3083122-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023, Julian Pidancet wrote:
 
-> On Mon Jul 3, 2023 at 02:09, David Rientjes wrote:
-> > I think we need more data beyond just kernbench.  Christoph's point about 
-> > different page sizes is interesting.  In the above results, I don't know 
-> > the page orders for the various slab caches that this workload will 
-> > stress.  I think the memory overhead data may be different depending on 
-> > how slab_max_order is being used, if at all.
-> >
-> > We should be able to run this through a variety of different benchmarks 
-> > and measure peak slab usage at the same time for due diligence.  I support 
-> > the change in the default, I would just prefer to know what the 
-> > implications of it is.
-> >
-> > Is it possible to collect data for other microbenchmarks and real-world 
-> > workloads?  And perhaps also with different page sizes where this will 
-> > impact memory overhead more?  I can help running more workloads once we 
-> > have the next set of data.
-> >
-> 
-> David,
-> 
-> I agree about the need to perform those tests on hardware using larger
-> pages. I will collect data if I have the chance to get my hands on one
-> of these systems.
-> 
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-Thanks.  I think arm64 should suffice for things like 64KB pages that 
-Christoph was referring to.
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-We also may want to play around with slub_min_order on the kernel command 
-line since that will inflate the size of slab pages and we may see some 
-different results because of the increased page size.
+are available in the Git repository at:
 
-> Do you have specific tests or workload in mind ? Compiling the kernel
-> with files sitting on an XFS partition is not exhaustive but it is the
-> only test I could think of that is both easy to set up and can be 
-> reproduced while keeping external interferences as little as possible.
-> 
+  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v6.5
 
-The ones that Binder, cc'd, used to evaluate SLAB vs SLUB memory overhead:
+for you to fetch changes up to 181da4bcc3d4bb4b58e3df481e72353925b36edd:
 
-hackbench
-netperf
-redis
-specjbb2015
-unixbench
-will-it-scale
+  remoteproc: qcom_q6v5_pas: staticize adsp_segment_dump() (2023-06-14 08:16:04 -0700)
 
-And Vlastimil had also suggested a few XFS specific benchmarks.
+----------------------------------------------------------------
+remoteproc updates for v6.5
 
-I can try to help run benchmarks that you're not able to run or if you 
-can't get your hands on an arm64 system.
+The bulk of these patches relates to the moving to a void-returning
+remove callback.
 
-Additionally, I wouldn't consider this to be super urgent: slab cache 
-merging has been this way for several years, we have some time to do an 
-assessment of the implications of changing an important aspect of kernel 
-memory allocation that will affect everybody.  I agree with the patch if 
-we can make it work, I'd just like to study the effect of it more fully 
-beyond some kernbench runs.
+The i.MX HiFi remoteproc driver gets its pm_ops helpers updated to
+resolve build warnings about "defined but not used" variables in certain
+configurations.
+
+The ST STM32 remoteproc driver is extended to allow using a SCMI reset
+controller to hold boot, and has an error message corrected.
+
+The Qualcomm Q6V5 PAS driver gains a missing "static" qualifier on
+adsp_segment_dump().
+
+----------------------------------------------------------------
+Arnaud Pouliquen (2):
+      dt-bindings: remoteproc: st,stm32-rproc: Rework reset declarations
+      remoteproc: stm32: Allow hold boot management by the SCMI reset controller
+
+Arnd Bergmann (1):
+      remoteproc: imx_dsp_rproc: use modern pm_ops
+
+Dan Carpenter (1):
+      remoteproc: stm32: Fix error code in stm32_rproc_parse_dt()
+
+Krzysztof Kozlowski (1):
+      remoteproc: qcom_q6v5_pas: staticize adsp_segment_dump()
+
+Uwe Kleine-König (18):
+      remoteproc: da8xx: Convert to platform remove callback returning void
+      remoteproc: imx_dsp: Convert to platform remove callback returning void
+      remoteproc: imx: Convert to platform remove callback returning void
+      remoteproc: keystone: Convert to platform remove callback returning void
+      remoteproc: meson_mx_ao_arc: Convert to platform remove callback returning void
+      remoteproc: mtk_scp: Convert to platform remove callback returning void
+      remoteproc: omap: Convert to platform remove callback returning void
+      remoteproc: pru: Convert to platform remove callback returning void
+      remoteproc: qcom_q6v5_adsp: Convert to platform remove callback returning void
+      remoteproc: qcom_q6v5_mss: Convert to platform remove callback returning void
+      remoteproc: qcom_q6v5_pas: Convert to platform remove callback returning void
+      remoteproc: qcom_q6v5_wcss: Convert to platform remove callback returning void
+      remoteproc: qcom_wcnss: Convert to platform remove callback returning void
+      remoteproc: rcar: Convert to platform remove callback returning void
+      remoteproc: virtio: Convert to platform remove callback returning void
+      remoteproc: st: Convert to platform remove callback returning void
+      remoteproc: stm32: Convert to platform remove callback returning void
+      remoteproc: wkup_m3: Convert to platform remove callback returning void
+
+ .../bindings/remoteproc/st,stm32-rproc.yaml        | 44 ++++++++++--
+ drivers/remoteproc/da8xx_remoteproc.c              |  6 +-
+ drivers/remoteproc/imx_dsp_rproc.c                 | 17 ++---
+ drivers/remoteproc/imx_rproc.c                     |  6 +-
+ drivers/remoteproc/keystone_remoteproc.c           |  6 +-
+ drivers/remoteproc/meson_mx_ao_arc.c               |  6 +-
+ drivers/remoteproc/mtk_scp.c                       |  6 +-
+ drivers/remoteproc/omap_remoteproc.c               |  6 +-
+ drivers/remoteproc/pru_rproc.c                     |  6 +-
+ drivers/remoteproc/qcom_q6v5_adsp.c                |  6 +-
+ drivers/remoteproc/qcom_q6v5_mss.c                 |  6 +-
+ drivers/remoteproc/qcom_q6v5_pas.c                 |  8 +--
+ drivers/remoteproc/qcom_q6v5_wcss.c                |  6 +-
+ drivers/remoteproc/qcom_wcnss.c                    |  6 +-
+ drivers/remoteproc/rcar_rproc.c                    |  6 +-
+ drivers/remoteproc/remoteproc_virtio.c             |  6 +-
+ drivers/remoteproc/st_remoteproc.c                 |  6 +-
+ drivers/remoteproc/stm32_rproc.c                   | 82 +++++++++++++++-------
+ drivers/remoteproc/wkup_m3_rproc.c                 |  6 +-
+ 19 files changed, 136 insertions(+), 105 deletions(-)
