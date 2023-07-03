@@ -2,159 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747517458C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0306F7458C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjGCJtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S231199AbjGCJsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjGCJsw (ORCPT
+        with ESMTP id S231195AbjGCJsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:48:52 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD5912C;
-        Mon,  3 Jul 2023 02:48:50 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-636220ca533so5573086d6.0;
-        Mon, 03 Jul 2023 02:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688377729; x=1690969729;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Or8dFWcZaZQ+0fBVUWIhSbo2VVRVHtdq1po7KsbeTx0=;
-        b=j89bmR0pEZdAh1wW0mtwaoyM9ZTL4bdljqEP1mBSHDe2uHocqrRTilD8XW5ziOwKWz
-         hrPZP28u0sBWfIS9859Pvk9/JKqxoQe1taeAF27ItcbIK8njFTg4dL1b8+tj4yVnnVFL
-         RMDgA0dgWjUu9gBAdFjAsdQoWGsnrAyzyUyLkwysrnp4AUMqNLSgzCb6LxHFb9Gd6huN
-         F9FT8Wi3HUJcnguNRJdPA0LHGCAYhm3mQ+Y4C30Q4nyG8e4+nXGlxkGVKaLGb1tWkhLV
-         shvBlXlVd4B1Se5f2fCmzjIIjVG00COmjnaQGfFwibQxKXQlg4rY5clf0bIdlHLA9mLO
-         n7lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688377729; x=1690969729;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Or8dFWcZaZQ+0fBVUWIhSbo2VVRVHtdq1po7KsbeTx0=;
-        b=Q6qMT0qcZUztVqEutltOmvCAbrf8Rsz1yK3Mum9qktoBiJW9jd5KRWQfk9xZL1RIAV
-         8yDmvm+qyb9FRR/J3sSdkN9Ab8EBtCEtN9Btc5N2hc/weMRn7zFiUskVNhHj13vF3m8f
-         JMv2iOsfVTeqx4Sdwakd+bkLzRpUcU8FPXdLgNrs5B+g5Chb3FUTrAXp0G1DIuUWHZwA
-         Dij+2iCEkIJjJ/z19bBZlcEkdCDFkwknyzo61bKaaXGmYwc1Nr2jv26HdaqsqkSMWdB0
-         fnoAMTGzdwW4pti5jt1Em2tCppqEPPV4kcfp8xKMuq2KRiukxMlfoZ0IsuNdxrUt4gXh
-         UEGw==
-X-Gm-Message-State: ABy/qLZRW9TrfKC2CrZnPZdIunbdKugAGnOdq6xvkrXzY2oQy7QrxwOU
-        JiqUvJr8qVI2slDQoW7pUwnVMzkE6Pt0l2u0Is9mnrbkMLc=
-X-Google-Smtp-Source: APBJJlHCHVbQdo+WqYTG17yAsz+Uxt6mkudWjoRztusl1dmRn2e+ADRNdeCGju1yyofs01i+BYhVnJamRuEwnxmaEe0=
-X-Received: by 2002:a05:6214:2685:b0:635:d9d0:cccf with SMTP id
- gm5-20020a056214268500b00635d9d0cccfmr10789245qvb.4.1688377728977; Mon, 03
- Jul 2023 02:48:48 -0700 (PDT)
+        Mon, 3 Jul 2023 05:48:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3055E73;
+        Mon,  3 Jul 2023 02:48:42 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 157D26602329;
+        Mon,  3 Jul 2023 10:48:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688377721;
+        bh=3nr4rR/iu3oTG2ydNtl+jv3WxDV732H20lVTt5rYlz4=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=AQNDlTnQo8nv0kUnxdjxYToKoHgGozT+EMXldZry8KOzjL30vXLsHmy0ewo7GNfwA
+         gAApfkepZBP1N8qucblQmVQZKsgIHc2ojR8WhGOqdczn0xbNdzEOllf5C3k3AkMKF2
+         z29wPgNGrX4gaba6bUKDB5pnUO2md/YMWkFeSMI2Y1ZnbsgHMQtUGT7jz5ZjFWcvKT
+         QnHgDDbUimyUfXJn5DhMgF8cDqop1f0Vm11//nP9dKPOPcw4zGgEt6Z91pIx2SVu2u
+         HPzWDx8Qxn9FYiSoT4KK9fzyzftutlTN8bqEFznw3zU4kqHbnQcj/45aSoHy3KUvSw
+         +BvRia539wk3A==
+Message-ID: <b4a8b79c-a237-b320-c88d-292fb0788fcf@collabora.com>
+Date:   Mon, 3 Jul 2023 11:48:38 +0200
 MIME-Version: 1.0
-References: <20230630145831.2988845-1-i.maximets@ovn.org>
-In-Reply-To: <20230630145831.2988845-1-i.maximets@ovn.org>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Mon, 3 Jul 2023 11:48:37 +0200
-Message-ID: <CAJ8uoz1TGjWuJKkZ8C9ZrQB0CDasik3A=qJs=xwdQP8cbn97VQ@mail.gmail.com>
-Subject: Re: [RFC bpf-next] xsk: honor SO_BINDTODEVICE on bind
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/2] ARM: dts: mediatek: minor whitespace cleanup around
+ '='
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230702185128.44052-1-krzysztof.kozlowski@linaro.org>
+ <20230702185128.44052-2-krzysztof.kozlowski@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230702185128.44052-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 at 16:58, Ilya Maximets <i.maximets@ovn.org> wrote:
->
-> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
-> A privileged process might create the socket and pass it to a
-> non-privileged process for later use.  However, that process will be
-> able to bind the socket to any network interface.  Even though it will
-> not be able to receive any traffic without modification of the BPF map,
-> the situation is not ideal.
->
-> Sockets already have a mechanism that can be used to restrict what
-> interface they can be attached to.  That is SO_BINDTODEVICE.
->
-> To change the binding the process will need CAP_NET_RAW.
->
-> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
-> workflow when non-privileged process is using AF_XDP.
+Il 02/07/23 20:51, Krzysztof Kozlowski ha scritto:
+> The DTS code coding style expects exactly one space before and after '='
+> sign.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Rebinding an AF_XDP socket is not allowed today. Any such attempt will
-return an error from bind. So if I understand the purpose of
-SO_BINDTODEVICE correctly, you could say that this option is always
-set for an AF_XDP socket and it is not possible to toggle it. The only
-way to "rebind" an AF_XDP socket is to close it and open a new one.
-This was a conscious design decision from day one as it would be very
-hard to support this, especially in zero-copy mode.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-> ---
->
-> Posting as an RFC for now to probably get some feedback.
-> Will re-post once the tree is open.
->
->  Documentation/networking/af_xdp.rst | 9 +++++++++
->  net/xdp/xsk.c                       | 6 ++++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-> index 247c6c4127e9..1cc35de336a4 100644
-> --- a/Documentation/networking/af_xdp.rst
-> +++ b/Documentation/networking/af_xdp.rst
-> @@ -433,6 +433,15 @@ start N bytes into the buffer leaving the first N bytes for the
->  application to use. The final option is the flags field, but it will
->  be dealt with in separate sections for each UMEM flag.
->
-> +SO_BINDTODEVICE setsockopt
-> +--------------------------
-> +
-> +This is a generic SOL_SOCKET option that can be used to tie AF_XDP
-> +socket to a particular network interface.  It is useful when a socket
-> +is created by a privileged process and passed to a non-privileged one.
-> +Once the option is set, kernel will refuse attempts to bind that socket
-> +to a different interface.  Updating the value requires CAP_NET_RAW.
-> +
->  XDP_STATISTICS getsockopt
->  -------------------------
->
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 5a8c0dd250af..386ff641db0f 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -886,6 +886,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
->         struct sock *sk = sock->sk;
->         struct xdp_sock *xs = xdp_sk(sk);
->         struct net_device *dev;
-> +       int bound_dev_if;
->         u32 flags, qid;
->         int err = 0;
->
-> @@ -899,6 +900,11 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
->                       XDP_USE_NEED_WAKEUP))
->                 return -EINVAL;
->
-> +       bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
-> +
-> +       if (bound_dev_if && bound_dev_if != sxdp->sxdp_ifindex)
-> +               return -EINVAL;
-> +
->         rtnl_lock();
->         mutex_lock(&xs->mutex);
->         if (xs->state != XSK_READY) {
-> --
-> 2.40.1
->
->
+
