@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2357A745CCD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6B1745CD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjGCND4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        id S231271AbjGCNEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjGCNDy (ORCPT
+        with ESMTP id S229599AbjGCNE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:03:54 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767AAC7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:03:50 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3143493728dso1503278f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688389429; x=1690981429;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cPBpk9U/09/3mwSB5bUrvUTAuq++fuN/NRKxbA7bKNo=;
-        b=hAy+BEYKnzd4+DmBw0GRbDQ1l88L7pEEpB2kO9554H/4kn61UlVe/JewCteAPvuSVE
-         tmHSfhdRmq/m2BO8bQ1qgGndwlyxlrIsSXXAYBEnR430VaszhPz+2tggA1hjNRjby+KP
-         EwZvL8n3NZO0qqnUXPAMkMhCXoP512GXkLhHr5OTUny1/ERP8Ex26t5hv3LYOMc2yO1B
-         S7C4C5WAY9ZROLBQBX+q17uc27P0Wl1l9w5z8s4vvVYM6INBw8kEhCI1dCJSaftfbi/J
-         r2JAepRR1Kn0tXpI/2p2zc657H8zKm4N8YnyIvL0PSLZ2vEx0WPq2hRN/TFVmAtKQheW
-         atnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688389429; x=1690981429;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cPBpk9U/09/3mwSB5bUrvUTAuq++fuN/NRKxbA7bKNo=;
-        b=ZUN92X5UyO6jQQ/ciq5bUXnZuOXNGwL7xFGJwp2/YrIbx1AzMK2kngMSZMiRAzU07u
-         4Zk21gV5SW+pSYlZN0tqo2YFJoSGlK7Z5FQyYiehPvclUZN1NiAvnblLp5ByvzEapSZ4
-         TNFls8fISaoQO7D9ieqG3GzW3c661MUQqbZnHcUz+7p7F5u1r2oEpll0UpwuTcCtOAhP
-         bEL8JQISJGmJe2CDDhEyNFlgEQvuYjzJuyltcjRHc/Ior1mbWwUT8mEWjrD3xmjIJ2wy
-         lFGnOheuY46/wTME2KlXQl/Ra1t71lMwqUrTDomUhTUjl2+gWn+s6l1zyRxm8p0U2rrl
-         xGVA==
-X-Gm-Message-State: ABy/qLbrnMxpY5QkwRBpZmK/lQB1gpLFf6sjRr6EO+dVkv6QsL2iFgnk
-        ueWn7OUYjJX2imGIXNLGdhyuHmATOUSIrf4IWxg=
-X-Google-Smtp-Source: APBJJlFzwWsag5H3B4fJAbl6Ppsd6Y16qbcXnimVTA19W+2BGHYWOjsyQihmyCv5gjCQoJYwvqbZ2w==
-X-Received: by 2002:a5d:5542:0:b0:314:3aa5:d285 with SMTP id g2-20020a5d5542000000b003143aa5d285mr1272124wrw.11.1688389428832;
-        Mon, 03 Jul 2023 06:03:48 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id d5-20020adff845000000b003141b9ddab3sm10587287wrq.114.2023.07.03.06.03.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 06:03:48 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 15:03:47 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 08/10] Documentation: admin-guide: Add riscv
- sysctl_perf_user_access
-Message-ID: <20230703-c7f3e773f50ed6c934662f3f@orel>
-References: <20230703124647.215952-1-alexghiti@rivosinc.com>
- <20230703124647.215952-9-alexghiti@rivosinc.com>
+        Mon, 3 Jul 2023 09:04:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B27C7;
+        Mon,  3 Jul 2023 06:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688389468; x=1719925468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oCgpW04UB0T6adNKQaJvNj1k+izTFprGjrj2QXmMcAQ=;
+  b=noFtevKFYo24HIL/2G7u35XpJribeN4ISEM8Ur84bERPYdNQoIAqEeor
+   f6ZkpCBkb9hbmm9FTrx4zvIzXwY9eLWdmm0BQXwzrWfRXRea4whe2idOV
+   6ZpmNOq7F6JQVEAwO+yI7RSu8WUyxNbHCX0lJ0/bsflOmUU0WMTDLFdtI
+   pLBXSbcZVFGJFC/ihfbguLk86OXyRb6Buryleu0rtZFKv7sA5sOALPiVY
+   lqGfrYVBFqRRItM6bUhqfe5IRqH7C0c75rOYFOgb/kh1+tqEwvQhFC9QG
+   H4ahKPUpSz0dY0iRIKug66qo2WMF0V2oC60jI2SVveXjwIgXocLoDts+O
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="449252038"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="449252038"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 06:04:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="808578079"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="808578079"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Jul 2023 06:04:05 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qGJDo-000HNb-0Q;
+        Mon, 03 Jul 2023 13:04:04 +0000
+Date:   Mon, 3 Jul 2023 21:03:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     oe-kbuild-all@lists.linux.dev, dlemoal@kernel.org,
+        Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        Dan Carpenter <error27@gmail.com>, stable@vger.kernel.org,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI
+ address
+Message-ID: <202307032003.1fpK28pS-lkp@intel.com>
+References: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230703124647.215952-9-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,60 +76,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 02:46:45PM +0200, Alexandre Ghiti wrote:
-> riscv now uses this sysctl so document its usage for this architecture.
-> 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  Documentation/admin-guide/sysctl/kernel.rst | 27 ++++++++++++++++++---
->  1 file changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index d85d90f5d000..19b627883313 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -941,16 +941,35 @@ enabled, otherwise writing to this file will return ``-EBUSY``.
->  The default value is 8.
->  
->  
-> -perf_user_access (arm64 only)
-> -=================================
-> +perf_user_access (arm64 and riscv only)
-> +=======================================
-> +
-> +Controls user space access for reading perf event counters.
->  
-> -Controls user space access for reading perf event counters. When set to 1,
-> -user space can read performance monitor counter registers directly.
-> +arm64
-> +=====
->  
->  The default value is 0 (access disabled).
->  
-> +When set to 1, user space can read performance monitor counter registers
-> +directly.
-> +
->  See Documentation/arm64/perf.rst for more information.
->  
-> +riscv
-> +=====
-> +
-> +When set to 0, user space access is disabled.
-> +
-> +The default value is 1, user space can read performance monitor counter
-> +registers through perf, any direct access without perf intervention will trigger
-> +an illegal instruction.
-> +
-> +When set to 2, which enables legacy mode (user space has direct access to cycle
-> +and insret CSRs only). Note that this legacy value is deprecated and will be
-> +removed once all user space applications are fixed.
-> +
-> +Note that the time CSR is always directly accessible to all modes.
->  
->  pid_max
->  =======
-> -- 
-> 2.39.2
->
+Hi Rick,
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on pci/next]
+[also build test WARNING on linus/master next-20230703]
+[cannot apply to pci/for-linus v6.4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Rick-Wertenbroek/PCI-rockchip-Use-64-bit-mask-on-MSI-64-bit-PCI-address/20230703-165959
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20230703085845.2052008-1-rick.wertenbroek%40gmail.com
+patch subject: [PATCH v2] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI address
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230703/202307032003.1fpK28pS-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230703/202307032003.1fpK28pS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307032003.1fpK28pS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/bitops.h:6,
+                    from include/linux/log2.h:12,
+                    from include/asm-generic/div64.h:55,
+                    from arch/arm/include/asm/div64.h:107,
+                    from include/linux/math.h:6,
+                    from include/linux/math64.h:6,
+                    from include/linux/time.h:6,
+                    from include/linux/stat.h:19,
+                    from include/linux/configfs.h:22,
+                    from drivers/pci/controller/pcie-rockchip-ep.c:11:
+   drivers/pci/controller/pcie-rockchip-ep.c: In function 'rockchip_pcie_prog_ep_ob_atu':
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:167:49: note: in expansion of macro 'PCIE_ADDR_MASK'
+     167 | #define   PCIE_CORE_OB_REGION_ADDR0_LO_ADDR     PCIE_ADDR_MASK
+         |                                                 ^~~~~~~~~~~~~~
+   drivers/pci/controller/pcie-rockchip-ep.c:77:44: note: in expansion of macro 'PCIE_CORE_OB_REGION_ADDR0_LO_ADDR'
+      77 |                 (lower_32_bits(pci_addr) & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/asm-generic/div64.h:27:
+   drivers/pci/controller/pcie-rockchip-ep.c: In function 'rockchip_pcie_ep_send_msi_irq':
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip-ep.c:394:54: note: in expansion of macro 'PCIE_ADDR_MASK'
+     394 |         if (unlikely(ep->irq_pci_addr != (pci_addr & PCIE_ADDR_MASK) ||
+         |                                                      ^~~~~~~~~~~~~~
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip-ep.c:399:57: note: in expansion of macro 'PCIE_ADDR_MASK'
+     399 |                                              pci_addr & PCIE_ADDR_MASK,
+         |                                                         ^~~~~~~~~~~~~~
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip-ep.c:400:47: note: in expansion of macro 'PCIE_ADDR_MASK'
+     400 |                                              ~PCIE_ADDR_MASK + 1);
+         |                                               ^~~~~~~~~~~~~~
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip-ep.c:401:48: note: in expansion of macro 'PCIE_ADDR_MASK'
+     401 |                 ep->irq_pci_addr = (pci_addr & PCIE_ADDR_MASK);
+         |                                                ^~~~~~~~~~~~~~
+   In file included from include/linux/io.h:13,
+                    from include/linux/irq.h:20,
+                    from include/asm-generic/hardirq.h:17,
+                    from arch/arm/include/asm/hardirq.h:10,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from include/linux/pci.h:38,
+                    from include/linux/pci-epf.h:15,
+                    from include/linux/pci-epc.h:12,
+                    from drivers/pci/controller/pcie-rockchip-ep.c:15:
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   arch/arm/include/asm/io.h:281:75: note: in definition of macro 'writew_relaxed'
+     281 | #define writew_relaxed(v,c)     __raw_writew((__force u16) cpu_to_le16(v),c)
+         |                                                                           ^
+   drivers/pci/controller/pcie-rockchip-ep.c:405:9: note: in expansion of macro 'writew'
+     405 |         writew(data, ep->irq_cpu_addr + (pci_addr & ~PCIE_ADDR_MASK));
+         |         ^~~~~~
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip-ep.c:405:54: note: in expansion of macro 'PCIE_ADDR_MASK'
+     405 |         writew(data, ep->irq_cpu_addr + (pci_addr & ~PCIE_ADDR_MASK));
+         |                                                      ^~~~~~~~~~~~~~
+--
+   In file included from include/linux/bitops.h:6,
+                    from include/linux/kernel.h:22,
+                    from include/linux/clk.h:13,
+                    from drivers/pci/controller/pcie-rockchip-host.c:15:
+   drivers/pci/controller/pcie-rockchip-host.c: In function 'rockchip_pcie_prog_ob_atu':
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:167:49: note: in expansion of macro 'PCIE_ADDR_MASK'
+     167 | #define   PCIE_CORE_OB_REGION_ADDR0_LO_ADDR     PCIE_ADDR_MASK
+         |                                                 ^~~~~~~~~~~~~~
+   drivers/pci/controller/pcie-rockchip-host.c:733:35: note: in expansion of macro 'PCIE_CORE_OB_REGION_ADDR0_LO_ADDR'
+     733 |         ob_addr_0 |= lower_addr & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/pcie-rockchip-host.c: In function 'rockchip_pcie_prog_ib_atu':
+>> include/linux/bits.h:35:18: warning: right shift count is negative [-Wshift-count-negative]
+      35 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:37:38: note: in expansion of macro '__GENMASK'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:163:41: note: in expansion of macro 'GENMASK'
+     163 | #define PCIE_ADDR_MASK                  GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
+         |                                         ^~~~~~~
+   drivers/pci/controller/pcie-rockchip.h:175:49: note: in expansion of macro 'PCIE_ADDR_MASK'
+     175 | #define   PCIE_CORE_IB_REGION_ADDR0_LO_ADDR     PCIE_ADDR_MASK
+         |                                                 ^~~~~~~~~~~~~~
+   drivers/pci/controller/pcie-rockchip-host.c:767:42: note: in expansion of macro 'PCIE_CORE_IB_REGION_ADDR0_LO_ADDR'
+     767 |         ib_addr_0 |= (lower_addr << 8) & PCIE_CORE_IB_REGION_ADDR0_LO_ADDR;
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +35 include/linux/bits.h
+
+295bcca84916cb Rikard Falkeborn 2020-04-06  32  
+295bcca84916cb Rikard Falkeborn 2020-04-06  33  #define __GENMASK(h, l) \
+95b980d62d52c4 Masahiro Yamada  2019-07-16  34  	(((~UL(0)) - (UL(1) << (l)) + 1) & \
+95b980d62d52c4 Masahiro Yamada  2019-07-16 @35  	 (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+295bcca84916cb Rikard Falkeborn 2020-04-06  36  #define GENMASK(h, l) \
+295bcca84916cb Rikard Falkeborn 2020-04-06  37  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+8bd9cb51daac89 Will Deacon      2018-06-19  38  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
