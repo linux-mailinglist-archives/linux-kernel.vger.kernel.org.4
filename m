@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DF4746156
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F29674615A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjGCRWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S231261AbjGCRX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjGCRWr (ORCPT
+        with ESMTP id S229932AbjGCRXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:22:47 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F76E60;
-        Mon,  3 Jul 2023 10:22:43 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-777a6ebb542so183473939f.0;
-        Mon, 03 Jul 2023 10:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688404962; x=1690996962;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BnKwwBMUflpvArQ9dgNRUkrt++2jq7wbS1H/2FICAXE=;
-        b=gS57i0sYM8MpwaJcA9vfG5DIl4TCd5/sGeypkK2nA9HNLeX3cUJA8b9dI1EUWE0q3K
-         A4Nsotm5LWTJB5OcIXzQOSTqaICubkOnvulplKJ2VKgRU4jom151lbzidTnhEpnwxjGb
-         agrEWg3pfLAFCAA3cT1lGYP4AKdnSajm7ezIDPAk/6mhi1/yb/5iU18k6N5L6vvxeitd
-         oJKN1AlD3dIQPPo9EeMUMuoWpIGI2JWSNCmHkQfWqHseWADCbKlmtH/zAXnUZzLS6cCh
-         j9SEo1dF9Pjs5qj8/QwRC1ViOdxqxjytL0Dw2pR/3Zw/+Eg9c0rucACdrGp8ca6hK3to
-         N2Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688404962; x=1690996962;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BnKwwBMUflpvArQ9dgNRUkrt++2jq7wbS1H/2FICAXE=;
-        b=N7MiQnq7MSGxB84/Mo1624eM/qCY4rnwtKfr7SlhtNPM1Xi72Ytz+d5wwA4UAS9p/u
-         WJJ3FcPHtFkq5hv0qk9s8vPgWZPka+dknZLmpiISGqHQ6HElhQRo1ZaxYubDKZCHxI21
-         0e2ydMvNOkhqIHchhgsTRrf64zj0zvex01yxhHN4JbLJP/fqx8/WRon64yQfQqRCxM/L
-         we0WP/4bvTGt8141R/menPWmnQMaQfZl3/zxCQu428u1HBrddNTijQ2uUvCGJgJT8lQk
-         uup/AkCDn/GyROxDBbYOq+mqjBvEAcXScJ8M5czWDNWHIJy1fDy+pufJt2xRZTlmzNoQ
-         Nk0w==
-X-Gm-Message-State: AC+VfDxlD1NCq9qLA0gfPcbuFB+10cS60OZZLXzkUrtBhCXpz7muJLUt
-        oqMpqPTU0zpDQcXM2Q0SF6M=
-X-Google-Smtp-Source: ACHHUZ6XJi0K1PCW7k+QpZdwdcS6iMy4VV6gsMtUim2gW+bPLuVVGHN14vOsYfMttAOkK1skD74aNQ==
-X-Received: by 2002:a5e:c64c:0:b0:784:314f:8d5b with SMTP id s12-20020a5ec64c000000b00784314f8d5bmr11030969ioo.11.1688404962269;
-        Mon, 03 Jul 2023 10:22:42 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id ed22-20020a056638291600b0042b3e2e5ca1sm1033860jab.122.2023.07.03.10.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 10:22:42 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Kees Cook <keescook@chromium.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 2/2] blk-wbt: Replace strlcpy with strscpy
-Date:   Mon,  3 Jul 2023 17:21:59 +0000
-Message-ID: <20230703172159.3668349-3-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-In-Reply-To: <20230703172159.3668349-1-azeemshaikh38@gmail.com>
-References: <20230703172159.3668349-1-azeemshaikh38@gmail.com>
+        Mon, 3 Jul 2023 13:23:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D68E5D;
+        Mon,  3 Jul 2023 10:23:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 864F360FD8;
+        Mon,  3 Jul 2023 17:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9880BC433C7;
+        Mon,  3 Jul 2023 17:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688405033;
+        bh=HqoN+ykT6mcx6CD/Ub4vmYOWlAUj2Sw0KQddslJPPDs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dqWzK3zrOi4s/PD7nVSHt10ysL9pI4UiMx8ZhJMul+Wf8QpZZ7azO7KoaO37KGPnQ
+         35M/lCZY9wt2iu31FiNlO2x52ufOgZBw969Ge6Fr4NymYTs10AfFn64i823I6ZSCzU
+         ztMgHEeDbyK0BmjQupnqFLgy5+8OAp+k/HM3pFyUEZ0+KmI8c06n2kkSWKQ1VRBlSn
+         6KYo0ZBSf7Z6+kMT3VPw9GJ+yOwubUywRMHJA+7aXZRfmlFFtSWHk2liHgoiMqQ3FZ
+         IfBKRbp1pVA+AEW2zOdecKTwPEGqJ8PD+mVLsR8d7DfG3pdZzTW+sE6dwAFXLdpRLp
+         vKVdtwwgK4mDw==
+Message-ID: <011d3204-5c33-782c-41d1-53bf9bd2e095@kernel.org>
+Date:   Mon, 3 Jul 2023 11:23:51 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
+ page_pool: remove PP_FLAG_PAGE_FRAG flag)
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+References: <20230612130256.4572-1-linyunsheng@huawei.com>
+ <20230612130256.4572-5-linyunsheng@huawei.com>
+ <20230614101954.30112d6e@kernel.org>
+ <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
+ <20230615095100.35c5eb10@kernel.org>
+ <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
+ <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com>
+ <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
+ <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
+ <20230616122140.6e889357@kernel.org>
+ <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
+ <20230619110705.106ec599@kernel.org>
+ <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
+ <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
+ <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+ <47b79e77-461b-8fe9-41fb-b69a6b205ef2@kernel.org>
+ <CANn89iKAvrf92Fy8a_M+V9eya6OHokey2_yxQ3JiCT87fKND_w@mail.gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <CANn89iKAvrf92Fy8a_M+V9eya6OHokey2_yxQ3JiCT87fKND_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
+On 7/3/23 11:13 AM, Eric Dumazet wrote:
+> diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+> index a2dbeb264f260e5b8923ece9aac99fe19ddfeb62..aa4133d1b1e0676e408499ea4534b51262394432
+> 100644
+> --- a/net/packet/af_packet.c
+> +++ b/net/packet/af_packet.c
+> @@ -2152,7 +2152,7 @@ static int packet_rcv(struct sk_buff *skb,
+> struct net_device *dev,
+>                 }
+>         }
+> 
+> -       snaplen = skb->len;
+> +       snaplen = skb->devmem ? skb_headlen(skb) : skb->len;
+> 
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+Ok, so you expect a flag on the skb noting the use of 'untouchable'
+memory. That aligns with my expectations based on POCs.
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- include/trace/events/wbt.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/trace/events/wbt.h b/include/trace/events/wbt.h
-index 9c66e59d859c..4661f0d27062 100644
---- a/include/trace/events/wbt.h
-+++ b/include/trace/events/wbt.h
-@@ -33,7 +33,7 @@ TRACE_EVENT(wbt_stat,
- 	),
- 
- 	TP_fast_assign(
--		strlcpy(__entry->name, bdi_dev_name(bdi),
-+		strscpy(__entry->name, bdi_dev_name(bdi),
- 			ARRAY_SIZE(__entry->name));
- 		__entry->rmean		= stat[0].mean;
- 		__entry->rmin		= stat[0].min;
-@@ -68,7 +68,7 @@ TRACE_EVENT(wbt_lat,
- 	),
- 
- 	TP_fast_assign(
--		strlcpy(__entry->name, bdi_dev_name(bdi),
-+		strscpy(__entry->name, bdi_dev_name(bdi),
- 			ARRAY_SIZE(__entry->name));
- 		__entry->lat = div_u64(lat, 1000);
- 	),
-@@ -105,7 +105,7 @@ TRACE_EVENT(wbt_step,
- 	),
- 
- 	TP_fast_assign(
--		strlcpy(__entry->name, bdi_dev_name(bdi),
-+		strscpy(__entry->name, bdi_dev_name(bdi),
- 			ARRAY_SIZE(__entry->name));
- 		__entry->msg	= msg;
- 		__entry->step	= step;
-@@ -141,7 +141,7 @@ TRACE_EVENT(wbt_timer,
- 	),
- 
- 	TP_fast_assign(
--		strlcpy(__entry->name, bdi_dev_name(bdi),
-+		strscpy(__entry->name, bdi_dev_name(bdi),
- 			ARRAY_SIZE(__entry->name));
- 		__entry->status		= status;
- 		__entry->step		= step;
--- 
-2.41.0.255.g8b1d071c50-goog
-
+Based on the above: 1) skb->head is expected to be host memory, and 2)
+the flag is a global for all frags, so no mix and match.
