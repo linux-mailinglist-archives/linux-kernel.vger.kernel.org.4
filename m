@@ -2,406 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453047453E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753D77453E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjGCCk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 22:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        id S229820AbjGCCru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 22:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjGCCk6 (ORCPT
+        with ESMTP id S229605AbjGCCrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 22:40:58 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2134.outbound.protection.outlook.com [40.107.255.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01471E4F;
-        Sun,  2 Jul 2023 19:40:14 -0700 (PDT)
+        Sun, 2 Jul 2023 22:47:48 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12hn2212.outbound.protection.outlook.com [52.100.165.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A5E18F;
+        Sun,  2 Jul 2023 19:47:46 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mtZovj7kwTn1PF6YtgJSjCVtnjO5BZA5khG/s5nsojpz+ZyBf9shJxyUILknQStwXnOzyLSLQ9EXG2fBBaeTxzqaFzILkG4Nh1XuDZKugC5ZIydnTFG6aFNn1a4Z9MS1zZbuT43UJsi0rztKcmFVahUJjikmKtcp6+9jPJEtJKq25jHlnoQIp31YRWEExrzG745m8yaTADDkktxdolJaG5p1ILn2MBhBqppKMmpI1MK/lDkRGZQ8K7rmuL9Ekq19qlqP0erIG/APmgyaBhi+NY35JXWPsYsLQbcerSM1wq7oyPkTJK2hYVyPsSiNZA7lb03+zsYRTXz4UVsUmcZV+g==
+ b=XouX/K5qVA/IqlKFFNxRT/GZbtXIPw63KD36eIFFPr7W/qD+0OFtljy4mEJWkIl5lzu/Wtn9WPiqOsyEn+MnQcY/0ca8h3u6S7+s5jNJ6dMHgADNCUMUeqlpdn6IczXP8d1lioSgk/F2rARC+gjj3hSu1fFNjiEl7FzDZ6IRlJllDvEWmgMHVBlbsXlNjG+EpLWVSIMnam6O6j4YWYj20DSwcCsTmJsVPtjMiyt6HEYHiiZqBSJTzOvMNrl9kBRg3VGP7rcB0KfUb6OrMWDZLnUhXbc0kRdzPRyT85x69InjmNK/vKwzx9CrVblqEaCFSfxEOT4Rb9mpsxNPruKWYQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aMUm5xAJ8HsQBLRBpp+z0oedH6yZCkxmY8Mx2idU8Yo=;
- b=Jql3xnoGVrY+bmJDBKcMyBOEDPjDb7K9yRjch63jPoXy+DgZ/0gSYiDdkmKUEcZrYBHp4q1Eb7f5k26INur54j5rnQbsavcgDQo6/sbIKU1veoqb/BV4ArQXvKVQQW+auRlTBnccySsO1xkbLFzbISE2PM1kk58GUXjzJ+hEijZHm5mKp12yV6x3SQpr0VAUx/a2eL/bOC5ddK/02e6GNrc7CjgQhAHfF+CBNb9RQC7WVyEoA+u893UOd9ciUBppywUdfiFNG1YUuOr1W6fQ62tHAGC81lAbn5QuPit3FkxBE4k2fdoXnmgcf9r1gWELimqe6lNeRuTNtl0S6ffNsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
+ bh=SKncvf/Vi4+B2gbr+MyBeAkT5AE7qUlzVoUCKtgSdVk=;
+ b=Z1Vm1IcT9YAe5ItkS/YPOe49aVIBJOJbqPnRF7DCYH9hN6Akdhh5/5V2Fxe0xpb+D2yAektqwc8PudJPHahbuw9Ls6H7g1quO1V2e/meowhYmQmSrmyHCcDp8E3ZMXEcjNT7wIQTpP25umHkU4g1/At7L7TQbBmHkDSA/Qrnu2x3NWby1TSpe9tBBUi3ZvyomYkKdD+UG10WbpmED/clD17OHeZI400M6FTlxzJ5TkG36QRl5zD7AeUMns7vv3l7omPLPjI5W0Su8eyIk5TJGkSrcz24jO+ED6FOhtp+Mlb5CG8QBg4b3vyWVT3HYs3I7GDOctCHj+H+nUCz6Qxg4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 192.147.44.155) smtp.rcpttodomain=gmail.com smtp.mailfrom=tw.synaptics.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=tw.synaptics.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aMUm5xAJ8HsQBLRBpp+z0oedH6yZCkxmY8Mx2idU8Yo=;
- b=pGGKNQaQE6vy0KnZZxsKokDIhgR4M5JKkJlVQB+UAPFC2dVGgYWxRnTKI8BtSso9Sm7V5C7aEeWTznRdZnE0aF4PWDiXsPoP0ou2Q4NUlL/X1fke7IGtPED0HpmHgkPFa9mRFL6EbUlI31cL6yDGGjYl6cxTJ0Hhwv8NSJU9B6o9sjYFO9mN5LG648r0IWghNiEX4MotBuYBc7ZRGNGoZy2UVRWAUrbvG7v18hHynnc8Sv9BQ1cvxT197ZPsI/mbbfl7gCYBy62BnJJ5H2thLpaGRaMH5z+bJTUqAIMLleTrI15yst+D4WENRZGmha3hzyvxcqkFYdTQmSnbLvbU+A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com (2603:1096:400:289::14)
- by TY0PR03MB6451.apcprd03.prod.outlook.com (2603:1096:400:1ac::12) with
+ bh=SKncvf/Vi4+B2gbr+MyBeAkT5AE7qUlzVoUCKtgSdVk=;
+ b=FCaZEFG1afjHzpahxgDaTU3m0URP9i1j4OjnkzBJqMzJvbQoFROA6o1C42KH9KYuTrOG2fyCtUBAEE/3f8a3zd2QPRspx1I4h5E7CaWxdAI5PSPk//+hN/Ggk9kjJVvACIfplqzNcQjUAL/XSxDIdMFCUQpj8fY6b0DVyZy0K/o=
+Received: from BN9P223CA0029.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::34)
+ by SJ0PR03MB5565.namprd03.prod.outlook.com (2603:10b6:a03:27a::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
- 2023 02:40:08 +0000
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::c478:28ff:9d91:61f5]) by TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::c478:28ff:9d91:61f5%5]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
- 02:40:07 +0000
-Message-ID: <b7aea1f3-1850-4e09-6e76-5e8c8c2851bf@amlogic.com>
-Date:   Mon, 3 Jul 2023 10:39:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 4/4] arm64: dts: amlogic-t7-a311d2-khadas-vim4: add
- initial device-tree
-To:     Lucas Tanure <tanure@linux.com>
-Cc:     Nick <nick@khadas.com>, Artem <art@khadas.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-References: <20230629073419.207886-1-tanure@linux.com>
- <20230629073419.207886-5-tanure@linux.com>
-Content-Language: en-US
-From:   Xianwei Zhao <xianwei.zhao@amlogic.com>
-In-Reply-To: <20230629073419.207886-5-tanure@linux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0028.apcprd02.prod.outlook.com
- (2603:1096:4:195::8) To TYZPR03MB6896.apcprd03.prod.outlook.com
- (2603:1096:400:289::14)
+ 2023 02:47:43 +0000
+Received: from BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10b:cafe::f4) by BN9P223CA0029.outlook.office365.com
+ (2603:10b6:408:10b::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.26 via Frontend
+ Transport; Mon, 3 Jul 2023 02:47:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 192.147.44.155)
+ smtp.mailfrom=tw.synaptics.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=tw.synaptics.com;
+Received-SPF: Pass (protection.outlook.com: domain of tw.synaptics.com
+ designates 192.147.44.155 as permitted sender)
+ receiver=protection.outlook.com; client-ip=192.147.44.155;
+ helo=365hybrid.synaptics.com; pr=C
+Received: from 365hybrid.synaptics.com (192.147.44.155) by
+ BN8NAM11FT111.mail.protection.outlook.com (10.13.177.54) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.47 via Frontend Transport; Mon, 3 Jul 2023 02:47:42 +0000
+Received: from SJC1WVP-OPEX01.synaptics-inc.local (10.20.148.252) by
+ SJC1WVP-OPEX01.synaptics-inc.local (10.20.148.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.12; Sun, 2 Jul 2023 19:47:40 -0700
+Received: from sjc1uvd-bld04.synaptics.com (10.20.70.64) by
+ SJC1WVP-OPEX01.synaptics-inc.local (10.20.148.252) with Microsoft SMTP Server
+ id 15.2.1258.12 via Frontend Transport; Sun, 2 Jul 2023 19:47:40 -0700
+From:   Marge Yang <marge.yang@tw.synaptics.com>
+To:     <dmitry.torokhov@gmail.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <marge.yang@tw.synaptics.com>
+CC:     <david.chiu@tw.synaptics.com>, <derek.cheng@tw.synaptics.com>,
+        <sam.tsai@synaptics.com>, <vincent.huang@tw.synaptics.com>
+Subject: [PATCH V3] Input: synaptics-rmi4- Add a new feature for Forepad.
+Date:   Mon, 3 Jul 2023 02:47:36 +0000
+Message-ID: <20230703024736.80044-1-marge.yang@tw.synaptics.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR03MB6896:EE_|TY0PR03MB6451:EE_
-X-MS-Office365-Filtering-Correlation-Id: b40e7521-8637-4139-f98a-08db7b6ecfd2
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT111:EE_|SJ0PR03MB5565:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0af7b6d0-0ffe-4456-7832-08db7b6fdfb4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3P+nJFYZb2VcZBVOih65jMnRq0DrqtmxAkjXSeSCi7d7wJv/twkMnk5YvAYUAa6bjWFyjHG1kJGDmJ1g6z3Sg/A/Hq/T/Jh9cADKc4GcIRjUTlFpax9qURQEEWaBWQ8zgsyiqIQgBi8dTUOzRLlsMZUKwfQOVnXfUj5XIuermYTqkv0X5NHQQpwDZEJHRLr8nHG9hzm7RPiJeoWw5D4mGzIEVk++1nwUJuQHlLckVW31N1ApQf4rnIz5/OZs1KvhBOdDWNXQwNzPCYqvvnfS8IMN+dt9x+H3TsetJ9XyQgtSu1qbT3KGb1icPNXGDhN/sYwa5MtE/WnLtGsk2MwjdWvSv2HQIvn+fHBnl+wE88DC/TO0A1Qt+urP5ucAbBA4GreO6q4unJu481AXcH6GHMEFiy9Bc2Sivh55oFFKyVFEPl9MqXHBgD58O4pFkiZjNBmp876toaV3C6c8Om12PI9P9/oZ0aK6uChK3cSMW5rOS+iYD7L77NDzbDLaPfwy4B69hCAYKGLVZMyuMn2ndJaIOkzAsDIUuEuOOWxoV5F2lgRVAh4F4RiH2rg29U7DMXo/HuPvbejbw5P0LhXM8Zve+W1PuDlTjUN/OQWFQsemdCO197PXkDUnMJi30jqy2oaUJgifeStrp5fjI83ZkhMX1Rzm3DiQEKXb8F7tqFeklWqPry7ulVtNrZ31ajOl19OIFXfbSYuUvmUwjWdeow==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6896.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39850400004)(376002)(346002)(136003)(451199021)(2906002)(41300700001)(5660300002)(8676002)(8936002)(44832011)(7416002)(36756003)(86362001)(31696002)(186003)(2616005)(31686004)(478600001)(26005)(6512007)(6506007)(6666004)(53546011)(6486002)(316002)(4326008)(66476007)(6916009)(66556008)(66946007)(38100700002)(54906003)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SDlmMGJpOGo4emFYTnNYQXJ3bnF6MDN4eHFRWUluZzg2ZjJ5R1ZtRWdGUDB5?=
- =?utf-8?B?aXNZbkF0K252cnhMeDBiaXkycjRidWRVbzNNbE1EZ2JFb3AyZWphZUhRL0hG?=
- =?utf-8?B?YWRaQmFZTlZ5elVWemJ3TzdIVEZZcktBeGZtZ3ZQK3FTRzdLeSt2VExvUWlp?=
- =?utf-8?B?OWR2WmpXVnRSeVp5UHN1blFBM2pnNlZ4cnIzSW9EV1R2THo4TGxJZmQ2dGc2?=
- =?utf-8?B?UU1VMFE0TDhvczNHNFdOV1dTUllUdm5ZN003Y2xyUkNESlEwcVJUcUJOR0JJ?=
- =?utf-8?B?L2RiZHU5OUNwd2VJdWQ1R1BxajExc3VXdmNGZVRUZDhjUDlKdkozcmFnSnFK?=
- =?utf-8?B?UjVNVzlmemNHdGYwekQ3cHlOTU1BTlFNdHNxRmRhTnNkYi91WGx2ZVpqdFlV?=
- =?utf-8?B?c1dOK2lwS25yOHZKVUhobEFiMHBwWVk1YUhvWHAxWnBNbjZvL3RDcVVJR0NU?=
- =?utf-8?B?cTZXYTl6T1pQVXFFUzd2citBOFJTbDB0RjlMUXFpdnRmYUFQbkh5bWhjVGdB?=
- =?utf-8?B?bCtGeTg5bFc1MHQ1ZFlGZnhzL3VNVWhPUzZiNlRWK3FMRDNsUTdTdGxIeW1T?=
- =?utf-8?B?U2MrRXNoTkNIOUtrMzhZOEhsMXhlaHlXTzZESmI0OWU0TkQ4bSsxV3FYQ2ta?=
- =?utf-8?B?YWZ3N2NLb1BHTlNOUFJBMURBYWU0OWVqVDdQUzlqcGFvaXhLRyt4ZWpuN3Qw?=
- =?utf-8?B?WVJ6OWcxMDNvTUg0R2dYT3dzSTB3aE55bEhOWGk0UEtSaGtSUkwxREMrcFBW?=
- =?utf-8?B?VmFwOWRlbVBTemNlMFhxSmRHRGI2WEV0cHFWTDZrbWFvWUpITUJGdkxReUFJ?=
- =?utf-8?B?dXA4anJ4MnB3Vm9vTWMzK1haZDQxbG1OSkRMLzNjdGcvSG1pYk1VVFlac1Qy?=
- =?utf-8?B?ME1VbCsrMlVPV2twTFpTTUtFb0dITU1ubndVODFhU1BxSG5kT240a0k2NUN1?=
- =?utf-8?B?QU5UT0VVOGNlcGlFMi9hT0NlWjViQi90ZFpCUWUrMjRMb1NvOW1hWldlRC9i?=
- =?utf-8?B?VGRQYS91REExRVcwTGMwMkpKOFk0OFF1NDR1WTh5TnY1Y05URmdySHdtcjNE?=
- =?utf-8?B?VUViMEpTejg0Y3VEejJpSWZERXhndjVEZmwvb0R0VTFaR2tzM3lGOThKOW5i?=
- =?utf-8?B?OGZtQ05McmtzQWFXMklTQ2tjck1pSkpjQ2NkWmxEVTh2NmE5dG4xOU5IR0FB?=
- =?utf-8?B?ajlSK1Z5TmMreDY4OGtjaTE3bmdZVEtjY2s1WUZnU2x1Tm96Q092RVkzNWxY?=
- =?utf-8?B?WkE3QlVLTHMxSS9QcHJEdzdvbm5VUTRSck8vcG16a0pqZlNTOTJUeVpSM1lM?=
- =?utf-8?B?L0pOT1YzQzRiQmx4OHZ6TnNhdmdVREFlT2J4L3VnNWtUOUV6bUl3Lzc3LzlK?=
- =?utf-8?B?TEEyd2lXRlZlZndSU2c4b0xyaXpETlkyZkgxbEhrRzdkd2lVQmxlRVN1L1g0?=
- =?utf-8?B?eGlLQnBJeGhCTElhdUd2K2RtR1ZTM0JYV1E0Q3phQk9lM05FRjFpVDB1dlRV?=
- =?utf-8?B?amF3NE1idFh3Y3ZOa3JyWjM4bzNLS0daeGZhRURlMnlQM1Q1SFYvMHRCdity?=
- =?utf-8?B?YTlLMmlLeTJtSnhkVXJVM2YxelI4ekkxaTc1bnk0WGlobVJpUTYyUDdWYmNt?=
- =?utf-8?B?bkF2clNsaEQvUkEwOUpjZjI1RmVzeUVES093T0R3RzdBdG0yUGgzV2o5ZU1D?=
- =?utf-8?B?Nm9GR24zR0hOREtCanFpMjVQOGt4Ky8rMVdrc2dDd0o4MHJsemp6Y2NZNnEx?=
- =?utf-8?B?T0MwMVF0YTNDSm16UzlNUVVEbXJWQXNIYVdmaDdjdk1kb3JtVGlLZlNZU3VV?=
- =?utf-8?B?NUZkRTkyeHFTWWREK1VwL1VnaENTejRxbUxPWWtSYkRTVTB6MlJab0I1KzJQ?=
- =?utf-8?B?S1lUdEtneXdPYmxRdk5qeDNFbWxCb2hFY2VVS3pIZlExQmZRTFk0RjkxM1RS?=
- =?utf-8?B?cm41ZjZXTFFEZnlGMWFkeGNEWW5TYW9vQ2xkcnlydzdGcmMrbldsZ0tZSE5P?=
- =?utf-8?B?SkxnQndWL2VYTEgwWEcrWTlSYUg3UjhPSDJkc0R6bzhGdnlwZDBtNytIc2lZ?=
- =?utf-8?B?SHVCQVM3RnNlYmNneHJoeEVzR2VFd09qN1dIL0tBeDZyMDhQSGtNckJtYUgw?=
- =?utf-8?B?WU1JNzBXUVhzRllFZHZ2STVVNGNiMnNKSW9jMnh1R3Y4azN0MUc5U3FKb0tW?=
- =?utf-8?B?bWc9PQ==?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b40e7521-8637-4139-f98a-08db7b6ecfd2
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6896.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 02:40:07.0612
+X-Microsoft-Antispam-Message-Info: jutSk1O88miYqGNatqvdnGnGDlpioO+1N3wTWSfN7kB7kEgTA3KCwf9mwV2qBf4dAR4jRAdOXb7qp3tQRBjRWtPVWRsYy+p3PhuLhBOUdMfJ5OYeGEhYJgZCimnduErG9p0FgaW0qDkSqrTW13aMa3xJJaM0H2xOSLhpYD6GWyQSj3DSjaossDYd7n/VDUSu60SLAhob/tk/OY715lA7wgHTkfKLIKj00McXxgCYycog1A456EX18UWG6EWQ3vQ+UZbapX2Ute5XH5R0FM62Y7SO7SiyWwZjc7q4kJgDbk+hLfK0gp0WYQnol6wr3lMpazRSJpvXhIxJSqlzWWsOKU0pEPAbMB4497rLe+tOuTFqzSWi3p8j00gbG7mO5k0CR1dMBnMbv5kQ8F9MAkhkxxxlNTuZV0peJjN9MGAWUW+NH+wohhucpndzoU+LFHfqoDrK6X/Qu2BkQ1gZGZ1lNrSpUEBhm+cYJYkz2dHAB7yqvWuaD4fyKUw6ktlkCM/i4naOQW0Xqs5Ni4lguQyMp7HKBzGohUqCQ70uU/pBClJGJ9pdmHq4SQtGEIIQgQOeTmSPd6vkS4/pwE27Bw1l7eMD+ILkA04MsnvCKwWwsilSv34mk1AI8OpCjPRzFGXSkwW/+VpW4MX9+jJ1M//9DSU5AzHfsyPx//qzyjJkLfp+V/9xjnI99J0yVwcmHmYe3UJeaHcGTMGr6Kn7ZJ5lERBBNK0qvnfiLgZOpJ2r7c8urqShgRKHaD87n+DVTtR90uDhiDlLP/sY526EfIUY16714OfLlVeF9oJO8W0BDsimY/YmwIHrFC7pLikb7h33
+X-Forefront-Antispam-Report: CIP:192.147.44.155;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:365hybrid.synaptics.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(346002)(39850400004)(396003)(136003)(376002)(5400799015)(451199021)(36840700001)(46966006)(336012)(7049001)(41300700001)(34020700004)(82310400005)(6666004)(82740400003)(2616005)(107886003)(81166007)(356005)(83380400001)(1076003)(26005)(186003)(47076005)(36860700001)(40480700001)(110136005)(54906003)(86362001)(478600001)(316002)(2906002)(4326008)(70586007)(70206006)(8936002)(8676002)(44832011)(5660300002)(36900700001)(12100799033);DIR:OUT;SFP:1501;
+X-OriginatorOrg: tw.synaptics.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 02:47:42.6227
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CLjhWYvG+dOl3ckvpNs6AGIGvo/J7j8+uVEBRmQDSGVT3h4qnnxaEcIjThHKQGJ3GXgBpasMcjszNaIBpldN1PrmEcGZMpxNgXA8Csf+F1s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR03MB6451
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0af7b6d0-0ffe-4456-7832-08db7b6fdfb4
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=335d1fbc-2124-4173-9863-17e7051a2a0e;Ip=[192.147.44.155];Helo=[365hybrid.synaptics.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT111.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB5565
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Forcepad devices will use F21, for click simulation
+due to lack of a metal button, so we add F21 support
+to make forcepad support click function.
 
+Signed-off-by: Marge Yang <marge.yang@tw.synaptics.com>
+---
+ drivers/input/rmi4/Kconfig      |   8 +++
+ drivers/input/rmi4/Makefile     |   1 +
+ drivers/input/rmi4/rmi_bus.c    |   3 +
+ drivers/input/rmi4/rmi_driver.h |   5 +-
+ drivers/input/rmi4/rmi_f21.c    | 110 ++++++++++++++++++++++++++++++++
+ 5 files changed, 126 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/input/rmi4/rmi_f21.c
 
-On 2023/6/29 15:34, Lucas Tanure wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> The Khadas VIM4 uses the Amlogic A311D2 SoC, based on the Amlogic T7 SoC
-> family, on a board with the same form factor as the VIM3 models.
-> 
-> - 8GB LPDDR4X 2016MHz
-> - 32GB eMMC 5.1 storage
-> - 32MB SPI flash
-> - 10/100/1000 Base-T Ethernet
-> - AP6275S Wireless (802.11 a/b/g/n/ac/ax, BT5.1)
-> - HDMI 2.1 video
-> - HDMI Input
-> - 1x USB 2.0 + 1x USB 3.0 ports
-> - 1x USB-C (power) with USB 2.0 OTG
-> - 3x LED's (1x red, 1x blue, 1x white)
-> - 3x buttons (power, function, reset)
-> - M2 socket with PCIe, USB, ADC & I2C
-> - 40pin GPIO Header
-> - 1x micro SD card slot
-> 
-> Signed-off-by: Lucas Tanure <tanure@linux.com>
-> ---
->   arch/arm64/boot/dts/amlogic/Makefile          |   1 +
->   .../amlogic/amlogic-t7-a311d2-khadas-vim4.dts |  54 ++++++
->   arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi   | 155 ++++++++++++++++++
->   3 files changed, 210 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts
->   create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-> index cd1c5b04890a..166fec1e4229 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -1,4 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_MESON) += amlogic-t7-a311d2-khadas-vim4.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j110-rev-2.dtb
-> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts b/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts
-> new file mode 100644
-> index 000000000000..fffdab96b12e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts
-> @@ -0,0 +1,54 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2022 Wesion, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "amlogic-t7.dtsi"
-> +
-> +/ {
-> +       model = "Khadas vim4";
-> +       compatible = "khadas,vim4", "amlogic,a311d2", "amlogic,t7";
-> +
-> +       aliases {
-> +               serial0 = &uart_a;
-> +       };
-> +
-> +       memory@0 {
-> +               device_type = "memory";
-> +               reg = <0x0 0x0 0x2 0x0>; /* 8 GB */
-> +       };
-> +
-> +       reserved-memory {
-> +               #address-cells = <2>;
-> +               #size-cells = <2>;
-> +               ranges;
-> +
-> +               /* 3 MiB reserved for ARM Trusted Firmware (BL31) */
-> +               secmon_reserved: secmon@5000000 {
-> +                       reg = <0x0 0x05000000 0x0 0x300000>;
-> +                       no-map;
-> +               };
-> +
-> +               /* 32 MiB reserved for ARM Trusted Firmware (BL32) */
-> +               secmon_reserved_bl32: secmon@5300000 {
-> +                       reg = <0x0 0x05300000 0x0 0x2000000>;
-> +                       no-map;
-> +               };
-> +       };
-> +
-> +       xtal: xtal-clk {
-> +               compatible = "fixed-clock";
-> +               clock-frequency = <24000000>;
-> +               clock-output-names = "xtal";
-> +               #clock-cells = <0>;
-> +       };
-Place xal in DTSI files is beterr,  the same as other Amlogic SoCs 
-family. If frequency is different, reset value in here.
+diff --git a/drivers/input/rmi4/Kconfig b/drivers/input/rmi4/Kconfig
+index c0163b983ce6..37e2ba4918fd 100644
+--- a/drivers/input/rmi4/Kconfig
++++ b/drivers/input/rmi4/Kconfig
+@@ -108,6 +108,14 @@ config RMI4_F3A
+ 	  Function 3A provides GPIO support for RMI4 devices. This includes
+ 	  support for buttons on TouchPads and ClickPads.
+ 
++config RMI4_F21
++	bool "RMI4 Function 21 (PRESSURE)"
++	help
++	  Say Y here if you want to add support for RMI4 function 21.
++
++	  Function 21 provides buttons/pressure for RMI4 devices. This includes
++	  support for buttons/pressure on PressurePad.
++
+ config RMI4_F54
+ 	bool "RMI4 Function 54 (Analog diagnostics)"
+ 	depends on VIDEO_DEV=y || (RMI4_CORE=m && VIDEO_DEV=m)
+diff --git a/drivers/input/rmi4/Makefile b/drivers/input/rmi4/Makefile
+index 02f14c846861..ec4f08513d8b 100644
+--- a/drivers/input/rmi4/Makefile
++++ b/drivers/input/rmi4/Makefile
+@@ -11,6 +11,7 @@ rmi_core-$(CONFIG_RMI4_F12) += rmi_f12.o
+ rmi_core-$(CONFIG_RMI4_F30) += rmi_f30.o
+ rmi_core-$(CONFIG_RMI4_F34) += rmi_f34.o rmi_f34v7.o
+ rmi_core-$(CONFIG_RMI4_F3A) += rmi_f3a.o
++rmi_core-$(CONFIG_RMI4_F21) += rmi_f21.o
+ rmi_core-$(CONFIG_RMI4_F54) += rmi_f54.o
+ rmi_core-$(CONFIG_RMI4_F55) += rmi_f55.o
+ 
+diff --git a/drivers/input/rmi4/rmi_bus.c b/drivers/input/rmi4/rmi_bus.c
+index f2e093b0b998..e12033aa7517 100644
+--- a/drivers/input/rmi4/rmi_bus.c
++++ b/drivers/input/rmi4/rmi_bus.c
+@@ -369,6 +369,9 @@ static struct rmi_function_handler *fn_handlers[] = {
+ #ifdef CONFIG_RMI4_F3A
+ 	&rmi_f3a_handler,
+ #endif
++#ifdef CONFIG_RMI4_F21
++	&rmi_f21_handler,
++#endif
+ #ifdef CONFIG_RMI4_F54
+ 	&rmi_f54_handler,
+ #endif
+diff --git a/drivers/input/rmi4/rmi_driver.h b/drivers/input/rmi4/rmi_driver.h
+index 1c6c6086c0e5..57f258371bab 100644
+--- a/drivers/input/rmi4/rmi_driver.h
++++ b/drivers/input/rmi4/rmi_driver.h
+@@ -114,7 +114,9 @@ static inline int rmi_f03_overwrite_button(struct rmi_function *fn,
+ }
+ static inline void rmi_f03_commit_buttons(struct rmi_function *fn) {}
+ #endif
+-
++#ifdef CONFIG_RMI4_F21
++int rmi_f21_report_pressure(struct rmi_function *fn, int i);
++#endif
+ #ifdef CONFIG_RMI4_F34
+ int rmi_f34_create_sysfs(struct rmi_device *rmi_dev);
+ void rmi_f34_remove_sysfs(struct rmi_device *rmi_dev);
+@@ -136,6 +138,7 @@ extern struct rmi_function_handler rmi_f12_handler;
+ extern struct rmi_function_handler rmi_f30_handler;
+ extern struct rmi_function_handler rmi_f34_handler;
+ extern struct rmi_function_handler rmi_f3a_handler;
++extern struct rmi_function_handler rmi_f21_handler;
+ extern struct rmi_function_handler rmi_f54_handler;
+ extern struct rmi_function_handler rmi_f55_handler;
+ #endif
+diff --git a/drivers/input/rmi4/rmi_f21.c b/drivers/input/rmi4/rmi_f21.c
+new file mode 100644
+index 000000000000..bbb9ab12ae7c
+--- /dev/null
++++ b/drivers/input/rmi4/rmi_f21.c
+@@ -0,0 +1,110 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2012-2020 Synaptics Incorporated
++ */
++
++#include <linux/kernel.h>
++#include <linux/rmi.h>
++#include <linux/input.h>
++#include <linux/slab.h>
++#include "rmi_driver.h"
++
++#define RMI_F21_FORCE_CLICK_OFFSET	8
++#define RMI_f21_FORCE_CLICK			0x01
++#define RMI_f21_DATA_REGS_MAX_SIZE	1
++#define RMI_f21_FORCEPAD_BUTTON_COUNT	1
++
++struct f21_data {
++	/* Query Data */
++	u8 data_regs[RMI_f21_DATA_REGS_MAX_SIZE];
++	struct input_dev *input;
++	u16 key_code;
++};
++
++static irqreturn_t rmi_f21_attention(int irq, void *ctx)
++{
++	struct rmi_function *fn = ctx;
++	struct f21_data *f21 = dev_get_drvdata(&fn->dev);
++	int error;
++
++	error = rmi_read_block(fn->rmi_dev,
++				fn->fd.data_base_addr+RMI_F21_FORCE_CLICK_OFFSET,
++				f21->data_regs, 1);
++	if (error) {
++		dev_err(&fn->dev,
++			"%s: Failed to read f21 data registers: %d\n",
++			__func__, error);
++		return IRQ_RETVAL(error);
++	}
++
++	if ((f21->data_regs[0] & RMI_f21_FORCE_CLICK))
++		input_report_key(f21->input, f21->key_code, true);
++	else
++		input_report_key(f21->input, f21->key_code, false);
++	return IRQ_HANDLED;
++}
++
++static int rmi_f21_config(struct rmi_function *fn)
++{
++	struct f21_data *f21 = dev_get_drvdata(&fn->dev);
++	struct rmi_driver *drv = fn->rmi_dev->driver;
++
++	if (!f21)
++		return 0;
++
++	drv->set_irq_bits(fn->rmi_dev, fn->irq_mask);
++
++	return 0;
++}
++
++static int rmi_f21_initialize(struct rmi_function *fn, struct f21_data *f21)
++{
++	struct input_dev *input = f21->input;
++	unsigned int button = BTN_LEFT;
++
++	f21->key_code = button;
++	input_set_capability(input, EV_KEY, f21->key_code);
++	input->keycode = &(f21->key_code);
++	input->keycodesize = sizeof(f21->key_code);
++	input->keycodemax = RMI_f21_FORCEPAD_BUTTON_COUNT;
++
++	__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
++
++	return 0;
++}
++
++static int rmi_f21_probe(struct rmi_function *fn)
++{
++	struct rmi_device *rmi_dev = fn->rmi_dev;
++	struct rmi_driver_data *drv_data = dev_get_drvdata(&rmi_dev->dev);
++	struct f21_data *f21;
++	int error;
++
++	if (!drv_data->input) {
++		dev_info(&fn->dev, "f21: no input device found, ignoring\n");
++		return -ENXIO;
++	}
++
++	f21 = devm_kzalloc(&fn->dev, sizeof(*f21), GFP_KERNEL);
++	if (!f21)
++		return -ENOMEM;
++
++	f21->input = drv_data->input;
++
++	error = rmi_f21_initialize(fn, f21);
++	if (error)
++		return error;
++
++	dev_set_drvdata(&fn->dev, f21);
++	return 0;
++}
++
++struct rmi_function_handler rmi_f21_handler = {
++	.driver = {
++		.name = "rmi4_f21",
++	},
++	.func = 0x21,
++	.probe = rmi_f21_probe,
++	.config = rmi_f21_config,
++	.attention = rmi_f21_attention,
++};
+-- 
+2.25.1
 
-> +
-> +};
-> +
-> +&uart_a {
-> +       status = "okay";
-> +       clocks = <&xtal>, <&xtal>, <&xtal>;
-> +       clock-names = "xtal", "pclk", "baud";
-> +};
-> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
-> new file mode 100644
-> index 000000000000..1423d4a79156
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
-> @@ -0,0 +1,155 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +/ {
-> +       interrupt-parent = <&gic>;
-> +       #address-cells = <2>;
-> +       #size-cells = <2>;
-> +
-> +       cpus {
-> +               #address-cells = <0x2>;
-> +               #size-cells = <0x0>;
-> +
-> +               cpu-map {
-> +                       cluster0 {
-> +                               core0 {
-> +                                       cpu = <&cpu100>;
-> +                               };
-> +                               core1 {
-> +                                       cpu = <&cpu101>;
-> +                               };
-> +                               core2 {
-> +                                       cpu = <&cpu102>;
-> +                               };
-> +                               core3 {
-> +                                       cpu = <&cpu103>;
-> +                               };
-> +                       };
-> +
-> +                       cluster1 {
-> +                               core0 {
-> +                                       cpu = <&cpu0>;
-> +                               };
-> +                               core1 {
-> +                                       cpu = <&cpu1>;
-> +                               };
-> +                               core2 {
-> +                                       cpu = <&cpu2>;
-> +                               };
-> +                               core3 {
-> +                                       cpu = <&cpu3>;
-> +                               };
-> +                       };
-> +               };
-> +
-> +               cpu100: cpu@100 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x0 0x100>;
-> +                       enable-method = "psci";
-> +               };
-> +
-> +               cpu101: cpu@101{
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x0 0x101>;
-> +                       enable-method = "psci";
-> +               };
-> +
-> +               cpu102: cpu@102 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x0 0x102>;
-> +                       enable-method = "psci";
-> +               };
-> +
-> +               cpu103: cpu@103 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x0 0x103>;
-> +                       enable-method = "psci";
-> +               };
-> +
-> +               cpu0: cpu@0 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a73";
-> +                       reg = <0x0 0x0>;
-> +                       enable-method = "psci";
-> +               };
-> +
-> +               cpu1: cpu@1 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a73";
-> +                       reg = <0x0 0x1>;
-> +                       enable-method = "psci";
-> +               };
-> +
-> +               cpu2: cpu@2 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a73";
-> +                       reg = <0x0 0x2>;
-> +                       enable-method = "psci";
-> +               };
-> +
-> +               cpu3: cpu@3 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a73";
-> +                       reg = <0x0 0x3>;
-> +                       enable-method = "psci";
-> +               };
-> +       };
-> +
-> +       timer {
-> +               compatible = "arm,armv8-timer";
-> +               interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +                            <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +                            <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> +                            <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-> +       };
-> +
-> +       psci {
-> +               compatible = "arm,psci-1.0";
-> +               method = "smc";
-> +       };
-> +
-> +       sm: secure-monitor {
-> +               compatible = "amlogic,meson-gxbb-sm";
-> +       };
-> +
-> +       soc {
-> +               compatible = "simple-bus";
-> +               #address-cells = <2>;
-> +               #size-cells = <2>;
-> +               ranges;
-> +
-> +               gic: interrupt-controller@fff01000 {
-> +                       compatible = "arm,gic-400";
-> +                       #interrupt-cells = <3>;
-> +                       #address-cells = <0>;
-> +                       interrupt-controller;
-> +                       reg = <0x0 0xfff01000 0 0x1000>,
-> +                             <0x0 0xfff02000 0 0x0100>;
-> +                       interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
-> +               };
-> +
-> +               apb4: bus@fe000000 {
-> +                       compatible = "simple-bus";
-> +                       reg = <0x0 0xfe000000 0x0 0x480000>;
-> +                       #address-cells = <2>;
-> +                       #size-cells = <2>;
-> +                       ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
-> +
-> +                       uart_a: serial@78000 {
-> +                               compatible = "amlogic,t7-uart", "amlogic,meson-s4-uart";
-> +                               reg = <0x0 0x78000 0x0 0x18>;
-> +                               interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +                               status = "disabled";
-> +                       };
-> +               };
-> +
-> +       };
-> +};
-> --
-> 2.41.0
-> 
