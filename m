@@ -2,147 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738FE745CE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE56745CE7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjGCNLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S231310AbjGCNMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjGCNLv (ORCPT
+        with ESMTP id S230331AbjGCNMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:11:51 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2102.outbound.protection.outlook.com [40.107.255.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8AD1B5
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:11:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WLNnvcGRcGnSvcVyXDXxPRU66NthC9/Fhwp+hSsOaajFeJ62elaEaChT+OzGuO5965JGieuSHDXuPsP6+mCg3w7DbSVehvyjp8ympUHR65EJJUvsSNx//ZnPEt7xzXWCSmV+JyGVybCCETKV7fcES/53EAhlXrSwrprV6bY3PZwhPDoiWE7H6s5PKfboE7o31EFk+d+vE6L8kkRrn2XDSvHDQ7TD8q++VLF0JfyLncOeIDScofV3WtoGvPM+8fvDFTc9w0dhCR1/J/Ado3yUT/CSVYnulYBo54ewXg1djCZzSOqCEjik6F+kAPaO3c1SCxYQ1x6tHRRHsxpMEcYzog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VEd38gsmEiYhvXExK1ldQuVF7T9+80esfhC3A7KWC+8=;
- b=PiR4m54XDbzXWhGJcSn+mH7BdR3LKAdve0ZJUUHVN21XF3iv8eQmM3BvMFTn1XZps3TP2KZEvByEOo3aPF9fjRVJjTgjGBw9KgsWdEMuTZNfOAuvnfZNYqku2uY0XtPFZMIsSX8a2IxAvQTjVKFPuJz/5C4ow6sAIb1xKDlXkG99m0mRINE3sZLfWd6pjzMAdKlg+HdN3BoyL/tH6rByHPE3NqTOPd5ozr4skjXUEjBcS7g3YCIE/Uy22k4tlY+FQ7QemjIgmktt+5KB6h9vprS23eU8peO7A0uGqfxIkHBFHAnxBnxduue+gAcPRoL/7pseUmEhcFgZS/2g9h1E/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VEd38gsmEiYhvXExK1ldQuVF7T9+80esfhC3A7KWC+8=;
- b=TEsijPKuTZVeOkXdRRJyOGwr4YYPnak+w8d20yhh5NruzBGeGgwStzbY0IMrxA10N2H2Iyqhpk6g0B8g3UzIsy+6MYYNYurZ+oWv+hQfEIA8CE5wlz0Nf84FxL2UzB5I35jYR7xLTJFv5iiPXE4XJIbuWcKjNFTD9zw6o4MKZg98KY4iOLpPTR3gcJdavNEyL8sYyg0beGLkI1TCGsL7WToZbptZYoaMHkBJOi3ArwaLUbGesE/l9SroKbe/aClPHU6DeB3BFXrF18EfDMe7ofK2bMi+7QnN/IbPD6FwgMI8LIgwdAaJ70I8REtlVwBFHzvwvhukR+rLT+F3RCnkpw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
- TY0PR06MB5845.apcprd06.prod.outlook.com (2603:1096:400:278::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
- 2023 13:11:46 +0000
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::c2b:41ab:3b14:f920]) by SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::c2b:41ab:3b14:f920%6]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
- 13:11:45 +0000
-From:   Minjie Du <duminjie@vivo.com>
-To:     richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, sfr@canb.auug.org.au,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        11162212@vivo.com
-Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
-Subject: [PATCH v2] drivers: use free_netdev before return
-Date:   Mon,  3 Jul 2023 21:11:29 +0800
-Message-Id: <20230703131129.8588-1-duminjie@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCPR01CA0018.jpnprd01.prod.outlook.com (2603:1096:405::30)
- To SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9)
+        Mon, 3 Jul 2023 09:12:13 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CF01B5
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:12:11 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3142a9ffa89so3333152f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:12:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688389930; x=1690981930;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3C72+69VGn6Vh4PEX3kulCzL7RyUsSJTOHMj9jDZHN8=;
+        b=uKaA9p0Ox2ovUpVrrVYgiLiawXF/eJHtDmw08cPCzgZCbB60Ie8INNvKUxBIAKmL3Y
+         gJjymwQdcF7raXNSF8V6wRpvvBFTtLf7turtg9TU69p5lKeXMaD3Z6AKI9UYiwJRApAI
+         IwHg9pDdFL6ENpVemuwnYsQ1q7YBVDw7d2I64puqIHBLNSMNvR3bY+KieueemlUZI4Wx
+         VNwKAbld7p6chbwhedWQ/HFD3cmZG4DjjGBZ1UDZ5JQMWdmeF/kgXYKIpM3ZHIQHpGNk
+         JalLPDuZ1BM6md6B3Gsm+P5SO/aD6zQVkMFh25wH0/768JWkKOd5sOlYeVUH5tPTISd3
+         ABLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688389930; x=1690981930;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3C72+69VGn6Vh4PEX3kulCzL7RyUsSJTOHMj9jDZHN8=;
+        b=HyuKeG3vnv8PNUvA58rLdYt3qMkmRd0iqLPJ+s+EfpymmsV5cWZ+7QD5g3Li7XQ/7a
+         P4y2s/UZEjcXg1aboWDs4KgjHrc5zY0NhiC6OGPNYPAZ/2szg1hd/bqa0+OnABu+av6G
+         BQPnNFHv3T8kfD9epjF/uYQywwBAt6WBKPVNIeXaEJg2s+xgdHR8KPmuwiyWocKSoIGZ
+         7qZsrA4TCtKj4m3wHfe+mtZtJnWxg2SZFTduLxEEx6sQlh2+GCQQEfMaxnanCgkoddAw
+         HwqayE81agdZ+AOYl2ZaugigFwoTM8KrP4xREoZqGD4GTuwmkxIArW378bPrGPtMyo1T
+         GaZQ==
+X-Gm-Message-State: ABy/qLahRywWV/n5GZKqCw0VyEOZORRO9GkM79TJbfBegvifUjo/Xt3k
+        TbX7FFYAaKfDXAkxrFRY7nQvVw==
+X-Google-Smtp-Source: APBJJlGzI2y08jEzmUxZusXD3XCrTA4WMsvMiPknAxeFAukczBsa/LAjJj2fSLhRTg7ATBgccqwsAQ==
+X-Received: by 2002:adf:ee51:0:b0:313:fd52:af37 with SMTP id w17-20020adfee51000000b00313fd52af37mr10499400wro.4.1688389930317;
+        Mon, 03 Jul 2023 06:12:10 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id m16-20020a5d6250000000b003068f5cca8csm25443464wrv.94.2023.07.03.06.12.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 06:12:09 -0700 (PDT)
+Message-ID: <d1cfb1fb-d347-16d8-4446-dddcf8200638@linaro.org>
+Date:   Mon, 3 Jul 2023 15:12:08 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|TY0PR06MB5845:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4d36b2c-2ed9-4210-9fd1-08db7bc70d06
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T56n+dm2q1OAuzIAVeURNbQ8vyZWXXEXGo6R5YJTXVC/z3Y3Phof72D06BPfIG095HA+vaeVPnibG1+GYZ78ZXTY/n9KbfL9s/vik8sUchQXb46Ej9tH/RkxGCQ76+szdt4u5Mq5jhqx2k52rtNDKuJZijdrypyb2zBavj/sVR6DEKoli8UiDdCQQZLKOIcuYUm52KsAUqCWx3CZeLN1qDBXTjvf1v/rwYK/DPRveilMCaYVwGfvqMVBvtxt39/HX+8mjFOhSBWapU2DxYed445TRx7wOPD7qpeLHM5/2fDhyKDfwRcpDkeeJNVhOaq/bgrK1GrEy+Fe0Ww21+Ij+JYXuG2GP1JUKHrZAYGq8G438dGf18D+1gqkdYN989YyAiwbgJ+2GOMnTbmd9sZp+ycOrCpW0lk9HfWx/jvswSIBDIxpBVnF4azI3i+Wpec5tq4C509rQjOTpPQ5JIrlIsq0C2yqaXl5f2q8yXjOVmDflNi5WqP/c7GVPttv3kkXh4PT6acbcKqYS7I8zIkaLzCEHWpv0CXEfmrbPCDCmbTrKnw7a3/nf+hWVVUdbAWVqZ/3mBMKTa+KpnA881I6NaDUJVXetxEDkgAP4GSNCPg6Hvcawdm+/m3BxT86HcCM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(346002)(136003)(39860400002)(451199021)(38100700002)(38350700002)(52116002)(6666004)(4744005)(2906002)(6486002)(8936002)(8676002)(36756003)(41300700001)(5660300002)(478600001)(66946007)(66556008)(66476007)(6636002)(107886003)(1076003)(6506007)(26005)(86362001)(6512007)(186003)(4326008)(316002)(2616005)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Uo3ZFieFJcFLjvjfPyfTj73J/sI5Du/euVRWv9eTi70cp8Ai7pbSHTcZmMjN?=
- =?us-ascii?Q?NkVupAghbAMPDdPgbh8k+04i/lIgV9flsUzzHZYyDbK/rFzsTi85lNepFpYU?=
- =?us-ascii?Q?g7BLGwBCUzHh12+BK+RuxtgPWk0EQlWvheufQ+sxpDofnuYftKt2upu2jkCx?=
- =?us-ascii?Q?lovO/rU0VZ9SDTAjXvoYKWKyoej3U/93rjxjpow0MV10Nzwxf6TsXN0KGKmo?=
- =?us-ascii?Q?UZPwbNBhb2kQLNnbZ0N9gpxrr3Tg306iBPeHdrlBYVetLHAt7s3sEB//krrX?=
- =?us-ascii?Q?z1hIsRFSEPzm2hiBOdXJH7ysibWayaEwhew0RNwpbJLU9pAkwgcmp6i0JtRm?=
- =?us-ascii?Q?/wxkEGHB4j3stGybeK02ZiSDi5x9d1Sjwstc2zOO6U6LQr5AuEYuN3VLx0AU?=
- =?us-ascii?Q?PP2wl6qiBNTH0DjhuGiEVMj11TXM6gqeYdsxgkZqrV1W8KpYcJwbeESSLhBz?=
- =?us-ascii?Q?0TTbHypEzwCh1+DKXq2rYXQge2F+48XSLk+Jkt/g96XBNto6SCHsvbZKq8Xp?=
- =?us-ascii?Q?zYtPTlGc9TeOGykpSwe8aYbb9ApTKBjd9Vp27wgqREtmfdsjxvcVsVkZdShb?=
- =?us-ascii?Q?tOiUcpu4noEQf5IYS5Zx+GkL1pFY7pqxLVm3r9R9qcvwbqR/OPao+tWbWhly?=
- =?us-ascii?Q?jLJC6yl4cEWy2dhIhBMme6WyWBaeg0OnqxwfhabGkSvfgJksbtEAZ2mU7w/N?=
- =?us-ascii?Q?MmBQYSlLRATTnAvh20K7oH608Eg3pkw96t5kZZBEkeVgBV4ftFAjlzADP0At?=
- =?us-ascii?Q?bdjEzXk/4e5fB2MrworWDQcu4VV6wH52mdfwW2c75C0OYYUe8KXq5k4hAs05?=
- =?us-ascii?Q?dnK/ZN8aRJQz6umcS8i/KBzOEa/CpDt+qEe2pG17lKvbilgOBko5Y37KDf/T?=
- =?us-ascii?Q?0WUBSD6m0Q5dRcfHFvOOgG1m3nu1v2N9RJaQgssiUhDE5rmIMFCXtR/FQ6t3?=
- =?us-ascii?Q?cCXuC8XACyI2mfxD+H7tBbaqCoOWdtlgRVxRyQrX/yxa5LcbrYQV5XQB8Kxt?=
- =?us-ascii?Q?gfSB402nxrd7a3yZQGJslRToXlMvAIAM8jaQ1WS9Hf2tZmBItFcKKvxoeE9B?=
- =?us-ascii?Q?dDkZZsjzx9IBwPsHem702XxSt5YIwQVL5esNwpt1iqRGpkC25D4UFeKIPelL?=
- =?us-ascii?Q?EbnEjE6fBCu5rTDF0aaj7iWs+AWNi9NQ8iDncy+TbwrzkPuLQxyG9oOysnwn?=
- =?us-ascii?Q?QSNl3x0G8T7nRSPJJ01XGX64fip07eoZixabH9CL3jENGO1bIFLuNRaiZ1Nm?=
- =?us-ascii?Q?aTGVnytSZ9i3FQd3IBdqMSwIO2Q7E5AN7DLAHfeSNQwvMvgt44L1sQJG2S+H?=
- =?us-ascii?Q?Hhx/z7QCNgE0aGbdvgsxjWCz8FCnp8PaqJ3UsYrQ+igvmniEoLLBHQl8hHS3?=
- =?us-ascii?Q?m9V3FcsT8EjNoHixBQw/j0HfDJMCQG7K3NMmqIA8fmADQlUr+shRa8gTMmIs?=
- =?us-ascii?Q?q+M9Cs2MO/oullALJJ6w8H7KrRZ6zvSQRWQ2f1YyEesaBIGo9fdRuWAPajGH?=
- =?us-ascii?Q?txeYLyxYBfACKeHvzm82V86/MvqzsqasUWOZcnBD4oTs/V9GSRGZ4XA8K4cV?=
- =?us-ascii?Q?C+W1c4v+1OBqPvgnYhVNKKaUTtWeX9wOYqKzEt7N?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4d36b2c-2ed9-4210-9fd1-08db7bc70d06
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 13:11:45.2116
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O38HmcdpqxxPhlC8t6L3cuJZ2cRDXOWjNOAW7+yjpshkmyk6o2n93ediGyiS6cuaqsZAMj8NoF4EGPy7Dg2zFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5845
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: power: add Amlogic C3 power domains
+To:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>
+References: <20230703093142.2028500-1-xianwei.zhao@amlogic.com>
+ <20230703093142.2028500-2-xianwei.zhao@amlogic.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230703093142.2028500-2-xianwei.zhao@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We will replace the old version of 
-undo_user_init and use out_free_netdev
+On 03/07/2023 11:31, =Xianwei Zhao wrote:
+> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> 
+> Add devicetree binding document and related header file for Amlogic C3 secure power domains.
+> 
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> ---
+>  .../power/amlogic,meson-sec-pwrc.yaml         |  3 ++-
+>  include/dt-bindings/power/amlogic-c3-power.h  | 26 +++++++++++++++++++
+>  2 files changed, 28 insertions(+), 1 deletion(-)
+>  create mode 100644 include/dt-bindings/power/amlogic-c3-power.h
+> 
+> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+> index eab21bb2050a..d80bbedfe3aa 100644
+> --- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+> @@ -12,7 +12,7 @@ maintainers:
+>    - Jianxin Pan <jianxin.pan@amlogic.com>
+>  
+>  description: |+
+> -  Secure Power Domains used in Meson A1/C1/S4 SoCs, and should be the child node
+> +  Secure Power Domains used in Meson A1/C1/S4 & C3 SoCs, and should be the child node
+>    of secure-monitor.
+>  
+>  properties:
+> @@ -20,6 +20,7 @@ properties:
+>      enum:
+>        - amlogic,meson-a1-pwrc
+>        - amlogic,meson-s4-pwrc
+> +      - amlogic,c3-pwrc
+>  
+>    "#power-domain-cells":
+>      const: 1
+> diff --git a/include/dt-bindings/power/amlogic-c3-power.h b/include/dt-bindings/power/amlogic-c3-power.h
+> new file mode 100644
+> index 000000000000..3403e7c0b49d
+> --- /dev/null
+> +++ b/include/dt-bindings/power/amlogic-c3-power.h
 
-Signed-off-by: Minjie Du <duminjie@vivo.com>
----
- arch/um/drivers/vector_kern.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Filename matching compatibles, please.
 
-diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
-index af7f6fd4c..7ae6ab8df 100644
---- a/arch/um/drivers/vector_kern.c
-+++ b/arch/um/drivers/vector_kern.c
-@@ -1646,7 +1646,7 @@ static void vector_eth_configure(
- 	err = register_netdevice(dev);
- 	rtnl_unlock();
- 	if (err)
--		goto out_undo_user_init;
-+		goto out_free_netdev;
- 
- 	spin_lock(&vector_devices_lock);
- 	list_add(&device->list, &vector_devices);
-@@ -1654,9 +1654,6 @@ static void vector_eth_configure(
- 
- 	return;
- 
--out_undo_user_init:
--	free_netdev(dev);
--	return;
- out_free_netdev:
- 	free_netdev(dev);
- out_free_device:
--- 
-2.39.0
+> @@ -0,0 +1,26 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ or MIT) */
+> +/*
+> + * Copyright (c) 2023 Amlogic, Inc.
+> + * Author: hongyu chen1 <hongyu.chen1@amlogic.com>
+> + */
+> +#ifndef _DT_BINDINGS_AMLOGIC_C3_POWER_H
+> +#define _DT_BINDINGS_AMLOGIC_C3_POWER_H
+> +
+> +#define PWRC_C3_NNA_ID				0
+> +#define PWRC_C3_AUDIO_ID			1
+> +#define PWRC_C3_RESV_SEC_ID			2
+> +#define PWRC_C3_SDIOA_ID			3
+> +#define PWRC_C3_EMMC_ID				4
+> +#define PWRC_C3_USB_COMB_ID			5
+> +#define PWRC_C3_SDCARD_ID			6
+> +#define PWRC_C3_ETH_ID				7
+> +#define PWRC_C3_RESV0_ID			8
+> +#define PWRC_C3_GE2D_ID				9
+> +#define PWRC_C3_CVE_ID				10
+> +#define PWRC_C3_GDC_WRAP_ID			11
+> +#define PWRC_C3_ISP_TOP_ID			12
+> +#define PWRC_C3_MIPI_ISP_WRAP_ID		13
+> +#define PWRC_C3_VCODEC_ID			14
+> +
+> +#endif
+> +
+
+No need for stray blank line.
+
+Best regards,
+Krzysztof
 
