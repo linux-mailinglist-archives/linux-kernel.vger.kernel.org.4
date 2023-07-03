@@ -2,121 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FB6745E78
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 252EB745E6C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjGCOXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
+        id S230402AbjGCOXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbjGCOXm (ORCPT
+        with ESMTP id S229591AbjGCOXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:23:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D90FB3;
-        Mon,  3 Jul 2023 07:23:42 -0700 (PDT)
+        Mon, 3 Jul 2023 10:23:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE965E59;
+        Mon,  3 Jul 2023 07:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688394223; x=1719930223;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+L1E/N9RqavBPrenoP9G4WVhEe4u338kfR3kCGQlQfA=;
-  b=DQevfpXL2emIahI1iTsbPMz/xv1PF3c1OzXv7i5r2qNgCTXIsgDN5ntD
-   DZPtWpS4u5Y5jm2iE2MHrab/02tutAh9l/yIls3Rw63cMkq0W2t2r+SJ2
-   HG4IX8Skapz7YEBZ8sAzbus6Bqi70Vh6q0Fvc+mrRRxWg2pwmK572wl4n
-   UvwxaRYNUnoBxtcrYHRV7psHNLQKnCaLIM/FMgMKwujlJSEWhz2COE9ng
-   BiNsVeQnaeWHcdXQVvIcYu4CkWbTiI1IJrZk6ud9tdNWd3fp8hXAHTG3p
-   w9sbvgQTHs443Dtab7sKlS5r/X6Xsz5i/NDcRQroWRF1oEre0N7jaM5iu
-   w==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688394189; x=1719930189;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=NHA/m/W7ECo+9Ht24ncNolRYwqlkEkvfdTVYskUAM7Y=;
+  b=YppO9w/qLlV9jrS5F+oTQZYxmirOhOSpvWJL7PqsaT3m8A4ugxtxjENX
+   n80ON5LBpCJWqjwtrkyV7gKQITD+Mt6QqkP2S6hxBtv/d90+bRHhDG9xM
+   Z/KkWqmrh3Em7oL6qzT9wiLKf+VabapkeEV2b79+wzWMRvKlWTPGimcro
+   6iDPII1r6cYc68njypUdUybv1cC9LLIeRsBlep0hjsbiiq8fCbubDVZZY
+   4Q4zC31ddYN5gK2FyiOqDnAqT8ujJWMABNycc+9tHIifRLTA0BSMAg7tb
+   BzR3zBpTPUjG/4HABXeAPc1uxC7qZrutcluZ8lNw/vZIv52z7ieteMxeL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="361752563"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="asc'?scan'208";a="221805980"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jul 2023 07:23:41 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Jul 2023 07:23:40 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 3 Jul 2023 07:23:36 -0700
-Date:   Mon, 3 Jul 2023 15:23:07 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     =?utf-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
-        <ardb@kernel.org>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <rminnich@gmail.com>,
-        <mark.rutland@arm.com>, <lpieralisi@kernel.org>,
-        <rafael@kernel.org>, <lenb@kernel.org>, <jdelvare@suse.com>,
-        <yc.hung@mediatek.com>, <angelogioacchino.delregno@collabora.com>,
-        <allen-kh.cheng@mediatek.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <tinghan.shen@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <geshijian@bytedance.com>,
-        <weidong.wd@bytedance.com>
-Subject: Re: [External] Re: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-Message-ID: <20230703-operation-mankind-778882d8d350@wendy>
-References: <20230702095735.860-1-cuiyunhui@bytedance.com>
- <20230703-71f67eb66a037f5c0fb825c6@orel>
- <CAEEQ3w=7tBHyG=CvuktPN5cvfpY6ayamnbry6eOYxMDrPN+oZg@mail.gmail.com>
- <20230703-6ac90a2de15f1017bc0ced74@orel>
+   d="scan'208";a="361752563"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 07:23:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="808602021"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="808602021"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Jul 2023 07:23:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D964917C; Mon,  3 Jul 2023 17:23:09 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH v2 3/3] gpiolib: Do not alter GPIO chip fwnode member
+Date:   Mon,  3 Jul 2023 17:23:08 +0300
+Message-Id: <20230703142308.5772-4-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+In-Reply-To: <20230703142308.5772-1-andriy.shevchenko@linux.intel.com>
+References: <20230703142308.5772-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="E+2R2X9wOGgH+Gca"
-Content-Disposition: inline
-In-Reply-To: <20230703-6ac90a2de15f1017bc0ced74@orel>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---E+2R2X9wOGgH+Gca
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ideally we should not touch data in the given GPIO chip structure.
+Let's become closer to it by avoiding altering fwnode member.
 
-On Mon, Jul 03, 2023 at 04:17:07PM +0200, Andrew Jones wrote:
-> On Mon, Jul 03, 2023 at 09:30:10PM +0800, =E8=BF=90=E8=BE=89=E5=B4=94 wro=
-te:
-> > On Mon, Jul 3, 2023 at 9:01=E2=80=AFPM Andrew Jones <ajones@ventanamicr=
-o.com> wrote:
-> > >
-> > >
-> > > (This is a reply to a non-existent cover letter.)
-> >=20
-> > This has been discussed many times with Ard, Please refer to :
-> > https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1=
--cuiyunhui@bytedance.com/
->=20
-> There's nothing in that thread that convinces me this is a good idea.
-> Indeed, afaict from that thread, Ard nacked this. It was only when it
-> was suggested that arch/riscv would own the code, that he stopped
-> complaining about it. I wouldn't call that an endorsement.
+The GPIO library must use fwnode from GPIO device and the drivers
+might use one from GPIO chip in case they initialized it.
 
-In fact, he expressly said that it would then be up to the RISC-V
-maintainers as to what to do:
-	But please check with the RISC-V maintainers
-	if they are up for this, and whether they want to see this mechanism
-	contributed to one of the pertinent specifications.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+ drivers/gpio/gpiolib.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index bc8b9d6afe0e..8b7032300039 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -708,13 +708,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ 	int base = 0;
+ 	int ret = 0;
+ 
+-	/*
+-	 * If the calling driver did not initialize firmware node, do it here
+-	 * using the parent device, if any.
+-	 */
+-	if (!gc->fwnode && gc->parent)
+-		gc->fwnode = dev_fwnode(gc->parent);
+-
+ 	/*
+ 	 * First: allocate and populate the internal stat container, and
+ 	 * set up the struct device.
+@@ -729,7 +722,14 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ 	gc->gpiodev = gdev;
+ 	gpiochip_set_data(gc, data);
+ 
+-	device_set_node(&gdev->dev, gc->fwnode);
++	/*
++	 * If the calling driver did not initialize firmware node,
++	 * do it here using the parent device, if any.
++	 */
++	if (gc->fwnode)
++		device_set_node(&gdev->dev, gc->fwnode);
++	else if (gc->parent)
++		device_set_node(&gdev->dev, dev_fwnode(gc->parent));
+ 
+ 	gdev->id = ida_alloc(&gpio_ida, GFP_KERNEL);
+ 	if (gdev->id < 0) {
+-- 
+2.40.0.1.gaa8946217a0b
 
---E+2R2X9wOGgH+Gca
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKLZywAKCRB4tDGHoIJi
-0lN2AQDpIYP//3WSQfuOdQ5ge5coGys/iiBPLD9RjiOuc+OMJAD/bZh8USr333vM
-nyvylIQXi4vnoVBU3XUmLLWvRqRzpgE=
-=n7aW
------END PGP SIGNATURE-----
-
---E+2R2X9wOGgH+Gca--
