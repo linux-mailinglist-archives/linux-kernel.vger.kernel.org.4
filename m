@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252EB745E6C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37549745E77
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjGCOXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S231184AbjGCOXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjGCOXL (ORCPT
+        with ESMTP id S231377AbjGCOXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:23:11 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE965E59;
-        Mon,  3 Jul 2023 07:23:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688394189; x=1719930189;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NHA/m/W7ECo+9Ht24ncNolRYwqlkEkvfdTVYskUAM7Y=;
-  b=YppO9w/qLlV9jrS5F+oTQZYxmirOhOSpvWJL7PqsaT3m8A4ugxtxjENX
-   n80ON5LBpCJWqjwtrkyV7gKQITD+Mt6QqkP2S6hxBtv/d90+bRHhDG9xM
-   Z/KkWqmrh3Em7oL6qzT9wiLKf+VabapkeEV2b79+wzWMRvKlWTPGimcro
-   6iDPII1r6cYc68njypUdUybv1cC9LLIeRsBlep0hjsbiiq8fCbubDVZZY
-   4Q4zC31ddYN5gK2FyiOqDnAqT8ujJWMABNycc+9tHIifRLTA0BSMAg7tb
-   BzR3zBpTPUjG/4HABXeAPc1uxC7qZrutcluZ8lNw/vZIv52z7ieteMxeL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="361752563"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="361752563"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 07:23:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="808602021"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="808602021"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Jul 2023 07:23:06 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D964917C; Mon,  3 Jul 2023 17:23:09 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Benjamin Tissoires <bentiss@kernel.org>
-Subject: [PATCH v2 3/3] gpiolib: Do not alter GPIO chip fwnode member
-Date:   Mon,  3 Jul 2023 17:23:08 +0300
-Message-Id: <20230703142308.5772-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230703142308.5772-1-andriy.shevchenko@linux.intel.com>
-References: <20230703142308.5772-1-andriy.shevchenko@linux.intel.com>
+        Mon, 3 Jul 2023 10:23:40 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704E3E54;
+        Mon,  3 Jul 2023 07:23:39 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso3814284e87.3;
+        Mon, 03 Jul 2023 07:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688394218; x=1690986218;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ma1KyTozt79WQFhFhjXGW+QNtFHS9FsRimX5pJ9eb2c=;
+        b=XsaWtZ1Nvob2QnhpQ+rGPXskrrUnIUfb8AfDMGrGMXcP3ipTsMBZwIWWcsQpkQwsB7
+         VQeAXSX0cLA73q5xLjoNs9ZF8PQRPT6VMDZE1dBpTm8nQVBp0XeQfPEK6sKv6Cljd787
+         b/+QlojCMnXwPnpdRTmdhsMT9XBsUyaDhqUnWBObP6buoCQECb7W91hw4wkawJdemlHf
+         gmyTiIeDS3hdGtf7PLbd4hdcNVjlrvlFvtBU6s1N+sj+o5GiHYl5Lq3BQoJ5e5DuTXax
+         H5fmhWdNPuBgx64XbbMRXtoDarKJDzMwJi3fXH8i3ZdP4H5I8IqxDz+Yi2kp2wmNe6WU
+         6QyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688394218; x=1690986218;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ma1KyTozt79WQFhFhjXGW+QNtFHS9FsRimX5pJ9eb2c=;
+        b=isAVLrshGDnrpM6TCLquSbodCPpe8UfJsifwcvpN25wLX7+cONi9sKv3k6e7aIkt6P
+         ECzUumXqffxifP8VagcFapFBFQGDWTwXe695T5WihEdbUVu9rv0TGELfe9G7wATqT4k/
+         ke75dEif/H1ZFiBl1d6VF8ykMdAz80DxeeJQJqTpMIYGcXVsrHw/YBEMGcfI+3GyQjZp
+         79bQOh66xIsIoCBdbfaTi7vdhitvcIDD7f12QgIkWhc6X++CV6JFqXt4CxkSxiN9m06P
+         3e1GFLQyyhHOLA5C/ZKjrDklAHZg4QUXmQ4HDgm9CHqZ7q3h62PeqaG+bWm0qz8+5Qno
+         Fegw==
+X-Gm-Message-State: ABy/qLZ6MdaIVTcoNiR+QB3P8sY6WKEoHWnSij/nnxRxGzfFFpmFzIQG
+        9V7pX2+hERT4R5ja1Jhp3TE=
+X-Google-Smtp-Source: APBJJlH+pIwmjwOtnM94dmF/0nZ2RXR9s92STPPhPgs1uUFf5jUOOFZrrYogPdzH5ER+Pxr8NAmXyQ==
+X-Received: by 2002:a05:6512:281a:b0:4f8:742f:3bed with SMTP id cf26-20020a056512281a00b004f8742f3bedmr7730273lfb.37.1688394217383;
+        Mon, 03 Jul 2023 07:23:37 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id p20-20020a1c7414000000b003fa973e6612sm22049004wmc.44.2023.07.03.07.23.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 07:23:37 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 16:23:18 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     Gal Pressman <gal@nvidia.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, aleksander.lobakin@intel.com,
+        lixiaoyan@google.com, lucien.xin@gmail.com, alexanderduyck@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] gro: decrease size of CB
+Message-ID: <20230703142314.GA27131@debian>
+References: <20230601160924.GA9194@debian>
+ <20230601161407.GA9253@debian>
+ <f83d79d6-f8d7-a229-941a-7d7427975160@nvidia.com>
+ <20230629123559.GA12573@debian>
+ <431d8445-9593-73df-d431-d5e76c9085cf@nvidia.com>
+ <20230630153923.GA18237@debian>
+ <fdc1d609-5604-f372-6e64-1ea971fabe84@nvidia.com>
+ <50181937-19ea-ccca-057c-eb6931f4b2da@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <50181937-19ea-ccca-057c-eb6931f4b2da@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ideally we should not touch data in the given GPIO chip structure.
-Let's become closer to it by avoiding altering fwnode member.
-
-The GPIO library must use fwnode from GPIO device and the drivers
-might use one from GPIO chip in case they initialized it.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Benjamin Tissoires <bentiss@kernel.org>
----
- drivers/gpio/gpiolib.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index bc8b9d6afe0e..8b7032300039 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -708,13 +708,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	int base = 0;
- 	int ret = 0;
- 
--	/*
--	 * If the calling driver did not initialize firmware node, do it here
--	 * using the parent device, if any.
--	 */
--	if (!gc->fwnode && gc->parent)
--		gc->fwnode = dev_fwnode(gc->parent);
--
- 	/*
- 	 * First: allocate and populate the internal stat container, and
- 	 * set up the struct device.
-@@ -729,7 +722,14 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	gc->gpiodev = gdev;
- 	gpiochip_set_data(gc, data);
- 
--	device_set_node(&gdev->dev, gc->fwnode);
-+	/*
-+	 * If the calling driver did not initialize firmware node,
-+	 * do it here using the parent device, if any.
-+	 */
-+	if (gc->fwnode)
-+		device_set_node(&gdev->dev, gc->fwnode);
-+	else if (gc->parent)
-+		device_set_node(&gdev->dev, dev_fwnode(gc->parent));
- 
- 	gdev->id = ida_alloc(&gpio_ida, GFP_KERNEL);
- 	if (gdev->id < 0) {
--- 
-2.40.0.1.gaa8946217a0b
-
+Thank you for replying.
+I will check it out and update once there is something new.
