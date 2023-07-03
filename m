@@ -2,78 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE9D7456BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B046F7456C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjGCIDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S230511AbjGCIDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjGCICr (ORCPT
+        with ESMTP id S231211AbjGCICv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:02:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970BA19AE
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:02:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 3 Jul 2023 04:02:51 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493BEE76;
+        Mon,  3 Jul 2023 01:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1688371330;
+        bh=mxT+hp0pGIWfYK4XM4T63enx90hO11e+CShcYgfo8H0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=iY49mJOi8grshnjTw7grQ3MauTVbYoj0RJm4FCUljQPdjDMRI8vQ6Y8pO6+2OS43+
+         P+fAm31J9NbYzsF/SYpRVP4ZRVFU8XLN7qQFvi4UD4SYiBFMOuvruDEw8syyH7vK+1
+         e2aIDQg/d2mT1Y1lDoBIik0J7t7IDAeqQ6I3a1eM=
+Received: from [IPv6:240e:358:110a:4b00:dc73:854d:832e:4] (unknown [IPv6:240e:358:110a:4b00:dc73:854d:832e:4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9B0D60DDA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E5FC433C8;
-        Mon,  3 Jul 2023 08:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688371317;
-        bh=ZUKw7q8V4ay5pMR8wVbZ0SclAMMyJvKXf2173otiaSE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h4RYEHqcTxiC58If0FK8/DakXfjJf23COw47R7vWnRP5550RIH9FEFsydsNVDJ3u8
-         ugmw+aeZXKWl1BVMeuVzom4PGicSxGPxfV+UTcjQ+TROBzBiDJFrsltmANop2tLgSq
-         1ymoBw6WJAyoYQ/uzGEoCWfQo0D73OjAXnpseYxAsgWL+QA8VDkOqoqHLnU6BCZTSK
-         fPQAKSx4pwCkoUsmGYZhz8hDmSt1PziFTDTjNbgP7vPMK/kzgWOk7rOVJrt24K0HT5
-         iqczOCPwAdP/EjEPdJ012U8TXaJKPvd7I/S0MzeJAjwnNEC9NJjw/LE8G0BxZqqwyx
-         EY4qOO2xq/O1w==
-Date:   Mon, 3 Jul 2023 10:01:53 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     syzbot <syzbot+319a9b09e5de1ecae1e1@syzkaller.appspotmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [kernel?] bpf-next test error: UBSAN:
- array-index-out-of-bounds in alloc_pid
-Message-ID: <20230703-richten-ehren-5a4c9b042a23@brauner>
-References: <000000000000246c3f05ff8fea48@google.com>
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id CD90E660BB;
+        Mon,  3 Jul 2023 04:02:02 -0400 (EDT)
+Message-ID: <1b331090f91215d6c061a24c4cc61680995412f8.camel@xry111.site>
+Subject: Re: [PATCH v4] =?gb2312?Q?wifi=A3=BAmac80211=3A?= Replace the
+ ternary conditional operator with conditional-statements
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     You Kangren <youkangren@vivo.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:MAC80211" <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+Date:   Mon, 03 Jul 2023 16:01:53 +0800
+In-Reply-To: <20230703030200.1067-1-youkangren@vivo.com>
+References: <20230703030200.1067-1-youkangren@vivo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <000000000000246c3f05ff8fea48@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 12:14:17AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    c20f9cef725b Merge branch 'libbpf: add netfilter link atta..
-> git tree:       bpf-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=127adbfb280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=924167e3666ff54c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=319a9b09e5de1ecae1e1
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/bf9c9608a1e0/disk-c20f9cef.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/3bde4e994bd0/vmlinux-c20f9cef.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/5d80f8634183/bzImage-c20f9cef.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+319a9b09e5de1ecae1e1@syzkaller.appspotmail.com
+On Mon, 2023-07-03 at 11:02 +0800, You Kangren wrote:
+> Replacing ternary conditional operators with conditional statements=20
+> ensures proper expression of meaning while making it easier for=20
+> the compiler to generate code.
 
-#syz dup: [syzbot] [kernel?] net-next test error: UBSAN: array-index-out-of-bounds in alloc_pid
+No you underestimated the compiler here.  Both GCC and Clang translates
+the ternary operator and the if statement into the same IR during very
+early passes.
+
+Maybe there is some reason to avoid ternary operators, but "making it
+easier for compiler" is just invalid.  And "my text book/my teacher says
+ternary operators are bad" will be invalid too, the kernel coding
+convention is not what the text book or teacher say.
+
+> Signed-off-by: You Kangren <youkangren@vivo.com>
+> ---
+> =C2=A0net/mac80211/tdls.c | 3 ++-
+> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/net/mac80211/tdls.c b/net/mac80211/tdls.c
+> index a4af3b7675ef..41176491965d 100644
+> --- a/net/mac80211/tdls.c
+> +++ b/net/mac80211/tdls.c
+> @@ -946,7 +946,8 @@ ieee80211_tdls_build_mgmt_packet_data(struct
+> ieee80211_sub_if_data *sdata,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ieee80211_link_dat=
+a *link;
+> =C2=A0
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0link_id =3D link_id >=3D 0 ? l=
+ink_id : 0;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (link_id < 0)
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0link_id =3D 0;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rcu_read_lock();
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0link =3D rcu_dereference(=
+sdata->link[link_id]);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (WARN_ON(!link))
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
