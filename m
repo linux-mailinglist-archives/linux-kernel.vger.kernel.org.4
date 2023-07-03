@@ -2,178 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC83745F51
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3FF745F54
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjGCPAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S231535AbjGCPBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjGCPAu (ORCPT
+        with ESMTP id S231514AbjGCPA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:00:50 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D3CE5F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lEjQPsDxtRvLE8zahWewvCEDc9M1w1GJ+mEScSJMMVI=; b=DCkVBEqraHjIzrkzpVAu1I1fMd
-        x3M/MmqmMrkVCu9Ew6c43mRhieNKUGOms4QP8dpBCjOZAB0UWS8JNJcENWnCEtO/+uvs9T3VV24Xq
-        NB+i1YpIkToHgtjWBn5P/VNcB3QRPnSEApYb3Gt3m+DFB1AlMRyDR6OjuPoJKq9pVl6AykNL+zf4R
-        NpgK2Olt4YDPJkE0m4UsEZSwHol2ZztANfqDUJ14FhzAfzMDSqEXaFjXU39+Ek/9+rQX6/CKKbGm9
-        9hBkn1s0AKmt8gtoXeZRxNBo0Nk+iHLuJt+EC9N9OHFt+qW1Vyb3NyOgGHQdNuQr6UNq9cP0k5Zth
-        EbyfCPUA==;
-Received: from [187.74.70.209] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qGL2R-007fhp-7K; Mon, 03 Jul 2023 17:00:27 +0200
-Message-ID: <cedc57a5-779a-3ec6-cfbd-f51dfb17f2dc@igalia.com>
-Date:   Mon, 3 Jul 2023 12:00:22 -0300
+        Mon, 3 Jul 2023 11:00:57 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D0FE6E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:00:54 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51cb40f13f6so5762831a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 08:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688396453; x=1690988453;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kYc7ssW76JbeyuIAYWb2z/AMKU9mWqY66zI1YvE3ht4=;
+        b=rq3em3i2DhBtDJZbyPiiH/JcD1whzSHiFE+JJXBVtdQ7Tq3p/2ShBpJc/UnO79qBh4
+         dAYkUPQ1m3NvvHRtkMH3gr/vV21L+K5D2Oaeysm1HKEU56G4eV0RWgmGs3Zug6JRw/uv
+         NDODM6ZAIj83FeP3w8oKRGCLKlWZTD4GJ+9T8kg1SDDNmCV2rDMTm4X3HgSCsCy6NtfJ
+         lxwevRsHXWM8SRP3n/IrG6nsLudj15VBgyQsxEulKpwMRoFDf35iMHqw8qkYUFc0x6EE
+         uHW7NSSUAwzgxhgtZC2G5mqIQNeBP2swrKbq18kQrpKjvgEKQDmBVwqP80xWOTJUHgpI
+         EAgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688396453; x=1690988453;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kYc7ssW76JbeyuIAYWb2z/AMKU9mWqY66zI1YvE3ht4=;
+        b=B1CcLQRqZDZFCyodZDQ6uq6iKixRqermzwmfdPhVFcTgpuTdHSZDJ4IyhcNwrWng17
+         9J1eRhYSBNMI0MI8f0YiC/D9bZY8BYd2J22fdAdh8nVTXgg/sgIzGq0Vrmuq8iyHzvoo
+         guv6Phly+ZY7NeSu6FfmNGrDBn0BfXFgyePOENehejSgzzmGgqc/p+QYO444iE7XkBeb
+         kak42t5znQ79RlQc/4JlhlLVeun+7aMfRxhbr/q/V2IEQTk9nNFu9mQQW5d1OTV9sF5Y
+         fg4DNKgwCAEYbR7OBahexlXhi81Xx0RI28ieIImNdi0Ll4adOyF8k1XyohNLDxSFmm2l
+         1Lbw==
+X-Gm-Message-State: ABy/qLbBv2LuW7UdAWryoHfEiUFDZI8mbH8U4TWZ6uMHYek1xzS51eN1
+        pmkWcD51pB/Dtz93lGvLHynxkQ==
+X-Google-Smtp-Source: APBJJlFd14wiD2Xpe42nUkkf2jg9Ee7geplQ4o0gKJmte8k6StgWqm4Jvh5aw2ZOGo/GOSZbcFcCpQ==
+X-Received: by 2002:aa7:d7ce:0:b0:51d:f37b:1b4e with SMTP id e14-20020aa7d7ce000000b0051df37b1b4emr7377991eds.19.1688396453073;
+        Mon, 03 Jul 2023 08:00:53 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id k17-20020a1709063e1100b009875a6d28b0sm2266432eji.51.2023.07.03.08.00.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 08:00:52 -0700 (PDT)
+Message-ID: <cf2978dc-9ef9-0b3c-911a-7da97977e412@linaro.org>
+Date:   Mon, 3 Jul 2023 17:00:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        pierre-eric.pelloux-prayer@amd.com,
-        Sebastian Wick <sebastian.wick@redhat.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        amd-gfx@lists.freedesktop.org,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alexander.deucher@amd.com,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, christian.koenig@amd.com
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
- <CA+hFU4z1pc=KUVVqyqfXEceUqMXQgh-qUnuB=1nkPELghvQO7w@mail.gmail.com>
- <CADnq5_MNVdtdcWKSz6dgmsjg+kEu8p5FVE+fkw_5BaXeG3QGow@mail.gmail.com>
- <afab1f5a-e581-3416-e2c2-238ea120655b@mailbox.org>
- <CAAxE2A5C96k5ua+r938VA_+w7gHHNTdF3n8LwDb98W0Bf9wCVA@mail.gmail.com>
- <7c1e6df5-1ad4-be3c-b95d-92dc62a8c537@mailbox.org>
- <20230703114949.796c7498@eldfell>
+Subject: Re: [PATCH v9 00/13] dmaengine: edma: add freescale edma v3 support
 Content-Language: en-US
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20230703114949.796c7498@eldfell>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Frank Li <Frank.li@nxp.com>
+Cc:     vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
+        imx@lists.linux.dev
+References: <20230620201221.2580428-1-Frank.Li@nxp.com>
+ <ZJxHc62V72eVMYu4@lizhi-Precision-Tower-5810>
+ <3ce07ab8-9ed0-d5c0-e7da-bb24085cc3f8@linaro.org>
+ <ZKLfB7putFfLlAoH@lizhi-Precision-Tower-5810>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZKLfB7putFfLlAoH@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Em 03/07/2023 05:49, Pekka Paalanen escreveu:
-> On Mon, 3 Jul 2023 09:12:29 +0200
-> Michel Dänzer <michel.daenzer@mailbox.org> wrote:
-> 
->> On 6/30/23 22:32, Marek Olšák wrote:
->>> On Fri, Jun 30, 2023 at 11:11 AM Michel Dänzer <michel.daenzer@mailbox.org <mailto:michel.daenzer@mailbox.org>> wrote:
->>>> On 6/30/23 16:59, Alex Deucher wrote:
->>>>> On Fri, Jun 30, 2023 at 10:49 AM Sebastian Wick
->>>>> <sebastian.wick@redhat.com <mailto:sebastian.wick@redhat.com>> wrote:
->>>>>> On Tue, Jun 27, 2023 at 3:23 PM André Almeida <andrealmeid@igalia.com <mailto:andrealmeid@igalia.com>> wrote:
->>>>>>>
->>>>>>> +Robustness
->>>>>>> +----------
->>>>>>> +
->>>>>>> +The only way to try to keep an application working after a reset is if it
->>>>>>> +complies with the robustness aspects of the graphical API that it is using.
->>>>>>> +
->>>>>>> +Graphical APIs provide ways to applications to deal with device resets. However,
->>>>>>> +there is no guarantee that the app will use such features correctly, and the
->>>>>>> +UMD can implement policies to close the app if it is a repeating offender,
->>>>>>> +likely in a broken loop. This is done to ensure that it does not keep blocking
->>>>>>> +the user interface from being correctly displayed. This should be done even if
->>>>>>> +the app is correct but happens to trigger some bug in the hardware/driver.
->>>>>>
->>>>>> I still don't think it's good to let the kernel arbitrarily kill
->>>>>> processes that it thinks are not well-behaved based on some heuristics
->>>>>> and policy.
->>>>>>
->>>>>> Can't this be outsourced to user space? Expose the information about
->>>>>> processes causing a device and let e.g. systemd deal with coming up
->>>>>> with a policy and with killing stuff.
->>>>>
->>>>> I don't think it's the kernel doing the killing, it would be the UMD.
->>>>> E.g., if the app is guilty and doesn't support robustness the UMD can
->>>>> just call exit().
+On 03/07/2023 16:45, Frank Li wrote:
+> On Sun, Jul 02, 2023 at 10:22:22PM +0200, Krzysztof Kozlowski wrote:
+>> On 28/06/2023 16:45, Frank Li wrote:
+>>> On Tue, Jun 20, 2023 at 04:12:08PM -0400, Frank Li wrote:
+>>>> This patch series introduces support for the eDMA version 3 from
+>>>> Freescale. The eDMA v3 brings alterations in the register layout,
+>>>> particularly, the separation of channel control registers into
+>>>> different channels. The Transfer Control Descriptor (TCD) layout,
+>>>> however, remains identical with only the offset being changed.
 >>>>
->>>> It would be safer to just ignore API calls[0], similarly to what
->>>> is done until the application destroys the context with
->>>> robustness. Calling exit() likely results in losing any unsaved
->>>> work, whereas at least some applications might otherwise allow
->>>> saving the work by other means.
+>>>> The first 11 patches aim at tidying up the existing Freescale
+>>>> eDMA code and laying the groundwork for the integration of eDMA v3
+>>>> support.
+>>>>
+>>>> Patch 1-11:
+>>>> These patches primarily focus on cleaning up and refactoring the existing
+>>>> fsl_edma driver code. This is to accommodate the upcoming changes and new
+>>>> features introduced with the eDMA v3.
+>>>>
+>>>> Patch 12:
+>>>> This patch introduces support for eDMA v3. In addition, this patch has
+>>>> been designed with an eye towards future upgradability, specifically for
+>>>> transitioning to eDMA v5. The latter involves a significant upgrade
+>>>> where the TCD address would need to support 64 bits.
+>>>>
+>>>> Patch 13:
+>>>> This patch focuses on the device tree bindings and their modifications
+>>>> to properly handle and integrate the changes brought about by eDMA v3
 >>>
->>> That's a terrible idea. Ignoring API calls would be identical to a
->>> freeze. You might as well disable GPU recovery because the result
->>> would be the same.
+>>> @vkoul:
+>>>   Do you have chance to check these patches? Any chance to come into 6.5
+>>>   All audio parts of i.MX8x and i.MX9 was dependent on these patches.
 >>
->> No GPU recovery would affect everything using the GPU, whereas this
->> affects only non-robust applications.
+>> Why do you ping during the merge window?
 >>
->>
->>> - non-robust contexts: call exit(1) immediately, which is the best
->>> way to recover
->>
->> That's not the UMD's call to make.
->>
->>
->>>>      [0] Possibly accompanied by a one-time message to stderr along
->>>> the lines of "GPU reset detected but robustness not enabled in
->>>> context, ignoring OpenGL API calls".
->>
+>> v6.5? And what about having it in next for two weeks? One thing is to
+>> ping for something forgotten, different thing is to try squeeze patches
+>> skipping our process.
 > 
-> Hi,
-> 
-> Michel does have a point. It's not just games and display servers that
-> use GPU, but productivity tools as well. They may have periodic
-> autosave in anticipation of crashes, but being able to do the final
-> save before quitting would be nice. UMD killing the process would be
-> new behaviour, right? Previously either application's GPU thread hangs
-> or various API calls return errors, but it didn't kill the process, did
-> it?
-> 
+> I saw dmaengine tree have not update over 5 weeks.
+> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/
 
-In Intel's Iris, UMD may call abort() for the reset guilty application:
+Then you should have pinged during that time.
 
-https://elixir.bootlin.com/mesa/mesa-23.0.4/source/src/gallium/drivers/iris/iris_batch.c#L1063
+> And vkoul have not sent out pull request yet. So I just want to check
+> if possible. 
 
-I was pretty sure this was the same for RadeonSI, but I failed to find 
-the code for this, so I might be wrong.
+It is merge window. Patches are supposed to be in next for two weeks
+before merge window.
 
-> If an application freezes, that's "no problem"; the end user can just
-> continue using everything else. Alt-tab away etc. if the app was
-> fullscreen. I do that already with games on even Xorg.
-> 
-> If a display server freezes, that's a desktop-wide problem, but so is
-> killing it.
-> 
 
-Interesting, what GPU do you use? In my experience (AMD RX 5600 XT), 
-hanging the GPU usually means that the rest of applications/compositor 
-can't use the GPU either, freezing all user interactions. So killing the 
-guilty app is one effective solution currently, but ignoring calls may 
-help as well.
 
-> OTOH, if UMD really does need to terminate the process, then please do
-> it in a way that causes a crash report to be recorded. _exit() with an
-> error code is not it.
-> 
+Best regards,
+Krzysztof
 
-In the "Reporting causes of resets" subsection of this document I can 
-add something for UMD as well.
-
-> 
-> Thanks,
-> pq
