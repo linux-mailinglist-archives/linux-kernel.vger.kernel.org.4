@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4625C746321
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8285C746324
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjGCS6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S231243AbjGCTAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 15:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbjGCS62 (ORCPT
+        with ESMTP id S229925AbjGCTAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:58:28 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F99790;
-        Mon,  3 Jul 2023 11:58:16 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-c581c758ad8so944585276.1;
-        Mon, 03 Jul 2023 11:58:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688410696; x=1691002696;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SdI/aR6tDnny9jl70GO2VaZWhjHcoPI5SvZ3goGqWe0=;
-        b=QnHxICIrzDP76D9hf4nrvbTsxoz1OcQQIUlQgEs6FCOrdQio9sHxHfdcZHUuaqYKY5
-         KencCpjDBUlgIDBiYvtW88dWsN9sOPduo0cUhLFWR3LyhyGsqkW2+f3GjFbDq9m12UAZ
-         Isb+Gx4LWLtikSyJ8SjvovAFD1ZLBUWrHU4gJ7OqWCyOIQ5Gik34njEg7pAYGKqunfWq
-         tdY4MFzXobsGG+SBfSmtqe5DFQTAfVo1SDSka0bTTF0/+4bjGMvr5AcpuMUuVWC8S5vf
-         uwsfq2us2K3oAMj2Nq0/Qp9EHU9IG/taxq6tew4BcUMTiaLEMrObheFdiGxsxbLeHIsr
-         51tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688410696; x=1691002696;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SdI/aR6tDnny9jl70GO2VaZWhjHcoPI5SvZ3goGqWe0=;
-        b=Ts/n3CGnsi/mRNdjO6AjP6g0ghy0Tr/w1bQRafUGuXci4E0dgs4hWweIAUXR8MmwYA
-         l6gMnTldfAHdDNv6sWm60jd9qtdHuh/mk6Xhryk0PjlwNYqq8SG8SqeJMveIfSyFwpU9
-         bnb/zURAcw+Fj4DVtCKc6v3fWn3jQxYa9nVKqK6uFtSLgG9OezJg+ulRGCa5IOu613pj
-         aTtp6LNbxo7NOrRfcjNyJnI+R/KUPUg8jaNfQHnF6Ky4m6UNV/CKlZWQ6UlKzM8KlJkz
-         vGJA0K0bEDOCqYfC7Y8WutyeCorRT0/2WLj6rQIGvhym11ShBFaTueURSVOh8via6rJc
-         Ha1Q==
-X-Gm-Message-State: ABy/qLYA6M8QsfFg17fNaTfGwpOJpAFlA01i3vU05rm+WV+lLIqIlS/o
-        ONnItgAykzdlWXVYu6nL4MkNfleZRcDvPAxxu0M=
-X-Google-Smtp-Source: APBJJlGX+HQAUgcwh5aUbevyBV7Auco1dx/c0vI2lwouiMuJpkFdnAyw13cNFf+KlvG50Qc45KCcJyggHhnzFoKfJPU=
-X-Received: by 2002:a25:320c:0:b0:c2b:cc71:d870 with SMTP id
- y12-20020a25320c000000b00c2bcc71d870mr9565258yby.57.1688410695987; Mon, 03
- Jul 2023 11:58:15 -0700 (PDT)
+        Mon, 3 Jul 2023 15:00:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD60B90
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 12:00:29 -0700 (PDT)
+Date:   Mon, 03 Jul 2023 19:00:26 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688410827;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UCB5T/gy1GB3F/sOlhbXr9bhn6QO/yicK1iojSEVVxA=;
+        b=j1VyHdoBvUSxxunqe9vbEuvFeJWWVH6T2OUncwOC9xTnMx9/GRlrzIQBQYxZyVgYmCaQpp
+        qXBrRJeo0t3B12E2NOkPFg9q1pwLXwLkG+6f0JOvG41MD3FdR2BOCiB1EPUvkxfS7PgYqa
+        jsuJGoHBJK7FNr9bgDfCU1StHLS0j7mxKtnbgSq55Zofv82R8Q/A3kP1i1EUtms7QqXuZd
+        I/XjTr0Sb59brkBli+71IAOaAzkMDFRXgnMHwI4jwBzjDwG4NEO0zB8wu3H76QET7CfCNW
+        1ZZ3n4UEKMfnu8FHvxPj/MWZKWDcMFdzrWn1cW+Qbj/iAJVcKPiDfv1k50qJXw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688410827;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UCB5T/gy1GB3F/sOlhbXr9bhn6QO/yicK1iojSEVVxA=;
+        b=PsIOfO+CLGxUo0ZYczLGK11FbB5xUFkVVa/ctiGKPst1SGHqM/0qVsykzyd7l+Q5ScBetR
+        Gon1+IxHhvPM2NDA==
+From:   "irqchip-bot for Sebastian Reichel" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irqchip/gic-v3: Enable Rockchip 3588001
+ erratum workaround for RK3588S
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20230703164129.193991-1-sebastian.reichel@collabora.com>
+References: <20230703164129.193991-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230703-71f67eb66a037f5c0fb825c6@orel>
- <CAEEQ3w=7tBHyG=CvuktPN5cvfpY6ayamnbry6eOYxMDrPN+oZg@mail.gmail.com>
-In-Reply-To: <CAEEQ3w=7tBHyG=CvuktPN5cvfpY6ayamnbry6eOYxMDrPN+oZg@mail.gmail.com>
-From:   Emil Renner Berthing <emil.renner.berthing@gmail.com>
-Date:   Mon, 3 Jul 2023 20:58:04 +0200
-Message-ID: <CANBLGcwcvK55dZ1__wvWCtcw=XoKt=qki8g6C_QYo+TBqqJ=TA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-To:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Cc:     Andrew Jones <ajones@ventanamicro.com>, ardb@kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168841082652.404.9728132604301003133.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 15:33, =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@bytedan=
-ce.com> wrote:
->
-> Hi drew,
->
-> On Mon, Jul 3, 2023 at 9:01=E2=80=AFPM Andrew Jones <ajones@ventanamicro.=
-com> wrote:
-> >
-> >
-> > (This is a reply to a non-existent cover letter.)
->
-> This has been discussed many times with Ard, Please refer to :
-> https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1-c=
-uiyunhui@bytedance.com/
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Hi Yunhui,
+Commit-ID:     567f67acac94e7bbc4cb4b71ff9773555d02609a
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/567f67acac94e7bbc4cb4b71ff9773555d02609a
+Author:        Sebastian Reichel <sebastian.reichel@collabora.com>
+AuthorDate:    Mon, 03 Jul 2023 18:41:29 +02:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Mon, 03 Jul 2023 19:48:04 +01:00
 
-From that discussion it was mentioned that that arm supports 3 methods
-of booting:
-  direct + devicetree
-  EFI + devicetree
-  EFI + ACPI
-..but not
-  direct + ACPI
+irqchip/gic-v3: Enable Rockchip 3588001 erratum workaround for RK3588S
 
-To me it isn't obvious from that or this thread, and since arm seems
-to be doing fine without the 4th option I'm curious why that's
-necessary on riscv?
+Commit a8707f553884 ("irqchip/gic-v3: Add Rockchip 3588001 erratum
+workaround") mentioned RK3588S (the slimmed down variant of RK3588)
+being affected, but did not check for its compatible value. Thus the
+quirk is not applied on RK3588S. Since the GIC ITS node got added to the
+upstream DT, boards using RK3588S are no longer booting without this
+quirk being applied.
 
-> > I'm not a big fan of adding yet another interface. Have you considered
-> > doing something like [1]?
-> >
-> > [1] https://github.com/tianocore/tianocore.github.io/wiki/UefiPayloadPk=
-g
+Fixes: 06cdac8e8407 ("arm64: dts: rockchip: add GIC ITS support to rk3588")
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20230703164129.193991-1-sebastian.reichel@collabora.com
+---
+ drivers/irqchip/irq-gic-v3-its.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Also you didn't answer this question, which I'd also like to hear a reply t=
-o.
-
-/Emil
-
-> > Thanks,
-> > drew
->
-> Thanks,
-> Yunhui
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index 5365bc3..e0c2b10 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -4744,7 +4744,8 @@ static bool __maybe_unused its_enable_rk3588001(void *data)
+ {
+ 	struct its_node *its = data;
+ 
+-	if (!of_machine_is_compatible("rockchip,rk3588"))
++	if (!of_machine_is_compatible("rockchip,rk3588") &&
++	    !of_machine_is_compatible("rockchip,rk3588s"))
+ 		return false;
+ 
+ 	its->flags |= ITS_FLAGS_FORCE_NON_SHAREABLE;
