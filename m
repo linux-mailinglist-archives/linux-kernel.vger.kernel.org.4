@@ -2,226 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A972874563F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1464B745644
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjGCHnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S229830AbjGCHoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjGCHm7 (ORCPT
+        with ESMTP id S229597AbjGCHop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:42:59 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB28C1;
-        Mon,  3 Jul 2023 00:42:58 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b698937f85so67109061fa.2;
-        Mon, 03 Jul 2023 00:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688370176; x=1690962176;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1fo/4xJmI/v8Apxv9iZE5rA9bnr+7LUJRY6uhOPxrs=;
-        b=XTuXbF9NC0ZLUFLxZHbCrh3BmMosYZaCcPoeLni+PwhvONO2MBefRwIVdNhR75bJKG
-         XwZKEo9RjfCO7OaaiKzfTjv7G9R17HRp6865LFsLPbmgEc4c1ju6/W9CIOzeuvxOp3im
-         IRhzqK25pn8mJWiUqycZyFM/wAT24ZmeUrQaE5kt+P71VKOl4Yl7aqkS4Mw6Vr8WElKy
-         lUoWAojpHSEyjyXzzCrdbUWhothijb5FFlUGYgKjbmF4NL3VOmX3/gM4WrEuIximSsrn
-         egoeVN2r20c+4kVR/tD+nan5IcPTGaHA46PrObKU8JfE634aoogYUPucgBf066n8gZOh
-         XJ+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688370176; x=1690962176;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1fo/4xJmI/v8Apxv9iZE5rA9bnr+7LUJRY6uhOPxrs=;
-        b=ls/Eh1nGOiCrMRxq513E45c38xzm8DTaYkaV+gFzxtctx/UuxyfVIJjmfhGnMxTRzd
-         +N0l2shONa5FTmKHtayfIjkMczI276gwRSJKMoGxAxJ8E6Omc2pd/ylPzA0XcAdqZGiV
-         BTQCTW+19g7GsY9hTZCVLpW2s8czEv718Unw6KB6TTVfUJHoZc9looClnc/XboCINS58
-         sL4DByPziFLkg10twWh9aYakpzNuJ+0kvk5FkBemt8KFVftJr1cW0Y7d5caqIjUse4OR
-         FzNuJ5kWPTHvU+Y9vvUEQzndJaWXoMbmqxHxtWrZXDx2VbIsK2ZQTpH/NQnjoy1PGq1e
-         /m/A==
-X-Gm-Message-State: ABy/qLbiYMkhRqQqaX4rmdm7xt0GUZrXoD6l/JfHhYBzUlHEz6w2wTKI
-        /6R7covTAqz76E+AU3NIK8k=
-X-Google-Smtp-Source: APBJJlEihHpYEQV3HBBUGCrGICtVF/Y3mrZuaF6KRazeMHpNXruNvJsym66J/DOXgm+zAeWs8K9cRw==
-X-Received: by 2002:a2e:900e:0:b0:2b6:e121:cf68 with SMTP id h14-20020a2e900e000000b002b6e121cf68mr2760105ljg.5.1688370176174;
-        Mon, 03 Jul 2023 00:42:56 -0700 (PDT)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id o6-20020a2e7306000000b002b6e77e87fcsm704378ljc.68.2023.07.03.00.42.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 00:42:55 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 10:42:46 +0300
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        <quic_abhinavk@quicinc.com>, <contact@emersion.fr>,
-        <laurent.pinchart@ideasonboard.com>, <sebastian.wick@redhat.com>,
-        <ville.syrjala@linux.intel.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>,
-        <wayland-devel@lists.freedesktop.org>
-Subject: Re: [PATCH RFC v4 7/7] drm/msm/dpu: Use DRM solid_fill property
-Message-ID: <20230703104246.7226953a@eldfell>
-In-Reply-To: <20230630112649.263331b4@eldfell>
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
-        <20230404-solid-fill-v4-7-f4ec0caa742d@quicinc.com>
-        <20230630112649.263331b4@eldfell>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Mon, 3 Jul 2023 03:44:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD67C1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:43:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688370237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+izZ056qkx9wA4inyIESYge9LDOiXeBR8mNGux+wGrY=;
+        b=P3oNtMuBn8BryPEUfLLUrjmx6u5lRpkoCLV6rykUGyuSnYxuu8tOk5rXkDF0BwYqoh2hni
+        xVL9EBL2WW1rphykHkt7hqGNszS2fYPjR5DFO7LNRE1d1hK9+RAxwyorGigE25hNMUBq6s
+        u5Ol/TYIdV/Y+Te9jJIhS7r1kOFH+Ak=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-523-yUKSl3uqMPq6z5xBHPWbzQ-1; Mon, 03 Jul 2023 03:43:54 -0400
+X-MC-Unique: yUKSl3uqMPq6z5xBHPWbzQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C8573806707;
+        Mon,  3 Jul 2023 07:43:54 +0000 (UTC)
+Received: from [10.39.208.21] (unknown [10.39.208.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BA0544087C6A;
+        Mon,  3 Jul 2023 07:43:51 +0000 (UTC)
+Message-ID: <571e2fbc-ea6a-d231-79f0-37529e05eb98@redhat.com>
+Date:   Mon, 3 Jul 2023 09:43:49 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=0TNTkoqRYefLA_rwhlpF9P";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
+To:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     xieyongji@bytedance.com, david.marchand@redhat.com,
+        lulu@redhat.com, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
+References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
+ <20230702093530-mutt-send-email-mst@kernel.org>
+ <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
+Content-Language: en-US
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+In-Reply-To: <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=0TNTkoqRYefLA_rwhlpF9P
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, 30 Jun 2023 11:26:49 +0300
-Pekka Paalanen <ppaalanen@gmail.com> wrote:
+On 7/3/23 08:44, Jason Wang wrote:
+> On Sun, Jul 2, 2023 at 9:37 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>>
+>> On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
+>>> This small series enables virtio-net device type in VDUSE.
+>>> With it, basic operation have been tested, both with
+>>> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+>>> adding VDUSE support using split rings layout (merged in
+>>> DPDK v23.07-rc1).
+>>>
+>>> Control queue support (and so multiqueue) has also been
+>>> tested, but requires a Kernel series from Jason Wang
+>>> relaxing control queue polling [1] to function reliably.
+>>>
+>>> [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
+>>
+>> Jason promised to post a new version of that patch.
+>> Right Jason?
+> 
+> Yes.
+> 
+>> For now let's make sure CVQ feature flag is off?
+> 
+> We can do that and relax on top of my patch.
 
-> On Thu, 29 Jun 2023 17:25:06 -0700
-> Jessica Zhang <quic_jesszhan@quicinc.com> wrote:
->=20
-> > Drop DPU_PLANE_COLOR_FILL_FLAG and check the DRM solid_fill property to
-> > determine if the plane is solid fill. In addition drop the DPU plane
-> > color_fill field as we can now use drm_plane_state.solid_fill instead,
-> > and pass in drm_plane_state.alpha to _dpu_plane_color_fill_pipe() to
-> > allow userspace to configure the alpha value for the solid fill color.
-> >=20
-> > Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> > ---
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 21 +++++++++++++++------
-> >  1 file changed, 15 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/dr=
-m/msm/disp/dpu1/dpu_plane.c
-> > index 4476722f03bb..11d4fb771a1f 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > @@ -42,7 +42,6 @@
-> >  #define SHARP_SMOOTH_THR_DEFAULT	8
-> >  #define SHARP_NOISE_THR_DEFAULT	2
-> > =20
-> > -#define DPU_PLANE_COLOR_FILL_FLAG	BIT(31)
-> >  #define DPU_ZPOS_MAX 255
-> > =20
-> >  /*
-> > @@ -82,7 +81,6 @@ struct dpu_plane {
-> > =20
-> >  	enum dpu_sspp pipe;
-> > =20
-> > -	uint32_t color_fill;
-> >  	bool is_error;
-> >  	bool is_rt_pipe;
-> >  	const struct dpu_mdss_cfg *catalog;
-> > @@ -606,6 +604,17 @@ static void _dpu_plane_color_fill_pipe(struct dpu_=
-plane_state *pstate,
-> >  	_dpu_plane_setup_scaler(pipe, fmt, true, &pipe_cfg, pstate->rotation);
-> >  }
-> > =20
-> > +static uint32_t _dpu_plane_get_fill_color(struct drm_solid_fill solid_=
-fill)
-> > +{
-> > +	uint32_t ret =3D 0;
-> > +
-> > +	ret |=3D ((uint8_t) solid_fill.b) << 16;
-> > +	ret |=3D ((uint8_t) solid_fill.g) << 8;
-> > +	ret |=3D ((uint8_t) solid_fill.r); =20
->=20
-> solid_fill.r, g and b are uint32_t, yes?
->=20
-> What's the value encoding in the UAPI? That doc was missing.
->=20
-> I wouldn't expect the UAPI to use 32-bit variables if it was
-> essentially 8-bit, so this conversion looks wrong.
->=20
-> Nominal color value 1.0 in u8 is 0xff. The same in u32 is probably
-> 0xffffffff? So a simple cast to u8 won't work. You'd want to take the
-> upper 8 bits instead.
->=20
->=20
-> Thanks,
-> pq
->=20
-> > +
-> > +	return ret;
-
-Btw. if your driver format is ABGR, then this function leaves alpha as
-zero. That's confusing.
-
-It would be nice to mention the exact pixel format in the function name
-so the consistency is easier to check in both here and in callers.
-
+I agree? Do you prefer a features negotiation, or failing init (like
+done for VERSION_1) if the VDUSE application advertises CVQ?
 
 Thanks,
-pq
+Maxime
 
-> > +}
-> > +
-> >  /**
-> >   * _dpu_plane_color_fill - enables color fill on plane
-> >   * @pdpu:   Pointer to DPU plane object
-> > @@ -977,9 +986,9 @@ void dpu_plane_flush(struct drm_plane *plane)
-> >  	if (pdpu->is_error)
-> >  		/* force white frame with 100% alpha pipe output on error */
-> >  		_dpu_plane_color_fill(pdpu, 0xFFFFFF, 0xFF);
-> > -	else if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG)
-> > -		/* force 100% alpha */
-> > -		_dpu_plane_color_fill(pdpu, pdpu->color_fill, 0xFF);
-> > +	else if (drm_plane_solid_fill_enabled(plane->state))
-> > +		_dpu_plane_color_fill(pdpu, _dpu_plane_get_fill_color(plane->state->=
-solid_fill),
-> > +				plane->state->alpha);
-> >  	else {
-> >  		dpu_plane_flush_csc(pdpu, &pstate->pipe);
-> >  		dpu_plane_flush_csc(pdpu, &pstate->r_pipe);
-> > @@ -1024,7 +1033,7 @@ static void dpu_plane_sspp_update_pipe(struct drm=
-_plane *plane,
-> >  	}
-> > =20
-> >  	/* override for color fill */
-> > -	if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG) {
-> > +	if (drm_plane_solid_fill_enabled(plane->state)) {
-> >  		_dpu_plane_set_qos_ctrl(plane, pipe, false);
-> > =20
-> >  		/* skip remaining processing on color fill */
-> >  =20
->=20
+> Thanks
+> 
+>>
+>>> RFC -> v1 changes:
+>>> ==================
+>>> - Fail device init if it does not support VERSION_1 (Jason)
+>>>
+>>> Maxime Coquelin (2):
+>>>    vduse: validate block features only with block devices
+>>>    vduse: enable Virtio-net device type
+>>>
+>>>   drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
+>>>   1 file changed, 11 insertions(+), 4 deletions(-)
+>>>
+>>> --
+>>> 2.41.0
+>>
+> 
 
-
---Sig_/=0TNTkoqRYefLA_rwhlpF9P
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmSie/YACgkQI1/ltBGq
-qqdvWg/+IUlRh8UhRQkQoJS25uUvPZS8VcXCmrgzoWzMxdliGqBuuBZYtX4eY1gZ
-3E1nEhYylI4RoAF6JuNzoHaegBpK8TmFcx60sj1Y8WQnH6DlWni3FsF/+4T9jwbn
-IZDcOl3oihEsOPZgtbHvnpJgpqyVrGG+C7hVIvlLK4j8ngn1FC9aj63mTlluInlS
-ER82vqXHRw+QXOYiyj2XmrylS36mXTambq0iJKYQLLIEz0hJvN6ZEBjd06GZWJTW
-8R24cX6zSTNC9jY4F7aL21i8eUqLLa79/lYQ+kkv28ClsH2xZGr2R2+KiaDVOYaR
-7n74EWWIMyt/f2XYdkzM2K+TMF6P61/CZy9nfW74YeoPadI4oJV5x2Sta3RqtqPH
-TpUmikI9n+LwSEqDjXGmxbI+/xAqt5sfpS0wgBH11tD7R0f41LB98aw6zPcxlR4e
-n4Rvdpow8UpOZv7WSXkLjkU0qto8DOEHANhCUBPFwuqybjlPjvi7w0dNSs7K32xj
-BQiDoBOz2c+8tfpo3KqjJmkxk0r/E0wDwqIh/N/j8Uit6mmbPH62lkwZYLLBkOkg
-mPMDAB8wj1lHazzbGJnvTCCXnsWlNv1eNWGelRHlGFaL7DuQPRZReU1SDfjhU2sH
-+DXeGFF7jsTt1Muzt/ol9LhgrHTWsP5N1DtGWayklopgc9nZhJU=
-=OtQx
------END PGP SIGNATURE-----
-
---Sig_/=0TNTkoqRYefLA_rwhlpF9P--
