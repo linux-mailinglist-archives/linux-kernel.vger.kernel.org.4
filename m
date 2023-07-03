@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1184574581F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC70C745825
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjGCJKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S230494AbjGCJNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjGCJKi (ORCPT
+        with ESMTP id S229701AbjGCJNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:10:38 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2137.outbound.protection.outlook.com [40.107.255.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25896CE;
-        Mon,  3 Jul 2023 02:10:36 -0700 (PDT)
+        Mon, 3 Jul 2023 05:13:49 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2093.outbound.protection.outlook.com [40.107.215.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94AE12E;
+        Mon,  3 Jul 2023 02:13:47 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EWU6cFT0YyPw15SI2AHl5+c7/Ib13RCHXMeuzEgkf6tHC/VPK0OiOZ4YNfH6rYNzlMXD0kD7+8cnZul615Bf1P1mUp6eRCRqZoOlgdJoRUdRfWdi42XEUkYutNmrWaYuD8yG1ugJOAdSLvlNXF6h26+/8v1GbQnpO2n6kNaS+xYkg2SCyEVB8k5+R21CkvWVesddOa2F3y+8K1nW3Vq673cUDHbBmjqma8nB7k6HYw5Rdn72Lxu8uw183Ayl9hyQ5c5HfcuulMd8zIA7PcBEfAgV80mUOvtJ2sbiRUwUicyAD8sEAlOIHZcH3D/J2ckgWluARm2wNi1E2FFbs7RPfA==
+ b=h1xHkIb9Sbxvr4xJqBmyqYdXMymUQ/+k7CnWe8t9ozRfjKC1e2gPJTZfgZpLhEZ7JXF8y5kYUCdsVXNp6F3qRSuWiJYRjk14L5D/FTg9s4AH2hMqUxUlSDUoKFajxQFEfhkyvRqHDeBzvmtjzigDzcCoPlRT0QUFfG4d8MN58qbUUqg7pkdZAoMBizHsa2CuhFwj4IxeiXeGXIpiz7hiYEV+KGVl7lzEB+BeUuWNONwzy7UZJv4RDd+drNFgvTMVEIUq45TkHysrjGFWI+Z9qfBrUIHhG4Kl9o31ydbp4NbBed2sZXt2XeDkIFSFmK58VRcxsp5/6qtWelhKZbDa3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2kTEICfvZlWArhXQExtpRh1wsCPBwmSLMuFnRrUqvfg=;
- b=TzduVwHledEseTbIy+Eo+223uparBYUtpTjjwHOtCFPM+6qYGK89Fe7F0GGKE8DyMN+zYbq675eHL/Kmz8kFL/MHwOseDznoXhPZvOp7duBiC9Y1FsvKDpQJCkAto1xHedhE0OWrdIDwLHDjRMUWgMoG1Bbjk78Ezt24IVh/45V8+WnpbFcclY+UeLj1A/zK3rK6zQRrNlB3UWaj0GACQqhzPNKoOg/ETMSRDzrLv9oYAloq4G4B9pnNOM3r49tyenu5cXCnFfqEu181NslS6Zh05X2h7LUQsJKnFLPJ8b8OXHfRLO/Jy6NLnMZQlRM+RZCuuFZBTJfCGUubxM8ASA==
+ bh=czK4J5IXuhM9FcHbc3AGmLW4qty5n8A7jCu7uUaSXaE=;
+ b=dbgDqvBYLuEozdIcYI/Da5ZMxJRCSKiGXzePxP3TlKDS2tqYOhzViU0QDZ/EGNhmsIlAs+ERd1VPi875TAyqziZMW7sx8OtbCZGEcY0DCseTfvi4hU/9pQu5jLBqIIUIHna/uuCNei9xbw9Z3k25d+LpNUlFsXB53VUcvgET7ef2K+p+8L4frj0u4j+TWuGcUkmnskudBCGsT2pH8lmFem0PadQ65IvrbqvGSCwNjxJCU4hNHhO0uYFstdvaHxF6A9798znMxnsdejiYrSth0Tuqpm3HPgVhmVxd6be2VMyIHn7Rir87OVBLAnX2TJuGLunfTaqBaOgyFecbyJACUA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2kTEICfvZlWArhXQExtpRh1wsCPBwmSLMuFnRrUqvfg=;
- b=Rk1+SEfYBzbTGHFSo5BIRSffs8f0qAxW7lQXtgDNGIbxaV1oese5AE7dyATqzyyFQ8+YFTecV03TccQNyKxrxXW6fxRftTzYMFAes2EA7duClGwGPmIUY/KOrv6a7ZReoj0UTnGxxvSKbhkVmzAFfW2qfYp28//WFlzo9IZl6AvY4N0av61uc+2xmGOOxD0zK9SkiKIHOVNkBCVb4k1ULObIZNU37SLsbwIdbx7unOjpHytUXSOzmdr7q+UNXG7UwzuI3/PABVS8Gka/7fYGPNkKEQXNuEW7Ezmj6zjRFbyLMroscn/kbLc+23OVTvskOvUFB8EKGMZzafzf8KyqpQ==
+ bh=czK4J5IXuhM9FcHbc3AGmLW4qty5n8A7jCu7uUaSXaE=;
+ b=SU8O+Hw0TMTkpu0cu+voeWHi9pzPWwTbsaBKLZggBTsoYyMSqfT8k0D2ibGF+4/gG1e3ORkgViy3FxE8x0Gx8PpLVksFY8MIWNj0s62bx4dOxFwN8NscDfE32lQCTf6RTkMHMPXVxuCnCxNw9WJuJd4zxnsbjaqlPIpDxc9Lvzen55kSEBHcp9Mvf4o+B3ChtgdOjWjJrPnXgPxA1DtfRJtcxIG33VKtokhyPEkfddBUnS35hiINhNUAzEQKkxfA4KaQsa8YyDTYKAMrZC4km3WJl0ISWg2DC8lwiYxsJrPjTgU22tOfrHypYQEJXmcWxgumegcdepQffmKM8gHMbg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB4003.apcprd06.prod.outlook.com (2603:1096:820:26::6) with
+ by SEYPR06MB6507.apcprd06.prod.outlook.com (2603:1096:101:177::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
- 2023 09:10:32 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Mon, 3 Jul
+ 2023 09:13:38 +0000
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
- 09:10:32 +0000
-Message-ID: <db14ea3c-c224-e263-e134-70e9acc5008a@vivo.com>
-Date:   Mon, 3 Jul 2023 17:10:22 +0800
+ 09:13:38 +0000
+Message-ID: <690b12b7-5586-6ade-de83-99f463bc8397@vivo.com>
+Date:   Mon, 3 Jul 2023 17:13:29 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH 01/15] genirq/devres: Add error information printing for
- devm_request_threaded_irq()
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        miquel.raynal@bootlin.com, rafael@kernel.org,
+Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
+ for devm_request_threaded_irq()
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     miquel.raynal@bootlin.com, rafael@kernel.org,
         daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
         mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
         florian.fainelli@broadcom.com, shawnguo@kernel.org,
@@ -56,157 +57,175 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
         heiko@sntech.de, mcoquelin.stm32@gmail.com,
         alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        jonathanh@nvidia.com, matthias.bgg@gmail.com,
         angelogioacchino.delregno@collabora.com,
         srinivas.pandruvada@linux.intel.com,
         DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
         bchihi@baylibre.com, wenst@chromium.org,
-        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+        hayashi.kunihiko@socionext.com,
         niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
-        johan+linaro@kernel.org, jernej.skrabec@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230627071707.77659-1-frank.li@vivo.com>
- <82dc5efc-35fe-15ff-d0ea-e1a19da71c5c@linaro.org>
+        linux-arm-kernel@lists.infradead.org
+References: <20230627101215.58798-1-frank.li@vivo.com>
+ <20230627110025.vgtplc6nluiiuvoh@pengutronix.de> <87h6qpyzkd.ffs@tglx>
 From:   Yangtao Li <frank.li@vivo.com>
-In-Reply-To: <82dc5efc-35fe-15ff-d0ea-e1a19da71c5c@linaro.org>
+In-Reply-To: <87h6qpyzkd.ffs@tglx>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0008.apcprd04.prod.outlook.com
- (2603:1096:4:197::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR04CA0016.apcprd04.prod.outlook.com
+ (2603:1096:4:197::7) To SEZPR06MB5269.apcprd06.prod.outlook.com
  (2603:1096:101:78::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4003:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc1a2b51-0417-45d4-19f5-08db7ba55a69
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB6507:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12bc9ed4-346a-4e04-1fe5-08db7ba5c992
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nnA23rMGUz1VtpvhOHB0HRLXA4hjj8e7U3BybAuxiRmJO4xC/eQFV8/51RyZkXSkMju6bfHc6sWhEh2ybCfOjRZldBG3KFU34I4vJ6PnuZFkLnESN06eeZRq0xJsYpt0Yfj1jxc7miPwcNL67R0uNc1mxO2Ii8dGvH14eBGJqF7q2r5PpB/1FiL4hLN5asPw2sr5TfJURPF4GOAHYok5kDMyYR4OF85oUUHj+iyyY/EVaXzo/hfoONHZvcL+ypOhU8iO3PpXleV0bki3YJwvYwCLLN+IDhAm6X3d3Cais+/wazWBhGlAtRSCuuNn+9Fe3daFmj/+OXASV3GWf4Oqyje6zpLdQIUEkcDy7gzdG0xmL2Tg704eFLWWkrTpYuiC/1nzxB7jWh7pb9580qKmaR3+Uxgbne2nr7SIm7lPk8YiVDkAcHpcYcGXiYjhaXU22s5Ocq5PrgUGIboYn2uNGNhWR0A76hjXzboBi6XwX/KnqW3wOthFT9K8jpSZeFlZtZFzy2wzc8QmmMerWcrOLcc/j05o9QKfAqGBsRzdynhNjMB5luTAJ6TiQYVTuB7hspC+KhBEbDMEZlovdJYJVdAyfoEfkp4yjrLgBJt85QYHjlZ6aPDjkYKl0jTMb5EVONceHjjGophCE9bscb/a9R+U6oS2+61DoVgdJsuWKf2NKwQIGFCfS1pp6/3FxaNlrXKmPWIKbvVCDMXvCx6Q/A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(346002)(39860400002)(376002)(451199021)(2906002)(41300700001)(8936002)(5660300002)(8676002)(7416002)(7406005)(36756003)(31696002)(86362001)(186003)(2616005)(31686004)(478600001)(26005)(6506007)(6512007)(6666004)(53546011)(6486002)(52116002)(316002)(66476007)(4326008)(66946007)(66556008)(38100700002)(38350700002)(921005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 6g2591paU51B2LYfKRd3d8yTh3hnH7RW/52U8T0DgoZ/TcZOBLFgaTWmhSDCXX0b5HH5PRolb6hi8tJ+awJu4SPYiFQopWd1v8WK6ciWg80J/FudpD26VflnwIvuxfYu0iqpCX3UmFs+MGq3USNh8tMWv7ImsnMyntqUipN1sp+m5KegxnLKRH3xeu12qEBEOw5FPX99Zm/epC04jN2KfYTn2IXBkGaRQKIkBWFDO/uabW8fzQHUdEJkiyjQtPiBU1fWFVfJc6kBL+oTj6UhOAGN3ZatERcnB2mrNMJq4MRAtsdL5r2oIs0N1KH1A2aflBrMJakDeUW5r93Cu1N0/bqa6/yWA2c+WR8rjFIErVNaNs2GEVih4O6WvyGAogf6ZVA8xQZQsL9YnJS0ZooF2PDLTFYtweFBIi4oYqmr3RoFulhN/Wven6fSgK8gDu5OYf/1CwCTKZI+IoiFA+16Se/DSuAaj4sRBhei3y6aR6XmwSo6d68D02rKhCYmCeEae1PV+ZoXEnhcvuSUbJZC8D12SFWzYsZ/EvtHTaSZKffJiknBDqHCqqdfC9FpcujnxuGeQDsUoaU2ziMVoMJhzPztqIjPLAIv6ajG/PKWot76MjAeW4TnAol4k4ADLAteCHZi40h3eeoxMRKaak6DufcDULEC2N/gE4isFaBp7TqzFEJicjTapjcprSNVMQA3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199021)(26005)(66574015)(6666004)(6512007)(2906002)(186003)(38350700002)(6486002)(52116002)(38100700002)(2616005)(83380400001)(86362001)(53546011)(6506007)(110136005)(31696002)(41300700001)(316002)(36756003)(4326008)(66946007)(66556008)(31686004)(66476007)(7406005)(5660300002)(7416002)(8676002)(478600001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2I3QXBKM3JvRGVKSzEzODkydlgrYytGais2VCs2a21PdWhoYWVJSEJyZmlC?=
- =?utf-8?B?cTZaNlcwWldGc2tmVEhtMUFPR2JVNUlvQVhhL2l3SlY4TUI5cjJTLzV3aGEr?=
- =?utf-8?B?VktmTzJueFV1Mnd0VmNqemVjcERva0xuS2xsU2l2QkRVUkJSSzcxK2RHZ3lQ?=
- =?utf-8?B?d3hlUzJHbXFOT2xjVE81bUFhUmh4UUdxb0YwZXNhOXYvcTZuMWdjM0xkTzA0?=
- =?utf-8?B?bHhBWHZ3bzJXRnROZ0gxZEp2UG14czdUNmhwa3JSbUtXVnhsckQrU1ZFQUJm?=
- =?utf-8?B?MUI2b0NiMnhhY3FPQVllMDdvSGQ5V0dpM2F3WXFBMGFRcXhJTjVwY1BsU0o4?=
- =?utf-8?B?UkNYV2lRSXl6SVAyNys0S2wrYVJhbHVLNTBSVFhlZGkzRmczQ0ZDUU1KQWZZ?=
- =?utf-8?B?MjNlK01OS1FraVNIelNWUnU5bEFMQUtrT0tRNlhPRGdma3VnVW13eG5SRzV0?=
- =?utf-8?B?QlFoMzB2Z0ZEakNJSlZBUXdKR2F3cXdjc2xONXR4bUVXZVNQZWV2SjdIdm1S?=
- =?utf-8?B?WWxrVkhpaGhXOS9BZ1pRWVZQQ1B2UzRLNnFTaXZBdVJtcUZwMk1NTkYrVHU4?=
- =?utf-8?B?QzVqR3M4TU44eDN2akQ5OFkvV2ZBY1FWTW80d0FiU09iRnNQbUdPUyt6RHhM?=
- =?utf-8?B?cmxSN0oxWERyQS9hM1loZXJFU3pOL2xSLzlWQ2MyRFJ0RGE4TW1GTGVnSVll?=
- =?utf-8?B?emd2WkNMWU5iclVFRzAyZys3UnQwLzJyQmxHblRPVDVyWEhKZ2hBSExPSmVh?=
- =?utf-8?B?aTdzanVJNStGZzlQeWF0ZkZ3MG4xaytCMTZ2cXUyaXUzeDV2SXAzL0NWTFJG?=
- =?utf-8?B?UVRtTmFwYStqVVVDRmdvbmNoYzd2RUNSSnRFMEtFMmRkVytMTTAvTjg5QlNp?=
- =?utf-8?B?Wk9jelBucVh0Z0NKZW51VEZzUlBsaFhrcnQzclllS21xWEdqUlZZTzUzbnpo?=
- =?utf-8?B?TGlWOHZHTjFubHdQK241QnBOZ0hrZVNlOHVXZEJyT1A5RjlwOEVJRFUvT05z?=
- =?utf-8?B?NFdiZkxaZHpNbEZMbWQ5YTUycDFDQXh1ZkoyWkV6akEyQ2Y1TlFIU05ScU1I?=
- =?utf-8?B?RlZQNmF4ZUV5QkRXM0JDOGQxQmRMMjBERnRDVnIrRllKajBlalpBTms3WmpW?=
- =?utf-8?B?VzV6eUxVYmVJVmFtT2o0aWxDT1ZLeU80SlRLZ3ZBOHlXMDBvSE1BbFNBVGxo?=
- =?utf-8?B?c1lYNnBabHRHZTBSWlAyRllUWnUrYnRTRUFOYlVGTGRKWHJwTGJDL3VyOVd3?=
- =?utf-8?B?blF3OW05bE9MZm9XTXdXbmhTeVZJODI5aWZ1aktaaDFiQWhtcXRvcWlRUHJ5?=
- =?utf-8?B?c01aYjNNZGk2RnhWU1FjMFdsVGQ5QXUxLzlFZVdiZHpIcFhhRE5sUHJiellk?=
- =?utf-8?B?UjFUUjhRaDVOMnZJYjB5dDhsa24yd0JFSzlxY090K0NSUi9ubjNTZ0tLL2NR?=
- =?utf-8?B?NjBydWJOYjNDZ0RQS1ozNkNmOXNNY2M3QnNscW5XTkYwcWlTaUZ6c240cUdr?=
- =?utf-8?B?WGxCamJ1QS9EZEQ5QWFuQ3RHRG85T3ZaNTJqb0R5UjlxVk1nc2dmZjZieFRo?=
- =?utf-8?B?d3BDRHdXVkF3enZhZnR2b29MSnFFMDBIanZSRFJ5ZC9ieVRwaENHd016eTVK?=
- =?utf-8?B?NDhhd1BXa2E4V1ZhNnlvbXhTcEl1SmZaRUtZRHhpM2s2b0lRT2h0U1poOExC?=
- =?utf-8?B?WFVoWTNSbXl4Qm9EcktDZ3hVS0Q1MzRqbDRBS0dzRDEyZmpacmZQRjRqczV1?=
- =?utf-8?B?NHpHK2NwdTVZTUkvQzBKWXV5RG10M0ljbEJ2bDZLaW04anpYNXVVVWNYZ2Jm?=
- =?utf-8?B?cGx4YllYMWkyUm90eHhaS1h4WnROMlNiM2R2WUZaNEllYzVnOFYzanQxN3E1?=
- =?utf-8?B?ZStWSzliKzBJUnVYZjJPU3ZnU2NpOGZzL04yOVVibnZucE9XbGljVkFyWlhP?=
- =?utf-8?B?dEdreTFtWkJNTHd6dDc1TEFKSWpyMlp2T1hHK1FjMHZMbjhVQUR0NXdUU0xu?=
- =?utf-8?B?ZldUY0N4bE4wYXVUZUJCWHFEUlVIU2lSY1JkeFk1Q2RubUlRbzhZd1Z6OUNU?=
- =?utf-8?B?eUtZd2NOUlVNTkExUDB3RUMvY29NRWFDR2k3WW1SbXdKMWxObG13ejZWd2Zi?=
- =?utf-8?Q?GiR3mxpqHIYOLSBWms3m5HVui?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHJlZ3VDTGJWMlozNkFoRlgxTSt6S2pTS0J6d2wyQU9DVEJVVEJhUStDSU9m?=
+ =?utf-8?B?K3hGdXRYeFRocWFwTzdNeUx4V1Z4emZKdGdnYS9iWmpRQlFPeGNVYmlGWHRw?=
+ =?utf-8?B?ZUptbU9lVXhha0lDZ1k4WVdJUW95MEV1MTA5SzFYVVhWMERMbXhRM0dWdmVR?=
+ =?utf-8?B?Tnl4OWNzMm1qS2JISVc4WGtkWWFiQ2krNUlTNjd4Rkl5MW9mL1VDNXZhckY5?=
+ =?utf-8?B?M2htazFsY0pDVjlYei9kVjlxTDRJcllhS3VWbGQxWnUvWTB4VFZXNk9oVFNQ?=
+ =?utf-8?B?a21vMU5yL1U1ZDFzRTNMdVgyOUphNXhrbjBoMEVnR1Z2d2R0clh3R0FtUHVp?=
+ =?utf-8?B?SUk4WXFrTzhFVTI3WkNNSXE5ekgzL09nK3EwZEpOTWpKc1BaWmxHSXNqY044?=
+ =?utf-8?B?Zm9ISHR4UWo1SHBlRjk3by9jUTc3TG9VK3B3RmtpQ1ZVU2JubTFvN1ZWRzhj?=
+ =?utf-8?B?WXlILzV2ODEwcFB6NHRVUGEyQWM1MzRXbUREM2hEK25XdjZtU1Fmb2E1T1FY?=
+ =?utf-8?B?cm1rMlhPbVF3UWR3UG5qajQrMVFKSzkyVXlNcVBiMjFNL3YxeUxidCtVbzhZ?=
+ =?utf-8?B?UmlWK21EUE4ySkM0US9sOGc1SGl5ZnpVVCs3bjJneGhvL1NTWVJPczFsdmhw?=
+ =?utf-8?B?bjNzamF3dUdVWVloQm4zMi9adWhaSC9iOWp0RmFhbEYrYitxNDRWRnE5U092?=
+ =?utf-8?B?em0vemd1R3RWOEFSSUREcDZ0RmoxRlVNeDVXRi8vazBPZ29nbnI4bFg5a0ta?=
+ =?utf-8?B?MW1XN0RTT1RnditDb3V3YjRsQnJlUlR6VUU1N3ZjWTBqN0RFeE5nNWU4eHg4?=
+ =?utf-8?B?L09lU3Rlclp4RmE4djljNkRDZGdrekFUdXZvS1FHWDMwZm1FMlB1bVhMWW1I?=
+ =?utf-8?B?Zmw5NlNDcE52T2piaUhDcmN1WE9CZS9oRUdHTitLNEpKSVN6cVMzUHdjUnl4?=
+ =?utf-8?B?SldzaklaUFFyUXVzSE1Bb0VCbGdxdnFSN3VlY3NIQ0FNdGx3ZjkybW9sdytX?=
+ =?utf-8?B?M293VEFhTURpWmhuUTl0QzJTYlp6aytqaVZBekcwc0lSZ0UzbWhkU1ZzQkJT?=
+ =?utf-8?B?UkJSRmVSa0dVUDBEd1ZRVzFCc3JYbzRjWDk0akZmZlVqOUN0a09TeTc4bzhI?=
+ =?utf-8?B?U0dtMXR3ZzVnaWsyY1I5dXRnUTU2YjRQSnJkMFNJWnFvNnRscE1kSXhDdlhy?=
+ =?utf-8?B?bXVEWDZrM3BLajlpTU85dUtZVy9EMkpsSjM3VjU4NmZObGF6N2Zrdm5HMHRQ?=
+ =?utf-8?B?aGNHY1pXR2xuM1Nsalh0b3NXNmYwRmttRXNsRnN4empMV0dWNnhhR0c3YWJO?=
+ =?utf-8?B?VUl3Z0RhZVNtVmJZU2tIalRlTnU0ZXliQTVqK0huc3ZzY21RV2loNjVQS1FR?=
+ =?utf-8?B?WE9GOG9EZFJ2bEJGYzYyakN6S01NcU5uWDJLSVQ0UHFVUWdsbEhyM2EvV2Zk?=
+ =?utf-8?B?UjBFWXRralJxbFJwM29KL2hLUlpxWkdzbnB5N1E4SlBua2I1TnlMMFRsRHNs?=
+ =?utf-8?B?S0d3WlphKzY0WDdZNWxDM1Y1NnUvc2VQU2tySHQvSFRUZ1lxWW9MSzMxWHNO?=
+ =?utf-8?B?TVdEbzhvSG0yRlp3TU1Ia2hNNnZZUUxFUGNrT3BZWWFhVVNWbG9CaVJCSzlD?=
+ =?utf-8?B?eGRhZGZiNXdaRUN2d3IwRlF5ZkZBWjZqcEJOdDVSbWpIbmp6SGxZZFRvMFZw?=
+ =?utf-8?B?ZHc1dDBYZWc5MEpLNlU3a01SbnQ4d212Q0FSL0w1cjMyNUtOcGdCRGcyVXdX?=
+ =?utf-8?B?T21CcDlxaWtKR1NkN2s0Y0FjcFFmUzR4WHVFYU9iNHNpenJ1R2ZDczUwc1p2?=
+ =?utf-8?B?aVlhcGdkUkpScHlQd0drY2FSNWZyelVsYk52aVZ2OUVPWk1kcjBvekFHcnZs?=
+ =?utf-8?B?ZmZ5TXlnNHJXR004WTVoU3lodjN5UFcwQkNLWW5INEFTT01DTDhZRE9QK1Bi?=
+ =?utf-8?B?UTUrdzBiTXZ4SnJNdlg4cUNUOCtFQm15d0lDVDNrWDZ6amdWejFmWUZ3RTRW?=
+ =?utf-8?B?a24vaGpraFovK3ZYOUNsZjc1aE8wZExJcmpMaTRRREJzZzZ0OHhoMXRBVWhL?=
+ =?utf-8?B?SXlBdFdlVzdlTUZ4bGR6aldhY0liQTRmWWd4MDJ2TTFMTU9VeWM3SkJrU1V2?=
+ =?utf-8?Q?tcer0ixeYUQPoh739LvZi58+g?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc1a2b51-0417-45d4-19f5-08db7ba55a69
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12bc9ed4-346a-4e04-1fe5-08db7ba5c992
 X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 09:10:32.3597
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 09:13:38.6811
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MUb5rdTLbhzZbvqSLtxZDAKYnZSkv8u7Nawtgyl7S4A8fuPidgyg6to7dXdRvDq9KeE9wACBT7J5CR7pbNgRQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4003
+X-MS-Exchange-CrossTenant-UserPrincipalName: 45HHPW41jyFfU6ygCABPNLCVpuXp5YnPFEFqyreTnASH2xNOJ9mJy5fIzpwYHJuIiVU7Rtje5G9JegX6uRNFyA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6507
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/27 15:43, Krzysztof Kozlowski wrote:
+Hi,
 
-> On 27/06/2023 09:16, Yangtao Li wrote:
->> Ensure that all error handling branches print error information. In this
->> way, when this function fails, the upper-layer functions can directly
->> return an error code without missing debugging information. Otherwise,
->> the error message will be printed redundantly or missing.
+On 2023/6/30 19:11, Thomas Gleixner wrote:
+> On Tue, Jun 27 2023 at 13:00, Uwe Kleine-König wrote:
+>> On Tue, Jun 27, 2023 at 06:12:01PM +0800, Yangtao Li wrote:
 >>
->> There are more than 700 calls to the devm_request_threaded_irq method.
->> If error messages are printed everywhere, more than 1000 lines of code
->> can be saved by removing the msg in the driver.
->>
->> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->> ---
->>   kernel/irq/devres.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
->> index f6e5515ee077..94039a915218 100644
->> --- a/kernel/irq/devres.c
->> +++ b/kernel/irq/devres.c
->> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
->>   
->>   	dr = devres_alloc(devm_irq_release, sizeof(struct irq_devres),
->>   			  GFP_KERNEL);
->> -	if (!dr)
->> +	if (!dr) {
->> +		dev_err(dev, "Failed to allocate device resource data\n");
-> Just like any memory allocation, I don't think we print anything for
-> devres failures. Why do you think we should start doing it?
-
-
-And tglx point out that:
-
-Having proper and consistent information why the device cannot be used 
-_is_ useful.
-
+>> While I assume changing to dev_err_probe is a result of my concern that
+>> no error should be printed when rc=-EPROBEDEFER, my other concern that
+>> adding an error message to a generic allocation function is a bad idea
+>> still stands.
+> I agree in general, but if you actually look at the call sites of
+> devm_request_threaded_irq() then the vast majority of them print more or
+> less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
 >
->>   		return -ENOMEM;
->> +	}
->>   
->>   	if (!devname)
->>   		devname = dev_name(dev);
->> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
->>   	rc = request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
->>   				  dev_id);
->>   	if (rc) {
->> +		dev_err(dev, "Failed to request threaded irq\n");
-> I don't like that one path - devm() managed - prints error, but regular
-> path does not. Code should be here consistent. Also error message is too
-> generic. You need to print at least irq number, maybe also devname?
+>       519 messages total (there are probably more)
+>
+>       352 unique messages
+>
+>       323 unique messages after lower casing
+>
+>           Those 323 are mostly just variants of the same patterns with slight
+>           modifications in formatting and information provided.
+>
+>       186 of these messages do not deliver any useful information,
+>           e.g. "no irq", "
+>
+>       The most useful one of all is: "could request wakeup irq: %d"
+>
+> So there is certainly an argument to be made that this particular
+> function should print a well formatted and informative error message.
+>
+> It's not a general allocator like kmalloc(). It's specialized and in the
+> vast majority of cases failing to request the interrupt causes the
+> device probe to fail. So having proper and consistent information why
+> the device cannot be used _is_ useful.
+>
+> Yangtao: The way how this is attempted is not useful at all.
+>
+>      1) The changelog is word salad and provides 0 rationale
+>
+>         Also such series require a cover letter...
+>
+>      2) The dev_err() which is added is not informative at all and cannot
+>         replace actually useful error messages. It's not that hard to
+>         make it useful.
+>
+>      2) Adding the printks unconditionally first will emit two messages
+>         with different content.
+>
+>         This is not how such changes are done.
+>
+>         The proper approach is to create a wrapper function which emits
+>         the error message:
+>
+>         wrapper(....., const char *info)
+>         {
+>              ret = devm_request_threaded_irq(....);
+>              if (ret < 0) {
+>                 dev_err(dev, "Failed to request %sinterrupt %u %s %s: %d\n,
+>                         thread_fn ? "threaded " : "",
+>                         irq, devname, info ? : "", ret);
+>              }
+>              return ret;
+>         }
+>
+>         Then convert the callsites over one by one with proper
+>         changelogs and justification.
+>
+>         See?
 
 
-v3 has been added.
+Yes, thanks a lot for the suggestion, and v3 has been sent.
 
 
-Thx,
+MBR,
 
 Yangtao
 
 
 >
-> Best regards,
-> Krzysztof
+> Thanks,
 >
+>          tglx
