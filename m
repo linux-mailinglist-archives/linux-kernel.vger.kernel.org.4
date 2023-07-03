@@ -2,96 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE26C746401
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 22:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C56746404
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 22:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjGCU1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 16:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        id S230232AbjGCU25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 16:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjGCU1l (ORCPT
+        with ESMTP id S229915AbjGCU2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 16:27:41 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0092FE6A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 13:27:38 -0700 (PDT)
-Received: (qmail 1082657 invoked by uid 1000); 3 Jul 2023 16:27:37 -0400
-Date:   Mon, 3 Jul 2023 16:27:37 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Olivier Dion <odion@efficios.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-Message-ID: <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
-References: <87ttukdcow.fsf@laura>
+        Mon, 3 Jul 2023 16:28:55 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AC4AF;
+        Mon,  3 Jul 2023 13:28:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51d9695ec29so4578206a12.1;
+        Mon, 03 Jul 2023 13:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1688416132; x=1691008132;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=btFntjY0O3IvQAR+9HWAi9QrudxEpvSJmgYuJTKvtTI=;
+        b=P/2IY1xgAl3/k1IG0imh55eAHTfrSdB5GD9jlHerOgWmBqtOW+2iTqhMRvaBCZn8bM
+         epXKrQtZswPggaRgmebsXPy72F+87TqNgiEOv7/hjwRsf+5xGlkxaj1Cavn29gHcSiir
+         8gVjUY3iaDSvWlBwXKP6/N2mfnwyjsdylTfL3N4WXOoeJhBTyksduxZdYRDVPEenxK41
+         e7SjW1T+8QA091QNxC3ef3O50hzyAnpO6vn0k2/vxl6IIj/Bt3c9RwPCRhvNAxlURxIC
+         CCX37YvD0MP45pfZ65cUCKYZk+mbQiIYMD+R3ij+Bb3zWnHRGCS2HtFxiWVyqej8iNbq
+         TAMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688416132; x=1691008132;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=btFntjY0O3IvQAR+9HWAi9QrudxEpvSJmgYuJTKvtTI=;
+        b=h7nyxsQncaiTALpy875/tYSGKMTaJqo8HNqS0VP85EhpS9DQ2xcludw9+3n4z3Ecc/
+         eb1YQjcq4oz0qzA9oHg9YyJVJdNJ53x1+UbNjcvWE48VI1ViWy6Ltb2GMc8Ykl2pJzPx
+         E9hpw4m9cSrxuWl2plA+AcvGr+xT6vfFOfcRKgTj4SWH7jg7ElaRmOMQipLRN4ks59+R
+         CV1knf/gIBUhIYh9J3cLHML+kcgd7T9vi5gUVN++OZf4aQO+6Jo+bMINNe0dVQ0y7ry2
+         Xrj+fi4ADrk2udsdePEVL5FAhxHXijE4KMCgH8g3QPOJX4Z028MQKG9rqBdPMeBzWbb8
+         Yd7Q==
+X-Gm-Message-State: ABy/qLYbqxGix9yULsrJNDcKzWnWl5JfbQJBDf9qNzoTlrK5uMogWP3u
+        YxusgPknzTvY0JaviIBw1EKntmOcPIIXlh8g+pg=
+X-Google-Smtp-Source: APBJJlEouvycMaNq7SW8pfQsXaQaCcJyu1kZ1tJurr0d+7z68IgdVSBIE6WLPsH2RfuMtgVa8aYFuKsE0q+6bUbE7lc=
+X-Received: by 2002:a17:907:76ab:b0:992:d013:1132 with SMTP id
+ jw11-20020a17090776ab00b00992d0131132mr6440806ejc.1.1688416132254; Mon, 03
+ Jul 2023 13:28:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ttukdcow.fsf@laura>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <TYZPR01MB5556B56D834E02F41C44D81DC95FA@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
+ <CAFBinCAJ1E6JKmFTuaJwGpd_MBzHMZ0mMj-1AE3TNeB2_72nZA@mail.gmail.com>
+In-Reply-To: <CAFBinCAJ1E6JKmFTuaJwGpd_MBzHMZ0mMj-1AE3TNeB2_72nZA@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 3 Jul 2023 22:28:41 +0200
+Message-ID: <CAFBinCAWsurgCqxCJMP_xo-uj-FsPpYK-6e_6KAGMdDJB2adFA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: meson-mx-sdhc: Fix initialization frozen issue
+To:     Ziyang Huang <hzyitc@outlook.com>
+Cc:     ulf.hansson@linaro.org, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
-> Hi all,
-> 
-> This is a request for comments on extending the atomic builtins API to
-> help avoiding redundant memory barriers.  Indeed, there are
+Hello,
 
-What atomic builtins API are you talking about?  The kernel's?  That's 
-what it sounded like when I first read this sentence -- why else post 
-your message on a kernel mailing list?
+On Mon, Jun 19, 2023 at 9:51=E2=80=AFPM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Hello,
+>
+> first of all: thank you for this patch!
+>
+> On Mon, Jun 19, 2023 at 7:36=E2=80=AFPM Ziyang Huang <hzyitc@outlook.com>=
+ wrote:
+> >
+> > Commit 4bc31edebde5 ("mmc: core: Set HS clock speed before sending
+> > HS CMD13") set HS clock (52MHz) before switching to HS mode. For this
+> > freq, FCLK_DIV5 will be selected and div value is 10 (reg value is 9).
+> > Then we set rx_clk_phase to 11 or 15 which is out of range and make
+> > hardware frozen. After we send command request, no irq will be
+> > interrupted and the mmc driver will keep to wait for request finished,
+> > even durning rebooting.
+> I think this is the exact same problem I reported some days ago: [0]
+> Ulf is questioning whether we properly support 52MHz clocks correctly,
+> so I think you're onto something!
+>
+> So this is an excellent finding! I can confirm that using rx_clk_phase
+> of 1 makes my Odroid-C1 eMMC work again :-)
+>
+> > So let's set a common value - 1 just for initialization. Then let
+> > meson_mx_sdhc_execute_tuning() to find the accurate value for data
+> > transfer.
+> As far as I know unconditionally using value 1 can negatively affect
+> other devices.
+> I'm assuming that you're testing on an Odroid-C1 or similar board with
+> HS200 eMMC:
+> On those SoC + eMMC combinations we do support. But on other boards
+> (for example Meson8b EC-100 / Endless Mini) there's no HS200 support
+> because the eMMC is connected with 3.3V IO lines. So tuning is not
+> executed there (if I recall correctly).
+>
+> What do you think about adding a special case for the 51MHz "actual
+> clock rate" and adding a comment that it was found by manual testing?
+> For some reason (that I don't understand) Amlogic's vendor driver
+> maxes out at 47.22MHz (presumably because they limit themselves to
+> using FCLK_DIV3 as input only - but I don't get why...).
+Did you have the chance to look into my comment? I would like to hear
+your opinion on this topic!
 
-> discrepancies between the Linux kernel consistency memory model (LKMM)
-> and the C11/C++11 memory consistency model [0].  For example,
 
-Indeed.  The kernel's usage of C differs from the standard in several 
-respects, and there's no particular reason for its memory model to match 
-the standard's.
-
-> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
-> have implicit memory barriers before/after the operations [1-2], while
-> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
-> do not have any ordering guarantees of an atomic thread fence
-> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
-
-After reading what you wrote below, I realized that the API you're 
-thinking of modifying is the one used by liburcu for user programs.  
-It's a shame you didn't mention this in either the subject line or the 
-first few paragraphs of the email; that would have made understanding 
-the message a little easier.
-
-In any case, your proposal seems reasonable to me at first glance, with 
-two possible exceptions:
-
-1.	I can see why you have special fences for before/after load, 
-	store, and rmw operations.  But why clear?  In what way is 
-	clearing an atomic variable different from storing a 0 in it?
-
-2.	You don't have a special fence for use after initializing an 
-	atomic.  This operation can be treated specially, because at the 
-	point where an atomic is initialized, it generally has not yet 
-	been made visible to any other threads.  Therefore the fence 
-	which would normally appear after a store (or clear) generally 
-	need not appear after an initialization, and you might want to 
-	add a special API to force the generation of such a fence.
-
-Alan Stern
+Best regards,
+Martin
