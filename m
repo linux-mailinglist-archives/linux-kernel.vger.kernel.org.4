@@ -2,163 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348D1745F4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC83745F51
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbjGCPAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S231423AbjGCPAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjGCPAb (ORCPT
+        with ESMTP id S230072AbjGCPAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:00:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AB4E41;
-        Mon,  3 Jul 2023 08:00:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA1160F58;
-        Mon,  3 Jul 2023 15:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B0FFC433C7;
-        Mon,  3 Jul 2023 15:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688396429;
-        bh=lIdqQ67i0FMsC0cUxCJ5AfsUJuPaQdWJi5CbAOYuFN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lqQaODny3PFiok3uuUGZ6RZMrVppXRyHc0EQzS5vSky8C1535Ew23fb+VpDMsh2R7
-         5G/6V33iXSD8GKWOU6nSjt58XiHiRJEMJbTMC22aAfAnFPfltISAUNDBXp2f41ebzV
-         oXxIdeuZvhu1IP9Wo5ArwWXnq2rsDUVMmG3METKA=
-Date:   Mon, 3 Jul 2023 17:00:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Kees Cook <keescook@chromium.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, security@kernel.org, corbet@lwn.net,
-        workflows@vger.kernel.org
-Subject: Re: [PATCH 2/2] Documentation: security-bugs.rst: clarify CVE
- handling
-Message-ID: <2023070335-groggily-catfish-9ad5@gregkh>
-References: <2023063020-throat-pantyhose-f110@gregkh>
- <2023063022-retouch-kerosene-7e4a@gregkh>
- <202306301114.E199B136@keescook>
- <2023070213-capacity-moneybags-3668@gregkh>
- <ZKJJoK4kyOCEYcOR@1wt.eu>
+        Mon, 3 Jul 2023 11:00:50 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D3CE5F
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lEjQPsDxtRvLE8zahWewvCEDc9M1w1GJ+mEScSJMMVI=; b=DCkVBEqraHjIzrkzpVAu1I1fMd
+        x3M/MmqmMrkVCu9Ew6c43mRhieNKUGOms4QP8dpBCjOZAB0UWS8JNJcENWnCEtO/+uvs9T3VV24Xq
+        NB+i1YpIkToHgtjWBn5P/VNcB3QRPnSEApYb3Gt3m+DFB1AlMRyDR6OjuPoJKq9pVl6AykNL+zf4R
+        NpgK2Olt4YDPJkE0m4UsEZSwHol2ZztANfqDUJ14FhzAfzMDSqEXaFjXU39+Ek/9+rQX6/CKKbGm9
+        9hBkn1s0AKmt8gtoXeZRxNBo0Nk+iHLuJt+EC9N9OHFt+qW1Vyb3NyOgGHQdNuQr6UNq9cP0k5Zth
+        EbyfCPUA==;
+Received: from [187.74.70.209] (helo=[192.168.1.111])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1qGL2R-007fhp-7K; Mon, 03 Jul 2023 17:00:27 +0200
+Message-ID: <cedc57a5-779a-3ec6-cfbd-f51dfb17f2dc@igalia.com>
+Date:   Mon, 3 Jul 2023 12:00:22 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKJJoK4kyOCEYcOR@1wt.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        pierre-eric.pelloux-prayer@amd.com,
+        Sebastian Wick <sebastian.wick@redhat.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
+        amd-gfx@lists.freedesktop.org,
+        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        alexander.deucher@amd.com,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        kernel-dev@igalia.com, christian.koenig@amd.com
+References: <20230627132323.115440-1-andrealmeid@igalia.com>
+ <CA+hFU4z1pc=KUVVqyqfXEceUqMXQgh-qUnuB=1nkPELghvQO7w@mail.gmail.com>
+ <CADnq5_MNVdtdcWKSz6dgmsjg+kEu8p5FVE+fkw_5BaXeG3QGow@mail.gmail.com>
+ <afab1f5a-e581-3416-e2c2-238ea120655b@mailbox.org>
+ <CAAxE2A5C96k5ua+r938VA_+w7gHHNTdF3n8LwDb98W0Bf9wCVA@mail.gmail.com>
+ <7c1e6df5-1ad4-be3c-b95d-92dc62a8c537@mailbox.org>
+ <20230703114949.796c7498@eldfell>
+Content-Language: en-US
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20230703114949.796c7498@eldfell>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 06:08:00AM +0200, Willy Tarreau wrote:
-> On Sun, Jul 02, 2023 at 02:39:49PM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Jun 30, 2023 at 11:18:37AM -0700, Kees Cook wrote:
-> > > On Fri, Jun 30, 2023 at 09:14:21AM +0200, Greg Kroah-Hartman wrote:
-> > > > The kernel security team does NOT assign CVEs, so document that properly
-> > > > and provide the "if you want one, ask MITRE for it" response that we
-> > > > give on a weekly basis in the document, so we don't have to constantly
-> > > > say it to everyone who asks.
-> > > > 
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > >  Documentation/process/security-bugs.rst | 11 ++++-------
-> > > >  1 file changed, 4 insertions(+), 7 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
-> > > > index f12ac2316ce7..8b80e1eb7d79 100644
-> > > > --- a/Documentation/process/security-bugs.rst
-> > > > +++ b/Documentation/process/security-bugs.rst
-> > > > @@ -79,13 +79,10 @@ not contribute to actually fixing any potential security problems.
-> > > >  CVE assignment
-> > > >  --------------
-> > > >  
-> > > > -The security team does not normally assign CVEs, nor do we require them
-> > > > -for reports or fixes, as this can needlessly complicate the process and
-> > > > -may delay the bug handling. If a reporter wishes to have a CVE identifier
-> > > > -assigned ahead of public disclosure, they will need to contact the private
-> > > > -linux-distros list, described above. When such a CVE identifier is known
-> > > > -before a patch is provided, it is desirable to mention it in the commit
-> > > > -message if the reporter agrees.
-> > > > +The security team does not assign CVEs, nor do we require them for
-> > > > +reports or fixes, as this can needlessly complicate the process and may
-> > > > +delay the bug handling.  If a reporter wishes to have a CVE identifier
-> > > > +assigned, they should contact MITRE directly.
-> > > 
-> > > Hmm. The language about "assigned ahead of public disclosure" was added
-> > > intentionally due to trouble we'd had with coordination when a CVE was
-> > > needed, etc. Additionally, it IS preferred to have a CVE in a patch when
-> > > it IS known ahead of time, so I think that should be kept. How about
-> > > this:
-> > > 
-> > > 
-> > > diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
-> > > index 82e29837d589..2f4060d49b31 100644
-> > > --- a/Documentation/process/security-bugs.rst
-> > > +++ b/Documentation/process/security-bugs.rst
-> > > @@ -81,13 +81,12 @@ the email Subject line with "[vs]" as described in the linux-distros wiki:
-> > >  CVE assignment
-> > >  --------------
-> > >  
-> > > -The security team does not normally assign CVEs, nor do we require them
-> > > -for reports or fixes, as this can needlessly complicate the process and
-> > > -may delay the bug handling. If a reporter wishes to have a CVE identifier
-> > > -assigned ahead of public disclosure, they will need to contact the private
-> > > -linux-distros list, described above. When such a CVE identifier is known
-> > > -before a patch is provided, it is desirable to mention it in the commit
-> > > -message if the reporter agrees.
-> > > +The security team does not assign CVEs, nor do we require them for reports
-> > > +or fixes, as this can needlessly complicate the process and may delay
-> > > +the bug handling. If a reporter wishes to have a CVE identifier assigned
-> > > +ahead of public disclosure, they will need to contact MITRE directly.
-> > > +When such a CVE identifier is known before a patch is provided, it is
-> > > +desirable to mention it in the commit message if the reporter agrees.
-> > 
-> > I can not, in good faith, with the current mess that MITRE is going
-> > through, tell anyone that they should contact MITRE ahead of public
-> > disclosure, sorry.
-> > 
-> > All I can say is "if you really want one, go ask them for one", as
-> > everyone keeps asking us for one to pad their resume/CV.
-> > 
-> > Also note that many non-US-based companies are not allowed to contact a
-> > US-government-backed entity for potential security issues for obvious
-> > reasons.
-> > 
-> > So I don't want to even give a hint that we support or request this at
-> > all, or that it is something that changelog texts should contain for
-> > security issues (for the obvious reason of them being a "hint" one way
-> > or another.)
-> > 
-> > External groups may wish to play the CVE "game" as it facilitates their
-> > engineering procedures to get changes past managers, but that's not
-> > anything that we should be encouraging at all for all of the various
-> > geopolitical and corporate reasons involved in that mess.
-> 
-> I generally agree with your points above, and these can be easily
-> summarized by indicating that the patch will not wait for this, and
-> suggesting that MITRE is not the only possible source:
-> 
->   The security team does not assign CVEs, nor do we require them for
->   reports or fixes, as this can needlessly complicate the process and may
->   delay the bug handling.  If a reporter wishes to have a CVE identifier
->   assigned, they should find one by themselves, for example by contacting
->   MITRE directly.  However under no circumstances will a patch inclusion
->   be delayed to wait for a CVE identifier to arrive.
-> 
-> This puts the responsibility for finding one in time on the reporter
-> depending on what they expect, and if they want it in the commit
-> message, they'd rather have one before reporting the problem.
 
-Oh, nice wording, let me steal that!  :)
 
-thanks,
+Em 03/07/2023 05:49, Pekka Paalanen escreveu:
+> On Mon, 3 Jul 2023 09:12:29 +0200
+> Michel Dänzer <michel.daenzer@mailbox.org> wrote:
+> 
+>> On 6/30/23 22:32, Marek Olšák wrote:
+>>> On Fri, Jun 30, 2023 at 11:11 AM Michel Dänzer <michel.daenzer@mailbox.org <mailto:michel.daenzer@mailbox.org>> wrote:
+>>>> On 6/30/23 16:59, Alex Deucher wrote:
+>>>>> On Fri, Jun 30, 2023 at 10:49 AM Sebastian Wick
+>>>>> <sebastian.wick@redhat.com <mailto:sebastian.wick@redhat.com>> wrote:
+>>>>>> On Tue, Jun 27, 2023 at 3:23 PM André Almeida <andrealmeid@igalia.com <mailto:andrealmeid@igalia.com>> wrote:
+>>>>>>>
+>>>>>>> +Robustness
+>>>>>>> +----------
+>>>>>>> +
+>>>>>>> +The only way to try to keep an application working after a reset is if it
+>>>>>>> +complies with the robustness aspects of the graphical API that it is using.
+>>>>>>> +
+>>>>>>> +Graphical APIs provide ways to applications to deal with device resets. However,
+>>>>>>> +there is no guarantee that the app will use such features correctly, and the
+>>>>>>> +UMD can implement policies to close the app if it is a repeating offender,
+>>>>>>> +likely in a broken loop. This is done to ensure that it does not keep blocking
+>>>>>>> +the user interface from being correctly displayed. This should be done even if
+>>>>>>> +the app is correct but happens to trigger some bug in the hardware/driver.
+>>>>>>
+>>>>>> I still don't think it's good to let the kernel arbitrarily kill
+>>>>>> processes that it thinks are not well-behaved based on some heuristics
+>>>>>> and policy.
+>>>>>>
+>>>>>> Can't this be outsourced to user space? Expose the information about
+>>>>>> processes causing a device and let e.g. systemd deal with coming up
+>>>>>> with a policy and with killing stuff.
+>>>>>
+>>>>> I don't think it's the kernel doing the killing, it would be the UMD.
+>>>>> E.g., if the app is guilty and doesn't support robustness the UMD can
+>>>>> just call exit().
+>>>>
+>>>> It would be safer to just ignore API calls[0], similarly to what
+>>>> is done until the application destroys the context with
+>>>> robustness. Calling exit() likely results in losing any unsaved
+>>>> work, whereas at least some applications might otherwise allow
+>>>> saving the work by other means.
+>>>
+>>> That's a terrible idea. Ignoring API calls would be identical to a
+>>> freeze. You might as well disable GPU recovery because the result
+>>> would be the same.
+>>
+>> No GPU recovery would affect everything using the GPU, whereas this
+>> affects only non-robust applications.
+>>
+>>
+>>> - non-robust contexts: call exit(1) immediately, which is the best
+>>> way to recover
+>>
+>> That's not the UMD's call to make.
+>>
+>>
+>>>>      [0] Possibly accompanied by a one-time message to stderr along
+>>>> the lines of "GPU reset detected but robustness not enabled in
+>>>> context, ignoring OpenGL API calls".
+>>
+> 
+> Hi,
+> 
+> Michel does have a point. It's not just games and display servers that
+> use GPU, but productivity tools as well. They may have periodic
+> autosave in anticipation of crashes, but being able to do the final
+> save before quitting would be nice. UMD killing the process would be
+> new behaviour, right? Previously either application's GPU thread hangs
+> or various API calls return errors, but it didn't kill the process, did
+> it?
+> 
 
-greg k-h
+In Intel's Iris, UMD may call abort() for the reset guilty application:
+
+https://elixir.bootlin.com/mesa/mesa-23.0.4/source/src/gallium/drivers/iris/iris_batch.c#L1063
+
+I was pretty sure this was the same for RadeonSI, but I failed to find 
+the code for this, so I might be wrong.
+
+> If an application freezes, that's "no problem"; the end user can just
+> continue using everything else. Alt-tab away etc. if the app was
+> fullscreen. I do that already with games on even Xorg.
+> 
+> If a display server freezes, that's a desktop-wide problem, but so is
+> killing it.
+> 
+
+Interesting, what GPU do you use? In my experience (AMD RX 5600 XT), 
+hanging the GPU usually means that the rest of applications/compositor 
+can't use the GPU either, freezing all user interactions. So killing the 
+guilty app is one effective solution currently, but ignoring calls may 
+help as well.
+
+> OTOH, if UMD really does need to terminate the process, then please do
+> it in a way that causes a crash report to be recorded. _exit() with an
+> error code is not it.
+> 
+
+In the "Reporting causes of resets" subsection of this document I can 
+add something for UMD as well.
+
+> 
+> Thanks,
+> pq
