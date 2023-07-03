@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689FF745DB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5A3745DB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjGCNry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S230083AbjGCNuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjGCNrw (ORCPT
+        with ESMTP id S229719AbjGCNt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:47:52 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3787A1A8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:47:51 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-986d8332f50so532299566b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:47:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688392069; x=1690984069;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5mR8kflAUl3Rreoc5lJ+BkszrAX8k/kBUds7AX5wTeQ=;
-        b=luH7LMT3M6gjy+U9cz1PKrhJaitqeIjGWzyuCQk1Fg98SinFKK84u425JS/Pod4SEY
-         W5iAMYzShDe/QD4iDQNjApF1N6nEliO1cv99bqxinSAVA/D3pgTnbHDCov21AJJ2UrdT
-         Uh27Y+hdz3Q5nVDBRdA/DWhQyyCi+iJbXIavvGpbv90UClKFWobx5dGZAo4iRXpGmQ5V
-         533VsGBlyklrUzpITzl6qeVIWbmF0rQApIENtAgSBRjhUWitb25lNQ4HzJh0ElGoDjzU
-         /uZIzP80x6zRcdRRprqCzm9AQZpJ249deanxwT6mjuGM9LZBtY2aKfzTQOL+8RvaTAEv
-         yPLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688392069; x=1690984069;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5mR8kflAUl3Rreoc5lJ+BkszrAX8k/kBUds7AX5wTeQ=;
-        b=U4KKIO6ak6i8MIMgLqBKOW3bXlnaCDkSU4ehju1bZhSl6ZEXd3xtiyXvebgnDe747v
-         Gr/RzCY0G63Fbb5H+SKisGOZuwHRg9F6EtRO9SaN17u2Tt5yoWxdt6BRdPoCioVLIKsN
-         dfzFZrqQqQ/HrJY1SKV1MrYgyCl2MICvEEWwaNTVywvt/yZXCTzOLfpTbyhBKRYT7Z8x
-         F8r1j2elKqSw2ZTI2aS7loCAg2rD7+7XCA52kG4NXxXmzW4xZLHmmnVALFWjiIdpEaJk
-         u2bhoCmPQsgOCz2D2SbDU+ASiYtdoz5RGqUfouzGyi4UYCg+TmzmihoQ55Nl2XF5txo/
-         ia3w==
-X-Gm-Message-State: ABy/qLahXHFKYvDjkVZZMZZ2DphXktgF7Jp1/Xpn4OLia211r1aI77I+
-        b/x6W939Kijfb7FtfQcGdWgHVw==
-X-Google-Smtp-Source: APBJJlEL46+KVkuqPX8uIyw1aGCUFwRRFtVipSjMFgZQOsSGE44XK1wwr4iA1h2F4ukGGad+KbHMZg==
-X-Received: by 2002:a17:906:1690:b0:96f:5747:a0de with SMTP id s16-20020a170906169000b0096f5747a0demr7622915ejd.6.1688392069742;
-        Mon, 03 Jul 2023 06:47:49 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id oz31-20020a170906cd1f00b0098d15d170a0sm11936803ejb.202.2023.07.03.06.47.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 06:47:49 -0700 (PDT)
-Message-ID: <5f501f0f-2362-4079-d833-6883b674e588@linaro.org>
-Date:   Mon, 3 Jul 2023 15:47:47 +0200
+        Mon, 3 Jul 2023 09:49:59 -0400
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84186109
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:49:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1688392179; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SP9ImYKJXEf65WKqag/ju5y526ZfAFIBV4itRdPacBQ3+yv5KnCru8ASuO9Hlo1Gt2oK5OjGfBVUSMXqhHesfFw44l8G58ol9rDbTZs4DUmr2mNbiu8R7n5wTKI8SpMtNvhTnFheLb4J/UW25OjOE1YUX+l1vx5BFFQaQfHSCDs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1688392179; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=0juxJGr0V0mWBkxuSy/zAkO1ju2c9SqaUoNVC94Ta+g=; 
+        b=DX6QQuBCyOLO33f2JL3SPON+PDyKnDqY1eJlK7uslPKmFb4TRsfiJgmyoGAQztmM7A8PKEZK+FLdZdB8gsIsKBIY7lsV6kcJNwhVBuvbkVjUmHLbEUBwrCT7wWyc8/wZWC1zStk5lUGlH6HoxgGCe+XO8Lghe/GrXoaadX9RSFw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1688392178;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=0juxJGr0V0mWBkxuSy/zAkO1ju2c9SqaUoNVC94Ta+g=;
+        b=HWnuovJb6yqvdgTAK2CNyPNMuAPlm0fFmH8WjjDVWS0zulM3dFFROXLQSFR/CqSV
+        SmRDdJwch6aB7hRBeuhgl35fz65Jn4i+LDo+6X6IBx8lnPlgfa1Pq9/V20UT1owcSFJ
+        WugwavBR6h6CxjQqQP3VeKrrITPPXzcFwAyMXimw=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1688392177737939.3774690465508; Mon, 3 Jul 2023 06:49:37 -0700 (PDT)
+Date:   Mon, 03 Jul 2023 21:49:37 +0800
+From:   Li Chen <me@linux.beauty>
+To:     "Achal Verma" <a-verma1@ti.com>
+Cc:     "Vignesh Raghavendra" <vigneshr@ti.com>,
+        "Tom Joseph" <tjoseph@cadence.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        "Krzysztof Wilczy_ski" <kw@linux.com>,
+        "Rob Herring" <robh@kernel.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "linux-omap" <linux-omap@vger.kernel.org>,
+        "linux-pci" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel" <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <1891c041807.fea67a55448140.3454059194195387266@linux.beauty>
+In-Reply-To: <20230703112914.68806-1-a-verma1@ti.com>
+References: <20230703112914.68806-1-a-verma1@ti.com>
+Subject: Re: [PATCH] PCI: j721e: Fix delay before PERST# deassert
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 2/2] soc: loongson2_pm: add power management support
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liu Yun <liuyun@loongson.cn>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230620090811.721-1-zhuyinbo@loongson.cn>
- <20230620090811.721-3-zhuyinbo@loongson.cn>
- <bd9661f1-b77d-2ce9-0de2-f559576bf55a@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bd9661f1-b77d-2ce9-0de2-f559576bf55a@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 03:30, zhuyinbo wrote:
-> 
-> Friendly ping ?
-> 
+Hi Achal,
+ ---- On Mon, 03 Jul 2023 19:29:14 +0800  Achal Verma  wrote --- 
+ > As per the PCIe Card Electromechanical specification REV. 3.0, PERST#
+ > signal should be de-asserted after minimum 100ms from the time power-rails
+ > become stable. Current delay of 100us is observed to be not enough on some
+ > custom platform implemented using TI's K3 SOCs.
+ > 
+ > So, to ensure 100ms delay to give sufficient time for power-rails and
+ > refclk to become stable, change delay from 100us to 100ms.
 
-Please avoid pings during merge window. Not much can happen with the
-patchset anyway. Resend or ping afterwards.
+What problems could arise if the delay is too small? Would some endpoints not be able to detect it?
 
-Best regards,
-Krzysztof
-
+Regards,
+Li
