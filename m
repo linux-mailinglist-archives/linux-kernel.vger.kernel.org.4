@@ -2,182 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C92B745EB2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649DA745EBB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjGCOmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S231364AbjGCOmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjGCOmQ (ORCPT
+        with ESMTP id S231324AbjGCOmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:42:16 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12002B2;
-        Mon,  3 Jul 2023 07:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1688395334;
-        bh=xUQlRJiv0BrDJu2N4vefK4PLI4lrSt6Z70TDgeQpcYs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hKE4LH1qBJLiXXH9rih/kbNbGViPFRh7mp4kfHOm8PL48Or5SW9QTOO/HZOz0Wiqo
-         /dV6D/T26s14gdarunqZSVTjn1AigsmFkD3jSblOg8ZLckdb7zPN5HhkOwD64aywR9
-         ffHZwQJBm40JW38O99WfivmMcRi+Lltc3Zwqkpami0Cxc0GnO/is19Q8qapVqPr+cl
-         6TLGGcvYMbWdN+vqAQqGj56hDfHCqi9BT58EARtAIm6QgOCO9QL4iQec6MTF/ZfH8K
-         erTR/VfIhdHCiB288dTe2BY1fHtPUtWtc5MYFrypJxZ8//WHk9DvbWtufi03usHRph
-         pgTITT+bp/m2g==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 571C71DBE;
-        Mon,  3 Jul 2023 16:42:14 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 16:42:13 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Chung-Chiang Cheng <cccheng@synology.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/3] splice: always fsnotify_access(in),
- fsnotify_modify(out) on success
-Message-ID: <604ec704d933e0e0121d9e107ce914512e045fad.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jq5mboc5m63x3mer"
-Content-Disposition: inline
-In-Reply-To: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 10:42:50 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA4B10D7;
+        Mon,  3 Jul 2023 07:42:41 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363DGb7d014214;
+        Mon, 3 Jul 2023 14:42:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=MZdnB0+YVKr0J+qNVmUklG4YkhW78DJg7w3EcyBWxy0=;
+ b=cdy1o0J/q8aAMFXrJwexGYZOSzrjaMm3F/3yZX6Yvwoa0CqRMrE2f1Bb+n8XtPYV10y6
+ Cxb3McQ9EB+t5yQCo/iGsvti5BM9yOdo3kH/ahwMSQ18WchLXS3aded5CdVNMbPMVN3C
+ FaMadGiQju2LoEETvfHTD1N7hMsGYEUBS///RB/Z2EtmDJTynPcEaGxN0aHUJLBRE02L
+ 5HD7T8dCCYtyewTnDUxJkzLGvJP0kLOhKnDn2yhV2ggWhnoDJT1WCVSOWQEgaskGYdxL
+ +cHXYrVO6vn3+5MaSHKNiTANaDCnGLU7PbtKe+CA7B7XGpaGN8Xwh7vku3LdjPtY6RqA hQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rjb5dc9je-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jul 2023 14:42:31 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 363EgSDr031505;
+        Mon, 3 Jul 2023 14:42:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rjd7k8ge9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 03 Jul 2023 14:42:28 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 363EgRgL031491;
+        Mon, 3 Jul 2023 14:42:27 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 363EgRvp031478;
+        Mon, 03 Jul 2023 14:42:27 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id F39BE5008; Mon,  3 Jul 2023 20:12:26 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        sboyd@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH 00/10] Add Power Domains and Regulators in SDX75
+Date:   Mon,  3 Jul 2023 20:12:16 +0530
+Message-Id: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: EuYxm1tG7z7m0Ylh_Ta08J2TEPNZh-jB
+X-Proofpoint-GUID: EuYxm1tG7z7m0Ylh_Ta08J2TEPNZh-jB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-03_11,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 malwarescore=0 mlxlogscore=683 spamscore=0
+ clxscore=1011 mlxscore=0 adultscore=0 phishscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307030132
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---jq5mboc5m63x3mer
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds driver and dt-bindings related changes
+in SDX75 to add power domains and regulators.
 
-The current behaviour caused an asymmetry where some write APIs
-(write, sendfile) would notify the written-to/read-from objects,
-but splice wouldn't.
+Thanks,
+Rohit.
 
-This affected userspace which uses inotify, most notably coreutils
-tail -f, to monitor pipes.
-If the pipe buffer had been filled by a splice-family function:
-  * tail wouldn't know and thus wouldn't service the pipe, and
-  * all writes to the pipe would block because it's full,
-thus service was denied.
-(For the particular case of tail -f this could be worked around
- with ---disable-inotify.)
+Rohit Agarwal (10):
+  dt-bindings: regulator: Add PMX75 compatibles
+  dt-bindings: power: Add rpm power domains for SDX75
+  dt-bindings: mfd: Add compatible for pm7550ba
+  dt-bindings: pinctrl: qcom-pmic-gpio: Add pm7550ba support
+  dt-bindings: mfd: Add compatible for pmx75
+  dt-bindings: pinctrl: qcom-pmic-gpio: Add pmx75 support
+  soc: qcom: rpmhpd: Add SDX75 power domains
+  regulator: qcom-rpmh: Add support for SDX75
+  pinctrl: qcom-pmic-gpio: Add support for pm7550ba
+  pinctrl: qcom-pmic-gpio: Add support for pmx75
 
-Fixes: 983652c69199 ("splice: report related fsnotify events")
-Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs=
-3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-Link: https://bugs.debian.org/1039488
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Jan Kara <jack@suse.cz>
----
- fs/splice.c | 31 ++++++++++++++-----------------
- 1 file changed, 14 insertions(+), 17 deletions(-)
+ .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |  2 ++
+ .../bindings/pinctrl/qcom,pmic-gpio.yaml           |  6 ++++
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
+ .../bindings/regulator/qcom,rpmh-regulator.yaml    |  2 ++
+ drivers/pinctrl/qcom/pinctrl-spmi-gpio.c           |  2 ++
+ drivers/regulator/qcom-rpmh-regulator.c            | 38 ++++++++++++++++++++++
+ drivers/soc/qcom/rpmhpd.c                          | 16 +++++++++
+ include/dt-bindings/power/qcom-rpmpd.h             |  8 +++++
+ 8 files changed, 75 insertions(+)
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 3e06611d19ae..6ae6da52eba9 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -1154,10 +1154,8 @@ long do_splice(struct file *in, loff_t *off_in, stru=
-ct file *out,
- 		if ((in->f_flags | out->f_flags) & O_NONBLOCK)
- 			flags |=3D SPLICE_F_NONBLOCK;
-=20
--		return splice_pipe_to_pipe(ipipe, opipe, len, flags);
--	}
--
--	if (ipipe) {
-+		ret =3D splice_pipe_to_pipe(ipipe, opipe, len, flags);
-+	} else if (ipipe) {
- 		if (off_in)
- 			return -ESPIPE;
- 		if (off_out) {
-@@ -1182,18 +1180,11 @@ long do_splice(struct file *in, loff_t *off_in, str=
-uct file *out,
- 		ret =3D do_splice_from(ipipe, out, &offset, len, flags);
- 		file_end_write(out);
-=20
--		if (ret > 0)
--			fsnotify_modify(out);
--
- 		if (!off_out)
- 			out->f_pos =3D offset;
- 		else
- 			*off_out =3D offset;
--
--		return ret;
--	}
--
--	if (opipe) {
-+	} else if (opipe) {
- 		if (off_out)
- 			return -ESPIPE;
- 		if (off_in) {
-@@ -1209,18 +1200,24 @@ long do_splice(struct file *in, loff_t *off_in, str=
-uct file *out,
-=20
- 		ret =3D splice_file_to_pipe(in, opipe, &offset, len, flags);
-=20
--		if (ret > 0)
--			fsnotify_access(in);
--
- 		if (!off_in)
- 			in->f_pos =3D offset;
- 		else
- 			*off_in =3D offset;
-+	} else
-+		return -EINVAL;
-=20
--		return ret;
-+	if (ret > 0) {
-+		/*
-+		 * Generate modify out before access in:
-+		 * do_splice_from() may've already sent modify out,
-+		 * and this ensures the events get merged.
-+		 */
-+		fsnotify_modify(out);
-+		fsnotify_access(in);
- 	}
-=20
--	return -EINVAL;
-+	return ret;
- }
-=20
- static long __do_splice(struct file *in, loff_t __user *off_in,
---=20
-2.39.2
+-- 
+2.7.4
 
-
---jq5mboc5m63x3mer
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSi3kQACgkQvP0LAY0m
-WPHHCQ/8CWKTO+MNjS4ZRBYNto+BgHIPRE68LHKKAziWQgba9ovC43UxLtpmdVdL
-fEMuS/6qGrsLY2WynXneQZapLD4Kinsf+4wDQG+iEKlhvdFDtfejYGQTqMNADrY1
-D8hz+W1imgvGgIWdTUb7P3eGtZJHHwrp3/okTZWVnknevux2+3KcAMnQeJwEZxKw
-Wsy+xQrK9rOdXhs4MOKlWrJWofNytkZdODeUsyzGdoe2ochw1g3FfqIOgrLLuKLj
-Nmdypw3N70G7CKzO2lqI9GtgL64HRH0qpi3y+svIfEirLwQYiP+7CwxS2o94RLiT
-MuEaSL7zWdhWQp8sfdE3lYd+4skNROUZiR5nRLEEOgw2/pRN6iwF8CjOVht/SL8y
-f9BMP05IP86Skwf2grIuyQiJEg2UVqgMGjsmiSNXrzi6/bBiLQhOdl/WC++uuENF
-8lS6cxO/x75EonzjoV/pBm4hszIb9c/pUJoqLPhucgpbZnpbGHFRzSMZ3p6FH6wO
-nZ3x3/L9IRCwjyhDHzIUJvlLKlK/Gg6qjJb58uI7OUvaPtGY7HflBpfOZxLbb5MY
-/1xiaqzPW8z/gnDGS26tzlAPXJoh9h8j26Wj+JNpUMoVVcmEjuFmzNtEYE6y9sLD
-y5BJAAvnOaxm5y9vEJtuSEQejQEIlt0E7cVg7VgLgWh0Co1L5t8=
-=0+8T
------END PGP SIGNATURE-----
-
---jq5mboc5m63x3mer--
