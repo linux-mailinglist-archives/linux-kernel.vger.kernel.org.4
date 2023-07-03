@@ -2,175 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4929746500
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106BB746507
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjGCVnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 17:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S231218AbjGCVrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 17:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjGCVnT (ORCPT
+        with ESMTP id S230028AbjGCVrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:43:19 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A5BE49
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 14:43:18 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8054180acso39588755ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 14:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1688420598; x=1691012598;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zb/tmr/noeY2rNeZVS/rd5RWOm9XHi+842eE/ic0+a0=;
-        b=AiAmewfofTMCDjim2n5Tw+1ZtqlOIk0bXi6iRE5v5TlHNIye7/DkwQc6W3qq8LjOIp
-         Xqa4BLwykqMBs3rTWLQCqB46cY7yk3e1UlXmD3dachyhxKT3HwGyQ5ZQUBoEeRTg6FWt
-         V3FoZeb/Pfcslwv6G9ml4ZN+Vhlb3NLpYwVIhyIi4T14lqPagW7Xqsj1Vy9HAv94g+UV
-         eCE+uAt/Ww3sa8lilIbrUy2CO/y3njkzPQf1M1G2yc4qYYfB6dr/PTXL5EfFbJB+6aSL
-         RGoqXV5w3f2vXm8fzuxp5DSKfDMzQA8c3OkoqHlFbZHcWSFOF/jGyPHFIwQaqg3O6Ipn
-         SNTA==
+        Mon, 3 Jul 2023 17:47:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679E6E47
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 14:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688420784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tARB5Wn5Gx1zOd7JWlq2DBGoUqFTRjKmGP2nqR1fdFE=;
+        b=KWiahIhd0MIYfdHggjmf0iR3FxsOoVkUmBElumm9D+0mQ5ScyZOMs8qAiHZQIKD6NSjyWt
+        L2fIVd2buC+nbHT2UJ5RiBGVCevvM3eSGnfar0ltn+bXzCEJGcCc1vgXt2PSTuaZ3vUdtu
+        G9bUiSD6j0gfs2SbUlQS6wdfrTNaY4I=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-2-tUgAOJwkN1Gf6SHoF5jujg-1; Mon, 03 Jul 2023 17:45:14 -0400
+X-MC-Unique: tUgAOJwkN1Gf6SHoF5jujg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3141325af78so3324921f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 14:45:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688420598; x=1691012598;
+        d=1e100.net; s=20221208; t=1688420713; x=1691012713;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zb/tmr/noeY2rNeZVS/rd5RWOm9XHi+842eE/ic0+a0=;
-        b=e2AzJ39aygkwS7P+K/nxYF4waohTfbBcWigHWCs/t/Iry637I4yF5bzDHrArgZkSIV
-         RLktEp29Rtt8s7SZWWcFcm6cunUlAyVJAX3nbtp0DjsaZe2RoeX5AAGCCK8hTgrSKoSB
-         DhAsw6VETK/Agu3ej7EenjAn4ZeFUTYxINHlsObdIAE4c0rZmrcImNPBatDOOIgzPvoD
-         hMJADm1l8f9S9ZpavBwJSE4glTP2me0/9Bio7IbJnqWOBzpkVwItkmxycTeLKfwPx3yT
-         SC2fmmmJO5iCW3WoxHrbLjbl8YvHGRFVRZ8Ymb4AoS/UCSDCtvZ6+27n2Hi1NCnRSfDh
-         A8Gg==
-X-Gm-Message-State: ABy/qLYu79PqR/e31aST46LWH7ktN3rNNWQN+y2M8kyYOgM0i+r9XTFv
-        +1B3UiFvPYh8mxqu99a1f15g7Q==
-X-Google-Smtp-Source: APBJJlFY5Wk4ycN3RNcdbeJSOzZJDY4GA9boj1G/G7OddE78CxDwcF9OafgCPpqmAI1xuqydRL+o/g==
-X-Received: by 2002:a17:902:c1cd:b0:1b8:400a:48f2 with SMTP id c13-20020a170902c1cd00b001b8400a48f2mr12348909plc.62.1688420597872;
-        Mon, 03 Jul 2023 14:43:17 -0700 (PDT)
-Received: from ziepe.ca (ip-216-194-73-131.syban.net. [216.194.73.131])
-        by smtp.gmail.com with ESMTPSA id h23-20020a17090aea9700b0025dc5749b4csm14888942pjz.21.2023.07.03.14.43.17
+        bh=tARB5Wn5Gx1zOd7JWlq2DBGoUqFTRjKmGP2nqR1fdFE=;
+        b=af2IS1cQsQjwgw4j/ryo41062GHF990grActoUEDUKyb3ZwWEUF0oxjdVDqE17vNzg
+         KtrfjDbq6gmZ1J79PCVd8kdgmuQBBvbj9FkiuB34z19s8adyhoIWaVPnQUe58SSswQuR
+         OPHAuTuWwPbauC45u4Lltt7z3ZJSST/Kmi4MuExEGoOuLadWOhtU4P0AroKFxED3hksI
+         Nq0b08YsXwhi7qIzFLGm6nsn+v/qiUcvnNSjbQgxJVpxU0Gwr0jmxt0TcAZlDyqJraNH
+         PYDCFQBN6tkofA03fIi512bTX2IBpRFhTuZoMSZITCjHGjm4zqI5eujp/D6j/+T69axB
+         sZqA==
+X-Gm-Message-State: ABy/qLZDkPuvZPmBu0p5Jhc443eBCZXOogumXDwdmm2LhGHW3nSC4gfz
+        snrK+T1oxmOWErN9M4V/JgSWnpTKBls+lOaggaTRII0juHyGZjquwretv5uKQCIpmSvw9o1dzm3
+        rMa0n1Rlu1EWW0FDX+tZXBTycaxIiBMSl
+X-Received: by 2002:adf:fe02:0:b0:313:f124:aa53 with SMTP id n2-20020adffe02000000b00313f124aa53mr9386206wrr.45.1688420713232;
+        Mon, 03 Jul 2023 14:45:13 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGwxrKykcKROIp8288hJK2F1DWQTpGg+15j/Wx8NbEXoDCuZbeNevgm5l58+rk/qYWMMQkJGg==
+X-Received: by 2002:adf:fe02:0:b0:313:f124:aa53 with SMTP id n2-20020adffe02000000b00313f124aa53mr9386193wrr.45.1688420712899;
+        Mon, 03 Jul 2023 14:45:12 -0700 (PDT)
+Received: from redhat.com ([2.52.13.33])
+        by smtp.gmail.com with ESMTPSA id z13-20020a056000110d00b003143d80d11dsm611369wrw.112.2023.07.03.14.45.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 14:43:17 -0700 (PDT)
-Received: from jgg by jggl with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qGRKG-000BU8-Jc;
-        Mon, 03 Jul 2023 18:43:16 -0300
-Date:   Mon, 3 Jul 2023 18:43:16 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
+        Mon, 03 Jul 2023 14:45:12 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 17:45:08 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Maxime Coquelin <maxime.coquelin@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>, xieyongji@bytedance.com,
+        david.marchand@redhat.com, lulu@redhat.com,
         linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <ZKNA9Pkg2vMJjHds@ziepe.ca>
-References: <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
- <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com>
- <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
- <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
- <20230616122140.6e889357@kernel.org>
- <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
- <20230619110705.106ec599@kernel.org>
- <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
- <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
- <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
+Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
+Message-ID: <20230703174043-mutt-send-email-mst@kernel.org>
+References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
+ <20230702093530-mutt-send-email-mst@kernel.org>
+ <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
+ <571e2fbc-ea6a-d231-79f0-37529e05eb98@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <571e2fbc-ea6a-d231-79f0-37529e05eb98@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 02, 2023 at 11:22:33PM -0700, Mina Almasry wrote:
-> On Sun, Jul 2, 2023 at 9:20 PM David Ahern <dsahern@kernel.org> wrote:
-> >
-> > On 6/29/23 8:27 PM, Mina Almasry wrote:
-> > >
-> > > Hello Jakub, I'm looking into device memory (peer-to-peer) networking
-> > > actually, and I plan to pursue using the page pool as a front end.
-> > >
-> > > Quick description of what I have so far:
-> > > current implementation uses device memory with struct pages; I am
-> > > putting all those pages in a gen_pool, and we have written an
-> > > allocator that allocates pages from the gen_pool. In the driver, we
-> > > use this allocator instead of alloc_page() (the driver in question is
-> > > gve which currently doesn't use the page pool). When the driver is
-> > > done with the p2p page, it simply decrements the refcount on it and
-> > > the page is freed back to the gen_pool.
+On Mon, Jul 03, 2023 at 09:43:49AM +0200, Maxime Coquelin wrote:
 > 
-> Quick update here, I was able to get my implementation working with
-> the page pool as a front end with the memory provider API Jakub wrote
-> here:
-> https://github.com/kuba-moo/linux/tree/pp-providers
+> On 7/3/23 08:44, Jason Wang wrote:
+> > On Sun, Jul 2, 2023 at 9:37 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > 
+> > > On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
+> > > > This small series enables virtio-net device type in VDUSE.
+> > > > With it, basic operation have been tested, both with
+> > > > virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+> > > > adding VDUSE support using split rings layout (merged in
+> > > > DPDK v23.07-rc1).
+> > > > 
+> > > > Control queue support (and so multiqueue) has also been
+> > > > tested, but requires a Kernel series from Jason Wang
+> > > > relaxing control queue polling [1] to function reliably.
+> > > > 
+> > > > [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
+> > > 
+> > > Jason promised to post a new version of that patch.
+> > > Right Jason?
+> > 
+> > Yes.
+> > 
+> > > For now let's make sure CVQ feature flag is off?
+> > 
+> > We can do that and relax on top of my patch.
 > 
-> The main complication indeed was the fact that my device memory pages
-> are ZONE_DEVICE pages, which are incompatible with the page_pool due
-> to the union in struct page. I thought of a couple of approaches to
-> resolve that.
+> I agree? Do you prefer a features negotiation, or failing init (like
+> done for VERSION_1) if the VDUSE application advertises CVQ?
 > 
-> 1. Make my device memory pages non-ZONE_DEVICE pages. 
+> Thanks,
+> Maxime
 
-Hard no on this from a mm perspective.. We need P2P memory to be
-properly tagged and have the expected struct pages to be DMA mappable
-and otherwise, you totally break everything if you try to do this..
+Unfortunately guests fail probe if feature set is inconsistent.
+So I don't think passing through features is a good idea,
+you need a list of legal bits. And when doing this,
+clear CVQ and everything that depends on it.
 
-> 2. Convert the pages from ZONE_DEVICE pages to page_pool pages and
-> vice versa as they're being inserted and removed from the page pool.
 
-This is kind of scary, it is very, very, fragile to rework the pages
-like this. Eg what happens when the owning device unplugs and needs to
-revoke these pages? I think it would likely crash..
 
-I think it also technically breaks the DMA API as we may need to look
-into the pgmap to do cache ops on some architectures.
+> > Thanks
+> > 
+> > > 
+> > > > RFC -> v1 changes:
+> > > > ==================
+> > > > - Fail device init if it does not support VERSION_1 (Jason)
+> > > > 
+> > > > Maxime Coquelin (2):
+> > > >    vduse: validate block features only with block devices
+> > > >    vduse: enable Virtio-net device type
+> > > > 
+> > > >   drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
+> > > >   1 file changed, 11 insertions(+), 4 deletions(-)
+> > > > 
+> > > > --
+> > > > 2.41.0
+> > > 
+> > 
 
-I suggest you try to work with 8k folios and then the tail page's
-struct page is empty enough to store the information you need..
-Or allocate per page memory and do a memdesc like thing..
-
-Though overall, you won't find devices creating struct pages for their
-P2P memory today, so I'm not sure what the purpose is. Jonathan
-already got highly slammed for proposing code to the kernel that was
-unusable. Please don't repeat that. Other than a special NVMe use case
-the interface for P2P is DMABUF right now and it is not struct page
-backed.
-
-Even if we did get to struct pages for device memory, it is highly
-likely cases you are interested in will be using larger than 4k
-folios, so page pool would need to cope with this nicely as well.
-
-Jason
