@@ -2,118 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0CB745C0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957E2745C14
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjGCMSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S231437AbjGCMTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjGCMSs (ORCPT
+        with ESMTP id S229633AbjGCMTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:18:48 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1195A109;
-        Mon,  3 Jul 2023 05:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688386728; x=1719922728;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=iKjfzmoGgKnWfJYiwCW1KqBhCHm32seAtWfANjROfaY=;
-  b=NlmUCFI5JKFFsAeEoLj1uo0WdMQyTwXWEBDhPcoDAJkWtxoByrvCHO2E
-   UsNHbRiKGdJOO/qgAaVtD2yMjsCAn82URxivD2cBy1zFTwEL4hwcoVOTB
-   uVtOt8HElUrwo40onnheSdUW61jhnyPce8p1qsDEW/pOMeO6v2loetP9I
-   aQOAssOUbn+vmbgwhxDxKb1xBt4BA9DArnR83Bh8mYpTRzhLiKp8cZxhO
-   dqGGCfSyYvJQJ4ohu1z0J8HEtJR6mNklcsA/GjRGhShHY58UE4DdTnBb5
-   XOn7r6Fntae+Gz9I88y8uxBJlmyLKFoh1PXCJCZvEQKYsqe5f3zZVyFkr
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="449242335"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="449242335"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 05:18:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="863065884"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="863065884"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Jul 2023 05:18:39 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 372D617C; Mon,  3 Jul 2023 15:18:42 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH v1 3/3] gpiolib: Do not alter GPIO chip fwnode member
-Date:   Mon,  3 Jul 2023 15:18:38 +0300
-Message-Id: <20230703121838.70898-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230703121838.70898-1-andriy.shevchenko@linux.intel.com>
-References: <20230703121838.70898-1-andriy.shevchenko@linux.intel.com>
+        Mon, 3 Jul 2023 08:19:05 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30C41AD;
+        Mon,  3 Jul 2023 05:18:55 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-160-45-219.reb.o2.cz [85.160.45.219])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A02C2512;
+        Mon,  3 Jul 2023 14:18:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1688386689;
+        bh=fHLoFwnP7N99CrLDMZJdiDw1fOyEzuyRgMPQdQXI1bU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BeL/PXXMRb5rPrT9rJQ8tmN4prPUpakUuz4df5PMhJs27sLZ7P4kNDeafB1Icx4tX
+         eBuib0hIyGK/MxkYdkwj1F13VU5uOxsYcdn7PeldXy1lTut1BVoJhmuxSBwR7H6oFO
+         QMPMnGdAJiZKAczkIOUqB8QKQVApL8w3eoNFfLV0=
+Date:   Mon, 3 Jul 2023 15:18:53 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Julien Stephan <jstephan@baylibre.com>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        devicetree@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH v2 2/4] media: platform: mediatek: isp_30: add mediatek
+ ISP3.0 sensor interface
+Message-ID: <20230703121853.GA16531@pendragon.ideasonboard.com>
+References: <20230630100321.1951138-1-jstephan@baylibre.com>
+ <20230630100321.1951138-3-jstephan@baylibre.com>
+ <CAAOTY_-qu2RWr496wXxc1Cp14eZfzKt4QgEH8fJns2LOjpwi8Q@mail.gmail.com>
+ <CAAOTY_9SFRMb7d3c62SVDnZY00hRAZ=9wBi9QCcv1UKuc8iBtQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAAOTY_9SFRMb7d3c62SVDnZY00hRAZ=9wBi9QCcv1UKuc8iBtQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ideally we should not touch data in the given GPIO chip structure.
-Let's become closer to it by avoid altering fwnode member.
+On Sun, Jul 02, 2023 at 05:20:25PM +0800, Chun-Kuang Hu wrote:
+> Chun-Kuang Hu <chunkuang.hu@kernel.org> 於 2023年7月2日 週日 上午7:35寫道：
+> > Julien Stephan <jstephan@baylibre.com> 於 2023年6月30日 週五 下午6:05寫道：
+> > >
+> > > From: Louis Kuo <louis.kuo@mediatek.com>
+> > >
+> > > This will add the mediatek ISP3.0 seninf (sensor interface) driver found
+> > > on several Mediatek SoCs such as the mt8365.
+> > >
+> > > Then seninf module has 4 physical CSI-2 inputs. Depending on the soc they
+> > > may not be all connected.
+> > >
+> > > Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+> > > Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
+> > > Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
+> > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> > >
+> >
+> > [snip]
+> >
+> > > +
+> > > +static const struct mtk_seninf_conf seninf_8365_conf = {
+> > > +       .model = "mtk-camsys-3.0",
+> > > +       .nb_inputs = 4,
+> > > +       .nb_muxes = 6,
+> > > +       .nb_outputs = 4,
+> > > +};
+> > > +
+> > > +static const struct of_device_id mtk_seninf_of_match[] = {
+> > > +       {
+> > > +               .compatible = "mediatek,mt8365-seninf",
+> > > +               .data = &seninf_8365_conf,
+> >
+> > Now only support one SoC, so it's necessary to select the SoC data and
+> > you could directly place the data in the code. After support other
+> 
+> Typo.
+> 
+> Now only support one SoC, so it's not necessary to select the SoC data
+> and you could directly place the data in the code.
 
-The GPIO library must use fwnode from GPIO device and the drivers
-might use one from GPIO chip in case they initialized it.
+I think Julien has visibility on other SoCs that could use the same
+driver, and has designed the mtk_seninf_conf structure accordingly. I'll
+let Julien confirm (or tell I'm wrong).
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpiolib.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+> > SoC, so we could know what should be placed in struct mtg_seninf_conf
+> > (Now we have no any information).
+> >
+> > > +       },
+> > > +       {
+> > > +       },
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, mtk_seninf_of_match);
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index bc8b9d6afe0e..8b7032300039 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -708,13 +708,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	int base = 0;
- 	int ret = 0;
- 
--	/*
--	 * If the calling driver did not initialize firmware node, do it here
--	 * using the parent device, if any.
--	 */
--	if (!gc->fwnode && gc->parent)
--		gc->fwnode = dev_fwnode(gc->parent);
--
- 	/*
- 	 * First: allocate and populate the internal stat container, and
- 	 * set up the struct device.
-@@ -729,7 +722,14 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	gc->gpiodev = gdev;
- 	gpiochip_set_data(gc, data);
- 
--	device_set_node(&gdev->dev, gc->fwnode);
-+	/*
-+	 * If the calling driver did not initialize firmware node,
-+	 * do it here using the parent device, if any.
-+	 */
-+	if (gc->fwnode)
-+		device_set_node(&gdev->dev, gc->fwnode);
-+	else if (gc->parent)
-+		device_set_node(&gdev->dev, dev_fwnode(gc->parent));
- 
- 	gdev->id = ida_alloc(&gpio_ida, GFP_KERNEL);
- 	if (gdev->id < 0) {
 -- 
-2.40.0.1.gaa8946217a0b
+Regards,
 
+Laurent Pinchart
