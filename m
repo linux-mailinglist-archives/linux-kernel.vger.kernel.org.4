@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE266745AE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAF1745AF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjGCLTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S230337AbjGCLYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjGCLTj (ORCPT
+        with ESMTP id S229484AbjGCLYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:19:39 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17481E3;
-        Mon,  3 Jul 2023 04:19:38 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-635e01eb981so7512476d6.1;
-        Mon, 03 Jul 2023 04:19:38 -0700 (PDT)
+        Mon, 3 Jul 2023 07:24:06 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C36CC1;
+        Mon,  3 Jul 2023 04:24:05 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fba74870abso4119857e87.0;
+        Mon, 03 Jul 2023 04:24:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688383177; x=1690975177;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3dRFQnX6q2L+s/xMwOL4tS9PRX/lQXRRvVxG4UITLxI=;
-        b=pNqQoyV585e+s71TqwI4udzGmKSOwwogfoCDXagF6WFiGPU0+Fk8IKNhxRILls4lCu
-         wK0kczwgU2YBaZd3UfoTQHCfFe2yZFp5Tqhto2yF+zObqsDtkqK/GDRrJFYlyeGX/0HL
-         pUR4aIlGtNLH0rRk7Q+G28NprzkSOyR8bdv/gLjgnT/u+QHZmxLO9DmlseDViGVIygGo
-         Hza5IgR5bCsz2Wo0hGfr0GjVl3sSYRBlJ6MStxXcAhrfNaZu4ZMnD9dvBF9ekldyvmJq
-         E2fB8fjZFIYcMl0LoFydW33RtcNhrNyUTpiiwiA0rYyGzqrNNrUMRliCofnJCJC6MvqM
-         abbg==
+        d=gmail.com; s=20221208; t=1688383443; x=1690975443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8J4F0JphlS60aIlO89X6KCISi3bIatLzrPpJxxUwzNc=;
+        b=PiAchaq+cIdndnc6Ryfhwmdg8OAkoyZX6JGF3vsf8poTX4uPL66vGCqtxmkA1/c3jJ
+         24DL/trF7kW4+lL6ebg7BAHT8ZvcJflh8CgrLgT93JAz6MYMHiT8sVEFUrxYpebuA1Lb
+         pyD8pKbkURADHKH5pBWIfHr8F52B2ZF8/oK7W90EX/uhPhHtKU3Dv8fKESc3id0WbFQE
+         MTQB1eCRm9QY/kN/Z7W8ZxOtl3qOCKSbkyz75eTVcQk0LxZXQE3GEX5n0x92LR4vPY4f
+         Y4DuhlDLuKXhaVFmMMzmU5meFpRqGl60uwv3GjnmcvXl1Gq0Qyj2Ys+Lk/ccfoH3su8x
+         n5fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688383177; x=1690975177;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688383443; x=1690975443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3dRFQnX6q2L+s/xMwOL4tS9PRX/lQXRRvVxG4UITLxI=;
-        b=WDp//YFtxYzFHFtyrBtwrg7bllqfBpyMG9MEgqWiqtcKlE8v803FsZ7QOkmNupqG+4
-         MTsSOVeqsJSoJgZ5t5rs0Dh+wcxzNLQsB0L3DUl0ToJXLzpa7upL20GXyTTV7lsNm0hh
-         AmvqZGI7Hz1RKz+nicPj4Wu056Wp5qOrYpnKPkuaACjdXrH4sJAHuBvWBpy2S3ZHBoTf
-         B5CGeMLaIosqtCgVVX3UJuQcboys6yIYp9eZnCs8UTf8a87b5vwPTXRSk+I18I0Qk6HV
-         6pAtsAdIs149yGLYadeaetPzXJJ60JBFVJkapPqmZTN5ENtRamaRDvsj7sJlsonbEyPg
-         VqCg==
-X-Gm-Message-State: ABy/qLac0Ulm4U5s1wHfVvhXTe6j1R408Z/ZtOjlv98AMG8SKIgo4Itp
-        oRThGx7NWB5bYRFsmjbWXSoDuC8pR2IQOk/hMoF0vjIYBncbEA==
-X-Google-Smtp-Source: APBJJlGpsOTH/rLA2+NUK6x4d+hIDQxbP1lRIEg95xZqU1egGYROLY+WB+AV1GYFGRRoJAVQQaSzRM3YhK2PQ8vQydg=
-X-Received: by 2002:a05:6214:202c:b0:625:aa48:e50f with SMTP id
- 12-20020a056214202c00b00625aa48e50fmr9574440qvf.6.1688383177097; Mon, 03 Jul
- 2023 04:19:37 -0700 (PDT)
+        bh=8J4F0JphlS60aIlO89X6KCISi3bIatLzrPpJxxUwzNc=;
+        b=Wi6qFRYZLtpKZxqfPrI1KD2tCqD/u4tJ24vZr5f/aWXSjHXxFHbPpNqHP8Ysml013H
+         IFfKwEIbykGof9obTSfnU+Vdtsy/bgDQc5dhh5pu4dBLkwyGv3e7ja3PPmVOZCM14YNA
+         WifPXwsGR3a4j1keEBZDp2sTALC7Z9CBpn4VevGOInbCSTkOEWr1LuVLuTjgX06DZr7/
+         Fk+DwDGYxbtSZ6VsK06dg7zsXm/8NX0IjffFc+3b/F9mFyDYvi9daYPp7tv0oMr3bQwZ
+         I5LQONoVQaOUSl4ydn5MVhUBoN6sZCaAaXYQXEZWUzMxbo3JyQSEtW03aiYrKKiy45br
+         gwvw==
+X-Gm-Message-State: ABy/qLYrRvUw/DtzG8owMXNKBpIagwEuFfSdSlhs8uMyru0MZBJ6odOe
+        J/gk1TlRBhnk6dR3VqsK7ub7az25qzU=
+X-Google-Smtp-Source: APBJJlEN9W/KerWD+vLnjCiPAzG7pJLadxw29KfXv86kaMCxpdEBc8a5VgmDE5vE96GQVz6yTF+p5A==
+X-Received: by 2002:a05:6512:32b1:b0:4fa:5e76:7ad4 with SMTP id q17-20020a05651232b100b004fa5e767ad4mr5672119lfe.10.1688383443207;
+        Mon, 03 Jul 2023 04:24:03 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id k22-20020a05600c0b5600b003fb40f5f553sm19632410wmr.31.2023.07.03.04.24.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 04:24:02 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     linux-leds@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: Bulk LED API
+Date:   Mon, 03 Jul 2023 13:24:02 +0200
+Message-ID: <5324811.I0CZgJUjXn@archbook>
 MIME-Version: 1.0
-References: <20230630145831.2988845-1-i.maximets@ovn.org> <CAJ8uoz1TGjWuJKkZ8C9ZrQB0CDasik3A=qJs=xwdQP8cbn97VQ@mail.gmail.com>
- <04ed302e-067e-d372-370b-3fef1cf8c7f2@ovn.org> <c6944b25-7ac4-0b75-75b1-465c8a705d02@ovn.org>
- <CAJ8uoz0ChXfavPKAkjsj8URKp3sJPPcd_dqiHsxP0iG6NjiVzg@mail.gmail.com> <297fdd01-f1c6-6733-534c-8ed50b74c3ae@ovn.org>
-In-Reply-To: <297fdd01-f1c6-6733-534c-8ed50b74c3ae@ovn.org>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Mon, 3 Jul 2023 13:19:25 +0200
-Message-ID: <CAJ8uoz1zNs0JAD9MmStY_s=w5n_6Ea1iu8ebihAn99RpBAEcvg@mail.gmail.com>
-Subject: Re: [RFC bpf-next] xsk: honor SO_BINDTODEVICE on bind
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,151 +68,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 13:16, Ilya Maximets <i.maximets@ovn.org> wrote:
->
-> On 7/3/23 12:24, Magnus Karlsson wrote:
-> > On Mon, 3 Jul 2023 at 12:13, Ilya Maximets <i.maximets@ovn.org> wrote:
-> >>
-> >> On 7/3/23 12:06, Ilya Maximets wrote:
-> >>> On 7/3/23 11:48, Magnus Karlsson wrote:
-> >>>> On Fri, 30 Jun 2023 at 16:58, Ilya Maximets <i.maximets@ovn.org> wrote:
-> >>>>>
-> >>>>> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
-> >>>>> A privileged process might create the socket and pass it to a
-> >>>>> non-privileged process for later use.  However, that process will be
-> >>>>> able to bind the socket to any network interface.  Even though it will
-> >>>>> not be able to receive any traffic without modification of the BPF map,
-> >>>>> the situation is not ideal.
-> >>>>>
-> >>>>> Sockets already have a mechanism that can be used to restrict what
-> >>>>> interface they can be attached to.  That is SO_BINDTODEVICE.
-> >>>>>
-> >>>>> To change the binding the process will need CAP_NET_RAW.
-> >>>>>
-> >>>>> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
-> >>>>> workflow when non-privileged process is using AF_XDP.
-> >>>>
-> >>>> Rebinding an AF_XDP socket is not allowed today. Any such attempt will
-> >>>> return an error from bind. So if I understand the purpose of
-> >>>> SO_BINDTODEVICE correctly, you could say that this option is always
-> >>>> set for an AF_XDP socket and it is not possible to toggle it. The only
-> >>>> way to "rebind" an AF_XDP socket is to close it and open a new one.
-> >>>> This was a conscious design decision from day one as it would be very
-> >>>> hard to support this, especially in zero-copy mode.
-> >>>
-> >>> Hi, Magnus.
-> >>>
-> >>> The purpose of this patch is not to allow re-binding.  The use case is
-> >>> following:
-> >>>
-> >>> 1. First process creates a bare socket with socket(AF_XDP, ...).
-> >>> 2. First process loads the XSK program to the interface.
-> >>> 3. First process adds the socket fd to a BPF map.
-> >>> 4. First process sends socket fd to a second process.
-> >>> 5. Second process allocates UMEM.
-> >>> 6. Second process binds socket to the interface.
-> >>
-> >> 7. Second process sends/receives the traffic. :)
-> >>
-> >>>
-> >>> The idea is that the first process will call SO_BINDTODEVICE before
-> >>> sending socket fd to a second process, so the second process is limited
-> >>> in to which interface it can bind the socket.
-> >>>
-> >>> Does that make sense?
-> >
-> > Thanks for explaining this to me. Yes, that makes sense and seems
-> > useful. Could you please send a v2 and include the flow (1-7) above in
-> > your commit message? Would be good to add one step with the setsockopt
-> > SO_BINDTODEVICE before step #4 just to be clear. With those changes
-> > please feel free to include my ack:
-> >
-> >  Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
->
-> Thanks!  I'll update the commit message with the steps above to make it
-> more clear.
->
-> I was planning to send a non-RFC version of this patch once the tree is
-> open (in a week).  Or are the rules for bpf-next different?
+Hello,
 
-Bpf-next is always open I believe.
+I hope this message can either clear up some questions I have or
+prompt some discussion concerning a potentially new uAPI to control
+LEDs through.
 
-> >
-> > Thank you!
-> >
-> >>> This workflow allows the second process to have no capabilities
-> >>> as long as it has sufficient RLIMIT_MEMLOCK.
-> >>
-> >> Note that steps 1-7 are working just fine today.  i.e. the umem
-> >> registration, bind, ring mapping and traffic send/receive do not
-> >> require any extra capabilities.
-> >>
-> >> We may restrict the bind() call to require CAP_NET_RAW and then
-> >> allow it for sockets that had SO_BINDTODEVICE as an alternative.
-> >> But restriction will break the current uAPI.
-> >>
-> >>>
-> >>> Best regards, Ilya Maximets.
-> >>>
-> >>>>
-> >>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-> >>>>> ---
-> >>>>>
-> >>>>> Posting as an RFC for now to probably get some feedback.
-> >>>>> Will re-post once the tree is open.
-> >>>>>
-> >>>>>  Documentation/networking/af_xdp.rst | 9 +++++++++
-> >>>>>  net/xdp/xsk.c                       | 6 ++++++
-> >>>>>  2 files changed, 15 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-> >>>>> index 247c6c4127e9..1cc35de336a4 100644
-> >>>>> --- a/Documentation/networking/af_xdp.rst
-> >>>>> +++ b/Documentation/networking/af_xdp.rst
-> >>>>> @@ -433,6 +433,15 @@ start N bytes into the buffer leaving the first N bytes for the
-> >>>>>  application to use. The final option is the flags field, but it will
-> >>>>>  be dealt with in separate sections for each UMEM flag.
-> >>>>>
-> >>>>> +SO_BINDTODEVICE setsockopt
-> >>>>> +--------------------------
-> >>>>> +
-> >>>>> +This is a generic SOL_SOCKET option that can be used to tie AF_XDP
-> >>>>> +socket to a particular network interface.  It is useful when a socket
-> >>>>> +is created by a privileged process and passed to a non-privileged one.
-> >>>>> +Once the option is set, kernel will refuse attempts to bind that socket
-> >>>>> +to a different interface.  Updating the value requires CAP_NET_RAW.
-> >>>>> +
-> >>>>>  XDP_STATISTICS getsockopt
-> >>>>>  -------------------------
-> >>>>>
-> >>>>> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> >>>>> index 5a8c0dd250af..386ff641db0f 100644
-> >>>>> --- a/net/xdp/xsk.c
-> >>>>> +++ b/net/xdp/xsk.c
-> >>>>> @@ -886,6 +886,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
-> >>>>>         struct sock *sk = sock->sk;
-> >>>>>         struct xdp_sock *xs = xdp_sk(sk);
-> >>>>>         struct net_device *dev;
-> >>>>> +       int bound_dev_if;
-> >>>>>         u32 flags, qid;
-> >>>>>         int err = 0;
-> >>>>>
-> >>>>> @@ -899,6 +900,11 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
-> >>>>>                       XDP_USE_NEED_WAKEUP))
-> >>>>>                 return -EINVAL;
-> >>>>>
-> >>>>> +       bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
-> >>>>> +
-> >>>>> +       if (bound_dev_if && bound_dev_if != sxdp->sxdp_ifindex)
-> >>>>> +               return -EINVAL;
-> >>>>> +
-> >>>>>         rtnl_lock();
-> >>>>>         mutex_lock(&xs->mutex);
-> >>>>>         if (xs->state != XSK_READY) {
-> >>>>> --
-> >>>>> 2.40.1
-> >>>>>
-> >>>>>
-> >>>
-> >>
->
+Right now, as far as I can tell, the way to control LEDs for an
+userspace application is through sysfs. This works fine for stuff
+that has very few LEDs (e.g. your average laptop).
+
+However, looking through some online listings[1], we now have
+multi-colour LED strips addressable over serial protocols that,
+assuming an SPI frequency of 1 MHz and 1024 LEDs, we can update
+30 times per second. Beyond just the problem of opening x * 1024
+file descriptors (where x is the number of parameters we want to
+change), we'll probably run into other inefficiencies pretty
+quickly.
+
+The scenario I'm picturing is the following: we have some Linux
+SBC, and an LED strip hooked up over SPI. We now want to have a
+certain pattern displayed on the LEDs, e.g. based on some machine
+vision input. This should be as interactive as possible, or else
+the machine vision part would be pointless. The way to do this
+right now is to bash around spidev from userspace which leads to
+very little reusable code across different addressable LED vendors.
+Supply chains happen, a different vendor is chosen, code is thrown
+out, nobody is happy.
+
+A solution to this might be a bulk LED API. We add a new concept of
+bulk LEDs, and have LED strip drivers implement that. These show up
+in sysfs like regular LEDs (though that might be a bit overwhelming)
+but they also have some character device for which a userspace
+program can query the format (colour components + maybe brightness
+components) and then write binary data to the device in said format
+to set each individual LED's components to individual values. We
+could then also add another ioctl or whatever to "flip" (present)
+the newly written values, causing them to be actually applied to the
+LEDs by the implementing driver.
+
+Beyond LED strips, LED matrices exist too. I'm not sure if those
+would rather be best implemented as DRM panels instead however.
+
+So here are my questions:
+
+1. Am I correct in my assumption that such an API currently does
+   not exist?
+
+2. Does mainline Linux care about addressable LED strips enough
+   to theoretically accept some of the concepts proposed in this
+   message, ignoring the fine details for now?
+
+3. What is the current LED subsystem technical debt that needs
+   addressing before one could get started on this work? I see
+   in the TODO file that there is some concern over multi-colour
+   LEDs, which would be tangentially relevant to this.
+
+4. Should the LED subsystem even be the subsystem to implement
+   these, or should they be 1xn panels in the DRM subsystem?
+   The DRM pixel formats might not map to wacky multi-colour
+   LEDs very well, but 8-bit RGB + 5-bit brightness as in the
+   example strip I linked would probably work in some vaguely
+   HDR-adjacent way.
+
+And, addressed at nobody in particular:
+
+5. Is any company willing to sponsor me in doing the work to
+   implement something like this?
+
+I'd also like to gather some ideas at this stage as for how
+such a bulk uAPI (and kernel internal implementation) might
+look like in more concrete terms, as I am quite new to kernel
+development and probably glossed over some important details.
+
+Kind regards,
+Nicolas Frattaroli
+
+[1]: https://www.adafruit.com/product/2239
+
+
