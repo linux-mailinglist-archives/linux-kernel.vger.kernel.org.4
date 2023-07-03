@@ -2,505 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC3074553F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CBF745545
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjGCGCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S229988AbjGCGDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjGCGCb (ORCPT
+        with ESMTP id S229943AbjGCGDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:02:31 -0400
-Received: from mail.inventec.com (mail.inventec.com [61.220.76.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C374BC;
-        Sun,  2 Jul 2023 23:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-    s=sEx04; d=inventec.com;
-    h=from:to:cc:subject:date:message-id:in-reply-to:mime-version:
-      content-type;
-    bh=hIMcZMsWbpt8FgyYLdfQQ/GAzTgQR7eyippkjzikMWQ=;
-    b=AcQlQU1jSDqMBwYRFVFWMFz/CO4P1JxIpyRC3y8p9KjsOUfoMYVXesdIjprXSx
-      QlgS3nH2nMPQ0VaLXZ4aEXfs/3BSrSNxaYWAAPNa141ngDeJ37yPL203jvdtmN
-      Ox256hx66JjcO85br9XCPUbtjTHoDtE4h8+mO4bluThknuM=
-Received: from IEC1-EX2016-04.iec.inventec (10.1.254.222) by
- IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 3 Jul 2023 14:02:25 +0800
-Received: from TAO-MailRelay-1.iec.inventec (10.6.254.133) by
- IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server id
- 15.1.2507.23 via Frontend Transport; Mon, 3 Jul 2023 14:02:25 +0800
-Received: from charon ([10.6.141.37]) by TAO-MailRelay-1.iec.inventec with Microsoft SMTPSVC(8.0.9200.16384);
-         Mon, 3 Jul 2023 14:02:24 +0800
-From:   PJ Chen <chen.pj@inventec.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-aspeed@lists.ozlabs.org>
-CC:     <ye.vic@inventec.com>, <Huang.Alang@inventec.com>,
-        Chen PJ <Chen.pj@inventec.com>
-Subject: [PATCH v7 2/2] ARM: dts: aspeed: Adding Inventec Starscream BMC
-Date:   Mon, 3 Jul 2023 14:02:22 +0800
-Message-ID: <20230703060222.24263-2-chen.pj@inventec.com>
+        Mon, 3 Jul 2023 02:03:45 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E88BB;
+        Sun,  2 Jul 2023 23:03:41 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1688364205t17ezhh7
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 03 Jul 2023 14:03:24 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: ZgHZPTZ8fzM2scasbR4KDNmzDJ57tOJaycJ/uri88ZY5e961v5sezP2d2eDKd
+        3MdVLM6sDzieW/jVdp4RNJ3nRvnXbXxXbGuQPhrYGOS3e/iPaCcunS/dl8B8d0KuCs7Rsmd
+        JI8jk7TEjFMrn0lSPIoSvYGnrMwVR9p1BoIABpJsWbowe1RNCD+wpl1I4PSJ4nRE/Oa3FQY
+        HRG0QxFy7CrQlfKOlUOphW+aVbdrXa4K869Z8zz5tGD5nPCJrcaT8fWKqXoYo/lohCk/+tA
+        D0NTEWTwXJpfmls1KsrvfSeqtvAfzFPbkZhkNBlzorNCEacgiiPis39vsCRU442licX8Ol2
+        hGnzTZOUkila+j5Mho=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11292108538094942741
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux@weissschuh.net,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
+Date:   Mon,  3 Jul 2023 14:03:23 +0800
+Message-Id: <20230703060323.487347-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230703060222.24263-1-chen.pj@inventec.com>
-References: <20230703060222.24263-1-chen.pj@inventec.com>
+In-Reply-To: <20230702193306.GK16233@1wt.eu>
+References: <20230702193306.GK16233@1wt.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 03 Jul 2023 06:02:24.0909 (UTC) FILETIME=[F0550BD0:01D9AD73]
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 8EF94C605EEB815EA2DFE3A1D19DF3BDB7028A516C868836792279F99A61768C2000:8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen PJ <Chen.pj@inventec.com>
+> Hi Zhangjin,
+> 
+> On Wed, Jun 28, 2023 at 09:51:57PM +0800, Zhangjin Wu wrote:
+> > Three mmap/munmap related test cases are added:
+> > 
+> > - mmap_bad: the length argument must be greater than 0, otherwise, fail
+> >   with -EINVAL.
+> > 
+> > - munmap_bad: invalid (void *)-1 address fail with -EINVAL.
+> > 
+> > - mmap_munmap_good: mmap() a file with good offset and then munmap().
+> > 
+> > Note, it is not easy to find a unique file for mmap() in different
+> > scenes, so, a file list is used to search the right one:
+> > 
+> > - /proc/1/exe, for 'run' and 'run-user' target
+> >   'run-user' can not find '/proc/self/exe'
+> > 
+> > - /proc/self/exe, for 'libc-test' target
+> >   normal program 'libc-test' has no permission to access '/proc/1/exe'
+> 
+> Strictly speaking, if your executable is not readable (e.g. chmod 111
+> due to a restrictive umask) it will also fail that one.
+>
 
-Initial introduction of Inventec Starscream x86 family
-equipped with AST2600 BMC SoC.
+ok.
 
-Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+> > - the others, for kernel without procfs
+> >   let it pass even with 'worst case' kernel configs
+> 
+> You should include /dev/zero, which is commonly used to allocate anonymous
+> memory and is more likely present and readable than any of the other files.
+> And another file of choice is obviously argv[0] ;-)  In this case you don't
+> need any of the other extra ones. Thus I could suggest that you try in this
+> order:
+> 
+>     /dev/zero, /proc/self/exe, /proc/1/exe, argv[0]
+> 
+> and be done with it. That doesn't prevent one from extending the list if
+> really needed later, but I doubt it would be needed. Also, it's already
+> arranged in a read-write, then read-only fallbacks mode, so if we later
+> need to add more complex tests involving writes, the writable /dev/zero
+> will have precedence.
+>
 
----
-V6 -> V7:
-  - Resend a new patch set.
-V5 -> V6:
-  - Remove setting not match dt-binging check.
-V4 -> V5:
-  - Remove devices not defined in dt-binding yet.
-V3 -> V4:
-  - Reply with devicetree binding
-    https://lore.kernel.org/all/28f0ce0a82464083ae24f9ef2f598425@inventec.com/
-V2 -> V3:
-  - Rename the node name to generic.
-V1 -> V2:
-  - Correct License description
-  - Remove not supported device
-  - Using openbmc-flash-layout.dtsi
-  - Correct device format
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/aspeed-bmc-inventec-starscream.dts    | 389 ++++++++++++++++++
- 2 files changed, 390 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
+Cool, both /dev/zero and argv[0] are very good candidates ;-)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index eb681903d50b..6a897ff40ff0 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1629,6 +1629,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-quanta-q71l.dtb \
- 	aspeed-bmc-quanta-s6q.dtb \
- 	aspeed-bmc-supermicro-x11spi.dtb \
-+	aspeed-bmc-inventec-starscream.dtb \
- 	aspeed-bmc-inventec-transformers.dtb \
- 	aspeed-bmc-tyan-s7106.dtb \
- 	aspeed-bmc-tyan-s8036.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts b/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
-new file mode 100644
-index 000000000000..ec82af94e1fb
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
-@@ -0,0 +1,389 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright 2023 Inventec Corp.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include "aspeed-g6-pinctrl.dtsi"
-+#include <dt-bindings/i2c/i2c.h>
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+/ {
-+	model = "STARSCREAM BMC";
-+	compatible = "inventec,starscream-bmc", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		video_engine_memory: video {
-+			size = <0x04000000>;
-+			alignment = <0x01000000>;
-+			compatible = "shared-dma-pool";
-+			reusable;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-uid {
-+			label = "UID_LED";
-+			gpios = <&gpio0 186 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-heartbeat {
-+			label = "HB_LED";
-+			gpios = <&gpio0 127 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
-+
-+&mdio0 {
-+	status = "okay";
-+
-+	ethphy0: ethernet-phy@0 {
-+		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
-+	};
-+};
-+
-+&mac2 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	phy-mode = "rmii";
-+	pinctrl-0 = <&pinctrl_rmii3_default>;
-+	use-ncsi;
-+};
-+
-+&mac3 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-handle = <&ethphy0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rgmii4_default>;
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+#include "openbmc-flash-layout.dtsi"
-+	};
-+
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc2";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+	};
-+};
-+
-+&spi1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi1_default>;
-+
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bios";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+	};
-+};
-+
-+&vuart1 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&kcs3 {
-+	aspeed,lpc-io-reg = <0xca2>;
-+	status = "okay";
-+};
-+
-+&uart_routing {
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+&i2c1 {
-+	status = "okay";
-+};
-+&i2c2 {
-+	status = "okay";
-+};
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+
-+	// I2C EXPANDER
-+	i2c-mux@71 {
-+		compatible = "nxp,pca9546";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x71>;
-+
-+		i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+			// AMD SB-TSI CPU1
-+			sbtsi@4c {
-+				compatible = "amd,sbtsi";
-+				reg = <0x4c>;
-+			};
-+		};
-+
-+		i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+			// AMD SB-TSI CPU2
-+			sbtsi@48 {
-+				compatible = "amd,sbtsi";
-+				reg = <0x48>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	// I2C EXPANDER U153
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9546";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x70>;
-+
-+		usb_hub: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		riser1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		riser2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+
-+	// Motherboard Temp_U89
-+	temperature-sensor@4e {
-+		compatible = "ti,tmp421";
-+		reg = <0x4e>;
-+	};
-+
-+	// RunBMC Temp_U6
-+	temperature-sensor@49 {
-+		compatible = "ti,tmp75";
-+		reg = <0x49>;
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+	// I2C EXPANDER U40
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9545";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x70>;
-+
-+		i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+	// FRU RunBMC
-+	eeprom@51 {
-+		compatible = "atmel,24c512";
-+		reg = <0x51>;
-+		pagesize = <128>;
-+	};
-+};
-+
-+&i2c9 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	// FRU SCM
-+	eeprom@51 {
-+		compatible = "atmel,24c512";
-+		reg = <0x51>;
-+		pagesize = <128>;
-+	};
-+
-+	// SCM Temp_U17
-+	temperature-sensor@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+&gpio0 {
-+	status = "okay";
-+	gpio-line-names =
-+	/*A0-A7*/   "","","","","","","","",
-+	/*B0-B7*/   "alert-psu0-smb-r-n","bmc-ready","","assert-cpu0-prochot-r-n",
-+	"","","","",
-+	/*C0-C7*/   "","","","","","","","",
-+	/*D0-D7*/   "","","","","","","","",
-+	/*E0-E7*/   "","","","","","","","",
-+	/*F0-F7*/   "","","","","reset-sgpio-r-n","","","",
-+	/*G0-G7*/   "","","scm-jtag-mux-select","","","","","",
-+	/*H0-H7*/   "","","","","reset-out","power-out","","",
-+	/*I0-I7*/   "","","","","","","irq-bmc-cpu0-buf-nmi-n","",
-+	/*J0-J7*/   "","","","","","","","",
-+	/*K0-K7*/   "","","","","","","","",
-+	/*L0-L7*/   "","","","","","","","",
-+	/*M0-M7*/   "","","","","","","","",
-+	/*N0-N7*/   "","","ncsi-ocp-clk-en-n","","","","","",
-+	/*O0-O7*/   "","","","","","","cpu1-thermal-trip-n","",
-+	/*P0-P7*/   "","","","","","","","",
-+	/*Q0-Q7*/   "cpu0-prochot-n","","cpu1-prochot-n","","cpu0-pe-rst0","","","",
-+	/*R0-R7*/   "","","","","","","","",
-+	/*S0-S7*/   "","","","",
-+	"","PCH_SLP_S4_BMC_N","cpu0-thermtrip-n","alert-psu1-smb-r-n",
-+	/*T0-T7*/   "","","","","","","","",
-+	/*U0-U7*/   "","","","","","","","",
-+	/*V0-V7*/   "bios-recovery-buf-n","","assert-cpu1-prochot-r-n","",
-+	"power-chassis-good","","","",
-+	/*W0-W7*/   "","","","","","","","",
-+	/*X0-X7*/   "","","","","platform-type","","","",
-+	/*Y0-Y7*/   "","","","","","","","",
-+	/*Z0-Z7*/   "","cpld-power-break-n","","","","","","",
-+	/*AA0-AA7*/ "","","","","","","","",
-+	/*AB0-AB7*/ "","","","","","","","",
-+	/*AC0-AC7*/ "","","","","","","","";
-+};
-+
-+&sgpiom0 {
-+	status = "okay";
-+	ngpios = <64>;
-+	bus-frequency = <1000000>;
-+};
-+
-+&lpc_snoop {
-+	status = "okay";
-+	snoop-ports = <0x80>;
-+};
-+
-+&emmc_controller {
-+	status = "okay";
-+};
-+
-+&emmc {
-+	status = "okay";
-+	non-removable;
-+	max-frequency = <52000000>;
-+	bus-width = <8>;
-+};
-+
-+&video {
-+	status = "okay";
-+	memory-region = <&video_engine_memory>;
-+};
-+
-+&vhub {
-+	status = "okay";
-+	aspeed,vhub-downstream-ports = <7>;
-+	aspeed,vhub-generic-endpoints = <21>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb2ad_default>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
--- 
-2.25.1
+Just verified both of them, works perfectly.
 
+- /dev/zero
+
+  we need to mknod it in prepare() and also, in test_mmap_munmap(),
+  stat() return a zero size of /dev/zero, in this case, we should assign
+  a non-zero file_size ourselves.
+
+    -       file_size = stat_buf.st_size;
+    +       /* file size of the special /dev/zero is 0, let's assign one manually */
+    +       if (i == 0)
+    +               file_size = 3*page_size - 1;
+    +       else
+    +               file_size = stat_buf.st_size;
+
+
+- argv[0]
+
+  since nolibc has no realpath() currently, we can simply
+  support the current path and the absolute path like this:
+
+    nolibc-test.c:
+
+    /* assigned as argv[0] in main(), will be used by some tests */
+    static char exe[PATH_MAX + 1];
+
+    main():
+
+    /* get absolute path of myself, nolibc has no realpath() currently */
+    #ifndef NOLIBC
+            realpath(argv[0], exe);
+    #else
+            /* assume absolute path has no "./" */
+            if (strncmp(argv[0], "./", 2) != 0)
+                    strncat(exe, argv[0], strlen(argv[0]) + 1);
+            else {
+                    pwd = getenv("PWD");
+                    /* skip the ending '\0' */
+                    strncat(exe, getenv("PWD"), strlen(pwd));
+                    /* skip the first '.' */
+                    strncat(exe, argv[0] + 1, strlen(argv[0]));
+            }
+    #endif
+
+A full functional realpath() is a little complex, such as '../' support and
+even symlink support, let's delay its requirement at current stage ;-)
+
+one or both of them may also help the other test cases:
+
+- chroot_exe (used '/init' before)
+
+    CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(proc ? "/proc/self/exe" : exe), -1, ENOTDIR); break;
+
+- chmod_exe (replace the one: chmod_tmpdir in another patchset)
+
+    CASE_TEST(chmod_exe);       EXPECT_SYSZR(1, chmod(proc ? "/proc/self/exe" : exe, 0555)); break;
+
+    It should be safe enough to only remove the writable attribute for the test
+    program.
+
+- stat_timestamps (used '/init' before)
+
+    if (stat("/proc/self/", &st) && stat(exe, &st) && stat("/dev/zero", &st) && stat("/", &st))
+
+Will update the related patches with them.
+
+Thanks,
+Zhangjin
+
+> Willy
