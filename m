@@ -2,139 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AADE745F02
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411A7745F03
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjGCOrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S231344AbjGCOsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGCOre (ORCPT
+        with ESMTP id S231235AbjGCOrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:47:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB3810F9;
-        Mon,  3 Jul 2023 07:47:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0525060F59;
-        Mon,  3 Jul 2023 14:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6A9C433C7;
-        Mon,  3 Jul 2023 14:47:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688395631;
-        bh=0+HXRIje9Ard9diwM3PfMrFZZF9PNbX5EcSRVaV+SIc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mBEp3Y+/ivPwlfOe2N0+4Zc3M3+sctlgzv6KEosYsahzcLayVHqAiYVt/CPzLPuOK
-         y7ydw10R8dsXPHWK3W7zszU/Qi2MeztWCLpgUVmx5kznDc9Fy1GruZzPCqL0HPDSHk
-         kGMZ7SNrGylNEOlr9ZdDtcaVXYt5anIqlJNe+tRs=
-Date:   Mon, 3 Jul 2023 16:46:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefan.wahren@i2se.com,
-        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
-        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH v8 3/5] staging: bcm2835-camera: Register bcm2835-camera
- with vchiq_bus_type
-Message-ID: <2023070309-flashback-droplet-a938@gregkh>
-References: <20230627201628.207483-1-umang.jain@ideasonboard.com>
- <20230627201628.207483-4-umang.jain@ideasonboard.com>
- <2023070319-daycare-pointless-abba@gregkh>
- <f080a725-65ea-c3fe-896a-5ac711dddfc1@ideasonboard.com>
+        Mon, 3 Jul 2023 10:47:53 -0400
+Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0533310C2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:47:29 -0700 (PDT)
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id GKpoqwMkk4iOUGKpoqLUnY; Mon, 03 Jul 2023 16:47:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1688395645; bh=NOx9nUtR8OOcpYMcehzkrBt/SXaGbSqWZgl3UHzFKfY=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=PyKSuSXtzqIsMOFPTPX8a55dT5yOyhs/VB8DaGNLfKO1DYdE8VGzHpLe8yq6ToHnK
+         x95CCbAHhJLxeo/rufhwhcNwK5dUvrelYhT+kvvY+/jaamsgqvNa/vWwPKdRSbfPyR
+         MZwCSDTrCP1aK1ylOqkzJGnG235vWOudhepXcTZNAKSNkmAdNlceLIfoNWjNOmjlJZ
+         AjA/RIMKGcAto68jEjBoQ6XIhbtOKQ9js8yQwcXOicyEpHHwNbiwPseWpWptxZ1zEA
+         +Gh/l5mRK2D/eJj2TRW91hzzP3RL44yH1uONS778M8IjJqjpO3efnHGf7CJAK7GVa+
+         9EQ15G2T3w2fQ==
+Message-ID: <a743ab0a-fd45-2cd1-2546-44cf4547266f@enneenne.com>
+Date:   Mon, 3 Jul 2023 16:47:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f080a725-65ea-c3fe-896a-5ac711dddfc1@ideasonboard.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] include/uapi pps.h: drop not needed PPS_MAX_SOURCES
+ define
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+References: <20230630071826.105501-1-giometti@enneenne.com>
+ <20230630071826.105501-2-giometti@enneenne.com>
+ <2023063017-traverse-accustom-97f4@gregkh>
+ <56e461b4-2cd8-ec89-86b2-68544826cf73@enneenne.com>
+ <2023063015-immerse-broadside-3dab@gregkh>
+ <ca137a28-28a3-f563-52e9-4ee0ef1daa9f@enneenne.com>
+ <2023070327-gangway-comic-6e15@gregkh>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <2023070327-gangway-comic-6e15@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfC+J2hdxjVRu1RYgGGYVsFbnyC3t0b7DaN7IgRtdAKVtFEj3940QBPbm6IGve8AS/53AMzcR873kspeVPImgi1c454bupC6TCP5Fr434Pfw/k7Gmvdu9
+ 15IkIKYWz+G6q/gK5f7O1EGvwc/L/QHV5qcjlGfeBbju8NnCuD/452VYjK5fwyDVv1fjLbSyD5GCOhLxRrQ+gNIablWtpCDW2/kr9xe3ZKvJ9UZqC7Nyhuv4
+ JqWiBaVuu11gzGW60JIt7g==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 04:44:39PM +0200, Umang Jain wrote:
-> Hi Greg,
+On 03/07/23 15:38, Greg Kroah-Hartman wrote:
+> On Fri, Jun 30, 2023 at 03:29:50PM +0200, Rodolfo Giometti wrote:
+>> On 30/06/23 14:53, Greg Kroah-Hartman wrote:
+>>> On Fri, Jun 30, 2023 at 09:50:33AM +0200, Rodolfo Giometti wrote:
+>>>> On 30/06/23 09:31, Greg Kroah-Hartman wrote:
+>>>>> On Fri, Jun 30, 2023 at 09:18:26AM +0200, Rodolfo Giometti wrote:
+>>>>>> Userspace PPS clients should not known about how many PPS sources can
+>>>>>> be defined within the system (nor the rfc2783 say so), so we can
+>>>>>> safely drop this define since is not used anymore in the kernel too.
+>>>>>>
+>>>>>> Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
+>>>>>> ---
+>>>>>>     drivers/pps/pps.c        | 6 +++---
+>>>>>>     include/uapi/linux/pps.h | 1 -
+>>>>>>     2 files changed, 3 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
+>>>>>> index 5d19baae6a38..1a6131608036 100644
+>>>>>> --- a/drivers/pps/pps.c
+>>>>>> +++ b/drivers/pps/pps.c
+>>>>>> @@ -354,7 +354,7 @@ int pps_register_cdev(struct pps_device *pps)
+>>>>>>     	 * Get new ID for the new PPS source.  After idr_alloc() calling
+>>>>>>     	 * the new source will be freely available into the kernel.
+>>>>>>     	 */
+>>>>>> -	err = idr_alloc(&pps_idr, pps, 0, PPS_MAX_SOURCES, GFP_KERNEL);
+>>>>>> +	err = idr_alloc(&pps_idr, pps, 0, MINORMASK, GFP_KERNEL);
+>>>>>>     	if (err < 0) {
+>>>>>>     		if (err == -ENOSPC) {
+>>>>>>     			pr_err("%s: too many PPS sources in the system\n",
+>>>>>> @@ -449,7 +449,7 @@ EXPORT_SYMBOL(pps_lookup_dev);
+>>>>>>     static void __exit pps_exit(void)
+>>>>>>     {
+>>>>>>     	class_destroy(pps_class);
+>>>>>> -	unregister_chrdev_region(pps_devt, PPS_MAX_SOURCES);
+>>>>>> +	unregister_chrdev_region(pps_devt, MINORMASK);
+>>>>>>     }
+>>>>>>     static int __init pps_init(void)
+>>>>>> @@ -463,7 +463,7 @@ static int __init pps_init(void)
+>>>>>>     	}
+>>>>>>     	pps_class->dev_groups = pps_groups;
+>>>>>> -	err = alloc_chrdev_region(&pps_devt, 0, PPS_MAX_SOURCES, "pps");
+>>>>>> +	err = alloc_chrdev_region(&pps_devt, 0, MINORMASK, "pps");
+>>>>>>     	if (err < 0) {
+>>>>>>     		pr_err("failed to allocate char device region\n");
+>>>>>>     		goto remove_class;
+>>>>>> diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
+>>>>>> index 90f2e86020ba..8a4096f18af1 100644
+>>>>>> --- a/include/uapi/linux/pps.h
+>>>>>> +++ b/include/uapi/linux/pps.h
+>>>>>> @@ -26,7 +26,6 @@
+>>>>>>     #include <linux/types.h>
+>>>>>>     #define PPS_VERSION		"5.3.6"
+>>>>>> -#define PPS_MAX_SOURCES		MINORMASK
+>>>>>
+>>>>> Why change this in patch 1, and then delete this here?
+>>>>>
+>>>>> That makes no sense.
+>>>>
+>>>> I did it in two steps to be clear that the first step is about a better
+>>>> redefinition of the PPS_MAX_SOURCES define, while the second step is about
+>>>> the fact it's now that define is useless.
+>>>
+>>> Better to just convert everything in patch one, and then in patch 2
+>>> delete the .h #define.  That way, when userspace breaks, you can revert
+>>> just the last patch :)
+>>
+>> I'm puzzled since I did as you say... patch 1/2 increases PPS_MAX_SOURCES
+>> value while patch 2/2 drops PPS_MAX_SOURCES define.
 > 
-> On 7/3/23 3:29 PM, Greg KH wrote:
-> > On Tue, Jun 27, 2023 at 10:16:26PM +0200, Umang Jain wrote:
-> > > Register the bcm2835-camera with the vchiq_bus_type instead of using
-> > > platform driver/device.
-> > > 
-> > > Also the VCHIQ firmware doesn't support device enumeration, hence
-> > > one has to maintain a list of devices to be registered in the interface.
-> > > 
-> > > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> > > ---
-> > >   .../bcm2835-camera/bcm2835-camera.c           | 16 +++++++-------
-> > >   .../interface/vchiq_arm/vchiq_arm.c           | 21 ++++++++++++++++---
-> > >   2 files changed, 26 insertions(+), 11 deletions(-)
-> > > 
-> > > diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> > > index 346d00df815a..f37b2a881d92 100644
-> > > --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> > > +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> > > @@ -24,8 +24,9 @@
-> > >   #include <media/v4l2-event.h>
-> > >   #include <media/v4l2-common.h>
-> > >   #include <linux/delay.h>
-> > > -#include <linux/platform_device.h>
-> > > +#include "../interface/vchiq_arm/vchiq_arm.h"
-> > > +#include "../interface/vchiq_arm/vchiq_device.h"
-> > >   #include "../vchiq-mmal/mmal-common.h"
-> > >   #include "../vchiq-mmal/mmal-encodings.h"
-> > >   #include "../vchiq-mmal/mmal-vchiq.h"
-> > > @@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format = {
-> > >   	.fmt.pix.sizeimage = 1024 * 768,
-> > >   };
-> > > -static int bcm2835_mmal_probe(struct platform_device *pdev)
-> > > +static int bcm2835_mmal_probe(struct vchiq_device *device)
-> > >   {
-> > >   	int ret;
-> > >   	struct bcm2835_mmal_dev *dev;
-> > > @@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
-> > >   						       &camera_instance);
-> > >   		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
-> > >   		if (ret) {
-> > > -			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
-> > > +			dev_err(&device->dev, "%s: could not register V4L2 device: %d\n",
-> > >   				__func__, ret);
-> > >   			goto free_dev;
-> > >   		}
-> > > @@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
-> > >   	return ret;
-> > >   }
-> > > -static void bcm2835_mmal_remove(struct platform_device *pdev)
-> > > +static void bcm2835_mmal_remove(struct vchiq_device *device)
-> > >   {
-> > >   	int camera;
-> > >   	struct vchiq_mmal_instance *instance = gdev[0]->instance;
-> > > @@ -1988,17 +1989,16 @@ static void bcm2835_mmal_remove(struct platform_device *pdev)
-> > >   	vchiq_mmal_finalise(instance);
-> > >   }
-> > > -static struct platform_driver bcm2835_camera_driver = {
-> > > +static struct vchiq_driver bcm2835_camera_driver = {
-> > >   	.probe		= bcm2835_mmal_probe,
-> > > -	.remove_new	= bcm2835_mmal_remove,
-> > > +	.remove		= bcm2835_mmal_remove,
-> > No need to change this here, right?  That's independant of this patch
-> > series.
-> 
-> Why not ?
-> 
-> Should I have "remove_new()"  in the struct vchiq_driver {..} [Patch 1/5]
-> instead of "remove()"  -  match up with platform_driver virtual interface ?
+> Ah, I thought patch 1/2 renamed it.
 
-Ah, sorry, my fault, I thought this was just a platform driver change.
-This is fine.
+No, patch 1/2 just safely increases PPS_MAX_SOURCES value as other drivers does.
 
-greg k-h
+> But why increase it if you are removing it?
+
+As I said I splitted the modification in two steps just to highlight that the 
+first step is a better redefinition of PPS_MAX_SOURCES, while the second step 
+drops it since it's useless for userspace. As you noticed this last step is not 
+trivial since it may breaks some userspace programs, but it's also true that 
+RFC2783 doesn't define it, so well written userspace programs should not use 
+that define and then they should not break at all. :)
+
+>>>>> And if this is exported to userspace, removing it should break things,
+>>>>> right?  If not, why was it there in the first place?
+>>>>
+>>>> In reality such define is not stated within the PPS RFC2783, so userspace
+>>>> programs whose relies on such define are broken.
+>>>
+>>> RFC's do not document Linux kernel apis.
+>>
+>> It's true, but well written PPS clients should relay only on PPS API which
+>> in turn doesn't states that define. :P
+> 
+> Are you sure?  Have you audited the clients?  if so, please document
+> that in the changelog text.
+
+OK, I'm going to re-write the changelog text adding this information.
+
+>>> So if any userspace code breaks, you have to put this back, sorry.
+>>
+>> If you think that patch 2 is not good, no problem, just drop it, but please
+>> just consider applying patch 1, since increasing PPS_MAX_SOURCES value is
+>> good.
+> 
+> You can't change a uapi value either without breaking things :(
+
+I see, but in this case what do you suggest to do? Keeping 1/2 and dropping 2/2?
+
+Ciao,
+
+Rodolfo
+
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
+
