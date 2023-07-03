@@ -2,121 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A0D7457E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE3B7457E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjGCI7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        id S230299AbjGCI75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjGCI7d (ORCPT
+        with ESMTP id S230205AbjGCI7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:59:33 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE6A93;
-        Mon,  3 Jul 2023 01:59:32 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9926623e367so483818766b.0;
-        Mon, 03 Jul 2023 01:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688374770; x=1690966770;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gIU+W3KyfXyLBg7kXWXihpWayTsoJV4YZPC0K6yLsJA=;
-        b=JUWUA2aOc9Dgh4V5Q7UhO675h2MALJ5NW9MdQo101rjli8W6OLSSe1OswnGwmKyxrB
-         NHAUqn0UPLG4yGtZMWH7AeC8CxBMCMXdg6abYWBNi1BfS5zfu3f6898+i89v95xWw6kp
-         GvEUWvuhCV1ZkHG39MFp0vYwtTJL6f+XzqaRfT0A4yfCYG2gv4hqb6YxgSbaPiHijGpv
-         L7RL9qE6EPs2sbXSVEPx8EXype00i4baQGWNbw5zRK7QmYI3Mx97966lUGfTL9jcQprI
-         83RZ8yj/3MfV3dBGnVVyK91IqrR4m9MmA5Unj1F+ggj93CCca5I2pwNTCWBSJ93JOR2M
-         JJtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688374770; x=1690966770;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gIU+W3KyfXyLBg7kXWXihpWayTsoJV4YZPC0K6yLsJA=;
-        b=GidgQh0KTJli3io8XdX2Od9gHHbjHy69ZrAuG/Sn2wYkBWAPp2jaNScOXI/C/k8Lv+
-         vTaQHOHzRpCZ+U8u2TdH2LH5A1EYfQ/FeIBDzdDc82JnrPcfQZ1b8vNaCxVn+Aowo5Y3
-         t2du327NUHpB49VkB7RpxCwUseTOreA3NKp9JqfLNkmj6yatC0/z5ckzYJqZ5ZdlgZy0
-         4ZCBRgfGu7LdBI5zLMVHUlTLoaUrVD9S4jhzOtVA6bQUkg0ccB2WYDRIlI8BuZp+vNYI
-         4Q9wP9fwR6/U+Pkv6Y5VF6tO/ZFnltBpy7ZhPHD8KGKWG3OiNKgB3juWQ0S2alhR4wVO
-         7wHA==
-X-Gm-Message-State: ABy/qLbFkwIjzZbfWC5SKV6Epx+/Lqf8sFikmG1+2KGp0Sl1WHKZQTBd
-        /tb5NrKPBCBcmJ1jSaGUxPU=
-X-Google-Smtp-Source: APBJJlEtZ35iuRiAJo32s6RRkTkvahBjWT1OeGN/+dzdJFyZKgH0GZC7TK0lOAP/xxPXzDnniK+bYw==
-X-Received: by 2002:a17:906:5a94:b0:96f:c0b0:f137 with SMTP id l20-20020a1709065a9400b0096fc0b0f137mr6850646ejq.16.1688374770463;
-        Mon, 03 Jul 2023 01:59:30 -0700 (PDT)
-Received: from A13PC04R.einet.ad.eivd.ch ([193.134.219.72])
-        by smtp.googlemail.com with ESMTPSA id gx23-20020a170906f1d700b00992dcae806bsm4501159ejb.5.2023.07.03.01.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 01:59:29 -0700 (PDT)
-From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
-To:     alberto.dassatti@heig-vd.ch
-Cc:     dlemoal@kernel.org, Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI address
-Date:   Mon,  3 Jul 2023 10:58:45 +0200
-Message-Id: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Jul 2023 04:59:54 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A77093;
+        Mon,  3 Jul 2023 01:59:50 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4Qvfxv02dpz9spf;
+        Mon,  3 Jul 2023 10:59:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1688374787;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IgizOrynAySv2dLicDLGl13lYDf7Baoa0hm2ZdTCH8M=;
+        b=hzqyvIoY1GLE4APTwgDMqFjTi1N9S0Tr21AZF0v44cOHMOKfT/Sl5UikMRTfTCpR+ZlIKv
+        fwWiBr810bLDuL6G0UzbM8DjZzfLmSRJ5YlEof0laYNWHcREuEFkibFe2PejX6+Azx9bhA
+        fO9hEx09A8YK5zEOVA8XLmveqfDYJLIFfHXqAJkPcQmJ0InSlPvTrg2akkW7OWS7EBX5Ud
+        x/V3GLefSYRBmeYmVAcT5jmbf7pMX73tVpQHUFJMxstF8YVdcMDmXFGp3JIgZdKDcWULLl
+        Xl1Iq3KVa3wy2lDMb05t0L90XNzlZUNmc06lmXsBLcTvRadFWLKgF8BJxG8P1w==
+References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
+ <20230702-pll-mipi_set_rate_parent-v3-5-46dcb8aa9cbc@oltmanns.dev>
+ <87wmzhsbu0.fsf@oltmanns.dev>
+ <zvxviyera3zxe2ro5ej52vz2o2vrinu6zo7osddojbys4tuqhd@3f2okcbpf5jr>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Roman Beranek <me@crly.cz>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/8] clk: sunxi-ng: nkm: Support finding closest rate
+In-reply-to: <zvxviyera3zxe2ro5ej52vz2o2vrinu6zo7osddojbys4tuqhd@3f2okcbpf5jr>
+Date:   Mon, 03 Jul 2023 10:59:43 +0200
+Message-ID: <87jzvhs740.fsf@oltmanns.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A 32-bit mask was used on the 64-bit PCI address used for mapping MSIs.
-This would result in the upper 32 bits being unintentionally zeroed and
-MSIs getting mapped to incorrect PCI addresses if the address had any
-of the upper bits set.
 
-Replace 32-bit mask by appropriate 64-bit mask.
+On 2023-07-03 at 09:25:59 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+> [[PGP Signed Part:Undecided]]
+> On Mon, Jul 03, 2023 at 09:17:43AM +0200, Frank Oltmanns wrote:
+>>
+>> On 2023-07-02 at 19:55:24 +0200, Frank Oltmanns <frank@oltmanns.dev> wrote:
+>> > When finding the best rate for a NKM clock, consider rates that are
+>> > higher than the requested rate, if the CCU_FEATURE_CLOSEST_RATE flag is
+>> > set.
+>> >
+>> > Accommodate ccu_mux_helper_determine_rate to this change.
+>> >
+>> > Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+>> > ---
+>> >  drivers/clk/sunxi-ng/ccu_mux.c | 23 +++++++++++++++-----
+>> >  drivers/clk/sunxi-ng/ccu_nkm.c | 48 +++++++++++++++++++++++++++++++-----------
+>> >  2 files changed, 54 insertions(+), 17 deletions(-)
+>> >
+>> > diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mux.c
+>> > index 1d557e323169..8594d6a4addd 100644
+>> > --- a/drivers/clk/sunxi-ng/ccu_mux.c
+>> > +++ b/drivers/clk/sunxi-ng/ccu_mux.c
+>> > @@ -113,7 +113,7 @@ int ccu_mux_helper_determine_rate(struct ccu_common *common,
+>> >  	}
+>> >
+>> >  	for (i = 0; i < clk_hw_get_num_parents(hw); i++) {
+>> > -		unsigned long tmp_rate, parent_rate;
+>> > +		unsigned long tmp_rate, parent_rate, best_diff = ULONG_MAX;
+>> >  		struct clk_hw *parent;
+>> >
+>> >  		parent = clk_hw_get_parent_by_index(hw, i);
+>> > @@ -139,10 +139,23 @@ int ccu_mux_helper_determine_rate(struct ccu_common *common,
+>> >  			goto out;
+>> >  		}
+>> >
+>> > -		if ((req->rate - tmp_rate) < (req->rate - best_rate)) {
+>> > -			best_rate = tmp_rate;
+>> > -			best_parent_rate = parent_rate;
+>> > -			best_parent = parent;
+>> > +		if (common->features & CCU_FEATURE_CLOSEST_RATE) {
+>> > +			unsigned long tmp_diff = req->rate > tmp_rate ?
+>> > +						 req->rate - tmp_rate :
+>> > +						 tmp_rate - req->rate;
+>> > +
+>> > +			if (tmp_diff < best_diff) {
+>> > +				best_rate = tmp_rate;
+>> > +				best_parent_rate = parent_rate;
+>> > +				best_parent = parent;
+>> > +				best_diff = tmp_diff;
+>> > +			}
+>> > +		} else {
+>> > +			if ((req->rate - tmp_rate) < (req->rate - best_rate)) {
+>> > +				best_rate = tmp_rate;
+>> > +				best_parent_rate = parent_rate;
+>> > +				best_parent = parent;
+>> > +			}
+>> >  		}
+>> >  	}
+>> >
+>> > diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nkm.c
+>> > index d83843e69c25..36d9e987e4d8 100644
+>> > --- a/drivers/clk/sunxi-ng/ccu_nkm.c
+>> > +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
+>> > @@ -18,9 +18,11 @@ struct _ccu_nkm {
+>> >  };
+>> >
+>> >  static unsigned long ccu_nkm_find_best_with_parent_adj(unsigned long *parent, unsigned long rate,
+>> > -						       struct _ccu_nkm *nkm, struct clk_hw *phw)
+>> > +						       struct _ccu_nkm *nkm, struct clk_hw *phw,
+>> > +						       unsigned long features)
+>> >  {
+>> > -	unsigned long best_rate = 0, best_parent_rate = *parent, tmp_parent = *parent;
+>> > +	unsigned long best_rate = 0, best_parent_rate = 0, tmp_parent = *parent;
+>> > +	unsigned long best_diff = ULONG_MAX;
+>> >  	unsigned long best_n = 0, best_k = 0, best_m = 0;
+>> >  	unsigned long _n, _k, _m;
+>> >
+>> > @@ -28,16 +30,26 @@ static unsigned long ccu_nkm_find_best_with_parent_adj(unsigned long *parent, un
+>> >  		for (_n = nkm->min_n; _n <= nkm->max_n; _n++) {
+>> >  			for (_m = nkm->min_m; _m <= nkm->max_m; _m++) {
+>> >  				unsigned long tmp_rate;
+>> > +				unsigned long tmp_diff;
+>> >
+>> >  				tmp_parent = clk_hw_round_rate(phw, rate * _m / (_n * _k));
+>> >
+>> >  				tmp_rate = tmp_parent * _n * _k / _m;
+>> > -				if (tmp_rate > rate)
+>> > -					continue;
+>> >
+>> > -				if ((rate - tmp_rate) < (rate - best_rate)) {
+>> > +				if (features & CCU_FEATURE_CLOSEST_RATE) {
+>> > +					tmp_diff = rate > tmp_rate ?
+>> > +						   rate - tmp_rate :
+>> > +						   tmp_rate - rate;
+>> > +				} else {
+>> > +					if (tmp_rate > rate)
+>> > +						continue;
+>> > +					tmp_diff = rate - tmp_diff;
+>>
+>> Sorry, this should of course be tmp_diff = rate - tmp_rate. I'll fix
+>> that in v4. Also I'll do tests on my phone where
+>> CCU_FEATURE_CLOSEST_RATE is not set (i.e., without PATCH 8), so see if
+>> it replicates the old behaviour. I'll also look into adding kunit tests,
+>> so that this doesn't happen again. I'm not sure if this is feasible, but
+>> I'll ask here for advise, if/when I encounter obstacles.
+>
+> While this would obviously be great, I don't think we have the
+> infrastructure just yet to allow to easily add kunit tests for entire
+> clocks.
 
-Fixes: dc73ed0f1b8b ("PCI: rockchip: Fix window mapping and address translation for endpoint")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/linux-pci/8d19e5b7-8fa0-44a4-90e2-9bb06f5eb694@moroto.mountain/
-Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc: stable@vger.kernel.org
----
- drivers/pci/controller/pcie-rockchip.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I think, clk_test.c provides a good blueprint. I tried to do that for
+clk-fractional-divider [1], but Stephen wanted to go a different route,
+so I dropped it. You could look at clk_fd_test_init() in [1]. A similar
+approach might work for the sunxi-ng clocks. I don't see any real
+blockers, but maybe that's me being naive.
 
-diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
-index fe0333778fd9..627d08b34827 100644
---- a/drivers/pci/controller/pcie-rockchip.h
-+++ b/drivers/pci/controller/pcie-rockchip.h
-@@ -158,7 +158,9 @@
- #define PCIE_RC_CONFIG_THP_CAP		(PCIE_RC_CONFIG_BASE + 0x274)
- #define   PCIE_RC_CONFIG_THP_CAP_NEXT_MASK	GENMASK(31, 20)
- 
--#define PCIE_ADDR_MASK			0xffffff00
-+#define MAX_AXI_IB_ROOTPORT_REGION_NUM		3
-+#define MIN_AXI_ADDR_BITS_PASSED		8
-+#define PCIE_ADDR_MASK			GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
- #define PCIE_CORE_AXI_CONF_BASE		0xc00000
- #define PCIE_CORE_OB_REGION_ADDR0	(PCIE_CORE_AXI_CONF_BASE + 0x0)
- #define   PCIE_CORE_OB_REGION_ADDR0_NUM_BITS	0x3f
-@@ -185,8 +187,6 @@
- #define AXI_WRAPPER_TYPE1_CFG			0xb
- #define AXI_WRAPPER_NOR_MSG			0xc
- 
--#define MAX_AXI_IB_ROOTPORT_REGION_NUM		3
--#define MIN_AXI_ADDR_BITS_PASSED		8
- #define PCIE_RC_SEND_PME_OFF			0x11960
- #define ROCKCHIP_VENDOR_ID			0x1d87
- #define PCIE_LINK_IS_L2(x) \
--- 
-2.25.1
+[1]: https://lore.kernel.org/all/20230614185521.477924-3-frank@oltmanns.dev/
 
+Best regards,
+  Frank
+
+>
+> Maxime
+>
+> [[End of PGP Signed Part]]
