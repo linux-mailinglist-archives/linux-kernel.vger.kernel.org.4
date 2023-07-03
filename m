@@ -2,367 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94232745798
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F410674579C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjGCIse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
+        id S230300AbjGCItA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjGCIsc (ORCPT
+        with ESMTP id S230214AbjGCIso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:48:32 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7766893
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:48:31 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4Qvfht2Krvz9sFl;
-        Mon,  3 Jul 2023 10:48:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mFt__gNmFExW; Mon,  3 Jul 2023 10:48:30 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4Qvfhs4dcsz9sFY;
-        Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9A2CB8B81F;
-        Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id QTwWyeTuseav; Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5B7D28B77E;
-        Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 3638mReh1103972
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 3 Jul 2023 10:48:27 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 3638mRCt1103971;
-        Mon, 3 Jul 2023 10:48:27 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2 9/9] powerpc/kuap: Use ASM feature fixups instead of static branches
-Date:   Mon,  3 Jul 2023 10:48:13 +0200
-Message-ID: <2c30423f3963bf8e13e2cb4ae9af337c5cf704a8.1688373335.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1688373335.git.christophe.leroy@csgroup.eu>
-References: <cover.1688373335.git.christophe.leroy@csgroup.eu>
+        Mon, 3 Jul 2023 04:48:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFC6E59;
+        Mon,  3 Jul 2023 01:48:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AB7A60E76;
+        Mon,  3 Jul 2023 08:48:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0611C433C8;
+        Mon,  3 Jul 2023 08:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688374116;
+        bh=pox5/8OU+E0k0USvT7GzuoL1tE4nYDvau0NjWziCQbg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QO5q0gD+xg0S2yRaTSvnhQN1rQSHd3GjZR/BSvSF5xkz6zcOhpSknzlG215Zkx8V1
+         8v1d/RtC05HMr5F/BsBtEzRd6iS5S9L+yhc3Glx/DuUHH6YdlaokKLWtPnxvbbVqiT
+         R5r/TOG61tIwNf/cZ87WVI4Q1lc8Kisxk6Vzle1GYtj9yAxPib85Q3ISjzapugs4H3
+         2slsG81RGvle2x2nfzci471SvTPp0apDznCWCf+t7pn5nLQWbFTDEqoN8lQ/YsbJg7
+         IbCkh1dwJtggfdSWh8rpKfY1jFVlQsadGyzWELnwwgAVUPZ0EG+oWb8lQU5q+XrtP6
+         jg7EQP/EkplYg==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qGFEo-0006nE-37;
+        Mon, 03 Jul 2023 10:48:51 +0200
+Date:   Mon, 3 Jul 2023 10:48:50 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>, johan+linaro@kernel.org,
+        perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, Stable@vger.kernel.org
+Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
+ number
+Message-ID: <ZKKLcnosI5jD-IXv@hovoldconsulting.com>
+References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
+ <ZKJ9UrB8FRkLzLc-@hovoldconsulting.com>
+ <ZKKA6K44mp_vjwtp@hovoldconsulting.com>
+ <877crh76ge.wl-tiwai@suse.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688374084; l=10074; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=M3Dc0TliNzKOaNzBxD5nEDH5NIpmE0TGTq/Vp/i6IP8=; b=jFkUNFSxhHs+K65yAuyEH92MZNKUIqamJlwYFZkFakwNZkbBxUjzprJmjvyhahgZygDQmmwXL TvYjo9rUvJiBIIcUu9CDFys9KuGomVhGeB8i180AyqX6M1rqxJEgQSk
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877crh76ge.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid a useless nop on top of every uaccess enable/disable and
-make life easier for objtool, replace static branches by ASM feature
-fixups that will nop KUAP enabling instructions out in the unlikely
-case KUAP is disabled at boottime.
+On Mon, Jul 03, 2023 at 10:19:29AM +0200, Takashi Iwai wrote:
+> On Mon, 03 Jul 2023 10:03:52 +0200,
+> Johan Hovold wrote:
 
-Leave it as is on book3s/64 for now, it will be handled later when
-objtool is activated on PPC64.
+> > Ok, scratch that. I just hit the race again also with this patch
+> > applied:
+> > 
+> > [   11.815028] q6apm-dai 3000000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 23
+> > [   11.838667] snd-sc8280xp sound: ASoC: adding FE link failed
+> > [   11.838774] snd-sc8280xp sound: ASoC: topology: could not load header: -517
+> > [   11.838916] qcom-apm gprsvc:service:2:1: tplg component load failed-517
+> > [   11.838996] qcom-apm gprsvc:service:2:1: ASoC: error at snd_soc_component_probe on gprsvc:service:2:1: -22
+> > [   11.839430] snd-sc8280xp sound: ASoC: failed to instantiate card -22
+> > [   11.844801] snd-sc8280xp: probe of sound failed with error -22
+> 
+> Isn't it rather an issue about the error code passing in qcom driver?
+> How about the change like below?
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/book3s/32/kup.h     | 34 +++++++++++----
- arch/powerpc/include/asm/kup.h               | 45 +++-----------------
- arch/powerpc/include/asm/nohash/32/kup-8xx.h | 30 +++++++++----
- arch/powerpc/include/asm/nohash/kup-booke.h  | 38 ++++++++++-------
- arch/powerpc/mm/nohash/kup.c                 |  2 +-
- 5 files changed, 75 insertions(+), 74 deletions(-)
+Indeed, and I tested a change like that here:
 
-diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/include/asm/book3s/32/kup.h
-index f40a210bf1bb..73d02815f52d 100644
---- a/arch/powerpc/include/asm/book3s/32/kup.h
-+++ b/arch/powerpc/include/asm/book3s/32/kup.h
-@@ -17,14 +17,30 @@
- 
- static __always_inline void uaccess_end_32s(unsigned long addr)
- {
--	mtsr(mfsr(addr) | SR_KS, addr);
--	isync();	/* Context sync required after mtsr() */
-+	unsigned long tmp;
-+
-+	asm volatile(ASM_MMU_FTR_IFSET(
-+		"mfsrin %0, %1;"
-+		"oris %0, %0, %2;"
-+		"mtsrin %0, %1;"
-+		"isync", "", %3)
-+		: "=&r"(tmp)
-+		: "r"(addr), "i"(SR_KS >> 16), "i"(MMU_FTR_KUAP)
-+		: "memory");
- }
- 
- static __always_inline void uaccess_begin_32s(unsigned long addr)
- {
--	mtsr(mfsr(addr) & ~SR_KS, addr);
--	isync();	/* Context sync required after mtsr() */
-+	unsigned long tmp;
-+
-+	asm volatile(ASM_MMU_FTR_IFSET(
-+		"mfsrin %0, %1;"
-+		"rlwinm %0, %0, 0, %2;"
-+		"mtsrin %0, %1;"
-+		"isync", "", %3)
-+		: "=&r"(tmp)
-+		: "r"(addr), "i"(~SR_KS), "i"(MMU_FTR_KUAP)
-+		: "memory");
- }
- 
- static __always_inline void __kuap_save_and_lock(struct pt_regs *regs)
-@@ -69,8 +85,8 @@ static __always_inline unsigned long __kuap_get_and_assert_locked(void)
- }
- #define __kuap_get_and_assert_locked __kuap_get_and_assert_locked
- 
--static __always_inline void __allow_user_access(void __user *to, const void __user *from,
--						u32 size, unsigned long dir)
-+static __always_inline void allow_user_access(void __user *to, const void __user *from,
-+					      u32 size, unsigned long dir)
- {
- 	BUILD_BUG_ON(!__builtin_constant_p(dir));
- 
-@@ -81,7 +97,7 @@ static __always_inline void __allow_user_access(void __user *to, const void __us
- 	uaccess_begin_32s((__force u32)to);
- }
- 
--static __always_inline void __prevent_user_access(unsigned long dir)
-+static __always_inline void prevent_user_access(unsigned long dir)
- {
- 	u32 kuap = current->thread.kuap;
- 
-@@ -94,7 +110,7 @@ static __always_inline void __prevent_user_access(unsigned long dir)
- 	uaccess_end_32s(kuap);
- }
- 
--static __always_inline unsigned long __prevent_user_access_return(void)
-+static __always_inline unsigned long prevent_user_access_return(void)
- {
- 	unsigned long flags = current->thread.kuap;
- 
-@@ -106,7 +122,7 @@ static __always_inline unsigned long __prevent_user_access_return(void)
- 	return flags;
- }
- 
--static __always_inline void __restore_user_access(unsigned long flags)
-+static __always_inline void restore_user_access(unsigned long flags)
- {
- 	if (flags != KUAP_NONE) {
- 		current->thread.kuap = flags;
-diff --git a/arch/powerpc/include/asm/kup.h b/arch/powerpc/include/asm/kup.h
-index 77adb9cd2da5..ad7e8c5aec3f 100644
---- a/arch/powerpc/include/asm/kup.h
-+++ b/arch/powerpc/include/asm/kup.h
-@@ -72,11 +72,11 @@ static __always_inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned
-  * platforms.
-  */
- #ifndef CONFIG_PPC_BOOK3S_64
--static __always_inline void __allow_user_access(void __user *to, const void __user *from,
--						unsigned long size, unsigned long dir) { }
--static __always_inline void __prevent_user_access(unsigned long dir) { }
--static __always_inline unsigned long __prevent_user_access_return(void) { return 0UL; }
--static __always_inline void __restore_user_access(unsigned long flags) { }
-+static __always_inline void allow_user_access(void __user *to, const void __user *from,
-+					      unsigned long size, unsigned long dir) { }
-+static __always_inline void prevent_user_access(unsigned long dir) { }
-+static __always_inline unsigned long prevent_user_access_return(void) { return 0UL; }
-+static __always_inline void restore_user_access(unsigned long flags) { }
- #endif /* CONFIG_PPC_BOOK3S_64 */
- #endif /* CONFIG_PPC_KUAP */
- 
-@@ -132,41 +132,6 @@ static __always_inline void kuap_assert_locked(void)
- 		kuap_get_and_assert_locked();
- }
- 
--#ifndef CONFIG_PPC_BOOK3S_64
--static __always_inline void allow_user_access(void __user *to, const void __user *from,
--				     unsigned long size, unsigned long dir)
--{
--	if (kuap_is_disabled())
--		return;
--
--	__allow_user_access(to, from, size, dir);
--}
--
--static __always_inline void prevent_user_access(unsigned long dir)
--{
--	if (kuap_is_disabled())
--		return;
--
--	__prevent_user_access(dir);
--}
--
--static __always_inline unsigned long prevent_user_access_return(void)
--{
--	if (kuap_is_disabled())
--		return 0;
--
--	return __prevent_user_access_return();
--}
--
--static __always_inline void restore_user_access(unsigned long flags)
--{
--	if (kuap_is_disabled())
--		return;
--
--	__restore_user_access(flags);
--}
--#endif /* CONFIG_PPC_BOOK3S_64 */
--
- static __always_inline void allow_read_from_user(const void __user *from, unsigned long size)
- {
- 	barrier_nospec();
-diff --git a/arch/powerpc/include/asm/nohash/32/kup-8xx.h b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-index e231b3afed98..46bc5925e5fd 100644
---- a/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-+++ b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
-@@ -37,31 +37,43 @@ static __always_inline unsigned long __kuap_get_and_assert_locked(void)
- #define __kuap_get_and_assert_locked __kuap_get_and_assert_locked
- #endif
- 
--static __always_inline void __allow_user_access(void __user *to, const void __user *from,
--						unsigned long size, unsigned long dir)
-+static __always_inline void uaccess_begin_8xx(unsigned long val)
- {
--	mtspr(SPRN_MD_AP, MD_APG_INIT);
-+	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1", "", %2) : :
-+	    "i"(SPRN_MD_AP), "r"(val), "i"(MMU_FTR_KUAP) : "memory");
- }
- 
--static __always_inline void __prevent_user_access(unsigned long dir)
-+static __always_inline void uaccess_end_8xx(void)
- {
--	mtspr(SPRN_MD_AP, MD_APG_KUAP);
-+	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1", "", %2) : :
-+	    "i"(SPRN_MD_AP), "r"(MD_APG_KUAP), "i"(MMU_FTR_KUAP) : "memory");
-+}
-+
-+static __always_inline void allow_user_access(void __user *to, const void __user *from,
-+					      unsigned long size, unsigned long dir)
-+{
-+	uaccess_begin_8xx(MD_APG_INIT);
- }
- 
--static __always_inline unsigned long __prevent_user_access_return(void)
-+static __always_inline void prevent_user_access(unsigned long dir)
-+{
-+	uaccess_end_8xx();
-+}
-+
-+static __always_inline unsigned long prevent_user_access_return(void)
- {
- 	unsigned long flags;
- 
- 	flags = mfspr(SPRN_MD_AP);
- 
--	mtspr(SPRN_MD_AP, MD_APG_KUAP);
-+	uaccess_end_8xx();
- 
- 	return flags;
- }
- 
--static __always_inline void __restore_user_access(unsigned long flags)
-+static __always_inline void restore_user_access(unsigned long flags)
- {
--	mtspr(SPRN_MD_AP, flags);
-+	uaccess_begin_8xx(flags);
- }
- 
- static __always_inline bool
-diff --git a/arch/powerpc/include/asm/nohash/kup-booke.h b/arch/powerpc/include/asm/nohash/kup-booke.h
-index 98780a2d3dcd..0c7c3258134c 100644
---- a/arch/powerpc/include/asm/nohash/kup-booke.h
-+++ b/arch/powerpc/include/asm/nohash/kup-booke.h
-@@ -3,6 +3,7 @@
- #define _ASM_POWERPC_KUP_BOOKE_H_
- 
- #include <asm/bug.h>
-+#include <asm/mmu.h>
- 
- #ifdef CONFIG_PPC_KUAP
- 
-@@ -60,35 +61,42 @@ static __always_inline unsigned long __kuap_get_and_assert_locked(void)
- #define __kuap_get_and_assert_locked __kuap_get_and_assert_locked
- #endif
- 
--static __always_inline void __allow_user_access(void __user *to, const void __user *from,
--						unsigned long size, unsigned long dir)
-+static __always_inline void uaccess_begin_booke(unsigned long val)
- {
--	mtspr(SPRN_PID, current->thread.pid);
--	isync();
-+	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1; isync", "", %2) : :
-+	    "i"(SPRN_PID), "r"(val), "i"(MMU_FTR_KUAP) : "memory");
- }
- 
--static __always_inline void __prevent_user_access(unsigned long dir)
-+static __always_inline void uaccess_end_booke(void)
- {
--	mtspr(SPRN_PID, 0);
--	isync();
-+	asm(ASM_MMU_FTR_IFSET("mtspr %0, %1; isync", "", %2) : :
-+	    "i"(SPRN_PID), "r"(0), "i"(MMU_FTR_KUAP) : "memory");
-+}
-+
-+static __always_inline void allow_user_access(void __user *to, const void __user *from,
-+					      unsigned long size, unsigned long dir)
-+{
-+	uaccess_begin_booke(current->thread.pid);
- }
- 
--static __always_inline unsigned long __prevent_user_access_return(void)
-+static __always_inline void prevent_user_access(unsigned long dir)
-+{
-+	uaccess_end_booke();
-+}
-+
-+static __always_inline unsigned long prevent_user_access_return(void)
- {
- 	unsigned long flags = mfspr(SPRN_PID);
- 
--	mtspr(SPRN_PID, 0);
--	isync();
-+	uaccess_end_booke();
- 
- 	return flags;
- }
- 
--static __always_inline void __restore_user_access(unsigned long flags)
-+static __always_inline void restore_user_access(unsigned long flags)
- {
--	if (flags) {
--		mtspr(SPRN_PID, current->thread.pid);
--		isync();
--	}
-+	if (flags)
-+		uaccess_begin_booke(current->thread.pid);
- }
- 
- static __always_inline bool
-diff --git a/arch/powerpc/mm/nohash/kup.c b/arch/powerpc/mm/nohash/kup.c
-index 94ff82b9ae60..e1f7de2e54ec 100644
---- a/arch/powerpc/mm/nohash/kup.c
-+++ b/arch/powerpc/mm/nohash/kup.c
-@@ -24,6 +24,6 @@ void setup_kuap(bool disabled)
- 
- 	pr_info("Activating Kernel Userspace Access Protection\n");
- 
--	__prevent_user_access(KUAP_READ_WRITE);
-+	prevent_user_access(KUAP_READ_WRITE);
- }
- #endif
--- 
-2.41.0
+	https://lore.kernel.org/lkml/ZIHSGf18Aw7htb9o8@hovoldconsulting.com/
 
+but that only seems to make the problem worse currently.
+
+This should probably still be fixed, but I was just hoping that the DAI
+numbering could have been the cause for the probe deferral (which then
+triggers the other bugs).
+
+Johan
