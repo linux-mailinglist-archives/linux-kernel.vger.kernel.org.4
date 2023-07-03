@@ -2,96 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733A5745EF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DC1745EF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjGCOp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S231266AbjGCOp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjGCOpL (ORCPT
+        with ESMTP id S231511AbjGCOpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Jul 2023 10:45:11 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B6310D0;
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB5010CE;
         Mon,  3 Jul 2023 07:44:52 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 363Ei0xv066266;
-        Mon, 3 Jul 2023 09:44:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1688395440;
-        bh=EdzWHkf1aaa1WsMyIhRj6KpzRSMZEp4+Px5Tx9YAjRc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Cvvw45rNa5ezhkvHMcuAWc10NurKwUE0HvRjTSWMMydmmGgNiC9nA3YLRrzIyJFdY
-         NlSwqwbVA9Y9NOs0iSbXPAqYPkQUcXfDDXoyd5meDrFMeXhNi4x62gsXcLOtHIWj5U
-         XbcIun2TTAZKUjKi414Oyqoz19IflfDE4HfMfPL4=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 363Ei0i7034089
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Jul 2023 09:44:00 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 3
- Jul 2023 09:43:59 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 3 Jul 2023 09:43:59 -0500
-Received: from [10.249.128.37] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 363Eht6L097671;
-        Mon, 3 Jul 2023 09:43:56 -0500
-Message-ID: <9bb176c9-f1e6-349e-5486-74e0ea6b5012@ti.com>
-Date:   Mon, 3 Jul 2023 20:13:55 +0530
+Received: from [192.168.0.136] (85-160-45-219.reb.o2.cz [85.160.45.219])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6D019558;
+        Mon,  3 Jul 2023 16:44:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1688395445;
+        bh=gY4+xWjRxQqKzgbz5r4Gqf9iuuKb3qum48HfTwqVoME=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kvCmMAlOGe3KhkmBcK3B67kVoraHZWy5ufOidnsjV5bHCemAe1MVvtRf8pSXemww7
+         jKKrwVTjJ3qSkL4cd+7+0mb4MEyw6S1cgiUZUmp3OI6vzVWF9HJf/Qzi8Zic0+Xe0N
+         /xaafLDmvyd7Rmi9jfuj33F6V+DjiOH+T1zZUsbM=
+Message-ID: <f080a725-65ea-c3fe-896a-5ac711dddfc1@ideasonboard.com>
+Date:   Mon, 3 Jul 2023 16:44:39 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [EXTERNAL] Re: [PATCH] PCI: j721e: Fix delay before PERST#
- deassert
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v8 3/5] staging: bcm2835-camera: Register bcm2835-camera
+ with vchiq_bus_type
 Content-Language: en-US
-To:     Li Chen <me@linux.beauty>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20230703112914.68806-1-a-verma1@ti.com>
- <1891c041807.fea67a55448140.3454059194195387266@linux.beauty>
-From:   "Verma, Achal" <a-verma1@ti.com>
-In-Reply-To: <1891c041807.fea67a55448140.3454059194195387266@linux.beauty>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefan.wahren@i2se.com,
+        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
+        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com
+References: <20230627201628.207483-1-umang.jain@ideasonboard.com>
+ <20230627201628.207483-4-umang.jain@ideasonboard.com>
+ <2023070319-daycare-pointless-abba@gregkh>
+From:   Umang Jain <umang.jain@ideasonboard.com>
+In-Reply-To: <2023070319-daycare-pointless-abba@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
+On 7/3/23 3:29 PM, Greg KH wrote:
+> On Tue, Jun 27, 2023 at 10:16:26PM +0200, Umang Jain wrote:
+>> Register the bcm2835-camera with the vchiq_bus_type instead of using
+>> platform driver/device.
+>>
+>> Also the VCHIQ firmware doesn't support device enumeration, hence
+>> one has to maintain a list of devices to be registered in the interface.
+>>
+>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+>> ---
+>>   .../bcm2835-camera/bcm2835-camera.c           | 16 +++++++-------
+>>   .../interface/vchiq_arm/vchiq_arm.c           | 21 ++++++++++++++++---
+>>   2 files changed, 26 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+>> index 346d00df815a..f37b2a881d92 100644
+>> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+>> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+>> @@ -24,8 +24,9 @@
+>>   #include <media/v4l2-event.h>
+>>   #include <media/v4l2-common.h>
+>>   #include <linux/delay.h>
+>> -#include <linux/platform_device.h>
+>>   
+>> +#include "../interface/vchiq_arm/vchiq_arm.h"
+>> +#include "../interface/vchiq_arm/vchiq_device.h"
+>>   #include "../vchiq-mmal/mmal-common.h"
+>>   #include "../vchiq-mmal/mmal-encodings.h"
+>>   #include "../vchiq-mmal/mmal-vchiq.h"
+>> @@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format = {
+>>   	.fmt.pix.sizeimage = 1024 * 768,
+>>   };
+>>   
+>> -static int bcm2835_mmal_probe(struct platform_device *pdev)
+>> +static int bcm2835_mmal_probe(struct vchiq_device *device)
+>>   {
+>>   	int ret;
+>>   	struct bcm2835_mmal_dev *dev;
+>> @@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
+>>   						       &camera_instance);
+>>   		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
+>>   		if (ret) {
+>> -			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
+>> +			dev_err(&device->dev, "%s: could not register V4L2 device: %d\n",
+>>   				__func__, ret);
+>>   			goto free_dev;
+>>   		}
+>> @@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
+>>   	return ret;
+>>   }
+>>   
+>> -static void bcm2835_mmal_remove(struct platform_device *pdev)
+>> +static void bcm2835_mmal_remove(struct vchiq_device *device)
+>>   {
+>>   	int camera;
+>>   	struct vchiq_mmal_instance *instance = gdev[0]->instance;
+>> @@ -1988,17 +1989,16 @@ static void bcm2835_mmal_remove(struct platform_device *pdev)
+>>   	vchiq_mmal_finalise(instance);
+>>   }
+>>   
+>> -static struct platform_driver bcm2835_camera_driver = {
+>> +static struct vchiq_driver bcm2835_camera_driver = {
+>>   	.probe		= bcm2835_mmal_probe,
+>> -	.remove_new	= bcm2835_mmal_remove,
+>> +	.remove		= bcm2835_mmal_remove,
+> No need to change this here, right?  That's independant of this patch
+> series.
 
-On 7/3/2023 7:19 PM, Li Chen wrote:
-> Hi Achal,
->   ---- On Mon, 03 Jul 2023 19:29:14 +0800  Achal Verma  wrote ---
->   > As per the PCIe Card Electromechanical specification REV. 3.0, PERST#
->   > signal should be de-asserted after minimum 100ms from the time power-rails
->   > become stable. Current delay of 100us is observed to be not enough on some
->   > custom platform implemented using TI's K3 SOCs.
->   >
->   > So, to ensure 100ms delay to give sufficient time for power-rails and
->   > refclk to become stable, change delay from 100us to 100ms.
-> 
-> What problems could arise if the delay is too small? Would some endpoints not be able to detect it?
-If delay is small, cpu stall is reported during probe() while accessing 
-PCIe registers in some cases.
-> 
-> Regards,
-> Li
+Why not ?
+
+Should I have "remove_new()"  in the struct vchiq_driver {..} [Patch 
+1/5] instead of "remove()"  -  match up with platform_driver virtual 
+interface ?
+
+>
+> thanks,
+>
+> greg k-h
+
