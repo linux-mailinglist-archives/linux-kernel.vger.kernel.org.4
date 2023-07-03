@@ -2,85 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB2D745672
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7FD745675
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjGCHxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S230138AbjGCHxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjGCHxA (ORCPT
+        with ESMTP id S230133AbjGCHxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:53:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C66BA;
-        Mon,  3 Jul 2023 00:52:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A88851F8AC;
-        Mon,  3 Jul 2023 07:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688370777; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tjcTbVMiizpIZqZCmtNiu9ZgGpYWuGwMKK6QoxAyIHI=;
-        b=Rb6SDZNjtzfNnEwmU+phWSNKsCG5UJ1NpH+iv3U320xZ83f4wLg1IxyRlyv2PUIEFuYwEu
-        +CXyomUTPHWf7HtTsN0+tOVpfQiX1pBsGF0Nps3rn/VNp6cmmB8QH+Se8Pl9utKw/ru+Ql
-        tCzXcgyogVCDFSs7RPz2lZndFinkJGA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688370777;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tjcTbVMiizpIZqZCmtNiu9ZgGpYWuGwMKK6QoxAyIHI=;
-        b=feRAQGHaFNLITnlZ4yYTz/w1bzqwQEhInSKWyfUZL9n0OZVn0ODC0KGsFI9NmLsEF0wAKL
-        H/VA5pWibPyliGDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 52EF5138FC;
-        Mon,  3 Jul 2023 07:52:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jJxXE1l+omRiYAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 03 Jul 2023 07:52:57 +0000
-Message-ID: <04fa72f3-d6ca-bd68-7ed9-57151c1877df@suse.de>
-Date:   Mon, 3 Jul 2023 09:52:56 +0200
-MIME-Version: 1.0
+        Mon, 3 Jul 2023 03:53:11 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274CBC1;
+        Mon,  3 Jul 2023 00:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1688370789;
+  x=1719906789;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/8vdooaz0cjRGKEBG+sx8nQux5u34v68Mot+xTUG+HQ=;
+  b=eDihRpCNZP7hq/fSUNfJgCp1C4SMfGe+UZI+O1P3QVC8sYzNCWLlZbac
+   dkMo/Qcb6jIgN1RwTC9NVYDRuAqbr9ZBUjTtvHhxOtEBbY3IuQBw3G6d3
+   IPJUyNPxEqzYRkDp+JlXxVFzI78eM7gEXJe0FD49hYDBQwH2uGiPprTAa
+   ozYKhpEo+smvTgeokuXfWZQgHYDSfdu2h+A3vP3OxzCregvAli//P9GA3
+   P4CVptzQLVSDG4FcN9iVG59r6LkNTQ2oC6MFiowGBfgSdMIIfMM3k9GBD
+   AUSv+xvXCNP1jTlgzVchkRdZ7dQyE5bQ36LGYaWR1lK2u1R/8eeV5n1eF
+   g==;
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CBaU4ZQaiBecv5vzenvm8/8xG9KG7DSV+ww3BMpF6SKt+T/uMFgS1hTzlXXihpk75veejo2MqcR0V4UQz2ANmtfrXRDVvO+CdMlsYGCjsc9VbjflzIzVyZdoNgQkfsHj7XmlirzNF79nkbobvz2925bre4Tphv2cLRQWqKPLaXe4NYvz5oq9i1XFsynUEz0yoG/u8ekCuWiO0QAXLeOTk/B8gOwAAljEL43613F/mRP2SnncDmzPCrPEpRwEfkzcZJq/Q+1xZ4sbSzzCdYI3yUVtj1YanAI/jr7AFHuCMVI6j4U6CHBPXUp1nzmlMMvPrz1TXYtkH/cUSdhgFIPcOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/8vdooaz0cjRGKEBG+sx8nQux5u34v68Mot+xTUG+HQ=;
+ b=RCEU9RtP21GmhEaMybm4Fn2WiyFi/8a8NZ5aXOGk+BVSiDCKGZaf9OpWTdTF8YJbx264e0EqNdb0czTbldRmjL2iSET0hJzLWZn92AddGGItEHZ4EI0t+6FsbQDWRMkYlZD4Rtj+ttkQbtlCOi/qFNo9fzI3ux9TMif3rwQp0xJ0NSJvvETFunvXhYKL7crdLchy30NRMY+wc+dlUc2eNoqYr60QdrXHE0Gvasm0WI7wtLrhn8MOqFLzNnDSZZp4WoVVFqdosvWEmZaFGhAbVQPsjc71zUDxVwwszZxccamzu4OpDwmJbFIc3nk/pfrbhTu6JVuyuNlyW696mClfiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=axis365.onmicrosoft.com; s=selector2-axis365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/8vdooaz0cjRGKEBG+sx8nQux5u34v68Mot+xTUG+HQ=;
+ b=pEa68MSn0MZldlyoYiKaao0+OTfccvE4/uBD9Cjtj91Y8C19aiGU30BWS4Z6lzDpYlEXwRiaNubxLtTklV64fNZjmT8xY6KtSkJefntRqD6QN7+jaywhn2hTgmSYKvYO/3PrTRBBNuZ7o33cZ57MVUwq7JvPTrvQQezbAxSA4hM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+Message-ID: <abcfb68b-b631-8a7b-e7cb-daefc58f3dde@axis.com>
+Date:   Mon, 3 Jul 2023 09:53:01 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/2] fbdev: Split frame buffer support in FB and
- FB_CORE symbols
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, x86@kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] led: led-class: Read max-brightness from
+ devicetree
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Astrid Rost <astrid.rost@axis.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20230701214503.550549-1-javierm@redhat.com>
- <20230701214503.550549-2-javierm@redhat.com>
- <e83eab26-a8fe-b151-6bd4-7a7db6ceee1f@suse.de>
- <873525e8tb.fsf@minerva.mail-host-address-is-not-set>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <873525e8tb.fsf@minerva.mail-host-address-is-not-set>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------oXvTJlmCdi1BeUtnw2N9740V"
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>
+CC:     <kernel@axis.com>, <linux-leds@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230630092248.4146169-1-astrid.rost@axis.com>
+ <20230630092248.4146169-2-astrid.rost@axis.com>
+ <3e8e7834-fe0e-7e92-5472-cb9fd223980e@gmail.com>
+Content-Language: en-US
+From:   Astrid Rost <astridr@axis.com>
+In-Reply-To: <3e8e7834-fe0e-7e92-5472-cb9fd223980e@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MM0P280CA0034.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:b::15) To DU0PR02MB9467.eurprd02.prod.outlook.com
+ (2603:10a6:10:41b::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR02MB9467:EE_|PAVPR02MB9794:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f709370-bce7-469d-39ea-08db7b9a87c1
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fDWupPl7/VZfFCcm17JZSKcJUGViDh4zD2KP1wFqqdsdkh5yLlsETYZWpungjDVTSKuPq3YXgOEJXnAJKGjAWpoC1qf0GHMCiKL7CRZyWx24otKHQrfom37daJKjdgyZ7hRWkeZfMn0t9GJ+QU5KGxqFP7g/3bgMxml6MKHpq3XgDE4QPEXBU75Gs3sKMKvdLiyoTWB6ghCIHQ2exNExZVJojBUoqEEH/ZufXPJVA2wThGjcVLweMvdWXiTBgzLY4+R0VMDWiUv9/ff5SdcSFbPYG3lF0tGwZk8r7LL/aPSUtQ3tx5Ax+YZvOM4AEy0vaiUS8fuadurggkmpmC0Yo21Cf+sBtp1cYalfyHvQcYrfZvjuSVH5ZxzJpoJwsvlvIpKmmKvfpm42XPKm3iefdUyp2JX8NyYGnX6BD2cPFeJvYSOy3yWZY0sqvRFzn6UQAs+nhTjjMo/l0zfpqVYHmIqtXSXyoGt6PH4ZE9hf3hzeMnEQlCAzWiT0SPB6baiY4YSJamVJ3I/bWywNI8nUw8MUoKd0lLNYI7fFRBNO/6S6X7UC0xLmmwt0RZHHDotWefQ3dsBlJ2QrBOBzYmsfu8uYm5BisksZ6KiXopdZgsJn6hHE8o8DQykzKpGEhQkb6ruYDS67Dtc7s7uTa6NfNA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR02MB9467.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(376002)(346002)(136003)(451199021)(2906002)(41300700001)(5660300002)(8676002)(8936002)(36756003)(31696002)(186003)(2616005)(31686004)(478600001)(26005)(6512007)(966005)(6506007)(53546011)(6486002)(316002)(4326008)(66476007)(66556008)(66946007)(38100700002)(110136005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WG9DclVZUk9TdHplTysxUDNRREd5K3o3MEVYY2wwSjRadm0wZkVmYkExRGxQ?=
+ =?utf-8?B?T2NRV0JDSm5SZGZPaUVEU2Vxd1plakFTRW85dGh4T2JqN2VnVDQwQk9mdXEz?=
+ =?utf-8?B?UjBHNWkrQ2lSRjVLWklyZ0pnZ2RqdUhhR0kvdXZ3USthbExlaVo4SDZTMlBx?=
+ =?utf-8?B?UjJoT3BUSEt6Z3ZhOW95R1pETWJMdjB4cUEvNUN2S0ljcXpQUXhEa2U5b0M0?=
+ =?utf-8?B?bjZmejBzbVo2SDREVVF1ODR5eXZVNzdDdnFLS1U5R0VvUEltWnV5SnQxazF0?=
+ =?utf-8?B?RXBycktvUURSRG9BVmkyQzhxb2luYWpZcXgxbGNVbk9VS04wTVBEN1lhMjQ1?=
+ =?utf-8?B?Nm9XMmZoK0xRN3h1RmlubTNlUVAxbVh3U2taMEttN0VMMEZhU0VRcDFtRzRh?=
+ =?utf-8?B?UTBFQXFVTHMvNG9MMzZiN0pvMTQyMmVLUHVxU2ZTQzRxTUU2V3VLSXE3L1gr?=
+ =?utf-8?B?TlZ2REtPVENqS0VSR0RIQjNaaGlOT0NNYW13cFVIR1gyR3dZSXo1MXN2WDN0?=
+ =?utf-8?B?QjdPMWVTK1p0UkVxbU9Wb2o4TjVUSVlHbmlvVWh4bDI2eHZ4blFXZmMvSEYw?=
+ =?utf-8?B?eWlvNUIxbDF3YWV0MWVXRG8yNzQ5VS9TRTRXQjBYZnNsM0h3MEEyNHNNRHJH?=
+ =?utf-8?B?M04vWjRhcGZmaVFDc29lcGNPaGpYaWFlMjRUY1FDbnhqZGV5eE5WenJDRkRo?=
+ =?utf-8?B?OHhBVU14TmgwQ25LOEpJb2NtdHdCQzZMQ3gwSGt6M2ZjTCs2QkgwLzRaTjlM?=
+ =?utf-8?B?enBEcm1Cb24zVkNZcVU2cndxclM1dCtER3BKTEtYL2hSVlNzdkR5eFRrc3V2?=
+ =?utf-8?B?YjVqek9HaFJhMS8wYTh2U1hJaFNVZ0VsTGlyUjBlbzJJaEhid3FydDdsbjUz?=
+ =?utf-8?B?OVErM0srdmVTZTFiTWdkOW0yZWxyaUR0ZzVCY0ovMHVpQWdHRHhkODhNLy9y?=
+ =?utf-8?B?cGt3TndweStweVVObDFwYlpKWFp4cmlpVGJpMUc0S2tpeWFDSk1wdFk4aHBv?=
+ =?utf-8?B?YjNTc1pyaU9VRXRGV1ZzbW1zcmdiaXVQUFJ4N0ZqaktuN3hpRE85aW1vRE4v?=
+ =?utf-8?B?UkVyUHJkNi9VWVJVWDBPNmRGWnNjSGxQTTg4ckY2eXJIem1zYklRTG02Lzd5?=
+ =?utf-8?B?dlhDNGlMVUxZaS9iWUVRTjNqc1dqQXZJZm9sQVVyQ01CYVZwT1NMeEM1Q09B?=
+ =?utf-8?B?VERmSW1ZM2hJRVVWdE1BdS9SdVpLRUlzRE5nODNiaVd2aWZqYjlwckZGbEdp?=
+ =?utf-8?B?SUtYeGN5dHhvQjY2R281MTBmSTlGbkVGdnp5MmhNQ3UrdjFGUzBCdDlMcktC?=
+ =?utf-8?B?enlBR2kxRldRRG5udEl2OUNrZE4wZ1FBcjAvTUxtT084RWNPWFhnc1czaERK?=
+ =?utf-8?B?TXUvNm4xenFjL09FUUZHQW04cVZLeUtDaUJ3RXFjTGp0djNzVUNvQWl6OEQ2?=
+ =?utf-8?B?WXl6UUhCM1lCUFZSR1daZmt1dlVoUFViejNzZFVYaEk4aXVMTjdXT2lsS2dY?=
+ =?utf-8?B?cWJaVUt6OHplZ3VkZFNYM2dJbzFqbW9xbzVEWFlyWm1mTzRBM2tNbFcwUUw5?=
+ =?utf-8?B?SUpMVnR1aEtZdEVvSDIrZ1I5cHNvczRBclhSRVNmRnFHelE0RmdxMVBMQzkr?=
+ =?utf-8?B?RWg1bzlUK01xTWc3NkRuNnJHL3c5T0hXeWVyeFBwNXdqOEdtTGV0QlRiU0ND?=
+ =?utf-8?B?NEVKRzZySkZyQkR4S3RWYkc3V0F2dHhmbFBmZkg1UEsvS0J2SmdzVGdwdmM5?=
+ =?utf-8?B?RXptR2J6azZXa1lDK1Y5dDYwQm5PZE1XUU9HcUozaVNVRFFxSEhpMlpCcDVm?=
+ =?utf-8?B?SENPcmh5VGVMRzFzdngyOGpyanBoWStZTHZNNFlSb1VwZ3FpUm0ydlAzTlhT?=
+ =?utf-8?B?akV2SGx1VHRMWnczQlRJa3RhcjJaNDNtWHpDWXdJeGJHdjBJd3o2L0oxNmk0?=
+ =?utf-8?B?elRXekZGbzhFd3ZENjU3dEszZ1oySFYyOGd3LzlLeVMwVW5HS3VtN3lpdSt0?=
+ =?utf-8?B?RHBFVUhadHVBTGdjR20vd1VEN3lSZkhaSG9VUStWRlhYRWpSeUJjb0k2OXNn?=
+ =?utf-8?B?LzZQNEp5SWtyaU1uSHdOQWNaVkU3RUpUemRLem1TVThHYVB3RmxZTTNvOVd4?=
+ =?utf-8?Q?lQTw=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f709370-bce7-469d-39ea-08db7b9a87c1
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB9467.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 07:53:03.7590
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M/HSkg+gvFAVgmZpcqjlRisA6VYCNZT8buxaqkYwJChNZZTxYIoc4fmejLVz8RHlsms3D8p3ILiXquysHsdluA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR02MB9794
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,97 +137,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------oXvTJlmCdi1BeUtnw2N9740V
-Content-Type: multipart/mixed; boundary="------------yEVrolPn78GGGYeuop5R7PJg";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Helge Deller
- <deller@gmx.de>, x86@kernel.org, dri-devel@lists.freedesktop.org,
- Geert Uytterhoeven <geert@linux-m68k.org>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Sam Ravnborg <sam@ravnborg.org>
-Message-ID: <04fa72f3-d6ca-bd68-7ed9-57151c1877df@suse.de>
-Subject: Re: [PATCH v2 1/2] fbdev: Split frame buffer support in FB and
- FB_CORE symbols
-References: <20230701214503.550549-1-javierm@redhat.com>
- <20230701214503.550549-2-javierm@redhat.com>
- <e83eab26-a8fe-b151-6bd4-7a7db6ceee1f@suse.de>
- <873525e8tb.fsf@minerva.mail-host-address-is-not-set>
-In-Reply-To: <873525e8tb.fsf@minerva.mail-host-address-is-not-set>
+Hello Jacek,
 
---------------yEVrolPn78GGGYeuop5R7PJg
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I am having problems with the PWM controller LP5024.
 
-SGkNCg0KQW0gMDMuMDcuMjMgdW0gMDk6NDYgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cml0
-ZXM6DQo+IA0KPiBIZWxsbyBUaG9tYXMsDQo+IA0KPiBUaGFua3MgZm9yIHlvdXIgcmV2aWV3
-Lg0KPiANCj4+IEhpDQo+Pg0KPj4gQW0gMDEuMDcuMjMgdW0gMjM6NDQgc2NocmllYiBKYXZp
-ZXIgTWFydGluZXogQ2FuaWxsYXM6DQo+IA0KPiBbLi4uXQ0KPiANCj4+PiAgICANCj4+PiAr
-bWVudWNvbmZpZyBGQl9DT1JFDQo+Pj4gKwl0cmlzdGF0ZSAiQ29yZSBzdXBwb3J0IGZvciBm
-cmFtZSBidWZmZXIgZGV2aWNlcyINCj4+DQo+PiBXaXRoIHRoZSB0ZXh0LCB0aGlzIGlzIHZp
-c2libGU7IGFzIG90aGVycyBub3RlZC4NCj4+DQo+IA0KPiBZZXMsIEkgbWlzcmVtZW1iZXJl
-ZCB3aGF0IG1hZGUgYSBLY29uZmlnIHN5bWJvbCBub24tdmlzaWJsZSwgYW5kIHRob3VnaHQN
-Cj4gdGhhdCB3YXMganVzdCB0aGUgbGFjayBvZiBhIGhlbHAgc2VjdGlvbiBidXQgZm9yZ290
-IHRvIHJlbW92ZSB0aGUgcHJvbXB0Lg0KPiANCj4gVGhpcyBpcyBhbHJlYWR5IGZpeGVkIGlu
-IHYzLg0KPiANCj4+PiArDQo+Pj4gICAgbWVudWNvbmZpZyBGQg0KPj4+IC0JdHJpc3RhdGUg
-IlN1cHBvcnQgZm9yIGZyYW1lIGJ1ZmZlciBkZXZpY2VzIg0KPj4+ICsJdHJpc3RhdGUgIlN1
-cHBvcnQgZm9yIGZyYW1lIGJ1ZmZlciBkZXZpY2UgZHJpdmVycyINCj4+DQo+PiBKdXN0IGtl
-ZXAgdGhlIHRleHQgYXMtaXMuDQo+Pg0KPiANCj4gSSBkaXNhZ3JlZS4gQmVjYXVzZSB3ZSBh
-cmUgc2xpZ2h0bHkgY2hhbmdpbmcgdGhlIEtjb25maWcgc3ltYm9sIHNlbWFudGljcw0KPiBo
-ZXJlLCBmb3IgaW5zdGFuY2UgQ09ORklHX0ZCX0NPUkUgKyBDT05GSUdfRFJNX0ZCREVWX0VN
-VUxBVElPTiB3aWxsIGFsc28NCj4gcHJvdmlkZSBhIGZyYW1lIGJ1ZmZlciBkZXZpY2UgKGFu
-ZCB3aXRoIENPTkZJR19GQl9ERVZJQ0UsIHdpbGwgYmUgZXhwb3NlZA0KPiB0byB1c2VyLXNw
-YWNlIGFzIGEgL2Rldi9mYj8gZGV2aWNlKS4NCj4gDQo+IFNvIG5vdyBDT05GSUdfRkIgaXMg
-cmVhbGx5IGFib3V0IGFsbG93aW5nIHRoZSBuYXRpdmUgZmJkZXYgZHJpdmVycyB0byBiZQ0K
-PiBlbmFibGVkLiBUaGF0J3Mgd2h5IEknbSBjaGFuZ2luZyB0aGUgcHJvbXB0IHRleHQgdG8g
-bWFrZSB0aGF0IG1vcmUgY2xlYXIuDQo+IA0KPiBbLi4uXQ0KPiANCj4+PiAgICBjb25maWcg
-RkJfREVWSUNFDQo+Pj4gICAgCWJvb2wgIlByb3ZpZGUgbGVnYWN5IC9kZXYvZmIqIGRldmlj
-ZSINCj4+PiAtCWRlcGVuZHMgb24gRkINCj4+PiArCXNlbGVjdCBGQl9DT1JFDQo+Pg0KPj4g
-VGhpcyBzaG91bGQgZGVwZW5kIG9uIEZCX0NPUkUuDQo+Pg0KPiANCj4gWWVzLCBhbHJlYWR5
-IGZpeGVkIGluIHYzIHRvby4gSSBkaWQgYSBzZWxlY3QgdG8gcHJldmVudCBzeW1ib2wgY2ly
-Y3VsYXINCj4gZGVwZW5kZW5jaWVzIGJ1dCBkb2luZyB0aGF0IGxlYWQgdG8gQ09ORklHX0ZC
-X0NPUkU9eSBldmVuIGlmIENPTkZJR19EUk0NCj4gd2FzIHNldCBhcyBhIG1vZHVsZS4NCj4g
-DQo+IEJ1dCB3aXRoIHRoZSAic2VsZWN0IEZCX0NPUkUgaWYgRFJNX0ZCREVWX0VNVUxBVElP
-TiIgaW4gdGhlIERSTSBzeW1ib2wgYXMNCj4gQXJuZCBzdWdnZXN0ZWQsIEkgd2FzIGFibGUg
-dG8gaGF2ZSBGQl9ERVZJQ0UgdG8gZGVwZW5kIG9uIEZCX0NPUkUgYWdhaW4uDQoNCkJUVywg
-d2hlcmUgZG9lcyB0aGlzIGl0ZW0gbm93IHNob3cgdXAgaW4gdGhlIG1lbnU/IEl0IHVzZWQg
-dG8gYmUgaW4gdGhlIA0KZnJhbWVidWZmZXIgbWVudS4gSXQncyBub3cgaW4gdGhlIGdyYXBo
-aWNzLWRyaXZlcnMgbWVudT8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4+IEJl
-c3QgcmVnYXJkcw0KPj4gVGhvbWFzDQo+Pg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFu
-bg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMg
-R2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2Vy
-bWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJv
-dWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
+https://www.ti.com/product/LP5024
 
---------------yEVrolPn78GGGYeuop5R7PJg--
+There is no such a calculation in the data-sheet like:
+max_brightness = max_current / constant.
 
---------------oXvTJlmCdi1BeUtnw2N9740V
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+I also assume it is depending on the type of LEDs and circuit, which are 
+connected.
 
------BEGIN PGP SIGNATURE-----
+It supports two current modes: 25,5 mA and and 35 mA, both is to high 
+for the LEDs I have.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSiflgFAwAAAAAACgkQlh/E3EQov+Cy
-sA//blrF7Js6UhybXcDbcr02zUs8GiFhjqXj7fRsC2p2RT9vh1II2OnTe31NUZypvaQeCguFRHOD
-D90MxIIi4w86JMqvJVuEr/PJT3TaMI03pFvY4FNj8/5Or/RPqoO18MLN4hA0jhcrM4/7Fw0VyxaK
-CVgtukCYY8fcn0p/ih8dLQFOoqOCjneSDpUJllIxZuza1Gl0cLkR72Pb1w8VF3kh3s0H9CohHQFI
-Hj0z4LWdETOolJbUkENAhrojOjMugn223SYBSMO6t3K97tM0Y7XWW2DaY1pYGmj5h0dH/NjsNCpp
-0qNFiaWgidN83UN4jfmryNXl+pVEIh+1ND9dyjzujZv0d2N34TEccjuq2Lydd/njmloVRikdKtb5
-nB3aT9i+TfQqbZ2+xnNvbrRjHIuMbOw2GPKUqh8HeCjuUb4e79fbiQTtuE3o1MCk6eio/1IOSe1g
-LAKfDJWsi36J1wbejjTonNqoJZh1MIlnGrBJhlRvvxurtitjCub8HPAwTHI93a/zhqipz3JPfI87
-eqdsJzidTfhloOFrbXq1S1Aj9iveQtmczuSdoxj+KrgLnSRKzVQ6E7a1fTUSdpFxAongaWGoJxXm
-fZg4ceau2Pf2dImih2+PlaG+/TUu32QHp58iuzbaeJ1jUQJhy39ufY5ZNWGLRU05TJ29QLA3h4Qj
-Wuw=
-=t5iO
------END PGP SIGNATURE-----
+For max_brightness seems to be everything inside the kernel, but reading 
+the value from devicetree. I first thought I could add it in the lp50xx
+driver, but Andy and Rob thought that I better put it into the general 
+parts. And of course drivers having led-max-microamp should better use it.
 
---------------oXvTJlmCdi1BeUtnw2N9740V--
+Please, let me know if you have a better suggestion.
+
+Astrid
+
+
+
+
+
+On 7/1/23 13:09, Jacek Anaszewski wrote:
+> Hi Astrid,
+> 
+> On 6/30/23 11:22, Astrid Rost wrote:
+>> Add max-brightness in order to reduce the current on the connected LEDs.
+>> Normally, the maximum brightness is determined by the hardware, and this
+>> property is not required. This property is used to set a software limit.
+>> It could happen that an LED is made so bright that it gets damaged or
+>> causes damage due to restrictions in a specific system, such as mounting
+>> conditions. Note that led-max-microamp should be preferably used, if it
+>> is supported by the controller.
+>>
+>> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+>> ---
+>>   drivers/leds/led-class.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+>> index 9255bc11f99d..ce652abf9336 100644
+>> --- a/drivers/leds/led-class.c
+>> +++ b/drivers/leds/led-class.c
+>> @@ -457,6 +457,10 @@ int led_classdev_register_ext(struct device *parent,
+>>               if (fwnode_property_present(init_data->fwnode,
+>>                               "retain-state-shutdown"))
+>>                   led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
+>> +
+>> +            fwnode_property_read_u32(init_data->fwnode,
+>> +                "max-brightness",
+>> +                &led_cdev->max_brightness);
+>>           }
+>>       } else {
+>>           proposed_name = led_cdev->name;
+> 
+> We have led-max-microamp for that and every LED class driver is supposed
+> to calculate its max brightness level basing on it.
+> 
