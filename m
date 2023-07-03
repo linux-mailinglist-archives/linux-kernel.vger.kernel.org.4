@@ -2,98 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A96745F86
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9A6745F9A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjGCPKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
+        id S231371AbjGCPNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjGCPKa (ORCPT
+        with ESMTP id S229885AbjGCPNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:10:30 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7746F1A8;
-        Mon,  3 Jul 2023 08:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688397028; x=1719933028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zq4TPE/ConExquqFCC1NYBoUWWFuvgyzWL4EOSrGXpA=;
-  b=MteHHtkMYgyzuKJ+dmPW67aVL437C4Ms16ntADlJDHCqr0E51eeRlUCa
-   nfmcQAbYw+7KoPxHSxg8G0YYh289kAyOuGhVKqU7v6FW7+Ue5KoZaHKXM
-   nToroxNyrUgNUt2OQ/4CJsYNPme6X8hyOCtq752SNqxGPNa7/nVhJkj9s
-   GFVBmCYzTQKAxfcnQvkS7VUidFnTDemN+i0UqM1+UoDeh6Pa8w7XVYw+D
-   CTwFAIKf6Sdxr+wRzeR2xN2l+HV8QNM7snq/0Lm1Kf01I8pwXqJarDL3m
-   FCEjaTc8hKKzYxpLYJ+HUx4oVI3+3rfIOEQuteGvh9DLjyIbHrRIEhF/s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393646570"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="393646570"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 08:10:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="831859555"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="831859555"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Jul 2023 08:10:13 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qGLBs-000HR5-2E;
-        Mon, 03 Jul 2023 15:10:12 +0000
-Date:   Mon, 3 Jul 2023 23:09:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bastien Nocera <hadess@hadess.net>, linux-input@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH v5] HID: steelseries: Add support for Arctis 1 XBox
-Message-ID: <202307032208.b5brKeCt-lkp@intel.com>
-References: <20230703102918.9941-1-hadess@hadess.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703102918.9941-1-hadess@hadess.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 11:13:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D6DEE;
+        Mon,  3 Jul 2023 08:13:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 157D21FEE2;
+        Mon,  3 Jul 2023 15:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688397212; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1XYK3JhaJ5qtklFAcL4Ab0ZphGfyNSKUJRl9bXh8Qy4=;
+        b=QeARC4sb7YbOE+ALTChd9oaZA8hY9iv5xC38X5FoNJmV+o4mDkYfyLUdxAEA53Rkf+aTfH
+        ftJNjdXD4iSJT8TJNqq2Of4ByFWe4tc6ntnKmRydnp8Gqkij4RoKxGdvTZWSy1zE+VhTdm
+        AHB3Aga0lAYwOK7aEqJCsfVuib4zhSY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688397212;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1XYK3JhaJ5qtklFAcL4Ab0ZphGfyNSKUJRl9bXh8Qy4=;
+        b=y8e7fSN/9HksPzkl1REx3A8LCD+/eOHDCXc06HcfDANJBzndAGA3sxwwCZU1TFnPptAwld
+        lLx2rBLFRlqY7cCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9C451358E;
+        Mon,  3 Jul 2023 15:13:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wpZmLJvlomTlVgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 03 Jul 2023 15:13:31 +0000
+Date:   Mon, 03 Jul 2023 17:13:31 +0200
+Message-ID: <87o7kt3u5g.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Shenghao Ding <13916275206@139.com>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com
+Subject: Re: [PATCH v1 1/3] ALSA: hda/tas2781: Add tas2781 HDA driver
+In-Reply-To: <20230702081857.799693-1-13916275206@139.com>
+References: <20230702081857.799693-1-13916275206@139.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bastien,
+On Sun, 02 Jul 2023 10:18:55 +0200,
+Shenghao Ding wrote:
+> 
+> Integrate tas2781 configs for Lenovo Laptops. All of the tas2781s in the
+> laptop will be aggregated as one speaker. The code support realtek as the
+> primary codec.
 
-kernel test robot noticed the following build errors:
+It's not only that -- you changed the struct name used in the code,
+too.  Please describe it, too.
 
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on linus/master v6.4 next-20230703]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> @@ -5883,7 +5883,7 @@ static void alc_fixup_headset_mode_alc255_no_hp_mic(struct hda_codec *codec,
+>  		struct alc_spec *spec = codec->spec;
+>  		spec->parse_flags |= HDA_PINCFG_HEADSET_MIC;
+>  		alc255_set_default_jack_type(codec);
+> -	} 
+> +	}
+>  	else
+>  		alc_fixup_headset_mode(codec, fix, action);
+>  }
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/HID-steelseries-Add-support-for-Arctis-1-XBox/20230703-183124
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20230703102918.9941-1-hadess%40hadess.net
-patch subject: [PATCH v5] HID: steelseries: Add support for Arctis 1 XBox
-config: parisc-randconfig-r032-20230703 (https://download.01.org/0day-ci/archive/20230703/202307032208.b5brKeCt-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230703/202307032208.b5brKeCt-lkp@intel.com/reproduce)
+This change is irrelevant with your code, and should be fixed
+individually.  Please drop the hunk.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307032208.b5brKeCt-lkp@intel.com/
+> @@ -9255,6 +9317,12 @@ static const struct hda_fixup alc269_fixups[] = {
+>  		.chained = true,
+>  		.chain_id = ALC255_FIXUP_DELL1_MIC_NO_PRESENCE,
+>  	},
+> +	[ALC287_FIXUP_TAS2781_I2C] = {
+> +		.type = HDA_FIXUP_FUNC,
+> +		.v.func = tas2781_fixup_i2c,
+> +		.chained = true,
+> +		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
+> +	},
 
-All errors (new ones prefixed by >>):
+So this is supposed to be Lenovo-specific, and maybe better to rename,
+e.g. ALC287_FIXUP_LENOVO_TAS2781_I2C or such?
 
-   hppa-linux-ld: drivers/hid/hid-steelseries.o: in function `.LC10':
->> hid-steelseries.c:(.rodata.cst4+0x8): undefined reference to `hid_is_usb'
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> @@ -9813,6 +9881,33 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+>  	SND_PCI_QUIRK(0x17aa, 0x3853, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+>  	SND_PCI_QUIRK(0x17aa, 0x3855, "Legion 7 16ITHG6", ALC287_FIXUP_LEGION_16ITHG6),
+>  	SND_PCI_QUIRK(0x17aa, 0x3869, "Lenovo Yoga7 14IAL7", ALC287_FIXUP_YOGA9_14IAP7_BASS_SPK_PIN),
+> +	SND_PCI_QUIRK(0x17aa, 0x387d, "Yoga S780-16 pro Quad AAC",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x387e, "Yoga S780-16 pro Quad YC",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x3881, "YB9 dual powe mode2 YC",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x3884, "Y780 YG DUAL",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x3886, "Y780 VECO DUAL",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38a7, "Y780P AMD YG dual",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38a8, "Y780P AMD VECO dual",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38ba, "Yoga S780-14.5 Air AMD quad YC",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38bb, "Yoga S780-14.5 Air AMD quad AAC",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38be, "Yoga S980-14.5 proX YC Dual",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38bf, "Yoga S980-14.5 proX LX Dual",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38c3, "Y980 DUAL", ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38cb, "Y790 YG DUAL",
+> +		ALC287_FIXUP_TAS2781_I2C),
+> +	SND_PCI_QUIRK(0x17aa, 0x38cd, "Y790 VECO DUAL",
+> +		ALC287_FIXUP_TAS2781_I2C),
+
+Please keep one entry per line.  Let's ignore the checkpatch
+complaints.
+
+> @@ -10728,6 +10823,17 @@ static int patch_alc269(struct hda_codec *codec)
+>  		codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
+>  	}
+>  
+> +	/* FIXME: Laptop 0x17aa38be will get the wrong fixup_id and
+> +	 * enter into the wrong entry.
+> +	 * Correct the wrong entry.
+> +	 */
+> +	if (codec->fixup_id == ALC287_FIXUP_YOGA7_14ITL_SPEAKERS &&
+> +		codec->core.vendor_id == 0x10ec0287 &&
+> +		codec->core.subsystem_id == 0x17aa38be) {
+> +		codec_dbg(codec, "Clear wrong fixup for 17aa38be\n");
+> +		codec->fixup_id = ALC287_FIXUP_TAS2781_I2C;
+> +	}
+
+Why this is needed at all?  IOW, which entry causes this wrong
+attribute?
+
+
+thanks,
+
+Takashi
