@@ -2,171 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629157453BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F017453C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjGCCGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 22:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S230031AbjGCCH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 22:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjGCCGN (ORCPT
+        with ESMTP id S229482AbjGCCHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 22:06:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AF0E58;
-        Sun,  2 Jul 2023 19:05:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83B9A60D2C;
-        Mon,  3 Jul 2023 02:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64B1BC433C8;
-        Mon,  3 Jul 2023 02:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688349933;
-        bh=6Vt/sBkrXdrxTQKVsUKGftN2YBxZb9Pi00xquCrBohc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LjCUwi5skzJas/FE30Uw3LTmmxaKFtanu5Q4CdiA49GglOROpD0KWawmPcK/U4jNN
-         JS8ST9+me3IWMG5rrqvv0w6A3PRik9TAMkaRw7GNTQiJ+5wDcJjU7CF/9D6BJjIVhH
-         ekW8hR0sTSKZ6ZmZD9ru3O7LGE3mDymTQk+K9dOzGl3go/NdZzM85W2cMSzdu0uwJF
-         TlPQJtZoiuy0kSOpGr+E5E92Dxx0Cyz+kFt4zPdHBy9Lcm+AUpBb+W6f6bwTTxwoe1
-         DGrhyfGMbhZijPjzMC3JOVUdIbIRcCYrty3HlFavgHMT4cmZIdz9QTHsriKTh1x262
-         HSfUi7zOdkttw==
-Message-ID: <3e49476e-ee18-bfb8-ae1a-3a55a3d13f88@kernel.org>
-Date:   Mon, 3 Jul 2023 11:05:30 +0900
+        Sun, 2 Jul 2023 22:07:55 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF17188
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 19:07:52 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-4035dd6b349so3105311cf.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 19:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1688350072; x=1690942072;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+NnINhqvfRXnJIdL2hBgvRljauFbXLj+yF4b2cm3b/E=;
+        b=Kr9xN4nn5x1jphy0yYNW0NeOib0rvBIzfgGlT9gXEa14KJx9vBRWvhJ+3k3Cr+8sK5
+         jrgjUKSOIY6VheWciYyoZPZ+Ee++IIOEHGNabq0y1YeLgAu+z2titzRkd/8HacGxlyYm
+         ZHZzfC3K5xifj+CULAAKgLRMMIeE5sWmZ61Yw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688350072; x=1690942072;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NnINhqvfRXnJIdL2hBgvRljauFbXLj+yF4b2cm3b/E=;
+        b=L/mYvhnc6m/UYq/bA2ABdIc1v6g9UmH99j82M6OdO2zHwSePCWHbDeytz/VbXMfiCY
+         ZbsO7ebJT48bkckHKvbkMtGlQcos1vteYA9Pl4OlrJSaD5NJ4HC1p8dYX6TqMi0p+xWx
+         gxMaGvqh2IWknNh2rGot3+4vJ6/pmIEuxPkb5xlakSdxOcFijRXkusLt5B/7/Ayd+wxf
+         3a0cY6K2Ol4/T70mYU50m8NLNGYU51zDFTooZnKoHsilcp1nMT8nxjWgZ7TC4L071Bvd
+         au7zyYk7TSltlQ03S3aB+t+CFg81dwO613JTn0FKPfScuk4wbwdjEFQEStfqvjIaaOKz
+         yJyg==
+X-Gm-Message-State: AC+VfDx/8QyWRJmbLdrE8yaZEM5nLufk7VqrEAmnV9ejlKW8D+1x7VRI
+        VcFmwuAlLpzAtXD+os3WMIZ+FQ==
+X-Google-Smtp-Source: ACHHUZ58VBYyJUbCNzd8mG8P9Txf2iGK6zR6PNsaUyTQFYo54Ya89fn5cjA5qRqy+pJxyt9oOC/HHQ==
+X-Received: by 2002:a05:622a:24b:b0:400:98d4:78c6 with SMTP id c11-20020a05622a024b00b0040098d478c6mr11223957qtx.49.1688350071973;
+        Sun, 02 Jul 2023 19:07:51 -0700 (PDT)
+Received: from [10.5.0.2] ([45.85.145.152])
+        by smtp.gmail.com with ESMTPSA id cf18-20020a05622a401200b003f9af049c55sm6122496qtb.18.2023.07.02.19.07.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 19:07:51 -0700 (PDT)
+Message-ID: <7d372630-31cb-22c1-12f6-0d77fb0387c6@joelfernandes.org>
+Date:   Sun, 2 Jul 2023 22:07:50 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI address
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig.vd.ch
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>, stable@vger.kernel.org,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230630131753.1549685-1-rick.wertenbroek@gmail.com>
+Subject: Re: [PATCH v3] sched/core: introduce sched_core_idle_cpu()
 Content-Language: en-US
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230630131753.1549685-1-rick.wertenbroek@gmail.com>
+To:     Cruz Zhao <CruzZhao@linux.alibaba.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, boqun.feng@gmail.com,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        qiang1.zhang@intel.com, jstultz@google.com,
+        clingutla@codeaurora.org, nsaenzju@redhat.com, tglx@linutronix.de,
+        frederic@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <1688011324-42406-1-git-send-email-CruzZhao@linux.alibaba.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <1688011324-42406-1-git-send-email-CruzZhao@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/23 22:17, Rick Wertenbroek wrote:
-> A 32-bit mask was used on the 64-bit PCI address used for mapping MSIs.
-> This would result in the upper 32 bits being unintentionally zeroed and
-> MSIs getting mapped to incorrect PCI addresses if the address had any
-> of the upper bits set.
+On 6/29/2023 12:02 AM, Cruz Zhao wrote:
+> As core scheduling introduced, a new state of idle is defined as
+> force idle, running idle task but nr_running greater than zero.
 > 
-> Replace 32-bit mask by appropriate 64-bit mask and rename 32-bit mask
-> for clarity.
+> If a cpu is in force idle state, idle_cpu() will return zero. This
+> result makes sense in some scenarios, e.g., load balance,
+> showacpu when dumping, and judge the RCU boost kthread is starving.
 > 
-> Fixes: dc73ed0f1b8b ("PCI: rockchip: Fix window mapping and address translation for endpoint")
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/linux-pci/8d19e5b7-8fa0-44a4-90e2-9bb06f5eb694@moroto.mountain/
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-> Cc: stable@vger.kernel.org
+> But this will cause error in other scenarios, e.g., tick_irq_exit():
+> When force idle, rq->curr == rq->idle but rq->nr_running > 0, results
+> that idle_cpu() returns 0. In function tick_irq_exit(), if idle_cpu()
+> is 0, tick_nohz_irq_exit() will not be called, and ts->idle_active will
+> not become 1, which became 0 in tick_nohz_irq_enter().
+> ts->idle_sleeptime won't update in function update_ts_time_stats(), if
+> ts->idle_active is 0, which should be 1. And this bug will result that
+> ts->idle_sleeptime is less than the actual value, and finally will
+> result that the idle time in /proc/stat is less than the actual value.
+> 
+> To solve this problem, we introduce sched_core_idle_cpu(), which
+> returns 1 when force idle. We audit all users of idle_cpu(), and
+> change idle_cpu() into sched_core_idle_cpu() in function
+> tick_irq_exit().
+
+Reviewed-by: Joel Fernandes <joel@joelfernandes.org>
+
+ - Joel
+
+
+> 
+> v2-->v3: Only replace idle_cpu() with sched_core_idle_cpu() in
+> function tick_irq_exit(). And modify the corresponding commit log.
+> 
+> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+> Reviewed-by: Peter Zijlstra <peterz@infradead.org>
+> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> Reviewed-by: Joel Fernandes <joel@joelfernandes.org>
+> Link: https://lore.kernel.org/lkml/1687631295-126383-1-git-send-email-CruzZhao@linux.alibaba.com
 > ---
->  drivers/pci/controller/pcie-rockchip-ep.c | 12 ++++++------
->  drivers/pci/controller/pcie-rockchip.h    |  6 +++---
->  2 files changed, 9 insertions(+), 9 deletions(-)
+>  include/linux/sched.h |  2 ++
+>  kernel/sched/core.c   | 13 +++++++++++++
+>  kernel/softirq.c      |  2 +-
+>  3 files changed, 16 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-> index 0af0e965fb57..313face6a87f 100644
-> --- a/drivers/pci/controller/pcie-rockchip-ep.c
-> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
-> @@ -354,7 +354,7 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
->  	struct rockchip_pcie *rockchip = &ep->rockchip;
->  	u32 flags, mme, data, data_mask;
->  	u8 msi_count;
-> -	u64 pci_addr;
-> +	u64 pci_addr, pci_addr_mask = GENMASK(63, 8);
-
-I think you can simplify all this with only the change to the definition of
-PCIE_ADDR_MASK macro. Applying a 64 bits mask for low bits to a 32-bits variable
-is OK and should not generate any complaints from the compiler.
-Also, that "8" in the GENMASK can be replaced by MIN_AXI_ADDR_BITS_PASSED.
-So:
-
-#define PCIE_ADDR_MASK	GENMASK(63, MIN_AXI_ADDR_BITS_PASSED)
-
-Would fix everything I think.
-
-If it does not, I would prefer you define a macro for that GENMASK(63, 8) mask
-instead of using a variable on stack. That would be more efficient code wise,
-removing a memory access.
-
->  	u32 r;
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index b09a83bfad8b..73e61c0f10a7 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -2430,9 +2430,11 @@ extern void sched_core_free(struct task_struct *tsk);
+>  extern void sched_core_fork(struct task_struct *p);
+>  extern int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
+>  				unsigned long uaddr);
+> +extern int sched_core_idle_cpu(int cpu);
+>  #else
+>  static inline void sched_core_free(struct task_struct *tsk) { }
+>  static inline void sched_core_fork(struct task_struct *p) { }
+> +static inline int sched_core_idle_cpu(int cpu) { return idle_cpu(cpu); }
+>  #endif
 >  
->  	/* Check MSI enable bit */
-> @@ -391,18 +391,18 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
->  				       PCI_MSI_ADDRESS_LO);
->  
->  	/* Set the outbound region if needed. */
-> -	if (unlikely(ep->irq_pci_addr != (pci_addr & PCIE_ADDR_MASK) ||
-> +	if (unlikely(ep->irq_pci_addr != (pci_addr & pci_addr_mask) ||
->  		     ep->irq_pci_fn != fn)) {
->  		r = rockchip_ob_region(ep->irq_phys_addr);
->  		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, r,
->  					     ep->irq_phys_addr,
-> -					     pci_addr & PCIE_ADDR_MASK,
-> -					     ~PCIE_ADDR_MASK + 1);
-> -		ep->irq_pci_addr = (pci_addr & PCIE_ADDR_MASK);
-> +					     pci_addr & pci_addr_mask,
-> +					     ~pci_addr_mask + 1);
-> +		ep->irq_pci_addr = (pci_addr & pci_addr_mask);
->  		ep->irq_pci_fn = fn;
->  	}
->  
-> -	writew(data, ep->irq_cpu_addr + (pci_addr & ~PCIE_ADDR_MASK));
-> +	writew(data, ep->irq_cpu_addr + (pci_addr & ~pci_addr_mask));
->  	return 0;
+>  extern void sched_set_stop_task(int cpu, struct task_struct *stop);
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 71c1a0f232b4..c80088956987 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -7286,6 +7286,19 @@ struct task_struct *idle_task(int cpu)
+>  	return cpu_rq(cpu)->idle;
 >  }
 >  
-> diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
-> index fe0333778fd9..2d7b05f07b7e 100644
-> --- a/drivers/pci/controller/pcie-rockchip.h
-> +++ b/drivers/pci/controller/pcie-rockchip.h
-> @@ -158,11 +158,11 @@
->  #define PCIE_RC_CONFIG_THP_CAP		(PCIE_RC_CONFIG_BASE + 0x274)
->  #define   PCIE_RC_CONFIG_THP_CAP_NEXT_MASK	GENMASK(31, 20)
+> +#ifdef CONFIG_SCHED_CORE
+> +int sched_core_idle_cpu(int cpu)
+> +{
+> +	struct rq *rq = cpu_rq(cpu);
+> +
+> +	if (sched_core_enabled(rq) && rq->curr == rq->idle)
+> +		return 1;
+> +
+> +	return idle_cpu(cpu);
+> +}
+> +
+> +#endif
+> +
+>  #ifdef CONFIG_SMP
+>  /*
+>   * This function computes an effective utilization for the given CPU, to be
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index c8a6913c067d..98b98991ce45 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -630,7 +630,7 @@ static inline void tick_irq_exit(void)
+>  	int cpu = smp_processor_id();
 >  
-> -#define PCIE_ADDR_MASK			0xffffff00
-> +#define PCIE_LO_ADDR_MASK		GENMASK(31, 8)
->  #define PCIE_CORE_AXI_CONF_BASE		0xc00000
->  #define PCIE_CORE_OB_REGION_ADDR0	(PCIE_CORE_AXI_CONF_BASE + 0x0)
->  #define   PCIE_CORE_OB_REGION_ADDR0_NUM_BITS	0x3f
-> -#define   PCIE_CORE_OB_REGION_ADDR0_LO_ADDR	PCIE_ADDR_MASK
-> +#define   PCIE_CORE_OB_REGION_ADDR0_LO_ADDR	PCIE_LO_ADDR_MASK
->  #define PCIE_CORE_OB_REGION_ADDR1	(PCIE_CORE_AXI_CONF_BASE + 0x4)
->  #define PCIE_CORE_OB_REGION_DESC0	(PCIE_CORE_AXI_CONF_BASE + 0x8)
->  #define PCIE_CORE_OB_REGION_DESC1	(PCIE_CORE_AXI_CONF_BASE + 0xc)
-> @@ -170,7 +170,7 @@
->  #define PCIE_CORE_AXI_INBOUND_BASE	0xc00800
->  #define PCIE_RP_IB_ADDR0		(PCIE_CORE_AXI_INBOUND_BASE + 0x0)
->  #define   PCIE_CORE_IB_REGION_ADDR0_NUM_BITS	0x3f
-> -#define   PCIE_CORE_IB_REGION_ADDR0_LO_ADDR	PCIE_ADDR_MASK
-> +#define   PCIE_CORE_IB_REGION_ADDR0_LO_ADDR	PCIE_LO_ADDR_MASK
->  #define PCIE_RP_IB_ADDR1		(PCIE_CORE_AXI_INBOUND_BASE + 0x4)
->  
->  /* Size of one AXI Region (not Region 0) */
-
--- 
-Damien Le Moal
-Western Digital Research
-
+>  	/* Make sure that timer wheel updates are propagated */
+> -	if ((idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
+> +	if ((sched_core_idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
+>  		if (!in_hardirq())
+>  			tick_nohz_irq_exit();
+>  	}
