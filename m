@@ -2,207 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FD87456F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACAC7456FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjGCIHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S230418AbjGCIJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbjGCIHY (ORCPT
+        with ESMTP id S230160AbjGCIJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:07:24 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD33D1710;
-        Mon,  3 Jul 2023 01:07:10 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1688371613txz6f5uw
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 03 Jul 2023 16:06:52 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: C46Rb8GPIEdHxAFCE3BvkSlNOAIZKwGCuo6b9oMnIg2+3RsnASJ4Odgdn480K
-        D9O/zHQs9+SI0waAap24x1DtHFT1YhLFoXm+IHocqEYwW6JswgvloZwfQAJN6UsHkvyaP9x
-        QyBfBnAjQS8LVnCs302OFPUOYjidAiN/QvVkBaZGWrOwLLOZotAu8RmowxqfgV/oY7Kp6Rx
-        q2GZuLW+0aFiIafX5uuKHRaz+7efPvRT8FTu1WQZrCDywPojQ0HrrqkoL49Q1GenSQ+3x14
-        g/7TqCVqZOHLLlXzTLGfS0VAr0TFd7f+RwSYEOw4TIw4AtYEt2zSett+Kx0g+o/bTv4XZtb
-        qQevDcOllpzai0lcp+5UgkPNFxGHTFnhRL6r+g56jEEFEc4T7w=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 351077419301285196
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux@weissschuh.net,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
-Date:   Mon,  3 Jul 2023 16:06:47 +0800
-Message-Id: <20230703080647.491363-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZKJ35DyPOG+LAy5j@1wt.eu>
-References: <ZKJ35DyPOG+LAy5j@1wt.eu>
+        Mon, 3 Jul 2023 04:09:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD1BC5;
+        Mon,  3 Jul 2023 01:09:17 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:4563:92b0:7df7:68d2] (unknown [IPv6:2a01:e0a:120:3210:4563:92b0:7df7:68d2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 762B8660297B;
+        Mon,  3 Jul 2023 09:09:15 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688371755;
+        bh=FoxyCwSED1NQb2JVKQe28H/cQr0EbCDBOFoxMI+oRmk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DX+0JyOi+UOAHjq+U7oPBEXI/iGkisjG3bkMz93iti3JlqWvZyY7i4tLWXdLS+081
+         jlqKGzRkb0RVaO4m511EhrPeVwYCMy80lMdoJPyf6+fkZPiBiKshVlu+UnXSCcsFUB
+         hezXrnKZtVJhr81Q+3PLGm63u7EYCTh0S3xPOFridHH20BYJ2maAlCpzpNz2ZHyub3
+         rudswu81kQdJXnL6gZC7bC4nmLxWYyonXo8VuAeatB1jmubCthLD4/yWeVPp0V9slO
+         4kJMv6ByOoqe7P7mp6+SXZOURXU3ybNccRmu5mydjS7FpaqNWZnPwTHTLoYesY23AL
+         VLnoLUdpeX/LA==
+Message-ID: <5cb3f216-5041-a155-5d2c-059dc1f15024@collabora.com>
+Date:   Mon, 3 Jul 2023 10:09:13 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 04/11] media: videobuf2: Stop define VB2_MAX_FRAME as
+ global
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        hverkuil-cisco@xs4all.nl, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, linux-staging@lists.linux.dev,
+        ming.qian@nxp.com, kernel@collabora.com,
+        gregkh@linuxfoundation.org, tfiga@chromium.org,
+        nicolas.dufresne@collabora.com
+References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
+ <20230622131349.144160-5-benjamin.gaignard@collabora.com>
+ <e7444263-0ce5-1575-8cca-1e51b1cfbe9a@synaptics.com>
+Content-Language: en-US
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <e7444263-0ce5-1575-8cca-1e51b1cfbe9a@synaptics.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
 
-> On Mon, Jul 03, 2023 at 02:03:23PM +0800, Zhangjin Wu wrote:
-> > > > - the others, for kernel without procfs
-> > > >   let it pass even with 'worst case' kernel configs
-> > > 
-> > > You should include /dev/zero, which is commonly used to allocate anonymous
-> > > memory and is more likely present and readable than any of the other files.
-> > > And another file of choice is obviously argv[0] ;-)  In this case you don't
-> > > need any of the other extra ones. Thus I could suggest that you try in this
-> > > order:
-> > > 
-> > >     /dev/zero, /proc/self/exe, /proc/1/exe, argv[0]
-> > > 
-> > > and be done with it. That doesn't prevent one from extending the list if
-> > > really needed later, but I doubt it would be needed. Also, it's already
-> > > arranged in a read-write, then read-only fallbacks mode, so if we later
-> > > need to add more complex tests involving writes, the writable /dev/zero
-> > > will have precedence.
-> > >
-> > 
-> > Cool, both /dev/zero and argv[0] are very good candidates ;-)
-> > 
-> > Just verified both of them, works perfectly.
-> > 
-> > - /dev/zero
-> > 
-> >   we need to mknod it in prepare()
-> 
-> Indeed.
-> 
-> >   and also, in test_mmap_munmap(),
-> >   stat() return a zero size of /dev/zero, in this case, we should assign
-> >   a non-zero file_size ourselves.
-> > 
-> >     -       file_size = stat_buf.st_size;
-> >     +       /* file size of the special /dev/zero is 0, let's assign one manually */
-> >     +       if (i == 0)
-> >     +               file_size = 3*page_size - 1;
-> >     +       else
-> >     +               file_size = stat_buf.st_size;
-> 
-> OK but why this -1 ? That doesn't sound right, unless you explicitly want
-> a file size that's not multiple of a page size for whatever reason ?
+Le 30/06/2023 à 11:51, Hsia-Jun Li a écrit :
 >
-
-Just make sure the file size is a litle random, not just aligned with
-PAGE_SIZE, it is ok without '-1' ;-)
-
-> > - argv[0]
-> > 
-> >   since nolibc has no realpath() currently, we can simply
-> >   support the current path and the absolute path like this:
-> > 
-> >     nolibc-test.c:
-> > 
-> >     /* assigned as argv[0] in main(), will be used by some tests */
-> >     static char exe[PATH_MAX + 1];
-> > 
-> >     main():
-> > 
-> >     /* get absolute path of myself, nolibc has no realpath() currently */
-> >     #ifndef NOLIBC
-> >             realpath(argv[0], exe);
-> >     #else
-> >             /* assume absolute path has no "./" */
-> >             if (strncmp(argv[0], "./", 2) != 0)
-> >                     strncat(exe, argv[0], strlen(argv[0]) + 1);
-> >             else {
-> >                     pwd = getenv("PWD");
-> >                     /* skip the ending '\0' */
-> >                     strncat(exe, getenv("PWD"), strlen(pwd));
-> >                     /* skip the first '.' */
-> >                     strncat(exe, argv[0] + 1, strlen(argv[0]));
-> >             }
-> >     #endif
-> 
-> No, please, not like this. Just copy argv[0] (the pointer not the
-> contents) and you're fine:
+> On 6/22/23 21:13, Benjamin Gaignard wrote:
+>> CAUTION: Email originated externally, do not click links or open 
+>> attachments unless you recognize the sender and know the content is 
+>> safe.
+>>
+>>
+>> After changing bufs arrays to a dynamic allocated array
+>> VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
 >
->     static const char *argv0;
-> 
->     int main(int argc, char **argv, char **envp)
->     {
->             argv0 = argv[0];
->             ...
->     }
-> 
-> Nothing more, nothing less. Your program will always have its correct
-> path when being called unless someone purposely forces it to something
-> different, which is not our concern at all since this is a test program.
-> And I'd rather call it "argv0" which exactly tells us what it contains
-> than "exe" which can be misleading for that precise reason.
+> I think make it 64 which is the VB2_MAX_FRAME in Android GKI kernel is 
+> more reasonable.
 >
+> It would be hard to iterate the whole array, it would go worse with a 
+> filter. Such iterate may need to go twice because you mix 
+> post-processing buffer and decoding buffer(with MV) in the same array.
 
-Yeah, locally, I just used a global argv0 pointer directly, but
-chroot_exe("./nolibc-test") not work when run 'libc-test' in host
-system, that is why I tried to get an absolute path ;-)
+Here I don't want to change drivers behavior so I keep the same value.
+If it happens that they need more buffers, like for dynamic resolution change
+feature for Verisilicon VP9 decoder, case by case patches will be needed.
 
-    CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(exe), -1, ENOTDIR); break;
 
-    -->
-
-    19 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
-
-I removed the "proc ?" check manually to test if it also work with
-CONFIG_PROC_FS=n. it doesn't work, without absolute path, we need to add
-the ENOENT errno back to the errno check list.
-
-I'm not sure if the other syscalls require an absolute path, so, the
-realpath() is called in this proposed method.
-
-> > A full functional realpath() is a little complex, such as '../' support and
-> > even symlink support, let's delay its requirement at current stage ;-)
-> 
-> Please do not even engage into this, and keep in mind that the sole
-> purpose of this test program is to help developers simply add tests to
-> the set of existing ones. If the program becomes complex for doing stuff
-> that is out of its scope, it will become much harder to extend and users
-> will lose interest and motivation for updating it.
-> 
-> > one or both of them may also help the other test cases:
-> > 
-> > - chroot_exe (used '/init' before)
-> > 
-> >     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(proc ? "/proc/self/exe" : exe), -1, ENOTDIR); break;
-> > 
-> > - chmod_exe (replace the one: chmod_tmpdir in another patchset)
-> > 
-> >     CASE_TEST(chmod_exe);       EXPECT_SYSZR(1, chmod(proc ? "/proc/self/exe" : exe, 0555)); break;
-> > 
-> >     It should be safe enough to only remove the writable attribute for the test
-> >     program.
-> > 
-> > - stat_timestamps (used '/init' before)
-> > 
-> >     if (stat("/proc/self/", &st) && stat(exe, &st) && stat("/dev/zero", &st) && stat("/", &st))
-> 
-> Indeed, why not!
 >
-
-Ok, without absolute path, the chroot_exe() will be changed back to
-something like this:
-
-    CASE_TEST(chroot_exe);        EXPECT_SYSER2(1, chroot(proc ? "/proc/self/exe" : argv0), -1, ENOTDIR, ENOENT); break;
-
-Best regards,
-Zhangjin
-
-> > Will update the related patches with them.
-> 
-> OK thanks!
-> Willy
+>> Remove it from the core definitions but keep it for drivers internal
+>> needs.
+>>
+>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> ---
+>>   drivers/media/common/videobuf2/videobuf2-core.c | 2 ++
+>>   drivers/media/platform/amphion/vdec.c | 1 +
+>>   .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c | 2 ++
+>>   drivers/media/platform/qcom/venus/hfi.h | 2 ++
+>>   drivers/media/platform/verisilicon/hantro_hw.h | 2 ++
+>>   drivers/staging/media/ipu3/ipu3-v4l2.c | 2 ++
+>>   include/media/videobuf2-core.h | 1 -
+>>   include/media/videobuf2-v4l2.h | 4 ----
+>>   8 files changed, 11 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c 
+>> b/drivers/media/common/videobuf2/videobuf2-core.c
+>> index 86e1e926fa45..899783f67580 100644
+>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+>> @@ -31,6 +31,8 @@
+>>
+>>   #include <trace/events/vb2.h>
+>>
+>> +#define VB2_MAX_FRAME  32
+>> +
+>>   static int debug;
+>>   module_param(debug, int, 0644);
+>>
+>> diff --git a/drivers/media/platform/amphion/vdec.c 
+>> b/drivers/media/platform/amphion/vdec.c
+>> index 3fa1a74a2e20..b3219f6d17fa 100644
+>> --- a/drivers/media/platform/amphion/vdec.c
+>> +++ b/drivers/media/platform/amphion/vdec.c
+>> @@ -28,6 +28,7 @@
+>>
+>>   #define VDEC_MIN_BUFFER_CAP            8
+>>   #define VDEC_MIN_BUFFER_OUT            8
+>> +#define VB2_MAX_FRAME                  32
+>>
+>>   struct vdec_fs_info {
+>>          char name[8];
+>> diff --git 
+>> a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c 
+>> b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+>> index 6532a69f1fa8..a1e0f24bb91c 100644
+>> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+>> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+>> @@ -16,6 +16,8 @@
+>>   #include "../vdec_drv_if.h"
+>>   #include "../vdec_vpu_if.h"
+>>
+>> +#define VB2_MAX_FRAME  32
+>> +
+>>   /* reset_frame_context defined in VP9 spec */
+>>   #define VP9_RESET_FRAME_CONTEXT_NONE0 0
+>>   #define VP9_RESET_FRAME_CONTEXT_NONE1 1
+>> diff --git a/drivers/media/platform/qcom/venus/hfi.h 
+>> b/drivers/media/platform/qcom/venus/hfi.h
+>> index f25d412d6553..bd5ca5a8b945 100644
+>> --- a/drivers/media/platform/qcom/venus/hfi.h
+>> +++ b/drivers/media/platform/qcom/venus/hfi.h
+>> @@ -10,6 +10,8 @@
+>>
+>>   #include "hfi_helper.h"
+>>
+>> +#define VB2_MAX_FRAME                          32
+>> +
+>>   #define VIDC_SESSION_TYPE_VPE                  0
+>>   #define VIDC_SESSION_TYPE_ENC                  1
+>>   #define VIDC_SESSION_TYPE_DEC                  2
+>> diff --git a/drivers/media/platform/verisilicon/hantro_hw.h 
+>> b/drivers/media/platform/verisilicon/hantro_hw.h
+>> index e83f0c523a30..9e8faf7ba6fb 100644
+>> --- a/drivers/media/platform/verisilicon/hantro_hw.h
+>> +++ b/drivers/media/platform/verisilicon/hantro_hw.h
+>> @@ -15,6 +15,8 @@
+>>   #include <media/v4l2-vp9.h>
+>>   #include <media/videobuf2-core.h>
+>>
+>> +#define VB2_MAX_FRAME  32
+>> +
+>>   #define DEC_8190_ALIGN_MASK    0x07U
+>>
+>>   #define MB_DIM                 16
+>> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c 
+>> b/drivers/staging/media/ipu3/ipu3-v4l2.c
+>> index e530767e80a5..6627b5c2d4d6 100644
+>> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
+>> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+>> @@ -10,6 +10,8 @@
+>>   #include "ipu3.h"
+>>   #include "ipu3-dmamap.h"
+>>
+>> +#define VB2_MAX_FRAME  32
+>> +
+>>   /******************** v4l2_subdev_ops ********************/
+>>
+>>   #define IPU3_RUNNING_MODE_VIDEO                0
+>> diff --git a/include/media/videobuf2-core.h 
+>> b/include/media/videobuf2-core.h
+>> index 77921cf894ef..080b783d608d 100644
+>> --- a/include/media/videobuf2-core.h
+>> +++ b/include/media/videobuf2-core.h
+>> @@ -20,7 +20,6 @@
+>>   #include <media/media-request.h>
+>>   #include <media/frame_vector.h>
+>>
+>> -#define VB2_MAX_FRAME  (32)
+>>   #define VB2_MAX_PLANES (8)
+>>
+>>   /**
+>> diff --git a/include/media/videobuf2-v4l2.h 
+>> b/include/media/videobuf2-v4l2.h
+>> index 5a845887850b..88a7a565170e 100644
+>> --- a/include/media/videobuf2-v4l2.h
+>> +++ b/include/media/videobuf2-v4l2.h
+>> @@ -15,10 +15,6 @@
+>>   #include <linux/videodev2.h>
+>>   #include <media/videobuf2-core.h>
+>>
+>> -#if VB2_MAX_FRAME != VIDEO_MAX_FRAME
+>> -#error VB2_MAX_FRAME != VIDEO_MAX_FRAME
+>> -#endif
+>> -
+>>   #if VB2_MAX_PLANES != VIDEO_MAX_PLANES
+>>   #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
+>>   #endif
+>> -- 
+>> 2.39.2
+>>
