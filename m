@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641A27455D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61427455E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjGCHTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S229819AbjGCHUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjGCHTQ (ORCPT
+        with ESMTP id S230035AbjGCHUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:19:16 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DF1D1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:19:14 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f875b267d9so6283375e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:19:14 -0700 (PDT)
+        Mon, 3 Jul 2023 03:20:49 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB957E42
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:20:47 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-19fa4346498so3549364fac.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688368753; x=1690960753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MtebQLIZdSRHMNweZtl9CpSzAwnJBH7sdxrx9vZRKrw=;
-        b=lGnqf8ck325RiQ5OVd6sGeCefJKsgYsFl8jly9ocyhQWkA5msfGhD4jURmXrOHv5sz
-         meUPXxFBWI0sNRmDPHfoOLubRlHEZVadeQoCBg6uAlz1ngzpez6oeh056v2pi5lLDLTX
-         eci1Q42KmWblVKlI/BTHTWkDJXfjyDsMltClFXCDZLPFTeLHh3OjL7DhaQ+dP23dV2FH
-         dz9EZgxPIXaS4w7xjGreU4SI1GQUV+c+e2LlCnyQdZu9zxBtjMUlbSO3MynGNOpi0Qg6
-         jzrIjT4wWU7jRFPedwDgUYsRWI/lbMk5R5ScmrAclAiIm2br831D9EcIh+3VtRY7jgUP
-         XJtA==
+        d=linaro.org; s=google; t=1688368847; x=1690960847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5wOEeEqZxs/53QPFBAeYmLrF3X4waeqXDqE1Qr5s1oo=;
+        b=K4Fk0wgl41urJ973GedutT6AJySQVRpM7IEAeH1DL3A0K5cftuzCamKRTB9DPS99mD
+         nA2nj+JvCX7ToqPkiXrqneN0AFk6tdTwfutFdtsVKkSIPottw7M/tR3AATLz4IgyfIl5
+         3uIT+BmwDiCixsnU59nodSwDjHwYO1qhwePVV9/5uIAGIE8HgjGzSORacDRfTQN9o+A4
+         RK189ThZg7KIFV/i1sqW4r2TYZBTb/6fmGM/KM32273ABzhuloTOaX+mqNyy/elVoy8H
+         x0NV4f9dVSDnPrOCSmBeOuSYdtx92ccMK5jyz2fExYMyn5NXHnQPrd9uQwVYLUOJFjPO
+         p98w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688368753; x=1690960753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MtebQLIZdSRHMNweZtl9CpSzAwnJBH7sdxrx9vZRKrw=;
-        b=bHkhMZXR+md9XDiCyonOIpKC0Ij7PskbG5AIO33PGgubWOnD+2SCE71QcBjTjPZv4j
-         FKOaimbPqWpw1sR+cx68u4/MeYq3hCBAD/9iUccK8VjasG3Wjl2eW4BsC1Ku+Hcz3q91
-         rIqC4yESr7wM5g0rePqg+O/aBhqBuvmluR77IEgrVOVeru5mFa8gbES5wslAdxnCStk6
-         meopu4XrKycrVs2jYGSb8t2jiHb5FGvV7jpnUtnmSfZuNXezjlcpjkym76TvCXTQiyg0
-         jdVEr1J8EledAl3I+LZqgyzaZTNYWeI14HLLmNmLRa9KukgJzvamZzUmNViSAYu22MlD
-         gcKg==
-X-Gm-Message-State: ABy/qLa/3apFl3Xi4Kmx5KKnGOhjXk5I/IB9SQ4W/IvCdeXKHvoV2ZQf
-        8YOmAOcO9672fjpAed69WoaGd8fk6kZDSjzaHffQHw==
-X-Google-Smtp-Source: APBJJlG61zFjMe1dVqXS9PKK1Fv7xdR289e82FbM96Qx+97WUwUpWN+ceSsDmFGAl/NNio8E6NYwPhzSGKuB+eUQJgI=
-X-Received: by 2002:a05:6512:4028:b0:4f9:69b8:1e7c with SMTP id
- br40-20020a056512402800b004f969b81e7cmr7043008lfb.46.1688368752911; Mon, 03
- Jul 2023 00:19:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688368847; x=1690960847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5wOEeEqZxs/53QPFBAeYmLrF3X4waeqXDqE1Qr5s1oo=;
+        b=UQzFBPsDjS08fjzhXzmCFa8PxEumyRvUNt2n6q5VvA9l5nfiADpGcFKzm0NtGL34r+
+         ljsX+tLZOIHXxDJ3ccFHqBAIMHuxfVFUclKQIsV4FhYvsyrzblDyad7Dxl1GW3sL2ELw
+         ZK2tl86ayl0O5RwmuqpaG9VImgVohFe+Fd+XqhGn8cvTlqik/tc7JWQDs0LuG2ir2npt
+         /sIQ5ZqO2l39w10JHVK5PBZcxpsXRVy7cvsoMHUu5voQASWSoahgngtqISjNBfAlaoWP
+         LSsTEAcS0czz+OZB94ziNA6K84UU2dVVezJdqdo/SJvRMpFodDW9eyzTr8Q8GTAeFrj5
+         lH3w==
+X-Gm-Message-State: ABy/qLYmktBoK6jtHwuOlag9xjALOVymwQfWQDR1TJ6WcHqCJQl/yS0y
+        J1/WnpHioJPbjDz5xm5OPKglo2E+F1ZQNh3wbYXQ7A==
+X-Google-Smtp-Source: APBJJlEb+AJ0CavHV/EY5o02uXm03FgkhsSGBahp5rgVjQwn4oDUf2oZLdvfrUiaO5BwJCpHYi9SurP9PwIS6yl4hW0=
+X-Received: by 2002:a05:6870:f150:b0:1b0:3771:736c with SMTP id
+ l16-20020a056870f15000b001b03771736cmr12943732oac.41.1688368847232; Mon, 03
+ Jul 2023 00:20:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230702-headway-dreamlike-d7ba39ac4910@spud>
-In-Reply-To: <20230702-headway-dreamlike-d7ba39ac4910@spud>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Mon, 3 Jul 2023 15:19:01 +0800
-Message-ID: <CAEEQ3wnzf=iDDHJATo2vdVz-SDNYRGBEEb7sXUyGojgP4ZAgaA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-To:     Conor Dooley <conor@kernel.org>
-Cc:     ardb@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com, alexghiti@rivosinc.com,
-        sunilvl@ventanamicro.com
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <1687955688-20809-9-git-send-email-quic_mojha@quicinc.com>
+ <CAL_JsqJ_TTnGjjB2d8_FKHpWBRG5GHLoWnabCKjsdeZ4QFdNEg@mail.gmail.com>
+ <cacbbb02-732e-076e-50bf-292d20a4d722@quicinc.com> <58a26b9e-a48d-d567-c310-193a2c52521e@linaro.org>
+ <5447f9f8-55b4-8bed-66a6-1c9d62b02c79@quicinc.com>
+In-Reply-To: <5447f9f8-55b4-8bed-66a6-1c9d62b02c79@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Mon, 3 Jul 2023 09:20:35 +0200
+Message-ID: <CAGE=qrq0CuO4J-6yC=YZ4xjL67o9QTqpei0ovX-X_8MLVeEH6g@mail.gmail.com>
+Subject: Re: [PATCH v4 08/21] dt-bindings: reserved-memory: Add qcom,ramoops binding
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, corbet@lwn.net,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        conor+dt@kernel.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com, mathieu.poirier@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
+        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -77,294 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Conor
-
-On Sun, Jul 2, 2023 at 9:48=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
->
-> Hey,
-> %subject: riscv: obtain ACPI RSDP from FFI.
->
-> This subject is a bit unhelpful because FFI would commonly mean "foreign
-> function interface" & you have not yet introduced it. It seems like it
-> would be better to do s/FFI/devicetree/ or similar.
-
-FFI: FDT FIRMWARE INTERFACE.
-
-You are right, s/FFI/devicetree/ is of course possible=EF=BC=8C but I actua=
-lly
-want to use FFI as a general solution, put all relevant codes under
-driver/firmware/, and use RISC-V arch to call general codes.
-
-In this case, only one Kconfig CONFIG_FDT_FW_INTERFACE is enough=EF=BC=8C a=
-nd
-The FFI code will be placed first in the patchset.
-
-But Ard's suggestion is to put the part of SMBIOS in the generic code,
-and put the FFI for ACPI in the RISCV arch.
-
-Please see  the v1:
-https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1-cui=
-yunhui@bytedance.com/
-
-Put the following to /driver/firmware/ffi.c , What do you think?
-void __init ffi_acpi_root_pointer(void)
-{
-    ...
-}
-
-
-> Please also drop the full stop from the commit messages ;)
-Okay, thanks.
-
->
-> Please use a cover letter for multi-patch series & include changelogs.
-OK, On v3 I would use.
-
->
-> +CC Sunil, Alex:
->
-> Can you guys please take a look at this & see if it is something that we
-> want to do (ACPI without EFI)?
->
-> On Sun, Jul 02, 2023 at 05:57:32PM +0800, Yunhui Cui wrote:
-> > 1. We need to enable the ACPI function on RISC-V.
->
-> RISC-V already supports ACPI, the "we" in this commit message is
-> confusing. Who is "we"? Bytedance?
->
-> > When booting with
-> > Coreboot, we encounter two problems:
-> > a. Coreboot does not support EFI
->
->
-> > b. On RISC-V, only the DTS channel can be used.
->
-> We support ACPI, so this seems inaccurate. Could you explain it better
-> please?
-
-Yes, Sunil already supports ACPI, But it is based on EDK2 boot which
-supports EFI.
-In fact, We use Coreboot which has the features of a and b above.
-
->
-> > 2. Based on this, we have added an interface for obtaining firmware
-> > information transfer through FDT, named FFI.
->
-> Please use the long form of "FFI" before using the short form, since you
-> are inventing this & noone knows what it means yet.
->
-> > 3. We not only use FFI to pass ACPI RSDP, but also pass other
-> > firmware information as an extension.
->
-> This patch doesn't do that though?
-
-Similar problems may be encountered on other arches, which is also the
-purpose of this sentence.
-
-> > +RISC-V FDT FIRMWARE INTERFACE (FFI) SUPPORT
-> > +M:     Yunhui Cui cuiyunhui@bytedance.com
-> > +S:     Maintained
-> > +F:     arch/riscv/include/asm/ffi.h
-> > +F:     arch/riscv/kernel/ffi.c
->
-> Please add this in alphabetical order, these entries have recently been
-> resorted. That said, maintainers entry for a trivial file in arch code
-> seems a wee bit odd, seems like it would be better suited rolled up into
-> your other entry for the interface, like how Ard's one looks for EFI?
->
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index b49793cf34eb..2e1c40fb2300 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -785,6 +785,16 @@ config EFI
-> >         allow the kernel to be booted as an EFI application. This
-> >         is only useful on systems that have UEFI firmware.
+On Mon, 3 Jul 2023 at 08:22, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+> On 7/2/2023 1:42 PM, Krzysztof Kozlowski wrote:
+> >>> The big difference is if firmware is not deciding where this log
+> >>> lives, then it doesn't need to be in DT. How does anything except the
+> >>> kernel that allocates the log find the logs?
+> >>
+> >> Yes, you are correct, firmware is not deciding where the logs lives
+> >> instead here, Kernel has reserved the region where the ramoops region
+> >> lives and later with the minidump registration where, physical
+> >> address/size/virtual address(for parsing) are passed and that is how
+> >> firmware is able to know and dump those region before triggering system
+> >> reset.
 > >
-> > +config FFI
-> > +     bool "Fdt firmware interface"
-> > +     depends on OF
-> > +     default y
-> > +     help
-> > +       Added an interface to obtain firmware information transfer
-> > +       through FDT, named FFI. Some bootloaders do not support EFI,
-> > +       such as coreboot.
-> > +       We can pass firmware information through FFI, such as ACPI.
+> > Your explanation does not justify storing all this in DT. Kernel can
+> > allocate any memory it wishes, store there logs and pass the address to
+> > the firmware. That's it, no need for DT.
 >
-> I don't understand your Kconfig setup. Why don't you just have one
-> option (the one from patch 2/3), instead of adding 2 different but
-> similarly named options?
-OK, let me try it=EF=BC=8C and use the Kconfig CONFIG_FDT_FW_INTERFACE.  EF=
-I
-seems to use two...
+> If you go through the driver, you will know that what it does, is
 
-> >  config CC_HAVE_STACKPROTECTOR_TLS
-> >       def_bool $(cc-option,-mstack-protector-guard=3Dtls -mstack-protec=
-tor-guard-reg=3Dtp -mstack-protector-guard-offset=3D0)
+We talk about bindings and I should not be forced to look at the
+driver to be able to understand them. Bindings should stand on their
+own.
+
+> just create platform device for actual ramoops driver to probe and to
+
+Not really justification for Devicetree anyway. Whatever your driver
+is doing, is driver's business, not bindings.
+
+> provide this it needs exact set of parameters of input what original
+> ramoops DT provides, we need to keep it in DT as maintaining this in
+> driver will not scale well with different size/parameter size
+> requirement for different targets.
+
+Really? Why? I don't see a problem in scaling. At all.
+
+>
 > >
-> > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acp=
-i.h
-> > index f71ce21ff684..f9d1625dd159 100644
-> > --- a/arch/riscv/include/asm/acpi.h
-> > +++ b/arch/riscv/include/asm/acpi.h
-> > @@ -15,6 +15,8 @@
-> >  /* Basic configuration for ACPI */
-> >  #ifdef CONFIG_ACPI
+> >>
+> >> A part of this registration code you can find in 11/21
+> >>
+> >>> I'm pretty sure I already said all this before.
+> >>
+> >> Yes, you said this before but that's the reason i came up with vendor
+> >> ramoops instead of changing traditional ramoops binding.
 > >
-> > +#include <asm/ffi.h>
-> > +
-> >  typedef u64 phys_cpuid_t;
-> >  #define PHYS_CPUID_INVALID INVALID_HARTID
-> >
-> > @@ -66,6 +68,13 @@ int acpi_get_riscv_isa(struct acpi_table_header *tab=
-le,
-> >                      unsigned int cpu, const char **isa);
-> >
-> >  static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO=
-_NODE; }
-> > +
-> > +#define ACPI_HAVE_ARCH_GET_ROOT_POINTER
+> > That's unexpected conclusion. Adding more bindings is not the answer to
+> > comment that it should not be in the DTS in the first place.
 >
-> How come this is not set in Kconfig like HAVE_FOO options usually are?
-This is modeled after x86 historical code.
-See arch/x86/include/asm/acpi.h
+> Please suggest, what is the other way being above text as requirement..
 
-> > +static inline u64 acpi_arch_get_root_pointer(void)
-> > +{
-> > +     return acpi_rsdp;
-> > +}
-> > +
-> >  #else
-> >  static inline void acpi_init_rintc_map(void) { }
-> >  static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-> > diff --git a/arch/riscv/include/asm/ffi.h b/arch/riscv/include/asm/ffi.=
-h
-> > new file mode 100644
-> > index 000000000000..847af02abd87
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/ffi.h
-> > @@ -0,0 +1,9 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#ifndef _ASM_FFI_H
-> > +#define _ASM_FFI_H
-> > +
-> > +extern u64 acpi_rsdp;
->
-> /stuff/linux/drivers/acpi/osl.c:178:22: error: redefinition of 'acpi_rsdp=
-' with a different type: 'unsigned long' vs 'u64' (aka 'unsigned long long'=
-)
->
-> Fails to build when Kexec is enabled.
+I do not see any requirement for us there. Forcing me to figure out
+how to add non-hardware property to DT is not the way to convince
+reviewers. But if you insist - we have ABI for this, called sysfs. If
+it is debugging feature, then debugfs.
 
-Rename my acpi_rsdp to arch_acpi_rsdp? WDYT?
-
->
-> > +extern void ffi_init(void);
-> > +
-> > +#endif /* _ASM_FFI_H */
-> > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > index 506cc4a9a45a..274e06f4da33 100644
-> > --- a/arch/riscv/kernel/Makefile
-> > +++ b/arch/riscv/kernel/Makefile
-> > @@ -92,6 +92,7 @@ obj-$(CONFIG_CRASH_CORE)    +=3D crash_core.o
-> >  obj-$(CONFIG_JUMP_LABEL)     +=3D jump_label.o
-> >
-> >  obj-$(CONFIG_EFI)            +=3D efi.o
-> > +obj-$(CONFIG_FFI)              +=3D ffi.o
->
-> This file uses tabs for alignment, not spaces.
-Okay, got it.
-
->
-> >  obj-$(CONFIG_COMPAT)         +=3D compat_syscall_table.o
-> >  obj-$(CONFIG_COMPAT)         +=3D compat_signal.o
-> >  obj-$(CONFIG_COMPAT)         +=3D compat_vdso/
-> > diff --git a/arch/riscv/kernel/ffi.c b/arch/riscv/kernel/ffi.c
-> > new file mode 100644
-> > index 000000000000..c5ac2b5d9148
-> > --- /dev/null
-> > +++ b/arch/riscv/kernel/ffi.c
-> > @@ -0,0 +1,37 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * ffi.c - FDT FIRMWARE INTERFACE
-> > + */
-> > +
-> > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > +
-> > +#include <linux/of.h>
-> > +#include <linux/of_fdt.h>
-> > +#include <linux/libfdt.h>
-> > +
-> > +u64 acpi_rsdp;
-> > +
-> > +void __init ffi_acpi_root_pointer(void)
-> > +{
-> > +     int cfgtbl, len;
-> > +     fdt64_t *prop;
-> > +
-> > +     cfgtbl =3D fdt_path_offset(initial_boot_params, "/cfgtables");
-> > +     if (cfgtbl < 0) {
-> > +             pr_info("firmware table not found.\n");
-> > +             return;
-> > +     }
-> > +
-> > +     prop =3D fdt_getprop_w(initial_boot_params, cfgtbl, "acpi_phy_ptr=
-", &len);
-> > +     if (!prop || len !=3D sizeof(u64))
-> > +             pr_info("acpi_rsdp not found.\n");
-> > +     else
-> > +             acpi_rsdp =3D fdt64_to_cpu(*prop);
-> > +
-> > +     pr_debug("acpi rsdp: %llx\n", acpi_rsdp);
->
-> Same comments here about undocumented DT properties and pr_*()s that
-> likely are not wanted (or correct).
-Okay=EF=BC=8Cupdate it on v3.
-
->
-> > +}
-> > +
-> > +void __init ffi_init(void)
-> > +{
-> > +     ffi_acpi_root_pointer();
->
-> What happens if, on a system with "normal" ACPI support, ffi_init() is
-> called & ffi_acpi_root_pointer() calls things like fdt_path_offset()?
-
-According to the current logic, get it from FFI is enabled, if can
-not,  continue to use =E2=80=9Cnormal=E2=80=9D ACPI.
-
-> > +}
-> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > index 971fe776e2f8..5a933d6b6acb 100644
-> > --- a/arch/riscv/kernel/setup.c
-> > +++ b/arch/riscv/kernel/setup.c
-> > @@ -36,6 +36,7 @@
-> >  #include <asm/thread_info.h>
-> >  #include <asm/kasan.h>
-> >  #include <asm/efi.h>
-> > +#include <asm/ffi.h>
-> >
-> >  #include "head.h"
-> >
-> > @@ -279,6 +280,7 @@ void __init setup_arch(char **cmdline_p)
-> >       parse_early_param();
-> >
-> >       efi_init();
-> > +     ffi_init();
->
-> What provides ffi_init() if CONFIG_FFI is disabled?
-Ok=EF=BC=8C Modified on v3,  put it with the CONFIG_FFI
-
->
-> >       paging_init();
-> >
-> >       /* Parse the ACPI tables for possible boot-time configuration */
->
-> Cheers,
-> Conor.
-
-Thanks,
-Yunhui
+Best regards,
+Krzysztof
