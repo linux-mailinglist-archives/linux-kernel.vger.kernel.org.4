@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2B2745B87
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012D4745B8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjGCLtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S231371AbjGCLtn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jul 2023 07:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjGCLs7 (ORCPT
+        with ESMTP id S229504AbjGCLtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:48:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADC1E8;
-        Mon,  3 Jul 2023 04:48:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2247460F03;
-        Mon,  3 Jul 2023 11:48:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD04C433C7;
-        Mon,  3 Jul 2023 11:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688384936;
-        bh=94E1xNeUaIhmByKLDdNMrVR1xm0w+a+Mcuf+Blcmadc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WbI6uLApPdI5dT9UVGlzwVzAKqDwBkfbJje5v74MQrn25edivWB2mBcmuQhny5Btt
-         f0SF+P1kYRMTnOyNdM0bSQkbYxL6R+gxLAdRD2sMaYYI/2q47d3BmAIIc7InTkbm+z
-         PzZZ5TyPUMkwOShlfNTsksnsVZg5JfRgZo2+RmlA1uUhFdCxyjx6j7pJZiQ5DLkqWi
-         YGr0jG96eySZaUmlVuxVOyK+3CFFeknltvP0Dwdy8b6t5pbNogHWoMFaMrWeQMm5W2
-         pDjSKb2MoXUxAc2LOu9dMKvHzFEXFr7tCimrdivOf3r524jlPSS9z7IbKV0SM+bOn3
-         CemdKD6+pQKYg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Sagar Biradar <sagar.biradar@microchip.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Gilbert Wu <gilbert.wu@microchip.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: aacraid: avoid -Warray-bounds warning
-Date:   Mon,  3 Jul 2023 13:48:46 +0200
-Message-Id: <20230703114851.1194510-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 3 Jul 2023 07:49:41 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2595910E;
+        Mon,  3 Jul 2023 04:49:40 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-c581c758ad8so464395276.1;
+        Mon, 03 Jul 2023 04:49:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688384979; x=1690976979;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P4/+ijC8ulIilId4/4aWiJo6sUOIg4T/2au1tamaqkM=;
+        b=Eqdhh2pYLRYVzvxhWswWn14n4OSUefQfZlAmztQnO5YC3g2WHPaAPSgHl8XtaCGUHk
+         0XZFa7qPl+ikLmuPODq+/K767SozOuNgPD1w5wRpJuEoHYgkYgzStEXJ0yGwN+rpASZV
+         xeGiC/7S62QIu+S9CTlduWIFmbIBuyZOGUat7YvrCzTy3h3Fl4A0e7AvZfV2rQKLNDmp
+         MHJiKFy3JrhK4CEyfp+jkEhv1ilEBq6Ex6yvlQjEpAP7/DRul1mPXpFa3W35eWGjBNZ3
+         h34Sy4GO+2LUbdDA3ZNGNHulvR9fQZq7SYfcPE+c94PrAlWoVTX74uzPGj7oDoBt5La/
+         cq+A==
+X-Gm-Message-State: ABy/qLaDIBVvqXIjclQMIAijGgev8Ltu4WztJBBxXXzwxdWrrJjOPkUx
+        BdNtEVoddFWDUFycxUYzHPUHnTooBBiZvQ==
+X-Google-Smtp-Source: APBJJlHxjtuPRK3X98XwAKDaWlFDQ1ONdvROkwR297HH2ssQ0lNcYS4pgb9FILLcgqihXp3Jbe8vUA==
+X-Received: by 2002:a25:f204:0:b0:c4c:ec2c:3c9a with SMTP id i4-20020a25f204000000b00c4cec2c3c9amr4240270ybe.16.1688384979088;
+        Mon, 03 Jul 2023 04:49:39 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id v70-20020a252f49000000b00c4d485120d5sm955866ybv.31.2023.07.03.04.49.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 04:49:38 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-be49ca27e1fso4819101276.3;
+        Mon, 03 Jul 2023 04:49:37 -0700 (PDT)
+X-Received: by 2002:a25:ae26:0:b0:c3c:b8fb:524e with SMTP id
+ a38-20020a25ae26000000b00c3cb8fb524emr8785588ybj.64.1688384977235; Mon, 03
+ Jul 2023 04:49:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com> <20230622113341.657842-6-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230622113341.657842-6-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 3 Jul 2023 13:49:26 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXH_ipqCYY35bQd6BM5ZkkimHRfd8mg34mTqbPnyBM+4g@mail.gmail.com>
+Message-ID: <CAMuHMdXH_ipqCYY35bQd6BM5ZkkimHRfd8mg34mTqbPnyBM+4g@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] arm64: defconfig: Enable Renesas RZ/V2M CSI driver
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Jun 22, 2023 at 1:34 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> Enable CSI driver support for Renesas RZ/V2M based platforms.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
+>
+> v2: no changes
 
-The one-element array in aac_aifcmd is actually meant as a flexible array,
-and causes an overflow warning that can be avoided using the normal
-flex arrays:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.6.
 
-drivers/scsi/aacraid/commsup.c:1166:17: error: array index 1 is past the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-                                (((__le32 *)aifcmd->data)[1] == cpu_to_le32(3));
-                                            ^             ~
+Gr{oetje,eeting}s,
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/scsi/aacraid/aacraid.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+                        Geert
 
-diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-index 7c6efde75da66..73b6ac0c01f54 100644
---- a/drivers/scsi/aacraid/aacraid.h
-+++ b/drivers/scsi/aacraid/aacraid.h
-@@ -2618,7 +2618,7 @@ struct aac_hba_info {
- struct aac_aifcmd {
- 	__le32 command;		/* Tell host what type of notify this is */
- 	__le32 seqnum;		/* To allow ordering of reports (if necessary) */
--	u8 data[1];		/* Undefined length (from kernel viewpoint) */
-+	u8 data[];		/* Undefined length (from kernel viewpoint) */
- };
- 
- /**
 -- 
-2.39.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
