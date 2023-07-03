@@ -2,163 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E89F7455FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D14C7455FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjGCHZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S229657AbjGCHZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjGCHZz (ORCPT
+        with ESMTP id S230114AbjGCHZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:25:55 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EAC7E56;
-        Mon,  3 Jul 2023 00:25:45 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3637POX9022120;
-        Mon, 3 Jul 2023 09:25:24 +0200
-Date:   Mon, 3 Jul 2023 09:25:24 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux@weissschuh.net,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
-Message-ID: <ZKJ35DyPOG+LAy5j@1wt.eu>
-References: <20230702193306.GK16233@1wt.eu>
- <20230703060323.487347-1-falcon@tinylab.org>
+        Mon, 3 Jul 2023 03:25:48 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5FEAE6C;
+        Mon,  3 Jul 2023 00:25:34 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 1F2C31D74;
+        Mon,  3 Jul 2023 07:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1688368821;
+        bh=idQe/8I4/xtf47MoCwShCKiDMRqvp0LjVacaYr6AkWU=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=jqwwrq8B8R664q9ffRJjmOoR2X8CkRNU4rlXglrlwAsRvgRunVJuYY9Nzd/Serb3x
+         wZNXxN6TabamoZsxq4gvnA44ipNC5KLs/YzKRjXVD6bnZ+qF++zZ+TN646VFIW2Hp8
+         g+7ng2XewnogU8vU+K6qNydqFDKkhcl9brgaeiik=
+Received: from [192.168.211.138] (192.168.211.138) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 3 Jul 2023 10:25:32 +0300
+Message-ID: <d402810a-3f1a-4e9c-eb05-4445d80569bc@paragon-software.com>
+Date:   Mon, 3 Jul 2023 11:25:31 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703060323.487347-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: [PATCH 3/8] fs/ntfs3: Minor code refactoring and formatting
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <e41f6717-7c70-edf2-2d3a-8034840d14c5@paragon-software.com>
+In-Reply-To: <e41f6717-7c70-edf2-2d3a-8034840d14c5@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.211.138]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 02:03:23PM +0800, Zhangjin Wu wrote:
-> > > - the others, for kernel without procfs
-> > >   let it pass even with 'worst case' kernel configs
-> > 
-> > You should include /dev/zero, which is commonly used to allocate anonymous
-> > memory and is more likely present and readable than any of the other files.
-> > And another file of choice is obviously argv[0] ;-)  In this case you don't
-> > need any of the other extra ones. Thus I could suggest that you try in this
-> > order:
-> > 
-> >     /dev/zero, /proc/self/exe, /proc/1/exe, argv[0]
-> > 
-> > and be done with it. That doesn't prevent one from extending the list if
-> > really needed later, but I doubt it would be needed. Also, it's already
-> > arranged in a read-write, then read-only fallbacks mode, so if we later
-> > need to add more complex tests involving writes, the writable /dev/zero
-> > will have precedence.
-> >
-> 
-> Cool, both /dev/zero and argv[0] are very good candidates ;-)
-> 
-> Just verified both of them, works perfectly.
-> 
-> - /dev/zero
-> 
->   we need to mknod it in prepare()
+Trim spaces and clang-format.
+Add comment for mi_enum_attr.
 
-Indeed.
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/namei.c  | 2 +-
+  fs/ntfs3/ntfs.h   | 2 +-
+  fs/ntfs3/record.c | 6 ++++++
+  fs/ntfs3/super.c  | 3 +--
+  fs/ntfs3/xattr.c  | 3 ++-
+  5 files changed, 11 insertions(+), 5 deletions(-)
 
->   and also, in test_mmap_munmap(),
->   stat() return a zero size of /dev/zero, in this case, we should assign
->   a non-zero file_size ourselves.
-> 
->     -       file_size = stat_buf.st_size;
->     +       /* file size of the special /dev/zero is 0, let's assign one manually */
->     +       if (i == 0)
->     +               file_size = 3*page_size - 1;
->     +       else
->     +               file_size = stat_buf.st_size;
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 70f8c859e0ad..dd38dbf30add 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -376,7 +376,7 @@ static int ntfs_atomic_open(struct inode *dir, 
+struct dentry *dentry,
 
-OK but why this -1 ? That doesn't sound right, unless you explicitly want
-a file size that's not multiple of a page size for whatever reason ?
+  #ifdef CONFIG_NTFS3_FS_POSIX_ACL
+      if (IS_POSIXACL(dir)) {
+-        /*
++        /*
+           * Load in cache current acl to avoid ni_lock(dir):
+           * ntfs_create_inode -> ntfs_init_acl -> posix_acl_create ->
+           * ntfs_get_acl -> ntfs_get_acl_ex -> ni_lock
+diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
+index 98b76d1b09e7..86aecbb01a92 100644
+--- a/fs/ntfs3/ntfs.h
++++ b/fs/ntfs3/ntfs.h
+@@ -847,7 +847,7 @@ struct OBJECT_ID {
+      // Birth Volume Id is the Object Id of the Volume on.
+      // which the Object Id was allocated. It never changes.
+      struct GUID BirthVolumeId; //0x10:
+-
++
+      // Birth Object Id is the first Object Id that was
+      // ever assigned to this MFT Record. I.e. If the Object Id
+      // is changed for some reason, this field will reflect the
+diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
+index c12ebffc94da..cae939cb42cf 100644
+--- a/fs/ntfs3/record.c
++++ b/fs/ntfs3/record.c
+@@ -189,6 +189,12 @@ int mi_read(struct mft_inode *mi, bool is_mft)
+      return err;
+  }
 
-> - argv[0]
-> 
->   since nolibc has no realpath() currently, we can simply
->   support the current path and the absolute path like this:
-> 
->     nolibc-test.c:
-> 
->     /* assigned as argv[0] in main(), will be used by some tests */
->     static char exe[PATH_MAX + 1];
-> 
->     main():
-> 
->     /* get absolute path of myself, nolibc has no realpath() currently */
->     #ifndef NOLIBC
->             realpath(argv[0], exe);
->     #else
->             /* assume absolute path has no "./" */
->             if (strncmp(argv[0], "./", 2) != 0)
->                     strncat(exe, argv[0], strlen(argv[0]) + 1);
->             else {
->                     pwd = getenv("PWD");
->                     /* skip the ending '\0' */
->                     strncat(exe, getenv("PWD"), strlen(pwd));
->                     /* skip the first '.' */
->                     strncat(exe, argv[0] + 1, strlen(argv[0]));
->             }
->     #endif
++/*
++ * mi_enum_attr - start/continue attributes enumeration in record.
++ *
++ * NOTE: mi->mrec - memory of size sbi->record_size
++ * here we sure that mi->mrec->total == sbi->record_size (see mi_read)
++ */
+  struct ATTRIB *mi_enum_attr(struct mft_inode *mi, struct ATTRIB *attr)
+  {
+      const struct MFT_REC *rec = mi->mrec;
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 1a02072b6b0e..d24f2da36bb2 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -488,7 +488,6 @@ static ssize_t ntfs3_label_write(struct file *file, 
+const char __user *buffer,
+  {
+      int err;
+      struct super_block *sb = pde_data(file_inode(file));
+-    struct ntfs_sb_info *sbi = sb->s_fs_info;
+      ssize_t ret = count;
+      u8 *label = kmalloc(count, GFP_NOFS);
 
-No, please, not like this. Just copy argv[0] (the pointer not the
-contents) and you're fine:
+@@ -502,7 +501,7 @@ static ssize_t ntfs3_label_write(struct file *file, 
+const char __user *buffer,
+      while (ret > 0 && label[ret - 1] == '\n')
+          ret -= 1;
 
-    static const char *argv0;
+-    err = ntfs_set_label(sbi, label, ret);
++    err = ntfs_set_label(sb->s_fs_info, label, ret);
 
-    int main(int argc, char **argv, char **envp)
-    {
-            argv0 = argv[0];
-            ...
-    }
+      if (err < 0) {
+          ntfs_err(sb, "failed (%d) to write label", err);
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index 1a518550c317..c59d6f5a725a 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -211,7 +211,8 @@ static ssize_t ntfs_list_ea(struct ntfs_inode *ni, 
+char *buffer,
+      size = le32_to_cpu(info->size);
 
-Nothing more, nothing less. Your program will always have its correct
-path when being called unless someone purposely forces it to something
-different, which is not our concern at all since this is a test program.
-And I'd rather call it "argv0" which exactly tells us what it contains
-than "exe" which can be misleading for that precise reason.
+      /* Enumerate all xattrs. */
+-    for (ret = 0, off = 0; off + sizeof(struct EA_FULL) < size; off += 
+ea_size) {
++    ret = 0;
++    for (off = 0; off + sizeof(struct EA_FULL) < size; off += ea_size) {
+          ea = Add2Ptr(ea_all, off);
+          ea_size = unpacked_ea_size(ea);
 
-> A full functional realpath() is a little complex, such as '../' support and
-> even symlink support, let's delay its requirement at current stage ;-)
+-- 
+2.34.1
 
-Please do not even engage into this, and keep in mind that the sole
-purpose of this test program is to help developers simply add tests to
-the set of existing ones. If the program becomes complex for doing stuff
-that is out of its scope, it will become much harder to extend and users
-will lose interest and motivation for updating it.
 
-> one or both of them may also help the other test cases:
-> 
-> - chroot_exe (used '/init' before)
-> 
->     CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot(proc ? "/proc/self/exe" : exe), -1, ENOTDIR); break;
-> 
-> - chmod_exe (replace the one: chmod_tmpdir in another patchset)
-> 
->     CASE_TEST(chmod_exe);       EXPECT_SYSZR(1, chmod(proc ? "/proc/self/exe" : exe, 0555)); break;
-> 
->     It should be safe enough to only remove the writable attribute for the test
->     program.
-> 
-> - stat_timestamps (used '/init' before)
-> 
->     if (stat("/proc/self/", &st) && stat(exe, &st) && stat("/dev/zero", &st) && stat("/", &st))
-
-Indeed, why not!
-
-> Will update the related patches with them.
-
-OK thanks!
-Willy
