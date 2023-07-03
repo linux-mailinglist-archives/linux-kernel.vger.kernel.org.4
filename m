@@ -2,138 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00FE7464D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E7C7464D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjGCV0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 17:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S230367AbjGCV1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 17:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjGCV0G (ORCPT
+        with ESMTP id S230341AbjGCV1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:26:06 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58392E62;
-        Mon,  3 Jul 2023 14:26:02 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-66872d4a141so2911439b3a.1;
-        Mon, 03 Jul 2023 14:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688419562; x=1691011562;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4bmKZ8Y/bfL0lMK2TktVUvKgxAR9Wdg/glmHijui0lE=;
-        b=X0JQ3sIwqpDsvmjbL/qFyefRXGKaTd5daOZPNF2QsYjbFKpMdoOlyCTdiGdXZLLbmn
-         TE9h280nCAXRyMRPToBUNcG8wns2Rneev2GL7FvLyhBReWy/YoYZwD9SoVreW50lHhuo
-         03VjIVhjvpbWh8t1UJeByciP0JY0fABpW917T7Fp7e/0UHwU3Ii09aT7mNPqV2TLCWIN
-         ZdJUuDkmCx/m/6EqLMdKHHYdpLRnGMHHW3DqQSjbxegGW+/JXhrLyHByrIle4ovAchPk
-         j3Fbs+aCtoc2liyztfxUtZA7msaF0e2rgyrcMKlvu267D/wBq3sT9TgluWPFBu20ujC+
-         xghw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688419562; x=1691011562;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4bmKZ8Y/bfL0lMK2TktVUvKgxAR9Wdg/glmHijui0lE=;
-        b=CgcVbXXve6/xLpMsGicf6Ox+bz/FRsu4CxVy6dy2cnFpU02gOYXEztTTxjyhkpOaoi
-         Ia6psj4GUa3rL1oYCtzXFXiuUsQFfJxiYV45wWqQGxJzeBLyb1sgYI/MrEV8CdypmMym
-         h6DwHySc4h1ht/LjX84FyJPs+sOj7Hv8JT9uQGJapVXGJWC4traaO3YYY8EEPhbOERC6
-         4vwW1YadZ6ESpjsL1GrijOPD+HdxnajtR/ZjIleY+8gtlhqDQ0Bnmuo670SxVkWHjUSW
-         LIz8EfT8XIj0x45qIak6SZGZlLsHKe9Ex/7bhxGHLWw8PC4BfFdE5Eju9S0srIjL5CcD
-         jXKw==
-X-Gm-Message-State: AC+VfDx5Ndkdv32CBzhZc0x6GH/GQiG//iyGWI3h6KxOEyvQrxZqqQDG
-        iwtsU4UFSN+ReQAt85g6Unc=
-X-Google-Smtp-Source: ACHHUZ67vfjG9TOTuz6vIg9/gI1HAJ/DfD0VsFRyLGeO9oxaqDjP6MJNysppVbEjM9Xymhho6qmNdw==
-X-Received: by 2002:a05:6a20:8f16:b0:12d:3d9e:2934 with SMTP id b22-20020a056a208f1600b0012d3d9e2934mr9111623pzk.44.1688419561631;
-        Mon, 03 Jul 2023 14:26:01 -0700 (PDT)
-Received: from localhost ([2605:59c8:148:ba10::41f])
-        by smtp.gmail.com with ESMTPSA id a13-20020a1709027d8d00b001acae9734c0sm15690664plm.266.2023.07.03.14.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 14:26:01 -0700 (PDT)
-Date:   Mon, 03 Jul 2023 14:25:59 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     =?UTF-8?B?SsO2cm4tVGhvcmJlbiBIaW56?= <jthinz@mailbox.tu-berlin.de>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     =?UTF-8?B?SsO2cm4tVGhvcmJlbiBIaW56?= <jthinz@mailbox.tu-berlin.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Deepa Dinamani <deepa.kernel@gmail.com>
-Message-ID: <64a33ce7b50d2_6520520875@john.notmuch>
-In-Reply-To: <20230703175048.151683-1-jthinz@mailbox.tu-berlin.de>
-References: <20230703175048.151683-1-jthinz@mailbox.tu-berlin.de>
-Subject: RE: [PATCH 0/2] bpf, net: Allow setting SO_TIMESTAMPING* from BPF
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 17:27:47 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80342E62
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 14:27:45 -0700 (PDT)
+Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 70b68763-19e8-11ee-abf4-005056bdd08f;
+        Tue, 04 Jul 2023 00:27:41 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Tue, 4 Jul 2023 00:27:40 +0300
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     andy.shevchenko@gmail.com,
+        Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v3 2/4] firmware: arm_scmi: Add SCMI v3.2 pincontrol
+ protocol basic support
+Message-ID: <ZKM9TMHEMkMNaKt9@surfacebook>
+References: <cover.1686063941.git.oleksii_moisieiev@epam.com>
+ <d388c7af3f72fd47baffe0de8c6fec8074cb483c.1686063941.git.oleksii_moisieiev@epam.com>
+ <ZIAtdLTvM6qh4r9W@surfacebook>
+ <ZJ78hBcjAhiU+ZBO@e120937-lin>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJ78hBcjAhiU+ZBO@e120937-lin>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J=C3=B6rn-Thorben Hinz wrote:
-> BPF applications, e.g., a TCP congestion control, might benefit from
-> precise packet timestamps. These timestamps are already available in
-> __sk_buff and bpf_sock_ops, but could not be requested: A BPF program
-> was not allowed to set SO_TIMESTAMPING* on a socket. This change enable=
-s
-> BPF programs to actively request the generation of timestamps from a
-> stream socket.
-> =
+Fri, Jun 30, 2023 at 05:02:12PM +0100, Cristian Marussi kirjoitti:
+> On Wed, Jun 07, 2023 at 10:10:44AM +0300, andy.shevchenko@gmail.com wrote:
+> > Tue, Jun 06, 2023 at 04:22:27PM +0000, Oleksii Moisieiev kirjoitti:
 
-> To reuse the setget_sockopt BPF prog test for
-> bpf_{get,set}sockopt(SO_TIMESTAMPING_NEW), also implement the missing
-> getsockopt(SO_TIMESTAMPING_NEW) in the network stack.
-> =
+...
 
-> I reckon the way I added getsockopt(SO_TIMESTAMPING_NEW) causes an API
-> change: For existing users that set SO_TIMESTAMPING_NEW but queried
-> SO_TIMESTAMPING_OLD afterwards, it would now look as if no timestamping=
+> > > -scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o
+> > > +scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o pinctrl.o
+> > 
+> > Why not splitting it and make it ordered?
+> 
+> Maybe a good idea for a separate cleanup...not sure can fit this series
+> without causing churn with other in-flight SCMI series...I'll happily wait
+> for Sudeep to decide.
 
-> flags have been set. Is this an acceptable change? If not, I=E2=80=99m =
-happy to
-> change getsockopt() to only be strict about the newly-implemented
-> getsockopt(SO_TIMESTAMPING_NEW), or not distinguish between
-> SO_TIMESTAMPING_NEW and SO_TIMESTAMPING_OLD at all.
+Sure.
 
-Yeah, I think it would be best if we keep the old behavior and let
-SO_TIMESTAMPING_OLD return timestamps for both new/old. It looks
-like it should be relatively easy to implement?
+...
 
-Otherwise the series lgtm.
+> > Missing headers:
+> > 
+> > 	bitfield.h
+> > 	bits.h
+> > 	byteorder/
+> > 	types.h
+> > 
+> > > +#include <linux/module.h>
+> > > +#include <linux/scmi_protocol.h>
+> > > +#include <linux/slab.h>
+> > 
+> > Missing
+> > 
+> > 	asm/unaligned.h
+> 
+> Most if not all of these headers are already included by the
+> 
+> 	#include "protocols.h"
+> 
+> above that introduces a lot of common other stuff needed to implement
+> a new SCMI protocol.
 
-> =
+OK!
 
-> J=C3=B6rn-Thorben Hinz (2):
->   net: Implement missing getsockopt(SO_TIMESTAMPING_NEW)
->   bpf: Allow setting SO_TIMESTAMPING* with bpf_setsockopt()
-> =
+...
 
->  include/uapi/linux/bpf.h                            | 3 ++-
->  net/core/filter.c                                   | 2 ++
->  net/core/sock.c                                     | 9 +++++++--
->  tools/include/uapi/linux/bpf.h                      | 3 ++-
->  tools/testing/selftests/bpf/progs/bpf_tracing_net.h | 2 ++
->  tools/testing/selftests/bpf/progs/setget_sockopt.c  | 4 ++++
->  6 files changed, 19 insertions(+), 4 deletions(-)
-> =
+> > > +	ret = ph->xops->do_xfer(ph, t);
+> > > +	if (!ret) {
+> > 
+> > Can you rather follow the usual pattern, i.e. checking for the errors?
+> 
+> I think Oleksii here followed the (opinable maybe) pattern we have in
+> the SCMI stack where typically you get/build/send/put an scmi message
+> (xfer) while doing a few things only if the message was sent
+> successfully (if !ret ... most of the time): checking for success avoid
+> a lot of 'goto err:' all around.
 
-> -- =
+If it's
+	ret = fpp();
+	if (!ret)
+		ret = bpp();
+	return ret;
 
-> 2.39.2
-> =
+I would agree with you, but in some cases it involves more core and that code
+doesn't affect ret itself.
 
-> =
+> > > +	}
+
+...
+
+> > All the same, why devm_*() is in use and what are the object lifetimes?
+> 
+> This bit about alocation and devres deserves an explanation in the context
+> of the SCMI stack.
+> 
+> So, you can add support for a new SCMI protocol using the below macro
+> 
+>  DEFINE_SCMI_PROTOCOL_REGISTER_UNREGISTER
+> 
+> to register with the core SCMI stack a few things like an
+> initialization function and the protocol operations you wish this
+> protocol to expose.
+> 
+> At run-time, once the first user of your new protocol comes up (like
+> the pinctrl driver later in the series), the core SCMI will take care
+> to setup and initialize the protocol so that can be used by the SCMI
+> drivers (like pinctrl-scmi.c) via its exposed proto_operations.
+> (assuming the protocol has been also found as supported by the fw
+> serving as the SCMI server)
+> 
+> When the last user of a protocol is gone, similarly, the protocol
+> will be deinitialized (if anything is needed to be deinit really...)
+> 
+> Basically the core calls upfront the protocol_init function you provided
+> and passes to it a ph protocol_handle that embeds a number of things
+> useful for protocol implementations, like as example the xops-> needed
+> to build and send messages using the core facilities.
+> 
+> Another thing that is embedded in the ph, as you noticed, is the ph->dev
+> device reference to be optionally used for devres in your protocol: now,
+> we do NOT have per-protocol devices, so, that device lifetine is NOT bound
+> strictly to this protocol but to the whole stack... BUT the SCMI core
+> takes care to open/close a devres group around your protocol_init invocation,
+> so that you can use devres on your .protocol_init, and be assured that when
+> your protocol will be de-initialized (since no more used by anyone) all your
+> devres allocations will be freed.
+> 
+> For this see:
+> 
+>  drivers/firmware/arm_scmi/driver.c::scmi_alloc_init_protocol_instance()
+> 
+> This clearly works ONLY for allocations descending directly from the
+> .protocol_init() call (when the devres group is open) and it was working
+> fine till today for all protocols, since all existing protocols
+> allocated all what they needed during protocol_init....
+> 
+> ... Pinctrl is a differenet beast, though, since it could make sense indeed
+> (even though still under a bit of discussion..) to delay some allocations and
+> SCMI querying to the platform after the protocol_init stage...i.e. lazy allocate
+> some resources only later when the pinctrl subsystem will parse the DT and will
+> ask the pinctrl-scmi driver just for the strictly needed resources.
+> (so you avoid to query and allocate at boot time a bunch of pin stuff that you
+> will never use...)
+> 
+> These lazy allocations instead, like the ones in scmi_pinctrl_get_group_info(),
+> happen outside of the .protocol_init path so they HAVE TO to be explicitly
+> managed manually without devres; as a consequence the addition of a
+> dedicated .protocol_deinit() function and the frees on the err path: so
+> that anything non devres allocated in the protcol devres_group can be
+> freed properly when the core deinitializes the protocol.
+> 
+> What is WRONG, though, in this patch (and I missed it ... my bad) is that such
+> explicit manual alloc/dealloc need not and should not be of devres kind but just
+> plain simple kmalloc_ / kfree.
+> (even though it is not harmful in this context...the ph->dev never unbounds till
+> the end of the stack..it is certainkly not needed and confusing)
+> 
+> Hoping not to have bored you to death with all of this SCMI digression... :D
+
+Thank you for a dive into the implementation of the SCMI. Perhaps you can
+summarize that into some kernel doc aroung thouse callbacks, so people can
+clearly see when it's possible and when it's not to use devm_*() APIs.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
