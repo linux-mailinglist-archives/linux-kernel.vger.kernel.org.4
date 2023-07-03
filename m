@@ -2,180 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B00B745FC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD70745FCA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjGCPZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        id S230050AbjGCP0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjGCPZm (ORCPT
+        with ESMTP id S229930AbjGCP0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:25:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0D5E62
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688397895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zFg0SW/Ml+QzpZbtGhGaAsAD9yjqCyWD3c3Go1nt0PM=;
-        b=QEh6sv+U3Y0vsHFFkXj5PJr/iTUqa9wSydwjQEG8pH55drMGO3JmYlyVzzOBEaD+8oMXO/
-        ncZqAcIss8KHu0Gsf4oz/id+hM+efd+caUtvOZmuk4BlHyDfSlqC3oiM+YCq8WSBNXntmu
-        HdgPtcNXfc8y6iLB42A44NzwgSprBoY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-339-29YVQJo1MLm4wvNiQIdEQg-1; Mon, 03 Jul 2023 11:24:49 -0400
-X-MC-Unique: 29YVQJo1MLm4wvNiQIdEQg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DE73185A78B;
-        Mon,  3 Jul 2023 15:24:48 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.39.194.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 57266492B01;
-        Mon,  3 Jul 2023 15:24:44 +0000 (UTC)
-Date:   Mon, 3 Jul 2023 11:24:40 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v4] Sched/fair: Block nohz tick_stop when cfs bandwidth
- in use
-Message-ID: <20230703152440.GC67396@lorien.usersys.redhat.com>
-References: <20230630135714.1018434-1-pauld@redhat.com>
- <20230630150641.GH2533791@hirez.programming.kicks-ass.net>
- <20230630152824.GC43299@lorien.usersys.redhat.com>
- <20230630160534.GA2534344@hirez.programming.kicks-ass.net>
- <20230630162910.GD43299@lorien.usersys.redhat.com>
- <20230703121009.GH4253@hirez.programming.kicks-ass.net>
- <20230703141056.GA67396@lorien.usersys.redhat.com>
- <20230703143257.GY83892@hirez.programming.kicks-ass.net>
+        Mon, 3 Jul 2023 11:26:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F368E66;
+        Mon,  3 Jul 2023 08:26:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688397963; x=1719933963;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kj6e5XFo1qU/JWRexT6QL5AcQhLeMKD04nwS981R7Mk=;
+  b=bHlyziwdI3jDBrhqVAB+bZeZThMdrecTUzVklE9qmdFWrnIifXNUwKNo
+   K0Ei7w2n95GykkpIirh8B7vQsjq1ow8OFTdpHbD5QlwJ6VXbait9TK3/M
+   MRnKlI4XaqoQxIV56PXk7kk318Y32lqsAxq7FZtu4nS6ByE5+IVY9VvZb
+   7kr8Ik1bj6uZXLHby43LqGe6tYA8Ej3XzLPHcRwYmlGaNn39El5WjIAT9
+   Iai3E1KmfXHDqfFTs1wgy/T73p4x0ePvZ2KdbvoB/VO8nkpRLR89bJsoM
+   PhIUAZrCeG5zh26Mbgi6Wjx46OOuE0089r6uLi/JGDfBm+4UNfTgB9YI5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="428950439"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="428950439"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 08:26:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="668786413"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="668786413"
+Received: from lbates-mobl.amr.corp.intel.com (HELO [10.212.242.115]) ([10.212.242.115])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 08:26:01 -0700
+Message-ID: <8c080959-e1a5-6768-934d-33eca8e04086@intel.com>
+Date:   Mon, 3 Jul 2023 08:26:00 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703143257.GY83892@hirez.programming.kicks-ass.net>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+ <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
+ <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net>
+ <20230630190514.GH3436214@ls.amr.corp.intel.com>
+ <ZJ9IKALhz1Q6ogu1@google.com>
+ <20230703104942.GG4253@hirez.programming.kicks-ass.net>
+ <eb83e722-0379-1451-9c9c-9b9de33cb4cb@intel.com>
+ <20230703150330.GA83892@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230703150330.GA83892@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 04:32:57PM +0200 Peter Zijlstra wrote:
-> On Mon, Jul 03, 2023 at 10:10:56AM -0400, Phil Auld wrote:
-> > On Mon, Jul 03, 2023 at 02:10:09PM +0200 Peter Zijlstra wrote:
-> > > On Fri, Jun 30, 2023 at 12:29:10PM -0400, Phil Auld wrote:
-> > > 
-> > > > I think you are agreeing that I need the pick next code but need to remove
-> > > > the hierarchy walks, right?
-> > > 
-> > > Yeah, the dequeue case makes we have to care about pick, not sure we
-> > > then also need to care about sched_update_tick_dependency() though.
-> > > There is indeed a window where these two will 'race', but afaict it is
-> > > benign.
-> > > 
-> > 
-> > Hm, that's confusing.
-> > 
-> > As I see it it's the enqueue case (0->1 mostly) where we need the check
-> > in pick.  At that point in enqueue we only have a handle on ->curr which
-> > is the idle thread.
+On 7/3/23 08:03, Peter Zijlstra wrote:
+> On Mon, Jul 03, 2023 at 07:40:55AM -0700, Dave Hansen wrote:
+>> On 7/3/23 03:49, Peter Zijlstra wrote:
+>>>> There are also latency and noisy neighbor concerns, e.g. we *really* don't want
+>>>> to end up in a situation where creating a TDX guest for a customer can observe
+>>>> arbitrary latency *and* potentially be disruptive to VMs already running on the
+>>>> host.
+>>> Well, that's a quality of implementation issue with the whole TDX
+>>> crapola. Sounds like we want to impose latency constraints on the
+>>> various TDX calls. Allowing it to consume arbitrary amounts of CPU time
+>>> is unacceptable in any case.
+>>
+>> For what it's worth, everybody knew that calling into the TDX module was
+>> going to be a black hole and that consuming large amounts of CPU at
+>> random times would drive people bat guano crazy.
+>>
+>> The TDX Module ABI spec does have "Leaf Function Latency" warnings for
+>> some of the module calls.  But, it's basically a binary thing.  A call
+>> is either normal or "longer than most".
+>>
+>> The majority of the "longer than most" cases are for initialization.
+>> The _most_ obscene runtime ones are chunked up and can return partial
+>> progress to limit latency spikes.  But I don't think folks tried as hard
+>> on the initialization calls since they're only called once which
+>> actually seems pretty reasonable to me.
+>>
+>> Maybe we need three classes of "Leaf Function Latency":
+>> 1. Sane
+>> 2. "Longer than most"
+>> 3. Better turn the NMI watchdog off before calling this. :)
+>>
+>> Would that help?
 > 
-> Well, the 0->1 case is trivial, we'll run the task that's enqueued, and
-> as such everything can DTRT and be simple.
->
-
-Right, but we have to do it (check for bw_constraint and set the TICK_DEP bit)
-in pick because we don't have a handle on the task that's enqueued in
-sched_update_tick_dependency(). Simple :)
-
-> > For the dequeue case (2->1) we need the check in the
-> > sched_update_tick_dependency() path because if the 1 is the task on the
-> > cpu (and is staying there) then we'd otherwise clear the bit when we
-> > shouldn't (since we aren't going to go back through pick).
+> I'm thikning we want something along the lines of the Xen preemptible
+> hypercalls, except less crazy. Where the caller does:
 > 
-> The 2->1 case OTOH is tricky, because then we'll end up running a task
-> we've not recently seen. sub_nr_running() will hit the ==1 case and
-> clear TICK_DEP_BIT_SCHED.
+> 	for (;;) {
+> 		ret = tdcall(fn, args);
+> 		if (ret == -EAGAIN) {
+> 			cond_resched();
+> 			continue;
+> 		}
+> 		break;
+> 	}
 > 
-> But then pick will come and set it again, no harm done, right?
-> 
-> .oO Ah!, You're worried about the case where a task is already running,
-> a second task comes in, (1->2) and then quickly leaves again (2->1)
-> without passing through schedule(). And you don't want to disable the
-> tick if that running task needs it.
-> 
-> Mooo :-(
->
+> And then the TDX black box provides a guarantee that any one tdcall (or
+> seamcall or whatever) never takes more than X ns (possibly even
+> configurable) and we get to raise a bug report if we can prove it
+> actually takes longer.
 
-Yeah, Ben pointed that out and then I was able to rt-app a way to hit it
-reliably.
+It's _supposed_ to be doing something kinda like that.  For instance, in
+the places that need locking, the TDX module essentially does:
 
-> > I'm thinking that I'll try to set the bit in pick since we only care about
-> > it when it's the task on the cpu.  That, I think, will simplify the
-> > code needed to update the bit when the quota is changed (to or from
-> > RUNTIME_INF).
-> > 
-> > Setting the bit in enqueue/dequeue means updating it on all the queued
-> > task if it changes. Although I may clear it in dequeue just to not leave
-> > it around stale.
-> 
-> Hmm, no you have to set on enqueue (1->2), otherwise the running task
-> doesn't get preempted when it runs out of slice.
+	if (!trylock(&lock))
+		return -EBUSY;
 
-Sorry, I'm not sure I'm following. I meant the bw_constrained bit in the
-task not the actual TICK_DEP bit. 
+which is a heck of a lot better than spinning in the TDX module.  Those
+module locks are also almost always for things that *also* have some
+kind of concurrency control in Linux too.
 
-So in this case we don't go through pick because we may be preempting
-from say a wakeup? If we stay at 2 none of this matters because
-the existing tick_dependency stuff will work (nr_running > 1)
-
-That's why I wanted to clarify which bit I was talking about where.
-
-Ah... If we go from 1->2 via a wakeup and preempt rather than pick_next
-then the task would not get the bw_constrained bit set if we
-then drop from 2->1.  Right, okay. Will need to set it in enqueue
-and update all queued tasks if bandwidth changes. Or also update it
-in pick, maybe. I.e. make sure task::bw_constrained is still right when
-we actually land on the cpu because the only place we really care about
-it is when we are ->curr.
-
-> 
-> And I don't suppose you want to delay clearing to the first tick after,
-> because NOHZ_FULL doesn't want spurious ticks :/
-
-Here you mean clearing the TICK_DEP yes?
-
->
-> What a mess.
-> 
-> Please document all these stupid cases in a comment, otherwise we'll go
-> bananas trying to make sense of the code later on.
-> 
-
-Will do. 
-
-Thanks for your input.
-
-
-Cheers,
-Phil
-
-
--- 
-
+*But*, there are also the really nasty calls that *do* take forever.  It
+would be great to have a list of them or, heck, even *enumeration* of
+which ones can take forever so we don't need to maintain a table.
