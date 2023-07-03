@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F37745495
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 06:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E085774549E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 06:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjGCEi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 00:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S229854AbjGCEqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 00:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjGCEiz (ORCPT
+        with ESMTP id S229481AbjGCEq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 00:38:55 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BFD1AB;
-        Sun,  2 Jul 2023 21:38:53 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so2891414a12.1;
-        Sun, 02 Jul 2023 21:38:53 -0700 (PDT)
+        Mon, 3 Jul 2023 00:46:29 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDA81AB;
+        Sun,  2 Jul 2023 21:46:28 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-66f3fc56ef4so2358609b3a.0;
+        Sun, 02 Jul 2023 21:46:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688359132; x=1690951132;
+        d=gmail.com; s=20221208; t=1688359588; x=1690951588;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=x0S1JkZS9qbPw++EtmvPDulhpZ8OPzh6zrJYaBNGJ5E=;
-        b=BZqRMUXyXM2dShSRH3UCrjwxxJ7bJsHRv5B81oEym9Ji4yYm14H3Ym3G3SZbMKCAdT
-         +D5WDqfvQEpmpXDyxdWn8gKVAbH88+9tkvYnGWQjpZCAx3FfbYrLjXQChLlqTFiTit+6
-         E9u4Fc9SOZn1cEiLjlpJ3aGZL9GGjuuQ/0LH1bRRcmlLze1COQQ7IO5LvJks/EvTePaA
-         0A6SXxmcGXJFtTbCDAMt6OwZO7DNfpP+KvCYKsXrb1xT6Asa+b+lQh0kIfl69BIDBlkh
-         aBwAbWYZFtWAp0c1zwh39Ps/P72sDyv8pTDiWrNlosnb9SXbEiA9Cme+U0qhBH4GzAe4
-         /lgQ==
+        bh=l0VKzbBNLxqu3gGmHDDoW4LuIz7xzbrZcoUmfJuSOyk=;
+        b=kV+xWXKfMNCEATcK+f32azw2YUhL1OWP6meKrLKeZiA/nz0Wa1m0EswI+7TdFTugnV
+         fdrtpo0rM+AHG0Os54BQ8lvrQQBkhRPG+ZQsumehFmbMVKAfjxPE29yGNI7L07XEFB1Q
+         IoaEMThzlYw0uR3Hyd8ffCPhPtMch+f73xkZL2Iw0ckqyJADbMDtNSRAmz5HTXxYL+22
+         1D7zWJYjKIxbx9sThmuH6gmxgtplTtDF+i2WFjnLWpHO4q+MSjPJ27O3mi+sYKsYfrp7
+         7ExJKqun4gtIc24KYbMHBU6+9oMGidocnObyNuPfFgnpNPKYl5mpBb41jp0pw4E9prt0
+         V8oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688359132; x=1690951132;
+        d=1e100.net; s=20221208; t=1688359588; x=1690951588;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=x0S1JkZS9qbPw++EtmvPDulhpZ8OPzh6zrJYaBNGJ5E=;
-        b=cGHLYuHDFqffzoH07QY3qNO0uug0GTYwXdPVqjZKO2qtKwXIM4yTMg+9rDcAXgYsfZ
-         hZePT3EDOlBsYlEkOqPjUI85ycEokg5jwqAZyqRVbnsJI/i/GsbL0B4r4HDHXg14Adj3
-         1Sb+aqf2wx7T1ndsFG5ecCwIQSihZA227S93nTbC7GjHMLqqQ96KMVDTX7i7yh5eBe2M
-         UHqrNT7eSa3qOdnITQ+fY3x8ZnRIP4tHfHrNAFZgd7WHQGngyuTfLHcHoRbNRZYU2qQO
-         FKAsGcVYbjDKdOl8sl/a7cHgvTBtj4AnCV4Y+NkeBGP7INfCBtwM5GSmS40O+3ywJREq
-         eqOA==
-X-Gm-Message-State: AC+VfDwIl1RLZgIhs2Lu8BcNiHPzfo6qar1bhERXhSXJY9pvCFxsCtn4
-        Xsr9Wo5T6oWjb7KXRSqBlGY=
-X-Google-Smtp-Source: ACHHUZ4QxPJKcVnTdgGxLR/w7Nx8q7LX8tuuv+hDEgiF3V6OnSmd6JafVd/ilnFNFh2yvFgA2/C5sw==
-X-Received: by 2002:a05:6a21:6d98:b0:10b:4539:fa0a with SMTP id wl24-20020a056a216d9800b0010b4539fa0amr14271676pzb.1.1688359132621;
-        Sun, 02 Jul 2023 21:38:52 -0700 (PDT)
+        bh=l0VKzbBNLxqu3gGmHDDoW4LuIz7xzbrZcoUmfJuSOyk=;
+        b=f44FqjFddd2JQmthGY3CecOkp3RCxCoOU1n5fCwZkqBo33x3NqFmbI9m09tKRGlvpE
+         RMLBrS79E/RAP9in/YTKbrUJR70w708+IDL3Y91FrQja0KYPIW3JoPEJWdmM/UnzTmT7
+         pu4KMLr4jg2sj8moo1YqxtEY9iAVPg40DFQSzjM86snDdxaarN6yZCQMY0U9uhokPHr5
+         pPVHKumHqLYR2/SPwpGUhRTWU2fE6M41Iu95k47L9mhmcDZ0VylL0eYbxBx6CDxsU4rV
+         07U5tI58RxCHw3s9SlUBAd8+kmEeSF7rYgB1zfhENpk/jgRexpvrx3yqOgk/Z11g2hT5
+         M+SQ==
+X-Gm-Message-State: AC+VfDwTyLoZ9VUNAQZIV2wMpB6aOHL4cDJP/fRammB8CbcvjmfS8sUc
+        Bb/qQ+bmMMHNqJhNUF8/6bC0lYp1EcU=
+X-Google-Smtp-Source: ACHHUZ7FtksFdEFtlY6ZTNL0YXn2cYhuLJ3YtmwO3oCe3+4jqZKATSFCMFL34loOC2oNJEajkcq4uw==
+X-Received: by 2002:a05:6a00:14d2:b0:67b:77e7:f467 with SMTP id w18-20020a056a0014d200b0067b77e7f467mr22181560pfu.16.1688359588134;
+        Sun, 02 Jul 2023 21:46:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e5-20020a62ee05000000b0064f76992905sm12974767pfi.202.2023.07.02.21.38.51
+        by smtp.gmail.com with ESMTPSA id a8-20020aa780c8000000b00662610cf7a8sm13631578pfn.172.2023.07.02.21.46.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jul 2023 21:38:52 -0700 (PDT)
+        Sun, 02 Jul 2023 21:46:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b27f513d-38a5-5422-ba32-f2ccfdfae909@roeck-us.net>
-Date:   Sun, 2 Jul 2023 21:38:50 -0700
+Message-ID: <2a2387bf-f589-6856-3583-d3d848a17d34@roeck-us.net>
+Date:   Sun, 2 Jul 2023 21:46:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
+Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LLVM <llvm@lists.linux.dev>,
-        linux-kbuild@vger.kernel.org,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
- <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook>
- <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
- <4ea9488c-0f98-89b4-7af3-174cfcdaa02c@alu.unizg.hr>
- <202307022115.D96AB033F@keescook>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Helge Deller <deller@gmx.de>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John David Anglin <dave.anglin@bell.net>
+References: <20230629184151.888604958@linuxfoundation.org>
+ <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
+ <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
+ <2023063001-overlying-browse-de1a@gregkh>
+ <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
+ <5fd98a09-4792-1433-752d-029ae3545168@gmx.de>
+ <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
+ <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com>
+ <9b35a19d-800c-f9f9-6b45-cf2038ef235f@roeck-us.net>
+ <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <202307022115.D96AB033F@keescook>
+In-Reply-To: <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,115 +90,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/2/23 21:30, Kees Cook wrote:
-> On Mon, Jul 03, 2023 at 05:53:48AM +0200, Mirsad Goran Todorovac wrote:
->> On 7/3/23 05:26, Guenter Roeck wrote:
->>> On 7/2/23 20:20, Kees Cook wrote:
->>>> On Mon, Jul 03, 2023 at 08:44:37AM +0700, Bagas Sanjaya wrote:
->>>>> On Sun, Jul 02, 2023 at 06:36:12PM +0200, Mirsad Goran Todorovac wrote:
->>>>>> Hi,
->>>>>>
->>>>>> After new git pull the kernel in Torvalds tree with default debug config
->>>>>> failed to boot with error that occurs prior to mounting filesystems, so there
->>>>>> is no log safe for the screenshot(s) here:
->>>>>>
->>>>>> [1] https://domac.alu.unizg.hr/~mtodorov/linux/crashes/2023-07-02/
->>>>>>
->>>>>> Bisect shows the first bad commit is 2d47c6956ab3 (v6.4-rc2-1-g2d47c6956ab3):
->>>>>>
->>>>>> # good: [98be618ad03010b1173fc3c35f6cbb4447ee2b07] Merge tag 'Smack-for-6.5' of https://github.com/cschaufler/smack-next
->>>>>> git bisect good 98be618ad03010b1173fc3c35f6cbb4447ee2b07
->>>>>> # bad: [f4a0659f823e5a828ea2f45b4849ea8e2dd2984c] drm/i2c: tda998x: Replace all non-returning strlcpy with strscpy
->>>>>> git bisect bad f4a0659f823e5a828ea2f45b4849ea8e2dd2984c
->>>>>> .
->>>>>> .
->>>>>> .
->>>>>> # bad: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
->>>>>> git bisect bad 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c
->>>>>> # first bad commit: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
->>>>>>
->>>>>> The architecture is Ubuntu 22.04 with lshw and config give in the attachment.
->>>>>
->>>>> Can you show early kernel log (something like dmesg)?
->>>>>
->>>>> Anyway, I'm adding it to regzbot:
->>>>>
->>>>> #regzbot ^introduced: 2d47c6956ab3c8
->>>>> #regzbot title: Linux kernel fails to boot due to UBSAN_BOUNDS tightening
->>>>
->>>> I'm confused. Commit 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c isn't in the v6.4
->>>> tree... it's only in Linus's ToT.
->>>>
->>>
->>> In ToT:
->>>
->>> $ git describe 2d47c6956ab3
->>> v6.4-rc2-1-g2d47c6956ab3
->>>
->>> $ git describe --contains 2d47c6956ab3
->>> next-20230616~2^2~51
->>> $ git describe --contains --match 'v*' 2d47c6956ab3
->>> fatal: cannot describe '2d47c6956ab3c8b580a59d7704aab3e2a4882b6c'
->>>
->>> "git describe" always shows the parent tree, which I guess was based on
->>> v6.4-rc2.
->>>
->>> Guenter
->>>
->>>
->>>> Also, the config you included does not show CONFIG_UBSAN_BOUNDS_STRICT
->>>> as even being available, much less present. Something seems very wrong
->>>> with this report...
->>>>
->>>> -Kees
+On 7/2/23 21:22, Linus Torvalds wrote:
+> On Sun, 2 Jul 2023 at 20:23, Guenter Roeck <linux@roeck-us.net> wrote:
 >>
->> Anyway, I have double checked and linux-image-6.4.0-rc2-crash boots while
->> linux-image-6.4.0-rc2-crash-00001-g2d47c6956ab3 freezes in early boot.
+>> I can reproduce the problem in qemu. However, I do not see a warning
+>> after applying your patch.
 > 
-> I don't understand what tree you're testing. 2d47c6956ab3 is only in
-> Linus's latest tree, which is not 6.4-rc2.
+> Funky, funky.
+> 
+> I'm assuming it's the
+> 
+>                                  page = get_arg_page(bprm, pos, 1);
+>                                  if (!page) {
+>                                          ret = -E2BIG;
+>                                          goto out;
+>                                  }
+> 
+> in copy_strings() that causes this. Or possibly, the version in
+> copy_string_kernel().
+> 
+> Does *this* get that "pr_warn()" printout (and a stack trace once,
+> just for good measure)?
 > 
 
-Maybe this ?
-
-$ git checkout -b testing 2d47c6956ab3
-Updating files: 100% (15501/15501), done.
-Switched to a new branch 'testing'
-groeck@server:~/src/linux-staging$ git describe
-v6.4-rc2-1-g2d47c6956ab3
+Sorry, you lost me. Isn't that the same patch as before ? Or
+is it just time for me to go to bed ?
 
 Guenter
-
-> If you're testing Linus's tree, and you're bisecting to 2d47c6956ab3,
-> I don't understand why the .config you sent doesn't include
-> CONFIG_UBSAN_BOUNDS_STRICT (which was introduced by that commit) --
-> it should be visible whether or not it is selected.
-> 
->> Of course, in the next boot dmesg appears overwritten ... I could provide
->> only the first screen screenshots.
-> 
-> Without CONFIG_UBSAN_TRAP, I would not expect anything other than a
-> warning (i.e. boot would continue).
-> 
-> The only other thing I can think of that seems related (the backtrace
-> appears to show usb), might be this:
-> https://lore.kernel.org/lkml/20230629190900.never.787-kees@kernel.org/
-> which won't appears until after v6.5-rc1.
-> 
->> The difference is only one commit.
->>
->> It is a bit strange so I am available for any additional diagnostics.
-> 
-> Thanks! Can you send "grep UBSAN .config" output for the crashing kernel?
-> 
-> Are you booting on an EFI-capable machine? If you could configure pstore
-> to use the EFI-vars backend, you can capture the crash in EFI and
-> pstorefs will show it after the next boot. (If you're using systemd,
-> this all may already be happening -- check /var/lib/systemd/pstore/
-> or see[1] for more details.)
-> 
-> -Kees
-> 
-> [1] https://www.freedesktop.org/software/systemd/man/systemd-pstore.service.html
-> 
 
