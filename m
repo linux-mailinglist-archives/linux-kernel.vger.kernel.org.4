@@ -2,190 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0910D7459DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1425B7459F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjGCKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S231158AbjGCKPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjGCKNt (ORCPT
+        with ESMTP id S229656AbjGCKPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:13:49 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B412CE5E;
-        Mon,  3 Jul 2023 03:13:41 -0700 (PDT)
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-X-GND-Sasl: i.maximets@ovn.org
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D49061C000A;
-        Mon,  3 Jul 2023 10:13:36 +0000 (UTC)
-Message-ID: <c6944b25-7ac4-0b75-75b1-465c8a705d02@ovn.org>
-Date:   Mon, 3 Jul 2023 12:14:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     i.maximets@ovn.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Mon, 3 Jul 2023 06:15:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888021BC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688379285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XvxK+fIsyjrDQkIYelBKm95I7W5xSKZhQqP3NKGrN5Y=;
+        b=LrFYHwFYmSMTBCsFd60d4N/5RqATYE2ITQOgcTz5tplBff9TFKwacpN9Lg7GQz/9EoSIwb
+        i8s/aI68qFS7+vH9hru0hDHVydOa1AxQYL1fcTzO9ukxPIaBnkXVPJSdm/NPk9M8WyMJAl
+        euGbgNthqed0O5HbafKXk20WrwsNKYY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-445-qnbUeF2XMci7HzsNAhoD3Q-1; Mon, 03 Jul 2023 06:14:44 -0400
+X-MC-Unique: qnbUeF2XMci7HzsNAhoD3Q-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7673887b2cfso122597785a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:14:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688379284; x=1690971284;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XvxK+fIsyjrDQkIYelBKm95I7W5xSKZhQqP3NKGrN5Y=;
+        b=X5JOhVVR9Jl73a6cHxWnPs2zs3RClTl6Jlcgo7SIfvSr+QKNFpL7F3lLEmC1Fw7EgK
+         hwakDfpaC6NuIjOGwyPB1u/pjRlzPCbfIZrsP7DPCv/sTrCrc3z0CEUhSMc5jMmXxZfO
+         0cKMruMuxAYLeE+3Ymg5Uy7YouWmYdrzKBDY+NNI7oRR3NPEIJjUeCKKYAC7e97dSFSL
+         5aNiKi9UmoAM0HEpf7EobHHlhMuwyGzPaJ2g2Qgm7t0ij+caD2SiZe3qn+iQ1dKUV/31
+         DRJ4oL5hCIkYWVLYcTJJHhfRJJ+tUiABl2BtNSmGJ+WnnYue8mkp09a5vcKF8Mvzkwe+
+         niPw==
+X-Gm-Message-State: ABy/qLaE5wWTjbc1eoUXromgex+AUVwWpXrmOI8ITES2qlqxoJMJwF1p
+        ytqs0bcJ8GQ323DAluTaVk8wOqXLGge0xDcT9aG32Ih+p+JjoQYGixvsj+IgrZWYEhMxKoRWgIO
+        GC1o8TYDBVqcjweqTt8W2Ypq0
+X-Received: by 2002:a05:6214:202c:b0:625:aa48:e50f with SMTP id 12-20020a056214202c00b00625aa48e50fmr9437529qvf.6.1688379283891;
+        Mon, 03 Jul 2023 03:14:43 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFljnv6+yTIgfMKV/gziFBD0PAF2l0MeOkDf4KoEbTfBbqyGgdTZozaiDNbKJUnLvyb6syUBw==
+X-Received: by 2002:a05:6214:202c:b0:625:aa48:e50f with SMTP id 12-20020a056214202c00b00625aa48e50fmr9437518qvf.6.1688379283620;
+        Mon, 03 Jul 2023 03:14:43 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-247-156.dyn.eolo.it. [146.241.247.156])
+        by smtp.gmail.com with ESMTPSA id ec17-20020ad44e71000000b00632191a70a2sm11047509qvb.103.2023.07.03.03.14.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 03:14:42 -0700 (PDT)
+Message-ID: <8fb0c81c022d58d3f08082764038d17cfc849ba1.camel@redhat.com>
+Subject: Re: [Patch v3] net: mana: Batch ringing RX queue doorbell on
+ receiving packets
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Long Li <longli@microsoft.com>, Jakub Kicinski <kuba@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Subject: Re: [RFC bpf-next] xsk: honor SO_BINDTODEVICE on bind
-Content-Language: en-US
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-References: <20230630145831.2988845-1-i.maximets@ovn.org>
- <CAJ8uoz1TGjWuJKkZ8C9ZrQB0CDasik3A=qJs=xwdQP8cbn97VQ@mail.gmail.com>
- <04ed302e-067e-d372-370b-3fef1cf8c7f2@ovn.org>
-From:   Ilya Maximets <i.maximets@ovn.org>
-In-Reply-To: <04ed302e-067e-d372-370b-3fef1cf8c7f2@ovn.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Date:   Mon, 03 Jul 2023 12:14:37 +0200
+In-Reply-To: <PH7PR21MB3263ED62B45BF78370350AD7CE28A@PH7PR21MB3263.namprd21.prod.outlook.com>
+References: <1687823827-15850-1-git-send-email-longli@linuxonhyperv.com>
+         <36c95dd6babb2202f70594d5dde13493af62dcad.camel@redhat.com>
+         <PH7PR21MB3263B266E381BA15DCE45820CE25A@PH7PR21MB3263.namprd21.prod.outlook.com>
+         <e5c3e5e5033290c2228bbad0307334a964eb065e.camel@redhat.com>
+         <PH7PR21MB326330931CFDDA96E287E470CE2AA@PH7PR21MB3263.namprd21.prod.outlook.com>
+         <2023063001-agenda-spent-83c6@gregkh>
+         <PH7PR21MB3263330E6A32D81D52B955FBCE2AA@PH7PR21MB3263.namprd21.prod.outlook.com>
+         <20230630163805.79c0bdf5@kernel.org>
+         <PH7PR21MB3263ED62B45BF78370350AD7CE28A@PH7PR21MB3263.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/3/23 12:06, Ilya Maximets wrote:
-> On 7/3/23 11:48, Magnus Karlsson wrote:
->> On Fri, 30 Jun 2023 at 16:58, Ilya Maximets <i.maximets@ovn.org> wrote:
->>>
->>> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
->>> A privileged process might create the socket and pass it to a
->>> non-privileged process for later use.  However, that process will be
->>> able to bind the socket to any network interface.  Even though it will
->>> not be able to receive any traffic without modification of the BPF map,
->>> the situation is not ideal.
->>>
->>> Sockets already have a mechanism that can be used to restrict what
->>> interface they can be attached to.  That is SO_BINDTODEVICE.
->>>
->>> To change the binding the process will need CAP_NET_RAW.
->>>
->>> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
->>> workflow when non-privileged process is using AF_XDP.
->>
->> Rebinding an AF_XDP socket is not allowed today. Any such attempt will
->> return an error from bind. So if I understand the purpose of
->> SO_BINDTODEVICE correctly, you could say that this option is always
->> set for an AF_XDP socket and it is not possible to toggle it. The only
->> way to "rebind" an AF_XDP socket is to close it and open a new one.
->> This was a conscious design decision from day one as it would be very
->> hard to support this, especially in zero-copy mode.
-> 
-> Hi, Magnus.
-> 
-> The purpose of this patch is not to allow re-binding.  The use case is
-> following:
-> 
-> 1. First process creates a bare socket with socket(AF_XDP, ...).
-> 2. First process loads the XSK program to the interface.
-> 3. First process adds the socket fd to a BPF map.
-> 4. First process sends socket fd to a second process.
-> 5. Second process allocates UMEM.
-> 6. Second process binds socket to the interface.
+On Sun, 2023-07-02 at 20:18 +0000, Long Li wrote:
+> > > > > > > > Subject: Re: [Patch v3] net: mana: Batch ringing RX
+> > > > > > > > queue
+> > > > > > > > doorbell
+> > > > > > > > on receiving
+> > > > > > > > packets
+> > > > > > > >=20
+> > > > > > > > On Fri, 30 Jun 2023 20:42:28 +0000 Long Li wrote:
+> > > > > > > > > > > > > > > > > > > > 5.15 and kernel 6.1. (those
+> > > > > > > > > > > > > > > > > > > > kernels are longterm)
+> > > > > > > > > > > > > > > > > > > > They need
+> > > > > > > > > > > > > > > > > > > > this
+> > > > > > > > > > > > > > > > > > > > fix to achieve the performance
+> > > > > > > > > > > > > > > > > > > > target.
+> > > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > > Why can't they be upgraded to get that
+> > > > > > > > > > > > > > > > performance
+> > > > > > > > > > > > > > > > target, and
+> > > > > > > > > > > > > > > > all
+> > > > > > > > > > > > > > > > the other goodness that those kernels
+> > > > > > > > > > > > > > > > have? We don't
+> > > > > > > > > > > > > > > > normally
+> > > > > > > > > > > > > > > > backport new features, right?
+> > > > > > > > > > > >=20
+> > > > > > > > > > > > I think this should be considered as a fix, not
+> > > > > > > > > > > > a new
+> > > > > > > > > > > > feature.
+> > > > > > > > > > > >=20
+> > > > > > > > > > > > MANA is designed to be 200GB full duplex at the
+> > > > > > > > > > > > start. Due
+> > > > > > > > > > > > to
+> > > > > > > > > > > > lack of
+> > > > > > > > > > > > hardware testing capability at early stage of
+> > > > > > > > > > > > the project,
+> > > > > > > > > > > > we
+> > > > > > > > > > > > could
+> > > > > > > > > > > > only test 100GB for the Linux driver. When
+> > > > > > > > > > > > hardware is
+> > > > > > > > > > > > fully
+> > > > > > > > > > > > capable
+> > > > > > > > > > > > of reaching designed spec, this bug in the
+> > > > > > > > > > > > Linux driver
+> > > > > > > > > > > > shows up.
+> > > > > > > >=20
+> > > > > > > > That part we understand.
+> > > > > > > >=20
+> > > > > > > > If I were you I'd try to convince Greg and Paolo that
+> > > > > > > > the
+> > > > > > > > change is
+> > > > > > > > small and
+> > > > > > > > significant for user experience. And answer Greg's
+> > > > > > > > question why
+> > > > > > > > upgrading the
+> > > > > > > > kernel past 6.1 is a challenge in your environment.
+> > > >=20
+> > > > I was under the impression that this patch was considered to be
+> > > > a
+> > > > feature,=20
+> > > > not a bug fix. I was trying to justify that the "Fixes:" tag
+> > > > was
+> > > > needed.=20
+> > > >=20
+> > > > I apologize for misunderstanding this.
+> > > >=20
+> > > > Without this fix, it's not possible to run a typical workload
+> > > > designed for 200Gb
+> > > > physical link speed.
+> > > >=20
+> > > > We see a large number of customers and Linux distributions
+> > > > committed
+> > > > on 5.15=20
+> > > > and 6.1 kernels. They planned the product cycles and
+> > > > certification
+> > > > processes=20
+> > > > around these longterm kernel versions. It's difficult for them
+> > > > to
+> > > > upgrade to newer
+> > > > kernel versions.
 
-7. Second process sends/receives the traffic. :)
+I think there are some misunderstanding WRT distros and stable kernels.
+(Commercial) distros will backport the patch as needed, regardless such
+patch landing in the 5.15 upstream tree or not. Individual users
+running their own vanilla 5.15 kernel can't expect performance
+improvement landing there.
 
-> 
-> The idea is that the first process will call SO_BINDTODEVICE before
-> sending socket fd to a second process, so the second process is limited
-> in to which interface it can bind the socket.
-> 
-> Does that make sense?
-> 
-> This workflow allows the second process to have no capabilities
-> as long as it has sufficient RLIMIT_MEMLOCK.
+All in all I feel undecided. I would endorse this change going trough
+net-next (without the stable tag). I would feel less torn with this
+change targeting -net without the stable tag. Targeting -net with the
+stable tag sounds a bit too much to me.
 
-Note that steps 1-7 are working just fine today.  i.e. the umem
-registration, bind, ring mapping and traffic send/receive do not
-require any extra capabilities.
-
-We may restrict the bind() call to require CAP_NET_RAW and then
-allow it for sockets that had SO_BINDTODEVICE as an alternative.
-But restriction will break the current uAPI.
-
-> 
-> Best regards, Ilya Maximets.
-> 
->>
->>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
->>> ---
->>>
->>> Posting as an RFC for now to probably get some feedback.
->>> Will re-post once the tree is open.
->>>
->>>  Documentation/networking/af_xdp.rst | 9 +++++++++
->>>  net/xdp/xsk.c                       | 6 ++++++
->>>  2 files changed, 15 insertions(+)
->>>
->>> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
->>> index 247c6c4127e9..1cc35de336a4 100644
->>> --- a/Documentation/networking/af_xdp.rst
->>> +++ b/Documentation/networking/af_xdp.rst
->>> @@ -433,6 +433,15 @@ start N bytes into the buffer leaving the first N bytes for the
->>>  application to use. The final option is the flags field, but it will
->>>  be dealt with in separate sections for each UMEM flag.
->>>
->>> +SO_BINDTODEVICE setsockopt
->>> +--------------------------
->>> +
->>> +This is a generic SOL_SOCKET option that can be used to tie AF_XDP
->>> +socket to a particular network interface.  It is useful when a socket
->>> +is created by a privileged process and passed to a non-privileged one.
->>> +Once the option is set, kernel will refuse attempts to bind that socket
->>> +to a different interface.  Updating the value requires CAP_NET_RAW.
->>> +
->>>  XDP_STATISTICS getsockopt
->>>  -------------------------
->>>
->>> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
->>> index 5a8c0dd250af..386ff641db0f 100644
->>> --- a/net/xdp/xsk.c
->>> +++ b/net/xdp/xsk.c
->>> @@ -886,6 +886,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
->>>         struct sock *sk = sock->sk;
->>>         struct xdp_sock *xs = xdp_sk(sk);
->>>         struct net_device *dev;
->>> +       int bound_dev_if;
->>>         u32 flags, qid;
->>>         int err = 0;
->>>
->>> @@ -899,6 +900,11 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
->>>                       XDP_USE_NEED_WAKEUP))
->>>                 return -EINVAL;
->>>
->>> +       bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
->>> +
->>> +       if (bound_dev_if && bound_dev_if != sxdp->sxdp_ifindex)
->>> +               return -EINVAL;
->>> +
->>>         rtnl_lock();
->>>         mutex_lock(&xs->mutex);
->>>         if (xs->state != XSK_READY) {
->>> --
->>> 2.40.1
->>>
->>>
-> 
+Cheers,
+Paolo
 
