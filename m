@@ -2,187 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64BF745F1C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3235C745F25
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjGCOwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        id S231222AbjGCOxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjGCOwA (ORCPT
+        with ESMTP id S231528AbjGCOw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:52:00 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A49CD10E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1688395919;
-        bh=9Fz8rU9GmTaxOPVMlac3r3BzwGUKuWGirTJMgrIhhp8=;
-        h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=qe/bkuHbreHbm5lBsGJY6UMo8PLqxKWw24r3kGoS+9hbmR4YdVV5A5FiyxQ0RLIcp
-         /CpJt41YsBnTutOg8qjuQYm8VZLqSExsw/4Weaw/M8oYI6hkfDwoKqCm6Sb/3R+trg
-         Ags6bFTETucJ4Avf+EJTXWHMX5zswzUHg/O2s0soV2BOVd/6jD/N3gq59mca8awwnt
-         07QWbBJDjhnW3bFwqUwF4UgNRqsbbWnkkHh3AY/2JTKlUTdORkIhJg0+lXJhMmk9i7
-         HSpGy5vN/0Bf+Y+6WPFtivA3ZC9X3o5Etj0lAtmcx/qUD/0jWggRQazbzkQP4Rcpu8
-         u/c6d/sGb6FFg==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id E89E51EBA;
-        Mon,  3 Jul 2023 16:51:58 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 16:51:57 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] checkpatch: don't take signature to be part of the commit
- SHA
-Message-ID: <yobkleyyfic3cxlslgwft7eomzc4k2e4r6goy2x3xhbnzvee46@2u4treiamxdy>
-References: <p6by5totn26ofijoki4v6a7lgciswfqovyfrmavtldxg63g2k5@bp3uxxbccxvr>
+        Mon, 3 Jul 2023 10:52:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713EAE60
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688395930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hxWPFMlR4kZ1+JmDhDbo+VkKWcHB0JOfutQmGW+4K4A=;
+        b=h4iqkmzqPsxbHIv1LKZSNOPPs7YARH7opbcXwO6vszNJwupLV/0hY9sskgyiUBQaSCR26+
+        aehpKWfbH/+vwZO8+q9kT/LNh1b1+zrcnkEZeheCyet9IRL8XaK7aqDMcflZE+HiLgZqfr
+        wpZUS93xzVIbhMWASVWLmbIsWpPVEKM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-658-l9S9t9rxMTaXeyipOGMY8g-1; Mon, 03 Jul 2023 10:52:09 -0400
+X-MC-Unique: l9S9t9rxMTaXeyipOGMY8g-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fbb6675155so24876615e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:52:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688395927; x=1690987927;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hxWPFMlR4kZ1+JmDhDbo+VkKWcHB0JOfutQmGW+4K4A=;
+        b=AuGoQ6WSuQV0CyFuEVhZ2AMOXficqjYASodhS69Gsdx7jCXYjfyPfDyvDoCT1UUZtr
+         JPAXwvN6N2mUnxfCjYcuNdLBIDLMYJZXxzeFd3/d2r2IsoatlU6PWhSqWqY39S5e+4iG
+         IY2atiO1Xzs+6HytFoOQCg46cYw/OPZQwoE9GLbXnIHhO/82vj4PWsWln1+Ybtx/ku8/
+         Rc5fq/SkLF5z6/udROLyjQ7tOcNk+TMdFKCSObXMJq5wopLeOrYwgmQtEI9RwRkcOWvE
+         N+USuCP9wgSwvvq5RjUj41kjflNN0CA1Lj0iViJ5ic5WkDEFjn67Jb3tqOaLk4eeky1h
+         hlfw==
+X-Gm-Message-State: AC+VfDxl6dcoeEogHy4Idkdsnd2bgP4E2ANlKc+mZSGPMEIB9rhKPG5b
+        zdl9D7xe/FqNDLbl+HxytHD0931MinhA8SVuKCqoAgmY9lvSVmglhg+hrXHoC6JlYkrbpTBTqcC
+        jkVTY9JrEYfmqF/Q4/qMtx18PWm7TB1O2
+X-Received: by 2002:a1c:7908:0:b0:3f8:fb7c:6793 with SMTP id l8-20020a1c7908000000b003f8fb7c6793mr7708565wme.24.1688395927801;
+        Mon, 03 Jul 2023 07:52:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ47ys+l55usHyGP6AT5yJibBBM3aCFWJJsiZ8eURago1u09Y9uC8molkOyCSHZ78useV0c8hg==
+X-Received: by 2002:a1c:7908:0:b0:3f8:fb7c:6793 with SMTP id l8-20020a1c7908000000b003f8fb7c6793mr7708551wme.24.1688395927496;
+        Mon, 03 Jul 2023 07:52:07 -0700 (PDT)
+Received: from redhat.com ([2.52.13.33])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c229800b003fa98908014sm21973630wmf.8.2023.07.03.07.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 07:52:07 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 10:52:03 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
+Subject: Re: [PATCH] vdpa: reject F_ENABLE_AFTER_DRIVER_OK if backend does
+ not support it
+Message-ID: <20230703105022-mutt-send-email-mst@kernel.org>
+References: <20230703142218.362549-1-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3hdjimvrirjnjqby"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <p6by5totn26ofijoki4v6a7lgciswfqovyfrmavtldxg63g2k5@bp3uxxbccxvr>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230703142218.362549-1-eperezma@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 03, 2023 at 04:22:18PM +0200, Eugenio Pérez wrote:
+> With the current code it is accepted as long as userland send it.
+> 
+> Although userland should not set a feature flag that has not been
+> offered to it with VHOST_GET_BACKEND_FEATURES, the current code will not
+> complain for it.
+> 
+> Since there is no specific reason for any parent to reject that backend
+> feature bit when it has been proposed, let's control it at vdpa frontend
+> level. Future patches may move this control to the parent driver.
+> 
+> Fixes: 967800d2d52e ("vdpa: accept VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK backend feature")
+> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
 
---3hdjimvrirjnjqby
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please do send v3. And again, I don't want to send "after driver ok" hack
+upstream at all, I merged it in next just to give it some testing.
+We want RING_ACCESS_AFTER_KICK or some such.
 
-I had just received:
-  $ scripts/checkpatch.pl 0001-splice-always-fsnotify_access-in-fsnotify_mo=
-dify-out.patch
-  WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<ti=
-tle line>")' - ie: 'Fixes: gpg: Signatu (":35 CEST")'
-  #25:
-  Fixes: 983652c69199 ("splice: report related fsnotify events")
 
-  total: 0 errors, 1 warnings, 60 lines checked
+> ---
+> Sent with Fixes: tag pointing to git.kernel.org/pub/scm/linux/kernel/git/mst
+> commit. Please let me know if I should send a v3 of [1] instead.
+> 
+> [1] https://lore.kernel.org/lkml/20230609121244-mutt-send-email-mst@kernel.org/T/
+> ---
+>  drivers/vhost/vdpa.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index e1abf29fed5b..a7e554352351 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -681,18 +681,21 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+>  {
+>  	struct vhost_vdpa *v = filep->private_data;
+>  	struct vhost_dev *d = &v->vdev;
+> +	const struct vdpa_config_ops *ops = v->vdpa->config;
+>  	void __user *argp = (void __user *)arg;
+>  	u64 __user *featurep = argp;
+> -	u64 features;
+> +	u64 features, parent_features = 0;
+>  	long r = 0;
+>  
+>  	if (cmd == VHOST_SET_BACKEND_FEATURES) {
+>  		if (copy_from_user(&features, featurep, sizeof(features)))
+>  			return -EFAULT;
+> +		if (ops->get_backend_features)
+> +			parent_features = ops->get_backend_features(v->vdpa);
+>  		if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
+>  				 BIT_ULL(VHOST_BACKEND_F_SUSPEND) |
+>  				 BIT_ULL(VHOST_BACKEND_F_RESUME) |
+> -				 BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK)))
+> +				 parent_features))
+>  			return -EOPNOTSUPP;
+>  		if ((features & BIT_ULL(VHOST_BACKEND_F_SUSPEND)) &&
+>  		     !vhost_vdpa_can_suspend(v))
+> -- 
+> 2.39.3
 
-  NOTE: For some of the reported defects, checkpatch may be able to
-        mechanically convert to the typical style using --fix or --fix-inpl=
-ace.
-
-  0001-splice-always-fsnotify_access-in-fsnotify_modify-out.patch has style=
- problems, please review.
-
-  NOTE: If any of the errors are false positives, please report
-        them to the maintainer, see CHECKPATCH in MAINTAINERS.
-
-This fails when the Fixes:ed SHAs are signed, since the output is
-  $ git log --format=3D'%H %s'
-  gpg: Signature made Wed 28 Jun 2023 19:05:02 CEST
-  gpg:                using RSA key 7D69474E84028C5CC0C44163BCFD0B018D2658F1
-  gpg: Good signature from "=D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczlewe=
-li.xyz>" [ultimate]
-  gpg:                 aka "=D0=BD=D0=B0=D0=B1 <nabijaczleweli@gmail.com>" =
-[ultimate]
-  gpg:                 aka "nabijaczleweli <nabijaczleweli@gmail.com>" [ult=
-imate]
-  53307062b2b644dc0de7bde916d6193492f37643 splice: fsnotify_access(in), fsn=
-otify_modify(out) on success in tee
-or
-  $ git log --format=3D'%H %s' 983652c69199
-  gpg: Signature made Tue 04 Apr 2023 15:57:35 CEST
-  gpg:                using EDDSA key 408734571EA70C78B332692891C61BC06578D=
-CA2
-  gpg: Can't check signature: No public key
-  983652c691990b3257a07f67f4263eb847baa82d splice: report related fsnotify =
-events
-
-The fix mimics what was done in commit f24fb53984cf ("perf tools: Don't
-include signature in version strings"): just don't ask for the
-signatures being validated.
-
-With this, my patch passed validation.
-
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
- scripts/checkpatch.pl | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index b30114d637c4..1ff2c9835245 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -71,6 +71,7 @@ my $color =3D "auto";
- my $allow_c99_comments =3D 1; # Can be overridden by --ignore C99_COMMENT_=
-TOLERANCE
- # git output parsing needs US English output, so first set backtick child =
-process LANGUAGE
- my $git_command =3D'export LANGUAGE=3Den_US.UTF-8; git';
-+my $git_log_no =3D "--no-show-signature --no-color";
- my $tabsize =3D 8;
- my ${CONFIG_} =3D "CONFIG_";
-=20
-@@ -1164,7 +1165,7 @@ sub seed_camelcase_includes {
- 	$camelcase_seeded =3D 1;
-=20
- 	if (-e "$gitroot") {
--		my $git_last_include_commit =3D `${git_command} log --no-merges --pretty=
-=3Dformat:"%h%n" -1 -- include`;
-+		my $git_last_include_commit =3D `${git_command} log ${git_log_no} --no-m=
-erges --pretty=3Dformat:"%h%n" -1 -- include`;
- 		chomp $git_last_include_commit;
- 		$camelcase_cache =3D ".checkpatch-camelcase.git.$git_last_include_commit=
-";
- 	} else {
-@@ -1226,7 +1227,7 @@ sub git_commit_info {
-=20
- 	return ($id, $desc) if ((which("git") eq "") || !(-e "$gitroot"));
-=20
--	my $output =3D `${git_command} log --no-color --format=3D'%H %s' -1 $comm=
-it 2>&1`;
-+	my $output =3D `${git_command} log ${git_log_no} --format=3D'%H %s' -1 $c=
-ommit 2>&1`;
- 	$output =3D~ s/^\s*//gm;
- 	my @lines =3D split("\n", $output);
-=20
-@@ -1277,7 +1278,7 @@ if ($git) {
- 		} else {
- 			$git_range =3D "-1 $commit_expr";
- 		}
--		my $lines =3D `${git_command} log --no-color --no-merges --pretty=3Dform=
-at:'%H %s' $git_range`;
-+		my $lines =3D `${git_command} log ${git_log_no} --no-merges --pretty=3Df=
-ormat:'%H %s' $git_range`;
- 		foreach my $line (split(/\n/, $lines)) {
- 			$line =3D~ /^([0-9a-fA-F]{40,40}) (.*)$/;
- 			next if (!defined($1) || !defined($2));
---=20
-2.39.2
-
---3hdjimvrirjnjqby
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSi4I0ACgkQvP0LAY0m
-WPFCnxAAoyoVHV4TC1a9oR3O/QR36FVHOFHFLPOepDaWKS00oMXGGWP82MzKohUj
-fvsDabeIxlfjwRrVpRlMrqmJog0+gHUoTr2ppIPRy2PDz3LZXBn2yZP+Zh51lgdz
-TThGdwnwR6q0lCjIxBYTsfjupj+uU+37hp7Zo19H6Ejrb7Uf8U4gCHu1fI+Zg7MV
-DORdKDiS7eSMsW7k2Hsv0MoVqfgMpyROWc7txHJdq3KVWetuB8AuNv9pCr5bVZpY
-avcK9CqqgUuVoIyRqVqL3i6b55hS/y5A5Xo4MHgjQ2x25H5xcbBtEI7MeCLEIe1n
-OC0+13LVOsPhPN+HbVqDEZidzilj0wDQ029K6ZXRuWjC2t9fMQfyXPWSDlZ+QV6k
-K74mHNTNTNg2tVMWXcpzOe3HyPKYyvbzAdcU+Oqa/Oytrkdo3fPnLj+6Bs8yW+nh
-xVpN8kYx7Ug3cNUX2f4DNYLUBnNzOGbBDm40kQQ4fQnSxvq82AqzajDuSYik014b
-HXNZSd+bNt3rNZa+rpPR+/6Vm87qjcFqVm/NHJQlXgn7pdIlMGR+42i1X38/aem1
-8OxJcB15owMhTxbYe1fEByA5sC2+hN+6vY1Oz6wraYyip3j/oxk5PH3mH1b2epG1
-gVgAOCxEyc6AD0Gdbde9id+Z9EI3yAVlFI+y5XDMjirVok7T9mU=
-=IU9O
------END PGP SIGNATURE-----
-
---3hdjimvrirjnjqby--
