@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26E6745B6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAB0745B71
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjGCLoH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jul 2023 07:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
+        id S231319AbjGCLos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjGCLoF (ORCPT
+        with ESMTP id S229930AbjGCLoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:44:05 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76519EC;
-        Mon,  3 Jul 2023 04:44:04 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-c2cf4e61bc6so4989971276.3;
-        Mon, 03 Jul 2023 04:44:04 -0700 (PDT)
+        Mon, 3 Jul 2023 07:44:46 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EA410E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 04:44:44 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b6a0d91e80so69122571fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 04:44:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1688384683; x=1690976683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yaNHFGtqidFFoc879AcjoyLmp2ttt/EsaJvpqNaeTBg=;
+        b=tG+WDuV6RlFBC96XU0zrBQAAznnNTMP26skrKr0lEq/LIRouxE23HHH8iDMF4HOaXP
+         hv3CqtSeblorPsoUJGIMgX7Oir0zrOLXdgvaNSB+w0Wqw3SZxROIFKgYSZHaqRbrVAaQ
+         TcSpQp9U0PtgaAXgUwZqPFJsb9TwF4HGqi45jUzgW5lBGeXnMOUQySyltDC9Waalxbcg
+         4tMW/i5QTGtZFcFEysu+wWvFktGkmSr8vucZV3vdv2dLXXoA4mqPGcU2vi5vr2wFwaq2
+         q6ep/ns6phzhjdHnjjs0PC1VfilxQ3rwxQOgQfzMi2Rt/kkjFMzyN4dBi/Kh6v+SZZsE
+         lIdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688384643; x=1690976643;
+        d=1e100.net; s=20221208; t=1688384683; x=1690976683;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SaPHjrNNjb65n2ku8Yebhkij9c9u2ekJbgNiYyI6QAg=;
-        b=ZKYRUxOYTVKnsL/4T+U1jTRGFNtPUrDY2zxtKYb6rQ5Nni0SooR5d8qdxYxj8BxN+1
-         hTQ1C8yxLtogvWapmhkhRHUVFqZ22VsXyWXrAlvOTT1gdbbQ9uOGAqiZiK7ST5G6A9ZR
-         mwgudvlFRkL/oRecTfXVbxTNk1su7qQgZtxVXmeVUJmP/ap1eePmBNARn/MYR+QrZbvS
-         YwXyWtIfyL/xjea1fsyebyNzLky4xDvEPnGAzu76MGlC9WAxfmMYRvC7DQoztGCUL3gB
-         5pqWqswleV+LRtIr5qS9V+jUVYlhCQTVzxysgP1Ah+Npjq4/G1fJFBIGDs/7CbAky806
-         voUQ==
-X-Gm-Message-State: ABy/qLYfFGr75Vbz9XNgNuh6ELr1DpJyXEKKwmHJNXLghoFn6PRhXysc
-        VVw8hoN9P/nd1a37kj350ohMgkyrgHfheQ==
-X-Google-Smtp-Source: APBJJlGZcIpqsfOkh094e1NCa8yTu2qj9qTjhVMRX//+8WevoM0R07x+7SAEW5koowQozJEEB25mVg==
-X-Received: by 2002:a25:d3c8:0:b0:c10:c7d7:9cf5 with SMTP id e191-20020a25d3c8000000b00c10c7d79cf5mr9815045ybf.27.1688384643526;
-        Mon, 03 Jul 2023 04:44:03 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id 187-20020a2510c4000000b00bf4d24fd976sm4400428ybq.10.2023.07.03.04.44.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 04:44:03 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5704ddda6dfso52519117b3.1;
-        Mon, 03 Jul 2023 04:44:03 -0700 (PDT)
-X-Received: by 2002:a5b:4c3:0:b0:bb3:9ea1:7738 with SMTP id
- u3-20020a5b04c3000000b00bb39ea17738mr9979732ybp.24.1688384643065; Mon, 03 Jul
- 2023 04:44:03 -0700 (PDT)
+        bh=yaNHFGtqidFFoc879AcjoyLmp2ttt/EsaJvpqNaeTBg=;
+        b=NG8K1K3rXOSeLk0XtbFenp230V4EFL11ktN0xOrUGCwFdfbmi9LY5PF4pRK6P9UIOS
+         7WTFp2feLUKfYY2CFx2HfMW5KCNjOILPJwkxv9mbax/Cem9w1tSvPEy3bT+VO8htlQYy
+         fmO8XEMji4snTiSsmwwsRkTpMmNcYkPaZN7nDnjJsSyPRyFIneqsgIbgrxut3qG7UkuE
+         rfhvWZlV4NH8QBBqb6j9Je+wcg2RIHroQpScb4fk+XRSrEo/hnmdMr2rShqiZ7SeHQy7
+         9Oyd0kek6v8EcdsW4VhKbW/m97WDhfBhZ4RoGc8yyXwWqYnXnKn5MfX7y9OMQREIPW5T
+         8+eA==
+X-Gm-Message-State: ABy/qLbUPWtgOHKzTL2GYfw8cUS0exetcvRlNOkF+nQzi++MLAYoAtn2
+        ftqC/XgiiqGMJPqcrqp6veGAIlBgqcXFR+6qbOaASQ==
+X-Google-Smtp-Source: APBJJlGbheteHmbNZEDEkZHAuIEEMQkHMHMiMY31fEaVpgo1N30lf/fgRzYRxG7UFIccv4g/oQFL+6AtzrHyfgR4dtI=
+X-Received: by 2002:a2e:98d6:0:b0:2b6:9930:871 with SMTP id
+ s22-20020a2e98d6000000b002b699300871mr6735718ljj.13.1688384682883; Mon, 03
+ Jul 2023 04:44:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230702185252.44462-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230702185252.44462-1-krzysztof.kozlowski@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Jul 2023 13:43:51 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWfQPdPdBT=qEFtZ4awc05syL2FQAn7mXGzQBg2MapQ8A@mail.gmail.com>
-Message-ID: <CAMuHMdWfQPdPdBT=qEFtZ4awc05syL2FQAn7mXGzQBg2MapQ8A@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: minor whitespace cleanup around '='
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230630144006.1513270-1-pan@semihalf.com> <20230630144006.1513270-4-pan@semihalf.com>
+ <20230630-scrimmage-antelope-7d1f82d491fc@spud>
+In-Reply-To: <20230630-scrimmage-antelope-7d1f82d491fc@spud>
+From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Date:   Mon, 3 Jul 2023 13:44:31 +0200
+Message-ID: <CAF9_jYT1Fz4hBQrNtgkM6mU-JVH=ZxsJnkaLDsa5uoEV_hTLVA@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] ARM: dts: Add Chameleon v3 video node
+To:     Conor Dooley <conor@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dinguyen@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, mchehab@kernel.org, upstream@semihalf.com,
+        amstan@chromium.org, ribalda@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 2, 2023 at 8:52 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> The DTS code coding style expects exactly one space before and after '='
-> sign.
+On Fri, Jun 30, 2023 at 8:26=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> On Fri, Jun 30, 2023 at 04:40:06PM +0200, Pawe=C5=82 Anikiel wrote:
+> > Add node for the video system device.
+> >
+> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
+> > ---
+> >  .../socfpga/socfpga_arria10_chameleonv3.dts   | 54 +++++++++++++++++++
+> >  1 file changed, 54 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv=
+3.dts b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
+> > index 422d00cd4c74..5e66363d4ab5 100644
+> > --- a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
+> > +++ b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
+> > @@ -10,6 +10,60 @@ / {
+> >       compatible =3D "google,chameleon-v3", "enclustra,mercury-aa1",
+> >                    "altr,socfpga-arria10", "altr,socfpga";
+> >
+> > +     soc {
+> > +             video@c0060500 {
+> > +                     compatible =3D "google,chv3-video";
+>
+> This compatible does not seem to be documented & I did not see a comment
+> about the lack of a binding in the cover letter. What am I missing?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.6.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Yes, the compatible is not documented for now (I'll do that in a later
+patchset), sorry for not mentioning that in the cover letter.
