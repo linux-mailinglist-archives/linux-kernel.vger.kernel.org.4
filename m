@@ -2,119 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7024745482
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 06:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DA0745486
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 06:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjGCEV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 00:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
+        id S229958AbjGCEXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 00:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjGCEVz (ORCPT
+        with ESMTP id S229638AbjGCEW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 00:21:55 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B747D188
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 21:21:52 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b88e99673eso4634285ad.0
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 21:21:52 -0700 (PDT)
+        Mon, 3 Jul 2023 00:22:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34102194
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 21:22:58 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51d88f1c476so4410222a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 21:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688358112; x=1690950112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4yCyxORhZQcSjW6+wQb0JHG8SHx3C9xb2wsZB0KAdpI=;
-        b=hrs8TxzWqVROATb1+OO+b2scKvbkRUaPXE8wiQC3gOk/SRBZqMzOVrYrs/f17rNkqd
-         NywN86FFrtLqy8fAMv8FhNiblVyHqCyz6vpyZqebVrvgO3ev+tC/Cr38by1gy0KG70fA
-         iZKR0qUNE2EJjOhywKGq6YJbVbpAvoDclCTraEjqcN+v/H4gbKfk/V7N5Ztj+uKHMSwH
-         vpyLcw/nk4GmAR1AUZiMrfPCXtucNbwSEFzKSkyctwPD653hxDFnHtYc3bSRmNiPA+em
-         Sn9tlpzPXU0uirbvBbONeafLp0kQ72U0lHiVMaRQUsIycH/5jX2iUvG89jTxTRzebevg
-         vt1A==
+        d=linux-foundation.org; s=google; t=1688358176; x=1690950176;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LBv71BkedBGYMkqGKsr3uyFzGINH/oPOCalyJ1iyXF8=;
+        b=DRfZ+r9wmnsJ2NsqxbykaB7AxtX+KdmCwwNJ9SkKGxD9hJPxqoEtMp9o4pbi8tb9OI
+         9aFb7r0VTG2GbW4PSTX0E7PWqIz4CKaoMqzLDzJICvx/cKmPjOWDIW4Irzvu0+VMSSjv
+         vLgfTwfb4Jb/TYpj6DJwBofqYVscJ1FrE7BtU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688358112; x=1690950112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4yCyxORhZQcSjW6+wQb0JHG8SHx3C9xb2wsZB0KAdpI=;
-        b=Gm3GEhK/4PcaUsnsYso3Nuh4fvc+3+4nzBW9Msck3X1i2MokDDJtVi1sBpoGFhrICV
-         maLe3z62LqgL9iei5oArdje1XJ2adiesDVXouZQj7sP5GnKenQ6MSa+UmyAcq/ImpKUq
-         bFfPLcx7H09NdM0EeKFNzsIWGCBWybgITGFF8D/P3zPW12+sLJD3M45et5CipvaCRY++
-         tfs5pSE7N0uFke+MJBoHV/o17hR/uDGX+7VvaeKDquPUv/Tf4mGRUjo29j5/ziwKf9D6
-         ndLFRUrKzIhbMRKBVKhr1WoIHeMBES63Fw5uD0Kj7bXIMxKmT9k1AHj2ybL/wBmQG270
-         rGwg==
-X-Gm-Message-State: ABy/qLaY25t/Cq/D8cuPvNMhYHjouC6rPvRasTzJk7o2QiQjgXb70ot4
-        Y0XkevLfvCz0i5rpeYEfR2c30g==
-X-Google-Smtp-Source: APBJJlEuGGj6sFTOjEj6zdUt3a4LaoFocfAFlTOucF+WBrGmLI99yG1sSNGh9BMAqTV7PHKonGRnxA==
-X-Received: by 2002:a17:903:1250:b0:1b5:5059:e733 with SMTP id u16-20020a170903125000b001b55059e733mr9689916plh.17.1688358112035;
-        Sun, 02 Jul 2023 21:21:52 -0700 (PDT)
-Received: from sunil-laptop ([106.51.184.72])
-        by smtp.gmail.com with ESMTPSA id p11-20020a170902bd0b00b001a9b29b6759sm14296207pls.183.2023.07.02.21.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 21:21:51 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 09:51:41 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Yunhui Cui <cuiyunhui@bytedance.com>, ardb@kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com, alexghiti@rivosinc.com
-Subject: Re: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-Message-ID: <ZKJM1fG3JXEBApfj@sunil-laptop>
-References: <20230702095735.860-1-cuiyunhui@bytedance.com>
- <20230702-headway-dreamlike-d7ba39ac4910@spud>
+        d=1e100.net; s=20221208; t=1688358176; x=1690950176;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LBv71BkedBGYMkqGKsr3uyFzGINH/oPOCalyJ1iyXF8=;
+        b=JDrwCwZRcmsq8cRBWiR9Zh7SuEwhAVGeE6OSkhXb5QLhtwSXmFfzcQsIqGGxP7PY4l
+         NP3P30kAsZ9/rZ8XltwgcNXAihYsFoge3Hu4ps7XcKWEejbtqGazPdMdsfOLN1RDJjbu
+         cYTGnBHoIia7k+S25SHP6XNFuJeUTAn+gy23Kw2nG6mIuZPc3gC7MJeYGZCD1EducC02
+         KBjoU4m6zuRNCXwz7LGKUVtetx3O7yKVuP38YbgtecxBX/Y9iBJQmJ2mP7FooUMxDf7M
+         IVcwzN2JBjlozVVJOKPIxLnn+xuZwFlA6BDUJC8zq62NlIO2egj7XtnuEDU7AP7PxA7l
+         +H9w==
+X-Gm-Message-State: AC+VfDyrU+b0XLVP0tTOC/xPJmrSTEma5DRU1Uoj3Bgr67ViQxyklGIt
+        Y2SJRAoiEUnUDUurNfx7NxG5aGaeZTU9kYVMBqu9MJ4z
+X-Google-Smtp-Source: APBJJlE/A7zq4/o53Y9d5nu6IClX33moahAfeym2zU8zCTuAlc2r2lGBrW68kjXTVa8Fn/I2PJmDCA==
+X-Received: by 2002:a17:906:a053:b0:977:abac:9635 with SMTP id bg19-20020a170906a05300b00977abac9635mr6049213ejb.20.1688358176600;
+        Sun, 02 Jul 2023 21:22:56 -0700 (PDT)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id x26-20020a1709064a9a00b009786ae9ed50sm11295669eju.194.2023.07.02.21.22.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jul 2023 21:22:54 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-51dfa0771cdso2214524a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 21:22:54 -0700 (PDT)
+X-Received: by 2002:aa7:c711:0:b0:51d:d4c0:eea5 with SMTP id
+ i17-20020aa7c711000000b0051dd4c0eea5mr5453955edq.40.1688358174441; Sun, 02
+ Jul 2023 21:22:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230702-headway-dreamlike-d7ba39ac4910@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
+ <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
+ <2023063001-overlying-browse-de1a@gregkh> <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
+ <5fd98a09-4792-1433-752d-029ae3545168@gmx.de> <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
+ <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com> <9b35a19d-800c-f9f9-6b45-cf2038ef235f@roeck-us.net>
+In-Reply-To: <9b35a19d-800c-f9f9-6b45-cf2038ef235f@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 2 Jul 2023 21:22:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
+Message-ID: <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
+Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Helge Deller <deller@gmx.de>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John David Anglin <dave.anglin@bell.net>
+Content-Type: multipart/mixed; boundary="0000000000003de76805ff8d8571"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yunhui Cui,
-On Sun, Jul 02, 2023 at 02:47:41PM +0100, Conor Dooley wrote:
-> Hey,
-> %subject: riscv: obtain ACPI RSDP from FFI.
-> 
-> This subject is a bit unhelpful because FFI would commonly mean "foreign
-> function interface" & you have not yet introduced it. It seems like it
-> would be better to do s/FFI/devicetree/ or similar.
-> Please also drop the full stop from the commit messages ;)
-> 
-> Please use a cover letter for multi-patch series & include changelogs.
-> 
-> +CC Sunil, Alex:
-> 
-> Can you guys please take a look at this & see if it is something that we
-> want to do (ACPI without EFI)?
-> 
+--0000000000003de76805ff8d8571
+Content-Type: text/plain; charset="UTF-8"
 
-We have supported ACPI only with UEFI. The current booting contract
-between firmware and OS is to pass only one of DT or ACPI, not both.
-This approach brings another booting contract for Linux mixing ACPI and
-DT which affects RVI specs. As per policy and since it can affect
-multiple OSs, a frozen RVI spec is required for taking this patch into
-linux. So, could you please bring this topic for discussion in [1] and
-get agreement?
+On Sun, 2 Jul 2023 at 20:23, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> I can reproduce the problem in qemu. However, I do not see a warning
+> after applying your patch.
 
-Isn't it simpler to provide a minimum UEFI configuration table and
-stubbed BS/RS? 
+Funky, funky.
 
-Have you done a PoC? I am curious how do you handle EFI memory map
-dependencies.
+I'm assuming it's the
 
-In case this is approved, I am wondering why do we need new FFI?
+                                page = get_arg_page(bprm, pos, 1);
+                                if (!page) {
+                                        ret = -E2BIG;
+                                        goto out;
+                                }
 
-[1] - https://lists.riscv.org/g/tech-brs
+in copy_strings() that causes this. Or possibly, the version in
+copy_string_kernel().
 
-Thanks!
-Sunil
+Does *this* get that "pr_warn()" printout (and a stack trace once,
+just for good measure)?
+
+              Linus
+
+--0000000000003de76805ff8d8571
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljmcud9a0>
+X-Attachment-Id: f_ljmcud9a0
+
+IG1tL2d1cC5jIHwgNiArKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDEg
+ZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9tbS9ndXAuYyBiL21tL2d1cC5jCmluZGV4IGVmMjk2
+NDE2NzFjNy4uNjY1MjAxOTQwMDZiIDEwMDY0NAotLS0gYS9tbS9ndXAuYworKysgYi9tbS9ndXAu
+YwpAQCAtMTE2OCwxMSArMTE2OCwxNSBAQCBzdGF0aWMgbG9uZyBfX2dldF91c2VyX3BhZ2VzKHN0
+cnVjdCBtbV9zdHJ1Y3QgKm1tLAogCiAJCS8qIGZpcnN0IGl0ZXJhdGlvbiBvciBjcm9zcyB2bWEg
+Ym91bmQgKi8KIAkJaWYgKCF2bWEgfHwgc3RhcnQgPj0gdm1hLT52bV9lbmQpIHsKLQkJCXZtYSA9
+IGZpbmRfdm1hKG1tLCBzdGFydCk7CisJCQlzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnByZXYgPSBO
+VUxMOworCQkJdm1hID0gZmluZF92bWFfcHJldihtbSwgc3RhcnQsICZwcmV2KTsKIAkJCWlmICh2
+bWEgJiYgKHN0YXJ0IDwgdm1hLT52bV9zdGFydCkpIHsKIAkJCQlXQVJOX09OX09OQ0Uodm1hLT52
+bV9mbGFncyAmIFZNX0dST1dTRE9XTik7CiAJCQkJdm1hID0gTlVMTDsKIAkJCX0KKwkJCWlmICgh
+dm1hICYmIHByZXYgJiYgc3RhcnQgPj0gcHJldi0+dm1fZW5kKQorCQkJCVdBUk5fT05fT05DRShw
+cmV2LT52bV9mbGFncyAmIFZNX0dST1dTVVApOworCiAJCQlpZiAoIXZtYSAmJiBpbl9nYXRlX2Fy
+ZWEobW0sIHN0YXJ0KSkgewogCQkJCXJldCA9IGdldF9nYXRlX3BhZ2UobW0sIHN0YXJ0ICYgUEFH
+RV9NQVNLLAogCQkJCQkJZ3VwX2ZsYWdzLCAmdm1hLAo=
+--0000000000003de76805ff8d8571--
