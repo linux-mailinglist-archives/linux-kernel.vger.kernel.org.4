@@ -2,133 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D7D745785
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE3174578B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjGCIlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
+        id S230041AbjGCIon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjGCIlU (ORCPT
+        with ESMTP id S229516AbjGCIom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:41:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163E3B6;
-        Mon,  3 Jul 2023 01:41:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F7D260DFC;
-        Mon,  3 Jul 2023 08:41:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9C9C433C8;
-        Mon,  3 Jul 2023 08:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688373678;
-        bh=d5tEEoXis+6rNIIz2nfMllrQPz1AqmYDceP1A2JH4Cg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TnlwvVial1YwcI5iiIAKpYUZnDLCAyvnhnQqg3Slu0ti/JklkdeUar2hHbB4ZEvf/
-         kzhTy9CXSkl2s3q8qcnYhCif3SCjPYwX+Pqs5ZqBGMizJ/xxW8LkpDFqWbdEBqu0F6
-         c1Mz6BUeF86H/uoGlaLhdBzuvy7pth9eX5jdgl2UosPywmW9EtfygOrrtOCLkncPxK
-         yLbQSJDGaaa/IM3zn6NAYHDZ3N48e660yg+qFIZOo5Pm40yCpo5cZM9QCfJcW1OM8t
-         2leJqaa4LsVwAqgKUPA5z8e2uPBxmFdVDxunQ/XUYnLToqCx+f9y0rX8SnMfteln2O
-         Z/4zYKhhsapkw==
-Date:   Mon, 3 Jul 2023 17:41:14 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, dan.carpenter@linaro.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] kernel/trace: Fix cleanup logic of
- enable_trace_eprobe
-Message-Id: <20230703174114.dd2a7c53b35ab4c3e25a4366@kernel.org>
-In-Reply-To: <20230703042853.1427493-1-tz.stoyanov@gmail.com>
-References: <20230703042853.1427493-1-tz.stoyanov@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 04:44:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07399E56
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688373831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zp5g9NpYfxNAKr8x3hzhFJpQgOx/itKdI6XRa55tcZ4=;
+        b=IsYFA+sGcEB9QREBthJrAxtlzMD7//07UB7xguL29B5Kl5yfkGk5b92ncOtg9K9rzAalHc
+        BBJF0GURq10U2/tEFBGwGKBFb0ATiUE4pppz185l1Z0CnkglHQoHczdVF2g5FMWspc32gf
+        Q9LBD8EKuXrHFyz1XDOAxCgS7B7XQas=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-427--uFzpSOWOTqZOHvFW4HkMw-1; Mon, 03 Jul 2023 04:43:49 -0400
+X-MC-Unique: -uFzpSOWOTqZOHvFW4HkMw-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-31400956ce8so2371344f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 01:43:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688373828; x=1690965828;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zp5g9NpYfxNAKr8x3hzhFJpQgOx/itKdI6XRa55tcZ4=;
+        b=M3nQVcIKhI8FKROT/tkrwL+LpyJL0v9YAlVvd+UbS1eBmuc95extS+iBuWqLIFX64q
+         UZSDKh4pG+ifX5QZ0Eqb8exQ3saaqQ3zf5QoiFFPh5UQwdillP9ygKe7m3jgd0BaOU8w
+         dzTgz4omaV/YRvobQWdJYp+jc8bbat/o3nU86wN2s11TyKLs74s68AsGigbFeJThx317
+         q3GUAv9900YKUnsRt0I4CUOnsaGzaB684u5ZUN8u801Xyio+rj1vjytGDtpWoDMKl3+o
+         MALhpEnQE54asonVUsS8ZlOOIBreHbNFTRinYrY+IlcEmRfGLr3iO1UHyNKwxJqO/Lwv
+         QBDw==
+X-Gm-Message-State: ABy/qLYQ0VlsoKqeQTE5mwmAKff8EfPbE/SzS/sTY85EsB6gIlCqUNqU
+        4YcYdg6fsgoKz5frqGo9LoNXjoO44tXURx93JbQzBpu6VB2WXtwW1klYHEwND2tR0r7g7QbTIps
+        pW9mHAEzlCaVwh9dYspWi9vAf
+X-Received: by 2002:a5d:4143:0:b0:313:f94b:54e6 with SMTP id c3-20020a5d4143000000b00313f94b54e6mr7345896wrq.71.1688373827947;
+        Mon, 03 Jul 2023 01:43:47 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlF8Sgct2ZKOCxkKDgyrN07WyPQuy43UZE9MgiqZYPp0ju4sHwD649De1/MCHiwbo3Wl8IAHIA==
+X-Received: by 2002:a5d:4143:0:b0:313:f94b:54e6 with SMTP id c3-20020a5d4143000000b00313f94b54e6mr7345872wrq.71.1688373827611;
+        Mon, 03 Jul 2023 01:43:47 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id d17-20020adffbd1000000b002fb60c7995esm24990543wrs.8.2023.07.03.01.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 01:43:47 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 0/2] Allow disabling all native fbdev drivers and only
+ keeping DRM emulation
+In-Reply-To: <ZKKFDECBXfQF+n8Z@smile.fi.intel.com>
+References: <20230629225113.297512-1-javierm@redhat.com>
+ <ZJ8RY7ZUlryrPB50@smile.fi.intel.com>
+ <878rc0etqe.fsf@minerva.mail-host-address-is-not-set>
+ <ZJ8T/Fexkr9wEZoP@smile.fi.intel.com>
+ <875y74elsv.fsf@minerva.mail-host-address-is-not-set>
+ <ZKKFDECBXfQF+n8Z@smile.fi.intel.com>
+Date:   Mon, 03 Jul 2023 10:43:46 +0200
+Message-ID: <87zg4dcrlp.fsf@minerva.mail-host-address-is-not-set>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  3 Jul 2023 07:28:53 +0300
-"Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com> wrote:
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
 
-> The enable_trace_eprobe() function enables all event probes, attached
-> to given trace probe. If an error occurs in enabling one of the event
-> probes, all others should be roll backed. There is a bug in that roll
-> back logic - instead of all event probes, only the failed one is
-> disabled.
+> On Fri, Jun 30, 2023 at 10:29:20PM +0200, Javier Martinez Canillas wrote:
+>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+>> > On Fri, Jun 30, 2023 at 07:38:01PM +0200, Javier Martinez Canillas wrote:
+>> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+>> >> > On Fri, Jun 30, 2023 at 12:51:02AM +0200, Javier Martinez Canillas wrote:
+>> >> >> This patch series splits the fbdev core support in two different Kconfig
+>> >> >> symbols: FB and FB_CORE. The motivation for this is to allow CONFIG_FB to
+>> >> >> be disabled, while still having the the core fbdev support needed for the
+>> >> >> CONFIG_DRM_FBDEV_EMULATION to be enabled. The motivation is automatically
+>> >> >> disabling all fbdev drivers instead of having to be disabled individually.
+>> >> >> 
+>> >> >> The reason for doing this is that now with simpledrm, there's no need for
+>> >> >> the legacy fbdev (e.g: efifb or vesafb) drivers anymore and many distros
+>> >> >
+>> >> > How does simpledrm works with earlycon=efi?
+>> >> >
+>> >> 
+>> >> simpledrm isn't for earlycon. For that you use a different driver (i.e:
+>> >> drivers/firmware/efi/earlycon.c). I'm just talking about fbdev drivers
+>> >> here that could be replaced by simpledrm.
+>> >
+>> > So, efifb can't be replaced. Please, fix your cover letter to reduce false
+>> > impression of the scope of usage of the simpledrm.
+>> >
+>> 
+>> Nothing to fixup.
+>> 
+>> You are conflating the efifb fbdev driver (drivers/video/fbdev/efifb.c)
+>> with the efifb earlycon driver (drivers/firmware/efi/earlycon.c). I'm
+>> talking about the former (which can be replaced by simpledrm) while you
+>> are talking about the latter.
+>
+> Ah, this makes sense!
+>
+> I remember now that it was (still is?) an attempt to move from efifb to
+> simpledrm, but have no idea what the status of that series is.
+>
 
-This looks good to me.
+Indeed. And there was were also some patches IIRC to attempt porting the
+earlycon efifb to a fbdev or DRM driver, can't remember now.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you,
-
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
-> Signed-off-by: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
-> ---
-> Changes since v1: https://lore.kernel.org/all/20230628121811.338655-1-tz.stoyanov@gmail.com/
->  - Added one-time warning, suggested by Steven Rostedt.
-> Changed since v2: https://lore.kernel.org/lkml/20230630121627.833560-1-tz.stoyanov@gmail.com/
->  - Added counter of successfully enabled eprobes, suggested by Steven Rostedt.
-> 
->  kernel/trace/trace_eprobe.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index cb0077ba2b49..a0a704ba27db 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -644,6 +644,7 @@ static int enable_trace_eprobe(struct trace_event_call *call,
->  	struct trace_eprobe *ep;
->  	bool enabled;
->  	int ret = 0;
-> +	int cnt = 0;
->  
->  	tp = trace_probe_primary_from_call(call);
->  	if (WARN_ON_ONCE(!tp))
-> @@ -667,12 +668,25 @@ static int enable_trace_eprobe(struct trace_event_call *call,
->  		if (ret)
->  			break;
->  		enabled = true;
-> +		cnt++;
->  	}
->  
->  	if (ret) {
->  		/* Failed to enable one of them. Roll back all */
-> -		if (enabled)
-> -			disable_eprobe(ep, file->tr);
-> +		if (enabled) {
-> +			/*
-> +			 * It's a bug if one failed for something other than memory
-> +			 * not being available but another eprobe succeeded.
-> +			 */
-> +			WARN_ON_ONCE(ret != -ENOMEM);
-> +
-> +			list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
-> +				ep = container_of(pos, struct trace_eprobe, tp);
-> +				disable_eprobe(ep, file->tr);
-> +				if (!--cnt)
-> +					break;
-> +			}
-> +		}
->  		if (file)
->  			trace_probe_remove_file(tp, file);
->  		else
 > -- 
-> 2.41.0
-> 
-
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
