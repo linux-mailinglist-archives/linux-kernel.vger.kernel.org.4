@@ -2,165 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC146746593
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 00:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34A57465A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 00:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjGCWCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 18:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S231319AbjGCWGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 18:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjGCWCX (ORCPT
+        with ESMTP id S231452AbjGCWGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 18:02:23 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D61A1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 15:02:17 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b80b343178so27839345ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 15:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688421737; x=1691013737;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xAWDleebt7l7zEdHolSBzV/uMqJ/GbmesvF/kh1hWdE=;
-        b=IXUFd9b7r8hl56U5SRDsR/9UzGwQrMUhusT7pJ+/s1PMHNHuXpGbV/qH9LSNcb2QCE
-         7wWxGUDbHCDaiLI3LCDHk/af2JTtHQKwEb3M6xabA02Q+hHBxzscJLvEUWkL6LYq+C+Q
-         wxIcFWk9Fy739XWpsae7KH3EeNO1+thgjWL1M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688421737; x=1691013737;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xAWDleebt7l7zEdHolSBzV/uMqJ/GbmesvF/kh1hWdE=;
-        b=LkQ01bM7erlLIpBsJLGaumfI/dR70K9rT+bP++uJpyrpGbQgMdsQJ/qwVVM73+REn8
-         GE0xGV+2HxOGFPVQPUswgI91I+LzMhSI4ppJrNpVbNrskyoZPTxZqfaSWhfUjaYBHq7I
-         CdEzCtGjV+UIqAsdbMG8j6yLzElY1SdU2PyYpRnw6J7lArjBgO7/qte/9eoBcw/GPhaF
-         4fBgGSM6C0q7iZFL0pUhtPbaHmiO6GUV54/YfAlrqTa28peGGEIGw3RULpfyEmOAbXh+
-         eealaVdlJUN6IRobho2UKB+sB+OdQXXnVOygFE5FES8LaKahPTy8ms59m6o/jaJqLAFK
-         e4TA==
-X-Gm-Message-State: ABy/qLZvA7xQ7zp1nc6wtf6E/neBnd1k9uGpcs11NqEXQ61r7x99kV3a
-        jGKcAF5UACKXdcYpqRFt59L90Q==
-X-Google-Smtp-Source: APBJJlHUHWr2MjXiHeX7bobS1UK0VoqLRvSBRANzQe02d9Qqtt6YW1du4/YXNyR/ImLJVczn5z7Wpg==
-X-Received: by 2002:a17:902:e80b:b0:1b7:dfbd:4df0 with SMTP id u11-20020a170902e80b00b001b7dfbd4df0mr11826113plg.45.1688421737271;
-        Mon, 03 Jul 2023 15:02:17 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k9-20020a170902760900b001b54a88e6adsm15542571pll.309.2023.07.03.15.02.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 15:02:16 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Alexander Potapenko <glider@google.com>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] Revert "fortify: Allow KUnit test to build without FORTIFY"
-Date:   Mon,  3 Jul 2023 15:02:13 -0700
-Message-Id: <20230703220210.never.615-kees@kernel.org>
+        Mon, 3 Jul 2023 18:06:32 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2070.outbound.protection.outlook.com [40.107.20.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60319E6D;
+        Mon,  3 Jul 2023 15:06:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XMJ0z6+6AeTc/LptQU4Mm9MDMBMoKCJS927XbPAUHrk44jZNUq74E9MKH6JrKGr37mdfl76IVcG/lRDOXDY3H5KJXLpGiyWmT7JvAYhZ7L7qdQsHsyJSn5NpYpm3CHNYxV61CB4GZALRXTg15Mq/RyyYeckEFs1NpaZNEEwdhahL23qoheIodmPpV+tiYdCZLr2JHCtehOXwKkzeV+SEhEENF4y8MUi+QZbgtrm2B5j17X5mUVa8KSx8Rh2VUIlw27dxCc0DIQZQYXbP1xvMi3MZknHLRQjJifwBQF6oRpupbkXwGpnqwFbJx3Rsb/qC+leOI+p9o2haweFX7FFgVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u9uWXx5U6NJv9IJ4mulwa0UJoWk5HRI+kACPTEIAsE0=;
+ b=DYX5D+rBUSi3LU976VQZ8UCt5C5vaGiYSUwyDyXdhMZ+TM2+8kAO/64yqMWe4jAgY6AbvffPmFdpu1XKg4YzXn3Z/h1PJaxG3MjVKRQtTrXyTb1HSQRDY4o/b9qvDREZkOtW9MRjRiE4SQb78dA8vhPWyiDs8w7r6yYSLOEcUs7klp+A5WsHSHJYtek2T/+F+sdQx5Iu3tDJwNHtdQkA2vq0jIlNRIqDOpwlqMQn61YROVWkmU5rwmwPOuy7NeSVuJUcNO5EETHXEDxw9aO5hLGElMAeBSmzR+MYF7ThpvJ9RRaoxbUWj+1GAuIt/xpQqgk+BzKZL8e3lkvKUqi1SA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u9uWXx5U6NJv9IJ4mulwa0UJoWk5HRI+kACPTEIAsE0=;
+ b=C4LhvWjbcyIhCD0G6jMkuBQwvCo9604HDwBkaWW0Guhyl5J5Z710xiDgEqTcHrKhKfGcRsoWvpi+A+JA8UY/xTfXEbSn+yzztUcfIY5AShBEFv/KDB6WlZtNAZNztJpyRa7AmFlNwAsE+qjU0ky5vkWO4YixQ8GXFaOJxQOASrM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by GV1PR04MB9118.eurprd04.prod.outlook.com (2603:10a6:150:25::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
+ 2023 22:06:11 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460%5]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 22:06:11 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net 0/2] Fix mangled link-local MAC DAs with SJA1105 DSA
+Date:   Tue,  4 Jul 2023 01:05:43 +0300
+Message-Id: <20230703220545.3172891-1-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2499; i=keescook@chromium.org;
- h=from:subject:message-id; bh=WhBhSzaqPfsnfMGWEUr5gEyNmyjToakD/wquBaPOXCA=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBko0Vlt1pEL46RtDsfoMNRHGroygYArBX4j7Rld
- FW/fRc9MOiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZKNFZQAKCRCJcvTf3G3A
- JuoPEACFu2sAmQKtF/kkJeAEikAJMuV0uAcXZ2lN8TFXfGai71DEo5NXH4IIPfqwpB9q3E0aDys
- B6AlSwvYkS79nsy8DVfXqyeNxbDUDw2ZPc58slmqT/JwvDjTG3xp81v1hRYR6yZohOvnn2u59ld
- GILrPRPghL5oCnukkrtsI/1UqOyvwsQPoQSiUuAQ8Lr9Fk/OQFwTvDswfMJYi6n+vvfCD4J4mbm
- imJZfhnbNEyYAI/ZXs2IAVrd0oF8OqqCvA1b4vzIfus2q3cCuYG/sb7j6Wpjj1ZPTis7EgPnmBl
- 4LBq/eTYNtCtzsSKgRj+J9x1yW6G1bbk2GoL0+1ZzYKnKihzdp3nI0S+etKF3dTbUZoF8Gr3Lr0
- SKtQiNHxjnaEyoJPjoz+gEEiQLp70Reg3ZdptuqAbvDNMmEJni2DiGc2OEW4mS7txz22ItPtj7S
- TJxWw2aYT7xiI/2fMZQagSaRqmbYzaYZNrE1nC7honDekkLXJCL7sP/49xMuii0TXbLKidjCRa9
- HQH1OY4HgTaBkX2dGMYwihWgKU5soAdKkuIDXwWTnqGmZyvY7kExxZ1YvW+ES8rvRlbMAKDhGTB
- 83YWsn8KNqalTYdiG6Xl4FF7SfBnFVWqIXhHxKOUQQY9vFEwelexfCjE29S7Bm1f4108ROMq3Ow
- t03RMeG jtGGMPdQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR06CA0152.eurprd06.prod.outlook.com
+ (2603:10a6:803:a0::45) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|GV1PR04MB9118:EE_
+X-MS-Office365-Filtering-Correlation-Id: a81d1803-9d87-48fb-2f87-08db7c11b5d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V790ZSgumHfVaLEed92IWFSa3TxjtZvXhBVuGEwcgTXmgqhoQKfHCEMKMyEKUJYticIp30Qlb9I9/7C/SIHBBNSPQzLkjK8LZxAqB4Ux5vb9D8RjBQW3/ZdPvo7QB2o8fJtn/z//4ATyzv2PcAf4NMdISpfu9nIcUqBir5FJpKDe0lAbt4i92gm+4NC61ac4mPspu/OKZsFnKJRZOta+i6kt1Ed7Lc8WcKAC6pnE/L/yMELnY3s0YoxKZuKW6K+tkE/SLHczlX1UWsEDxdhCvTNNxrNEfScVT0H2fjLfp4Zo9/VJIeg0eV5BH0xf1VRkC47s7ZffPihL/tYryCSb2TeJfA44zivTR89nrly4qCnn0AH1IIom5jAsgREiqEd5zG9+7/JsGGcCo2BHjmJIDYaU0tt/AelHW2UnBTEx3D2eO1PW/NqoVoB0y5lHI3GTuTJUolGt8mWDZ+z2uUtf2r6IlRXpVYqmIyMMr499dE0In6Q821lYdq+Q370nir0iDgcw3nRqy09TeYzEOioloufo92p5cfZTq4vJ6mWpYHU2TqhVoQSKBSMiErbRT4tEWtMTyhhbvbdraHOd8NRjNgixa18sWbH3YP2T6DIdJ5g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(366004)(346002)(39860400002)(451199021)(2906002)(41300700001)(5660300002)(8676002)(8936002)(44832011)(36756003)(86362001)(186003)(2616005)(478600001)(26005)(6506007)(6512007)(966005)(1076003)(6666004)(6486002)(52116002)(316002)(6916009)(66476007)(4326008)(66946007)(66556008)(38350700002)(38100700002)(54906003)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o4r5x5ftiLf36DIYJGMb2bHSFFzV9WrdF1n4tvtBXIGQAQMD/5R+Tyth7ig9?=
+ =?us-ascii?Q?/zJXoS+QsHqswat5VEre4LBHgWdxNWX9s8p3zLBfcuBjP7lsbbTJ2hkS2aDv?=
+ =?us-ascii?Q?sciajrUmWHBxdhnTCfBsxpEO2tPaFk0fBTA0Pn1cE0ZKxMRIT1IxZnVgMY8n?=
+ =?us-ascii?Q?H8QsUK4+XlA0bT1ueGgiLP6rEMGBnaKTR6L64AdZqknCsp4TcFTlOFrRKSrL?=
+ =?us-ascii?Q?zV03uzNuZWSsaWmldmCD5qqwvYZTX2PDibU7m+CVs3YIV+1dPNNqxZKJ5vxS?=
+ =?us-ascii?Q?56SdWbgxcTNiHb/do61fJcxPhzR/IHTqGG2yGXvLSx63WSKgPZYejkB5ALWf?=
+ =?us-ascii?Q?KNg5WS1s+LYrua02LEsmC48urFw62Sp4Foozw8cSF2fv4lPwEFX9fLbou6oZ?=
+ =?us-ascii?Q?SewW8rFcb41XDm2xKfnLJf6cuJTReYQ8eL/+AIXmjyUZSTCztWx807jS1J2/?=
+ =?us-ascii?Q?652xmlsD0RS/ct9kxQe3vMBNLGNQ/B4l7CZIz4Hm1MLbuajY/cPNl3XaN7Mh?=
+ =?us-ascii?Q?7h2tKKzADM6SnnGZ3mEgK7TmlUG6zgKdgBseW5JBlEUgRoPcLmJxXT6K8s7z?=
+ =?us-ascii?Q?R5pcxBkAFivCHZ7q8IwruDTL0iLYDUMDMx3tn4+7ltmqKzs3JDZ5ouD7irXE?=
+ =?us-ascii?Q?XrO+3Oc/SVTEE79Eb0PVwmC5xASVtbqL0WHA3dzttzwT03GLlyOPwlNJbykB?=
+ =?us-ascii?Q?/O623ayhkDqkSSkwMpfQLznRH2DIZUfYa3hlk+rf7h+XtTr8MJyQHGGmtX3g?=
+ =?us-ascii?Q?2IP4gpIbVrVcBFk8RnoRaQHMk1YEhTu8H+WsklqAdUr6ly7Y8CadRuob9XxA?=
+ =?us-ascii?Q?WyWHxp80oWXSZ/ea4bj3sxo1JthtcoB/qQw8UccZkEEaDRU8B4muIDkV95ki?=
+ =?us-ascii?Q?9RPeYbqYcKcIpjBQ7+/WodCBsRo3AH1pVigBG3N/iV6DPj2H4wVpP5Y8YH4+?=
+ =?us-ascii?Q?r2bxeCRfDMTPSbJ1bg05xWrJNL4wOlXMjyouCjj4oj+zmsWq0+HLgd5nMR4q?=
+ =?us-ascii?Q?8amJXHbdM8AhopC4gNUPRMSMOQxTu3caupSD7Nv2DrPYgXaCtktudJffkMJQ?=
+ =?us-ascii?Q?XO3jMguhc8PVvlT6EmkCoQDiwlMUZcQImkZxWbpdo7xlR0tKSWnx5rBhbAVx?=
+ =?us-ascii?Q?nntN0f7mIdh3+V2Fu3+6Qdbl12PgAQEACJ9yEtk+6jY1GayhgmTNWd95Emaz?=
+ =?us-ascii?Q?g6WdolLtC4mH1w1QH1qdoJOsNbLPlQa2VQdV7K/lHJ683nFPYcO6fo4Tm/6L?=
+ =?us-ascii?Q?1PeOTfaKB/6rvghbZyXb2ElS54seyGwplhafBMY4yN3bYRMykhwcx4xOAW7B?=
+ =?us-ascii?Q?MYVHB9JELBKavlli3/HsLFFj1z05eQtwLMS+6ojHRo546bnxcXDHWzyjvqPw?=
+ =?us-ascii?Q?8L4y6q4hs3INGdJQ2DH8UNVcVktx9gZHZfYXFqTsnlhllhCZKQeyCjxUXssl?=
+ =?us-ascii?Q?Gf7VZD9tAvh5NpcOCGt3gnSVTenTEsljdOWcVI8H8HTFOMk3I1vU5U+JKKCc?=
+ =?us-ascii?Q?u+QSqn2uDmhWNxMNBhyfRT89dQyFTpMZftw7396zOhINlGP/MA2RMA4RcHpe?=
+ =?us-ascii?Q?33Hul8w1urR8MJXcqi6nbyeucS1pVI/pHGrSU4bdKfvgz0HTpiw3xACiLtTp?=
+ =?us-ascii?Q?yg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a81d1803-9d87-48fb-2f87-08db7c11b5d1
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 22:06:11.2049
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VZeAhm0wQ8hMpfNvpH5VRZKQ7MrOh3/dE4JaszuAp+WmkQ2OJ2GQYWPSN6colQ/fcmJASrUlL5OXrdeNZa/9zA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB9118
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit a9dc8d0442294b426b1ebd4ec6097c82ebe282e0.
+The SJA1105 hardware tagging protocol is weird and will put DSA
+information (source port, switch ID) in the MAC DA of the packets sent
+to the CPU, and then send some additional (meta) packets which contain
+the original bytes from the previous packet's MAC DA.
 
-The standard for KUnit is to not build tests at all when required
-functionality is missing, rather than doing test "skip". Restore this
-for the fortify tests, so that architectures without
-CONFIG_ARCH_HAS_FORTIFY_SOURCE do not emit unsolvable warnings.
+The tagging protocol driver contains logic to handle this, but the meta
+frames are optional functionality, and there are configurations when
+they aren't received (no PTP RX timestamping). Thus, the MAC DA from
+packets sent to the stack is not correct in all cases.
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Closes: https://lore.kernel.org/all/CAMuHMdUrxOEroHVUt7-mAnKSBjY=a-D3jr+XiAifuwv06Ob9Pw@mail.gmail.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-I'll take this via my hardening tree and send a PR to Linus before -rc1.
----
- lib/Kconfig.debug   |  2 +-
- lib/fortify_kunit.c | 14 --------------
- 2 files changed, 1 insertion(+), 15 deletions(-)
+Also, during testing it was found that the MAC DA patching procedure was
+incorrect.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index c2a7608ff585..6c6a7ee9f1f9 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2645,7 +2645,7 @@ config STACKINIT_KUNIT_TEST
- 
- config FORTIFY_KUNIT_TEST
- 	tristate "Test fortified str*() and mem*() function internals at runtime" if !KUNIT_ALL_TESTS
--	depends on KUNIT
-+	depends on KUNIT && FORTIFY_SOURCE
- 	default KUNIT_ALL_TESTS
- 	help
- 	  Builds unit tests for checking internals of FORTIFY_SOURCE as used
-diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
-index 524132f33cf0..c8c33cbaae9e 100644
---- a/lib/fortify_kunit.c
-+++ b/lib/fortify_kunit.c
-@@ -25,11 +25,6 @@ static const char array_of_10[] = "this is 10";
- static const char *ptr_of_11 = "this is 11!";
- static char array_unknown[] = "compiler thinks I might change";
- 
--/* Handle being built without CONFIG_FORTIFY_SOURCE */
--#ifndef __compiletime_strlen
--# define __compiletime_strlen __builtin_strlen
--#endif
--
- static void known_sizes_test(struct kunit *test)
- {
- 	KUNIT_EXPECT_EQ(test, __compiletime_strlen("88888888"), 8);
-@@ -312,14 +307,6 @@ DEFINE_ALLOC_SIZE_TEST_PAIR(kvmalloc)
- } while (0)
- DEFINE_ALLOC_SIZE_TEST_PAIR(devm_kmalloc)
- 
--static int fortify_test_init(struct kunit *test)
--{
--	if (!IS_ENABLED(CONFIG_FORTIFY_SOURCE))
--		kunit_skip(test, "Not built with CONFIG_FORTIFY_SOURCE=y");
--
--	return 0;
--}
--
- static struct kunit_case fortify_test_cases[] = {
- 	KUNIT_CASE(known_sizes_test),
- 	KUNIT_CASE(control_flow_split_test),
-@@ -336,7 +323,6 @@ static struct kunit_case fortify_test_cases[] = {
- 
- static struct kunit_suite fortify_test_suite = {
- 	.name = "fortify",
--	.init = fortify_test_init,
- 	.test_cases = fortify_test_cases,
- };
- 
+The investigation comes as a result of this discussion with Paolo:
+https://lore.kernel.org/netdev/f494387c8d55d9b1d5a3e88beedeeb448f2e6cc3.camel@redhat.com/
+
+Vladimir Oltean (2):
+  net: dsa: tag_sja1105: fix MAC DA patching from meta frames
+  net: dsa: sja1105: always enable the send_meta options
+
+ drivers/net/dsa/sja1105/sja1105.h      |  2 +-
+ drivers/net/dsa/sja1105/sja1105_main.c |  5 ++-
+ drivers/net/dsa/sja1105/sja1105_ptp.c  | 48 +++----------------------
+ include/linux/dsa/sja1105.h            |  4 ---
+ net/dsa/tag_sja1105.c                  | 49 ++------------------------
+ 5 files changed, 9 insertions(+), 99 deletions(-)
+
 -- 
 2.34.1
 
