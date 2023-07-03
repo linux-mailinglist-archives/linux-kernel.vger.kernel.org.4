@@ -2,118 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD7F74597B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DB274597D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjGCJ7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
+        id S231265AbjGCKAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbjGCJ7N (ORCPT
+        with ESMTP id S231802AbjGCKAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:59:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135FE5B98
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:55:35 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGGFi-0000sj-6H; Mon, 03 Jul 2023 11:53:50 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGGFW-00Blsj-7i; Mon, 03 Jul 2023 11:53:38 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGGFV-001phL-C8; Mon, 03 Jul 2023 11:53:37 +0200
-Date:   Mon, 3 Jul 2023 11:53:37 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, heiko@sntech.de,
-        hayashi.kunihiko@socionext.com, rafael@kernel.org,
-        amitk@kernel.org, alexandre.torgue@foss.st.com,
-        linux-tegra@vger.kernel.org, thierry.reding@gmail.com,
-        jernej.skrabec@gmail.com, miquel.raynal@bootlin.com,
-        srinivas.pandruvada@linux.intel.com, festevam@gmail.com,
-        linux-stm32@st-md-mailman.stormreply.com, bchihi@baylibre.com,
-        florian.fainelli@broadcom.com, daniel.lezcano@linaro.org,
-        chi.minghao@zte.com.cn, jonathanh@nvidia.com,
-        linux-rockchip@lists.infradead.org, agross@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-imx@nxp.com,
-        wenst@chromium.org, rui.zhang@intel.com, thara.gopinath@gmail.com,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, s.hauer@pengutronix.de,
-        linux-mediatek@lists.infradead.org, mmayer@broadcom.com,
-        matthias.bgg@gmail.com, DLG-Adam.Ward.opensource@dm.renesas.com,
-        johan+linaro@kernel.org, angelogioacchino.delregno@collabora.com,
-        linux-arm-kernel@lists.infradead.org,
-        niklas.soderlund+renesas@ragnatech.se, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, shangxiaojing@huawei.com,
-        konrad.dybcio@linaro.org, mcoquelin.stm32@gmail.com,
-        shawnguo@kernel.org
-Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
- for devm_request_threaded_irq()
-Message-ID: <20230703095337.27bhco7nkqtxr4me@pengutronix.de>
-References: <20230627101215.58798-1-frank.li@vivo.com>
- <20230627110025.vgtplc6nluiiuvoh@pengutronix.de>
- <87h6qpyzkd.ffs@tglx>
- <690b12b7-5586-6ade-de83-99f463bc8397@vivo.com>
+        Mon, 3 Jul 2023 06:00:02 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806ADE79;
+        Mon,  3 Jul 2023 02:56:23 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36373cuo019843;
+        Mon, 3 Jul 2023 02:56:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=WYDMzLE60YbEI5+R2XflYqsOuUQedahohgc583ZN6m0=;
+ b=F4dbLV6D3NVckHU+pF+nJ5qOTTVVmiUq9ekqTrGA2Oz+mGLAJFkmNtCiFlSdlljLD/5D
+ jDt8MiL5LikaeDOynOTa4cW3u+7/r47qt9/nKYciRFmKZNS0Fd5lLVWtydXcflWnmy6R
+ bnXcz1zVEkC4freVeRRVXBbOwHNnuYb0BK3X26pR45345n2HrkDgTm2ktlBtIcYYmkYD
+ ie+jZi1MBMBCMPFW+udeJ1I4nFyJ5d2hEQtOcbXPS4IhjSAnS7wI6jsYTPlSVpNdFtvW
+ qkjBwsyjV2si1v8vXlVyvt5A7drjPL7UBRYVnq0O3Lg1o/ga4D4x8bjkAvgFigkjLGmy Pw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3rjknj47kx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jul 2023 02:56:08 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 3 Jul
+ 2023 02:56:06 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Mon, 3 Jul 2023 02:56:06 -0700
+Received: from localhost.localdomain (unknown [10.28.36.166])
+        by maili.marvell.com (Postfix) with ESMTP id 81B6D3F704B;
+        Mon,  3 Jul 2023 02:56:03 -0700 (PDT)
+From:   Suman Ghosh <sumang@marvell.com>
+To:     <sgoutham@marvell.com>, <gakula@marvell.com>,
+        <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Suman Ghosh <sumang@marvell.com>
+Subject: [net PATCH V2] octeontx2-pf: Add additional check for MCAM rules.
+Date:   Mon, 3 Jul 2023 15:26:00 +0530
+Message-ID: <20230703095600.2048397-1-sumang@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4ifm6dkdtwbp3ztq"
-Content-Disposition: inline
-In-Reply-To: <690b12b7-5586-6ade-de83-99f463bc8397@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: v0qMJWj0MbiEzDfMj5chV-hBJXZM0fsN
+X-Proofpoint-ORIG-GUID: v0qMJWj0MbiEzDfMj5chV-hBJXZM0fsN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-03_08,2023-06-30_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Due to hardware limitation, MCAM drop rule with
+ether_type == 802.1Q and vlan_id == 0 is not supported. Hence rejecting
+such rules.
 
---4ifm6dkdtwbp3ztq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Suman Ghosh <sumang@marvell.com>
+---
+Changes since v1:
+- Updated commit message
 
-Hello,
+ .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c |  7 +++++++
+ .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c    | 13 +++++++++++++
+ 2 files changed, 20 insertions(+)
 
-On Mon, Jul 03, 2023 at 05:13:29PM +0800, Yangtao Li wrote:
-> [...] v3 has been sent.
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
+index 10e11262d48a..49ba27875111 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
+@@ -871,6 +871,13 @@ static int otx2_prepare_flow_request(struct ethtool_rx_flow_spec *fsp,
+ 			if (be16_to_cpu(fsp->m_ext.vlan_etype) != 0xFFFF)
+ 				return -EINVAL;
+ 
++			/* Drop rule with vlan_etype == 802.1Q
++			 * and vlan_id == 0 is not supported
++			 */
++			if (vlan_etype == ETH_P_8021Q && !fsp->m_ext.vlan_tci &&
++			    fsp->ring_cookie == RX_CLS_FLOW_DISC)
++				return -EINVAL;
++
+ 			vlan_etype = be16_to_cpu(fsp->h_ext.vlan_etype);
+ 			/* Only ETH_P_8021Q and ETH_P_802AD types supported */
+ 			if (vlan_etype != ETH_P_8021Q &&
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+index 044cc211424e..6c0fdc2bad73 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+@@ -604,6 +604,19 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
+ 			return -EOPNOTSUPP;
+ 		}
+ 
++		if (!match.mask->vlan_id) {
++			struct flow_action_entry *act;
++			int i;
++
++			flow_action_for_each(i, act, &rule->action) {
++				if (act->id == FLOW_ACTION_DROP) {
++					netdev_err(nic->netdev, "vlan tpid 0x%x with vlan_id %d is not supported for DROP rule.\n",
++						   ntohs(match.key->vlan_tpid), match.key->vlan_id);
++					return -EOPNOTSUPP;
++				}
++			}
++		}
++
+ 		if (match.mask->vlan_id ||
+ 		    match.mask->vlan_dei ||
+ 		    match.mask->vlan_priority) {
+-- 
+2.25.1
 
-Please make sure that you send a v3 patch series (at least) to the
-people who gave you feedback for v2. If you skip people who had general
-concerns about the whole series, this might help you in the short run
-because they might miss to also criticise v3, but in the long run it
-might result in a loss of trust in you.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---4ifm6dkdtwbp3ztq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSimqAACgkQj4D7WH0S
-/k6WAQgApvFvslry9NwR8H0z4aDKfgwg20hFIuR9LFKWPzquLmB7y1nBdA9z1Mpp
-Ybkb+E4cxXIe/uFWnm7mr+SlHuHQdwR6b983iZQjHGYCLiqxcAcWzp0W+b/ZH8JZ
-AYUipaQ9T6hm8Kqh+HgQN5VhXv7PM0fQH/yoBNeEF+CDsMwGMAoViefMhwHeZLx2
-+yHExhGOQNgoN2ge6GgpvdryJJ1NSl5PXpcyCG+1ED6a1pGmueDK5ipp+dMaxOQg
-l3/9ECPLYTDvPK4951UMlOuWdVG5qKqYw8q9Z8I5QGTav+lKoshXgpbAbQnHNpv+
-44KmixTXlQmRdC4XP2f1Em3/fP/8Dw==
-=4vu6
------END PGP SIGNATURE-----
-
---4ifm6dkdtwbp3ztq--
