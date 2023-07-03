@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAFA745EEC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C757745EB4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjGCOo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S231281AbjGCOmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjGCOmw (ORCPT
+        with ESMTP id S229885AbjGCOmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:42:52 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BC010DF;
-        Mon,  3 Jul 2023 07:42:42 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363DU4x4014908;
-        Mon, 3 Jul 2023 14:42:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=JyYQG51UyCCY7HcYnEcSdK9Wfs+G16NqaRCsm8LXtKk=;
- b=DAhKzozfkF81jB+Gjwp3x4l2LlYbYIJRu8eFut0yfX5cSeS6GJ1Y7VdTQM3KiCk2JIDs
- QgnR0iFK5mB7JR6DnmwvTTJ1zNcZK64aNcrF9vCnC4kkQMfNP80XXhoxAcKEQP8JmC/u
- sA+KMBSwpbWMSsKzKNOge+eA/J9fyijayT13oN6KOc/WNFJfnjSNKGcWvghZmd4cbnR7
- wjMBO9H7+dqVSigBfGPrLOk8Qz7GXp3obDA4oATA8sbP/8tOFP1NUcZwOfcGT9EKJ4hc
- Ws6BnPzYSN/sPCYzqiZS593NGyY4vUp+MXTb+zzRWG/9Kb2VK5jb4DornwbUY6gMII6j vQ== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rkwepgdde-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 14:42:32 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 363EgSrO031571;
-        Mon, 3 Jul 2023 14:42:29 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rjd7k8ged-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 03 Jul 2023 14:42:29 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 363EgSVY031498;
-        Mon, 3 Jul 2023 14:42:28 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 363EgSYG031495;
-        Mon, 03 Jul 2023 14:42:28 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-        id 710845025; Mon,  3 Jul 2023 20:12:27 +0530 (+0530)
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        sboyd@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH 01/10] dt-bindings: regulator: Add PMX75 compatibles
-Date:   Mon,  3 Jul 2023 20:12:17 +0530
-Message-Id: <1688395346-3126-2-git-send-email-quic_rohiagar@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XBByexc_VhRYRSW0cbr8DmQxmQGwCWhc
-X-Proofpoint-GUID: XBByexc_VhRYRSW0cbr8DmQxmQGwCWhc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_11,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 impostorscore=0 clxscore=1015 mlxlogscore=805
- spamscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307030132
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 3 Jul 2023 10:42:20 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 428C3E5C;
+        Mon,  3 Jul 2023 07:42:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1688395338;
+        bh=bxFjauUq2WL32jHSPjtbjDPG477Jdv0YrEDq/u80aBE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AhrIA4bpNXctnbjB9zL/sj1rGqhNvu6fT18CYncnYQWpQSIoov7xveEfjOSjqjLPy
+         zFtA91S2is2jbaHqb6RgRM3K+YTrqhLPanrW513653hGfBScv8jheHZe9kn0okLZZJ
+         XKA+JI+Yg0gIQrMPbxwRdGJ9k8THmYYI2v3APzNvzS8NqREcJzHyi8SqAHc1REhDAb
+         TdXAgU+ldh/kaK3eaOOH/XDcfCLjqBQvtKHCWbxiQdr3wWsbCEEtQ7uT4FVP57VCL3
+         kYYXfuN2yUQWehsiZ/iLwv1fgzmh7N4qgxt2MBp0PUydMkBLfKNDQ2tHekvoqg0yO5
+         EZklTMJRFR6dg==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 8FBCE1B6C;
+        Mon,  3 Jul 2023 16:42:18 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 16:42:17 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 2/3] splice: fsnotify_access(fd)/fsnotify_modify(fd) in
+ vmsplice
+Message-ID: <8d9ad5acb9c5c1dd2376a2ff5da6ac3183115389.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
+References: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ybsrpykphwaki6lg"
+Content-Disposition: inline
+In-Reply-To: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PMX75 compatibles for PMIC found in SDX75 platform.
 
-Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+--ybsrpykphwaki6lg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Same logic applies here: this can fill up the pipe and pollers that rely
+on getting IN_MODIFY notifications never wake up.
+
+Fixes: 983652c69199 ("splice: report related fsnotify events")
+Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs=
+3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
+Link: https://bugs.debian.org/1039488
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+Acked-by: Jan Kara <jack@suse.cz>
 ---
- Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/splice.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-index b949850..cc72144 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-@@ -53,6 +53,7 @@ description: |
-       For PMR735A, smps1 - smps3, ldo1 - ldo7
-       For PMX55, smps1 - smps7, ldo1 - ldo16
-       For PMX65, smps1 - smps8, ldo1 - ldo21
-+      For PMX75, smps1 - smps10, ldo1 - ldo21
- 
- properties:
-   compatible:
-@@ -84,6 +85,7 @@ properties:
-       - qcom,pmr735a-rpmh-regulators
-       - qcom,pmx55-rpmh-regulators
-       - qcom,pmx65-rpmh-regulators
-+      - qcom,pmx75-rpmh-regulators
- 
-   qcom,pmic-id:
-     description: |
--- 
-2.7.4
+diff --git a/fs/splice.c b/fs/splice.c
+index 6ae6da52eba9..5deb12d743b1 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -1346,6 +1346,9 @@ static long vmsplice_to_user(struct file *file, struc=
+t iov_iter *iter,
+ 		pipe_unlock(pipe);
+ 	}
+=20
++	if (ret > 0)
++		fsnotify_access(file);
++
+ 	return ret;
+ }
+=20
+@@ -1375,8 +1378,10 @@ static long vmsplice_to_pipe(struct file *file, stru=
+ct iov_iter *iter,
+ 	if (!ret)
+ 		ret =3D iter_to_pipe(iter, pipe, buf_flag);
+ 	pipe_unlock(pipe);
+-	if (ret > 0)
++	if (ret > 0) {
+ 		wakeup_pipe_readers(pipe);
++		fsnotify_modify(file);
++	}
+ 	return ret;
+ }
+=20
+--=20
+2.39.2
 
+
+--ybsrpykphwaki6lg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSi3kkACgkQvP0LAY0m
+WPGb/g/9GGTQCA3sX50kUiY44a5rX+Ff2TYxykNMrLWb5vbRU+KcvUQeMpXDOWiB
+a6I5vSYTnbLemmo7VVKNUPAtN85nKRu8k30QFlYPA8nBXOBQhnfa+mu6hYzEEPZ/
+oSBTcdj4eNtgDExIfQ9azx7onGtPQ/W8B4q6sXWSEy/olpqYZEwbT+D9AqZNYj+k
+VgcFI+dtbSw/fk03vhihniKRLrkue9vyDdkhYDuwvCLyZ0FO/W4Fnp73NPrz54g8
+oUdYaOR4wfDYaFf2Mo++4wRlNsBxsVsC8+VMQKPsx2MNuyGUH1o+Hus38/htUGVk
+DjMp/P6icRwWLZ8+SWt3qpg1POt8voICR6OuI8JvutiHAZiMcyKvyA1vDe8Oi3sf
+//uzGtAyoKd2x1AybJMoYnMTdV1j8PJfxBH+8VVh6SCTCWdGcklifS2TyWZShoCt
+F9tKIBayhCOyEHesQQjMiIG5N2BiOnkX9Zr6gKrXwT2wFpeedAZIW4tl4af8Hv9G
+1VrnO+hSsA5bLg77KgXlO3sYMLiQsW9oG3uTBds62ownw1xroMKNGIS0hHtNYk8V
+pUdfLZyUfbc/Kx1S4Wxz1isLdmN7dBuBj00o195RgrcsTUQhIcAYuX6c2+/CI+OC
+pcfVrAylsjVNMqyKwNC1ywpWxsxzMWmUaj9UQFPeVuuKkdqcG7g=
+=BYux
+-----END PGP SIGNATURE-----
+
+--ybsrpykphwaki6lg--
