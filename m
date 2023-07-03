@@ -2,95 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6D2745CFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1D8745CFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjGCNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S231401AbjGCNVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGCNTv (ORCPT
+        with ESMTP id S229454AbjGCNVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:19:51 -0400
-Received: from www.kot-begemot.co.uk (ns1.kot-begemot.co.uk [217.160.28.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A982ADD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:19:50 -0700 (PDT)
-Received: from [192.168.17.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1qGJSt-00GBX4-SU; Mon, 03 Jul 2023 13:19:41 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1qGJSt-009o8A-0T; Mon, 03 Jul 2023 14:19:41 +0100
-Message-ID: <aa29acfe-0973-54dc-a4d8-2b0f06dc805c@cambridgegreys.com>
-Date:   Mon, 3 Jul 2023 14:19:38 +0100
+        Mon, 3 Jul 2023 09:21:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AA81B5
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688390417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SxGJA6rkwn8pNlDZg9LvOInkCnegg1nUaKU0FcN4qDA=;
+        b=W2VEo/4e+b2LaocoHHHjAqloULnOIY40PSQ9BjEGK8jzuTYWs7jZc1uLdeReOLlJrdpFgd
+        vPAM7OcIaV8YwO8Xq6E/rEURb0gn/+CylihegJPTf6rBt80x4dUsRWIgUd6ZAJ8gaIAMWl
+        /igEdZV+oqZzkYk8OUuOCjz/R/4Ya7A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-FsgX71PKNtKDEEGBYxKSng-1; Mon, 03 Jul 2023 09:20:16 -0400
+X-MC-Unique: FsgX71PKNtKDEEGBYxKSng-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4BB40858EED;
+        Mon,  3 Jul 2023 13:20:16 +0000 (UTC)
+Received: from fedora (unknown [10.22.8.203])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 7648B4CD0C6;
+        Mon,  3 Jul 2023 13:20:04 +0000 (UTC)
+Date:   Mon, 3 Jul 2023 10:20:03 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        bigeasy@linutronix.de, juri.lelli@redhat.com
+Subject: Re: Splat in kernel RT while processing incoming network packets
+Message-ID: <5fq2oq6naaus3r5ppuktjdvkluovqbgf3fh4goww3sfz2dajvw@eiymjk53pqji>
+References: <bkw2aao62e3ppg7332dbhycgzdwr7k5brezj3bcij6zewphmnd@eigmbvjh6wuu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drivers: use free_netdev before return
-Content-Language: en-US
-To:     Minjie Du <duminjie@vivo.com>, richard@nod.at,
-        johannes@sipsolutions.net, sfr@canb.auug.org.au,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        11162212@vivo.com
-Cc:     opensource.kernel@vivo.com
-References: <20230703131129.8588-1-duminjie@vivo.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-In-Reply-To: <20230703131129.8588-1-duminjie@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.0
-X-Spam-Score: -2.0
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bkw2aao62e3ppg7332dbhycgzdwr7k5brezj3bcij6zewphmnd@eigmbvjh6wuu>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 03/07/2023 14:11, Minjie Du wrote:
-> We will replace the old version of
-> undo_user_init and use out_free_netdev
+On Mon, Jul 03, 2023 at 09:47:26AM -0300, Wander Lairson Costa wrote:
+> Dear all,
 > 
-> Signed-off-by: Minjie Du <duminjie@vivo.com>
-> ---
->   arch/um/drivers/vector_kern.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
+> I am writing to report a splat issue we encountered while running the
+> Real-Time (RT) kernel in conjunction with Network RPS (Receive Packet
+> Steering).
 > 
-> diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
-> index af7f6fd4c..7ae6ab8df 100644
-> --- a/arch/um/drivers/vector_kern.c
-> +++ b/arch/um/drivers/vector_kern.c
-> @@ -1646,7 +1646,7 @@ static void vector_eth_configure(
->   	err = register_netdevice(dev);
->   	rtnl_unlock();
->   	if (err)
-> -		goto out_undo_user_init;
-> +		goto out_free_netdev;
->   
->   	spin_lock(&vector_devices_lock);
->   	list_add(&device->list, &vector_devices);
-> @@ -1654,9 +1654,6 @@ static void vector_eth_configure(
->   
->   	return;
->   
-> -out_undo_user_init:
-> -	free_netdev(dev);
-> -	return;
->   out_free_netdev:
->   	free_netdev(dev);
->   out_free_device:
+> During some testing of the RT kernel version 6.4.0 with Network RPS enabled,
+> we observed a splat occurring in the SoftIRQ subsystem. The splat message is as
+> follows:
+> 
+> [   37.168920] ------------[ cut here ]------------
+> [   37.168925] WARNING: CPU: 0 PID: 0 at kernel/softirq.c:291 do_softirq_post_smp_call_flush+0x2d/0x60
+> [   37.168935] Modules linked in: xt_conntrack(E) ...
+> [   37.168976] Unloaded tainted modules: intel_cstate(E):4 intel_uncore(E):3
+> [   37.168994] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G            E     -------  ---  6.4.0-0.rc2.23.test.eln127.x86_64+rt #1
+> [   37.168996] Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0+14757+c25ee005 04/01/2014
+> [   37.168998] RIP: 0010:do_softirq_post_smp_call_flush+0x2d/0x60
+> [   37.169001] Code: 00 0f 1f 44 00 00 53 89 fb 48 c7 c7 f7 98 be 96 e8 d8 97 d2 00 65 66 8b 05 f8 36 ...
+> [   37.169002] RSP: 0018:ffffffff97403eb0 EFLAGS: 00010002
+> [   37.169004] RAX: 0000000000000008 RBX: 0000000000000000 RCX: 0000000000000003
+> [   37.169005] RDX: ffff992db7a34840 RSI: ffffffff96be98f7 RDI: ffffffff96bc23d8
+> [   37.169006] RBP: ffffffff97410000 R08: ffff992db7a34840 R09: ffff992c87f8dbc0
+> [   37.169007] R10: 00000000fffbfc67 R11: 0000000000000018 R12: 0000000000000000
+> [   37.169008] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> [   37.169011] FS:  0000000000000000(0000) GS:ffff992db7a00000(0000) knlGS:0000000000000000
+> [   37.169013] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   37.169014] CR2: 00007f028b8da3f8 CR3: 0000000118f44001 CR4: 0000000000370eb0
+> [   37.169015] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   37.169015] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   37.169016] Call Trace:
+> [   37.169018]  <TASK>
+> [   37.169020]  flush_smp_call_function_queue+0x78/0x80
+> [   37.169026]  do_idle+0xb2/0xd0
+> [   37.169030]  cpu_startup_entry+0x1d/0x20
+> [   37.169032]  rest_init+0xd1/0xe0
+> [   37.169037]  arch_call_rest_init+0xe/0x30
+> [   37.169044]  start_kernel+0x342/0x420
+> [   37.169046]  x86_64_start_reservations+0x18/0x30
+> [   37.169051]  x86_64_start_kernel+0x96/0xa0
+> [   37.169054]  secondary_startup_64_no_verify+0x10b/0x10b
+> [   37.169059]  </TASK>
+> [   37.169060] ---[ end trace 0000000000000000 ]---
+> 
+> It comes from [1].
+> 
+> The issue lies in the mechanism of RPS to defer network packets processing to
+> other CPUs. It sends an IPI to the to the target CPU. The registered callback
+> is rps_trigger_softirq, which will raise a softirq, leading to the following
+> scenario:
+> 
+> CPU0                                    CPU1
+> | netif_rx()                            |
+> | | enqueue_to_backlog(cpu=1)           |
+> | | | net_rps_send_ipi()                |
+> |                                       | flush_smp_call_function_queue()
+> |                                       | | was_pending = local_softirq_pending()
+> |                                       | | __flush_smp_call_function_queue()
+> |                                       | | rps_trigger_softirq()
+> |                                       | | | __raise_softirq_irqoff()
+> |                                       | | do_softirq_post_smp_call_flush()
+> 
+> That has the undesired side effect of raising a softirq in a function call,
+> leading to the aforementioned splat.
+> 
+> The kernel version is kernel-ark [1], os-build-rt branch. It is essentially the
 
-Acked-By: "Anton Ivanov" <anton.ivanov@cambridgegreys.com>
+Correction: kernel-ark [2]
 
--- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
+> upstream kernel with the PREEMPT_RT patches, and with RHEL configs. I can
+> provide the .config.
+> 
+> The only solution I imagined so far was to modify RPS to process packtes in a
+> kernel thread in RT. But I wonder how would be that be different than processing
+> them in ksoftirqd.
+> 
+> Any inputs on the issue?
+> 
+> [1] https://elixir.bootlin.com/linux/latest/source/kernel/softirq.c#L306
+> 
+
+[2] https://gitlab.com/cki-project/kernel-ark
+
+> Cheers,
+> Wander
+> 
+
