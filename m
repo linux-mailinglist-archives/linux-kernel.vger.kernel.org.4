@@ -2,121 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B5F745835
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F2874583A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjGCJRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S230080AbjGCJSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjGCJRw (ORCPT
+        with ESMTP id S231165AbjGCJSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:17:52 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564B7196;
-        Mon,  3 Jul 2023 02:17:24 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 362MwtIu021364;
-        Mon, 3 Jul 2023 02:17:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=tng00Oazf4CgQOGORPO+mNe41nQGiNWoJB3wfyGLgAg=;
- b=A/Kj/5kapjjUryyVbL6tcJgFbd1y7ojGWJq9juuQozD4Jm07ciPVguEXwVO6P+qOqXFI
- nF0ZbSpovUyCN7IE+oVSin9Esc9UtNgbEoafp2BqZjdemSnzkMzKTdsqVmYS4qliJ/7d
- BaWuFQ8KHX37A2qfZ0mnRsLFCYQR8C92b03bDWFhXSGhxKZ0Mr0wHa4yb4LEbVB97lam
- qdf7X91YeOxOBgjp/x++IIxi50Q1J0h4SWAMHzAp/HTapOrNMNEvmaFUEtAzejUJnibU
- t/pOEzE9oVKy7PP+iaLSbxk0TGtQkwKF+YZ89e/EA3k5an5tzVTXSj220Ecc+CM4s+pf DA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3rjhgnd0e9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 02:17:11 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 3 Jul
- 2023 02:17:09 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 3 Jul 2023 02:17:09 -0700
-Received: from localhost.localdomain (unknown [10.28.36.166])
-        by maili.marvell.com (Postfix) with ESMTP id C1B033F7067;
-        Mon,  3 Jul 2023 02:17:06 -0700 (PDT)
-From:   Suman Ghosh <sumang@marvell.com>
-To:     <sgoutham@marvell.com>, <gakula@marvell.com>,
-        <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Suman Ghosh <sumang@marvell.com>
-Subject: [PATCH] octeontx2-pf: Add additional check for MCAM rules.
-Date:   Mon, 3 Jul 2023 14:47:03 +0530
-Message-ID: <20230703091703.2003373-1-sumang@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Jul 2023 05:18:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55EEE59
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688375848;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8HHzoJ5KB9PwbED6aCUVdjiUMf88jiN+uGVsp2SPg0Q=;
+        b=YhE5YIJWqQoVibT2E5sLiY/bJUD20zm5gC9Y7Ub2+bWowLeFfkCak/+SZy3boG/fxgLQYI
+        riSYSzJPUMkt0Z2RdIOrrgh7kc1rpgm9Cd0fzo8HFUCnDYJp2YgVUGKLCGGtqWLfEV18Ca
+        fyne6u5mcbWLtDIxDBZ6wOOII+ZpV6o=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-uVTD_1aKMI6GYzMOrsU7ZA-1; Mon, 03 Jul 2023 05:17:26 -0400
+X-MC-Unique: uVTD_1aKMI6GYzMOrsU7ZA-1
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b7f0264306so39262795ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:17:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688375845; x=1690967845;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8HHzoJ5KB9PwbED6aCUVdjiUMf88jiN+uGVsp2SPg0Q=;
+        b=S6iUG1ZKVQgVzUyW1NG/WOeDJqfKmz+7T1bKvlQwOtR6CaTybhj91xqD+GcOpDWU/t
+         +ZgG9avEJ0E8twcIMYHaxg148ZD8ZHnf6anxT10Q/IXMGxr6Cy/2Z8/Q4dHHLgpGcwty
+         gle0A86EwjFvuEQxBuANfn04XPiYYSEBzdyvWZewf2NrnozOhTvimmD27D1iIgL+9zuV
+         K9EK9qA9YDaYsmLfFL/2ilK7jbwg3f8IWkZ74KOpeuxjAk5XB6evJ0oOxTyIVfPuduQX
+         nCKc4i+VBuotk24vCnP1vLY7m90vWNEQbSSaaW0oPwuU5RoVtGYYctq+sqCoWas8uPFW
+         9pIA==
+X-Gm-Message-State: ABy/qLZ5oWPUu3ue+DWNHL5tjG/K/nD5EojY9EHFqNs0cBI90A+GsBTg
+        lEILG7ZuUu4DJWlR/1JED3swZfD0jLis5NFQN0YOOr3bN/GZlH7j7mKm6v9KhCkDUurCoQLjIG7
+        JPx8nDQZR9E7oqDFd/0BRQ14TNBoiaAIBp5sT5F3u
+X-Received: by 2002:a17:903:22ce:b0:1b8:9b90:e2bc with SMTP id y14-20020a17090322ce00b001b89b90e2bcmr914059plg.52.1688375845568;
+        Mon, 03 Jul 2023 02:17:25 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFvcAIY9KsHTFSp2HQjjW2SLm2ABVtM2SXsV/67vEEWu50uv1ZaslAjF6b7RfDyYT6a4Pk8632wNdrsXX5WZ/w=
+X-Received: by 2002:a17:903:22ce:b0:1b8:9b90:e2bc with SMTP id
+ y14-20020a17090322ce00b001b89b90e2bcmr914045plg.52.1688375845264; Mon, 03 Jul
+ 2023 02:17:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 3O2s120SbcD4h8XbK1zD6A-_jKFJ1oov
-X-Proofpoint-GUID: 3O2s120SbcD4h8XbK1zD6A-_jKFJ1oov
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_07,2023-06-30_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1688073459.git.drv@mailo.com>
+In-Reply-To: <cover.1688073459.git.drv@mailo.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Mon, 3 Jul 2023 11:17:13 +0200
+Message-ID: <CAHc6FU5WZafgAutKpVRC1jPMNpGCh+M_i+tmCZw0dGCBUXe1ug@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] gfs2: kmap{_atomic} conversion to kmap_local_{page/folio}
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Bob Peterson <rpeterso@redhat.com>, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MCAM drop rule with ether_type==802.1Q and vlan_id==0 is not supported.
+Hi Deepak,
 
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
----
- .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c |  7 +++++++
- .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c    | 13 +++++++++++++
- 2 files changed, 20 insertions(+)
+On Thu, Jun 29, 2023 at 11:48=E2=80=AFPM Deepak R Varma <drv@mailo.com> wro=
+te:
+> This patch series proposes to replace the kmap/kmap_atomic implementation=
+ to the
+> preferred kmap_local_* APIs.
+>
+> The code blocks for this module where kmap/kmap_atomic calls are implemen=
+ted do
+> not appear to depend on disabling page-faults or preemption. Hence such c=
+ode
+> blocks are safe for converting to improved kmap_local_{page,folio} APIs.
+>
+> Note: The proposed patches are build tested only.
+>
+> Initially, only a single patch was sent and now being converted into a pa=
+tch
+> series including the other files/functions of this module. Hence all patc=
+hes,
+> that are included for the first time in this series are also marked as v3=
+.
+>
+> Changes in v3:
+>    - Patch set introduced to include all gfs2 kmap conversions
+>    - Patches 3/6 through 6/6 are included to build the series
+>    - Initial stand-alone patch split into 2 patches [1/6 and 2/6]
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-index 10e11262d48a..49ba27875111 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-@@ -871,6 +871,13 @@ static int otx2_prepare_flow_request(struct ethtool_rx_flow_spec *fsp,
- 			if (be16_to_cpu(fsp->m_ext.vlan_etype) != 0xFFFF)
- 				return -EINVAL;
- 
-+			/* Drop rule with vlan_etype == 802.1Q
-+			 * and vlan_id == 0 is not supported
-+			 */
-+			if (vlan_etype == ETH_P_8021Q && !fsp->m_ext.vlan_tci &&
-+			    fsp->ring_cookie == RX_CLS_FLOW_DISC)
-+				return -EINVAL;
-+
- 			vlan_etype = be16_to_cpu(fsp->h_ext.vlan_etype);
- 			/* Only ETH_P_8021Q and ETH_P_802AD types supported */
- 			if (vlan_etype != ETH_P_8021Q &&
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-index 044cc211424e..6c0fdc2bad73 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-@@ -604,6 +604,19 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
- 			return -EOPNOTSUPP;
- 		}
- 
-+		if (!match.mask->vlan_id) {
-+			struct flow_action_entry *act;
-+			int i;
-+
-+			flow_action_for_each(i, act, &rule->action) {
-+				if (act->id == FLOW_ACTION_DROP) {
-+					netdev_err(nic->netdev, "vlan tpid 0x%x with vlan_id %d is not supported for DROP rule.\n",
-+						   ntohs(match.key->vlan_tpid), match.key->vlan_id);
-+					return -EOPNOTSUPP;
-+				}
-+			}
-+		}
-+
- 		if (match.mask->vlan_id ||
- 		    match.mask->vlan_dei ||
- 		    match.mask->vlan_priority) {
--- 
-2.25.1
+I have already merged version 2 of this patch series and I've fixed up
+the remaining issues in follow-up patches; see the cluster-devel
+mailing list:
+
+https://listman.redhat.com/archives/cluster-devel/2023-June/024391.html
+https://listman.redhat.com/archives/cluster-devel/2023-June/024392.html
+https://listman.redhat.com/archives/cluster-devel/2023-June/024393.html
+
+As well as our for-next branch:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/log/?h=
+=3Dfor-next
+
+As far as I can see, there is nothing in v3 of your patches that I
+haven't addressed already. Please speak out if I've missed anything.
+
+Thanks,
+Andreas
+
+
+>
+> Changes in v2:
+>    - 3/6 to 6/6: None.
+>    - 1/6 + 2/6: Correct patch description for the replacement function na=
+me from
+>      kmap_local_folio to kmap_local_page
+>
+> Deepak R Varma (6):
+>   gfs2: Replace kmap_atomic() by kmap_local_page() in stuffed_readpage
+>   gfs2: Replace kmap_atomic()+memcpy by memcpy_from_page()
+>   gfs2: Replace kmap() by kmap_local_page() in gfs2_unstuffer_page
+>   gfs2: Replace kmap_atomic() by kmap_local_page() in lops.c
+>   gfs2: Replace kmap() by kmap_local_page() in gfs2_read_super
+>   gfs2: Replace kmap_atomic() by kmap_local_page() in
+>     gfs2_write_buf_to_page
+>
+>  fs/gfs2/aops.c       | 13 ++++++-------
+>  fs/gfs2/bmap.c       |  4 ++--
+>  fs/gfs2/lops.c       | 12 ++++++------
+>  fs/gfs2/ops_fstype.c |  4 ++--
+>  fs/gfs2/quota.c      |  4 ++--
+>  5 files changed, 18 insertions(+), 19 deletions(-)
+>
+> --
+> 2.34.1
+>
+>
+>
 
