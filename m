@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281BD7462EF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE367462E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjGCSz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
+        id S230348AbjGCSzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjGCSz4 (ORCPT
+        with ESMTP id S230250AbjGCSzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:55:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4556E64;
-        Mon,  3 Jul 2023 11:55:55 -0700 (PDT)
+        Mon, 3 Jul 2023 14:55:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DA110D9
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:54:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69F8761019;
-        Mon,  3 Jul 2023 18:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7C8C433C7;
-        Mon,  3 Jul 2023 18:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688410554;
-        bh=QSLM8BmL/Y3s6sjAZ97trfVyFWYruJB+PErAW4K9rS0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bGyswGH3VKcygLbLiS8o40Mb+Ys/aEYBPRAMaupahhNKfHQHM/X1OOox05RO42A2o
-         zOIXEJgZ06Ica3LWawfg3lH5bWg3TFcrVHUfyLTzGUKxuDmo+P74TIz/dhJAsRwTDe
-         cze248WtFoUplu8aDDGIQFz6FPfYbB/hSmwMCXlY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-Subject: [PATCH 6.4 00/13] 6.4.2-rc1 review
-Date:   Mon,  3 Jul 2023 20:54:01 +0200
-Message-ID: <20230703184519.261119397@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.2-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.4.2-rc1
-X-KernelTest-Deadline: 2023-07-05T18:45+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5615F60FFA
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02FFC433C8;
+        Mon,  3 Jul 2023 18:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688410443;
+        bh=SEKBMg3chV7met+vgORs+906H4nzp+RO5Hm59v64Jj0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XTfoCo0qlatCxo8uhhtnUeVPZLr0bGhBxDrJX2o9GnhcJnHEas3iQjs3v0Ssji9Fr
+         d3xt/nAG6UjEn2KoFHkVpT4YstgavD3Ef5cQaB+9XalmjxkmkmiIUFzwASJEUD4au5
+         bUmAJnOn8MfI1uMHMWtOxoxipPU8a7bdl4+pY9uI0l/2TVWKkVPoMr3yiLEkR0RvPt
+         6qYr/GhvnHwdnHzMza9fZJG37l9H3b73O2e6pk6aTCnBMmdeVMUIt/aJ1MHUF3A+kt
+         JntiL04FWn5q6rNJpLaSx2lDJrfRgV8Tpmxw7FeEzLDovMDqbnKmlhKMb7B2T9LIXL
+         EBHyUnFrIC7/g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGOgT-00AFAN-Hq;
+        Mon, 03 Jul 2023 19:54:01 +0100
+Date:   Mon, 03 Jul 2023 19:54:01 +0100
+Message-ID: <86wmzgx1va.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zenghui Yu <yuzenghui@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kunkun Jiang <jiangkunkun@huawei.com>,
+        <wanghaibin.wang@huawei.com>
+Subject: Re: [PATCH] irqchip/gic-v4.1: Properly lock VPEs when doing a directLPI invalidation
+In-Reply-To: <b665e102-eba9-cd4f-5b4e-ccbd77444233@huawei.com>
+References: <20230617073242.3199746-1-maz@kernel.org>
+        <b665e102-eba9-cd4f-5b4e-ccbd77444233@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: yuzenghui@huawei.com, linux-kernel@vger.kernel.org, tglx@linutronix.de, jiangkunkun@huawei.com, wanghaibin.wang@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,92 +70,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.4.2 release.
-There are 13 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+On Thu, 29 Jun 2023 15:52:24 +0100,
+Zenghui Yu <yuzenghui@huawei.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 2023/6/17 15:32, Marc Zyngier wrote:
+> > We normally rely on the irq_to_cpuid_[un]lock() primitives to make
+> > sure nothing will change col->idx while performing a LPI invalidation.
+> 
+> "change col_idx while performing a vLPI invalidation"?
+> 
+> > However, these primitives do not cover VPE doorbells, and we have
+> > some open-coded locking for that. Unfortunately, this locking is
+> > pretty bogus.
+> > 
+> > Instead, extend the above primitives to cover VPE doorbells and
+> > convert the whole thing to it.
+> > 
+> > Fixes: f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between vPE affinity change and RD access")
+> > Reported-by: Kunkun Jiang <jiangkunkun@huawei.com>
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > Cc: Zenghui Yu <yuzenghui@huawei.com>
+> > Cc: wanghaibin.wang@huawei.com
+> 
+> Reviewed-by: Zenghui Yu <yuzenghui@huawei.com>
 
-Responses should be made by Wed, 05 Jul 2023 18:45:08 +0000.
-Anything received after that time might be too late.
+Thanks!
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.2-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.4.y
-and the diffstat can be found below.
+> 
+> Nit: I think the Subject header can be changed to 'irqchip/gic-v4' as
+> the bug it fixes only affects GICv4 HW. v4.1 is unaffected.
 
-thanks,
+I'm not so sure.
 
-greg k-h
+v4.0 didn't allow direct invalidation of VPE doorbells (we had to use
+the fake device hack), except for the HiSi special that implemented
+DirectLPI despite the presence of multiple ITSs. It was a violation of
+the architecture, but it really saved the day by making invalidations
+cheap enough.
 
--------------
-Pseudo-Shortlog of commits:
+Only with v4.1 did we get architectural support for doorbell
+invalidation via a register instead of a command for a fake device.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.4.2-rc1
+So as far as the architecture is concerned, this should only affect
+v4.1. As a side effect, it also affect HiSi's v4.0 implementations.
 
-Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
-    drm/amdgpu: Validate VM ioctl flags.
+Or am I missing something?
 
-Demi Marie Obenour <demi@invisiblethingslab.com>
-    dm ioctl: Avoid double-fetch of version
+Cheers,
 
-Ahmed S. Darwish <darwi@linutronix.de>
-    docs: Set minimal gtags / GNU GLOBAL version to 6.6.5
+	M.
 
-Ahmed S. Darwish <darwi@linutronix.de>
-    scripts/tags.sh: Resolve gtags empty index generation
-
-Mike Kravetz <mike.kravetz@oracle.com>
-    hugetlb: revert use of page_cache_next_miss()
-
-Finn Thain <fthain@linux-m68k.org>
-    nubus: Partially revert proc_create_single_data() conversion
-
-Dan Williams <dan.j.williams@intel.com>
-    Revert "cxl/port: Enable the HDM decoder capability for switch ports"
-
-Jeff Layton <jlayton@kernel.org>
-    nfs: don't report STATX_BTIME in ->getattr
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    execve: always mark stack as growing down during early stack setup
-
-Mario Limonciello <mario.limonciello@amd.com>
-    PCI/ACPI: Call _REG when transitioning D-states
-
-Bjorn Helgaas <bhelgaas@google.com>
-    PCI/ACPI: Validate acpi_pci_set_power_state() parameter
-
-Thomas Weißschuh <linux@weissschuh.net>
-    tools/nolibc: x86_64: disable stack protector for _start
-
-Max Filippov <jcmvbkbc@gmail.com>
-    xtensa: fix lock_mm_and_find_vma in case VMA not found
-
-
--------------
-
-Diffstat:
-
- Documentation/process/changes.rst      |  7 +++++
- Makefile                               |  4 +--
- drivers/cxl/core/pci.c                 | 27 +++--------------
- drivers/cxl/cxl.h                      |  1 -
- drivers/cxl/port.c                     | 14 ++++-----
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c |  4 +++
- drivers/md/dm-ioctl.c                  | 33 +++++++++++++--------
- drivers/nubus/proc.c                   | 22 ++++++++++----
- drivers/pci/pci-acpi.c                 | 53 +++++++++++++++++++++++++---------
- fs/hugetlbfs/inode.c                   |  8 ++---
- fs/nfs/inode.c                         |  2 +-
- include/linux/mm.h                     |  4 ++-
- mm/hugetlb.c                           | 12 ++++----
- mm/nommu.c                             |  7 ++++-
- scripts/tags.sh                        |  9 +++++-
- tools/include/nolibc/arch-x86_64.h     |  2 +-
- tools/testing/cxl/Kbuild               |  1 -
- tools/testing/cxl/test/mock.c          | 15 ----------
- 18 files changed, 128 insertions(+), 97 deletions(-)
-
-
+-- 
+Without deviation from the norm, progress is not possible.
