@@ -2,289 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF39745F14
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64BF745F1C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbjGCOuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S229943AbjGCOwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjGCOuw (ORCPT
+        with ESMTP id S229484AbjGCOwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:50:52 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361AEB2;
-        Mon,  3 Jul 2023 07:50:51 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-777a6ebb542so177606939f.0;
-        Mon, 03 Jul 2023 07:50:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688395850; x=1690987850;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WvT8W6UUHkGl/2v0glhXnZWU1jmjMKb3Iaxvw5iaZ20=;
-        b=GDUslPD8lZD0uacPShUVESsZLYrA0uQrsOMcQKhWpyFBZVESG0+VBhpw0O+8f1esPy
-         IvERPd947NceLtnK+5tKCPa4uRcnPOLw1rh0BY7bZ/YAnsnMGAHVW+q84eBDllmU6rx6
-         4TJLFk3Zenf6w30sU98Mf6fnbYGBTLZzoOGiuQh2Y/1/wRL+cH6Svej9Sj0dgrLOQu9s
-         BBWiWQVlBQAdMUxNMr5n0baE/tKY5kW7iv10VjMp+eHkUzrgohUsvrgsEUB4gi7fQXY4
-         W0PFbcupzJ1xTeCSjuq9H50RWMnH+LZ/dKKkUJKPq/r4oplUeYspYiq/npLlV2MDhW3T
-         o0lw==
-X-Gm-Message-State: AC+VfDzSKnk/ehQbNq7uWPe1Ko5xNulujQTA5LpFYlP0gh2/oIjvmgOc
-        5zNWTbUwp9PetiKxo9Nbmw==
-X-Google-Smtp-Source: ACHHUZ4yimfAO+VPw11yaXvO6DKjxZchQyRUEhLA7m2uETW5Mx7B0bC/E0dg1HZJq9nCv5g88ZFF/Q==
-X-Received: by 2002:a05:6602:200c:b0:786:2d04:7b14 with SMTP id y12-20020a056602200c00b007862d047b14mr9761365iod.16.1688395850295;
-        Mon, 03 Jul 2023 07:50:50 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id v14-20020a02b90e000000b0042b0a6d899fsm2909181jan.60.2023.07.03.07.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 07:50:49 -0700 (PDT)
-Received: (nullmailer pid 3733418 invoked by uid 1000);
-        Mon, 03 Jul 2023 14:50:47 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Mon, 3 Jul 2023 10:52:00 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A49CD10E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1688395919;
+        bh=9Fz8rU9GmTaxOPVMlac3r3BzwGUKuWGirTJMgrIhhp8=;
+        h=Date:From:Cc:Subject:References:In-Reply-To:From;
+        b=qe/bkuHbreHbm5lBsGJY6UMo8PLqxKWw24r3kGoS+9hbmR4YdVV5A5FiyxQ0RLIcp
+         /CpJt41YsBnTutOg8qjuQYm8VZLqSExsw/4Weaw/M8oYI6hkfDwoKqCm6Sb/3R+trg
+         Ags6bFTETucJ4Avf+EJTXWHMX5zswzUHg/O2s0soV2BOVd/6jD/N3gq59mca8awwnt
+         07QWbBJDjhnW3bFwqUwF4UgNRqsbbWnkkHh3AY/2JTKlUTdORkIhJg0+lXJhMmk9i7
+         HSpGy5vN/0Bf+Y+6WPFtivA3ZC9X3o5Etj0lAtmcx/qUD/0jWggRQazbzkQP4Rcpu8
+         u/c6d/sGb6FFg==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id E89E51EBA;
+        Mon,  3 Jul 2023 16:51:58 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 16:51:57 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] checkpatch: don't take signature to be part of the commit
+ SHA
+Message-ID: <yobkleyyfic3cxlslgwft7eomzc4k2e4r6goy2x3xhbnzvee46@2u4treiamxdy>
+References: <p6by5totn26ofijoki4v6a7lgciswfqovyfrmavtldxg63g2k5@bp3uxxbccxvr>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>
-In-Reply-To: <20230703-topic-8250_qup_icc-v1-2-fea39aa07525@linaro.org>
-References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
- <20230703-topic-8250_qup_icc-v1-2-fea39aa07525@linaro.org>
-Message-Id: <168839584680.3733361.16157756581298354084.robh@kernel.org>
-Subject: Re: [PATCH 2/5] dt-bindings: serial: geni-qcom: Allow no qup-core
- icc path
-Date:   Mon, 03 Jul 2023 08:50:47 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3hdjimvrirjnjqby"
+Content-Disposition: inline
+In-Reply-To: <p6by5totn26ofijoki4v6a7lgciswfqovyfrmavtldxg63g2k5@bp3uxxbccxvr>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 03 Jul 2023 15:31:11 +0200, Konrad Dybcio wrote:
-> Some SoCs (like SM8150 and SM8250) don't seem to provide a qup-core path.
-> Allow such case.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/serial/qcom,serial-geni-qcom.yaml     | 26 +++++++++++++++-------
->  1 file changed, 18 insertions(+), 8 deletions(-)
-> 
+--3hdjimvrirjnjqby
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I had just received:
+  $ scripts/checkpatch.pl 0001-splice-always-fsnotify_access-in-fsnotify_mo=
+dify-out.patch
+  WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<ti=
+tle line>")' - ie: 'Fixes: gpg: Signatu (":35 CEST")'
+  #25:
+  Fixes: 983652c69199 ("splice: report related fsnotify events")
 
-yamllint warnings/errors:
+  total: 0 errors, 1 warnings, 60 lines checked
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@8c0000: serial@a88000: More than one condition true in oneOf schema:
-	{'$filename': '/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml',
-	 '$id': 'http://devicetree.org/schemas/serial/qcom,serial-geni-qcom.yaml#',
-	 '$schema': 'http://devicetree.org/meta-schemas/core.yaml#',
-	 'allOf': [{'$ref': '/schemas/serial/serial.yaml#'},
-	           {'oneOf': [{'required': ['interrupts']},
-	                      {'required': ['interrupts-extended']}]}],
-	 'oneOf': [{'patternProperties': {'pinctrl-[0-9]+': True},
-	            'properties': {'$nodename': True,
-	                           'bootph-all': True,
-	                           'bootph-pre-ram': True,
-	                           'bootph-pre-sram': True,
-	                           'bootph-some-ram': True,
-	                           'bootph-verify': True,
-	                           'interconnect-names': {'items': [{'const': 'qup-config'}],
-	                                                  'maxItems': 1,
-	                                                  'minItems': 1,
-	                                                  'type': 'array'},
-	                           'interconnects': {'maxItems': 1,
-	                                             'minItems': 1},
-	                           'phandle': True,
-	                           'pinctrl-names': True,
-	                           'secure-status': True,
-	                           'status': True}},
-	           {'patternProperties': {'pinctrl-[0-9]+': True},
-	            'properties': {'$nodename': True,
-	                           'bootph-all': True,
-	                           'bootph-pre-ram': True,
-	                           'bootph-pre-sram': True,
-	                           'bootph-some-ram': True,
-	                           'bootph-verify': True,
-	                           'interconnect-names': {'items': [{'const': 'qup-core'},
-	                                                            {'const': 'qup-config'}],
-	                                                  'maxItems': 2,
-	                                                  'minItems': 2,
-	                                                  'type': 'array'},
-	                           'interconnects': {'maxItems': 2,
-	                                             'minItems': 2},
-	                           'phandle': True,
-	                           'pinctrl-names': True,
-	                           'secure-status': True,
-	                           'status': True}}],
-	 'properties': {'$nodename': True,
-	                'assigned-clock-parents': True,
-	                'assigned-clock-rates': True,
-	                'assigned-clocks': True,
-	                'bootph-all': True,
-	                'bootph-pre-ram': True,
-	                'bootph-pre-sram': True,
-	                'bootph-some-ram': True,
-	                'bootph-verify': True,
-	                'clock-names': {'items': [{'const': 'se'}],
-	                                'maxItems': 1,
-	                                'minItems': 1,
-	                                'type': 'array'},
-	                'clocks': {'maxItems': 1, 'minItems': 1},
-	                'compatible': {'items': [{'enum': ['qcom,geni-uart',
-	                                                   'qcom,geni-debug-uart']}],
-	                               'maxItems': 1,
-	                               'minItems': 1,
-	                               'type': 'array'},
-	                'interrupt-parent': True,
-	                'interrupts': {'maxItems': 2,
-	                               'minItems': 1,
-	                               'type': 'array'},
-	                'interrupts-extended': {'maxItems': 2,
-	                                        'minItems': 1,
-	                                        'type': 'array'},
-	                'operating-points-v2': True,
-	                'phandle': True,
-	                'pinctrl-0': True,
-	                'pinctrl-1': True,
-	                'pinctrl-names': {'items': [{'const': 'default'},
-	                                            {'const': 'sleep'}],
-	                                  'maxItems': 2,
-	                                  'minItems': 1,
-	                                  'type': 'array'},
-	                'power-domains': {'maxItems': 1, 'minItems': 1},
-	                'reg': {'maxItems': 1, 'minItems': 1},
-	                'secure-status': True,
-	                'status': True},
-	 'required': ['compatible', 'clocks', 'clock-names', 'reg'],
-	 'select': {'properties': {'compatible': {'contains': {'enum': ['qcom,geni-debug-uart',
-	                                                                'qcom,geni-uart']}}},
-	            'required': ['compatible']},
-	 'title': 'Qualcomm Geni based QUP UART interface',
-	 'type': 'object',
-	 'unevaluatedProperties': False}
-	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: serial@a88000: More than one condition true in oneOf schema:
-	{'$filename': '/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml',
-	 '$id': 'http://devicetree.org/schemas/serial/qcom,serial-geni-qcom.yaml#',
-	 '$schema': 'http://devicetree.org/meta-schemas/core.yaml#',
-	 'allOf': [{'$ref': '/schemas/serial/serial.yaml#'},
-	           {'oneOf': [{'required': ['interrupts']},
-	                      {'required': ['interrupts-extended']}]}],
-	 'oneOf': [{'patternProperties': {'pinctrl-[0-9]+': True},
-	            'properties': {'$nodename': True,
-	                           'bootph-all': True,
-	                           'bootph-pre-ram': True,
-	                           'bootph-pre-sram': True,
-	                           'bootph-some-ram': True,
-	                           'bootph-verify': True,
-	                           'interconnect-names': {'items': [{'const': 'qup-config'}],
-	                                                  'maxItems': 1,
-	                                                  'minItems': 1,
-	                                                  'type': 'array'},
-	                           'interconnects': {'maxItems': 1,
-	                                             'minItems': 1},
-	                           'phandle': True,
-	                           'pinctrl-names': True,
-	                           'secure-status': True,
-	                           'status': True}},
-	           {'patternProperties': {'pinctrl-[0-9]+': True},
-	            'properties': {'$nodename': True,
-	                           'bootph-all': True,
-	                           'bootph-pre-ram': True,
-	                           'bootph-pre-sram': True,
-	                           'bootph-some-ram': True,
-	                           'bootph-verify': True,
-	                           'interconnect-names': {'items': [{'const': 'qup-core'},
-	                                                            {'const': 'qup-config'}],
-	                                                  'maxItems': 2,
-	                                                  'minItems': 2,
-	                                                  'type': 'array'},
-	                           'interconnects': {'maxItems': 2,
-	                                             'minItems': 2},
-	                           'phandle': True,
-	                           'pinctrl-names': True,
-	                           'secure-status': True,
-	                           'status': True}}],
-	 'properties': {'$nodename': True,
-	                'assigned-clock-parents': True,
-	                'assigned-clock-rates': True,
-	                'assigned-clocks': True,
-	                'bootph-all': True,
-	                'bootph-pre-ram': True,
-	                'bootph-pre-sram': True,
-	                'bootph-some-ram': True,
-	                'bootph-verify': True,
-	                'clock-names': {'items': [{'const': 'se'}],
-	                                'maxItems': 1,
-	                                'minItems': 1,
-	                                'type': 'array'},
-	                'clocks': {'maxItems': 1, 'minItems': 1},
-	                'compatible': {'items': [{'enum': ['qcom,geni-uart',
-	                                                   'qcom,geni-debug-uart']}],
-	                               'maxItems': 1,
-	                               'minItems': 1,
-	                               'type': 'array'},
-	                'interrupt-parent': True,
-	                'interrupts': {'maxItems': 2,
-	                               'minItems': 1,
-	                               'type': 'array'},
-	                'interrupts-extended': {'maxItems': 2,
-	                                        'minItems': 1,
-	                                        'type': 'array'},
-	                'operating-points-v2': True,
-	                'phandle': True,
-	                'pinctrl-0': True,
-	                'pinctrl-1': True,
-	                'pinctrl-names': {'items': [{'const': 'default'},
-	                                            {'const': 'sleep'}],
-	                                  'maxItems': 2,
-	                                  'minItems': 1,
-	                                  'type': 'array'},
-	                'power-domains': {'maxItems': 1, 'minItems': 1},
-	                'reg': {'maxItems': 1, 'minItems': 1},
-	                'secure-status': True,
-	                'status': True},
-	 'required': ['compatible', 'clocks', 'clock-names', 'reg'],
-	 'select': {'properties': {'compatible': {'contains': {'enum': ['qcom,geni-debug-uart',
-	                                                                'qcom,geni-uart']}}},
-	            'required': ['compatible']},
-	 'title': 'Qualcomm Geni based QUP UART interface',
-	 'type': 'object',
-	 'unevaluatedProperties': False}
-	from schema $id: http://devicetree.org/schemas/serial/qcom,serial-geni-qcom.yaml#
+  NOTE: For some of the reported defects, checkpatch may be able to
+        mechanically convert to the typical style using --fix or --fix-inpl=
+ace.
 
-doc reference errors (make refcheckdocs):
+  0001-splice-always-fsnotify_access-in-fsnotify_modify-out.patch has style=
+ problems, please review.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230703-topic-8250_qup_icc-v1-2-fea39aa07525@linaro.org
+  NOTE: If any of the errors are false positives, please report
+        them to the maintainer, see CHECKPATCH in MAINTAINERS.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+This fails when the Fixes:ed SHAs are signed, since the output is
+  $ git log --format=3D'%H %s'
+  gpg: Signature made Wed 28 Jun 2023 19:05:02 CEST
+  gpg:                using RSA key 7D69474E84028C5CC0C44163BCFD0B018D2658F1
+  gpg: Good signature from "=D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczlewe=
+li.xyz>" [ultimate]
+  gpg:                 aka "=D0=BD=D0=B0=D0=B1 <nabijaczleweli@gmail.com>" =
+[ultimate]
+  gpg:                 aka "nabijaczleweli <nabijaczleweli@gmail.com>" [ult=
+imate]
+  53307062b2b644dc0de7bde916d6193492f37643 splice: fsnotify_access(in), fsn=
+otify_modify(out) on success in tee
+or
+  $ git log --format=3D'%H %s' 983652c69199
+  gpg: Signature made Tue 04 Apr 2023 15:57:35 CEST
+  gpg:                using EDDSA key 408734571EA70C78B332692891C61BC06578D=
+CA2
+  gpg: Can't check signature: No public key
+  983652c691990b3257a07f67f4263eb847baa82d splice: report related fsnotify =
+events
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+The fix mimics what was done in commit f24fb53984cf ("perf tools: Don't
+include signature in version strings"): just don't ask for the
+signatures being validated.
 
-pip3 install dtschema --upgrade
+With this, my patch passed validation.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+ scripts/checkpatch.pl | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index b30114d637c4..1ff2c9835245 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -71,6 +71,7 @@ my $color =3D "auto";
+ my $allow_c99_comments =3D 1; # Can be overridden by --ignore C99_COMMENT_=
+TOLERANCE
+ # git output parsing needs US English output, so first set backtick child =
+process LANGUAGE
+ my $git_command =3D'export LANGUAGE=3Den_US.UTF-8; git';
++my $git_log_no =3D "--no-show-signature --no-color";
+ my $tabsize =3D 8;
+ my ${CONFIG_} =3D "CONFIG_";
+=20
+@@ -1164,7 +1165,7 @@ sub seed_camelcase_includes {
+ 	$camelcase_seeded =3D 1;
+=20
+ 	if (-e "$gitroot") {
+-		my $git_last_include_commit =3D `${git_command} log --no-merges --pretty=
+=3Dformat:"%h%n" -1 -- include`;
++		my $git_last_include_commit =3D `${git_command} log ${git_log_no} --no-m=
+erges --pretty=3Dformat:"%h%n" -1 -- include`;
+ 		chomp $git_last_include_commit;
+ 		$camelcase_cache =3D ".checkpatch-camelcase.git.$git_last_include_commit=
+";
+ 	} else {
+@@ -1226,7 +1227,7 @@ sub git_commit_info {
+=20
+ 	return ($id, $desc) if ((which("git") eq "") || !(-e "$gitroot"));
+=20
+-	my $output =3D `${git_command} log --no-color --format=3D'%H %s' -1 $comm=
+it 2>&1`;
++	my $output =3D `${git_command} log ${git_log_no} --format=3D'%H %s' -1 $c=
+ommit 2>&1`;
+ 	$output =3D~ s/^\s*//gm;
+ 	my @lines =3D split("\n", $output);
+=20
+@@ -1277,7 +1278,7 @@ if ($git) {
+ 		} else {
+ 			$git_range =3D "-1 $commit_expr";
+ 		}
+-		my $lines =3D `${git_command} log --no-color --no-merges --pretty=3Dform=
+at:'%H %s' $git_range`;
++		my $lines =3D `${git_command} log ${git_log_no} --no-merges --pretty=3Df=
+ormat:'%H %s' $git_range`;
+ 		foreach my $line (split(/\n/, $lines)) {
+ 			$line =3D~ /^([0-9a-fA-F]{40,40}) (.*)$/;
+ 			next if (!defined($1) || !defined($2));
+--=20
+2.39.2
+
+--3hdjimvrirjnjqby
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSi4I0ACgkQvP0LAY0m
+WPFCnxAAoyoVHV4TC1a9oR3O/QR36FVHOFHFLPOepDaWKS00oMXGGWP82MzKohUj
+fvsDabeIxlfjwRrVpRlMrqmJog0+gHUoTr2ppIPRy2PDz3LZXBn2yZP+Zh51lgdz
+TThGdwnwR6q0lCjIxBYTsfjupj+uU+37hp7Zo19H6Ejrb7Uf8U4gCHu1fI+Zg7MV
+DORdKDiS7eSMsW7k2Hsv0MoVqfgMpyROWc7txHJdq3KVWetuB8AuNv9pCr5bVZpY
+avcK9CqqgUuVoIyRqVqL3i6b55hS/y5A5Xo4MHgjQ2x25H5xcbBtEI7MeCLEIe1n
+OC0+13LVOsPhPN+HbVqDEZidzilj0wDQ029K6ZXRuWjC2t9fMQfyXPWSDlZ+QV6k
+K74mHNTNTNg2tVMWXcpzOe3HyPKYyvbzAdcU+Oqa/Oytrkdo3fPnLj+6Bs8yW+nh
+xVpN8kYx7Ug3cNUX2f4DNYLUBnNzOGbBDm40kQQ4fQnSxvq82AqzajDuSYik014b
+HXNZSd+bNt3rNZa+rpPR+/6Vm87qjcFqVm/NHJQlXgn7pdIlMGR+42i1X38/aem1
+8OxJcB15owMhTxbYe1fEByA5sC2+hN+6vY1Oz6wraYyip3j/oxk5PH3mH1b2epG1
+gVgAOCxEyc6AD0Gdbde9id+Z9EI3yAVlFI+y5XDMjirVok7T9mU=
+=IU9O
+-----END PGP SIGNATURE-----
+
+--3hdjimvrirjnjqby--
