@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7052E746616
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 01:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5870F746627
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 01:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjGCXJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 19:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S230516AbjGCXU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 19:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjGCXJn (ORCPT
+        with ESMTP id S229662AbjGCXU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 19:09:43 -0400
+        Mon, 3 Jul 2023 19:20:27 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3682B107
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 16:09:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA15BFB;
+        Mon,  3 Jul 2023 16:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=/0CU48Zw70eP8gCcZfPtoIrEyWctIOGQrz7h9ITawzM=; b=zFM/eyPbRLV1VXvvy01sbruHyF
-        zvQxPWumvh7k7b/Ri2n3voYL3q/5/or6nGHWQ0SDD24B5Ak905Sii0pBoPvSdSnmhuKwtVwtnL2/l
-        BPfC+xyGNrxdj0ZnHarErKnH05H7yrlnWkw3f4BQ+ir44ZVROBNEumaF9s/6VXnstL2QtdJEQt+n0
-        A34BlqNAqvbNc+tH101aCbq3jvEj+6Edy9gJP8HCv6CO1vrhta8NOqUPPfOHwz/aBGQtyDEe8cNRM
-        85SOboWbiKBhhhW1n3l68nQ9KiKu20WsnKmbcTd9wDmTTimZYTzcLkGgNNt6kvsF0LOmuIIs7Ajz8
-        9pSWiSMQ==;
+        bh=zRSf4m9jljbSBgJd1u1nkIHZSTBl9hKs7qeiFu0rofw=; b=pKnAPCRHqkakphOtwlnXmSbwK0
+        FIFTmFZ/22tG6k50dRUYqbnbMCXDEVTQ+4Ix8WTfTCcupJ60usNQqDqDrzr2QR9HtX9ps0/as6ATW
+        F/HPkR++fON5Keru84UZCkKWoLZ11bF8yI7Vkw53kE5T1UX5JpLRLCWXMeRWlzccquxrROPaOu7iY
+        gAJet4u3XQlJJRpdtrsdMrqF4/8aUIxvwJbh+MLXNTpxenCuwE9YCmNaqGtd8Nz1M22SPyAigiNQI
+        7GSZb/XoifCILNWLu4kaLgjNTmE7QpNQb35TsGI0ze1yw8ixfl/fU1z58eLGzAq0S5ve+k8UOdpZP
+        /35liZUA==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qGSfs-00BcGy-2I;
-        Mon, 03 Jul 2023 23:09:40 +0000
+        id 1qGSqH-00Bcwn-1Y;
+        Mon, 03 Jul 2023 23:20:25 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Christian Brauner <christian@brauner.io>
-Subject: [PATCH RESEND] nios2: support clone3() syscall
-Date:   Mon,  3 Jul 2023 16:09:40 -0700
-Message-ID: <20230703230940.17627-1-rdunlap@infradead.org>
+        "Darrick J . Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-mm@kvack.org, Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v3] Documentation: admin-guide: correct "it's" to possessive "its"
+Date:   Mon,  3 Jul 2023 16:20:24 -0700
+Message-ID: <20230703232024.8069-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -50,28 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the clone3() syscall to prevent a warning from
-checksyscalls.sh:
-
-<stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+Correct 2 uses of "it's" to the possessive "its" as needed.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Christian Brauner <christian@brauner.io>
+Cc: Darrick J. Wong <djwong@kernel.org>
+Cc: linux-xfs@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: Jonathan Corbet <corbet@lwn.net>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 ---
-Is there some reason that NIOS2 should not (does not) support clone3()?
+v2: add Rev-by: Darrick
+v3: rebase/resend
 
- arch/nios2/include/uapi/asm/unistd.h |    1 +
- 1 file changed, 1 insertion(+)
+ Documentation/admin-guide/mm/numa_memory_policy.rst |    2 +-
+ Documentation/admin-guide/xfs.rst                   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff -- a/arch/nios2/include/uapi/asm/unistd.h b/arch/nios2/include/uapi/asm/unistd.h
---- a/arch/nios2/include/uapi/asm/unistd.h
-+++ b/arch/nios2/include/uapi/asm/unistd.h
-@@ -22,6 +22,7 @@
- #define __ARCH_WANT_STAT64
- #define __ARCH_WANT_SET_GET_RLIMIT
- #define __ARCH_WANT_TIME32_SYSCALLS
-+#define __ARCH_WANT_SYS_CLONE3
+diff -- a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Documentation/admin-guide/mm/numa_memory_policy.rst
+--- a/Documentation/admin-guide/mm/numa_memory_policy.rst
++++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
+@@ -109,7 +109,7 @@ VMA Policy
+ 	* A task may install a new VMA policy on a sub-range of a
+ 	  previously mmap()ed region.  When this happens, Linux splits
+ 	  the existing virtual memory area into 2 or 3 VMAs, each with
+-	  it's own policy.
++	  its own policy.
  
- /* Use the standard ABI for syscalls */
- #include <asm-generic/unistd.h>
+ 	* By default, VMA policy applies only to pages allocated after
+ 	  the policy is installed.  Any pages already faulted into the
+diff -- a/Documentation/admin-guide/xfs.rst b/Documentation/admin-guide/xfs.rst
+--- a/Documentation/admin-guide/xfs.rst
++++ b/Documentation/admin-guide/xfs.rst
+@@ -192,7 +192,7 @@ When mounting an XFS filesystem, the fol
+ 	are any integer multiple of a valid ``sunit`` value.
+ 
+ 	Typically the only time these mount options are necessary if
+-	after an underlying RAID device has had it's geometry
++	after an underlying RAID device has had its geometry
+ 	modified, such as adding a new disk to a RAID5 lun and
+ 	reshaping it.
+ 
