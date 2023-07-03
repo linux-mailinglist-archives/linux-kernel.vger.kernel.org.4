@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F7974599A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE1174599B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjGCKFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
+        id S231327AbjGCKFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbjGCKFK (ORCPT
+        with ESMTP id S229764AbjGCKFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:05:10 -0400
+        Mon, 3 Jul 2023 06:05:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EA81728;
-        Mon,  3 Jul 2023 03:04:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A549D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:05:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7263060E8B;
-        Mon,  3 Jul 2023 10:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69801C433C7;
-        Mon,  3 Jul 2023 10:04:41 +0000 (UTC)
-Message-ID: <04dec113-f6d8-a9f8-0a8a-3279ff5fe870@xs4all.nl>
-Date:   Mon, 3 Jul 2023 12:04:39 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21F8C60EA8
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:05:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85F2C433C8;
+        Mon,  3 Jul 2023 10:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688378705;
+        bh=N2XBTu9XZ+qxcHuAX+yWcbHqX+PC0a29sebTMpz+g0I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Xffxs3eZrQxOSuCfB8X6zsg/1wrTk5sZNbjfJ+PJdd0laFhPQUwaBjxGNQQMQqPeD
+         NdmibNDOuuw77yM5wIygOg6qNeDMLcbJ75j3rlborCgRbiLm8dPsjESlefEHHluifK
+         NklK+DZ8Mzr+veXp4Q/X1ELUiQ/bxKpbR/bKo+WCPeVYagBvibS1uE8rZKeen3qRpk
+         JBHx8rmqKP9ZZBC0vJvWPCm0bQb8Y/4DGQBtZn3VlOYilD5prRMuFbWz663pGE63Bx
+         m4FTm4drbu0v1A7hYJFTXj7Wok40UamOVUntrZWdw5ybOdEFwnsROC8Se+W25cCzjs
+         AJL3vJ5gusN5A==
+Date:   Mon, 3 Jul 2023 11:05:01 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] MFD for v6.5
+Message-ID: <20230703100501.GA10359@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/6] media: v4l2: Add audio capture and output support
-Content-Language: en-US
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>, tfiga@chromium.org,
-        m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, Jacopo Mondi <jacopo@jmondi.org>
-References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
- <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
- <ZJ6o5fT4V4HXivFa@valkosipuli.retiisi.eu>
- <CAA+D8AND1yZ7eZLjBGxVF=i3hLMecUm-j7AVHN9npJi-4=3VrA@mail.gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <CAA+D8AND1yZ7eZLjBGxVF=i3hLMecUm-j7AVHN9npJi-4=3VrA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,421 +54,356 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 11:54, Shengjiu Wang wrote:
-> Hi Sakari
-> 
-> On Fri, Jun 30, 2023 at 6:05 PM Sakari Ailus <sakari.ailus@iki.fi <mailto:sakari.ailus@iki.fi>> wrote:
-> 
->     Hi Shengjiu,
-> 
->     On Thu, Jun 29, 2023 at 09:37:48AM +0800, Shengjiu Wang wrote:
->     > Audio signal processing has the requirement for memory to
->     > memory similar as Video.
->     >
->     > This patch is to add this support in v4l2 framework, defined
->     > new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
->     > V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
->     > for audio case usage.
-> 
->     Why are you proposing to add this to V4L2 framework instead of doing this
->     within ALSA?
-> 
->     Also cc Hans and Jacopo.
-> 
-> 
-> There is no such memory to memory interface defined in ALSA.  Seems
-> ALSA is not designed for M2M cases.
-> 
-> V4L2 is designed for video, radio, image, sdr, meta...,   so I think audio can be
-> naturally added to the support scope.  
+Good morning Linus,
 
-While I do not have an objection as such supporting this as part of V4L2, I do
-want to know if the ALSA maintainers think it is OK as well before I am going
-to spend time on this.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-In principle the V4L2 mem2mem framework doesn't really care what type of data
-is processed, it is just a matter of adding audio types (or reusing them from ALSA,
-which is presumably the intention here).
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-Regards,
+are available in the Git repository at:
 
-	Hans
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/mfd-next-6.5
 
-> 
-> Thanks.
->  
-> Best regards
-> Shengjiu Wang
-> 
->      
-> 
-> 
->     >
->     > The created audio device is named "/dev/audioX".
->     >
->     > Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com <mailto:shengjiu.wang@nxp.com>>
->     > ---
->     >  .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
->     >  drivers/media/v4l2-core/v4l2-dev.c            | 17 ++++++
->     >  drivers/media/v4l2-core/v4l2-ioctl.c          | 52 +++++++++++++++++++
->     >  include/media/v4l2-dev.h                      |  2 +
->     >  include/media/v4l2-ioctl.h                    | 34 ++++++++++++
->     >  include/uapi/linux/videodev2.h                | 19 +++++++
->     >  6 files changed, 128 insertions(+)
->     >
->     > diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
->     > index c7a54d82a55e..12f2be2773a2 100644
->     > --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
->     > +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
->     > @@ -785,6 +785,10 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
->     >       case V4L2_BUF_TYPE_META_OUTPUT:
->     >               requested_sizes[0] = f->fmt.meta.buffersize;
->     >               break;
->     > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
->     > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
->     > +             requested_sizes[0] = f->fmt.audio.buffersize;
->     > +             break;
->     >       default:
->     >               return -EINVAL;
->     >       }
->     > diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
->     > index f81279492682..67484f4c6eaf 100644
->     > --- a/drivers/media/v4l2-core/v4l2-dev.c
->     > +++ b/drivers/media/v4l2-core/v4l2-dev.c
->     > @@ -553,6 +553,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
->     >       bool is_tch = vdev->vfl_type == VFL_TYPE_TOUCH;
->     >       bool is_meta = vdev->vfl_type == VFL_TYPE_VIDEO &&
->     >                      (vdev->device_caps & meta_caps);
->     > +     bool is_audio = vdev->vfl_type == VFL_TYPE_AUDIO;
->     >       bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
->     >       bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
->     >       bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
->     > @@ -664,6 +665,19 @@ static void determine_valid_ioctls(struct video_device *vdev)
->     >               SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_out);
->     >               SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_out);
->     >       }
->     > +     if (is_audio && is_rx) {
->     > +             /* audio capture specific ioctls */
->     > +             SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_cap);
->     > +             SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_cap);
->     > +             SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_cap);
->     > +             SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_cap);
->     > +     } else if (is_audio && is_tx) {
->     > +             /* audio output specific ioctls */
->     > +             SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_out);
->     > +             SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_out);
->     > +             SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_out);
->     > +             SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_out);
->     > +     }
->     >       if (is_vbi) {
->     >               /* vbi specific ioctls */
->     >               if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
->     > @@ -927,6 +941,9 @@ int __video_register_device(struct video_device *vdev,
->     >       case VFL_TYPE_TOUCH:
->     >               name_base = "v4l-touch";
->     >               break;
->     > +     case VFL_TYPE_AUDIO:
->     > +             name_base = "audio";
->     > +             break;
->     >       default:
->     >               pr_err("%s called with unknown type: %d\n",
->     >                      __func__, type);
->     > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->     > index a858acea6547..26bc4b0d8ef0 100644
->     > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->     > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->     > @@ -188,6 +188,8 @@ const char *v4l2_type_names[] = {
->     >       [V4L2_BUF_TYPE_SDR_OUTPUT]         = "sdr-out",
->     >       [V4L2_BUF_TYPE_META_CAPTURE]       = "meta-cap",
->     >       [V4L2_BUF_TYPE_META_OUTPUT]        = "meta-out",
->     > +     [V4L2_BUF_TYPE_AUDIO_CAPTURE]      = "audio-cap",
->     > +     [V4L2_BUF_TYPE_AUDIO_OUTPUT]       = "audio-out",
->     >  };
->     >  EXPORT_SYMBOL(v4l2_type_names);
->     > 
->     > @@ -276,6 +278,7 @@ static void v4l_print_format(const void *arg, bool write_only)
->     >       const struct v4l2_sliced_vbi_format *sliced;
->     >       const struct v4l2_window *win;
->     >       const struct v4l2_meta_format *meta;
->     > +     const struct v4l2_audio_format *audio;
->     >       u32 pixelformat;
->     >       u32 planes;
->     >       unsigned i;
->     > @@ -346,6 +349,12 @@ static void v4l_print_format(const void *arg, bool write_only)
->     >               pr_cont(", dataformat=%p4cc, buffersize=%u\n",
->     >                       &pixelformat, meta->buffersize);
->     >               break;
->     > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
->     > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
->     > +             audio = &p->fmt.audio;
->     > +             pr_cont(", rate=%u, format=%u, channels=%u, buffersize=%u\n",
->     > +                     audio->rate, audio->format, audio->channels, audio->buffersize);
->     > +             break;
->     >       }
->     >  }
->     > 
->     > @@ -927,6 +936,7 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
->     >       bool is_tch = vfd->vfl_type == VFL_TYPE_TOUCH;
->     >       bool is_meta = vfd->vfl_type == VFL_TYPE_VIDEO &&
->     >                      (vfd->device_caps & meta_caps);
->     > +     bool is_audio = vfd->vfl_type == VFL_TYPE_AUDIO;
->     >       bool is_rx = vfd->vfl_dir != VFL_DIR_TX;
->     >       bool is_tx = vfd->vfl_dir != VFL_DIR_RX;
->     > 
->     > @@ -992,6 +1002,14 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
->     >               if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
->     >                       return 0;
->     >               break;
->     > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
->     > +             if (is_audio && is_rx && ops->vidioc_g_fmt_audio_cap)
->     > +                     return 0;
->     > +             break;
->     > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
->     > +             if (is_audio && is_tx && ops->vidioc_g_fmt_audio_out)
->     > +                     return 0;
->     > +             break;
->     >       default:
->     >               break;
->     >       }
->     > @@ -1592,6 +1610,16 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
->     >                       break;
->     >               ret = ops->vidioc_enum_fmt_meta_out(file, fh, arg);
->     >               break;
->     > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
->     > +             if (unlikely(!ops->vidioc_enum_fmt_audio_cap))
->     > +                     break;
->     > +             ret = ops->vidioc_enum_fmt_audio_cap(file, fh, arg);
->     > +             break;
->     > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
->     > +             if (unlikely(!ops->vidioc_enum_fmt_audio_out))
->     > +                     break;
->     > +             ret = ops->vidioc_enum_fmt_audio_out(file, fh, arg);
->     > +             break;
->     >       }
->     >       if (ret == 0)
->     >               v4l_fill_fmtdesc(p);
->     > @@ -1668,6 +1696,10 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
->     >               return ops->vidioc_g_fmt_meta_cap(file, fh, arg);
->     >       case V4L2_BUF_TYPE_META_OUTPUT:
->     >               return ops->vidioc_g_fmt_meta_out(file, fh, arg);
->     > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
->     > +             return ops->vidioc_g_fmt_audio_cap(file, fh, arg);
->     > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
->     > +             return ops->vidioc_g_fmt_audio_out(file, fh, arg);
->     >       }
->     >       return -EINVAL;
->     >  }
->     > @@ -1779,6 +1811,16 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
->     >                       break;
->     >               memset_after(p, 0, fmt.meta);
->     >               return ops->vidioc_s_fmt_meta_out(file, fh, arg);
->     > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
->     > +             if (unlikely(!ops->vidioc_s_fmt_audio_cap))
->     > +                     break;
->     > +             memset_after(p, 0, fmt.audio);
->     > +             return ops->vidioc_s_fmt_audio_cap(file, fh, arg);
->     > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
->     > +             if (unlikely(!ops->vidioc_s_fmt_audio_out))
->     > +                     break;
->     > +             memset_after(p, 0, fmt.audio);
->     > +             return ops->vidioc_s_fmt_audio_out(file, fh, arg);
->     >       }
->     >       return -EINVAL;
->     >  }
->     > @@ -1887,6 +1929,16 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
->     >                       break;
->     >               memset_after(p, 0, fmt.meta);
->     >               return ops->vidioc_try_fmt_meta_out(file, fh, arg);
->     > +     case V4L2_BUF_TYPE_AUDIO_CAPTURE:
->     > +             if (unlikely(!ops->vidioc_try_fmt_audio_cap))
->     > +                     break;
->     > +             memset_after(p, 0, fmt.audio);
->     > +             return ops->vidioc_try_fmt_audio_cap(file, fh, arg);
->     > +     case V4L2_BUF_TYPE_AUDIO_OUTPUT:
->     > +             if (unlikely(!ops->vidioc_try_fmt_audio_out))
->     > +                     break;
->     > +             memset_after(p, 0, fmt.audio);
->     > +             return ops->vidioc_try_fmt_audio_out(file, fh, arg);
->     >       }
->     >       return -EINVAL;
->     >  }
->     > diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
->     > index e0a13505f88d..0924e6d1dab1 100644
->     > --- a/include/media/v4l2-dev.h
->     > +++ b/include/media/v4l2-dev.h
->     > @@ -30,6 +30,7 @@
->     >   * @VFL_TYPE_SUBDEV: for V4L2 subdevices
->     >   * @VFL_TYPE_SDR:    for Software Defined Radio tuners
->     >   * @VFL_TYPE_TOUCH:  for touch sensors
->     > + * @VFL_TYPE_AUDIO:  for audio input/output devices
->     >   * @VFL_TYPE_MAX:    number of VFL types, must always be last in the enum
->     >   */
->     >  enum vfl_devnode_type {
->     > @@ -39,6 +40,7 @@ enum vfl_devnode_type {
->     >       VFL_TYPE_SUBDEV,
->     >       VFL_TYPE_SDR,
->     >       VFL_TYPE_TOUCH,
->     > +     VFL_TYPE_AUDIO,
->     >       VFL_TYPE_MAX /* Shall be the last one */
->     >  };
->     > 
->     > diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
->     > index edb733f21604..f840cf740ce1 100644
->     > --- a/include/media/v4l2-ioctl.h
->     > +++ b/include/media/v4l2-ioctl.h
->     > @@ -45,6 +45,12 @@ struct v4l2_fh;
->     >   * @vidioc_enum_fmt_meta_out: pointer to the function that implements
->     >   *   :ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
->     >   *   for metadata output
->     > + * @vidioc_enum_fmt_audio_cap: pointer to the function that implements
->     > + *   :ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
->     > + *   for audio capture
->     > + * @vidioc_enum_fmt_audio_out: pointer to the function that implements
->     > + *   :ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
->     > + *   for audio output
->     >   * @vidioc_g_fmt_vid_cap: pointer to the function that implements
->     >   *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for video capture
->     >   *   in single plane mode
->     > @@ -79,6 +85,10 @@ struct v4l2_fh;
->     >   *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
->     >   * @vidioc_g_fmt_meta_out: pointer to the function that implements
->     >   *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata output
->     > + * @vidioc_g_fmt_audio_cap: pointer to the function that implements
->     > + *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio capture
->     > + * @vidioc_g_fmt_audio_out: pointer to the function that implements
->     > + *   :ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio output
->     >   * @vidioc_s_fmt_vid_cap: pointer to the function that implements
->     >   *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for video capture
->     >   *   in single plane mode
->     > @@ -113,6 +123,10 @@ struct v4l2_fh;
->     >   *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
->     >   * @vidioc_s_fmt_meta_out: pointer to the function that implements
->     >   *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata output
->     > + * @vidioc_s_fmt_audio_cap: pointer to the function that implements
->     > + *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio capture
->     > + * @vidioc_s_fmt_audio_out: pointer to the function that implements
->     > + *   :ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio output
->     >   * @vidioc_try_fmt_vid_cap: pointer to the function that implements
->     >   *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for video capture
->     >   *   in single plane mode
->     > @@ -149,6 +163,10 @@ struct v4l2_fh;
->     >   *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
->     >   * @vidioc_try_fmt_meta_out: pointer to the function that implements
->     >   *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata output
->     > + * @vidioc_try_fmt_audio_cap: pointer to the function that implements
->     > + *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio capture
->     > + * @vidioc_try_fmt_audio_out: pointer to the function that implements
->     > + *   :ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio output
->     >   * @vidioc_reqbufs: pointer to the function that implements
->     >   *   :ref:`VIDIOC_REQBUFS <vidioc_reqbufs>` ioctl
->     >   * @vidioc_querybuf: pointer to the function that implements
->     > @@ -315,6 +333,10 @@ struct v4l2_ioctl_ops {
->     >                                       struct v4l2_fmtdesc *f);
->     >       int (*vidioc_enum_fmt_meta_out)(struct file *file, void *fh,
->     >                                       struct v4l2_fmtdesc *f);
->     > +     int (*vidioc_enum_fmt_audio_cap)(struct file *file, void *fh,
->     > +                                      struct v4l2_fmtdesc *f);
->     > +     int (*vidioc_enum_fmt_audio_out)(struct file *file, void *fh,
->     > +                                      struct v4l2_fmtdesc *f);
->     > 
->     >       /* VIDIOC_G_FMT handlers */
->     >       int (*vidioc_g_fmt_vid_cap)(struct file *file, void *fh,
->     > @@ -345,6 +367,10 @@ struct v4l2_ioctl_ops {
->     >                                    struct v4l2_format *f);
->     >       int (*vidioc_g_fmt_meta_out)(struct file *file, void *fh,
->     >                                    struct v4l2_format *f);
->     > +     int (*vidioc_g_fmt_audio_cap)(struct file *file, void *fh,
->     > +                                   struct v4l2_format *f);
->     > +     int (*vidioc_g_fmt_audio_out)(struct file *file, void *fh,
->     > +                                   struct v4l2_format *f);
->     > 
->     >       /* VIDIOC_S_FMT handlers */
->     >       int (*vidioc_s_fmt_vid_cap)(struct file *file, void *fh,
->     > @@ -375,6 +401,10 @@ struct v4l2_ioctl_ops {
->     >                                    struct v4l2_format *f);
->     >       int (*vidioc_s_fmt_meta_out)(struct file *file, void *fh,
->     >                                    struct v4l2_format *f);
->     > +     int (*vidioc_s_fmt_audio_cap)(struct file *file, void *fh,
->     > +                                   struct v4l2_format *f);
->     > +     int (*vidioc_s_fmt_audio_out)(struct file *file, void *fh,
->     > +                                   struct v4l2_format *f);
->     > 
->     >       /* VIDIOC_TRY_FMT handlers */
->     >       int (*vidioc_try_fmt_vid_cap)(struct file *file, void *fh,
->     > @@ -405,6 +435,10 @@ struct v4l2_ioctl_ops {
->     >                                      struct v4l2_format *f);
->     >       int (*vidioc_try_fmt_meta_out)(struct file *file, void *fh,
->     >                                      struct v4l2_format *f);
->     > +     int (*vidioc_try_fmt_audio_cap)(struct file *file, void *fh,
->     > +                                     struct v4l2_format *f);
->     > +     int (*vidioc_try_fmt_audio_out)(struct file *file, void *fh,
->     > +                                     struct v4l2_format *f);
->     > 
->     >       /* Buffer handlers */
->     >       int (*vidioc_reqbufs)(struct file *file, void *fh,
->     > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->     > index aee75eb9e686..a7af28f4c8c3 100644
->     > --- a/include/uapi/linux/videodev2.h
->     > +++ b/include/uapi/linux/videodev2.h
->     > @@ -153,6 +153,8 @@ enum v4l2_buf_type {
->     >       V4L2_BUF_TYPE_SDR_OUTPUT           = 12,
->     >       V4L2_BUF_TYPE_META_CAPTURE         = 13,
->     >       V4L2_BUF_TYPE_META_OUTPUT          = 14,
->     > +     V4L2_BUF_TYPE_AUDIO_CAPTURE        = 15,
->     > +     V4L2_BUF_TYPE_AUDIO_OUTPUT         = 16,
->     >       /* Deprecated, do not use */
->     >       V4L2_BUF_TYPE_PRIVATE              = 0x80,
->     >  };
->     > @@ -169,6 +171,7 @@ enum v4l2_buf_type {
->     >        || (type) == V4L2_BUF_TYPE_VBI_OUTPUT                  \
->     >        || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT           \
->     >        || (type) == V4L2_BUF_TYPE_SDR_OUTPUT                  \
->     > +      || (type) == V4L2_BUF_TYPE_AUDIO_OUTPUT                \
->     >        || (type) == V4L2_BUF_TYPE_META_OUTPUT)
->     > 
->     >  #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
->     > @@ -2404,6 +2407,20 @@ struct v4l2_meta_format {
->     >       __u32                           buffersize;
->     >  } __attribute__ ((packed));
->     > 
->     > +/**
->     > + * struct v4l2_audio_format - audio data format definition
->     > + * @rate:            sample rate
->     > + * @format:          sample format
->     > + * @channels:                channel numbers
->     > + * @buffersize:              maximum size in bytes required for data
->     > + */
->     > +struct v4l2_audio_format {
->     > +     __u32                           rate;
->     > +     __u32                           format;
->     > +     __u32                           channels;
->     > +     __u32                           buffersize;
->     > +} __attribute__ ((packed));
->     > +
->     >  /**
->     >   * struct v4l2_format - stream data format
->     >   * @type:    enum v4l2_buf_type; type of the data stream
->     > @@ -2412,6 +2429,7 @@ struct v4l2_meta_format {
->     >   * @win:     definition of an overlaid image
->     >   * @vbi:     raw VBI capture or output parameters
->     >   * @sliced:  sliced VBI capture or output parameters
->     > + * @audio:   definition of an audio format
->     >   * @raw_data:        placeholder for future extensions and custom formats
->     >   * @fmt:     union of @pix, @pix_mp, @win, @vbi, @sliced, @sdr, @meta
->     >   *           and @raw_data
->     > @@ -2426,6 +2444,7 @@ struct v4l2_format {
->     >               struct v4l2_sliced_vbi_format   sliced;  /* V4L2_BUF_TYPE_SLICED_VBI_CAPTURE */
->     >               struct v4l2_sdr_format          sdr;     /* V4L2_BUF_TYPE_SDR_CAPTURE */
->     >               struct v4l2_meta_format         meta;    /* V4L2_BUF_TYPE_META_CAPTURE */
->     > +             struct v4l2_audio_format        audio;   /* V4L2_BUF_TYPE_AUDIO_CAPTURE */
->     >               __u8    raw_data[200];                   /* user-defined */
->     >       } fmt;
->     >  };
->     > --
->     > 2.34.1
->     >
-> 
->     -- 
->     Sakari Ailus
-> 
+for you to fetch changes up to b05740d71bd2f8b2261930944bfe95f529190b8b:
 
+  dt-bindings: mfd: max77541: Add ADI MAX77541/MAX77540 (2023-06-28 15:18:36 +0100)
+
+----------------------------------------------------------------
+ - New Drivers
+   - Add support for TI TPS6594/TPS6593/LP8764 PMICs
+   - Add support for Samsung RT5033 Battery Charger
+   - Add support for Analog Devices MAX77540 and MAX77541 PMICs
+
+ - New Device Support
+   - Add support for SPI to Rockchip RK808 (and friends)
+   - Add support for AXP192 PMIC to X-Powers AXP20X
+   - Add support for AXP313a PMIC to X-Powers AXP20X
+   - Add support for RK806 to Rockchip RK8XX
+
+ - Removed Device Support
+   - Removed MFD support for Richtek RT5033 Battery
+
+ - Fix-ups
+   - Remove superfluous code
+   - Switch I2C drivers from .probe_new() to .probe()
+   - Convert over to managed resources (devm_*(), etc)
+   - Use dev_err_probe() for returning errors from .probe()
+   - Add lots of Device Tree bindings / support
+   - Improve cache efficiency by switching to Maple
+   - Use own exported namespaces (NS)
+   - Include missing and remove superfluous headers
+   - Start using / convert to the new shutdown sys-off API
+   - Trivial: variable / define renaming
+   - Make use of of_property_read_reg() when requesting DT 'reg's
+
+ - Bug Fixes
+   - Fix chip revision readout due to incorrect data masking
+   - Amend incorrect register and mask values used for charger state
+   - Hide unused functionality at compile time
+   - Fix resource leaks following error handling routines
+   - Return correct error values and fix error handling in general
+   - Repair incorrect device names - used for device matching
+   - Remedy broken module auto-loading
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      dt-bindings: mfd: qcom,spmi-pmic: Add pattern property for phy
+
+Aidan MacDonald (2):
+      mfd: axp20x: Add support for AXP192
+      dt-bindings: mfd: Add bindings for AXP192 MFD device
+
+Amelie Delaunay (2):
+      mfd: stmfx: Fix error path in stmfx_chip_init
+      mfd: stmfx: Nullify stmfx->vdd in case of error
+
+Arnd Bergmann (1):
+      mfd: intel-lpss: Hide suspend/resume functions in #ifdef
+
+Christophe JAILLET (5):
+      mfd: rc5t583-irq: Remove the unneeded include <linux/i2c.h>
+      mfd: dln2: Remove the unneeded include <linux/i2c.h>
+      mfd: wcd934x: Fix an error handling path in wcd934x_slim_probe()
+      mfd: wcd934x: Simplify with dev_err_probe()
+      mfd: stmpe: Only disable the regulators if they are enabled
+
+Dan Carpenter (1):
+      mfd: tps6594: Fix an error code in probe()
+
+Dario Binacchi (1):
+      dt-bindings: mfd: stm32f7: Add binding definition for CAN3
+
+Guiting Shen (1):
+      mfd: Remove redundant dev_set_drvdata() from I2C drivers
+
+Ilpo Järvinen (4):
+      mfd: intel-m10-bmc: Move core symbols to own namespace
+      mfd: intel-m10-bmc: Create m10bmc_sys_update_bits()
+      mfd: intel-m10-bmc: Move m10bmc_sys_read() away from header
+      mfd: intel-m10-bmc: Manage access to MAX 10 fw handshake registers
+
+Jakob Hauser (8):
+      mfd: rt5033: Fix chip revision readout
+      mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
+      mfd: rt5033: Apply preparatory changes before adding rt5033-charger driver
+      power: supply: rt5033_charger: Add RT5033 charger device driver
+      power: supply: rt5033_battery: Move struct rt5033_battery to battery driver
+      power: supply: rt5033_battery: Adopt status property from charger
+      dt-bindings: power: supply: rt5033-battery: Apply unevaluatedProperties
+      dt-bindings: Add rt5033 MFD, Regulator and Charger
+
+Jerome Neanne (2):
+      mfd: tps65219: Add GPIO cell instance
+      mfd: tps65219: Add support for soft shutdown via sys-off API
+
+Jiasheng Jiang (1):
+      mfd: intel-lpss: Add missing check for platform_get_resource
+
+Johan Hovold (2):
+      mfd: pm8008: Fix module autoloading
+      mfd: pm8008: Drop bogus i2c module alias
+
+Julien Panis (2):
+      mfd: tps6594: Add driver for TI TPS6594 PMIC
+      dt-bindings: mfd: Add TI TPS6594 PMIC
+
+Krzysztof Kozlowski (1):
+      dt-bindings: mfd: samsung,s5m8767: Simplify excluding properties
+
+Lee Jones (2):
+      Merge branches 'tb-mfd-clk-input-pinctrl-power-rtc-sound-6.5', 'ib-mfd-tps6594-core-6.5', 'ib-mfd-regulator-max5970-6.5', 'ib-mfd-regulator-6.5' and 'ib-mfd-power-6.5' into ibs-for-mfd-merged
+      mailmap: Add some mail mappings for Lee Jones
+
+Mark Brown (2):
+      mfd: twl6040: Use maple tree register cache
+      mfd: wm831x: Use maple tree register cache
+
+Martin Botka (1):
+      mfd: axp20x: Add support for AXP313a PMIC
+
+Naresh Solanki (1):
+      mfd: max5970: Rename driver and remove wildcard
+
+Okan Sahin (5):
+      mfd: max77541: Add ADI MAX77541/MAX77540 PMIC Support
+      dt-bindings: regulator: max77541: Add ADI MAX77541/MAX77540 Regulator
+      regulator: max77541: Add ADI MAX77541/MAX77540 Regulator Support
+      iio: adc: max77541: Add ADI MAX77541 ADC Support
+      dt-bindings: mfd: max77541: Add ADI MAX77541/MAX77540
+
+Pascal Paillet (1):
+      dt-bindings: mfd: Add vref_ddr supply for STPMIC1
+
+Rob Herring (1):
+      mfd: core: Use of_property_read_reg() to parse "reg"
+
+Sean Nyekjaer (2):
+      mfd: stpmic1: Fixup main control register and bits naming
+      mfd: stpmic1: Add PMIC poweroff via sys-off handler
+
+Sebastian Reichel (9):
+      clk: RK808: Reduce 'struct rk808' usage
+      mfd: rk808: Convert to device managed resources
+      mfd: rk808: Use dev_err_probe
+      mfd: rk808: Replace 'struct i2c_client' with 'struct device'
+      mfd: rk808: Split into core and i2c
+      mfd: rk8xx-i2c: Use device_get_match_data
+      dt-bindings: mfd: Add rk806 binding
+      mfd: rk8xx: Add rk806 support
+      pinctrl: rk805: Add rk806 pinctrl support
+
+Stephan Gerhold (1):
+      mfd: rt5033: Drop rt5033-battery sub-device
+
+Tim Harvey (1):
+      dt-bindings: mfd: gateworks-gsc: Remove unnecessary fan-controller nodes
+
+Uwe Kleine-König (2):
+      mfd: Switch i2c drivers back to use .probe()
+      mfd: Switch two more drivers back to use struct i2c_driver::probe
+
+Vignesh Viswanathan (1):
+      dt-bindings: mfd: qcom,tcsr: Add the compatible for IPQ8074
+
+ .mailmap                                           |    4 +
+ .../devicetree/bindings/mfd/adi,max77541.yaml      |   68 ++
+ .../devicetree/bindings/mfd/gateworks-gsc.yaml     |   10 -
+ .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |    4 +
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml         |    1 +
+ .../devicetree/bindings/mfd/richtek,rt5033.yaml    |  138 +++
+ .../devicetree/bindings/mfd/rockchip,rk806.yaml    |  406 ++++++++
+ .../devicetree/bindings/mfd/samsung,s5m8767.yaml   |   25 +-
+ .../devicetree/bindings/mfd/st,stpmic1.yaml        |    2 +-
+ .../devicetree/bindings/mfd/ti,tps6594.yaml        |  193 ++++
+ .../devicetree/bindings/mfd/x-powers,axp152.yaml   |    1 +
+ .../power/supply/richtek,rt5033-battery.yaml       |    2 +-
+ .../power/supply/richtek,rt5033-charger.yaml       |   65 ++
+ .../bindings/regulator/adi,max77541-regulator.yaml |   38 +
+ drivers/clk/Kconfig                                |    2 +-
+ drivers/clk/clk-rk808.c                            |   34 +-
+ drivers/fpga/intel-m10-bmc-sec-update.c            |   47 +-
+ drivers/hwmon/intel-m10-bmc-hwmon.c                |    1 +
+ drivers/iio/adc/Kconfig                            |   11 +
+ drivers/iio/adc/Makefile                           |    1 +
+ drivers/iio/adc/max77541-adc.c                     |  194 ++++
+ drivers/input/misc/Kconfig                         |    2 +-
+ drivers/mfd/88pm800.c                              |    2 +-
+ drivers/mfd/88pm805.c                              |    2 +-
+ drivers/mfd/88pm80x.c                              |    1 -
+ drivers/mfd/88pm860x-core.c                        |    3 +-
+ drivers/mfd/Kconfig                                |   70 +-
+ drivers/mfd/Makefile                               |    8 +-
+ drivers/mfd/aat2870-core.c                         |    4 +-
+ drivers/mfd/acer-ec-a500.c                         |    2 +-
+ drivers/mfd/act8945a.c                             |    2 +-
+ drivers/mfd/adp5520.c                              |    2 +-
+ drivers/mfd/arizona-i2c.c                          |    2 +-
+ drivers/mfd/as3711.c                               |    2 +-
+ drivers/mfd/as3722.c                               |    2 +-
+ drivers/mfd/atc260x-i2c.c                          |    2 +-
+ drivers/mfd/axp20x-i2c.c                           |    6 +-
+ drivers/mfd/axp20x.c                               |  219 ++++-
+ drivers/mfd/bcm590xx.c                             |    2 +-
+ drivers/mfd/bd9571mwv.c                            |    2 +-
+ drivers/mfd/da903x.c                               |    2 +-
+ drivers/mfd/da9052-i2c.c                           |    2 +-
+ drivers/mfd/da9055-i2c.c                           |    2 +-
+ drivers/mfd/da9062-core.c                          |    2 +-
+ drivers/mfd/da9063-i2c.c                           |    2 +-
+ drivers/mfd/da9150-core.c                          |    2 +-
+ drivers/mfd/dln2.c                                 |    1 -
+ drivers/mfd/ene-kb3930.c                           |    2 +-
+ drivers/mfd/gateworks-gsc.c                        |    2 +-
+ drivers/mfd/intel-lpss-acpi.c                      |    3 +
+ drivers/mfd/intel-lpss.c                           |    2 +
+ drivers/mfd/intel-m10-bmc-core.c                   |   90 +-
+ drivers/mfd/intel-m10-bmc-pmci.c                   |    1 +
+ drivers/mfd/intel-m10-bmc-spi.c                    |   15 +
+ drivers/mfd/intel_soc_pmic_chtdc_ti.c              |    2 +-
+ drivers/mfd/intel_soc_pmic_chtwc.c                 |    2 +-
+ drivers/mfd/intel_soc_pmic_crc.c                   |    2 +-
+ drivers/mfd/iqs62x.c                               |    2 +-
+ drivers/mfd/khadas-mcu.c                           |    2 +-
+ drivers/mfd/lm3533-core.c                          |    4 +-
+ drivers/mfd/lochnagar-i2c.c                        |    2 +-
+ drivers/mfd/lp3943.c                               |    2 +-
+ drivers/mfd/lp873x.c                               |    2 +-
+ drivers/mfd/lp87565.c                              |    2 +-
+ drivers/mfd/lp8788.c                               |    2 +-
+ drivers/mfd/madera-i2c.c                           |    2 +-
+ drivers/mfd/max14577.c                             |    2 +-
+ drivers/mfd/max77541.c                             |  224 +++++
+ drivers/mfd/max77620.c                             |    2 +-
+ drivers/mfd/max77650.c                             |    2 +-
+ drivers/mfd/max77686.c                             |    2 +-
+ drivers/mfd/max77693.c                             |    2 +-
+ drivers/mfd/max77714.c                             |    2 +-
+ drivers/mfd/max77843.c                             |    2 +-
+ drivers/mfd/max8907.c                              |    4 +-
+ drivers/mfd/max8925-i2c.c                          |    3 +-
+ drivers/mfd/max8997.c                              |    2 +-
+ drivers/mfd/max8998.c                              |    2 +-
+ drivers/mfd/mc13xxx-i2c.c                          |    2 +-
+ drivers/mfd/menelaus.c                             |    2 +-
+ drivers/mfd/menf21bmc.c                            |    2 +-
+ drivers/mfd/mfd-core.c                             |    6 +-
+ drivers/mfd/mp2629.c                               |    2 +-
+ drivers/mfd/mt6360-core.c                          |    2 +-
+ drivers/mfd/mt6370.c                               |    2 +-
+ drivers/mfd/ntxec.c                                |    2 +-
+ drivers/mfd/palmas.c                               |    2 +-
+ drivers/mfd/pcf50633-core.c                        |    2 +-
+ drivers/mfd/qcom-pm8008.c                          |    4 +-
+ drivers/mfd/rc5t583-irq.c                          |    2 +-
+ drivers/mfd/rc5t583.c                              |    2 +-
+ drivers/mfd/retu-mfd.c                             |    2 +-
+ drivers/mfd/{rk808.c => rk8xx-core.c}              |  352 +++----
+ drivers/mfd/rk8xx-i2c.c                            |  185 ++++
+ drivers/mfd/rk8xx-spi.c                            |  124 +++
+ drivers/mfd/rn5t618.c                              |    2 +-
+ drivers/mfd/rohm-bd71828.c                         |    2 +-
+ drivers/mfd/rohm-bd718x7.c                         |    2 +-
+ drivers/mfd/rohm-bd9576.c                          |    2 +-
+ drivers/mfd/rsmu_i2c.c                             |    2 +-
+ drivers/mfd/rt4831.c                               |    2 +-
+ drivers/mfd/rt5033.c                               |   10 +-
+ drivers/mfd/rt5120.c                               |    2 +-
+ drivers/mfd/sec-core.c                             |    2 +-
+ drivers/mfd/si476x-i2c.c                           |    2 +-
+ drivers/mfd/simple-mfd-i2c.c                       |   20 +-
+ drivers/mfd/sky81452.c                             |    2 +-
+ drivers/mfd/smpro-core.c                           |    2 +-
+ drivers/mfd/stmfx.c                                |    9 +-
+ drivers/mfd/stmpe-i2c.c                            |    2 +-
+ drivers/mfd/stmpe.c                                |    4 +-
+ drivers/mfd/stpmic1.c                              |   27 +-
+ drivers/mfd/stw481x.c                              |    2 +-
+ drivers/mfd/tc3589x.c                              |    2 +-
+ drivers/mfd/ti-lmu.c                               |    2 +-
+ drivers/mfd/tps6105x.c                             |    2 +-
+ drivers/mfd/tps65010.c                             |    2 +-
+ drivers/mfd/tps6507x.c                             |    2 +-
+ drivers/mfd/tps65086.c                             |    2 +-
+ drivers/mfd/tps65090.c                             |    2 +-
+ drivers/mfd/tps65217.c                             |    2 +-
+ drivers/mfd/tps65218.c                             |    2 +-
+ drivers/mfd/tps65219.c                             |   42 +-
+ drivers/mfd/tps6586x.c                             |    2 +-
+ drivers/mfd/tps65910.c                             |    2 +-
+ drivers/mfd/tps65912-i2c.c                         |    2 +-
+ drivers/mfd/tps6594-core.c                         |  462 +++++++++
+ drivers/mfd/tps6594-i2c.c                          |  244 +++++
+ drivers/mfd/tps6594-spi.c                          |  129 +++
+ drivers/mfd/twl-core.c                             |    2 +-
+ drivers/mfd/twl6040.c                              |    4 +-
+ drivers/mfd/wcd934x.c                              |   28 +-
+ drivers/mfd/wl1273-core.c                          |    2 +-
+ drivers/mfd/wm831x-core.c                          |    2 +-
+ drivers/mfd/wm831x-i2c.c                           |    2 +-
+ drivers/mfd/wm8350-i2c.c                           |    2 +-
+ drivers/mfd/wm8400-core.c                          |    4 +-
+ drivers/mfd/wm8994-core.c                          |    4 +-
+ drivers/pinctrl/Kconfig                            |    2 +-
+ drivers/pinctrl/pinctrl-rk805.c                    |  189 +++-
+ drivers/power/supply/Kconfig                       |   10 +-
+ drivers/power/supply/Makefile                      |    1 +
+ drivers/power/supply/rt5033_battery.c              |   38 +-
+ drivers/power/supply/rt5033_charger.c              |  472 +++++++++
+ drivers/regulator/Kconfig                          |   13 +-
+ drivers/regulator/Makefile                         |    1 +
+ drivers/regulator/max77541-regulator.c             |  153 +++
+ drivers/rtc/Kconfig                                |    2 +-
+ include/dt-bindings/mfd/stm32f7-rcc.h              |    1 +
+ include/linux/mfd/axp20x.h                         |  116 +++
+ include/linux/mfd/intel-m10-bmc.h                  |   43 +-
+ include/linux/mfd/{max597x.h => max5970.h}         |   16 +-
+ include/linux/mfd/max77541.h                       |   91 ++
+ include/linux/mfd/rk808.h                          |  417 +++++++-
+ include/linux/mfd/rt5033-private.h                 |   64 +-
+ include/linux/mfd/rt5033.h                         |   24 -
+ include/linux/mfd/stpmic1.h                        |   12 +-
+ include/linux/mfd/tps6594.h                        | 1020 ++++++++++++++++++++
+ sound/soc/codecs/Kconfig                           |    2 +-
+ 159 files changed, 5835 insertions(+), 579 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk806.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
+ create mode 100644 drivers/iio/adc/max77541-adc.c
+ create mode 100644 drivers/mfd/max77541.c
+ rename drivers/mfd/{rk808.c => rk8xx-core.c} (71%)
+ create mode 100644 drivers/mfd/rk8xx-i2c.c
+ create mode 100644 drivers/mfd/rk8xx-spi.c
+ create mode 100644 drivers/mfd/tps6594-core.c
+ create mode 100644 drivers/mfd/tps6594-i2c.c
+ create mode 100644 drivers/mfd/tps6594-spi.c
+ create mode 100644 drivers/power/supply/rt5033_charger.c
+ create mode 100644 drivers/regulator/max77541-regulator.c
+ rename include/linux/mfd/{max597x.h => max5970.h} (92%)
+ create mode 100644 include/linux/mfd/max77541.h
+ create mode 100644 include/linux/mfd/tps6594.h
+
+-- 
+Lee Jones [李琼斯]
