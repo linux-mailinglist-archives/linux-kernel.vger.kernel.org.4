@@ -2,184 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F136745FA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5756745FA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGCPQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S230335AbjGCPRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjGCPQA (ORCPT
+        with ESMTP id S229599AbjGCPRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:16:00 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9695FD;
-        Mon,  3 Jul 2023 08:15:59 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363EndPJ001646;
-        Mon, 3 Jul 2023 15:15:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=wczIYwJn2tWJ5P/yiFQ+TVg78QhFRctrlvv4X042TL4=;
- b=JpMC8G3Yk+24aCxyONiCfGuvxGcRXdqSBxGdkv5Tel38tp6W0mb7G/YEaoOO0ae2wi3n
- P7q4MEoNictAQQn6rcYPtNfb0jgs7GuYlxTvT6JEkEl63EMF9WPboCJVCe7uR6htoyrd
- uaeMOk4oCCMQ+gsYUHIe3kvs7nPyBFYAHW0V1p5y+tH3z6AcWKlWpPfYh83EoWW4UdeP
- JbRYd5Pm6DrKPz8TKe3gSZ1hLy1O5Pi2Hsigj89Wu0qW6imSClzrvkvxnItL3/A2OfUK
- 4YrWiE/iyiAh/yqBk/egooAszpxqwgtgOZPSeRgK+XUA/j+sVNqwVzpiwnY7ogZP5TxC fg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rjbrtawqf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Jul 2023 15:15:34 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 363FEGxC010621;
-        Mon, 3 Jul 2023 15:15:33 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rjak3fd0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Jul 2023 15:15:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=COUApGWPf2c5elxvnOL77INJhGl+IOg6RSKSAzi6rDh3MHNyLDIvdlrFq19oBKr41NlGbOKk8BtdrFKpMgyr2OWt0/KMrG9dZLdTmE+wmdrMhDLG9sbSEEKybwEy0UVcx/Ad+M+0xcoWmW2a8HquBgHCfuVsIHqarrXcv2FG7iTjj5YyUdzeJXNqoNYo0b/2AJWatWPyvZvkNOSqKxBsUIExESqavc7+Eg242SfNlXqS/Nf/GpHxj7Q81+ID0vPgjcBFD6r1O+gd/zYzNEykwOGCkCDkVF9EabTbhpS/amCIihZvwb/eUbmXUCouaxHRXHALXhGDl0BRZ5kNEl1Q2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wczIYwJn2tWJ5P/yiFQ+TVg78QhFRctrlvv4X042TL4=;
- b=gXaDyxcFqT/AyyAsJIV8Z3ZT7WP8Z9hp0T+Aga5WTqbSUN/mb9vmZNsRniN8X75SN/xrojnN1thjojfomJcsFWG3PH7crEvBIKlLVvlgfzl4TR8ySTkZa0pdT8zTtMtt4OhgVPj68b+vySbblNDFobITKkXbGFj9Mq8CieFji8LniIKx0MtgCdv7iH8CEsA1nEaLFrY/WNAB3/bgWLQN5yAIw6fQ2/daLpZF4+kluJUKUDb7s3IMvf4+SWravC4GklVsijEdztLIQN3RjPKd/REtwSbBkceM1MtAHML3gAIvIbO2n37o3KsEVYFFhprqkZ2CQ5Pw804fiRyVG16q4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wczIYwJn2tWJ5P/yiFQ+TVg78QhFRctrlvv4X042TL4=;
- b=gaMT9b4l++kbmfBUnNrqE07Kys1kqTFCKqGQ+VbXVLC1hbsAiyDuzrEIDkU+kPgyOF+5tvJvoT+N/rhud3IoLIEPeI+Iq0cJPC3Anz/HgqlHA9df1VgDBrfpKinfHPEia6gRIe99Efk2BcFdHfFymF/6FhlCrg8DH3UqawkY9xE=
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
- by MW4PR10MB6347.namprd10.prod.outlook.com (2603:10b6:303:1eb::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
- 2023 15:15:31 +0000
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::e38:5b81:b87f:c1eb]) by DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::e38:5b81:b87f:c1eb%7]) with mapi id 15.20.6521.023; Mon, 3 Jul 2023
- 15:15:31 +0000
-Message-ID: <d59b6e7c-cead-24d4-a9cb-6552b3154d84@oracle.com>
-Date:   Mon, 3 Jul 2023 16:15:26 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH RFC 4/9] perf jevents: Add sys_events_find_events_table()
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     acme@kernel.org, namhyung@kernel.org, jolsa@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        renyu.zj@linux.alibaba.com, shangxiaojing@huawei.com,
-        kjain@linux.ibm.com, kan.liang@linux.intel.com
-References: <20230628102949.2598096-1-john.g.garry@oracle.com>
- <20230628102949.2598096-5-john.g.garry@oracle.com>
- <CAP-5=fXa24_LEiyni0Ncyfa5hKwC1GE6y-zi2u8M98M9SwHX+g@mail.gmail.com>
- <CAP-5=fUs=u3PKYP3mVDdzNB8+=GAHaEXG3SGfWJpMELYYqO_hA@mail.gmail.com>
-From:   John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <CAP-5=fUs=u3PKYP3mVDdzNB8+=GAHaEXG3SGfWJpMELYYqO_hA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0259.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:194::12) To DM6PR10MB4313.namprd10.prod.outlook.com
- (2603:10b6:5:212::20)
+        Mon, 3 Jul 2023 11:17:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2B0FD
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:17:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C0AE60FA1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 15:17:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14EB8C433C7;
+        Mon,  3 Jul 2023 15:17:00 +0000 (UTC)
+Date:   Mon, 3 Jul 2023 16:17:01 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v1 11/14] arm64/mm: Wire up PTE_CONT for user mappings
+Message-ID: <ZKLmbRpEEKosj9/Q@arm.com>
+References: <20230622144210.2623299-1-ryan.roberts@arm.com>
+ <20230622144210.2623299-12-ryan.roberts@arm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|MW4PR10MB6347:EE_
-X-MS-Office365-Filtering-Correlation-Id: f649a14c-2482-4c93-63b4-08db7bd85758
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jF+lTUXjhjFDZfkwLN7W2Pb4C1UWRYMyxr7syfY0Eyq/AoKs2LXl3RIWlWiTBWzau4f8K1/1VHLI57j+/uaxldSyV1b1ekAJ+0aDPUGZPX4uXEShOIL01WsDpUU/LtdYuanElVd6AeEjbUxIVg8v5W+AjUujvqxjenErQxJwbjdQDNGMmP23ckaykgUst5ajK5brVYAhYPFmJAVfIhWI5wi5ZbPE0+sQaYITu9uV7aeGkpcuMzMNfWoNdhl1ZJ7hUhH03yemroUeqdiwRWN8VDNJe/7WmIqHIBbpijXNlpft6bJxmB5/swO0zk5vMsVY4l84dfe0zhsBRjdkypCtzURsemCBWt6hPthiDTXNh7vibvAGCnlZ/dPq/FvMm9sAgT0dxZtTYc3rMRodJF7n4iuWMJQAd3RwQIWK8UqZbUn1wd+k0e+Sr1DHiY4ynpi4NA/vG5dhkSEIPBmPVJwElu5JVFUplGzNB9kvY1a712yZ3eEMPx17h86KrEu3q/wo81HkHp4ibEFpqDsCPv0PGm9Gh0uJMK2iMMrkOzDQBTyFK6mO6qbQeAzjVT206R2C+DJSEpecDmEpUqF2v/Mpb41TaOWtBTHLTh53idCz96gLQyFaMIE2SHtrF7nKIBBn1i/FN15gohiPW/QrZZSQbg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(136003)(346002)(376002)(396003)(451199021)(6506007)(66556008)(6916009)(66946007)(4326008)(66476007)(478600001)(41300700001)(38100700002)(316002)(2616005)(186003)(53546011)(6512007)(26005)(966005)(2906002)(7416002)(5660300002)(31686004)(6486002)(84970400001)(86362001)(36916002)(31696002)(8936002)(36756003)(6666004)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGxVSkhVZVlUdlZlZG1YR090aEZQZHoyZmJIK0FyYXBOK2tIR2YrYmFIV2JU?=
- =?utf-8?B?ejUyTTVpSW12WHFLRXErZE1vdS9lZmpzMkRTSFFPbXB5OEgxQTAwRXc4UU53?=
- =?utf-8?B?S3pGOGlYQTQ3U2srYzRzNGUrTFNZTk00ekcxODBQRzFWczlJVzdnc1h1U1U3?=
- =?utf-8?B?N3JxTmVzMVZaZXUzdkFPTmdpWHVHQVNyZ05CV2hLM1puamFEbmhlU3p2eUlq?=
- =?utf-8?B?eVNQQi8zVVdBbHVaTzM4NVlINXRZaGhkY2YrMS9xTXg1NzlvRUZZOVowaDc2?=
- =?utf-8?B?dkVQZ1NHQzBTRFIwQ0FDdi9XZ3hlY2t6TzFwSTEvWWJFcXd5RUc1K1BzRFhh?=
- =?utf-8?B?WTYwc2MxcjMwMzFXMDB1YzE2cEs1V2cyK1BOSTJyaHA2Q3FsSWxNUkRzbGk0?=
- =?utf-8?B?ZTNjY0ozR0U4dk5PVXd0akI4SjBVa2JNcDBXRGxoRm9VNW54TWNQS1ZCQjFt?=
- =?utf-8?B?L0VJVEtNRjlmOU9kamlKYVQ0RmJVYTA0WUV2L3l6ejhobXFkcGNBNHlZOVk4?=
- =?utf-8?B?UDFFcUNldEZQUDNsNXhSUXJkc1lqNnBEQno5K1lhSWRZaXZGT2kyaWRNRDBU?=
- =?utf-8?B?TzliU1RVMjZlQWxvQTBRblhZSVJqVjJKQnZBNzVSQ25xY1NnRjRBQXV4M0E5?=
- =?utf-8?B?Wmw3NjFQWlFCMmtrcGdrR0s3UHkwTi9qWFJqb2Q1cFp1NzJPYm1zSG1WM3VK?=
- =?utf-8?B?RmtLZ1lEVnRudWtuRGx1cHFqWGRBYTdGdCt2UW56bER4U0sxNTZZZnJlVy9s?=
- =?utf-8?B?dUc5cjhYQmxDL2RyM1hDNzdtU3Q0TE8vOVh3L1ZSK3UrRmo2MTFLYVdjaisz?=
- =?utf-8?B?cllpZHp5ZFpjWS91aXhmamNZaittcmhFdFRtTTlrWU1qZkNTVjZkaHExY2N6?=
- =?utf-8?B?NlJyVmNBVitJWHllZGJ3cW51ZTZtSkpjYlhlbzlKQ2FSM0VjUEFqQ1RpRzBw?=
- =?utf-8?B?MGVoZklLajFuWVZ5V3AzUGpkb1JrbUVnNzVORndGQVBBYWd3M3BoQlJsRlNE?=
- =?utf-8?B?VkRKZkx0MzlYN1BDMThoUk96YVQ2WjZsWGw1UWhBQjZRR09VRmdoeGR5REZo?=
- =?utf-8?B?ZkxzVU9GSnN6dWYyeXcwMzk0Z1ZiaE5DMlRjSUxFdGlJR3I5WGszWkRqWVN3?=
- =?utf-8?B?WXFScGtaU09UTGhEVWFReGdvNUIzTWhQTFBhN2NrQm03emEvc0gzUTVHbnF6?=
- =?utf-8?B?Yytub1c5L0svMDF0TzNaWDFydTR2bHFGQkUrRysvd1FVYzdIbDVLdjcrYWlW?=
- =?utf-8?B?akVtOVBZTndjb3A3Z1I0bklXTU5DZHBRbi81bGliTDdCbU1oMmtiYWZMRUJG?=
- =?utf-8?B?SXkxa3dKREgrSE9tRTlYV1pZckpPRC8wOXBkemRUU084Rm11dWtFNTAvWk9M?=
- =?utf-8?B?N2g3eHByZmlZY2ZNYi8wVS94UVE0Vk92NzZTSS9lUUxXS3dnRi9MSy9XSDE2?=
- =?utf-8?B?bVVweHJXRFYveEphekt2Z0FYamE1bmg5Zno1cG4zb2JmSVBaUFJCa2t3cFFn?=
- =?utf-8?B?YWt4ZmNsNUg2a3RVU28wUzN0OFl3YmwzTHVYbWJ3ZWlxaGt2SWZ2czM5WnRh?=
- =?utf-8?B?blJYd3hDc0I3U2k0MGZWZC9zYzZpcEFCS2lpKzJDR3FxZkpYdk9sdGlJTGZK?=
- =?utf-8?B?OHV5RGprYW84UENkbjRLRGxwWkNIZDJPZk5ERCtockZBMWc2d2x3NUFKK0Vl?=
- =?utf-8?B?OUN5NjRnU2VCL1pFVkI4QS9HTzNBNnBEYVR4cWtLUXY3Rnk1ZTJjOWdPUXkx?=
- =?utf-8?B?QmMwT0JHWHlvOXd6R3pycDVTeXl0ZGhadlBXbHJaanVaTUVFalZockZKUE0y?=
- =?utf-8?B?UDRIKzQrbDlleDlwWlJlNjZEU0tyNitic2xxZy9OOVM3a1B0aVk2ODh5UVRF?=
- =?utf-8?B?M2t0UFR1Qlp0ZVpITG50U0lyaVlrdmY2eFBVMkxIZWZ5YkVUMVdSUjBZd1dY?=
- =?utf-8?B?ei9XaitvazIyUjhmL1VydGxuc1NNM1hZOWtHS0RPL3h4UlRMN1FKU3RUOHBl?=
- =?utf-8?B?VXh1azdIV0JlS2J6QWxuVGYwbE5aMXkrSWFubzNkaUYwdWh2T2p4MmRNTVNQ?=
- =?utf-8?B?UUo5Rm5md3ZVaVpDaExwR01BblpHTnhhTU5KN2RLQjZnRG1tb3pqOHdjY1c1?=
- =?utf-8?Q?4Zm4riI55JC8b+a+j5v7Dr2Zq?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?ZkhEdXpma1pZYXlrczMyTDVvd1pod2pjVFNVRnFPa1hjai9zQmJWbWt6Zjhm?=
- =?utf-8?B?RHM1ejdtcWJ5Yk12c29JeU1xNm8vRzM0MytYOFI3cHMrM1N0TGJRQ2x0UXNq?=
- =?utf-8?B?TXYvUVRsajM4NUNpVkZ6SUNudEI3cnc1N3FFSVlTbk5jTmMvWDNZMXhRVzRm?=
- =?utf-8?B?OHZKcnIxNWxyZWhHWHU0TFlXSHlvS0xkc0hRUytNc0VUbm9uc3owdU5IZGZG?=
- =?utf-8?B?QkxBNVJKTExNWFB6S3RpZ0FGY0d5b2ZJUmRRUnNHaitxT2hKdy9WU3h3ZFhw?=
- =?utf-8?B?SHJ6WmlTUUdqRnlMSm1uZktMWnR3Z0Z1RnNlRTA5ZTFiNloybTBvWVJMeWFo?=
- =?utf-8?B?TGJFNzhWS2VGdEpmclFEYnZNcWZscHZoYVFRSlJkREwvLzQ0UUFwNE93cmlC?=
- =?utf-8?B?dzlKeW5lR1R2WXg0VDVYb0dqMHFWMEt4eit6enJGNUM5WnhBQWRFaUFIdjRB?=
- =?utf-8?B?NzhrNVNkOXpsV0xtdE1sUzdLRGUyWCtpb3JVbzJxNEpuT1JjcitTcU5tV0tn?=
- =?utf-8?B?Z1FsNmlRbUU4d1NnOG9WTEFJcjhYK2IwNnhTUTdrM1ZuY0ZQU08rV1RtUEtJ?=
- =?utf-8?B?b2xUR1oxQWdkeXhDQVVCN1ZIT0NjK2xQZlVlSUJRdXpoZHBXbUVrdVJuanlx?=
- =?utf-8?B?cGNzeVIraUJZbERPcCtiWnNhMUwwRmxnZzhOZG9BL0w0RzFBTVpFMWt0NEdL?=
- =?utf-8?B?SVNkK2ZLNHVJL2ZLdFArRkVaN0Y0WVBhYzRWTndpSEdXMEJCYnBIYjBVRGY2?=
- =?utf-8?B?N2ZwU2RyM2pET0o5Ymd3T2lOSGNaeTdQNDlpbi9TWWh6MDhWNUtXc0JuRGRV?=
- =?utf-8?B?enJCSERvbHBxUkJnM3NocUlWUEpKT3JCbnJhZ2R3eG9kN01MbUJ4bFk3YVU1?=
- =?utf-8?B?bzVwMW5nK1hNckgxTEVvNUx5NTlkaFh2Q0ZMbnl0K0ZjWDR6T1FKVFZNOXVu?=
- =?utf-8?B?ek9HRGxaZEdIQk9qeERpWnduUmxZN0hPSndiWFo1Ky9pQjNwMzc0Um1EWDRH?=
- =?utf-8?B?bWI3eGsvTDdyeTlQM0toSVg0Y1hlUTZCUWUwWFFBY0F1WnhzVmNNOXU0VG0x?=
- =?utf-8?B?Z09jRG1Yck9POWpvQWpSb0RHR3pmMVQrVHdDZmhGVUQrQm1OK1BKay9uL2xW?=
- =?utf-8?B?OStsSHZzcklJM3hzOEVxN0U3VWQzcktxK2F4QzNVL3p6UFJzZ3UwY3lNTU44?=
- =?utf-8?B?MjdkeTBQUEhqaUFIMWxxZUoxWlNacVd6WWwwTXhpaHN0OVB2TCtkV2RMVm1u?=
- =?utf-8?B?aXlzbXNmQThCTnp1aEc0WEVuYmtSbTh5T0dMLzE4YnJuNzYrRVdqbzhDYmJB?=
- =?utf-8?B?U1Fsb2ozTGllRGNZTUhyYmJ1ZWJBSGJYdWVzMHhGU0VCQTF6L1lvQmpVanFI?=
- =?utf-8?B?REJ6TjN2UFFzZnc9PQ==?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f649a14c-2482-4c93-63b4-08db7bd85758
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 15:15:31.3704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cydI5mJ/1W9JrBqfxPMpwcz7j5WIqRF5C2wdD6Fznlr8CTcX7R7cMLiuVDSODdMP5RpUAzELH5lxpCVD5kVUhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6347
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_11,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307030138
-X-Proofpoint-GUID: sUiB1Ube6QdLKmcQ4f5D5gjOJ1mN7vsh
-X-Proofpoint-ORIG-GUID: sUiB1Ube6QdLKmcQ4f5D5gjOJ1mN7vsh
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622144210.2623299-12-ryan.roberts@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -187,76 +61,671 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 21:16, Ian Rogers wrote:
-> On Fri, Jun 30, 2023 at 12:00 PM Ian Rogers<irogers@google.com>  wrote:
->> On Wed, Jun 28, 2023 at 3:30 AM John Garry<john.g.garry@oracle.com>  wrote:
->>> Add a function to get the events table associated with a metric table for
->>> struct pmu_sys_events.
->>>
->>> We could also use something like:
->>> struct pmu_sys_events *sys = container_of(metrics, struct pmu_sys_events,
->>>                                                  metric_table);
->>>
->>> to lookup struct pmu_sys_events, but that relies on the user always passing
->>> a sys events metric struct pointer, so this way is safer, but slower.
+Hi Ryan,
 
-Hi Ian,
+Some comments below. I did not have time to trim down the quoted text,
+so you may need to scroll through it.
 
->> If an event is specific to a particular PMU, shouldn't the metric name
->> the PMU with the event?
+On Thu, Jun 22, 2023 at 03:42:06PM +0100, Ryan Roberts wrote:
+> With the ptep API sufficiently refactored, we can now introduce a new
+> "contpte" API layer, which transparently manages the PTE_CONT bit for
+> user mappings. Whenever it detects a set of PTEs that meet the
+> requirements for a contiguous range, the PTEs are re-painted with the
+> PTE_CONT bit.
+> 
+> This initial change provides a baseline that can be optimized in future
+> commits. That said, fold/unfold operations (which imply tlb
+> invalidation) are avoided where possible with a few tricks for
+> access/dirty bit management.
+> 
+> Write-enable and write-protect modifications are likely non-optimal and
+> likely incure a regression in fork() performance. This will be addressed
+> separately.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  arch/arm64/include/asm/pgtable.h | 137 ++++++++++++-
+>  arch/arm64/mm/Makefile           |   3 +-
+>  arch/arm64/mm/contpte.c          | 334 +++++++++++++++++++++++++++++++
+>  3 files changed, 466 insertions(+), 8 deletions(-)
+>  create mode 100644 arch/arm64/mm/contpte.c
+> 
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 31df4d73f9ac..17ea534bc5b0 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -1115,6 +1115,71 @@ extern void ptep_modify_prot_commit(struct vm_area_struct *vma,
+>  				    unsigned long addr, pte_t *ptep,
+>  				    pte_t old_pte, pte_t new_pte);
+>  
+> +/*
+> + * The contpte APIs are used to transparently manage the contiguous bit in ptes
+> + * where it is possible and makes sense to do so. The PTE_CONT bit is considered
+> + * a private implementation detail of the public ptep API (see below).
+> + */
+> +extern void __contpte_try_fold(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, pte_t pte);
+> +extern void __contpte_try_unfold(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, pte_t pte);
+> +extern pte_t contpte_ptep_get(pte_t *ptep, pte_t orig_pte);
+> +extern pte_t contpte_ptep_get_lockless(pte_t *orig_ptep);
+> +extern void contpte_set_ptes(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, pte_t pte, unsigned int nr);
+> +extern int contpte_ptep_test_and_clear_young(struct vm_area_struct *vma,
+> +				unsigned long addr, pte_t *ptep);
+> +extern int contpte_ptep_clear_flush_young(struct vm_area_struct *vma,
+> +				unsigned long addr, pte_t *ptep);
+> +extern int contpte_ptep_set_access_flags(struct vm_area_struct *vma,
+> +				unsigned long addr, pte_t *ptep,
+> +				pte_t entry, int dirty);
+> +
+> +static inline pte_t *contpte_align_down(pte_t *ptep)
+> +{
+> +	return (pte_t *)(ALIGN_DOWN((unsigned long)ptep >> 3, CONT_PTES) << 3);
+> +}
+> +
+> +static inline bool contpte_is_enabled(struct mm_struct *mm)
+> +{
+> +	/*
+> +	 * Don't attempt to apply the contig bit to kernel mappings, because
+> +	 * dynamically adding/removing the contig bit can cause page faults.
+> +	 * These racing faults are ok for user space, since they get serialized
+> +	 * on the PTL. But kernel mappings can't tolerate faults.
+> +	 */
+> +
+> +	return mm != &init_mm;
+> +}
+> +
+> +static inline void contpte_try_fold(struct mm_struct *mm, unsigned long addr,
+> +					pte_t *ptep, pte_t pte)
+> +{
+> +	/*
+> +	 * Only bother trying if both the virtual and physical addresses are
+> +	 * aligned and correspond to the last entry in a contig range. The core
+> +	 * code mostly modifies ranges from low to high, so this is the likely
+> +	 * the last modification in the contig range, so a good time to fold.
+> +	 */
+> +
+> +	bool valign = ((unsigned long)ptep >> 3) % CONT_PTES == CONT_PTES - 1;
+> +	bool palign = pte_pfn(pte) % CONT_PTES == CONT_PTES - 1;
+> +
+> +	if (contpte_is_enabled(mm) &&
+> +	    pte_present(pte) && !pte_cont(pte) &&
+> +	    valign && palign)
+> +		__contpte_try_fold(mm, addr, ptep, pte);
 
-I am working on the basis - which I think is quite sane in case of sys 
-events - that event names are unique to a PMU type.
+I would use pte_valid() here instead. pte_present() also includes the
+PTE_PROT_NONE option which we don't really care about as it's not
+accessible.
 
-> For example:
->>
->> MetricName: "IPC",
->> MetricExpr: "instructions / cycles",
->>
->> Here instructions and cycles can wildcard match on BIG.little/hybrid
->> systems and so we get an IPC metric for each PMU - although, I suspect
->> this isn't currently quite working. We can also, and currently, do:
->>
->> MetricName: "IPC",
->> MetricExpr: "cpu_atom@instructions@ / cpu_atom@cycles@",
->> ...
->> MetricName: "IPC",
->> MetricExpr: "cpu_core@instructions@ / cpu_core@cycles@",
+I've been discussing with Alexandru Elisei about PTE_PROT_NONE and
+whether we can use other bits from the pte even if they clash with other
+valid permissions. Since the pte is not valid, in theory we could as
+long as nothing corrupts the (like a cont bit). The background to this
+is multiple migrate types (not just NUMA) for the MTE tag carveout
+reuse.
 
-I did not know that it was possible to state that an event is for a 
-specific PMU type in this fashion - is this feature new? Does it work 
-only for known terms, like cycles and instructions?
+> +}
+> +
+> +static inline void contpte_try_unfold(struct mm_struct *mm, unsigned long addr,
+> +					pte_t *ptep, pte_t pte)
+> +{
+> +	if (contpte_is_enabled(mm) &&
+> +	    pte_present(pte) && pte_cont(pte))
+> +		__contpte_try_unfold(mm, addr, ptep, pte);
+> +}
 
->> The @ is used to avoid parsing confusion with / meaning divide. The
->> PMUs for the events are explicitly listed here. We could say the PMU
->> is implied but then it gets complex for uncore events, for metrics
->> that mix core and uncore events.
+Same here and probably most other places where pte_present() is used in
+this patch.
 
-So this works ok for IPC and CPU PMUs as we want the same event for many 
-PMU types and naturally it would have the same name.
+> +
+>  /*
+>   * The below functions constitute the public API that arm64 presents to the
+>   * core-mm to manipulate PTE entries within the their page tables (or at least
+> @@ -1122,30 +1187,68 @@ extern void ptep_modify_prot_commit(struct vm_area_struct *vma,
+>   * versions will automatically and transparently apply the contiguous bit where
+>   * it makes sense to do so. Therefore any users that are contig-aware (e.g.
+>   * hugetlb, kernel mapper) should NOT use these APIs, but instead use the
+> - * private versions, which are prefixed with double underscore.
+> + * private versions, which are prefixed with double underscore. All of these
+> + * APIs except for ptep_get_lockless() are expected to be called with the PTL
+> + * held.
+>   */
+>  
+>  #define ptep_get ptep_get
+>  static inline pte_t ptep_get(pte_t *ptep)
+>  {
+> -	return __ptep_get(ptep);
+> +	pte_t pte = __ptep_get(ptep);
+> +
+> +	if (!pte_present(pte) || !pte_cont(pte))
+> +		return pte;
+> +
+> +	return contpte_ptep_get(ptep, pte);
+> +}
+> +
+> +#define ptep_get_lockless ptep_get_lockless
+> +static inline pte_t ptep_get_lockless(pte_t *ptep)
+> +{
+> +	pte_t pte = __ptep_get(ptep);
+> +
+> +	if (!pte_present(pte) || !pte_cont(pte))
+> +		return pte;
+> +
+> +	return contpte_ptep_get_lockless(ptep);
+>  }
+>  
+>  static inline void set_pte(pte_t *ptep, pte_t pte)
+>  {
+> -	__set_pte(ptep, pte);
+> +	/*
+> +	 * We don't have the mm or vaddr so cannot unfold or fold contig entries
+> +	 * (since it requires tlb maintenance). set_pte() is not used in core
+> +	 * code, so this should never even be called. Regardless do our best to
+> +	 * service any call and emit a warning if there is any attempt to set a
+> +	 * pte on top of an existing contig range.
+> +	 */
+> +	pte_t orig_pte = __ptep_get(ptep);
+> +
+> +	WARN_ON_ONCE(pte_present(orig_pte) && pte_cont(orig_pte));
+> +	__set_pte(ptep, pte_mknoncont(pte));
 
-I am still not sure that sys event metrics need to specify a PMU.
+Why the pte_mknoncont() here? Do we expect a contiguous pte? The warning
+only checks the old entry.
 
-> So looking at the later patches, they are making it so the PMU doesn't
-> need to be specified,
+>  }
+>  
+>  #define set_ptes set_ptes
+>  static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+>  				pte_t *ptep, pte_t pte, unsigned int nr)
+>  {
+> -	__set_ptes(mm, addr, ptep, pte, nr);
+> +	pte = pte_mknoncont(pte);
+> +
+> +	if (!contpte_is_enabled(mm))
+> +		__set_ptes(mm, addr, ptep, pte, nr);
+> +	else if (nr == 1) {
+> +		contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
+> +		__set_ptes(mm, addr, ptep, pte, nr);
+> +		contpte_try_fold(mm, addr, ptep, pte);
+> +	} else
+> +		contpte_set_ptes(mm, addr, ptep, pte, nr);
+>  }
+>  
+>  static inline void pte_clear(struct mm_struct *mm,
+>  				unsigned long addr, pte_t *ptep)
+>  {
+> +	contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
+>  	__pte_clear(mm, addr, ptep);
+>  }
+>  
+> @@ -1153,6 +1256,7 @@ static inline void pte_clear(struct mm_struct *mm,
+>  static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>  				unsigned long addr, pte_t *ptep)
+>  {
+> +	contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
+>  	return __ptep_get_and_clear(mm, addr, ptep);
+>  }
+>  
+> @@ -1160,21 +1264,33 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>  static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
+>  				unsigned long addr, pte_t *ptep)
+>  {
+> -	return __ptep_test_and_clear_young(vma, addr, ptep);
+> +	pte_t orig_pte = __ptep_get(ptep);
+> +
+> +	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
+> +		return __ptep_test_and_clear_young(vma, addr, ptep);
 
-Right, as we assume that we use uniquely named events. Having non-unique 
-event names seems to create problems.
+Since I've seen this construct a few times, you may want to turn it into
+a specific check: pte_valid_cont().
 
-> so I think it is the same issue as here. My
-> thought was that the PMU would always be required for metrics like
-> memory bandwidth per million instructions, ie >1 PMU.
+> +
+> +	return contpte_ptep_test_and_clear_young(vma, addr, ptep);
+>  }
+>  
+>  #define __HAVE_ARCH_PTEP_CLEAR_YOUNG_FLUSH
+>  static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
+>  				unsigned long addr, pte_t *ptep)
+>  {
+> -	return __ptep_clear_flush_young(vma, addr, ptep);
+> +	pte_t orig_pte = __ptep_get(ptep);
+> +
+> +	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
+> +		return __ptep_clear_flush_young(vma, addr, ptep);
+> +
+> +	return contpte_ptep_clear_flush_young(vma, addr, ptep);
+>  }
+>  
+>  #define __HAVE_ARCH_PTEP_SET_WRPROTECT
+>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
+>  				unsigned long addr, pte_t *ptep)
+>  {
+> +	contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
+>  	__ptep_set_wrprotect(mm, addr, ptep);
+> +	contpte_try_fold(mm, addr, ptep, __ptep_get(ptep));
+>  }
+>  
+>  #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
+> @@ -1182,7 +1298,14 @@ static inline int ptep_set_access_flags(struct vm_area_struct *vma,
+>  				unsigned long addr, pte_t *ptep,
+>  				pte_t entry, int dirty)
+>  {
+> -	return __ptep_set_access_flags(vma, addr, ptep, entry, dirty);
+> +	pte_t orig_pte = __ptep_get(ptep);
+> +
+> +	entry = pte_mknoncont(entry);
 
-We treat these sys PMUs as standalone, and it makes no sense (currently) 
-to have a metric which contains events for multiple PMU types as we 
-don't know if the system is created with those PMUs, and, if it is, what 
-topology etc.
+As in a few other places, it's not clear to me why the pte_mknoncont()
+is needed. Here I expect 'entry' to be cont if *ptep is cont.
 
-> I know this
-> makes the metrics longer, I've tried to avoid writing json metrics and
-> have used Python to write them in my own work:
-> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/pmu-events/metric.py?h=perf-tools-next*n411__;Iw!!ACWV5N9M2RV99hQ!PE_9BEFVCr25fA9OHzfEDuT-MncA5pnPf5C3eTqYnXGKG9Q2OItrEIiEYz1T366HjAayQmYtZ6N6WxPJBCI$  
+> +
+> +	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
+> +		return __ptep_set_access_flags(vma, addr, ptep, entry, dirty);
 
-Thanks
-John
+Also wondering, can we have this check on 'entry' rather than
+'orig_pte'? And maybe a warning if the cont bit differs between them.
 
+> +
+> +	return contpte_ptep_set_access_flags(vma, addr, ptep, entry, dirty);
+>  }
+>  
+>  #endif /* !__ASSEMBLY__ */
+> diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
+> index dbd1bc95967d..70b6aba09b5d 100644
+> --- a/arch/arm64/mm/Makefile
+> +++ b/arch/arm64/mm/Makefile
+> @@ -2,7 +2,8 @@
+>  obj-y				:= dma-mapping.o extable.o fault.o init.o \
+>  				   cache.o copypage.o flush.o \
+>  				   ioremap.o mmap.o pgd.o mmu.o \
+> -				   context.o proc.o pageattr.o fixmap.o
+> +				   context.o proc.o pageattr.o fixmap.o \
+> +				   contpte.o
+>  obj-$(CONFIG_HUGETLB_PAGE)	+= hugetlbpage.o
+>  obj-$(CONFIG_PTDUMP_CORE)	+= ptdump.o
+>  obj-$(CONFIG_PTDUMP_DEBUGFS)	+= ptdump_debugfs.o
+> diff --git a/arch/arm64/mm/contpte.c b/arch/arm64/mm/contpte.c
+> new file mode 100644
+> index 000000000000..e8e4a298fd53
+> --- /dev/null
+> +++ b/arch/arm64/mm/contpte.c
+> @@ -0,0 +1,334 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 ARM Ltd.
+> + */
+> +
+> +#include <linux/mm.h>
+> +#include <asm/tlbflush.h>
+> +
+> +static void ptep_clear_flush_range(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, int nr)
+> +{
+> +	struct vm_area_struct vma = TLB_FLUSH_VMA(mm, 0);
+> +	unsigned long start_addr = addr;
+> +	int i;
+> +
+> +	for (i = 0; i < nr; i++, ptep++, addr += PAGE_SIZE)
+> +		__pte_clear(mm, addr, ptep);
+> +
+> +	__flush_tlb_range(&vma, start_addr, addr, PAGE_SIZE, true, 3);
+> +}
+> +
+> +static bool ptep_any_present(pte_t *ptep, int nr)
+
+Valid?
+
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < nr; i++, ptep++) {
+> +		if (pte_present(__ptep_get(ptep)))
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static void contpte_fold(struct mm_struct *mm, unsigned long addr,
+> +			pte_t *ptep, pte_t pte, bool fold)
+> +{
+> +	struct vm_area_struct vma = TLB_FLUSH_VMA(mm, 0);
+> +	unsigned long start_addr;
+> +	pte_t *start_ptep;
+> +	int i;
+> +
+> +	start_ptep = ptep = contpte_align_down(ptep);
+> +	start_addr = addr = ALIGN_DOWN(addr, CONT_PTE_SIZE);
+> +	pte = pfn_pte(ALIGN_DOWN(pte_pfn(pte), CONT_PTES), pte_pgprot(pte));
+> +	pte = fold ? pte_mkcont(pte) : pte_mknoncont(pte);
+> +
+> +	for (i = 0; i < CONT_PTES; i++, ptep++, addr += PAGE_SIZE) {
+> +		pte_t ptent = __ptep_get_and_clear(mm, addr, ptep);
+> +
+> +		if (pte_dirty(ptent))
+> +			pte = pte_mkdirty(pte);
+> +
+> +		if (pte_young(ptent))
+> +			pte = pte_mkyoung(pte);
+> +	}
+
+I presume this can be unsafe if any of the ptes in the range differ, so
+we need some higher level check. But that means we now have three loops
+for folding, one to check, another to clear and the last one via
+__set_ptes(). I guess we can't collapse the first two loops in a 'try'
+function as we need to do the cleaning (and would have to re-instate the
+old entries if they can't be made contiguous).
+
+> +
+> +	__flush_tlb_range(&vma, start_addr, addr, PAGE_SIZE, true, 3);
+> +
+> +	__set_ptes(mm, start_addr, start_ptep, pte, CONT_PTES);
+> +}
+> +
+> +void __contpte_try_fold(struct mm_struct *mm, unsigned long addr,
+> +			pte_t *ptep, pte_t pte)
+> +{
+> +	/*
+> +	 * We have already checked that the virtual and pysical addresses are
+> +	 * correctly aligned for a contig mapping in contpte_try_fold() so the
+> +	 * remaining checks are to ensure that the contig range is fully covered
+> +	 * by a single folio, and ensure that all the ptes are present with
+> +	 * contiguous PFNs and matching prots.
+> +	 */
+> +
+> +	struct page *page = pte_page(pte);
+> +	struct folio *folio = page_folio(page);
+> +	unsigned long folio_saddr = addr - (page - &folio->page) * PAGE_SIZE;
+> +	unsigned long folio_eaddr = folio_saddr + folio_nr_pages(folio) * PAGE_SIZE;
+> +	unsigned long cont_saddr = ALIGN_DOWN(addr, CONT_PTE_SIZE);
+> +	unsigned long cont_eaddr = cont_saddr + CONT_PTE_SIZE;
+> +	unsigned long pfn;
+> +	pgprot_t prot;
+> +	pte_t subpte;
+> +	pte_t *orig_ptep;
+> +	int i;
+> +
+> +	if (folio_saddr > cont_saddr || folio_eaddr < cont_eaddr)
+> +		return;
+> +
+> +	pfn = pte_pfn(pte) - ((addr - cont_saddr) >> PAGE_SHIFT);
+> +	prot = pte_pgprot(pte_mkold(pte_mkclean(pte)));
+> +	orig_ptep = ptep;
+> +	ptep = contpte_align_down(ptep);
+> +
+> +	for (i = 0; i < CONT_PTES; i++, ptep++, pfn++) {
+> +		subpte = __ptep_get(ptep);
+> +		subpte = pte_mkold(pte_mkclean(subpte));
+
+IIUC, this function assumes ptes that only differ by the dirty status
+can be contiguous. That's probably ok, with a chance of the dirty status
+spreading to the adjacent ptes in the fold function. Maybe add a comment
+on why this is ok (or why it doesn't happen).
+
+> +
+> +		if (!pte_present(subpte) ||
+> +		    pte_pfn(subpte) != pfn ||
+> +		    pgprot_val(pte_pgprot(subpte)) != pgprot_val(prot))
+> +			return;
+> +	}
+> +
+> +	contpte_fold(mm, addr, orig_ptep, pte, true);
+> +}
+> +
+> +void __contpte_try_unfold(struct mm_struct *mm, unsigned long addr,
+> +			pte_t *ptep, pte_t pte)
+> +{
+> +	/*
+> +	 * We have already checked that the ptes are contiguous in
+> +	 * contpte_try_unfold(), so we can unfold unconditionally here.
+> +	 */
+> +
+> +	contpte_fold(mm, addr, ptep, pte, false);
+> +}
+
+So the pte_mkyoung(), pte_mkdirty() calls in contpte_fold() are mostly
+for the unfold case. Maybe it's clearer if we just have two separate
+functions (or document why the pte_mk*() are needed).
+
+> +
+> +pte_t contpte_ptep_get(pte_t *ptep, pte_t orig_pte)
+> +{
+> +	/*
+> +	 * Gather access/dirty bits, which may be populated in any of the ptes
+> +	 * of the contig range. We are guarranteed to be holding the PTL, so any
+> +	 * contiguous range cannot be unfolded or otherwise modified under our
+> +	 * feet.
+> +	 */
+> +
+> +	pte_t pte;
+> +	int i;
+> +
+> +	ptep = contpte_align_down(ptep);
+> +
+> +	for (i = 0; i < CONT_PTES; i++, ptep++) {
+> +		pte = __ptep_get(ptep);
+> +
+> +		/*
+> +		 * Deal with the partial contpte_ptep_get_and_clear_full() case,
+> +		 * where some of the ptes in the range may be cleared but others
+> +		 * are still to do. See contpte_ptep_get_and_clear_full().
+> +		 */
+> +		if (pte_val(pte) == 0)
+> +			continue;
+> +
+> +		if (pte_dirty(pte))
+> +			orig_pte = pte_mkdirty(orig_pte);
+> +
+> +		if (pte_young(pte))
+> +			orig_pte = pte_mkyoung(orig_pte);
+> +	}
+> +
+> +	return orig_pte;
+> +}
+> +
+> +pte_t contpte_ptep_get_lockless(pte_t *orig_ptep)
+> +{
+> +	/*
+> +	 * Gather access/dirty bits, which may be populated in any of the ptes
+> +	 * of the contig range. We may not be holding the PTL, so any contiguous
+> +	 * range may be unfolded/modified/refolded under our feet.
+> +	 */
+> +
+> +	pte_t orig_pte;
+> +	pgprot_t orig_prot;
+> +	pte_t *ptep;
+> +	unsigned long pfn;
+> +	pte_t pte;
+> +	pgprot_t prot;
+> +	int i;
+> +
+> +retry:
+> +	orig_pte = __ptep_get(orig_ptep);
+> +
+> +	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
+> +		return orig_pte;
+
+I haven't looked through all the patches, so not entirely sure when this
+function is called. But since you mention that the range may be
+folded/unfolded, how do we deal with pte_cont() racing with something
+setting the contig bit?
+
+> +
+> +	orig_prot = pte_pgprot(pte_mkold(pte_mkclean(orig_pte)));
+> +	ptep = contpte_align_down(orig_ptep);
+> +	pfn = pte_pfn(orig_pte) - (orig_ptep - ptep);
+> +
+> +	for (i = 0; i < CONT_PTES; i++, ptep++, pfn++) {
+> +		pte = __ptep_get(ptep);
+> +		prot = pte_pgprot(pte_mkold(pte_mkclean(pte)));
+> +
+> +		if (!pte_present(pte) || !pte_cont(pte) ||
+> +		   pte_pfn(pte) != pfn ||
+> +		   pgprot_val(prot) != pgprot_val(orig_prot))
+> +			goto retry;
+
+It needs better documenting, I don't understand what the retry here is
+for (presumably to handle some races). Do we care about some memory
+ordering as well? __pte_get() only takes care of reading the ptep once.
+
+> +
+> +		if (pte_dirty(pte))
+> +			orig_pte = pte_mkdirty(orig_pte);
+> +
+> +		if (pte_young(pte))
+> +			orig_pte = pte_mkyoung(orig_pte);
+> +	}
+> +
+> +	return orig_pte;
+> +}
+> +
+> +void contpte_set_ptes(struct mm_struct *mm, unsigned long addr,
+> +					pte_t *ptep, pte_t pte, unsigned int nr)
+> +{
+> +	unsigned long next;
+> +	unsigned long end = addr + (nr << PAGE_SHIFT);
+> +	unsigned long pfn = pte_pfn(pte);
+> +	pgprot_t prot = pte_pgprot(pte);
+> +	pte_t orig_pte;
+> +
+> +	do {
+> +		next = pte_cont_addr_end(addr, end);
+> +		nr = (next - addr) >> PAGE_SHIFT;
+> +		pte = pfn_pte(pfn, prot);
+> +
+> +		if (((addr | next | (pfn << PAGE_SHIFT)) & ~CONT_PTE_MASK) == 0)
+> +			pte = pte_mkcont(pte);
+> +		else
+> +			pte = pte_mknoncont(pte);
+> +
+> +		/*
+> +		 * If operating on a partial contiguous range then we must first
+> +		 * unfold the contiguous range if it was previously folded.
+> +		 * Otherwise we could end up with overlapping tlb entries.
+> +		 */
+> +		if (nr != CONT_PTES)
+> +			contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
+> +
+> +		/*
+> +		 * If we are replacing ptes that were contiguous or if the new
+> +		 * ptes are contiguous and any of the ptes being replaced are
+> +		 * present, we need to clear and flush the range to prevent
+> +		 * overlapping tlb entries.
+> +		 */
+> +		orig_pte = __ptep_get(ptep);
+> +		if ((pte_present(orig_pte) && pte_cont(orig_pte)) ||
+> +		    (pte_cont(pte) && ptep_any_present(ptep, nr)))
+> +			ptep_clear_flush_range(mm, addr, ptep, nr);
+> +
+> +		__set_ptes(mm, addr, ptep, pte, nr);
+> +
+> +		addr = next;
+> +		ptep += nr;
+> +		pfn += nr;
+> +
+> +	} while (addr != end);
+> +}
+> +
+> +int contpte_ptep_test_and_clear_young(struct vm_area_struct *vma,
+> +					unsigned long addr, pte_t *ptep)
+> +{
+> +	/*
+> +	 * ptep_clear_flush_young() technically requires us to clear the access
+> +	 * flag for a _single_ pte. However, the core-mm code actually tracks
+> +	 * access/dirty per folio, not per page. And since we only create a
+> +	 * contig range when the range is covered by a single folio, we can get
+> +	 * away with clearing young for the whole contig range here, so we avoid
+> +	 * having to unfold.
+> +	 */
+> +
+> +	int i;
+> +	int young = 0;
+> +
+> +	ptep = contpte_align_down(ptep);
+> +	addr = ALIGN_DOWN(addr, CONT_PTE_SIZE);
+> +
+> +	for (i = 0; i < CONT_PTES; i++, ptep++, addr += PAGE_SIZE)
+> +		young |= __ptep_test_and_clear_young(vma, addr, ptep);
+> +
+> +	return young;
+> +}
+> +
+> +int contpte_ptep_clear_flush_young(struct vm_area_struct *vma,
+> +					unsigned long addr, pte_t *ptep)
+> +{
+> +	int young;
+> +
+> +	young = contpte_ptep_test_and_clear_young(vma, addr, ptep);
+> +	addr = ALIGN_DOWN(addr, CONT_PTE_SIZE);
+> +
+> +	if (young) {
+> +		/*
+> +		 * See comment in __ptep_clear_flush_young(); same rationale for
+> +		 * eliding the trailing DSB applies here.
+> +		 */
+> +		__flush_tlb_range_nosync(vma, addr, addr + CONT_PTE_SIZE,
+> +					 PAGE_SIZE, true, 3);
+> +	}
+> +
+> +	return young;
+> +}
+> +
+> +int contpte_ptep_set_access_flags(struct vm_area_struct *vma,
+> +					unsigned long addr, pte_t *ptep,
+> +					pte_t entry, int dirty)
+> +{
+> +	pte_t orig_pte;
+> +	int i;
+> +
+> +	/*
+> +	 * Gather the access/dirty bits for the contiguous range. If nothing has
+> +	 * changed, its a noop.
+> +	 */
+> +	orig_pte = ptep_get(ptep);
+> +	if (pte_val(orig_pte) == pte_val(entry))
+> +		return 0;
+> +
+> +	/*
+> +	 * We can fix up access/dirty bits without having to unfold/fold the
+> +	 * contig range. But if the write bit is changing, we need to go through
+> +	 * the full unfold/fold cycle.
+> +	 */
+> +	if (pte_write(orig_pte) == pte_write(entry)) {
+
+Depending on the architecture version, pte_write() either checks a
+software only bit or it checks the DBM one.
+
+> +		/*
+> +		 * No need to flush here; This is always "more permissive" so we
+> +		 * can only be _adding_ the access or dirty bit. And since the
+> +		 * tlb can't cache an entry without the AF set and the dirty bit
+> +		 * is a SW bit, there can be no confusion. For HW access
+> +		 * management, we technically only need to update the flag on a
+> +		 * single pte in the range. But for SW access management, we
+> +		 * need to update all the ptes to prevent extra faults.
+> +		 */
+
+On pre-DBM hardware, a PTE_RDONLY entry (writable from the kernel
+perspective but clean) may be cached in the TLB and we do need flushing.
+
+> +		ptep = contpte_align_down(ptep);
+> +		addr = ALIGN_DOWN(addr, CONT_PTE_SIZE);
+> +
+> +		for (i = 0; i < CONT_PTES; i++, ptep++, addr += PAGE_SIZE)
+> +			__ptep_set_access_flags(vma, addr, ptep, entry, 0);
+> +	} else {
+> +		/*
+> +		 * No need to flush in __ptep_set_access_flags() because we just
+> +		 * flushed the whole range in __contpte_try_unfold().
+> +		 */
+> +		__contpte_try_unfold(vma->vm_mm, addr, ptep, orig_pte);
+> +		__ptep_set_access_flags(vma, addr, ptep, entry, 0);
+> +		contpte_try_fold(vma->vm_mm, addr, ptep, entry);
+> +	}
+> +
+> +	return 1;
+> +}
+
+-- 
+Catalin
