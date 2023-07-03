@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9373745C9B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D382A745C9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjGCMyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
+        id S229928AbjGCMyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjGCMyB (ORCPT
+        with ESMTP id S229930AbjGCMyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:54:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4AB118;
-        Mon,  3 Jul 2023 05:53:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A63160F06;
-        Mon,  3 Jul 2023 12:53:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F7EC433C7;
-        Mon,  3 Jul 2023 12:53:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688388838;
-        bh=hewjnNwAOpFhWN8t9+3hp7dpuy2ksO2+BijfX7/pwtc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UWP6F7tvelb32aSFkmXp3E37CiVtJLdyV1Q/Ol+oRCeZ8nbkDPcaKwnvipmDJY7tH
-         54BJt+Oc4y83gshDU9zSBY8HSz7K/MU8Y0voUnWGhtfIy1CdScydVw8NVkMU1EoU2n
-         zQ7PTlmNXODiJcTWCcRKDWy6zczUYmSHoqRbRHJ21RUV2qlBOEw0yuexv38JuMAhSx
-         sFkOlE4rxVTL3Qbj35KkPeFAQTB7J9Jz41zlNo3gfESItN/Y9hSRVQ6Bq1nPFiw674
-         nOiuhwpXKQywk/gVZzjACg//zXsHevdnUMkGHdOaJWCePBUDyigaQH1iPwiFg4JO6l
-         DQeRuvSaX7XWg==
-Date:   Mon, 3 Jul 2023 13:53:51 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>, tfiga@chromium.org,
-        m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        hverkuil@xs4all.nl, Jacopo Mondi <jacopo@jmondi.org>
-Subject: Re: [PATCH 1/6] media: v4l2: Add audio capture and output support
-Message-ID: <43f0ecdf-7454-49ae-96b3-2eae5487e9a5@sirena.org.uk>
-References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
- <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
- <ZJ6o5fT4V4HXivFa@valkosipuli.retiisi.eu>
- <CAA+D8AND1yZ7eZLjBGxVF=i3hLMecUm-j7AVHN9npJi-4=3VrA@mail.gmail.com>
- <87h6ql5hch.wl-tiwai@suse.de>
+        Mon, 3 Jul 2023 08:54:10 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0FDE58;
+        Mon,  3 Jul 2023 05:54:09 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-47e5cf4e347so159654e0c.3;
+        Mon, 03 Jul 2023 05:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688388848; x=1690980848;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8UNjUFxogKwa7w723fW56Ug+Y7s+F2FtRHsJB36Mz9o=;
+        b=KoI8luSuFSpDxhSSQSZ1IAWiWyD9Ctbdj/6LYRQkmggybdV7t2a0UOuV+Hw/bjlWr3
+         TKsHTDWgdVTIi4hEGYmmDJQzL3jY0RpamZWYCiC73/TfFz1QVarPSYsgm6PX8vh8AfTa
+         4Mk5ZCj5vpfXmtLaobAT5o3SLkon0tJDSjp1XUXJSxdpV+7BYXz8z/xRTkbOv8B88aLz
+         LMq9T3fXP+hhI0Eg+vNFLeYE7zUmnmeDzqE6tfA4RMSPGVRE+/94b9Dmi4iQjxNZtC3V
+         bOV54ukfW84Nwc99HT/0Is0JOV4ofXhZxT0JkVnM+dPfUArt/TPOvnGYo8eue49Dmwes
+         F67Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688388848; x=1690980848;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8UNjUFxogKwa7w723fW56Ug+Y7s+F2FtRHsJB36Mz9o=;
+        b=GVexBi3yx/+wyOXNZmv1DvxxnZOeBGkqXORawecn1XbwXy6SvtsZHMdT7hguslsqSS
+         6yK47Dc+/LeVg3d3amxlot64T7cdm6iRoGlOg/EmhoH7Nh0w1uApFfN7NREeaeEAJUt5
+         FoghZ0LYTmnMEYo4wYVS6HqFjq2uP2cTT3NVgurwmO/0j1gn/xWj+l46Eg+wY+wPGnAE
+         PeOnblnJCJ952JbZLdP7ePlnI7yz0ky+o8O6fHjyRLF38mys4QAOeyErpZVYmj3hXd4i
+         XcQQXl0nCS8RxQJkEFFTodr8bb0186ag4mK3U1DrJ27h7ISPZTqBPri3l1KH9EulWUxC
+         lFsg==
+X-Gm-Message-State: ABy/qLbPjnbBWurFtGGCjaut61O5CAldlwAb2P6rP3c7HrSGbl6eoA1a
+        Z4PKmfA2SdyO1OU6pbUgrdJJ7P2zeG2Y2hIm2kQ=
+X-Google-Smtp-Source: APBJJlEyfvGPjC4sl8jnRJcD1mI5MQh0QGdeOcVz+gjYTgStp4xiqpqSM7Pt6GQrZjE9wkd/yzrx/O7U8G5/LUovkLs=
+X-Received: by 2002:a05:6102:21b:b0:443:6457:10e with SMTP id
+ z27-20020a056102021b00b004436457010emr4733155vsp.7.1688388848288; Mon, 03 Jul
+ 2023 05:54:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XyTCZVqlIuin1XJf"
-Content-Disposition: inline
-In-Reply-To: <87h6ql5hch.wl-tiwai@suse.de>
-X-Cookie: Please go away.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230703113142.424670-1-arnd@kernel.org>
+In-Reply-To: <20230703113142.424670-1-arnd@kernel.org>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 3 Jul 2023 15:53:57 +0300
+Message-ID: <CAOQ4uxj5v=zTsiXvHGD70nMcKSvTVwM2G0raCDePY64gofu+AQ@mail.gmail.com>
+Subject: Re: [PATCH] ovl: mark ovl_redirect_mode() as static again
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Christian Brauner <brauner@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-unionfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 3, 2023 at 2:31=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> This function was moved to another file and is no longer marked
+> static there, causing a W=3D1 warning:
+>
+> fs/overlayfs/params.c:92:13: error: no previous prototype for 'ovl_redire=
+ct_mode' [-Werror=3Dmissing-prototypes]
+>
+> This was probably lost by accident during the refactoring, as there is
+> still no caller in another file, so add back the annotation.
+>
+> Fixes: 06bcaa2dafb7e ("ovl: move all parameter handling into params.{c,h}=
+")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
---XyTCZVqlIuin1XJf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is against a patch that is not upstream.
+I will squash it.
 
-On Mon, Jul 03, 2023 at 02:07:10PM +0200, Takashi Iwai wrote:
-> Shengjiu Wang wrote:
+Thanks,
+Amir.
 
-> > There is no such memory to memory interface defined in ALSA.=A0 Seems
-> > ALSA is not designed for M2M cases.
-
-> There is no restriction to implement memory-to-memory capture in ALSA
-> framework.  It'd be a matter of the setup of PCM capture source, and
-> you can create a corresponding kcontrol element to switch the mode or
-> assign a dedicated PCM substream, for example.  It's just that there
-> was little demand for that.
-
-Yeah, it's not a terrible idea.  We might use it more if we ever get
-better support for DSP audio, routing between the DSP and external
-devices if driven from the CPU would be a memory to memory thing.
-
-> I'm not much against adding the audio capture feature to V4L2,
-> though, if it really makes sense.  But creating a crafted /dev/audio*
-> doesn't look like a great idea to me, at least.
-
-I've still not looked at the code at all.
-
---XyTCZVqlIuin1XJf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSixNsACgkQJNaLcl1U
-h9AHBgf+PmrkjDoGNN2pkJ1mNw5jmGsBAJkUX+OHPdAbWl0Su866gJ9fD6vXajFO
-Y/9d2UZ5ubbmVeBZn47fj95dmPvq2povgtl2nzNz85MpDwcac03pQBVmS+ZPfYlk
-Ui4s5mk+QFpXMRCxt4b9vYr8Wkp/lVH4RaD2q3fOXGeQqUvCp0Sn99z6tDZaTWBO
-9hShFfh4il+VkKeBk6+m2MxWTcAEy5pAM7moCIE0VMDmZ4MEWmaXxvyJCZEOapD9
-f+WpZURGpbdIi5yBHwfi/zVEHzfo2DGccC2UauYc50Z+hekml26dBQuTvfZM37Qc
-BN0Unl4+vKxBW8rdx7rkbRIUueFLGA==
-=SMUJ
------END PGP SIGNATURE-----
-
---XyTCZVqlIuin1XJf--
+>  fs/overlayfs/params.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/overlayfs/params.c b/fs/overlayfs/params.c
+> index b8c2f6056a9a8..a63160dbb0f95 100644
+> --- a/fs/overlayfs/params.c
+> +++ b/fs/overlayfs/params.c
+> @@ -89,7 +89,7 @@ const struct constant_table ovl_parameter_redirect_dir[=
+] =3D {
+>         {}
+>  };
+>
+> -const char *ovl_redirect_mode(struct ovl_config *config)
+> +static const char *ovl_redirect_mode(struct ovl_config *config)
+>  {
+>         return ovl_parameter_redirect_dir[config->redirect_mode].name;
+>  }
+> --
+> 2.39.2
+>
