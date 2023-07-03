@@ -2,68 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6812A745FF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94552745FFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjGCPi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
+        id S229943AbjGCPlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGCPi2 (ORCPT
+        with ESMTP id S229604AbjGCPlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:38:28 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7FCE49;
-        Mon,  3 Jul 2023 08:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=wkqMLEVigBtW/F9ZQ5Js0pxTwVvpXSe9+nI17gSnD6U=; b=OB4Cj7jiwBQjss9EmPrZbH9RYS
-        /h9Drdy2vDECtzQNkcUXAHLbIWEUieDHkJM7sU3e3J+xjOR3CyUn2MOwr5rVahZfMSVtw+sGzSABt
-        sP/W2VT4rJNK0QiF4t0M80S9b1dK8V2XaqrhDS6xWh7O9QHXW9iOwDtD0uQiwRRBpCzU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qGLd9-000UQQ-5y; Mon, 03 Jul 2023 17:38:23 +0200
-Date:   Mon, 3 Jul 2023 17:38:23 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "M. Haener" <michael.haener@siemens.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Subject: Re: [PATCH 0/3] net: dsa: SERDES support for mv88e632x family
-Message-ID: <3664909e-a259-4bca-be53-5bab43e23dbc@lunn.ch>
-References: <20230703152611.420381-1-michael.haener@siemens.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703152611.420381-1-michael.haener@siemens.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 11:41:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7BBE44;
+        Mon,  3 Jul 2023 08:41:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 679BF1FF07;
+        Mon,  3 Jul 2023 15:41:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688398880; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+cBsPbpKw4pd341qQme44tmicoNHSb1UHZAfIJrQtwY=;
+        b=2L0utiEvpTkFH/HV9cKOZztjBMltsFGwONNo9IBS6Wq36Sxt3cPIePD/qnUDFmlc96wS3x
+        1d4o6BIr917Gze+alGOUB7FVJZzXwCFGs0LJMHXLMugYwdwTrHrsNqMRaAVSD1TNIsrELA
+        Ydg2Hn3Ruow4ro9YP92w+G44j+cT9wc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688398880;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+cBsPbpKw4pd341qQme44tmicoNHSb1UHZAfIJrQtwY=;
+        b=ftNax7K8zy+OyaEef+G92wAeXb9ASk7QJRlClay6YI+cSpBYLRwKFVXWjcOYKNBus7BlXs
+        Xgz1dN6Va1WTN8Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1E4C71358E;
+        Mon,  3 Jul 2023 15:41:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rymQBiDsomRmZQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 03 Jul 2023 15:41:20 +0000
+Date:   Mon, 03 Jul 2023 17:41:18 +0200
+Message-ID: <87mt0d3sv5.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Shenghao Ding <13916275206@139.com>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com
+Subject: Re: [PATCH v1 2/3] ALSA: hda/tas2781: Add tas2781 HDA driver
+In-Reply-To: <20230702081857.799693-2-13916275206@139.com>
+References: <20230702081857.799693-1-13916275206@139.com>
+        <20230702081857.799693-2-13916275206@139.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 05:26:06PM +0200, M. Haener wrote:
-> From: Michael Haener <michael.haener@siemens.com>
+On Sun, 02 Jul 2023 10:18:56 +0200,
+Shenghao Ding wrote:
 > 
-> This patch series brings SERDES support for the mv88e632x family.
+> Create tas2781 side codec HDA driver for Lenovo Laptops. All of the
+> tas2781s in the laptop will be aggregated as one audio speaker. The
+> code supports realtek as the primary codec.
 
-Please take a look at Russell Kings series:
+First of all, again, it's too short description.  You added the code
+to bind, but also add lots of own control elements.  There is *NO*
+description / explanation about those at all.  User have no idea
+what is it and how can be used.
 
-https://www.spinics.net/lists/netdev/msg914908.html
+So, please make the patch descriptive.
 
-It would be good if you could build on top of that, which we should be
-merging soon.
 
-   Andrew
+> @@ -0,0 +1,874 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// TAS2781 HDA I2C driver
+> +//
+> +// Copyright 2023 Texas Instruments, Inc.
+> +//
+> +// Author: Shenghao Ding <shenghao-ding@ti.com>
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/crc8.h>
+> +#include <linux/crc32.h>
+> +#include <linux/efi.h>
+> +#include <linux/firmware.h>
+> +#include <linux/i2c.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +#include <sound/hda_codec.h>
+> +#include <sound/soc.h>
+> +#include <sound/tas2781.h>
+> +#include <sound/tlv.h>
+> +#include <sound/tas2781-tlv.h>
+> +
+> +#include "hda_local.h"
+> +#include "hda_auto_parser.h"
+> +#include "hda_component.h"
+> +#include "hda_jack.h"
+> +#include "hda_generic.h"
+> +
+> +#define TASDEVICE_SPEAKER_CALIBRATION_SIZE	20
+> +
+> +#define ACARD_SINGLE_RANGE_EXT_TLV(xname, xreg, xshift, xmin, xmax, xinvert, \
+> +	xhandler_get, xhandler_put, tlv_array) \
+> +{	.iface = SNDRV_CTL_ELEM_IFACE_CARD, .name = (xname),\
+> +	.access = SNDRV_CTL_ELEM_ACCESS_TLV_READ |\
+> +		 SNDRV_CTL_ELEM_ACCESS_READWRITE,\
+> +	.tlv.p = (tlv_array), \
+> +	.info = snd_soc_info_volsw_range, \
+> +	.get = xhandler_get, .put = xhandler_put, \
+> +	.private_value = (unsigned long)&(struct soc_mixer_control) \
+> +		{.reg = xreg, .rreg = xreg, .shift = xshift, \
+> +		 .rshift = xshift, .min = xmin, .max = xmax, \
+> +		 .invert = xinvert} }
+
+Is the only difference from the standard macro is the iface type?
+Comment it so.
+
+> +static int tas2781_acpi_get_i2c_res(struct acpi_resource *ares,
+> +	void *data)
+> +{
+> +	struct tasdevice_priv *tas_priv = data;
+> +	struct acpi_resource_i2c_serialbus *sb;
+> +
+> +	if (i2c_acpi_get_i2c_resource(ares, &sb)) {
+> +		if (sb->slave_address != TAS2781_GLOBAL_ADDR) {
+> +			tas_priv->tasdevice[tas_priv->ndev].dev_addr =
+> +				(unsigned int)sb->slave_address;
+> +			tas_priv->ndev++;
+> +			goto out;
+> +		}
+> +	}
+> +out:
+> +	return 1;
+> +}
+
+With the code above, tas_priv->ndev might overflow
+tas_priv->tasdevice[] if a buggy ACPI data is given.
+Add the range check.
+
+> +static int tas2781_hda_read_acpi(struct tasdevice_priv *tas_priv,
+> +	const char *hid)
+> +{
+> +	struct acpi_device *adev;
+> +	struct device *physdev;
+> +	LIST_HEAD(resources);
+> +	const char *sub;
+> +	int ret;
+> +
+> +	adev = acpi_dev_get_first_match_dev(hid, NULL, -1);
+> +	if (!adev) {
+> +		dev_err(tas_priv->dev,
+> +			"Failed to find an ACPI device for %s\n", hid);
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = acpi_dev_get_resources(adev, &resources,
+> +		tas2781_acpi_get_i2c_res, tas_priv);
+> +	if (ret < 0)
+> +		goto err;
+> +
+> +	acpi_dev_free_resource_list(&resources);
+> +	strscpy(tas_priv->dev_name, hid, sizeof(tas_priv->dev_name));
+> +	physdev = get_device(acpi_get_first_physical_node(adev));
+> +	acpi_dev_put(adev);
+> +
+> +	sub = acpi_get_subsystem_id(ACPI_HANDLE(physdev));
+> +	if (IS_ERR(sub))
+> +		sub = NULL;
+> +
+> +	tas_priv->acpi_subsystem_id = sub;
+> +
+> +	put_device(physdev);
+> +
+> +	return 0;
+
+Isn't NULL sub treated as an error?
+
+> +static int tasdevice_create_control(struct tasdevice_priv *tas_priv)
+> +{
+> +	char prof_ctrl_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	struct hda_codec *codec = tas_priv->codec;
+> +	struct snd_kcontrol_new prof_ctrl = {
+> +		.name = prof_ctrl_name,
+> +		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info = tasdevice_info_profile,
+> +		.get = tasdevice_get_profile_id,
+> +		.put = tasdevice_set_profile_id,
+> +	};
+> +	int ret;
+> +
+> +	/* Create a mixer item for selecting the active profile */
+> +	scnprintf(prof_ctrl_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,
+> +		"Speaker Profile Id");
+
+It's a constant name, so we can drop the prof_ctrl_name temp buffer
+and pass the name string directly, no?
+Then prof_ctrl can be a const static, too.
+
+> +static int tasdevice_dsp_create_ctrls(struct tasdevice_priv
+> +	*tas_priv)
+> +{
+> +	char prog_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	char conf_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	struct hda_codec *codec = tas_priv->codec;
+> +	struct snd_kcontrol_new prog_ctl = {
+> +		.name = prog_name,
+> +		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info = tasdevice_info_programs,
+> +		.get = tasdevice_program_get,
+> +		.put = tasdevice_program_put,
+> +	};
+> +	struct snd_kcontrol_new conf_ctl = {
+> +		.name = conf_name,
+> +		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info = tasdevice_info_configurations,
+> +		.get = tasdevice_config_get,
+> +		.put = tasdevice_config_put,
+> +	};
+> +	int ret;
+> +
+> +	scnprintf(prog_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,
+> +		"Speaker Program Id");
+> +	scnprintf(conf_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,
+> +		"Speaker Config Id");
+
+Ditto.
+
+> +static int tas2781_save_calibration(struct tasdevice_priv *tas_priv)
+> +{
+> +	efi_guid_t efi_guid = EFI_GUID(0x02f9af02, 0x7734, 0x4233, 0xb4, 0x3d,
+> +		0x93, 0xfe, 0x5a, 0xa3, 0x5d, 0xb3);
+> +	static efi_char16_t efi_name[] = L"CALI_DATA";
+> +	struct tm *tm = &tas_priv->tm;
+> +	unsigned int attr, crc;
+> +	unsigned int *tmp_val;
+> +	efi_status_t status;
+> +
+> +	/* Lenovo devices */
+> +	if (tas_priv->catlog_id == LENOVO)
+> +		efi_guid = EFI_GUID(0x1f52d2a1, 0xbb3a, 0x457d, 0xbc, 0x09,
+> +			0x43, 0xa3, 0xf4, 0x31, 0x0a, 0x92);
+> +
+> +	tas_priv->cali_data.total_sz = 0;
+> +	/* Get real size of UEFI variable */
+> +	status = efi.get_variable(efi_name, &efi_guid, &attr,
+> +		&tas_priv->cali_data.total_sz, tas_priv->cali_data.data);
+> +	if (status == EFI_BUFFER_TOO_SMALL) {
+> +		/* Allocate data buffer of data_size bytes */
+> +		tas_priv->cali_data.data = devm_kzalloc(tas_priv->dev,
+> +			tas_priv->cali_data.total_sz, GFP_KERNEL);
+> +		if (!tas_priv->cali_data.data)
+> +			return -ENOMEM;
+> +		/* Get variable contents into buffer */
+> +		status = efi.get_variable(efi_name, &efi_guid, &attr,
+> +			&tas_priv->cali_data.total_sz,
+> +			tas_priv->cali_data.data);
+> +		if (status != EFI_SUCCESS)
+> +			return -EINVAL;
+> +	}
+> +
+> +	tmp_val = (unsigned int *)tas_priv->cali_data.data;
+> +
+> +	crc = crc32(~0, tas_priv->cali_data.data, 84) ^ ~0;
+> +	dev_dbg(tas_priv->dev, "cali crc 0x%08x PK tmp_val 0x%08x\n",
+> +		crc, tmp_val[21]);
+> +
+> +	if (crc == tmp_val[21]) {
+> +		time64_to_tm(tmp_val[20], 0, tm);
+> +		dev_dbg(tas_priv->dev, "%4ld-%2d-%2d, %2d:%2d:%2d\n",
+> +			tm->tm_year, tm->tm_mon, tm->tm_mday,
+> +			tm->tm_hour, tm->tm_min, tm->tm_sec);
+> +		tas2781_apply_calib(tas_priv);
+> +	} else
+> +		tas_priv->cali_data.total_sz = 0;
+> +
+> +	return 0;
+> +}
+
+What does the function do actually?  I can guess, but it's all too
+much black magic there.  Please describe more.
+
+
+> +static int tas2781_hda_bind(struct device *dev, struct device *master,
+> +	void *master_data)
+> +{
+> +	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
+> +	struct hda_component *comps = master_data;
+> +	struct hda_codec *codec;
+> +	unsigned int subid;
+> +	int ret;
+> +
+> +	if (!comps || tas_priv->index < 0 ||
+> +		tas_priv->index >= HDA_MAX_COMPONENTS)
+> +		return -EINVAL;
+> +
+> +	comps = &comps[tas_priv->index];
+> +	if (comps->dev)
+> +		return -EBUSY;
+> +
+> +	codec = comps->codec;
+> +	subid = codec->core.subsystem_id & 0xFFFF;
+> +
+> +	//Lenovo devices
+> +	switch (subid) {
+> +	case 0x387d:
+> +	case 0x387e:
+> +	case 0x3881:
+> +	case 0x3884:
+> +	case 0x3886:
+> +	case 0x38a7:
+> +	case 0x38a8:
+> +	case 0x38ba:
+> +	case 0x38bb:
+> +	case 0x38be:
+> +	case 0x38bf:
+> +	case 0x38c3:
+> +	case 0x38cb:
+> +	case 0x38cd:
+> +		tas_priv->catlog_id = LENOVO;
+> +		break;
+> +	default:
+> +		tas_priv->catlog_id = OTHERS;
+> +		break;
+> +	}
+
+Listing up the explicit SSID here *again* looks bad.  It means that we
+have those SSIDs in two distinct places, and that's very error-prone.
+Can we put the info in the quirk side (patch_realtek.c) somehow?  Or
+can it be simply a check of vendor id with Lenovo?
+
+
+thanks,
+
+Takashi
