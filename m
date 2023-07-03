@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F6F7460B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15E27460B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 18:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjGCQZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 12:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
+        id S231284AbjGCQ0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 12:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGCQZU (ORCPT
+        with ESMTP id S231202AbjGCQ0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 12:25:20 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1555DE42
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 09:25:19 -0700 (PDT)
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CB0203F851
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 16:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688401517;
-        bh=ykDzESFnICwZIJMQN3uAcRHhxxnmPoYMfo+p0YP998E=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=dC+o2qDOHigQlHZfBXDCMlVKQ/KYDgZ2p+iRjDmgCSVXV+sSvI5YKuuFZVG9aqyf2
-         P7yfooE3z406qqJLfzH+GLEf/oWfVunZKd2mxFQGAWTKXw9V/hN6REW2yklOMZMShw
-         MeyAg6/9Erz37OPTGcyuHMjdmIRH7V++GDuQKwIKA26UCV+RGy73+vS4NZ4pWdDErD
-         rBF7K6jtM/hUeetTckiJcCi29R2jNfVx0z9hb8WcXGYvBEz6+LSNdZ9LV2tOb49/mT
-         7STWVk2AqykndKMzcoQY3nJ9/7oSDAH5l5bodbgTx3+pRfh/+FRtndaQSzJ3/TXgBy
-         kqBd8iqMbKC+A==
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1b7dd5bca25so51515585ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 09:25:17 -0700 (PDT)
+        Mon, 3 Jul 2023 12:26:00 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973F1E42
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 09:25:58 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6a0d91e80so74882421fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 09:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688401557; x=1690993557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BLv2uWzJasxuSdcQw7JIN9VIEqZpX0OvW+/IpBA42Bg=;
+        b=pxLSTHP2kLhaBPto7N/da1Td5PMEIp/F4IhpRVKT5wqLf9/dXxELa7I3Oedri08xZj
+         ZjPJtcYchvQ+jJTZGt4QD5oDGRmxlKRaS9EVD5GJt7/EXsQSBud67yeztSQMmjX5xqLQ
+         fBUZIf5Qp/lp0V0gouMpiWVhUFKxd3hGqcJE0PWj4E5i6L1Csa6MyqLWlWzKm4wHbWwe
+         GXuvYJk5QV9JQkuwfAgUkbUXyVZljCAP110UCd77x8/ZsuDnCsdqwb10kcBWnCpGSLVI
+         KS8L+94L1zYzI+AVjClkypxuAPP3xI7njeatU/5aAg2TUOn6WDbZhnEM/xm2NquK+qGQ
+         mqgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688401513; x=1690993513;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ykDzESFnICwZIJMQN3uAcRHhxxnmPoYMfo+p0YP998E=;
-        b=YtLAYbYNhfdBdesjjpRmEBxH22od6J5g8qAxg1npz+3/ZO4B5ExSkkq8Mqp9ko98ZB
-         AZ8RpAS7Kfonv/Jm11K0JxZiStKOwiK4Sn2iK6UUyzxut2u9mZSWiMLQOhOYlnpfcSBx
-         QGN1mp6Njz4wYyaH+5q7dZLZL6EzVbCrkdUh8vQl0xwHNuhKfNBnFeYVL2fzAIICMOPh
-         HcPSXLn8chA/Wc2zHDQq9UeIfOGJOe0HNg56bFoWcXnyjDpr8+MOzRnWuqgVebFhLnOQ
-         +s6shKTuJfoakDHGSrDAUlLy/LPR4JmrWBtptvUoNTMa3ugrxj2/RwGkKS34bJaIBNhF
-         e6Nw==
-X-Gm-Message-State: ABy/qLYSmXjYY4mW17vqWPtfv4ALeUY4P0EUakKVG5+MN+TKnPRNRfwt
-        6nwteVPA84FZm3a+BPFP9gyMjEWuK59fzXFtTwUbanROte1PRI1FCBjyrZKl3nHIgMoI6vUWmNp
-        gSh1T83EpPQlkQN2+PKbIRQ29IN66IH35VY68FDecIo/rOuTK2A==
-X-Received: by 2002:a17:902:e54c:b0:1b8:8979:8088 with SMTP id n12-20020a170902e54c00b001b889798088mr7052709plf.18.1688401513088;
-        Mon, 03 Jul 2023 09:25:13 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGZdOUJQa/Ej88XepCZgZmtuutg08rcOpg5AbKBkOrsnjhDxkAm5qqtXRN9B37RmrqCdRseWg==
-X-Received: by 2002:a17:902:e54c:b0:1b8:8979:8088 with SMTP id n12-20020a170902e54c00b001b889798088mr7052695plf.18.1688401512700;
-        Mon, 03 Jul 2023 09:25:12 -0700 (PDT)
-Received: from canonical.com (211-75-139-218.hinet-ip.hinet.net. [211.75.139.218])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170902c1ca00b001a072aedec7sm4863715plc.75.2023.07.03.09.25.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 09:25:12 -0700 (PDT)
-From:   Koba Ko <koba.ko@canonical.com>
-To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH][V2] EDAC/i10nm: shift exponent is negative
-Date:   Tue,  4 Jul 2023 00:25:09 +0800
-Message-Id: <20230703162509.77828-1-koba.ko@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1688401557; x=1690993557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BLv2uWzJasxuSdcQw7JIN9VIEqZpX0OvW+/IpBA42Bg=;
+        b=Z1WewU4Jc/k49PyaDoGmBQLORi4s1k+wCrrfhHdnJ+ae3GWhnIPR/SHcZCwK1h9JpS
+         I/muao/uKhUD7mTzXrcDiWQElzyD2wjyaL2SWr1HRyPxQOZd4sx3+VjaEeFGn5LbWvVf
+         51CJXj4YGecGM0kj549hFVIiRiDC3dMx7zbeFYLQiLu9XToXnRc5lVClgmF76Sbhbs3p
+         1e0gNtEbb3CWMbI+7cWCIm9Cnu5zYUj5mDVrDObZxnEpopyTh+2boohQG5amUBtKL0ns
+         9RoikAfDV9q5/Zo10OLjSQUiFht3lxlpxJoveYg2v5XjSfIeOljAI2QHjGicm/G06i03
+         iiFQ==
+X-Gm-Message-State: ABy/qLbsUSNp1175ZyfnbLAgAZk8Ub1vd8lxBXQryFTfxZE8wbYNZEmR
+        dmz1nCpUf0txnwpuQn2Qek9akQ==
+X-Google-Smtp-Source: APBJJlEs+9BsDopoZSFTmox3BWETANFQ9MyoDgY4nbY58873k3/S3elO73G5V2sgOfEe4/H/ZhvEeQ==
+X-Received: by 2002:a2e:91ce:0:b0:2af:25cf:92ae with SMTP id u14-20020a2e91ce000000b002af25cf92aemr8360233ljg.22.1688401556888;
+        Mon, 03 Jul 2023 09:25:56 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id v24-20020a1709064e9800b00992ca779f42sm5348151eju.97.2023.07.03.09.25.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 09:25:56 -0700 (PDT)
+Message-ID: <91fff80d-7f6f-2d97-46fa-d6a258e0e48d@linaro.org>
+Date:   Mon, 3 Jul 2023 18:25:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: Input: exc3000 - Support power supply
+ regulators
+Content-Language: en-US
+To:     Mike Looijmans <mike.looijmans@topic.nl>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.056940e6-2612-4bc3-a2f6-33121e64866d@emailsignatures365.codetwo.com>
+ <20230703084536.8429-1-mike.looijmans@topic.nl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230703084536.8429-1-mike.looijmans@topic.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,77 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBSAN complains this error
-~~~
- UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
- shift exponent -66 is negative
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x48/0x70
-  dump_stack+0x10/0x20
-  __ubsan_handle_shift_out_of_bounds+0x1ac/0x360
-  skx_get_dimm_info.cold+0x91/0x175 [i10nm_edac]
-  ? kvasprintf_const+0x2a/0xb0
-  i10nm_get_dimm_config+0x23c/0x340 [i10nm_edac]
-  skx_register_mci+0x139/0x1e0 [i10nm_edac]
-  ? __pfx_i10nm_get_dimm_config+0x10/0x10 [i10nm_edac]
-  i10nm_init+0x403/0xd10 [i10nm_edac]
-  ? __pfx_i10nm_init+0x10/0x10 [i10nm_edac]
-  do_one_initcall+0x5b/0x250
-  do_init_module+0x68/0x260
-  load_module+0xb45/0xcd0
-  ? kernel_read_file+0x2a4/0x320
-  __do_sys_finit_module+0xc4/0x140
-  ? __do_sys_finit_module+0xc4/0x140
-  __x64_sys_finit_module+0x18/0x30
-  do_syscall_64+0x58/0x90
-  ? syscall_exit_to_user_mode+0x29/0x50
-  ? do_syscall_64+0x67/0x90
-  ? syscall_exit_to_user_mode+0x29/0x50
-  ? do_syscall_64+0x67/0x90
-  ? do_syscall_64+0x67/0x90
-  ? __flush_smp_call_function_queue+0x122/0x1f0
-  ? exit_to_user_mode_prepare+0x30/0xb0
-  ? irqentry_exit_to_user_mode+0x9/0x20
-  ? irqentry_exit+0x43/0x50
-  ? sysvec_call_function+0x4b/0xd0
-  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-~~~
+On 03/07/2023 10:45, Mike Looijmans wrote:
+> Add power supply regulator support to the exc3000 devices.
+> This provides the devicetree bindings.
 
-when get rows, cols and ranks, the returned error value doesn't be
-handled.
+If there is going to be next version/resend, you could skip the last
+sentence. It is a bit redundant.
 
-check the return value is EINVAL, if yes, directly return 0.
+In any case:
 
-Signed-off-by: Koba Ko <koba.ko@canonical.com>
----
-V2: make error-print explicitly
----
- drivers/edac/skx_common.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 2a00e0503f0d5..ac61db72d2e6b 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -330,7 +330,7 @@ static int skx_get_dimm_attr(u32 reg, int lobit, int hibit, int add,
- 	u32 val = GET_BITFIELD(reg, lobit, hibit);
- 
- 	if (val < minval || val > maxval) {
--		edac_dbg(2, "bad %s = %d (raw=0x%x)\n", name, val, reg);
-+		skx_printk(KERN_ERR, "bad %s = %d (raw=0x%x)\n", name, val, reg);
- 		return -EINVAL;
- 	}
- 	return val + add;
-@@ -351,6 +351,8 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
- 	ranks = numrank(mtr);
- 	rows = numrow(mtr);
- 	cols = imc->hbm_mc ? 6 : numcol(mtr);
-+	if (ranks == -EINVAL || rows == -EINVAL || cols == -EINVAL)
-+		return 0;
- 
- 	if (imc->hbm_mc) {
- 		banks = 32;
--- 
-2.34.1
+
+Best regards,
+Krzysztof
 
