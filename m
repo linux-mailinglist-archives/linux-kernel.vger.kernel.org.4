@@ -2,118 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1F574658C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 00:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC146746593
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 00:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjGCWAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 18:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S231377AbjGCWCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 18:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjGCWAp (ORCPT
+        with ESMTP id S229823AbjGCWCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 18:00:45 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ECD187;
-        Mon,  3 Jul 2023 15:00:44 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-38c35975545so3834414b6e.1;
-        Mon, 03 Jul 2023 15:00:44 -0700 (PDT)
+        Mon, 3 Jul 2023 18:02:23 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D61A1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 15:02:17 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b80b343178so27839345ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 15:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688421644; x=1691013644;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KfN37eTUROOnwTliaBcxh7QT0xk1tHGByby5/rveQKI=;
-        b=CNeOtC3LUafYyE4A4AvSN/GHSZjIHoRV5RFKPK691UWNweoM7BIR2TvQX/TqeIgBPD
-         S19C+Sf9VHEFu/z7j9788jhNFxez+j1RzAE5uLyM6Vkn7vM2o7U3Zx8PcAoeIV6w5LWb
-         CPUlJfri9bMEyAVv2u5VoYM+1IKY2xfCOG0CDcYtqdtas1w+9DjH/Jt56igJcTdkmfKo
-         w2I3YAZuSnLWai1kfLzMTbFJXTQZywblJRhJJJBGR12UakssOaGnF9uxKiy2OUuXEEhA
-         9QSS4Cj3P3QgB5jSvrC5aOVLZ53em5u2sJOoa3DxbuIdEZgUAKbjfhWd8d79oQ9XFUbd
-         ak5g==
+        d=chromium.org; s=google; t=1688421737; x=1691013737;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xAWDleebt7l7zEdHolSBzV/uMqJ/GbmesvF/kh1hWdE=;
+        b=IXUFd9b7r8hl56U5SRDsR/9UzGwQrMUhusT7pJ+/s1PMHNHuXpGbV/qH9LSNcb2QCE
+         7wWxGUDbHCDaiLI3LCDHk/af2JTtHQKwEb3M6xabA02Q+hHBxzscJLvEUWkL6LYq+C+Q
+         wxIcFWk9Fy739XWpsae7KH3EeNO1+thgjWL1M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688421644; x=1691013644;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KfN37eTUROOnwTliaBcxh7QT0xk1tHGByby5/rveQKI=;
-        b=MAhv08d1D/EyGzGrr7+5OzOhQPEmG7KgULOede0leR7E+37fr60IacF8Zrp2okYc2N
-         kxMxTLnNHJjW65CGamNdj4fBhLuU7kY44mwssKaow6ahXne4kQWlKKe8/WWwbN9ANqF6
-         XuFv0LeJMfDGelqe9c2AOuGX12Jp1QuuiGZDQTJ08kY2g1hblgidTMYZWzTbcnb8sCgK
-         GD0EaqBXfd1LCrcpMXtAVkNKqnnNr7SZYUjw2ItGMsFVVJu4Zu+E7XBSAfxAZkHjAvca
-         j0wDv9W89W5yT3N8333uJ4ClOBrSihkK4VQE0aGSYOH+PlscRyU8HaVnB2044X2mbPzy
-         fFbg==
-X-Gm-Message-State: AC+VfDyhvmVGcHivcq7xw2THJ+3NPkFxMQgXi6lf1n9bgNJfGr4ILecW
-        avUsNEIc27Ia5PjWyUB2YZihNQPjgTvZSg==
-X-Google-Smtp-Source: ACHHUZ4rcMvHTKcJUPN+Dj33PZkYDKJVv2HyXJD//9LdedOwVkOwa8FXCt5iPmyRqUurMHzqrPYjuQ==
-X-Received: by 2002:a54:4599:0:b0:3a1:ecdf:5f74 with SMTP id z25-20020a544599000000b003a1ecdf5f74mr11611473oib.43.1688421643686;
-        Mon, 03 Jul 2023 15:00:43 -0700 (PDT)
-Received: from localhost ([2605:59c8:148:ba10::41f])
-        by smtp.gmail.com with ESMTPSA id j10-20020aa78d0a000000b00682936d049fsm1956047pfe.174.2023.07.03.15.00.42
+        d=1e100.net; s=20221208; t=1688421737; x=1691013737;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xAWDleebt7l7zEdHolSBzV/uMqJ/GbmesvF/kh1hWdE=;
+        b=LkQ01bM7erlLIpBsJLGaumfI/dR70K9rT+bP++uJpyrpGbQgMdsQJ/qwVVM73+REn8
+         GE0xGV+2HxOGFPVQPUswgI91I+LzMhSI4ppJrNpVbNrskyoZPTxZqfaSWhfUjaYBHq7I
+         CdEzCtGjV+UIqAsdbMG8j6yLzElY1SdU2PyYpRnw6J7lArjBgO7/qte/9eoBcw/GPhaF
+         4fBgGSM6C0q7iZFL0pUhtPbaHmiO6GUV54/YfAlrqTa28peGGEIGw3RULpfyEmOAbXh+
+         eealaVdlJUN6IRobho2UKB+sB+OdQXXnVOygFE5FES8LaKahPTy8ms59m6o/jaJqLAFK
+         e4TA==
+X-Gm-Message-State: ABy/qLZvA7xQ7zp1nc6wtf6E/neBnd1k9uGpcs11NqEXQ61r7x99kV3a
+        jGKcAF5UACKXdcYpqRFt59L90Q==
+X-Google-Smtp-Source: APBJJlHUHWr2MjXiHeX7bobS1UK0VoqLRvSBRANzQe02d9Qqtt6YW1du4/YXNyR/ImLJVczn5z7Wpg==
+X-Received: by 2002:a17:902:e80b:b0:1b7:dfbd:4df0 with SMTP id u11-20020a170902e80b00b001b7dfbd4df0mr11826113plg.45.1688421737271;
+        Mon, 03 Jul 2023 15:02:17 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k9-20020a170902760900b001b54a88e6adsm15542571pll.309.2023.07.03.15.02.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 15:00:43 -0700 (PDT)
-Date:   Mon, 03 Jul 2023 15:00:42 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Tero Kristo <tero.kristo@linux.intel.com>, shuah@kernel.org,
-        tglx@linutronix.de, x86@kernel.org, bp@alien8.de,
-        dave.hansen@linux.intel.com, mingo@redhat.com
-Cc:     ast@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, bpf@vger.kernel.org
-Message-ID: <64a3450a2a062_65205208a9@john.notmuch>
-In-Reply-To: <20230703105745.1314475-3-tero.kristo@linux.intel.com>
-References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
- <20230703105745.1314475-3-tero.kristo@linux.intel.com>
-Subject: RE: [PATCH 2/2] selftests/bpf: Add test for bpf_rdtsc
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 03 Jul 2023 15:02:16 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Alexander Potapenko <glider@google.com>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] Revert "fortify: Allow KUnit test to build without FORTIFY"
+Date:   Mon,  3 Jul 2023 15:02:13 -0700
+Message-Id: <20230703220210.never.615-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2499; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=WhBhSzaqPfsnfMGWEUr5gEyNmyjToakD/wquBaPOXCA=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBko0Vlt1pEL46RtDsfoMNRHGroygYArBX4j7Rld
+ FW/fRc9MOiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZKNFZQAKCRCJcvTf3G3A
+ JuoPEACFu2sAmQKtF/kkJeAEikAJMuV0uAcXZ2lN8TFXfGai71DEo5NXH4IIPfqwpB9q3E0aDys
+ B6AlSwvYkS79nsy8DVfXqyeNxbDUDw2ZPc58slmqT/JwvDjTG3xp81v1hRYR6yZohOvnn2u59ld
+ GILrPRPghL5oCnukkrtsI/1UqOyvwsQPoQSiUuAQ8Lr9Fk/OQFwTvDswfMJYi6n+vvfCD4J4mbm
+ imJZfhnbNEyYAI/ZXs2IAVrd0oF8OqqCvA1b4vzIfus2q3cCuYG/sb7j6Wpjj1ZPTis7EgPnmBl
+ 4LBq/eTYNtCtzsSKgRj+J9x1yW6G1bbk2GoL0+1ZzYKnKihzdp3nI0S+etKF3dTbUZoF8Gr3Lr0
+ SKtQiNHxjnaEyoJPjoz+gEEiQLp70Reg3ZdptuqAbvDNMmEJni2DiGc2OEW4mS7txz22ItPtj7S
+ TJxWw2aYT7xiI/2fMZQagSaRqmbYzaYZNrE1nC7honDekkLXJCL7sP/49xMuii0TXbLKidjCRa9
+ HQH1OY4HgTaBkX2dGMYwihWgKU5soAdKkuIDXwWTnqGmZyvY7kExxZ1YvW+ES8rvRlbMAKDhGTB
+ 83YWsn8KNqalTYdiG6Xl4FF7SfBnFVWqIXhHxKOUQQY9vFEwelexfCjE29S7Bm1f4108ROMq3Ow
+ t03RMeG jtGGMPdQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tero Kristo wrote:
-> Add selftest for bpf_rdtsc() which reads the TSC (Time Stamp Counter) on
-> x86_64 architectures. The test reads the TSC from both userspace and the
-> BPF program, and verifies the TSC values are in incremental order as
-> expected. The test is automatically skipped on architectures that do not
-> support the feature.
-> 
-> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> ---
->  .../selftests/bpf/prog_tests/test_rdtsc.c     | 67 +++++++++++++++++++
->  .../testing/selftests/bpf/progs/test_rdtsc.c  | 21 ++++++
->  2 files changed, 88 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_rdtsc.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> new file mode 100644
-> index 000000000000..2b26deb5b35a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright(c) 2023 Intel Corporation */
-> +
-> +#include "test_progs.h"
-> +#include "test_rdtsc.skel.h"
-> +
-> +#ifdef __x86_64__
-> +
-> +static inline u64 _rdtsc(void)
-> +{
-> +	u32 low, high;
-> +
-> +	__asm__ __volatile__("rdtscp" : "=a" (low), "=d" (high));
+This reverts commit a9dc8d0442294b426b1ebd4ec6097c82ebe282e0.
 
-I think its ok but note this could fail if user doesn't have
-access to rdtscp and iirc that can be restricted?
+The standard for KUnit is to not build tests at all when required
+functionality is missing, rather than doing test "skip". Restore this
+for the fortify tests, so that architectures without
+CONFIG_ARCH_HAS_FORTIFY_SOURCE do not emit unsolvable warnings.
 
-> +	return ((u64)high << 32) | low;
-> +}
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Closes: https://lore.kernel.org/all/CAMuHMdUrxOEroHVUt7-mAnKSBjY=a-D3jr+XiAifuwv06Ob9Pw@mail.gmail.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+I'll take this via my hardening tree and send a PR to Linus before -rc1.
+---
+ lib/Kconfig.debug   |  2 +-
+ lib/fortify_kunit.c | 14 --------------
+ 2 files changed, 1 insertion(+), 15 deletions(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index c2a7608ff585..6c6a7ee9f1f9 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2645,7 +2645,7 @@ config STACKINIT_KUNIT_TEST
+ 
+ config FORTIFY_KUNIT_TEST
+ 	tristate "Test fortified str*() and mem*() function internals at runtime" if !KUNIT_ALL_TESTS
+-	depends on KUNIT
++	depends on KUNIT && FORTIFY_SOURCE
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  Builds unit tests for checking internals of FORTIFY_SOURCE as used
+diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
+index 524132f33cf0..c8c33cbaae9e 100644
+--- a/lib/fortify_kunit.c
++++ b/lib/fortify_kunit.c
+@@ -25,11 +25,6 @@ static const char array_of_10[] = "this is 10";
+ static const char *ptr_of_11 = "this is 11!";
+ static char array_unknown[] = "compiler thinks I might change";
+ 
+-/* Handle being built without CONFIG_FORTIFY_SOURCE */
+-#ifndef __compiletime_strlen
+-# define __compiletime_strlen __builtin_strlen
+-#endif
+-
+ static void known_sizes_test(struct kunit *test)
+ {
+ 	KUNIT_EXPECT_EQ(test, __compiletime_strlen("88888888"), 8);
+@@ -312,14 +307,6 @@ DEFINE_ALLOC_SIZE_TEST_PAIR(kvmalloc)
+ } while (0)
+ DEFINE_ALLOC_SIZE_TEST_PAIR(devm_kmalloc)
+ 
+-static int fortify_test_init(struct kunit *test)
+-{
+-	if (!IS_ENABLED(CONFIG_FORTIFY_SOURCE))
+-		kunit_skip(test, "Not built with CONFIG_FORTIFY_SOURCE=y");
+-
+-	return 0;
+-}
+-
+ static struct kunit_case fortify_test_cases[] = {
+ 	KUNIT_CASE(known_sizes_test),
+ 	KUNIT_CASE(control_flow_split_test),
+@@ -336,7 +323,6 @@ static struct kunit_case fortify_test_cases[] = {
+ 
+ static struct kunit_suite fortify_test_suite = {
+ 	.name = "fortify",
+-	.init = fortify_test_init,
+ 	.test_cases = fortify_test_cases,
+ };
+ 
+-- 
+2.34.1
+
