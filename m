@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC4774558E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD37745593
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjGCGmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S230074AbjGCGqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjGCGmD (ORCPT
+        with ESMTP id S229671AbjGCGp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:42:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E10DC
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688366521; x=1719902521;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GVJRPLLzWdBT9QOerXJ55hu1ak6ZNokX28wFJuwc5RM=;
-  b=m2ZpZoAATtw+t+ecyX4SPwH9pGXrXuNkw+uyimdb8JUD8jLH0RikUFjC
-   ZQpJnrYExIvphg7nseDAEgayyddXpM+4Vcl2ubwYY8x1pzqyBZYmOWU5i
-   cVgnoOtuvzAiWsHDN9fM3/F9UZsBXrbjAy2cirsicIY3IOCUi6s7oVX0n
-   JljaLHCugk8T3JmwJLAH5w/4Sm//3TETdOFFYL3na96nM1mrYANAFLj+Q
-   SJxSKF1TLMQ4P8IsvTSg26xal57dMQ5ffXjr2SpAZxbXxjTeuIZxWA1ei
-   zXWMewAwWriV/NKVSLIjBKno/3blXDvk3jA6WbP4EGUNAHy4lNodjbUkP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="352630477"
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="352630477"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2023 23:42:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="668659322"
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="scan'208";a="668659322"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jul 2023 23:41:58 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qGDG0-000HCB-1P;
-        Mon, 03 Jul 2023 06:41:56 +0000
-Date:   Mon, 3 Jul 2023 14:41:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: drivers/powercap/intel_rapl_tpmi.c:141:41: sparse: sparse: incorrect
- type in initializer (different address spaces)
-Message-ID: <202307031405.dy3druuy-lkp@intel.com>
+        Mon, 3 Jul 2023 02:45:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A29CE
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688366699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ovluAHTmtFvydqG5OYZ6GVGeRDsdOvDwQZe/fLVcLSo=;
+        b=PiKIt3UUtdh9SKfsUFd3OdUxoUgcBdbJXWDUac3NH1zd2eYkmx+0xPnoPzPgXRIfEEEOW0
+        +jZxhEUvEfGSPnYiOYWY6VRPs1dX9LEuDjL6wnTm0g3ES3Cd2hab4j5f4b9ySx9On8oAAA
+        jzs7DbF7ijtwAysEK+CTBh4zMfJ720E=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-567-atnsiuKvMZyNCkwLAkav9Q-1; Mon, 03 Jul 2023 02:44:58 -0400
+X-MC-Unique: atnsiuKvMZyNCkwLAkav9Q-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b699c5f238so32979351fa.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 23:44:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688366696; x=1690958696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ovluAHTmtFvydqG5OYZ6GVGeRDsdOvDwQZe/fLVcLSo=;
+        b=NWzkihIHhfvGf0xHyemHo7tCMgbLZ0bJXG+6sToO5ekPpgV4OJEtNTdBGX3vwMtmjj
+         Mf/NvcEmkxPHwd031PwM5JkqUB3MRlG8/FF9SdGh2faUxazbG5KVUtAtxTmGRQ9040b8
+         WP7ux9ROcQFWcSMRBrd8EuSZ4Ib1vN/l6Oydy0OOCyZFzHcmnLdYrTRefurjHtG6p1Z7
+         prFKMdlrE+ENgxE8lE98R8kxhPRVMs+m8q09NTmKgmUUSyvQmT6J0XdV0OjcTX7CU8mq
+         GRTeip4L2ENweHNkvhO6Bg/WwFJObn2KtFfJLSGLaPOz4K5iQvt1F8tBVVQXpOv4iXnA
+         k30A==
+X-Gm-Message-State: ABy/qLYY116aKL5rlap8vLHrjgVGvYOY0WDKeKVVnxYns8wZPfnMns8J
+        ZQHuf8bYS/IrGhH4KxM1MjOJRRCWZF29IhD002wIaZk/SprFCi2omqSfR6GtZ3QK9+E2qfbuVx5
+        NnB6NHduBw0X7z1KZZ0QHuBtMqK6DlmuX47DRq6XT
+X-Received: by 2002:a2e:910c:0:b0:2b6:a22f:9fb9 with SMTP id m12-20020a2e910c000000b002b6a22f9fb9mr6009890ljg.27.1688366696672;
+        Sun, 02 Jul 2023 23:44:56 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHlynqGGlx9Jhthcs4p2/VB3UnNVeBKpKxmHTXOyGfI54rO4NRmFnzaCGXKfgksJmq0cNXrTsUIyES6jnl+V9A=
+X-Received: by 2002:a2e:910c:0:b0:2b6:a22f:9fb9 with SMTP id
+ m12-20020a2e910c000000b002b6a22f9fb9mr6009887ljg.27.1688366696399; Sun, 02
+ Jul 2023 23:44:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+References: <20230627113652.65283-1-maxime.coquelin@redhat.com> <20230702093530-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230702093530-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 3 Jul 2023 14:44:45 +0800
+Message-ID: <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Maxime Coquelin <maxime.coquelin@redhat.com>,
+        xieyongji@bytedance.com, david.marchand@redhat.com,
+        lulu@redhat.com, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,122 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451
-commit: 9eef7f9da928c54149199e7b3215b82c2d595ccd powercap: intel_rapl: Introduce RAPL TPMI interface driver
-date:   6 weeks ago
-config: x86_64-randconfig-x062-20230703 (https://download.01.org/0day-ci/archive/20230703/202307031405.dy3druuy-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230703/202307031405.dy3druuy-lkp@intel.com/reproduce)
+On Sun, Jul 2, 2023 at 9:37=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com> =
+wrote:
+>
+> On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
+> > This small series enables virtio-net device type in VDUSE.
+> > With it, basic operation have been tested, both with
+> > virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+> > adding VDUSE support using split rings layout (merged in
+> > DPDK v23.07-rc1).
+> >
+> > Control queue support (and so multiqueue) has also been
+> > tested, but requires a Kernel series from Jason Wang
+> > relaxing control queue polling [1] to function reliably.
+> >
+> > [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0Wv=
+jGRr3whU+QasUg@mail.gmail.com/T/
+>
+> Jason promised to post a new version of that patch.
+> Right Jason?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307031405.dy3druuy-lkp@intel.com/
+Yes.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/powercap/intel_rapl_tpmi.c:141:41: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned long long [usertype] *tpmi_rapl_regs @@     got void [noderef] __iomem * @@
-   drivers/powercap/intel_rapl_tpmi.c:141:41: sparse:     expected unsigned long long [usertype] *tpmi_rapl_regs
-   drivers/powercap/intel_rapl_tpmi.c:141:41: sparse:     got void [noderef] __iomem *
+> For now let's make sure CVQ feature flag is off?
 
-vim +141 drivers/powercap/intel_rapl_tpmi.c
+We can do that and relax on top of my patch.
 
-   132	
-   133	static int parse_one_domain(struct tpmi_rapl_package *trp, u32 offset)
-   134	{
-   135		u8 tpmi_domain_version;
-   136		enum rapl_domain_type domain_type;
-   137		enum tpmi_rapl_domain_type tpmi_domain_type;
-   138		enum tpmi_rapl_register reg_index;
-   139		enum rapl_domain_reg_id reg_id;
-   140		int tpmi_domain_size, tpmi_domain_flags;
- > 141		u64 *tpmi_rapl_regs = trp->base + offset;
-   142		u64 tpmi_domain_header = readq((void __iomem *)tpmi_rapl_regs);
-   143	
-   144		/* Domain Parent bits are ignored for now */
-   145		tpmi_domain_version = tpmi_domain_header & 0xff;
-   146		tpmi_domain_type = tpmi_domain_header >> 8 & 0xff;
-   147		tpmi_domain_size = tpmi_domain_header >> 16 & 0xff;
-   148		tpmi_domain_flags = tpmi_domain_header >> 32 & 0xffff;
-   149	
-   150		if (tpmi_domain_version != TPMI_RAPL_VERSION) {
-   151			pr_warn(FW_BUG "Unsupported version:%d\n", tpmi_domain_version);
-   152			return -ENODEV;
-   153		}
-   154	
-   155		/* Domain size: in unit of 128 Bytes */
-   156		if (tpmi_domain_size != 1) {
-   157			pr_warn(FW_BUG "Invalid Domain size %d\n", tpmi_domain_size);
-   158			return -EINVAL;
-   159		}
-   160	
-   161		/* Unit register and Energy Status register are mandatory for each domain */
-   162		if (!(tpmi_domain_flags & BIT(TPMI_RAPL_REG_UNIT)) ||
-   163		    !(tpmi_domain_flags & BIT(TPMI_RAPL_REG_ENERGY_STATUS))) {
-   164			pr_warn(FW_BUG "Invalid Domain flag 0x%x\n", tpmi_domain_flags);
-   165			return -EINVAL;
-   166		}
-   167	
-   168		switch (tpmi_domain_type) {
-   169		case TPMI_RAPL_DOMAIN_PACKAGE:
-   170			domain_type = RAPL_DOMAIN_PACKAGE;
-   171			break;
-   172		case TPMI_RAPL_DOMAIN_SYSTEM:
-   173			domain_type = RAPL_DOMAIN_PLATFORM;
-   174			break;
-   175		case TPMI_RAPL_DOMAIN_MEMORY:
-   176			domain_type = RAPL_DOMAIN_DRAM;
-   177			break;
-   178		default:
-   179			pr_warn(FW_BUG "Unsupported Domain type %d\n", tpmi_domain_type);
-   180			return -EINVAL;
-   181		}
-   182	
-   183		if (trp->priv.regs[domain_type][RAPL_DOMAIN_REG_UNIT]) {
-   184			pr_warn(FW_BUG "Duplicate Domain type %d\n", tpmi_domain_type);
-   185			return -EINVAL;
-   186		}
-   187	
-   188		reg_index = TPMI_RAPL_REG_HEADER;
-   189		while (++reg_index != TPMI_RAPL_REG_MAX) {
-   190			if (!(tpmi_domain_flags & BIT(reg_index)))
-   191				continue;
-   192	
-   193			switch (reg_index) {
-   194			case TPMI_RAPL_REG_UNIT:
-   195				reg_id = RAPL_DOMAIN_REG_UNIT;
-   196				break;
-   197			case TPMI_RAPL_REG_PL1:
-   198				reg_id = RAPL_DOMAIN_REG_LIMIT;
-   199				trp->priv.limits[domain_type] |= BIT(POWER_LIMIT1);
-   200				break;
-   201			case TPMI_RAPL_REG_PL2:
-   202				reg_id = RAPL_DOMAIN_REG_PL2;
-   203				trp->priv.limits[domain_type] |= BIT(POWER_LIMIT2);
-   204				break;
-   205			case TPMI_RAPL_REG_PL4:
-   206				reg_id = RAPL_DOMAIN_REG_PL4;
-   207				trp->priv.limits[domain_type] |= BIT(POWER_LIMIT4);
-   208				break;
-   209			case TPMI_RAPL_REG_ENERGY_STATUS:
-   210				reg_id = RAPL_DOMAIN_REG_STATUS;
-   211				break;
-   212			case TPMI_RAPL_REG_PERF_STATUS:
-   213				reg_id = RAPL_DOMAIN_REG_PERF;
-   214				break;
-   215			case TPMI_RAPL_REG_POWER_INFO:
-   216				reg_id = RAPL_DOMAIN_REG_INFO;
-   217				break;
-   218			default:
-   219				continue;
-   220			}
-   221			trp->priv.regs[domain_type][reg_id] = (u64)&tpmi_rapl_regs[reg_index];
-   222		}
-   223	
-   224		return 0;
-   225	}
-   226	
+Thanks
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> > RFC -> v1 changes:
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > - Fail device init if it does not support VERSION_1 (Jason)
+> >
+> > Maxime Coquelin (2):
+> >   vduse: validate block features only with block devices
+> >   vduse: enable Virtio-net device type
+> >
+> >  drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> >
+> > --
+> > 2.41.0
+>
+
