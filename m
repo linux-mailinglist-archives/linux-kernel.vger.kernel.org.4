@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0103745601
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDF47455FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjGCH0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S230352AbjGCH0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjGCH0Z (ORCPT
+        with ESMTP id S229949AbjGCH0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:26:25 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F3ECC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:26:13 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id ada2fe7eead31-443512ad63cso1119789137.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:26:13 -0700 (PDT)
+        Mon, 3 Jul 2023 03:26:16 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5638E55;
+        Mon,  3 Jul 2023 00:26:08 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 27D1D1D74;
+        Mon,  3 Jul 2023 07:20:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688369171; x=1690961171;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AFhL3WX439UF4ApWUsjLXGA8K76NwNV7mdB9JrDSbOs=;
-        b=DHzBol8NLJ+48zey6G6sAvkl6ZLmYaukks2MSceVz9eVvrtdUcyJ7mgcYSrSO0hTwW
-         2iVMxffzSLK0S2/rPMgLtNkyJjYZUKmqi8+xlyXOlLQjLrlwi/Z83AwdtiZ5b7loS6dA
-         9hhK9Sl0KSPoDlNfosKy43Jfeqn3agIJyzOHO9P4eyJIHAmCkk/HpC0YsAiF7G4UnTBv
-         q2nXKbdUE9jZeWnadixu10OKXl3xbJWeJZAWfW2I/1enV/ofupc3gmNxVbhB+V+Wt8xe
-         aqkGFYTgm1S8qtpKLatDn5ft4qkD7eWDUourxJc5SV8rSaXP0pKTeUIJngzgXv/QvbEM
-         ubNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688369171; x=1690961171;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AFhL3WX439UF4ApWUsjLXGA8K76NwNV7mdB9JrDSbOs=;
-        b=CNBaRCcGjWUb4Z5fSU+TS1IkzH9UyBd0YpXwDTiOIAC6G/ATjnG+DbvXHAoOQ6Ysql
-         BoUMfMJNUpeESZ2+Odiw/OFdJDWOA6fLsj5QlMDFS25bbp6U8ZR8vhDTkMQ6Qn8exic3
-         q/4is7du56Z83Il1FWOMqxZlw7h3zJkHnV/QrXFX1dVmOGC74dkUKi7jHH/RhDdL0C3X
-         hhoG9PBZ5lca57evfNXxZjmozqRovNtNKtDoj0meQOozeuBrMZL3073WyRG7Px1NnXyf
-         03wfVfFova4/mreCnrnoMwxvwob2GIVidR59PP7bFfo5ACccoZP57AI0iRcskOQ0SIPY
-         bGDg==
-X-Gm-Message-State: ABy/qLbV98oq+TonEwFC5llXkhAlveFBehcs6Vz5BeZutT0ZJlNEgOaI
-        VkoC2KL5Sj6dPsP0HvoWN4mT6vrHEpL1JB39ecFowNoBPFxCPhAN8SfMrw==
-X-Google-Smtp-Source: APBJJlGau/9OizFSeLgMU/K7IoZbflIEWzaM5xflRF3SI1OEFTJw/gCMYBFgMESsm8IteNIYVawKBkXDI8mVc+q8tBM=
-X-Received: by 2002:a67:f651:0:b0:443:51a7:b63d with SMTP id
- u17-20020a67f651000000b0044351a7b63dmr4037175vso.23.1688369171044; Mon, 03
- Jul 2023 00:26:11 -0700 (PDT)
+        d=paragon-software.com; s=mail; t=1688368855;
+        bh=+eBsKb2HTBRR8iMsfkWgMdZnxlIJ4gxnl7NXRmJUV8k=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=S0F7IwFq6c40h6gaEVdITZiroO+ZvZZ7+haTDwG7SUnO9xUWQul5u8vrjXJCUI2zF
+         c49G0p4igW/1KdgwlwzRA0U6GP0EaxMmxiZ9YTB66g9k9NaCAfXn+0e3f4Ix0J/KH0
+         XJZlEw2GHdOfNcWFHxLLz3BxujT5lf8W2i2kU15k=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 970F41D1E;
+        Mon,  3 Jul 2023 07:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1688369166;
+        bh=+eBsKb2HTBRR8iMsfkWgMdZnxlIJ4gxnl7NXRmJUV8k=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=ZBp5rhznk1XyJ0MlCxs6qu+hl7QD7YL6ibfUhcXAbi0M2+qxtzaQou6K/7emjY8m7
+         o7dCJJpvZa699JIbR2dGdDTUsfbeieG5EPhehEcBTthpzsqZDK1hmx77LtbSxWdkgp
+         GpkZ3aiTrUf+R/FzV1q4EliIHaVDa2BpEuapv4Hk=
+Received: from [192.168.211.138] (192.168.211.138) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 3 Jul 2023 10:26:06 +0300
+Message-ID: <a1aa84a5-29d4-a4f0-0b2d-200fb49b12d5@paragon-software.com>
+Date:   Mon, 3 Jul 2023 11:26:05 +0400
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 3 Jul 2023 12:55:59 +0530
-Message-ID: <CA+G9fYt1ZtucYds=p-Z+4sZ+nHMeEAFh2Fbe63VS_03-UsRwBg@mail.gmail.com>
-Subject: next: perf: 32-bit: bench/sched-seccomp-notify.c:139:24: error:
- format '%lu' expects argument of type 'long unsigned int', but argument 2 has
- type 'uint64_t'
-To:     open list <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf <bpf@vger.kernel.org>
-Cc:     Andrei Vagin <avagin@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: [PATCH 4/8] fs/ntfs3: Don't allow to change label if volume is
+ read-only
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <e41f6717-7c70-edf2-2d3a-8034840d14c5@paragon-software.com>
+In-Reply-To: <e41f6717-7c70-edf2-2d3a-8034840d14c5@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.211.138]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build regressions noticed on Linux next-20230703.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/super.c | 7 ++++++-
+  1 file changed, 6 insertions(+), 1 deletion(-)
 
-Regressions found on i386:
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index d24f2da36bb2..da739e509269 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -489,7 +489,12 @@ static ssize_t ntfs3_label_write(struct file *file, 
+const char __user *buffer,
+      int err;
+      struct super_block *sb = pde_data(file_inode(file));
+      ssize_t ret = count;
+-    u8 *label = kmalloc(count, GFP_NOFS);
++    u8 *label;
++
++    if (sb_rdonly(sb))
++        return -EROFS;
++
++    label = kmalloc(count, GFP_NOFS);
 
-  - build/gcc-11-lkftconfig-perf
-
-Regressions found on arm:
-
-  - build/gcc-10-lkftconfig-perf
-  - build/gcc-11-lkftconfig-perf
-
-Build error:
-=======
-bench/sched-seccomp-notify.c: In function 'bench_sched_seccomp_notify':
-bench/sched-seccomp-notify.c:139:24: error: format '%lu' expects
-argument of type 'long unsigned int', but argument 2 has type
-'uint64_t' {aka 'long long unsigned int'} [-Werror=format=]
-  139 |   printf("# Executed %lu system calls\n\n",
-      |                      ~~^
-      |                        |
-      |                        long unsigned int
-      |                      %llu
-  140 |    loops);
-      |    ~~~~~
-      |    |
-      |    uint64_t {aka long long unsigned int}
-cc1: all warnings being treated as errors
-make[4]: *** [tools/build/Makefile.build:97:
-/home/tuxbuild/.cache/tuxmake/builds/1/build/bench/sched-seccomp-notify.o]
-Error 1
-
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230703/testrun/18069798/suite/build/test/gcc-10-lkftconfig-perf/history/
+      if (!label)
+          return -ENOMEM;
+-- 
+2.34.1
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
