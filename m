@@ -2,196 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1425B7459F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4127459E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjGCKPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S231129AbjGCKOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjGCKPf (ORCPT
+        with ESMTP id S229481AbjGCKOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:15:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888021BC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688379285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XvxK+fIsyjrDQkIYelBKm95I7W5xSKZhQqP3NKGrN5Y=;
-        b=LrFYHwFYmSMTBCsFd60d4N/5RqATYE2ITQOgcTz5tplBff9TFKwacpN9Lg7GQz/9EoSIwb
-        i8s/aI68qFS7+vH9hru0hDHVydOa1AxQYL1fcTzO9ukxPIaBnkXVPJSdm/NPk9M8WyMJAl
-        euGbgNthqed0O5HbafKXk20WrwsNKYY=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-445-qnbUeF2XMci7HzsNAhoD3Q-1; Mon, 03 Jul 2023 06:14:44 -0400
-X-MC-Unique: qnbUeF2XMci7HzsNAhoD3Q-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7673887b2cfso122597785a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:14:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688379284; x=1690971284;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XvxK+fIsyjrDQkIYelBKm95I7W5xSKZhQqP3NKGrN5Y=;
-        b=X5JOhVVR9Jl73a6cHxWnPs2zs3RClTl6Jlcgo7SIfvSr+QKNFpL7F3lLEmC1Fw7EgK
-         hwakDfpaC6NuIjOGwyPB1u/pjRlzPCbfIZrsP7DPCv/sTrCrc3z0CEUhSMc5jMmXxZfO
-         0cKMruMuxAYLeE+3Ymg5Uy7YouWmYdrzKBDY+NNI7oRR3NPEIJjUeCKKYAC7e97dSFSL
-         5aNiKi9UmoAM0HEpf7EobHHlhMuwyGzPaJ2g2Qgm7t0ij+caD2SiZe3qn+iQ1dKUV/31
-         DRJ4oL5hCIkYWVLYcTJJHhfRJJ+tUiABl2BtNSmGJ+WnnYue8mkp09a5vcKF8Mvzkwe+
-         niPw==
-X-Gm-Message-State: ABy/qLaE5wWTjbc1eoUXromgex+AUVwWpXrmOI8ITES2qlqxoJMJwF1p
-        ytqs0bcJ8GQ323DAluTaVk8wOqXLGge0xDcT9aG32Ih+p+JjoQYGixvsj+IgrZWYEhMxKoRWgIO
-        GC1o8TYDBVqcjweqTt8W2Ypq0
-X-Received: by 2002:a05:6214:202c:b0:625:aa48:e50f with SMTP id 12-20020a056214202c00b00625aa48e50fmr9437529qvf.6.1688379283891;
-        Mon, 03 Jul 2023 03:14:43 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFljnv6+yTIgfMKV/gziFBD0PAF2l0MeOkDf4KoEbTfBbqyGgdTZozaiDNbKJUnLvyb6syUBw==
-X-Received: by 2002:a05:6214:202c:b0:625:aa48:e50f with SMTP id 12-20020a056214202c00b00625aa48e50fmr9437518qvf.6.1688379283620;
-        Mon, 03 Jul 2023 03:14:43 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-247-156.dyn.eolo.it. [146.241.247.156])
-        by smtp.gmail.com with ESMTPSA id ec17-20020ad44e71000000b00632191a70a2sm11047509qvb.103.2023.07.03.03.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 03:14:42 -0700 (PDT)
-Message-ID: <8fb0c81c022d58d3f08082764038d17cfc849ba1.camel@redhat.com>
-Subject: Re: [Patch v3] net: mana: Batch ringing RX queue doorbell on
- receiving packets
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Long Li <longli@microsoft.com>, Jakub Kicinski <kuba@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Date:   Mon, 03 Jul 2023 12:14:37 +0200
-In-Reply-To: <PH7PR21MB3263ED62B45BF78370350AD7CE28A@PH7PR21MB3263.namprd21.prod.outlook.com>
-References: <1687823827-15850-1-git-send-email-longli@linuxonhyperv.com>
-         <36c95dd6babb2202f70594d5dde13493af62dcad.camel@redhat.com>
-         <PH7PR21MB3263B266E381BA15DCE45820CE25A@PH7PR21MB3263.namprd21.prod.outlook.com>
-         <e5c3e5e5033290c2228bbad0307334a964eb065e.camel@redhat.com>
-         <PH7PR21MB326330931CFDDA96E287E470CE2AA@PH7PR21MB3263.namprd21.prod.outlook.com>
-         <2023063001-agenda-spent-83c6@gregkh>
-         <PH7PR21MB3263330E6A32D81D52B955FBCE2AA@PH7PR21MB3263.namprd21.prod.outlook.com>
-         <20230630163805.79c0bdf5@kernel.org>
-         <PH7PR21MB3263ED62B45BF78370350AD7CE28A@PH7PR21MB3263.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 3 Jul 2023 06:14:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4208DD;
+        Mon,  3 Jul 2023 03:14:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B1862F4;
+        Mon,  3 Jul 2023 03:15:24 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.27.109])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBBC33F762;
+        Mon,  3 Jul 2023 03:14:39 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 11:14:37 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Junhao He <hejunhao3@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Will Deacon <will@kernel.org>, zhangshaokun@hisilicon.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 6.4 11/12] drivers/perf: hisi: Add support for
+ HiSilicon H60PA and PAv3 PMU driver
+Message-ID: <ZKKfjW6Ix9dg11QZ@FVFF77S0Q05N>
+References: <20230702195057.1787686-1-sashal@kernel.org>
+ <20230702195057.1787686-11-sashal@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230702195057.1787686-11-sashal@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-07-02 at 20:18 +0000, Long Li wrote:
-> > > > > > > > Subject: Re: [Patch v3] net: mana: Batch ringing RX
-> > > > > > > > queue
-> > > > > > > > doorbell
-> > > > > > > > on receiving
-> > > > > > > > packets
-> > > > > > > >=20
-> > > > > > > > On Fri, 30 Jun 2023 20:42:28 +0000 Long Li wrote:
-> > > > > > > > > > > > > > > > > > > > 5.15 and kernel 6.1. (those
-> > > > > > > > > > > > > > > > > > > > kernels are longterm)
-> > > > > > > > > > > > > > > > > > > > They need
-> > > > > > > > > > > > > > > > > > > > this
-> > > > > > > > > > > > > > > > > > > > fix to achieve the performance
-> > > > > > > > > > > > > > > > > > > > target.
-> > > > > > > > > > > > > > > >=20
-> > > > > > > > > > > > > > > > Why can't they be upgraded to get that
-> > > > > > > > > > > > > > > > performance
-> > > > > > > > > > > > > > > > target, and
-> > > > > > > > > > > > > > > > all
-> > > > > > > > > > > > > > > > the other goodness that those kernels
-> > > > > > > > > > > > > > > > have? We don't
-> > > > > > > > > > > > > > > > normally
-> > > > > > > > > > > > > > > > backport new features, right?
-> > > > > > > > > > > >=20
-> > > > > > > > > > > > I think this should be considered as a fix, not
-> > > > > > > > > > > > a new
-> > > > > > > > > > > > feature.
-> > > > > > > > > > > >=20
-> > > > > > > > > > > > MANA is designed to be 200GB full duplex at the
-> > > > > > > > > > > > start. Due
-> > > > > > > > > > > > to
-> > > > > > > > > > > > lack of
-> > > > > > > > > > > > hardware testing capability at early stage of
-> > > > > > > > > > > > the project,
-> > > > > > > > > > > > we
-> > > > > > > > > > > > could
-> > > > > > > > > > > > only test 100GB for the Linux driver. When
-> > > > > > > > > > > > hardware is
-> > > > > > > > > > > > fully
-> > > > > > > > > > > > capable
-> > > > > > > > > > > > of reaching designed spec, this bug in the
-> > > > > > > > > > > > Linux driver
-> > > > > > > > > > > > shows up.
-> > > > > > > >=20
-> > > > > > > > That part we understand.
-> > > > > > > >=20
-> > > > > > > > If I were you I'd try to convince Greg and Paolo that
-> > > > > > > > the
-> > > > > > > > change is
-> > > > > > > > small and
-> > > > > > > > significant for user experience. And answer Greg's
-> > > > > > > > question why
-> > > > > > > > upgrading the
-> > > > > > > > kernel past 6.1 is a challenge in your environment.
-> > > >=20
-> > > > I was under the impression that this patch was considered to be
-> > > > a
-> > > > feature,=20
-> > > > not a bug fix. I was trying to justify that the "Fixes:" tag
-> > > > was
-> > > > needed.=20
-> > > >=20
-> > > > I apologize for misunderstanding this.
-> > > >=20
-> > > > Without this fix, it's not possible to run a typical workload
-> > > > designed for 200Gb
-> > > > physical link speed.
-> > > >=20
-> > > > We see a large number of customers and Linux distributions
-> > > > committed
-> > > > on 5.15=20
-> > > > and 6.1 kernels. They planned the product cycles and
-> > > > certification
-> > > > processes=20
-> > > > around these longterm kernel versions. It's difficult for them
-> > > > to
-> > > > upgrade to newer
-> > > > kernel versions.
+On Sun, Jul 02, 2023 at 03:50:56PM -0400, Sasha Levin wrote:
+> From: Junhao He <hejunhao3@huawei.com>
+> 
+> [ Upstream commit 1a51688474c0d395b864e98236335fba712e29bf ]
+> 
+> Compared to the original PA device, H60PA offers higher bandwidth.
+> The H60PA is a new device and we use HID to differentiate them.
+> 
+> The events supported by PAv3 and PAv2 are different. The PAv3 PMU
+> removed some events which are supported by PAv2 PMU. The older PA
+> PMU driver will probe v3 as v2. Therefore PA events displayed by
+> "perf list" cannot work properly. We add the HISI0275 HID for PAv3
+> PMU to distinguish different.
+> 
+> For each H60PA PMU, except for the overflow interrupt register, other
+> functions of the H60PA PMU are the same as the original PA PMU module.
+> It has 8-programable counters and each counter is free-running.
+> Interrupt is supported to handle counter (64-bits) overflow.
+> 
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
+> Link: https://lore.kernel.org/r/20230615125926.29832-2-hejunhao3@huawei.com
+> Signed-off-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 127 +++++++++++++++++---
+>  drivers/perf/hisilicon/hisi_uncore_pmu.h    |   8 ++
+>  2 files changed, 120 insertions(+), 15 deletions(-)
 
-I think there are some misunderstanding WRT distros and stable kernels.
-(Commercial) distros will backport the patch as needed, regardless such
-patch landing in the 5.15 upstream tree or not. Individual users
-running their own vanilla 5.15 kernel can't expect performance
-improvement landing there.
+Why is this being backported to stable?
 
-All in all I feel undecided. I would endorse this change going trough
-net-next (without the stable tag). I would feel less torn with this
-change targeting -net without the stable tag. Targeting -net with the
-stable tag sounds a bit too much to me.
+This patch adds supoprt for new HW, and is clearly not a fix, so it's not clear
+to me why it has been selected.
 
-Cheers,
-Paolo
+Thanks,
+Mark.
 
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> index 71b6687d66960..d941e746b4248 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> @@ -22,9 +22,15 @@
+>  #define PA_TT_CTRL			0x1c08
+>  #define PA_TGTID_CTRL			0x1c14
+>  #define PA_SRCID_CTRL			0x1c18
+> +
+> +/* H32 PA interrupt registers */
+>  #define PA_INT_MASK			0x1c70
+>  #define PA_INT_STATUS			0x1c78
+>  #define PA_INT_CLEAR			0x1c7c
+> +
+> +#define H60PA_INT_STATUS		0x1c70
+> +#define H60PA_INT_MASK			0x1c74
+> +
+>  #define PA_EVENT_TYPE0			0x1c80
+>  #define PA_PMU_VERSION			0x1cf0
+>  #define PA_EVENT_CNT0_L			0x1d00
+> @@ -46,6 +52,12 @@ HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_cmd, config1, 32, 22);
+>  HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_msk, config1, 43, 33);
+>  HISI_PMU_EVENT_ATTR_EXTRACTOR(tracetag_en, config1, 44, 44);
+>  
+> +struct hisi_pa_pmu_int_regs {
+> +	u32 mask_offset;
+> +	u32 clear_offset;
+> +	u32 status_offset;
+> +};
+> +
+>  static void hisi_pa_pmu_enable_tracetag(struct perf_event *event)
+>  {
+>  	struct hisi_pmu *pa_pmu = to_hisi_pmu(event->pmu);
+> @@ -219,40 +231,40 @@ static void hisi_pa_pmu_disable_counter(struct hisi_pmu *pa_pmu,
+>  static void hisi_pa_pmu_enable_counter_int(struct hisi_pmu *pa_pmu,
+>  					   struct hw_perf_event *hwc)
+>  {
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+>  	u32 val;
+>  
+>  	/* Write 0 to enable interrupt */
+> -	val = readl(pa_pmu->base + PA_INT_MASK);
+> +	val = readl(pa_pmu->base + regs->mask_offset);
+>  	val &= ~(1 << hwc->idx);
+> -	writel(val, pa_pmu->base + PA_INT_MASK);
+> +	writel(val, pa_pmu->base + regs->mask_offset);
+>  }
+>  
+>  static void hisi_pa_pmu_disable_counter_int(struct hisi_pmu *pa_pmu,
+>  					    struct hw_perf_event *hwc)
+>  {
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+>  	u32 val;
+>  
+>  	/* Write 1 to mask interrupt */
+> -	val = readl(pa_pmu->base + PA_INT_MASK);
+> +	val = readl(pa_pmu->base + regs->mask_offset);
+>  	val |= 1 << hwc->idx;
+> -	writel(val, pa_pmu->base + PA_INT_MASK);
+> +	writel(val, pa_pmu->base + regs->mask_offset);
+>  }
+>  
+>  static u32 hisi_pa_pmu_get_int_status(struct hisi_pmu *pa_pmu)
+>  {
+> -	return readl(pa_pmu->base + PA_INT_STATUS);
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+> +
+> +	return readl(pa_pmu->base + regs->status_offset);
+>  }
+>  
+>  static void hisi_pa_pmu_clear_int_status(struct hisi_pmu *pa_pmu, int idx)
+>  {
+> -	writel(1 << idx, pa_pmu->base + PA_INT_CLEAR);
+> -}
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+>  
+> -static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
+> -	{ "HISI0273", },
+> -	{}
+> -};
+> -MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
+> +	writel(1 << idx, pa_pmu->base + regs->clear_offset);
+> +}
+>  
+>  static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>  				   struct hisi_pmu *pa_pmu)
+> @@ -276,6 +288,10 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>  	pa_pmu->ccl_id = -1;
+>  	pa_pmu->sccl_id = -1;
+>  
+> +	pa_pmu->dev_info = device_get_match_data(&pdev->dev);
+> +	if (!pa_pmu->dev_info)
+> +		return -ENODEV;
+> +
+>  	pa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(pa_pmu->base)) {
+>  		dev_err(&pdev->dev, "ioremap failed for pa_pmu resource.\n");
+> @@ -314,6 +330,32 @@ static const struct attribute_group hisi_pa_pmu_v2_events_group = {
+>  	.attrs = hisi_pa_pmu_v2_events_attr,
+>  };
+>  
+> +static struct attribute *hisi_pa_pmu_v3_events_attr[] = {
+> +	HISI_PMU_EVENT_ATTR(tx_req,	0x0),
+> +	HISI_PMU_EVENT_ATTR(tx_dat,	0x1),
+> +	HISI_PMU_EVENT_ATTR(tx_snp,	0x2),
+> +	HISI_PMU_EVENT_ATTR(rx_req,	0x7),
+> +	HISI_PMU_EVENT_ATTR(rx_dat,	0x8),
+> +	HISI_PMU_EVENT_ATTR(rx_snp,	0x9),
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_pa_pmu_v3_events_group = {
+> +	.name = "events",
+> +	.attrs = hisi_pa_pmu_v3_events_attr,
+> +};
+> +
+> +static struct attribute *hisi_h60pa_pmu_events_attr[] = {
+> +	HISI_PMU_EVENT_ATTR(rx_flit,	0x50),
+> +	HISI_PMU_EVENT_ATTR(tx_flit,	0x65),
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_h60pa_pmu_events_group = {
+> +	.name = "events",
+> +	.attrs = hisi_h60pa_pmu_events_attr,
+> +};
+> +
+>  static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
+>  
+>  static struct attribute *hisi_pa_pmu_cpumask_attrs[] = {
+> @@ -337,6 +379,12 @@ static const struct attribute_group hisi_pa_pmu_identifier_group = {
+>  	.attrs = hisi_pa_pmu_identifier_attrs,
+>  };
+>  
+> +static struct hisi_pa_pmu_int_regs hisi_pa_pmu_regs = {
+> +	.mask_offset = PA_INT_MASK,
+> +	.clear_offset = PA_INT_CLEAR,
+> +	.status_offset = PA_INT_STATUS,
+> +};
+> +
+>  static const struct attribute_group *hisi_pa_pmu_v2_attr_groups[] = {
+>  	&hisi_pa_pmu_v2_format_group,
+>  	&hisi_pa_pmu_v2_events_group,
+> @@ -345,6 +393,46 @@ static const struct attribute_group *hisi_pa_pmu_v2_attr_groups[] = {
+>  	NULL
+>  };
+>  
+> +static const struct hisi_pmu_dev_info hisi_h32pa_v2 = {
+> +	.name = "pa",
+> +	.attr_groups = hisi_pa_pmu_v2_attr_groups,
+> +	.private = &hisi_pa_pmu_regs,
+> +};
+> +
+> +static const struct attribute_group *hisi_pa_pmu_v3_attr_groups[] = {
+> +	&hisi_pa_pmu_v2_format_group,
+> +	&hisi_pa_pmu_v3_events_group,
+> +	&hisi_pa_pmu_cpumask_attr_group,
+> +	&hisi_pa_pmu_identifier_group,
+> +	NULL
+> +};
+> +
+> +static const struct hisi_pmu_dev_info hisi_h32pa_v3 = {
+> +	.name = "pa",
+> +	.attr_groups = hisi_pa_pmu_v3_attr_groups,
+> +	.private = &hisi_pa_pmu_regs,
+> +};
+> +
+> +static struct hisi_pa_pmu_int_regs hisi_h60pa_pmu_regs = {
+> +	.mask_offset = H60PA_INT_MASK,
+> +	.clear_offset = H60PA_INT_STATUS, /* Clear on write */
+> +	.status_offset = H60PA_INT_STATUS,
+> +};
+> +
+> +static const struct attribute_group *hisi_h60pa_pmu_attr_groups[] = {
+> +	&hisi_pa_pmu_v2_format_group,
+> +	&hisi_h60pa_pmu_events_group,
+> +	&hisi_pa_pmu_cpumask_attr_group,
+> +	&hisi_pa_pmu_identifier_group,
+> +	NULL
+> +};
+> +
+> +static const struct hisi_pmu_dev_info hisi_h60pa = {
+> +	.name = "h60pa",
+> +	.attr_groups = hisi_h60pa_pmu_attr_groups,
+> +	.private = &hisi_h60pa_pmu_regs,
+> +};
+> +
+>  static const struct hisi_uncore_ops hisi_uncore_pa_ops = {
+>  	.write_evtype		= hisi_pa_pmu_write_evtype,
+>  	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
+> @@ -375,7 +463,7 @@ static int hisi_pa_pmu_dev_probe(struct platform_device *pdev,
+>  	if (ret)
+>  		return ret;
+>  
+> -	pa_pmu->pmu_events.attr_groups = hisi_pa_pmu_v2_attr_groups;
+> +	pa_pmu->pmu_events.attr_groups = pa_pmu->dev_info->attr_groups;
+>  	pa_pmu->num_counters = PA_NR_COUNTERS;
+>  	pa_pmu->ops = &hisi_uncore_pa_ops;
+>  	pa_pmu->check_event = 0xB0;
+> @@ -400,8 +488,9 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%u_pa%u",
+> -			      pa_pmu->sicl_id, pa_pmu->index_id);
+> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_%s%u",
+> +			      pa_pmu->sicl_id, pa_pmu->dev_info->name,
+> +			      pa_pmu->index_id);
+>  	if (!name)
+>  		return -ENOMEM;
+>  
+> @@ -435,6 +524,14 @@ static int hisi_pa_pmu_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
+> +	{ "HISI0273", (kernel_ulong_t)&hisi_h32pa_v2 },
+> +	{ "HISI0275", (kernel_ulong_t)&hisi_h32pa_v3 },
+> +	{ "HISI0274", (kernel_ulong_t)&hisi_h60pa },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
+> +
+>  static struct platform_driver hisi_pa_pmu_driver = {
+>  	.driver = {
+>  		.name = "hisi_pa_pmu",
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> index 07890a8e96ca7..772857b99dc5e 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> @@ -62,6 +62,13 @@ struct hisi_uncore_ops {
+>  	void (*disable_filter)(struct perf_event *event);
+>  };
+>  
+> +/* Describes the HISI PMU chip features information */
+> +struct hisi_pmu_dev_info {
+> +	const char *name;
+> +	const struct attribute_group **attr_groups;
+> +	void *private;
+> +};
+> +
+>  struct hisi_pmu_hwevents {
+>  	struct perf_event *hw_events[HISI_MAX_COUNTERS];
+>  	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
+> @@ -72,6 +79,7 @@ struct hisi_pmu_hwevents {
+>  struct hisi_pmu {
+>  	struct pmu pmu;
+>  	const struct hisi_uncore_ops *ops;
+> +	const struct hisi_pmu_dev_info *dev_info;
+>  	struct hisi_pmu_hwevents pmu_events;
+>  	/* associated_cpus: All CPUs associated with the PMU */
+>  	cpumask_t associated_cpus;
+> -- 
+> 2.39.2
+> 
