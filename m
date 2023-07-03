@@ -2,100 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CF4745CEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F2D745CF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjGCNNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        id S229608AbjGCNPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjGCNND (ORCPT
+        with ESMTP id S229454AbjGCNPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:13:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA9E91;
-        Mon,  3 Jul 2023 06:13:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1458160F2F;
-        Mon,  3 Jul 2023 13:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9EAC433C9;
-        Mon,  3 Jul 2023 13:12:56 +0000 (UTC)
-Message-ID: <d78e6ec3-a531-8fd4-a785-29b6712f83ae@xs4all.nl>
-Date:   Mon, 3 Jul 2023 15:12:55 +0200
+        Mon, 3 Jul 2023 09:15:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF50DD;
+        Mon,  3 Jul 2023 06:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688390118; x=1719926118;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8GrbQ9RA64erjYeBtLXVBNh/OeM1HDqe39pSdWb3L4U=;
+  b=krpm+KvVzEm6Rh8gfY28bVyqVfi0ue/zbRYBb187e/qxf89fmVeWI3A6
+   WGakH/6ysdaxAKk0s5uY7bg8lq7tTiMCQKCLDhaDxydWHM+lrLItG6EhQ
+   zmXeC5siBtdvVx31xN0xOrjwngSZnySqAEK20U3B6Adtt12M+rPq1FWzq
+   DxBH9ORYkR4kTZsIqsDwhrWTQ9wc+UYewikAC00NnfBwo1+n5p9yo+1zr
+   PeOpCHF1gmEcC+7TR86c8opWTTql803wYNC7IRzHlXq11m81jAVRpUmAP
+   br1lukIz3S3yTaxYFinfdA4oMQWTrt1CQl2kJsGemWGYESdzvtZhpyAqk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="365450030"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="365450030"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 06:15:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="863085347"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="863085347"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Jul 2023 06:15:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qGJOb-001rz3-1f;
+        Mon, 03 Jul 2023 16:15:13 +0300
+Date:   Mon, 3 Jul 2023 16:15:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH v1 2/3] gpiolib: acpi: Don't use GPIO chip fwnode in
+ acpi_gpiochip_find()
+Message-ID: <ZKLJ4TxK5t2TWjUW@smile.fi.intel.com>
+References: <20230703121838.70898-1-andriy.shevchenko@linux.intel.com>
+ <20230703121838.70898-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/6] media: v4l2: Add audio capture and output support
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>
-Cc:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>, tfiga@chromium.org,
-        m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        Jacopo Mondi <jacopo@jmondi.org>
-References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
- <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
- <ZJ6o5fT4V4HXivFa@valkosipuli.retiisi.eu>
- <CAA+D8AND1yZ7eZLjBGxVF=i3hLMecUm-j7AVHN9npJi-4=3VrA@mail.gmail.com>
- <87h6ql5hch.wl-tiwai@suse.de>
- <43f0ecdf-7454-49ae-96b3-2eae5487e9a5@sirena.org.uk>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <43f0ecdf-7454-49ae-96b3-2eae5487e9a5@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703121838.70898-3-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 14:53, Mark Brown wrote:
-> On Mon, Jul 03, 2023 at 02:07:10PM +0200, Takashi Iwai wrote:
->> Shengjiu Wang wrote:
-> 
->>> There is no such memory to memory interface defined in ALSA.  Seems
->>> ALSA is not designed for M2M cases.
-> 
->> There is no restriction to implement memory-to-memory capture in ALSA
->> framework.  It'd be a matter of the setup of PCM capture source, and
->> you can create a corresponding kcontrol element to switch the mode or
->> assign a dedicated PCM substream, for example.  It's just that there
->> was little demand for that.
-> 
-> Yeah, it's not a terrible idea.  We might use it more if we ever get
-> better support for DSP audio, routing between the DSP and external
-> devices if driven from the CPU would be a memory to memory thing.
-> 
->> I'm not much against adding the audio capture feature to V4L2,
->> though, if it really makes sense.  But creating a crafted /dev/audio*
->> doesn't look like a great idea to me, at least.
-> 
-> I've still not looked at the code at all.
+On Mon, Jul 03, 2023 at 03:18:37PM +0300, Andy Shevchenko wrote:
 
-My main concern is that these cross-subsystem drivers are a pain to
-maintain. So there have to be good reasons to do this.
+...
 
-Also it is kind of weird to have to use the V4L2 API in userspace to
-deal with a specific audio conversion. Quite unexpected.
+>  static int acpi_gpiochip_find(struct gpio_chip *gc, void *data)
+>  {
+> -	return ACPI_HANDLE_FWNODE(gc->fwnode) == data;
+> +	return ACPI_HANDLE(&gc->gpiodev->dev) == data;
+>  }
 
-But in the end, that's a decision I can't make.
+And after all this may be changed to device_match_acpi_handle().
+I'll update it locally, but still wait for the Benjamin to test
+this before sending a v2.
 
-So I wait for that feedback. Note that if the decision is made that this
-can use V4L2, then there is quite a lot more that needs to be done:
-documentation, new compliance tests, etc. It's adding a new API, and that
-comes with additional work...
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Regards,
 
-	Hans
