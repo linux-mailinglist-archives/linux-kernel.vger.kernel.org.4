@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B7874629D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418007462A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbjGCSj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S230250AbjGCSme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjGCSjU (ORCPT
+        with ESMTP id S230105AbjGCSmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:39:20 -0400
+        Mon, 3 Jul 2023 14:42:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20540137
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:39:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA708E64
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:42:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3B926100E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 592B7C433C7;
-        Mon,  3 Jul 2023 18:39:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81C726100C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:42:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D50C433C7;
+        Mon,  3 Jul 2023 18:42:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688409552;
-        bh=chBca2TVZLaQjsrWAR1UrcyJVanW8KIEZrfIlmJiLj4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=aASpM8sCWogWLpSCLOoDzT+/hqL847pvjzTEKjbJ7vR2bGzlk5MApoVHEOo/PQ3Fx
-         ymXLZdJFa3292wa4aS761mI3XdwlvkNUIril7itnap02ewz5pjYxSrGxYk5pQWEZTD
-         c4PAFqNdfAOCkkZNpWkL43Hhfby4gjOAg/Gd/BaPemdnlLOcs5IlYK9hlyon6q/7o7
-         yfAsqucDfh1taULgkduvW88LDAQt2+24UvTE5TFVOCs1ln3zG7V3GmDvYqr9HR5Xjw
-         V5X1D7GMZ0Y9Dp7qc+juvJXH1X3W5s9QNDtrF1y86nkfQLXtCPn0TrnmqWz4jqDjGL
-         wgqb6wnGWuLUg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3AF80C04E32;
-        Mon,  3 Jul 2023 18:39:12 +0000 (UTC)
-Subject: Re: [GIT PULL] MFD for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230703100501.GA10359@google.com>
-References: <20230703100501.GA10359@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230703100501.GA10359@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/mfd-next-6.5
-X-PR-Tracked-Commit-Id: b05740d71bd2f8b2261930944bfe95f529190b8b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b8ec70ab66b09ee9e081a38b8625b5accb388176
-Message-Id: <168840955222.6002.4172163124625149666.pr-tracker-bot@kernel.org>
-Date:   Mon, 03 Jul 2023 18:39:12 +0000
-To:     Lee Jones <lee@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Lee Jones <lee@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        s=k20201202; t=1688409749;
+        bh=ak7CRcSEzl92AIv7ty+8mdZMIXPfH1X1lmjQ31H8fZA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iFBATVd/6dCJC/RSUNCK0CAfnuDUaoypWoaqEvv92jGZ0JS6l5rf1gG33mC0iwh4R
+         GVB0usJRP5jA54niWzzhkm2706qtGePD6Qhw2wTTlSxGWATMEjjSH3hSRB7o1k5Rxa
+         lQABRCkxAKPdEymlfHlUQEtRBVxvaIZln/p2arhlipd9VEG2PB/uUKZVXAqDD9LURx
+         J1L6WlvlrgV2qrfdIEtNp6TD3Jo/tOa1maRgDNAa10IHGWrh35BH3dhgrZdcQXqP1k
+         qoBcJOItgkTTYn9XYA9zW0k9xDSsAvRkzeoLLir9FLb8ecXdI9Ox17wvDYLgmu9iS4
+         uxW+rMIbeKgoA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGOVH-00AF1y-Nq;
+        Mon, 03 Jul 2023 19:42:27 +0100
+Date:   Mon, 03 Jul 2023 19:42:27 +0100
+Message-ID: <86y1jwx2ek.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Chris Morgan <macromorgan@hotmail.com>,
+        Yixun Lan <dlan@gentoo.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v1 1/1] irqchip/gic-v3: Enable Rockchip 3588001 erratum workaround for RK3588S
+In-Reply-To: <20230703174233.wn7jusqeh3udusdz@mercury.elektranox.org>
+References: <20230703164129.193991-1-sebastian.reichel@collabora.com>
+        <863525x7eb.wl-maz@kernel.org>
+        <20230703174233.wn7jusqeh3udusdz@mercury.elektranox.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sebastian.reichel@collabora.com, macromorgan@hotmail.com, dlan@gentoo.org, tglx@linutronix.de, heiko@sntech.de, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, kernel@collabora.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,15 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 3 Jul 2023 11:05:01 +0100:
+On Mon, 03 Jul 2023 18:42:33 +0100,
+Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
+> 
+> > > ---
+> > >  drivers/irqchip/irq-gic-v3-its.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> > > index 1994541eaef8..034ece9ac47c 100644
+> > > --- a/drivers/irqchip/irq-gic-v3-its.c
+> > > +++ b/drivers/irqchip/irq-gic-v3-its.c
+> > > @@ -4727,7 +4727,8 @@ static bool __maybe_unused its_enable_rk3588001(void *data)
+> > >  {
+> > >  	struct its_node *its = data;
+> > >  
+> > > -	if (!of_machine_is_compatible("rockchip,rk3588"))
+> > > +	if (!of_machine_is_compatible("rockchip,rk3588") &&
+> > > +	    !of_machine_is_compatible("rockchip,rk3588s"))
+> > >  		return false;
+> > >  
+> > >  	its->flags |= ITS_FLAGS_FORCE_NON_SHAREABLE;
+> > 
+> > I don't mind taking this, but it also mean that only a new kernel
+> > will boot.
+> 
+> Yes. My assumption is, that this is considered a fix and landing in the
+> 6.5 cycle. The rk3588s.dtsi from v6.4 does not yet have the GIC ITS
+> nodes. So there is not yet a tagged kernel with the boot failure. The
+> first one will be v6.5-rc1.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/mfd-next-6.5
+Ah, fair enough. In this case I'll queue this patch without any remorse.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b8ec70ab66b09ee9e081a38b8625b5accb388176
+> The quirk in the GIC driver only landed in v6.4, so anything older
+> is broken anyways. So effectively we are talking about v6.4 booting
+> a v6.5 DT, which is not something we guarantee to be working as far
+> as I know.
 
-Thank you!
+In general, I do make a point in making things work *in both
+directions*. But given that this is an erratum, there isn't much we
+can do, and advertising an ITS to a kernel that cannot handle it is
+doomed.
+
+Thanks,
+
+	M.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Without deviation from the norm, progress is not possible.
