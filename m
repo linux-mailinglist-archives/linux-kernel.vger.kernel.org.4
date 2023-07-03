@@ -2,259 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C107745E95
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647CE745E96
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjGCOgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S230101AbjGCOhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjGCOgv (ORCPT
+        with ESMTP id S231147AbjGCOhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:36:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7B7E69
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:36:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D12C41FEB5;
-        Mon,  3 Jul 2023 14:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688395003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=71USX0E8uxJRhdrwFtwHUBM0OTncRS714ApHzQ/UV7Q=;
-        b=kKSLyGgZ4plUmjPQZGndFXoy4hMkYaWJ62y1IfW0GtY6eJJktJAD0Lmv5mhkeZLsk0/1sG
-        ESQv0EfkNGF/PMAyfqqlHHeF5mpf8dH2cVxeF7r1+oPm+LndLtyBpnkULopsrtXlf9mH+3
-        /7Y8YDg0a2KkH4n9Qtftgvzw1tHycDo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688395003;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=71USX0E8uxJRhdrwFtwHUBM0OTncRS714ApHzQ/UV7Q=;
-        b=cbc+pHSv3SB2J2yUndPvPMZD9eqHJfKCAEQTkOV1JZDUPczvfbwpncvsNjmivTs6vwN23n
-        5eq5mNZFwcqt9/Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C27AE13276;
-        Mon,  3 Jul 2023 14:36:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tZNpL/vcomRvQgAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 03 Jul 2023 14:36:43 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 557F9A0722; Mon,  3 Jul 2023 16:36:43 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 16:36:43 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     oe-kbuild@lists.linux.dev, Jan Kara <jack@suse.cz>, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: fs/namei.c:4875 vfs_rename() warn: variable dereferenced before
- check 'source' (see line 4830)
-Message-ID: <20230703143643.e7qlewcgwfhdcrdq@quack3>
-References: <a8200507-8e52-422d-85ad-22be78930099@kadam.mountain>
+        Mon, 3 Jul 2023 10:37:18 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790D394
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:37:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688395037; x=1719931037;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=hhC+yDxrzOLlLOtP58zu//X5IF0C2SI1Qlp2WUuQcQc=;
+  b=XkjJ0Uvt3W+WTwubpW0UhGNgryfCnlzCTJqkF9KVTPgLt33Mnze/B+uW
+   11enz/KJ4ea9HR3YivRMhr/lqGusz1w0XCpExhxEgjklY3HjOn/DhzVAV
+   B0Mnh8IW5fIA+qQ5HA0ngN01bbBxcMN5KnChNBlKUTmzHS+/WCWFS07PN
+   wvzjVMqCJp4a91/CYdPGj1nCxNjXImI3CuZLHOOfaX0NzG0enGotu8jbX
+   w08D07hLgBt/+QOi7ecCdtr/aNbz1kWkrEwzANWA978bGDv5WleoDA9o+
+   65bPGoG2XzPLHxuSibZ8DWE7RzWgHz8o0FABOLg1pvVx96gMNsI2v1gQ3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="361755995"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="361755995"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 07:37:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="695832769"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="695832769"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 03 Jul 2023 07:37:16 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 3 Jul 2023 07:37:16 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 3 Jul 2023 07:37:15 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 3 Jul 2023 07:37:15 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 3 Jul 2023 07:37:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lw73f/Lplnd16TnI1FceaKX1PqALOoAlTxIaYQEzPPs8sctRiWCuhi5iyCj14mE4lkzQT+ikTL1MqTpLy3ubg2CePIY1UCmVfveMFclWLQ/SXzF2RfMJGxtK2DaI0HLEeauRULBIOXe3mlC2/AQWLNw37NDFEJ1pI//RJh381auulL85oK/OplkXOSECgAqQVt0JJjzIzTAlpLrxbIAg6bmdB5a7zjognFkCVzpM3qIyZfRmLbHrHMqRltRc11iLd2gqAyIyfc8XBTEbfX8aLHmKiFwuUob4qk4hL0lUjShsSKYVFBDpiugk9xLoTrrnzbI0eFEY8JCmjoj2ESXDEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=giq/h2g1bxpkkqUJrHG35e9V1HqmJYflA9bqmAVaYJQ=;
+ b=SdhI33T6/RhpyBHj4WpQL7po0g8M9TLp61ANfJzwa+yOMeZFO3oZn0z0HGWzkumn53l34s8moACS4ptcKnJp5AGC0FDU4HILxfhQCVuhh2eeaeJV3ZJDEp3YHmbORvrUctIzW8YZTbxIbM+JCMQSy6VepsxsBkBBFIohC69Yi5vtzYRP68T0K4CFtV/++7g10P9QEM1UULMNtSx/dsxEVgtdnKtYMDkgJNCPhPI3VY5vBBy+CryyCSV/U9l3Lv4jL2Yzx6QWI98RT1nHmqjxHQP0ntQILG22ZNoJh/VWPaQH78+2wCwVkB9gBUgXsiHcxf8+oooU35uKooqatpnDhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5469.namprd11.prod.outlook.com (2603:10b6:5:399::13)
+ by SA1PR11MB8428.namprd11.prod.outlook.com (2603:10b6:806:38b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
+ 2023 14:37:13 +0000
+Received: from DM4PR11MB5469.namprd11.prod.outlook.com
+ ([fe80::1439:6bf2:b876:cec5]) by DM4PR11MB5469.namprd11.prod.outlook.com
+ ([fe80::1439:6bf2:b876:cec5%3]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 14:37:13 +0000
+Message-ID: <4f18a7ca-3a57-0097-51f0-490f876831dc@intel.com>
+Date:   Mon, 3 Jul 2023 22:37:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 0/5] iommu/vt-d: debugfs: Enhancements to IOMMU debugfs
+Content-Language: en-US
+To:     Tian Kevin <kevin.tian@intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230625150442.42197-1-Jingqi.liu@intel.com>
+ <BN9PR11MB5276885D6A142BC94D80C2618C29A@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   "Liu, Jingqi" <jingqi.liu@intel.com>
+In-Reply-To: <BN9PR11MB5276885D6A142BC94D80C2618C29A@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR01CA0038.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::20) To DM4PR11MB5469.namprd11.prod.outlook.com
+ (2603:10b6:5:399::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8200507-8e52-422d-85ad-22be78930099@kadam.mountain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5469:EE_|SA1PR11MB8428:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4af74be-114c-450b-2a4b-08db7bd2fd93
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f0utgKGkgujfumha96mSIi0cYL0EEjRd2Qb0U+GTYN1iC3iv0EQsjYRx9U5m2xWkW3FBUMoX6nQSAEzLH0Ze+dTWmvL1elNV8A7apn4pZGAYEsBWfI7pUrKKri1CT+LQinmCoX1gJk78VgFaVAX39nykG8PqdNwO+Edmi5wtpWGLJJakMSo/EEQPId31LhinVhrz8ePPVid5fh0uKx4l+v6CtlSraKTzyFs9QN8ToZ6rzN9Pfr4BOWz1beQIhDdvQYIzsLuaiSUEuS9XBy69lzXQPcW/p3L2TqSCMszJhJA0tUFuCR7ImFTQjsrPDaHTO5MF1Ht8i7zq8h1Jk13gtV0824GFNmKH+CXcSKMtuw7DoRORAzEUx6YCr6Jbq0pu+j/T8xK4uNx6RhJyY6+vydhy98cqi5PxZYjXMHQYWz1OLbYbvSqz80qHalIOaLGfRKwW/f9eT8hFI0tp1onuRohTT+OdK8IASdOaAvKCbnMKIb6Q0klGqxjUVGgIw2SphMEN6fmiGhQ9EB97a5kzt+MwcECAcUEGJgDkEnwip/SBhRwJoldfjBq7dZq0t0GuaMTriSs2oimfpeGXT5wM4dBs4LPAIQeAMHAjXPpeGxbV7EVwawBnu/AnDv7cBPiNSYepe3vwTkOA/kjIo7v93g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5469.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(376002)(396003)(136003)(366004)(451199021)(26005)(31686004)(82960400001)(478600001)(6666004)(6512007)(6506007)(31696002)(86362001)(2616005)(186003)(38100700002)(4326008)(66556008)(66946007)(66476007)(110136005)(53546011)(6486002)(316002)(5660300002)(8676002)(8936002)(41300700001)(2906002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SDVZbURpOUZRZ3hxeDRmaUU0MWV4M3poSXhIdmw2UE1LVTdtZm1YcitLQ0h3?=
+ =?utf-8?B?czdjaFlROHppZDI3bXprZ2tOT3F2bVpHMUpIOXBqL3B5WkYvNVZJSnhZMVdx?=
+ =?utf-8?B?U20zbzNSUm1aUTZHREQzdTV2UXRWRldPck5jZGQxcU1yQjJScVNITDFGVWdD?=
+ =?utf-8?B?ZE4ycEgrV2Ewb3l3ZU1WMFZqRjJWSktJZDIwWFJxc2U4K3QvNkkzVzJjOFpK?=
+ =?utf-8?B?d2xuUnJuWDlmdjVXN3RqVTA3eWZ4bTdVR0ZUWmZCNjJ2OXFoMTBNSU1kTjRQ?=
+ =?utf-8?B?WmlFcEEwUFRrN1RHUkJtdWZlWWo5Y2NPc2diMmhKcFUvVUt6QlNKRlRaMWw4?=
+ =?utf-8?B?VzBJeXdMUG9IUEp5SUc2emxSUFhFYnFLbWlJKzMyTDRiOVVIUjRnQXhzQmta?=
+ =?utf-8?B?b0ljTGxCYmFyZTQ0aFgvUHdaWHVrcTFzc1RqSGdCdHBOMWRLT1c0Tmw5Mmxy?=
+ =?utf-8?B?NTZIS0N2Q2N6bzdFcnhaR1ZKQWxoRUMrQmtLV3FVNENTWkRocGdxNUNxei9W?=
+ =?utf-8?B?aHMzSWJ4WTlIMC9nU0dYUjF2VDY1aHZDbVVjNFlKNVBVNkdkR21oL0tYS2dm?=
+ =?utf-8?B?WWljUDZYVEVvRllVYnREdnhqQ0dTVndtb1Vub1VMUzJySXpXb2tVTzFDRVEw?=
+ =?utf-8?B?bFY5aG9PSC83azdqNTJlTlh1Z3BvWHpvTjFGeUo3VGQ1TkhzSkxydFdCcGZE?=
+ =?utf-8?B?ZVlhY2JVRXh4TmVYTFJlTFpuVGJlWk45UGcxMDFCYzN0OFExUzFSMCsxbWJD?=
+ =?utf-8?B?UHFlbW5TMHJaQnpqMC81d1VXU2xHeEZaOVQ2a2tENm9EWmpVOGZKTElRUU9M?=
+ =?utf-8?B?KzY5RnVqbWVHV1VwWkc1RGJOQSt4eFVZdWFJSkE4TDRUUmhWSUlsYnBDS29z?=
+ =?utf-8?B?MW8vcGFURyszNEN6eE5FaVd2aCtGa2hkeEpXSEpQMyt5VXRRL1d3bHU5Q1cw?=
+ =?utf-8?B?TndLazRjczNackRhUHZwSFd1MVBCWnZ4VTlMM2hiNXhZenU5dFZjdTNrV1Mx?=
+ =?utf-8?B?ZUpUdW5EVllhQkRldmpZekNoZnBLRnNnNVBZZ1JqK3NSNVh0ZFN3S1dPZmRK?=
+ =?utf-8?B?Rm5xdmZpWUpsVWV4R2tJREhXbVBkYVZCcHhFdHRiaDYzOWd2bVVVUmtGYlZ3?=
+ =?utf-8?B?R1llQ2ZsL2orZVNiUlBFbjdMbXZneHhHenEzM0hHenVYRURMcEErV1lsUEta?=
+ =?utf-8?B?UDBCUHF4Vm56cVFqSVpKaGFXY2FhZlh6UFJZNlhoKzI2QnNPSVoxYmhtWDg2?=
+ =?utf-8?B?L0k2QllVd3loNjVhSWlqTTR1N2NiNHFoc0hoY1Z5MkJiVmtEZzNlZERyQ2lq?=
+ =?utf-8?B?S1VTUTNIWk53ZmFYNDE4TkdUalZHVVhOc05jZW00ZHVpNkEwWkphZC8rOXFq?=
+ =?utf-8?B?NnRYbmVJSldwSTZqSC9MWWxGSzZpWmJqcTM2alJBYnFhY05tYU95TjVWT3NF?=
+ =?utf-8?B?ODRqdzkxWXpCQWo4RXVhUVNzdnhFWFRpWm42cU85cFkrRlc4V0hXZlllUjRV?=
+ =?utf-8?B?Q0had2lpMWtlVlRqc2NSZ2RIYjNVRzRRRVRqbHdONDVpdC9haTV5b1I5YlYv?=
+ =?utf-8?B?TzE2dU5xSkpsWFZlSlNQRUtJNUc3dXZEL3NJeDExQis2cW9pZ3Awb3NaRHU1?=
+ =?utf-8?B?aFVaV21SODBNN08zSmk4RElwQlZqY1hxR214SlUvWk9haUlJRVFFWE9zaHRH?=
+ =?utf-8?B?SVNZbzBzNjFubDVvZHlBOUNhdTB3bS83Y0x3N0J1QThyVDhHdXdETHpvWjN2?=
+ =?utf-8?B?MDBJSjZ6UTB5U2wxQWw1Yy9FMlFiWFRaTytqdUVDWWhZemRWd1pVT2YvVVhP?=
+ =?utf-8?B?SWkzM0RCTDFTb2M3bUh4SUFtRFUwWlYvOEZER0pYTlRYOTFhdnBPQzI2TG1O?=
+ =?utf-8?B?TW1tWmJZeUVhdFprWkRRRTVEQjZFeUNOU0J1b3JBU2JNaUo4TWFBWm5TNTBB?=
+ =?utf-8?B?NkdqdFR3Rit6bWhrdXFzN2xZMHVvYWtTdG95UzAxRXNYaks5SGVpdUJ4YVBV?=
+ =?utf-8?B?U3p6WUh1MHA1bkgzaFFXUUt2QVVOWjFvM3gxdkt0Yk12TkpVaHNRNzVvbEQ0?=
+ =?utf-8?B?RWlESlRnVFFjQzFHNjM3Q2llVksySVZXT25aTmVsMGZuTTlScVJPYXgvYk5k?=
+ =?utf-8?Q?3d4Kn4o2ZCOMQqKFqWeRIxgwW?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4af74be-114c-450b-2a4b-08db7bd2fd93
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5469.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 14:37:13.4155
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 55Fn+ZXLIAaN6QT5hRy9q3zE2nOcB4oXxoKuRG9XRI6F/ZvF4Yzzm+55o6qrSp/IgOI7kOGyRGzT4g1Qb6JQrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8428
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 03-07-23 15:16:36, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   995b406c7e972fab181a4bb57f3b95e59b8e5bf3
-> commit: 28eceeda130f5058074dd007d9c59d2e8bc5af2e fs: Lock moved directories
-> config: x86_64-randconfig-m001-20230702 (https://download.01.org/0day-ci/archive/20230703/202307030026.9sE2pk2x-lkp@intel.com/config)
-> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030026.9sE2pk2x-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> | Closes: https://lore.kernel.org/r/202307030026.9sE2pk2x-lkp@intel.com/
-> 
-> New smatch warnings:
-> fs/namei.c:4875 vfs_rename() warn: variable dereferenced before check 'source' (see line 4830)
+On 7/3/2023 3:15 PM, Tian, Kevin wrote:
+>> From: Liu, Jingqi <jingqi.liu@intel.com>
+>> Sent: Sunday, June 25, 2023 11:05 PM
+>>
+>> The original debugfs only dumps all IOMMU page tables without pasid
+>> supported. It traverses all devices on the pci bus, then dumps all page
+>> tables based on device domains. This traversal is from software
+>> perspective.
+>>
+>> This series dumps page tables by traversing root tables, context tables,
+>> pasid directories and pasid tables from hardware perspective. By
+>> specifying source identifier and PASID, it supports dumping specified
+>> page table or all page tables in legacy mode or scalable mode.
+>>
+>> For a device that only supports legacy mode, specify the source
+>> identifier, and search the root table and context table to dump its
+>> page table. It does not support to specify PASID.
+>>
+>> For a device that supports scalable mode, specify a
+>> {source identifier, PASID} pair and search the root table, context table
+>> and pasid table to dump its page table.  If the pasid is not specified,
+>> it is set to RID_PASID.
+>>
+>> Switch to dump all page tables by specifying "auto".
+>>
+>> Examples are as follows:
+>> 1) Dump the page table of device "00:1f.0" that only supports legacy
+>> mode.
+>>
+>> $ sudo echo 00:1f.0 >
+>> /sys/kernel/debug/iommu/intel/domain_translation_struct
+>> $ sudo cat /sys/kernel/debug/iommu/intel/domain_translation_struct
+>> Device 0000:00:1f.0 @0x105407000
+>> IOVA_PFN                PML5E                   PML4E
+>> 0x0000000000000 |       0x0000000000000000      0x0000000105408003
+>> 0x0000000000001 |       0x0000000000000000      0x0000000105408003
+>> 0x0000000000002 |       0x0000000000000000      0x0000000105408003
+>> 0x0000000000003 |       0x0000000000000000      0x0000000105408003
+>>
+>> PDPE                    PDE                     PTE
+>> 0x0000000105409003      0x000000010540a003      0x0000000000000003
+>> 0x0000000105409003      0x000000010540a003      0x0000000000001003
+>> 0x0000000105409003      0x000000010540a003      0x0000000000002003
+>> 0x0000000105409003      0x000000010540a003      0x0000000000003003
+>>
+>> [...]
+>>
+>> 2) Dump the page table of device "00:0a.0" with pasid "2".
+>>
+>> $ sudo echo 00:0a.0,2 >
+>> /sys/kernel/debug/iommu/intel/domain_translation_struct
+>> $ sudo cat /sys/kernel/debug/iommu/intel/domain_translation_struct
+> What about creating a directory layout per {dev, pasid} so the user can
+> easily figure out and dump?
+>
+> e.g.
+>
+> /sys/kernel/debug/iommu/intel/00:0a.0/0/domain_translation_struct
+> /sys/kernel/debug/iommu/intel/00:0a.0/2/domain_translation_struct
+Thanks.
 
-Yeah, the check for source being non-NULL in:
+Do you mean create a directory for each device, whether it supports 
+PASID or not ?
+Seems the PASID can be assigned at runtime.
+So it needs to support creating debugfs file at runtime in IOMMU driver.
+Looks like this requires modifying IOMMU driver.
 
-	if (source)
-		inode_unlock(source);
-
-is pointless. When we are renaming something, we are guaranteed "something"
-exists ;). I'll send a cleanup patch.
-
-								Honza
-
-> 
-> vim +/source +4875 fs/namei.c
-> 
-> 9fe61450972d39 Christian Brauner     2021-01-21  4752  int vfs_rename(struct renamedata *rd)
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4753  {
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4754  	int error;
-> 9fe61450972d39 Christian Brauner     2021-01-21  4755  	struct inode *old_dir = rd->old_dir, *new_dir = rd->new_dir;
-> 9fe61450972d39 Christian Brauner     2021-01-21  4756  	struct dentry *old_dentry = rd->old_dentry;
-> 9fe61450972d39 Christian Brauner     2021-01-21  4757  	struct dentry *new_dentry = rd->new_dentry;
-> 9fe61450972d39 Christian Brauner     2021-01-21  4758  	struct inode **delegated_inode = rd->delegated_inode;
-> 9fe61450972d39 Christian Brauner     2021-01-21  4759  	unsigned int flags = rd->flags;
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4760  	bool is_dir = d_is_dir(old_dentry);
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4761  	struct inode *source = old_dentry->d_inode;
-> 9055cba711891a Sage Weil             2011-05-24  4762  	struct inode *target = new_dentry->d_inode;
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4763  	bool new_is_dir = false;
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4764  	unsigned max_links = new_dir->i_sb->s_max_links;
-> 49d31c2f389acf Al Viro               2017-07-07  4765  	struct name_snapshot old_name;
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4766  
-> 8d3e2936375bac Miklos Szeredi        2016-12-16  4767  	if (source == target)
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4768  		return 0;
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4769  
-> 4609e1f18e19c3 Christian Brauner     2023-01-13  4770  	error = may_delete(rd->old_mnt_idmap, old_dir, old_dentry, is_dir);
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4771  	if (error)
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4772  		return error;
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4773  
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4774  	if (!target) {
-> 4609e1f18e19c3 Christian Brauner     2023-01-13  4775  		error = may_create(rd->new_mnt_idmap, new_dir, new_dentry);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4776  	} else {
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4777  		new_is_dir = d_is_dir(new_dentry);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4778  
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4779  		if (!(flags & RENAME_EXCHANGE))
-> 4609e1f18e19c3 Christian Brauner     2023-01-13  4780  			error = may_delete(rd->new_mnt_idmap, new_dir,
-> 6521f891708292 Christian Brauner     2021-01-21  4781  					   new_dentry, is_dir);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4782  		else
-> 4609e1f18e19c3 Christian Brauner     2023-01-13  4783  			error = may_delete(rd->new_mnt_idmap, new_dir,
-> 6521f891708292 Christian Brauner     2021-01-21  4784  					   new_dentry, new_is_dir);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4785  	}
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4786  	if (error)
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4787  		return error;
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4788  
-> 2773bf00aeb9bf Miklos Szeredi        2016-09-27  4789  	if (!old_dir->i_op->rename)
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4790  		return -EPERM;
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4791  
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4792  	/*
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4793  	 * If we are going to change the parent - check write permissions,
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4794  	 * we'll need to flip '..'.
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4795  	 */
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4796  	if (new_dir != old_dir) {
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4797  		if (is_dir) {
-> 4609e1f18e19c3 Christian Brauner     2023-01-13  4798  			error = inode_permission(rd->old_mnt_idmap, source,
-> 47291baa8ddfda Christian Brauner     2021-01-21  4799  						 MAY_WRITE);
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4800  			if (error)
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4801  				return error;
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4802  		}
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4803  		if ((flags & RENAME_EXCHANGE) && new_is_dir) {
-> 4609e1f18e19c3 Christian Brauner     2023-01-13  4804  			error = inode_permission(rd->new_mnt_idmap, target,
-> 47291baa8ddfda Christian Brauner     2021-01-21  4805  						 MAY_WRITE);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4806  			if (error)
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4807  				return error;
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4808  		}
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4809  	}
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4810  
-> 0b3974eb04c487 Miklos Szeredi        2014-04-01  4811  	error = security_inode_rename(old_dir, old_dentry, new_dir, new_dentry,
-> 0b3974eb04c487 Miklos Szeredi        2014-04-01  4812  				      flags);
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4813  	if (error)
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4814  		return error;
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4815  
-> 49d31c2f389acf Al Viro               2017-07-07  4816  	take_dentry_name_snapshot(&old_name, old_dentry);
-> 1d2ef590148300 Al Viro               2011-09-14  4817  	dget(new_dentry);
-> 28eceeda130f50 Jan Kara              2023-06-01  4818  	/*
-> 28eceeda130f50 Jan Kara              2023-06-01  4819  	 * Lock all moved children. Moved directories may need to change parent
-> 28eceeda130f50 Jan Kara              2023-06-01  4820  	 * pointer so they need the lock to prevent against concurrent
-> 28eceeda130f50 Jan Kara              2023-06-01  4821  	 * directory changes moving parent pointer. For regular files we've
-> 28eceeda130f50 Jan Kara              2023-06-01  4822  	 * historically always done this. The lockdep locking subclasses are
-> 28eceeda130f50 Jan Kara              2023-06-01  4823  	 * somewhat arbitrary but RENAME_EXCHANGE in particular can swap
-> 28eceeda130f50 Jan Kara              2023-06-01  4824  	 * regular files and directories so it's difficult to tell which
-> 28eceeda130f50 Jan Kara              2023-06-01  4825  	 * subclasses to use.
-> 28eceeda130f50 Jan Kara              2023-06-01  4826  	 */
-> 28eceeda130f50 Jan Kara              2023-06-01  4827  	lock_two_inodes(source, target, I_MUTEX_NORMAL, I_MUTEX_NONDIR2);
-> 9055cba711891a Sage Weil             2011-05-24  4828  
-> 51cc3a6620a6ca Hugh Dickins          2021-09-02  4829  	error = -EPERM;
-> 51cc3a6620a6ca Hugh Dickins          2021-09-02 @4830  	if (IS_SWAPFILE(source) || (target && IS_SWAPFILE(target)))
->                                                                         ^^^^^^
-> Dereferenced.
-> 
-> 51cc3a6620a6ca Hugh Dickins          2021-09-02  4831  		goto out;
->                                                                 ^^^^^^^^
-> 51cc3a6620a6ca Hugh Dickins          2021-09-02  4832  
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4833  	error = -EBUSY;
-> 7af1364ffa64db Eric W. Biederman     2013-10-04  4834  	if (is_local_mountpoint(old_dentry) || is_local_mountpoint(new_dentry))
-> 9055cba711891a Sage Weil             2011-05-24  4835  		goto out;
-> 9055cba711891a Sage Weil             2011-05-24  4836  
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4837  	if (max_links && new_dir != old_dir) {
-> 8de52778798fe3 Al Viro               2012-02-06  4838  		error = -EMLINK;
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4839  		if (is_dir && !new_is_dir && new_dir->i_nlink >= max_links)
-> 8de52778798fe3 Al Viro               2012-02-06  4840  			goto out;
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4841  		if ((flags & RENAME_EXCHANGE) && !is_dir && new_is_dir &&
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4842  		    old_dir->i_nlink >= max_links)
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4843  			goto out;
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4844  	}
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4845  	if (!is_dir) {
-> 8e6d782cab5088 J. Bruce Fields       2011-09-20  4846  		error = try_break_deleg(source, delegated_inode);
-> 8e6d782cab5088 J. Bruce Fields       2011-09-20  4847  		if (error)
-> 8e6d782cab5088 J. Bruce Fields       2011-09-20  4848  			goto out;
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4849  	}
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4850  	if (target && !new_is_dir) {
-> 8e6d782cab5088 J. Bruce Fields       2011-09-20  4851  		error = try_break_deleg(target, delegated_inode);
-> 8e6d782cab5088 J. Bruce Fields       2011-09-20  4852  		if (error)
-> 8e6d782cab5088 J. Bruce Fields       2011-09-20  4853  			goto out;
-> 8e6d782cab5088 J. Bruce Fields       2011-09-20  4854  	}
-> e18275ae55e07a Christian Brauner     2023-01-13  4855  	error = old_dir->i_op->rename(rd->new_mnt_idmap, old_dir, old_dentry,
-> 520c8b16505236 Miklos Szeredi        2014-04-01  4856  				      new_dir, new_dentry, flags);
-> 51892bbb57e878 Sage Weil             2011-05-24  4857  	if (error)
-> 51892bbb57e878 Sage Weil             2011-05-24  4858  		goto out;
-> 51892bbb57e878 Sage Weil             2011-05-24  4859  
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4860  	if (!(flags & RENAME_EXCHANGE) && target) {
-> 8767712f26d18a Al Viro               2018-05-27  4861  		if (is_dir) {
-> 8767712f26d18a Al Viro               2018-05-27  4862  			shrink_dcache_parent(new_dentry);
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4863  			target->i_flags |= S_DEAD;
-> 8767712f26d18a Al Viro               2018-05-27  4864  		}
-> d83c49f3e36cec Al Viro               2010-04-30  4865  		dont_mount(new_dentry);
-> 8ed936b5671bfb Eric W. Biederman     2013-10-01  4866  		detach_mounts(new_dentry);
-> bc27027a73e8b8 Miklos Szeredi        2014-04-01  4867  	}
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4868  	if (!(old_dir->i_sb->s_type->fs_flags & FS_RENAME_DOES_D_MOVE)) {
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4869  		if (!(flags & RENAME_EXCHANGE))
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4870  			d_move(old_dentry, new_dentry);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4871  		else
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4872  			d_exchange(old_dentry, new_dentry);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4873  	}
-> 51892bbb57e878 Sage Weil             2011-05-24  4874  out:
-> 28eceeda130f50 Jan Kara              2023-06-01 @4875  	if (source)
->                                                             ^^^^^^
-> This check could be removed.
-> 
-> 28eceeda130f50 Jan Kara              2023-06-01  4876  		inode_unlock(source);
-> 28eceeda130f50 Jan Kara              2023-06-01  4877  	if (target)
-> 5955102c9984fa Al Viro               2016-01-22  4878  		inode_unlock(target);
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4879  	dput(new_dentry);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4880  	if (!error) {
-> f4ec3a3d43bcdc Al Viro               2019-04-26  4881  		fsnotify_move(old_dir, new_dir, &old_name.name, is_dir,
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4882  			      !(flags & RENAME_EXCHANGE) ? target : NULL, old_dentry);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4883  		if (flags & RENAME_EXCHANGE) {
-> f4ec3a3d43bcdc Al Viro               2019-04-26  4884  			fsnotify_move(new_dir, old_dir, &old_dentry->d_name,
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4885  				      new_is_dir, NULL, new_dentry);
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4886  		}
-> da1ce0670c14d8 Miklos Szeredi        2014-04-01  4887  	}
-> 49d31c2f389acf Al Viro               2017-07-07  4888  	release_dentry_name_snapshot(&old_name);
-> 0eeca28300df11 Robert Love           2005-07-12  4889  
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4890  	return error;
-> ^1da177e4c3f41 Linus Torvalds        2005-04-16  4891  }
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+BR,
+Jingqi
