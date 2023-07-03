@@ -2,78 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3FF745F54
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BC6745F56
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjGCPBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
+        id S231603AbjGCPBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbjGCPA5 (ORCPT
+        with ESMTP id S231548AbjGCPA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:00:57 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D0FE6E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:00:54 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51cb40f13f6so5762831a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 08:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688396453; x=1690988453;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kYc7ssW76JbeyuIAYWb2z/AMKU9mWqY66zI1YvE3ht4=;
-        b=rq3em3i2DhBtDJZbyPiiH/JcD1whzSHiFE+JJXBVtdQ7Tq3p/2ShBpJc/UnO79qBh4
-         dAYkUPQ1m3NvvHRtkMH3gr/vV21L+K5D2Oaeysm1HKEU56G4eV0RWgmGs3Zug6JRw/uv
-         NDODM6ZAIj83FeP3w8oKRGCLKlWZTD4GJ+9T8kg1SDDNmCV2rDMTm4X3HgSCsCy6NtfJ
-         lxwevRsHXWM8SRP3n/IrG6nsLudj15VBgyQsxEulKpwMRoFDf35iMHqw8qkYUFc0x6EE
-         uHW7NSSUAwzgxhgtZC2G5mqIQNeBP2swrKbq18kQrpKjvgEKQDmBVwqP80xWOTJUHgpI
-         EAgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688396453; x=1690988453;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYc7ssW76JbeyuIAYWb2z/AMKU9mWqY66zI1YvE3ht4=;
-        b=B1CcLQRqZDZFCyodZDQ6uq6iKixRqermzwmfdPhVFcTgpuTdHSZDJ4IyhcNwrWng17
-         9J1eRhYSBNMI0MI8f0YiC/D9bZY8BYd2J22fdAdh8nVTXgg/sgIzGq0Vrmuq8iyHzvoo
-         guv6Phly+ZY7NeSu6FfmNGrDBn0BfXFgyePOENehejSgzzmGgqc/p+QYO444iE7XkBeb
-         kak42t5znQ79RlQc/4JlhlLVeun+7aMfRxhbr/q/V2IEQTk9nNFu9mQQW5d1OTV9sF5Y
-         fg4DNKgwCAEYbR7OBahexlXhi81Xx0RI28ieIImNdi0Ll4adOyF8k1XyohNLDxSFmm2l
-         1Lbw==
-X-Gm-Message-State: ABy/qLbBv2LuW7UdAWryoHfEiUFDZI8mbH8U4TWZ6uMHYek1xzS51eN1
-        pmkWcD51pB/Dtz93lGvLHynxkQ==
-X-Google-Smtp-Source: APBJJlFd14wiD2Xpe42nUkkf2jg9Ee7geplQ4o0gKJmte8k6StgWqm4Jvh5aw2ZOGo/GOSZbcFcCpQ==
-X-Received: by 2002:aa7:d7ce:0:b0:51d:f37b:1b4e with SMTP id e14-20020aa7d7ce000000b0051df37b1b4emr7377991eds.19.1688396453073;
-        Mon, 03 Jul 2023 08:00:53 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k17-20020a1709063e1100b009875a6d28b0sm2266432eji.51.2023.07.03.08.00.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 08:00:52 -0700 (PDT)
-Message-ID: <cf2978dc-9ef9-0b3c-911a-7da97977e412@linaro.org>
-Date:   Mon, 3 Jul 2023 17:00:50 +0200
+        Mon, 3 Jul 2023 11:00:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2937DE4C;
+        Mon,  3 Jul 2023 08:00:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9A9F60DDE;
+        Mon,  3 Jul 2023 15:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00A4C433C8;
+        Mon,  3 Jul 2023 15:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688396456;
+        bh=g15K/7qo5THEcmwNcrIRS7RE0gZsvdpbN6D2FfMKddA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=00FU15bX/mKlfaColAwxm28pVQc7kdodltzkxUQ3yEBGqvSlX/I9sgL/TEhcxmwqX
+         PDw4s8BGzEZZv0Tk6dNok96hd3S13tMc2usZ2Z9qec3V76ZzqHXoBgVHQNvsZzzM4F
+         h0QP+GFlqo5v+GpD4XwkP+Qmh68EMFXqgy0D8pzA=
+Date:   Mon, 3 Jul 2023 17:00:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        security@kernel.org, corbet@lwn.net, workflows@vger.kernel.org
+Subject: Re: [PATCH 1/2] Documentation: security-bugs.rst: update preferences
+ when dealing with the linux-distros group
+Message-ID: <2023070323-sloppy-panama-4868@gregkh>
+References: <2023063020-throat-pantyhose-f110@gregkh>
+ <202306301113.FA8FD533@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v9 00/13] dmaengine: edma: add freescale edma v3 support
-Content-Language: en-US
-To:     Frank Li <Frank.li@nxp.com>
-Cc:     vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
-        imx@lists.linux.dev
-References: <20230620201221.2580428-1-Frank.Li@nxp.com>
- <ZJxHc62V72eVMYu4@lizhi-Precision-Tower-5810>
- <3ce07ab8-9ed0-d5c0-e7da-bb24085cc3f8@linaro.org>
- <ZKLfB7putFfLlAoH@lizhi-Precision-Tower-5810>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZKLfB7putFfLlAoH@lizhi-Precision-Tower-5810>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202306301113.FA8FD533@keescook>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,58 +54,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 16:45, Frank Li wrote:
-> On Sun, Jul 02, 2023 at 10:22:22PM +0200, Krzysztof Kozlowski wrote:
->> On 28/06/2023 16:45, Frank Li wrote:
->>> On Tue, Jun 20, 2023 at 04:12:08PM -0400, Frank Li wrote:
->>>> This patch series introduces support for the eDMA version 3 from
->>>> Freescale. The eDMA v3 brings alterations in the register layout,
->>>> particularly, the separation of channel control registers into
->>>> different channels. The Transfer Control Descriptor (TCD) layout,
->>>> however, remains identical with only the offset being changed.
->>>>
->>>> The first 11 patches aim at tidying up the existing Freescale
->>>> eDMA code and laying the groundwork for the integration of eDMA v3
->>>> support.
->>>>
->>>> Patch 1-11:
->>>> These patches primarily focus on cleaning up and refactoring the existing
->>>> fsl_edma driver code. This is to accommodate the upcoming changes and new
->>>> features introduced with the eDMA v3.
->>>>
->>>> Patch 12:
->>>> This patch introduces support for eDMA v3. In addition, this patch has
->>>> been designed with an eye towards future upgradability, specifically for
->>>> transitioning to eDMA v5. The latter involves a significant upgrade
->>>> where the TCD address would need to support 64 bits.
->>>>
->>>> Patch 13:
->>>> This patch focuses on the device tree bindings and their modifications
->>>> to properly handle and integrate the changes brought about by eDMA v3
->>>
->>> @vkoul:
->>>   Do you have chance to check these patches? Any chance to come into 6.5
->>>   All audio parts of i.MX8x and i.MX9 was dependent on these patches.
->>
->> Why do you ping during the merge window?
->>
->> v6.5? And what about having it in next for two weeks? One thing is to
->> ping for something forgotten, different thing is to try squeeze patches
->> skipping our process.
+On Fri, Jun 30, 2023 at 11:14:05AM -0700, Kees Cook wrote:
+> On Fri, Jun 30, 2023 at 09:14:20AM +0200, Greg Kroah-Hartman wrote:
+> > Because the linux-distros group forces reporters to release information
+> > about reported bugs, and they impose arbitrary deadlines in having those
+> > bugs fixed despite not actually being kernel developers, the kernel
+> > security team recommends not interacting with them at all as this just
+> > causes confusion and the early-release of reported security problems.
+> > 
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> I saw dmaengine tree have not update over 5 weeks.
-> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/
+> Yeah, this is good. It might make sense to explicitly detail the
+> rationale in security-bugs.rst (as you have in the commit log), but
+> perhaps that's too much detail.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Then you should have pinged during that time.
+Thanks for the review.  I'll keep this as-is as it's the content of the
+file that matters in the end.
 
-> And vkoul have not sent out pull request yet. So I just want to check
-> if possible. 
+thanks,
 
-It is merge window. Patches are supposed to be in next for two weeks
-before merge window.
-
-
-
-Best regards,
-Krzysztof
-
+greg k-h
