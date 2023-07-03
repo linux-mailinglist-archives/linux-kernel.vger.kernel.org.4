@@ -2,181 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF25745F7C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1D9745F84
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbjGCPJI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jul 2023 11:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S231704AbjGCPKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjGCPJG (ORCPT
+        with ESMTP id S230131AbjGCPKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:09:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AE5E44;
-        Mon,  3 Jul 2023 08:09:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Mon, 3 Jul 2023 11:10:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78F010C1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688396960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6g4SgMrAx5lx8sYPsFEruVMXFbKKSUycENj60N3/Gvk=;
+        b=HHjQBcdMYJs1cI3sN9TNQinEKLKRW0J+CaV38hEVyq5yn9uabsPZ8V5F4iPJmqXPizOMRG
+        evwXoxMkzxmUtG70fM7IrR8XoMKElULv8I4AsxtDO4ecOSAug25/rRT+nbXo+VHk0Bweta
+        iO/vrVBkWAB7ePUNvSczOPRRPjkK0HY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-JZofT6OTOEG7gcU8sMfiFQ-1; Mon, 03 Jul 2023 11:09:14 -0400
+X-MC-Unique: JZofT6OTOEG7gcU8sMfiFQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6004960F99;
-        Mon,  3 Jul 2023 15:09:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595B7C433C8;
-        Mon,  3 Jul 2023 15:08:59 +0000 (UTC)
-Date:   Mon, 3 Jul 2023 11:08:57 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Ching-lin Yu <chinglinyu@google.com>,
-        Nadav Amit <namit@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH v3 03/10] eventfs: adding eventfs dir add functions
-Message-ID: <20230703110857.2d051af5@rorschach.local.home>
-In-Reply-To: <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
-References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
-        <1685610013-33478-4-git-send-email-akaher@vmware.com>
-        <20230701095417.3de5baab@rorschach.local.home>
-        <ECB0097D-A323-4CFC-9C9E-D4DA2AA6E662@vmware.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9662790EEA5;
+        Mon,  3 Jul 2023 15:09:13 +0000 (UTC)
+Received: from [10.22.17.92] (unknown [10.22.17.92])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CB2C714682F9;
+        Mon,  3 Jul 2023 15:09:12 +0000 (UTC)
+Message-ID: <0a4f1738-dd0e-efdb-b137-7a7c9875786d@redhat.com>
+Date:   Mon, 3 Jul 2023 11:09:12 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 4/4] intel_idle: Add ibrs_off module parameter to force
+ disable IBRS
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+References: <20230628022554.1638318-1-longman@redhat.com>
+ <20230628022554.1638318-5-longman@redhat.com>
+ <20230703103255.GE4253@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230703103255.GE4253@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 10:13:22 +0000
-Ajay Kaher <akaher@vmware.com> wrote:
 
-> >> +/**
-> >> + * eventfs_down_write - acquire write lock function
-> >> + * @eventfs_rwsem: a pointer to rw_semaphore
-> >> + *
-> >> + * helper function to perform write lock on eventfs_rwsem
-> >> + */
-> >> +static void eventfs_down_write(struct rw_semaphore *eventfs_rwsem)
-> >> +{
-> >> +     while (!down_write_trylock(eventfs_rwsem))
-> >> +             msleep(10);  
-> >
-> > What's this loop for? Something like that needs a very good explanation
-> > in a comment. Loops like these are usually a sign of a workaround for a
-> > bug in the design, or worse, simply hides an existing bug.
-> >  
-> 
-> Yes correct, this logic is to solve deadlock:
-> 
-> Thread 1                             Thread 2
-> down_read_nested()                                 - read lock acquired
->                                          down_write()     - waiting for write lock to acquire
-> down_read_nested()                                  - deadlock
-> 
-> Deadlock is because rwlock wouldn’t allow read lock to be acquired if write lock is waiting.
-> down_write_trylock() wouldn’t add the write lock in waiting queue, hence helps to prevent
-> deadlock scenario.
-> 
-> I was stuck with this Deadlock, tried few methods and finally borrowed from cifs, as it’s
-> upstreamed, tested and working in cifs, please refer:
-> https://elixir.bootlin.com/linux/v6.3.1/source/fs/cifs/file.c#L438
+On 7/3/23 06:32, Peter Zijlstra wrote:
+> On Tue, Jun 27, 2023 at 10:25:54PM -0400, Waiman Long wrote:
+>
+>> @@ -69,6 +69,7 @@ static int max_cstate = CPUIDLE_STATE_MAX - 1;
+>>   static unsigned int disabled_states_mask __read_mostly;
+>>   static unsigned int preferred_states_mask __read_mostly;
+>>   static bool force_irq_on __read_mostly;
+>> +static bool ibrs_off __read_mostly;
+>>   
+>>   static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
+>>   
+>> @@ -1919,12 +1920,15 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+>>   	}
+>>   
+>>   	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
+>> -			   state->flags & CPUIDLE_FLAG_IBRS) {
+>> +			((state->flags & CPUIDLE_FLAG_IBRS) || ibrs_off)) {
+>>   		/*
+>>   		 * IBRS mitigation requires that C-states are entered
+>>   		 * with interrupts disabled.
+>>   		 */
+>> -		WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+>> +		if (ibrs_off && (state->flags & CPUIDLE_FLAG_IRQ_ENABLE))
+>> +			state->flags &= ~CPUIDLE_FLAG_IRQ_ENABLE;
+>> +		else
+>> +			WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+> If you're respinning this, you can leave out the else and avoid the
+> indent on the WARN:
+>
+> +		if (ibrs_off && (state->flags & CPUIDLE_FLAG_IRQ_ENABLE))
+> +			state->flags &= ~CPUIDLE_FLAG_IRQ_ENABLE;
+> 		WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+>
+> Same effect, simpler code and all that.
 
-I just looked at that code and the commit, and I honestly believe that
-is a horrible hack, and very fragile. It's in the smb code, so it was
-unlikely reviewed by anyone outside that subsystem. I really do not
-want to prolificate that solution around the kernel. We need to come up
-with something else.
+That is true. I can certainly respin that as there is another suggested 
+doc change that is pending.
 
-I also think it's buggy (yes the cifs code is buggy!) because in the
-comment above the down_read_nested() it says:
+Cheers,
+Longman
 
-/*
- * nested locking. NOTE: rwsems are not allowed to recurse
- * (which occurs if the same task tries to acquire the same
- * lock instance multiple times), but multiple locks of the
- * same lock class might be taken, if the order of the locks
- * is always the same. This ordering rule can be expressed
- * to lockdep via the _nested() APIs, but enumerating the
- * subclasses that are used. (If the nesting relationship is
- * static then another method for expressing nested locking is
- * the explicit definition of lock class keys and the use of
- * lockdep_set_class() at lock initialization time.
- * See Documentation/locking/lockdep-design.rst for more details.)
- */
-
-So this is NOT a solution (and the cifs code should be fixed too!)
-
-Can you show me the exact backtrace where the reader lock gets taken
-again? We will have to come up with a way to not take the same lock
-twice.
-
-We can also look to see if we can implement this with RCU. What exactly
-is this rwsem protecting?
-
-
-> 
-> Looking further for your input. I will add explanation in v4.
-> 
-> 
-> >> +}
-> >> +
-
-[..]
-
-> >> + *
-> >> + * This function creates the top of the trace event directory.
-> >> + */
-> >> +struct dentry *eventfs_create_events_dir(const char *name,
-> >> +                                      struct dentry *parent,
-> >> +                                      struct rw_semaphore *eventfs_rwsem)  
-> >
-> > OK, I'm going to have to really look at this. Passing in a lock to the
-> > API is just broken. We need to find a way to solve this another way.  
-> 
-> eventfs_rwsem is a member of struct trace_array, I guess we should
-> pass pointer to trace_array.
-
-No, it should not be part of the trace_array. If we can't do this with
-RCU, then we need to add a descriptor that contains the dentry that is
-returned above, and have the lock held there. The caller of the
-eventfs_create_events_dir() should not care about locking. That's an
-implementation detail that should *not* be part of the API.
-
-That is, if you need a lock:
-
-struct eventfs_dentry {
-	struct dentry		*dentry;
-	struct rwsem		*rwsem;
-};
-
-And then get to that lock by using the container_of() macro. All
-created eventfs dentry's could have this structure, where the rwsem
-points to the top one. Again, that's only if we can't do this with RCU.
-
--- Steve
-
-
-> 
-> 
-> > I'm about to board a plane to JFK shortly, I'm hoping to play with this
-> > while flying back.
-> >  
-> 
-> I have replied for major concerns. All other minor I will take care in v4.
-> 
-> Thanks a lot for giving time to eventfs patches.
-> 
-> - Ajay
-> 
