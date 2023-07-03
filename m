@@ -2,232 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393DA74601D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BD974601F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjGCPvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
+        id S230371AbjGCPvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjGCPvd (ORCPT
+        with ESMTP id S230262AbjGCPvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:51:33 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2124.outbound.protection.outlook.com [40.107.244.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C6DC2;
-        Mon,  3 Jul 2023 08:51:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bMd6S1jjvHufR9Sad8Yz+NZXvN8LAP9WyJ9spbxhpMHiLxPB/23j/PMlswtPWiPeL3k1AHgiArpbQx8qDWw5Fh5omvcqBehKMfc0rDQXNx0koe5i4meyHyNUv5OSnDPY7Ss3sxGgSiwl9sIod9YeeeubwrVUC5ejg9qalYPtJLnrDFesGvf8SYPqe7k2VDYB2ihwQxYJArNKX0SXui8JNFNxvKBCQWV/sKgMJNn/4gWfwHdRUr0D5P7EpUPAGuW/zuDI796TGl39734zAbLELyJ6KfyrAMpmvdw0zi7L8s+gJMRIcS10EkJ4u4xNmpr2fjuUJQXaDCDAC1F/wjZ+Sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xxLKuqzB8F3ZwItGN/CCzSImCLnYoPoXp8nFK1ZVaK0=;
- b=av6UWM+e93l6F0EcHxICwW44u5nqlPLDf5bhaq+PE2ksyvLMJ6QOmHrq9Q2i4My1iRM74uweudefXNyiqeGIxC8Zvgeh5ZJ+N0wM0CcYgMRtmaE5PrH2RCPOM+ojKr8v6HlK/PAtC/jzbgTrYL99CYzrA57mtYs8xl+4faYdPuirr8xetfXMGTc/qoxtj1iWpjzORhbWAv+mhLn9YEtd837kxwtPvDj3p+xJnI48Vwyd3kiLvF9PuQ6k4gfw5dRjvMnQw1tar4ciF3/+7t2PYKsyYmLS+420vJywmN+hjDl3KXVrwxmHrOdbQQk76iZ+ta6JYDP0QzQ+UEOwCEzFIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xxLKuqzB8F3ZwItGN/CCzSImCLnYoPoXp8nFK1ZVaK0=;
- b=e5Zd/I53k3pZt7xS35Qews8W2WHkM9VyQOkq9qFZDNiZjaWZpXuMNr+i8f6BBz9n5UOqnwiK8QpjKHuq4Nnl8hXxpwAxzedLw6abWPUUNzeYypudieg6KwZSXeqAyjps4hNAm/phDe4F5SNb1R99AIIQbk6+SS9Bv9EHNiDSHm8=
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
- by DM4PR21MB3682.namprd21.prod.outlook.com (2603:10b6:8:af::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.9; Mon, 3 Jul
- 2023 15:51:28 +0000
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::848b:6d47:841d:20ff]) by PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::848b:6d47:841d:20ff%4]) with mapi id 15.20.6544.006; Mon, 3 Jul 2023
- 15:51:28 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     souradeep chakrabarti <schakrabarti@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Souradeep Chakrabarti <schakrabarti@microsoft.com>
-Subject: RE: [PATCH V4 net] net: mana: Fix MANA VF unload when host is
- unresponsive
-Thread-Topic: [PATCH V4 net] net: mana: Fix MANA VF unload when host is
- unresponsive
-Thread-Index: AQHZrYtO9uZDC1JBBkmdomCootYeWK+oLtxg
-Date:   Mon, 3 Jul 2023 15:51:28 +0000
-Message-ID: <PH7PR21MB31166AAAE7225559D751F722CA29A@PH7PR21MB3116.namprd21.prod.outlook.com>
-References: <1688374171-10534-1-git-send-email-schakrabarti@linux.microsoft.com>
-In-Reply-To: <1688374171-10534-1-git-send-email-schakrabarti@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5f961a7e-ca82-4161-a6dd-538abc496366;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-07-03T15:42:29Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|DM4PR21MB3682:EE_
-x-ms-office365-filtering-correlation-id: 88375292-f5c5-433c-58ff-08db7bdd5d46
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ylwkPHfIky+3RiEbfjij+bxL5rto0jxS/RX9uZhN/ogIicbRlo12j6m9IvzN3oYIbO6DdoGSM4m4TBuBOcyiHMX4H9LFmGN3qmQ6iICeKH+/W8iHqSWQXg+LvouAvDVpOdGs6bFERqHBm890Smll1ZrA71Wdu85TKgynpmhiSoNPa83oi9p3LJ3NmOgHjvTFnIseEvUdXE8nIAjCN3HRaCrU2fIOZtw7I8jaOyb51gqZk12hOtlEHeV+KbYJ1Pn3FXl9dEpBN7BpyevQh953pCN4AwcYdS1KzGCwPQ1nmUC/GpZoxk88izXVZLzh9Y8YFkZnQpKzjq1cBH1WLWrHqIxmg7z5a5arQGQ5auS8BcSwuWZyW5bIHXBW3scdHuJlZ3ppYp/WdAq7vngjNtXfP2PvxtMhL/PsE+I6A/7lAs+UxHOABycPlEn/4hRt1lpOf3pFYtruTHop3S1W28kLk0c2TfIDWw/zgzSVBGdw0qLiAI56z75xIVwoTnZZ47IzQ0ubaRTTHwlxfEaTAbE48SZ3mTqL3rSgN/AG6waoLo0TKwK4sWz5KGzbIqSA4MuPaJLysrxRRZckgHxLmc1P0P0WIxkQOk918wchTu7e5f+EXLIwxTv8i147ZWEJO9wae5J2UZPl9bXh9yLFB8EKHM2MPBPpZGVK/8id4YjEeLN46cRlsguf7HU5UX0x/ZjG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(39860400002)(376002)(136003)(451199021)(82950400001)(82960400001)(53546011)(8990500004)(921005)(10290500003)(6506007)(316002)(66446008)(64756008)(38070700005)(76116006)(55016003)(66556008)(66476007)(4326008)(38100700002)(122000001)(66946007)(107886003)(83380400001)(66899021)(186003)(26005)(9686003)(478600001)(8936002)(54906003)(110136005)(8676002)(2906002)(71200400001)(5660300002)(7416002)(7696005)(41300700001)(86362001)(52536014)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xvvBdowBc+b8qZTXkTEyPmRdd65aORxRZH8iy+ReGGbUT/8Eq5DBFjPYL6qp?=
- =?us-ascii?Q?xHKepeEkEplPVp9JPAym0p7QRgw3pGn2vsHmf8af7CkjNgH4vPreggPB5N2L?=
- =?us-ascii?Q?RtfvEXiO/5MpqFNlHs8G2C33Faz2ENiKjX5NEA406RYMZkOlTs2/YZkmfsVV?=
- =?us-ascii?Q?czUGF2OB+vDFnM3HH3z97q6V3GyHdS7lblMhpmvpzsFyO+f7OlPLRz0AO12C?=
- =?us-ascii?Q?73Elc9CXiT2HXcjbBWu38Fdn3wDl1y1tjhCEESvR2RzEVSsHYd/1iJaoY41F?=
- =?us-ascii?Q?pckAk/AeHq6BTDM3+rsHPTVpjUQ3qV2DkVbGwck+5zhVBfoV4htrkSUIYXte?=
- =?us-ascii?Q?K4oq+bpdyV1eMg93QmkhxnPGzKWeZjrz2VrLy17+lLdcimaRglP7iTgp+GwN?=
- =?us-ascii?Q?EUSPnQV8z00Cw4v6kdD4V6orDVu1f0LR3SdE5Demhaf4yG+ekgJVZ1EJY2SE?=
- =?us-ascii?Q?HY4kR3uY3jNdsteh2z296lHkIIXzAOzR4BVuIbWyUwGa6BC5BhNfM4Au5nQg?=
- =?us-ascii?Q?3/XwH7mx13aT7gaWb0tRmCRewi8YiyhW5XbEoRxP2A9V1uY8Ct1gwx/mr7UW?=
- =?us-ascii?Q?bXdJzPlmzEdLdESW3frRbGmj3OO/pKWifZp47XDVgi+rUzTOsjP25Jd4uGha?=
- =?us-ascii?Q?3T2370L2wvqcEdJVtZXtibjjo6OGMF1NZS52HBiF2e/Sjw+EsHubmG5h5oUH?=
- =?us-ascii?Q?zF3TP0yQOdaFAwC77CgCG9IFOcMH4jmm5UQr9fQZ30QTVcxdu5xziUGvUMgf?=
- =?us-ascii?Q?pcwEe28GM8Pc75Z5MZWF6BYBQrlWunrkR8RT23T3z4c3uLtL5EXqdg56HfJx?=
- =?us-ascii?Q?zhG6byErd5bfx5gDccKu7635/8PIwu3l3FFSdcdvXWsNac7Gyr9l/QQsxDfK?=
- =?us-ascii?Q?1RRChE0kW+40X25XbWZ+5HCOfhEKmCZ54qaLqQgvj8KINIa42BMLAw3zQ6a2?=
- =?us-ascii?Q?GubXxDKTR4zPl9IFVVICDMWTN1HajNzcgB6JfPdVg67tCtlE6oSGdEBnTLiD?=
- =?us-ascii?Q?H4KRnuxm32FEwOK/wA2GzoDFsHHc1N+2pk5Gc1D5HjoWU6o/TQBoJbd4rxrs?=
- =?us-ascii?Q?+PRr8MZ0lCx92IKnadWg8K7Fgyyv/vFG15iUcajZT8IDcI99HRc6iNrpOn8g?=
- =?us-ascii?Q?WRbLZbkZUlAn0wLZ3Gu6PAR0Qts1gZnogD1Ppx7c/av1O0Ga1JnL1HKX8323?=
- =?us-ascii?Q?vXJnKQIKqc1zWO6ekw53TPBrRkmrzWzO0SamC/4DtW0psS+Hjy795yyFeoH9?=
- =?us-ascii?Q?nnreB9iSCSxL9g+rN9y7ewh/KI0Kir8nb+S6TyfWarx96ejcFZvLbijINZ2f?=
- =?us-ascii?Q?0oz1SD7RxIfgyEYUYw+b4JIHIXNU2Ya5GX+t7qFAlJcdYB5T2r5smHTj3Y4A?=
- =?us-ascii?Q?XxshStKt28eRLeI4tXw01J6X5qWP5aBXjZcVVgPIhg79+eem90EyacVgiCud?=
- =?us-ascii?Q?Sy7LhxghwL/+3PmhaVSdJ4wf62ikUEUhGPrha5IOt+49QsHoKTgMnwfTd93r?=
- =?us-ascii?Q?hozRTWUbBIj/GiFxr4v9QpS2V2QdJEWQ3nhY3riQLQOPxZTcPp4fpiLYctZg?=
- =?us-ascii?Q?2WuyfST+pK+yy9DxcIphAjJj+7SWziV83TEFvcZn?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 3 Jul 2023 11:51:52 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778E1E6B;
+        Mon,  3 Jul 2023 08:51:46 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1688399495t3coozev
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 03 Jul 2023 23:51:34 +0800 (CST)
+X-QQ-SSF: 01200000002000D0W000B00A0000000
+X-QQ-FEAT: LI9frMOdTzi74vtepOhraDFrC/riy2tqrBIrymCS+9r3A8+1vMTGnCnd1U2Ta
+        yqJBEK0KgPjGVtcHUt/FjnIWkGQU6dhonDp5QZRs5D/X3FYF7cxjfx3wRP4tBkh1xrIAjfG
+        MFRslggMfIXrZmIl59HtxWKP1acrlZ/BQiBNXKFT1L/ZH0csq2DmVDItEugTFnneHKGeYAr
+        Q13/EKEPj/o4o+Dc+58tk85vssr3Uazv1sdr0VAUv66Srk+1JnX7OLHq+vQ/KVqpm+UjVGo
+        V2OCE+Bt9Ap4bx+k+V/wo13qbQMffeHdoAfE+rwdwAwrmbwkDSuEMVPqybdDFKcL+SHvZTk
+        4iHZiAKsiWETEjDqRenjVD+pDseuD3suhDQGrkp3MrKD1glbXlf1c1Ze3d3DZ5ywGT9EkSu
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6305770625938334413
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux@weissschuh.net, thomas@t-8ch.de
+Subject: Re: [PATCH v5 5/5] selftests/nolibc: riscv: customize makefile for rv32
+Date:   Mon,  3 Jul 2023 23:51:30 +0800
+Message-Id: <20230703155130.501214-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230702171715.GD16233@1wt.eu>
+References: <20230702171715.GD16233@1wt.eu>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88375292-f5c5-433c-58ff-08db7bdd5d46
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2023 15:51:28.5333
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GeaWYQ9jeb1oTRlAf58puQkiqIAksTyiaMIxGfuA+1SMMa/4ON8D2PPjLZ1GKe/1p2PUxAQ0HlQDoC/VaxC78g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3682
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> On Mon, Jun 19, 2023 at 08:29:38PM +0800, Zhangjin Wu wrote:
+> > Both riscv64 and riscv32 have:
+> > 
+> > * the same arch/riscv source code tree
+> > * the same tools/include/nolibc/arch-riscv.h
+> > * the same ARCH=riscv value passed to top-level kernel Makefile
+> > 
+> > The only differences are:
+> > 
+> > * riscv64 uses defconfig, riscv32 uses rv32_defconfig
+> > * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
+> > * riscv32 has different compiler options (-march= and -mabi=)
+> > 
+> > So, riscv32 can share most of the settings with riscv64, add riscv32
+> > support like the original ARCH=riscv support.
+> > 
+> > To align with x86, the default riscv is reserved for riscv64 and a new
+> > riscv64 is also added to allow users pass ARCH=riscv64 directly.
+> > 
+> > Since top-level kernel Makefile only accept ARCH=riscv, to make kernel
+> > happy, let's set kernel specific KARCH as riscv for both riscv32 and
+> > riscv64.
+> > 
+> > And since they share the same arch-riscv.h, let's set nolibc specific
+> > NARCH as riscv too.
+> > 
+> > Usage:
+> > 
+> >     $ make defconfig ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
+> >     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
+> 
+> I'm hesitating on this one. Till now the ARCH variable taken on input
+> was *exactly* the one used by the kernel. We include some scripts very
+> early and we don't control the possible usage of ARCH. There's also
+> this at the top of the makefile:
+> 
+>   # when run as make -C tools/ nolibc_<foo> the arch is not set
+>   ifeq ($(ARCH),)
+>   include $(srctree)/scripts/subarch.include
+>   ARCH = $(SUBARCH)
+>   endif
+> 
+> So as you can see $(ARCH) is still very intimate with the kernel's.
+> For x86 it's no big deal because the i386 and x86_64 names are real
+> valid archs. The difficulty we're having with riscv is that 32 and 64
+> are two distinct archs for all tools but not for the kernel, and it
+> looks like the only difference is in the config itself.
+> 
+> Given that we call all tools explicitly and that the kernel does a lot
+> of implicit things with $(ARCH), I'm wondering if it wouldn't be more
+> robust for the long term to instead add a "VARIANT" variable for the
+> test only that would enforce "riscv32" or "riscv64" where needed (note
+> that I'm not sold on this variable's name, it's to illustrate). Because
+> if you look closely, you'll note that the nolibc source does not use
+> this difference since its arch is always equal to the kernel's, and
+> only the test requires it. I wouldn't be shocked by having more test
+> options than we have architectures, and I noticed in another series
+> that you were also proposing to extend config options, so I think it
+> goes in the same direction. Then we could have in the test's Makefile
+> a check for this VARIANT being set, which would preset ARCH when
+> defined, and being used to configure Qemu. Maybe it could more or
+> less look like this (for the selftest Makefile I mean) :
+> 
+>   # maps variants to nominal archs
+>   ARCH_VARIANT_riscv32 = riscv
+>   ARCH_VARIANT_riscv64 = riscv
+> 
+>   # default variants for some archs
+>   DEF_VARIANT_riscv    = riscv64
+> 
+>   VARIANT :=
+>   ARCH    ?= $(or $(ARCH_VARIANT_$(VARIANT)),$(VARIANT))
+>   VARIANT ?= $(or $(DEF_VARIANT_$(ARCH)),$(ARCH))
+> 
+> Modulo the possible typos above, you probably get the idea. If ARCH is
+> set, it will be used and automatically set the variant to the default
+> one for the arch. And if VARIANT is set, it will set the correct
+> default ARCH. It's possible to force the two in conflicting ways that
+> will not work but we don't care, it's like for the rest of the variables.
+> But at least we're never passing invalid values into ARCH anymore and I
+> find this much safer.
+>
+> What do you think ?
+>
 
+agree, to distinguish the user input one and the kernel accepted one. If want
+to reserve ARCH as the default Kernel ARCH, what about use something like UARCH
+(User input ARCH) or XARCH (eXtended ARCH), it is shorter than VARIANT.
 
-> -----Original Message-----
-> From: souradeep chakrabarti <schakrabarti@linux.microsoft.com>
-> Sent: Monday, July 3, 2023 4:50 AM
-> To: KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> <haiyangz@microsoft.com>; wei.liu@kernel.org; Dexuan Cui
-> <decui@microsoft.com>; davem@davemloft.net; edumazet@google.com;
-> kuba@kernel.org; pabeni@redhat.com; Long Li <longli@microsoft.com>; Ajay
-> Sharma <sharmaajay@microsoft.com>; leon@kernel.org;
-> cai.huoqing@linux.dev; ssengar@linux.microsoft.com; vkuznets@redhat.com;
-> tglx@linutronix.de; linux-hyperv@vger.kernel.org; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org; linux-rdma@vger.kernel.org
-> Cc: stable@vger.kernel.org; Souradeep Chakrabarti
-> <schakrabarti@microsoft.com>; Souradeep Chakrabarti
-> <schakrabarti@linux.microsoft.com>
-> Subject: [PATCH V4 net] net: mana: Fix MANA VF unload when host is
-> unresponsive
->=20
-> From: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
->=20
-> When unloading the MANA driver, mana_dealloc_queues() waits for the MANA
-> hardware to complete any inflight packets and set the pending send count
-> to zero. But if the hardware has failed, mana_dealloc_queues()
-> could wait forever.
->=20
-> Fix this by adding a timeout to the wait. Set the timeout to 120 seconds,
-> which is a somewhat arbitrary value that is more than long enough for
-> functional hardware to complete any sends.
->=20
-> Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-> ---
-> V3 -> V4:
-> * Fixed the commit message to describe the context.
-> * Removed the vf_unload_timeout, as it is not required.
-> ---
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 26 ++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> index a499e460594b..d26f1da70411 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -2346,7 +2346,10 @@ static int mana_dealloc_queues(struct net_device
-> *ndev)
->  {
->  	struct mana_port_context *apc =3D netdev_priv(ndev);
->  	struct gdma_dev *gd =3D apc->ac->gdma_dev;
-> +	unsigned long timeout;
->  	struct mana_txq *txq;
-> +	struct sk_buff *skb;
-> +	struct mana_cq *cq;
->  	int i, err;
->=20
->  	if (apc->port_is_up)
-> @@ -2363,15 +2366,32 @@ static int mana_dealloc_queues(struct net_device
-> *ndev)
->  	 * to false, but it doesn't matter since mana_start_xmit() drops any
->  	 * new packets due to apc->port_is_up being false.
->  	 *
-> -	 * Drain all the in-flight TX packets
-> +	 * Drain all the in-flight TX packets.
-> +	 * A timeout of 120 seconds for all the queues is used.
-> +	 * This will break the while loop when h/w is not responding.
-> +	 * This value of 120 has been decided here considering max
-> +	 * number of queues.
->  	 */
-> +
-> +	timeout =3D jiffies + 120 * HZ;
->  	for (i =3D 0; i < apc->num_queues; i++) {
->  		txq =3D &apc->tx_qp[i].txq;
-> -
-> -		while (atomic_read(&txq->pending_sends) > 0)
-> +		while (atomic_read(&txq->pending_sends) > 0 &&
-> +		       time_before(jiffies, timeout)) {
->  			usleep_range(1000, 2000);
-> +		}
->  	}
->=20
-> +	for (i =3D 0; i < apc->num_queues; i++) {
-> +		txq =3D &apc->tx_qp[i].txq;
-> +		cq =3D &apc->tx_qp[i].tx_cq;
-> +		while (atomic_read(&txq->pending_sends)) {
-> +			skb =3D skb_dequeue(&txq->pending_skbs);
-> +			mana_unmap_skb(skb, apc);
-> +			napi_consume_skb(skb, cq->budget);
+    # UARCH and ARCH mapping, ARCH is supported by kernel, UARCH is input from user
+    UARCH_riscv      = riscv64
+    UARCH           ?= $(or $(UARCH_$(ARCH)),$(ARCH))
+    
+    ARCH_riscv32     = riscv
+    ARCH_riscv64     = riscv
+    ARCH            ?= $(or $(ARCH_$(UARCH)),$(UARCH)
 
-This is not in NAPI context, so it should be dev_consume_skb_any()
+With this, we can simply customize the variables with UARCH or XARCH and left
+the others as before.
 
-Thanks,
-- Haiyang
+We can delay this after the minimal config patchset, I'm still preparing the v2
+of the tinyconfig patchset, it is almost ready. these two have some conflicts.
 
+With the v2 tinyconfig patchset, we are able to run nolibc-test for different
+architectures independently.
 
+Best regards,
+Zhangjin
+ 
+> Thanks,
+> Willy
