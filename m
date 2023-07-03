@@ -2,498 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A909C746516
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E41746522
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjGCVr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 17:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S231137AbjGCVvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 17:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjGCVrw (ORCPT
+        with ESMTP id S230156AbjGCVvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:47:52 -0400
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9666EE7C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 14:47:38 -0700 (PDT)
-Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id 38330c4e-19eb-11ee-abf4-005056bdd08f;
-        Tue, 04 Jul 2023 00:47:35 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 4 Jul 2023 00:47:34 +0300
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com, aseketeli@baylibre.com,
-        u-kumar1@ti.com
-Subject: Re: [PATCH v7 2/2] pinctrl: tps6594: Add driver for TPS6594 pinctrl
- and GPIOs
-Message-ID: <ZKNB9pN2F2z7EZlD@surfacebook>
-References: <20230628133021.500477-1-eblanc@baylibre.com>
- <20230628133021.500477-3-eblanc@baylibre.com>
+        Mon, 3 Jul 2023 17:51:39 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12BDE47;
+        Mon,  3 Jul 2023 14:51:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688421098; x=1719957098;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=pVtn6eJ1tLFkYvEdKpBs/6Zv0aUFRfnsnQVT8oN+X/0=;
+  b=I0PnrGZKh1ITi/6xrRxngMYgUKAg7yom8U/INwpewI0BbHu+o6/qEYM4
+   FDL6Y+SO3CBC8ahoyXoqHHlG0bn5Af9eKUDvnVs++hl3hYkhk6YN5xBbR
+   lnmQ/2TPs1vBI5gDyqsE99IC7q/4FwnsRGNsoCx/0Q89ZeRtLquvcuJK6
+   QmFQ/iJdYlhxxu/4AEAlVz9+sHX0grqfDHjOGTfUB52iCncVzGzEiAdT9
+   yt4Omdm1Hi9g3PJAsHyK+w3hOuQqhyXFQeC2WMajAUNNnYl8OEuHMhccs
+   MXFmkgSkCStUso5tWxRO+VUL5e6f+v1cd+ir9tdDjb6+Jg2S0Og20cUu+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393712756"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="393712756"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 14:51:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="863193145"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="863193145"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Jul 2023 14:51:37 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 3 Jul 2023 14:51:36 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 3 Jul 2023 14:51:36 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 3 Jul 2023 14:51:36 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.42) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 3 Jul 2023 14:51:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=buf24/MiU76JsmY0EyUwq670vbpDfQ9vDOfhRJfll5tUByWEWavv4kyntQQm0qPDUg36lhqhCRVVP2zSyl3u+PquAQ+36FD5lqZAG8ZWV3jQkPhFEgT/UsR2dzzR1bpoHG4DS0pnX4TU6KmLwjdRT2nHd+YiPfYwAuc3Lf9ThASwsAGFzhs0QIYdXjYS2c5pJAkRst+IuRdLv7JHxcDrJbEEbquDF8O9I74YQUwlAsssMBo3+zjRvsdgyiz/mw4w8s/46EETBbvKbJ3SBYvmNAscbpHmPTd1UyDUwE9eZGna2wuqH9/h1v9Nyn7VQBPcGY8SFE/UnBbrtMFiUXy1pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pVtn6eJ1tLFkYvEdKpBs/6Zv0aUFRfnsnQVT8oN+X/0=;
+ b=DEw/V9x75h6q7Mc/dHEc5/cWVGioRXsNpZePK2hnk4MpE49VnIRptX3DTAZ10NoqTvSJNf9nc+AI3+vlkpXUJvsVDHfp3KeMmrcfNUxDINlhq+wK0ORemJO4nUCDJA2kkymFd+NMXfhldd+O/vwRLnftojHy41Q56UPbQtXFTj9Y3diB2U6QNqucFMbx4jzeR7i9YiR1M9iOgJB1wzG0uEfWjCxLyWo3KCFKuoPS0jIQyEyMrXJiiN25Ptm75gsx+ziFlu1hJCBxDVdNZAtcVLjaGZzJARoiSX2eaYKjxs7AkfkWcDYs70LCocyKmdLwy0/A5n0U/uQeW++TcB5LNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by DM8PR11MB5669.namprd11.prod.outlook.com (2603:10b6:8:36::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
+ 2023 21:51:33 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::f232:e1a0:b936:2aed]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::f232:e1a0:b936:2aed%7]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 21:51:33 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        Koba Ko <koba.ko@canonical.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "Borislav Petkov" <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] EDAC/i10nm: shift exponent is negative
+Thread-Topic: [PATCH v2] EDAC/i10nm: shift exponent is negative
+Thread-Index: AQHZrc6A28+shQPK+kOOa0lv+6OuYK+ojzaQ
+Date:   Mon, 3 Jul 2023 21:51:33 +0000
+Message-ID: <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230703162509.77828-1-koba.ko@canonical.com>
+ <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
+In-Reply-To: <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|DM8PR11MB5669:EE_
+x-ms-office365-filtering-correlation-id: cc5a5e2f-1359-40c7-cef2-08db7c0faa96
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bOn8VvrM05pLcm5glQE7ka6UOJK62dDRQDVgIQ5N9jGniKKK4OBa46YwHT9Oi8SQzySIWF09c8EkQ00673q1BhCH3ybSqfc0NZQ682q0AfKSkH0+3i5hUZ2l4BQ+q2IINk+W8+B8V5CztGpPduuRsSqHTol5O3G+p5U07T20H9dC/vd6wm9WYY5pMHyAtd0tVpD3sLknkG9lE8n5TRNHzmU4rlXR76gmh2JIFQsTgjQAfIkuUW5khF+NVDxzvyOiyOEYTYs2V4OGHo3FbhaBRVQ9Cv3T1jq6wnUHveI7MLVsedFHzdst/sBoDtmBz+OIv5sD0ec//ZQyik0KBmA5JEvMPY4Ob229H8Ap3sOLGwqd47p2pUjL8iZ1OrP3BJANoaTVimnJSkUVlO76noAxrQgTuHYWCEdoJFe3SUjnGWnBBQrH0PS6Lg3k2GmrSfKUaNCWL2jzJzmdJNt0q3wEy2GsP1FY0zxpp5ubOKguyJu9b5OJCGZBthhO/HC8p0PK0aIKlGwlUV+PiZElJtEP35DVRqBJlgz6s/Iwr/wVdztP9DuGCPCCl0iHv73GVYdaZzE38Qej/2FK/5MA8KqX5lapOYdd8BTtpcB7kX7uTnw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(396003)(39860400002)(366004)(376002)(451199021)(26005)(82960400001)(478600001)(9686003)(71200400001)(966005)(6506007)(86362001)(186003)(38100700002)(66476007)(64756008)(66556008)(4326008)(66946007)(66446008)(83380400001)(110136005)(7696005)(76116006)(316002)(122000001)(5660300002)(8676002)(8936002)(52536014)(38070700005)(41300700001)(2906002)(55016003)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WHExOUl0M3g2UHhCN0E3Skh1QkJ6WGx0Q0ZGZlZta1BzVXQ1V0Q4eWZGdEZW?=
+ =?utf-8?B?S1F6UlI3SHhRaUhjSjZLQkYrYjNSZ1RTeHdXZTU3dTNwTnBDS2J3SlBXdmVD?=
+ =?utf-8?B?L2NNdW9QcXY5ZjZDVmNPcmRXeGNmY3greTh6SUtUc05UOTRiQ2JzTmsrYnBI?=
+ =?utf-8?B?SEVIbFFqQi9odytCVklWUHZNR3FYZloyWXRpWUd1TzllUTdWRXV4WHFwdnVC?=
+ =?utf-8?B?a3ZiZmcxbDhmNUc1Y2dvdkdHcW9FeC9FMnlwWFl0ZUkweGQ4TWczMTdNRXZF?=
+ =?utf-8?B?VzVwd0JuVlowN3FTMy9DbEd2TzhJZWU2ajVEVDBJaEpOQno4Z21OWUJVckZq?=
+ =?utf-8?B?SmM2b1BhS0VFNjVNNEo1eHErUS9lb1JzN25PRE13cDJ1UnczWWdLQkVicGFy?=
+ =?utf-8?B?NmpkTUloZEgvb2ZISGE3SW9CSHJTcUFXU3FrQ2p1SlQrYVlkOWxRRFJZZCsx?=
+ =?utf-8?B?bWhNUzVCTStpNTNHcGZXYUZJRTNQZTRLR1YyL3RheWxyNVZtV0djMndIcVU3?=
+ =?utf-8?B?RHpoZFZsSWpnTGxwcUpqN2ZkU3d1czlScVEzUjNyS0N5bWVsZGE5OVZtRlEx?=
+ =?utf-8?B?VExEVkpNeU5RNVlKZnF6R2x1UDIxZ2hnY0hnU3NCMFZXaWRXMGJPYnJ0bmdv?=
+ =?utf-8?B?Z0NSSkQwVnAvTXRUTjgrblNyWTNaZmJhaVJXQ2p2QnBHS1o4VXlxMnJnSjZN?=
+ =?utf-8?B?eStwRFo0MEFZYTdtSXdkSzhKUnlGZ08yekdiUTc4OWsvZ2ZQclZBV1pzY2pa?=
+ =?utf-8?B?ZHRNdjJDRUtlRjgwMTlUbWdXOUhKWkp3eVJwdElxVnhBczhyKzBWM0EzWDV5?=
+ =?utf-8?B?Qm9kZmt4clZIZkM4V3R5OUtIcU5kWW8zZWxxUllpb0RacDJPUWJkMkdYMFlI?=
+ =?utf-8?B?c3ZkNUhJcVYzd3NYSzhrNHRodThwSnFhZ1dDL2VBTXZ1MXdPYjBpUU9tYWJt?=
+ =?utf-8?B?ZEIxaExpQlNSZFJRV1FsMnA0NlNWenZDOVhzWmxyYmcvaVpsRTB2ZTZtOHVM?=
+ =?utf-8?B?cVRTMDhEMlljTWxiNjQwWjdoUWRxeURVVDF0aFd5U3gxeko2MDkvL2JnODZP?=
+ =?utf-8?B?ZTFScWx2VDNnR1lXNnB0U25lVzNNenpWamoreXVaMmNNTVBLdWFzUHRMWWZ5?=
+ =?utf-8?B?dU84VU9VSVF1K1IrOEI0Z1IvTDRMYVNjVXY3NmtRSzFuZFRlMUxiUUFvc3o2?=
+ =?utf-8?B?aHhrVkhuUkp0R3c4dUhiM1h1THREcmFXQUhOM1A3cytEa2IwQkZaMkFGVG5n?=
+ =?utf-8?B?cVJWam1QNm1QanlVdGVvKzNURFRlb0VnNXFmZzJUaDdyb0RpTWp4K3JVNFRi?=
+ =?utf-8?B?N0ZjakJycUQzeWlza3NYVzdNNjkvbm9mNk9wOUg1NFg2NDg1UUV2ZHN3ektV?=
+ =?utf-8?B?cGVia1ErczJKSGNwN05aTVpZMGoxSkZPaVJnN1Q5NmdONldYU0RTTFBtV3RL?=
+ =?utf-8?B?SjNua3lZT0FrWmFsVldmNVVodE8xWFljTkRWRzduZ3JHUWRLM3oybzkxeXFt?=
+ =?utf-8?B?UWlWaUIxUm5TR2I5cUxBWmNUbHNaZnJNeUtHV2lhZ005aXdBc1pRREw3UTVr?=
+ =?utf-8?B?SGlXTUZiV1hMeHNMcGxWVmRSc2hOZFdCSFpZTEM2UGFyMUNnNmZXSWQ5bEg3?=
+ =?utf-8?B?Yk40RHBqNWl0TnFYRkk0eVZVYmV3Sisyc0xMZWlCS0Y5U1hwNFhCYUdrbS9J?=
+ =?utf-8?B?ZERIN1RuZjdJRnlKR2U3VEIyZXdZSGVEdDRoQlhkR2htaHZwSnVTWHJPZ3d4?=
+ =?utf-8?B?YUhadWJ6MGt0RU5HRzU5VE53RHBERmJ6SE9hakNXRUhDVHBFbUwrUjRHNWk4?=
+ =?utf-8?B?TkpXendOVm1KVk1MK25uQUdlZlc1bFpwZlZyTlR1bXN6RkVlODI0aXdHcHhX?=
+ =?utf-8?B?Y2hSa0dYVUk4OWFrNHNzSlBMSjBYNjZyUUxqamdYVnNjMTdoSTJ6T1dqM29u?=
+ =?utf-8?B?RnVlYVJkb3JNYWhoOG5qMklkdUt6YW1QN1hzNUFDV1UwQ0lIakJvaThBQTFY?=
+ =?utf-8?B?UFhsc1d5SU9EWGZxNHE3ZUoreGVTdEN2TklsaEsvc210aVRxQUtyOE1yNWEy?=
+ =?utf-8?B?VkxiWmszRHZHQkZTY0UycE1maFZiL01hbmp0UmJxT3lBUVNjQVNNeUs2Ylp6?=
+ =?utf-8?Q?tvV4=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628133021.500477-3-eblanc@baylibre.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc5a5e2f-1359-40c7-cef2-08db7c0faa96
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2023 21:51:33.0972
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4s10pfUArnUbSC/yB7WmzwL/UlbgF7aFaixGx9t/IpP9nMRj84+wBk4yMBtP8Lkn5GFlwGojQi+sFbH3swxL1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5669
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Jun 28, 2023 at 03:30:21PM +0200, Esteban Blanc kirjoitti:
-> TI TPS6594 PMIC has 11 GPIOs which can be used
-> for different functions.
-> 
-> This patch adds a pinctrl and GPIO drivers in
-> order to use those functions.
-
-A couple of nit-picks below, otherwise LGTM,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
-> ---
->  drivers/pinctrl/Kconfig           |  15 ++
->  drivers/pinctrl/Makefile          |   1 +
->  drivers/pinctrl/pinctrl-tps6594.c | 368 ++++++++++++++++++++++++++++++
->  3 files changed, 384 insertions(+)
->  create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
-> 
-> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-> index 5787c579dcf6..d3cff8d27e5d 100644
-> --- a/drivers/pinctrl/Kconfig
-> +++ b/drivers/pinctrl/Kconfig
-> @@ -480,6 +480,21 @@ config PINCTRL_TB10X
->  	depends on OF && ARC_PLAT_TB10X
->  	select GPIOLIB
->  
-> +config PINCTRL_TPS6594
-> +	tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
-> +	depends on MFD_TPS6594
-> +	default MFD_TPS6594
-> +	select PINMUX
-> +	select GPIOLIB
-> +	select REGMAP
-> +	select GPIO_REGMAP
-> +	help
-> +	  Say Y to select the pinmuxing and GPIOs driver for the TPS6594
-> +	  PMICs chip family.
-> +
-> +	  This driver can also be built as a module
-> +	  called tps6594-pinctrl.
-> +
->  config PINCTRL_ZYNQ
->  	bool "Pinctrl driver for Xilinx Zynq"
->  	depends on ARCH_ZYNQ
-> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-> index e196c6e324ad..28271a8d5275 100644
-> --- a/drivers/pinctrl/Makefile
-> +++ b/drivers/pinctrl/Makefile
-> @@ -49,6 +49,7 @@ obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
->  obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
->  obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
->  obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
-> +obj-$(CONFIG_PINCTRL_TPS6594)	+= pinctrl-tps6594.o
->  obj-$(CONFIG_PINCTRL_ZYNQMP)	+= pinctrl-zynqmp.o
->  obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
->  
-> diff --git a/drivers/pinctrl/pinctrl-tps6594.c b/drivers/pinctrl/pinctrl-tps6594.c
-> new file mode 100644
-> index 000000000000..a1fcb9fd793b
-> --- /dev/null
-> +++ b/drivers/pinctrl/pinctrl-tps6594.c
-> @@ -0,0 +1,368 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Pinmux and GPIO driver for tps6594 PMIC
-> + *
-> + * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-> + */
-> +
-> +#include <linux/gpio/driver.h>
-> +#include <linux/gpio/regmap.h>
-> +#include <linux/module.h>
-> +#include <linux/pinctrl/pinmux.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <linux/mfd/tps6594.h>
-> +
-> +#define TPS6594_PINCTRL_PINS_NB 11
-> +
-> +#define TPS6594_PINCTRL_GPIO_FUNCTION 0
-> +#define TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION 1
-> +#define TPS6594_PINCTRL_TRIG_WDOG_FUNCTION 1
-> +#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION 1
-> +#define TPS6594_PINCTRL_SCLK_SPMI_FUNCTION 1
-> +#define TPS6594_PINCTRL_SDATA_SPMI_FUNCTION 1
-> +#define TPS6594_PINCTRL_NERR_MCU_FUNCTION 1
-> +#define TPS6594_PINCTRL_PDOG_FUNCTION 1
-> +#define TPS6594_PINCTRL_SYNCCLKIN_FUNCTION 1
-> +#define TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION 2
-> +#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION 2
-> +#define TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION 2
-> +#define TPS6594_PINCTRL_NERR_SOC_FUNCTION 2
-> +#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION 3
-> +#define TPS6594_PINCTRL_NSLEEP1_FUNCTION 4
-> +#define TPS6594_PINCTRL_NSLEEP2_FUNCTION 5
-> +#define TPS6594_PINCTRL_WKUP1_FUNCTION 6
-> +#define TPS6594_PINCTRL_WKUP2_FUNCTION 7
-> +
-> +/* Special muxval for recalcitrant pins */
-> +#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8 2
-> +#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8 3
-> +#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9 3
-> +
-> +#define TPS6594_OFFSET_GPIO_SEL 5
-
-> +#define FUNCTION(fname, v)									\
-> +	{											\
-> +		.pinfunction = PINCTRL_PINFUNCTION(#fname,					\
-> +						tps6594_##fname##_func_group_names,		\
-> +						ARRAY_SIZE(tps6594_##fname##_func_group_names)),\
-> +		.muxval = v,									\
-> +	}
-
-In case you need a new version, you may drop indentation level by 1 TAB.
-
-{											\
-	.pinfunction = PINCTRL_PINFUNCTION(#fname,					\
-					tps6594_##fname##_func_group_names,		\
-					ARRAY_SIZE(tps6594_##fname##_func_group_names)),\
-	.muxval = v,									\
-}
-
-> +static const struct pinctrl_pin_desc tps6594_pins[TPS6594_PINCTRL_PINS_NB] = {
-> +	PINCTRL_PIN(0, "GPIO0"),   PINCTRL_PIN(1, "GPIO1"),
-> +	PINCTRL_PIN(2, "GPIO2"),   PINCTRL_PIN(3, "GPIO3"),
-> +	PINCTRL_PIN(4, "GPIO4"),   PINCTRL_PIN(5, "GPIO5"),
-> +	PINCTRL_PIN(6, "GPIO6"),   PINCTRL_PIN(7, "GPIO7"),
-> +	PINCTRL_PIN(8, "GPIO8"),   PINCTRL_PIN(9, "GPIO9"),
-> +	PINCTRL_PIN(10, "GPIO10"),
-> +};
-> +
-> +static const char *const tps6594_gpio_func_group_names[] = {
-> +	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-> +	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-> +};
-> +
-> +static const char *const tps6594_nsleep1_func_group_names[] = {
-> +	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-> +	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-> +};
-> +
-> +static const char *const tps6594_nsleep2_func_group_names[] = {
-> +	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-> +	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-> +};
-> +
-> +static const char *const tps6594_wkup1_func_group_names[] = {
-> +	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-> +	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-> +};
-> +
-> +static const char *const tps6594_wkup2_func_group_names[] = {
-> +	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-> +	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-> +};
-> +
-> +static const char *const tps6594_scl_i2c2_cs_spi_func_group_names[] = {
-> +	"GPIO0",
-> +	"GPIO1",
-> +};
-> +
-> +static const char *const tps6594_nrstout_soc_func_group_names[] = {
-> +	"GPIO0",
-> +	"GPIO10",
-> +};
-> +
-> +static const char *const tps6594_trig_wdog_func_group_names[] = {
-> +	"GPIO1",
-> +	"GPIO10",
-> +};
-> +
-> +static const char *const tps6594_sda_i2c2_sdo_spi_func_group_names[] = {
-> +	"GPIO1",
-> +};
-> +
-> +static const char *const tps6594_clk32kout_func_group_names[] = {
-> +	"GPIO2",
-> +	"GPIO3",
-> +	"GPIO7",
-> +};
-> +
-> +static const char *const tps6594_nerr_soc_func_group_names[] = {
-> +	"GPIO2",
-> +};
-> +
-> +static const char *const tps6594_sclk_spmi_func_group_names[] = {
-> +	"GPIO4",
-> +};
-> +
-> +static const char *const tps6594_sdata_spmi_func_group_names[] = {
-> +	"GPIO5",
-> +};
-> +
-> +static const char *const tps6594_nerr_mcu_func_group_names[] = {
-> +	"GPIO6",
-> +};
-> +
-> +static const char *const tps6594_syncclkout_func_group_names[] = {
-> +	"GPIO7",
-> +	"GPIO9",
-> +};
-> +
-> +static const char *const tps6594_disable_wdog_func_group_names[] = {
-> +	"GPIO7",
-> +	"GPIO8",
-> +};
-> +
-> +static const char *const tps6594_pdog_func_group_names[] = {
-> +	"GPIO8",
-> +};
-> +
-> +static const char *const tps6594_syncclkin_func_group_names[] = {
-> +	"GPIO9",
-> +};
-> +
-> +struct tps6594_pinctrl_function {
-> +	struct pinfunction pinfunction;
-> +	u8 muxval;
-> +};
-> +
-> +static const struct tps6594_pinctrl_function pinctrl_functions[] = {
-> +	FUNCTION(gpio, TPS6594_PINCTRL_GPIO_FUNCTION),
-> +	FUNCTION(nsleep1, TPS6594_PINCTRL_NSLEEP1_FUNCTION),
-> +	FUNCTION(nsleep2, TPS6594_PINCTRL_NSLEEP2_FUNCTION),
-> +	FUNCTION(wkup1, TPS6594_PINCTRL_WKUP1_FUNCTION),
-> +	FUNCTION(wkup2, TPS6594_PINCTRL_WKUP2_FUNCTION),
-> +	FUNCTION(scl_i2c2_cs_spi, TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION),
-> +	FUNCTION(nrstout_soc, TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION),
-> +	FUNCTION(trig_wdog, TPS6594_PINCTRL_TRIG_WDOG_FUNCTION),
-> +	FUNCTION(sda_i2c2_sdo_spi, TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION),
-> +	FUNCTION(clk32kout, TPS6594_PINCTRL_CLK32KOUT_FUNCTION),
-> +	FUNCTION(nerr_soc, TPS6594_PINCTRL_NERR_SOC_FUNCTION),
-> +	FUNCTION(sclk_spmi, TPS6594_PINCTRL_SCLK_SPMI_FUNCTION),
-> +	FUNCTION(sdata_spmi, TPS6594_PINCTRL_SDATA_SPMI_FUNCTION),
-> +	FUNCTION(nerr_mcu, TPS6594_PINCTRL_NERR_MCU_FUNCTION),
-> +	FUNCTION(syncclkout, TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION),
-> +	FUNCTION(disable_wdog, TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION),
-> +	FUNCTION(pdog, TPS6594_PINCTRL_PDOG_FUNCTION),
-> +	FUNCTION(syncclkin, TPS6594_PINCTRL_SYNCCLKIN_FUNCTION),
-> +};
-> +
-> +struct tps6594_pinctrl {
-> +	struct tps6594 *tps;
-> +	struct gpio_regmap *gpio_regmap;
-> +	struct pinctrl_dev *pctl_dev;
-> +	const struct tps6594_pinctrl_function *funcs;
-> +	const struct pinctrl_pin_desc *pins;
-> +};
-> +
-> +static int tps6594_gpio_regmap_xlate(struct gpio_regmap *gpio,
-> +				     unsigned int base, unsigned int offset,
-> +				     unsigned int *reg, unsigned int *mask)
-> +{
-> +	unsigned int line = offset % 8;
-> +	unsigned int stride = offset / 8;
-> +
-> +	switch (base) {
-> +	case TPS6594_REG_GPIOX_CONF(0):
-> +		*reg = TPS6594_REG_GPIOX_CONF(offset);
-> +		*mask = TPS6594_BIT_GPIO_DIR;
-> +		return 0;
-> +	case TPS6594_REG_GPIO_IN_1:
-> +	case TPS6594_REG_GPIO_OUT_1:
-> +		*reg = base + stride;
-> +		*mask = BIT(line);
-> +		return 0;
-> +	default:
-> +		return -EINVAL;
-> +	}
-
-> +	return 0;
-
-Dead code.
-
-> +}
-> +
-> +static int tps6594_pmx_func_cnt(struct pinctrl_dev *pctldev)
-> +{
-> +	return ARRAY_SIZE(pinctrl_functions);
-> +}
-> +
-> +static const char *tps6594_pmx_func_name(struct pinctrl_dev *pctldev,
-> +					 unsigned int selector)
-> +{
-> +	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +	return pinctrl->funcs[selector].pinfunction.name;
-> +}
-> +
-> +static int tps6594_pmx_func_groups(struct pinctrl_dev *pctldev,
-> +				   unsigned int selector,
-> +				   const char *const **groups,
-> +				   unsigned int *num_groups)
-> +{
-> +	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +	*groups = pinctrl->funcs[selector].pinfunction.groups;
-> +	*num_groups = pinctrl->funcs[selector].pinfunction.ngroups;
-> +
-> +	return 0;
-> +}
-> +
-> +static int tps6594_pmx_set(struct tps6594_pinctrl *pinctrl, unsigned int pin,
-> +			   u8 muxval)
-> +{
-> +	u8 mux_sel_val = muxval << TPS6594_OFFSET_GPIO_SEL;
-> +
-> +	return regmap_update_bits(pinctrl->tps->regmap,
-> +				  TPS6594_REG_GPIOX_CONF(pin),
-> +				  TPS6594_MASK_GPIO_SEL, mux_sel_val);
-> +}
-> +
-> +static int tps6594_pmx_set_mux(struct pinctrl_dev *pctldev,
-> +			       unsigned int function, unsigned int group)
-> +{
-> +	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-> +	u8 muxval = pinctrl->funcs[function].muxval;
-> +
-> +	/* Some pins don't have the same muxval for the same function... */
-> +	if (group == 8) {
-> +		if (muxval == TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION)
-> +			muxval = TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8;
-> +		else if (muxval == TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION)
-> +			muxval = TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8;
-> +	} else if (group == 9) {
-> +		if (muxval == TPS6594_PINCTRL_CLK32KOUT_FUNCTION)
-> +			muxval = TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9;
-> +	}
-> +
-> +	return tps6594_pmx_set(pinctrl, group, muxval);
-> +}
-> +
-> +static int tps6594_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
-> +					  struct pinctrl_gpio_range *range,
-> +					  unsigned int offset, bool input)
-> +{
-> +	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-> +	u8 muxval = pinctrl->funcs[TPS6594_PINCTRL_GPIO_FUNCTION].muxval;
-> +
-> +	return tps6594_pmx_set(pinctrl, offset, muxval);
-> +}
-> +
-> +static const struct pinmux_ops tps6594_pmx_ops = {
-> +	.get_functions_count = tps6594_pmx_func_cnt,
-> +	.get_function_name = tps6594_pmx_func_name,
-> +	.get_function_groups = tps6594_pmx_func_groups,
-> +	.set_mux = tps6594_pmx_set_mux,
-> +	.gpio_set_direction = tps6594_pmx_gpio_set_direction,
-> +	.strict = true,
-> +};
-> +
-> +static int tps6594_groups_cnt(struct pinctrl_dev *pctldev)
-> +{
-> +	return ARRAY_SIZE(tps6594_pins);
-> +}
-> +
-> +static int tps6594_group_pins(struct pinctrl_dev *pctldev,
-> +			      unsigned int selector, const unsigned int **pins,
-> +			      unsigned int *num_pins)
-> +{
-> +	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +	*pins = &pinctrl->pins[selector].number;
-> +	*num_pins = 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static const char *tps6594_group_name(struct pinctrl_dev *pctldev,
-> +				      unsigned int selector)
-> +{
-> +	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +	return pinctrl->pins[selector].name;
-> +}
-> +
-> +static const struct pinctrl_ops tps6594_pctrl_ops = {
-> +	.dt_node_to_map = pinconf_generic_dt_node_to_map_group,
-> +	.dt_free_map = pinconf_generic_dt_free_map,
-> +	.get_groups_count = tps6594_groups_cnt,
-> +	.get_group_name = tps6594_group_name,
-> +	.get_group_pins = tps6594_group_pins,
-> +};
-> +
-> +static int tps6594_pinctrl_probe(struct platform_device *pdev)
-> +{
-> +	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-> +	struct device *dev = &pdev->dev;
-> +	struct tps6594_pinctrl *pinctrl;
-> +	struct pinctrl_desc *pctrl_desc;
-> +	struct gpio_regmap_config config = {};
-> +
-> +	pctrl_desc = devm_kzalloc(dev, sizeof(*pctrl_desc), GFP_KERNEL);
-> +	if (!pctrl_desc)
-> +		return -ENOMEM;
-> +	pctrl_desc->name = dev_name(dev);
-> +	pctrl_desc->owner = THIS_MODULE;
-> +	pctrl_desc->pins = tps6594_pins;
-> +	pctrl_desc->npins = ARRAY_SIZE(tps6594_pins);
-> +	pctrl_desc->pctlops = &tps6594_pctrl_ops;
-> +	pctrl_desc->pmxops = &tps6594_pmx_ops;
-> +
-> +	pinctrl = devm_kzalloc(dev, sizeof(*pinctrl), GFP_KERNEL);
-> +	if (!pinctrl)
-> +		return -ENOMEM;
-> +	pinctrl->tps = dev_get_drvdata(dev->parent);
-> +	pinctrl->funcs = pinctrl_functions;
-> +	pinctrl->pins = tps6594_pins;
-> +	pinctrl->pctl_dev = devm_pinctrl_register(dev, pctrl_desc, pinctrl);
-> +	if (IS_ERR(pinctrl->pctl_dev))
-> +		return dev_err_probe(dev, PTR_ERR(pinctrl->pctl_dev),
-> +				     "Couldn't register pinctrl driver\n");
-> +
-> +	config.parent = tps->dev;
-> +	config.regmap = tps->regmap;
-> +	config.ngpio = TPS6594_PINCTRL_PINS_NB;
-> +	config.ngpio_per_reg = 8;
-> +	config.reg_dat_base = TPS6594_REG_GPIO_IN_1;
-> +	config.reg_set_base = TPS6594_REG_GPIO_OUT_1;
-> +	config.reg_dir_out_base = TPS6594_REG_GPIOX_CONF(0);
-> +	config.reg_mask_xlate = tps6594_gpio_regmap_xlate;
-> +
-> +	pinctrl->gpio_regmap = devm_gpio_regmap_register(dev, &config);
-> +	if (IS_ERR(pinctrl->gpio_regmap))
-> +		return dev_err_probe(dev, PTR_ERR(pinctrl->gpio_regmap),
-> +				     "Couldn't register gpio_regmap driver\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver tps6594_pinctrl_driver = {
-> +	.probe = tps6594_pinctrl_probe,
-> +	.driver = {
-> +		.name = "tps6594-pinctrl",
-> +	},
-> +};
-> +module_platform_driver(tps6594_pinctrl_driver);
-> +
-> +MODULE_ALIAS("platform:tps6594-pinctrl");
-> +MODULE_AUTHOR("Esteban Blanc <eblanc@baylibre.com>");
-> +MODULE_DESCRIPTION("TPS6594 pinctrl and GPIO driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.41.0
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+PiA+IFVCU0FOIGNvbXBsYWlucyB0aGlzIGVycm9yDQo+ID4gfn5+DQo+ID4gIFVCU0FOOiBzaGlm
+dC1vdXQtb2YtYm91bmRzIGluIGRyaXZlcnMvZWRhYy9za3hfY29tbW9uLmM6MzY5OjE2DQo+IOKA
+pg0KPiA+IH5+fg0KPiA+DQo+ID4gd2hlbiBnZXQgcm93cywgY29scyBhbmQgcmFua3MsIHRoZSBy
+ZXR1cm5lZCBlcnJvciB2YWx1ZSBkb2Vzbid0IGJlDQo+ID4gaGFuZGxlZC4NCj4gPg0KPiA+IGNo
+ZWNrIHRoZSByZXR1cm4gdmFsdWUgaXMgRUlOVkFMLCBpZiB5ZXMsIGRpcmVjdGx5IHJldHVybiAw
+Lg0KPiDigKYNCj4NCj4gKiBQbGVhc2UgaW1wcm92ZSB0aGlzIGNoYW5nZSBkZXNjcmlwdGlvbiBm
+dXJ0aGVyLg0KDQpUbyBiZSBzcGVjaWZpYy4gSW5pdGlhbGx5IHlvdSByZXBvcnRlZCB0aGlzIGJl
+Y2F1c2Ugb2YgdGhlIFVCU0FOIGVycm9yDQpyZXBvcnQuIEJ1dCwgYWZ0ZXIgY29tbXVuaXR5IGRp
+c2N1c3Npb24geW91IG5vdyBrbm93IHRoYXQgdGhlIHByb2JsZW0NCmlzIHRoYXQgb25lIG9yIG1v
+cmUgb2YgdGhlIHJvd3MvY29scy9yYW5rcyBoYXMgYSB2YWx1ZSB0aGF0IHRoZSBFREFDIGRyaXZl
+cg0KZG9lc24ndCBleHBlY3QgYW5kIHByb2JhYmx5IGNhbiBoYW5kbGUuDQoNClNvLCBpbiBWMiwg
+dGhlIGNvbW1pdCBtZXNzYWdlIHNob3VsZCBzdGFydCB3aXRoIHRoZSBpbmZvcm1hdGlvbiB0aGVz
+ZQ0KdmFsdWVzIGFyZSBvdXQgb2YgcmFuZ2UgYW5kIG1lbnRpb24gdGhpcyB3YXMgZGlzY292ZXJl
+ZCB3aGVuIFVCU0FODQpwdXQgb3V0IGEgd2FybmluZyBhYm91dCBhIG5lZ2F0aXZlIHNoaWZ0LiBO
+byBuZWVkIHRvIGluY2x1ZGUgdGhlIHdob2xlDQpvZiB0aGUgVUJTQU4gc3RhY2sgdHJhY2UuDQoN
+ClRoZW4gZGVzY3JpYmUgdGhlIHR3byBmaXhlcyB0aGF0IHRoaXMgcGF0Y2ggaW5jbHVkZXMuIE9u
+ZSBpcyB0byBjaGFuZ2UgdGhlDQplZGFjIGRlYnVnIG1lc3NhZ2UgaW50byBhIGNvbnNvbGUgZXJy
+b3IgbWVzc2FnZSB0byBlbmFibGUgZnVydGhlcg0KZGVidWcgb2YgdGhpcyBpc3N1ZS4gVGhlIG90
+aGVyIGlzIHRvIHNraXAgdGhlIHVucmVjb2duaXplZCBESU1NLg0KDQo+ICogSG93IGRvIHlvdSB0
+aGluayBhYm91dCB0byBhZGQgdGhlIHRhZyDigJxGaXhlc+KAnT8NCg0KVGhpcyBpcyBhIGdvb2Qg
+aWRlYS4gIFVzZSBnaXQgYmxhbWUsIG9yIGRpZyBpbnRvIHRoZSBHSVQgaGlzdG9yeSB0bw0KZmlu
+ZCB0aGUgY29tbWl0IHdoZXJlIHRoaXMgY29kZSB3YXMgaW50cm9kdWNlZCAoaGludCAuLiBnaXQg
+YmxhbWUNCnNheXM6DQo4OGEyNDJjOTg3NDAgKCJFREFDLCBza3hfY29tbW9uOiBTZXBhcmF0ZSBj
+b21tb24gY29kZSBvdXQgZnJvbSBza3hfZWRhYyIpDQpidXQgdGhhdCBvYnZpb3VzbHkganVzdCBy
+ZWZhY3RvcmVkIGNvZGUsIHNvIHlvdSBzaG91bGQgZGlnIGJhY2sgbW9yZSBpbnRvDQp0aGUgaGlz
+dG9yeS4NCg0KPiA+IFYyOiBtYWtlIGVycm9yLXByaW50IGV4cGxpY2l0bHkNCj4gPiAtLS0NCj4N
+Cj4gV291bGQgeW91IGxpa2UgdG8gYXZvaWQgYSBtaXNwbGFjZWQgbWFya2VyIGxpbmUgaGVyZT8N
+Cj4NCj4gU2VlIGFsc286DQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9r
+ZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL0RvY3VtZW50YXRpb24vcHJvY2Vzcy9z
+dWJtaXR0aW5nLXBhdGNoZXMucnN0P2g9djYuNCNuNjg2DQoNClRoYXQncyBhbiBleGNlbGxlbnQg
+cmVzb3VyY2UuDQoNCi1Ub255DQo=
