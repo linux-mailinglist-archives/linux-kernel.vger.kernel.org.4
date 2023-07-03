@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B3D74617E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B665746181
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjGCRjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
+        id S230359AbjGCRml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjGCRjv (ORCPT
+        with ESMTP id S229978AbjGCRmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:39:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779F8CE
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:39:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 3 Jul 2023 13:42:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048B390
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:42:36 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-215-029.ewe-ip-backbone.de [91.248.215.29])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CA3960FEF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 17:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3945DC433C7;
-        Mon,  3 Jul 2023 17:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688405989;
-        bh=OntLpPnFpu6a5AZn6p9k4IDUTa9DeesaKC3dsarBEQU=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 31BF56606F85;
+        Mon,  3 Jul 2023 18:42:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688406155;
+        bh=+mh0Q3S2UjyB/www++yqUMy1ueB4lCohv4YJsD2q3iI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CmrFmh5lmxYbn4ure2V67iG4eEuApA+cAlmqBLLlcm22Zr08WKxQHX28dD2UKLsjd
-         DP+rbcQDXn3UG4NI77qkloLUuYM7fnmFG7citty9W43xTWEfujhRokN0XnVCTrEGSl
-         +s+hFLWXSRReOk0GYeB4H1sfXuFS5SYtVcdj2dFDXj+FWNkYQAkaih8GJVBwHN+U/e
-         BRv5FkW5UqRxzuussLA9sDCiLF7Q29Q5GHLyox7pAPttgayI8CuAD6RLZWMTswWaSy
-         yLFcxHVZT0QRlQpWQL/hSfB4BGXEx15i67N+6yqO0ZNIdEbFUTISuT79ubCc2ybOzL
-         R8pY7TlcX5mkA==
-Date:   Mon, 3 Jul 2023 18:39:43 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Ortiz <sameo@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>, linux@rivosinc.com,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Jiatai He <jiatai2021@iscas.ac.cn>
-Subject: Re: [PATCH 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
-Message-ID: <20230703-mangle-panning-75909ebbe30c@spud>
-References: <20230627143747.1599218-1-sameo@rivosinc.com>
- <20230627143747.1599218-2-sameo@rivosinc.com>
- <CALs-HssMkVikspnEi-Ek2t=ABvFvgptAhsBjk1+aLuVjiP7P7w@mail.gmail.com>
- <20230627-debating-twelve-da2c1ed60948@spud>
- <ZJwE5wRVkoND3Z6P@vermeer>
- <20230628-unfeeling-tavern-edd4f58396fa@wendy>
- <CALs-HstZe+bw_fY--4FQXfFoA67tvMSaEjKhZ2pRstNT07xBxA@mail.gmail.com>
- <20230628-dragonish-lullaby-b44d2df09d66@spud>
+        b=mz2VEYvXzWBHzDRjTWh+VfucTY5Ggl/3UAzQPkF0uRcMEqMnsvIf0nKsqlEq6TsXg
+         r7kcGcS7zwCnEIPYc0IhXzVQxgMujFJkFZjx9VjeZLeI4GQczN3pYW4X2OvKkDpjfa
+         F1wyCCFGTYV9vM8fcAed6hbuQ1G75zfpoF8Ce6/XQnRplEzgTnV4c+aqC/5ALcmfRr
+         6jv4lYDzhq41ePV7tHPgsNAGqacA+zzVe/tf/IfCcm51KEvWgSaTAVa0UESMiSvzMm
+         M45TYbOAcvH+aM/ZRuySvc3D7gVrDXIeKExiwMThqC2xjkIL6Jlb94DvsqYaNGE0B0
+         HIj2+QJkAXdZA==
+Received: by mercury (Postfix, from userid 1000)
+        id 2E30F106098B; Mon,  3 Jul 2023 19:42:33 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 19:42:33 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Chris Morgan <macromorgan@hotmail.com>,
+        Yixun Lan <dlan@gentoo.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v1 1/1] irqchip/gic-v3: Enable Rockchip 3588001 erratum
+ workaround for RK3588S
+Message-ID: <20230703174233.wn7jusqeh3udusdz@mercury.elektranox.org>
+References: <20230703164129.193991-1-sebastian.reichel@collabora.com>
+ <863525x7eb.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JgFm48JGbULM0hnk"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qc4np6zcipime3pj"
 Content-Disposition: inline
-In-Reply-To: <20230628-dragonish-lullaby-b44d2df09d66@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <863525x7eb.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,113 +63,120 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---JgFm48JGbULM0hnk
-Content-Type: text/plain; charset=utf-8
+--qc4np6zcipime3pj
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 28, 2023 at 06:24:40PM +0100, Conor Dooley wrote:
-> On Wed, Jun 28, 2023 at 10:18:34AM -0700, Evan Green wrote:
-> > On Wed, Jun 28, 2023 at 4:10=E2=80=AFAM Conor Dooley <conor.dooley@micr=
-ochip.com> wrote:
-> > >
-> > > On Wed, Jun 28, 2023 at 12:01:11PM +0200, Samuel Ortiz wrote:
-> > > > On Tue, Jun 27, 2023 at 07:48:15PM +0100, Conor Dooley wrote:
-> > > > > On Tue, Jun 27, 2023 at 11:14:30AM -0700, Evan Green wrote:
-> > > > > > On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@riv=
-osinc.com> wrote:
-> > >
-> > > > > > It would be nice to consolidate the ones together that search f=
-or a
-> > > > > > single string and set multiple bits, though I don't have any su=
-per
-> > > > > > elegant ideas for how off the top of my head.
-> > > > >
-> > > > > I've got a refactor of this code in progress, dropping all of the=
-se
-> > > > > copy-paste in place of a loop. It certainly looks more elegant th=
-an
-> > > > > this, but it will fall over a bit for these "one string matches m=
-any
-> > > > > extensions" cases. See here:
-> > > > > https://patchwork.kernel.org/project/linux-riscv/patch/20230626-t=
-hieving-jockstrap-d35d20b535c5@wendy/
-> > > > > My immediate thought is to add another element to riscv_isa_ext_d=
-ata,
-> > > > > that contains "parent" extensions to check for. Should be fairly =
-doable,
-> > > > > I'll whip something up on top of that...
-> > > >
-> > > > Nice, and thanks for the review.
-> > >
-> > > > Should I wait for your refactor to be merged before pushing this on=
-e?
-> > >
-> > > I don't know. I think that you should continue on with your series he=
-re,
-> > > and whichever goes in second gets rebased on top of the other.
-> > > I don't think it makes material difference to review of this patchset=
- as
-> > > to whether you rebase on top of what I'm working on, so I wouldn't
-> > > bother until it gets merged.
-> > >
-> > > Rather hacky, had less time than expected this morning:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commi=
-t/?h=3Driscv-extensions-strings-supersets
-> > > Clearly there's issues with looping to RISCV_ISA_MAX_SUPERSETS & I ju=
-st
-> > > repurposed Zicsr for the sake of testing something in the time I had.
-> > >
-> > > Evan, at a high level, does that look more elegant to you, or have I =
-made
-> > > things worse?
-> > >
+Hi,
+
+On Mon, Jul 03, 2023 at 05:54:36PM +0100, Marc Zyngier wrote:
+> On Mon, 03 Jul 2023 17:41:29 +0100,
+> Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
 > >=20
-> > I see what you're going for at least. It's unfortunate that when
-> > someone bumps up RISCV_ISA_MAX_SUPERSETS it squares the whole array.
-> > Another way to go might be to define the elements in a separate array,
-> > like:
+> > Commit a8707f553884 ("irqchip/gic-v3: Add Rockchip 3588001 erratum
+> > workaround") mentioned RK3588S (the slimmed down variant of RK3588)
+> > being affected, but did not check for its compatible value. Thus the
+> > quirk is not applied on RK3588S. Since the GIC ITS node got added to the
+> > upstream DT, boards using RK3588S are no longer booting without this
+> > quirk being applied.
 > >=20
-> > unsigned int riscv_zks_exts[] =3D {
-> >        RISCV_ISA_EXT_ZBKB,
-> >        RISCV_ISA_EXT_ZBKC,
-> >        ....
-> > };
-> >=20
-> > then the macro entry looks like:
-> >=20
-> > SET_ISA_EXT_MAP_MULTI("zks", riscv_zks_exts),
-> >=20
-> > where the SET_ISA_EXT_MAP_MULTI() could use ARRAY_SIZE() to stash both
-> > the pointer to the array and the number of elements.
+> > Fixes: 06cdac8e8407 ("arm64: dts: rockchip: add GIC ITS support to rk35=
+88")
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> > I recently got a Rock 5A and noticed this issue. Apart from it, the Ind=
+iedroid
+> > Nova should also be affected (I don't have that board). There are no ot=
+her
+> > upstream RK3588S boards at the moment.
 >=20
-> Yup, I like the sound of that. I like the variadic stuff as it'd not
-> require defining a bunch of sub-arrays of supersets. I guess if it grows
-> too badly, we can just dump it off into another file or w/e.
+> What about "khadas,edge2"?
 
-Also, I realised the other day that I had a bug in my series - I was using
-"name" to read the property, not "property", which is what required the
-extra "supersets" property.
-The simplest thing to do actually seems to be to expand the "property"
-member to an array of strings named "properties", rather than
-introducing a "supersets" or similar.
+[+cc Yixun Lan <dlan@gentoo.org>]
 
-Perhaps I am forgetting a good reason for why I had it split, but I'll
-give it a whirl and see what I think...
+Ah yes, that too. I should have grepped for rk3588s instead of
+rockchip,rk3588 and trying to sort out the false positives (I
+tried it that way to check if any other potential suffixes being
+used).
 
-Cheers,
-Conor.
+> > ---
+> >  drivers/irqchip/irq-gic-v3-its.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic=
+-v3-its.c
+> > index 1994541eaef8..034ece9ac47c 100644
+> > --- a/drivers/irqchip/irq-gic-v3-its.c
+> > +++ b/drivers/irqchip/irq-gic-v3-its.c
+> > @@ -4727,7 +4727,8 @@ static bool __maybe_unused its_enable_rk3588001(v=
+oid *data)
+> >  {
+> >  	struct its_node *its =3D data;
+> > =20
+> > -	if (!of_machine_is_compatible("rockchip,rk3588"))
+> > +	if (!of_machine_is_compatible("rockchip,rk3588") &&
+> > +	    !of_machine_is_compatible("rockchip,rk3588s"))
+> >  		return false;
+> > =20
+> >  	its->flags |=3D ITS_FLAGS_FORCE_NON_SHAREABLE;
+>=20
+> I don't mind taking this, but it also mean that only a new kernel
+> will boot.
 
+Yes. My assumption is, that this is considered a fix and landing in the
+6.5 cycle. The rk3588s.dtsi from v6.4 does not yet have the GIC ITS
+nodes. So there is not yet a tagged kernel with the boot failure. The
+first one will be v6.5-rc1.
 
---JgFm48JGbULM0hnk
+The quirk in the GIC driver only landed in v6.4, so anything older
+is broken anyways. So effectively we are talking about v6.4 booting
+a v6.5 DT, which is not something we guarantee to be working as far
+as I know.
+
+> Shouldn't you *also* fix the DT so that it advertises rk3588 as
+> a fallback to rk3588s? This would ensure that an old kernel can boot
+> as well.
+
+RK3588S is a subset of RK3588. Thus rk3588s could be a fallback for
+rk3588, but not the other way around. That way the quirk could only
+check for "rockchip,rk3588s". But this would break the following
+DTs, if they are not being patched in parallel:
+
+$ grep '"rockchip,rk3588"' *dts
+rk3588-edgeble-neu6a-io.dts:		     "edgeble,neural-compute-module-6a", "roc=
+kchip,rk3588";
+rk3588-edgeble-neu6b-io.dts:		     "edgeble,neural-compute-module-6b", "roc=
+kchip,rk3588";
+rk3588-evb1-v10.dts:	compatible =3D "rockchip,rk3588-evb1-v10", "rockchip,r=
+k3588";
+rk3588-rock-5b.dts:	compatible =3D "radxa,rock-5b", "rockchip,rk3588";
+
+And in this case it breaks the DT backwards compatibility guarantee,
+because new kernel is supposed to be able to boot an old DT. I
+suppose adding the extra fallback to RK3588 might still be sensible
+for any future issues.
+
+-- Sebastian
+
+--qc4np6zcipime3pj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKMH3wAKCRB4tDGHoIJi
-0t+YAQCaAdQcKzF/7Wkkp8B3/aBhZXO+q4AFQeKrzR3oAw54bwD9G6x/Upc4snIB
-z7KVmZAXIYejb0tOCXe33BZlBfBWUAg=
-=UEKI
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSjCH8ACgkQ2O7X88g7
++pq02Q//TlLemr1jP5o5Mh8WuCjiJ0cPKS4G74sM8zQQVBvWVShdTuKIhp3AgQFT
+RuYTgF7cSIp5wYR5u0tM+cj/OR+h7/O4npsYP7oBUsVBiYuUg6DlSUqYGc64FcB1
+kXzp8Iu1rug9MMl6fRYEfuNs7CJSwDE2/wYrW1wDOycPUgMAus5fbbviBhT2hnbV
+j8HoQzoDNRegw8WETNcuMR9UVXkfgSqFERBcrcFP+xLgokO1/BkF55wInhF3n6OB
+XBJjQDTwHr76MFgZMv/3kRk5CwwB//SEoHFb1f+WALPNToPGfJawXdP43WjmEy9+
+kOpK9oKmUDDnRZ7Z8TmFWrk09ZaGnDBB4q6FvJ3Bk5zFzkuFca6+V0BKR9POP8kF
+l9c8CrSObqFBsDb5Pkf4QYxvHx2c0z32HbG+1g+NIJkiZh0zwAJzbEzcutQ1aLXn
+ScwhvpMsYeJRM75C8TXCWd/dtE1CWRl61WZXWV3EiL73FZm1X11v9A13j3ms2sGJ
+44lw/f3pJmACqBsQpUwf7QZKjLg2Yf5xH392+0AMtDfr8uyjgmDK7I4nFsuGw946
+qTfYgxDXHhpyRdKOWXU3/+wTMSLZ5++XwY74e5XKU8FgvwI7yTKmOeHlHN6FexL3
+7+Kd9ZI3ShQt1l9GTPNDgVOEl4xiizPOx66JZ+9jKvY298VePks=
+=Tpf7
 -----END PGP SIGNATURE-----
 
---JgFm48JGbULM0hnk--
+--qc4np6zcipime3pj--
