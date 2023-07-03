@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E034745B0F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB6C745B11
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjGCL3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S231157AbjGCL3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjGCL3i (ORCPT
+        with ESMTP id S231147AbjGCL3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:29:38 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2421EC;
-        Mon,  3 Jul 2023 04:29:36 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 363BTG9b095606;
-        Mon, 3 Jul 2023 06:29:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1688383756;
-        bh=xDtP2HJQgfk6AN7TtOP/ryebO14+ERJGMm36HhtgU2Q=;
-        h=From:To:CC:Subject:Date;
-        b=klnc0xG8vrmpvDuVqdSlRNoClaR9Dz3fUQpMr+kcL1fTWNRJ0RBeESehAs6qKwC1h
-         hau/3fOOAe/kAeT51HIRpJylQFRzIE1HfevMGUlqDZ3lVOUv5tU1pPesFuDJMKPlcW
-         e8QnIkiz2UIkGMLep8PiaMEXigBmr1mweeQIuv90=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 363BTFx7048757
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Jul 2023 06:29:15 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 3
- Jul 2023 06:29:15 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 3 Jul 2023 06:29:15 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 363BTERL001690;
-        Mon, 3 Jul 2023 06:29:15 -0500
-From:   Achal Verma <a-verma1@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
-Subject: [PATCH] PCI: j721e: Fix delay before PERST# deassert
-Date:   Mon, 3 Jul 2023 16:59:14 +0530
-Message-ID: <20230703112914.68806-1-a-verma1@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Jul 2023 07:29:51 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA5AE75;
+        Mon,  3 Jul 2023 04:29:47 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QvkDy3l80z6J75p;
+        Mon,  3 Jul 2023 19:28:02 +0800 (CST)
+Received: from localhost (10.34.206.101) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 3 Jul
+ 2023 12:29:40 +0100
+Date:   Mon, 3 Jul 2023 19:29:36 +0800
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v8 01/14] cxl/port: Pre-initialize component register
+ mappings
+Message-ID: <20230703192936.00003dbd@Huawei.com>
+In-Reply-To: <20230630231635.3132638-2-terry.bowman@amd.com>
+References: <20230630231635.3132638-1-terry.bowman@amd.com>
+        <20230630231635.3132638-2-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.34.206.101]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the PCIe Card Electromechanical specification REV. 3.0, PERST#
-signal should be de-asserted after minimum 100ms from the time power-rails
-become stable. Current delay of 100us is observed to be not enough on some
-custom platform implemented using TI's K3 SOCs.
+On Fri, 30 Jun 2023 18:16:22 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
 
-So, to ensure 100ms delay to give sufficient time for power-rails and
-refclk to become stable, change delay from 100us to 100ms.
+> From: Robert Richter <rrichter@amd.com>
+> 
+> The component registers of a component may not exist or are not
+> needed. The setup may fail for that reason. In some cases the
+> initialization should continue anyway. Thus, always initialize struct
+> cxl_register_map with valid values. In case of errors, zero it, set a
+> value for @dev and make @resource a the valid value using
+> CXL_RESOURCE_NONE.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Seems reasonable to me.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-From PCIe Card Electromechanical specification REV. 3.0 section 2.6.2:
-TPVPERL: Power stable to PERST# inactive - 100ms
-T-PERST-CLK: REFCLK stable before PERST# inactive - 100 usec.
-
-Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
-Signed-off-by: Achal Verma <a-verma1@ti.com>
----
- drivers/pci/controller/cadence/pci-j721e.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-index e70213c9060a..fa2b4c11d2c4 100644
---- a/drivers/pci/controller/cadence/pci-j721e.c
-+++ b/drivers/pci/controller/cadence/pci-j721e.c
-@@ -499,13 +499,12 @@ static int j721e_pcie_probe(struct platform_device *pdev)
- 		/*
- 		 * "Power Sequencing and Reset Signal Timings" table in
- 		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
--		 * indicates PERST# should be deasserted after minimum of 100us
--		 * once REFCLK is stable. The REFCLK to the connector in RC
--		 * mode is selected while enabling the PHY. So deassert PERST#
--		 * after 100 us.
-+		 * indicates PERST# should be deasserted after minimum of 100ms
-+		 * after power rails achieve specified operating limits and
-+		 * within this period reference clock should also become stable.
- 		 */
- 		if (gpiod) {
--			usleep_range(100, 200);
-+			msleep(100);
- 			gpiod_set_value_cansleep(gpiod, 1);
- 		}
- 
--- 
-2.25.1
+> ---
+>  drivers/cxl/core/port.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+> index 724be8448eb4..2d22e7a5629b 100644
+> --- a/drivers/cxl/core/port.c
+> +++ b/drivers/cxl/core/port.c
+> @@ -693,16 +693,17 @@ static struct cxl_port *cxl_port_alloc(struct device *uport_dev,
+>  static int cxl_setup_comp_regs(struct device *dev, struct cxl_register_map *map,
+>  			       resource_size_t component_reg_phys)
+>  {
+> -	if (component_reg_phys == CXL_RESOURCE_NONE)
+> -		return 0;
+> -
+>  	*map = (struct cxl_register_map) {
+>  		.dev = dev,
+> -		.reg_type = CXL_REGLOC_RBI_COMPONENT,
+>  		.resource = component_reg_phys,
+> -		.max_size = CXL_COMPONENT_REG_BLOCK_SIZE,
+>  	};
+>  
+> +	if (component_reg_phys == CXL_RESOURCE_NONE)
+> +		return 0;
+> +
+> +	map->reg_type = CXL_REGLOC_RBI_COMPONENT;
+> +	map->max_size = CXL_COMPONENT_REG_BLOCK_SIZE;
+> +
+>  	return cxl_setup_regs(map);
+>  }
+>  
 
