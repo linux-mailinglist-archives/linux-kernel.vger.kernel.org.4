@@ -2,435 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67D77457B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533E474579D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjGCIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S230247AbjGCItD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjGCIuL (ORCPT
+        with ESMTP id S230302AbjGCIsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:50:11 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDE310EA;
-        Mon,  3 Jul 2023 01:49:52 -0700 (PDT)
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 43FD460004;
-        Mon,  3 Jul 2023 08:49:47 +0000 (UTC)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH v4] HID: steelseries: Add support for Arctis 1 XBox
-Date:   Mon,  3 Jul 2023 10:48:10 +0200
-Message-ID: <20230703084947.3620-1-hadess@hadess.net>
+        Mon, 3 Jul 2023 04:48:55 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2345E7B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:48:43 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4Qvfhy03FCz9sFg;
+        Mon,  3 Jul 2023 10:48:34 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VUhJEb5_N68q; Mon,  3 Jul 2023 10:48:33 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4Qvfhs4hjbz9sFj;
+        Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9B0C28B823;
+        Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id pxhR1CoTxnqj; Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5B7B08B77D;
+        Mon,  3 Jul 2023 10:48:29 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 3638mQCQ1103963
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 3 Jul 2023 10:48:26 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 3638mQld1103962;
+        Mon, 3 Jul 2023 10:48:26 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 7/9] powerpc/kuap: Simplify KUAP lock/unlock on BOOK3S/32
+Date:   Mon,  3 Jul 2023 10:48:11 +0200
+Message-ID: <1897c2f40448bb0dfc0f0be978cd10f74ef577ba.1688373335.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <cover.1688373335.git.christophe.leroy@csgroup.eu>
+References: <cover.1688373335.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688374084; l=7750; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=/19je7eNycqdcKZa7ad8wOoIcXq4DodoPt9t8vnNw1A=; b=uUi20fBtcM+rojZ2h2DtrO2lqFL0W9tJkZhRg1EVkxJgbHaNkfhlwLz84zlDZOlKER0CB81di 6EQimxkk7e5A8V0RJDhDtsaXddNYRrl9DyY7MgcevZBaRcu7ItFpNd4
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Steelseries Arctis 1 XBox headset. This driver
-will export the battery information from the headset, as well as the
-"wireless_status" property.
+On book3s/32 KUAP is performed at segment level. At the moment,
+when enabling userspace access, only current segment is modified.
+Then if a write is performed on another user segment, a fault is
+taken and all other user segments get enabled for userspace
+access. This then require special attention when disabling
+userspace access.
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
+Having a userspace write access crossing a segment boundary is
+unlikely. Having a userspace write access crossing a segment boundary
+back and forth is even more unlikely. So, instead of enabling
+userspace access on all segments when a write fault occurs, just
+change which segment has userspace access enabled in order to
+eliminate the case when more than one segment has userspace access
+enabled. That simplifies userspace access deactivation.
+
+There is however a corner case which is even more unlikely but has
+to be handled anyway: an unaligned access which is crossing a
+segment boundary. That would definitely require at least having
+userspace access enabled on the two segments. To avoid complicating
+the likely case for a so unlikely happening, handle such situation
+like an alignment exception and emulate the store.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
-v4:
-- Guard against crash when using uhid
-- Print the contents of the raw events for debugging
+ arch/powerpc/include/asm/book3s/32/kup.h | 71 ++++++++----------------
+ arch/powerpc/include/asm/bug.h           |  1 +
+ arch/powerpc/kernel/traps.c              |  2 +-
+ arch/powerpc/mm/book3s32/kuap.c          | 15 +----
+ 4 files changed, 26 insertions(+), 63 deletions(-)
 
-v3:
-- Dependency is on USB not USB_HID
-
-v2:
-- Fix missing USB dependency
-- Fix config option description
-
- drivers/hid/Kconfig           |   6 +-
- drivers/hid/hid-steelseries.c | 310 ++++++++++++++++++++++++++++++++--
- 2 files changed, 299 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 4ce012f83253..afe1c6070602 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1048,9 +1048,11 @@ config STEAM_FF
- 	Deck.
+diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/include/asm/book3s/32/kup.h
+index 4ca6122ef0e1..5d4f787244d5 100644
+--- a/arch/powerpc/include/asm/book3s/32/kup.h
++++ b/arch/powerpc/include/asm/book3s/32/kup.h
+@@ -14,55 +14,19 @@
+ #include <linux/sched.h>
  
- config HID_STEELSERIES
--	tristate "Steelseries SRW-S1 steering wheel support"
-+	tristate "Steelseries devices support"
-+	depends on USB
- 	help
--	Support for Steelseries SRW-S1 steering wheel
-+	Support for Steelseries SRW-S1 steering wheel, and the Steelseries
-+	Arctis 1 Wireless for XBox headset.
+ #define KUAP_NONE	(~0UL)
+-#define KUAP_ALL	(~1UL)
  
- config HID_SUNPLUS
- 	tristate "Sunplus wireless desktop"
-diff --git a/drivers/hid/hid-steelseries.c b/drivers/hid/hid-steelseries.c
-index aae3afc4107a..93bc70ba47ab 100644
---- a/drivers/hid/hid-steelseries.c
-+++ b/drivers/hid/hid-steelseries.c
-@@ -1,8 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- *  HID driver for Steelseries SRW-S1
-+ *  HID driver for Steelseries devices
-  *
-  *  Copyright (c) 2013 Simon Wood
-+ *  Copyright (c) 2023 Bastien Nocera
-  */
- 
- /*
-@@ -11,10 +12,28 @@
- #include <linux/device.h>
- #include <linux/hid.h>
- #include <linux/module.h>
-+#include <linux/usb.h>
- #include <linux/leds.h>
- 
- #include "hid-ids.h"
- 
-+#define STEELSERIES_SRWS1		BIT(0)
-+#define STEELSERIES_ARCTIS_1		BIT(1)
-+
-+struct steelseries_device {
-+	struct hid_device *hdev;
-+	unsigned long quirks;
-+
-+	struct delayed_work battery_work;
-+	spinlock_t lock;
-+	bool removed;
-+
-+	struct power_supply_desc battery_desc;
-+	struct power_supply *battery;
-+	uint8_t battery_capacity;
-+	bool headset_connected;
-+};
-+
- #if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-     (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
- #define SRWS1_NUMBER_LEDS 15
-@@ -353,9 +372,211 @@ static void steelseries_srws1_remove(struct hid_device *hdev)
- }
- #endif
- 
-+#define STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS	3000
-+
-+#define ARCTIS_1_BATTERY_RESPONSE_LEN		8
-+
-+static int steelseries_headset_arctis_1_fetch_battery(struct hid_device *hdev)
-+{
-+	u8 *write_buf;
-+	int ret;
-+	char battery_request[2] = { 0x06, 0x12 };
-+
-+	/* Request battery information */
-+	write_buf = kmemdup(battery_request, sizeof(battery_request), GFP_KERNEL);
-+	if (!write_buf)
-+		return -ENOMEM;
-+
-+	ret = hid_hw_raw_request(hdev, battery_request[0],
-+				 write_buf, sizeof(battery_request),
-+				 HID_OUTPUT_REPORT, HID_REQ_SET_REPORT);
-+	if (ret < sizeof(battery_request)) {
-+		hid_err(hdev, "hid_hw_raw_request() failed with %d\n", ret);
-+		ret = -ENODATA;
-+	}
-+	kfree(write_buf);
-+	return ret;
-+}
-+
-+static void steelseries_headset_fetch_battery(struct hid_device *hdev)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	int ret = 0;
-+
-+	if (sd->quirks & STEELSERIES_ARCTIS_1)
-+		ret = steelseries_headset_arctis_1_fetch_battery(hdev);
-+
-+	if (ret < 0)
-+		hid_dbg(hdev,
-+			"Battery query failed (err: %d)\n", ret);
-+}
-+
-+static void steelseries_headset_battery_timer_tick(struct work_struct *work)
-+{
-+	struct steelseries_device *sd = container_of(work,
-+		struct steelseries_device, battery_work.work);
-+	struct hid_device *hdev = sd->hdev;
-+
-+	steelseries_headset_fetch_battery(hdev);
-+}
-+
-+static int steelseries_headset_battery_get_property(struct power_supply *psy,
-+				enum power_supply_property psp,
-+				union power_supply_propval *val)
-+{
-+	struct steelseries_device *sd = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = 1;
-+		break;
-+	case POWER_SUPPLY_PROP_STATUS:
-+		val->intval = sd->headset_connected ?
-+			POWER_SUPPLY_STATUS_DISCHARGING :
-+			POWER_SUPPLY_STATUS_UNKNOWN;
-+		break;
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		val->intval = POWER_SUPPLY_SCOPE_DEVICE;
-+		break;
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		val->intval = sd->battery_capacity;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static void
-+steelseries_headset_set_wireless_status(struct hid_device *hdev,
-+					bool connected)
-+{
-+	struct usb_interface *intf;
-+
-+	if (!hid_is_usb(hdev))
-+		return;
-+
-+	intf = to_usb_interface(hdev->dev.parent);
-+	usb_set_wireless_status(intf, connected ?
-+				USB_WIRELESS_STATUS_CONNECTED :
-+				USB_WIRELESS_STATUS_DISCONNECTED);
-+}
-+
-+static enum power_supply_property steelseries_headset_battery_props[] = {
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_SCOPE,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+};
-+
-+static int steelseries_headset_battery_register(struct steelseries_device *sd)
-+{
-+	static atomic_t battery_no = ATOMIC_INIT(0);
-+	struct power_supply_config battery_cfg = { .drv_data = sd, };
-+	unsigned long n;
-+	int ret;
-+
-+	sd->battery_desc.type = POWER_SUPPLY_TYPE_BATTERY;
-+	sd->battery_desc.properties = steelseries_headset_battery_props;
-+	sd->battery_desc.num_properties = ARRAY_SIZE(steelseries_headset_battery_props);
-+	sd->battery_desc.get_property = steelseries_headset_battery_get_property;
-+	sd->battery_desc.use_for_apm = 0;
-+	n = atomic_inc_return(&battery_no) - 1;
-+	sd->battery_desc.name = devm_kasprintf(&sd->hdev->dev, GFP_KERNEL,
-+						    "steelseries_headset_battery_%ld", n);
-+	if (!sd->battery_desc.name)
-+		return -ENOMEM;
-+
-+	/* avoid the warning of 0% battery while waiting for the first info */
-+	steelseries_headset_set_wireless_status(sd->hdev, false);
-+	sd->battery_capacity = 100;
-+
-+	sd->battery = devm_power_supply_register(&sd->hdev->dev,
-+			&sd->battery_desc, &battery_cfg);
-+	if (IS_ERR(sd->battery)) {
-+		ret = PTR_ERR(sd->battery);
-+		hid_err(sd->hdev,
-+				"%s:power_supply_register failed with error %d\n",
-+				__func__, ret);
-+		return ret;
-+	}
-+	power_supply_powers(sd->battery, &sd->hdev->dev);
-+
-+	INIT_DELAYED_WORK(&sd->battery_work, steelseries_headset_battery_timer_tick);
-+	steelseries_headset_fetch_battery(sd->hdev);
-+
-+	return 0;
-+}
-+
-+static int steelseries_probe(struct hid_device *hdev, const struct hid_device_id *id)
-+{
-+	struct steelseries_device *sd;
-+	int ret;
-+
-+	sd = devm_kzalloc(&hdev->dev, sizeof(*sd), GFP_KERNEL);
-+	if (!sd)
-+		return -ENOMEM;
-+	hid_set_drvdata(hdev, sd);
-+	sd->hdev = hdev;
-+	sd->quirks = id->driver_data;
-+
-+	if (sd->quirks & STEELSERIES_SRWS1) {
-+#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-+    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-+		return steelseries_srws1_probe(hdev, id);
-+#else
-+		return -ENODEV;
-+#endif
-+	}
-+
-+	ret = hid_parse(hdev);
-+	if (ret)
-+		return ret;
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-+	if (ret)
-+		return ret;
-+
-+	if (steelseries_headset_battery_register(sd) < 0)
-+		hid_err(sd->hdev,
-+			"Failed to register battery for headset\n");
-+
-+	spin_lock_init(&sd->lock);
-+
-+	return ret;
-+}
-+
-+static void steelseries_remove(struct hid_device *hdev)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	unsigned long flags;
-+
-+	if (sd->quirks & STEELSERIES_SRWS1) {
-+#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-+    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-+		steelseries_srws1_remove(hdev);
-+#endif
-+		return;
-+	}
-+
-+	spin_lock_irqsave(&sd->lock, flags);
-+	sd->removed = true;
-+	spin_unlock_irqrestore(&sd->lock, flags);
-+
-+	cancel_delayed_work_sync(&sd->battery_work);
-+
-+	hid_hw_stop(hdev);
-+}
-+
- static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc,
- 		unsigned int *rsize)
+-static inline void kuap_lock_one(unsigned long addr)
++static inline void uaccess_end_32s(unsigned long addr)
  {
-+	if (hdev->vendor != USB_VENDOR_ID_STEELSERIES ||
-+	    hdev->product != USB_DEVICE_ID_STEELSERIES_SRWS1)
-+		return rdesc;
-+
- 	if (*rsize >= 115 && rdesc[11] == 0x02 && rdesc[13] == 0xc8
- 			&& rdesc[29] == 0xbb && rdesc[40] == 0xc5) {
- 		hid_info(hdev, "Fixing up Steelseries SRW-S1 report descriptor\n");
-@@ -365,22 +586,81 @@ static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc
- 	return rdesc;
+ 	mtsr(mfsr(addr) | SR_KS, addr);
+ 	isync();	/* Context sync required after mtsr() */
  }
  
--static const struct hid_device_id steelseries_srws1_devices[] = {
--	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1) },
-+static int steelseries_headset_raw_event(struct hid_device *hdev,
-+					struct hid_report *report, u8 *read_buf,
-+					int size)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	int capacity = sd->battery_capacity;
-+	bool connected = sd->headset_connected;
-+	unsigned long flags;
-+
-+	/* Not a headset */
-+	if (sd->quirks & STEELSERIES_SRWS1)
-+		return 0;
-+
-+	if (sd->quirks & STEELSERIES_ARCTIS_1) {
-+		hid_dbg(sd->hdev,
-+			"Parsing raw event for Arctis 1 headset (%*ph)\n", size, read_buf);
-+		if (size < 8)
-+			return 0;
-+		if (read_buf[2] == 0x01) {
-+			connected = false;
-+			capacity = 100;
+-static inline void kuap_unlock_one(unsigned long addr)
++static inline void uaccess_begin_32s(unsigned long addr)
+ {
+ 	mtsr(mfsr(addr) & ~SR_KS, addr);
+ 	isync();	/* Context sync required after mtsr() */
+ }
+ 
+-static inline void kuap_lock_all(void)
+-{
+-	update_user_segments(mfsr(0) | SR_KS);
+-	isync();	/* Context sync required after mtsr() */
+-}
+-
+-static inline void kuap_unlock_all(void)
+-{
+-	update_user_segments(mfsr(0) & ~SR_KS);
+-	isync();	/* Context sync required after mtsr() */
+-}
+-
+-void kuap_lock_all_ool(void);
+-void kuap_unlock_all_ool(void);
+-
+-static inline void kuap_lock_addr(unsigned long addr, bool ool)
+-{
+-	if (likely(addr != KUAP_ALL))
+-		kuap_lock_one(addr);
+-	else if (!ool)
+-		kuap_lock_all();
+-	else
+-		kuap_lock_all_ool();
+-}
+-
+-static inline void kuap_unlock(unsigned long addr, bool ool)
+-{
+-	if (likely(addr != KUAP_ALL))
+-		kuap_unlock_one(addr);
+-	else if (!ool)
+-		kuap_unlock_all();
+-	else
+-		kuap_unlock_all_ool();
+-}
+-
+ static inline void __kuap_save_and_lock(struct pt_regs *regs)
+ {
+ 	unsigned long kuap = current->thread.kuap;
+@@ -72,7 +36,7 @@ static inline void __kuap_save_and_lock(struct pt_regs *regs)
+ 		return;
+ 
+ 	current->thread.kuap = KUAP_NONE;
+-	kuap_lock_addr(kuap, false);
++	uaccess_end_32s(kuap);
+ }
+ #define __kuap_save_and_lock __kuap_save_and_lock
+ 
+@@ -84,7 +48,7 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kua
+ {
+ 	if (unlikely(kuap != KUAP_NONE)) {
+ 		current->thread.kuap = KUAP_NONE;
+-		kuap_lock_addr(kuap, false);
++		uaccess_end_32s(kuap);
+ 	}
+ 
+ 	if (likely(regs->kuap == KUAP_NONE))
+@@ -92,7 +56,7 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kua
+ 
+ 	current->thread.kuap = regs->kuap;
+ 
+-	kuap_unlock(regs->kuap, false);
++	uaccess_begin_32s(regs->kuap);
+ }
+ 
+ static inline unsigned long __kuap_get_and_assert_locked(void)
+@@ -114,7 +78,7 @@ static __always_inline void __allow_user_access(void __user *to, const void __us
+ 		return;
+ 
+ 	current->thread.kuap = (__force u32)to;
+-	kuap_unlock_one((__force u32)to);
++	uaccess_begin_32s((__force u32)to);
+ }
+ 
+ static __always_inline void __prevent_user_access(unsigned long dir)
+@@ -127,7 +91,7 @@ static __always_inline void __prevent_user_access(unsigned long dir)
+ 		return;
+ 
+ 	current->thread.kuap = KUAP_NONE;
+-	kuap_lock_addr(kuap, true);
++	uaccess_end_32s(kuap);
+ }
+ 
+ static inline unsigned long __prevent_user_access_return(void)
+@@ -136,7 +100,7 @@ static inline unsigned long __prevent_user_access_return(void)
+ 
+ 	if (flags != KUAP_NONE) {
+ 		current->thread.kuap = KUAP_NONE;
+-		kuap_lock_addr(flags, true);
++		uaccess_end_32s(flags);
+ 	}
+ 
+ 	return flags;
+@@ -146,7 +110,7 @@ static inline void __restore_user_access(unsigned long flags)
+ {
+ 	if (flags != KUAP_NONE) {
+ 		current->thread.kuap = flags;
+-		kuap_unlock(flags, true);
++		uaccess_begin_32s(flags);
+ 	}
+ }
+ 
+@@ -155,14 +119,23 @@ __bad_kuap_fault(struct pt_regs *regs, unsigned long address, bool is_write)
+ {
+ 	unsigned long kuap = regs->kuap;
+ 
+-	if (!is_write || kuap == KUAP_ALL)
++	if (!is_write)
+ 		return false;
+ 	if (kuap == KUAP_NONE)
+ 		return true;
+ 
+-	/* If faulting address doesn't match unlocked segment, unlock all */
+-	if ((kuap ^ address) & 0xf0000000)
+-		regs->kuap = KUAP_ALL;
++	/*
++	 * If faulting address doesn't match unlocked segment, change segment.
++	 * In case of unaligned store crossing two segments, emulate store.
++	 */
++	if ((kuap ^ address) & 0xf0000000) {
++		if (!(kuap & 0x0fffffff) && address > kuap - 4 && fix_alignment(regs)) {
++			regs_add_return_ip(regs, 4);
++			emulate_single_step(regs);
 +		} else {
-+			connected = true;
-+			capacity = read_buf[3];
++			regs->kuap = address;
 +		}
 +	}
-+
-+	if (connected != sd->headset_connected) {
-+		hid_dbg(sd->hdev,
-+			"Connected status changed from %sconnected to %sconnected\n",
-+			sd->headset_connected ? "" : "not ",
-+			connected ? "" : "not ");
-+		sd->headset_connected = connected;
-+		steelseries_headset_set_wireless_status(hdev, connected);
-+	}
-+
-+	if (capacity != sd->battery_capacity) {
-+		hid_dbg(sd->hdev,
-+			"Battery capacity changed from %d%% to %d%%\n",
-+			sd->battery_capacity, capacity);
-+		sd->battery_capacity = capacity;
-+		power_supply_changed(sd->battery);
-+	}
-+
-+	spin_lock_irqsave(&sd->lock, flags);
-+	if (!sd->removed)
-+		schedule_delayed_work(&sd->battery_work,
-+				msecs_to_jiffies(STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS));
-+	spin_unlock_irqrestore(&sd->lock, flags);
-+
-+	return 0;
-+}
-+
-+static const struct hid_device_id steelseries_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1),
-+	  .driver_data = STEELSERIES_SRWS1 },
-+
-+	{ /* SteelSeries Arctis 1 Wireless for XBox */
-+	  HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, 0x12b6),
-+	.driver_data = STEELSERIES_ARCTIS_1 },
-+
- 	{ }
- };
--MODULE_DEVICE_TABLE(hid, steelseries_srws1_devices);
--
--static struct hid_driver steelseries_srws1_driver = {
--	.name = "steelseries_srws1",
--	.id_table = steelseries_srws1_devices,
--#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
--    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
--	.probe = steelseries_srws1_probe,
--	.remove = steelseries_srws1_remove,
--#endif
--	.report_fixup = steelseries_srws1_report_fixup
-+MODULE_DEVICE_TABLE(hid, steelseries_devices);
-+
-+static struct hid_driver steelseries_driver = {
-+	.name = "steelseries",
-+	.id_table = steelseries_devices,
-+	.probe = steelseries_probe,
-+	.remove = steelseries_remove,
-+	.report_fixup = steelseries_srws1_report_fixup,
-+	.raw_event = steelseries_headset_raw_event,
- };
  
--module_hid_driver(steelseries_srws1_driver);
-+module_hid_driver(steelseries_driver);
- MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Bastien Nocera <hadess@hadess.net>");
-+MODULE_AUTHOR("Simon Wood <simon@mungewell.org>");
+ 	return false;
+ }
+diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
+index ef42adb44aa3..492530adecc2 100644
+--- a/arch/powerpc/include/asm/bug.h
++++ b/arch/powerpc/include/asm/bug.h
+@@ -163,6 +163,7 @@ __label_warn_on:						\
+ struct pt_regs;
+ void hash__do_page_fault(struct pt_regs *);
+ void bad_page_fault(struct pt_regs *, int);
++void emulate_single_step(struct pt_regs *regs);
+ extern void _exception(int, struct pt_regs *, int, unsigned long);
+ extern void _exception_pkey(struct pt_regs *, unsigned long, int);
+ extern void die(const char *, struct pt_regs *, long);
+diff --git a/arch/powerpc/kernel/traps.c b/arch/powerpc/kernel/traps.c
+index e59ec6d32d37..ab95105c69ca 100644
+--- a/arch/powerpc/kernel/traps.c
++++ b/arch/powerpc/kernel/traps.c
+@@ -1158,7 +1158,7 @@ DEFINE_INTERRUPT_HANDLER(single_step_exception)
+  * pretend we got a single-step exception.  This was pointed out
+  * by Kumar Gala.  -- paulus
+  */
+-static void emulate_single_step(struct pt_regs *regs)
++void emulate_single_step(struct pt_regs *regs)
+ {
+ 	if (single_stepping(regs))
+ 		__single_step_exception(regs);
+diff --git a/arch/powerpc/mm/book3s32/kuap.c b/arch/powerpc/mm/book3s32/kuap.c
+index 24c1c686e6b9..3a8815555a48 100644
+--- a/arch/powerpc/mm/book3s32/kuap.c
++++ b/arch/powerpc/mm/book3s32/kuap.c
+@@ -3,22 +3,11 @@
+ #include <asm/kup.h>
+ #include <asm/smp.h>
+ 
+-void kuap_lock_all_ool(void)
+-{
+-	kuap_lock_all();
+-}
+-EXPORT_SYMBOL(kuap_lock_all_ool);
+-
+-void kuap_unlock_all_ool(void)
+-{
+-	kuap_unlock_all();
+-}
+-EXPORT_SYMBOL(kuap_unlock_all_ool);
+-
+ void setup_kuap(bool disabled)
+ {
+ 	if (!disabled) {
+-		kuap_lock_all_ool();
++		update_user_segments(mfsr(0) | SR_KS);
++		isync();        /* Context sync required after mtsr() */
+ 		init_mm.context.sr0 |= SR_KS;
+ 		current->thread.sr0 |= SR_KS;
+ 	}
 -- 
 2.41.0
 
