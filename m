@@ -2,57 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89AD746249
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46E6746258
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjGCSXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S230330AbjGCS0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjGCSXh (ORCPT
+        with ESMTP id S229830AbjGCS0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:23:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344B8D7;
-        Mon,  3 Jul 2023 11:23:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A55D560FF1;
-        Mon,  3 Jul 2023 18:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D6DDC433C8;
-        Mon,  3 Jul 2023 18:23:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688408616;
-        bh=VV5nlcHSQdU2CE/kaXRHO4TsB7jAH3jRL4fsIT9AC5I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=g/gv8wQmnEK+0SC9oj+u2YDtTdqIYa0ibhF4prcDb5NBdrboGUEUpT2shV+MW+yzA
-         TW8uTL/NBjYiorcJ5EuDMRdQmb5R24Eek4+9nEV2Ln2P1dVnFNiuoc+bEsd9X4pqw+
-         XPPYlmNSNt5EJmeSrqG0vlFtOy5bIwaGzG/QAsHMsDiew+WtC1GGQSvMOyQVqrPhxF
-         ROWsjgqencRE80Zvz1XdOdnDduAEGNCMzWOMb31/3opxRF2bg7Hvy1LjTQRmAWJqKs
-         uqphevWI/vQK0ghvZx/bKwKVexThp6mIZXaQB8cavuWezg21QCxV6KgpgZtuJCf0PT
-         MZTGOLZcn7tVw==
-Message-ID: <19b2d721-06a3-bc17-eb81-18ee2d8856a3@kernel.org>
-Date:   Mon, 3 Jul 2023 20:23:30 +0200
+        Mon, 3 Jul 2023 14:26:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04947D7;
+        Mon,  3 Jul 2023 11:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688408806; x=1719944806;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=loPr+dzJ18Fhw1+ezR3lKISk94Z2wAYPGf8y4ACIrKE=;
+  b=kWtc2nsl+9L+/nOEZXpTFwYRvliVyo3wZ46DdDLeLmwlVNvZbZBwFIpt
+   +dr3BbEDZYiH4VUfhMCuou6XCCqQL1si5//5u9M/4gbu65ijc6QMtPp7d
+   OCSpRvZNbnZrtB0oBDMDOk2io65OFHeR38TcbdC/+e4IuQsgk17H8V+wH
+   7Gq7/AXflJHC/q0n1aZDCu2TLo709g1yXRNFKo8TSsFWn0TLQ/4/zInRD
+   JbZCyyfgLQn8QAKhQfXc6ad3ERN37FdeEjEIXtVb1AUco9DrPRv3kQWGY
+   pEkRHfAy6/ILF81TuK9D9azvplAWM186+LBNbEdyfPu7G5GrLlT5ed85B
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="428985376"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="428985376"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 11:26:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="712635074"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="712635074"
+Received: from lbates-mobl.amr.corp.intel.com (HELO [10.212.242.115]) ([10.212.242.115])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 11:26:44 -0700
+Message-ID: <f29fb57f-f59f-9101-74b6-e48e738963c5@intel.com>
+Date:   Mon, 3 Jul 2023 11:26:43 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/1] i2c: at91: constify at91_twi_pdata
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <6ac87dcbb660ae892bf8740c78d3eca7625d6db6.1687814664.git.mirq-linux@rere.qmqm.pl>
- <20230629223825.27q75s2a3eyiapgy@intel.intel>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230629223825.27q75s2a3eyiapgy@intel.intel>
+To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
+ <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net>
+ <20230630190514.GH3436214@ls.amr.corp.intel.com>
+ <ZJ9IKALhz1Q6ogu1@google.com>
+ <20230703104942.GG4253@hirez.programming.kicks-ass.net>
+ <eb83e722-0379-1451-9c9c-9b9de33cb4cb@intel.com>
+ <20230703150330.GA83892@hirez.programming.kicks-ass.net>
+ <20230703175556.nn5xozz7dzxjocqm@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230703175556.nn5xozz7dzxjocqm@box.shutemov.name>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,33 +101,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 00:38, Andi Shyti wrote:
-> Hi Michal,
+On 7/3/23 10:55, kirill.shutemov@linux.intel.com wrote:
+>> I'm thikning we want something along the lines of the Xen preemptible
+>> hypercalls, except less crazy. Where the caller does:
+>>
+>> 	for (;;) {
+>> 		ret = tdcall(fn, args);
+>> 		if (ret == -EAGAIN) {
+>> 			cond_resched();
+>> 			continue;
+>> 		}
+>> 		break;
+>> 	}
+>>
+>> And then the TDX black box provides a guarantee that any one tdcall (or
+>> seamcall or whatever) never takes more than X ns (possibly even
+>> configurable) and we get to raise a bug report if we can prove it
+>> actually takes longer.
+> TDG.VP.VMCALL TDCALL can take arbitrary amount of time as it handles over
+> control to the host/VMM.
 > 
-> [...]
-> 
->> -static struct at91_twi_pdata *at91_twi_get_driver_data(
->> +static const struct at91_twi_pdata *at91_twi_get_driver_data(
->>  					struct platform_device *pdev)
->>  {
->>  	if (pdev->dev.of_node) {
->> @@ -189,9 +189,9 @@ static struct at91_twi_pdata *at91_twi_get_driver_data(
->>  		match = of_match_node(atmel_twi_dt_ids, pdev->dev.of_node);
->>  		if (!match)
->>  			return NULL;
->> -		return (struct at91_twi_pdata *)match->data;
->> +		return match->data;
->>  	}
->> -	return (struct at91_twi_pdata *) platform_get_device_id(pdev)->driver_data;
->> +	return (const void *) platform_get_device_id(pdev)->driver_data;
-> 
-> the const's always confuse me... do you get an error here? Is
-> this cast really needed?
+> But I'm not quite follow how it is different from the host stopping
+> scheduling vCPU on a random instruction. It can happen at any point and
+> TDCALL is not special from this PoV.
 
-I think this change is not necessary and actually should not matter. See
-for example drivers/tty/serial/samsung_tty.c after my refactorings in
-commit 3aec40096550 ("tty: serial: samsung: reduce number of casts").
+Well, for one, if the host stops the vCPU on a random instruction the
+host has to restore all the vCPU state.  *ALL* of it.  That means that
+after the host hands control back, the guest is perfectly ready to take
+all the interrupts that are pending.
 
-Best regards,
-Krzysztof
+These TDCALLs are *VERY* different.  The guest gets control back and has
+some amount of its state zapped, RBP being the most annoying current
+example of state that is lost.  So the guest resumes control here and
+must handle all of its interrupts with some of its state (and thus
+ability to cleanly handle the interrupt) gone.
 
+The instructions after state is lost are very much special.  Just look
+at the syscall gap.
