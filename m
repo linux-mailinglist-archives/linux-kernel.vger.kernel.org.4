@@ -2,91 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B74745D4B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F58F745D50
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjGCN3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S230114AbjGCN3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjGCN3Q (ORCPT
+        with ESMTP id S229925AbjGCN3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:29:16 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73898E3;
-        Mon,  3 Jul 2023 06:29:15 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qvmwj4xc1z4f3tqb;
-        Mon,  3 Jul 2023 21:29:09 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHoZQkzaJkKhx1NA--.35620S3;
-        Mon, 03 Jul 2023 21:29:10 +0800 (CST)
-Subject: Re: [PATCH RFC 0/7] blk-mq: improve tag fair sharing
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        Christoph Hellwig <hch@lst.de>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230618160738.54385-1-yukuai1@huaweicloud.com>
- <4c9fea33-9c30-4ab9-c210-95e09d323837@acm.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <82d44ba1-4389-079c-935a-cbb49203ca27@huaweicloud.com>
-Date:   Mon, 3 Jul 2023 21:29:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 3 Jul 2023 09:29:46 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CDE10C7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:29:35 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-314172bb818so5123588f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688390973; x=1690982973;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y/VhzLPQHUerf9yIXAHQ3k56ZyHp33w08cf8vUBWG7Y=;
+        b=njVWohKchlcMEssQAmIF1k9K45Bbsrd0GbQfEH6owssZIqpB91tbfaZvQBAe2y6d1N
+         pfYh+rKJvhufICIyrpnVitykosZoAVctBURaePVLlsfTfbkyTRZHEZHi3Cwb2R1Ef2Mb
+         zPNZyr0j7/n69lqkf1LcW1BVdC45GIbm429M52QLjFBtW+HPuNBK9Brwx6z1rtL6ervi
+         J18BdPRMVF+ob1T3MaG2ubOle4LHZ6bX6GWGxuqpzeXoMdxExxR5eztZ50719pVvVZXQ
+         mget4xvTOK6HJHHZRrIizrB/mjd6/JRYFiY+unzHfnSkh5xQ/AICSlgjz/c67zA4qYd2
+         wIpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688390973; x=1690982973;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y/VhzLPQHUerf9yIXAHQ3k56ZyHp33w08cf8vUBWG7Y=;
+        b=enWd+g09T37XE2X4MM1xhlbj4ZogSYg+aVVuXtGeUg0ijH3jf7BiyhKya8OEu57hEA
+         n/ZdI2uacehMcz+6/fAORIdF8pCDFuIEbn4OT1QoIvkvZPoB3itf66XZnvW4EGS6ysc0
+         g+MOlc0bAb8o/dqD+FZ/9rJltE+ATbFU6k8sm6/Fn9N6BFRcFELRBRhUArY5NNuNjmKu
+         vgOgB7b03EVTAHrFiJdcrPv7utBsyd3uKX2ynLxPqWQfD6a1uny93LYxM0x4xvahE7+S
+         RewrErhU4sTsF180goKkqe80d519SMMVfmbDZ6QOpY0badBNtJ9nDLYD5T72Sch1IEPw
+         hGug==
+X-Gm-Message-State: ABy/qLa0Cg+zjikn6N26hkcxaCRjRO2Yjqm5f7bqi7WbqGuB2fnq1W+s
+        4iPZfYs8SDfRAdcK78A2UO7ZmA==
+X-Google-Smtp-Source: APBJJlGMsazVkHFxwQldk7Ee64dl++ep07uZano3iNOZM0/SiZWu6RXho/B4b8i2C1OknUXd7j1Nag==
+X-Received: by 2002:a5d:6986:0:b0:314:37a9:f225 with SMTP id g6-20020a5d6986000000b0031437a9f225mr2684111wru.40.1688390973573;
+        Mon, 03 Jul 2023 06:29:33 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:cf0b:9dd4:190:b74f? ([2a01:e0a:982:cbb0:cf0b:9dd4:190:b74f])
+        by smtp.gmail.com with ESMTPSA id k5-20020a5d6e85000000b003063a92bbf5sm25802354wrz.70.2023.07.03.06.29.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 06:29:33 -0700 (PDT)
+Message-ID: <e85f6dee-d62c-9f2f-b1de-8c38bb5aeb14@linaro.org>
+Date:   Mon, 3 Jul 2023 15:29:31 +0200
 MIME-Version: 1.0
-In-Reply-To: <4c9fea33-9c30-4ab9-c210-95e09d323837@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHoZQkzaJkKhx1NA--.35620S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrAr4fJF1rurWUGFy8Ar1xAFb_yoWxWrbE93
-        yktr9rKr4qqF1fXF4fKry5ZFZrKayjgryUX3yrJw4xtF9Y9ws8Xayqvrn3Z3W3tFs5GFsa
-        9r4kX3y3uw42qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
-        r21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUU
-        U==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 2/3] soc: c3: Add support for power domains controller
+Content-Language: en-US
+To:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>
+References: <20230703093142.2028500-1-xianwei.zhao@amlogic.com>
+ <20230703093142.2028500-3-xianwei.zhao@amlogic.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230703093142.2028500-3-xianwei.zhao@amlogic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Christoph and Jens and anyone who's interested
+Hi,
 
-在 2023/06/20 23:20, Bart Van Assche 写道:
-> On 6/18/23 09:07, Yu Kuai wrote:
->> This is not a formal version and not fully tested, I send this RFC
->> because I want to make sure if people think doing this is meaningful,
->> before I spend too much time on this.
-> The approach looks good to me but I'd like to hear from Jens and 
-> Christoph what their opinion is about the approach of this patch series 
-> before doing an in-depth review.
+On 03/07/2023 11:31, =Xianwei Zhao wrote:
+> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
 > 
-Any suggestions on this topic? It'll be great to hear that if anyone
-thinks it's meaningful to refactor tag fair sharing.
+> Add support for C3 Power controller. C3 power control
+> registers are in secure domain, and should be accessed by SMC.
+> 
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> ---
+>   drivers/soc/amlogic/meson-secure-pwrc.c | 28 ++++++++++++++++++++++++-
+>   1 file changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/soc/amlogic/meson-secure-pwrc.c
+> index 25b4b71df9b8..39ccc8f2e630 100644
+> --- a/drivers/soc/amlogic/meson-secure-pwrc.c
+> +++ b/drivers/soc/amlogic/meson-secure-pwrc.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/pm_domain.h>
+>   #include <dt-bindings/power/meson-a1-power.h>
+>   #include <dt-bindings/power/meson-s4-power.h>
+> +#include <dt-bindings/power/amlogic-c3-power.h>
+>   #include <linux/arm-smccc.h>
+>   #include <linux/firmware/meson/meson_sm.h>
+>   #include <linux/module.h>
+> @@ -132,6 +133,22 @@ static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
+>   	SEC_PD(S4_AUDIO,	0),
+>   };
+>   
+> +static struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
+> +	SEC_PD(C3_NNA,	0),
+> +	SEC_PD(C3_AUDIO,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_SDIOA,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_EMMC,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_USB_COMB, GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_SDCARD,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_ETH,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_GE2D,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_CVE,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_GDC_WRAP,	GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_ISP_TOP,		GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_MIPI_ISP_WRAP, GENPD_FLAG_ALWAYS_ON),
+> +	SEC_PD(C3_VCODEC,	0),
+> +};
+
+Please move this struct before _s4_
+
+> +
+>   static int meson_secure_pwrc_probe(struct platform_device *pdev)
+>   {
+>   	int i;
+> @@ -179,7 +196,7 @@ static int meson_secure_pwrc_probe(struct platform_device *pdev)
+>   	for (i = 0 ; i < match->count ; ++i) {
+>   		struct meson_secure_pwrc_domain *dom = &pwrc->domains[i];
+>   
+> -		if (!match->domains[i].index)
+> +		if (!match->domains[i].name)
+
+Is this change necessary ? If yes please move it to another patch
+and explain it's purpose. If it fixes something, add a Fixes tag so
+it can be backported.
 
 Thanks,
-Kuai
-> Thanks,
-> 
-> Bart.
-> 
-> .
-> 
+Neil
+
+>   			continue;
+>   
+>   		dom->pwrc = pwrc;
+> @@ -207,6 +224,11 @@ static struct meson_secure_pwrc_domain_data meson_secure_s4_pwrc_data = {
+>   	.count = ARRAY_SIZE(s4_pwrc_domains),
+>   };
+>   
+> +static struct meson_secure_pwrc_domain_data amlogic_secure_c3_pwrc_data = {
+> +	.domains = c3_pwrc_domains,
+> +	.count = ARRAY_SIZE(c3_pwrc_domains),
+> +};
+
+Please move this struct before _s4_
+
+> +
+>   static const struct of_device_id meson_secure_pwrc_match_table[] = {
+>   	{
+>   		.compatible = "amlogic,meson-a1-pwrc",
+> @@ -216,6 +238,10 @@ static const struct of_device_id meson_secure_pwrc_match_table[] = {
+>   		.compatible = "amlogic,meson-s4-pwrc",
+>   		.data = &meson_secure_s4_pwrc_data,
+>   	},
+> +	{
+> +		.compatible = "amlogic,c3-pwrc",
+> +		.data = &amlogic_secure_c3_pwrc_data,
+> +	},
+
+Please move this entry before _s4_
+
+>   	{ /* sentinel */ }
+>   };
+>   MODULE_DEVICE_TABLE(of, meson_secure_pwrc_match_table);
+
+Thanks,
+Neil
 
