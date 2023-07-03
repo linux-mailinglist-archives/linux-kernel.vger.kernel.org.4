@@ -2,97 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC04745D83
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47920745D86
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjGCNdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S230177AbjGCNeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbjGCNdI (ORCPT
+        with ESMTP id S229585AbjGCNd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:33:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB83310EA;
-        Mon,  3 Jul 2023 06:32:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8765660F29;
-        Mon,  3 Jul 2023 13:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89AB0C433C8;
-        Mon,  3 Jul 2023 13:32:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688391166;
-        bh=pk+2FTd4Zcg93LZyEvVLp7It0/fYBTya/f/EBtYUFN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B9ktR5ETbn+AAXn7P5ssFOFeAqcEeGK2LBn0WnJKo/tGi1/Hv6mWs2mxeso8jixCF
-         RTwKY54tdXE/kGBekc9qC3EbJjJUhwE1fgcy5d6Mc8uJDTxyLsAwOU3Z2GpdW5TWLW
-         go4R7lRZiQYwtq/cg1g4ZTb8bzDGC2EXvudt6dLERIOZhNT0D/6r97V7wY6npYXQHB
-         FmIeu2KkwEKzrA/PgMeCZSjXUP/1bHOzCpbiJPBXqGhJkLhI/Tpy1s0GC35cpPpDJm
-         eOlRROvlPEdkb/UR7khuqdS2lDeLRbivg0IwWcq4eg0rXDXJSdOZzBkUY+PjplMYyo
-         FoNpdJ5T0E/wA==
-Date:   Mon, 3 Jul 2023 16:32:42 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Selvin Xavier <selvin.xavier@broadcom.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA: fix INFINIBAND_USER_ACCESS dependency
-Message-ID: <20230703133242.GB32152@unreal>
-References: <20230703113025.356682-1-arnd@kernel.org>
+        Mon, 3 Jul 2023 09:33:59 -0400
+Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B1CE3;
+        Mon,  3 Jul 2023 06:33:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1688391234; x=1719927234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MZnqhy/csMNXbugFtNWNDpN2XhhdE1oePTXoQDzZgeU=;
+  b=j8+tx2eMFLT0PgwFTtZQw0kVMx7+H3or39OowaVAvarHLB94Ff9it+IS
+   duh+gLFsqCyy7aOa1ZVQHI6hreQPGkwd6Zrj323xnraG3MfdOEr/cX9C4
+   v4t3EFDFN/0tqyJGreFuxthm2ekcMxamrxM+w+yaoQsqVXxyCnYnABsdg
+   c=;
+X-IronPort-AV: E=Sophos;i="6.01,178,1684800000"; 
+   d="scan'208";a="657678907"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 13:33:49 +0000
+Received: from EX19D010EUA004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com (Postfix) with ESMTPS id 226AA40D4B;
+        Mon,  3 Jul 2023 13:33:47 +0000 (UTC)
+Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
+ EX19D010EUA004.ant.amazon.com (10.252.50.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 3 Jul 2023 13:33:40 +0000
+Received: from u40bc5e070a0153.ant.amazon.com (10.1.212.14) by
+ EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 3 Jul 2023 13:33:35 +0000
+Date:   Mon, 3 Jul 2023 15:33:29 +0200
+From:   Roman Kagan <rkagan@amazon.de>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Borislav Petkov" <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+Message-ID: <ZKLOKc1RbfLyQz7H@u40bc5e070a0153.ant.amazon.com>
+Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
+        Ingo Molnar <mingo@redhat.com>, Mingwei Zhang <mizhang@google.com>
+References: <20230504120042.785651-1-rkagan@amazon.de>
+ <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+ <ZJ4dmrQSduY8aWap@google.com>
+ <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
+ <ZJ7mjdZ8h/RSilFX@google.com>
+ <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
+ <ZJ74gELkj4DgAk4S@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230703113025.356682-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZJ74gELkj4DgAk4S@google.com>
+X-Originating-IP: [10.1.212.14]
+X-ClientProxiedBy: EX19D031UWA004.ant.amazon.com (10.13.139.19) To
+ EX19D033EUC004.ant.amazon.com (10.252.61.133)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 01:30:06PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 30, 2023 at 08:45:04AM -0700, Sean Christopherson wrote:
+> On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > On Fri, Jun 30, 2023 at 07:28:29AM -0700, Sean Christopherson wrote:
+> > > On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > > > On Thu, Jun 29, 2023 at 05:11:06PM -0700, Sean Christopherson wrote:
+> > > > > @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_pmc *pmc)
+> > > > >         return counter & pmc_bitmask(pmc);
+> > > > >  }
+> > > > >
+> > > > > +static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 val)
+> > > > > +{
+> > > > > +       if (pmc->perf_event && !pmc->is_paused)
+> > > > > +               perf_event_set_count(pmc->perf_event, val);
+> > > > > +
+> > > > > +       pmc->counter = val;
+> > > >
+> > > > Doesn't this still have the original problem of storing wider value than
+> > > > allowed?
+> > >
+> > > Yes, this was just to fix the counter offset weirdness.  My plan is to apply your
+> > > patch on top.  Sorry for not making that clear.
+> >
+> > Ah, got it, thanks!
+> >
+> > Also I'm now chasing a problem that we occasionally see
+> >
+> > [3939579.462832] Uhhuh. NMI received for unknown reason 30 on CPU 43.
+> > [3939579.462836] Do you have a strange power saving mode enabled?
+> > [3939579.462836] Dazed and confused, but trying to continue
+> >
+> > in the guests when perf is used.  These messages disappear when
+> > 9cd803d496e7 ("KVM: x86: Update vPMCs when retiring instructions") is
+> > reverted.  I haven't yet figured out where exactly the culprit is.
 > 
-> After a change to the bnxt_re driver, it fails to link when
-> CONFIG_INFINIBAND_USER_ACCESS is disabled:
-> 
-> aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o: in function `bnxt_re_handler_BNXT_RE_METHOD_ALLOC_PAGE':
-> ib_verbs.c:(.text+0xd64): undefined reference to `ib_uverbs_get_ucontext_file'
-> aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o:(.rodata+0x168): undefined reference to `uverbs_idr_class'
-> aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o:(.rodata+0x1a8): undefined reference to `uverbs_destroy_def_handler'
-> 
-> The problem is that the 'bnxt_re_uapi_defs' structure is built
-> unconditionally and references a couple of functions that are never
-> really called in this configuration but instead require other functions
-> that are left out.
-> 
-> Adding an #ifdef around the new code, or a Kconfig dependency would
-> address this problem, but adding the compile-time check inside of the
-> UAPI_DEF_CHAIN_OBJ_TREE_NAMED() macro seems best because that also
-> addresses the problem in other drivers that may run into the same
-> dependency.
-> 
-> Fixes: 360da60d6c6ed ("RDMA/bnxt_re: Enable low latency push")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/rdma/uverbs_ioctl.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
+> Can you reverting de0f619564f4 ("KVM: x86/pmu: Defer counter emulated overflow
+> via pmc->prev_counter")?  I suspect the problem is the prev_counter mess.
+
+We observe the problem on a branch that predates this commit
 
 Thanks,
-Acked-by: Leon Romanovsky <leon@kernel.org>
+Roman.
 
-Linus, can you please apply this patch directly as it is overkill to
-send PR for one patch?
 
-https://lore.kernel.org/all/20230703113025.356682-1-arnd@kernel.org
 
-Thanks
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
