@@ -2,37 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32FDE7461D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3957461D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjGCSLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
+        id S230377AbjGCSLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjGCSLU (ORCPT
+        with ESMTP id S230513AbjGCSLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:11:20 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F45E60;
-        Mon,  3 Jul 2023 11:11:18 -0700 (PDT)
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9212260003;
-        Mon,  3 Jul 2023 18:11:16 +0000 (UTC)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH v6] HID: steelseries: Add support for Arctis 1 XBox
-Date:   Mon,  3 Jul 2023 20:10:21 +0200
-Message-ID: <20230703181115.61975-1-hadess@hadess.net>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
+        Mon, 3 Jul 2023 14:11:32 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443ABE75
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:11:29 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b80b343178so26763425ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 11:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688407888; x=1690999888;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zk6jWIKfxALkH5YWG9XODZj23fNJc2D4nFUwyOlmNpw=;
+        b=HsuoTLXTUY3IpeT6bR1dj7J6LGfIS/eQiwYegMg+JPrgQbnJcjJho7BSgm+okN/KNl
+         7hjS+jJRDiI8EqMjqwECoEAWa4MEB4wmIgzDkFy9V18m9biZitc8gHYdXzHCojUeG+Rj
+         pMHdm+xGC6FN+onR+wygpBsE4U+Tj7x1vRvxQN5qbh0Vt7OPLuI+HBxdoJThfFuDYjR1
+         5aiumOcYsk+SC74OBOxl1tAdUaphoZ846oi0s1E5x9xWCQoMniZpoTp7H+xqlEt6ef2O
+         rCN5Vu8xIZ5S2ce9iZCoWLlTdZp6b/R61sm7MyxtNZerPu7N11lppbVKoXt+Ee9yZ2o+
+         VPFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688407888; x=1690999888;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zk6jWIKfxALkH5YWG9XODZj23fNJc2D4nFUwyOlmNpw=;
+        b=h3LR6YXNYBywUzjrpMIhouK3oFivg7RgaEhQfmjwnmShv58xWYG9yl/3r0rHXbm/kq
+         EllFVdTYO+Wb5tehM/Qq2dVjv/HVU3hVDksi1MgZzKmRDpNn9ORbz9a2A4Ddno6zzAVN
+         4oONvPW0rt/GdFVdwHyIa57QC0Bf5dXX5TQ9ZzJaYmGF1TuTuC9Vy5MEZkrWNWfCUW+a
+         j/6OOfDQkkdkCrhnr2DLl8ChYr2tGjLE9mYZ78SqMF6WlMY0T0pyroFa3HwR6Hkm3a/w
+         qb7GbJnwlzPh/fj6BdNDEpa9vvy5x0hCCMQjOdX357Jwffp+Xpxuva3QpeOObiBSGco8
+         IjOg==
+X-Gm-Message-State: ABy/qLafgjCB4l5CrHAIS6PI/eUMfoLpqg6gQEYquJxgGNFotWSGXqL5
+        eCP3UAYURS9KODExOFOkfQLmxA==
+X-Google-Smtp-Source: APBJJlFy325cJq87q6d/v98dNxLzLD4Y9j3AOpQ5sEXrAjPzkjzJ29egWfrMYo/aV2dyEdJJ9ouadA==
+X-Received: by 2002:a17:903:1210:b0:1b5:5192:fa15 with SMTP id l16-20020a170903121000b001b55192fa15mr10334920plh.20.1688407888286;
+        Mon, 03 Jul 2023 11:11:28 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id k16-20020a170902761000b001b3f9a5d4besm15572309pll.255.2023.07.03.11.11.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 11:11:27 -0700 (PDT)
+Date:   Mon, 03 Jul 2023 11:11:27 -0700 (PDT)
+X-Google-Original-Date: Mon, 03 Jul 2023 11:11:25 PDT (-0700)
+Subject:     Re: [mm] 408579cd62: WARNING:suspicious_RCU_usage
+In-Reply-To: <CAHk-=wijh9Gi14SRe0riD8Y9EdPpo3MNU_XDu8vpjY6xWdNhpQ@mail.gmail.com>
+CC:     Marc Zyngier <maz@kernel.org>, Conor Dooley <conor@kernel.org>,
+        apatel@ventanamicro.com, oliver.sang@intel.com,
+        Liam.Howlett@oracle.com, linux-kernel@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-ce7af44f-732e-4a48-adb4-62deb17b3eb9@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,407 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Steelseries Arctis 1 XBox headset. This driver
-will export the battery information from the headset, as well as the
-"wireless_status" property.
+On Mon, 03 Jul 2023 10:46:55 PDT (-0700), Linus Torvalds wrote:
+> On Mon, 3 Jul 2023 at 10:34, Marc Zyngier <maz@kernel.org> wrote:
+>>
+>> Comparing with what we do on arm64, a less radical change would be to
+>> move the IPI init after notify_cpu_starting(), which explicitly
+>> enables RCU usage.
+>
+> Ack, that looks right to me.
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
----
-v6:
-- Dependency is now on USB_HID :eyeroll: after the changes to v4
+I don't see anything wrong with it and it's passing my tests, but we've 
+got a handful of ways to boot so it's all a bit messy and I might be 
+messing something.
 
-v5:
-- Move spinlock init as per bentiss review
-- Use the already defined response length constant when parsing answers
-- Avoid parsing non-battery events (fixes battery showing up as 3%
-  for a couple of seconds in some rare circumstances)
+I'm still catching up a bit as I took both days off this weekend.  
+Hopefully just an oversight in a bigger rafactoring, but I'll give it 
+another look.
 
-v4:
-- Guard against crash when using uhid
-- Print the contents of the raw events for debugging
-
-v3:
-- Dependency is on USB not USB_HID
-
-v2:
-- Fix missing USB dependency
-- Fix config option description
-
- drivers/hid/Kconfig           |   6 +-
- drivers/hid/hid-steelseries.c | 311 ++++++++++++++++++++++++++++++++--
- 2 files changed, 300 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 4ce012f83253..1bc99b33329f 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1048,9 +1048,11 @@ config STEAM_FF
- 	Deck.
- 
- config HID_STEELSERIES
--	tristate "Steelseries SRW-S1 steering wheel support"
-+	tristate "Steelseries devices support"
-+	depends on USB_HID
- 	help
--	Support for Steelseries SRW-S1 steering wheel
-+	Support for Steelseries SRW-S1 steering wheel, and the Steelseries
-+	Arctis 1 Wireless for XBox headset.
- 
- config HID_SUNPLUS
- 	tristate "Sunplus wireless desktop"
-diff --git a/drivers/hid/hid-steelseries.c b/drivers/hid/hid-steelseries.c
-index aae3afc4107a..495377686123 100644
---- a/drivers/hid/hid-steelseries.c
-+++ b/drivers/hid/hid-steelseries.c
-@@ -1,8 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- *  HID driver for Steelseries SRW-S1
-+ *  HID driver for Steelseries devices
-  *
-  *  Copyright (c) 2013 Simon Wood
-+ *  Copyright (c) 2023 Bastien Nocera
-  */
- 
- /*
-@@ -11,10 +12,28 @@
- #include <linux/device.h>
- #include <linux/hid.h>
- #include <linux/module.h>
-+#include <linux/usb.h>
- #include <linux/leds.h>
- 
- #include "hid-ids.h"
- 
-+#define STEELSERIES_SRWS1		BIT(0)
-+#define STEELSERIES_ARCTIS_1		BIT(1)
-+
-+struct steelseries_device {
-+	struct hid_device *hdev;
-+	unsigned long quirks;
-+
-+	struct delayed_work battery_work;
-+	spinlock_t lock;
-+	bool removed;
-+
-+	struct power_supply_desc battery_desc;
-+	struct power_supply *battery;
-+	uint8_t battery_capacity;
-+	bool headset_connected;
-+};
-+
- #if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-     (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
- #define SRWS1_NUMBER_LEDS 15
-@@ -353,9 +372,211 @@ static void steelseries_srws1_remove(struct hid_device *hdev)
- }
- #endif
- 
-+#define STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS	3000
-+
-+#define ARCTIS_1_BATTERY_RESPONSE_LEN		8
-+const char arctis_1_battery_request[] = { 0x06, 0x12 };
-+
-+static int steelseries_headset_arctis_1_fetch_battery(struct hid_device *hdev)
-+{
-+	u8 *write_buf;
-+	int ret;
-+
-+	/* Request battery information */
-+	write_buf = kmemdup(arctis_1_battery_request, sizeof(arctis_1_battery_request), GFP_KERNEL);
-+	if (!write_buf)
-+		return -ENOMEM;
-+
-+	ret = hid_hw_raw_request(hdev, arctis_1_battery_request[0],
-+				 write_buf, sizeof(arctis_1_battery_request),
-+				 HID_OUTPUT_REPORT, HID_REQ_SET_REPORT);
-+	if (ret < sizeof(arctis_1_battery_request)) {
-+		hid_err(hdev, "hid_hw_raw_request() failed with %d\n", ret);
-+		ret = -ENODATA;
-+	}
-+	kfree(write_buf);
-+	return ret;
-+}
-+
-+static void steelseries_headset_fetch_battery(struct hid_device *hdev)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	int ret = 0;
-+
-+	if (sd->quirks & STEELSERIES_ARCTIS_1)
-+		ret = steelseries_headset_arctis_1_fetch_battery(hdev);
-+
-+	if (ret < 0)
-+		hid_dbg(hdev,
-+			"Battery query failed (err: %d)\n", ret);
-+}
-+
-+static void steelseries_headset_battery_timer_tick(struct work_struct *work)
-+{
-+	struct steelseries_device *sd = container_of(work,
-+		struct steelseries_device, battery_work.work);
-+	struct hid_device *hdev = sd->hdev;
-+
-+	steelseries_headset_fetch_battery(hdev);
-+}
-+
-+static int steelseries_headset_battery_get_property(struct power_supply *psy,
-+				enum power_supply_property psp,
-+				union power_supply_propval *val)
-+{
-+	struct steelseries_device *sd = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = 1;
-+		break;
-+	case POWER_SUPPLY_PROP_STATUS:
-+		val->intval = sd->headset_connected ?
-+			POWER_SUPPLY_STATUS_DISCHARGING :
-+			POWER_SUPPLY_STATUS_UNKNOWN;
-+		break;
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		val->intval = POWER_SUPPLY_SCOPE_DEVICE;
-+		break;
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		val->intval = sd->battery_capacity;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static void
-+steelseries_headset_set_wireless_status(struct hid_device *hdev,
-+					bool connected)
-+{
-+	struct usb_interface *intf;
-+
-+	if (!hid_is_usb(hdev))
-+		return;
-+
-+	intf = to_usb_interface(hdev->dev.parent);
-+	usb_set_wireless_status(intf, connected ?
-+				USB_WIRELESS_STATUS_CONNECTED :
-+				USB_WIRELESS_STATUS_DISCONNECTED);
-+}
-+
-+static enum power_supply_property steelseries_headset_battery_props[] = {
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_SCOPE,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+};
-+
-+static int steelseries_headset_battery_register(struct steelseries_device *sd)
-+{
-+	static atomic_t battery_no = ATOMIC_INIT(0);
-+	struct power_supply_config battery_cfg = { .drv_data = sd, };
-+	unsigned long n;
-+	int ret;
-+
-+	sd->battery_desc.type = POWER_SUPPLY_TYPE_BATTERY;
-+	sd->battery_desc.properties = steelseries_headset_battery_props;
-+	sd->battery_desc.num_properties = ARRAY_SIZE(steelseries_headset_battery_props);
-+	sd->battery_desc.get_property = steelseries_headset_battery_get_property;
-+	sd->battery_desc.use_for_apm = 0;
-+	n = atomic_inc_return(&battery_no) - 1;
-+	sd->battery_desc.name = devm_kasprintf(&sd->hdev->dev, GFP_KERNEL,
-+						    "steelseries_headset_battery_%ld", n);
-+	if (!sd->battery_desc.name)
-+		return -ENOMEM;
-+
-+	/* avoid the warning of 0% battery while waiting for the first info */
-+	steelseries_headset_set_wireless_status(sd->hdev, false);
-+	sd->battery_capacity = 100;
-+
-+	sd->battery = devm_power_supply_register(&sd->hdev->dev,
-+			&sd->battery_desc, &battery_cfg);
-+	if (IS_ERR(sd->battery)) {
-+		ret = PTR_ERR(sd->battery);
-+		hid_err(sd->hdev,
-+				"%s:power_supply_register failed with error %d\n",
-+				__func__, ret);
-+		return ret;
-+	}
-+	power_supply_powers(sd->battery, &sd->hdev->dev);
-+
-+	INIT_DELAYED_WORK(&sd->battery_work, steelseries_headset_battery_timer_tick);
-+	steelseries_headset_fetch_battery(sd->hdev);
-+
-+	return 0;
-+}
-+
-+static int steelseries_probe(struct hid_device *hdev, const struct hid_device_id *id)
-+{
-+	struct steelseries_device *sd;
-+	int ret;
-+
-+	sd = devm_kzalloc(&hdev->dev, sizeof(*sd), GFP_KERNEL);
-+	if (!sd)
-+		return -ENOMEM;
-+	hid_set_drvdata(hdev, sd);
-+	sd->hdev = hdev;
-+	sd->quirks = id->driver_data;
-+
-+	if (sd->quirks & STEELSERIES_SRWS1) {
-+#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-+    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-+		return steelseries_srws1_probe(hdev, id);
-+#else
-+		return -ENODEV;
-+#endif
-+	}
-+
-+	ret = hid_parse(hdev);
-+	if (ret)
-+		return ret;
-+
-+	spin_lock_init(&sd->lock);
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-+	if (ret)
-+		return ret;
-+
-+	if (steelseries_headset_battery_register(sd) < 0)
-+		hid_err(sd->hdev,
-+			"Failed to register battery for headset\n");
-+
-+	return ret;
-+}
-+
-+static void steelseries_remove(struct hid_device *hdev)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	unsigned long flags;
-+
-+	if (sd->quirks & STEELSERIES_SRWS1) {
-+#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-+    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-+		steelseries_srws1_remove(hdev);
-+#endif
-+		return;
-+	}
-+
-+	spin_lock_irqsave(&sd->lock, flags);
-+	sd->removed = true;
-+	spin_unlock_irqrestore(&sd->lock, flags);
-+
-+	cancel_delayed_work_sync(&sd->battery_work);
-+
-+	hid_hw_stop(hdev);
-+}
-+
- static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc,
- 		unsigned int *rsize)
- {
-+	if (hdev->vendor != USB_VENDOR_ID_STEELSERIES ||
-+	    hdev->product != USB_DEVICE_ID_STEELSERIES_SRWS1)
-+		return rdesc;
-+
- 	if (*rsize >= 115 && rdesc[11] == 0x02 && rdesc[13] == 0xc8
- 			&& rdesc[29] == 0xbb && rdesc[40] == 0xc5) {
- 		hid_info(hdev, "Fixing up Steelseries SRW-S1 report descriptor\n");
-@@ -365,22 +586,82 @@ static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc
- 	return rdesc;
- }
- 
--static const struct hid_device_id steelseries_srws1_devices[] = {
--	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1) },
-+static int steelseries_headset_raw_event(struct hid_device *hdev,
-+					struct hid_report *report, u8 *read_buf,
-+					int size)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	int capacity = sd->battery_capacity;
-+	bool connected = sd->headset_connected;
-+	unsigned long flags;
-+
-+	/* Not a headset */
-+	if (sd->quirks & STEELSERIES_SRWS1)
-+		return 0;
-+
-+	if (sd->quirks & STEELSERIES_ARCTIS_1) {
-+		hid_dbg(sd->hdev,
-+			"Parsing raw event for Arctis 1 headset (%*ph)\n", size, read_buf);
-+		if (size < ARCTIS_1_BATTERY_RESPONSE_LEN ||
-+		    memcmp (read_buf, arctis_1_battery_request, sizeof(arctis_1_battery_request)))
-+			return 0;
-+		if (read_buf[2] == 0x01) {
-+			connected = false;
-+			capacity = 100;
-+		} else {
-+			connected = true;
-+			capacity = read_buf[3];
-+		}
-+	}
-+
-+	if (connected != sd->headset_connected) {
-+		hid_dbg(sd->hdev,
-+			"Connected status changed from %sconnected to %sconnected\n",
-+			sd->headset_connected ? "" : "not ",
-+			connected ? "" : "not ");
-+		sd->headset_connected = connected;
-+		steelseries_headset_set_wireless_status(hdev, connected);
-+	}
-+
-+	if (capacity != sd->battery_capacity) {
-+		hid_dbg(sd->hdev,
-+			"Battery capacity changed from %d%% to %d%%\n",
-+			sd->battery_capacity, capacity);
-+		sd->battery_capacity = capacity;
-+		power_supply_changed(sd->battery);
-+	}
-+
-+	spin_lock_irqsave(&sd->lock, flags);
-+	if (!sd->removed)
-+		schedule_delayed_work(&sd->battery_work,
-+				msecs_to_jiffies(STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS));
-+	spin_unlock_irqrestore(&sd->lock, flags);
-+
-+	return 0;
-+}
-+
-+static const struct hid_device_id steelseries_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1),
-+	  .driver_data = STEELSERIES_SRWS1 },
-+
-+	{ /* SteelSeries Arctis 1 Wireless for XBox */
-+	  HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, 0x12b6),
-+	.driver_data = STEELSERIES_ARCTIS_1 },
-+
- 	{ }
- };
--MODULE_DEVICE_TABLE(hid, steelseries_srws1_devices);
--
--static struct hid_driver steelseries_srws1_driver = {
--	.name = "steelseries_srws1",
--	.id_table = steelseries_srws1_devices,
--#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
--    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
--	.probe = steelseries_srws1_probe,
--	.remove = steelseries_srws1_remove,
--#endif
--	.report_fixup = steelseries_srws1_report_fixup
-+MODULE_DEVICE_TABLE(hid, steelseries_devices);
-+
-+static struct hid_driver steelseries_driver = {
-+	.name = "steelseries",
-+	.id_table = steelseries_devices,
-+	.probe = steelseries_probe,
-+	.remove = steelseries_remove,
-+	.report_fixup = steelseries_srws1_report_fixup,
-+	.raw_event = steelseries_headset_raw_event,
- };
- 
--module_hid_driver(steelseries_srws1_driver);
-+module_hid_driver(steelseries_driver);
- MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Bastien Nocera <hadess@hadess.net>");
-+MODULE_AUTHOR("Simon Wood <simon@mungewell.org>");
--- 
-2.41.0
-
+Marc: are you going to send that as a patch?
