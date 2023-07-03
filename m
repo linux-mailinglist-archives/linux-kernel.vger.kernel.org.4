@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F52A74625E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9086746264
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjGCS3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S230464AbjGCSbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjGCS3S (ORCPT
+        with ESMTP id S230137AbjGCSbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:29:18 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A6121
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xv2iVQxMPEAE5QW23mN+S6PmBY/FobKHXWm5wRoa/ac=; b=mcCX73XmmAgaW7kBs8kIKVMtYl
-        TazsGMKq2FvG3q9CD4VjJSaswHYy/2BJvGy6vZ6qAdCcW7nbacBJSFGkkbLiI38R5Tz9oZ1MurFtt
-        za0omQ4stOAGEgwhc9JAGKhQQF8BDR/monERm1+7TsxY4lHRp802NKCM6yxeMdoSSDNxw9dlZmsc4
-        GEPgxz09NjLcJEefmNw82KS3AeOYq7/tZcIaIvl8F6+YLG2wiK+aLbi3ilP12MJdnARBKgQHNp0X8
-        MX8qfBOPc48yPFCDoK0CgANoM7+D9ufvONd2yPzR0RoV2Q5QYKjW+szcJuwRJsUUVtyqmfeBf5l6e
-        Z5Zodu3w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qGOIG-00A9Jy-2l;
-        Mon, 03 Jul 2023 18:29:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 3 Jul 2023 14:31:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66B9121;
+        Mon,  3 Jul 2023 11:31:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6290A3001E7;
-        Mon,  3 Jul 2023 20:29:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E30D820292D0E; Mon,  3 Jul 2023 20:28:59 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 20:28:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Dave Wysochanski <dwysocha@redhat.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Pavel Shilovsky <pshilov@microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ajay Kaher <akaher@vmware.com>
-Subject: Re: Buggy rwsem locking code in fs/smb/client/file.c
-Message-ID: <20230703182859.GO4253@hirez.programming.kicks-ass.net>
-References: <20230703114318.1576ea24@rorschach.local.home>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43EFC60FFA;
+        Mon,  3 Jul 2023 18:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA58C433C8;
+        Mon,  3 Jul 2023 18:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688409068;
+        bh=WFAyaT1zBQm/iWkDAeWv3kb/dymBVkbMfUBLGKdYW5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BIqHRpak3i1WBkOOcQxmz4zZdBFnodO6CT37vQwO5m5E+wUrsVrXulKzpa/4z81PD
+         skZl5ufsvgnuzsxzWOY80tKuIx2yNZH+G2KsmvAGu+SIKT0uEgxVftqsCU7JSpk/yh
+         V5ICfyIS94uH0WzUDD2bK4J/+7GBLctk6Lcl6yf0=
+Date:   Mon, 3 Jul 2023 20:31:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com, mike.kravetz@oracle.com,
+        Ackerley Tng <ackerleytng@google.com>
+Subject: Re: [PATCH 6.3.y] mm/hugetlb: revert use of page_cache_next_miss()
+Message-ID: <2023070356-paddling-grip-b31a@gregkh>
+References: <20230629211817.194786-1-sidhartha.kumar@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230703114318.1576ea24@rorschach.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230629211817.194786-1-sidhartha.kumar@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 11:43:18AM -0400, Steven Rostedt wrote:
-> I just reviewed a patch that copied a solution from
-> fs/smb/client/file.c (original was fs/cifs/file.c), which is really
-> just hiding a bug. And because this code could have possibly caused
-> this buggy solution to be repeated, I believe it should be fixed,
-> before others use it as precedent in other areas of the kernel.
+On Thu, Jun 29, 2023 at 05:18:17PM -0400, Sidhartha Kumar wrote:
+> commit fd4aed8d985a3236d0877ff6d0c80ad39d4ce81a upstream
 > 
-> Commit d46b0da7a33dd ("cifs: Fix cifsInodeInfo lock_sem deadlock when
-> reconnect occurs") has in its change log:
+> Ackerley Tng reported an issue with hugetlbfs fallocate as noted in the
+> Closes tag.  The issue showed up after the conversion of hugetlb page
+> cache lookup code to use page_cache_next_miss.  User visible effects are:
+> 
+> - hugetlbfs fallocate incorrectly returns -EEXIST if pages are presnet
+>   in the file.
+> - hugetlb pages will not be included in core dumps if they need to be
+>   brought in via GUP.
+> - userfaultfd UFFDIO_COPY will not notice pages already present in the
+>   cache.  It may try to allocate a new page and potentially return
+>   ENOMEM as opposed to EEXIST.
+> 
+> Revert the use page_cache_next_miss() in hugetlb code.
+> 
+> The upstream fix[2] cannot be used used directly as the return value for
+> filemap_get_folio() has been changed between 6.3 and upstream.
+> 
+> Closes: https://lore.kernel.org/linux-mm/cover.1683069252.git.ackerleytng@google.com
+> Fixes: d0ce0e47b323 ("mm/hugetlb: convert hugetlb fault paths to use alloc_hugetlb_folio()")
+> Cc: <stable@vger.kernel.org> #v6.3
+> Reported-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> 
+> [1] https://lore.kernel.org/linux-mm/cover.1683069252.git.ackerleytng@google.com/
+> [2] https://lore.kernel.org/lkml/20230621230255.GD4155@monkey/
+> ---
+> 
+>  fs/hugetlbfs/inode.c |  8 +++-----
+>  mm/hugetlb.c         | 11 +++++------
+>  2 files changed, 8 insertions(+), 11 deletions(-)
 
-Oh man, that's .... I gotta go buy a new WTF'o'meter again :/
+Now queued up, thanks.
+
+greg k-h
