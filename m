@@ -2,408 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00BE74616C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5C9746175
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjGCR14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S230084AbjGCRaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjGCR1s (ORCPT
+        with ESMTP id S229698AbjGCRad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:27:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ABEE5F;
-        Mon,  3 Jul 2023 10:27:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1CBCA21B0A;
-        Mon,  3 Jul 2023 17:27:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1688405264; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SW4z05NiH7oIsztapmK1VK8RVAsODZYR8xUUh1Doa24=;
-        b=DuYB+rQwYiJNb/RuLJBH9gsEk/IA3Ejg6GCb5aP6BphXU4FhhQlo4Te1W7NBKJWc7sDlO5
-        CFj664FPOCh2zVzaYyKYtWQaOAXzr/cfdRkRDsmyaHz2ENRyqiP7r4XEs3UUW06i5cdxWi
-        SBrGGZ0EmbxbtznXNI/EBm5B6e6NxAQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E7F20138FC;
-        Mon,  3 Jul 2023 17:27:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WFXKNw8Fo2QqHgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 03 Jul 2023 17:27:43 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v3 3/3] selftests: cgroup: Add cpuset migrations testcase
-Date:   Mon,  3 Jul 2023 19:27:41 +0200
-Message-ID: <20230703172741.25392-4-mkoutny@suse.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230703172741.25392-1-mkoutny@suse.com>
-References: <20230703172741.25392-1-mkoutny@suse.com>
+        Mon, 3 Jul 2023 13:30:33 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266B8E5D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:30:32 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so8321977a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 10:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688405430; x=1690997430;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CrS/MpuWOEjZGLSDInBYEukcytiKIRhK8AvJ7Dhgwl8=;
+        b=AJkYUWLzRRpXGP3wlCexBptPwNnatNTc7igkz+o8cRwv9+1oMYA3C6ips1xNmuVzq2
+         ja6+S1uPJJChIBXCC+NxyFAgQLmaGyt59nw78LrPb00wYw4XkrR7tpqqV5ccr5TchBpo
+         D1TvpylEA9Y/zgZpGt7ZALZIKF+rXktKsw/MI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688405430; x=1690997430;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CrS/MpuWOEjZGLSDInBYEukcytiKIRhK8AvJ7Dhgwl8=;
+        b=Els9o8+1HSYaYYjNEAwPGmAjfiBlGkEoIZQHd7fgoyre5cPXW78GikJbOrsKF+e5C2
+         GZvvYTcFhQ1XCFdN9FKyM5PylI3xN8Wx38XPX1Ws7FCBECftNYHvc9+9ynlgrmI2Uima
+         c6IQiaSBMppeefEqECrG7mCv1Q3p6LYBXoTipkuU8Krx7O/ZW0c5Kxb+Dd4WqkMlNRO8
+         hqqYYe68r11wODxcNVkCPEkPfH/xtUsA0iQ9Nr1eaUI+IvX84eDOfQ/tD1eixf+DiI1K
+         OrvWlm8hzf3riVqyZxwHCHGId/naC9uT252u3tEd6QHWGeyR37tpD4dmtncCtaYRsCZP
+         8lIA==
+X-Gm-Message-State: ABy/qLaRAQm2N048CN2GsEqsjDModws45Lcz1QCIVJFccDgttT3NUd3r
+        AkSppq70LjzJdav82BNKKh/GzA00vCdw67L0yIDKdHuJ
+X-Google-Smtp-Source: APBJJlEmKTkR1ucdyiklbffnki18GrNatIHvsgQ3qG6GrTeE9g518xEvkwrWdrmGBbAgv11RNRTzyA==
+X-Received: by 2002:a05:6402:2145:b0:51e:1a58:eac0 with SMTP id bq5-20020a056402214500b0051e1a58eac0mr885140edb.12.1688405430412;
+        Mon, 03 Jul 2023 10:30:30 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05640200d500b0051bfc7763c2sm10841507edu.25.2023.07.03.10.30.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 10:30:29 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-51d80c5c834so8429264a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 10:30:29 -0700 (PDT)
+X-Received: by 2002:a05:6402:4494:b0:51a:4c1e:c94a with SMTP id
+ er20-20020a056402449400b0051a4c1ec94amr18268322edb.2.1688405429462; Mon, 03
+ Jul 2023 10:30:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
+ <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
+ <2023063001-overlying-browse-de1a@gregkh> <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
+ <5fd98a09-4792-1433-752d-029ae3545168@gmx.de> <CAHk-=wiHs1cL2Fb90NXVhtQsMuu+OLHB4rSDsPVe0ALmbvZXZQ@mail.gmail.com>
+ <CAHk-=wj=0jkhj2=HkHVdezvuzV-djLsnyeE5zFfnXxgtS2MXFQ@mail.gmail.com>
+ <9b35a19d-800c-f9f9-6b45-cf2038ef235f@roeck-us.net> <CAHk-=wgdC6RROG145_YB5yWoNtBQ0Xsrhdcu2TMAFTw52U2E0w@mail.gmail.com>
+ <2a2387bf-f589-6856-3583-d3d848a17d34@roeck-us.net> <CAHk-=wgczy0dxK9vg-YWbq6YLP2gP8ix7Ys9K+Mr=S2NEj+hGw@mail.gmail.com>
+ <c21e8e95-3353-fc57-87fd-271b2c9cc000@roeck-us.net> <CAHk-=wj+F8oGK_Hx6YSPJpwL-xyL+-q2SxtxYE0abtZa_jSkLw@mail.gmail.com>
+ <7146f74d-8638-46c7-8e8c-15abc97a379f@gmx.de> <CAHk-=wjqp09i1053vqFc41Ftegkrh0pD+MKY-3ptdYu3FUh6Bw@mail.gmail.com>
+ <964806c4-db73-a70b-2168-24168e4b5aab@roeck-us.net>
+In-Reply-To: <964806c4-db73-a70b-2168-24168e4b5aab@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 3 Jul 2023 10:30:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh-hZr6N-ONO3mmUOwPDrOJ_N3NYXD3bsk4bm-1jaD2mw@mail.gmail.com>
+Message-ID: <CAHk-=wh-hZr6N-ONO3mmUOwPDrOJ_N3NYXD3bsk4bm-1jaD2mw@mail.gmail.com>
+Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review - hppa argument list too long
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Helge Deller <deller@gmx.de>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John David Anglin <dave.anglin@bell.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a separate testfile to verify treating permissions when tasks are
-migrated on cgroup v2 hierarchy between cpuset cgroups.
+On Mon, 3 Jul 2023 at 10:19, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> FWIW, my qemu boot tests didn't find any problems with other architectures.
 
-In accordance with v2 design, migration should be allowed based on
-delegation boundaries (i.e. cgroup.procs permissions) and does not
-depend on the migrated object (i.e. unprivileged process can migrate
-another process (even privileged) as long as it remains in the original
-dedicated scope).
+Thanks. This whole "let's get the stack expansion locking right"
+wasn't exactly buttery smooth, but given all our crazy architectures
+it was not entirely unexpected.
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- MAINTAINERS                                  |   1 +
- tools/testing/selftests/cgroup/.gitignore    |   1 +
- tools/testing/selftests/cgroup/Makefile      |   2 +
- tools/testing/selftests/cgroup/test_cpuset.c | 275 +++++++++++++++++++
- 4 files changed, 279 insertions(+)
- create mode 100644 tools/testing/selftests/cgroup/test_cpuset.c
+Let's hope it really is all done now,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 03bec83944c4..5c55de000ee3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5260,6 +5260,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
- F:	Documentation/admin-guide/cgroup-v1/cpusets.rst
- F:	include/linux/cpuset.h
- F:	kernel/cgroup/cpuset.c
-+F:	tools/testing/selftests/cgroup/test_cpuset.c
- F:	tools/testing/selftests/cgroup/test_cpuset_prs.sh
- 
- CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)
-diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-index c4a57e69f749..8443a8d46a1c 100644
---- a/tools/testing/selftests/cgroup/.gitignore
-+++ b/tools/testing/selftests/cgroup/.gitignore
-@@ -5,4 +5,5 @@ test_freezer
- test_kmem
- test_kill
- test_cpu
-+test_cpuset
- wait_inotify
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index 3d263747d2ad..dee0f013c7f4 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -12,6 +12,7 @@ TEST_GEN_PROGS += test_core
- TEST_GEN_PROGS += test_freezer
- TEST_GEN_PROGS += test_kill
- TEST_GEN_PROGS += test_cpu
-+TEST_GEN_PROGS += test_cpuset
- 
- LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
- 
-@@ -23,3 +24,4 @@ $(OUTPUT)/test_core: cgroup_util.c
- $(OUTPUT)/test_freezer: cgroup_util.c
- $(OUTPUT)/test_kill: cgroup_util.c
- $(OUTPUT)/test_cpu: cgroup_util.c
-+$(OUTPUT)/test_cpuset: cgroup_util.c
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-new file mode 100644
-index 000000000000..b061ed1e05b4
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -0,0 +1,275 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/limits.h>
-+#include <signal.h>
-+
-+#include "../kselftest.h"
-+#include "cgroup_util.h"
-+
-+static int idle_process_fn(const char *cgroup, void *arg)
-+{
-+	(void)pause();
-+	return 0;
-+}
-+
-+static int do_migration_fn(const char *cgroup, void *arg)
-+{
-+	int object_pid = (int)(size_t)arg;
-+
-+	if (setuid(TEST_UID))
-+		return EXIT_FAILURE;
-+
-+	// XXX checking /proc/$pid/cgroup would be quicker than wait
-+	if (cg_enter(cgroup, object_pid) ||
-+	    cg_wait_for_proc_count(cgroup, 1))
-+		return EXIT_FAILURE;
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+static int do_controller_fn(const char *cgroup, void *arg)
-+{
-+	const char *child = cgroup;
-+	const char *parent = arg;
-+
-+	if (setuid(TEST_UID))
-+		return EXIT_FAILURE;
-+
-+	if (!cg_read_strstr(child, "cgroup.controllers", "cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (cg_read_strstr(child, "cgroup.controllers", "cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "-cpuset"))
-+		return EXIT_FAILURE;
-+
-+	if (!cg_read_strstr(child, "cgroup.controllers", "cpuset"))
-+		return EXIT_FAILURE;
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+/*
-+ * Migrate a process between two sibling cgroups.
-+ * The success should only depend on the parent cgroup permissions and not the
-+ * migrated process itself (cpuset controller is in place because it uses
-+ * security_task_setscheduler() in cgroup v1).
-+ *
-+ * Deliberately don't set cpuset.cpus in children to avoid definining migration
-+ * permissions between two different cpusets.
-+ */
-+static int test_cpuset_perms_object(const char *root, bool allow)
-+{
-+	char *parent = NULL, *child_src = NULL, *child_dst = NULL;
-+	char *parent_procs = NULL, *child_src_procs = NULL, *child_dst_procs = NULL;
-+	const uid_t test_euid = TEST_UID;
-+	int object_pid = 0;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_test_0");
-+	if (!parent)
-+		goto cleanup;
-+	parent_procs = cg_name(parent, "cgroup.procs");
-+	if (!parent_procs)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	child_src = cg_name(parent, "cpuset_test_1");
-+	if (!child_src)
-+		goto cleanup;
-+	child_src_procs = cg_name(child_src, "cgroup.procs");
-+	if (!child_src_procs)
-+		goto cleanup;
-+	if (cg_create(child_src))
-+		goto cleanup;
-+
-+	child_dst = cg_name(parent, "cpuset_test_2");
-+	if (!child_dst)
-+		goto cleanup;
-+	child_dst_procs = cg_name(child_dst, "cgroup.procs");
-+	if (!child_dst_procs)
-+		goto cleanup;
-+	if (cg_create(child_dst))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset"))
-+		goto cleanup;
-+
-+	if (cg_read_strstr(child_src, "cgroup.controllers", "cpuset") ||
-+	    cg_read_strstr(child_dst, "cgroup.controllers", "cpuset"))
-+		goto cleanup;
-+
-+	/* Enable permissions along src->dst tree path */
-+	if (chown(child_src_procs, test_euid, -1) ||
-+	    chown(child_dst_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	if (allow && chown(parent_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	/* Fork a privileged child as a test object */
-+	object_pid = cg_run_nowait(child_src, idle_process_fn, NULL);
-+	if (object_pid < 0)
-+		goto cleanup;
-+
-+	/* Carry out migration in a child process that can drop all privileges
-+	 * (including capabilities), the main process must remain privileged for
-+	 * cleanup.
-+	 * Child process's cgroup is irrelevant but we place it into child_dst
-+	 * as hacky way to pass information about migration target to the child.
-+	 */
-+	if (allow ^ (cg_run(child_dst, do_migration_fn, (void *)(size_t)object_pid) == EXIT_SUCCESS))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (object_pid > 0) {
-+		(void)kill(object_pid, SIGTERM);
-+		(void)clone_reap(object_pid, WEXITED);
-+	}
-+
-+	cg_destroy(child_dst);
-+	free(child_dst_procs);
-+	free(child_dst);
-+
-+	cg_destroy(child_src);
-+	free(child_src_procs);
-+	free(child_src);
-+
-+	cg_destroy(parent);
-+	free(parent_procs);
-+	free(parent);
-+
-+	return ret;
-+}
-+
-+static int test_cpuset_perms_object_allow(const char *root)
-+{
-+	return test_cpuset_perms_object(root, true);
-+}
-+
-+static int test_cpuset_perms_object_deny(const char *root)
-+{
-+	return test_cpuset_perms_object(root, false);
-+}
-+
-+/*
-+ * Migrate a process between parent and child implicitely
-+ * Implicit migration happens when a controller is enabled/disabled.
-+ *
-+ */
-+static int test_cpuset_perms_subtree(const char *root)
-+{
-+	char *parent = NULL, *child = NULL;
-+	char *parent_procs = NULL, *parent_subctl = NULL, *child_procs = NULL;
-+	const uid_t test_euid = TEST_UID;
-+	int object_pid = 0;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_test_0");
-+	if (!parent)
-+		goto cleanup;
-+	parent_procs = cg_name(parent, "cgroup.procs");
-+	if (!parent_procs)
-+		goto cleanup;
-+	parent_subctl = cg_name(parent, "cgroup.subtree_control");
-+	if (!parent_subctl)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	child = cg_name(parent, "cpuset_test_1");
-+	if (!child)
-+		goto cleanup;
-+	child_procs = cg_name(child, "cgroup.procs");
-+	if (!child_procs)
-+		goto cleanup;
-+	if (cg_create(child))
-+		goto cleanup;
-+
-+	/* Enable permissions as in a delegated subtree */
-+	if (chown(parent_procs, test_euid, -1) ||
-+	    chown(parent_subctl, test_euid, -1) ||
-+	    chown(child_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	/* Put a privileged child in the subtree and modify controller state
-+	 * from an unprivileged process, the main process remains privileged
-+	 * for cleanup.
-+	 * The unprivileged child runs in subtree too to avoid parent and
-+	 * internal-node constraing violation.
-+	 */
-+	object_pid = cg_run_nowait(child, idle_process_fn, NULL);
-+	if (object_pid < 0)
-+		goto cleanup;
-+
-+	if (cg_run(child, do_controller_fn, parent) != EXIT_SUCCESS)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (object_pid > 0) {
-+		(void)kill(object_pid, SIGTERM);
-+		(void)clone_reap(object_pid, WEXITED);
-+	}
-+
-+	cg_destroy(child);
-+	free(child_procs);
-+	free(child);
-+
-+	cg_destroy(parent);
-+	free(parent_subctl);
-+	free(parent_procs);
-+	free(parent);
-+
-+	return ret;
-+}
-+
-+
-+#define T(x) { x, #x }
-+struct cpuset_test {
-+	int (*fn)(const char *root);
-+	const char *name;
-+} tests[] = {
-+	T(test_cpuset_perms_object_allow),
-+	T(test_cpuset_perms_object_deny),
-+	T(test_cpuset_perms_subtree),
-+};
-+#undef T
-+
-+int main(int argc, char *argv[])
-+{
-+	char root[PATH_MAX];
-+	int i, ret = EXIT_SUCCESS;
-+
-+	if (cg_find_unified_root(root, sizeof(root)))
-+		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "cpuset"))
-+		if (cg_write(root, "cgroup.subtree_control", "+cpuset"))
-+			ksft_exit_skip("Failed to set cpuset controller\n");
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		switch (tests[i].fn(root)) {
-+		case KSFT_PASS:
-+			ksft_test_result_pass("%s\n", tests[i].name);
-+			break;
-+		case KSFT_SKIP:
-+			ksft_test_result_skip("%s\n", tests[i].name);
-+			break;
-+		default:
-+			ret = EXIT_FAILURE;
-+			ksft_test_result_fail("%s\n", tests[i].name);
-+			break;
-+		}
-+	}
-+
-+	return ret;
-+}
--- 
-2.41.0
-
+            Linus
