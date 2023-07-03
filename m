@@ -2,188 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BC7745F0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4449745F19
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjGCOtr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jul 2023 10:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S231478AbjGCOu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjGCOtp (ORCPT
+        with ESMTP id S229930AbjGCOu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:49:45 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FD2B2;
-        Mon,  3 Jul 2023 07:49:44 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5703cb4bcb4so48059217b3.3;
-        Mon, 03 Jul 2023 07:49:44 -0700 (PDT)
+        Mon, 3 Jul 2023 10:50:56 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B08B2;
+        Mon,  3 Jul 2023 07:50:53 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-78625caa702so176890139f.1;
+        Mon, 03 Jul 2023 07:50:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688395783; x=1690987783;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nY1I4rwqDndCDmWpTkptLJRSj9+jun4KpqhzWpHlROg=;
-        b=J5C3B1bptD1PtBht6YeK92I6OEZirpGTiCvq61y9iNzqgvQ7fRkj8Ny25TzR4xwSiE
-         +HvERqurtfGq6Tg8RFtDIVoERu1BDwdA7SuPWuBi7XpuHzW0CWMmoyoAJdPum2GZjtkz
-         XjpYwV/5rk58a40BV8G5kXW1BrG1jKKdEdTiqWWRY4VCmxNHopJMeY4IEuESfE6r8xn4
-         j2nXCyyAW/Bld3v64nvis7/GFeRAFW5kXh346NCswJdMLpesBoLKrC2VSrSPArmK97ex
-         vYLtegGBlz8GkVuFqnOw+/vWzxIvBwAXACB1XLBaiKWwPovWG09SPZhP86hRFDB8DfeX
-         agqw==
-X-Gm-Message-State: ABy/qLZtk87+zPcorKs7YQZYV3h/RcClJ5QD4y8WaMR5XZDyeu+OfytL
-        CsGhArNH5KJHhDJ+if+VsbVyFFaffNAyXg==
-X-Google-Smtp-Source: APBJJlF0M4Fikyc0Ul4SzDeqUAzNRZP96JEtVLCJdDdSn3+io+1b7eUxliLWPtfEYm2dY1uhhvcPkw==
-X-Received: by 2002:a81:628a:0:b0:56d:4b17:7e9c with SMTP id w132-20020a81628a000000b0056d4b177e9cmr11763355ywb.32.1688395783112;
-        Mon, 03 Jul 2023 07:49:43 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id 132-20020a25168a000000b00bcc9793c3e6sm4398729ybw.65.2023.07.03.07.49.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 07:49:42 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5703cb4bcb4so48058897b3.3;
-        Mon, 03 Jul 2023 07:49:42 -0700 (PDT)
-X-Received: by 2002:a25:15c1:0:b0:bfe:77f1:f454 with SMTP id
- 184-20020a2515c1000000b00bfe77f1f454mr8566617ybv.51.1688395782355; Mon, 03
- Jul 2023 07:49:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688395853; x=1690987853;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6oClqgtuEJ5kxas9fDkwmwd/7VCwke8lenSscKAAvr8=;
+        b=GlpxQvaQj1XDczx1FAtMD16oZ12IyVHA99viXEk74jCDvtnE1zeC4OW+nfvE0xApy5
+         k2+rdhoIwNMMeDebR5/QFy51beXhqXTzbHxuDWsChxUpUT4CgvvljZMri+sahQ30SUmb
+         t7o+AtwsUFmgyHJatopYSefRbp4lne03XrB0gMJv6ftQlU98RKqqx1i8ZU8JMxEqfw+A
+         FNF293XwioupRHlNex0sGVsRVqACx9M7No2zbvAd9GRQUcZBw0oKxbpqaShoa2h155Qs
+         4qYbJ94ktoYszDGUI6P2LKdMjbSIoFwDZIlg3bLrWg8KBVcMGsLYeB9Gg4jcdWjTsYRB
+         /5qg==
+X-Gm-Message-State: AC+VfDyKpz+0V7gwdq0ZXWVFk2nawXn54s7sddNTGnWAV0XRpJhGIq9c
+        KOxLunW+qSJVOkWiZUtsL1lPic5vzA==
+X-Google-Smtp-Source: ACHHUZ5YdfEkLDyk8nhQAw2w5UexpOXgzHRtjJA78rJ89+yRFKE71e4m4sXqlabBZ5NbW4D3Yb0fbg==
+X-Received: by 2002:a5e:c64c:0:b0:784:314f:8d5b with SMTP id s12-20020a5ec64c000000b00784314f8d5bmr10668475ioo.11.1688395853161;
+        Mon, 03 Jul 2023 07:50:53 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id x14-20020a02ac8e000000b0042b060ad00esm2845518jan.90.2023.07.03.07.50.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 07:50:52 -0700 (PDT)
+Received: (nullmailer pid 3733421 invoked by uid 1000);
+        Mon, 03 Jul 2023 14:50:47 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230623080135.15696-1-fabrizio.castro.jz@renesas.com>
- <CAMuHMdVNG_LENbU_nu-W+x_snXxbz3vbs=Yb-__FF3DBR2JEUA@mail.gmail.com> <CACRpkdavQ1X29LyZscvdkBOS53H5sdYhZbKhWL9fpdghiddCTw@mail.gmail.com>
-In-Reply-To: <CACRpkdavQ1X29LyZscvdkBOS53H5sdYhZbKhWL9fpdghiddCTw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Jul 2023 16:49:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUoHRBWy3JXosTu7N0HUYECC=7DaiQWhchJQ=Fn=72vGA@mail.gmail.com>
-Message-ID: <CAMuHMdUoHRBWy3JXosTu7N0HUYECC=7DaiQWhchJQ=Fn=72vGA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: rzv2mevk2: Fix eMMC/SDHI pinctrl names
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-serial@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-i2c@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-msm@vger.kernel.org
+In-Reply-To: <20230703-topic-8250_qup_icc-v1-3-fea39aa07525@linaro.org>
+References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
+ <20230703-topic-8250_qup_icc-v1-3-fea39aa07525@linaro.org>
+Message-Id: <168839584767.3733402.17418126780770305815.robh@kernel.org>
+Subject: Re: [PATCH 3/5] dt-bindings: i2c: qcom,i2c-geni: Allow no qup-core
+ icc path
+Date:   Mon, 03 Jul 2023 08:50:47 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, Fabrizio,
 
-On Sat, Jun 24, 2023 at 9:12 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Fri, Jun 23, 2023 at 10:40 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Fri, Jun 23, 2023 at 10:01 AM Fabrizio Castro
-> > <fabrizio.castro.jz@renesas.com> wrote:
-> > > pinctrl-rzv2m b6250000.pinctrl: pin P8_2 already requested by 85000000.mmc; cannot claim for 85020000.mmc
-> > > pinctrl-rzv2m b6250000.pinctrl: pin-130 (85020000.mmc) status -22
-> > > renesas_sdhi_internal_dmac 85020000.mmc: Error applying setting, reverse things back
+On Mon, 03 Jul 2023 15:31:12 +0200, Konrad Dybcio wrote:
+> Some SoCs (like SM8150 and SM8250) don't seem to provide a qup-core path.
+> Allow such case.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/i2c/qcom,i2c-geni-qcom.yaml           | 27 +++++++++++++++-------
+>  1 file changed, 19 insertions(+), 8 deletions(-)
+> 
 
-I managed to reproduce the issue[*], and devised a fix, which I will
-send shortly.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> > To me, that sounds like a bug in the pinctrl core.
-> > Or am I missing something?
->
-> The pin control core tracks on a per-pin basis, it has no clue about
-> the name of certain dt nodes.
->
-> This bug would be in the DT parsing code for the different states
-> I think, and rzv2m is not using the core helpers for this but
-> rather rzv2m_dt_subnode_to_map() etc.
+yamllint warnings/errors:
 
-Indeed, there's an issue in rzv2m_dt_subnode_to_map(): it registers
-groups and functions using just the subnode names, which may not
-be unique.  When this happens, they are ignored silently.
+dtschema/dtc warnings/errors:
 
-      $ cat /sys/kernel/debug/pinctrl/b6250000.pinctrl/pingroups
-      registered pin groups:
-      group: data
-      pin 130 (P8_2)
-      pin 131 (P8_3)
-      pin 132 (P8_4)
-      pin 133 (P8_5)
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@8c0000: i2c@a94000: More than one condition true in oneOf schema:
+	{'oneOf': [{'patternProperties': {'pinctrl-[0-9]+': True},
+	            'properties': {'$nodename': True,
+	                           'bootph-all': True,
+	                           'bootph-pre-ram': True,
+	                           'bootph-pre-sram': True,
+	                           'bootph-some-ram': True,
+	                           'bootph-verify': True,
+	                           'interconnect-names': {'items': [{'const': 'qup-config'},
+	                                                            {'const': 'qup-memory'}],
+	                                                  'maxItems': 2,
+	                                                  'minItems': 2,
+	                                                  'type': 'array'},
+	                           'interconnects': {'maxItems': 2,
+	                                             'minItems': 2},
+	                           'phandle': True,
+	                           'pinctrl-names': True,
+	                           'secure-status': True,
+	                           'status': True}},
+	           {'patternProperties': {'pinctrl-[0-9]+': True},
+	            'properties': {'$nodename': True,
+	                           'bootph-all': True,
+	                           'bootph-pre-ram': True,
+	                           'bootph-pre-sram': True,
+	                           'bootph-some-ram': True,
+	                           'bootph-verify': True,
+	                           'interconnect-names': {'items': [{'const': 'qup-core'},
+	                                                            {'const': 'qup-config'},
+	                                                            {'const': 'qup-memory'}],
+	                                                  'maxItems': 3,
+	                                                  'minItems': 3,
+	                                                  'type': 'array'},
+	                           'interconnects': {'maxItems': 3,
+	                                             'minItems': 3},
+	                           'phandle': True,
+	                           'pinctrl-names': True,
+	                           'secure-status': True,
+	                           'status': True}}],
+	 'properties': {'clock-names': {'items': [{'const': 'se'}],
+	                                'maxItems': 1,
+	                                'minItems': 1,
+	                                'type': 'array'},
+	                'clocks': {'maxItems': 1, 'minItems': 1}}}
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: i2c@a94000: More than one condition true in oneOf schema:
+	{'oneOf': [{'patternProperties': {'pinctrl-[0-9]+': True},
+	            'properties': {'$nodename': True,
+	                           'bootph-all': True,
+	                           'bootph-pre-ram': True,
+	                           'bootph-pre-sram': True,
+	                           'bootph-some-ram': True,
+	                           'bootph-verify': True,
+	                           'interconnect-names': {'items': [{'const': 'qup-config'},
+	                                                            {'const': 'qup-memory'}],
+	                                                  'maxItems': 2,
+	                                                  'minItems': 2,
+	                                                  'type': 'array'},
+	                           'interconnects': {'maxItems': 2,
+	                                             'minItems': 2},
+	                           'phandle': True,
+	                           'pinctrl-names': True,
+	                           'secure-status': True,
+	                           'status': True}},
+	           {'patternProperties': {'pinctrl-[0-9]+': True},
+	            'properties': {'$nodename': True,
+	                           'bootph-all': True,
+	                           'bootph-pre-ram': True,
+	                           'bootph-pre-sram': True,
+	                           'bootph-some-ram': True,
+	                           'bootph-verify': True,
+	                           'interconnect-names': {'items': [{'const': 'qup-core'},
+	                                                            {'const': 'qup-config'},
+	                                                            {'const': 'qup-memory'}],
+	                                                  'maxItems': 3,
+	                                                  'minItems': 3,
+	                                                  'type': 'array'},
+	                           'interconnects': {'maxItems': 3,
+	                                             'minItems': 3},
+	                           'phandle': True,
+	                           'pinctrl-names': True,
+	                           'secure-status': True,
+	                           'status': True}}],
+	 'properties': {'clock-names': {'items': [{'const': 'se'}],
+	                                'maxItems': 1,
+	                                'minItems': 1,
+	                                'type': 'array'},
+	                'clocks': {'maxItems': 1, 'minItems': 1}}}
+	from schema $id: http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#
 
-      group: ctrl
-      pin 128 (P8_0)
-      pin 129 (P8_1)
+doc reference errors (make refcheckdocs):
 
-      group: cd
-      pin 135 (P8_7)
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230703-topic-8250_qup_icc-v1-3-fea39aa07525@linaro.org
 
-      $ cat /sys/kernel/debug/pinctrl/b6250000.pinctrl/pinmux-functions
-      function 0: data, groups = [ data ]
-      function 1: ctrl, groups = [ ctrl ]
-      function 2: cd, groups = [ cd ]
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-You can see this by adding checks in the pin control core:
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
---- a/drivers/pinctrl/core.c
-+++ b/drivers/pinctrl/core.c
-@@ -639,8 +639,10 @@ int pinctrl_generic_add_group(struct pinctrl_dev
-*pctldev, const char *name,
-                return -EINVAL;
+pip3 install dtschema --upgrade
 
-        selector = pinctrl_generic_group_name_to_selector(pctldev, name);
--       if (selector >= 0)
-+       if (selector >= 0) {
-+               pr_err("Duplicate group name %s (selector %d)\n",
-name, selector);
-                return selector;
-+       }
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
-        selector = pctldev->num_groups;
-
---- a/drivers/pinctrl/pinmux.c
-+++ b/drivers/pinctrl/pinmux.c
-@@ -878,8 +878,10 @@ int pinmux_generic_add_function(struct
-pinctrl_dev *pctldev,
-                return -EINVAL;
-
-        selector = pinmux_func_name_to_selector(pctldev, name);
--       if (selector >= 0)
-+       if (selector >= 0) {
-+pr_err("Duplicate function name %s (selector %d)\n", name, selector);
-                return selector;
-+       }
-
-        selector = pctldev->num_functions;
-
-Is there any special reason why such duplicates are just ignored,
-and not flagged as an error?
-
-The RZ/G2L and RZ/N1 pin control drivers have the same issue, but it
-is not triggered on these platforms (yet), as their DTS files either
-do not use subnodes, or use unique subnode names.
-
-The RZ/A1 and RZ/A2 pin control drivers are not affected, as they do
-not support subnodes.
-
-The StarFive JH7100 pin control driver does it right, by constructing
-group/function names from both the node and the subnode names.
-
-[*] As I do not have an RZ/V2M board, I added pin control, eMMC, and
-    SDHI snippets from RZ/V2M to the Koelsch DTS, and modified the
-    drivers to not touch the non-existing hardware.
-
-
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
