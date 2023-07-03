@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F835745741
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6120C745749
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjGCIW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S229830AbjGCIYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjGCIW2 (ORCPT
+        with ESMTP id S229593AbjGCIYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:22:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE54BB2;
-        Mon,  3 Jul 2023 01:22:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 473ED60DF7;
-        Mon,  3 Jul 2023 08:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 561EEC433C7;
-        Mon,  3 Jul 2023 08:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688372545;
-        bh=VSXlUwwcvEpNuAZDDx5QPmruquJXWTHQzPh6qjfaa3U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PigxOmwgDSlkoARPHyomdr8764/wZSTNTJawCRk9IiARKLJxeJnbIMHEy2gD+Bk+C
-         zZM46j6DQ79H+Pjdh2UAztwUUytksd1Fbybwb5ZXE9QADiBvLO/bSNV3+grgsGL+k1
-         d1Gfmn9yb6+KX3LiG7vctIffvWq0YxKrXBH2QURdb+6gZbFtydwweZi4Jgt4ss291n
-         Mn2USW87I8pIWuXZ3M5MrjQ4gKxTGSdArC6eCgOtgUqa1cvDo+7Jn81YPJjKsNvTtR
-         gSDcDDElChN2RVxZlKzE35BAP/IyW1XxQD1vlmnGLP/BWQPC2/EJpD4XWgUpRQ8HN1
-         Z7o+kjmbNHr+A==
-Date:   Mon, 3 Jul 2023 10:22:21 +0200
-From:   Benjamin Tissoires <bentiss@kernel.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH v3] HID: steelseries: Add support for Arctis 1 XBox
-Message-ID: <77asu2iibozr7azbowphkbnt2ykfreqhxaszmq34cubzd7szuk@lyrik7e3nvre>
-References: <20230630131217.51827-1-hadess@hadess.net>
+        Mon, 3 Jul 2023 04:24:32 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC122BB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:24:06 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc0981755so46140705e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 01:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688372645; x=1690964645;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VK9YJK54N6X6KANLQAKaW0JERmC99/mkew38T4D7Txw=;
+        b=lCArJJna5LLyOPkgI58sEAU27L0ZiP4Ne872I/FQMplFNqtbW0R8UUGlyOt+Hb+pUn
+         zI3WBAPsFMf318AzUzG17RX5zgxwKu/Pp3NgS3zikmLMia/whGzAKLIlOLkbW79G2LEa
+         WXcdQxuV+biiJ0O7FVwNbQFPQJgRo9iioM5KrWvOy25xzLW4h3NclGEi5hYtRnEJp+GI
+         8O0cspqvGI6GW59oD8b3Siu65v9ACpJ/NncLq88kl1G82AUPgVn3onR0JJc+miY4rhmC
+         eQPLC+pXuTzx8bmSJrJrVC9lj2AWVlKwPmuaDp6iFtSZoeF4E4ByzDYvHV9eE9fKW8E6
+         trfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688372645; x=1690964645;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VK9YJK54N6X6KANLQAKaW0JERmC99/mkew38T4D7Txw=;
+        b=HwU0QD01rIUT8aGYpgTvF+SmSE57LG6ww5mWJWa6ewjkWqiLADNVMMCflyDSqhpZ0R
+         tsmINkFj0B1TxifhzAk5ABFS5uzgpWrL+uMbqwl0JL5iXdDvhXrh7+ub0gHXLdXD5KjC
+         EHJOWUFpjVPrkMsvr/NMIvLGwIVnwOzoEpVtTSSB4XIHvu416afo+xOiuxltJXeDPiR9
+         LODSQsvAoyk4dC+Q1Jg/aoiAvOTG4TyEw1isBqnLm/VemLzlkWWGOHGhaHQL7iZheFjP
+         mEr4MlHgQyXDAlF8gciBaVCr7lhNrWPJa9Z8hLv/ce83JUtgM0HaI0ikLRdAEsPWpzK4
+         aggA==
+X-Gm-Message-State: ABy/qLYo4GnZQQALtB7z8HqKfU05/0Ts3kGgAghaKzjXOe0qXpRX3F5r
+        q34NrK50HwX6KfWaRtxP2kPU1kvfZkMZxcYfXMvbDA==
+X-Google-Smtp-Source: APBJJlF9ZTAYs0T0KFZt84N7iRTPRiRVEXyVf9NJt5DrHvQiO/09D955cqr5PIWdRYhIKMVO7VldzYBOhpO7/9ZSUdA=
+X-Received: by 2002:adf:e747:0:b0:314:2f5b:2ce with SMTP id
+ c7-20020adfe747000000b003142f5b02cemr4203439wrn.12.1688372645184; Mon, 03 Jul
+ 2023 01:24:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630131217.51827-1-hadess@hadess.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230702095735.860-2-cuiyunhui@bytedance.com>
+ <20230702-collide-rumor-f0d915a4f1b2@spud>
+In-Reply-To: <20230702-collide-rumor-f0d915a4f1b2@spud>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Mon, 3 Jul 2023 16:23:53 +0800
+Message-ID: <CAEEQ3w=CMSMnYmfprYS4ydsA=EBJtLhQQHWky754EC-iifcYtg@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v2 2/3] firmware: introduce FFI for SMBIOS entry.
+To:     Conor Dooley <conor@kernel.org>
+Cc:     ardb@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
+        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
+        weidong.wd@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,418 +77,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Jun 30 2023, Bastien Nocera wrote:
-> 
-> Add support for the Steelseries Arctis 1 XBox headset. This driver
-> will export the battery information from the headset, as well as the
-> "wireless_status" property.
-> 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
-> v3:
-> - Dependency is on USB not USB_HID
-> 
-> v2:
-> - Fix missing USB dependency
-> - Fix config option description
-> 
->  drivers/hid/Kconfig           |   6 +-
->  drivers/hid/hid-steelseries.c | 307 ++++++++++++++++++++++++++++++++--
->  2 files changed, 296 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> index 4ce012f83253..afe1c6070602 100644
-> --- a/drivers/hid/Kconfig
-> +++ b/drivers/hid/Kconfig
-> @@ -1048,9 +1048,11 @@ config STEAM_FF
->  	Deck.
->  
->  config HID_STEELSERIES
-> -	tristate "Steelseries SRW-S1 steering wheel support"
-> +	tristate "Steelseries devices support"
-> +	depends on USB
->  	help
-> -	Support for Steelseries SRW-S1 steering wheel
-> +	Support for Steelseries SRW-S1 steering wheel, and the Steelseries
-> +	Arctis 1 Wireless for XBox headset.
->  
->  config HID_SUNPLUS
->  	tristate "Sunplus wireless desktop"
-> diff --git a/drivers/hid/hid-steelseries.c b/drivers/hid/hid-steelseries.c
-> index aae3afc4107a..a9300a4244aa 100644
-> --- a/drivers/hid/hid-steelseries.c
-> +++ b/drivers/hid/hid-steelseries.c
-> @@ -1,8 +1,9 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /*
-> - *  HID driver for Steelseries SRW-S1
-> + *  HID driver for Steelseries devices
->   *
->   *  Copyright (c) 2013 Simon Wood
-> + *  Copyright (c) 2023 Bastien Nocera
->   */
->  
->  /*
-> @@ -11,10 +12,28 @@
->  #include <linux/device.h>
->  #include <linux/hid.h>
->  #include <linux/module.h>
-> +#include <linux/usb.h>
->  #include <linux/leds.h>
->  
->  #include "hid-ids.h"
->  
-> +#define STEELSERIES_SRWS1		BIT(0)
-> +#define STEELSERIES_ARCTIS_1		BIT(1)
-> +
-> +struct steelseries_device {
-> +	struct hid_device *hdev;
-> +	unsigned long quirks;
-> +
-> +	struct delayed_work battery_work;
-> +	spinlock_t lock;
-> +	bool removed;
-> +
-> +	struct power_supply_desc battery_desc;
-> +	struct power_supply *battery;
-> +	uint8_t battery_capacity;
-> +	bool headset_connected;
-> +};
-> +
->  #if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
->      (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
->  #define SRWS1_NUMBER_LEDS 15
-> @@ -353,9 +372,208 @@ static void steelseries_srws1_remove(struct hid_device *hdev)
->  }
->  #endif
->  
-> +#define STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS	3000
-> +
-> +#define ARCTIS_1_BATTERY_RESPONSE_LEN		8
-> +
-> +static int steelseries_headset_arctis_1_fetch_battery(struct hid_device *hdev)
-> +{
-> +	u8 *write_buf;
-> +	int ret;
-> +	char battery_request[2] = { 0x06, 0x12 };
-> +
-> +	/* Request battery information */
-> +	write_buf = kmemdup(battery_request, sizeof(battery_request), GFP_KERNEL);
-> +	if (!write_buf)
-> +		return -ENOMEM;
-> +
-> +	ret = hid_hw_raw_request(hdev, battery_request[0],
-> +				 write_buf, sizeof(battery_request),
-> +				 HID_OUTPUT_REPORT, HID_REQ_SET_REPORT);
-> +	if (ret < sizeof(battery_request)) {
-> +		hid_err(hdev, "hid_hw_raw_request() failed with %d\n", ret);
-> +		ret = -ENODATA;
-> +	}
-> +	kfree(write_buf);
-> +	return ret;
-> +}
-> +
-> +static void steelseries_headset_fetch_battery(struct hid_device *hdev)
-> +{
-> +	struct steelseries_device *sd = hid_get_drvdata(hdev);
-> +	int ret = 0;
-> +
-> +	if (sd->quirks & STEELSERIES_ARCTIS_1)
-> +		ret = steelseries_headset_arctis_1_fetch_battery(hdev);
-> +
-> +	if (ret < 0)
-> +		hid_dbg(hdev,
-> +			"Battery query failed (err: %d)\n", ret);
-> +}
-> +
-> +static void steelseries_headset_battery_timer_tick(struct work_struct *work)
-> +{
-> +	struct steelseries_device *sd = container_of(work,
-> +		struct steelseries_device, battery_work.work);
-> +	struct hid_device *hdev = sd->hdev;
-> +
-> +	steelseries_headset_fetch_battery(hdev);
-> +}
-> +
-> +static int steelseries_headset_battery_get_property(struct power_supply *psy,
-> +				enum power_supply_property psp,
-> +				union power_supply_propval *val)
-> +{
-> +	struct steelseries_device *sd = power_supply_get_drvdata(psy);
-> +	int ret = 0;
-> +
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_PRESENT:
-> +		val->intval = 1;
-> +		break;
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +		val->intval = sd->headset_connected ?
-> +			POWER_SUPPLY_STATUS_DISCHARGING :
-> +			POWER_SUPPLY_STATUS_UNKNOWN;
-> +		break;
-> +	case POWER_SUPPLY_PROP_SCOPE:
-> +		val->intval = POWER_SUPPLY_SCOPE_DEVICE;
-> +		break;
-> +	case POWER_SUPPLY_PROP_CAPACITY:
-> +		val->intval = sd->battery_capacity;
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static void
-> +steelseries_headset_set_wireless_status(struct hid_device *hdev,
-> +					bool connected)
-> +{
-> +	struct usb_interface *intf;
-> +
-
-You need to inset a `if (!hid_is_usb(hdev)) return;` here, so that a uhid
-device will not oops the kernel.
-
-> +	intf = to_usb_interface(hdev->dev.parent);
-> +	usb_set_wireless_status(intf, connected ?
-> +				USB_WIRELESS_STATUS_CONNECTED :
-> +				USB_WIRELESS_STATUS_DISCONNECTED);
-> +}
-> +
-> +static enum power_supply_property steelseries_headset_battery_props[] = {
-> +	POWER_SUPPLY_PROP_PRESENT,
-> +	POWER_SUPPLY_PROP_STATUS,
-> +	POWER_SUPPLY_PROP_SCOPE,
-> +	POWER_SUPPLY_PROP_CAPACITY,
-> +};
-> +
-> +static int steelseries_headset_battery_register(struct steelseries_device *sd)
-> +{
-> +	static atomic_t battery_no = ATOMIC_INIT(0);
-> +	struct power_supply_config battery_cfg = { .drv_data = sd, };
-> +	unsigned long n;
-> +	int ret;
-> +
-> +	sd->battery_desc.type = POWER_SUPPLY_TYPE_BATTERY;
-> +	sd->battery_desc.properties = steelseries_headset_battery_props;
-> +	sd->battery_desc.num_properties = ARRAY_SIZE(steelseries_headset_battery_props);
-> +	sd->battery_desc.get_property = steelseries_headset_battery_get_property;
-> +	sd->battery_desc.use_for_apm = 0;
-> +	n = atomic_inc_return(&battery_no) - 1;
-> +	sd->battery_desc.name = devm_kasprintf(&sd->hdev->dev, GFP_KERNEL,
-> +						    "steelseries_headset_battery_%ld", n);
-> +	if (!sd->battery_desc.name)
-> +		return -ENOMEM;
-> +
-> +	/* avoid the warning of 0% battery while waiting for the first info */
-> +	steelseries_headset_set_wireless_status(sd->hdev, false);
-> +	sd->battery_capacity = 100;
-> +
-> +	sd->battery = devm_power_supply_register(&sd->hdev->dev,
-> +			&sd->battery_desc, &battery_cfg);
-> +	if (IS_ERR(sd->battery)) {
-> +		ret = PTR_ERR(sd->battery);
-> +		hid_err(sd->hdev,
-> +				"%s:power_supply_register failed with error %d\n",
-> +				__func__, ret);
-> +		return ret;
-> +	}
-> +	power_supply_powers(sd->battery, &sd->hdev->dev);
-> +
-> +	INIT_DELAYED_WORK(&sd->battery_work, steelseries_headset_battery_timer_tick);
-> +	steelseries_headset_fetch_battery(sd->hdev);
-> +
-> +	return 0;
-> +}
-> +
-> +static int steelseries_probe(struct hid_device *hdev, const struct hid_device_id *id)
-> +{
-> +	struct steelseries_device *sd;
-> +	int ret;
-> +
-> +	sd = devm_kzalloc(&hdev->dev, sizeof(*sd), GFP_KERNEL);
-> +	if (!sd)
-> +		return -ENOMEM;
-
-Nitpick: please add a new-line here
-
-> +	hid_set_drvdata(hdev, sd);
-> +	sd->hdev = hdev;
-> +	sd->quirks = id->driver_data;
-> +
-> +	if (sd->quirks & STEELSERIES_SRWS1) {
-> +#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-> +    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-> +		return steelseries_srws1_probe(hdev, id);
-> +#else
-> +		return -ENODEV;
-> +#endif
-> +	}
-> +
-> +	ret = hid_parse(hdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (steelseries_headset_battery_register(sd) < 0)
-> +		hid_err(sd->hdev,
-> +			"Failed to register battery for headset\n");
-> +
-> +	spin_lock_init(&sd->lock);
-
-I'd say the spin_lock should be initialized before we register the
-battery, given that steelseries_headset_battery_register() calls in the
-workqueue already. No?
-
-Actually the lock is used in .raw_event, so this should be called before
-hid_hw_start()
+Hi Conor,
 
 
-> +
-> +	return ret;
-> +}
-> +
-> +static void steelseries_remove(struct hid_device *hdev)
-> +{
-> +	struct steelseries_device *sd = hid_get_drvdata(hdev);
-> +	unsigned long flags;
-> +
-> +	if (sd->quirks & STEELSERIES_SRWS1) {
-> +#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-> +    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-> +		steelseries_srws1_remove(hdev);
-> +#endif
-> +		return;
-> +	}
-> +
-> +	spin_lock_irqsave(&sd->lock, flags);
-> +	sd->removed = true;
-> +	spin_unlock_irqrestore(&sd->lock, flags);
-> +
-> +	cancel_delayed_work_sync(&sd->battery_work);
-> +
-> +	hid_hw_stop(hdev);
-> +}
-> +
->  static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc,
->  		unsigned int *rsize)
->  {
-> +	if (hdev->vendor != USB_VENDOR_ID_STEELSERIES ||
-> +	    hdev->product != USB_DEVICE_ID_STEELSERIES_SRWS1)
-> +		return rdesc;
-> +
->  	if (*rsize >= 115 && rdesc[11] == 0x02 && rdesc[13] == 0xc8
->  			&& rdesc[29] == 0xbb && rdesc[40] == 0xc5) {
->  		hid_info(hdev, "Fixing up Steelseries SRW-S1 report descriptor\n");
-> @@ -365,22 +583,81 @@ static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc
->  	return rdesc;
->  }
->  
-> -static const struct hid_device_id steelseries_srws1_devices[] = {
-> -	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1) },
-> +static int steelseries_headset_raw_event(struct hid_device *hdev,
-> +					struct hid_report *report, u8 *read_buf,
-> +					int size)
-> +{
-> +	struct steelseries_device *sd = hid_get_drvdata(hdev);
-> +	int capacity = sd->battery_capacity;
-> +	bool connected = sd->headset_connected;
-> +	unsigned long flags;
-> +
-> +	/* Not a headset */
-> +	if (sd->quirks & STEELSERIES_SRWS1)
-> +		return 0;
-> +
-> +	if (sd->quirks & STEELSERIES_ARCTIS_1) {
-> +		hid_dbg(sd->hdev,
-> +			"Parsing raw event for Arctis 1 headset (len: %d)\n", size);
-> +		if (size < 8)
-> +			return 0;
-> +		if (read_buf[2] == 0x01) {
-> +			connected = false;
-> +			capacity = 100;
-> +		} else {
-> +			connected = true;
-> +			capacity = read_buf[3];
-> +		}
-> +	}
-> +
-> +	if (connected != sd->headset_connected) {
-> +		hid_dbg(sd->hdev,
-> +			"Connected status changed from %sconnected to %sconnected\n",
-> +			sd->headset_connected ? "" : "not ",
-> +			connected ? "" : "not ");
-> +		sd->headset_connected = connected;
-> +		steelseries_headset_set_wireless_status(hdev, connected);
-> +	}
-> +
-> +	if (capacity != sd->battery_capacity) {
-> +		hid_dbg(sd->hdev,
-> +			"Battery capacity changed from %d%% to %d%%\n",
-> +			sd->battery_capacity, capacity);
-> +		sd->battery_capacity = capacity;
-> +		power_supply_changed(sd->battery);
-> +	}
-> +
-> +	spin_lock_irqsave(&sd->lock, flags);
-> +	if (!sd->removed)
-> +		schedule_delayed_work(&sd->battery_work,
-> +				msecs_to_jiffies(STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS));
-> +	spin_unlock_irqrestore(&sd->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hid_device_id steelseries_devices[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1),
-> +	  .driver_data = STEELSERIES_SRWS1 },
-> +
-> +	{ /* SteelSeries Arctis 1 Wireless for XBox */
-> +	  HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, 0x12b6),
-> +	.driver_data = STEELSERIES_ARCTIS_1 },
-> +
->  	{ }
->  };
-> -MODULE_DEVICE_TABLE(hid, steelseries_srws1_devices);
-> -
-> -static struct hid_driver steelseries_srws1_driver = {
-> -	.name = "steelseries_srws1",
-> -	.id_table = steelseries_srws1_devices,
-> -#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-> -    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-> -	.probe = steelseries_srws1_probe,
-> -	.remove = steelseries_srws1_remove,
-> -#endif
-> -	.report_fixup = steelseries_srws1_report_fixup
-> +MODULE_DEVICE_TABLE(hid, steelseries_devices);
-> +
-> +static struct hid_driver steelseries_driver = {
-> +	.name = "steelseries",
-> +	.id_table = steelseries_devices,
-> +	.probe = steelseries_probe,
-> +	.remove = steelseries_remove,
-> +	.report_fixup = steelseries_srws1_report_fixup,
-> +	.raw_event = steelseries_headset_raw_event,
->  };
->  
-> -module_hid_driver(steelseries_srws1_driver);
-> +module_hid_driver(steelseries_driver);
->  MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Bastien Nocera <hadess@hadess.net>");
-> +MODULE_AUTHOR("Simon Wood <simon@mungewell.org>");
-> -- 
-> 2.41.0
-> 
+> nit: please don't write your commit messages as bullet lists
+Okay, thanks for your suggestion.
 
-Few nitpicks here and there, but code looks good otherwise.
+> > +FDT FIRMWARE INTERFACE (FFI)
+> > +M:   Yunhui Cui cuiyunhui@bytedance.com
+> > +S:   Maintained
+> > +F:   drivers/firmware/ffi.c
+> > +F:   include/linux/ffi.h
+>
+> Are you going to apply patches for this, or is someone else?
+Yes,  it will be used by patch 3/3.
 
-We are still in the merge window, so no commits targetting v6.6 will be
-included until this is over (we should have 6.5-rc1 at the end of the
-week IIRC).
+>
+> >  EXTERNAL CONNECTOR SUBSYSTEM (EXTCON)
+> >  M:   MyungJoo Ham <myungjoo.ham@samsung.com>
+> >  M:   Chanwoo Choi <cw00.choi@samsung.com>
+> > diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> > index b59e3041fd62..ea0149fb4683 100644
+> > --- a/drivers/firmware/Kconfig
+> > +++ b/drivers/firmware/Kconfig
+> > @@ -303,6 +303,17 @@ config TURRIS_MOX_RWTM
+> >         other manufacturing data and also utilize the Entropy Bit Gener=
+ator
+> >         for hardware random number generation.
+> >
+> > +config FDT_FW_INTERFACE
+> > +       bool "An interface for passing firmware info through FDT"
+> > +       depends on OF && OF_FLATTREE
+> > +       default n
+> > +       help
+> > +         When some bootloaders do not support EFI, and the arch does n=
+ot
+> > +         support SMBIOS_ENTRY_POINT_SCAN_START, then you can enable th=
+is option
+> > +         to support the transfer of firmware information, such as smbi=
+os tables.
+>
+> Could you express this dependency on !SMBIOS_ENTRY_POINT_SCAN_START in
+> Kconfig & then simply the text to:
+> "Enable this option to support the transfer of firmware information,
+> such as smbios tables, for bootloaders that do not support EFI."
+> since it would not even appear if the arch supports scanning for the
+> entry point?
+> If I was was a punter trying to configure my kernel in menuconfig or
+> whatever, I should be able to decide based on the help text if I need
+> this, not going grepping for #defines in headers.
+Okay=EF=BC=8C I'll update on v3.
 
-Cheers,
-Benjamin
+
+>
+> >  static void __init dmi_scan_machine(void)
+> > @@ -660,58 +686,22 @@ static void __init dmi_scan_machine(void)
+> >       char __iomem *p, *q;
+> >       char buf[32];
+> >
+> > +#ifdef CONFIG_FDT_FW_INTERFACE
+> > +     if (dmi_sacn_smbios(ffi.smbios3, ffi.smbios))
+>
+> "dmi_sacn_smbios"
+>
+> > +             goto error;
+> > +#endif
+>
+> Does this not mean that if FDT_FW_INTERFACE is enabled, but the platform
+> wants to use EFI, it won't be able to? The `goto error;` makes this look
+> mutually exclusive to my efi-unaware eyes.
+
+If you have enabled FFI, then if something goes wrong, you should goto erro=
+r.
+Just like the origin code:
+        if (efi_enabled(EFI_CONFIG_TABLES)) {
+                if (dmi_sacn_smbios(efi.smbios3, efi.smbios))
+                        goto error;
+        } else if (IS_ENABLED(CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK)) {
+                p =3D dmi_early_remap(SMBIOS_ENTRY_POINT_SCAN_START, 0x1000=
+0);
+                if (p =3D=3D NULL)
+                        goto error;
+....
+}
+
+>
+> >       if (efi_enabled(EFI_CONFIG_TABLES)) {
+> > -             /*
+> > -              * According to the DMTF SMBIOS reference spec v3.0.0, it=
+ is
+> > -              * allowed to define both the 64-bit entry point (smbios3=
+) and
+> > -              * the 32-bit entry point (smbios), in which case they sh=
+ould
+> > -              * either both point to the same SMBIOS structure table, =
+or the
+> > -              * table pointed to by the 64-bit entry point should cont=
+ain a
+> > -              * superset of the table contents pointed to by the 32-bi=
+t entry
+> > -              * point (section 5.2)
+> > -              * This implies that the 64-bit entry point should have
+> > -              * precedence if it is defined and supported by the OS. I=
+f we
+> > -              * have the 64-bit entry point, but fail to decode it, fa=
+ll
+> > -              * back to the legacy one (if available)
+> > -              */
+> > -             if (efi.smbios3 !=3D EFI_INVALID_TABLE_ADDR) {
+> > -                     p =3D dmi_early_remap(efi.smbios3, 32);
+> > -                     if (p =3D=3D NULL)
+> > -                             goto error;
+> > -                     memcpy_fromio(buf, p, 32);
+> > -                     dmi_early_unmap(p, 32);
+> > -
+> > -                     if (!dmi_smbios3_present(buf)) {
+> > -                             dmi_available =3D 1;
+> > -                             return;
+> > -                     }
+> > -             }
+> > -             if (efi.smbios =3D=3D EFI_INVALID_TABLE_ADDR)
+> > +             if (dmi_sacn_smbios(efi.smbios3, efi.smbios))
+> >                       goto error;
+> > -
+> > -             /* This is called as a core_initcall() because it isn't
+> > -              * needed during early boot.  This also means we can
+> > -              * iounmap the space when we're done with it.
+> > -              */
+> > -             p =3D dmi_early_remap(efi.smbios, 32);
+> > -             if (p =3D=3D NULL)
+> > -                     goto error;
+> > -             memcpy_fromio(buf, p, 32);
+> > -             dmi_early_unmap(p, 32);
+> > -
+> > -             if (!dmi_present(buf)) {
+> > -                     dmi_available =3D 1;
+> > -                     return;
+> > -             }
+> > diff --git a/drivers/firmware/ffi.c b/drivers/firmware/ffi.c
+> > new file mode 100644
+> > index 000000000000..169802b4a7a8
+> > --- /dev/null
+> > +++ b/drivers/firmware/ffi.c
+> > @@ -0,0 +1,36 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > +
+> > +#include <linux/of.h>
+> > +#include <linux/of_fdt.h>
+> > +#include <linux/libfdt.h>
+> > +#include <linux/ffi.h>
+> > +
+> > +#define FFI_INVALID_TABLE_ADDR       (~0UL)
+> > +
+> > +struct ffi __read_mostly ffi =3D {
+> > +     .smbios =3D FFI_INVALID_TABLE_ADDR,
+> > +     .smbios3 =3D FFI_INVALID_TABLE_ADDR,
+> > +};
+>
+> > +EXPORT_SYMBOL(ffi);
+>
+> > +// SPDX-License-Identifier: GPL-2.0-only
+>
+> Why not EXPORT_SYMBOL_GPL? But also, who is the user of this export?
+Just like efi.
+
+>
+> > +
+> > +void __init ffi_smbios_root_pointer(void)
+> > +{
+> > +     int cfgtbl, len;
+> > +     fdt64_t *prop;
+> > +
+> > +     cfgtbl =3D fdt_path_offset(initial_boot_params, "/cfgtables");
+>
+> These DT properties need to be documented in a binding.
+>
+> > +     if (cfgtbl < 0) {
+> > +             pr_info("firmware table not found.\n");
+>
+> Isn't it perfectly valid for a DT not to contain this table? This print
+> should be, at the very least, a pr_debug().
+>
+> > +             return;
+> > +     }
+> > +     prop =3D fdt_getprop_w(initial_boot_params, cfgtbl, "smbios_phy_p=
+tr", &len);
+>
+> Again, undocumented DT property. Please document them in a binding.
+Okay, I'll add them into binding.
+
+
+>
+> > +     if (!prop || len !=3D sizeof(u64))
+> > +             pr_info("smbios entry point not found.\n");
+> > +     else
+> > +             ffi.smbios =3D fdt64_to_cpu(*prop);
+> > +
+> > +     pr_info("smbios root pointer: %lx\n", ffi.smbios);
+>
+> ffi.smbios is not set if (!prop || len !=3D sizeof(u64)), looks like your
+> "if" should return and the contents of the else become unconditional?
+> Otherwise, this print seems wrong.
+OK, I will optimize this logic and print.
+
+>
+> > +}
+> > +
+> > diff --git a/include/linux/ffi.h b/include/linux/ffi.h
+> > new file mode 100644
+> > index 000000000000..95298a805222
+> > --- /dev/null
+> > +++ b/include/linux/ffi.h
+> > @@ -0,0 +1,15 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +#ifndef _LINUX_FFI_H
+> > +#define _LINUX_FFI_H
+> > +
+> > +extern struct ffi {
+> > +     unsigned long smbios;  /* SMBIOS table (32 bit entry point) */
+> > +     unsigned long smbios3;  /* SMBIOS table (64 bit entry point) */
+> > +     unsigned long flags;
+> > +
+> > +} ffi;
+> > +
+> > +void ffi_smbios_root_pointer(void);
+>
+> Please provide a stub for !FDT_FW_INTERFACE so that we don't need
+> ifdeffery at callsites.
+OK, update it on v3.
+
+
+
+Thanks,
+Yunhui
