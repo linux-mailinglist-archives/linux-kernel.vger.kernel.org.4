@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E43B745D1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD965745D22
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjGCNZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
+        id S231401AbjGCNZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjGCNZm (ORCPT
+        with ESMTP id S231559AbjGCNZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:25:42 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22A5E70
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:25:34 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbc59de009so43532715e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:25:34 -0700 (PDT)
+        Mon, 3 Jul 2023 09:25:51 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA60BE7B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:25:49 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b88e99673eso7209465ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:25:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688390733; x=1690982733;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=IOndpcYQZRei86HjTSa6sLCOIMedJ10F8ZmbDKThl2M=;
-        b=vd7G70PqJmphoqcC5/iGI9byEgifXwK6Rj3mJrKjAIB8uLw1hpzkudZj36bLUzAfkk
-         CjzNWks5k2enqZ83uiheJk1bPKP4uBNGIYPZq9fUuff3p2KtuZ3rqJncJyFJqF58Wk11
-         z3wyE/Lpomy7vrHjrlZWBHS1lrFctL5sXDGQirjHnrOynrP0Lsyxy/RUFfpaiizpZ15D
-         m2niLhmeobmjKoqyeci4H11VdTtxm8S2YpJ4x7pVGDNNw+N9JpOT8TaCH2LRBE6AMkMV
-         2n86A3zQAeyy55sfLbSPXNIM5/Y7R6C5jvxqBMMqtnupqZrKysuVl4uSym0zdS0BCsLV
-         ydtQ==
+        d=gmail.com; s=20221208; t=1688390749; x=1690982749;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ga6xNVvtp+lNzVIC5GM49mPA6xqLDAki2KCiSYDekHg=;
+        b=ByElqpxaXLmLNtmWy2TYSJO/JUFTGZy2h49CLboWSt/xi11ecZfZ0ehCMNkPnbtmoT
+         WXfPqsIo0AqSit+UQaDRRb2wsE1jDsK7ggXZA0jvOsJXqDKt/amZ4wVhd7jU4b3LIDHz
+         vcnn6hrg+41HOaENnZtgt+OmMMJkmr+9KEm8y4q3T/3qmgQFVrKdPg5OcpOlktQECzeE
+         3QKrviG2Y6o81oyLc5pmwupobhwSvT7bP63ogRAzvzknIF8IW/B3/gRMciHy4gysaqVf
+         6NeADxjR+CglePxOO7t6ZZHhDT47VrVK33Q8tNl1V4P3vpPJ1/Ozd4RNiP584TD01Y5g
+         hhvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688390733; x=1690982733;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IOndpcYQZRei86HjTSa6sLCOIMedJ10F8ZmbDKThl2M=;
-        b=F6psCVAvrBh3XeH6i8B1mgldzvdq1TBPKczD7BA1uMtuA3bPclBxV9y19DG/czQHUO
-         sE1hHOp4apqJU0O8xiEEn2rxzQ2qIyrBMFRBkT2UyoM40iPnU5Waf+jWW+K369zU5IfV
-         +Cq79B2J1DrMbHlDSMySj3jaPuL2EprduMEjbHCcHXD3DENkY2yO9Ry10KjdzwfWmp2P
-         lZHgpcFJ7c9vDmsZIEJhcrMVqROYLxnXT4VVjdcvXWapFcMBrtNJgUzWT9Uca3+7BdXp
-         uXGfBiHgZ1e8PJhci0Wq24vFi0HHssC9iVxIHiMqtLyiLA87r9E5n8o+mNuhQ85VNxPi
-         v3kQ==
-X-Gm-Message-State: ABy/qLaiGzc9m6LCLelE9js19YShVova1ovIkmaAQ9ImNoUa21K/vL2X
-        FrG3OXY8YvzN5Qt/XVnbFdnQIebfG1BLmI+XiFQfcg==
-X-Google-Smtp-Source: APBJJlFRFQcvat3EQxFgB5SI6iSmXIGa31iU1VkZvt3I+z99Hnaof/6yj4+br2u7++97LUjZHWQZuw==
-X-Received: by 2002:a1c:790e:0:b0:3fb:db66:8332 with SMTP id l14-20020a1c790e000000b003fbdb668332mr1599049wme.40.1688390733118;
-        Mon, 03 Jul 2023 06:25:33 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:cf0b:9dd4:190:b74f? ([2a01:e0a:982:cbb0:cf0b:9dd4:190:b74f])
-        by smtp.gmail.com with ESMTPSA id p19-20020a05600c205300b003fbc2c0addbsm10279849wmg.42.2023.07.03.06.25.31
+        d=1e100.net; s=20221208; t=1688390749; x=1690982749;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ga6xNVvtp+lNzVIC5GM49mPA6xqLDAki2KCiSYDekHg=;
+        b=UjXrd3rvaXk49OL5oyG0Y9WdmEnYNUz7KAnAVmF4JOYHqAo9BIKLhGrE66s2nSb1uX
+         BSJW6aiSXlfm9SovwZgIlOv0geUKqjZD+YqAdrsS9uDf8W3L3qZf7wjglFMMwUEZ4m93
+         KUpTYR8G1EDHTH6Cngz0v+9HTjQxM+XyBwTuAFZUj9jhXDDEwf0h4SGrRHcal2WDIJML
+         q3CpRRiYw/D242YL7+RF1nTaq32a1kGn1FCYpKc6p1v3uN1ti/Gbv3z13DA5pqjmdKTh
+         CKcnCBa3O+BlbckYxMPMAde6/B+d0jbxjajvFQuVh6oCIIxkmzfv2Dru8IrB00ydlBq5
+         18+A==
+X-Gm-Message-State: ABy/qLaokUyI5bs4tTvHq4ys+0xq0CliI6OZmovrVnVvkcErCxtAzlQE
+        63R0T2FWbl0+4SFmXIX+4rtPY5pCmiZypyKu
+X-Google-Smtp-Source: APBJJlGJ2K9GY+2bcZXbHVRCdunLIb1dR6F7DBiszDdzV3UC3p3rDMFzkNgSX8R+ppFGaZyRzNTATA==
+X-Received: by 2002:a17:903:1c9:b0:1b8:76cb:3e50 with SMTP id e9-20020a17090301c900b001b876cb3e50mr6928046plh.47.1688390749077;
+        Mon, 03 Jul 2023 06:25:49 -0700 (PDT)
+Received: from [192.168.0.103] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id jl23-20020a170903135700b001aafa2e212esm15272064plb.52.2023.07.03.06.25.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 06:25:32 -0700 (PDT)
-Message-ID: <1ed2eca7-b5bf-8d25-d38e-15022a8c8a39@linaro.org>
-Date:   Mon, 3 Jul 2023 15:25:31 +0200
+        Mon, 03 Jul 2023 06:25:48 -0700 (PDT)
+Message-ID: <591e089a-6ccd-c5f3-4cd4-a332e2eae724@gmail.com>
+Date:   Mon, 3 Jul 2023 20:25:35 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] dt-bindings: cleanup DTS example whitespaces
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230702182308.7583-1-krzysztof.kozlowski@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230702182308.7583-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Carsten Hatger <xmb8dsv4@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>, x86@kernel.org
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Read from RTC broken upon resume from suspend on HP Pro x360 435
+ G9 w/ AMD Ryzen 7 5825U
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/07/2023 20:23, Krzysztof Kozlowski wrote:
-> The DTS code coding style expects spaces around '=' sign.
+Hi,
+
+I notice a regression report on Bugzilla [1]. Quoting from it:
+
+> Dear all,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> read access to the device's RTC fails upon resume from suspend with the following error message grabbed from the kernel ring buffer:
 > 
-> ---
+> [409610.163139] Unable to read current time from RTC
 > 
-> Rob,
+> The issue is rare and more likely to appear if the system has been in standby for more than 24hrs w/o interruption.
 > 
-> Maybe this could go via your tree? Rebased on your for-next:
-> v6.4-rc2-45-gf0ac35049606
-> ---
->   .../bindings/arm/arm,coresight-cti.yaml        | 18 +++++++++---------
->   .../bindings/arm/keystone/ti,sci.yaml          |  8 ++++----
->   .../devicetree/bindings/display/msm/gmu.yaml   |  2 +-
->   .../display/panel/samsung,s6e8aa0.yaml         |  2 +-
->   .../display/rockchip/rockchip-vop.yaml         |  4 ++--
->   .../bindings/iio/adc/ti,adc108s102.yaml        |  2 +-
->   .../bindings/media/renesas,rzg2l-cru.yaml      |  4 ++--
->   .../devicetree/bindings/media/renesas,vin.yaml |  4 ++--
->   .../devicetree/bindings/mtd/mtd-physmap.yaml   |  2 +-
->   .../bindings/net/mediatek-dwmac.yaml           |  2 +-
->   .../bindings/perf/amlogic,g12-ddr-pmu.yaml     |  4 ++--
->   .../bindings/phy/mediatek,dsi-phy.yaml         |  2 +-
->   .../remoteproc/amlogic,meson-mx-ao-arc.yaml    |  2 +-
-
-For amlogic ones:
-
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
-
-
->   .../devicetree/bindings/usb/mediatek,mtu3.yaml |  2 +-
->   .../devicetree/bindings/usb/ti,am62-usb.yaml   |  2 +-
->   15 files changed, 30 insertions(+), 30 deletions(-)
+> Same issue is reported to appear on HP Elite G9 devices, cf. https://bbs.archlinux.org/viewtopic.php?id=283620
 > 
+> The issue screws up the systems time resulting in erroneous dated log entries, failing authentication, ..., thus requiring a reboot.
+> 
+> Please see attached dmesg output (line 2069) for further information. 
+> 
+> AMD staff member suspected commit d2a632a8a11756197deb1341bbb09c09abaf20ce to cause a race condition, thus being responsible for the issue. They suggested to increase the delays introduced by latter commmit to 300us. Unfortunately this does not resolve the issue.
+> 
+> Any help would be appreciated.
 
-<snip>
+See Bugzilla for the full thread and attached dmesg.
 
+Mateusz: It looks like this regression is caused by a commit of yours.
+Would you like to take a look on it?
+
+Anyway, I'm adding it to regzbot:
+
+#regzbot introduced: d2a632a8a11756 https://bugzilla.kernel.org/show_bug.cgi?id=217626
+#regzbot title: reducing RTC_UIP polling period causes broken RTC on resume from suspend
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217626
+
+-- 
+An old man doll... just what I always wanted! - Clara
