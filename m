@@ -2,159 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B82746326
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ECB746327
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 21:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjGCTAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 15:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
+        id S230414AbjGCTBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 15:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbjGCTAb (ORCPT
+        with ESMTP id S231549AbjGCTBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 15:00:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190C9E6B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 12:00:30 -0700 (PDT)
-Date:   Mon, 03 Jul 2023 19:00:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688410828;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HKhXlmbNlkSzh7GXP62fqrW0/HPTfBTzxq98qGCo0nU=;
-        b=jKxybCFzzcdPtLRCJ37twNCwgQ1iAYUVWhoH7Sb6zWpugXxZ4MMiioegI0SzDiR4Dyo5TN
-        FPfHIV6T2pWVRmd+vPEMtaztI64+ogpJhQHI4L9WYPSZvKNLU6ewtOohNsin7tSCG3Vphm
-        IMuLZ+2ZEuLbV2qonhmevZOFRTUZ8DR7UBMEd8JBnpAuFGDgs52A4YmR/77M0Ihn8FYKE5
-        jA6Mxy7qN0DTnoh+VjfrR/1QQ7/DnbLpYuDlLrZq+R8RbYUzi/bbnU2j45ktuD27Wa0Ah9
-        NGW1kASYw1DiyQkxsZfyJbaP4NBbU2gfWD51tcysMwozKgi73wMSGTYOjHlrfQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688410828;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HKhXlmbNlkSzh7GXP62fqrW0/HPTfBTzxq98qGCo0nU=;
-        b=AxRnJLj/HPe1Xnxe9odqWWubGJ6mDfg4k6JA6GjYKzwz9z0VKBHsAUsazXrlguNkesJr3P
-        cssYPH2pX6kSzNCA==
-From:   "irqchip-bot for Jonas Gorski" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irq-bcm6345-l1: Do not assume a fixed
- block to cpu mapping
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>, philmd@linaro.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20230629072620.62527-1-jonas.gorski@gmail.com>
-References: <20230629072620.62527-1-jonas.gorski@gmail.com>
+        Mon, 3 Jul 2023 15:01:11 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2082.outbound.protection.outlook.com [40.107.95.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A0010EF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 12:00:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mWHTfUER0G1yzIw6Jb03bhEMYf83btcHKVSAhM+m1dW++TNgALlmlFSQh3Z3/A0Nxk3KhvXRVpCD5Czzf739KyOC9rwN80+ClhWm0LzIZkpe47FbRGo3i6RQZ6reK5kFnK4oH7P2b0E7LD7i8nf8CKlm8aBqD0s6+/5qqsBwVJFepNgwFDcXqzGqtgCB2ZwlaOxJqJwIo11ey9ox967zVYZ1eH3xSp819mLlI2t5mLvVl3sm5L7A5vuyHnCCyQSpPELq5fIwD8dHzUD5tGq+h2QRd8Zg4qbxGgWR+Jbq08yHbIndNCeQbVtsn8OUCVsViIxhyRc2zni9zSuEr0z0+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z4hQEngljiBuMGKa7/H9dnFsqTDES+zur4iQU7FQ8DQ=;
+ b=ZJo8jDgFfu0SyKE3qFMeywdlpaQSmgGeXtNgpVP62mjM4rXftmaFu+WQHuEkO2ZUztu6dcLbSkIVwPEhoyXp+gE7dsMACbyIbUk2v1Bb2SDqbAacd7C/v2iZLAmZR5o9JId/49gVUlWP0V7M4/F8i1TmekaJDJ6dmhzplAheLZan/c88V5yBIEAtw9Xfti+t3PnrlgtplCrtR8VEH5X1NMmrG1jK9mfrc4rbFsi+H1fLQoglqzECeLc3K+ITn2G/Ht/lf6MJhlHZ0q6dASM8NAyAvSaDJWVEJ2ZEM86+tKPy94hkGCHJlI1LllACg2HDtCv0GKOMxWF8xoLnxGODOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z4hQEngljiBuMGKa7/H9dnFsqTDES+zur4iQU7FQ8DQ=;
+ b=PiitQvUBS87MkQGzcVGcZ75MR0DFV5AVGzybDB2IF+gMqWElRfVwV2VLPROo5Q0yHEiBafeiwB0LiNHm/o+iIUPuE4RxSz92YBe9J0gROuDPu76HYEg1DgO5sYgC5vkCGrgPb+f9Q+SLymTKKU3V2cfuiaj/DnVTpSjdiqiX6NbX7CINTRwv0E7R22FTxjFw3RXyyr/EFkBCepbzn21WvpXc+KRt23Mbl+UhNoQOpUpwLR/gUa5KFzFjh1eQDeFzevLAdpTMlq/uiIVDlIpaterJb2GwT79fZwAPdpuIaFfbVMHIL1E/iFvs69s03OUtq/7RiHKZUxAik0MgAKKNeg==
+Received: from MW2PR16CA0006.namprd16.prod.outlook.com (2603:10b6:907::19) by
+ CH2PR12MB4056.namprd12.prod.outlook.com (2603:10b6:610:a5::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6544.24; Mon, 3 Jul 2023 19:00:57 +0000
+Received: from CO1NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:907:0:cafe::a5) by MW2PR16CA0006.outlook.office365.com
+ (2603:10b6:907::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.30 via Frontend
+ Transport; Mon, 3 Jul 2023 19:00:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ CO1NAM11FT049.mail.protection.outlook.com (10.13.175.50) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.43 via Frontend Transport; Mon, 3 Jul 2023 19:00:57 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 3 Jul 2023
+ 12:00:46 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Mon, 3 Jul 2023 12:00:46 -0700
+Received: from sandstorm.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Mon, 3 Jul 2023 12:00:46 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        "Hugh Dickins" <hughd@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        <linux-riscv@lists.infradead.org>, <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        James Houghton <jthoughton@google.com>,
+        Ryan Roberts <ryan.roberts@arm.com>
+Subject: [PATCH] mm: riscv: fix an unsafe pte read in huge_pte_alloc()
+Date:   Mon, 3 Jul 2023 12:00:44 -0700
+Message-ID: <20230703190044.311730-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Message-ID: <168841082817.404.2381514452871552922.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT049:EE_|CH2PR12MB4056:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a4e77db-9892-4e80-754c-08db7bf7d583
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iZ/X1yu/X+S35lK9SWQbBh7EdONin+46gQ2X3K0kv3oyW8HBMG2cR1PT/qf5Gqpb+bTJ+Ti7y5QMYZHT5ew07m9XvGQ0w6KoJlqRz/9/lR2hN84u1fFeGMjfVtAUn82k3/k+T5dewCyEWbqEXMMKipESNqOhLahPIHbu7MoYIrRni8LJuMWup58MQQlVLeGL9fOWRFm6LsSuYH8VERoDLDi3lsWRgR8mxy6gGUrwKnQCItlsjPu+WX+gnY3t5VOa44q06Aw6Npsf0ihoRpN0XvK5wJm93/KqptgGRthRBIIDjqxk2hwacrj04yio3FZ9atiw9SftgQBLeyDtxYlTk/AE3LfDNwUvKbjx0Ns/CM1r9npngen7fqZdHmft82JjnK0PBNJzYbXZ6cbDCcIKUVFZUWw2sLgwWJXcVi+R/jIRlbBtXfUZOL/2agZxWK7CwdcHbrFjtkaXSh1VzKHFNRqC3VKt8hRf2DSZzlKsVcrCmAAfPKaFVtgl3TePEe4Yh9i39WogSOrRvmiffk0Q9cujFiy2CIRshci81htOlv7F/RHYNtTa8QmgamepUg1mVql+JLK4eBQuDW8D+Y37T9RT8qqepyOo+8hS5/eeJYGy1B4PTgZQLjFtDLuFWFXM/mz5BXg+Bmm7JGe20NXNJbyArpnS2ZsHYyB5lWQULII6Byahzu7I+jBLWym57IiHSDn6rL39uB72Lc3frBNft+aqc/ZiddYM261XpbSBXGbOGGRPuNG1vk3p+O3/V33hU/0sCmOYT692ASVi5PrQcPNK6ARyiNWuq8sXnnWHrJw=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(46966006)(40470700004)(36840700001)(336012)(54906003)(316002)(8936002)(47076005)(41300700001)(426003)(82310400005)(8676002)(40460700003)(40480700001)(36860700001)(356005)(83380400001)(82740400003)(70586007)(6916009)(70206006)(7636003)(4326008)(36756003)(26005)(966005)(186003)(86362001)(478600001)(5660300002)(7416002)(1076003)(2906002)(7696005)(2616005)(14583001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 19:00:57.1420
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a4e77db-9892-4e80-754c-08db7bf7d583
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT049.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4056
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irq=
-chip:
+The WARN_ON_ONCE() statement in riscv's huge_pte_alloc() is susceptible
+to false positives, because the pte is read twice at the C language
+level, locklessly, within the same conditional statement. Depending on
+compiler behavior, this can lead to generated machine code that actually
+reads the pte just once, or twice. Reading twice will expose the code to
+changing pte values and cause incorrect behavior.
 
-Commit-ID:     55ad24857341c36616ecc1d9580af5626c226cf1
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platfo=
-rms/55ad24857341c36616ecc1d9580af5626c226cf1
-Author:        Jonas Gorski <jonas.gorski@gmail.com>
-AuthorDate:    Thu, 29 Jun 2023 09:26:20 +02:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Mon, 03 Jul 2023 19:47:51 +01:00
+In [1], similar code actually caused a kernel crash on 64-bit x86, when
+using clang to build the kernel, but only after the conversion from *pte
+reads, to ptep_get(pte). The latter uses READ_ONCE(), which forced a
+double read of *pte.
 
-irq-bcm6345-l1: Do not assume a fixed block to cpu mapping
+Rather than waiting for the upcoming ptep_get() conversion, just convert
+this part of the code now, but in a way that avoids the above problem:
+take a single snapshot of the pte before using it in the WARN
+conditional.
 
-The irq to block mapping is fixed, and interrupts from the first block
-will always be routed to the first parent IRQ. But the parent interrupts
-themselves can be routed to any available CPU.
+As expected, this preparatory step does not actually change the
+generated code ("make mm/hugetlbpage.s"), on riscv64, when using a gcc
+12.2 cross compiler.
 
-This is used by the bootloader to map the first parent interrupt to the
-boot CPU, regardless wether the boot CPU is the first one or the second
-one.
+[1] https://lore.kernel.org/20230630013203.1955064-1-jhubbard@nvidia.com
 
-When booting from the second CPU, the assumption that the first block's
-IRQ is mapped to the first CPU breaks, and the system hangs because
-interrupts do not get routed correctly.
-
-Fix this by passing the appropriate bcm6434_l1_cpu to the interrupt
-handler instead of the chip itself, so the handler always has the right
-block.
-
-Fixes: c7c42ec2baa1 ("irqchips/bmips: Add bcm6345-l1 interrupt controller")
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20230629072620.62527-1-jonas.gorski@gmail.com
+Suggested-by: James Houghton <jthoughton@google.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- drivers/irqchip/irq-bcm6345-l1.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ arch/riscv/mm/hugetlbpage.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l=
-1.c
-index fa113cb..6341c01 100644
---- a/drivers/irqchip/irq-bcm6345-l1.c
-+++ b/drivers/irqchip/irq-bcm6345-l1.c
-@@ -82,6 +82,7 @@ struct bcm6345_l1_chip {
- };
-=20
- struct bcm6345_l1_cpu {
-+	struct bcm6345_l1_chip	*intc;
- 	void __iomem		*map_base;
- 	unsigned int		parent_irq;
- 	u32			enable_cache[];
-@@ -115,17 +116,11 @@ static inline unsigned int cpu_for_irq(struct bcm6345_l=
-1_chip *intc,
-=20
- static void bcm6345_l1_irq_handle(struct irq_desc *desc)
- {
--	struct bcm6345_l1_chip *intc =3D irq_desc_get_handler_data(desc);
--	struct bcm6345_l1_cpu *cpu;
-+	struct bcm6345_l1_cpu *cpu =3D irq_desc_get_handler_data(desc);
-+	struct bcm6345_l1_chip *intc =3D cpu->intc;
- 	struct irq_chip *chip =3D irq_desc_get_chip(desc);
- 	unsigned int idx;
-=20
--#ifdef CONFIG_SMP
--	cpu =3D intc->cpus[cpu_logical_map(smp_processor_id())];
--#else
--	cpu =3D intc->cpus[0];
--#endif
--
- 	chained_irq_enter(chip, desc);
-=20
- 	for (idx =3D 0; idx < intc->n_words; idx++) {
-@@ -253,6 +248,7 @@ static int __init bcm6345_l1_init_one(struct device_node =
-*dn,
- 	if (!cpu)
- 		return -ENOMEM;
-=20
-+	cpu->intc =3D intc;
- 	cpu->map_base =3D ioremap(res.start, sz);
- 	if (!cpu->map_base)
- 		return -ENOMEM;
-@@ -271,7 +267,7 @@ static int __init bcm6345_l1_init_one(struct device_node =
-*dn,
- 		return -EINVAL;
+diff --git a/arch/riscv/mm/hugetlbpage.c b/arch/riscv/mm/hugetlbpage.c
+index 542883b3b49b..96225a8533ad 100644
+--- a/arch/riscv/mm/hugetlbpage.c
++++ b/arch/riscv/mm/hugetlbpage.c
+@@ -73,7 +73,11 @@ pte_t *huge_pte_alloc(struct mm_struct *mm,
  	}
- 	irq_set_chained_handler_and_data(cpu->parent_irq,
--						bcm6345_l1_irq_handle, intc);
-+						bcm6345_l1_irq_handle, cpu);
-=20
- 	return 0;
+ 
+ out:
+-	WARN_ON_ONCE(pte && pte_present(*pte) && !pte_huge(*pte));
++	if (pte) {
++		pte_t pteval = ptep_get_lockless(pte);
++
++		WARN_ON_ONCE(pte_present(pteval) && !pte_huge(pteval));
++	}
+ 	return pte;
  }
+ 
+
+base-commit: 0a8d6c9c7128a93689fba384cdd7f72b0ce19abd
+-- 
+2.41.0
+
