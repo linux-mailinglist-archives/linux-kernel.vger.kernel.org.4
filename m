@@ -2,164 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1DE745C6E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A84A745C75
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjGCMnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S230419AbjGCMp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGCMnd (ORCPT
+        with ESMTP id S229504AbjGCMpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:43:33 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39B9BC;
-        Mon,  3 Jul 2023 05:43:32 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-345db6c12b4so16740205ab.0;
-        Mon, 03 Jul 2023 05:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688388212; x=1690980212;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZcEoocC19pvVvckXEfOwPq0UrW7yuRC8cKDF3dCYEz4=;
-        b=Xknf2hwH10pOXp2JSYKV5VMG25V29YwSCtAF1bztkGfwW1rGJHKDMcWVI7c1RRZJtz
-         wdtoI40NHgRDbD0DvHw/0gUjHO4pnAdQRAeMWEByAK+mqgBCTExDYRuuisz4c6LcH7Cu
-         lbefqBP2iBDZRZM6GhsVbEahUoSxwXYqWi0i1JQiaDvEpo6NgDzET3zJpDesMnb9lcu8
-         S2q1OYub0sdyeWS65VHBzhH6gIgGynBzeCJ1WwVCfzFyFItirpwAAAcfu41D8PGbVEyF
-         UbeXgx3xtNy+8lD8iBLNS9HwmTP3xMrvFva1f1h3lfDYQyj0Gh7/4jsJablMW5y0+HtK
-         X0cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688388212; x=1690980212;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZcEoocC19pvVvckXEfOwPq0UrW7yuRC8cKDF3dCYEz4=;
-        b=MnHxA/gXIpQHDW7COsXDdJQO0oe60mzYXx0S6o9AclECjkB/YHptb7WwoTvhrEP1ZM
-         2RjkLG64RoTN66CZ1yf3wLc7QhRkLw1iXKgVvG90hXgNBw0EYP3tGWVl6st6fB0No3pA
-         jeqw+n3HLoGbMpdR5g9T6leOQChe9jM5DXVJ8nBcr95HgqyCwlCVibNXCIZw7WoWjgHu
-         q5FkTSVwjwe88KGwFrrueL8zaQu5imZC6zNlpdMZOP9V6aNPY57tcUMuoM93uSlCMGqh
-         i5VvIVqf9K1NqPttVkKoY+3oD/IWMTNk2IsKJZaS4wyiTMtO1sqdmaUbcJkPoZSf0sXj
-         cifA==
-X-Gm-Message-State: AC+VfDw2KZpvrBe4IF+3LLx3CluzgFkawSGLsJavHIY9fXJUHxl2vc6e
-        Yw1CyV2mYkZvsZmlyJtmD/WRRSzsVmlUcAHIgh8=
-X-Google-Smtp-Source: ACHHUZ5Zk75GyTJn8VfVPthaCVH4awdI5bmJizAK7v91XelWS1kU8rpKLdAAWEQH3wcA/yiXqvhxLSQ+BwE8f0ktwnw=
-X-Received: by 2002:a6b:7a02:0:b0:785:d017:c16f with SMTP id
- h2-20020a6b7a02000000b00785d017c16fmr11368650iom.14.1688388212208; Mon, 03
- Jul 2023 05:43:32 -0700 (PDT)
+        Mon, 3 Jul 2023 08:45:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE15BC;
+        Mon,  3 Jul 2023 05:45:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF23260F1E;
+        Mon,  3 Jul 2023 12:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B49C433C7;
+        Mon,  3 Jul 2023 12:45:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688388323;
+        bh=aPhviO+6gR3kw19K1RPOfSMPLnc5aEdn3cO2oF8ecBE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mwA9qcQ7EoE0uU+5LDOVbwvV0l+VLBzBd0BpMHA1z3wg9/xoTqu0K0sQzeHf26Csi
+         khDJkCglgQuP1ps9tE5eIK33+0jaOXWuNtYKew7Rf3sqDXxl/KeB1BT3oxa602StNY
+         ZbEDNyNeVSTQUlSG9XL0WfGLsUmAnvfgikkHHXus=
+Date:   Mon, 3 Jul 2023 14:45:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        John Keeping <john@keeping.me.uk>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Dan Carpenter <error27@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: functionfs: avoid memcpy() field overflow warning
+Message-ID: <2023070309-outlook-predator-c3dc@gregkh>
+References: <20230703123053.3117488-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20230630120433.49529-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230630120433.49529-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <OS0PR01MB592217C4028606B67B39C6858629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB592217C4028606B67B39C6858629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 3 Jul 2023 13:43:06 +0100
-Message-ID: <CA+V-a8sXcHP2AYYLLONLLBDVctMb=fnU=D4+6hNoHGx5Dk2O3Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
- RZG2L_GPIO_PORT_PACK() macro
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703123053.3117488-1-arnd@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+On Mon, Jul 03, 2023 at 02:30:32PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> __ffs_func_bind_do_os_desc() copies both the CompatibleID and SubCompatibleID
+> fields of the usb_ext_compat_desc structure into an array, which triggers
+> a warning in the fortified memcpy():
+> 
+> In file included from drivers/usb/gadget/function/f_fs.c:17:
+> In file included from include/linux/string.h:254:
+> include/linux/fortify-string.h:592:4: error: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>                         __read_overflow2_field(q_size_field, size);
+> 
+> Usually we can avoid this by using a struct_group() inside of the structure
+> definition, but this might cause problems in userspace since it is in a uapi
+> header.
 
-Thank you for the review.
+We use this in other uapi .h files, what is unique about these fields
+that makes it so that they can not be used?  Because it's not the last
+field?
 
-On Mon, Jul 3, 2023 at 12:42=E2=80=AFPM Biju Das <biju.das.jz@bp.renesas.co=
-m> wrote:
->
-> Hi Prabhakar,
->
-> Thanks for the patch.
->
-> > -----Original Message-----
-> > From: Prabhakar <prabhakar.csengg@gmail.com>
-> > Sent: Friday, June 30, 2023 1:05 PM
-> > To: Geert Uytterhoeven <geert+renesas@glider.be>; Magnus Damm
-> > <magnus.damm@gmail.com>
-> > Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > <krzysztof.kozlowski+dt@linaro.org>; Linus Walleij
-> > <linus.walleij@linaro.org>; linux-renesas-soc@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-riscv@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; linux-gpio@vger.kernel.org; Biju Das
-> > <biju.das.jz@bp.renesas.com>; Prabhakar <prabhakar.csengg@gmail.com>;
-> > Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Subject: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
-> > RZG2L_GPIO_PORT_PACK() macro
-> >
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Currently we assume all the port pins are sequential ie always PX_0 to
-> > PX_n (n=3D1..7) exist, but on RZ/Five SoC we have additional pins P19_1=
- to
-> > P28_5 which have holes in them, for example only one pin on port19 is
-> > available and that is P19_1 and not P19_0.
-> >
-> > So to handle such cases include pinmap for each port which would
-> > indicate the pin availability on each port. With this we also get
-> > additional pin validation, for example on the RZ/G2L SOC P0 has two pin=
-s
-> > P0_1 and P0_0 but with DT/SYSFS could use the P0_2-P0_7.
-> >
-> > While at it, update rzg2l_validate_gpio_pin() to use the port pinmap to
-> > validate the gpio pin.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/pinctrl/renesas/pinctrl-rzg2l.c | 167 ++++++++++++------------
-> >  1 file changed, 86 insertions(+), 81 deletions(-)
-> >
-> > diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > index 9511d920565e..a0c2e585e765 100644
-> > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > @@ -67,10 +67,12 @@
-> >                                        PIN_CFG_FILCLKSEL)
-> >
-> >  /*
-> > - * n indicates number of pins in the port, a is the register index
-> > - * and f is pin configuration capabilities supported.
-> > + * m indicates the bitmap of supported pins, n indicates number
-> > + * of pins in the port, a is the register index and f is pin
-> > + * configuration capabilities supported.
-> >   */
-> > -#define RZG2L_GPIO_PORT_PACK(n, a, f)        (((n) << 28) | ((a) << 20=
-) |
-> > (f))
-> > +#define RZG2L_GPIO_PORT_PACK(m, n, a, f)     ((UL(m) << 32) | (UL(n) <=
-< 28)
-> > | ((a) << 20) | (f))
->
-> I guess, you can still achieve RZG2L_GPIO_PORT_PACK(n, a, f) with
-> ((UL(PINMAP(n)) << 32) | (UL(n) << 28) | ((a) << 20) | (f))
->
-> #define PINMAP(n) GENMASK(n,0) ?? Then you don't need to modify rzg2l_gpi=
-o_configs.
->
-Good point, but this would work if port pins didn't have any holes.
-For example on RZ/Five port P19 we have P19_1 pin only and P19_0 is
-not available (and similarly for port P25 we have P25_1).
+thanks,
 
-Cheers,
-Prabhakar
+greg k-h
