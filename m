@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656DE74598B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3861F74598F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbjGCKCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S231213AbjGCKCu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jul 2023 06:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbjGCKBR (ORCPT
+        with ESMTP id S231217AbjGCKC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:01:17 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74441723;
-        Mon,  3 Jul 2023 02:58:45 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1688378314to1hdzr5
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 03 Jul 2023 17:58:33 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: swyrzWPvyR2MHnEm0gEV1f52S7C1AsQZQ8BAWWwXSoI4RGVChMko0pt9DVKSn
-        8hALMuPjl9kFUwWdtEjIlPuRYHSPZghjqqEaIvzXTdd9rwqgZwWZhRJ0GbLQDAlNB42qiqI
-        Gcd24WBNFPRfXCwNAwNTXq6fMAmlUE4SgB+VlBwcczsRgD9sH9c6UN3WWMAxQSJ0WvF0AdH
-        aO8Lijwo1OTGHcbjuRdyXxJzDs1ByHvoJwprheuyS+FQZDmdsvpoWCRELEyn+VhVfawYvw2
-        ZtYl3euUkf8nLT0YgGvP8eaqjTYMe75UMPW8hGaGlxxH5LD/FuWRiN0WieEvAVcjaj5emKS
-        hFS60sGyhllezb+ILTwLzm19IPjANH0XIS1292ny9aHMvvuMTycIKeeknMUww==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18250716996633539476
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        w@1wt.eu
-Subject: Re: [PATCH v1 03/11] tools/nolibc: include crt.h before arch.h
-Date:   Mon,  3 Jul 2023 17:58:32 +0800
-Message-Id: <20230703095832.493137-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <e1cf8fd3-f8cd-4c3c-9f8c-24bbc0a7cde3@t-8ch.de>
-References: <e1cf8fd3-f8cd-4c3c-9f8c-24bbc0a7cde3@t-8ch.de>
+        Mon, 3 Jul 2023 06:02:29 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1CA4690;
+        Mon,  3 Jul 2023 03:00:06 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-579ed2829a8so13955767b3.1;
+        Mon, 03 Jul 2023 03:00:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688378405; x=1690970405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=00zdOELNHoGtantaf4JPu8FnRGXRfG9PIC7WPkzfT0g=;
+        b=C00UIL0ktZTyL029dQjgEYB1t/6LiS6wf1gorK8pTov7lzJxqmvlu6VKfiGq6USzMw
+         UfpJFK4env2L5SyiYtpxI1quh8o8F4mNjN3grHrHFR18SjFN+CNybVETFgRMSkR0OwP2
+         XrzWD8dJ+ZjJLO+WYNWqm5YxXDCPVbbobQrsB+CjISIcoEbS5DC5A/ySXflAaD0BMsHs
+         l4MqF9hm8+Hm9HyHi+z/spIgVIZUfAWhhAlWdmumjc/wiX26XAuzBwvatwiFuZhsHy9s
+         /N1yPI9IKFxHfpJ48X6tUCvzOmP6Zoa4IE/Truph8s7GusUqFsLx8P3U7WEKsJbO8ILy
+         VI0g==
+X-Gm-Message-State: ABy/qLbSeImUJNTxFujlb8wxePtVxUq8ZQSd7hO+9bDirohNU1Jis1Bj
+        C2HKEghfpmIIq6E1RWmEplvxKhoSoeqhRw==
+X-Google-Smtp-Source: APBJJlHX+xjReSbCSJMs+RsjTmq7EKi6DXemn7jU4es5qH3FpT++/mb0uwbRM2B84k89amug4qHpPQ==
+X-Received: by 2002:a81:6d02:0:b0:577:60ec:6966 with SMTP id i2-20020a816d02000000b0057760ec6966mr8544348ywc.13.1688378405356;
+        Mon, 03 Jul 2023 03:00:05 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id y127-20020a818885000000b00576cd8f9770sm3970906ywf.146.2023.07.03.03.00.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 03:00:04 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bb15165ba06so3741330276.2;
+        Mon, 03 Jul 2023 03:00:04 -0700 (PDT)
+X-Received: by 2002:a25:3104:0:b0:c36:3d2a:8336 with SMTP id
+ x4-20020a253104000000b00c363d2a8336mr9567373ybx.32.1688378404662; Mon, 03 Jul
+ 2023 03:00:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com> <20230622113341.657842-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230622113341.657842-3-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 3 Jul 2023 11:59:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXtM6gQTWpJgLDpDf1x+NdSfi23RVfj34q5fHXts=2ogw@mail.gmail.com>
+Message-ID: <CAMuHMdXtM6gQTWpJgLDpDf1x+NdSfi23RVfj34q5fHXts=2ogw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] clk: renesas: r9a09g011: Add CSI related clocks
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
+Hi Fabrizio,
 
-> 
-> On 2023-06-29 02:54:35+0800, Zhangjin Wu wrote:
-> > The crt.h provides a new _start_c() function, which is required by the
-> > new assembly _start entry of arch-<ARCH>.h (included by arch.h), let's
-> > include crt.h before arch.h.
-> > 
-> > This '#include "crt.h"' doesn't let the new _start_c() work immediately,
-> > but it is a base of the coming patches to move most of the assembly
-> > _start operations to the _start_c() function for every supported
-> > architecture.
-> 
-> Why don't the arch-*.h files include this new header?
-> They are the users of the new symbol.
+Thanks for your patch!
+
+On Thu, Jun 22, 2023 at 1:34 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The Renesas RZ/V2M SoC comes with 6 CSI IPs (CSI0, CSI1, CSI2
+> CSI3, CSI4, and CSI5), however Linux is only allowed control
+> of CSI0 and CSI4.
+> CSI0 shares its reset and PCLK lines with CSI1, CSI2, and CSI3.
+> CSI4 shares its reset and PCLK lines with CSI5.
+
+That sounds like a marvelous idea.... :-(
+
+> This commit adds support for the relevant clocks.
 >
-
-I have tried so, but since crt.h itself is not architecture specific, add it
-before arch.h will avoid every new arch porting add the same thing again and
-again, currently, we only need to add once. I have even planned to move
-compiler.h out of arch-*.h, but not yet ;-)
-
-And also, crt.h may require more features in the future, like init/fini
-support, it may be not only used by arch-*.h files.
-
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/Makefile | 1 +
-> >  tools/include/nolibc/nolibc.h | 1 +
-> >  tools/include/nolibc/signal.h | 1 +
-> >  tools/include/nolibc/stdio.h  | 1 +
-> >  tools/include/nolibc/stdlib.h | 1 +
-> >  tools/include/nolibc/sys.h    | 1 +
-> >  tools/include/nolibc/time.h   | 1 +
-> >  tools/include/nolibc/unistd.h | 1 +
-> >  8 files changed, 8 insertions(+)
-> > 
-> > diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-> > index 875e13e3c851..00471e59b11e 100644
-> > --- a/tools/include/nolibc/Makefile
-> > +++ b/tools/include/nolibc/Makefile
-> > @@ -37,6 +37,7 @@ NARCH            = $(or $(NARCH_$(ARCH)),$(ARCH))
-> >  arch_file := arch-$(NARCH).h
-> >  all_files := \
-> >  		compiler.h \
-> > +		crt.h \
-> 
-> This should be part of the patch adding the file.
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
 >
+> v2: no changes
 
-Ok, thanks very much.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk-for-v6.6.
 
-Best regards,
-Zhangjin
+Gr{oetje,eeting}s,
 
-> >  		ctype.h \
-> >  		errno.h \
-> >  		nolibc.h \
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
