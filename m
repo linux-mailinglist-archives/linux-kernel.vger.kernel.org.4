@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B602745BE2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190AB745BE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjGCMK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
+        id S230074AbjGCMOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjGCMK0 (ORCPT
+        with ESMTP id S229728AbjGCMOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:10:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABAB109
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 05:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qGROpifsOdCT4Xwo5fTFRwrXOPLpnTQ2X2kSGJz1AGs=; b=Q0s11KtjRRE+XjqpowFprZ7h3z
-        tT5HO09peI5vpMHiivblNnAxAVB2X7HOyFKL9MP91BInqwL4IPzWpNB+idLvVLdDy914nj6p1SIzT
-        sitFrVZu5CnMlvsBuGiazlqbqXSGKCGlG8VSJ4sxDqxWQr7OefNt4MIqFvL6Bw8NXohS6Z37xHPmz
-        Mud1HPm+6enB4Yj1G0ZaRmzPF/r4aNkMJyF+LKVn6cV6Z5zA8+3AuT87SCXW4EdhCPgS9XocdP194
-        AMnI047OiyUOwggEVYd5Sg+sOZy213Z4QbNYAs7HNeLYsFRsOJOY8zhfbI55ccHqw/LuIO/Lm2kMj
-        zAxySWZQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qGINg-008DYd-9u; Mon, 03 Jul 2023 12:10:13 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3482C30005E;
-        Mon,  3 Jul 2023 14:10:10 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1471D202A2A17; Mon,  3 Jul 2023 14:10:10 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 14:10:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v4] Sched/fair: Block nohz tick_stop when cfs bandwidth
- in use
-Message-ID: <20230703121009.GH4253@hirez.programming.kicks-ass.net>
-References: <20230630135714.1018434-1-pauld@redhat.com>
- <20230630150641.GH2533791@hirez.programming.kicks-ass.net>
- <20230630152824.GC43299@lorien.usersys.redhat.com>
- <20230630160534.GA2534344@hirez.programming.kicks-ass.net>
- <20230630162910.GD43299@lorien.usersys.redhat.com>
+        Mon, 3 Jul 2023 08:14:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4A1109;
+        Mon,  3 Jul 2023 05:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688386453; x=1719922453;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B+0o99RwmPnmItgZGhKKF+qA0QI/Xs8dXHq+Uwdmz44=;
+  b=YDq+87bh7Hn4iSR5aWLx3cT7sktDxusqJegRlcgNHE4hpPPzM8pwwass
+   eSqAAkE1kuAlfzLLfQL3FwA1wQbeMPNXj7jyncNlmJkuhpQFlr8MvOeIY
+   umDcCid1x4uKAjj6QdQ6oS5bDNjJMSZa2z8RM83BhcZHB8DlFtpX6xTP3
+   R7CW7ooDKGAchiQe6c7ZtDZ4b11yVxjqV5L7yWiJTzkaOFHhJQH86KV/v
+   2zUGVZSwS+i7fIXwa+ZmUELq5p2rjThPbbIBnc3RuztPsLgMGNnM3a+4k
+   sfBXE3i49uCOUq63Thr/79vPn/RdZ06qide1AecI0BJeqRLoiWsuBZF0c
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="361726060"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="361726060"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 05:14:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="788508190"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="788508190"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Jul 2023 05:14:10 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E199C170; Mon,  3 Jul 2023 15:14:12 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v4 0/5] ACPI: platform: Fix SMB0001 enumeration on Kontron devices
+Date:   Mon,  3 Jul 2023 15:14:06 +0300
+Message-Id: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630162910.GD43299@lorien.usersys.redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,13 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 12:29:10PM -0400, Phil Auld wrote:
+After switching i2c-scmi driver to be a plaform one, it stopped
+being enumerated on number of Kontron platforms, because it's
+listed in the forbidden_id_list.
 
-> I think you are agreeing that I need the pick next code but need to remove
-> the hierarchy walks, right?
+To resolve the situation, add a flag and check if there are resources
+privided for the forbiden device. If it is the case, the device must
+be skipped.
 
-Yeah, the dequeue case makes we have to care about pick, not sure we
-then also need to care about sched_update_tick_dependency() though.
-There is indeed a window where these two will 'race', but afaict it is
-benign.
+Changelog v4:
+- dropped applied patch
+- added kernel doc for new helper (Rafael)
+- rewritten the commit message for the reason of a new helper (Rafael)
+- added a couple of patches for ACPI scan.c that can be applied later on
+
+Changelog v3:
+- provided completely rewritten solution (Rafael)
+- due to above, added two new patches
+- due to above, dropped tags from patch 3
+
+Andy Shevchenko (5):
+  ACPI: bus: Introduce acpi_match_acpi_device() helper
+  ACPI: platform: Ignore SMB0001 only when it has resources
+  ACPI: platform: Move SMB0001 HID to the header and reuse
+  ACPI: scan: Use the acpi_match_acpi_device() helper
+  ACPI: scan: Provide symbol declarations
+
+ drivers/acpi/acpi_platform.c  | 30 +++++++++++++++++++++++++++---
+ drivers/acpi/bus.c            | 25 +++++++++++++++++++++----
+ drivers/acpi/scan.c           | 22 +++++++++++++---------
+ drivers/i2c/busses/i2c-scmi.c |  3 ---
+ include/acpi/acpi_drivers.h   |  2 ++
+ include/linux/acpi.h          |  9 +++++++++
+ 6 files changed, 72 insertions(+), 19 deletions(-)
+
+-- 
+2.40.0.1.gaa8946217a0b
 
