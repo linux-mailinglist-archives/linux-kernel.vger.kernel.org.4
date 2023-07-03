@@ -2,155 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AD0745458
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 05:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F221D74545B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 05:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjGCD7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 23:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S230043AbjGCD7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 23:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjGCD66 (ORCPT
+        with ESMTP id S229696AbjGCD7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 23:58:58 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AC093;
-        Sun,  2 Jul 2023 20:58:57 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5577900c06bso3219929a12.2;
-        Sun, 02 Jul 2023 20:58:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688356737; x=1690948737;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/PQXjkL+Ql9ozRL2pZj1FoItwIuuU1/FoM+PWBLQ0c=;
-        b=bisdXdMB4kJWYFdP44MjynQlmsPMqRTKuCIHvEsf99IH14GTNQU4PIHsB3zhEhkdtZ
-         dds0STQzdT4k0sh/ANI0ef7sfBS3CeFvVHJQiGac1cX3qLxc3v3guJ1wO+N9SIth+yjS
-         caBUE3uPYHOzNhIJPgTUfigb8ONO4YXEyGVggrZKIWEJE5X+vNQLLWe0vuCp7VmhniUO
-         P5NYwbN4+MrrS8t8ukoFwTSrQd3AnLSw7JiQckI0urh0+cmPPnOGbUysRQ+fPxzcyns3
-         t6uSKt2cL9a5dy5hJHZ/uLsB1Hi7M73OUTQL3An9VJwfC3zG+Swjx9kyYMkKrXYS75Kk
-         Dtmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688356737; x=1690948737;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B/PQXjkL+Ql9ozRL2pZj1FoItwIuuU1/FoM+PWBLQ0c=;
-        b=UsTvgpRkflOMNRT9uqp50SRksay8VtLflM1AymzFvsLVneHytFL9AAbvcFyJWIUy4W
-         ZTSkv/bpOwVL6H9KUSezUhGJ0tZAKBJ0BzHvgfLwOo7TFi54oKbwiVeerUerWGvgK8b9
-         KIkV/UEmiEE5mcV25+u++p/YMtyPIDNc8TDPe7WrnkJK7P8BCpxmUXNIMxnwTwApeemB
-         EP2c3W9QQ6ftpzJME43IYXPYsGndV4zgkyaNQsv+Kp34WFdfuMF9wCMFyqaxbzYHnkGx
-         guxPQToeSW24gjSPKuCIY3Cag8cuYpDstZzQav2VeMRtOM9T8WQJb7n2xOs9wMgAEqjO
-         S9bA==
-X-Gm-Message-State: ABy/qLaIZqH0uzjtSwOvOlJXxsTIQwp4/LXHgSCeMDJe73hE4duJ/ByG
-        T2AWOlNHVChTh6hZcbx14hT7wolfa14=
-X-Google-Smtp-Source: APBJJlHDG2peAa+bdtQ2zpwU+zP/GyrC6Ad84+kw3JlYBIiRBiesEntfQ3PLoBApiezbXkXINLO0RQ==
-X-Received: by 2002:a05:6a20:1043:b0:123:3f03:68f9 with SMTP id gt3-20020a056a20104300b001233f0368f9mr9215812pzc.61.1688356737282;
-        Sun, 02 Jul 2023 20:58:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170902848300b001b53d3d8f3dsm14258612plo.299.2023.07.02.20.58.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jul 2023 20:58:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4fa56264-f188-46f9-cc77-117b469b3328@roeck-us.net>
-Date:   Sun, 2 Jul 2023 20:58:55 -0700
+        Sun, 2 Jul 2023 23:59:22 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252901B5;
+        Sun,  2 Jul 2023 20:59:14 -0700 (PDT)
+X-UUID: f667c956195511ee9cb5633481061a41-20230703
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=3aA7hDmn2+eYJqtz3awtG5Y2HfWiSGYOPPozwjtep1Q=;
+        b=abqW7nfj96QOok0S6qbqhX/XecpEYxqXNQR//KQRSedjAOBwG3cN9i0m2YF4KrnxQOST3kxr91KBmsZycMzXIHdaL6vlLNsU51mLWfYudS38rRFXYDWozDdkO42lMDrNmElY5lJoZyHPg0rjhFtVEDIFPVLSHt4TzPpQJA4mPD4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:2dbfb483-0e03-4e08-b7bf-5822efcd7c1c,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:100
+X-CID-INFO: VERSION:1.1.27,REQID:2dbfb483-0e03-4e08-b7bf-5822efcd7c1c,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:100
+X-CID-META: VersionHash:01c9525,CLOUDID:0d829f82-5a99-42ae-a2dd-e4afb731b474,B
+        ulkID:230703115909H5L3126B,BulkQuantity:1,Recheck:0,SF:48|38|29|28|17|19,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL
+        :0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULN,TF_CID_SPAM_SNR,
+        TF_CID_SPAM_SDM,TF_CID_SPAM_ASC
+X-UUID: f667c956195511ee9cb5633481061a41-20230703
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1573200431; Mon, 03 Jul 2023 11:59:09 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 3 Jul 2023 11:59:07 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 3 Jul 2023 11:59:07 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2] media: mediatek: vcodec: Return NULL if no vdec_fb is found
+Date:   Mon, 3 Jul 2023 11:59:05 +0800
+Message-ID: <20230703035905.28247-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kees Cook <keescook@chromium.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LLVM <llvm@lists.linux.dev>,
-        linux-kbuild@vger.kernel.org,
-        Linux Regressions <regressions@list.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
- <ZKIoBVzrjZ+Ybxy9@debian.me> <202307022018.B26F5795@keescook>
- <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
-In-Reply-To: <625e951e-9922-d15d-5520-e8cd5eba1995@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/2/23 20:26, Guenter Roeck wrote:
-> On 7/2/23 20:20, Kees Cook wrote:
->> On Mon, Jul 03, 2023 at 08:44:37AM +0700, Bagas Sanjaya wrote:
->>> On Sun, Jul 02, 2023 at 06:36:12PM +0200, Mirsad Goran Todorovac wrote:
->>>> Hi,
->>>>
->>>> After new git pull the kernel in Torvalds tree with default debug config
->>>> failed to boot with error that occurs prior to mounting filesystems, so there
->>>> is no log safe for the screenshot(s) here:
->>>>
->>>> [1] https://domac.alu.unizg.hr/~mtodorov/linux/crashes/2023-07-02/
->>>>
->>>> Bisect shows the first bad commit is 2d47c6956ab3 (v6.4-rc2-1-g2d47c6956ab3):
->>>>
->>>> # good: [98be618ad03010b1173fc3c35f6cbb4447ee2b07] Merge tag 'Smack-for-6.5' of https://github.com/cschaufler/smack-next
->>>> git bisect good 98be618ad03010b1173fc3c35f6cbb4447ee2b07
->>>> # bad: [f4a0659f823e5a828ea2f45b4849ea8e2dd2984c] drm/i2c: tda998x: Replace all non-returning strlcpy with strscpy
->>>> git bisect bad f4a0659f823e5a828ea2f45b4849ea8e2dd2984c
->>>> .
->>>> .
->>>> .
->>>> # bad: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
->>>> git bisect bad 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c
->>>> # first bad commit: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
->>>>
->>>> The architecture is Ubuntu 22.04 with lshw and config give in the attachment.
->>>
->>> Can you show early kernel log (something like dmesg)?
->>>
->>> Anyway, I'm adding it to regzbot:
->>>
->>> #regzbot ^introduced: 2d47c6956ab3c8
->>> #regzbot title: Linux kernel fails to boot due to UBSAN_BOUNDS tightening
->>
->> I'm confused. Commit 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c isn't in the v6.4
->> tree... it's only in Linus's ToT.
->>
-> 
-> In ToT:
-> 
-> $ git describe 2d47c6956ab3
-> v6.4-rc2-1-g2d47c6956ab3
-> 
-> $ git describe --contains 2d47c6956ab3
-> next-20230616~2^2~51
-> $ git describe --contains --match 'v*' 2d47c6956ab3
-> fatal: cannot describe '2d47c6956ab3c8b580a59d7704aab3e2a4882b6c'
-> 
-> "git describe" always shows the parent tree, which I guess was based on
-> v6.4-rc2.
-> 
+"fb_use_list" is used to store used or referenced frame buffers for
+vp9 stateful decoder. "NULL" should be returned when getting target
+frame buffer failed from "fb_use_list", not a random unexpected one.
 
-Ah, sorry, I didn't realize that the subject claims that the problem
-would be in 6.4.1. That indeed does not match the bisect results.
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+---
+changed with v1:
+- remove the added flag variable.
+- update commit message.
+---
+ drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Guenter
-
-> Guenter
-> 
-> 
->> Also, the config you included does not show CONFIG_UBSAN_BOUNDS_STRICT
->> as even being available, much less present. Something seems very wrong
->> with this report...
->>
->> -Kees
->>
-> 
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+index 70b8383f7c8e..a27a109d8d14 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+@@ -226,10 +226,11 @@ static struct vdec_fb *vp9_rm_from_fb_use_list(struct vdec_vp9_inst
+ 		if (fb->base_y.va == addr) {
+ 			list_move_tail(&node->list,
+ 				       &inst->available_fb_node_list);
+-			break;
++			return fb;
+ 		}
+ 	}
+-	return fb;
++
++	return NULL;
+ }
+ 
+ static void vp9_add_to_fb_free_list(struct vdec_vp9_inst *inst,
+-- 
+2.18.0
 
