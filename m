@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA74745D79
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E580745D82
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjGCNbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S229608AbjGCNdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbjGCNbd (ORCPT
+        with ESMTP id S231757AbjGCNdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:31:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6D8E7A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:31:23 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so7084308e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688391081; x=1690983081;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jrefK8/PwFCkX5pIXHy+fvuyVY7YugWgUcP56e2MTgw=;
-        b=HzCv0pW7TPsAck1rWghAm02q2yt/HBzROM1oIyfB5qzGD+iJBee4h44EfePcDKv/ME
-         WlT6+sbB9mIUTLXDQ/mhEoT9Y/1Jb1lIzXQAxk/VSByEcB4sbeBjO1dKppzI177pOtc1
-         lZfUCewju6od/DqrYi6YvVBBzQfQVbkqUoDGS1MlcCFDCkICp16fXJ3g0ZWe7cjRbA6q
-         ldmTzmMIooF4KNQFYnsbY7jg2rH/n8Roj5Jr4Ye+Xus1I+A5GeYlkB9klbbtdjpG8ab3
-         FRpQLYJ4ZtYeYLL6dKnpLdIf0cjJAjP1pid2yKak3eOdfPZt23ETyOl81xIzMD8HuGmR
-         dmeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688391081; x=1690983081;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jrefK8/PwFCkX5pIXHy+fvuyVY7YugWgUcP56e2MTgw=;
-        b=iS17shfVcQmwmPCS8Lx3nUCVx0smtv9Yl6WT1Fkvh+Pw0d0gK1he9yMhxV+cmo2aiZ
-         dpL5fNRU30v/6aJy2aQO7BqkFRAD8mGO4Wk9WGZCyRzQ38+OeQZmWgAweQkhfWp29udi
-         ZbkKujbgknifsWQl+AG33HVytbomQvUKwCoCEKrzo4kBkPjpIREhTTjf2btum91xPB8M
-         ycYbk8E9/jlDT+EcEEkngyEXz7qZ8ANHIUJH0Y5IE3gZXvVEo057609ENpVeGZtm6kQn
-         IlF8J/ryG/wAMVSKHBJXEWHLgosMtaQNak3F1AkOCZYcBBjFNFIoy23AjjBgnkf5Zw2o
-         sPlg==
-X-Gm-Message-State: ABy/qLYzKiG/xKH3cC4q2pcqoLG370A58OtH8p3GJ3+gk79n23yXC8+B
-        CUrdRRPRWONRhfh+Ib3JxlcU1g==
-X-Google-Smtp-Source: APBJJlGy6QEGoSvdZ/JnNulOqJqe4aDlq/q/gjO8UeVoFQoVR5IjBhO4qM2MvR2m24Cc9pbz369Nmg==
-X-Received: by 2002:a05:6512:3703:b0:4f8:7551:7485 with SMTP id z3-20020a056512370300b004f875517485mr5342676lfr.5.1688391081053;
-        Mon, 03 Jul 2023 06:31:21 -0700 (PDT)
-Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id ep7-20020a056512484700b004fbb1f70ceesm833417lfb.227.2023.07.03.06.31.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 06:31:20 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 03 Jul 2023 15:31:14 +0200
-Subject: [PATCH 5/5] arm64: dts: qcom: sm8250: Add interconnects and
- power-domains to QUPs
+        Mon, 3 Jul 2023 09:33:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B804310D4;
+        Mon,  3 Jul 2023 06:32:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D38D60F3C;
+        Mon,  3 Jul 2023 13:32:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88351C433C7;
+        Mon,  3 Jul 2023 13:32:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688391151;
+        bh=7qlSX9Nell5J7ysbWiOfRWUhTOykTgPNeRvu7kTYWFI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z+7keICwZsDZYvzIbUYbAjua4wVC7WpRTZjY+p0UqCOPQWrv55HZV17LbtFu8q55z
+         w7+nnoVSS94ACBMalD0MKTnRFPFU8Lo8gOJYLxh/7fFg8lK8+z+7ucOmuceABT2LbP
+         OXt0TLl2OgWesEtsAtwwdogHYkJAqX6uxcjqLNOnN4FJ/q4GQ94xo2jHCEL0RlmBjG
+         3HH9mfElWZu57e7nhMbgJKjDoRJ7NCGaeytE3WK+/Oau36Zx6m+PH6EyMFWK9dN/+P
+         O5o5DDMYh20KrcIyUUvLmMh9lCta8zIFQh0t07Nl5P0Z5JSBTdsqs9+tHNT3DtqWGF
+         BFhK3s1ZBvHeQ==
+Date:   Mon, 3 Jul 2023 14:32:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <d8ade3c0-f256-48dd-9969-d5e55dadd0e4@sirena.org.uk>
+References: <ZJFukYxRbU1MZlQn@arm.com>
+ <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
+ <ZJLgp29mM3BLb3xa@arm.com>
+ <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
+ <ZJQR7slVHvjeCQG8@arm.com>
+ <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
+ <ZJR545en+dYx399c@arm.com>
+ <1cd67ae45fc379fd82d2745190e4caf74e67499e.camel@intel.com>
+ <ZJ2sTu9QRmiWNISy@arm.com>
+ <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230703-topic-8250_qup_icc-v1-5-fea39aa07525@linaro.org>
-References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
-In-Reply-To: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688391072; l=20635;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6sUJWs3uxT99bYspriYn1C039w1VdT+N8WiwYSJREPo=;
- b=8lQCglMSF9hO/+Ac5DQiOSr/lbjk+1qBSxdwNkARdIUOVPweSFMlfQfxcfXyajIuNzL9lgKD6
- WfxrfHGMwUnDXGK9N/q+0FV5G2Cvwd8g3r9372f54FjcbOQ7uZFbRzX
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3loSgCLP1vFHrOSe"
+Content-Disposition: inline
+In-Reply-To: <e057de9dd9e9fe48981afb4ded4b337e8a83fabf.camel@intel.com>
+X-Cookie: Please go away.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,486 +109,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the interconnect paths related to QUPs and add the power-domains
-powering them.
 
-This is required for icc sync_state, as otherwise QUP access is gated.
+--3loSgCLP1vFHrOSe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 150 +++++++++++++++++++++++++++++++++++
- 1 file changed, 150 insertions(+)
+On Sun, Jul 02, 2023 at 06:03:42PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2023-06-29 at 17:07 +0100, szabolcs.nagy@arm.com wrote:
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 1efa07f2caff..35111fce898a 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -1022,6 +1022,10 @@ i2c14: i2c@880000 {
- 				dmas = <&gpi_dma2 0 0 QCOM_GPI_I2C>,
- 				       <&gpi_dma2 1 0 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1038,6 +1042,9 @@ spi14: spi@880000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1054,6 +1061,10 @@ i2c15: i2c@884000 {
- 				dmas = <&gpi_dma2 0 1 QCOM_GPI_I2C>,
- 				       <&gpi_dma2 1 1 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1070,6 +1081,9 @@ spi15: spi@884000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1086,6 +1100,10 @@ i2c16: i2c@888000 {
- 				dmas = <&gpi_dma2 0 2 QCOM_GPI_I2C>,
- 				       <&gpi_dma2 1 2 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1102,6 +1120,9 @@ spi16: spi@888000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1118,6 +1139,10 @@ i2c17: i2c@88c000 {
- 				dmas = <&gpi_dma2 0 3 QCOM_GPI_I2C>,
- 				       <&gpi_dma2 1 3 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1134,6 +1159,9 @@ spi17: spi@88c000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1149,6 +1177,8 @@ uart17: serial@88c000 {
- 				interrupts = <GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>;
-+				interconnect-names = "qup-config";
- 				status = "disabled";
- 			};
- 
-@@ -1163,6 +1193,10 @@ i2c18: i2c@890000 {
- 				dmas = <&gpi_dma2 0 4 QCOM_GPI_I2C>,
- 				       <&gpi_dma2 1 4 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1179,6 +1213,9 @@ spi18: spi@890000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1194,6 +1231,8 @@ uart18: serial@890000 {
- 				interrupts = <GIC_SPI 586 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>;
-+				interconnect-names = "qup-config";
- 				status = "disabled";
- 			};
- 
-@@ -1208,6 +1247,10 @@ i2c19: i2c@894000 {
- 				dmas = <&gpi_dma2 0 5 QCOM_GPI_I2C>,
- 				       <&gpi_dma2 1 5 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1224,6 +1267,9 @@ spi19: spi@894000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_2 0>,
-+						<&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1276,6 +1322,10 @@ i2c0: i2c@980000 {
- 				dmas = <&gpi_dma0 0 0 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 0 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1292,6 +1342,9 @@ spi0: spi@980000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1308,6 +1361,10 @@ i2c1: i2c@984000 {
- 				dmas = <&gpi_dma0 0 1 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 1 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1324,6 +1381,9 @@ spi1: spi@984000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1340,6 +1400,10 @@ i2c2: i2c@988000 {
- 				dmas = <&gpi_dma0 0 2 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 2 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1356,6 +1420,9 @@ spi2: spi@988000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1371,6 +1438,8 @@ uart2: serial@988000 {
- 				interrupts = <GIC_SPI 603 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>;
-+				interconnect-names = "qup-config";
- 				status = "disabled";
- 			};
- 
-@@ -1385,6 +1454,10 @@ i2c3: i2c@98c000 {
- 				dmas = <&gpi_dma0 0 3 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 3 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1401,6 +1474,9 @@ spi3: spi@98c000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1417,6 +1493,10 @@ i2c4: i2c@990000 {
- 				dmas = <&gpi_dma0 0 4 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 4 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1433,6 +1513,9 @@ spi4: spi@990000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1449,6 +1532,10 @@ i2c5: i2c@994000 {
- 				dmas = <&gpi_dma0 0 5 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 5 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1465,6 +1552,9 @@ spi5: spi@994000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1481,6 +1571,10 @@ i2c6: i2c@998000 {
- 				dmas = <&gpi_dma0 0 6 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 6 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1497,6 +1591,9 @@ spi6: spi@998000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1512,6 +1609,8 @@ uart6: serial@998000 {
- 				interrupts = <GIC_SPI 607 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>;
-+				interconnect-names = "qup-config";
- 				status = "disabled";
- 			};
- 
-@@ -1526,6 +1625,10 @@ i2c7: i2c@99c000 {
- 				dmas = <&gpi_dma0 0 7 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 7 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1542,6 +1645,9 @@ spi7: spi@99c000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1591,6 +1697,10 @@ i2c8: i2c@a80000 {
- 				dmas = <&gpi_dma1 0 0 QCOM_GPI_I2C>,
- 				       <&gpi_dma1 1 0 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1607,6 +1717,9 @@ spi8: spi@a80000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1623,6 +1736,10 @@ i2c9: i2c@a84000 {
- 				dmas = <&gpi_dma1 0 1 QCOM_GPI_I2C>,
- 				       <&gpi_dma1 1 1 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1639,6 +1756,9 @@ spi9: spi@a84000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1655,6 +1775,10 @@ i2c10: i2c@a88000 {
- 				dmas = <&gpi_dma1 0 2 QCOM_GPI_I2C>,
- 				       <&gpi_dma1 1 2 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1671,6 +1795,9 @@ spi10: spi@a88000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1687,6 +1814,10 @@ i2c11: i2c@a8c000 {
- 				dmas = <&gpi_dma1 0 3 QCOM_GPI_I2C>,
- 				       <&gpi_dma1 1 3 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1703,6 +1834,9 @@ spi11: spi@a8c000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1719,6 +1853,10 @@ i2c12: i2c@a90000 {
- 				dmas = <&gpi_dma1 0 4 QCOM_GPI_I2C>,
- 				       <&gpi_dma1 1 4 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1735,6 +1873,9 @@ spi12: spi@a90000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1750,6 +1891,8 @@ uart12: serial@a90000 {
- 				interrupts = <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>;
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>;
-+				interconnect-names = "qup-config";
- 				status = "disabled";
- 			};
- 
-@@ -1764,6 +1907,10 @@ i2c13: i2c@a94000 {
- 				dmas = <&gpi_dma1 0 5 QCOM_GPI_I2C>,
- 				       <&gpi_dma1 1 5 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				power-domains = <&rpmhpd SM8250_CX>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1780,6 +1927,9 @@ spi13: spi@a94000 {
- 				dma-names = "tx", "rx";
- 				power-domains = <&rpmhpd SM8250_CX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-+						<&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI_CH0 0>;
-+				interconnect-names = "qup-config", "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
+> > which means x86 linux will likely end up maintaining two incompatible
+> > abis and the future one will need user code and build system changes,
+> > not just runtime changes. it is not a small incremental change to add
+> > alt shadow stack support for example.
 
--- 
-2.41.0
+> > i don't think the maintenance burden of two shadow stack abis is the
+> > right path for arm64 to follow, so the shadow stack semantics will
+> > likely become divergent not common across targets.
 
+> Unfortunately we are at a bit of an information asymmetry here because
+> the ARM spec and patches are not public. It may be part of the cause of
+> the confusion.
+
+While the descriptive text bit of the spec is not yet integrated into
+the ARM the architecture XML describing the instructions and system
+registers is there, the document is numbered DDI0601:
+
+    https://developer.arm.com/documentation/ddi0601/
+
+The GCS specific instructions and system registers are all named
+beginning with GCS, it's aarch64 only.
+
+Hopefully I should have something out next week for the kernel.
+
+--3loSgCLP1vFHrOSe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSizeIACgkQJNaLcl1U
+h9D3Wwf/baVnu4r+oxpjrck31M4SQYopy428bSNBHaGoVHcoFSNJEIBylX2Zcrp+
+c+z0gkJRAjSvAfpT1mqWkw96gSlqLrDzUS6VClhMu0JZwkfmoNiqXwO2iK1jV5w9
+9ZMxbCYtfA6pSN8DHwhVkEJO1+9sI6iUJrWsXXcQBRFEeWwkeKpR8CeYL4F8hpdl
+4sOC1f2UeEJ82Rm6WPJ/ZNY/pTaGF3CWRP2WfoewkBwzMw9TevsYXdQAIOooFCOT
+5ukjmiLiGw2IuYux8Y0Gb1ZaOiOI/W95yow0cPBDS9YGj7y6ZbZqIa5PVfK1Smwf
+1QRf+xHUlAz6eiCCxHK2lZZqEP4vOw==
+=6QcV
+-----END PGP SIGNATURE-----
+
+--3loSgCLP1vFHrOSe--
