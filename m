@@ -2,76 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0F1745770
+	by mail.lfdr.de (Postfix) with ESMTP id CAB46745771
 	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjGCIgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S230162AbjGCIgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjGCIfh (ORCPT
+        with ESMTP id S230258AbjGCIfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:35:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6471BC;
-        Mon,  3 Jul 2023 01:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688373337; x=1719909337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0/VuNN8vAbwtoIAOscoPME46U2tJgXgmlj69V2xtFA4=;
-  b=RyZ7HNR6bMhH0ZiNirsKaePdk/R7aFfPF09X40XE0DsC/YNmiozVZVMI
-   u6yQXk69OrSaLBYhnQrLljk9uy2yGyB7/+tqbKZ3Kapul+cfSQJUnNLEe
-   Iw2vc7BOO7ym13ZbTrcyyNW4yhHjuv+A+gLmfbBxxwHc0hJ1XRtYO2rQh
-   9YqHBhN+BZ0/ChEKBl5sahQxA30xFvFvony7JpB2Env1fwrbmQgxkAfaT
-   JCtU0er3nTO6Crw4++JcpLVARc0jfRV4RfV05LlU3cXD12wkjxAX/2OBc
-   +Um9srdP/12RfqzbM0OzqaOuuvRh3603rZHL6pKE+U8CxtKztUGHBFHie
-   g==;
-X-IronPort-AV: E=Sophos;i="6.01,177,1684825200"; 
-   d="asc'?scan'208";a="218667141"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jul 2023 01:35:36 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Jul 2023 01:35:27 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 3 Jul 2023 01:35:24 -0700
-Date:   Mon, 3 Jul 2023 09:34:54 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     =?utf-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-CC:     Conor Dooley <conor@kernel.org>, <ardb@kernel.org>,
-        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
-        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
-        <rminnich@gmail.com>, <mark.rutland@arm.com>,
-        <lpieralisi@kernel.org>, <rafael@kernel.org>, <lenb@kernel.org>,
-        <jdelvare@suse.com>, <yc.hung@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <allen-kh.cheng@mediatek.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <tinghan.shen@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <geshijian@bytedance.com>,
-        <weidong.wd@bytedance.com>
-Subject: Re: [External] Re: [PATCH v2 2/3] firmware: introduce FFI for SMBIOS
- entry.
-Message-ID: <20230703-rebuff-smashing-6b2c6f80ba05@wendy>
-References: <20230702095735.860-1-cuiyunhui@bytedance.com>
- <20230702095735.860-2-cuiyunhui@bytedance.com>
- <20230702-collide-rumor-f0d915a4f1b2@spud>
- <CAEEQ3w=CMSMnYmfprYS4ydsA=EBJtLhQQHWky754EC-iifcYtg@mail.gmail.com>
+        Mon, 3 Jul 2023 04:35:44 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DB1E44;
+        Mon,  3 Jul 2023 01:35:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AvTMYrJzm+Ng+2FOJUcWNUT20fv8gwOMdGq4tdC4OkylhksyAoH3K3/ihcqFJGx6nnRPDCabxZwoGoJd0ASqglv4L3QDJuYRyiT9WU+McyxlFmsGr2wtVdbYCHwtF57/Ktz4/n5FTI/ZNHIksIjcIvqYLtYeQo2yXDLyquKqZqHsKpNbiFCvxcL05/O/Fed/gy7BLxdvOqCKRXyjCKnHB9whSyWmizz3GPa22mwiG+ujltSK3knfRgfCGsmjYx+A2fTstzY/XIugLA8N5cmUzMx8DOAuTLG49G1dE5WIfkxkKA0Ts+RCD3QBnIAbcsUdMm1TlkdHqL53eCaPxAh6ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YxXYZmpJUpbSYTXnd2F4QLWkGX/o4clLvmyUwZJ1biY=;
+ b=DLcZYQp3gsrHfjBDEq8Gl7VkGgjWv7O/8Zu/cK4tYr8Y7I1M2dcA9PMv2FVpIE5a72eNHDbS/i5eVOZHKapIqTYsoiruWV8YePtR07XVW0RCcBSPN0RfGGEEGh3oK4B8Q9lm4UC/9Mg5Yt7gsdK1pr2P1CHoL5c2LBctaN11g3Qq06ovMW2fmpeku9DrAeOuR84SxniMKWfqWH07nKsz1NlTTl10qtU5U/M725H9Oczmq4lRzvq4uO+hAFsVPcKAALIUhe81y9w5z7wYxqJLg4Es9SwgVWaxRyRFmtoyZfoSE/ctcGc2gSIxjIEoKHHboFYJXcGtQKKcQ59TSLNm+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YxXYZmpJUpbSYTXnd2F4QLWkGX/o4clLvmyUwZJ1biY=;
+ b=mKpOUFcOWVrJzIbansEH3DSjUEQeFmQtZ7iUJJZeOHpZuglQGPjN3tkOT7dcYTZfQM5zC4sLu7zBRCBpvqbSrIFAnHFdqXBdV0nkGLQkWsvzkzpwbqRtW5bOMA2XXKMbB8vChJ748+FdvkT7f7usDrsE9r8pXcdNuUIllvRxvGs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by BN9PR03MB6058.namprd03.prod.outlook.com (2603:10b6:408:137::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
+ 2023 08:35:39 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::6882:b9c1:2b2d:998d]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::6882:b9c1:2b2d:998d%5]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 08:35:38 +0000
+Message-ID: <25b21252-0d3a-3e50-0012-57055f386fee@synaptics.com>
+Date:   Mon, 3 Jul 2023 16:35:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 04/11] media: videobuf2: Stop define VB2_MAX_FRAME as
+ global
+Content-Language: en-GB
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        hverkuil-cisco@xs4all.nl, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, linux-rockchip@lists.infradead.org,
+        mchehab@kernel.org, linux-staging@lists.linux.dev,
+        ming.qian@nxp.com, kernel@collabora.com,
+        gregkh@linuxfoundation.org, tfiga@chromium.org,
+        nicolas.dufresne@collabora.com
+References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
+ <20230622131349.144160-5-benjamin.gaignard@collabora.com>
+ <e7444263-0ce5-1575-8cca-1e51b1cfbe9a@synaptics.com>
+ <5cb3f216-5041-a155-5d2c-059dc1f15024@collabora.com>
+From:   Hsia-Jun Li <Randy.Li@synaptics.com>
+In-Reply-To: <5cb3f216-5041-a155-5d2c-059dc1f15024@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BY3PR03CA0028.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::33) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mgEY+RpkWKJjg9BW"
-Content-Disposition: inline
-In-Reply-To: <CAEEQ3w=CMSMnYmfprYS4ydsA=EBJtLhQQHWky754EC-iifcYtg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|BN9PR03MB6058:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25d1422f-48e6-4956-650e-08db7ba07a7f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PqAGwFESGZ3Xm6T0p87nvXx2CxRoxX/qhMtvqOpWgaX0a6Ma+QPfqFFLAKMCQtArQY/SUdbwbYLgz4+C2BSP7wQXt57qW1PEV6Ip00ZNfP5FvyhRmj4OkQWa1rfPdMelXyvVyPRSKatWBsch1LLWV1bAcys2r74gbe0P4l0oRqq7FAMHwIZtYNdbgugIryAL1V24mcHo7dTHlzBWIdGZ+16mUO47B+hP7l7q2bTEntWpIg2BJsnG+iLozbs91/n8DiEzodfgNX0M/kPDfq6gzjxnpJPnBhwZDCxbsKrilQHvNEGojsB+3AhXRVynWOQPo/6qkFFTxyCeV48LeVrhsK6SzPb6iFwujxV2LRvNbPqysdyci/lz7/YS+64uXCupeNYmPTM7JshK/FOJf13pI0PzoUllxhiXNkli2ky2ZQjpdSn/N9ZuzAOkQK41BbC8lWEaOJ8EvK1NW4jRUTy5zvxsYzj1AoCMdUfgpJwE0+CH4pfXHWo57CdFscrEgFen1k8FgKcyh9FAd0w88kIrueUYKgJLYshqVb2diQsWhEiKHBVE3bsgj167krNB8jTgW4ErJt6R8KhJ6Wa5pSbFJbQwXqzUXeguib3jW4TVBZK7X4bttrC4qDKr74mOGE5E9yqH272FSmqKqbiHcZyip++toy2YrYV+309kuRdf5ctES5mRG6k5ab9QaJrdfUVH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(396003)(376002)(136003)(366004)(451199021)(26005)(31686004)(478600001)(6666004)(6512007)(6506007)(31696002)(86362001)(2616005)(186003)(38350700002)(38100700002)(6916009)(66556008)(66946007)(4326008)(66476007)(83380400001)(66574015)(52116002)(6486002)(53546011)(316002)(5660300002)(8676002)(8936002)(7416002)(41300700001)(2906002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y1BwUS9Gc1RraFhWWXluazNva3g0bUIxNVVtekluMjArZDRBNGxXb1d1N0li?=
+ =?utf-8?B?V01IQXJmdTM3am1UYTFCdjhRTENMUFNOeVpoUEpMbGlUNkVnU0NYMFBiSG81?=
+ =?utf-8?B?NUx1Q0d1TENPY1NTVS85Z2szWi9sVC82UGhWS2M1ZXZQS3dvVmdyRG9wek9h?=
+ =?utf-8?B?ZmN4US9wcTU4Ykw5V2krVEtIZ2d6bTYwRFFGUmdPNTBUMTlzWGdqbzhjRFNk?=
+ =?utf-8?B?Ujh1S00wQUtwUEt4L2lyWkl4R1l2OXNQaWpIaFM1QVYrUzV2ZHFCMFpqckt2?=
+ =?utf-8?B?Zy9VVDhzOXNKenJVRWFJL0VwcDk4RXRYT0hCcUxZTkRrWHkyYXlSYUs3aVlx?=
+ =?utf-8?B?WHd1em1kVy8rMnQ3dHZQbExMejdyWFBrR3BPRnJ0Y0Q4cllXbGFSSysveVhx?=
+ =?utf-8?B?Y2ZURmRBcytaTDlkTXVEMkJVSTE5TnN5c2NiaHZUaUVWeHA0VHZBK2lHcGhn?=
+ =?utf-8?B?U3pieXVCUjRKUHNYWkRlQ3d4ZVg4R0E3ZDZtU3Vmb29NSlgxVytYZGlUb2Rv?=
+ =?utf-8?B?UWRZbUxYUmJaYWNacVFUNStVb0dMQmVkTmJ3UVp0VG9LdVRLQ09peUtaVUxO?=
+ =?utf-8?B?dUtFSElxSlhiS2JybG95eXkrdDFHY05NUHBrV2wrcVRVK21MQUVWa0d2eElW?=
+ =?utf-8?B?ajJKLzNCZjFrTFB0THJmYXNOYjRLM1pwamJFNUtyRE5lTFpFQXliVVlvcE9U?=
+ =?utf-8?B?YkZJSElpdFRlOUFIeEpaUDhtYTd3YWZrekdWSjNvSWQwdENSM3BOMXo4bEdK?=
+ =?utf-8?B?TkpUbWtoYmtvNTIwRW40d2pHVDJubndkVFBVRUtZbmcwMEFjY3REcW54NWEv?=
+ =?utf-8?B?V1Eya1c2UnNSeDN6QlhUV2VJU1NYeTRGQUk0TzBQZnlSTXdzTFpXTHZLdFFY?=
+ =?utf-8?B?Q3ljdkxSTnYrYzdmMjdUc2dpWUhWVXk2V1MwTDE3UW5lOFU5cGxCMStSZFIw?=
+ =?utf-8?B?cGVoVWsrSnI5RUEzS0ZWa3IvRXVkMzBMM3pkVkUyWDBDcXZKNng4OTR5bFJK?=
+ =?utf-8?B?aVVCUHJUK1k4bnE3OHErQjNSUXlVWjRFTE56VVRGeDMvVE1STXFOYW9GS3dq?=
+ =?utf-8?B?bTZ2RkQ3a3RYTEtKVEg0cnp3NHRuOEFiSUFhZmVWVzE3NTZnRHZBRlNlMmJD?=
+ =?utf-8?B?ZlE5Ukx3alo0SExaVmFGL25uZ3VoRG5SRmtOckZjOVNIRzNSbFFkQmxGaWxp?=
+ =?utf-8?B?SE9EUm5Md0tpQkVTb0tWcU92UjZrNVBHU2Y0QkNTY0VWN3gweGdtY0doQjlh?=
+ =?utf-8?B?b3piT045MHZEQmZjV29jTnVVZ2dyQjZ3YWxEUVJ2SmdIdXlqUGprVXZ0ZVMw?=
+ =?utf-8?B?QzZpMWFkYVlCTVFuYUxIb3RPUnRFbjZBeU9jMVgyRnZ3bXc0eG93TW9UK3Z1?=
+ =?utf-8?B?V1pocTRPcVJOVFVNUHcvRXVXN3lRT1dOaWc0VDBzdTMwQkdRRnN0ZXluMWxG?=
+ =?utf-8?B?UGI4SnJOSWxTS3EvOGs4NzZrK0gzM3VnMVhwUFBJUm9DdGZjdFhoektqTk1R?=
+ =?utf-8?B?SWNySXAxeHBmZHlOdlJUUmdTd2k2amZxekRGSDRNOEwrbnp0bjVXcjJoTGRZ?=
+ =?utf-8?B?b01BTFphZXkvMU9KRUNCb3VlZ2p4aXF2THVjcjhLWHdRdERQTTVKbVdCam9T?=
+ =?utf-8?B?Tjd4OElWcXNudVJTelB1eFp1OVZkczZCck1LK1hxdzRnSERLbHdkZnUwQkx1?=
+ =?utf-8?B?Tll6bzdlVkdVU2VzbXpUcmFpM0NUWWJQcmFFWDdRTGNwZFFkSzJpSGZhWVlF?=
+ =?utf-8?B?K3ZBUXRNSmNPVUI2NHNHektnWlU2TDJxd2h5N2FtdnlCQUI5UmNscE9rb1kr?=
+ =?utf-8?B?aFU2WldxYTM0Q3ZwM1dLR3c3TzNMdnlMdE8vcWNvREJvSlNyOEMyQnZwbTVM?=
+ =?utf-8?B?UDhQK29JNGZlYkRmMlQrNkUwdFM0SmM1c0NkcFhIQ0J5MUw5UDdRQnZDbFJz?=
+ =?utf-8?B?L2IxQktoV0IzZXkrdlVDSGk2VkRlTWV2Qk1PTDdRRzJlUTZ1MlYycE9YK0NR?=
+ =?utf-8?B?K0REeXIwVUtlbTA0YnNBdjFWcnQ2Um5WcWliV0xISkxjVUxGZFhXRnZnN29s?=
+ =?utf-8?B?QnRCWjhuZWwza1FjQlR3akJoTmY3YlV0bWZPeGduSzlhbVdpL0E1UlJZQlAw?=
+ =?utf-8?Q?oO1GVOzDZGRQzudi3GKReBEjj?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25d1422f-48e6-4956-650e-08db7ba07a7f
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 08:35:38.4169
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kyozrvIdu+LDsyKNsp1k7ugEG8veho+CT3ALItpQksLwEKf1OWHHkHFkFJhAUGkahRYN+tmKByQoa6PvJwwtCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR03MB6058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,243 +136,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---mgEY+RpkWKJjg9BW
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey,
+On 7/3/23 16:09, Benjamin Gaignard wrote:
+> CAUTION: Email originated externally, do not click links or open 
+> attachments unless you recognize the sender and know the content is safe.
+>
+>
+> Le 30/06/2023 à 11:51, Hsia-Jun Li a écrit :
+>>
+>> On 6/22/23 21:13, Benjamin Gaignard wrote:
+>>> CAUTION: Email originated externally, do not click links or open
+>>> attachments unless you recognize the sender and know the content is
+>>> safe.
+>>>
+>>>
+>>> After changing bufs arrays to a dynamic allocated array
+>>> VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
+>>
+>> I think make it 64 which is the VB2_MAX_FRAME in Android GKI kernel is
+>> more reasonable.
+>>
+>> It would be hard to iterate the whole array, it would go worse with a
+>> filter. Such iterate may need to go twice because you mix
+>> post-processing buffer and decoding buffer(with MV) in the same array.
+>
+> Here I don't want to change drivers behavior so I keep the same value.
+> If it happens that they need more buffers, like for dynamic resolution 
+> change
+> feature for Verisilicon VP9 decoder, case by case patches will be needed.
+>
+I just don't like the idea that using a variant length array here.
 
-On Mon, Jul 03, 2023 at 04:23:53PM +0800, =E8=BF=90=E8=BE=89=E5=B4=94 wrote:
->=20
-> > nit: please don't write your commit messages as bullet lists
-> Okay, thanks for your suggestion.
->=20
-> > > +FDT FIRMWARE INTERFACE (FFI)
-> > > +M:   Yunhui Cui cuiyunhui@bytedance.com
-> > > +S:   Maintained
-> > > +F:   drivers/firmware/ffi.c
-> > > +F:   include/linux/ffi.h
-> >
-> > Are you going to apply patches for this, or is someone else?
-> Yes,  it will be used by patch 3/3.
+And I could explain why you won't need so many buffers for the 
+performance of decoding.
 
-That's not what I asked :(
+VP9 could support 10 reference frames in dpb.
 
-> > >  EXTERNAL CONNECTOR SUBSYSTEM (EXTCON)
-> > >  M:   MyungJoo Ham <myungjoo.ham@samsung.com>
-> > >  M:   Chanwoo Choi <cw00.choi@samsung.com>
-> > > diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> > > index b59e3041fd62..ea0149fb4683 100644
-> > > --- a/drivers/firmware/Kconfig
-> > > +++ b/drivers/firmware/Kconfig
-> > > @@ -303,6 +303,17 @@ config TURRIS_MOX_RWTM
-> > >         other manufacturing data and also utilize the Entropy Bit Gen=
-erator
-> > >         for hardware random number generation.
-> > >
-> > > +config FDT_FW_INTERFACE
-> > > +       bool "An interface for passing firmware info through FDT"
-> > > +       depends on OF && OF_FLATTREE
-> > > +       default n
-> > > +       help
-> > > +         When some bootloaders do not support EFI, and the arch does=
- not
-> > > +         support SMBIOS_ENTRY_POINT_SCAN_START, then you can enable =
-this option
-> > > +         to support the transfer of firmware information, such as sm=
-bios tables.
-> >
-> > Could you express this dependency on !SMBIOS_ENTRY_POINT_SCAN_START in
-> > Kconfig & then simply the text to:
-> > "Enable this option to support the transfer of firmware information,
-> > such as smbios tables, for bootloaders that do not support EFI."
-> > since it would not even appear if the arch supports scanning for the
-> > entry point?
-> > If I was was a punter trying to configure my kernel in menuconfig or
-> > whatever, I should be able to decide based on the help text if I need
-> > this, not going grepping for #defines in headers.
-> Okay=EF=BC=8C I'll update on v3.
->=20
->=20
-> >
-> > >  static void __init dmi_scan_machine(void)
-> > > @@ -660,58 +686,22 @@ static void __init dmi_scan_machine(void)
-> > >       char __iomem *p, *q;
-> > >       char buf[32];
-> > >
-> > > +#ifdef CONFIG_FDT_FW_INTERFACE
-> > > +     if (dmi_sacn_smbios(ffi.smbios3, ffi.smbios))
-> >
-> > "dmi_sacn_smbios"
-> >
-> > > +             goto error;
-> > > +#endif
-> >
-> > Does this not mean that if FDT_FW_INTERFACE is enabled, but the platform
-> > wants to use EFI, it won't be able to? The `goto error;` makes this look
-> > mutually exclusive to my efi-unaware eyes.
->=20
-> If you have enabled FFI, then if something goes wrong, you should goto er=
-ror.
-> Just like the origin code:
->         if (efi_enabled(EFI_CONFIG_TABLES)) {
->                 if (dmi_sacn_smbios(efi.smbios3, efi.smbios))
->                         goto error;
->         } else if (IS_ENABLED(CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK)) {
->                 p =3D dmi_early_remap(SMBIOS_ENTRY_POINT_SCAN_START, 0x10=
-000);
->                 if (p =3D=3D NULL)
->                         goto error;
+Even for those frequent resolution changing test set, it would only 
+happen to two resolutions,
 
-Does this not make FFI and EFI mutually exclusive Kconfig options?
-Suppose you are on a system that does not implement FFI, but does
-implement EFI - what's going to happen then?
-AFAICT, dmi_sacn_smbios(ffi.smbios3, ffi.smbios) will fail & you'll do a
-`goto error` & skip the EFI code. What am I missing?
+32 would be enough for 20 buffers of two resolution plus golden frames. 
+It also leaves enough slots for re-order latency.
 
-> > >       if (efi_enabled(EFI_CONFIG_TABLES)) {
-> > > -             /*
-> > > -              * According to the DMTF SMBIOS reference spec v3.0.0, =
-it is
-> > > -              * allowed to define both the 64-bit entry point (smbio=
-s3) and
-> > > -              * the 32-bit entry point (smbios), in which case they =
-should
-> > > -              * either both point to the same SMBIOS structure table=
-, or the
-> > > -              * table pointed to by the 64-bit entry point should co=
-ntain a
-> > > -              * superset of the table contents pointed to by the 32-=
-bit entry
-> > > -              * point (section 5.2)
-> > > -              * This implies that the 64-bit entry point should have
-> > > -              * precedence if it is defined and supported by the OS.=
- If we
-> > > -              * have the 64-bit entry point, but fail to decode it, =
-fall
-> > > -              * back to the legacy one (if available)
-> > > -              */
-> > > -             if (efi.smbios3 !=3D EFI_INVALID_TABLE_ADDR) {
-> > > -                     p =3D dmi_early_remap(efi.smbios3, 32);
-> > > -                     if (p =3D=3D NULL)
-> > > -                             goto error;
-> > > -                     memcpy_fromio(buf, p, 32);
-> > > -                     dmi_early_unmap(p, 32);
-> > > -
-> > > -                     if (!dmi_smbios3_present(buf)) {
-> > > -                             dmi_available =3D 1;
-> > > -                             return;
-> > > -                     }
-> > > -             }
-> > > -             if (efi.smbios =3D=3D EFI_INVALID_TABLE_ADDR)
-> > > +             if (dmi_sacn_smbios(efi.smbios3, efi.smbios))
-> > >                       goto error;
-> > > -
-> > > -             /* This is called as a core_initcall() because it isn't
-> > > -              * needed during early boot.  This also means we can
-> > > -              * iounmap the space when we're done with it.
-> > > -              */
-> > > -             p =3D dmi_early_remap(efi.smbios, 32);
-> > > -             if (p =3D=3D NULL)
-> > > -                     goto error;
-> > > -             memcpy_fromio(buf, p, 32);
-> > > -             dmi_early_unmap(p, 32);
-> > > -
-> > > -             if (!dmi_present(buf)) {
-> > > -                     dmi_available =3D 1;
-> > > -                     return;
-> > > -             }
-> > > diff --git a/drivers/firmware/ffi.c b/drivers/firmware/ffi.c
-> > > new file mode 100644
-> > > index 000000000000..169802b4a7a8
-> > > --- /dev/null
-> > > +++ b/drivers/firmware/ffi.c
-> > > @@ -0,0 +1,36 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +
-> > > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > > +
-> > > +#include <linux/of.h>
-> > > +#include <linux/of_fdt.h>
-> > > +#include <linux/libfdt.h>
-> > > +#include <linux/ffi.h>
-> > > +
-> > > +#define FFI_INVALID_TABLE_ADDR       (~0UL)
-> > > +
-> > > +struct ffi __read_mostly ffi =3D {
-> > > +     .smbios =3D FFI_INVALID_TABLE_ADDR,
-> > > +     .smbios3 =3D FFI_INVALID_TABLE_ADDR,
-> > > +};
-> >
-> > > +EXPORT_SYMBOL(ffi);
-> >
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> >
-> > Why not EXPORT_SYMBOL_GPL? But also, who is the user of this export?
-> Just like efi.
+If your case had more two resolutions, likes low->medium->high.
 
-I don't really understand how that is an answer to the questions.
+I would suggest just skip the medium resolutions, just allocate the 
+lower one first for fast playback then the highest for all the possible
 
-> > > +
-> > > +void __init ffi_smbios_root_pointer(void)
-> > > +{
-> > > +     int cfgtbl, len;
-> > > +     fdt64_t *prop;
-> > > +
-> > > +     cfgtbl =3D fdt_path_offset(initial_boot_params, "/cfgtables");
-> >
-> > These DT properties need to be documented in a binding.
-> >
-> > > +     if (cfgtbl < 0) {
-> > > +             pr_info("firmware table not found.\n");
-> >
-> > Isn't it perfectly valid for a DT not to contain this table? This print
-> > should be, at the very least, a pr_debug().
-> >
-> > > +             return;
-> > > +     }
-> > > +     prop =3D fdt_getprop_w(initial_boot_params, cfgtbl, "smbios_phy=
-_ptr", &len);
-> >
-> > Again, undocumented DT property. Please document them in a binding.
-> Okay, I'll add them into binding.
->=20
->=20
-> >
-> > > +     if (!prop || len !=3D sizeof(u64))
-> > > +             pr_info("smbios entry point not found.\n");
-> > > +     else
-> > > +             ffi.smbios =3D fdt64_to_cpu(*prop);
-> > > +
-> > > +     pr_info("smbios root pointer: %lx\n", ffi.smbios);
-> >
-> > ffi.smbios is not set if (!prop || len !=3D sizeof(u64)), looks like yo=
-ur
-> > "if" should return and the contents of the else become unconditional?
-> > Otherwise, this print seems wrong.
+medium cases. Reallocation happens frequently would only cause memory 
+fragment, nothing benefits your performance.
 
-> OK, I will optimize this logic and print.
+>
+>>
+>>> Remove it from the core definitions but keep it for drivers internal
+>>> needs.
+>>>
+>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>> ---
+>>>   drivers/media/common/videobuf2/videobuf2-core.c | 2 ++
+>>>   drivers/media/platform/amphion/vdec.c | 1 +
+>>> .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c | 2 ++
+>>>   drivers/media/platform/qcom/venus/hfi.h | 2 ++
+>>>   drivers/media/platform/verisilicon/hantro_hw.h | 2 ++
+>>>   drivers/staging/media/ipu3/ipu3-v4l2.c | 2 ++
+>>>   include/media/videobuf2-core.h | 1 -
+>>>   include/media/videobuf2-v4l2.h | 4 ----
+>>>   8 files changed, 11 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c
+>>> b/drivers/media/common/videobuf2/videobuf2-core.c
+>>> index 86e1e926fa45..899783f67580 100644
+>>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+>>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+>>> @@ -31,6 +31,8 @@
+>>>
+>>>   #include <trace/events/vb2.h>
+>>>
+>>> +#define VB2_MAX_FRAME  32
+>>> +
+>>>   static int debug;
+>>>   module_param(debug, int, 0644);
+>>>
+>>> diff --git a/drivers/media/platform/amphion/vdec.c
+>>> b/drivers/media/platform/amphion/vdec.c
+>>> index 3fa1a74a2e20..b3219f6d17fa 100644
+>>> --- a/drivers/media/platform/amphion/vdec.c
+>>> +++ b/drivers/media/platform/amphion/vdec.c
+>>> @@ -28,6 +28,7 @@
+>>>
+>>>   #define VDEC_MIN_BUFFER_CAP            8
+>>>   #define VDEC_MIN_BUFFER_OUT            8
+>>> +#define VB2_MAX_FRAME                  32
+>>>
+>>>   struct vdec_fs_info {
+>>>          char name[8];
+>>> diff --git
+>>> a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+>>> b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+>>> index 6532a69f1fa8..a1e0f24bb91c 100644
+>>> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+>>> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+>>> @@ -16,6 +16,8 @@
+>>>   #include "../vdec_drv_if.h"
+>>>   #include "../vdec_vpu_if.h"
+>>>
+>>> +#define VB2_MAX_FRAME  32
+>>> +
+>>>   /* reset_frame_context defined in VP9 spec */
+>>>   #define VP9_RESET_FRAME_CONTEXT_NONE0 0
+>>>   #define VP9_RESET_FRAME_CONTEXT_NONE1 1
+>>> diff --git a/drivers/media/platform/qcom/venus/hfi.h
+>>> b/drivers/media/platform/qcom/venus/hfi.h
+>>> index f25d412d6553..bd5ca5a8b945 100644
+>>> --- a/drivers/media/platform/qcom/venus/hfi.h
+>>> +++ b/drivers/media/platform/qcom/venus/hfi.h
+>>> @@ -10,6 +10,8 @@
+>>>
+>>>   #include "hfi_helper.h"
+>>>
+>>> +#define VB2_MAX_FRAME                          32
+>>> +
+>>>   #define VIDC_SESSION_TYPE_VPE                  0
+>>>   #define VIDC_SESSION_TYPE_ENC                  1
+>>>   #define VIDC_SESSION_TYPE_DEC                  2
+>>> diff --git a/drivers/media/platform/verisilicon/hantro_hw.h
+>>> b/drivers/media/platform/verisilicon/hantro_hw.h
+>>> index e83f0c523a30..9e8faf7ba6fb 100644
+>>> --- a/drivers/media/platform/verisilicon/hantro_hw.h
+>>> +++ b/drivers/media/platform/verisilicon/hantro_hw.h
+>>> @@ -15,6 +15,8 @@
+>>>   #include <media/v4l2-vp9.h>
+>>>   #include <media/videobuf2-core.h>
+>>>
+>>> +#define VB2_MAX_FRAME  32
+>>> +
+>>>   #define DEC_8190_ALIGN_MASK    0x07U
+>>>
+>>>   #define MB_DIM                 16
+>>> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c
+>>> b/drivers/staging/media/ipu3/ipu3-v4l2.c
+>>> index e530767e80a5..6627b5c2d4d6 100644
+>>> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
+>>> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+>>> @@ -10,6 +10,8 @@
+>>>   #include "ipu3.h"
+>>>   #include "ipu3-dmamap.h"
+>>>
+>>> +#define VB2_MAX_FRAME  32
+>>> +
+>>>   /******************** v4l2_subdev_ops ********************/
+>>>
+>>>   #define IPU3_RUNNING_MODE_VIDEO                0
+>>> diff --git a/include/media/videobuf2-core.h
+>>> b/include/media/videobuf2-core.h
+>>> index 77921cf894ef..080b783d608d 100644
+>>> --- a/include/media/videobuf2-core.h
+>>> +++ b/include/media/videobuf2-core.h
+>>> @@ -20,7 +20,6 @@
+>>>   #include <media/media-request.h>
+>>>   #include <media/frame_vector.h>
+>>>
+>>> -#define VB2_MAX_FRAME  (32)
+>>>   #define VB2_MAX_PLANES (8)
+>>>
+>>>   /**
+>>> diff --git a/include/media/videobuf2-v4l2.h
+>>> b/include/media/videobuf2-v4l2.h
+>>> index 5a845887850b..88a7a565170e 100644
+>>> --- a/include/media/videobuf2-v4l2.h
+>>> +++ b/include/media/videobuf2-v4l2.h
+>>> @@ -15,10 +15,6 @@
+>>>   #include <linux/videodev2.h>
+>>>   #include <media/videobuf2-core.h>
+>>>
+>>> -#if VB2_MAX_FRAME != VIDEO_MAX_FRAME
+>>> -#error VB2_MAX_FRAME != VIDEO_MAX_FRAME
+>>> -#endif
+>>> -
+>>>   #if VB2_MAX_PLANES != VIDEO_MAX_PLANES
+>>>   #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
+>>>   #endif
+>>> -- 
+>>> 2.39.2
+>>>
+-- 
+Hsia-Jun(Randy) Li
 
-It's not an optimisation. If the if branch of your code is taken, it
-currently will do
-	pr_info("smbios entry point not found.\n");
-	pr_info("smbios root pointer: %lx\n", ffi.smbios);
-which makes no sense...
-
-Thanks,
-Conor.
-
-
---mgEY+RpkWKJjg9BW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKKILgAKCRB4tDGHoIJi
-0sHCAP9oR6Zc2RsczALqIEh4yefVd02+y2p1qwmzjU1PUXkz+AD+OWkhwMcOhFzn
-0UxULbuvEFFad2H/cRSU/EQJI0LbcAo=
-=2KIj
------END PGP SIGNATURE-----
-
---mgEY+RpkWKJjg9BW--
