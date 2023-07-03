@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0B6746138
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CD574613D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjGCRNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S230441AbjGCRPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjGCRNc (ORCPT
+        with ESMTP id S229804AbjGCRPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:13:32 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF25E4C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 10:13:31 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-401f4408955so407711cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 10:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688404411; x=1690996411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iHhUcDMJ3GqqYqX8PUUmG05Gp9eg0kW+H85LcvU0FfM=;
-        b=pcu1plunE/NwYXd0zKabq0kXC4lBKk8tohnsKuaUuvE/HlEsyL08J8Rrncb6tdHXMG
-         cmz9bCoXUDR/JwJsqsmr71QjeYmcARqtrt1DQSYI9zPV/Sf5pJYJl6xLdKaxJCKOgvFr
-         tnh9hlLbsw7q44xoXUaYM2Dl0zsM+CLmFGB60IzLiGOE4Gp49zPEcLGoPRuAw7HPala5
-         LXBec5FoBaHgoeX5sfQUdYjUsvGaUbSYJ1wRZy1H8aMdOztF5ksEydpAKeoXbOIbsEEp
-         30O8WuSAIYDTIkOI+/A0q8zA+SIzSI2JSocnTIfxpIswqs5WknnfbaYV8cHM0P31259d
-         HXkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688404411; x=1690996411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iHhUcDMJ3GqqYqX8PUUmG05Gp9eg0kW+H85LcvU0FfM=;
-        b=Fr/M8wBWZxJq2EkmOv0USgvvPB3zpjxu1yqgeKXzgIheuL0Pd/MRG21wRhpAgOXdp4
-         aHpukwwcputwXz8JxjwJzL1+f7WgkrqMpQE4zNVUtGG6SdQB6WdzsxLPsgh+/9Ei8i1t
-         MP4BcqCqD+SFu9tGkdBh08kwIdtMbKz0t/24WTn58zfgBHdDuFebATHLW2FneSRaZsIZ
-         ws+maZ620vBeTqeHyaUyxtF3ljeFJhTunF6p9HeBWZQ2xwTfQS+e3Zo84JpDfojQtYvh
-         OTufj7+bL5nTR/EESrqn+QHFfv6L4UVgUum4+FplQ3my7XRdna6r/t0COZ8A8nZgr2Ck
-         vlHA==
-X-Gm-Message-State: ABy/qLaHepmkEIpcK58JRJqvJXqQLiBL2OLN/xFfOSjpQo+0UpjFE5FU
-        AvvsUkNGNGj090d5LvxTtqIaTESu+hwpTnQU+ewXIQ==
-X-Google-Smtp-Source: APBJJlGYc95qxttE9/8PAmxKfxDwWHEqgj+xMhW5O9ooJIFZZ/PHyQ6aNbFx0eU2JgiJSidSG/eG84BaW6wvypRKK3A=
-X-Received: by 2002:ac8:574c:0:b0:3e8:684b:195d with SMTP id
- 12-20020ac8574c000000b003e8684b195dmr44qtx.10.1688404410592; Mon, 03 Jul 2023
- 10:13:30 -0700 (PDT)
+        Mon, 3 Jul 2023 13:15:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4B9CD;
+        Mon,  3 Jul 2023 10:15:19 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB7CE6606F7D;
+        Mon,  3 Jul 2023 18:15:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688404518;
+        bh=+FspP4SEXLpd8UGez/YnH27IKQxsKfy3tcMyJKUz3yk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eShCOhwfHuWkARISle8RvontgqPMwOzK0A+y0Swu8MYAf2U4nHZgrYGt/m7XnOWH1
+         /T909DFVycl40YdEOV0Aapa17mXExSkGDaZX0/1dp11i0YqEKfeAhovI4kZsNtPLCC
+         cTNMxpS4LKJe2Tn4Zkqldnapn/piPFIBJJtMXSTBU7aiDh18V5QdtoUa9AjJMUCOcs
+         trPcGvU2IcCsAVIKsAXy+9ZuHokvhUx5mFwhEu2bLyi/5jWI+sUZKnuizIOyw1+g2d
+         BBW7T57VY23pQM+1gsjcgAsSmt30uVQ6sm0Dk5F9mO83+1A2cShO72aMGI40pf57dq
+         k5yuX1Vy94Rsg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] thermal/core: Don't update trip points inside the hysteresis range
+Date:   Mon,  3 Jul 2023 13:14:44 -0400
+Message-ID: <20230703171502.44657-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230612130256.4572-1-linyunsheng@huawei.com> <20230612130256.4572-5-linyunsheng@huawei.com>
- <20230614101954.30112d6e@kernel.org> <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
- <20230615095100.35c5eb10@kernel.org> <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
- <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com> <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
- <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com> <20230616122140.6e889357@kernel.org>
- <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com> <20230619110705.106ec599@kernel.org>
- <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
- <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org> <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
- <47b79e77-461b-8fe9-41fb-b69a6b205ef2@kernel.org>
-In-Reply-To: <47b79e77-461b-8fe9-41fb-b69a6b205ef2@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 3 Jul 2023 19:13:19 +0200
-Message-ID: <CANn89iKAvrf92Fy8a_M+V9eya6OHokey2_yxQ3JiCT87fKND_w@mail.gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 4:45=E2=80=AFPM David Ahern <dsahern@kernel.org> wro=
-te:
->
-> On 7/3/23 12:22 AM, Mina Almasry wrote:
-> > tcpdump is able to access the header of these skbs which is in host
-> > memory, but not the payload in device memory. Here is an example
-> > session with my netcat-like test for device memory TCP:
-> > https://pastebin.com/raw/FRjKf0kv
-> >
-> > tcpdump seems to work, and the length of the packets above is correct.
-> > tcpdump -A however isn't able to print the payload of the packets:
-> > https://pastebin.com/raw/2PcNxaZV
->
-> That is my expectation. The tcpdump is just an easy example of accessing
-> the skb page frags. skb_copy_and_csum_bits used by icmp is another
-> example that can walk frags wanting access to device memory. You did not
-> cause a panic or trip a WARN_ON for example with the tcpdump?
->
+When searching for the trip points that need to be set, the nearest trip
+point's temperature is used for the high trip, while the nearest trip
+point's temperature minus the hysteresis is used for the low trip. The
+issue with this logic is that when the current temperature is inside a
+trip point's hysteresis range, both high and low trips will come from
+the same trip point. As a consequence instability can still occur like
+this:
+* the temperature rises slightly and enters the hysteresis range of a
+  trip point
+* polling happens and updates the trip points to the hysteresis range
+* the temperature falls slightly, exiting the hysteresis range, crossing
+  the trip point and triggering an IRQ, the trip points are updated
+* repeat
 
-Change for af_packet was not too hard :)
+So even though the current hysteresis implementation prevents
+instability from happening due to IRQs triggering on the same
+temperature value, both ways, it doesn't prevent it from happening due
+to an IRQ on one way and polling on the other.
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index a2dbeb264f260e5b8923ece9aac99fe19ddfeb62..aa4133d1b1e0676e408499ea453=
-4b51262394432
-100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -2152,7 +2152,7 @@ static int packet_rcv(struct sk_buff *skb,
-struct net_device *dev,
-                }
-        }
+To properly implement a hysteresis behavior, when inside the hysteresis
+range, don't update the trip points. This way, the previously set trip
+points will stay in effect, which will in a way remember the previous
+state (if the temperature signal came from above or below the range) and
+therefore have the right trip point already set. The exception is if
+there was no previous trip point set, in which case a previous state
+doesn't exist, and so it's sensible to allow the hysteresis range as
+trip points.
 
--       snaplen =3D skb->len;
-+       snaplen =3D skb->devmem ? skb_headlen(skb) : skb->len;
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-        res =3D run_filter(skb, sk, snaplen);
-        if (!res)
-@@ -2275,7 +2275,7 @@ static int tpacket_rcv(struct sk_buff *skb,
-struct net_device *dev,
-                }
-        }
+---
 
--       snaplen =3D skb->len;
-+       snaplen =3D skb->devmem ? skb_headlen(skb) : skb->len;
+ drivers/thermal/thermal_trip.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-        res =3D run_filter(skb, sk, snaplen);
-        if (!res)
+diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+index 907f3a4d7bc8..c386ac5d8bad 100644
+--- a/drivers/thermal/thermal_trip.c
++++ b/drivers/thermal/thermal_trip.c
+@@ -57,6 +57,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+ {
+ 	struct thermal_trip trip;
+ 	int low = -INT_MAX, high = INT_MAX;
++	int low_trip_id = -1, high_trip_id = -2;
+ 	int i, ret;
+ 
+ 	lockdep_assert_held(&tz->lock);
+@@ -73,18 +74,34 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+ 
+ 		trip_low = trip.temperature - trip.hysteresis;
+ 
+-		if (trip_low < tz->temperature && trip_low > low)
++		if (trip_low < tz->temperature && trip_low > low) {
+ 			low = trip_low;
++			low_trip_id = i;
++		}
+ 
+ 		if (trip.temperature > tz->temperature &&
+-		    trip.temperature < high)
++		    trip.temperature < high) {
+ 			high = trip.temperature;
++			high_trip_id = i;
++		}
+ 	}
+ 
+ 	/* No need to change trip points */
+ 	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
+ 		return;
+ 
++	/*
++	 * If the current temperature is inside a trip point's hysteresis range,
++	 * don't update the trip points, rely on the previously set ones to
++	 * rememember the previous state.
++	 *
++	 * Unless no previous trip point was set, in which case there's no
++	 * previous state to remember.
++	 */
++	if ((tz->prev_low_trip > -INT_MAX || tz->prev_high_trip < INT_MAX) &&
++	    low_trip_id == high_trip_id)
++		return;
++
+ 	tz->prev_low_trip = low;
+ 	tz->prev_high_trip = high;
+ 
+-- 
+2.41.0
 
-
-And a generic change in pskb_may_pull() ( __pskb_pull_tail() more
-exactly) was enough to cover most other cases.
