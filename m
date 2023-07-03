@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8370A74571F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A067E745720
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjGCISq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        id S231361AbjGCIS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjGCISk (ORCPT
+        with ESMTP id S231403AbjGCIS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:18:40 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969EF1BC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:18:38 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51d9124e1baso4793166a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 01:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688372317; x=1690964317;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f0AIPmQjwEPFU9S6QPuv3kXAJyYa7R0ahvO9uqbNsw0=;
-        b=CTXm0Evd7f9xNERgFGe8Kgf2dIrXOUMZPOBGhEgXQdvIjRhhrv5Qh3s5ENWJ09z7ev
-         5wm7FiXz+iF/TvW0dDpczV2RwoT7ClRWoiG7fSddWKzNyBagcc/r7pNw84OiXN04lL4z
-         wC0LmC5S4SY3KJKOoKwf0war+sU1MsM9XTZc+Scp7fmMYsS9QJtvuv34rKr0yMZAysn8
-         D2fh7In8mMCQM9+yNYsq6aVEQIOZzk4aw7h/eGK/mN535gJJ9Vny0AUFRXYlZM0dEbQr
-         O8A0Ma5CFWhzbHzM3joBe8qmF4w64d0CQLFSC5gbL99qho7IZPwuRlOOued1WUV58MLW
-         eK2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688372317; x=1690964317;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f0AIPmQjwEPFU9S6QPuv3kXAJyYa7R0ahvO9uqbNsw0=;
-        b=UMiQOz8aWm5Vu1R0dC+//JW1cMnmhz8m3N8ksPj8bZWvrVkPIAsiGyV/imjdA/twcg
-         atyPOJcgAd/uf54mwXV/MoKa6A9oo6x9tMBUFjYnaLUYg/1UUA64d9aESy1+UVCM16Ry
-         0cWiYARK9kS5iKle8mDNY4igB5BbpaoWTFlhgVg28MaHKuJBzupq3zMIJho3ay4Qjmzy
-         OzsJfP0EvLLzz4bpSs6zlyUt0/yEspV44FsLeyMB/c4EdTGxfDeM43taO4SsIGGiG5RJ
-         hXwv5olH0XfkL3XlbGDjGJ0ryzoRCZ3vPw8+J3hIrAqdjJ9NrhpCLGxLZ2dVwRPDTi5x
-         1FCg==
-X-Gm-Message-State: ABy/qLbT06tTvaAtu5ttkoqNn1HEvkldQVUqNrIiV615FyafqjpAt7Gy
-        l9PszTguuOCSc5Pq5b+rTTqZZQ==
-X-Google-Smtp-Source: APBJJlFjFKFq1EVk2plu+5SIDoHMMxjYDFXuQ8UHkU0hLQGKGPcjw2PacRkzpqFIW8QfcigNzutaAw==
-X-Received: by 2002:a05:6402:4497:b0:51a:200b:d8ff with SMTP id er23-20020a056402449700b0051a200bd8ffmr6795812edb.13.1688372316835;
-        Mon, 03 Jul 2023 01:18:36 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id n22-20020a056402515600b0051e0f100c48sm1171605edd.22.2023.07.03.01.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 01:18:36 -0700 (PDT)
-Date:   Mon, 3 Jul 2023 10:18:35 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
-        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v5 10/13] KVM: selftests: Only do get/set tests on
- present blessed list
-Message-ID: <20230702-49c5545eb1ae2d0cf11c7b95@orel>
-References: <cover.1688010022.git.haibo1.xu@intel.com>
- <f44c3aa46971d524319c6340f9ce1b00c0182fd2.1688010022.git.haibo1.xu@intel.com>
+        Mon, 3 Jul 2023 04:18:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D949E5F;
+        Mon,  3 Jul 2023 01:18:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE7CC1FB;
+        Mon,  3 Jul 2023 01:19:35 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E52483F73F;
+        Mon,  3 Jul 2023 01:18:50 -0700 (PDT)
+Message-ID: <3a0fff38-b364-a6b4-1d10-41311e2073b4@arm.com>
+Date:   Mon, 3 Jul 2023 09:18:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f44c3aa46971d524319c6340f9ce1b00c0182fd2.1688010022.git.haibo1.xu@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] perf report: Don't add to histogram when there is no
+ thread found
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
+References: <20230626161059.324046-1-james.clark@arm.com>
+ <20230626161059.324046-3-james.clark@arm.com> <ZJonE3ZZ2cBUq0U8@google.com>
+ <CAP-5=fX+FDAkFoMhQY27_+fiRp_UDruP8qWTdjvqU5-uE0SdWA@mail.gmail.com>
+ <CAM9d7cj4xr6oTDKvxbNTVUewyZFTBchQS36KC0nN4i4HjCsq5w@mail.gmail.com>
+ <CAP-5=fUTzn06DM7o-1qBx7Tauo2Q2ACHmYcvwTmrTOJpzS2=oQ@mail.gmail.com>
+ <d5618d0b-1441-0c04-4b09-768bfe7b7ee7@arm.com>
+ <CAM9d7cjx2zinztBYiYaU6iqKzuV3vcJA6wtY71aicFbr5sy9zA@mail.gmail.com>
+ <CAM9d7chKj4pnhtuuA6wN6TBLUYq_9bTxvr6dRT7CKW3CfQ1Avg@mail.gmail.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <CAM9d7chKj4pnhtuuA6wN6TBLUYq_9bTxvr6dRT7CKW3CfQ1Avg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 01, 2023 at 09:42:58PM +0800, Haibo Xu wrote:
-> Only do the get/set tests on present and blessed registers
-> since we don't know the capabilities of any new ones.
+
+
+On 30/06/2023 22:02, Namhyung Kim wrote:
+> On Wed, Jun 28, 2023 at 1:06 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>>
+>> On Wed, Jun 28, 2023 at 3:34 AM James Clark <james.clark@arm.com> wrote:
+>>>
+>>>
+>>>
+>>> On 27/06/2023 18:19, Ian Rogers wrote:
+>>>> On Tue, Jun 27, 2023 at 9:58 AM Namhyung Kim <namhyung@kernel.org> wrote:
+>>>>>
+>>>>> On Tue, Jun 27, 2023 at 9:43 AM Ian Rogers <irogers@google.com> wrote:
+>>>>>>
+>>>>>> On Mon, Jun 26, 2023 at 5:02 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>>>>>>>
+>>>>>>> On Mon, Jun 26, 2023 at 05:10:58PM +0100, James Clark wrote:
+>>>>>>>> thread__find_map() chooses to exit without assigning a thread to the
+>>>>>>>> addr_location in some scenarios, for example when there are samples from
+>>>>>>>> a guest and perf_guest == false. This results in a segfault when adding
+>>>>>>>> to the histogram because it uses unguarded accesses to the thread member
+>>>>>>>> of the addr_location.
+>>>>>>>
+>>>>>>> Looking at the commit 0dd5041c9a0ea ("perf addr_location: Add
+>>>>>>> init/exit/copy functions") that introduced the change, I'm not sure if
+>>>>>>> it's the intend behavior.
+>>>>>>>
+>>>>>>> It might change maps and map, but not thread.  Then I think no reason
+>>>>>>> to not set the al->thread at the beginning.
+>>>>>>>
+>>>>>>> How about this?  Ian?
+>>>>>>> (I guess we can get rid of the duplicate 'al->map = NULL' part)
+>>>>>>
+>>>>>> It seemed strange that we were failing to find a map (the function's
+>>>>>> purpose) but then populating the address_location. The change below
+>>>>>> brings back that somewhat odd behavior. I'm okay with reverting to the
+>>>>>> old behavior, clearly there were users relying on it. We should
+>>>>>> probably also copy maps and not just thread, as that was the previous
+>>>>>> behavior.
+>>>>>
+>>>>> Probably.  But it used to support samples without maps and I think
+>>>>> that's why it ignores the return value of thread__find_map().  So
+>>>>> we can expect al.map is NULL and maybe fine to leave it for now.
+>>>>>
+>>>>> As machine__resolve() returns -1 if it gets no thread, we should set
+>>>>> al.thread when it returns 0.
+>>>>>
+>>>>> Can I get your Acked-by?
+>>>>
+>>>> Yep:
+>>>> Acked-by: Ian Rogers <irogers@google.com>
+>>>
+>>> Looks good to me too. Should I resend the set with this change instead
+>>> of my one?
+>>
+>> No, I can take care of that.  I'll take this as your Acked-by. :)
 > 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  tools/testing/selftests/kvm/get-reg-list.c | 29 ++++++++++++++--------
->  1 file changed, 18 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
-> index c61090806007..74fb6f6fdd09 100644
-> --- a/tools/testing/selftests/kvm/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> @@ -49,6 +49,10 @@ extern int vcpu_configs_n;
->  	for_each_reg_filtered(i)						\
->  		if (!find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
->  
-> +#define for_each_present_blessed_reg(i)			\
-> +	for ((i) = 0; (i) < blessed_n; ++(i))		\
-> +		if (find_reg(reg_list->reg, reg_list->n, blessed_reg[i]))
+> This part is applied to perf-tools-next, thanks!
 
-I just realized this is backwards. We need 'i' to index reg_list->reg in
-the body of the loop. That means we need to write this as
-
-#define for_each_present_blessed_reg(i)                                         \
-        for_each_reg(i)                                                         \
-                if (find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
-
-(Which, in hindsight, makes sense since we're replacing a for_each_reg()
-loop.)
-
-Thanks,
-drew
+Thanks Namhyung
