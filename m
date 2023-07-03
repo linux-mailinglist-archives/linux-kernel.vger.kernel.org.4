@@ -2,179 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D5F745434
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 05:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1891574543D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 05:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjGCDgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 23:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S229917AbjGCDlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 23:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjGCDga (ORCPT
+        with ESMTP id S229482AbjGCDk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 23:36:30 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2B01B2
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 20:36:29 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230703033626epoutp022e853423c85c071d216e8e0a98e2f062~uPkdZELQk0792507925epoutp02t
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:36:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230703033626epoutp022e853423c85c071d216e8e0a98e2f062~uPkdZELQk0792507925epoutp02t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1688355386;
-        bh=iJHsnzuv/3P3c/sgg4qrhHAomf5LGAlPsBYm7dMoUZg=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=iau2pE31qxEJ2RUw7UFmLyU4U+6UELtc+Q4lejj7Xz0IevVYFkGpx3d0opoJOf1yW
-         j+fIXmvowRPdTdlkk2IYC37kbTc//4uVOHLIzQnfGKCS8vn495tnK0mHWxR1s7iXjO
-         wfT1Oz9YNtDjQypafrXF1OQrQ+jyzeEYwHGs8Y+A=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20230703033625epcas5p13c6102e5fa95aad265a560961462e44f~uPkcpum6f1851118511epcas5p1D;
-        Mon,  3 Jul 2023 03:36:25 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4QvWmm0776z4x9Q9; Mon,  3 Jul
-        2023 03:36:24 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        89.6B.06099.63242A46; Mon,  3 Jul 2023 12:36:22 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230703033621epcas5p453ad7299c057693a149deee0862a150d~uPkY4jysa0345803458epcas5p4v;
-        Mon,  3 Jul 2023 03:36:21 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230703033621epsmtrp2d59fc2a16ee74b1bf4179237504c8df4~uPkY34z_j1417014170epsmtrp2D;
-        Mon,  3 Jul 2023 03:36:21 +0000 (GMT)
-X-AuditID: b6c32a4b-d308d700000017d3-81-64a24236d398
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0D.91.30535.53242A46; Mon,  3 Jul 2023 12:36:21 +0900 (KST)
-Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230703033619epsmtip28deebef965e47baf1e4ff7f33f76d642~uPkXMncK02600726007epsmtip2T;
-        Mon,  3 Jul 2023 03:36:19 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        "'Conor Dooley'" <conor+dt@kernel.org>, <linux-fsd@tesla.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230702185012.43699-4-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH 4/4] ARM: dts: s5pv210: minor whitespace cleanup around
- '='
-Date:   Mon, 3 Jul 2023 09:06:18 +0530
-Message-ID: <014f01d9ad5f$88cc5090$9a64f1b0$@samsung.com>
+        Sun, 2 Jul 2023 23:40:57 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CA012A;
+        Sun,  2 Jul 2023 20:40:55 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 1AD0E6016E;
+        Mon,  3 Jul 2023 05:40:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1688355646; bh=g9yXXDDfiKFGXYs35wZ62G1hHziQXBpu/IYLkrKqkDg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=O/UZeWoPbsLCMBDupTwBsAC2XHgCkemKAUlekJTTzTDsGIkiReU8l/c9twIbtzn6J
+         9rkNxLQKk1eTNy8en+9mIFfOcmm24z4BCk0iAukECYGYgBhPlAlgc5hOgvVqb4d6qz
+         jeQFG5CqM9guu/AxbfLHFW/qpF6YVt9+GKsBe7Cs73ph7o11e23kI/CTVHKga0Sc29
+         HnV/M2/8isBE3AuGD3EE7+9N9Ss5tVR7BTw11y7/sOhlLzizSsRBwdASH1+Gw97GZS
+         V8BrEygkutvgSk0xCPRX/Qe5FrJZ2tL48atFxpad4SL5zz6h0N/F3VycT4gIS5TF7E
+         VZPWT1xaa8urw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id sSarGCCyqUfX; Mon,  3 Jul 2023 05:40:43 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id C3FC960161;
+        Mon,  3 Jul 2023 05:40:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1688355643; bh=g9yXXDDfiKFGXYs35wZ62G1hHziQXBpu/IYLkrKqkDg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pGyWXq8MBiAkxy88cpu9HnHmlxrDWx9q9bPyFEbzm/8m6xDVbsq/XfhJVF5DA73BH
+         nxih1zM0HFu4D/uCLVzcPjwohOdjmAt5vuLAQxt1Ks1qJjveWeFHi+9+HBIgqzHK3W
+         lHpfezaRI+Fajwp0SzEsu8ruBL1/bDUV5G8WOL1LREe5FT6u3/lBir2sDcpLym6tQF
+         Qep99UPR/BJNQqn2Y1ofO8TLkFGRh/XS+8uCJelcyD4aUlgPKvKwOA8V8HVNoeNThY
+         Yom4DAzrnlvmtaBK3fE3XWIaFZdafHz3HHNFBGuICWXh/qBrYjYpWSMeRgwzq+LwVR
+         3AwFlPs303oEg==
+Message-ID: <d2144011-9825-7cc8-ae61-cfed27f78fa8@alu.unizg.hr>
+Date:   Mon, 3 Jul 2023 05:40:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [CRASH][BISECTED] 6.4.1 crash in boot
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LLVM <llvm@lists.linux.dev>
+Cc:     linux-kbuild@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <9a8e34ad-8a8b-3830-4878-3c2c82e69dd9@alu.unizg.hr>
+ <ZKIoBVzrjZ+Ybxy9@debian.me>
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZKIoBVzrjZ+Ybxy9@debian.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJK0TCEOAUhA3bp3DdQU92USEW3oQIgPvh1AdVkXliupW9F0A==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmuq6Z06IUg6ZfvBZr9p5jsph/5Byr
-        Rd+Lh8wWe19vZbfY9Pgaq8XDV+EWl3fNYbOYcX4fk0Xr3iPsDpwem1Z1snncubaHzWPzknqP
-        f01z2T0+b5ILYI3KtslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLx
-        CdB1y8wBOkdJoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BSoFecmFtcmpeul5da
-        YmVoYGBkClSYkJ3x+PsP5oLvAhUr3/1ma2Bs5Oti5OSQEDCRONuyj6mLkYtDSGA3o8SmvS+g
-        nE+MEn2H2tghnG+MEqvPTGTrYuQAa/n/rwoivpdRYknjUaiOl4wS7X/3M4HMZRPQldixuI0N
-        JCEi8JlJ4mTjTXaQBKeAi8SRWVvAbGGBQImWO6tYQWwWARWJe8/fMIPYvAKWErfurGWEsAUl
-        Ts58wgJiMwvIS2x/O4cZ4nAFiZ9Pl4H1igg4SUycsIQJokZc4uXRI2BnSwjM5ZD49+QaO8TZ
-        LhKfezUheoUlXh2HuEFCQEri87u9UJ95SCz6IwURzpB4u3w9I4RtL3HgyhwWkBJmAU2J9bv0
-        ITbxSfT+fsIE0ckr0dEmBFGtKtH87ioLhC0tMbG7mxVmePNtdUhIXWSUmPtiBeMERoVZSH6c
-        heTHWUh+mYWweAEjyypGydSC4tz01GLTAuO81HJ4dCfn525iBKdVLe8djI8efNA7xMjEwXiI
-        UYKDWUmEt/nh/BQh3pTEyqrUovz4otKc1OJDjKbAgJ/ILCWanA9M7Hkl8YYmlgYmZmZmJpbG
-        ZoZK4ryvW+emCAmkJ5akZqemFqQWwfQxcXBKNTAZzPB5ZPbz7krTrLOPkniP36r89VhDX/S+
-        /uf5fxYpya+Qcl9ac40raof7ppzuaXPKZzl/v1C/olCx/UHRyZC5Nmb/4ifWcJVzfCmXNPkq
-        nyyXxOt5Umcfz7FJRQK/zZYsVk1eVHWXQYxPUGOxkrCYjorK052SMseEJUpKfk5Tld9yy+uE
-        7uHNXLwfrfNYYiZM0uxP3X7yyt6WiO8tuv3sxW8awlmzlT8IPD38TGi5RNCWCYFut75PEpY9
-        oh71tM6OrcUyZ03f0+3nbCpOn/t68NY2z865AQKsHUk/1C/MeyV6UqPa5ddRyzmc/NJxejaG
-        bLWz3WfuMznUpWPN4PnIV1651fKkkPALOfZPPkosxRmJhlrMRcWJAMlCoqI0BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsWy7bCSvK6p06IUg9fz5S3W7D3HZDH/yDlW
-        i74XD5kt9r7eym6x6fE1VouHr8ItLu+aw2Yx4/w+JovWvUfYHTg9Nq3qZPO4c20Pm8fmJfUe
-        /5rmsnt83iQXwBrFZZOSmpNZllqkb5fAlfH4+w/mgu8CFSvf/WZrYGzk62Lk4JAQMJH4/6+q
-        i5GLQ0hgN6PErI5Oli5GTqC4tMT1jRPYIWxhiZX/nrNDFD1nlNixoZsNJMEmoCuxY3EbG0hC
-        ROAnk8TdzvlsEFVnGSV63l5jBqniFHCRODJrC9goYQF/ibunJ7CC2CwCKhL3nr8Bq+EVsJS4
-        dWctI4QtKHFy5hMWkPOYBfQk2jaChZkF5CW2v53DDHGRgsTPp8vAxogIOElMnLCECaJGXOLl
-        0SPsExiFZiGZNAth0iwkk2Yh6VjAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4
-        irS0djDuWfVB7xAjEwfjIUYJDmYlEd7mh/NThHhTEiurUovy44tKc1KLDzFKc7AoifN+e92b
-        IiSQnliSmp2aWpBaBJNl4uCUamDackF90Y6Jz6Q3pp6N9uMoXVtsM+HFV2aTK1+m6zWyrO/p
-        iIt9Kpizx5ZJZtKBjRMlshUOLcs9mvikz3xnqdvZA49ueO1jFPT8kLLAUvgc1zzB1Bm7FCu7
-        Z9WfSVv7WyLS9FaLmpNkxJdDVQrCUrNKz63ael6z7+ChAJ85gQ/vqz3rjbdw8/jstjNypbFm
-        6pL0NXeeFCi98Pg3RfvlDlEXY0Xb+49vPnr+4RUT071COaY/K2Juct4VNhb17GzaIOt/7PF/
-        njNhbi+ZNjdLXfCZprvJlv/79GV2XpcUqyY9ik/z+1/Zk+xuHhL8ckFY5Uc2raTVc6zSDteL
-        v2h+tvSxoNkbY6afM6+7a9isfvlQiaU4I9FQi7moOBEAluWAGhEDAAA=
-X-CMS-MailID: 20230703033621epcas5p453ad7299c057693a149deee0862a150d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230702185024epcas5p34b4c4d222ef1e0a3c1cd56604a46c485
-References: <20230702185012.43699-1-krzysztof.kozlowski@linaro.org>
-        <CGME20230702185024epcas5p34b4c4d222ef1e0a3c1cd56604a46c485@epcas5p3.samsung.com>
-        <20230702185012.43699-4-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Sent: Monday, July 3, 2023 12:20 AM
-> To: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
-> <conor+dt@kernel.org>; Alim Akhtar <alim.akhtar@samsung.com>; linux-
-> fsd@tesla.com; devicetree@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Subject: [PATCH 4/4] ARM: dts: s5pv210: minor whitespace cleanup around
-> '='
+On 7/3/23 03:44, Bagas Sanjaya wrote:
+> On Sun, Jul 02, 2023 at 06:36:12PM +0200, Mirsad Goran Todorovac wrote:
+>> Hi,
+>>
+>> After new git pull the kernel in Torvalds tree with default debug config
+>> failed to boot with error that occurs prior to mounting filesystems, so there
+>> is no log safe for the screenshot(s) here:
+>>
+>> [1] https://domac.alu.unizg.hr/~mtodorov/linux/crashes/2023-07-02/
+>>
+>> Bisect shows the first bad commit is 2d47c6956ab3 (v6.4-rc2-1-g2d47c6956ab3):
+>>
+>> # good: [98be618ad03010b1173fc3c35f6cbb4447ee2b07] Merge tag 'Smack-for-6.5' of https://github.com/cschaufler/smack-next
+>> git bisect good 98be618ad03010b1173fc3c35f6cbb4447ee2b07
+>> # bad: [f4a0659f823e5a828ea2f45b4849ea8e2dd2984c] drm/i2c: tda998x: Replace all non-returning strlcpy with strscpy
+>> git bisect bad f4a0659f823e5a828ea2f45b4849ea8e2dd2984c
+>> .
+>> .
+>> .
+>> # bad: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
+>> git bisect bad 2d47c6956ab3c8b580a59d7704aab3e2a4882b6c
+>> # first bad commit: [2d47c6956ab3c8b580a59d7704aab3e2a4882b6c] ubsan: Tighten UBSAN_BOUNDS on GCC
+>>
+>> The architecture is Ubuntu 22.04 with lshw and config give in the attachment.
 > 
-> The DTS code coding style expects exactly one space before and after '='
-> sign.
+> Can you show early kernel log (something like dmesg)?
+
+No, machine freezes after those screenfulls and I could only take a
+screenshot.
+  
+> Anyway, I'm adding it to regzbot:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Thanks!
-
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
-
->  arch/arm/boot/dts/samsung/s5pv210-pinctrl.dtsi | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> #regzbot ^introduced: 2d47c6956ab3c8
+> #regzbot title: Linux kernel fails to boot due to UBSAN_BOUNDS tightening
 > 
-> diff --git a/arch/arm/boot/dts/samsung/s5pv210-pinctrl.dtsi
-> b/arch/arm/boot/dts/samsung/s5pv210-pinctrl.dtsi
-> index af740abd9e0f..6ecdd504e5f4 100644
-> --- a/arch/arm/boot/dts/samsung/s5pv210-pinctrl.dtsi
-> +++ b/arch/arm/boot/dts/samsung/s5pv210-pinctrl.dtsi
-> @@ -832,12 +832,12 @@ lcd_clk: lcd-clk-pins {
->  	};
+> Thanks.
 > 
->  	lcd_data24: lcd-data-width24-pins {
-> -		samsung,pins =  "gpf0-4", "gpf0-5", "gpf0-6", "gpf0-7",
-> -				"gpf1-0", "gpf1-1", "gpf1-2", "gpf1-3",
-> -				"gpf1-4", "gpf1-5", "gpf1-6", "gpf1-7",
-> -				"gpf2-0", "gpf2-1", "gpf2-2", "gpf2-3",
-> -				"gpf2-4", "gpf2-5", "gpf2-6", "gpf2-7",
-> -				"gpf3-0", "gpf3-1", "gpf3-2", "gpf3-3";
-> +		samsung,pins = "gpf0-4", "gpf0-5", "gpf0-6", "gpf0-7",
-> +			       "gpf1-0", "gpf1-1", "gpf1-2", "gpf1-3",
-> +			       "gpf1-4", "gpf1-5", "gpf1-6", "gpf1-7",
-> +			       "gpf2-0", "gpf2-1", "gpf2-2", "gpf2-3",
-> +			       "gpf2-4", "gpf2-5", "gpf2-6", "gpf2-7",
-> +			       "gpf3-0", "gpf3-1", "gpf3-2", "gpf3-3";
->  		samsung,pin-function = <S5PV210_PIN_FUNC_2>;
->  		samsung,pin-pud = <S5PV210_PIN_PULL_NONE>;
->  		samsung,pin-drv = <S5PV210_PIN_DRV_LV1>;
-> --
-> 2.34.1
-
-
