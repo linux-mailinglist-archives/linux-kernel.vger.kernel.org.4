@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB00E745B2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD0F745B34
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjGCLdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S230200AbjGCLev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjGCLc6 (ORCPT
+        with ESMTP id S229771AbjGCLes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:32:58 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630EFC6
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 04:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1688383972;
-        bh=amKSxElUXOBsQ/ZeBWOs02uQ1wiOklOJIeiioUSfrbU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=cjOfTwTDAdyQWLk5OgoU+scBQqHcMgm1xrC+YKMj0qbh8OB31tJr1QzMaNC0oznvJ
-         5X0JG5ai36xAcluxWkPzUNyXsx9HP7NnCyAAHIc5tCcUI0+X97GYSkWIniwW851GHM
-         TLlSFRW2wZ2EMDgY2rh+blKYhn0GA7jOZEEzYZdMh551VhhBHulejM+xi7fe7g3pdV
-         ydTC9xYNU76Kby9gUINFGbVxRipDDqGU6wPEVYAgO+EuxQCXEY8RgrYwWnuKhHTwzW
-         JjaP823x4D8XKPAXeVOlcwaEHpocYrsmkcoXd3LMO4jkK02naIaG24u/e8dgsHSYz8
-         H3wWvd3AHHkPQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QvkLW1b5Yz4wZp;
-        Mon,  3 Jul 2023 21:32:50 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Michael Ellerman <patch-notifications@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring <robh@kernel.org>
-Cc:     Darren Stevens <darren@stevens-zone.net>,
-        "R.T.Dickinson" <rtd2@xtra.co.nz>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc: isa-bridge: Fix ISA mmapping when "ranges" is
- not present
-In-Reply-To: <1a205224-06d4-9337-5621-c9760c02f9e5@xenosoft.de>
-References: <20230505171816.3175865-1-robh@kernel.org>
- <168836167601.46386.17041701491443802315.b4-ty@ellerman.id.au>
- <1a205224-06d4-9337-5621-c9760c02f9e5@xenosoft.de>
-Date:   Mon, 03 Jul 2023 21:32:50 +1000
-Message-ID: <873525w7q5.fsf@mail.lhotse>
+        Mon, 3 Jul 2023 07:34:48 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83A6E3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 04:34:47 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51d9890f368so4823987a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 04:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688384086; x=1690976086;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=op6mQcm4JLOM9l+53MHx6V+IW+ZpBdMwi+OgBoLHHDo=;
+        b=nJbw3EYLLN9fys3o29MLFKjTRT6T/eF0xMNckBtLtj0f7pGU38o2tN0P8IgWMQjO96
+         wV9R2G6BHzYrDE5GPXw2omslyV1dG/NmJ6I6iXXq3TNUKWCbfm7G83wgD/P3rNiT8cxV
+         7g1+C1MxFH7h5WyrO0Bi3lZgWvfgrim/Qt6em+N57+0dXf53t9TavEMxMH5Sdk8bVsu2
+         TZHUxYuxHK8qdu7XmcWmSbVVaCub1vFm74IKzR0G6dgdHd7E2Uimx/wzqpKhoORm+pQq
+         Y1253oIa20ZL4bUVlVpOMqETvC6OqPwxY13kZp/NAY3fSQJpI6lLjdLuDmO4Z67F4avV
+         wAhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688384086; x=1690976086;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=op6mQcm4JLOM9l+53MHx6V+IW+ZpBdMwi+OgBoLHHDo=;
+        b=CSqJnzB5KcOn0oMvh3+twM39ktDPxaDiyXos72avBZ6066NFbwtpqWuPd4wvMSEBuu
+         CDDeMcLkxjfm1W7Jt1TzbT1mt192B+Ymkq/IB6R2t8pA6SmPnQ7CQkCWNu9VpN0heVaT
+         td1UVhaVzZtzb/9Za7xIUHq4JlGv8jBEUJTJmLeN9Z0+StKzaQ8WpW+PzXTtHzW6gtoA
+         rgVtWQN3977q+kRayceRtoh96SmCpMF3dkLOrpquwIoEJTxRSQ1a7kdHSG7X6nQVayzb
+         4E9jTyGH3Hv57JsGV3NvvfuKt6cEQTKXnSesXMaLUf0jvA1p65LjH5WrxReQsPb8S3lL
+         einw==
+X-Gm-Message-State: ABy/qLav8s+4fEJd5MUkvQbJZUMS7imo23yKL2aOjswJ7NDWzeeLd4EQ
+        UxUJ9NSqYoXIFfZ9QIMl8uT3KYAbKNqdcNcNWX/Uu6/O
+X-Google-Smtp-Source: APBJJlHw9F2VP9lgn05Vy8TBj3boa7p7E1HJ5XSqFNGTAcjnHaRVlL+3f5SWyYttgPyY6M6OCPUkLw==
+X-Received: by 2002:aa7:d98e:0:b0:518:721e:f594 with SMTP id u14-20020aa7d98e000000b00518721ef594mr7409699eds.37.1688384086239;
+        Mon, 03 Jul 2023 04:34:46 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id d25-20020a50fb19000000b0051ddfb4385asm5229702edq.45.2023.07.03.04.34.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 04:34:45 -0700 (PDT)
+Message-ID: <19a9fcdb-7ac9-c84f-56cc-940fe3548798@linaro.org>
+Date:   Mon, 3 Jul 2023 13:34:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4] arm64: dts: agilex/stratix10: Updated QSPI Flash
+ layout for UBIFS
+To:     Conor.Dooley@microchip.com, Markus.Elfring@web.de,
+        alif.zakuan.yuslaimi@intel.com, kah.jing.lee@intel.com
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        catalin.marinas@arm.com, conor+dt@kernel.org, dinguyen@kernel.org,
+        robh+dt@kernel.org, will@kernel.org
+References: <20230703083626.1347969-1-kah.jing.lee@intel.com>
+ <59da2f49-706f-0a08-df14-71ad0326da83@web.de>
+ <a786b6b9-3923-0138-5738-dc20e14aa0f3@microchip.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a786b6b9-3923-0138-5738-dc20e14aa0f3@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Zigotzky <chzigotzky@xenosoft.de> writes:
-> On 03.07.23 07:21, Michael Ellerman wrote:
->> On Fri, 05 May 2023 12:18:17 -0500, Rob Herring wrote:
->>> Commit e4ab08be5b49 ("powerpc/isa-bridge: Remove open coded "ranges"
->>> parsing") broke PASemi Nemo board booting. The issue is the ISA I/O
->>> range was not getting mapped as the logic to handle no "ranges" was
->>> inverted. If phb_io_base_phys is non-zero, then the ISA range defaults
->>> to the first 64K of the PCI I/O space. phb_io_base_phys should only be 0
->>> when looking for a non-PCI ISA region.
->>>
->>> [...]
->> Applied to powerpc/fixes.
+On 03/07/2023 11:08, Conor.Dooley@microchip.com wrote:
+> On 03/07/2023 10:00, Markus Elfring wrote:
+> 
+>> …
+>>> ---
+>>> V4->V3: Drop cover letter & remove unnecessary marker line
+>>> V3->V2: Update commit messages
+>> …
 >>
->> [1/1] powerpc: isa-bridge: Fix ISA mmapping when "ranges" is not present
->>        https://git.kernel.org/powerpc/c/79de36042eecb684e0f748d17ba52f365fde0d65
+>> * Do you find the arrow notation helpful for the version identification?
 >>
->> cheers
-> Hello Michael,
->
-> This patch has already been applied. Link: 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4927cb98f0eeaa5dbeac882e8372f4b16dc62624
+>> * How do you think about to avoid duplicate data in the version history?
+>>
+>> * Would an other listing style become nicer for the “patch changelog”?
+> 
+> This is a complete waste of contributor time. Please stop.
 
-Yes, it's actually the same commit. I'm just catching up on sending the
-thanks emails. Sorry for the confusion.
+Markus is banned from the LKML. Just ignore the comments.
 
-cheers
+Best regards,
+Krzysztof
+
