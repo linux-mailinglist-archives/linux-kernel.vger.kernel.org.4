@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7158A7464B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4C07464B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbjGCVKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 17:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S230144AbjGCVMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 17:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjGCVKu (ORCPT
+        with ESMTP id S229517AbjGCVMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:10:50 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145BBE59;
-        Mon,  3 Jul 2023 14:10:49 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-7835ae70e46so192218039f.3;
-        Mon, 03 Jul 2023 14:10:49 -0700 (PDT)
+        Mon, 3 Jul 2023 17:12:05 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A22BE5B;
+        Mon,  3 Jul 2023 14:12:05 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-78360b822abso196709239f.2;
+        Mon, 03 Jul 2023 14:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688418648; x=1691010648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pzVkmEgU5WzK/Ygg1Ob57YCyS+9xMsLU8cmnnEEo+/M=;
-        b=ggNSk/H1Gu+SWvUTcFKzi52A/Nuq5OjwcnWpXPbpm5zYS5lRO/GqinQIi6LRvFf5js
-         9Ngg0qC9cVjdZcSTmjXDHFeUIRkRBls9EEhikCDCOxNawCsO8WILiqeW5+JB58sDyB69
-         29LRRFms3nDEznT2wR6Zf6+jhz3o8/NAV1fnTnUP1aWW53+ZLN0abqkjojIHkP+CEOGw
-         Ofe3cRV0hk0KI1mZrS2cIrcU4qQjvD3lLI+oahSb4kVllxLodasgApQgSGNK7iHTwW8i
-         jJ1q3whXmgGphg/X6maRg+ZWZSWrDnijv2tJCTeyhSnK3xJQQ1PvBM97VTBWWBNDuU57
-         x//A==
+        d=gmail.com; s=20221208; t=1688418724; x=1691010724;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c0EoX2DheebN94bt0rFrXPITU8dcwd8m1uYfEeNrV7c=;
+        b=iQLJZVNh9bIwOw+2iuKcGUN+cTi274XOHrQU3XI/VjN9FtcxsrB9c66omYyrugnM+E
+         pTqi8Url9RRsPDe5Fg31A5Lc5FhwOLeTNWTLBVO6cqp9e9WqK7nydfA8qzeWKo4ZNROl
+         io/fmExXuRCxn5swlIEDksXN9mAN2ATKZXnOiNbxnsWEUjiLX1Rr2ov6dbxxpActNidI
+         SNF+EpGIzLxllvqmDSqjADEO8X0oYtzWjhWX+OvnN/O9OkUBHlx4tLhx2tcLnA0kMpu1
+         YSphP5SZNVGcEPhHs3ICrHlGmVau3nOv5q/MCck0itkB5FdI/aaQd/+S0KKwmGbzMgrU
+         n2Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688418648; x=1691010648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pzVkmEgU5WzK/Ygg1Ob57YCyS+9xMsLU8cmnnEEo+/M=;
-        b=laqMVwS7fH9bPv8m7JpByAFBEHDl/+hdr2SX7I2i80zbQmaivQ7lzf5YReGGT2rDt1
-         MLkqIy0+j8+Ggfq7DQ6QH4Hn2mhSLCci07fmWF79vwmx2F5yGA/ZW7CSO+ldc42WbbiV
-         BTSziVSOQByOka7e4O1Zwl5cB969hxWa1C6VIYDSOQSf8R1+93feROGh80kR2sE/oyz5
-         x0E1qQFkvZE9gv8eOVs24DNAYahLTnlDVWu5zh9HdzWo0Vu7vSmz592Qg2kUgFTJ+CWH
-         HaN1t5gNLkr1jHqLV5IjbD+bGu62DnH6XGWf5y4LJYqweVCLVBawtJZI1AODR5l2PnJU
-         9RgQ==
-X-Gm-Message-State: AC+VfDw+HpuuPr5fiMC/o/HXrbVQk3m7WC8HMhQG1YPSUh+aao8999Zy
-        PEtu41Fcei+L3bZA9NsgGuWFdVRrFUc4/BuYb4v/xEtkht2JnA==
-X-Google-Smtp-Source: ACHHUZ6FkDf1mZszo/F/op4b4PfzyWqxR/zwCVmySCW6VP4GNg/zqvWZRGF5OdMpO5oqXZ9qEIDoJKf1z4mgA7m5tJE=
-X-Received: by 2002:a6b:f10d:0:b0:783:727b:7073 with SMTP id
- e13-20020a6bf10d000000b00783727b7073mr11630255iog.20.1688418648099; Mon, 03
- Jul 2023 14:10:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688418724; x=1691010724;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c0EoX2DheebN94bt0rFrXPITU8dcwd8m1uYfEeNrV7c=;
+        b=TPzcGV3H/epyID6lFO45pMCWb/JcdYfCqWroGvk7YMu0c3fs0SAcUAPpYwMo3azizj
+         BMBqx71hX1GUmhnLA77QorLRLS1QLP9YxEVteo//JpAxnmBGViEdLbwqR+V8MtIo7Z/8
+         PHdFq3svUIcbUrfSoeHxVyPnUjf4M2wO7+gQ3Id/ahbako56xxDgk6qpMwzDJoPM628r
+         gu1Ur8vee4vVnzO+vY44fQVV8IIza4FJv2C/4/TOGSABvinxddbJbK1dmfSBK/Z4oXE+
+         kPJr5Rtkm9awvsM4n6FsoilJaCoFBaPETUQKZ/CszPo/voGoI+QFq39kkrsp0ArAd6VB
+         Q4bQ==
+X-Gm-Message-State: AC+VfDxt9eiPE5Rz+btnMq0VoVhwOoDFafI7XaBz9ZXvK+wHMMZtDhRP
+        Atx3iXrlRlqHokzsdDuHkMo=
+X-Google-Smtp-Source: ACHHUZ4OqUrXPGmlKw5P+m0ozv+5LfI/SNPwoveeJPyyu2Ucgkj95xvoM5BFIb0YyAE1aRLVqMlivw==
+X-Received: by 2002:a5e:a911:0:b0:77e:3d2f:d1f4 with SMTP id c17-20020a5ea911000000b0077e3d2fd1f4mr11268010iod.15.1688418724252;
+        Mon, 03 Jul 2023 14:12:04 -0700 (PDT)
+Received: from rivendell ([2a01:4f9:c010:5d73::1])
+        by smtp.gmail.com with ESMTPSA id g9-20020a0566380c4900b0042b068d921esm3197911jal.16.2023.07.03.14.12.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 14:12:03 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 23:11:57 +0200
+From:   Enrico Mioso <mrkiko.rs@gmail.com>
+To:     Jan Engelhardt <jengelh@inai.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+Message-ID: <ZKM5nbDnKnFZLOlY@rivendell>
+References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
+ <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr>
 MIME-Version: 1.0
-References: <20230630120433.49529-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230630120433.49529-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB592217C4028606B67B39C6858629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8sXcHP2AYYLLONLLBDVctMb=fnU=D4+6hNoHGx5Dk2O3Q@mail.gmail.com> <OS0PR01MB592285AB361A6C25CEDC21F68629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB592285AB361A6C25CEDC21F68629A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 3 Jul 2023 22:10:21 +0100
-Message-ID: <CA+V-a8tkZ8vbMPqReQ+CixQgHZWBXxzmNdjv1EL9skgaf+Mmvw@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
- RZG2L_GPIO_PORT_PACK() macro
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,121 +88,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+Hi all!!
 
-On Mon, Jul 3, 2023 at 3:13=E2=80=AFPM Biju Das <biju.das.jz@bp.renesas.com=
-> wrote:
->
-> Hi Prabhakar,
->
-> > -----Original Message-----
-> > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
-> > Sent: Monday, July 3, 2023 1:43 PM
-> > To: Biju Das <biju.das.jz@bp.renesas.com>
-> > Cc: Geert Uytterhoeven <geert+renesas@glider.be>; Magnus Damm
-> > <magnus.damm@gmail.com>; Rob Herring <robh+dt@kernel.org>; Krzysztof
-> > Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Linus Walleij
-> > <linus.walleij@linaro.org>; linux-renesas-soc@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-riscv@lists.infradead.org; linux-
-> > kernel@vger.kernel.org; linux-gpio@vger.kernel.org; Prabhakar Mahadev
-> > Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Subject: Re: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
-> > RZG2L_GPIO_PORT_PACK() macro
-> >
-> > Hi Biju,
-> >
-> > Thank you for the review.
-> >
-> > On Mon, Jul 3, 2023 at 12:42=E2=80=AFPM Biju Das <biju.das.jz@bp.renesa=
-s.com>
-> > wrote:
-> > >
-> > > Hi Prabhakar,
-> > >
-> > > Thanks for the patch.
-> > >
-> > > > -----Original Message-----
-> > > > From: Prabhakar <prabhakar.csengg@gmail.com>
-> > > > Sent: Friday, June 30, 2023 1:05 PM
-> > > > To: Geert Uytterhoeven <geert+renesas@glider.be>; Magnus Damm
-> > > > <magnus.damm@gmail.com>
-> > > > Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > > > <krzysztof.kozlowski+dt@linaro.org>; Linus Walleij
-> > > > <linus.walleij@linaro.org>; linux-renesas-soc@vger.kernel.org;
-> > > > devicetree@vger.kernel.org; linux-riscv@lists.infradead.org; linux-
-> > > > kernel@vger.kernel.org; linux-gpio@vger.kernel.org; Biju Das
-> > > > <biju.das.jz@bp.renesas.com>; Prabhakar
-> > > > <prabhakar.csengg@gmail.com>; Prabhakar Mahadev Lad
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > Subject: [RFC PATCH 1/4] pinctrl: renesas: rzg2l: Include pinmap in
-> > > > RZG2L_GPIO_PORT_PACK() macro
-> > > >
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Currently we assume all the port pins are sequential ie always PX_0
-> > > > to PX_n (n=3D1..7) exist, but on RZ/Five SoC we have additional pin=
-s
-> > > > P19_1 to
-> > > > P28_5 which have holes in them, for example only one pin on port19
-> > > > is available and that is P19_1 and not P19_0.
-> > > >
-> > > > So to handle such cases include pinmap for each port which would
-> > > > indicate the pin availability on each port. With this we also get
-> > > > additional pin validation, for example on the RZ/G2L SOC P0 has two
-> > > > pins
-> > > > P0_1 and P0_0 but with DT/SYSFS could use the P0_2-P0_7.
-> > > >
-> > > > While at it, update rzg2l_validate_gpio_pin() to use the port pinma=
-p
-> > > > to validate the gpio pin.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > ---
-> > > >  drivers/pinctrl/renesas/pinctrl-rzg2l.c | 167
-> > > > ++++++++++++------------
-> > > >  1 file changed, 86 insertions(+), 81 deletions(-)
-> > > >
-> > > > diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > > > b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > > > index 9511d920565e..a0c2e585e765 100644
-> > > > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > > > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> > > > @@ -67,10 +67,12 @@
-> > > >                                        PIN_CFG_FILCLKSEL)
-> > > >
-> > > >  /*
-> > > > - * n indicates number of pins in the port, a is the register index
-> > > > - * and f is pin configuration capabilities supported.
-> > > > + * m indicates the bitmap of supported pins, n indicates number
-> > > > + * of pins in the port, a is the register index and f is pin
-> > > > + * configuration capabilities supported.
-> > > >   */
-> > > > -#define RZG2L_GPIO_PORT_PACK(n, a, f)        (((n) << 28) | ((a) <=
-<
-> > 20) |
-> > > > (f))
-> > > > +#define RZG2L_GPIO_PORT_PACK(m, n, a, f)     ((UL(m) << 32) |
-> > (UL(n) << 28)
-> > > > | ((a) << 20) | (f))
-> > >
-> > > I guess, you can still achieve RZG2L_GPIO_PORT_PACK(n, a, f) with
-> > > ((UL(PINMAP(n)) << 32) | (UL(n) << 28) | ((a) << 20) | (f))
-> > >
-> > > #define PINMAP(n) GENMASK(n,0) ?? Then you don't need to modify
-> > rzg2l_gpio_configs.
-> > >
-> > Good point, but this would work if port pins didn't have any holes.
-> > For example on RZ/Five port P19 we have P19_1 pin only and P19_0 is not
-> > available (and similarly for port P25 we have P25_1).
->
-> Maybe introduce a helper macro to address this case.
->
-> #define RZG2L_GPIO_PORT_PACK_WITH_HOLES(m, n, a, f) for these 2 cases
->
-> and use RZG2L_GPIO_PORT_PACK(n, a, f) for the one without holes.
->
-Agreed will do.
+I think the rndis_host USB driver might emit a warning in the dmesg, but disabling the driver wouldn't be a good idea.
+The TP-Link MR6400 V1 LTE modem and also some ZTE modems integrated in routers do use this protocol.
 
-Cheers,
-Prabhakar
+We may also distinguish between these cases and devices you might plug in - as they pose different risk levels.
+
+Enrico
