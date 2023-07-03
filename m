@@ -2,147 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1D8745CFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175FC745D01
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbjGCNVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S231418AbjGCNWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjGCNVC (ORCPT
+        with ESMTP id S231214AbjGCNV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:21:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AA81B5
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688390417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SxGJA6rkwn8pNlDZg9LvOInkCnegg1nUaKU0FcN4qDA=;
-        b=W2VEo/4e+b2LaocoHHHjAqloULnOIY40PSQ9BjEGK8jzuTYWs7jZc1uLdeReOLlJrdpFgd
-        vPAM7OcIaV8YwO8Xq6E/rEURb0gn/+CylihegJPTf6rBt80x4dUsRWIgUd6ZAJ8gaIAMWl
-        /igEdZV+oqZzkYk8OUuOCjz/R/4Ya7A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-FsgX71PKNtKDEEGBYxKSng-1; Mon, 03 Jul 2023 09:20:16 -0400
-X-MC-Unique: FsgX71PKNtKDEEGBYxKSng-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4BB40858EED;
-        Mon,  3 Jul 2023 13:20:16 +0000 (UTC)
-Received: from fedora (unknown [10.22.8.203])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 7648B4CD0C6;
-        Mon,  3 Jul 2023 13:20:04 +0000 (UTC)
-Date:   Mon, 3 Jul 2023 10:20:03 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        bigeasy@linutronix.de, juri.lelli@redhat.com
-Subject: Re: Splat in kernel RT while processing incoming network packets
-Message-ID: <5fq2oq6naaus3r5ppuktjdvkluovqbgf3fh4goww3sfz2dajvw@eiymjk53pqji>
-References: <bkw2aao62e3ppg7332dbhycgzdwr7k5brezj3bcij6zewphmnd@eigmbvjh6wuu>
+        Mon, 3 Jul 2023 09:21:58 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCC0E3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:21:57 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b6994a8ce3so65304731fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688390515; x=1690982515;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tinG0/XqkHHzI3FCP2o6G+zrStuwejYrOQFggB4/KKI=;
+        b=Akv376SiheqT7/HD212s99wJLv9JXMTr9kmlGBpWnI4y8zKrM2IHTYMQIj3nB2iNhK
+         VBSi/XV1bivCL1R1B9yFgxz2ShMDnaySOMEIwphtfvcBnY/hbhodRtGxpErpQgytv9kh
+         lqs/Lc1VGxRR/s/Tr8nnNsoiPfpP4v88P++WA955l79d2vhnLm2tGUofBe7uGlntf/Ul
+         xzyk42q7Uk/yLiUKZGwgCzOJFOINeaMdCbqOJC1lhohTZ8vfoRHmDUMez/ZiHxBzEYjQ
+         6Yrd0JyCXg2SB/6bLJKa/iAWUtVxf9qr4QDktVY15KbKymPXL6cN15pJ1/aKDmthWE1r
+         HI1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688390515; x=1690982515;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tinG0/XqkHHzI3FCP2o6G+zrStuwejYrOQFggB4/KKI=;
+        b=Xe4Ek36iDt26V3vv52zCKobd30VbVGkowgwaSsIsBcmvUbpQeRffBYKpczV/HTEg4Y
+         HHOX/acvgZxymdXVBSm83AZjh4ggSKpxkPEJWe4pqylH3/1hGgJsOqr0vfUMcxnlEIni
+         D9U9aTFEUqidafBw+g6Iw/pX0rfTHxpA7lrV8XuHRl6JJ9KfhzMZp52TJl+l1Tq1UnVC
+         Uc08BoyHMU4ZwAd0+tHIrK2Yy6EFkoIHc02lNlIPSfvrlLvUt1RrE/lBKlNzbK3jyMBE
+         omKAJnc+cdc/1RO5Bk3J+NaBfq/iCISBG1WwiVtKRhkRLNoIuQWLqXdMfxQXM2GkN4MF
+         zkfA==
+X-Gm-Message-State: ABy/qLZ238WDkvgLNGeazXlWP3cng5kkfqyM4S2WI6KwSW4aMeo9E7PR
+        ts1ZfxCyb2An59uQuCfCA/Ev0w==
+X-Google-Smtp-Source: APBJJlHyfemJUeV2FAvERXLUeaCPUSlvq4XuIXhD6FBKsVkUD/9X+Reh8IAmeeY48HFE1sybjSdCQA==
+X-Received: by 2002:a2e:90c7:0:b0:2b6:cf5e:5da0 with SMTP id o7-20020a2e90c7000000b002b6cf5e5da0mr5791563ljg.40.1688390515464;
+        Mon, 03 Jul 2023 06:21:55 -0700 (PDT)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id u10-20020a2e9f0a000000b002b6b7a98c4bsm3535238ljk.77.2023.07.03.06.21.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 06:21:54 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v3 0/4] Fix up the boe-tv101wum-nl6 panel driver
+Date:   Mon, 03 Jul 2023 15:21:48 +0200
+Message-Id: <20230703-fix-boe-tv101wum-nl6-v3-0-bd6e9432c755@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bkw2aao62e3ppg7332dbhycgzdwr7k5brezj3bcij6zewphmnd@eigmbvjh6wuu>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGzLomQC/42NzQ6CMBAGX4X07Jq2lB89+R7GwxYWaAKtabFqC
+ O9u4eZJj7Obb2ZhgbyhwM7ZwjxFE4yzCfJDxpoBbU9g2sRMcpnzUhTQmRdoRzBHwcXzMYEdSyg
+ R8w61lFoplqYaA4H2aJthG08YZvLb4+4pCfbe9ZZ4MGF2/r3no9iuP0pRAIcam7yqFS86XV1GY
+ 9G7o/M924xR/mORyaKKqq2oIVWc+JdlXdcP7DD+LBgBAAA=
+To:     Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 09:47:26AM -0300, Wander Lairson Costa wrote:
-> Dear all,
-> 
-> I am writing to report a splat issue we encountered while running the
-> Real-Time (RT) kernel in conjunction with Network RPS (Receive Packet
-> Steering).
-> 
-> During some testing of the RT kernel version 6.4.0 with Network RPS enabled,
-> we observed a splat occurring in the SoftIRQ subsystem. The splat message is as
-> follows:
-> 
-> [   37.168920] ------------[ cut here ]------------
-> [   37.168925] WARNING: CPU: 0 PID: 0 at kernel/softirq.c:291 do_softirq_post_smp_call_flush+0x2d/0x60
-> [   37.168935] Modules linked in: xt_conntrack(E) ...
-> [   37.168976] Unloaded tainted modules: intel_cstate(E):4 intel_uncore(E):3
-> [   37.168994] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G            E     -------  ---  6.4.0-0.rc2.23.test.eln127.x86_64+rt #1
-> [   37.168996] Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0+14757+c25ee005 04/01/2014
-> [   37.168998] RIP: 0010:do_softirq_post_smp_call_flush+0x2d/0x60
-> [   37.169001] Code: 00 0f 1f 44 00 00 53 89 fb 48 c7 c7 f7 98 be 96 e8 d8 97 d2 00 65 66 8b 05 f8 36 ...
-> [   37.169002] RSP: 0018:ffffffff97403eb0 EFLAGS: 00010002
-> [   37.169004] RAX: 0000000000000008 RBX: 0000000000000000 RCX: 0000000000000003
-> [   37.169005] RDX: ffff992db7a34840 RSI: ffffffff96be98f7 RDI: ffffffff96bc23d8
-> [   37.169006] RBP: ffffffff97410000 R08: ffff992db7a34840 R09: ffff992c87f8dbc0
-> [   37.169007] R10: 00000000fffbfc67 R11: 0000000000000018 R12: 0000000000000000
-> [   37.169008] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [   37.169011] FS:  0000000000000000(0000) GS:ffff992db7a00000(0000) knlGS:0000000000000000
-> [   37.169013] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   37.169014] CR2: 00007f028b8da3f8 CR3: 0000000118f44001 CR4: 0000000000370eb0
-> [   37.169015] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   37.169015] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   37.169016] Call Trace:
-> [   37.169018]  <TASK>
-> [   37.169020]  flush_smp_call_function_queue+0x78/0x80
-> [   37.169026]  do_idle+0xb2/0xd0
-> [   37.169030]  cpu_startup_entry+0x1d/0x20
-> [   37.169032]  rest_init+0xd1/0xe0
-> [   37.169037]  arch_call_rest_init+0xe/0x30
-> [   37.169044]  start_kernel+0x342/0x420
-> [   37.169046]  x86_64_start_reservations+0x18/0x30
-> [   37.169051]  x86_64_start_kernel+0x96/0xa0
-> [   37.169054]  secondary_startup_64_no_verify+0x10b/0x10b
-> [   37.169059]  </TASK>
-> [   37.169060] ---[ end trace 0000000000000000 ]---
-> 
-> It comes from [1].
-> 
-> The issue lies in the mechanism of RPS to defer network packets processing to
-> other CPUs. It sends an IPI to the to the target CPU. The registered callback
-> is rps_trigger_softirq, which will raise a softirq, leading to the following
-> scenario:
-> 
-> CPU0                                    CPU1
-> | netif_rx()                            |
-> | | enqueue_to_backlog(cpu=1)           |
-> | | | net_rps_send_ipi()                |
-> |                                       | flush_smp_call_function_queue()
-> |                                       | | was_pending = local_softirq_pending()
-> |                                       | | __flush_smp_call_function_queue()
-> |                                       | | rps_trigger_softirq()
-> |                                       | | | __raise_softirq_irqoff()
-> |                                       | | do_softirq_post_smp_call_flush()
-> 
-> That has the undesired side effect of raising a softirq in a function call,
-> leading to the aforementioned splat.
-> 
-> The kernel version is kernel-ark [1], os-build-rt branch. It is essentially the
+This is two patches fixing things I would normally complain about
+in reviews, but alas I missed this one, so I go in and fix it up
+myself.
 
-Correction: kernel-ark [2]
+Discovering that a completely unrelated driver has been merged
+into this panel driver I had to bite the bullet and break it out.
+I am pretty suspicious of the other recently added panel as well.
 
-> upstream kernel with the PREEMPT_RT patches, and with RHEL configs. I can
-> provide the .config.
-> 
-> The only solution I imagined so far was to modify RPS to process packtes in a
-> kernel thread in RT. But I wonder how would be that be different than processing
-> them in ksoftirqd.
-> 
-> Any inputs on the issue?
-> 
-> [1] https://elixir.bootlin.com/linux/latest/source/kernel/softirq.c#L306
-> 
+I am surprised that contributors from manufacturers do not seem
+to have datasheets for the display controllers embedded in the
+panels of their products. Can you take a second look?
 
-[2] https://gitlab.com/cki-project/kernel-ark
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Changes in v3:
+- Rebase on drm-misc-next
+- Convert the two newly added Starry panels as well.
+- Break out the obvious ILI9882t-based panel into its own driver.
+- Link to v2: https://lore.kernel.org/r/20230615-fix-boe-tv101wum-nl6-v2-0-457d7ece4590@linaro.org
 
-> Cheers,
-> Wander
-> 
+Changes in v2:
+- Fix a missed static keyword
+- Link to v1: https://lore.kernel.org/r/20230615-fix-boe-tv101wum-nl6-v1-0-8ac378405fb7@linaro.org
+
+---
+Linus Walleij (4):
+      drm/panel: boe-tv101wum-nl6: Drop macros and open code sequences
+      drm/panel: boe-tv101wum-nl6: Drop surplus prepare tracking
+      drm/panel: ili9882t: Break out as separate driver
+      drm/panel: ili9882t: Break out function for switching page
+
+ drivers/gpu/drm/panel/Kconfig                  |    9 +
+ drivers/gpu/drm/panel/Makefile                 |    1 +
+ drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 3037 ++++++++++--------------
+ drivers/gpu/drm/panel/panel-ilitek-ili9882t.c  |  759 ++++++
+ 4 files changed, 2067 insertions(+), 1739 deletions(-)
+---
+base-commit: 14806c6415820b1c4bc317655c40784d050a2edb
+change-id: 20230615-fix-boe-tv101wum-nl6-6aa3fab22b44
+
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
 
