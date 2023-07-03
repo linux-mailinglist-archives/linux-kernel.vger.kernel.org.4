@@ -2,155 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F2874583A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB65745837
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjGCJSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S230348AbjGCJSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjGCJSs (ORCPT
+        with ESMTP id S230112AbjGCJSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:18:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55EEE59
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688375848;
+        Mon, 3 Jul 2023 05:18:08 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DB4E67;
+        Mon,  3 Jul 2023 02:17:51 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QvgLZ490vz9sqJ;
+        Mon,  3 Jul 2023 11:17:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1688375862;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8HHzoJ5KB9PwbED6aCUVdjiUMf88jiN+uGVsp2SPg0Q=;
-        b=YhE5YIJWqQoVibT2E5sLiY/bJUD20zm5gC9Y7Ub2+bWowLeFfkCak/+SZy3boG/fxgLQYI
-        riSYSzJPUMkt0Z2RdIOrrgh7kc1rpgm9Cd0fzo8HFUCnDYJp2YgVUGKLCGGtqWLfEV18Ca
-        fyne6u5mcbWLtDIxDBZ6wOOII+ZpV6o=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-uVTD_1aKMI6GYzMOrsU7ZA-1; Mon, 03 Jul 2023 05:17:26 -0400
-X-MC-Unique: uVTD_1aKMI6GYzMOrsU7ZA-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b7f0264306so39262795ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:17:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688375845; x=1690967845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8HHzoJ5KB9PwbED6aCUVdjiUMf88jiN+uGVsp2SPg0Q=;
-        b=S6iUG1ZKVQgVzUyW1NG/WOeDJqfKmz+7T1bKvlQwOtR6CaTybhj91xqD+GcOpDWU/t
-         +ZgG9avEJ0E8twcIMYHaxg148ZD8ZHnf6anxT10Q/IXMGxr6Cy/2Z8/Q4dHHLgpGcwty
-         gle0A86EwjFvuEQxBuANfn04XPiYYSEBzdyvWZewf2NrnozOhTvimmD27D1iIgL+9zuV
-         K9EK9qA9YDaYsmLfFL/2ilK7jbwg3f8IWkZ74KOpeuxjAk5XB6evJ0oOxTyIVfPuduQX
-         nCKc4i+VBuotk24vCnP1vLY7m90vWNEQbSSaaW0oPwuU5RoVtGYYctq+sqCoWas8uPFW
-         9pIA==
-X-Gm-Message-State: ABy/qLZ5oWPUu3ue+DWNHL5tjG/K/nD5EojY9EHFqNs0cBI90A+GsBTg
-        lEILG7ZuUu4DJWlR/1JED3swZfD0jLis5NFQN0YOOr3bN/GZlH7j7mKm6v9KhCkDUurCoQLjIG7
-        JPx8nDQZR9E7oqDFd/0BRQ14TNBoiaAIBp5sT5F3u
-X-Received: by 2002:a17:903:22ce:b0:1b8:9b90:e2bc with SMTP id y14-20020a17090322ce00b001b89b90e2bcmr914059plg.52.1688375845568;
-        Mon, 03 Jul 2023 02:17:25 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFvcAIY9KsHTFSp2HQjjW2SLm2ABVtM2SXsV/67vEEWu50uv1ZaslAjF6b7RfDyYT6a4Pk8632wNdrsXX5WZ/w=
-X-Received: by 2002:a17:903:22ce:b0:1b8:9b90:e2bc with SMTP id
- y14-20020a17090322ce00b001b89b90e2bcmr914045plg.52.1688375845264; Mon, 03 Jul
- 2023 02:17:25 -0700 (PDT)
+        bh=wzL5L1lBY5rqvf78gNGZQXkCiKNDPWm58F8aOJ0dj7I=;
+        b=G0ywYUvJ5zFc39jBJU87AUoesBe8B95rVsm9BKiVgv+kPdQO/Ep9vKlEOKYnlQnH/UYifx
+        twGWoW8qkjEYbiQEg1riRhCP85B/BW/XuyAlMMf9nLprqZD+B+hxCRnNcJgfP6bCi/Ev50
+        iShVRoQxQZ3LF0Jnxl277TobXcWIOhyLhL7dJ3F60jENETfxIkaNLnN7vVtjkLpEAEloCs
+        nchnT5/G3+XyrSTUGFsDx6nSbcArbr06pX1eLKJliPorsBMKYlmujMFi8o7mihP2rv8wob
+        tIEiq6uZyKMbAjZujN4L0h6iDcWRlLTIb7ak1O3cwHiHCnQ4DZdKLfAAt2A4bQ==
+References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
+ <20230702-pll-mipi_set_rate_parent-v3-6-46dcb8aa9cbc@oltmanns.dev>
+ <b7gnap57aajkbhbbcbgallvqjdc7nzppjjwnancgmm5ibmhdaq@cftau72qyjdu>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Roman Beranek <me@crly.cz>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 6/8] clk: sunxi-ng: mux: Support finding closest rate
+In-reply-to: <b7gnap57aajkbhbbcbgallvqjdc7nzppjjwnancgmm5ibmhdaq@cftau72qyjdu>
+Date:   Mon, 03 Jul 2023 11:17:24 +0200
+Message-ID: <87fs65s6aj.fsf@oltmanns.dev>
 MIME-Version: 1.0
-References: <cover.1688073459.git.drv@mailo.com>
-In-Reply-To: <cover.1688073459.git.drv@mailo.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Mon, 3 Jul 2023 11:17:13 +0200
-Message-ID: <CAHc6FU5WZafgAutKpVRC1jPMNpGCh+M_i+tmCZw0dGCBUXe1ug@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] gfs2: kmap{_atomic} conversion to kmap_local_{page/folio}
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Bob Peterson <rpeterso@redhat.com>, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Deepak,
 
-On Thu, Jun 29, 2023 at 11:48=E2=80=AFPM Deepak R Varma <drv@mailo.com> wro=
-te:
-> This patch series proposes to replace the kmap/kmap_atomic implementation=
- to the
-> preferred kmap_local_* APIs.
+On 2023-07-03 at 09:38:48 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+> [[PGP Signed Part:Undecided]]
+> On Sun, Jul 02, 2023 at 07:55:25PM +0200, Frank Oltmanns wrote:
+>> When finding the best rate for a mux clock, consider rates that are
+>> higher than the requested rate by introducing a new clk_ops structure
+>> that uses the existing __clk_mux_determine_rate_closest function.
+>> Furthermore introduce an initialization macro that uses this new
+>> structure.
+>>
+>> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+>> ---
+>>  drivers/clk/sunxi-ng/ccu_mux.c | 13 +++++++++++++
+>>  drivers/clk/sunxi-ng/ccu_mux.h | 17 +++++++++++++++++
+>>  2 files changed, 30 insertions(+)
+>>
+>> diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mux.c
+>> index 8594d6a4addd..49a592bdeacf 100644
+>> --- a/drivers/clk/sunxi-ng/ccu_mux.c
+>> +++ b/drivers/clk/sunxi-ng/ccu_mux.c
+>> @@ -264,6 +264,19 @@ static unsigned long ccu_mux_recalc_rate(struct clk_hw *hw,
+>>  					   parent_rate);
+>>  }
+>>
+>> +const struct clk_ops ccu_mux_closest_ops = {
+>> +	.disable	= ccu_mux_disable,
+>> +	.enable		= ccu_mux_enable,
+>> +	.is_enabled	= ccu_mux_is_enabled,
+>> +
+>> +	.get_parent	= ccu_mux_get_parent,
+>> +	.set_parent	= ccu_mux_set_parent,
+>> +
+>> +	.determine_rate	= __clk_mux_determine_rate_closest,
+>> +	.recalc_rate	= ccu_mux_recalc_rate,
+>> +};
+>> +EXPORT_SYMBOL_NS_GPL(ccu_mux_closest_ops, SUNXI_CCU);
+>> +
 >
-> The code blocks for this module where kmap/kmap_atomic calls are implemen=
-ted do
-> not appear to depend on disabling page-faults or preemption. Hence such c=
-ode
-> blocks are safe for converting to improved kmap_local_{page,folio} APIs.
+> This is also a bit inconsistent with the other clocks: most (all?) of
+> them will simply handle this through a flag, but this one requires a new
+> set of clk_ops as well?
 >
-> Note: The proposed patches are build tested only.
+> I think we should create our own wrapper here around
+> __clk_mux_determine_rate and either call
+> __clk_mux_determine_rate_closest or __clk_mux_determine_rate depending
+> on the state of the flags, or call __clk_mux_determine_rate_flags with
+> the proper flags set for our clock.
 >
-> Initially, only a single patch was sent and now being converted into a pa=
-tch
-> series including the other files/functions of this module. Hence all patc=
-hes,
-> that are included for the first time in this series are also marked as v3=
-.
+> The former is probably slightly simpler.
+
+Ok, I will address that in v4.
+
 >
-> Changes in v3:
->    - Patch set introduced to include all gfs2 kmap conversions
->    - Patches 3/6 through 6/6 are included to build the series
->    - Initial stand-alone patch split into 2 patches [1/6 and 2/6]
+>>  const struct clk_ops ccu_mux_ops = {
+>>  	.disable	= ccu_mux_disable,
+>>  	.enable		= ccu_mux_enable,
+>> diff --git a/drivers/clk/sunxi-ng/ccu_mux.h b/drivers/clk/sunxi-ng/ccu_mux.h
+>> index 2c1811a445b0..c4ee14e43719 100644
+>> --- a/drivers/clk/sunxi-ng/ccu_mux.h
+>> +++ b/drivers/clk/sunxi-ng/ccu_mux.h
+>> @@ -46,6 +46,22 @@ struct ccu_mux {
+>>  	struct ccu_common	common;
+>>  };
+>>
+>> +#define SUNXI_CCU_MUX_TABLE_WITH_GATE_CLOSEST(_struct, _name, _parents, _table,	\
+>> +				     _reg, _shift, _width, _gate,	\
+>> +				     _flags)				\
+>> +	struct ccu_mux _struct = {					\
+>> +		.enable	= _gate,					\
+>> +		.mux	= _SUNXI_CCU_MUX_TABLE(_shift, _width, _table),	\
+>> +		.common	= {						\
+>> +			.reg		= _reg,				\
+>> +			.hw.init	= CLK_HW_INIT_PARENTS(_name,	\
+>> +							      _parents, \
+>> +							      &ccu_mux_closest_ops, \
+>> +							      _flags),	\
+>> +			.features	= CCU_FEATURE_CLOSEST_RATE,	\
+>> +		}							\
+>> +	}
+>> +
+>
+> I'm fine with that one, but like we discussed on the NM (I think?) patch
+> already, this creates some clocks and macros that will use the feature
+> as a flag, and some will encode it into their name.
+>
+> Given that we need it here too, I'm really inclined to prefer what you
+> did there, and thus create a new macro for pll-video0 instead of
+> modifying the existing one.
 
-I have already merged version 2 of this patch series and I've fixed up
-the remaining issues in follow-up patches; see the cluster-devel
-mailing list:
-
-https://listman.redhat.com/archives/cluster-devel/2023-June/024391.html
-https://listman.redhat.com/archives/cluster-devel/2023-June/024392.html
-https://listman.redhat.com/archives/cluster-devel/2023-June/024393.html
-
-As well as our for-next branch:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/log/?h=
-=3Dfor-next
-
-As far as I can see, there is nothing in v3 of your patches that I
-haven't addressed already. Please speak out if I've missed anything.
+Ok. Just to be clear: What I did in this patch is fine and I should use
+the same approach for NM. Did I get that right?
 
 Thanks,
-Andreas
+  Frank
 
-
 >
-> Changes in v2:
->    - 3/6 to 6/6: None.
->    - 1/6 + 2/6: Correct patch description for the replacement function na=
-me from
->      kmap_local_folio to kmap_local_page
+> Maxime
 >
-> Deepak R Varma (6):
->   gfs2: Replace kmap_atomic() by kmap_local_page() in stuffed_readpage
->   gfs2: Replace kmap_atomic()+memcpy by memcpy_from_page()
->   gfs2: Replace kmap() by kmap_local_page() in gfs2_unstuffer_page
->   gfs2: Replace kmap_atomic() by kmap_local_page() in lops.c
->   gfs2: Replace kmap() by kmap_local_page() in gfs2_read_super
->   gfs2: Replace kmap_atomic() by kmap_local_page() in
->     gfs2_write_buf_to_page
->
->  fs/gfs2/aops.c       | 13 ++++++-------
->  fs/gfs2/bmap.c       |  4 ++--
->  fs/gfs2/lops.c       | 12 ++++++------
->  fs/gfs2/ops_fstype.c |  4 ++--
->  fs/gfs2/quota.c      |  4 ++--
->  5 files changed, 18 insertions(+), 19 deletions(-)
->
-> --
-> 2.34.1
->
->
->
-
+> [[End of PGP Signed Part]]
