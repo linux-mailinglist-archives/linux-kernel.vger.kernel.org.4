@@ -2,105 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE71F7455EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA75E7455F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjGCHYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
+        id S230334AbjGCHYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjGCHYU (ORCPT
+        with ESMTP id S230331AbjGCHYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:24:20 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1E0CC;
-        Mon,  3 Jul 2023 00:24:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so4581268a12.0;
-        Mon, 03 Jul 2023 00:24:19 -0700 (PDT)
+        Mon, 3 Jul 2023 03:24:35 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E14CE60
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:24:30 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbc244d386so42542385e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688369058; x=1690961058;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YMYA768Yuc+e863XYjfb4koFTu7nhhp3H7iOM5oxBd8=;
-        b=AWfclo1YRw8mHr1mBcQa6Al7/lD8qj8v4Tgi6fnK89pioGVIlQ60ccHh5jMJNntOCA
-         NnpGoMFZc6MXgHx1tehi4WvvVHBzemLSIUxOxdugmro6IaW4e3LFOZx3cQ4orgtunyJc
-         efY5RcAWN0ig2r7V4K4SjstqTNR5Kr9fa/JUxBz19Vo21EYXqKwmmFUtHMbcZi6UKJM4
-         eHWRfftpFaCbQiYIrvSezQkFtpB/Y2Q59+cpkRUI4grdA1RrMNt9gzOqBy7tOEdM2vlP
-         dO15+StPxy3lyKdjQc3vSBfsvvwmpA2iD2KnSmwoGU0IzT+Co2/GD+XPoKB0RQE8Q8Sn
-         GJRg==
+        d=linaro.org; s=google; t=1688369068; x=1690961068;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=KgMnJ8CKfBislhp1HG0z8FmS5BLcV5+cmaj4jvnhxWQ=;
+        b=lKrkHVcsQngHENPpMshxYINgAv/o3G4zjF9clGaCwoFrRmttkUWr4CBrogdvxNzMS3
+         VBP86BoCy3AKClMFDF9HKPnJtmGpdmiipRLgTXgdGNS4e85wXCTHXgQTmURXCy5fNf5m
+         LxexEPRA7cwPlrcsXz+F1rXEQI1sP8laktduTFkvWEbrgg/jMuTHCuPebIqG1ozPUTdZ
+         IUYsdmpolDS8JvoAktsNi9dCycog7boyCBWaDP3PYwLu4lolTKdY5ehvy7aTMVfkLHfK
+         R07BeDK6M+Dv1Kr+KwncWpguMs+6Gv792dGNu4Jf1DKoHce2DPoWYH74hji1yCmqMA4W
+         sEMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688369058; x=1690961058;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688369068; x=1690961068;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YMYA768Yuc+e863XYjfb4koFTu7nhhp3H7iOM5oxBd8=;
-        b=CtDPcQQWJ6dIxE9vOWjZy/Gi0lpWy1LXQewk7LuJLUJpk0nAcbqauouWg1ppnvXTJ6
-         VpF+tWoGDdIy1znAIv+w/5PH9s8bKYd3z65yXS2s2YUW1CYCUAlP07JaVF3fVrqlnVT7
-         tny5slzTK6HNyhlHcmZl3hkI7puujidZlcYhNzNo9vy8Tewidl8Ars5DvRGBoP+ESbsx
-         rH0wfHssttl52e0YTbD8gyoDGnzj7Z2IRs5XalImMpejF6A3t3T7H3nknJx7W6PhDrAs
-         utJq/wh/MmsOFEvCB7ohMJTmpOpatVsczf3rH5W7TAcrJcRhf2ybtrMISg5GrogWe9RG
-         hxuw==
-X-Gm-Message-State: ABy/qLaC470NMCr8v9ka4yAaqCiNFJGPtBLSNpKF30Qr7gf8CpIFihtq
-        uxLfqGd8nrA7HBpCfQLsSUlbps1eitcBWDMLxMg=
-X-Google-Smtp-Source: APBJJlHDxu4653ZbuqiolCCAbs5HQRJeGVyhSAZ7vj84ypDu66Lq3AzthAyfxRrPKN2IAwfrFPOLHG/gBI/eS/a5Cf0=
-X-Received: by 2002:a05:6402:14cb:b0:51d:d16f:7e52 with SMTP id
- f11-20020a05640214cb00b0051dd16f7e52mr6090296edx.29.1688369057919; Mon, 03
- Jul 2023 00:24:17 -0700 (PDT)
+        bh=KgMnJ8CKfBislhp1HG0z8FmS5BLcV5+cmaj4jvnhxWQ=;
+        b=Veig5nly59NEFLPURP1eCvKwwVWYJGYU3OczAAMIwhEedXKNJQNNu3/81b2gDWTQjG
+         5SlA+jFQNXNF33tIvjlHLzk0h5wtV/BE2S9t4XdYanLZGqPJK9zuP8W8/kgRl1p22/BW
+         WCZvesMuUApQb25nJ0G8tzPIO/RYyyHtO891ppxlwcqjYA3GeCace/3TO7IizmXNQCtU
+         TCZ9NTr1cElIqZ6cBv0Rv398Pg62rj8ffsMJphBGJ4dcwPL2imQIAMNiFo3neBFST4gl
+         yNbbGfizZDNHQpp4lDFYYK6lLr4z7Iv25wPLdha+F3uvCI9N7FoAsJtEuFgbaneo1LBa
+         pugA==
+X-Gm-Message-State: ABy/qLbUToKoHV3TLLxasGK8pCCJ8QvWYalQCzyttzcm1hHPhFeaV3BG
+        H1kect9/SrRIIoobYlWBWlBk2w==
+X-Google-Smtp-Source: APBJJlErVoF0iApuPq86HVOvO0iLKPOR8uT2faeOcndYld3NEwBM2GZKbdz/+srhnFDYERI4fgA7tQ==
+X-Received: by 2002:a5d:6349:0:b0:313:e48a:d173 with SMTP id b9-20020a5d6349000000b00313e48ad173mr6657516wrw.68.1688369068512;
+        Mon, 03 Jul 2023 00:24:28 -0700 (PDT)
+Received: from [192.168.7.21] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id u11-20020adfdd4b000000b003143765e207sm1899030wrm.49.2023.07.03.00.24.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 00:24:27 -0700 (PDT)
+Message-ID: <65d78d07-be4f-8ea0-b322-353b5c23fcb0@linaro.org>
+Date:   Mon, 3 Jul 2023 09:24:23 +0200
 MIME-Version: 1.0
-References: <20230702133113.3438049-1-trix@redhat.com>
-In-Reply-To: <20230702133113.3438049-1-trix@redhat.com>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Mon, 3 Jul 2023 15:24:01 +0800
-Message-ID: <CAJhJPsVWQLD_OeL9E0i0e6hdt5i_TPMkvh5u_+u4e9xUbHxFcQ@mail.gmail.com>
-Subject: Re: [PATCH] clocksource/drivers/loongson1: set variable
- ls1x_timer_lock storage-class-specifier to static
-To:     Tom Rix <trix@redhat.com>
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v6 5/9] drm/meson: gate px_clk when setting rate
+Content-Language: en-US
+To:     George Stark <gnstark@sberdevices.ru>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Nicolas Belin <nbelin@baylibre.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-0-fd2ac9845472@linaro.org>
+ <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-5-fd2ac9845472@linaro.org>
+ <c487ed03-0ab2-74fb-91bc-4a773bfdfc5b@sberdevices.ru>
+Organization: Linaro Developer Services
+In-Reply-To: <c487ed03-0ab2-74fb-91bc-4a773bfdfc5b@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> smatch reports
-> drivers/clocksource/timer-loongson1-pwm.c:31:1: warning: symbol
->   'ls1x_timer_lock' was not declared. Should it be static?
->
-> This variable is only used in its defining file, so it should be static.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On 30/06/2023 20:10, George Stark wrote:
+> Hello Neil
+> 
+> On 6/30/23 19:29, Neil Armstrong wrote:
+>> Disable the px_clk when setting the rate to recover a fully
+>> configured and correctly reset VCLK clock tree after the rate
+>> is set.
+>>
+>> Fixes: 77d9e1e6b846 ("drm/meson: add support for MIPI-DSI transceiver")
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+>> index 57447abf1a29..dc63d2d813a9 100644
+>> --- a/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+>> +++ b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+>> @@ -94,6 +94,7 @@ static int dw_mipi_dsi_phy_init(void *priv_data)
+>>           return ret;
+>>       }
+>> +    clk_disable_unprepare(mipi_dsi->px_clk);
+>>       ret = clk_set_rate(mipi_dsi->px_clk, mipi_dsi->mode->clock * 1000);
+>>       if (ret) {
+>> @@ -102,6 +103,12 @@ static int dw_mipi_dsi_phy_init(void *priv_data)
+>>           return ret;
+>>       }
+>> +    clk_prepare_enable(mipi_dsi->px_clk);
+> probably should be:
+> ret = clk_prepare_enable(mipi_dsi->px_clk);
 
-Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
+Indeed, thx for noticing :-)
 
-> ---
->  drivers/clocksource/timer-loongson1-pwm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
-> index 6335fee03017..244d66835508 100644
-> --- a/drivers/clocksource/timer-loongson1-pwm.c
-> +++ b/drivers/clocksource/timer-loongson1-pwm.c
-> @@ -28,7 +28,7 @@
->
->  #define CNTR_WIDTH             24
->
-> -DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
-> +static DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
->
->  struct ls1x_clocksource {
->         void __iomem *reg_base;
-> --
-> 2.27.0
->
+>> +    if (ret) {
+>> +        dev_err(mipi_dsi->dev, "Failed to enable DSI Pixel clock (ret %d)\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>>       switch (mipi_dsi->dsi_device->format) {
+>>       case MIPI_DSI_FMT_RGB888:
+>>           dpi_data_format = DPI_COLOR_24BIT;
+>>
 
-
---
-Best regards,
-
-Keguang Zhang
