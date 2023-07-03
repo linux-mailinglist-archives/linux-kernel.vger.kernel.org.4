@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA7C745563
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C26745560
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjGCGUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
+        id S230072AbjGCGT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjGCGUA (ORCPT
+        with ESMTP id S229844AbjGCGT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:20:00 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E7FC0
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:19:58 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fa9850bfebso41188535e9.1
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 23:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688365197; x=1690957197;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kIA8PGEOYws0vmVhO9ZbwpnpL5VKVZvMUon+9TyoBpI=;
-        b=G28N59EBqbA1TV1NU1uC3s8kAkrfBErBxvNr2G/qFOJK2E54h05y0DRcJ3xxoCztG5
-         Q4N40aSZk/g5pXFRQHkarqTf4DZs3X7wL2345oNsjJH8e53OJ5sF9P5cxapjmofvL/Nj
-         f29CR6105WEeo2//RW2Wyl/EBUDrrHlyi595e6w8n4k3iJKtcaR3Uig2Hd6M0fmL2bu8
-         g1wKa1TYVRHxyQK6y3Qg3wZ4U8ZVlgzWFXA2tziamptWb9hzjqWbmdRkp1+Fm4IbJEmC
-         DzFIBJkfaQqpbGENW26FK3KbR1seicOuBAdwtZlcC6ArQjIvmaMnv61m73QIJDzv/ybA
-         hRVg==
+        Mon, 3 Jul 2023 02:19:56 -0400
+Received: from mail-pg1-f207.google.com (mail-pg1-f207.google.com [209.85.215.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97CEBF
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:19:54 -0700 (PDT)
+Received: by mail-pg1-f207.google.com with SMTP id 41be03b00d2f7-528ab71c95cso3742887a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 23:19:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688365197; x=1690957197;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kIA8PGEOYws0vmVhO9ZbwpnpL5VKVZvMUon+9TyoBpI=;
-        b=XY7c4oCpEgvSK9jur2S3cpQ+UJRRyIE1ZR16T+MRWC9m6GhbSvNrK5BtQCVEIK9SUR
-         h5oeDsZGAuwV8NJnIfpmkAWEbg1343x1gjaFApuBNqDlYRUIjYTRa0jzuRlDQTROivvT
-         tj6Jsz7wXIeEpeyyc4hzt18g7NSljaBB3vHWyJq56tZXNiMUiukBS+Mzvkffo9dpOiu9
-         2A471PXRsqzSd2YE8rcLcRDuUyCZEAHA+Yvlzo7bOEBf8chN28sZrjV7m5X8lkZBMYt8
-         Vy0kHEskFC//sFw8awqqNagZ8aA+4YwS/T1uWRHX1XZBTR7EOFv7uYdMDgHtNnfRYhFI
-         rbdg==
-X-Gm-Message-State: ABy/qLZvLZMOggaT6nEpqfoyLFn0wIk4SwkusZCayHiilb4SHQcbs0gi
-        weNj1TCrDzwZNWUwasUoP8z4ztiFXBbdWH46BBOzEQ==
-X-Google-Smtp-Source: APBJJlEGTc+phyaAeTPWFFONu5TUwojxZNGJBdfvyl86jwAZEp9blrmCMJKrpwCX7fYL9Do4AqX75KbcPMfQRU1K8RM=
-X-Received: by 2002:adf:cc81:0:b0:314:d19:fc31 with SMTP id
- p1-20020adfcc81000000b003140d19fc31mr7536169wrj.51.1688365197436; Sun, 02 Jul
- 2023 23:19:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688365194; x=1690957194;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CDkahJodiXFcs7gkNv9N8r/9oLwv2oJU5LPEjTK0ILo=;
+        b=KffvD6YFEOsrKZOwz3zI0xVJqUEkOUphGQHE79+IwNyPmPfnJ3KNrgLmg4sHVuDFCM
+         tqvDI3Gaj3FcKlSvRTQ8oDgXDWyKOqph513oEfO3DH2HdreXSjfhqJ+bFH+ul1o+38Lu
+         iFm1RP8G1jpXyP4tXJ54l6GIcHBYj77jb9bWxRYxw75ism5nZ3/ZKIQI9oO88YHoZXcY
+         xakSZefbo9MMQF5bmcVZn7Bj50Uk+E8cT96VCmONHaB1VWRe4XbTqnm+Ga+0Z3AMD7o+
+         w5B7wWOXo1kgB6cA3ialw39lA/iD/tiVoYY3Z5qYJSBkW9pOUVsqKv9tn+QAYyje+NNe
+         rJWg==
+X-Gm-Message-State: ABy/qLbqTmK3EkTWTFGpXA6SkXQMByzE4p9jLVeDLpTt0m6/ycwkZB+A
+        kq2DUsVt77h5W0uTnTMMG/+X4Pajzcfb8XQgb8y3f3bwTkuf
+X-Google-Smtp-Source: APBJJlFu5xVmBSnGMC346Snpkz3WDWRUpn2pz6dgAPpa2yTKyfwoFfuTn7o6+C6Vk05m2W9+04O4akrYgWnQkrsKxKKLT2Emo5D3
 MIME-Version: 1.0
-References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230702-headway-dreamlike-d7ba39ac4910@spud>
- <ZKJM1fG3JXEBApfj@sunil-laptop>
-In-Reply-To: <ZKJM1fG3JXEBApfj@sunil-laptop>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Mon, 3 Jul 2023 14:19:46 +0800
-Message-ID: <CAEEQ3wnsedWJYEEg8z+3C_HuCca0nD50NGpCdU3scxavrrOucA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Conor Dooley <conor@kernel.org>, ardb@kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com, alexghiti@rivosinc.com
+X-Received: by 2002:a63:114d:0:b0:55b:3576:c630 with SMTP id
+ 13-20020a63114d000000b0055b3576c630mr3611112pgr.9.1688365194188; Sun, 02 Jul
+ 2023 23:19:54 -0700 (PDT)
+Date:   Sun, 02 Jul 2023 23:19:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a6a01c05ff8f2745@google.com>
+Subject: [syzbot] [kernel?] net test error: UBSAN: array-index-out-of-bounds
+ in alloc_pid
+From:   syzbot <syzbot+3945b679bf589be87530@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,58 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sunil,
+Hello,
 
-On Mon, Jul 3, 2023 at 12:22=E2=80=AFPM Sunil V L <sunilvl@ventanamicro.com=
-> wrote:
->
-> Hi Yunhui Cui,
-> On Sun, Jul 02, 2023 at 02:47:41PM +0100, Conor Dooley wrote:
-> > Hey,
-> > %subject: riscv: obtain ACPI RSDP from FFI.
-> >
-> > This subject is a bit unhelpful because FFI would commonly mean "foreig=
-n
-> > function interface" & you have not yet introduced it. It seems like it
-> > would be better to do s/FFI/devicetree/ or similar.
-> > Please also drop the full stop from the commit messages ;)
-> >
-> > Please use a cover letter for multi-patch series & include changelogs.
-> >
-> > +CC Sunil, Alex:
-> >
-> > Can you guys please take a look at this & see if it is something that w=
-e
-> > want to do (ACPI without EFI)?
-> >
->
-> We have supported ACPI only with UEFI. The current booting contract
-> between firmware and OS is to pass only one of DT or ACPI, not both.
-> This approach brings another booting contract for Linux mixing ACPI and
-> DT which affects RVI specs. As per policy and since it can affect
-> multiple OSs, a frozen RVI spec is required for taking this patch into
-> linux. So, could you please bring this topic for discussion in [1] and
-> get agreement?
->
-> Isn't it simpler to provide a minimum UEFI configuration table and
-> stubbed BS/RS?
->
-> Have you done a PoC? I am curious how do you handle EFI memory map
-> dependencies.
+syzbot found the following issue on:
 
-Yes, Poc has been completed.
-a memory node in DTS can solve it.
+HEAD commit:    97791d3c6d0a Merge branch 'octeontx2-af-fixes'
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=11b1a6d7280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=924167e3666ff54c
+dashboard link: https://syzkaller.appspot.com/bug?extid=3945b679bf589be87530
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
->
-> In case this is approved, I am wondering why do we need new FFI?
->
-> [1] - https://lists.riscv.org/g/tech-brs
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2bd5d64db6b8/disk-97791d3c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cd31502424f2/vmlinux-97791d3c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/33c6f22e34ab/bzImage-97791d3c.xz
 
-We have discussed with Ard and Ron many times about the series of
-questions you mentioned above, and reached a consensus.
-Please see the v1:
-https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1-cui=
-yunhui@bytedance.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3945b679bf589be87530@syzkaller.appspotmail.com
 
-Thanks,
-Yunhui
+================================================================================
+UBSAN: array-index-out-of-bounds in kernel/pid.c:244:15
+index 1 is out of range for type 'upid [1]'
+CPU: 1 PID: 5009 Comm: syz-executor.0 Not tainted 6.4.0-syzkaller-04291-g97791d3c6d0a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
+ alloc_pid+0xbe5/0xdd0 kernel/pid.c:244
+ copy_process+0x4589/0x7620 kernel/fork.c:2519
+ kernel_clone+0xeb/0x890 kernel/fork.c:2911
+ __do_sys_clone+0xba/0x100 kernel/fork.c:3054
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f392b489fab
+Code: ed 0f 85 60 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 89 00 00 00 41 89 c5 85 c0 0f 85 90 00 00
+RSP: 002b:00007ffca92c9fb0 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 00007ffca92ca608 RCX: 00007f392b489fab
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000555556bf0400
+R10: 0000555556bf06d0 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffca92ca0a0 R14: 00007f392b5ac9d8 R15: 000000000000000c
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
