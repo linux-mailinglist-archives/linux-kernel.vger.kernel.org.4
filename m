@@ -2,126 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A2B7464C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9547464CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjGCVTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 17:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S230089AbjGCVUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 17:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjGCVTP (ORCPT
+        with ESMTP id S229653AbjGCVT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:19:15 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0745E59;
-        Mon,  3 Jul 2023 14:19:13 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1b056276889so4118788fac.2;
-        Mon, 03 Jul 2023 14:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688419153; x=1691011153;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UpqEkaNg2J+Bvai1eAr5gemxKMDFvKrtFaY0+RQFT44=;
-        b=YNfVyPMrtM+l//4e83mxX3p1YK5+82O1BU/hVANnM1N6jc2ntbgmhK363IxtXgmU6i
-         MYkq24ujV1XDGM3ORTWfQJuonRidDMWsFFoFT9PbCFnPe47VGDgnYE8YkrWzfJm8E6np
-         0lYNyASVemcM8upnFdliO0US3UZ5OtaoyWjtSAAE+pizyQ6y+52TKFOd9ZsNvr7n+Vdc
-         ukSX+Q68u/XydWPUMP8OLc5pkSOcOUmtZJIIZowifISrhJiMxSOZF19Lb4x3E67EoV19
-         zoHO1tXWBrkMN7oK4axUj4yzx+X+XE5x3SqaO9FjkU3VN+vb3f15JZtH2AgTd/8lO2NY
-         J35w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688419153; x=1691011153;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UpqEkaNg2J+Bvai1eAr5gemxKMDFvKrtFaY0+RQFT44=;
-        b=MsXIesY6dc89Csu4Fq3dlQ9cJGm+IhgbTc8MEXd+NwwoQHcwh0p4MJZNsxcRG5kgyn
-         F0WRRnraHkqjNh2kGyUq4ZdMYyx2HzliQk7f3hhLoKW0w3odrKkw+F7EHPUG73v5gNXd
-         hxsxhB2TNmcvoqI/Pn2nMVQbbqkFVAzPnppVuA8gJJI23g9E4VVurXStIe1JU23J21uS
-         gCIk/EKVgwtHwQp744xZ1+Lgcy370ktm4980bZ3ATMxgCuG50d8ogoJcrxm8Z/PWR+KW
-         A1dLciq2NDp/lKWG9TGKlCRhGIVszxkPT7T0yCNGf2eL5Xy7fqZ1WuIiMTEEXIx585JI
-         xUcw==
-X-Gm-Message-State: ABy/qLYwFyxzeRWXkEn7grLql7DRmXXq3cqOEHbGLnbXZ2ZddmppJQAB
-        YtjZlwAoZYemGOMpfWVQlig=
-X-Google-Smtp-Source: APBJJlHqATpdJTKWq1iDMSIA3foxuxaBzMCf8d8gvgidQSrf4T1i9ibLte2VnDPbJLdegXQwptEYMg==
-X-Received: by 2002:a05:6870:7d8e:b0:1ad:2e18:7090 with SMTP id oq14-20020a0568707d8e00b001ad2e187090mr12419826oab.32.1688419152950;
-        Mon, 03 Jul 2023 14:19:12 -0700 (PDT)
-Received: from localhost ([2605:59c8:148:ba10::41f])
-        by smtp.gmail.com with ESMTPSA id gm4-20020a17090b100400b0025023726fc4sm14271294pjb.26.2023.07.03.14.19.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 14:19:12 -0700 (PDT)
-Date:   Mon, 03 Jul 2023 14:19:11 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Ilya Maximets <i.maximets@ovn.org>
-Message-ID: <64a33b4fcccc_6520520825@john.notmuch>
-In-Reply-To: <20230703175329.3259672-1-i.maximets@ovn.org>
-References: <20230703175329.3259672-1-i.maximets@ovn.org>
-Subject: RE: [PATCH bpf-next] xsk: honor SO_BINDTODEVICE on bind
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 17:19:58 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2081.outbound.protection.outlook.com [40.107.95.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE92E59;
+        Mon,  3 Jul 2023 14:19:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KGsPl3tXfIp4FrcECsUFf5PTM08XTVkiOaX+nn+gPpVOAilmJAlj5sgFUq5cvI1C3OACZLz0JnhrHp3WJiAKuNY3ie11la4dNPXCHpy25MDkU6YSy3rAx1Hgloa8Hdrxg1Fd2tD6NXErxzUyLmvplqCr6YCBsiy/3ZQejPD/n+yK2jZkvHiQNN5+ICdTWcv8cyNsjd7WGKaNLonqdvNdt4fp0cFgTRH0Wer78/e3htJ7Xq0VZikzqzKmH5Ln13KrsZSQN05hQXIZvz9NMzwRZHMNbkDU8dNdctZJKfcegZy5ciTdgchukUJkgrYYdxUDOlCCL4RLeHx/r0EX9ScduA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EHrvsg6mQIKnSQt5M8kc88n6Lav13CJ6+csjWnJs9/U=;
+ b=EWYYqRJ0NXn2/S+ly0GRtGa3oppMJxAQMnME0OIZVyeqHlXu1Sxq5j+PuTIQ3ZpEIvBxB9pXcQrEd8RX92Q/J76gC8apNeTAmW1Tkq8bPs+0jjDn5U55NgvSZgd1K7Ndtybcx4Ua9f0wWqIxOnVGkZmcUSwB4MAs4FGN2iMH9tRrIaNPgspW7/lE8rQQg1plqEkhlsZZgj6m9wP5zHhesoc6AyZAtNatuympjUYsI3ItM/lA5m6Vtu3nzenJbA+vd3eSc4mJIzpfK6q/u8e9NQ1eDMeJpA1aJOt+IXVMYCXlJKG0K94ItWEgC39L/8b/R9dEa1y/MwsBJqi4wzl0Nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EHrvsg6mQIKnSQt5M8kc88n6Lav13CJ6+csjWnJs9/U=;
+ b=Am0BjOugld3Qs19joUuKYdoxRL6jp+EqGi9gpTqc16u4CUgkLnwQEDemw2N9AHXDA2PRkPT7ItK3LNezjxY7PHRZDkQ9geWBQo1rwoD07FahLP595K0IPmV8MYp2pJ0Af+1LhmypjTuxjxOO260cEZ/WOIu/o1kG28G0jQhDQmDXCGPAXuJIi+PWs+Eizg8mCFmYG03AhNpNBnqDrTR1eoy00WcH+U2tsKfdNBzVJ2QJieMY7Gz1l0QpmZL+tESm/bsQWjv/Aqzdi4/K6bUwFkyXEG8jX6xT6gOQepCwlxUevZW/XeFwcTukOF7aitj8baHMvK9CjDFzI557QdsbAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW4PR12MB7439.namprd12.prod.outlook.com (2603:10b6:303:22b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Mon, 3 Jul
+ 2023 21:19:53 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::b26d:72b8:be41:2f0c]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::b26d:72b8:be41:2f0c%4]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 21:19:53 +0000
+Date:   Mon, 3 Jul 2023 18:19:51 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <ZKM7d/01mrbNO77V@nvidia.com>
+References: <ZJzUeFT7lLqEjMJn@nvidia.com>
+ <CAHk-=wjiSW52tf=xaBe0LrFJrRbSnA=E1ziKBEioMT9cMJPM1A@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjiSW52tf=xaBe0LrFJrRbSnA=E1ziKBEioMT9cMJPM1A@mail.gmail.com>
+X-ClientProxiedBy: SJ0PR05CA0012.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::17) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB7439:EE_
+X-MS-Office365-Filtering-Correlation-Id: f47f1c08-ab6a-48ac-86a3-08db7c0b3e60
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XxUXs4hoj8I5w34HdMdUgylwfvni99pcpAnRMD1dQSmys8N7f7sXS/qCLUNBJ5UFYOo05Ue4F0BjcIBLA1qWGRqR1Ujf4LWUhV9uz/XrrZnDx0NyWXyX8N6gf4evHj5DcFEAFfd1NmHk0khlGWHPLQDKaN5FTQZnK47pWGIb+umoqQwLpVtRoExJs4LLQgEBaHLxbEoMlzD0cdRdk/oMBBtEZfsGB36O1oUp/T9rcN9hjAE1048BWzyMgb39rCmEFWYMEzPNvlCu82uFySjveSSkX6XGohxetZkPBnXjlrY0Sxl8RPKVh8wEelrcyh9y3jNF0SPHcQe5LcVfGVKTN7aliI0z08vgvt/0mxRDdA/4WDIJVjbEHtah36FNcihfzwYwMTQZBnz6IaYjIM7ie6M3qSzZHLQrkpDY9IdW5woCwl1/yT/Lnfhn83oeBThkhOhyEp0KX8qDaLJxk9Q5C0Hu9lU75Wfn1in0Xf+Wx/OLzFK9VSISmAUt3UV1oyGhJU88MuCSjjauKkpu7qy5meDRTwy/Kq7Soj+mXp+uiUWsPJpeBS8TxaJ6hW4P+83K
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(39860400002)(346002)(136003)(451199021)(86362001)(107886003)(8676002)(8936002)(5660300002)(66476007)(26005)(6506007)(478600001)(66556008)(6486002)(66946007)(6916009)(41300700001)(4326008)(316002)(186003)(6512007)(2616005)(2906002)(83380400001)(36756003)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lupdH0GbQy4/9Dm/0FITGxiiZXFvDjqwv1eDUkSjzVaoU1/jkuIfc/jfmsEy?=
+ =?us-ascii?Q?UZPSt74WHpkZORF312XO/XUcNKdwypRJySeDJGt1X8n2rXnYhEW2v8RYe8lA?=
+ =?us-ascii?Q?7AT62fgdK4jBJUnTMXmox4H4l6vKFkA6n35rlUp1YiAH67HXm+m/Gp1bN+Bi?=
+ =?us-ascii?Q?50LuBpBZbw06YuTsZEd6m1pyWzVGAD2qHS82CXozE7WIgVI3yIZ5NjMvO75H?=
+ =?us-ascii?Q?7AGsngrD8u0L1lfpU3BBucbpKvqG728XDhiOcZXjddPJVI0FTVLCOd4vShuY?=
+ =?us-ascii?Q?45ovMB3fhekvJnoclxOuOhHHjqCGdvU8A6HF/A9c4XlMu6YGvFP07QMOpO8W?=
+ =?us-ascii?Q?6jORr/aQ6+mCjmU0G3SBBAL2hBRQ+xhLxxlyr3nWivcWQ/USOADObp7Knn0J?=
+ =?us-ascii?Q?jfy3taz4YvoIv7hJvUe8pC9r+J4LX+mPHGunDt2Zq8hPcTA/vPB+aPwowm2G?=
+ =?us-ascii?Q?yyBdX+XPsG22IhoHd3NQ5tyklfsKKAO2VGNBpbAqTKyjsfakMw4xbWQkAbAU?=
+ =?us-ascii?Q?KNb1WqzHnvA3AsAxiG4pWJrn+C0i4Gv9hkNhf7CZB1sqB86ZXgUhOQ+dQaKH?=
+ =?us-ascii?Q?9FHUbgL3edxacG1OI4NvimvCEztlu5FrnJY1mZhlcHNUhcmZEXuYINSyLWIV?=
+ =?us-ascii?Q?v9JzwcV8GiIJcbRlV2nMOu0g37S9sJZFY2USHXI7SAXtimJQ1yxBigR2ysie?=
+ =?us-ascii?Q?WTwmY8qo+UGN3Q6WwlAZRPlkKu3ges93+g6FBxZRD58jDn5az9lomyTiOuqk?=
+ =?us-ascii?Q?qyr0qybYrpR2a7sTs5ItjBWuukWIsd0fkPCuCK+gOXX5yhDbEveH+b2AET5r?=
+ =?us-ascii?Q?eO5op+Pm/htKUDashk8vLCGiqWAynZn8lA5MO1RaAAGvVWpqHSmD2TZEkXTL?=
+ =?us-ascii?Q?HH8/e5g+zUtXopvNoEqEIDNIm8n/470g497knUt9pWjJ4QiFdlx652nCxBEb?=
+ =?us-ascii?Q?azCFoAa3h00KLkuqOrXydaSgf2JbyypDOO/aiBICRmB4XFX3yLSdGt7MztY3?=
+ =?us-ascii?Q?opR905DlsV1+rr6pM6YmWvkMAYlgBd1BMplXSgvg854EVSMFL4SfIrXnGEl7?=
+ =?us-ascii?Q?05QJG5JhCICUX6Q4fKcxLR7eqlztHkpGRNdg93aYy0ijI9fNKW+s9WcIqb6S?=
+ =?us-ascii?Q?PrbKZnpzmS/2uAJ3DP8tErlxr/6p8dpWc3yjJ/5tLy5TEjqPx/BFrBZJuJEv?=
+ =?us-ascii?Q?49CKQwuVbrvaKDYM+TZFGW1d3+tTSqnaeqc+FvRMyXeBdkiCJHaNw9Ij5KBs?=
+ =?us-ascii?Q?HigRcq1aiJ7Kz/bLgAhtOvzKfCTq0pBZh+P4nWwHGLhluD5GmaDILxFt6ZzB?=
+ =?us-ascii?Q?MywTo6QnJOQ6gqd5RU0CPhGtoF9HDGS/E9GiIo/EBaMr3erRKTx+78XQf8iC?=
+ =?us-ascii?Q?lp85TNgQFz4C/bHJNOy7Sus+uEODOGalczGvHBUiTQCsQZvijYqfF8B7fqoR?=
+ =?us-ascii?Q?HJWq18kn48rFQJE45rUj8xHrgOQlDtFKsiCnAENfXTtjbI2UCWgJ+op7VzM1?=
+ =?us-ascii?Q?0vE5xTz9dDwryRamWFFPOHxbyP9bz9Dh+KH89BYs4fO0HE7cg2rKyQHeMWZG?=
+ =?us-ascii?Q?kFTx/pcT72bgqQK7EeLOCNiJYudQ5tg67UDUCRTw?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f47f1c08-ab6a-48ac-86a3-08db7c0b3e60
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 21:19:53.7296
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YjQQTnzKrQlSH7IFyarfb+H+pmp9140ZF0iZ474XS4aC9/n7XXbeYZ19bNVYNMDV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7439
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ilya Maximets wrote:
-> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
-> A privileged process might create the socket and pass it to a
-> non-privileged process for later use.  However, that process will be
-> able to bind the socket to any network interface.  Even though it will
-> not be able to receive any traffic without modification of the BPF map,
-> the situation is not ideal.
+On Thu, Jun 29, 2023 at 09:10:17PM -0700, Linus Torvalds wrote:
+> On Wed, 28 Jun 2023 at 17:46, Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> > Here are the changes for RDMA for this cycle, there was a small rxe
+> > conflict with v6.4 that I resolved in the usual way.
 > 
-> Sockets already have a mechanism that can be used to restrict what
-> interface they can be attached to.  That is SO_BINDTODEVICE.
+> Please just don't. I'd rather know about the conflicts. See
 > 
-> To change the SO_BINDTODEVICE binding the process will need CAP_NET_RAW.
+>    Documentation/maintainer/rebasing-and-merging.rst
 > 
-> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
-> workflow when non-privileged process is using AF_XDP.
-> 
-> The intended workflow is following:
-> 
->   1. First process creates a bare socket with socket(AF_XDP, ...).
->   2. First process loads the XSK program to the interface.
->   3. First process adds the socket fd to a BPF map.
->   4. First process ties socket fd to a particular interface using
->      SO_BINDTODEVICE.
->   5. First process sends socket fd to a second process.
->   6. Second process allocates UMEM.
->   7. Second process binds socket to the interface with bind(...).
->   8. Second process sends/receives the traffic.
-> 
-> All the steps above are possible today if the first process is
-> privileged and the second one has sufficient RLIMIT_MEMLOCK and no
-> capabilities.  However, the second process will be able to bind the
-> socket to any interface it wants on step 7 and send traffic from it.
-> With the proposed change, the second process will be able to bind
-> the socket only to a specific interface chosen by the first process
-> at step 4.
-> 
-> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-> ---
+> and about gazillion emails on the issue.
 
-LGTM.
+OK, I thought the release merges were OK, I've sent them this way for
+a long time now. Easy to change
+ 
+> > - Lots of small cleanups and rework in bnxt_re
+> >    * Use the common mmap functions
+> >    * Support disassociation
+> >    * Improve FW command flow
+> >
+> > - bnxt_re support for "low latency push", this allows a packet
+> 
+> This allows a packet WHAT?
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+Oh it got lost "a packet to be Tx'd without DMA"
+
+> On a positive note, I see that you have a blue checkmark by google
+> now, and Google says
+> 
+>   "The sender of this email has verified that
+>     they own nvidia.com and the logo in the
+>     profile image. Learn more"
+> 
+> which is lovely. I expect great things from nvidia now that you
+> apparently own it. Congratulations! Champagne all around!
+
+I thought only Twitter did blue checkmarks!
+
+Thanks,
+Jason
