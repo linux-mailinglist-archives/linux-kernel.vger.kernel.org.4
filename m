@@ -2,168 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABACC745A96
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43604745A99
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjGCKtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S231487AbjGCKuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbjGCKtr (ORCPT
+        with ESMTP id S229494AbjGCKuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:49:47 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB261B2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:49:45 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3142ee41fd2so1698409f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688381384; x=1690973384;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zMW2KHTH1k0saqLVq/PnPXDqIo/Gx/E/p4VUDDJ1U6I=;
-        b=xQz8HMvpLJVieB4c9yZXE+Rye0x0kYj33cRkcKT6vgt7AvsEHPs8dYp7I+qHygHRzk
-         UefOUx6ZcnvS/QAH8zpOZzcAqIrxsp1OMjt9JAT98ZXYPJYkO1jsOOpZuMmbQ156iLCz
-         ybEybLHXiiB7S9pshS5axn//NaIapIDZQnkUcfIazZQ95/bGG1cI7+f/5Pg2gZzQGVbk
-         D+q0MGfCZnfc3CF1xJ9at5kod8QdcGnWGeq6Ece3WU7/PcMCiui2SF/Bm6WLvIPoZ+xd
-         aWKjNzLAPhQ8aXTqtzzwP31GjqSxdPnpLQJpQUI4UZ2G5aa/2mrdV3Nu4DZukGrZTFA4
-         8HBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688381384; x=1690973384;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zMW2KHTH1k0saqLVq/PnPXDqIo/Gx/E/p4VUDDJ1U6I=;
-        b=Z3D0ReRkE1LMf4hqxf0ZBgHv0djyZvPLwNArz0lnvX5gPLYNHOIQofjkV0RyCizWAX
-         tQ8EKkLr13DycWfBZQu0ydDPs2mN2bPUKLWKuUHnLq8dk31dv4qdVwnlueyPTkLLfpU4
-         +YQHF1a7JUYqRu6iK0XCfRA5Mcz0D1gfj55SN0d5BFazPh9dqhojAwFyB3LsWQtOYC26
-         unlRj/CoiLcQcQdYO3sP2YDN3C8nj3fln+LkFuSE30PE275nlfY3zzVV45IV/8Mtwfah
-         rZb1aekieInFDDLH2BrQfw/YoveHDOd+xosAPeB+h9MXqQ6Zwhos+8FjbPZSIc6mnqpm
-         swFg==
-X-Gm-Message-State: ABy/qLZPPCtQTmdcvXQhOki246Ip8zCynz5Kn0L/ZvmU+QC6gLl/Lw1J
-        06krLsVBLaGUzMyE6fHNwvqJZw==
-X-Google-Smtp-Source: APBJJlHh1kEDO3WvQRwg3cckAYEOuNmTZgbNy8OPVJ7dqdRYLMFr56tfQYYhCFk91HcsV2nV9M+gdQ==
-X-Received: by 2002:adf:f0d2:0:b0:314:1ddc:ecbd with SMTP id x18-20020adff0d2000000b003141ddcecbdmr7234708wro.18.1688381384261;
-        Mon, 03 Jul 2023 03:49:44 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id x5-20020adff645000000b0031432f1528csm3856060wrp.45.2023.07.03.03.49.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 03:49:43 -0700 (PDT)
-Message-ID: <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
+        Mon, 3 Jul 2023 06:50:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFFDC9;
+        Mon,  3 Jul 2023 03:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Egmu4PcPG3YUkJp0tRZXJg7Ab4Gnh+DI3c4ffyVSY8s=; b=pLAZXR4pPvwfWO7Q6+RO4iVkSC
+        89KdYHUbzmv52oZQsddS68kNrKO1gS5HWOJ3mSnbApbQElGUoYWa1FfYTQZiGGdGI7ZoRuh3BiM5Z
+        NakSPE6FSa14WvGpHUKF6yh1/t9P7ZZqJ6CEGahY/kTmKNkKRmsdgkGhV9AuIqrfQOvC6DmH6Jyl7
+        rgjJXdZBkj6XzBWdJC3kpV4JdCfV5Uvyib6Ix/fEoPmxFhOqhpUO5EXwEc1hHr7eM1+6soamrBdPH
+        v355zIJglpkIRxKLkOVR+Q1tMAwkYQI/nij73qxWfoDB3GdWaFKYRjiZzDvot+3V2cr1mrUrT5/w3
+        bS4DQ97Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qGH7n-008A7x-Ed; Mon, 03 Jul 2023 10:49:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BDA463002E1;
+        Mon,  3 Jul 2023 12:49:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A4CAF202A2A17; Mon,  3 Jul 2023 12:49:42 +0200 (CEST)
 Date:   Mon, 3 Jul 2023 12:49:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Message-ID: <20230703104942.GG4253@hirez.programming.kicks-ass.net>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+ <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
+ <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net>
+ <20230630190514.GH3436214@ls.amr.corp.intel.com>
+ <ZJ9IKALhz1Q6ogu1@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
- wrappers
-Content-Language: en-US
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
- <20230525140135.3589917-6-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230525140135.3589917-6-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJ9IKALhz1Q6ogu1@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 02:24:56PM -0700, Sean Christopherson wrote:
 
-Hi Srinivas,
+> I dunno about that, *totally* killing TDX would make my life a lot simpler ;-)
 
-do you agree with the changes in patches 5 and 6 ?
+:-)
 
-Thanks
-
-   -- Daniel
-
-
-On 25/05/2023 16:01, Daniel Lezcano wrote:
-> The driver is accessing the thermal zone device structure but the
-> accessors are already existing and we want to consolidate the thermal
-> core code by preventing accesses to the internals from the drivers.
+> > > I don't get this obsession with doing at module load time :/
 > 
-> Let's use these accessors.
-> 
-> On the other side, the code is getting directly the temperature from
-> tz->temperature, but the temperature is a faked on, so we can replace
-> this access by the fake temp and remove the thermal zone device
-> structure access.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 810231b59dcd..66e34241b33a 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -15,6 +15,7 @@
->   #define INT3400_THERMAL_TABLE_CHANGED 0x83
->   #define INT3400_ODVP_CHANGED 0x88
->   #define INT3400_KEEP_ALIVE 0xA0
-> +#define INT3400_FAKE_TEMP (20 * 1000) /* faked temp sensor with 20C */
->   
->   enum int3400_thermal_uuid {
->   	INT3400_THERMAL_ACTIVE = 0,
-> @@ -453,6 +454,7 @@ static void int3400_notify(acpi_handle handle,
->   			void *data)
->   {
->   	struct int3400_thermal_priv *priv = data;
-> +	struct device *dev;
->   	char *thermal_prop[5];
->   	int therm_event;
->   
-> @@ -475,12 +477,14 @@ static void int3400_notify(acpi_handle handle,
->   		return;
->   	}
->   
-> -	thermal_prop[0] = kasprintf(GFP_KERNEL, "NAME=%s", priv->thermal->type);
-> -	thermal_prop[1] = kasprintf(GFP_KERNEL, "TEMP=%d", priv->thermal->temperature);
-> +	dev = thermal_zone_device(priv->thermal);
-> +	
-> +	thermal_prop[0] = kasprintf(GFP_KERNEL, "NAME=%s", thermal_zone_device_type(priv->thermal));
-> +	thermal_prop[1] = kasprintf(GFP_KERNEL, "TEMP=%d", INT3400_FAKE_TEMP);
->   	thermal_prop[2] = kasprintf(GFP_KERNEL, "TRIP=");
->   	thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d", therm_event);
->   	thermal_prop[4] = NULL;
-> -	kobject_uevent_env(&priv->thermal->device.kobj, KOBJ_CHANGE, thermal_prop);
-> +	kobject_uevent_env(&dev->kobj, KOBJ_CHANGE, thermal_prop);
->   	kfree(thermal_prop[0]);
->   	kfree(thermal_prop[1]);
->   	kfree(thermal_prop[2]);
-> @@ -490,7 +494,7 @@ static void int3400_notify(acpi_handle handle,
->   static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
->   			int *temp)
->   {
-> -	*temp = 20 * 1000; /* faked temp sensor with 20C */
-> +	*temp = INT3400_FAKE_TEMP;
->   	return 0;
->   }
->   
+> Waiting until userspace attempts to create the first TDX guest adds complexity
+> and limits what KVM can do to harden itself.  Currently, all feature support in
+> KVM is effectively frozen at module load.  E.g. most of the setup code is
+> contained in __init functions, many module-scoped variables are effectively 
+> RO after init (though they can't be marked as such until we smush kvm-intel.ko
+> and kvm-amd.ko into kvm.ko, which is tentatively the long-term plan).  All of
+> those patterns would get tossed aside if KVM waits until userspace attempts to
+> create the first guest.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Pff, all that is perfectly possible, just a wee bit more work :-) I
+mean, we manage to poke text that's RO, surely we can poke a variable
+that supposedly RO.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+And I really wish we could put part of the kvm-intel/amd.ko things in
+the kernel proper and reduce the EXPORT_SYMBOL surface -- we're
+exporting a whole bunch of things that really shouldn't be, just for KVM
+:/
 
+> The userspace experience would also be poor, as KVM can't know whether or TDX is
+> actually supported until the TDX module is fully loaded and configured.
+
+Quality that :-(
+
+> There are also latency and noisy neighbor concerns, e.g. we *really* don't want
+> to end up in a situation where creating a TDX guest for a customer can observe
+> arbitrary latency *and* potentially be disruptive to VMs already running on the
+> host.
+
+Well, that's a quality of implementation issue with the whole TDX
+crapola. Sounds like we want to impose latency constraints on the
+various TDX calls. Allowing it to consume arbitrary amounts of CPU time
+is unacceptable in any case.
+
+> Userspace can workaround the second and third issues by spawning a dummy TDX guest
+> as early as possible, but that adds complexity to userspace, especially if there's
+> any desire for it to be race free, e.g. with respect to reporting system capabilities
+> to the control plan.
+
+FWIW, I'm 100% behind pushing complexity into userspace if it makes for
+a simpler kernel.
+
+> On the flip side, limited hardware availability (unless Intel has changed its
+> tune) and the amount of enabling that's required in BIOS and whatnot makes it
+> highly unlikely that random Linux users are going to unknowingly boot with TDX
+> enabled.
+> 
+> That said, if this is a sticking point, let's just make enable_tdx off by default,
+
+OK.
