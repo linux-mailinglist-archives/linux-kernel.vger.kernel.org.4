@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5FD7455C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF237455C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 09:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjGCHMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 03:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S230143AbjGCHNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 03:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjGCHMi (ORCPT
+        with ESMTP id S229759AbjGCHNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 03:12:38 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE07FCC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:12:36 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QvcZ868zmz9sTc;
-        Mon,  3 Jul 2023 09:12:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1688368352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JDNJNCwhoG+0ydNvsWCgQAPOCFx9yNIpNg5RG4lrTFc=;
-        b=uWzB5PEqTbeBjl2FMU9jiApj7p/ZTTvmBwYysJPhNe3nP2k+MMFSaV8oYukXBCgb+SXuMl
-        8+zLLt+byMxA4coMGnS66mLAvQC4Kf3JKGaUx/NHSMudjil7YmYLGyL4oZgVZBOkZakg8E
-        ed1lZuSHky7P7pZBJmsgbNGKgI20ap2wGJNReVVtijfHSz68ljAMpY+YuzCiAeB6Qihx3M
-        GgLhSrjYOeDYy+RH3CTd5udiosINbE3uGCJnRG7ilRZ1VQAibodlkoRxzQw/EkX5vFn6EL
-        QpEtZmsPjumFqMty4ZT1IUeEmchWHxj03wd5ad+nCbEH6ax3ux7TuBEGlIx4TQ==
-Message-ID: <7c1e6df5-1ad4-be3c-b95d-92dc62a8c537@mailbox.org>
-Date:   Mon, 3 Jul 2023 09:12:29 +0200
+        Mon, 3 Jul 2023 03:13:20 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A6ACC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 00:13:19 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b890e2b9b7so4219875ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 00:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688368399; x=1690960399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3gdmjGHia+jKRSyCfrlTQ/eoeJlaZFLf9ynF3dOskcU=;
+        b=NvLnU7Qf/4miEBTDIGynlVerZgG0j9kKifoHjbQVSC6ehgAanCaXlPKMu+PmHOhH/W
+         hse8ugMIDG8mOC6T5lA3Avc6jFOEW5oUpK/wCWq/zbTxKP5NZUPtgS2URd0k5+6UJ49n
+         LVX9JT8k+BFKqrW4xc6QH0OTb7ek9woEnDoWByxPRPaAv8TFcyf6cAq1UoF5il86lRvS
+         xQNTG1stp8WLkMwMO3pG8hVHge8hJaqie7QFqgWN28/bOODImQ+0aO169hYoG+3NfPBr
+         6BJmBm0a6GvpaG6lD5Wg9meRp+eLIAcBTSLIrBoI7waD8UNZ5XEyl3eg5LekT2cOoaTq
+         dH7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688368399; x=1690960399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3gdmjGHia+jKRSyCfrlTQ/eoeJlaZFLf9ynF3dOskcU=;
+        b=ZLLKYeVTxl9UDVcBWD2CXxoV2tH9P/8xjj8K/aEGmytWJ0N7KyT8yQLQe8qH28AqEX
+         B/pnIyiTzOAXpmNiGhFpZORuTLF54w03Omwe58W9L1BOJr5iECNQ9xNaV+D2/uAzl/gD
+         5sl1y3d5T/gQtvae3h39emM6opqOtkjl0huHmSYZP+jOyHRJl9yo+qM+37oycHQhNsrf
+         alWSvkI+dSMnu1in28ssvohsO//tcRHjwVW3NVQJdJstBTER/YqmBqqjg4hveOY9krij
+         YonarVKxu9m+EcAqwGFq/hW7VS3iIvH1700Lt64NtvRxicvnpUd2M0iZVYrtGv6GCwFG
+         YB8w==
+X-Gm-Message-State: ABy/qLbIrXTzHBMCUeDt7v63UTqajEPrbzXPeyQCh6AxgBB4bTytvUnL
+        Z91A7nfOeqLsGIp7ZLnS9qw8aGfl4Mc9rai3cO7DZg==
+X-Google-Smtp-Source: APBJJlH4H1LJEkNForC6tZD4lPdH33Iimwz3Zzeu94n+d3up/GqFuSavaNHzUS7dGulmfroxCq8D+yD98kWMqXzpoSw=
+X-Received: by 2002:a17:902:da92:b0:1b8:525a:f685 with SMTP id
+ j18-20020a170902da9200b001b8525af685mr9718943plx.37.1688368398730; Mon, 03
+ Jul 2023 00:13:18 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-Content-Language: de-CH-frami, en-CA
-To:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>
-Cc:     pierre-eric.pelloux-prayer@amd.com,
-        Sebastian Wick <sebastian.wick@redhat.com>,
-        amd-gfx@lists.freedesktop.org,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alexander.deucher@amd.com, Pekka Paalanen <ppaalanen@gmail.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        christian.koenig@amd.com
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
- <CA+hFU4z1pc=KUVVqyqfXEceUqMXQgh-qUnuB=1nkPELghvQO7w@mail.gmail.com>
- <CADnq5_MNVdtdcWKSz6dgmsjg+kEu8p5FVE+fkw_5BaXeG3QGow@mail.gmail.com>
- <afab1f5a-e581-3416-e2c2-238ea120655b@mailbox.org>
- <CAAxE2A5C96k5ua+r938VA_+w7gHHNTdF3n8LwDb98W0Bf9wCVA@mail.gmail.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <CAAxE2A5C96k5ua+r938VA_+w7gHHNTdF3n8LwDb98W0Bf9wCVA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: d01efb6d83f21620a65
-X-MBO-RS-META: 5z8b3itq5tq11yiwuxjwbw1bdzf74g3m
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230702103516.139440-1-rgallaispou@gmail.com>
+ <11ec64ad-8fb8-e94d-2019-d3deb399084b@linaro.org> <4aba0e4a-87f0-1810-bf4d-a2f278e51e8b@gmail.com>
+In-Reply-To: <4aba0e4a-87f0-1810-bf4d-a2f278e51e8b@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Mon, 3 Jul 2023 09:13:06 +0200
+Message-ID: <CAGE=qrpE9pP4m07VT+RRLhPysF+wO690mF7ChToJYcArKm_nGg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: st: add buswidth property to stm32f429-disco
+To:     =?UTF-8?Q?Rapha=C3=ABl_Gallais=2DPou?= <rgallaispou@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/23 22:32, Marek Olšák wrote:
-> On Fri, Jun 30, 2023 at 11:11 AM Michel Dänzer <michel.daenzer@mailbox.org <mailto:michel.daenzer@mailbox.org>> wrote:
->> On 6/30/23 16:59, Alex Deucher wrote:
->>> On Fri, Jun 30, 2023 at 10:49 AM Sebastian Wick
->>> <sebastian.wick@redhat.com <mailto:sebastian.wick@redhat.com>> wrote:
->>>> On Tue, Jun 27, 2023 at 3:23 PM André Almeida <andrealmeid@igalia.com <mailto:andrealmeid@igalia.com>> wrote:
->>>>>
->>>>> +Robustness
->>>>> +----------
->>>>> +
->>>>> +The only way to try to keep an application working after a reset is if it
->>>>> +complies with the robustness aspects of the graphical API that it is using.
->>>>> +
->>>>> +Graphical APIs provide ways to applications to deal with device resets. However,
->>>>> +there is no guarantee that the app will use such features correctly, and the
->>>>> +UMD can implement policies to close the app if it is a repeating offender,
->>>>> +likely in a broken loop. This is done to ensure that it does not keep blocking
->>>>> +the user interface from being correctly displayed. This should be done even if
->>>>> +the app is correct but happens to trigger some bug in the hardware/driver.
->>>>
->>>> I still don't think it's good to let the kernel arbitrarily kill
->>>> processes that it thinks are not well-behaved based on some heuristics
->>>> and policy.
->>>>
->>>> Can't this be outsourced to user space? Expose the information about
->>>> processes causing a device and let e.g. systemd deal with coming up
->>>> with a policy and with killing stuff.
->>>
->>> I don't think it's the kernel doing the killing, it would be the UMD.
->>> E.g., if the app is guilty and doesn't support robustness the UMD can
->>> just call exit().
->>
->> It would be safer to just ignore API calls[0], similarly to what is done until the application destroys the context with robustness. Calling exit() likely results in losing any unsaved work, whereas at least some applications might otherwise allow saving the work by other means.
-> 
-> That's a terrible idea. Ignoring API calls would be identical to a freeze. You might as well disable GPU recovery because the result would be the same.
+On Mon, 3 Jul 2023 at 05:21, Rapha=C3=ABl Gallais-Pou <rgallaispou@gmail.co=
+m> wrote:
+> >>              spi-3wire;
+> >>              spi-max-frequency =3D <10000000>;
+> >>              dc-gpios =3D <&gpiod 13 0>;
+> >> +            buswidth =3D <8>;
+> >
+> > There is no such spi property.
+>
+> While I agree with you, I saw in staging drivers that this property was
+> fetch in the device-tree by the fbtft core.
+>
+> Should I document those in or try to do it another way ?
 
-No GPU recovery would affect everything using the GPU, whereas this affects only non-robust applications.
-
-
-> - non-robust contexts: call exit(1) immediately, which is the best way to recover
-
-That's not the UMD's call to make.
-
-
->>     [0] Possibly accompanied by a one-time message to stderr along the lines of "GPU reset detected but robustness not enabled in context, ignoring OpenGL API calls".
-
-
--- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
-
+You cannot use undocumented properties. Whether this should be used at
+all, depends what's this, why other properties cannot be used etc.
