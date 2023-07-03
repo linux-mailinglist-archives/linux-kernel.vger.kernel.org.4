@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D80745B17
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FDE745B1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGCLap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S229984AbjGCLbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjGCLan (ORCPT
+        with ESMTP id S229436AbjGCLbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:30:43 -0400
+        Mon, 3 Jul 2023 07:31:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B64E59;
-        Mon,  3 Jul 2023 04:30:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E82B3;
+        Mon,  3 Jul 2023 04:31:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2462E60EA2;
-        Mon,  3 Jul 2023 11:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11974C433C7;
-        Mon,  3 Jul 2023 11:30:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 669F760EC2;
+        Mon,  3 Jul 2023 11:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD31CC433C7;
+        Mon,  3 Jul 2023 11:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688383835;
-        bh=fnwln6CemjKCbAI2pkk0HZ5h53bpzKYZ/+yqxY7jdyQ=;
+        s=k20201202; t=1688383879;
+        bh=4dMz6AICQADVRRk6AU4c36ys4TXGNzy34CAOZWE5z1o=;
         h=From:To:Cc:Subject:Date:From;
-        b=sELuPoj7mXoP4GnvJwiI+sewkmpy+2EIT/+iXHfI64WaqMa+pL1k8yLHKBFU11NSk
-         8GGNwbQfDWg4YYHcHSoIoY86NFgqOG8k2NBEzIiJDQGqF1Xfsoaqj2CjyycF8xbdFV
-         c+A6AsAgO3leH2yLXGKoVYtYVgomIyeq+D5WUF3vUf/cnh+hBYjw2E40109lrVuH6E
-         q+o4X/WoKCbH7Sduba3ZCgv9D0XgGKgt/ZN9vD0viumNWaXfkE8H+Uu2ehkZLKgxGm
-         9qB+BEqiMxmcx4N/dFvodx7cYXJVzxm1o5VZh3zFjGS/sqihPbvXLHQS7/CUmIfXrk
-         aRjghhFRwdyFw==
+        b=JGYuRaq5gZfzOX8EqTv+gxLLWUN2XdBFw6I4bM65b02eU9FLNa05+EkPbuIM/w/0L
+         KKTu7s2hACooo45t5NDtM88Rdku73L7/D/1UNqwCFiT456JhYx2FO6FLHa2zAdQXk4
+         kBYM+1lb9c7KI7X8CAO+I/L6fuxTwIv5D8kBj4byiLVWnJR/Y+9kCcCt/CZSdG19TK
+         6u0MLr5Qpf3fIrA27gXgGb+rRYtyqDcI2T4SQ7j6UslQf0KizBMVMnA9OEbppJPDLf
+         SHVBr8s4T3LmNTyYyYLytU73cOIVLW9itW3Pxduydln2eOH0/4tsmDNlAFniXdwStT
+         DMbLYPeHBgZ9g==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Selvin Xavier <selvin.xavier@broadcom.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rdma@vger.kernel.org,
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Chris Lu <chris.lu@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Jing Cai <jing.cai@mediatek.com>,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        Manish Mandlik <mmandlik@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Brian Gix <brian.gix@intel.com>, Pauli Virtanen <pav@iki.fi>,
+        Iulia Tanasescu <iulia.tanasescu@nxp.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] RDMA: fix INFINIBAND_USER_ACCESS dependency
-Date:   Mon,  3 Jul 2023 13:30:06 +0200
-Message-Id: <20230703113025.356682-1-arnd@kernel.org>
+Subject: [PATCH] Bluetooth: coredump: fix building with coredump disabled
+Date:   Mon,  3 Jul 2023 13:30:48 +0200
+Message-Id: <20230703113112.380663-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,48 +69,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-After a change to the bnxt_re driver, it fails to link when
-CONFIG_INFINIBAND_USER_ACCESS is disabled:
+The btmtk driver uses an IS_ENABLED() check to conditionally compile
+the coredump support, but this fails to build because the hdev->dump
+member is in an #ifdef:
 
-aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o: in function `bnxt_re_handler_BNXT_RE_METHOD_ALLOC_PAGE':
-ib_verbs.c:(.text+0xd64): undefined reference to `ib_uverbs_get_ucontext_file'
-aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o:(.rodata+0x168): undefined reference to `uverbs_idr_class'
-aarch64-linux-ld: drivers/infiniband/hw/bnxt_re/ib_verbs.o:(.rodata+0x1a8): undefined reference to `uverbs_destroy_def_handler'
+drivers/bluetooth/btmtk.c: In function 'btmtk_process_coredump':
+drivers/bluetooth/btmtk.c:386:30: error: 'struct hci_dev' has no member named 'dump'
+  386 |   schedule_delayed_work(&hdev->dump.dump_timeout,
+      |                              ^~
 
-The problem is that the 'bnxt_re_uapi_defs' structure is built
-unconditionally and references a couple of functions that are never
-really called in this configuration but instead require other functions
-that are left out.
+The struct member doesn't really make a huge difference in the total size,
+so just remove the #ifdef around it to avoid adding similar checks
+around each user.
 
-Adding an #ifdef around the new code, or a Kconfig dependency would
-address this problem, but adding the compile-time check inside of the
-UAPI_DEF_CHAIN_OBJ_TREE_NAMED() macro seems best because that also
-addresses the problem in other drivers that may run into the same
-dependency.
-
-Fixes: 360da60d6c6ed ("RDMA/bnxt_re: Enable low latency push")
+Fixes: 872f8c253cb9e ("Bluetooth: btusb: mediatek: add MediaTek devcoredump support")
+Fixes: 9695ef876fd12 ("Bluetooth: Add support for hci devcoredump")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- include/rdma/uverbs_ioctl.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ include/net/bluetooth/hci_core.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/include/rdma/uverbs_ioctl.h b/include/rdma/uverbs_ioctl.h
-index 9d45a5b203169..06287de69cd29 100644
---- a/include/rdma/uverbs_ioctl.h
-+++ b/include/rdma/uverbs_ioctl.h
-@@ -436,8 +436,10 @@ struct uapi_definition {
- 	},								       \
- 		##__VA_ARGS__
- #define UAPI_DEF_CHAIN_OBJ_TREE_NAMED(_object_enum, ...)                       \
--	UAPI_DEF_CHAIN_OBJ_TREE(_object_enum, &UVERBS_OBJECT(_object_enum),    \
--				##__VA_ARGS__)
-+	UAPI_DEF_CHAIN_OBJ_TREE(_object_enum,				       \
-+		PTR_IF(IS_ENABLED(CONFIG_INFINIBAND_USER_ACCESS),	       \
-+		       &UVERBS_OBJECT(_object_enum)),			       \
-+		##__VA_ARGS__)
+diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+index c0ca3f869c923..491ab83ccafc9 100644
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -593,9 +593,7 @@ struct hci_dev {
+ 	const char		*fw_info;
+ 	struct dentry		*debugfs;
  
- /*
-  * =======================================
+-#ifdef CONFIG_DEV_COREDUMP
+ 	struct hci_devcoredump	dump;
+-#endif
+ 
+ 	struct device		dev;
+ 
 -- 
 2.39.2
 
