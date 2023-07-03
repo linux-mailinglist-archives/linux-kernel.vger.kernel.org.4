@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB65745837
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F19745838
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjGCJSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 05:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S230000AbjGCJSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjGCJSI (ORCPT
+        with ESMTP id S230341AbjGCJSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 05:18:08 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DB4E67;
-        Mon,  3 Jul 2023 02:17:51 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QvgLZ490vz9sqJ;
-        Mon,  3 Jul 2023 11:17:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1688375862;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wzL5L1lBY5rqvf78gNGZQXkCiKNDPWm58F8aOJ0dj7I=;
-        b=G0ywYUvJ5zFc39jBJU87AUoesBe8B95rVsm9BKiVgv+kPdQO/Ep9vKlEOKYnlQnH/UYifx
-        twGWoW8qkjEYbiQEg1riRhCP85B/BW/XuyAlMMf9nLprqZD+B+hxCRnNcJgfP6bCi/Ev50
-        iShVRoQxQZ3LF0Jnxl277TobXcWIOhyLhL7dJ3F60jENETfxIkaNLnN7vVtjkLpEAEloCs
-        nchnT5/G3+XyrSTUGFsDx6nSbcArbr06pX1eLKJliPorsBMKYlmujMFi8o7mihP2rv8wob
-        tIEiq6uZyKMbAjZujN4L0h6iDcWRlLTIb7ak1O3cwHiHCnQ4DZdKLfAAt2A4bQ==
-References: <20230702-pll-mipi_set_rate_parent-v3-0-46dcb8aa9cbc@oltmanns.dev>
- <20230702-pll-mipi_set_rate_parent-v3-6-46dcb8aa9cbc@oltmanns.dev>
- <b7gnap57aajkbhbbcbgallvqjdc7nzppjjwnancgmm5ibmhdaq@cftau72qyjdu>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Roman Beranek <me@crly.cz>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 6/8] clk: sunxi-ng: mux: Support finding closest rate
-In-reply-to: <b7gnap57aajkbhbbcbgallvqjdc7nzppjjwnancgmm5ibmhdaq@cftau72qyjdu>
-Date:   Mon, 03 Jul 2023 11:17:24 +0200
-Message-ID: <87fs65s6aj.fsf@oltmanns.dev>
+        Mon, 3 Jul 2023 05:18:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE133196;
+        Mon,  3 Jul 2023 02:17:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t7o2rmfPLhYslNYoOujyShh3+93sZwFvRpTrs9N8Hs0=; b=eh1FxzZh0WVr/7S3QujKESedO+
+        iriMrAMMgptzM94W6Mw1Wa94rchrJ95WRI0uKb3eB6OuhDeF+j+81wcFeKAtM3uZRddcQfW9lSiaF
+        3vYQnI7fqvPo9MLMp9eHSj/fxyMPUQx06FYB9KW9N07yub5zfJwqY0Dd+D+n5YUK1uPp0Tcm967bC
+        gIJBC41tnMEjvsP33FktRQVPMeMcpTdmLj07Egtqf0qcRvYdd1Q3aJr7ZpHqOSkI2nDPkcpqo08TC
+        cpaJGGf8SlCDJbZAX0HHErNIDXMxDAtPDGivvM1zwlvWl7VXB2hoH1W6X/kwJUXV4m42YD3SpuKYe
+        pBAMKQSQ==;
+Received: from [2001:8b0:10b:5:86a3:26f9:cd4a:d44b] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qGFgr-0085o0-2O; Mon, 03 Jul 2023 09:17:49 +0000
+Message-ID: <77ce6f91f163f333d4b2146e6ea66b7f5fe38d9e.camel@infradead.org>
+Subject: Re: [PATCH AUTOSEL 6.4 01/15] cpu/hotplug: Reset task stack state
+ in _cpu_up()
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Helge Deller <deller@gmx.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Date:   Mon, 03 Jul 2023 10:17:48 +0100
+In-Reply-To: <20230702194020.1776895-1-sashal@kernel.org>
+References: <20230702194020.1776895-1-sashal@kernel.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-6A6huHxieyiyGhNnwQ9y"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,101 +60,141 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2023-07-03 at 09:38:48 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
-> [[PGP Signed Part:Undecided]]
-> On Sun, Jul 02, 2023 at 07:55:25PM +0200, Frank Oltmanns wrote:
->> When finding the best rate for a mux clock, consider rates that are
->> higher than the requested rate by introducing a new clk_ops structure
->> that uses the existing __clk_mux_determine_rate_closest function.
->> Furthermore introduce an initialization macro that uses this new
->> structure.
->>
->> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
->> ---
->>  drivers/clk/sunxi-ng/ccu_mux.c | 13 +++++++++++++
->>  drivers/clk/sunxi-ng/ccu_mux.h | 17 +++++++++++++++++
->>  2 files changed, 30 insertions(+)
->>
->> diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mux.c
->> index 8594d6a4addd..49a592bdeacf 100644
->> --- a/drivers/clk/sunxi-ng/ccu_mux.c
->> +++ b/drivers/clk/sunxi-ng/ccu_mux.c
->> @@ -264,6 +264,19 @@ static unsigned long ccu_mux_recalc_rate(struct clk_hw *hw,
->>  					   parent_rate);
->>  }
->>
->> +const struct clk_ops ccu_mux_closest_ops = {
->> +	.disable	= ccu_mux_disable,
->> +	.enable		= ccu_mux_enable,
->> +	.is_enabled	= ccu_mux_is_enabled,
->> +
->> +	.get_parent	= ccu_mux_get_parent,
->> +	.set_parent	= ccu_mux_set_parent,
->> +
->> +	.determine_rate	= __clk_mux_determine_rate_closest,
->> +	.recalc_rate	= ccu_mux_recalc_rate,
->> +};
->> +EXPORT_SYMBOL_NS_GPL(ccu_mux_closest_ops, SUNXI_CCU);
->> +
->
-> This is also a bit inconsistent with the other clocks: most (all?) of
-> them will simply handle this through a flag, but this one requires a new
-> set of clk_ops as well?
->
-> I think we should create our own wrapper here around
-> __clk_mux_determine_rate and either call
-> __clk_mux_determine_rate_closest or __clk_mux_determine_rate depending
-> on the state of the flags, or call __clk_mux_determine_rate_flags with
-> the proper flags set for our clock.
->
-> The former is probably slightly simpler.
+--=-6A6huHxieyiyGhNnwQ9y
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ok, I will address that in v4.
+On Sun, 2023-07-02 at 15:40 -0400, Sasha Levin wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+>=20
+> [ Upstream commit 6d712b9b3a58018259fb40ddd498d1f7dfa1f4ec ]
+>=20
+> Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()"=
+)
+> ensured that the shadow call stack and KASAN poisoning were removed from
+> a CPU's stack each time that CPU is brought up, not just once.
+>=20
+> This is not incorrect.
 
->
->>  const struct clk_ops ccu_mux_ops = {
->>  	.disable	= ccu_mux_disable,
->>  	.enable		= ccu_mux_enable,
->> diff --git a/drivers/clk/sunxi-ng/ccu_mux.h b/drivers/clk/sunxi-ng/ccu_mux.h
->> index 2c1811a445b0..c4ee14e43719 100644
->> --- a/drivers/clk/sunxi-ng/ccu_mux.h
->> +++ b/drivers/clk/sunxi-ng/ccu_mux.h
->> @@ -46,6 +46,22 @@ struct ccu_mux {
->>  	struct ccu_common	common;
->>  };
->>
->> +#define SUNXI_CCU_MUX_TABLE_WITH_GATE_CLOSEST(_struct, _name, _parents, _table,	\
->> +				     _reg, _shift, _width, _gate,	\
->> +				     _flags)				\
->> +	struct ccu_mux _struct = {					\
->> +		.enable	= _gate,					\
->> +		.mux	= _SUNXI_CCU_MUX_TABLE(_shift, _width, _table),	\
->> +		.common	= {						\
->> +			.reg		= _reg,				\
->> +			.hw.init	= CLK_HW_INIT_PARENTS(_name,	\
->> +							      _parents, \
->> +							      &ccu_mux_closest_ops, \
->> +							      _flags),	\
->> +			.features	= CCU_FEATURE_CLOSEST_RATE,	\
->> +		}							\
->> +	}
->> +
->
-> I'm fine with that one, but like we discussed on the NM (I think?) patch
-> already, this creates some clocks and macros that will use the feature
-> as a flag, and some will encode it into their name.
->
-> Given that we need it here too, I'm really inclined to prefer what you
-> did there, and thus create a new macro for pll-video0 instead of
-> modifying the existing one.
+No really, it *wasn't* incorrect. This isn't a bugfix that needs
+backporting; it's preparation for the parallel CPU bringup which I
+*hope* you aren't planning to backport in its entirety :)
 
-Ok. Just to be clear: What I did in this patch is fine and I should use
-the same approach for NM. Did I get that right?
+Unless I'm missing something, I don't think you want this for stable
+(in any of the trees it was just sent out for).
 
-Thanks,
-  Frank
 
->
-> Maxime
->
-> [[End of PGP Signed Part]]
+
+--=-6A6huHxieyiyGhNnwQ9y
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwNzAzMDkxNzQ4WjAvBgkqhkiG9w0BCQQxIgQgb7Mc8oYX
+AS9JwSrAMOtY6hYliQi1OkPru/Wu1G3izfwwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCLutgunfJ9rZYQhkYTA59Orqq2N2tv6DAZ
+5cLONNq7gB91iJakHrUsg2W9197/JEMvxahnh2XkwO595U568jxJY7WpsukW4R7MbOBQyQ1/7HnP
+acYaaljwbJFag/LVJtzhr+pdarWl2aPG8RzjAEDjbzHEDYyHyiktWwWubyZt039xQEu2LfWTOhX4
+9I2wBdPHrPOguP3UkNE12+iA7f3L/dIbyF72jbKD7J5iOnctyXXbfxikrOCajBcJx8GfL9pgiOSi
+4Anc3KGIGIrjMmybJHkFabUTbsp2a59vSDMuQViDjUnRQvEP76aQkugznRyZP/myHThCT0zOZ/VS
+4R9lf8rGFHVqTw2m7QJqAxsIIeKbDkEqoxdezbYUy5RE6nlyuvHw+AWWh+2rnO+3mXLsUwWM++4M
+YbQhrKxdfx3jdaqhIDj/tCrsxOhczGVT4WIvZW+aFh2GZrEnhlsiA/1U7wzeTP554LC07P4YY1fA
+UjahEnGv/uelJvrClSGBWf9IFNqkAKSOF/nTqMBsnyG1CTqRCVH+NoLT+G3CZJR3erLcWfSBxJMP
+cO0YSx1xB7j9rZevZDZ82MjBCD8FV0XUeF6sXiB5gr0ebCGXP/qFQdADfcivV+tRsrz3dEYBqhra
+xX51Ygl5FeI5/THPDmXpFEenBrP000h8zXjUGHOHkgAAAAAAAA==
+
+
+--=-6A6huHxieyiyGhNnwQ9y--
