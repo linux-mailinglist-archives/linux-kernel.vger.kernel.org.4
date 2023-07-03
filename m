@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9301F746110
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F076D746113
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 19:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjGCRBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 13:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
+        id S229971AbjGCRBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 13:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjGCRBQ (ORCPT
+        with ESMTP id S230465AbjGCRBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 13:01:16 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D80E58;
-        Mon,  3 Jul 2023 10:01:15 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363EaXo8009834;
-        Mon, 3 Jul 2023 10:01:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=0CNLZyZHsPtMZ/I6Jnu98QhOJXKD5S2GrMCc85IJ0jc=;
- b=KEDrqQezJBwMrEU0oIIUPuXWDxPor1Rn5DVbY36D12e3+fjg0d+4kqg8T5Sy3GrOP3U1
- BBEah6PfafJWJ2uz6UppsjtHldeBMSjhmJqXYxSIdO04Acj8EeAN/m//GYgbmjuE5RL6
- J2YTjPzgGGstw9LqpXIeaODGeiYBNmNF0xnIey6WPsrmLDuenu+O3J/xb+5RXgersCFr
- zXk5H0hRDqswvc2t2xRNY0mzcdBptzpyMStZ0qa8WierNP7igGsvUUyPNkkPkgQVpGwx
- 0E0lMipe7Zy9e2OpOsuaIcF3pBBDC7Vi9HoftB/RNIwWJfj53I9KDKTPqYTR4zHfyWo5 fQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3rjknj5bty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 10:01:06 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 3 Jul
- 2023 10:01:04 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 3 Jul 2023 10:01:04 -0700
-Received: from localhost.localdomain (unknown [10.28.36.166])
-        by maili.marvell.com (Postfix) with ESMTP id D2F703F707F;
-        Mon,  3 Jul 2023 10:01:00 -0700 (PDT)
-From:   Suman Ghosh <sumang@marvell.com>
-To:     <sgoutham@marvell.com>, <gakula@marvell.com>,
-        <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Suman Ghosh <sumang@marvell.com>
-Subject: [PATCH V3] octeontx2-pf: Add additional check for MCAM rules
-Date:   Mon, 3 Jul 2023 22:30:54 +0530
-Message-ID: <20230703170054.2152662-1-sumang@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Jul 2023 13:01:19 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC79EE58;
+        Mon,  3 Jul 2023 10:01:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A906621ACE;
+        Mon,  3 Jul 2023 17:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688403676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CxxA5KPOlxZoqVBuLA7u+rs+PuFzIjExMLh3T2z3dig=;
+        b=WwkmG+qaXYNQ/vu9q4F7pEj9wrt2bBvW6aP9mlVUwydMkr7hS3xU7fSguhVECWbugKFVwD
+        nFfsMv+fh+VCYPr0mUXkIt6MUoHAY0tHWAVVhgoa1E0ZsN/9yuDPQzhSeKss/q3dJUw1Ta
+        kHoy5ufRYv9txFxyUyUCkLRfw+3UDts=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688403676;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CxxA5KPOlxZoqVBuLA7u+rs+PuFzIjExMLh3T2z3dig=;
+        b=RCvYdmMDKz+U+kgLqNfhNNngHIe4nuoTf2Nywg7oLIDSHSzTvjaJ7eJOx50qEZOlN3bDcL
+        q6LZq+rMlUQWdcBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 995451358E;
+        Mon,  3 Jul 2023 17:01:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tSFmJdz+omSOEQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 03 Jul 2023 17:01:16 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2DC8AA0722; Mon,  3 Jul 2023 19:01:16 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 19:01:16 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v3 0/5] quota: fix race condition between dqput() and
+ dquot_mark_dquot_dirty()
+Message-ID: <20230703170116.xikrectpzdc5dmux@quack3>
+References: <20230630110822.3881712-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: r-PiGNkEuPQOnkGXfCjkHEJlkMo0GISD
-X-Proofpoint-ORIG-GUID: r-PiGNkEuPQOnkGXfCjkHEJlkMo0GISD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_13,2023-06-30_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630110822.3881712-1-libaokun1@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,62 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to hardware limitation, MCAM drop rule with
-ether_type == 802.1Q and vlan_id == 0 is not supported. Hence rejecting
-such rules.
+Hello!
 
-Fixes: dce677da57c0 ("octeontx2-pf: Add vlan-etype to ntuple filters")
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
----
-Changes since v2:
-- Added "fixes" tag
+On Fri 30-06-23 19:08:17, Baokun Li wrote:
+> Hello Honza,
+> 
+> This is a solution that uses dquot_srcu to avoid race condition between
+> dqput() and dquot_mark_dquot_dirty(). I performed a 12+h fault injection
+> stress test (6 VMs, 4 test threads per VM) and have not found any problems.
+> And I tested the performance based on the next branch (5c875096d590), this
+> patch set didn't degrade performance, but rather had a ~5% improvement.
+> 
+> V1->V2:
+> 	Modify the solution to use dquot_srcu.
+> V2->V3:
+> 	Merge some patches, optimize descriptions.
+> 	Simplify solutions, and fix some spelling errors.
+> 
 
- .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c |  7 +++++++
- .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c    | 13 +++++++++++++
- 2 files changed, 20 insertions(+)
+Thanks! I've added the patches to my tree.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-index 10e11262d48a..49ba27875111 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-@@ -871,6 +871,13 @@ static int otx2_prepare_flow_request(struct ethtool_rx_flow_spec *fsp,
- 			if (be16_to_cpu(fsp->m_ext.vlan_etype) != 0xFFFF)
- 				return -EINVAL;
- 
-+			/* Drop rule with vlan_etype == 802.1Q
-+			 * and vlan_id == 0 is not supported
-+			 */
-+			if (vlan_etype == ETH_P_8021Q && !fsp->m_ext.vlan_tci &&
-+			    fsp->ring_cookie == RX_CLS_FLOW_DISC)
-+				return -EINVAL;
-+
- 			vlan_etype = be16_to_cpu(fsp->h_ext.vlan_etype);
- 			/* Only ETH_P_8021Q and ETH_P_802AD types supported */
- 			if (vlan_etype != ETH_P_8021Q &&
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-index 044cc211424e..6c0fdc2bad73 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-@@ -604,6 +604,19 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
- 			return -EOPNOTSUPP;
- 		}
- 
-+		if (!match.mask->vlan_id) {
-+			struct flow_action_entry *act;
-+			int i;
-+
-+			flow_action_for_each(i, act, &rule->action) {
-+				if (act->id == FLOW_ACTION_DROP) {
-+					netdev_err(nic->netdev, "vlan tpid 0x%x with vlan_id %d is not supported for DROP rule.\n",
-+						   ntohs(match.key->vlan_tpid), match.key->vlan_id);
-+					return -EOPNOTSUPP;
-+				}
-+			}
-+		}
-+
- 		if (match.mask->vlan_id ||
- 		    match.mask->vlan_dei ||
- 		    match.mask->vlan_priority) {
+								Honza
+
+> Baokun Li (5):
+>   quota: factor out dquot_write_dquot()
+>   quota: rename dquot_active() to inode_quota_active()
+>   quota: add new helper dquot_active()
+>   quota: fix dqput() to follow the guarantees dquot_srcu should provide
+>   quota: simplify drop_dquot_ref()
+> 
+>  fs/quota/dquot.c | 244 ++++++++++++++++++++++++-----------------------
+>  1 file changed, 125 insertions(+), 119 deletions(-)
+> 
+> -- 
+> 2.31.1
+> 
 -- 
-2.25.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
