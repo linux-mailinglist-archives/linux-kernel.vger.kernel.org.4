@@ -2,137 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF56745B5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392CD745991
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjGCLl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S229971AbjGCKEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGCLly (ORCPT
+        with ESMTP id S230334AbjGCKDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:41:54 -0400
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E5EEC;
-        Mon,  3 Jul 2023 04:41:51 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id BEC651204F9;
-        Mon,  3 Jul 2023 12:45:45 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru BEC651204F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688377545;
-        bh=wRrn6iFZ9wvY6EzviQOv3A+7Kxncor6/Mip9AQNivGs=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-        b=qlJ8LqLVZI7V75BuBRdc2Ts/lhLBHonx/zyV9YbrVjgIRpk6XNJR6KF7wrHocIqyA
-         8Pl6yyBTZRalMxo6FvHdAFMQl2a+r7uksM+RPs4WSvxUJFJrl7QxfOzTbc3zNNviHQ
-         TLcV6T/DqNrgtuiBqjTDxYudWtc+peqNfXWw8QQDzyey6LvRaEMou5JIk6YbjRtWVc
-         /GFkv9pjb3CXhCiSkh9L64BhYhLfYE9cxyklR2gkUuaomQgvEZtH3kBffB+wuLLArE
-         lvB14BhyOagI3489Sg/6Sbsec/BzgSY2QPDHxCWDrvM8mMZHHKBnkk4UsaY74RQ9MI
-         m5lSJQdS2jYDg==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Jul 2023 06:03:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6763E1997;
+        Mon,  3 Jul 2023 03:01:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Mon,  3 Jul 2023 12:45:44 +0300 (MSK)
-Received: from CAB-WSD-0004828.sigma.sbrf.ru (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 3 Jul 2023 12:45:43 +0300
-From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
-To:     Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
-        Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Subject: [PATCH v1 2/2] spi: amlogic-spifc-a1: add support for max_speed_hz
-Date:   Mon, 3 Jul 2023 12:45:18 +0300
-Message-ID: <20230703094518.53755-3-mmkurbanov@sberdevices.ru>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230703094518.53755-1-mmkurbanov@sberdevices.ru>
-References: <20230703094518.53755-1-mmkurbanov@sberdevices.ru>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178391 [Jul 03 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: MMKurbanov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/03 07:50:00 #21557756
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F125160EA8;
+        Mon,  3 Jul 2023 10:01:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10676C433C7;
+        Mon,  3 Jul 2023 10:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688378514;
+        bh=lBNCeBSaDVPbahPrODhFzB0mv9GW3qx5Y2qThueabmI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XdgLcRzE0839ClMwDo2BfuZiHpg0hGkfYm72QUXNB67Fndw0qZ8DElRfdzKnLDBSq
+         x2qgT1GRJbxQ5sNcTPO+XgYZw624/QwMIPGKZJyUJ142AaZikmPUri44fTjYPoslQA
+         jD/4EsLqQtxDMRnuEe2Rcx/Ze9ghtmAERW63are3KozWcZTAaOOG7vmQi24WzEnNxn
+         v9GgFoHf+xaodyqsU61h3maEP7C/3Qc1+a/UrK0/2eneRdq1SkyF5vkEmSgTy498c4
+         yekJomhAgHJOA5Lcnx/cX9oVAGLKnVNp8lWlmp7Yc1Gwkj3rLD2VbI93mh2uFnZssC
+         jVy3GVv/53Tww==
+Date:   Mon, 3 Jul 2023 19:01:50 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, Ze Gao <zegao@tencent.com>,
+        Yafang <laoar.shao@gmail.com>
+Subject: Re: [PATCH v2] fprobe: add unlock to match a succeeded
+ ftrace_test_recursion_trylock
+Message-Id: <20230703190150.1451de6be0388b64d51c8530@kernel.org>
+In-Reply-To: <20230703092336.268371-1-zegao@tencent.com>
+References: <20230703092336.268371-1-zegao@tencent.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch sets the clock rate (spi_transfer->max_speed_hz) from the
-amlogic_spifc_a1_exec_op().
+On Mon,  3 Jul 2023 17:23:36 +0800
+Ze Gao <zegao2021@gmail.com> wrote:
 
-Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
----
- drivers/spi/spi-amlogic-spifc-a1.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+> Unlock ftrace recursion lock when fprobe_kprobe_handler() is failed
+> because of some running kprobe.
+> 
 
-diff --git a/drivers/spi/spi-amlogic-spifc-a1.c b/drivers/spi/spi-amlogic-spifc-a1.c
-index 0c21917e4caf..7ef2a0448990 100644
---- a/drivers/spi/spi-amlogic-spifc-a1.c
-+++ b/drivers/spi/spi-amlogic-spifc-a1.c
-@@ -107,6 +107,7 @@ struct amlogic_spifc_a1 {
- 	struct clk *clk;
- 	struct device *dev;
- 	void __iomem *base;
-+	u32 curr_speed_hz;
- };
- 
- static int amlogic_spifc_a1_request(struct amlogic_spifc_a1 *spifc, bool read)
-@@ -235,6 +236,20 @@ static int amlogic_spifc_a1_write(struct amlogic_spifc_a1 *spifc,
- 	return amlogic_spifc_a1_request(spifc, false);
- }
- 
-+static int amlogic_spifc_a1_set_freq(struct amlogic_spifc_a1 *spifc, u32 freq)
-+{
-+	int ret;
-+
-+	if (freq == spifc->curr_speed_hz)
-+		return 0;
-+
-+	ret = clk_set_rate(spifc->clk, freq);
-+	if (!ret)
-+		spifc->curr_speed_hz = freq;
-+
-+	return ret;
-+}
-+
- static int amlogic_spifc_a1_exec_op(struct spi_mem *mem,
- 				    const struct spi_mem_op *op)
- {
-@@ -243,6 +258,10 @@ static int amlogic_spifc_a1_exec_op(struct spi_mem *mem,
- 	size_t data_size = op->data.nbytes;
- 	int ret;
- 
-+	ret = amlogic_spifc_a1_set_freq(spifc, mem->spi->max_speed_hz);
-+	if (ret)
-+		return ret;
-+
- 	amlogic_spifc_a1_user_init(spifc);
- 	amlogic_spifc_a1_set_cmd(spifc, SPIFC_A1_USER_CMD(op));
- 
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks!
+
+> Fixes: 3cc4e2c5fbae ("fprobe: make fprobe_kprobe_handler recursion free")
+> Reported-by: Yafang <laoar.shao@gmail.com>
+> Closes: https://lore.kernel.org/linux-trace-kernel/CALOAHbC6UpfFOOibdDiC7xFc5YFUgZnk3MZ=3Ny6we=AcrNbew@mail.gmail.com/
+> Signed-off-by: Ze Gao <zegao@tencent.com>
+> ---
+>  kernel/trace/fprobe.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 18d36842faf5..93b3e361bb97 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -102,12 +102,14 @@ static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  
+>  	if (unlikely(kprobe_running())) {
+>  		fp->nmissed++;
+> -		return;
+> +		goto recursion_unlock;
+>  	}
+>  
+>  	kprobe_busy_begin();
+>  	__fprobe_handler(ip, parent_ip, ops, fregs);
+>  	kprobe_busy_end();
+> +
+> +recursion_unlock:
+>  	ftrace_test_recursion_unlock(bit);
+>  }
+>  
+> -- 
+> 2.40.1
+> 
+
+
 -- 
-2.40.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
