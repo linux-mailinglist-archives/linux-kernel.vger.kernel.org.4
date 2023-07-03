@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B12D745C80
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF4A745C85
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 14:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjGCMsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 08:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S231213AbjGCMs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 08:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjGCMrx (ORCPT
+        with ESMTP id S230489AbjGCMsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 08:47:53 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8ADFD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 05:47:52 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31438512cafso862144f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 05:47:51 -0700 (PDT)
+        Mon, 3 Jul 2023 08:48:54 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9C8CA
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 05:48:53 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc0609cd6so42289425e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 05:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688388470; x=1690980470;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688388531; x=1690980531;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YVY/yta8MPWmg9iGDhd2QZ8qAlvFNnDO2cXvkrgJQ+E=;
-        b=QlE2Iqus6AP6Te3dv3Y5Sx4aMQ+r5SKgwVSpZ0lVhlvFOkGw0WYXtGXIyYV13AdXyg
-         BF50w/diT8Np6DqNMws/6d/47CDoirkmcKusK6cN3dPFI2VGnUd9hAmyNYSlA4poktO+
-         eBlIbLnt08K37EodkyVat6+liUHZWpeoQatiE5O/3ceBUMebG7p6wzso8g68vqx48QeP
-         Q50WOmsmdac9sn01EhF2WYiEkGFTwOTVO9QCJi6lJY9lnNqqXeQk/4wQoS1+c5EPLsLm
-         ycCf9vXUK/7Q3fhEEM4/FDM3oJBppGTNdLj8CelDbYB3NzmZu/AEwfXT3hZ6/haUCtRa
-         EgeA==
+        bh=nFKT0CCXN0CmmHE2x8MUQw5sccSB1SdakxOhkM1UsG4=;
+        b=i16J4ni9PRmgjYqxfrE1XbOUgfjftUIExJgrCxjMKUpNa0UHu4g4yT+G0k47/9OXnB
+         1QZB5ciPxLMxQpV9Unfp9f38KrhcDrdpy19aiupbprTf6ktj0XEUYYpWnKBXfnS7wGnK
+         1jnDUxYGgsa6sX3GiT/5N6zso6Tc56ROXb4EybFyia6SKn0G4VbXTyoksin6FNg45DCn
+         F/LPCUrj8h4B5eRcFhh1e5sEkDM8anr5dq+g86J0nGpmQUjeO0YiV3ZN8NGYAaRQfSV3
+         PvNJk0trAcDdP1lOMdY1spR+0ZPZsTIr6rZhwBUjfQWCajqHVMWOW8LuUebj+kMlwQBo
+         UCuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688388470; x=1690980470;
+        d=1e100.net; s=20221208; t=1688388531; x=1690980531;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YVY/yta8MPWmg9iGDhd2QZ8qAlvFNnDO2cXvkrgJQ+E=;
-        b=G0LtnkXgZAJtcpJDQsEDynJmbRw7J3Vl6I9MQHpJlzFMSw0kDGN15QiKnwVSLCfh1B
-         LbamLziNAMe5Rc/5zZVtx1WUFsxoG3dqtnc+uDSIpMR+ibkJ9hUXFTYiVNACxvCb0Q5H
-         F9m5AyrvuaqYyKF2xvbdxSXF92Rxa9hqtaB0kbxB66AZo8b/8FQ+/krZzfW5hj2tOMh5
-         W3X6I5xju8pWCf4BA6ayKVNpbmUuQEtB/i8RImp2LlUoyRphTixCNH0Ls6rO45QiY/KX
-         PdYbrMu5vRHNb4PgBp5KELxosr8Q8cS/KU8SuuCjHhK/pYVwgmKZ1SNHIC1kYzI9rdWD
-         U5Wg==
-X-Gm-Message-State: ABy/qLYoaNpRMoBvg1+j9M6FFG55wYFbIrsLq31hnF9vKQ94828ScRjM
-        Iwvmv0Pzka32IxHhtCHiRHZ9GA==
-X-Google-Smtp-Source: APBJJlGkvS0VBTA5uxFkpZhC1EeXtotxBOQUfL8gsoFO3JwjxcRP9zPFqdv6CO7IZsrTAyG8/+JKUQ==
-X-Received: by 2002:a05:6000:124f:b0:314:3746:d44b with SMTP id j15-20020a056000124f00b003143746d44bmr2701847wrx.41.1688388470517;
-        Mon, 03 Jul 2023 05:47:50 -0700 (PDT)
+        bh=nFKT0CCXN0CmmHE2x8MUQw5sccSB1SdakxOhkM1UsG4=;
+        b=gsHVpqYy3elWiSLsN4PCyTckP8eg2ja7cp0iikN4ILttWQAELu0MhKBWFnuNhwD7Rp
+         AkKnRHK4dmaeGSXo97W2xdSSqe+/EtrPyZlR5NtLVfVL7ByejJtuErRhZRSC4z5yM1EN
+         L63VrVXyJRE/FnGjZVlr0aXmrfw9QY3o6fj5AjpW0bfFIWxVTWhpGeEN6qPPOS8ROQfa
+         +cWFpykeP6ePoSmilGDY1InbKzbi3iC2lCVqAxUvt4FJtERgl9U9mFPrvyMWFAarNbDA
+         d7FFXL7NcaE71oInzbQO1OTtaBaq6H3HFT7vr8KpS/ZYGoMFjdt0qgGaMxvU9v+GIqs5
+         fguQ==
+X-Gm-Message-State: AC+VfDzO1Rhlbf1JMPSt6tgMSg0NL50NAxoCDWJCGKRJPNjBYo+StBWC
+        d8wGXVbcc9np0FnhbLouGWv4CQ==
+X-Google-Smtp-Source: ACHHUZ5hXaX0d50B/MxYY7zmUATcMLkAUWf08O2mNTD1GDuz0rdbpLxwVWR6/kUM2N1nPey6Tok//g==
+X-Received: by 2002:a7b:ce0a:0:b0:3fb:b1fd:4172 with SMTP id m10-20020a7bce0a000000b003fbb1fd4172mr7691263wmc.22.1688388531708;
+        Mon, 03 Jul 2023 05:48:51 -0700 (PDT)
 Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id v2-20020a5d6782000000b00313f5babb18sm19568022wru.9.2023.07.03.05.47.49
+        by smtp.gmail.com with ESMTPSA id u20-20020a05600c211400b003fbb618f7adsm12744165wml.15.2023.07.03.05.48.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 05:47:50 -0700 (PDT)
+        Mon, 03 Jul 2023 05:48:51 -0700 (PDT)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -71,10 +71,11 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
         Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v4 01/10] perf: Fix wrong comment about default event_idx
-Date:   Mon,  3 Jul 2023 14:46:38 +0200
-Message-Id: <20230703124647.215952-2-alexghiti@rivosinc.com>
+Subject: [PATCH v4 02/10] include: riscv: Fix wrong include guard in riscv_pmu.h
+Date:   Mon,  3 Jul 2023 14:46:39 +0200
+Message-Id: <20230703124647.215952-3-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230703124647.215952-1-alexghiti@rivosinc.com>
 References: <20230703124647.215952-1-alexghiti@rivosinc.com>
@@ -90,31 +91,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit c719f56092ad ("perf: Fix and clean up initialization of
-pmu::event_idx"), event_idx default implementation has returned 0, not
-idx + 1, so fix the comment that can be misleading.
+The current include guard prevents the inclusion of asm/perf_event.h
+which uses the same include guard: fix the one in riscv_pmu.h so that it
+matches the file name.
 
 Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- include/linux/perf_event.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/perf/riscv_pmu.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index d5628a7b5eaa..56fe43b20966 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -442,7 +442,8 @@ struct pmu {
+diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
+index 43fc892aa7d9..9f70d94942e0 100644
+--- a/include/linux/perf/riscv_pmu.h
++++ b/include/linux/perf/riscv_pmu.h
+@@ -6,8 +6,8 @@
+  *
+  */
  
- 	/*
- 	 * Will return the value for perf_event_mmap_page::index for this event,
--	 * if no implementation is provided it will default to: event->hw.idx + 1.
-+	 * if no implementation is provided it will default to 0 (see
-+	 * perf_event_idx_default).
- 	 */
- 	int (*event_idx)		(struct perf_event *event); /*optional */
+-#ifndef _ASM_RISCV_PERF_EVENT_H
+-#define _ASM_RISCV_PERF_EVENT_H
++#ifndef _RISCV_PMU_H
++#define _RISCV_PMU_H
  
+ #include <linux/perf_event.h>
+ #include <linux/ptrace.h>
+@@ -81,4 +81,4 @@ int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *num_hw_ctr);
+ 
+ #endif /* CONFIG_RISCV_PMU */
+ 
+-#endif /* _ASM_RISCV_PERF_EVENT_H */
++#endif /* _RISCV_PMU_H */
 -- 
 2.39.2
 
