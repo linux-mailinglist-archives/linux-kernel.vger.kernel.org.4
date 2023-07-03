@@ -2,199 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4A3745E20
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D739E745E26
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjGCOG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        id S230355AbjGCOHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjGCOG4 (ORCPT
+        with ESMTP id S229614AbjGCOHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:06:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC89E51
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:06:07 -0700 (PDT)
+        Mon, 3 Jul 2023 10:07:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA83CE52
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:06:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688393166;
+        s=mimecast20190719; t=1688393211;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zHQXfVtXAZjvrQC07bbaf5d12vfBfUWqeJ1W4srezSg=;
-        b=H9y3vgDTOKjzMdrN5PiDBQjVQ/4/q3RuNPlJTgt/ojS/PX95RlxOK6KzArl6dQGIPSSNtA
-        b1QUpPAzKZFV8e89hbvxxpwQS98FFkkoEI2Ryl2xQJUJ4iv3suRf/ImgP6XTmk15y486Xc
-        F4vDUNDi5Apu/6Szq4asIhOfEleX2d0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-519-KKwRuRHoNVWxmJZw_RtnrA-1; Mon, 03 Jul 2023 10:06:00 -0400
-X-MC-Unique: KKwRuRHoNVWxmJZw_RtnrA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B40C03C18FE2;
-        Mon,  3 Jul 2023 14:05:59 +0000 (UTC)
-Received: from localhost.localdomain.com (unknown [10.22.32.241])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B36D6492B01;
-        Mon,  3 Jul 2023 14:05:58 +0000 (UTC)
-From:   Nico Pache <npache@redhat.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     aquini@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>
-Subject: [RFC] arm64: properly define SOFT_DIRTY for arm64
-Date:   Mon,  3 Jul 2023 09:55:26 -0400
-Message-ID: <20230703135526.930004-1-npache@redhat.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CB8PxyDNwVkJMIW4hfmSSWI5RtlCTt1qxsK0d6XKaw4=;
+        b=KiFKSEbsBQ1eZ14DVaP+0aAhyuWaM8sYvXmj2mF6Mrun/yRz/+euwW8MQN2rXcih/FVzzk
+        0CZzSdJ6IxkjDFvBuitqAzZar2Vzdtj6MO3bTL/4B9FRsMb/6NtOt6P3TlYm7P8jk9x1jP
+        UPYQ+9pLFztz2X5Lt1xiQEME82nYul0=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-518-67RcfbF5NTuiqMv3K18FTQ-1; Mon, 03 Jul 2023 10:06:50 -0400
+X-MC-Unique: 67RcfbF5NTuiqMv3K18FTQ-1
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-564fb1018bcso47577317b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:06:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688393210; x=1690985210;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CB8PxyDNwVkJMIW4hfmSSWI5RtlCTt1qxsK0d6XKaw4=;
+        b=OkQF/KO4JFHDe7HSrIyTr84Wr1UCOKC/xuwq8sRd0hHx9ygU5kW7yxR+t9S/uj1ipg
+         fLblcYx+D2NAAvZetjhU8UmUucW0m2xdYIwbJDqw5H9ZDV0APRe0ks2ihdmgQm99cXAQ
+         iXjbQWdHiGW9p2C5goTpPcoyygfZjSxdhTaMxKYLDk7jya6zBcdkyTH3/vtyhkgbgnVK
+         IQ5/xaOkSvTi9j7YDXBXqf0rImcs2g1SMRCYvohnPNlVdARKprNWa9Hd4wVkB9t/iBUn
+         tq0/fXJjpBCBcB4A3DOaK2/PagwKdCVMsJAOEC44Gn9U4+8xb+swtkKynCLUxXiVAxqV
+         1A2w==
+X-Gm-Message-State: ABy/qLaDgyY1ajLyF5vWXsSFBGsZ1f/Ay9IIB845/VHcVX968Yp6cmAK
+        dRwclcSzmyCCgKBIf5ognHtNib4y/jexAWk0UPKuEB7wJguqunTuK/u7/01s38ZTeQjjmmfIiUj
+        2K0ckwqnQpwIylPMwpuBW93B+K4q0QTa6ET1/yHab
+X-Received: by 2002:a25:cfd0:0:b0:c4d:f174:3c83 with SMTP id f199-20020a25cfd0000000b00c4df1743c83mr4576944ybg.36.1688393209877;
+        Mon, 03 Jul 2023 07:06:49 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFL9AvmP2dHOWHf/Kz2nSTH0l+Cv3iKQAmB5Od+UQBYtwns0Up/LcC6ba4zFUuffi4csE/qtbIWQ48IbCK/1A0=
+X-Received: by 2002:a25:cfd0:0:b0:c4d:f174:3c83 with SMTP id
+ f199-20020a25cfd0000000b00c4df1743c83mr4576932ybg.36.1688393209675; Mon, 03
+ Jul 2023 07:06:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+References: <20230703121838.70898-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230703121838.70898-1-andriy.shevchenko@linux.intel.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 3 Jul 2023 16:06:38 +0200
+Message-ID: <CAO-hwJJOW6QT-weKqTC5QJnP5e6EjJD3-d0-cxePpdHOj3Epkg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] gpiolib: Avpid modifying GPIO chip fwnode
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARM64 has a soft-dirty bit (software dirty) but never properly defines
-CONFIG_ARCH_HAS_SOFT_DIRTY or its necessary functions. This patch
-introduces the ability to set/clear the soft dirty bit in a similar
-manner as the other arches that utilize it.
+On Mon, Jul 3, 2023 at 2:18=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Ideally the GPIO chip data structure has to be constant.
+> In real life it's not true, but we can make it closer to
+> that. Hence the series.
+>
+> Benjamin, would be nice it you can perform regression test for your
+> case.
 
-However, we must be careful... there are cases where the DBM bit is not
-available and the software dirty bit plays a essential role in determining
-whether or not a page is dirty. In these cases we must not allow the
-user to clear the software dirty bit. We can test for these cases by
-utilizing the arch_faults_on_old_pte() function which test the availability
-of DBM.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc: Liu Shixin <liushixin2@huawei.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Yu Zhao <yuzhao@google.com>
-Signed-off-by: Nico Pache <npache@redhat.com>
----
- arch/arm64/Kconfig               |  1 +
- arch/arm64/include/asm/pgtable.h | 77 +++++++++++++++++++++++++++++++-
- 2 files changed, 76 insertions(+), 2 deletions(-)
+FWIW:
+Tested-by: Benjamin Tissoires <bentiss@kernel.org>
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 891ab530a665..4de491627f49 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -173,6 +173,7 @@ config ARM64
- 	select HAVE_ARCH_PREL32_RELOCATIONS
- 	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
- 	select HAVE_ARCH_SECCOMP_FILTER
-+	select HAVE_ARCH_SOFT_DIRTY
- 	select HAVE_ARCH_STACKLEAK
- 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
- 	select HAVE_ARCH_TRACEHOOK
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 0bd18de9fd97..a0a15ffa2417 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -121,8 +121,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
- })
- 
- #define pte_hw_dirty(pte)	(pte_write(pte) && !(pte_val(pte) & PTE_RDONLY))
--#define pte_sw_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
--#define pte_dirty(pte)		(pte_sw_dirty(pte) || pte_hw_dirty(pte))
-+#define pte_soft_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
-+#define pte_dirty(pte)		(pte_soft_dirty(pte) || pte_hw_dirty(pte))
-+#define pte_swp_soft_dirty(pte)	pte_soft_dirty(pte)
- 
- #define pte_valid(pte)		(!!(pte_val(pte) & PTE_VALID))
- /*
-@@ -1096,6 +1097,78 @@ static inline bool pud_sect_supported(void)
- 	return PAGE_SIZE == SZ_4K;
- }
- 
-+#ifdef CONFIG_ARM64_HW_AFDBM
-+/*
-+ * if we have the DBM bit we can utilize the software dirty bit as
-+ * a mechanism to introduce the soft_dirty functionality; however, without
-+ * it this bit is crucial to determining if a entry is dirty and we cannot
-+ * clear it via software. DBM can also be disabled or broken on some early
-+ * armv8 devices, so check its availability before modifying it.
-+ */
-+static inline pte_t pte_clear_soft_dirty(pte_t pte)
-+{
-+	if (arch_faults_on_old_pte())
-+		return pte;
-+
-+	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-+}
-+
-+static inline pte_t pte_mksoft_dirty(pte_t pte)
-+{
-+	if (arch_faults_on_old_pte())
-+		return pte;
-+
-+	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-+}
-+
-+static inline pte_t pte_swp_clear_soft_dirty(pte_t pte)
-+{
-+	if (arch_faults_on_old_pte())
-+		return pte;
-+
-+	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-+}
-+
-+static inline pte_t pte_swp_mksoft_dirty(pte_t pte)
-+{
-+	if (arch_faults_on_old_pte())
-+		return pte;
-+
-+	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-+}
-+
-+static inline int pmd_soft_dirty(pmd_t pmd)
-+{
-+	return pte_soft_dirty(pmd_pte(pmd));
-+}
-+
-+static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
-+{
-+	return pte_pmd(pte_clear_soft_dirty(pmd_pte(pmd)));
-+}
-+
-+static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
-+{
-+	return pte_pmd(pte_mksoft_dirty(pmd_pte(pmd)));
-+}
-+
-+#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-+static inline int pmd_swp_soft_dirty(pmd_t pmd)
-+{
-+	return pmd_soft_dirty(pmd);
-+}
-+
-+static inline pmd_t pmd_swp_clear_soft_dirty(pmd_t pmd)
-+{
-+	return pmd_clear_soft_dirty(pmd);
-+}
-+
-+static inline pmd_t pmd_swp_mksoft_dirty(pmd_t pmd)
-+{
-+	return pmd_mksoft_dirty(pmd);
-+}
-+#endif /* CONFIG_ARCH_ENABLE_THP_MIGRATION */
-+#endif /* CONFIG_ARM64_HW_AFDBM */
- 
- #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
- #define ptep_modify_prot_start ptep_modify_prot_start
--- 
-2.41.0
+I've tested Danny's series + my SSDT override, with and without your
+series on top of the master of hid.git (v6.4+merge of the hid.git tree
+for v6.5-rc1), and in both cases, I can access the I2C-HID node that
+sits on top of the CP2112 USB adapter.
+
+Cheers,
+Benjamin
+
+
+>
+>
+> Bart, the idea is that this series has to land immediately after
+> v6.5-rc1 is out so we will have longer time to fix any downsides
+> and regressions found, if any.
+>
+> Andy Shevchenko (3):
+>   gpiolib: of: Don't use GPIO chip fwnode in of_gpiochip_*()
+>   gpiolib: acpi: Don't use GPIO chip fwnode in acpi_gpiochip_find()
+>   gpiolib: Do not alter GPIO chip fwnode member
+>
+>  drivers/gpio/gpiolib-acpi.c |  2 +-
+>  drivers/gpio/gpiolib-of.c   |  6 +++---
+>  drivers/gpio/gpiolib.c      | 16 ++++++++--------
+>  3 files changed, 12 insertions(+), 12 deletions(-)
+>
+> --
+> 2.40.0.1.gaa8946217a0b
+>
 
