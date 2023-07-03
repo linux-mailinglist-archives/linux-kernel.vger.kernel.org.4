@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB6C745758
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4E274575B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 10:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjGCIbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 04:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S230029AbjGCId1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 04:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjGCIbm (ORCPT
+        with ESMTP id S229523AbjGCId0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:31:42 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F69DD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:31:41 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbca6a9ae4so120685e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 01:31:41 -0700 (PDT)
+        Mon, 3 Jul 2023 04:33:26 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBD01BC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 01:33:25 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so118215e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 01:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688373099; x=1690965099;
+        d=google.com; s=20221208; t=1688373204; x=1690965204;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hvMSLmEp/jCrf5+fXJYCHSi75wHSFHMyA26Vf0+e2Ew=;
-        b=ncYEWyB42+EGNRtnmuTbaDTFcdc5HwR/u/GwI6uAvYNyIiben7j4gFA8VJF8bygJHG
-         pu+6Oh8yLsrV5W/CmfBfwgmO4eTYvEyvomLjN9azkjr9xZUy7CfpclmWGpC8xxK+Y35o
-         s6aNTTcqSYYkygcqT+fsWz3vazmR9Xb3RVuTBG3V7OVmDn/XD/uprFfyEj40Kw/kYb4V
-         TeFhX84TR6JFmF143cOYWfEVKeHMjJVGQOlvKilYd8F6V3M0Hw8LwVQPr73O/ihCD2IK
-         oIkbMj7tbQI/TDuH0n7xIjp0NcwAe2KtksdmkyF1/l8WGZBihueSA0aBJtqm+QxNJIvT
-         5Xxw==
+        bh=wriP2XUrnLtI+7GWf032nay1vqXA7Kps9xjESoFP7kE=;
+        b=La84kUPlP1niN59EnYFq8q7DPZlQKSzPo2QQJikmqpprzPyCxAwb4E3IgXNjl9syuC
+         dy+Du5m0kUXDwTNE/4d47X2h+yhuH7atqEyui2Uk1p1Yok/zepI4XhGjIcv8BPpaejjt
+         7ifRc5TGcJ7nJqYm1u+jXjJDUReBJR5M8RjjooNvk1yz4yzrilCfDWLVUw4BsotNr6q+
+         ferkveled2VUO31hgxghZUjLK3cE37d6p7Ku3yhsDgJveMSyLXYXB9oQgHK6BsooNsNm
+         dLZGst2BPKcVQxBztDQQwmJjlh8LqBNf0/6MiXctIfVACrJVSZ6rMuM5p56N8BPUlswM
+         FA/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688373099; x=1690965099;
+        d=1e100.net; s=20221208; t=1688373204; x=1690965204;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hvMSLmEp/jCrf5+fXJYCHSi75wHSFHMyA26Vf0+e2Ew=;
-        b=ixxuamIJqNkCa3a80AvsorxFSQjAZol9l4IZ0grDF/RyV8W3/Is74qmzFp2mBj+rA1
-         bPpUi4aDjpH2V61BwFNR1TqePclAVp7XgHjqGZx/rRGtw6pQF2X6zpJNf/CFqK3537lo
-         7m2T89YiTP1RrDUpWrvTbo5vYQvLadQT0OUYRTOp7fwFp0b6Ncei6Fb02H7BGsGGGOpu
-         /oDBs1JAQWk6XqdoFcwv5qtFP8mCERUsieiIslb0wZlN/Lms1BmsYtHiNeMpDeLyr9qD
-         hnrBQc7pc1OOAThTHQUMl5jMlv3X+skTQvmvmCQKGUs4+AuEK7spIrDZ5tGZFZFp1baO
-         D/1A==
-X-Gm-Message-State: ABy/qLaq0C52X7j6S7bGaQNfNVIrnwIpc2/vzkJ8aK9hpu4SVH+70eaC
-        T7VpJNoJopHmjb3zNm6mn8DwZIYaT0hRuQTKqFSlJnueP1NNNjrCTaU=
-X-Google-Smtp-Source: APBJJlENpIpyWgCH9Y60BUirnq+/MtqiHOwLZijSMXbL6iIdYGH1Ln3fbXNObVUgo+uGipISqjN2SULM1jmNhgRylb8=
-X-Received: by 2002:a05:600c:1d29:b0:3f7:ba55:d038 with SMTP id
- l41-20020a05600c1d2900b003f7ba55d038mr146968wms.6.1688373099531; Mon, 03 Jul
- 2023 01:31:39 -0700 (PDT)
+        bh=wriP2XUrnLtI+7GWf032nay1vqXA7Kps9xjESoFP7kE=;
+        b=DKomammsZpPjb/OwErwm0ErTWU13eP3uKVZyECSKsH5suj+Ou5sCD40jRg6Kv0gPEs
+         CkHBkK6yuCpnVYHNOYLUlhSOH8wqMc0E8RdyA/SeMM2rpjY6gAyhSLHQ3AfwHbDnkhFA
+         w7+nbf9apqDiwkMQTh/wkghqxHoykVnmojzVJTz0sTBxZQ/yEnjLnNe3cqUHghmvh4AU
+         jMez4OXfQQyypSTk9nsw02mZGash6g3NvMOrA0nSSjjnKe0L4m0k1uDRXu1FPPr9Id7c
+         wV5BsGNY2ZkpegkouH1PPHPJoA/o0vEvJwIlm/DqyCS3/7DPWX1F2RegduA502zv3mDA
+         ovZA==
+X-Gm-Message-State: ABy/qLaaK08j/7h/zIid74Nf/1q/OAmeC7htLVD8kngfIeeWEsuzBFgX
+        hl5jpjA17lDXIa+MqxQHqJuW0ZNIUyJVPB1nacxd2g==
+X-Google-Smtp-Source: APBJJlHCMX7Exg4kL0Im+kwDJxYL/zpztui5/XBZvyxdLBPkrE8suJFG7vi5iAaG+uYEYS0xT/xA9zGbhdTWyrNFh1I=
+X-Received: by 2002:a05:600c:3b9e:b0:3f7:e463:a0d6 with SMTP id
+ n30-20020a05600c3b9e00b003f7e463a0d6mr150843wms.0.1688373204036; Mon, 03 Jul
+ 2023 01:33:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000e6068305ff68b9c5@google.com> <87edlry1cn.ffs@tglx>
-In-Reply-To: <87edlry1cn.ffs@tglx>
+References: <20230703-unpassend-bedauerlich-492e62f1a429@brauner> <000000000000d2451605ff9093bc@google.com>
+In-Reply-To: <000000000000d2451605ff9093bc@google.com>
 From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 3 Jul 2023 10:31:27 +0200
-Message-ID: <CANp29Y6X7fiw6y74Br6HXyyDuQUJMqQk3suzFvwrkg0W36ob5Q@mail.gmail.com>
-Subject: Re: [syzbot] [kernel?] linux-next boot error: BUG: sleeping function
- called from invalid context in cpu_bugs_smt_update
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     syzbot <syzbot+bdc9ec9be68959140dbf@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        peterz@infradead.org, sfr@canb.auug.org.au,
+Date:   Mon, 3 Jul 2023 10:33:11 +0200
+Message-ID: <CANp29Y5KParuHYw2sJdDMXXP7zaa-ss1nPN4n5x2qxGJnhtubg@mail.gmail.com>
+Subject: Re: [syzbot] [kernel?] net test error: UBSAN: array-index-out-of-bounds
+ in alloc_pid
+To:     syzbot <syzbot+3945b679bf589be87530@syzkaller.appspotmail.com>
+Cc:     brauner@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 7:43=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
- wrote:
+On Mon, Jul 3, 2023 at 10:01=E2=80=AFAM syzbot
+<syzbot+3945b679bf589be87530@syzkaller.appspotmail.com> wrote:
 >
-> On Sat, Jul 01 2023 at 01:29, syzbot wrote:
-> > syzbot found the following issue on:
+> > On Sun, Jul 02, 2023 at 11:19:54PM -0700, syzbot wrote:
+> >> Hello,
+> >>
+> >> syzbot found the following issue on:
+> >>
+> >> HEAD commit:    97791d3c6d0a Merge branch 'octeontx2-af-fixes'
+> >> git tree:       net
+> >> console output: https://syzkaller.appspot.com/x/log.txt?x=3D11b1a6d728=
+0000
+> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D924167e366=
+6ff54c
+> >> dashboard link: https://syzkaller.appspot.com/bug?extid=3D3945b679bf58=
+9be87530
+> >> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Bin=
+utils for Debian) 2.35.2
+> >>
+> >> Downloadable assets:
+> >> disk image: https://storage.googleapis.com/syzbot-assets/2bd5d64db6b8/=
+disk-97791d3c.raw.xz
+> >> vmlinux: https://storage.googleapis.com/syzbot-assets/cd31502424f2/vml=
+inux-97791d3c.xz
+> >> kernel image: https://storage.googleapis.com/syzbot-assets/33c6f22e34a=
+b/bzImage-97791d3c.xz
+> >>
+> >> IMPORTANT: if you fix the issue, please add the following tag to the c=
+ommit:
+> >> Reported-by: syzbot+3945b679bf589be87530@syzkaller.appspotmail.com
 > >
-> > HEAD commit:    53cdf865f90b Add linux-next specific files for 20230627
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D12a6f567280=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D83c17849d18=
-e7a86
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dbdc9ec9be6895=
-9140dbf
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
-tils for Debian) 2.35.2
+> > #syz dup: [syzbot] [kernel?] net-next test error: UBSAN: array-index-ou=
+t-of-bounds in alloc_pid
 >
-> That was a temporary hickup in next.
+> can't find the dup bug
+>
 
-Thanks for your reply.
-
-Let's invalidate the report then:
-#syz invalid
+#syz dup: net-next test error: UBSAN: array-index-out-of-bounds in alloc_pi=
+d
