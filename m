@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1187465FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 01:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2DC746600
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 01:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjGCXCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 19:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S230427AbjGCXCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 19:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjGCXCE (ORCPT
+        with ESMTP id S230512AbjGCXCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 19:02:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0166CE6D;
-        Mon,  3 Jul 2023 16:02:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=1rtcPybyM5MqfBvMrkvocPzhfGVv/+DMp2tXnRIeTf4=; b=PXfaaU+BYNjGFWCf5aiibLVahl
-        cFEfwzIQHmgIKhrvoGbTVY9biuglzEl8sLI3BpJoxV23m6YtVh0qFWQSTxie/NydYgiwmlg/+yfLp
-        ns1ghEntAfD9STYmkivXNJsTRKtTyl7YzyDwvavQGhcxNZZwIOln1Nt4HY3Yu+dIaeUp3uIcc2bsR
-        VqDqs735F4L2BuZacw+rQIvJZl5Q8qBOxytmImIU0jj3Uowh6J9JEP76yDEJpXHlr8rYU0FojiQp+
-        oxDDuaTLeW6fvqc7Z0ZzHSpGdni2wrUG9MSSyP0H0ZkBsyOKMre8n/E5pdbMJzVD9cK0EInjIEdKt
-        HQebaVBg==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qGSYV-00Bbd5-2b;
-        Mon, 03 Jul 2023 23:02:03 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <izh1979@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v4 RESEND] sparc64: NMI watchdog: fix return value of __setup handler
-Date:   Mon,  3 Jul 2023 16:02:02 -0700
-Message-ID: <20230703230202.19844-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.41.0
+        Mon, 3 Jul 2023 19:02:39 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA8E10E5
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 16:02:22 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51d9695ec29so4676124a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 16:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=futuring-girl-com.20221208.gappssmtp.com; s=20221208; t=1688425340; x=1691017340;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ugEEPDI78ePccslV5nFSda7Y+u/b3y8toq3vF1cGXRM=;
+        b=Gxg1d296aYhiThTBErhnK4dFyBlXUAQZR1j5FPxBeNRWewzsI9EYOok18orw1+ka1x
+         +bln1Pl9uVN9FKWcvin7zQoyOTdfSeP7iYT1KquHv/2Guvb2gEQwQ0bS3yurHb84tRcd
+         UZn/uttOqZ42oBsM2Lu7jsF+dofR+ZkktI39f1FtTVw5cnxdpAv0WkPyPnEqoLhgumXg
+         y6tUYBc+rnuSm1I4rgSIcZhOPR2nIvmgJ5+hSjhmOY/sX7RqoCZY37moGpkZjpQ94Fn6
+         SwfY8aaKo0F2wt8qwbc3NJqvuyTok8oCtlw8LNWm7yoWR9iVHYiXNBGMdl+HkL7AJrLc
+         BnQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688425340; x=1691017340;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ugEEPDI78ePccslV5nFSda7Y+u/b3y8toq3vF1cGXRM=;
+        b=LXN20jJ9zssqMWPgGiSqIXo2nwG6aBKJI2BPjFAtcZtf27fdsldlXXczFI90mxnOrN
+         RRnYJXSHME8HXVl3nsnBnQ9UIMcp9aS0lA9a7zkzKl5rsdD4KvkiZZ6E4PfEzAGfNlPZ
+         AYSgraGY9tgPhFZwjeWbi3W3guD2/sDDDOuyFuWCQkZslv8BU9ALXssEN+QB1B+ChpRT
+         0qbXrzyEPzwCkBP6JheYCbxFMLtp4ilqO23nWFNrCa8tB/f7SWYXOttgQwpbKK2+sGMM
+         4TNaLY39TwtIiS0AY6NVdioIlwKXHJpGz1Exd5G4VdYHnHFbUKd1hyt6zDiKV07XRdcn
+         2IiA==
+X-Gm-Message-State: ABy/qLZaEFC90jx2/nMEhfUvjNZmYYEdbpPssMHlWfBL/MHx0Laxn3wD
+        qZvU/RO13Z2rPNdU3f8odY8FtpjbGyWVX2RMJmp1cw==
+X-Google-Smtp-Source: APBJJlFfCePKSzholqHXh1bDMosUBsG+EpDt5w4T90POrytUx446YR+AKSabi0OjjX5yBnw0LUAcyx0QPDihFPk1n/8=
+X-Received: by 2002:aa7:c697:0:b0:51d:960d:5fce with SMTP id
+ n23-20020aa7c697000000b0051d960d5fcemr6204738edq.14.1688425340062; Mon, 03
+ Jul 2023 16:02:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20230703184519.121965745@linuxfoundation.org>
+In-Reply-To: <20230703184519.121965745@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Tue, 4 Jul 2023 08:02:09 +0900
+Message-ID: <CAKL4bV6wTXVoYP7Ui9u0vSfx4Ga0GY+VPZeQp8TLJ+zvxjoHhQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/11] 6.1.38-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,42 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from setup_nmi_watchdog().
+Hi Greg
 
-Fixes: e5553a6d0442 ("sparc64: Implement NMI watchdog on capable cpus.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <izh1979@gmail.com>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>
----
-v2: change From: Igor to Reported-by:
-    add more Cc's
-v3: use Igor's current email address
-v4: add Arnd to Cc: list
+On Tue, Jul 4, 2023 at 3:57=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.38 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Jul 2023 18:45:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.38-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
- arch/sparc/kernel/nmi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+6.1.38-rc1 tested.
 
-diff -- a/arch/sparc/kernel/nmi.c b/arch/sparc/kernel/nmi.c
---- a/arch/sparc/kernel/nmi.c
-+++ b/arch/sparc/kernel/nmi.c
-@@ -279,7 +279,7 @@ static int __init setup_nmi_watchdog(cha
- 	if (!strncmp(str, "panic", 5))
- 		panic_on_timeout = 1;
- 
--	return 0;
-+	return 1;
- }
- __setup("nmi_watchdog=", setup_nmi_watchdog);
- 
+Build successfully completed.
+Boot successfully completed.
+No dmesg regressions.
+Video output normal.
+Sound output normal.
+
+Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P(x86_64), arch linux)
+
+Thanks
+
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
