@@ -2,344 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587E8746021
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530EC746022
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 17:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjGCPwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 11:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S230176AbjGCPwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 11:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjGCPwV (ORCPT
+        with ESMTP id S230052AbjGCPwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 11:52:21 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCEBE44
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688399539; x=1719935539;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kg4H8EJxzT+JmzsPx5yMUTbVFym+TvfIau+EfU0TlSE=;
-  b=GdZi7i1GLjV2X8oxem1sdcLmXuWFGChP2pT9tEGJu4XpVTHisg7Noy7Z
-   jW94QaHlPzUkCYK8Dlxfdhpwym/UVFgA0S9huCP/6lIFyGZf1pqpcCw7c
-   uBXw6ZUAARL9maKiDtinbaEjdOZvwCuT7z80WM8F/MCUzym0KAVBrOgHb
-   FNOqYiBWk+KDnUbC6c+Jvr1mWR2jyQkod6gVD6gGkSptyFIicFgEmFImI
-   VIIXnzVM4dJyNegjSoNgBdiN4h6Ku5+4w1qGjh6v+6Kfr5Q0lXPHQIQG5
-   kIoaGXd517mgtEzlox4obGyXWN91Jwma+pEvfwGsetgMQteZX7TRoeB/n
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="365488056"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="365488056"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 08:52:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="965225256"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="965225256"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jul 2023 08:52:14 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qGLqX-000HSJ-0u;
-        Mon, 03 Jul 2023 15:52:13 +0000
-Date:   Mon, 3 Jul 2023 23:51:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ryan Roberts <ryan.roberts@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-Message-ID: <202307032325.u93xmWbG-lkp@intel.com>
-References: <20230703135330.1865927-5-ryan.roberts@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703135330.1865927-5-ryan.roberts@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Jul 2023 11:52:44 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C195DE52
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 08:52:41 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230703155237euoutp02d97b90b9dfb23730bb809d707a3371ca~uZnPKtS-R1479714797euoutp02H
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 15:52:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230703155237euoutp02d97b90b9dfb23730bb809d707a3371ca~uZnPKtS-R1479714797euoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1688399557;
+        bh=jpSZ740BbRpOlPH0bgMbpPV5ohMlMtS4ynvmt2Pinu0=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=dcb124aNnqSE/x5yfnJTmlZg/bOcs5Oum03YtYVOVpGC6uChadW3lKNgrlt+4nwAs
+         eYRKLcpidYfL7QTZ4TtBT7DT1x2tebYcjLRtb2lyEdsvs5yavTBg4o6SnnjQlt228H
+         JqW+0ZCyUZKIevLPSIyAslwUT1+5DyZj1Z3Sovhk=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230703155237eucas1p13ba5e3125e5394e85d1dc577b16ddbb0~uZnO89aid2818528185eucas1p1J;
+        Mon,  3 Jul 2023 15:52:37 +0000 (GMT)
+X-AuditID: cbfec7f5-815ff7000002937e-6e-64a2eec59593
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 98.50.37758.5CEE2A46; Mon,  3
+        Jul 2023 16:52:37 +0100 (BST)
+Mime-Version: 1.0
+Subject: [PATCH] trace: fix null pointer dereference in
+ tracing_err_log_open()
+Reply-To: m.stachyra@samsung.com
+Sender: Mateusz Stachyra <m.stachyra@samsung.com>
+From:   Mateusz Stachyra <m.stachyra@samsung.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>
+CC:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230703155237eucms1p4dfb6a19caa14c79eb6c823d127b39024@eucms1p4>
+Date:   Mon, 03 Jul 2023 17:52:37 +0200
+X-CMS-MailID: 20230703155237eucms1p4dfb6a19caa14c79eb6c823d127b39024
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230703155237eucms1p4dfb6a19caa14c79eb6c823d127b39024
+X-EPHeader: Mail
+X-ConfirmMail: N,general
+CMS-TYPE: 201P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrIIsWRmVeSWpSXmKPExsWy7djPc7pH3y1KMZjWr2BxedccNosj68+y
+        WCxermaxr+MBkwOLR8u+W+wem1Z1snl83iQXwBzFZZOSmpNZllqkb5fAlTHj7V62gh2CFS9W
+        XmFuYDzP18XIySEhYCKx78t+li5GLg4hgRWMEhvf3WbtYuTg4BUQlPi7QxikRlggQGLF3yVg
+        YSEBBYktz9UhwoYSE3asYgax2QT0JRYv3McIMkZEoI9RYnffTkaQBLNAnMTO2cuZIXbxSsxo
+        f8oCYUtLbF++lRHCFpW4ufotO4z9/th8qLiIROu9s1C9ghIPfu6GiktK3L7ZB2VXS/zfsxDK
+        bmGUeLPGAsI2l/g5dyczxCu+EudvS4GEWQRUJZYcu8MKUeIiceV7GzPEmfIS29/OAStnFtCU
+        WL9LH6LEUeLfvgNQ5QISa07MgbpGQmJryxNWiFY+iUnbpsN9uGPeEyYIW0XiyIHLUF9JSZx8
+        1cQGYXtI7Hz/mW0Co+IsRDjPQnLELIQjFjAyr2IUTy0tzk1PLTbOSy3XK07MLS7NS9dLzs/d
+        xAhMFaf/Hf+6g3HFq496hxiZOBgPMUpwMCuJ8DY/nJ8ixJuSWFmVWpQfX1Sak1p8iFGag0VJ
+        nFfb9mSykEB6YklqdmpqQWoRTJaJg1OqganxM1NS1PPQa9pz5ls06nhlhbZmJC5atqZIOdDc
+        k/uzw4t7YXNaU7pnsRzz/Si1P8WlVPGmi/7WA9z1LR0LpI2F7rjWpEqcyJqf9Fh/8e3NZQwz
+        Cmy0Kr9oC3yVl2q/xlCv7/V4n5W6mQLrkqCAsENnQ1PaLp5e9XHuB/4dq3y2x3T2eDsefrOh
+        qu7XnES1iVOnSTnrn3jyr+br389v5G5/2Pad+a9PyVN+wdn7p11P/iDzIWLj7MU3vjm0uzf8
+        7d68w1Lwrt2ESy/L/nVdetV8fG7JynuJQXO1Ltn80H8Xw7LB+95qjorSj0+evplpVXZfjL11
+        4tUZzqadNcueNZZszZ7pnb/Gm8VEQCFpurUSS3FGoqEWc1FxIgDJefPYhAMAAA==
+X-CMS-RootMailID: 20230703155237eucms1p4dfb6a19caa14c79eb6c823d127b39024
+References: <CGME20230703155237eucms1p4dfb6a19caa14c79eb6c823d127b39024@eucms1p4>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ryan,
+From d6ef949d29b884dd77fe5e628dc71318de08868c Mon Sep 17 00:00:00 2001
+From: Mateusz Stachyra <m.stachyra@samsung.com>
+Date: Mon, 3 Jul 2023 17:48:40 +0200
+Subject: [PATCH] trace: fix null pointer dereference in tracing_err_log_open()
 
-kernel test robot noticed the following build errors:
+Fix an issue in function 'tracing_err_log_open'.
+The function doesn't call 'seq_open' if file is opened only with
+write permissions, which results in 'file->private_data' being left at null.
+If we then use 'lseek' on that opened file, 'seq_lseek' dereferences
+'file->private_data' in 'mutex_lock(&m->lock)', resulting in a Kernel panic.
+Writing to this node requires root privilages, therefore this bug
+has very little security impact.
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on v6.4]
-[cannot apply to akpm-mm/mm-everything linus/master next-20230703]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tracefs node: /sys/kernel/tracing/error_log
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/mm-Non-pmd-mappable-large-folios-for-folio_add_new_anon_rmap/20230703-215627
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230703135330.1865927-5-ryan.roberts%40arm.com
-patch subject: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230703/202307032325.u93xmWbG-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230703/202307032325.u93xmWbG-lkp@intel.com/reproduce)
+Example Kernel panic:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307032325.u93xmWbG-lkp@intel.com/
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000038
+Call trace:
+ mutex_lock+0x30/0x110
+ seq_lseek+0x34/0xb8
+ __arm64_sys_lseek+0x6c/0xb8
+ invoke_syscall+0x58/0x13c
+ el0_svc_common+0xc4/0x10c
+ do_el0_svc+0x24/0x98
+ el0_svc+0x24/0x88
+ el0t_64_sync_handler+0x84/0xe4
+ el0t_64_sync+0x1b4/0x1b8
+Code: d503201f aa0803e0 aa1f03e1 aa0103e9 (c8e97d02)
+---[ end trace 561d1b49c12cf8a5 ]---
+Kernel panic - not syncing: Oops: Fatal exception
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Mateusz Stachyra <m.stachyra@samsung.com>
+---
+ kernel/trace/trace.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-   In file included from mm/memory.c:42:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from mm/memory.c:42:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from mm/memory.c:42:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> mm/memory.c:4271:2: error: implicit declaration of function 'set_ptes' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
-           ^
-   mm/memory.c:4271:2: note: did you mean 'set_pte'?
-   arch/um/include/asm/pgtable.h:232:20: note: 'set_pte' declared here
-   static inline void set_pte(pte_t *pteptr, pte_t pteval)
-                      ^
->> mm/memory.c:4274:2: error: implicit declaration of function 'update_mmu_cache_range' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
-           ^
-   12 warnings and 2 errors generated.
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 5d2c5678b..bfa8e2d01 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -8097,8 +8097,16 @@ static int tracing_err_log_open(struct inode *inode, struct file *file)
+ 		return ret;
+ 
+ 	/* If this file was opened for write, then erase contents */
+-	if ((file->f_mode & FMODE_WRITE) && (file->f_flags & O_TRUNC))
++	if ((file->f_mode & FMODE_WRITE) && (file->f_flags & O_TRUNC)) {
+ 		clear_tracing_err_log(tr);
++		ret = seq_open(file, &tracing_err_log_seq_ops);
++		if (!ret) {
++			struct seq_file *m = file->private_data;
++			m->private = tr;
++		} else {
++			trace_array_put(tr);
++		}
++	}
+ 
+ 	if (file->f_mode & FMODE_READ) {
+ 		ret = seq_open(file, &tracing_err_log_seq_ops);
 
-
-vim +/set_ptes +4271 mm/memory.c
-
-  4135	
-  4136	/*
-  4137	 * We enter with non-exclusive mmap_lock (to exclude vma changes,
-  4138	 * but allow concurrent faults), and pte mapped but not yet locked.
-  4139	 * We return with mmap_lock still held, but pte unmapped and unlocked.
-  4140	 */
-  4141	static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
-  4142	{
-  4143		bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
-  4144		struct vm_area_struct *vma = vmf->vma;
-  4145		struct folio *folio;
-  4146		vm_fault_t ret = 0;
-  4147		pte_t entry;
-  4148		int order;
-  4149		int pgcount;
-  4150		unsigned long addr;
-  4151	
-  4152		/* File mapping without ->vm_ops ? */
-  4153		if (vma->vm_flags & VM_SHARED)
-  4154			return VM_FAULT_SIGBUS;
-  4155	
-  4156		/*
-  4157		 * Use pte_alloc() instead of pte_alloc_map().  We can't run
-  4158		 * pte_offset_map() on pmds where a huge pmd might be created
-  4159		 * from a different thread.
-  4160		 *
-  4161		 * pte_alloc_map() is safe to use under mmap_write_lock(mm) or when
-  4162		 * parallel threads are excluded by other means.
-  4163		 *
-  4164		 * Here we only have mmap_read_lock(mm).
-  4165		 */
-  4166		if (pte_alloc(vma->vm_mm, vmf->pmd))
-  4167			return VM_FAULT_OOM;
-  4168	
-  4169		/* See comment in handle_pte_fault() */
-  4170		if (unlikely(pmd_trans_unstable(vmf->pmd)))
-  4171			return 0;
-  4172	
-  4173		/* Use the zero-page for reads */
-  4174		if (!(vmf->flags & FAULT_FLAG_WRITE) &&
-  4175				!mm_forbids_zeropage(vma->vm_mm)) {
-  4176			entry = pte_mkspecial(pfn_pte(my_zero_pfn(vmf->address),
-  4177							vma->vm_page_prot));
-  4178			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
-  4179					vmf->address, &vmf->ptl);
-  4180			if (vmf_pte_changed(vmf)) {
-  4181				update_mmu_tlb(vma, vmf->address, vmf->pte);
-  4182				goto unlock;
-  4183			}
-  4184			ret = check_stable_address_space(vma->vm_mm);
-  4185			if (ret)
-  4186				goto unlock;
-  4187			/* Deliver the page fault to userland, check inside PT lock */
-  4188			if (userfaultfd_missing(vma)) {
-  4189				pte_unmap_unlock(vmf->pte, vmf->ptl);
-  4190				return handle_userfault(vmf, VM_UFFD_MISSING);
-  4191			}
-  4192			if (uffd_wp)
-  4193				entry = pte_mkuffd_wp(entry);
-  4194			set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
-  4195	
-  4196			/* No need to invalidate - it was non-present before */
-  4197			update_mmu_cache(vma, vmf->address, vmf->pte);
-  4198			goto unlock;
-  4199		}
-  4200	
-  4201		/*
-  4202		 * If allocating a large folio, determine the biggest suitable order for
-  4203		 * the VMA (e.g. it must not exceed the VMA's bounds, it must not
-  4204		 * overlap with any populated PTEs, etc). We are not under the ptl here
-  4205		 * so we will need to re-check that we are not overlapping any populated
-  4206		 * PTEs once we have the lock.
-  4207		 */
-  4208		order = uffd_wp ? 0 : max_anon_folio_order(vma);
-  4209		if (order > 0) {
-  4210			vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
-  4211			order = calc_anon_folio_order_alloc(vmf, order);
-  4212			pte_unmap(vmf->pte);
-  4213		}
-  4214	
-  4215		/* Allocate our own private folio. */
-  4216		if (unlikely(anon_vma_prepare(vma)))
-  4217			goto oom;
-  4218		folio = alloc_anon_folio(vma, vmf->address, order);
-  4219		if (!folio && order > 0) {
-  4220			order = 0;
-  4221			folio = alloc_anon_folio(vma, vmf->address, order);
-  4222		}
-  4223		if (!folio)
-  4224			goto oom;
-  4225	
-  4226		pgcount = 1 << order;
-  4227		addr = ALIGN_DOWN(vmf->address, pgcount << PAGE_SHIFT);
-  4228	
-  4229		if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL))
-  4230			goto oom_free_page;
-  4231		folio_throttle_swaprate(folio, GFP_KERNEL);
-  4232	
-  4233		/*
-  4234		 * The memory barrier inside __folio_mark_uptodate makes sure that
-  4235		 * preceding stores to the folio contents become visible before
-  4236		 * the set_ptes() write.
-  4237		 */
-  4238		__folio_mark_uptodate(folio);
-  4239	
-  4240		entry = mk_pte(&folio->page, vma->vm_page_prot);
-  4241		entry = pte_sw_mkyoung(entry);
-  4242		if (vma->vm_flags & VM_WRITE)
-  4243			entry = pte_mkwrite(pte_mkdirty(entry));
-  4244	
-  4245		vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
-  4246		if (vmf_pte_changed(vmf)) {
-  4247			update_mmu_tlb(vma, vmf->address, vmf->pte);
-  4248			goto release;
-  4249		} else if (order > 0 && check_ptes_none(vmf->pte, pgcount) != pgcount) {
-  4250			goto release;
-  4251		}
-  4252	
-  4253		ret = check_stable_address_space(vma->vm_mm);
-  4254		if (ret)
-  4255			goto release;
-  4256	
-  4257		/* Deliver the page fault to userland, check inside PT lock */
-  4258		if (userfaultfd_missing(vma)) {
-  4259			pte_unmap_unlock(vmf->pte, vmf->ptl);
-  4260			folio_put(folio);
-  4261			return handle_userfault(vmf, VM_UFFD_MISSING);
-  4262		}
-  4263	
-  4264		folio_ref_add(folio, pgcount - 1);
-  4265		add_mm_counter(vma->vm_mm, MM_ANONPAGES, pgcount);
-  4266		folio_add_new_anon_rmap(folio, vma, addr);
-  4267		folio_add_lru_vma(folio, vma);
-  4268	
-  4269		if (uffd_wp)
-  4270			entry = pte_mkuffd_wp(entry);
-> 4271		set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
-  4272	
-  4273		/* No need to invalidate - it was non-present before */
-> 4274		update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
-  4275	unlock:
-  4276		pte_unmap_unlock(vmf->pte, vmf->ptl);
-  4277		return ret;
-  4278	release:
-  4279		folio_put(folio);
-  4280		goto unlock;
-  4281	oom_free_page:
-  4282		folio_put(folio);
-  4283	oom:
-  4284		return VM_FAULT_OOM;
-  4285	}
-  4286	
-
+base-commit: 1ef6663a587ba3e57dc5065a477db1c64481eedd
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
