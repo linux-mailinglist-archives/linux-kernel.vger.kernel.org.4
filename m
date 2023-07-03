@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8334B745BB7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A521745BBA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 13:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbjGCLzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 07:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S231464AbjGCL4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 07:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjGCLze (ORCPT
+        with ESMTP id S230119AbjGCL4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 07:55:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5559B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 04:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688385289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=f7Blmz01KkhnjG3CkQuHSrHa/R3BAwypyrKjulduXVA=;
-        b=OoKrZaoKyDJKFcILN+8V+n4r6YpcKyqHLsYn8cRgslnYUQUHmDz1U6wyxC/MVJ8GAZg3wZ
-        +5tNAdeqeIRYG94T9Aw8miwtcENjHQAeFUKzp/ufiLq1pmldCX9X8vCt1kQwCQ0tjrbKHa
-        BXcLS6DuknPYcMVloadVZJ/KGfa5WKA=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-613-2PnihrzTPoOQoxeNiJ6fUw-1; Mon, 03 Jul 2023 07:54:48 -0400
-X-MC-Unique: 2PnihrzTPoOQoxeNiJ6fUw-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b7cb432dd0so3755583a34.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 04:54:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688385287; x=1690977287;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f7Blmz01KkhnjG3CkQuHSrHa/R3BAwypyrKjulduXVA=;
-        b=MDr19JXTUHlVlygbUb1rwfzRQ8LuOdaFwVKz9N+lFNY1DhZtP4d2l/hs93B4kINLlF
-         V2ZhU6jVYj+gXuW45wMUOF0qU/fEUvvcoPQPNbWJL3WlqMnHa3ISkQ9cDw5qwubYtgwb
-         b0N801bxf8S/POrPqeeClmJUr9nQGmZ7T8akOThRLtOfeGz6tWMBW4qB2sjTxSIGrpge
-         3S5k5StMcZlH/2wjRnPqqsDjE4Wl1A1IWXb+nTPXG9NBH+JTVqA4MnWOFGPy07YmoCsQ
-         QS+NLK5Sli7ww2NozzmaSdyOwsRWsimzA24VLNyMnVjtNIDz1bEOLyb1vtQgNg8grWaM
-         RNqA==
-X-Gm-Message-State: AC+VfDxuuKeiNmR3n9d384sWqNAbBaFBiDa9lV1njy35qsGOfNDHe8Ci
-        c5t5+ET4+9ihzA7IRx1F/dwij68cFk5+vdD0P9vb6J6poZgTwviWYp2Ki520/r6hYtmPrS4vev0
-        3KEwgxBcjlVzJFxQE2TMklR3t
-X-Received: by 2002:a05:6830:139a:b0:6b7:20f6:1242 with SMTP id d26-20020a056830139a00b006b720f61242mr9877364otq.20.1688385287102;
-        Mon, 03 Jul 2023 04:54:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7FVEteqImZ56jG0cTISB6k7WjoEl4kHlZ2OzvXOgqdAXDOGMsCexyRBXODj/JojKMnZ6RaGw==
-X-Received: by 2002:a05:6830:139a:b0:6b7:20f6:1242 with SMTP id d26-20020a056830139a00b006b720f61242mr9877348otq.20.1688385286830;
-        Mon, 03 Jul 2023 04:54:46 -0700 (PDT)
-Received: from localhost ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id s68-20020a635e47000000b005533f154df1sm14907784pgb.2.2023.07.03.04.54.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 04:54:46 -0700 (PDT)
-From:   Coiby Xu <coxu@redhat.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ima: require signed IMA policy when UEFI secure boot is enabled
-Date:   Mon,  3 Jul 2023 19:54:41 +0800
-Message-ID: <20230703115442.129725-1-coxu@redhat.com>
-X-Mailer: git-send-email 2.41.0
+        Mon, 3 Jul 2023 07:56:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3122992;
+        Mon,  3 Jul 2023 04:56:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA23060F00;
+        Mon,  3 Jul 2023 11:56:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BF4EC433C8;
+        Mon,  3 Jul 2023 11:56:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688385381;
+        bh=F2W2Yz29lXWIrZbzQBpiFGDh8BKRY5hjbFr5d6zCVrs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fewtM7a2Cx5ya9V8+XoM9lpG+ndtxyx//S9nZtj4bgpbJVkqzfImc+/Ce7yZSkH7t
+         XYPVhzpx6urFRs4vv5FuaJxOQoTL+MvnIP4RtG44CUg0tqh2Vhn4KYXefdPF7xjVml
+         PTIMtAqxJjyOYiisqKpE82dB4t82txblOj5KTPHSrngfTJYNdNYe6ffxnvIYfzd7BA
+         DfD3qVdV4Yqc38x2utfEr1e59x4vhsvOuX2CZJnn0x9DlTuGjodYLy0fuf9EMAZVFi
+         +aphcOzB7muCt9hh2A2QP1N8s+RK1mFMjAtPkjaRUcEv+3v8eHcRc1AYeh3o4UyZ+f
+         8DKK6cwLZ7gJg==
+Date:   Mon, 3 Jul 2023 12:56:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
+        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        Stable@vger.kernel.org
+Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
+ number
+Message-ID: <80183a58-78ba-46b0-8d2a-502b5b28ffe4@sirena.org.uk>
+References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
+ <ZKJ9UrB8FRkLzLc-@hovoldconsulting.com>
+ <ZKKA6K44mp_vjwtp@hovoldconsulting.com>
+ <877crh76ge.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="U+PSF/XHDoszaQ30"
+Content-Disposition: inline
+In-Reply-To: <877crh76ge.wl-tiwai@suse.de>
+X-Cookie: Please go away.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the introduction of the .machine keyring for UEFI-based systems,
-users are able to add custom CAs keys via MOK. This allow users to sign
-their own IMA polices. For the sake of security, mandate signed IMA
-policy when UEFI secure boot is enabled.
 
-Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- security/integrity/ima/ima_efi.c | 3 +++
- 1 file changed, 3 insertions(+)
+--U+PSF/XHDoszaQ30
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-index 9db66fe310d4..bb2881759505 100644
---- a/security/integrity/ima/ima_efi.c
-+++ b/security/integrity/ima/ima_efi.c
-@@ -58,6 +58,9 @@ static const char * const sb_arch_rules[] = {
- #if !IS_ENABLED(CONFIG_MODULE_SIG)
- 	"appraise func=MODULE_CHECK appraise_type=imasig",
- #endif
-+#if IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && IS_ENABLED(CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY)
-+	"appraise func=POLICY_CHECK appraise_type=imasig",
-+#endif /* CONFIG_INTEGRITY_MACHINE_KEYRING && IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY */
- 	"measure func=MODULE_CHECK",
- 	NULL
- };
--- 
-2.41.0
+On Mon, Jul 03, 2023 at 10:19:29AM +0200, Takashi Iwai wrote:
 
+> Isn't it rather an issue about the error code passing in qcom driver?
+> How about the change like below?
+>=20
+>=20
+> Takashi
+>=20
+> --- a/sound/soc/qcom/qdsp6/topology.c
+> +++ b/sound/soc/qcom/qdsp6/topology.c
+> @@ -1276,10 +1276,8 @@ int audioreach_tplg_init(struct snd_soc_component =
+*component)
+>  	}
+> =20
+>  	ret =3D snd_soc_tplg_component_load(component, &audioreach_tplg_ops, fw=
+);
+> -	if (ret < 0) {
+> -		dev_err(dev, "tplg component load failed%d\n", ret);
+> -		ret =3D -EINVAL;
+> -	}
+> +	if (ret < 0)
+> +		dev_err_probe(dev, ret, "tplg component load failed %d\n", ret);
+
+That looks like a sensible change in general anyway.
+
+--U+PSF/XHDoszaQ30
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSit14ACgkQJNaLcl1U
+h9CjtAf7B2p1IgCA8Co/ROslWsAioKfyEfS43xyuwkb1ytO0MD50aPa5lID+D70f
+NRxVkywvv6oMZ26fvEFsebBNY/ZMyYdEv2j+hJ7HJjAvfv+JVDuTfFVekmaugM5N
+sFM8Pxs5WL12SecXUA6/zWgNt0DTncRKRyEMS5frnfYm+uiB4yT/rCeARNvbfgk3
+FKh5SAzmH/ELKlfy2Y0Sn2/J/1Yc5axqR0ZAgJZd0Yl/NHR3sa1taYpTlMGl5B3y
+xkBoNudvJrMSWq8v8VVZtisHZiXe//tSssEaTkFY6/4eSu8P9bmLX/Ge87K8IV9G
+3L8mkAUNnKXEPq/nH97/BUNtEe3Xrw==
+=NvHF
+-----END PGP SIGNATURE-----
+
+--U+PSF/XHDoszaQ30--
