@@ -2,86 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C1A745EAE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF83745EB0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjGCOl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
+        id S231219AbjGCOmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjGCOlY (ORCPT
+        with ESMTP id S229585AbjGCOmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:41:24 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6BAE70
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:41:18 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-992f6d7c7fbso350007566b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:41:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688395277; x=1690987277;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KsxT2CXzmHNRKMKyTxxMYK1jnDo5PSeQbIe7Vn7ruhs=;
-        b=ibuP6poiRv2NCpv0GANe5BUUMAtho2Sim6bzfVUn+CrFEk0BeMJH5r82Rsm/lrHb4B
-         FZ6udm9GNduaB5PVVVvfx085xYtTTDg2yvhr1xAElZaSw/DNo+jVEX9j72mskdOTx1+L
-         1gkkzTEkGsY+VhnT/EgfPPoAG692VJYniEIMJV3O5lPX0aBxe9Zii4MJZoJZbLLQJq+T
-         zDQlamtXX523PrGN0SNns51BDHWiqG5wBA0qk8M0uOXFfOph57kVHiQKKzOLLBpH4ats
-         3p6worsobf8sD/soHqHA9k+YonV6arMhM/smOcC69I92l0dLRjdLL65JOwv29W2G5BmN
-         +RRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688395277; x=1690987277;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KsxT2CXzmHNRKMKyTxxMYK1jnDo5PSeQbIe7Vn7ruhs=;
-        b=EC7eVmlIk9/ou4UPtmbsEvGMbSrzhHv6LhzPnabzmAMRGVs7A7eDupjF1+B1xRDjDh
-         pGdhgBjzZ+0/KeTkNBe8pUyAKW4VYaJweTmOgJcv6NxvGO1ro1AkZO9aSqviIIQUddX9
-         sGuQNSmRsdot597vKox/Cjna2O4KcRSwGT0U7VHd6GARb5DJloCv2EIXPYlJMQUZGfYM
-         zTF9bOEwO93Iyv/jIydLoZk9qUuC8MM7tWf4tVPgOJa/t3tVseEmLmB8qWlXQHkABGbT
-         ph9DcnkC/AYMcDmfyme4ufJgh2lFkWpFxiPsjhRKt99Mi5IL+ikKsGIpHAsfQDtC4XeZ
-         bvZA==
-X-Gm-Message-State: ABy/qLbWUhaMKM5wRkYNjpy5OzZquA+3gAhzSgvgWFq8t9EMcKjIzT9a
-        wn2Jsqpg2IX4M+Gl0zW10DsJfQ==
-X-Google-Smtp-Source: APBJJlGk9ekQfg4hjV5s18OXGN4VoU+I+0II8jd3rHixUG8SYz65UZyLq9XhnjMqiiDFTkFoY/5w9w==
-X-Received: by 2002:a17:906:2dc5:b0:992:58fc:bcb8 with SMTP id h5-20020a1709062dc500b0099258fcbcb8mr6529593eji.56.1688395277328;
-        Mon, 03 Jul 2023 07:41:17 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id l16-20020a1709065a9000b0098d93142ce1sm11957949ejq.109.2023.07.03.07.41.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 07:41:16 -0700 (PDT)
-Message-ID: <30070c0d-df8c-2ab4-bc54-7801b6b7d49b@linaro.org>
-Date:   Mon, 3 Jul 2023 16:41:15 +0200
+        Mon, 3 Jul 2023 10:42:13 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F34F7B2;
+        Mon,  3 Jul 2023 07:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1688395327;
+        bh=cre8VZmV6gYgTF6bv9oEQ8gWcE0Cd+BqTyhkY8/8Gww=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Dr9I8ddw6AGZrBWNXdhCwPsLl7OBiyps+er9THFZTMJfnH8N7VAlV3RTkS+pq1JNj
+         RVbiC1xrGkH/NFNXZNcH6htc23Mgdynw9goSOMtioI2dtq40ocBcTTSDID4MPm1mt4
+         WBD6COK4jCA5WYIJi3HnPLu5xiEaS2fQcnqjalF/+tRo+k52fHlDFy7p0M2nM900RA
+         wKm1gjh2G88hdPq44Gp1fcsfWvDpTVFCOK18ms7+DR4k/CaWuVr6pqTsA+gwL5jRQv
+         tF3sgn1V1kOVyg56IMY4cZGSHmzOAEOwQ0+QTqp1rrZHSP/IAdEQ99RESkG4Ti/1HO
+         3ryDp42PYV7zQ==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 04C8A1B6A;
+        Mon,  3 Jul 2023 16:42:07 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 16:42:05 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] fanotify accounting for fs/splice.c
+Message-ID: <cover.1688393619.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/5] dt-bindings: serial: geni-qcom: Allow no qup-core icc
- path
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
- <20230703-topic-8250_qup_icc-v1-2-fea39aa07525@linaro.org>
- <b8d3e99b-157e-4f7d-1f5e-a702acd8e819@linaro.org>
- <d3d6af2b-4feb-1545-5576-a811941a47e1@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d3d6af2b-4feb-1545-5576-a811941a47e1@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h7vuydtxhwlulk7a"
+Content-Disposition: inline
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,55 +53,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 16:38, Konrad Dybcio wrote:
-> On 3.07.2023 16:01, Krzysztof Kozlowski wrote:
->> On 03/07/2023 15:31, Konrad Dybcio wrote:
->>> Some SoCs (like SM8150 and SM8250) don't seem to provide a qup-core path.
->>> Allow such case.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>  .../bindings/serial/qcom,serial-geni-qcom.yaml     | 26 +++++++++++++++-------
->>>  1 file changed, 18 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> index dd33794b3534..a0acba57bc06 100644
->>> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> @@ -25,14 +25,6 @@ properties:
->>>    clock-names:
->>>      const: se
->>>  
->>> -  interconnects:
->>> -    maxItems: 2
->>> -
->>> -  interconnect-names:
->>> -    items:
->>> -      - const: qup-core
->>> -      - const: qup-config
->>
->> Instead please keep the definition of the fields in top-level properties
->> with the widest constraints, e.g.
->> interconnects:
->>   minItems: 1
->>   maxItems: 2
->>
->> interconnect-names:
->>   minItems: 1
->>   items:
->>    - const: qup-core
->>    - const: qup-config
-> Sadly the issue here is that the qup-config path exists, but qup-core
-> doesn't.
 
-Ah, right, then:
-interconnect-names:
-  oneOf:
-    - items:
-      ....
-    - items:
-      ...
+--h7vuydtxhwlulk7a
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+Previously: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2=
+gffyjs3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
 
+In short:
+  * most read/write APIs generate ACCESS/MODIFY for the read/written file(s)
+  * except the [vm]splice/tee family
+    (actually, since 6.4, splice itself /does/ generate events but only
+     for the non-pipes being spliced from/to; this commit is Fixes:ed)
+  * userspace that registers (i|fa)notify on pipes usually relies on it
+    actually working (coreutils tail -f is the primo example)
+  * it's sub-optimal when someone with a magic syscall can fill up a
+    pipe simultaneously ensuring it will never get serviced
+
+Thus: actually generate ACCESS/MODIFY for all the
+[vm]spliced/teed-from/to files.
+
+LTP tests are staged in
+  https://git.sr.ht/~nabijaczleweli/ltp/commit/v4
+("inotify13: new test for fs/splice.c functions vs pipes vs inotify"),
+validating that one A and/or one M event per [vm]splice(), tee(),
+and sendfile() is generated =E2=80=92
+without this patchset, this only holds for sendfile().
+
+Amir has identified a potential performance impact caused by
+correctly generating events, and has prepared patches at
+  https://github.com/amir73il/linux/commits/fsnotify_pipe
+that optimise the most common cases more aggressively.
+
+Please review, and please consider taking these through the vfs
+tree for 6.6.
+
+Thanks,
+Ahelenia Ziemia=C5=84ska (3):
+  splice: always fsnotify_access(in), fsnotify_modify(out) on success
+  splice: fsnotify_access(fd)/fsnotify_modify(fd) in vmsplice
+  splice: fsnotify_access(in), fsnotify_modify(out) on success in tee
+
+ fs/splice.c | 43 +++++++++++++++++++++++++------------------
+ 1 file changed, 25 insertions(+), 18 deletions(-)
+
+--=20
+2.39.2
+
+--h7vuydtxhwlulk7a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSi3j0ACgkQvP0LAY0m
+WPEtEQ/9F6xggxB4EolNBUV1fvUunoQyDjqsg//EpbRE/TxQUdUnVrYtCuNxM0gE
+jphR/F8R2h2iJmf3p8d/Omjshnggp45+fnKFH3xoY3dNctPNUujmWEDFPtMPPrc6
+ZI63MAg/nDUORSlMBu4mCmBWhwkjXR+NViseN49vZQEkkxZiJP8RVBCQUNevze/Q
+ZSXE3wjXzMFRU1Q+qa64Zwz5cQnhQxkUHMt/8ILLbrlDCC8WO1wj8ZfwIIT5HGza
+kC8AgMIhm/LpjBg/RP8xgqySAawRbJuPXd/jRdCI4gAgERZSCPoHtWMpAj/kP4vN
+YzbsWJjH5qsvnEmDl6f6UWTMc+MygDbNF3RawoA2qM0WADISzKyq6fr2f+M+Q47I
+JdP1DhzXg4BtUNHadJvKEkWhw0+S2WEF0pPnN7JAoX3IE5K7Wg9cC4U4Og4IiA0i
+xp5XaECxIKxAOSVUf/HOXnKbJjO+gGIL9CuXAAx0cYp4xEi/H+HMxZU1KdJ9a0Mh
+FJxox+P1Ghsfu8/fj9kQjGvNSikfufzxBGHxVo/1pF6cW0DMtXLrQDeCnfXhXKGX
+twKYgURcYzDkbJ0gjRJbwbenGhZL56IwRG0rEbIzyMg49qlhT8CARwabGDj4RiWW
+OLMcKJJgLxx78aRQ+STrY7Yu584PZgJpPPKAy4dvRhB3DgBg8lI=
+=g2al
+-----END PGP SIGNATURE-----
+
+--h7vuydtxhwlulk7a--
