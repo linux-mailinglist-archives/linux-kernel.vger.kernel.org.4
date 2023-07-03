@@ -2,160 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B7E7461C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91C97461C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 20:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjGCSC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 14:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
+        id S230392AbjGCSDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 14:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjGCSCz (ORCPT
+        with ESMTP id S230128AbjGCSDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 14:02:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151F7B3;
-        Mon,  3 Jul 2023 11:02:54 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363I1nJF013926;
-        Mon, 3 Jul 2023 18:02:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ViaCQboEoqoC1SxuFuQ30JlPi06Gs9yRXq7q20ZtG4E=;
- b=sTKnqVi1WUkJzL8CUNH3LwutDmQYgTW1r4nLtDAQyzdCEgDUMNicRZ/KYatTR8vcqqpI
- 6qWPfYUcg3S3BfHT3goEaxHh3ZGO+FsH2ItVr7LTe3xvg6EvK0zTnAR9vwy7pw0Svr3J
- WUHCJA37fYcUmv3csObOt15qwJobfLdt1rSiKQs4Tpx9WdTgGbJf5x9TDjAakeI2xjID
- z6kvwnZOjIYLcV9dc7vUhpDlqCJyiWLBhrg+DUjLygPzJGbENFwhQlIEW5E0xHRi2rkt
- ue4S/W8Kj6TbCXn+Dtj5WRBxgycWYTdufTx2jLcsb7p4ls5tbipggGopG2iWqmxb79ZL 4Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rm38jr0sb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 18:02:47 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 363I2f5U016328;
-        Mon, 3 Jul 2023 18:02:46 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rm38jr0rb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 18:02:46 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 363GLNg3003348;
-        Mon, 3 Jul 2023 18:02:44 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3rjbdds4e6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 18:02:44 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 363I2fNs48103788
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Jul 2023 18:02:41 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB47120040;
-        Mon,  3 Jul 2023 18:02:41 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4458F20043;
-        Mon,  3 Jul 2023 18:02:41 +0000 (GMT)
-Received: from [9.171.84.180] (unknown [9.171.84.180])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Jul 2023 18:02:41 +0000 (GMT)
-Message-ID: <9778740b9e07b9bb92b86bf13b8f6329485ae418.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 0/2] PCI: Handle HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 03 Jul 2023 20:02:40 +0200
-In-Reply-To: <20230703174233.GA529479@bhelgaas>
-References: <20230703174233.GA529479@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FXqH1HfRaoUJLIigdsyDJGERQZbnKhCL
-X-Proofpoint-ORIG-GUID: I21vbk60RnZzvBfSJdz-AacyCLSAczYl
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 3 Jul 2023 14:03:00 -0400
+Received: from mail-pg1-f205.google.com (mail-pg1-f205.google.com [209.85.215.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C86CB3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 11:02:59 -0700 (PDT)
+Received: by mail-pg1-f205.google.com with SMTP id 41be03b00d2f7-53ff4f39c0fso4822413a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 11:02:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688407378; x=1690999378;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8z80RBhj8pIWxUsoYhQZS8OsYGwN6pTmTjWk7DRU9Ao=;
+        b=YpyssLEmE+hlssJhSC7mEGt1EcvUFLWnm+vvP3GdstkjXm9LemeD5MLSsXxBKtOHH4
+         tBeGm7BG6Y7uSPDfrbob9F/oCRt9zTWK4+bay504qc4X1554FAHW5a6IehqcmJlP8o+B
+         lN/tnj3ZCyoIR1cgFIE1V055iQByVAPubUMHg3H7MgGhkWkWPGC8RCyzukbBIpqbejEC
+         OgnQyt2m4gbaHNzUEZz4df5Pdk0piUIXa7T+E89IvPVJUsCEiYWYTWL2hiXg5ob3wHc4
+         bbKjUTMx1/kADBxhThRwZB+SuH/aexGxPYg0tx+ljMTIPVw109zNUVIF+Iyf5HZqyMrG
+         RmuA==
+X-Gm-Message-State: ABy/qLaaMdNp2htnXptC4miPVFQjy/CT1VABpBca1ezV1gcEjBUsskaV
+        VCvR7whiZt4+QUgDh39Zxw1lGBsEv3vmE81yAslel4F7YH5I
+X-Google-Smtp-Source: APBJJlFNystmhZrwKagAPFOuVGkBZnpd0lpPVQoeN1hhfjwUddTY/W4cUj/oqffTo16roztSY6y3wt4Nhk0zx4kPcq3WESyBEeZi
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-03_13,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- mlxscore=0 clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307030164
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a63:4c51:0:b0:55b:603b:4a5b with SMTP id
+ m17-20020a634c51000000b0055b603b4a5bmr5879166pgl.9.1688407378545; Mon, 03 Jul
+ 2023 11:02:58 -0700 (PDT)
+Date:   Mon, 03 Jul 2023 11:02:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000008d0f405ff98fa21@google.com>
+Subject: [syzbot] [btrfs?] kernel BUG in merge_reloc_roots
+From:   syzbot <syzbot+adac949c4246513f0dc6@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, fdmanana@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-07-03 at 12:42 -0500, Bjorn Helgaas wrote:
-> On Mon, Jul 03, 2023 at 03:52:53PM +0200, Niklas Schnelle wrote:
-> > Hi Bjorn,
-> >=20
-> > This is a follow up to my ongoing effort of making the inb()/outb() and
-> > similar I/O port accessors compile-time optional. Previously I sent thi=
-s as
-> > a complete treewide series titled "treewide: Remove I/O port accessors =
-for
-> > HAS_IOPORT=3Dn" with the latest being its 5th version[0]. Now about hal=
-f of
-> > the per-subsystem patches have been merged so I'm changing over to stand
-> > alone subsystem patches. These series are stand alone and should be mer=
-ged
-> > via the relevant tree such that with all subsystems complete we can fol=
-low
-> > this up with the last patch[1] that will make the I/O port accessors
-> > compile-time optional.
->=20
-> Is the merge plan for each subsystem to merge this separately?  I
-> acked these so they could be merged along with all the tree-wide
-> changes.
+Hello,
 
-Hi Bj=C3=B6rn,
+syzbot found the following issue on:
 
-Yeah this went back and forth a little, sorry about that. With the
-Kconfig introduction of HAS_IOPORT merged about half of the original
-patches have been merged via subsystem maintainers or are at least
-sitting in linux-next already.  Arnd was anticipating that he'll pick
-up some left overs but at the moment the simplest is for subsystems to
-pick the patches up themselves ideally and if small enough for v6.5
-still.
+HEAD commit:    b19edac5992d Merge tag 'nolibc.2023.06.22a' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17e0cfe0a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=33c8c2baba1cfc7e
+dashboard link: https://syzkaller.appspot.com/bug?extid=adac949c4246513f0dc6
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1562a47f280000
 
-Thanks,
-Niklas
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e1a4f239105a/disk-b19edac5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/25776c3e9785/vmlinux-b19edac5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ca7e959d451d/bzImage-b19edac5.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/2926fe9a4819/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/da38c75be578/mount_17.gz
 
->=20
-> > As for compile-time vs runtime see Linus' reply to my first attempt[2].
-> >=20
-> > Other than rebasing on current master there are no changes to these
-> > two patches for the PCI subsystem.
-> >=20
-> > Thanks,
-> > Niklas
-> >=20
-> > [0] https://lore.kernel.org/all/20230516110038.2413224-1-schnelle@linux=
-.ibm.com/
-> > [1] https://lore.kernel.org/all/20230516110038.2413224-42-schnelle@linu=
-x.ibm.com/
-> > [2] https://lore.kernel.org/lkml/CAHk-=3Dwg80je=3DK7madF4e7WrRNp37e3qh6=
-y10Svhdc7O8SZ_-8g@mail.gmail.com/
-> >=20
-> > Niklas Schnelle (2):
-> >   PCI: Make quirk using inw() depend on HAS_IOPORT
-> >   PCI/sysfs: Make I/O resource depend on HAS_IOPORT
-> >=20
-> >  drivers/pci/pci-sysfs.c | 4 ++++
-> >  drivers/pci/quirks.c    | 2 ++
-> >  2 files changed, 6 insertions(+)
-> >=20
-> >=20
-> > base-commit: a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451
-> > --=20
-> > 2.39.2
-> >=20
+The issue was bisected to:
 
+commit 751a27615ddaaf95519565d83bac65b8aafab9e8
+Author: Filipe Manana <fdmanana@suse.com>
+Date:   Thu Jun 8 10:27:49 2023 +0000
+
+    btrfs: do not BUG_ON() on tree mod log failures at btrfs_del_ptr()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15196068a80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17196068a80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13196068a80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+adac949c4246513f0dc6@syzkaller.appspotmail.com
+Fixes: 751a27615dda ("btrfs: do not BUG_ON() on tree mod log failures at btrfs_del_ptr()")
+
+assertion failed: 0, in fs/btrfs/relocation.c:2011
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/relocation.c:2011!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 7243 Comm: syz-executor.3 Not tainted 6.4.0-syzkaller-01312-gb19edac5992d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:merge_reloc_roots+0x98b/0x9a0 fs/btrfs/relocation.c:2011
+Code: cb d1 10 07 0f 0b e8 84 9d ed fd 48 c7 c7 60 45 2b 8b 48 c7 c6 c0 50 2b 8b 48 c7 c2 e0 45 2b 8b b9 db 07 00 00 e8 a5 d1 10 07 <0f> 0b e8 7e 12 13 07 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 41
+RSP: 0018:ffffc9000656f760 EFLAGS: 00010246
+RAX: 0000000000000032 RBX: ffff88806a59a030 RCX: a7b6d3c4bc715b00
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc9000656f870 R08: ffffffff816efd9c R09: fffff52000cadea1
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888079e16558
+R13: ffff888079e16000 R14: ffff88806a59a000 R15: dffffc0000000000
+FS:  00007f62d8f56700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7ba56f1000 CR3: 000000001a7d0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ relocate_block_group+0xa68/0xcd0 fs/btrfs/relocation.c:3751
+ btrfs_relocate_block_group+0x7ab/0xd70 fs/btrfs/relocation.c:4087
+ btrfs_relocate_chunk+0x12c/0x3b0 fs/btrfs/volumes.c:3283
+ __btrfs_balance+0x1b06/0x2690 fs/btrfs/volumes.c:4018
+ btrfs_balance+0xbdb/0x1120 fs/btrfs/volumes.c:4402
+ btrfs_ioctl_balance+0x496/0x7c0 fs/btrfs/ioctl.c:3604
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xf8/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f62d828c389
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f62d8f56168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f62d83abf80 RCX: 00007f62d828c389
+RDX: 00000000200003c0 RSI: 00000000c4009420 RDI: 0000000000000006
+RBP: 00007f62d82d7493 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffedd8614bf R14: 00007f62d8f56300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:merge_reloc_roots+0x98b/0x9a0 fs/btrfs/relocation.c:2011
+Code: cb d1 10 07 0f 0b e8 84 9d ed fd 48 c7 c7 60 45 2b 8b 48 c7 c6 c0 50 2b 8b 48 c7 c2 e0 45 2b 8b b9 db 07 00 00 e8 a5 d1 10 07 <0f> 0b e8 7e 12 13 07 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 41
+RSP: 0018:ffffc9000656f760 EFLAGS: 00010246
+RAX: 0000000000000032 RBX: ffff88806a59a030 RCX: a7b6d3c4bc715b00
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc9000656f870 R08: ffffffff816efd9c R09: fffff52000cadea1
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888079e16558
+R13: ffff888079e16000 R14: ffff88806a59a000 R15: dffffc0000000000
+FS:  00007f62d8f56700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f83ebdff000 CR3: 000000001a7d0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
