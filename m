@@ -2,94 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DAB745D26
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8AA745D15
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjGCN0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
+        id S231281AbjGCNZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjGCN0N (ORCPT
+        with ESMTP id S231367AbjGCNZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:26:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8769E70;
-        Mon,  3 Jul 2023 06:26:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 3 Jul 2023 09:25:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C16FE41;
+        Mon,  3 Jul 2023 06:25:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3EC60EE0;
-        Mon,  3 Jul 2023 13:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197ADC433C9;
-        Mon,  3 Jul 2023 13:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688390767;
-        bh=lOto3+2FBgpgZYTbSv5jQU8R2gXWk1bZIPsTI/IYNIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jR0vzl0SnAnlH9AL2mHlfOw7ml7dux3qyyJCHrzNVWXX8mXNomw2vrfuqRd/fPs7J
-         FX731LoZbOcq0kJ8EudGvauceZ0xT6soX/7XeWdGr0QuOBx5ebSCrQ1z9ErA+1xIfx
-         6Wn/4RFXqMKebtYuaBKN/PPgppDxI74arIK/jifM=
-Date:   Mon, 3 Jul 2023 15:25:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?Q?Rapha=EBl?= Gallais-Pou <rgallaispou@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: fbtft: ili9341: use macro
- FBTFT_REGISTER_SPI_DRIVER
-Message-ID: <2023070312-pasty-divisive-fa22@gregkh>
-References: <20230702080324.120137-1-rgallaispou@gmail.com>
- <2023070254-embark-subplot-4dd4@gregkh>
- <ae400e28-0cd4-cdf8-811d-843e62cd4a95@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8851A219D0;
+        Mon,  3 Jul 2023 13:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688390705; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pecUI4xOagetnVa0y89RSrIZk+VfXoyy55j+EXMIhrE=;
+        b=F05OyKorIVsZtJqSMTMTx2t4OhAdEC/+OO3iv9HroaH4bvA/CM8OMjuNHFZ2+GEHEXkgqH
+        uFTcf7/rSKY7BW3dM7dhnk9sWJ+2GIYX9wQmt+rLnjVoSivGha8kzGX57U01sopLZEhHYB
+        IXoW6+Ab60AQaXMd1aiGey/SEvhI804=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688390705;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pecUI4xOagetnVa0y89RSrIZk+VfXoyy55j+EXMIhrE=;
+        b=tuFNu4N3pjt+/HNuE1JNIS8OM3bR2Y7JFd2FQpVfNUN1FcT+bRDEe+pgdO0Pspz50R1ewD
+        rihp3pAoxFfHeaBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA3A6138FC;
+        Mon,  3 Jul 2023 13:25:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1n/1NzDMomQMGAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 03 Jul 2023 13:25:04 +0000
+Date:   Mon, 03 Jul 2023 15:25:04 +0200
+Message-ID: <8735255dqn.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>, tfiga@chromium.org,
+        m.szyprowski@samsung.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 1/6] media: v4l2: Add audio capture and output support
+In-Reply-To: <d78e6ec3-a531-8fd4-a785-29b6712f83ae@xs4all.nl>
+References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
+        <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
+        <ZJ6o5fT4V4HXivFa@valkosipuli.retiisi.eu>
+        <CAA+D8AND1yZ7eZLjBGxVF=i3hLMecUm-j7AVHN9npJi-4=3VrA@mail.gmail.com>
+        <87h6ql5hch.wl-tiwai@suse.de>
+        <43f0ecdf-7454-49ae-96b3-2eae5487e9a5@sirena.org.uk>
+        <d78e6ec3-a531-8fd4-a785-29b6712f83ae@xs4all.nl>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ae400e28-0cd4-cdf8-811d-843e62cd4a95@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 02, 2023 at 03:05:25PM +0200, Raphaël Gallais-Pou wrote:
-> Hi,
+On Mon, 03 Jul 2023 15:12:55 +0200,
+Hans Verkuil wrote:
 > 
-> Le 02/07/2023 à 14:02, Greg Kroah-Hartman a écrit :
-> > On Sun, Jul 02, 2023 at 10:03:24AM +0200, Raphael Gallais-Pou wrote:
-> > > Using FBTFT_REGISTER_DRIVER resolves to a NULL struct spi_device_id. This
-> > > ultimately causes the module to an early exit at probe time.
+> On 03/07/2023 14:53, Mark Brown wrote:
+> > On Mon, Jul 03, 2023 at 02:07:10PM +0200, Takashi Iwai wrote:
+> >> Shengjiu Wang wrote:
 > > 
-> > So this doesn't work at all today?  Has it ever worked?  What commit
-> > does thi fix?
-> 
-> I tested again with only a tweak in my device-tree. The early exit in the
-> driver's code is caused by a missing field. So regarding this particular
-> driver the macro works.
-> 
-> It resolves to set spi_driver.id_table = NULL, which yields a warning in
-> __spi_register_driver(). So I guess this patch only fixes a warning.
-
-Ok, please fix the changelog text when you resend this.
-
-> > > In addition the MODULE_ALIASes can be dropped.
+> >>> There is no such memory to memory interface defined in ALSA.  Seems
+> >>> ALSA is not designed for M2M cases.
 > > 
-> > Why?  When you say "also" or "in addition", that's a huge hint it should
-> > be a separate patch.
-> I did not find any reference to those aliases in the kernel, which led me to
-> remove those.
+> >> There is no restriction to implement memory-to-memory capture in ALSA
+> >> framework.  It'd be a matter of the setup of PCM capture source, and
+> >> you can create a corresponding kcontrol element to switch the mode or
+> >> assign a dedicated PCM substream, for example.  It's just that there
+> >> was little demand for that.
+> > 
+> > Yeah, it's not a terrible idea.  We might use it more if we ever get
+> > better support for DSP audio, routing between the DSP and external
+> > devices if driven from the CPU would be a memory to memory thing.
+> > 
+> >> I'm not much against adding the audio capture feature to V4L2,
+> >> though, if it really makes sense.  But creating a crafted /dev/audio*
+> >> doesn't look like a great idea to me, at least.
+> > 
+> > I've still not looked at the code at all.
+> 
+> My main concern is that these cross-subsystem drivers are a pain to
+> maintain. So there have to be good reasons to do this.
+> 
+> Also it is kind of weird to have to use the V4L2 API in userspace to
+> deal with a specific audio conversion. Quite unexpected.
+> 
+> But in the end, that's a decision I can't make.
+> 
+> So I wait for that feedback. Note that if the decision is made that this
+> can use V4L2, then there is quite a lot more that needs to be done:
+> documentation, new compliance tests, etc. It's adding a new API, and that
+> comes with additional work...
 
-Aliases are used by userspace, not the kernel.
+All agreed.  Especially in this case, it doesn't have to be in V4L2
+API, as it seems.
 
-> If you think they are still necessary, I'll split them in an upcoming v2.
+(Though, the support of audio on V4L2 might be useful if it's closely
+tied with the a stream.  But that's another story.)
 
-Please document why they are not needed in order to be able to be
-removed.
 
 thanks,
 
-greg k-h
+Takashi
