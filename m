@@ -2,76 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1CE7459F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D72C7459F8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjGCKQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S231195AbjGCKRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjGCKQq (ORCPT
+        with ESMTP id S230459AbjGCKQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:16:46 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF2DBC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 03:16:19 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-31438512cafso690473f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 03:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688379378; x=1690971378;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KHna20O5nuwmYMQaQmDisbtnuP0SS9Nya9vSK5lPsIM=;
-        b=D51JaqYyHlucBw7NXpCblfBlLZtkeRJxiAkudc6DBT/DtQEDrb1FYnMMibCzrI8sk1
-         H/x/VwgSSbWnJwtbWC8lJqvxt9b7A3UmUuUfhOLCyQyJTWCN4Mv1v8xfMgW/xlbkWdZI
-         yDj0Q+VahUAxGkQFoUlnGeuLBcP9mA0tUgVAXo8QHQjlnn3BPdTzbCWbgNRT5/UGS3Re
-         /28ME7WC6JEVV7WtL2QEJOi/AvMqij1E+ak6798ICJ/Y8cY8AUKzQtt1+on7GKr3ZVHk
-         ic7heDchy2bwzeczoMHnAV6OH95ba8TlEvMf1OjzowxZtvNvVfvBcoQyzY3Uhq0gBndb
-         gxDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688379378; x=1690971378;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KHna20O5nuwmYMQaQmDisbtnuP0SS9Nya9vSK5lPsIM=;
-        b=CdQy9K2dfhMIceftgsl24AUel+kkHQlNhLmMqwthZViMXmlID+6dRQvs5cMLmhMMTh
-         LF13xvqsFb4ufokA1y/fI9jM78EIYYlyMarsSXQKz9OxqG+bnb3RWWzyBR/X+Giong2B
-         DiYjqm9Yb+W7B5JS/XIu7fUvGv7nj35UbfqyBnWMD2d72VvrmrxRxbDpaUIsprXchLwy
-         SWMTbpm5dLqJpg95yHqe7JNrJj6Zt7tndn4lkslrlU0PU+Aiv5Nfkxq+PhhORUctWSWu
-         +oKI+lFVy7ZUFVPTSe641Kaa9/90/uOaQBCng0tFg7OyFRrdd15M/Afp8yTEErTMgZL3
-         cHIw==
-X-Gm-Message-State: ABy/qLZ9FQPo2pyGMswRaKvF1cUBRipFGWgpeg3+mPBQGkWONhvGGQKS
-        n9pifNg0XnpSv1I9MqrVs8baQMdDgfdE3343EqwHQw==
-X-Google-Smtp-Source: APBJJlEyPHaw9RDOWtWuuNTrLxiqJdK1Y9rx8u7ncpQxqzZArAv5IjOfEjZY7gyHfQ9l2BG3z28vd3wfUHh72kONM4Y=
-X-Received: by 2002:adf:fe8f:0:b0:314:ca7:f30b with SMTP id
- l15-20020adffe8f000000b003140ca7f30bmr8267188wrr.54.1688379378380; Mon, 03
- Jul 2023 03:16:18 -0700 (PDT)
+        Mon, 3 Jul 2023 06:16:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CD87BE;
+        Mon,  3 Jul 2023 03:16:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A75982F4;
+        Mon,  3 Jul 2023 03:17:33 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72C273F762;
+        Mon,  3 Jul 2023 03:16:49 -0700 (PDT)
+Date:   Mon, 3 Jul 2023 11:16:47 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v3 2/4] firmware: arm_scmi: Add SCMI v3.2 pincontrol
+ protocol basic support
+Message-ID: <ZKKgD1QxF085kE+c@e120937-lin>
+References: <cover.1686063941.git.oleksii_moisieiev@epam.com>
+ <d388c7af3f72fd47baffe0de8c6fec8074cb483c.1686063941.git.oleksii_moisieiev@epam.com>
 MIME-Version: 1.0
-References: <20230702095735.860-1-cuiyunhui@bytedance.com> <20230702-headway-dreamlike-d7ba39ac4910@spud>
- <CAEEQ3wnzf=iDDHJATo2vdVz-SDNYRGBEEb7sXUyGojgP4ZAgaA@mail.gmail.com> <20230703-glorified-headless-16e998608eaa@wendy>
-In-Reply-To: <20230703-glorified-headless-16e998608eaa@wendy>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Mon, 3 Jul 2023 18:16:07 +0800
-Message-ID: <CAEEQ3wnjYK+Jj9Ce_yEHPL_z3eYn4OKP85YLXnVeaPd+SA3DJw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Conor Dooley <conor@kernel.org>, ardb@kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
-        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
-        weidong.wd@bytedance.com, alexghiti@rivosinc.com,
-        sunilvl@ventanamicro.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d388c7af3f72fd47baffe0de8c6fec8074cb483c.1686063941.git.oleksii_moisieiev@epam.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,370 +52,849 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-On Mon, Jul 3, 2023 at 4:13=E2=80=AFPM Conor Dooley <conor.dooley@microchip=
-.com> wrote:
+On Tue, Jun 06, 2023 at 04:22:27PM +0000, Oleksii Moisieiev wrote:
+> scmi: Introduce pinctrl SCMI protocol driver
 >
-> Hey,
->
-> On Mon, Jul 03, 2023 at 03:19:01PM +0800, =E8=BF=90=E8=BE=89=E5=B4=94 wro=
-te:
-> > On Sun, Jul 2, 2023 at 9:48=E2=80=AFPM Conor Dooley <conor@kernel.org> =
-wrote:
-> > >
-> > > %subject: riscv: obtain ACPI RSDP from FFI.
-> > >
-> > > This subject is a bit unhelpful because FFI would commonly mean "fore=
-ign
-> > > function interface" & you have not yet introduced it. It seems like i=
-t
-> > > would be better to do s/FFI/devicetree/ or similar.
-> >
-> > FFI: FDT FIRMWARE INTERFACE.
-> >
-> > You are right, s/FFI/devicetree/ is of course possible=EF=BC=8C but I a=
-ctually
-> > want to use FFI as a general solution, put all relevant codes under
-> > driver/firmware/, and use RISC-V arch to call general codes.
->
-> Yes, I read the patchset. It's still unhelpful to someone reading
-> $subject because nobody knows what your version of FFI is IMO.
->
-> > In this case, only one Kconfig CONFIG_FDT_FW_INTERFACE is enough=EF=BC=
-=8C and
-> > The FFI code will be placed first in the patchset.
-> >
-> > But Ard's suggestion is to put the part of SMBIOS in the generic code,
-> > and put the FFI for ACPI in the RISCV arch.
-> >
-> > Please see  the v1:
-> > https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1=
--cuiyunhui@bytedance.com/
->
-> I read this too, I was following along with the discussion on the v1.
 
-Okay,  I will take your suggestion=EF=BC=8C to do s/FFI/devicetree/.
-This needs to be confirmed with you:
-Continue to follow the current code structure, patch 1/3 is placed in
-arch/riscv/, and 2/3 is placed under driver/firmware?
+Hi Oleksii,
 
->
-> > Put the following to /driver/firmware/ffi.c , What do you think?
-> > void __init ffi_acpi_root_pointer(void)
-> > {
-> >     ...
-> > }
->
-> Usually the NOP versions just go in the headers.
->
-> > > Please also drop the full stop from the commit messages ;)
-> > Okay, thanks.
-> >
-> > >
-> > > Please use a cover letter for multi-patch series & include changelogs=
-.
-> > OK, On v3 I would use.
-> >
-> > >
-> > > +CC Sunil, Alex:
-> > >
-> > > Can you guys please take a look at this & see if it is something that=
- we
-> > > want to do (ACPI without EFI)?
-> > >
-> > > On Sun, Jul 02, 2023 at 05:57:32PM +0800, Yunhui Cui wrote:
-> > > > 1. We need to enable the ACPI function on RISC-V.
-> > >
-> > > RISC-V already supports ACPI, the "we" in this commit message is
-> > > confusing. Who is "we"? Bytedance?
->
-> Who is the "we"?
+spurios line above.
 
-"We" are people who need to use ACPI on RISC-V systems, including
-ByteDance of course.
+> Add basic implementation of the SCMI v3.2 pincontrol protocol
+> excluding GPIO support. All pinctrl related callbacks and operations
+> are exposed in the include/linux/scmi_protocol.h
+> 
 
->
-> > > > When booting with
-> > > > Coreboot, we encounter two problems:
-> > > > a. Coreboot does not support EFI
-> > >
-> > >
-> > > > b. On RISC-V, only the DTS channel can be used.
-> > >
-> > > We support ACPI, so this seems inaccurate. Could you explain it bette=
-r
-> > > please?
-> >
-> > Yes, Sunil already supports ACPI, But it is based on EDK2 boot which
-> > supports EFI.
-> > In fact, We use Coreboot which has the features of a and b above.
->
-> My point is that the commit message has gaps in it.
-> This point b & point 1 make it seem like this patch adds ACPI support to
-> an architecture that only supports devicetree. "DTS channel" needs to be
-> explained further, to be frank I have no idea what that means. Does it
-> mean that coreboot on RISC-V only supports DT, or that the RISC-V linux
-> kernel requires a mini-DT when booting with EFI?
+As Andy said already, you can drop the second sentence here, but I would
+ALSO drop the GPIO part in the first sentence, since there is nothing
+specific to GPIO in the SCMI spec and this patch is about the SCMI protocol
+not the pinctrl driver.
 
-Yeah=EF=BC=8C Coreboot only supports DT, do not support EFI.
-The first half sentence has already said "When booting with Coreboot,
-we encounter two problems:"
+> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> ---
+>  MAINTAINERS                           |   6 +
+>  drivers/firmware/arm_scmi/Makefile    |   2 +-
+>  drivers/firmware/arm_scmi/driver.c    |   2 +
+>  drivers/firmware/arm_scmi/pinctrl.c   | 836 ++++++++++++++++++++++++++
+>  drivers/firmware/arm_scmi/protocols.h |   1 +
+>  include/linux/scmi_protocol.h         |  47 ++
+>  6 files changed, 893 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/firmware/arm_scmi/pinctrl.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0dab9737ec16..297b2512963d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20522,6 +20522,12 @@ F:	include/linux/sc[mp]i_protocol.h
+>  F:	include/trace/events/scmi.h
+>  F:	include/uapi/linux/virtio_scmi.h
+>  
+> +PINCTRL DRIVER FOR SYSTEM CONTROL & POWER/MANAGEMENT INTERFACE (SCPI/SCMI)
 
-How about changing the commit log to the following?
+SCPI is a leftover here I suppose...
 
-riscv: obtain ACPI RSDP from devicetree.
+> +M:	Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> +L:	linux-arm-kernel@lists.infradead.org
+> +S:	Maintained
+> +F:	drivers/firmware/arm_scmi/pinctrl.c
+> +
+>  SYSTEM RESET/SHUTDOWN DRIVERS
+>  M:	Sebastian Reichel <sre@kernel.org>
+>  L:	linux-pm@vger.kernel.org
+> diff --git a/drivers/firmware/arm_scmi/Makefile b/drivers/firmware/arm_scmi/Makefile
+> index b31d78fa66cc..603430ec0bfe 100644
+> --- a/drivers/firmware/arm_scmi/Makefile
+> +++ b/drivers/firmware/arm_scmi/Makefile
+> @@ -10,7 +10,7 @@ scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_SMC) += smc.o
+>  scmi-transport-$(CONFIG_ARM_SCMI_HAVE_MSG) += msg.o
+>  scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_VIRTIO) += virtio.o
+>  scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_OPTEE) += optee.o
+> -scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o
+> +scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o pinctrl.o
+>  scmi-module-objs := $(scmi-driver-y) $(scmi-protocols-y) $(scmi-transport-y)
+>  
+>  obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-core.o
+> diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+> index 5be931a07c84..a9fd337b9596 100644
+> --- a/drivers/firmware/arm_scmi/driver.c
+> +++ b/drivers/firmware/arm_scmi/driver.c
+> @@ -3025,6 +3025,7 @@ static int __init scmi_driver_init(void)
+>  	scmi_voltage_register();
+>  	scmi_system_register();
+>  	scmi_powercap_register();
+> +	scmi_pinctrl_register();
+>  
+>  	return platform_driver_register(&scmi_driver);
+>  }
+> @@ -3042,6 +3043,7 @@ static void __exit scmi_driver_exit(void)
+>  	scmi_voltage_unregister();
+>  	scmi_system_unregister();
+>  	scmi_powercap_unregister();
+> +	scmi_pinctrl_unregister();
+>  
+>  	scmi_transports_exit();
+>  
+> diff --git a/drivers/firmware/arm_scmi/pinctrl.c b/drivers/firmware/arm_scmi/pinctrl.c
+> new file mode 100644
+> index 000000000000..fc0fcc26dfb6
+> --- /dev/null
+> +++ b/drivers/firmware/arm_scmi/pinctrl.c
+> @@ -0,0 +1,836 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * System Control and Management Interface (SCMI) Pinctrl Protocol
+> + *
+> + * Copyright (C) 2023 EPAM
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/scmi_protocol.h>
+> +#include <linux/slab.h>
+> +
+> +#include "protocols.h"
+> +
+> +#define REG_TYPE_BITS GENMASK(9, 8)
+> +#define REG_CONFIG GENMASK(7, 0)
+> +
+> +#define GET_GROUPS_NR(x)	le32_get_bits((x), GENMASK(31, 16))
+> +#define GET_PINS_NR(x)		le32_get_bits((x), GENMASK(15, 0))
+> +#define GET_FUNCTIONS_NR(x)	le32_get_bits((x), GENMASK(15, 0))
+> +
+> +#define EXT_NAME_FLAG(x)	le32_get_bits((x), BIT(31))
+> +#define NUM_ELEMS(x)		le32_get_bits((x), GENMASK(15, 0))
+> +
+> +#define REMAINING(x)		le32_get_bits((x), GENMASK(31, 16))
+> +#define RETURNED(x)		le32_get_bits((x), GENMASK(11, 0))
+> +
+> +enum scmi_pinctrl_protocol_cmd {
+> +	PINCTRL_ATTRIBUTES = 0x3,
+> +	PINCTRL_LIST_ASSOCIATIONS = 0x4,
+> +	PINCTRL_CONFIG_GET = 0x5,
+> +	PINCTRL_CONFIG_SET = 0x6,
+> +	PINCTRL_FUNCTION_SELECT = 0x7,
+> +	PINCTRL_REQUEST = 0x8,
+> +	PINCTRL_RELEASE = 0x9,
+> +	PINCTRL_NAME_GET = 0xa,
+> +	PINCTRL_SET_PERMISSIONS = 0xb
+> +};
+> +
+> +struct scmi_msg_conf_set {
+> +	__le32 identifier;
+> +	__le32 attributes;
+> +	__le32 config_value;
+> +};
+> +
+> +struct scmi_msg_conf_get {
+> +	__le32 identifier;
+> +	__le32 attributes;
+> +};
+> +
+> +struct scmi_msg_pinctrl_protocol_attributes {
+> +	__le32 attributes_low;
+> +	__le32 attributes_high;
+> +};
+> +
+> +struct scmi_msg_pinctrl_attributes {
+> +	__le32 identifier;
+> +	__le32 flags;
+> +};
+> +
+> +struct scmi_resp_pinctrl_attributes {
+> +	__le32 attributes;
+> +	u8 name[SCMI_SHORT_NAME_MAX_SIZE];
+> +};
+> +
+> +struct scmi_msg_pinctrl_list_assoc {
+> +	__le32 identifier;
+> +	__le32 flags;
+> +	__le32 index;
+> +};
+> +
+> +struct scmi_resp_pinctrl_list_assoc {
+> +	__le32 flags;
+> +	__le16 array[];
+> +};
+> +
+> +struct scmi_msg_func_set {
+> +	__le32 identifier;
+> +	__le32 function_id;
+> +	__le32 flags;
+> +};
+> +
+> +struct scmi_msg_request {
+> +	__le32 identifier;
+> +	__le32 flags;
+> +};
+> +
+> +struct scmi_group_info {
+> +	bool present;
+> +	char name[SCMI_MAX_STR_SIZE];
+> +	unsigned int *group_pins;
+> +	unsigned int nr_pins;
+> +};
+> +
+> +struct scmi_function_info {
+> +	bool present;
+> +	char name[SCMI_MAX_STR_SIZE];
+> +	unsigned int *groups;
+> +	unsigned int nr_groups;
+> +};
+> +
 
-On RISC-V, when using Coreboot to start, since Coreboot only supports
-DTS but not EFI, and
-RISC-V does not have a reserved address segment.
-When the system enables ACPI, ACPI RSDP needs to be passed through DTS
+A small note related to Andy remarks about directly embedding here pinctrl
+subsystem structures (like pingroup / pinfucntion) that I forgot to say
+in my reply to him.
 
->
-> > > > 2. Based on this, we have added an interface for obtaining firmware
-> > > > information transfer through FDT, named FFI.
-> > >
-> > > Please use the long form of "FFI" before using the short form, since =
-you
-> > > are inventing this & noone knows what it means yet.
-> > >
-> > > > 3. We not only use FFI to pass ACPI RSDP, but also pass other
-> > > > firmware information as an extension.
-> > >
-> > > This patch doesn't do that though?
-> >
-> > Similar problems may be encountered on other arches, which is also the
-> > purpose of this sentence.
->
-> Right, but that has nothing to do with this patch? This patch only
-> implements the ACPI side of things for RISC-V, it doesn't do the SMBIOS
-> stuff. Leave that for the patch that actually does that please.
+These structs above indeed are very similar to the Pinctrl ones but this is
+the protocol layer inside SCMI, I would not mix here stuff from the Pinctrl
+subsystem which is, at the end the, one of the possible users of this layer
+(via the SCMI pinctrl driver) but not necessarily the only one in the
+future; moreover Pinctrl subsystem is not even needed at all if you think
+about a testing scenario, so I would not build up a dependency here between
+SCMI and Pinctrl by using Pinctrl structures...what if these latter change
+in the future ?
 
-Okay, Modify it to the above commit log and there will be no such problem.
+All of this to just say this is fine for me as it is now :D
 
-> > > > +RISC-V FDT FIRMWARE INTERFACE (FFI) SUPPORT
-> > > > +M:     Yunhui Cui cuiyunhui@bytedance.com
-> > > > +S:     Maintained
-> > > > +F:     arch/riscv/include/asm/ffi.h
-> > > > +F:     arch/riscv/kernel/ffi.c
-> > >
-> > > Please add this in alphabetical order, these entries have recently be=
-en
-> > > resorted. That said, maintainers entry for a trivial file in arch cod=
-e
-> > > seems a wee bit odd, seems like it would be better suited rolled up i=
-nto
-> > > your other entry for the interface, like how Ard's one looks for EFI?
-> > >
-> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > > index b49793cf34eb..2e1c40fb2300 100644
-> > > > --- a/arch/riscv/Kconfig
-> > > > +++ b/arch/riscv/Kconfig
-> > > > @@ -785,6 +785,16 @@ config EFI
-> > > >         allow the kernel to be booted as an EFI application. This
-> > > >         is only useful on systems that have UEFI firmware.
-> > > >
-> > > > +config FFI
-> > > > +     bool "Fdt firmware interface"
-> > > > +     depends on OF
-> > > > +     default y
-> > > > +     help
-> > > > +       Added an interface to obtain firmware information transfer
-> > > > +       through FDT, named FFI. Some bootloaders do not support EFI=
-,
-> > > > +       such as coreboot.
-> > > > +       We can pass firmware information through FFI, such as ACPI.
-> > >
-> > > I don't understand your Kconfig setup. Why don't you just have one
-> > > option (the one from patch 2/3), instead of adding 2 different but
-> > > similarly named options?
-> > OK, let me try it=EF=BC=8C and use the Kconfig CONFIG_FDT_FW_INTERFACE.=
-  EFI
-> > seems to use two...
->
-> It doesn't use two different options, AFAIR. There's an EFI option in
-> the arch Kconfigs and then a menu in drivers/firmware/efi/Kconfig that
-> allows enabling sub-components. You've got two entries that appear
-> unrelated, despite parsing the same DT bits.
+> +struct scmi_pin_info {
+> +	bool present;
+> +	char name[SCMI_MAX_STR_SIZE];
+> +};
+> +
+> +struct scmi_pinctrl_info {
+> +	u32 version;
+> +	int nr_groups;
+> +	int nr_functions;
+> +	int nr_pins;
+> +	struct scmi_group_info *groups;
+> +	struct scmi_function_info *functions;
+> +	struct scmi_pin_info *pins;
+> +};
+> +
+> +static int scmi_pinctrl_attributes_get(const struct scmi_protocol_handle *ph,
+> +				       struct scmi_pinctrl_info *pi)
+> +{
+> +	int ret;
+> +	struct scmi_xfer *t;
+> +	struct scmi_msg_pinctrl_protocol_attributes *attr;
+> +
+> +	if (!pi)
+> +		return -EINVAL;
 
-OKay, I'll update it on v3.
+You can drop this, cannot happen given the code paths.
 
->
-> >
-> > > >  config CC_HAVE_STACKPROTECTOR_TLS
-> > > >       def_bool $(cc-option,-mstack-protector-guard=3Dtls -mstack-pr=
-otector-guard-reg=3Dtp -mstack-protector-guard-offset=3D0)
-> > > >
-> > > > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm=
-/acpi.h
-> > > > index f71ce21ff684..f9d1625dd159 100644
-> > > > --- a/arch/riscv/include/asm/acpi.h
-> > > > +++ b/arch/riscv/include/asm/acpi.h
-> > > > @@ -15,6 +15,8 @@
-> > > >  /* Basic configuration for ACPI */
-> > > >  #ifdef CONFIG_ACPI
-> > > >
-> > > > +#include <asm/ffi.h>
-> > > > +
-> > > >  typedef u64 phys_cpuid_t;
-> > > >  #define PHYS_CPUID_INVALID INVALID_HARTID
-> > > >
-> > > > @@ -66,6 +68,13 @@ int acpi_get_riscv_isa(struct acpi_table_header =
-*table,
-> > > >                      unsigned int cpu, const char **isa);
-> > > >
-> > > >  static inline int acpi_numa_get_nid(unsigned int cpu) { return NUM=
-A_NO_NODE; }
-> > > > +
-> > > > +#define ACPI_HAVE_ARCH_GET_ROOT_POINTER
-> > >
-> > > How come this is not set in Kconfig like HAVE_FOO options usually are=
-?
->
-> > This is modeled after x86 historical code.
-> > See arch/x86/include/asm/acpi.h
->
-> Is that a good reason for propagating the pattern? Is there a benefit to
-> this, other than "x86 did this"?
+> +
+> +	ret = ph->xops->xfer_get_init(ph, PROTOCOL_ATTRIBUTES,
+> +				      0, sizeof(*attr), &t);
+> +	if (ret)
+> +		return ret;
+> +
+> +	attr = t->rx.buf;
+> +
+> +	ret = ph->xops->do_xfer(ph, t);
+> +	if (!ret) {
+> +		pi->nr_functions = GET_FUNCTIONS_NR(attr->attributes_high);
+> +		pi->nr_groups = GET_GROUPS_NR(attr->attributes_low);
+> +		pi->nr_pins = GET_PINS_NR(attr->attributes_low);
+> +	}
+> +
+> +	ph->xops->xfer_put(ph, t);
+> +	return ret;
+> +}
+> +
+> +static int scmi_pinctrl_get_count(const struct scmi_protocol_handle *ph,
+> +				  enum scmi_pinctrl_selector_type type)
+> +{
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
+> +		return -ENODEV;
 
-I smiled when I read this sentence=EF=BC=8CI haven't thought of a better wa=
-y yet =EF=BC=9A-=EF=BC=89
+You dont need to check for NULL here and nowhere else.
+You set protocol private data with set_priv at the end of protocol init
+which is called as soon as a user tries to use this protocol operations,
+so it cannot ever be NULL in any of these following ops.
 
+> +
+> +	switch (type) {
+> +	case PIN_TYPE:
+> +		return pi->nr_pins;
+> +	case GROUP_TYPE:
+> +		return pi->nr_groups;
+> +	case FUNCTION_TYPE:
+> +		return pi->nr_functions;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int scmi_pinctrl_validate_id(const struct scmi_protocol_handle *ph,
+> +				    u32 identifier,
+> +				    enum scmi_pinctrl_selector_type type)
+> +{
+> +	int value;
+> +
+> +	value = scmi_pinctrl_get_count(ph, type);
+> +	if (value < 0)
+> +		return value;
+> +
+> +	if (identifier >= value)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_attributes(const struct scmi_protocol_handle *ph,
+> +				   enum scmi_pinctrl_selector_type type,
+> +				   u32 selector, char *name,
+> +				   unsigned int *n_elems)
+> +{
+> +	int ret;
+> +	struct scmi_xfer *t;
+> +	struct scmi_msg_pinctrl_attributes *tx;
+> +	struct scmi_resp_pinctrl_attributes *rx;
+> +
+> +	if (!name)
+> +		return -EINVAL;
+> +
+> +	ret = scmi_pinctrl_validate_id(ph, selector, type);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ph->xops->xfer_get_init(ph, PINCTRL_ATTRIBUTES, sizeof(*tx),
+> +				      sizeof(*rx), &t);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tx = t->tx.buf;
+> +	rx = t->rx.buf;
+> +	tx->identifier = cpu_to_le32(selector);
+> +	tx->flags = cpu_to_le32(type);
+> +
+> +	ret = ph->xops->do_xfer(ph, t);
+> +	if (!ret) {
+> +		if (n_elems)
+> +			*n_elems = NUM_ELEMS(rx->attributes);
+> +
+> +		strscpy(name, rx->name, SCMI_SHORT_NAME_MAX_SIZE);
+> +	}
+> +
+> +	ph->xops->xfer_put(ph, t);
+> +
+> +	/*
+> +	 * If supported overwrite short name with the extended one;
+> +	 * on error just carry on and use already provided short name.
+> +	 */
+> +	if (!ret && EXT_NAME_FLAG(rx->attributes))
+> +		ph->hops->extended_name_get(ph, PINCTRL_NAME_GET, selector,
+> +					    (u32 *)&type, name,
+> +					    SCMI_MAX_STR_SIZE);
+> +	return ret;
+> +}
+> +
 
->
-> > > > +static inline u64 acpi_arch_get_root_pointer(void)
-> > > > +{
-> > > > +     return acpi_rsdp;
-> > > > +}
-> > > > +
-> > > >  #else
-> > > >  static inline void acpi_init_rintc_map(void) { }
-> > > >  static inline struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int =
-cpu)
-> > > > diff --git a/arch/riscv/include/asm/ffi.h b/arch/riscv/include/asm/=
-ffi.h
-> > > > new file mode 100644
-> > > > index 000000000000..847af02abd87
-> > > > --- /dev/null
-> > > > +++ b/arch/riscv/include/asm/ffi.h
-> > > > @@ -0,0 +1,9 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > +
-> > > > +#ifndef _ASM_FFI_H
-> > > > +#define _ASM_FFI_H
-> > > > +
-> > > > +extern u64 acpi_rsdp;
-> > >
-> > > /stuff/linux/drivers/acpi/osl.c:178:22: error: redefinition of 'acpi_=
-rsdp' with a different type: 'unsigned long' vs 'u64' (aka 'unsigned long l=
-ong')
-> > >
-> > > Fails to build when Kexec is enabled.
-> >
-> > Rename my acpi_rsdp to arch_acpi_rsdp? WDYT?
->
-> You could do s/arch/riscv/ either, that'd match what we prefix a lot of
-> stuff with.
+[snip]
 
- Sorry, I don't quite understand what you mean. Could you tell me in detail=
-?
+> +
+> +static int scmi_pinctrl_get_group_info(const struct scmi_protocol_handle *ph,
+> +				       u32 selector,
+> +				       struct scmi_group_info *group)
+> +{
+> +	int ret;
+> +
+> +	if (!group)
+> +		return -EINVAL;
+> +
+> +	ret = scmi_pinctrl_attributes(ph, GROUP_TYPE, selector,
+> +				      group->name,
+> +				      &group->nr_pins);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!group->nr_pins) {
+> +		dev_err(ph->dev, "Group %d has 0 elements", selector);
+> +		return -ENODATA;
+> +	}
+> +
+> +	group->group_pins = devm_kmalloc_array(ph->dev, group->nr_pins,
+> +					       sizeof(*group->group_pins),
+> +					       GFP_KERNEL);
+> +	if (!group->group_pins)
+> +		return -ENOMEM;
 
->
-> > > > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefil=
-e
-> > > > index 506cc4a9a45a..274e06f4da33 100644
-> > > > --- a/arch/riscv/kernel/Makefile
-> > > > +++ b/arch/riscv/kernel/Makefile
-> > > > @@ -92,6 +92,7 @@ obj-$(CONFIG_CRASH_CORE)    +=3D crash_core.o
-> > > >  obj-$(CONFIG_JUMP_LABEL)     +=3D jump_label.o
-> > > >
-> > > >  obj-$(CONFIG_EFI)            +=3D efi.o
-> > > > +obj-$(CONFIG_FFI)              +=3D ffi.o
-> > >
-> > > This file uses tabs for alignment, not spaces.
-> > Okay, got it.
-> >
-> > >
-> > > >  obj-$(CONFIG_COMPAT)         +=3D compat_syscall_table.o
-> > > >  obj-$(CONFIG_COMPAT)         +=3D compat_signal.o
-> > > >  obj-$(CONFIG_COMPAT)         +=3D compat_vdso/
-> > > > diff --git a/arch/riscv/kernel/ffi.c b/arch/riscv/kernel/ffi.c
-> > > > new file mode 100644
-> > > > index 000000000000..c5ac2b5d9148
-> > > > --- /dev/null
-> > > > +++ b/arch/riscv/kernel/ffi.c
->
-> > > > +void __init ffi_init(void)
-> > > > +{
-> > > > +     ffi_acpi_root_pointer();
-> > >
-> > > What happens if, on a system with "normal" ACPI support, ffi_init() i=
-s
-> > > called & ffi_acpi_root_pointer() calls things like fdt_path_offset()?
-> >
-> > According to the current logic, get it from FFI is enabled, if can
-> > not,  continue to use =E2=80=9Cnormal=E2=80=9D ACPI.
->
-> I find it hard to understand what you mean here. Do you mean something
-> like "The calls to fdt_path_offset() will use the mini EFI DT and are
-> harmless. If the config table is not present, it will continue to use
-> \"normal\" ACPI."?
+This is a lazy-allocation happening outside of the protocol init path so you
+are rigthly tracking it manually here and in protocol_deinit, BUT you
+should not use devm_ helpers, it is fuorviating even though harmless;
+just plain kmalloc/kcalloc/kfree will do. (As I said oin the reply to
+Andy I miss this previously, apologies)
 
-acpi_os_get_root_pointer()
-{
-        pa =3D acpi_arch_get_root_pointer();
-        if (pa)
-                return pa;
+> +
+> +	ret = scmi_pinctrl_list_associations(ph, selector, GROUP_TYPE,
+> +					     group->nr_pins, group->group_pins);
+> +	if (ret) {
+> +		devm_kfree(ph->dev, group->group_pins);
 
-        ...//efi logic
-}
+kfree
 
-Even if acpi_arch_get_root_pointer returns 0, it does not affect the
-next efi logic.
+> +		return ret;
+> +	}
+> +
+> +	group->present = true;
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_get_group_name(const struct scmi_protocol_handle *ph,
+> +				       u32 selector, const char **name)
+> +{
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	if (!name)
+> +		return -EINVAL;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
 
->
-> > > > +}
-> > > > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > > > index 971fe776e2f8..5a933d6b6acb 100644
-> > > > --- a/arch/riscv/kernel/setup.c
-> > > > +++ b/arch/riscv/kernel/setup.c
-> > > > @@ -36,6 +36,7 @@
-> > > >  #include <asm/thread_info.h>
-> > > >  #include <asm/kasan.h>
-> > > >  #include <asm/efi.h>
-> > > > +#include <asm/ffi.h>
-> > > >
-> > > >  #include "head.h"
-> > > >
-> > > > @@ -279,6 +280,7 @@ void __init setup_arch(char **cmdline_p)
-> > > >       parse_early_param();
-> > > >
-> > > >       efi_init();
-> > > > +     ffi_init();
-> > >
-> > > What provides ffi_init() if CONFIG_FFI is disabled?
->
-> > Ok=EF=BC=8C Modified on v3,  put it with the CONFIG_FFI
->
-> Sorry, what does this mean?
+Ditto.
 
-I mean thanks for the idea, I'll update it in v3.
-#ifdef CONFIG_FDT_FW_INTERFACE
-    ffi_init();
-#endif
+> +		return -EINVAL;
+> +
+> +	if (selector > pi->nr_groups)
+> +		return -EINVAL;
 
+selector >=  ?
 
->
-> >
-> > >
-> > > >       paging_init();
-> > > >
-> > > >       /* Parse the ACPI tables for possible boot-time configuration=
- */
->
-> Cheers,
-> Conor.
+> +
+> +	if (!pi->groups[selector].present) {
+> +		int ret;
+> +
+> +		ret = scmi_pinctrl_get_group_info(ph, selector,
+> +						  &pi->groups[selector]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	*name = pi->groups[selector].name;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_get_group_pins(const struct scmi_protocol_handle *ph,
+> +				       u32 selector, const unsigned int **pins,
+> +				       unsigned int *nr_pins)
+> +{
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	if (!pins || !nr_pins)
+> +		return -EINVAL;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
+> +		return -EINVAL;
 
+Ditto.
+
+> +
+> +	if (selector > pi->nr_groups)
+> +		return -EINVAL;
+> +
+
+selector >=  ?
+
+> +	if (!pi->groups[selector].present) {
+> +		int ret;
+> +
+> +		ret = scmi_pinctrl_get_group_info(ph, selector,
+> +						  &pi->groups[selector]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	*pins = pi->groups[selector].group_pins;
+> +	*nr_pins = pi->groups[selector].nr_pins;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_get_function_info(const struct scmi_protocol_handle *ph,
+> +					  u32 selector,
+> +					  struct scmi_function_info *func)
+> +{
+> +	int ret;
+> +
+> +	if (!func)
+> +		return -EINVAL;
+> +
+> +	ret = scmi_pinctrl_attributes(ph, FUNCTION_TYPE, selector,
+> +				      func->name,
+> +				      &func->nr_groups);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!func->nr_groups) {
+> +		dev_err(ph->dev, "Function %d has 0 elements", selector);
+> +		return -ENODATA;
+> +	}
+> +
+> +	func->groups = devm_kmalloc_array(ph->dev, func->nr_groups,
+> +					  sizeof(*func->groups),
+> +					  GFP_KERNEL);
+> +	if (!func->groups)
+> +		return -ENOMEM;
+
+Same as above...lazy allocation properly tracked BUT do not use devm_
+variants.
+
+> +
+> +	ret = scmi_pinctrl_list_associations(ph, selector, FUNCTION_TYPE,
+> +					     func->nr_groups, func->groups);
+> +	if (ret) {
+> +		devm_kfree(ph->dev, func->groups);
+> +		return ret;
+
+kfree
+
+> +	}
+> +
+> +	func->present = true;
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_get_function_name(const struct scmi_protocol_handle *ph,
+> +					  u32 selector, const char **name)
+> +{
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	if (!name)
+> +		return -EINVAL;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
+> +		return -EINVAL;
+
+Ditto.
+
+> +
+> +	if (selector > pi->nr_functions)
+> +		return -EINVAL;
+
+selector >=  ?
+
+> +
+> +	if (!pi->functions[selector].present) {
+> +		int ret;
+> +
+> +		ret = scmi_pinctrl_get_function_info(ph, selector,
+> +						     &pi->functions[selector]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	*name = pi->functions[selector].name;
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_get_function_groups(const struct scmi_protocol_handle *ph,
+> +					    u32 selector,
+> +					    unsigned int *nr_groups,
+> +					    const unsigned int **groups)
+> +{
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	if (!groups || !nr_groups)
+> +		return -EINVAL;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
+> +		return -EINVAL;
+
+Ditto.
+
+> +
+> +	if (selector > pi->nr_functions)
+> +		return -EINVAL;
+
+selector >=  ?
+
+> +
+> +	if (!pi->functions[selector].present) {
+> +		int ret;
+> +
+> +		ret = scmi_pinctrl_get_function_info(ph, selector,
+> +						     &pi->functions[selector]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	*groups = pi->functions[selector].groups;
+> +	*nr_groups = pi->functions[selector].nr_groups;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_set_mux(const struct scmi_protocol_handle *ph,
+> +				u32 selector, u32 group)
+> +{
+> +	return scmi_pinctrl_function_select(ph, group, GROUP_TYPE,
+> +					    selector);
+> +}
+> +
+> +static int scmi_pinctrl_get_pin_info(const struct scmi_protocol_handle *ph,
+> +				     u32 selector, struct scmi_pin_info *pin)
+> +{
+> +	int ret;
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	if (!pin)
+> +		return -EINVAL;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
+> +		return -EINVAL;
+
+Ditto.
+
+> +
+> +	ret = scmi_pinctrl_attributes(ph, PIN_TYPE, selector,
+> +				      pin->name, NULL);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pin->present = true;
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_get_pin_name(const struct scmi_protocol_handle *ph,
+> +				     u32 selector, const char **name)
+> +{
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	if (!name)
+> +		return -EINVAL;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
+> +		return -EINVAL;
+
+Ditto.
+
+> +
+> +	if (selector > pi->nr_pins)
+> +		return -EINVAL;
+
+selector >=  ?
+
+> +
+> +	if (!pi->pins[selector].present) {
+> +		int ret;
+> +
+> +		ret = scmi_pinctrl_get_pin_info(ph, selector,
+> +						&pi->pins[selector]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	*name = pi->pins[selector].name;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scmi_pinctrl_get_name(const struct scmi_protocol_handle *ph,
+> +				 u32 selector,
+> +				 enum scmi_pinctrl_selector_type type,
+> +				 const char **name)
+> +{
+> +	switch (type) {
+> +	case PIN_TYPE:
+> +		return scmi_pinctrl_get_pin_name(ph, selector, name);
+> +	case GROUP_TYPE:
+> +		return scmi_pinctrl_get_group_name(ph, selector, name);
+> +	case FUNCTION_TYPE:
+> +		return scmi_pinctrl_get_function_name(ph, selector, name);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct scmi_pinctrl_proto_ops pinctrl_proto_ops = {
+> +	.get_count = scmi_pinctrl_get_count,
+> +	.get_name = scmi_pinctrl_get_name,
+> +	.get_group_pins = scmi_pinctrl_get_group_pins,
+> +	.get_function_groups = scmi_pinctrl_get_function_groups,
+> +	.set_mux = scmi_pinctrl_set_mux,
+> +	.get_config = scmi_pinctrl_get_config,
+> +	.set_config = scmi_pinctrl_set_config,
+> +	.request_pin = scmi_pinctrl_request_pin,
+> +	.free_pin = scmi_pinctrl_free_pin
+> +};
+> +
+> +static int scmi_pinctrl_protocol_init(const struct scmi_protocol_handle *ph)
+> +{
+> +	int ret;
+> +	u32 version;
+> +	struct scmi_pinctrl_info *pinfo;
+> +
+> +	ret = ph->xops->version_get(ph, &version);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(ph->dev, "Pinctrl Version %d.%d\n",
+> +		PROTOCOL_REV_MAJOR(version), PROTOCOL_REV_MINOR(version));
+> +
+> +	pinfo = devm_kzalloc(ph->dev, sizeof(*pinfo), GFP_KERNEL);
+> +	if (!pinfo)
+> +		return -ENOMEM;
+> +
+> +	ret = scmi_pinctrl_attributes_get(ph, pinfo);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pinfo->pins = devm_kcalloc(ph->dev, pinfo->nr_pins,
+> +				   sizeof(*pinfo->pins),
+> +				   GFP_KERNEL);
+> +	if (!pinfo->pins)
+> +		return -ENOMEM;
+> +
+> +	pinfo->groups = devm_kcalloc(ph->dev, pinfo->nr_groups,
+> +				     sizeof(*pinfo->groups),
+> +				     GFP_KERNEL);
+> +	if (!pinfo->groups)
+> +		return -ENOMEM;
+> +
+> +	pinfo->functions = devm_kcalloc(ph->dev, pinfo->nr_functions,
+> +					sizeof(*pinfo->functions),
+> +					GFP_KERNEL);
+> +	if (!pinfo->functions)
+> +		return -ENOMEM;
+> +
+> +	pinfo->version = version;
+> +
+> +	return ph->set_priv(ph, pinfo);
+> +}
+> +
+> +static int scmi_pinctrl_protocol_deinit(const struct scmi_protocol_handle *ph)
+> +{
+> +	int i;
+> +	struct scmi_pinctrl_info *pi;
+> +
+> +	pi = ph->get_priv(ph);
+> +	if (!pi)
+> +		return -EINVAL;
+
+Ditto. You never get even here if protocol init had not succesfully
+completed.
+
+> +
+> +	for (i = 0; i < pi->nr_groups; i++)
+> +		if (pi->groups[i].present) {
+> +			devm_kfree(ph->dev, pi->groups[i].group_pins);
+
+kfree..you are managing these.
+
+> +			pi->groups[i].present = false;
+> +		}
+> +
+> +	for (i = 0; i < pi->nr_functions; i++)
+> +		if (pi->functions[i].present) {
+> +			devm_kfree(ph->dev, pi->functions[i].groups);
+
+kfree..you are managing these.
+
+> +			pi->functions[i].present = false;
+> +		}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct scmi_protocol scmi_pinctrl = {
+> +	.id = SCMI_PROTOCOL_PINCTRL,
+> +	.owner = THIS_MODULE,
+> +	.instance_init = &scmi_pinctrl_protocol_init,
+> +	.instance_deinit = &scmi_pinctrl_protocol_deinit,
+> +	.ops = &pinctrl_proto_ops,
+> +};
+> +
+> +DEFINE_SCMI_PROTOCOL_REGISTER_UNREGISTER(pinctrl, scmi_pinctrl)
+> diff --git a/drivers/firmware/arm_scmi/protocols.h b/drivers/firmware/arm_scmi/protocols.h
+> index b3c6314bb4b8..674f949354f9 100644
+> --- a/drivers/firmware/arm_scmi/protocols.h
+> +++ b/drivers/firmware/arm_scmi/protocols.h
+> @@ -346,5 +346,6 @@ DECLARE_SCMI_REGISTER_UNREGISTER(sensors);
+>  DECLARE_SCMI_REGISTER_UNREGISTER(voltage);
+>  DECLARE_SCMI_REGISTER_UNREGISTER(system);
+>  DECLARE_SCMI_REGISTER_UNREGISTER(powercap);
+> +DECLARE_SCMI_REGISTER_UNREGISTER(pinctrl);
+>  
+>  #endif /* _SCMI_PROTOCOLS_H */
+> diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+> index 0ce5746a4470..97631783a5a4 100644
+> --- a/include/linux/scmi_protocol.h
+> +++ b/include/linux/scmi_protocol.h
+> @@ -735,6 +735,52 @@ struct scmi_notify_ops {
+>  					 struct notifier_block *nb);
+>  };
+>  
+> +enum scmi_pinctrl_selector_type {
+> +	PIN_TYPE = 0,
+> +	GROUP_TYPE,
+> +	FUNCTION_TYPE
+> +};
+> +
+> +/**
+> + * struct scmi_pinctrl_proto_ops - represents the various operations provided
+> + * by SCMI Pinctrl Protocol
+> + *
+> + * @get_count: returns count of the registered elements in given type
+> + * @get_name: returns name by index of given type
+> + * @get_group_pins: returns the set of pins, assigned to the specified group
+> + * @get_function_groups: returns the set of groups, assigned to the specified
+> + *	function
+> + * @set_mux: set muxing function for groups of pins
+> + * @get_config: returns configuration parameter for pin or group
+> + * @set_config: sets the configuration parameter for pin or group
+> + * @request_pin: aquire pin before selecting mux setting
+> + * @free_pin: frees pin, acquired by request_pin call
+> + */
+> +struct scmi_pinctrl_proto_ops {
+> +	int (*get_count)(const struct scmi_protocol_handle *ph,
+> +			 enum scmi_pinctrl_selector_type type);
+> +	int (*get_name)(const struct scmi_protocol_handle *ph,
+> +			u32 selector,
+> +			enum scmi_pinctrl_selector_type type,
+> +			const char **name);
+> +	int (*get_group_pins)(const struct scmi_protocol_handle *ph,
+> +			      u32 selector,
+> +			      const unsigned int **pins, unsigned int *nr_pins);
+> +	int (*get_function_groups)(const struct scmi_protocol_handle *ph,
+> +				   u32 selector, unsigned int *nr_groups,
+> +				   const unsigned int **groups);
+> +	int (*set_mux)(const struct scmi_protocol_handle *ph, u32 selector,
+> +		       u32 group);
+> +	int (*get_config)(const struct scmi_protocol_handle *ph, u32 selector,
+> +			  enum scmi_pinctrl_selector_type type,
+> +			  u8 config_type, unsigned long *config_value);
+> +	int (*set_config)(const struct scmi_protocol_handle *ph, u32 selector,
+> +			  enum scmi_pinctrl_selector_type type,
+> +			  u8 config_type, unsigned long config_value);
+> +	int (*request_pin)(const struct scmi_protocol_handle *ph, u32 pin);
+> +	int (*free_pin)(const struct scmi_protocol_handle *ph, u32 pin);
+> +};
+> +
+
+Can you move all of these before .notify_ops where all others protocol
+ops lives ? ... and rename all pinctrl_ops to match the ".<object>_<verb>"
+pattern like other ops (i.e. count_get/name_get ... instead get_count/get_name)
+
+>  /**
+>   * struct scmi_handle - Handle returned to ARM SCMI clients for usage.
+>   *
+> @@ -783,6 +829,7 @@ enum scmi_std_protocol {
+>  	SCMI_PROTOCOL_RESET = 0x16,
+>  	SCMI_PROTOCOL_VOLTAGE = 0x17,
+>  	SCMI_PROTOCOL_POWERCAP = 0x18,
+> +	SCMI_PROTOCOL_PINCTRL = 0x19,
+>  };
+>  
 
 Thanks,
-Yunhui
+Cristian
