@@ -2,42 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3ACE7464EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842E67464F2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 23:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjGCVfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 17:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S230521AbjGCVhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 17:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGCVfp (ORCPT
+        with ESMTP id S229989AbjGCVhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:35:45 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35ED1A7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 14:35:44 -0700 (PDT)
-Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 8f925d03-19e9-11ee-b3cf-005056bd6ce9;
-        Tue, 04 Jul 2023 00:35:42 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 4 Jul 2023 00:35:42 +0300
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com,
-        linus.walleij@linaro.org, npliashechnikov@gmail.com,
-        nmschulte@gmail.com, friedrich.vock@gmx.de, dridri85@gmail.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] pinctrl: amd: Use amd_pinconf_set() for all config
- options
-Message-ID: <ZKM_Ltif-L59Jo34@surfacebook>
-References: <20230630194716.6497-1-mario.limonciello@amd.com>
- <20230630194716.6497-5-mario.limonciello@amd.com>
+        Mon, 3 Jul 2023 17:37:23 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62031A7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 14:37:22 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666fb8b1bc8so4001832b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 14:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1688420242; x=1691012242;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J1yYukfh+CgT+RxPOIniYqFZ33Swz4P1lYS5Scmtogs=;
+        b=kUFS60rsh5WTEJERHjyUxocc9x8/sIb0CCEV3Mb397K4x8Oa5rJfvHeRaT59GJ0QpL
+         5LFiAax33DKQsKW3rHL0a4YHnP+W5Bx7R5hGDP1M4IM0wn+19ykFk5aFaIOxWRS1p7Fw
+         fvLEi3h3wqNQRxlsgiEGgaV5iN611wanRHq7TcYir4Z4QN3RazbqII3Fnz+k0bIZLwvg
+         T7NQS1C1OvVCLdFKoTRef3NWUz4r1+0J8I9K2BCffZQfbzciAoeT9YokSwMCELO2KG1k
+         XHxH9zo1CXpklV0U+L/d8YLbgX4AvdEeaSsZ1M38ObzyJjWALai0/EjO/jRlUd+7l+oA
+         b96w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688420242; x=1691012242;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J1yYukfh+CgT+RxPOIniYqFZ33Swz4P1lYS5Scmtogs=;
+        b=hp1iePRXSWloxN3nGQcr5kWEyqSu8agIlSA5gJPp27JsK2tlHrTfoNQZPH707H9bIO
+         g56i65g32cvQ96krFj/9W+gqGTIITsuzSB537i+Y2JCmNcO2WkJ8HObO/zzxtokeIZkO
+         /QkeNuMySZS2iSUJSXpEg6loY/0R7SsCCkPGaC/EKkFSKDsJ/VyfzSbuRQcFM00xmCZz
+         TtH/SMoVlViG4PK4zf6k4gsRP8vOIos3xea2gysDB/R4NkDdNBq8Lj0XQ0BRllzEl8FZ
+         +qczxMoEW91CGLPmxKrGlgJB59PEkLKyQrjZ+8CNuir86+50m+sjMu6DCdrjRsxZuask
+         fDyQ==
+X-Gm-Message-State: ABy/qLbLacRgH0PcKUZxsG7E70sXWKRoBL6uWOfZRSbdpRk6CDMf+41o
+        shYJLAWQpIsKYfH+JMsa/b+gOA==
+X-Google-Smtp-Source: APBJJlG8cAJr0dpzAku3LWshZd9EoTaSBaJgZu/e4IEXhV2kYUK6+we/zvcjNSf+3BBEFenCLDMxag==
+X-Received: by 2002:a05:6a00:14ce:b0:67f:1d30:9e51 with SMTP id w14-20020a056a0014ce00b0067f1d309e51mr15869878pfu.33.1688420242210;
+        Mon, 03 Jul 2023 14:37:22 -0700 (PDT)
+Received: from dread.disaster.area (pa49-186-53-194.pa.vic.optusnet.com.au. [49.186.53.194])
+        by smtp.gmail.com with ESMTPSA id r9-20020a63ec49000000b0050a0227a4bcsm15393528pgj.57.2023.07.03.14.37.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 14:37:21 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qGRET-001lTl-2i;
+        Tue, 04 Jul 2023 07:37:17 +1000
+Date:   Tue, 4 Jul 2023 07:37:17 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] writeback: Account the number of pages written back
+Message-ID: <ZKM/jUXRjlq19AXN@dread.disaster.area>
+References: <20230628185548.981888-1-willy@infradead.org>
+ <20230702130615.b72616d7f03b3ab4f6fc8dab@linux-foundation.org>
+ <ZKIuu6uQQJIQE640@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630194716.6497-5-mario.limonciello@amd.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <ZKIuu6uQQJIQE640@casper.infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,44 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Jun 30, 2023 at 02:47:16PM -0500, Mario Limonciello kirjoitti:
-> On ASUS TUF A16 it is reported that the ITE5570 ACPI device connected to
-> GPIO 7 is causing an interrupt storm.  This issue doesn't happen on
-> Windows.
+On Mon, Jul 03, 2023 at 03:13:15AM +0100, Matthew Wilcox wrote:
+> On Sun, Jul 02, 2023 at 01:06:15PM -0700, Andrew Morton wrote:
+> > On Wed, 28 Jun 2023 19:55:48 +0100 "Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
+> > 
+> > > nr_to_write is a count of pages, so we need to decrease it by the number
+> > > of pages in the folio we just wrote, not by 1.  Most callers specify
+> > > either LONG_MAX or 1, so are unaffected, but writeback_sb_inodes()
+> > > might end up writing 512x as many pages as it asked for.
+> > 
+> > 512 is a big number,  Should we backport this?
 > 
-> Comparing the GPIO register configuration between Windows and Linux
-> bit 20 has been configured as a pull up on Windows, but not on Linux.
-> Checking GPIO declaration from the firmware it is clear it *should* have
-> been a pull up on Linux as well.
-> 
-> ```
->                     GpioInt (Level, ActiveLow, Exclusive, PullUp, 0x0000,
->                         "\\_SB.GPIO", 0x00, ResourceConsumer, ,
->                         )
->                         {   // Pin list
->                             0x0007
->                         }
+> I'm really not sure.  Maybe?  I'm hoping one of the bots comes up with a
+> meaningful performance change as a result of this patch and we find out.
 
-I beleive we do not need so many heading spaces in the above
+XFS is the only filesystem this would affect, right? AFAIA, nothing
+else enables large folios and uses writeback through
+write_cache_pages() at this point...
 
-> ```
-> 
-> On Linux amd_gpio_set_config() is currently only used for programming
-> the debounce. Actually the GPIO core calls it with all the arguments
-> that are supported by a GPIO, pinctrl-amd just responds `-ENOTSUPP`.
-> 
-> To solve this issue expand amd_gpio_set_config() to support the other
-> arguments amd_pinconf_set() supports, namely `PIN_CONFIG_BIAS_PULL_DOWN`,
-> `PIN_CONFIG_BIAS_PULL_UP`, and `PIN_CONFIG_DRIVE_STRENGTH`.
+In which case, I'd be surprised if much difference, if any, gets
+noticed by anyone.
 
-...
-
-> Fixes: 2956b5d94a76b ("pinctrl / gpio: Introduce .set_config() callback for GPIO chips")
-
-Can you group fixes at the beginning of the series? 
-
+-Dave.
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Dave Chinner
+david@fromorbit.com
