@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CE3745E88
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31B4745E89
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjGCObp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S230162AbjGCOdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjGCObn (ORCPT
+        with ESMTP id S229591AbjGCOdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:31:43 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D53E5E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:31:41 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4faaaa476a9so7184291e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 07:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688394700; x=1690986700;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L9EGFOki3xiHnF+7FGAAtZBB7mQbs7Eeh4q/1Vj38Fc=;
-        b=gNYhxNbFP8IzfoJRIxeCaMSWWFNO1JHLT/5dtrYJHDBQIJ/1LXVs3YQWM7JwEDVQND
-         XEdM0av8oed2tWaU76NQGdE4P3fmzdp5Mb6qpQX9bQRymPE7gmK861NL7nhg5z1JpxeF
-         bZw7i353l6g88e9qdxwijj7Ocb5qzRU4ayw+sZKk1dzzV+U3Y6mIYi7ux0jyb2OmOntb
-         Hqu6MW19sQT83/ryim69UdtMc11F7kvp96RwYMRbNdnMgRQjiIyoyOr0sGHVw63TK+MT
-         9Fhz6gOfc9TcImcO9GcIGJo74/jkGwS/xCqTEb3cJzXjeAk/WTK4w1+rUNuqu332p5/e
-         LVCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688394700; x=1690986700;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L9EGFOki3xiHnF+7FGAAtZBB7mQbs7Eeh4q/1Vj38Fc=;
-        b=D/3m50dECyLkHmccN5KmKV5u8lCOX1Ou4WG765uwz5XECsb5zGLApBM0d2gVl7jNCX
-         lxk+ZhzCsmUah4dd9PjpxpZVsicrsk27hqNPtQ3KDM9zD+7Nl874DsZPR//ilFOdHnoh
-         6q1eo4pj8EvLNPDuvhixdJBhM5GgOvn2r6axHu5h7oPLfoyr76eNc4/79pkjnbjgLdam
-         PHC9nyu0Z7n8K6ZkP6EF3R0iNsJxrbQJh+n8sqlCr2+cZNk6q00MwbqeUCc/XqiWZdVq
-         WQzTPhEJ8F2QZ1sPKQbEWF5wviHSoZko+GhMNlfpnt5PBwc0vTxF1UtaZqF97O/alLx3
-         k3xQ==
-X-Gm-Message-State: ABy/qLapxc0D3Hk0Yk9xN2pDBNrVpfafdpkPKqt/2BgVHItFWL/ATifz
-        qwp3TkAuNVQQ+6cLe8qbBmutLw==
-X-Google-Smtp-Source: APBJJlHFnl9pjPTADToa5QxsSJWwI7H0vQw+sI7M7U3gEoIJRsZNiQ+IGa1hAankXA5VYYCKg4zhug==
-X-Received: by 2002:a05:6512:3e0a:b0:4f9:72a5:2b76 with SMTP id i10-20020a0565123e0a00b004f972a52b76mr7876617lfv.65.1688394700107;
-        Mon, 03 Jul 2023 07:31:40 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id d20-20020ac24c94000000b004fbab80ecefsm1557245lfl.145.2023.07.03.07.31.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 07:31:39 -0700 (PDT)
-Message-ID: <29f6e66d-d093-8d65-bf88-046dca5f0dcf@linaro.org>
-Date:   Mon, 3 Jul 2023 17:31:38 +0300
+        Mon, 3 Jul 2023 10:33:13 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E06D94
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M6biFba36/dvwdpy7paAJx9BloGDg1HvyAfRKozbIbM=; b=lNsGz6yBP0gwxsmfObKEVVhhNV
+        1itYd21MtlUDQUM0Xs+5MXfVVcckVgOkepzn6ZZJjwDRYM79jUT0Ot9azSjGKXm81eJ5WYBwNzEIw
+        hOGTvN4h601JsE2IgpAuKtn/f+OJ6WukgMyT1gMRwqSr0168zgLxMq+ZSy12lIUoE5yXp+yUxVEyR
+        Lwl7809TsvCpC02LhahATgU2QEvtQ9uD8rar+7pOSGO4yP0nVDbC2Ne3jNEb55xzGKNz5ti84h6wr
+        JrYjQG+r4fQJmZE7pVXUfWJkftjst/bwKH2/e26ePELImJfLqRnUwKUg2M2omcFWfbg1beuSSY4gV
+        0AbvGYEA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qGKbr-00A6Mw-0n;
+        Mon, 03 Jul 2023 14:32:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 073EC3001E7;
+        Mon,  3 Jul 2023 16:32:57 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BA4D520292D0E; Mon,  3 Jul 2023 16:32:57 +0200 (CEST)
+Date:   Mon, 3 Jul 2023 16:32:57 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH v4] Sched/fair: Block nohz tick_stop when cfs bandwidth
+ in use
+Message-ID: <20230703143257.GY83892@hirez.programming.kicks-ass.net>
+References: <20230630135714.1018434-1-pauld@redhat.com>
+ <20230630150641.GH2533791@hirez.programming.kicks-ass.net>
+ <20230630152824.GC43299@lorien.usersys.redhat.com>
+ <20230630160534.GA2534344@hirez.programming.kicks-ass.net>
+ <20230630162910.GD43299@lorien.usersys.redhat.com>
+ <20230703121009.GH4253@hirez.programming.kicks-ass.net>
+ <20230703141056.GA67396@lorien.usersys.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/5] soc: qcom: geni-se: Allow any combination of icc
- paths
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
- <20230703-topic-8250_qup_icc-v1-4-fea39aa07525@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230703-topic-8250_qup_icc-v1-4-fea39aa07525@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703141056.GA67396@lorien.usersys.redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 16:31, Konrad Dybcio wrote:
-> Not all SoCs provide all the usual paths. By the looks of it, at least
-> SM8150 and SM8250 don't have one that would resemble "qup-core".
+On Mon, Jul 03, 2023 at 10:10:56AM -0400, Phil Auld wrote:
+> On Mon, Jul 03, 2023 at 02:10:09PM +0200 Peter Zijlstra wrote:
+> > On Fri, Jun 30, 2023 at 12:29:10PM -0400, Phil Auld wrote:
+> > 
+> > > I think you are agreeing that I need the pick next code but need to remove
+> > > the hierarchy walks, right?
+> > 
+> > Yeah, the dequeue case makes we have to care about pick, not sure we
+> > then also need to care about sched_update_tick_dependency() though.
+> > There is indeed a window where these two will 'race', but afaict it is
+> > benign.
+> > 
 > 
-> Check for the error that icc_get throws and assign a NULL value to each
-> path that can't be found to effectively allow any combination of icc paths
-> (which, like previously, includes no icc paths). The ICC APIs gracefully
-> handle a NULL path by exiting early.
+> Hm, that's confusing.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/soc/qcom/qcom-geni-se.c | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
+> As I see it it's the enqueue case (0->1 mostly) where we need the check
+> in pick.  At that point in enqueue we only have a handle on ->curr which
+> is the idle thread.
+
+Well, the 0->1 case is trivial, we'll run the task that's enqueued, and
+as such everything can DTRT and be simple.
+
+> For the dequeue case (2->1) we need the check in the
+> sched_update_tick_dependency() path because if the 1 is the task on the
+> cpu (and is staying there) then we'd otherwise clear the bit when we
+> shouldn't (since we aren't going to go back through pick).
+
+The 2->1 case OTOH is tricky, because then we'll end up running a task
+we've not recently seen. sub_nr_running() will hit the ==1 case and
+clear TICK_DEP_BIT_SCHED.
+
+But then pick will come and set it again, no harm done, right?
+
+.oO Ah!, You're worried about the case where a task is already running,
+a second task comes in, (1->2) and then quickly leaves again (2->1)
+without passing through schedule(). And you don't want to disable the
+tick if that running task needs it.
+
+Mooo :-(
+
+> I'm thinking that I'll try to set the bit in pick since we only care about
+> it when it's the task on the cpu.  That, I think, will simplify the
+> code needed to update the bit when the quota is changed (to or from
+> RUNTIME_INF).
 > 
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index ba788762835f..a5e2e8925c8e 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -813,8 +813,13 @@ int geni_icc_get(struct geni_se *se, const char *icc_ddr)
->   			continue;
->   
->   		se->icc_paths[i].path = devm_of_icc_get(se->dev, icc_names[i]);
+> Setting the bit in enqueue/dequeue means updating it on all the queued
+> task if it changes. Although I may clear it in dequeue just to not leave
+> it around stale.
 
-Would it make sense to add (devm_)of_icc_get_optional instead?  I think 
-we already have several usecases for such API call
+Hmm, no you have to set on enqueue (1->2), otherwise the running task
+doesn't get preempted when it runs out of slice.
 
-For this patch:
+And I don't suppose you want to delay clearing to the first tick after,
+because NOHZ_FULL doesn't want spurious ticks :/
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+What a mess.
 
-> -		if (IS_ERR(se->icc_paths[i].path))
-> -			goto err;
-> +		if (IS_ERR(se->icc_paths[i].path)) {
-> +			/* Not all SoCs implement all the paths */
-> +			if (PTR_ERR(se->icc_paths[i].path) == -ENODATA)
-> +				se->icc_paths[i].path = NULL;
-> +			else
-> +				goto err;
-> +		}
->   	}
->   
->   	return 0;
-> 
-
--- 
-With best wishes
-Dmitry
-
+Please document all these stupid cases in a comment, otherwise we'll go
+bananas trying to make sense of the code later on.
