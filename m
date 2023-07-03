@@ -2,154 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DA1745E19
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4A3745E20
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 16:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjGCOC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 10:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S230364AbjGCOG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 10:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjGCOC1 (ORCPT
+        with ESMTP id S229614AbjGCOG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 10:02:27 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B7106;
-        Mon,  3 Jul 2023 07:02:23 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1688392922tdq088by
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 03 Jul 2023 22:02:00 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: ILHsT53NKPhCMmoSN0mc34nVN2tnvUayvI7MBzxx9zHYJyKQV9kkg57EgKUt6
-        GZxsvMMNxRk+hppQv+Ccai8JrA53fYikH0nzWzLw9W2Oe2OE3mTkXcYVJmycpa2A5v2IEZl
-        zr6Gq/Uh/PqcXof015OmnqK0s0OThKUf8SWSCzIxMg5V3kgkVzSxe0v2KP+o0cNiGApqcQR
-        poIvP6Qeq3+eD6I18peAL8xDBg9t6cXFJwnRj00HSPrWJZfebEZQi+VufEIF7tpIR+wOnsM
-        f78VG+JZKiq3roX8r1RChbNM4+6/Lpm0SmkWGM8zQ+nyitI10KUouywQTTwFgd37WmB1Um5
-        X3aP0k3/O4ARQ1M0eR01OWKWSiFZoUPgj4mvbwu8WzmWc9bI7RrkKs+GJpLiQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15298407468080028086
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: Re: [PATCH v5 06/14] tools/nolibc: arch-*.h: clean up multiple whitespaces
-Date:   Mon,  3 Jul 2023 22:02:00 +0800
-Message-Id: <20230703140200.499769-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230702184453.GF16233@1wt.eu>
-References: <20230702184453.GF16233@1wt.eu>
+        Mon, 3 Jul 2023 10:06:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC89E51
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 07:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688393166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zHQXfVtXAZjvrQC07bbaf5d12vfBfUWqeJ1W4srezSg=;
+        b=H9y3vgDTOKjzMdrN5PiDBQjVQ/4/q3RuNPlJTgt/ojS/PX95RlxOK6KzArl6dQGIPSSNtA
+        b1QUpPAzKZFV8e89hbvxxpwQS98FFkkoEI2Ryl2xQJUJ4iv3suRf/ImgP6XTmk15y486Xc
+        F4vDUNDi5Apu/6Szq4asIhOfEleX2d0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-519-KKwRuRHoNVWxmJZw_RtnrA-1; Mon, 03 Jul 2023 10:06:00 -0400
+X-MC-Unique: KKwRuRHoNVWxmJZw_RtnrA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B40C03C18FE2;
+        Mon,  3 Jul 2023 14:05:59 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.22.32.241])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B36D6492B01;
+        Mon,  3 Jul 2023 14:05:58 +0000 (UTC)
+From:   Nico Pache <npache@redhat.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     aquini@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>
+Subject: [RFC] arm64: properly define SOFT_DIRTY for arm64
+Date:   Mon,  3 Jul 2023 09:55:26 -0400
+Message-ID: <20230703135526.930004-1-npache@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
+ARM64 has a soft-dirty bit (software dirty) but never properly defines
+CONFIG_ARCH_HAS_SOFT_DIRTY or its necessary functions. This patch
+introduces the ability to set/clear the soft dirty bit in a similar
+manner as the other arches that utilize it.
 
-> Hi Zhangjin,
-> 
-> On Wed, Jun 28, 2023 at 09:19:33PM +0800, Zhangjin Wu wrote:
-> > To align with Linux code style and let scripts/checkpatch.pl happy, the
-> > multiple whitespaces in arch-<ARCH>.h files are cleaned up.
-> > 
-> > Most of them are modified by these commands automatically:
-> > 
-> >     $ sed -i -e '/#define my_syscall/,/})/{s/        /\t/g}' tools/include/nolibc/arch-*.h
-> >     $ sed -i -e '/#define my_syscall/,/})/{s/ *\\$/\t\\/g}' tools/include/nolibc/arch-*.h
-> > 
-> > And checked with:
-> > 
-> >     $ grep '  *\\$' tools/include/nolibc/arch-*.h
-> 
-> I'm surprised by this one, I never saw checkpatch complain here. For me,
-> putting a tab after a non-tab is an error. It makes the code harder to
-> edit and re-align, and diffs are harder to read on lines whose lengths
-> varies by +/-1 around a multiple of 8 as it makes the post-tab stuff
-> zigzag. You made me recheck the coding style file, and there's nothing
-> about alignment there, only about indent (and indent uses tabs here).
-> There are also other parts which use spaces for alignment (albeit not
-> that many), so unless there is a solid reason for changing that, I'd
-> rather not do it, as for me it's the exact opposite of a cleanup as it
-> will cause me quite some discomfort.
->
+However, we must be careful... there are cases where the DBM bit is not
+available and the software dirty bit plays a essential role in determining
+whether or not a page is dirty. In these cases we must not allow the
+user to clear the software dirty bit. We can test for these cases by
+utilizing the arch_faults_on_old_pte() function which test the availability
+of DBM.
 
-Willy, it is not about alignment, just rechecked it, it is code indent
-related:
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc: Liu Shixin <liushixin2@huawei.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yu Zhao <yuzhao@google.com>
+Signed-off-by: Nico Pache <npache@redhat.com>
+---
+ arch/arm64/Kconfig               |  1 +
+ arch/arm64/include/asm/pgtable.h | 77 +++++++++++++++++++++++++++++++-
+ 2 files changed, 76 insertions(+), 2 deletions(-)
 
-    #32: FILE: tools/include/nolibc/arch-mips.h:160:
-    +^I                                                                      \$
-    
-    ERROR: code indent should use tabs where possible
-    #44: FILE: tools/include/nolibc/arch-mips.h:172:
-    +^I          "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"  \$
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 891ab530a665..4de491627f49 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -173,6 +173,7 @@ config ARM64
+ 	select HAVE_ARCH_PREL32_RELOCATIONS
+ 	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+ 	select HAVE_ARCH_SECCOMP_FILTER
++	select HAVE_ARCH_SOFT_DIRTY
+ 	select HAVE_ARCH_STACKLEAK
+ 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+ 	select HAVE_ARCH_TRACEHOOK
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 0bd18de9fd97..a0a15ffa2417 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -121,8 +121,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+ })
+ 
+ #define pte_hw_dirty(pte)	(pte_write(pte) && !(pte_val(pte) & PTE_RDONLY))
+-#define pte_sw_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
+-#define pte_dirty(pte)		(pte_sw_dirty(pte) || pte_hw_dirty(pte))
++#define pte_soft_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
++#define pte_dirty(pte)		(pte_soft_dirty(pte) || pte_hw_dirty(pte))
++#define pte_swp_soft_dirty(pte)	pte_soft_dirty(pte)
+ 
+ #define pte_valid(pte)		(!!(pte_val(pte) & PTE_VALID))
+ /*
+@@ -1096,6 +1097,78 @@ static inline bool pud_sect_supported(void)
+ 	return PAGE_SIZE == SZ_4K;
+ }
+ 
++#ifdef CONFIG_ARM64_HW_AFDBM
++/*
++ * if we have the DBM bit we can utilize the software dirty bit as
++ * a mechanism to introduce the soft_dirty functionality; however, without
++ * it this bit is crucial to determining if a entry is dirty and we cannot
++ * clear it via software. DBM can also be disabled or broken on some early
++ * armv8 devices, so check its availability before modifying it.
++ */
++static inline pte_t pte_clear_soft_dirty(pte_t pte)
++{
++	if (arch_faults_on_old_pte())
++		return pte;
++
++	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
++}
++
++static inline pte_t pte_mksoft_dirty(pte_t pte)
++{
++	if (arch_faults_on_old_pte())
++		return pte;
++
++	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
++}
++
++static inline pte_t pte_swp_clear_soft_dirty(pte_t pte)
++{
++	if (arch_faults_on_old_pte())
++		return pte;
++
++	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
++}
++
++static inline pte_t pte_swp_mksoft_dirty(pte_t pte)
++{
++	if (arch_faults_on_old_pte())
++		return pte;
++
++	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
++}
++
++static inline int pmd_soft_dirty(pmd_t pmd)
++{
++	return pte_soft_dirty(pmd_pte(pmd));
++}
++
++static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
++{
++	return pte_pmd(pte_clear_soft_dirty(pmd_pte(pmd)));
++}
++
++static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
++{
++	return pte_pmd(pte_mksoft_dirty(pmd_pte(pmd)));
++}
++
++#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
++static inline int pmd_swp_soft_dirty(pmd_t pmd)
++{
++	return pmd_soft_dirty(pmd);
++}
++
++static inline pmd_t pmd_swp_clear_soft_dirty(pmd_t pmd)
++{
++	return pmd_clear_soft_dirty(pmd);
++}
++
++static inline pmd_t pmd_swp_mksoft_dirty(pmd_t pmd)
++{
++	return pmd_mksoft_dirty(pmd);
++}
++#endif /* CONFIG_ARCH_ENABLE_THP_MIGRATION */
++#endif /* CONFIG_ARM64_HW_AFDBM */
+ 
+ #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
+ #define ptep_modify_prot_start ptep_modify_prot_start
+-- 
+2.41.0
 
-The first one is here:
-
-	register long _arg6 = (long)(arg6);                                   \
-	<--     whitespaces                                                -->\
-	__asm__  volatile (                                                   \
-
-And the second one:
-
-		: "memory", "cc", "at", "v1", "hi", "lo",                     \
-	<-spaces->"t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"  \
-
-These two lines indent with "one tab + more than 8 whitespaces", the
-other lines also have whitespaces code indent, but not more than 8, so,
-not reported.
-
-I have tried to replace whitespaces with tabs in the first one, but the first
-one can not align with the other lines, so, the current modify method is
-applied.
-
-To only touch minimal lines, this may work (reserve the post-whitespaces):
-
-    $ sed -i -e '/^\t*        /{s/        /\t/g}' tools/include/nolibc/arch-*.h
-
-It will only fix up the lines the reported. The cleanup of the post-whitespaces
-is not necessary and it does touch too many lines.
-
-Sorry to disturb you with such cleanups, since I have seen the similar
-reports when we added the arch-arm.h (for my_syscall6), because the code
-style aligns with the others, so, I did touch it, but again encounter
-the same issues with arch-mips.h and to avoid the future reports, I
-checked the whole arch-xxx.h, and found more such reports, so, we
-prepared such a patch.
-
-To be honest, I do prefer post-tabs to whitespaces (less key press, less code
-size ;-)), but as you pointed out, post-tabs have more side-effects, we
-shouldn't touch them, Thanks.
-
-> > Besides, more multiple whitespaces are cleaned up:
-> > 
-> > - convert "__asm__  volatile" to "__asm__ volatile"
-> 
-> I totally agree on this one, it's very likely the result of a mechanical
-> change.
-
-Ok, will split it to a standalone patch, one error report one patch.
-
-> 
-> > - "foo _num  bar" should be "foo _num bar"
-> 
-> In theory yes, except that for those where it appears it was only to
-> keep all declarations aligned given that this _num was shorter by one
-> char than all other local names. Especially when it comes to enumerating
-> register names, you definitely want to keep them aligned. It's sufficiently
-> difficult to avoid mistakes there, any help for visual check counts.
->
-
-Agree, let's keep it as before.
-
-Thanks,
-Zhangjin
-
-> Willy
