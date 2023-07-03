@@ -2,96 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902B8745989
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053D0745979
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 11:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjGCKBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
+        id S230393AbjGCJ7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 05:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjGCKBG (ORCPT
+        with ESMTP id S232691AbjGCJ6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:01:06 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF77E5B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:58:19 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-98e109525d6so767918866b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 02:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1688377994; x=1690969994;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4iGJp3Y6rXle8uuZs1n28iqn7SIORXWqojx1agj3edY=;
-        b=bphMktEdQ7kRVbqtpfQc9RhJUAIleyS9jzfQeitBsbWpVglcgIukNLf9QojsnXBl7Y
-         7eSdQy3YQHS1OPoADbZmcuSsaRZk5STkaHKVeeDw93oo9EAUhXR/se9R2HA9zB8B1VDE
-         Le4q6+XaE3HFMyVECQlhecyHDUQuiUUPLRD7mp5u6Bxo+6wHggU+aOaulkVVtGAp76P0
-         8JohFw9mCyGO+KeT4U2cyNE33w6VinERfsudUV3K+H2VQIHfmayxDP6tk371iFBFPODB
-         21ChH2nQM3TqMuFdKHgponFeeppDmhBjYU6CKFWh8OrHzAE35TxFrdfoPBcyBpQ5hdzP
-         +S3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688377994; x=1690969994;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4iGJp3Y6rXle8uuZs1n28iqn7SIORXWqojx1agj3edY=;
-        b=UKdGnJ0uhm2l0dJ5Ca5k0KaCIvB5yDGmV6c5L+2arU5qM+s1mVLRrO4riz2y22cmnU
-         dKHQdvwRp80zx3adJOriIhcBjxORQy0BcY6kRC+qSP+zeTeROKWI1i6Ef8ciQtUv/UJl
-         XlvKZWcOeobwnZdsGJGbHKrEQkQ5rHYGzvBV0lfq8Fdcl7kshCc1WB+U3LrFw8ddO2Zi
-         yVUdXIXTFPpodqL9fImJH/+ae6U+uJOJvsJxwZoYJNVYPGtIUW7Irk64idcf3T+67YnA
-         Lw+HLujlptzZ+Ibx/+ONdyzBU+734vykKEth0hp4zaIK11svow6yRsyz6f/1TLlG7yU+
-         4L4A==
-X-Gm-Message-State: AC+VfDz8TfzOlQQcsLQX/ChqEwztPV6yVEnQ3CdA/7lVaClz2K/+eMx3
-        Uiz3IqmVmZqL1YsLFEJBsVU4Tkq9B8W4EW0sBYb/jA==
-X-Google-Smtp-Source: ACHHUZ7bIeou5Mbf5sQ4AuXdSmgs0EUefiJOjBpKJhnQ5LCHfzQaSsQLVcAmXDOIi1h+QBWptSoHuOL31iaBYoluKuQ=
-X-Received: by 2002:a17:907:720c:b0:988:565f:bf46 with SMTP id
- dr12-20020a170907720c00b00988565fbf46mr10110365ejc.32.1688377994535; Mon, 03
- Jul 2023 02:53:14 -0700 (PDT)
+        Mon, 3 Jul 2023 05:58:44 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24817172E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 02:54:44 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qGGF0-0001X4-1P; Mon, 03 Jul 2023 11:53:06 +0200
+Message-ID: <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info>
+Date:   Mon, 3 Jul 2023 11:53:05 +0200
 MIME-Version: 1.0
-References: <20230613-so-reuseport-v4-6-4ece76708bba@isovalent.com> <20230628185006.76632-1-kuniyu@amazon.com>
-In-Reply-To: <20230628185006.76632-1-kuniyu@amazon.com>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Mon, 3 Jul 2023 10:53:03 +0100
-Message-ID: <CAN+4W8iktigV4j3t11HiVoo1BLW4r0UsDv+adaE_OZp_bemkOQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets
- with bpf_sk_assign
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
-        edumazet@google.com, haoluo@google.com, hemanthmalla@gmail.com,
-        joe@cilium.io, joe@wand.net.nz, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        martin.lau@linux.dev, mykolal@fb.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, sdf@google.com, shuah@kernel.org,
-        song@kernel.org, willemdebruijn.kernel@gmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: Memory corruption in multithreaded user space program while
+ calling fork
+Content-Language: en-US, de-DE
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jacob Young <jacobly.alt@gmail.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688378085;f7f9c399;
+X-HE-SMSGID: 1qGGF0-0001X4-1P
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 7:50=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.co=
-m> wrote:
-
-> > +     } else {
-> > +             return sk;
-> > +     }
-> > +
-> > +     reuse_sk =3D inet6_lookup_reuseport(net, sk, skb, doff,
-> > +                                       saddr, sport, daddr, ntohs(dpor=
-t),
-> > +                                       ehashfn);
-> > +     if (!reuse_sk || reuse_sk =3D=3D sk)
+On 02.07.23 14:27, Bagas Sanjaya wrote:
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+> 
+>> After upgrading to kernel version 6.4.0 from 6.3.9, I noticed frequent but random crashes in a user space program.  After a lot of reduction, I have come up with the following reproducer program:
+> [...]
+>> After tuning the various parameters for my computer, exit code 2, which indicates that memory corruption was detected, occurs approximately 99% of the time.  Exit code 1, which occurs approximately 1% of the time, means it ran out of statically-allocated memory before reproducing the issue, and increasing the memory usage any more only leads to diminishing returns.  There is also something like a 0.1% chance that it segfaults due to memory corruption elsewhere than in the statically-allocated buffer.
+>>
+>> With this reproducer in hand, I was able to perform the following bisection:
+> [...]
 >
-> nit: compiler might have optimised though, given here is the fast path,
-> we can save reuse_sk =3D=3D sk check.
+> See Bugzilla for the full thread.
 
-Ack.
+Additional details from
+https://bugzilla.kernel.org/show_bug.cgi?id=217624#c5 :
+
+```
+I can confirm that v6.4 with 0bff0aaea03e2a3ed6bfa302155cca8a432a1829
+reverted no longer causes any memory corruption with either my
+reproducer or the original program.
+```
+
+FWIW: 0bff0aaea03 ("x86/mm: try VMA lock-based page fault handling
+first") [merged for v6.4-rc1, authored by Suren Baghdasaryan [already CCed]]
+
+That's the same commit that causes build problems with go:
+
+https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot introduced: 0bff0aaea03e2a3
