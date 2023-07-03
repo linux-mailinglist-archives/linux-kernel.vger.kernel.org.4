@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFA5745E08
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2201745E0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 15:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjGCN6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 09:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S229998AbjGCN71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 09:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjGCN6X (ORCPT
+        with ESMTP id S229981AbjGCN7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 09:58:23 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36674E51;
-        Mon,  3 Jul 2023 06:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/XBj/KASDZEwaINZN6zR62oMWEpcbbmzAAJb5oHzCeI=; b=W8MiGSK63K7sPBiin8aiix6wVO
-        nHiTld2qumxTI7KLvLiwRcb6+D867gCT4fcfIrf2UUrOCFffjXpjVD2DolVTfso0nq3diFjiGDl7u
-        I5R7gSTbdHSFUrmZXgVcKXmALtqvVzN9LEI4Lug2UX5PSrFU19UfvLyffICP0tjPS3Z263iCSCX8Q
-        NG7pwby6B82QH/I9tyBuHDRRg52Dvqxu2PWPJE6HcnpfmsSfWKfnO9hjIskcCD2Vwy21zuqEGbyXI
-        n52/HizMJdjIcYm/Lk/JIgxjXRuwiGvNZSsrmij1Tn9hr4h5xsz9/UA0pRH1DMprbqSBd5tjIh4q8
-        Wxemefbg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qGK3e-00A60O-03;
-        Mon, 03 Jul 2023 13:57:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4FC4E30012F;
-        Mon,  3 Jul 2023 15:57:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 308802028FBD3; Mon,  3 Jul 2023 15:57:34 +0200 (CEST)
-Date:   Mon, 3 Jul 2023 15:57:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yair Podemsky <ypodemsk@redhat.com>
-Cc:     mtosatti@redhat.com, ppandit@redhat.com, david@redhat.com,
-        linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, keescook@chromium.org, paulmck@kernel.org,
-        frederic@kernel.org, will@kernel.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        linus.walleij@linaro.org, akpm@linux-foundation.org,
-        sebastian.reichel@collabora.com, rppt@kernel.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to MM CPUs
-Message-ID: <20230703135734.GK4253@hirez.programming.kicks-ass.net>
-References: <20230620144618.125703-1-ypodemsk@redhat.com>
- <20230620144618.125703-3-ypodemsk@redhat.com>
+        Mon, 3 Jul 2023 09:59:24 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AD4E52
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 06:59:22 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-98d34f1e54fso421094766b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 06:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688392760; x=1690984760;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X80ysD/F6wvgJKG8ztSCHOsfQgFC0oL2m6OimzpJAHE=;
+        b=xTlawRSml3QjxxqYZhVn+T6lwHkX+LmDoaoGwDF4hdysxEQOSi8mjnnsbImPtglyjv
+         +ueYNV2paUwXBQ/3g83aN6gYENvfk733tRTvOo0wmNGy7lqUwIRKTvCmRzjxq0In0lW2
+         yaNlNGu2TD8uPiYRncw7dSXirI/BcZc/aIq81+eCdTP1Ve5oz30koqDmcvX1NnpVJ2z2
+         FD50Py6puVy3JN6WomELAUvSb4oGicviRNggW+lOCIV8fWgQWZIZJ3SL2vKYR8GzAE0o
+         aguWBV3nO+LXRycWErSpsSmQXimW/FUnKhiBQIJ4G5w+FRI1cS5L1stPC3bdnhFdlE3n
+         GaVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688392760; x=1690984760;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X80ysD/F6wvgJKG8ztSCHOsfQgFC0oL2m6OimzpJAHE=;
+        b=JISCf6UncVCC2hg/w12/OK7p2mGApUwaKt50FQJf3wszWedq58Ks/nVk3f0bYQuEsS
+         IJEmMcKPPYHBvp7F9lDbC1lBxvyRSN1whqEU2DpjBzFT8Vnjc2nAU9HrYoZQxVwpQpJD
+         np97mkmjobj48Q7HD8EVd06/VBmV7IRbYW1+zoAjpX8AyG0UzxK9ij5j7nevs6nKrIw7
+         yfbfUCYN027SlWAMCEEWBe76rUxTdDF3oQzK5xt7IpO0kUIaXXcaEa3S0NlfDLtn/dqQ
+         mPohTesQFigIKudI1GEcyF3oIAETPFV6J3h5IBnNCl+O4BKZWDq/OOx1Kz/AORg4Ub9z
+         wZmA==
+X-Gm-Message-State: ABy/qLYq6HADZpVeGiJbNsdY2vlbmlCYUBlqkfxqgFiWUtg5MTCN6CJd
+        5JxHgKhKyFIjJ0PW4ExatUxXQSM7pGDyiirQn9KZrMRM
+X-Google-Smtp-Source: APBJJlHWOpmp0L5iU4aJ3V1Luyx61WADzk04WlLGpK/8sKUeSlzfLcnuvKA4rHqVN4V/eGDHm6iOWQ==
+X-Received: by 2002:a17:907:76ab:b0:992:d013:1132 with SMTP id jw11-20020a17090776ab00b00992d0131132mr5768360ejc.1.1688392760602;
+        Mon, 03 Jul 2023 06:59:20 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id p11-20020a1709060e8b00b00993159ce075sm3726148ejf.210.2023.07.03.06.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 06:59:20 -0700 (PDT)
+Message-ID: <14253982-da00-ceaa-4fe9-c2561258b014@linaro.org>
+Date:   Mon, 3 Jul 2023 15:59:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620144618.125703-3-ypodemsk@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/5] dt-bindings: spi: spi-geni-qcom: Allow no qup-core
+ icc path
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
+ <20230703-topic-8250_qup_icc-v1-1-fea39aa07525@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230703-topic-8250_qup_icc-v1-1-fea39aa07525@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 05:46:18PM +0300, Yair Podemsky wrote:
-> @@ -191,7 +191,13 @@ static void tlb_remove_table_smp_sync(void *arg)
->  	/* Simply deliver the interrupt */
->  }
->  
-> -void tlb_remove_table_sync_one(void)
-> +#ifdef CONFIG_ARCH_HAS_CPUMASK_BITS
-> +#define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
-> +#else
-> +#define REMOVE_TABLE_IPI_MASK cpu_online_mask
-> +#endif /* CONFIG_ARCH_HAS_CPUMASK_BITS */
-> +
-> +void tlb_remove_table_sync_one(struct mm_struct *mm)
->  {
->  	/*
->  	 * This isn't an RCU grace period and hence the page-tables cannot be
-> @@ -200,7 +206,8 @@ void tlb_remove_table_sync_one(void)
->  	 * It is however sufficient for software page-table walkers that rely on
->  	 * IRQ disabling.
->  	 */
-> -	smp_call_function(tlb_remove_table_smp_sync, NULL, 1);
-> +	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync,
-> +			NULL, true);
+On 03/07/2023 15:31, Konrad Dybcio wrote:
+> Some SoCs (like SM8150 and SM8250) don't seem to provide a qup-core path.
+> Allow such case.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/spi/qcom,spi-geni-qcom.yaml       | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
 
-Aside from what Dave said about the REMOVE_TABLE_IPI_MASK thing, this
-isn't right.
 
-on_each_cpu_mask() includes the current cpu, while smp_call_function()
-explicitly does not.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yes, they all end up in smp_call_function_many_cond(), but the
-on_each_cpu*() family will have SCF_RUN_LOCAL set, while the
-smp_call_function*() family will not.
+Best regards,
+Krzysztof
+
