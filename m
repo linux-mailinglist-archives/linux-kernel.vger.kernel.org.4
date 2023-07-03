@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15867459DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0910D7459DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 12:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjGCKOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 06:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S230457AbjGCKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 06:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjGCKOK (ORCPT
+        with ESMTP id S231157AbjGCKNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 06:14:10 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA1DD;
-        Mon,  3 Jul 2023 03:14:07 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1688379232tkl6910g
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 03 Jul 2023 18:13:51 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: +ynUkgUhZJmRgMk64lNbZvav6NA7MhEGUtOANAStIGSLiFHATIZ01J/qbTMxh
-        LmahML3fuiEGq78NrYI0qrWi3uraDQj5ug3lHYzbbD+UkEaXq4Z6jAdLvi4oFizHTmcsYqI
-        /CeFtQP9xAEC+AqN0RjhrLvlnyQIFvB9VQ9QYMH2kAKIzyP0cfpCGMYqrbhXz9IULKrXSRb
-        y4ql2CbfJm05AoLvNgwLPLAhLtB2hl7u0BoytYsfTgQp3BcJIAh8PBaRBhp3+pIyPgEoBSK
-        AeyQ4J2yP3bRHATN7W+Vj95Q9nKpsshpSMoBjJvO5iu4p+0QAUXTYgDLwlJoBuaBRlW01JW
-        J+Gq4DqT40KnfFje70Jfh6W6kANcVjTRLyEWRet+y61442zeerDCNanTNmbHZmrIEjK+1mJ
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13818321821494681635
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: Re: [PATCH v5 09/14] tools/nolibc: add missing my_syscall6() for mips
-Date:   Mon,  3 Jul 2023 18:13:50 +0800
-Message-Id: <20230703101350.493374-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230702185549.GH16233@1wt.eu>
-References: <20230702185549.GH16233@1wt.eu>
+        Mon, 3 Jul 2023 06:13:49 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B412CE5E;
+        Mon,  3 Jul 2023 03:13:41 -0700 (PDT)
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D49061C000A;
+        Mon,  3 Jul 2023 10:13:36 +0000 (UTC)
+Message-ID: <c6944b25-7ac4-0b75-75b1-465c8a705d02@ovn.org>
+Date:   Mon, 3 Jul 2023 12:14:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     i.maximets@ovn.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+Subject: Re: [RFC bpf-next] xsk: honor SO_BINDTODEVICE on bind
+Content-Language: en-US
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+References: <20230630145831.2988845-1-i.maximets@ovn.org>
+ <CAJ8uoz1TGjWuJKkZ8C9ZrQB0CDasik3A=qJs=xwdQP8cbn97VQ@mail.gmail.com>
+ <04ed302e-067e-d372-370b-3fef1cf8c7f2@ovn.org>
+From:   Ilya Maximets <i.maximets@ovn.org>
+In-Reply-To: <04ed302e-067e-d372-370b-3fef1cf8c7f2@ovn.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,51 +66,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
-
-> Hi Zhangjin,
+On 7/3/23 12:06, Ilya Maximets wrote:
+> On 7/3/23 11:48, Magnus Karlsson wrote:
+>> On Fri, 30 Jun 2023 at 16:58, Ilya Maximets <i.maximets@ovn.org> wrote:
+>>>
+>>> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
+>>> A privileged process might create the socket and pass it to a
+>>> non-privileged process for later use.  However, that process will be
+>>> able to bind the socket to any network interface.  Even though it will
+>>> not be able to receive any traffic without modification of the BPF map,
+>>> the situation is not ideal.
+>>>
+>>> Sockets already have a mechanism that can be used to restrict what
+>>> interface they can be attached to.  That is SO_BINDTODEVICE.
+>>>
+>>> To change the binding the process will need CAP_NET_RAW.
+>>>
+>>> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
+>>> workflow when non-privileged process is using AF_XDP.
+>>
+>> Rebinding an AF_XDP socket is not allowed today. Any such attempt will
+>> return an error from bind. So if I understand the purpose of
+>> SO_BINDTODEVICE correctly, you could say that this option is always
+>> set for an AF_XDP socket and it is not possible to toggle it. The only
+>> way to "rebind" an AF_XDP socket is to close it and open a new one.
+>> This was a conscious design decision from day one as it would be very
+>> hard to support this, especially in zero-copy mode.
 > 
-> On Wed, Jun 28, 2023 at 09:37:29PM +0800, Zhangjin Wu wrote:
-> > It is able to pass the 6th argument like the 5th argument via the stack
-> > for mips, let's add a new my_syscall6() now, see [1] for details:
-> > 
-> >   The mips/o32 system call convention passes arguments 5 through 8 on
-> >   the user stack.
-> > 
-> > Both mmap() and pselect6() require my_syscall6().
+> Hi, Magnus.
 > 
-> Very interesting, I didn't manage to make it work previously. Did you
-> test it to confirm that it works ? I guess so but since you didn't
-> mention, I preferred to ask.
->
+> The purpose of this patch is not to allow re-binding.  The use case is
+> following:
+> 
+> 1. First process creates a bare socket with socket(AF_XDP, ...).
+> 2. First process loads the XSK program to the interface.
+> 3. First process adds the socket fd to a BPF map.
+> 4. First process sends socket fd to a second process.
+> 5. Second process allocates UMEM.
+> 6. Second process binds socket to the interface.
 
-Yes, I'm curious too ;-) 
+7. Second process sends/receives the traffic. :)
 
-we did add the mmap test cases and run it for mips, as Thomas
-suggested, we pass a none-zero pa_offset to mmap() to make sure the 6th
-argument is used.
+> 
+> The idea is that the first process will call SO_BINDTODEVICE before
+> sending socket fd to a second process, so the second process is limited
+> in to which interface it can bind the socket.
+> 
+> Does that make sense?
+> 
+> This workflow allows the second process to have no capabilities
+> as long as it has sufficient RLIMIT_MEMLOCK.
 
-I just re-tested it for mips and printed something like this:
+Note that steps 1-7 are working just fine today.  i.e. the umem
+registration, bind, ring mapping and traffic send/receive do not
+require any extra capabilities.
 
-    44 mmap_bad = <0xffffffff> EINVAL                                [OK]
-    45 munmap_bad = -1 EINVAL                                        [OK]
-    46 mmap_munmap_good
-    pa_offset: 8192
-    length: 1
-    file_size: 12287
-     = 0                                          [OK]
-    47 open_tty = 3                                                  [OK]
-    48 open_blah = -1 ENOENT                                         [OK]
+We may restrict the bind() call to require CAP_NET_RAW and then
+allow it for sockets that had SO_BINDTODEVICE as an alternative.
+But restriction will break the current uAPI.
 
-And I also checked the mips support of musl, it evan provide a
-__syscall7, so, it should be ok ;-)
+> 
+> Best regards, Ilya Maximets.
+> 
+>>
+>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>>> ---
+>>>
+>>> Posting as an RFC for now to probably get some feedback.
+>>> Will re-post once the tree is open.
+>>>
+>>>  Documentation/networking/af_xdp.rst | 9 +++++++++
+>>>  net/xdp/xsk.c                       | 6 ++++++
+>>>  2 files changed, 15 insertions(+)
+>>>
+>>> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
+>>> index 247c6c4127e9..1cc35de336a4 100644
+>>> --- a/Documentation/networking/af_xdp.rst
+>>> +++ b/Documentation/networking/af_xdp.rst
+>>> @@ -433,6 +433,15 @@ start N bytes into the buffer leaving the first N bytes for the
+>>>  application to use. The final option is the flags field, but it will
+>>>  be dealt with in separate sections for each UMEM flag.
+>>>
+>>> +SO_BINDTODEVICE setsockopt
+>>> +--------------------------
+>>> +
+>>> +This is a generic SOL_SOCKET option that can be used to tie AF_XDP
+>>> +socket to a particular network interface.  It is useful when a socket
+>>> +is created by a privileged process and passed to a non-privileged one.
+>>> +Once the option is set, kernel will refuse attempts to bind that socket
+>>> +to a different interface.  Updating the value requires CAP_NET_RAW.
+>>> +
+>>>  XDP_STATISTICS getsockopt
+>>>  -------------------------
+>>>
+>>> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+>>> index 5a8c0dd250af..386ff641db0f 100644
+>>> --- a/net/xdp/xsk.c
+>>> +++ b/net/xdp/xsk.c
+>>> @@ -886,6 +886,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+>>>         struct sock *sk = sock->sk;
+>>>         struct xdp_sock *xs = xdp_sk(sk);
+>>>         struct net_device *dev;
+>>> +       int bound_dev_if;
+>>>         u32 flags, qid;
+>>>         int err = 0;
+>>>
+>>> @@ -899,6 +900,11 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+>>>                       XDP_USE_NEED_WAKEUP))
+>>>                 return -EINVAL;
+>>>
+>>> +       bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
+>>> +
+>>> +       if (bound_dev_if && bound_dev_if != sxdp->sxdp_ifindex)
+>>> +               return -EINVAL;
+>>> +
+>>>         rtnl_lock();
+>>>         mutex_lock(&xs->mutex);
+>>>         if (xs->state != XSK_READY) {
+>>> --
+>>> 2.40.1
+>>>
+>>>
+> 
 
-The only difference is, musl provide a different clobber list for
-'__mips_isa_rev >= 6', I didn't look into the details yet:
-https://elixir.bootlin.com/musl/latest/source/arch/mips/syscall_arch.h
-
-Best regards,
-Zhangjin
-
-> Thanks!
-> Willy
