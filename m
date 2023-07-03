@@ -2,180 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CAF74556B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FCC745573
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 08:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjGCGWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 02:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S230000AbjGCGX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 02:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjGCGWs (ORCPT
+        with ESMTP id S230171AbjGCGXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 02:22:48 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56B4C4
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:22:45 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-78a1e095508so1371330241.0
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jul 2023 23:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688365365; x=1690957365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dh2dAhBT/r+t8dBDKmgiVOzd46bgkC5w60SC2kQomME=;
-        b=CSbXeIllDKG52Hz2y0BzvzeWTNUEc4fr1uNpd8I0jFTbwT+x3xDzfAMsPWIKx6IndK
-         bOfUdQihG5MDXKogCsRu0ZSQMmMqJLNluQnXpau1J4w9cUIMMHIL/jF+DEbhCBDpOV4D
-         UrvGya3awuDtGeA3F5CEGu7Tsy5x6It+z9gqJsw2oPuPXEPiIxuE9fQSoLE3tGreKNSn
-         n29sZy8eBYgJ3uG2O2Vor2R9NR0H8vnSeaY4+eTO2hqtFSudrrp5NWwTcNsssh4ExF2G
-         md6hi/utlTHH/EJqeqUjebheF7KLxlDoH+TCdnplsNmsiqqiOSECjVqhIKnbPUezcxIN
-         Ax/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688365365; x=1690957365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dh2dAhBT/r+t8dBDKmgiVOzd46bgkC5w60SC2kQomME=;
-        b=TSwN9cQ87PPJhHGJQAIS2S2HWesQ4bLqITPdh8QUTUGPTRgcE9HJz4D1DZZzKn1N9e
-         lro7dllYXTDf84LqKrKwPt47SGJcCVBKZDzGPCvk3rXb8xml4MThlUuY+kWGsV0yfHQ6
-         GZQdHBC/83/jssff/MPBJTICrab1x1DBEd/qrVnJ5QQuBzHUOyWz2wFsYJV1VCCB7x2y
-         sFJh+OUKmVFIrG33/kk1P6qtfdGeLX50lKrcjiT0gQndHovJf568wmvC+L38IFX6+spc
-         Rsc9EQEuxyo9BJOu9SFyI+SPx+Ur+WR8RaveCRV0qz5bT55cUvdTgdCnb3dwad0HGIYX
-         ESjQ==
-X-Gm-Message-State: ABy/qLYyI6e5Y4FjhJbcPlHPKJdxEVC1vNE+c+Muh5OMn5X9Jmrv17To
-        XWfk5KifMYJmh9VhZK2QzlE0xUuVLlRyI4a7NN11aA==
-X-Google-Smtp-Source: APBJJlH0cEalozKdN1PxBzsfGgMveO3/o2cxZaibne5GXfrl3uwlOSKqPsgSIeVejxm1iGr09N+dbcj5d2OvkAVr1vs=
-X-Received: by 2002:a67:ee55:0:b0:443:6052:43ac with SMTP id
- g21-20020a67ee55000000b00443605243acmr3287737vsp.30.1688365364750; Sun, 02
- Jul 2023 23:22:44 -0700 (PDT)
+        Mon, 3 Jul 2023 02:23:49 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6787CD
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jul 2023 23:23:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1688365409; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=h2wZhgnFTRaW48adXC7R9FkvMJt0cqe0pht6vrt0diiaSzKPAc0FDyifj26vamMXhE
+    YhuFrrtnWNISk/8VrYXRsn1wch2/AH7EWJdpJrhGWdrEdjhVc8+fHUunE+5ANfnAwp1k
+    K1/jwD5SHB5CKX3hBUY7JGNniRkyTH66OJSJABiBnvATUbc2ZlYKBtLW99Kk3lryP101
+    V/DBFYogGUG9yBN8WA9Qv7i/BaXw96p/YzNfo3b+UXs6JKf3QCVmvtcLhqfkTq3rnMDC
+    kMKJlB1hS0L5+jInEEQoSCeak/W1H3VZLGnxuQf/XUdKbKFmHSV8rFGVBFAgUgxQxvQh
+    oH3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1688365409;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=VigkN2P9VAqWMVxOPGmNVBtxL11TIs6XihUyRsbczCs=;
+    b=Bv76Wo/XYZOMQXkKbsH0QMfaqvr8MspGFv/DWSEPzPKTwyotNKmPOfZ46S2pUcOlBr
+    cmyw3n0s0rFXm4mRloYqs8UXmef/+TnQqWhWeCBNLwkqjIFYMJdLADLCQO2s8IYyi4AR
+    KlO2Bm/fuKG5cMhnnXZaQ9mnL91ntxA1dWKj2YzFvNycLczW2iQaWH05qR5xuH2pAy8o
+    jZEJkwWxcCgis/hi2iJ+ZOvU397FnIlkzzdo2ApA3t9dR3U6C3pM79VSBorJNC70mkXZ
+    IIZN4xDH9uwES60i2xUBpz0s1H7RgSatWbZJfej/tqIpZsyyaHxvIM9If/P4rjNYYy0R
+    q8uQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1688365409;
+    s=strato-dkim-0002; d=xenosoft.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=VigkN2P9VAqWMVxOPGmNVBtxL11TIs6XihUyRsbczCs=;
+    b=OxNBsNc3d7VvRr+7SL7aETVTNDLn1L9f5xSC+G2rFViyPImSg0u0TAfSmrOPXujx+p
+    nTU+1umTZIghLQJylr/Kyc2dLbgNbfMTVyX8Fv8GZyOoH+2AEmlkP5v4zy5DC/43zub4
+    slkRJv4jCwvRbrI4zh7gFoX8cvBeLH5LsFvUYQegJ30rFzUlsmeZhF76+z3yXtZIQyt5
+    TUL+8xoXNaDwKS7fMz4+SznohvKhTvXjRMRXbqksyOH/SnoCZm+S9X1GblgcjwT8Cp60
+    atR3hlXP7dLt+zwiiS01P0cnxbfA7RxSsqmTlzto82lZM8KxkUw++28hHQnfoNeroJeR
+    wjNg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1688365409;
+    s=strato-dkim-0003; d=xenosoft.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=VigkN2P9VAqWMVxOPGmNVBtxL11TIs6XihUyRsbczCs=;
+    b=Mh3osUCY+AsP/pYGNodti7Q+cGwfHJmZH0RBwCwVTTjUwm8fUh1B7pm7IHgOxIYEKf
+    qFLx3be6Q6S3AeVsjiAQ==
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHvJzedV4gJwiYnA2b8Im6fsBSfXOgxLFqo2dX1be4ZzRPQGO"
+Received: from [IPV6:2a01:598:d035:1cd6:a8bc:1f79:6a95:4328]
+    by smtp.strato.de (RZmta 49.6.0 AUTH)
+    with ESMTPSA id N28a51z636NRvGH
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 3 Jul 2023 08:23:27 +0200 (CEST)
+Message-ID: <1a205224-06d4-9337-5621-c9760c02f9e5@xenosoft.de>
+Date:   Mon, 3 Jul 2023 08:23:26 +0200
 MIME-Version: 1.0
-References: <20230612130256.4572-1-linyunsheng@huawei.com> <20230612130256.4572-5-linyunsheng@huawei.com>
- <20230614101954.30112d6e@kernel.org> <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
- <20230615095100.35c5eb10@kernel.org> <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
- <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com> <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
- <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com> <20230616122140.6e889357@kernel.org>
- <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com> <20230619110705.106ec599@kernel.org>
- <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com> <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
-In-Reply-To: <5e0ac5bb-2cfa-3b58-9503-1e161f3c9bd5@kernel.org>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Sun, 2 Jul 2023 23:22:33 -0700
-Message-ID: <CAHS8izP2fPS56uXKMCnbKnPNn=xhTd0SZ1NRUgnAvyuSeSSjGA@mail.gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] powerpc: isa-bridge: Fix ISA mmapping when "ranges" is
+ not present
+To:     Michael Ellerman <patch-notifications@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>
+Cc:     Darren Stevens <darren@stevens-zone.net>,
+        "R.T.Dickinson" <rtd2@xtra.co.nz>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20230505171816.3175865-1-robh@kernel.org>
+ <168836167601.46386.17041701491443802315.b4-ty@ellerman.id.au>
+Content-Language: en-US
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+In-Reply-To: <168836167601.46386.17041701491443802315.b4-ty@ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 2, 2023 at 9:20=E2=80=AFPM David Ahern <dsahern@kernel.org> wro=
-te:
+On 03.07.23 07:21, Michael Ellerman wrote:
+> On Fri, 05 May 2023 12:18:17 -0500, Rob Herring wrote:
+>> Commit e4ab08be5b49 ("powerpc/isa-bridge: Remove open coded "ranges"
+>> parsing") broke PASemi Nemo board booting. The issue is the ISA I/O
+>> range was not getting mapped as the logic to handle no "ranges" was
+>> inverted. If phb_io_base_phys is non-zero, then the ISA range defaults
+>> to the first 64K of the PCI I/O space. phb_io_base_phys should only be 0
+>> when looking for a non-PCI ISA region.
+>>
+>> [...]
+> Applied to powerpc/fixes.
 >
-> On 6/29/23 8:27 PM, Mina Almasry wrote:
-> >
-> > Hello Jakub, I'm looking into device memory (peer-to-peer) networking
-> > actually, and I plan to pursue using the page pool as a front end.
-> >
-> > Quick description of what I have so far:
-> > current implementation uses device memory with struct pages; I am
-> > putting all those pages in a gen_pool, and we have written an
-> > allocator that allocates pages from the gen_pool. In the driver, we
-> > use this allocator instead of alloc_page() (the driver in question is
-> > gve which currently doesn't use the page pool). When the driver is
-> > done with the p2p page, it simply decrements the refcount on it and
-> > the page is freed back to the gen_pool.
-
-Quick update here, I was able to get my implementation working with
-the page pool as a front end with the memory provider API Jakub wrote
-here:
-https://github.com/kuba-moo/linux/tree/pp-providers
-
-The main complication indeed was the fact that my device memory pages
-are ZONE_DEVICE pages, which are incompatible with the page_pool due
-to the union in struct page. I thought of a couple of approaches to
-resolve that.
-
-1. Make my device memory pages non-ZONE_DEVICE pages. The issue with
-that is that if the page is not ZONE_DEVICE, put_page(page) will
-attempt to free it to the buddy allocator I think, which is not
-correct. The only places where the mm stack currently allow custom
-freeing callback (AFAIK), are for ZONE_DEVICE page where
-free_zone_device_page() will call the provided callback in
-page->pgmap->ops->page_free, and compound pages where the
-compound_dtor is specified. My device memory pages aren't compound
-pages so only ZONE_DEVICE pages do what I want.
-
-2. Convert the pages from ZONE_DEVICE pages to page_pool pages and
-vice versa as they're being inserted and removed from the page pool.
-This, I think, works elegantly without any issue, and is the option I
-went with. The info from ZONE_DEVICE that I care about for device
-memory TCP is the page->zone_device_data which holds the dma_addr, and
-the page->pgmap which holds the page_free op. I'm able to store both
-in my memory provider so I can swap pages from ZONE_DEVICE and
-page_pool back and forth.
-
-So far I haven't needed to make any modifications to the memory
-provider implementation Jakub has pretty much, and my functionality
-tests are passing. If there are no major objections I'll look into
-cleaning up the interface a bit and propose it for merge. This is a
-prerequisite of device memory TCP via the page_pool.
-
+> [1/1] powerpc: isa-bridge: Fix ISA mmapping when "ranges" is not present
+>        https://git.kernel.org/powerpc/c/79de36042eecb684e0f748d17ba52f365fde0d65
 >
-> I take it these are typical Linux networking applications using standard
-> socket APIs (not dpdk or xdp sockets or such)? If so, what does tcpdump
-> show for those skbs with pages for the device memory?
->
+> cheers
+Hello Michael,
 
-Yes these are using (mostly) standing socket APIs. We have small
-extensions to sendmsg() and recvmsg() to pass a reference to the
-device memory in both these cases, but that's about it.
+This patch has already been applied. Link: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4927cb98f0eeaa5dbeac882e8372f4b16dc62624
 
-tcpdump is able to access the header of these skbs which is in host
-memory, but not the payload in device memory. Here is an example
-session with my netcat-like test for device memory TCP:
-https://pastebin.com/raw/FRjKf0kv
-
-tcpdump seems to work, and the length of the packets above is correct.
-tcpdump -A however isn't able to print the payload of the packets:
-https://pastebin.com/raw/2PcNxaZV
-
---=20
 Thanks,
-Mina
+Christian
