@@ -2,105 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1407453C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2388D7453CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjGCCNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 22:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S230051AbjGCCNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 22:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjGCCNJ (ORCPT
+        with ESMTP id S229844AbjGCCNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 22:13:09 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C607188;
-        Sun,  2 Jul 2023 19:13:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VmQ0CKk_1688350382;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VmQ0CKk_1688350382)
-          by smtp.aliyun-inc.com;
-          Mon, 03 Jul 2023 10:13:03 +0800
-Message-ID: <1688350297.9197447-5-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH] virtio-mmio: don't break lifecycle of vm_dev
-Date:   Mon, 3 Jul 2023 10:11:37 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        weiping zhang <zhangweiping@didichuxing.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20230629120526.7184-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230629120526.7184-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 2 Jul 2023 22:13:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CCEE49;
+        Sun,  2 Jul 2023 19:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9J/g0VFy6q7xC/ouAKR0qMLrwzHMVyMoe2h/3jmtkiQ=; b=gO+bv3PIquyoknoVsnDh6hJlTV
+        dsjpjiYEMMC0uH+o/A84nZoEmVoYrNig2dSILYTA6IRag2BqSEH6G16psuo7t8RjgSrIs5Xi34Bnf
+        qBk0l6chAtcIzC1zCqwAN0yiT7ttbtwzROtE8gWvJg1vsDqCw0zHlAR6pOY7p1XS1ONv0ND7M/o/q
+        5Q/gdEBKfLB2w0BOKOkz57ZhQ0uTMKqsXKno279NrWZMKJKFK0kACnyq0LZv2W2x28aYKY6v8WOPv
+        cQu+2I8rAfPp7ItK0nqHbdxnAXAaewNOz3DOewRm3VVVu1akf2V1aNbvRLAW0wJKXwecaVHmXJjge
+        0EYZ78Fw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qG93z-007pby-VW; Mon, 03 Jul 2023 02:13:16 +0000
+Date:   Mon, 3 Jul 2023 03:13:15 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] writeback: Account the number of pages written back
+Message-ID: <ZKIuu6uQQJIQE640@casper.infradead.org>
+References: <20230628185548.981888-1-willy@infradead.org>
+ <20230702130615.b72616d7f03b3ab4f6fc8dab@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230702130615.b72616d7f03b3ab4f6fc8dab@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023 14:05:26 +0200, Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
-> vm_dev has a separate lifecycle because it has a 'struct device'
-> embedded. Thus, having a release callback for it is correct.
->
-> Allocating the vm_dev struct with devres totally breaks this protection,
+On Sun, Jul 02, 2023 at 01:06:15PM -0700, Andrew Morton wrote:
+> On Wed, 28 Jun 2023 19:55:48 +0100 "Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
+> 
+> > nr_to_write is a count of pages, so we need to decrease it by the number
+> > of pages in the folio we just wrote, not by 1.  Most callers specify
+> > either LONG_MAX or 1, so are unaffected, but writeback_sb_inodes()
+> > might end up writing 512x as many pages as it asked for.
+> 
+> 512 is a big number,  Should we backport this?
 
-device? or driver?
+I'm really not sure.  Maybe?  I'm hoping one of the bots comes up with a
+meaningful performance change as a result of this patch and we find out.
 
-And why?
+> > Fixes: 793917d997df ("mm/readahead: Add large folio readahead")
+> 
+> I'm not seeing how a readahead change messed up writeback accounting?
 
-
-> though. Instead of waiting for the vm_dev release callback, the memory
-> is freed when the platform_device is removed. Resulting in a
-> use-after-free when finally the callback is to be called.
-
-Can we have the break stack?
-
-Thanks.
-
-
->
-> To easily see the problem, compile the kernel with
-> CONFIG_DEBUG_KOBJECT_RELEASE and unbind with sysfs.
->
-> The fix is easy, don't use devres in this case.
->
-> Found during my research about object lifetime problems.
->
-> Fixes: 7eb781b1bbb7 ("virtio_mmio: add cleanup for virtio_mmio_probe")
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/virtio/virtio_mmio.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-> index a46a4a29e929..97760f611295 100644
-> --- a/drivers/virtio/virtio_mmio.c
-> +++ b/drivers/virtio/virtio_mmio.c
-> @@ -607,9 +607,8 @@ static void virtio_mmio_release_dev(struct device *_d)
->  	struct virtio_device *vdev =
->  			container_of(_d, struct virtio_device, dev);
->  	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vdev);
-> -	struct platform_device *pdev = vm_dev->pdev;
->
-> -	devm_kfree(&pdev->dev, vm_dev);
-> +	kfree(vm_dev);
->  }
->
->  /* Platform device */
-> @@ -620,7 +619,7 @@ static int virtio_mmio_probe(struct platform_device *pdev)
->  	unsigned long magic;
->  	int rc;
->
-> -	vm_dev = devm_kzalloc(&pdev->dev, sizeof(*vm_dev), GFP_KERNEL);
-> +	vm_dev = kzalloc(sizeof(*vm_dev), GFP_KERNEL);
->  	if (!vm_dev)
->  		return -ENOMEM;
->
-> --
-> 2.35.1
->
+That was the first patch which allowed large folios to be added to the
+page cache.  Until that point, this was latent.  We could probably argue
+for one of a dozen other commits around the same time.
