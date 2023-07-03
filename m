@@ -2,55 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5881745395
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 03:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60628745398
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 03:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjGCBau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 21:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S230003AbjGCBeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 21:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjGCBat (ORCPT
+        with ESMTP id S229554AbjGCBeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 21:30:49 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0A5A12E;
-        Sun,  2 Jul 2023 18:30:46 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxCsbFJKJkZREFAA--.8271S3;
-        Mon, 03 Jul 2023 09:30:45 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ8y+JKJkfkUZAA--.38104S3;
-        Mon, 03 Jul 2023 09:30:44 +0800 (CST)
-Subject: Re: [PATCH v4 2/2] soc: loongson2_pm: add power management support
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liu Yun <liuyun@loongson.cn>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230620090811.721-1-zhuyinbo@loongson.cn>
- <20230620090811.721-3-zhuyinbo@loongson.cn>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <bd9661f1-b77d-2ce9-0de2-f559576bf55a@loongson.cn>
-Date:   Mon, 3 Jul 2023 09:30:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 2 Jul 2023 21:34:09 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5220E134;
+        Sun,  2 Jul 2023 18:34:08 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-7659cb9c42aso334976285a.3;
+        Sun, 02 Jul 2023 18:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688348047; x=1690940047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j+DQp1aToFjJn6ibYm/4PN8jG7y+qtLc+dd9jn1u2OI=;
+        b=E247jHIts6Coz6hmPu1O7nST/fEOvOmX8+WSIt8dvPOLEXWrHnbxR8/wZMD7eWOQfA
+         VWuEOxQiDxZX2TGM1v1cJTzENETOZ1RTwXjXhPbfHKBlDZERMQ0MzLWQBG2sf45cWvf5
+         TKh5cRMAl5Q29jZMz0JhPRozzhHoZodIsIBQ91yhE+QLdGmpjzDzt89AC7M/S72qzn2a
+         AVlnBgqkZNvWnvJSs9VW+FNOJHBQusF4u/9r8z7R5++3JVQb0cb5EZNZXAolt3W62II7
+         yhCabHg/iIHSZWmXZ+U6AnsKqOzUSbouWdcIm+VutWFROc2Cc1OuWBmxckNnX9zLZA1S
+         rJGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688348047; x=1690940047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j+DQp1aToFjJn6ibYm/4PN8jG7y+qtLc+dd9jn1u2OI=;
+        b=geLdkrHdwTIN7W8hXXmwtxRkGhCtXn7O/4Am0Up1USE2b/v4QWtNr5OVj35eTRC4yP
+         jCAvSJbaMG4ARUPPsMs4SwHwQyiKu5pgf9LMW1cP0S0rc7Gc5lkAVcMv/oobE5/UoAHr
+         Eg0DuAcG5KwNoph7Y1mp88RaoTO8H+a3LjkCtku8zGAYZzn8anYJGysBwxIFfNtN8Pdd
+         wj36dmHQYFe/JPGWm7VOJx4RcsqmbmBRwIrBPx2bBXM1EhyoQsqIM77mNwhStoUrUssq
+         +2fsZ7mRVwG3oheu/NyS5NBlDvc0cyrn5bZdgvyNo/9YuOvYbr+dSqiTv6iqy/UMFvN3
+         gq3Q==
+X-Gm-Message-State: ABy/qLbk62z94zjKN/ATUGAeZrU/FzR81GBxdSc9+l0j3BVk3M4nJUUc
+        YaUW469rHABg3hupwPfRuAg=
+X-Google-Smtp-Source: APBJJlH92Kk5anUzz/btdHsFS1h2wIq4UMijxUHmrjYT7HeyyIRo0qQnTuby7k7tSS0XXQYnB3Oa/Q==
+X-Received: by 2002:a05:620a:2547:b0:763:9f31:1588 with SMTP id s7-20020a05620a254700b007639f311588mr10579466qko.70.1688348047293;
+        Sun, 02 Jul 2023 18:34:07 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id c184-20020a621cc1000000b0066875f17266sm3492941pfc.135.2023.07.02.18.34.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jul 2023 18:34:06 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 73EA181BD580; Mon,  3 Jul 2023 08:34:02 +0700 (WIB)
+Date:   Mon, 3 Jul 2023 08:34:01 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Eric DeVolder <eric.devolder@oracle.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        David R <david@unsolicited.net>,
+        Boris Ostrovsky <boris.ovstrosky@oracle.com>,
+        Miguel Luis <miguel.luis@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux RCU <rcu@vger.kernel.org>,
+        Wireguard Mailing List <wireguard@lists.zx2c4.com>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Manuel 'satmd' Leiner <manuel.leiner@gmx.de>
+Subject: Re: Fwd: RCU stalls with wireguard over bonding over igb on Linux
+ 6.3.0+
+Message-ID: <ZKIlibX5wCgWlonq@debian.me>
+References: <e5b76a4f-81ae-5b09-535f-114149be5069@gmail.com>
+ <79196679-fb65-e5ad-e836-2c43447cfacd@gmail.com>
+ <10f2a5ee-91e2-1241-9e3b-932c493e61b6@leemhuis.info>
+ <CAHmME9onMWdJVUerf86V0kpmNKByt+VC=SUfys+GFryGq1ziHQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230620090811.721-3-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxJ8y+JKJkfkUZAA--.38104S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iSZj5c+AXivxuOj4"
+Content-Disposition: inline
+In-Reply-To: <CAHmME9onMWdJVUerf86V0kpmNKByt+VC=SUfys+GFryGq1ziHQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,288 +100,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Friendly ping ?
+--iSZj5c+AXivxuOj4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Sun, Jul 02, 2023 at 03:46:38PM +0200, Jason A. Donenfeld wrote:
+> I've got an overdue patch that I still need to submit to netdev, which
+> I suspect might actually fix this.
+>=20
+> Can you let me know if
+> https://git.zx2c4.com/wireguard-linux/patch/?id=3D54d5e4329efe0d1dba8b4a5=
+8720d29493926bed0
+> solves the problem?
 
-ÔÚ 2023/6/20 ÏÂÎç5:08, Yinbo Zhu Ð´µÀ:
-> The Loongson-2's power management controller was ACPI, supports ACPI
-> S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
-> Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
-> (USB, GMAC, PWRBTN, etc.). This driver was to add power management
-> controller support that base on dts for Loongson-2 series SoCs.
-> 
-> Co-developed-by: Liu Yun <liuyun@loongson.cn>
-> Signed-off-by: Liu Yun <liuyun@loongson.cn>
-> Co-developed-by: Liu Peibao <liupeibao@loongson.cn>
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->   MAINTAINERS                         |   1 +
->   drivers/soc/loongson/Kconfig        |  10 ++
->   drivers/soc/loongson/Makefile       |   1 +
->   drivers/soc/loongson/loongson2_pm.c | 215 ++++++++++++++++++++++++++++
->   4 files changed, 227 insertions(+)
->   create mode 100644 drivers/soc/loongson/loongson2_pm.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index bcd05f1fa5c1..7c4ad0cbaeff 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12195,6 +12195,7 @@ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-pm@vger.kernel.org
->   S:	Maintained
->   F:	Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-> +F:	drivers/soc/loongson/loongson2_pm.c
->   
->   LOONGSON-2 SOC SERIES PINCTRL DRIVER
->   M:	zhanghongchen <zhanghongchen@loongson.cn>
-> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
-> index 707f56358dc4..4f3ce9eb7520 100644
-> --- a/drivers/soc/loongson/Kconfig
-> +++ b/drivers/soc/loongson/Kconfig
-> @@ -16,3 +16,13 @@ config LOONGSON2_GUTS
->   	 SoCs. Initially only reading SVR and registering soc device are
->   	 supported. Other guts accesses, such as reading firmware configuration
->   	 by default, should eventually be added into this driver as well.
-> +
-> +config LOONGSON2_PM
-> +	bool "Loongson-2 SoC Power Management Controller Driver"
-> +	depends on LOONGARCH && OF
-> +	help
-> +	 The Loongson-2's power management controller was ACPI, supports ACPI
-> +	 S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
-> +	 Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
-> +	 (USB, GMAC, PWRBTN, etc.). This driver was to add power management
-> +	 controller support that base on dts for Loongson-2 series SoCs.
-> diff --git a/drivers/soc/loongson/Makefile b/drivers/soc/loongson/Makefile
-> index 263c486df638..4118f50f55e2 100644
-> --- a/drivers/soc/loongson/Makefile
-> +++ b/drivers/soc/loongson/Makefile
-> @@ -4,3 +4,4 @@
->   #
->   
->   obj-$(CONFIG_LOONGSON2_GUTS)		+= loongson2_guts.o
-> +obj-$(CONFIG_LOONGSON2_PM)		+= loongson2_pm.o
-> diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
-> new file mode 100644
-> index 000000000000..cd022a1d5b33
-> --- /dev/null
-> +++ b/drivers/soc/loongson/loongson2_pm.c
-> @@ -0,0 +1,215 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Loongson-2 PM Support
-> + *
-> + * Copyright (C) 2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/init.h>
-> +#include <linux/input.h>
-> +#include <linux/suspend.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/pm_wakeirq.h>
-> +#include <linux/platform_device.h>
-> +#include <asm/bootinfo.h>
-> +#include <asm/suspend.h>
-> +
-> +#define LOONGSON2_PM1_CNT_REG		0x14
-> +#define LOONGSON2_PM1_STS_REG		0x0c
-> +#define LOONGSON2_PM1_ENA_REG		0x10
-> +#define LOONGSON2_GPE0_STS_REG		0x28
-> +#define LOONGSON2_GPE0_ENA_REG		0x2c
-> +
-> +#define LOONGSON2_PM1_PWRBTN_STS	BIT(8)
-> +#define LOONGSON2_PM1_PCIEXP_WAKE_STS	BIT(14)
-> +#define LOONGSON2_PM1_WAKE_STS		BIT(15)
-> +#define LOONGSON2_PM1_CNT_INT_EN	BIT(0)
-> +#define LOONGSON2_PM1_PWRBTN_EN		LOONGSON2_PM1_PWRBTN_STS
-> +
-> +static struct loongson2_pm {
-> +	void __iomem			*base;
-> +	struct input_dev		*dev;
-> +	bool				suspended;
-> +} loongson2_pm;
-> +
-> +#define loongson2_pm_readw(reg)		readw(loongson2_pm.base + reg)
-> +#define loongson2_pm_readl(reg)		readl(loongson2_pm.base + reg)
-> +#define loongson2_pm_writew(val, reg)	writew(val, loongson2_pm.base + reg)
-> +#define loongson2_pm_writel(val, reg)	writel(val, loongson2_pm.base + reg)
-> +
-> +static void loongson2_pm_status_clear(void)
-> +{
-> +	u16 value;
-> +
-> +	value = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
-> +	value |= (LOONGSON2_PM1_PWRBTN_STS | LOONGSON2_PM1_PCIEXP_WAKE_STS |
-> +		  LOONGSON2_PM1_WAKE_STS);
-> +	loongson2_pm_writew(value, LOONGSON2_PM1_STS_REG);
-> +	loongson2_pm_writel(loongson2_pm_readl(LOONGSON2_GPE0_STS_REG), LOONGSON2_GPE0_STS_REG);
-> +}
-> +
-> +static void loongson2_pm_irq_enable(void)
-> +{
-> +	u16 value;
-> +
-> +	value = loongson2_pm_readw(LOONGSON2_PM1_CNT_REG);
-> +	value |= LOONGSON2_PM1_CNT_INT_EN;
-> +	loongson2_pm_writew(value, LOONGSON2_PM1_CNT_REG);
-> +
-> +	value = loongson2_pm_readw(LOONGSON2_PM1_ENA_REG);
-> +	value |= LOONGSON2_PM1_PWRBTN_EN;
-> +	loongson2_pm_writew(value, LOONGSON2_PM1_ENA_REG);
-> +}
-> +
-> +static int loongson2_suspend_enter(suspend_state_t state)
-> +{
-> +	loongson2_pm_status_clear();
-> +	loongarch_common_suspend();
-> +	loongarch_suspend_enter();
-> +	loongarch_common_resume();
-> +	loongson2_pm_irq_enable();
-> +	pm_set_resume_via_firmware();
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson2_suspend_begin(suspend_state_t state)
-> +{
-> +	pm_set_suspend_via_firmware();
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson2_suspend_valid_state(suspend_state_t state)
-> +{
-> +	return (state == PM_SUSPEND_MEM);
-> +}
-> +
-> +static const struct platform_suspend_ops loongson2_suspend_ops = {
-> +	.valid	= loongson2_suspend_valid_state,
-> +	.begin	= loongson2_suspend_begin,
-> +	.enter	= loongson2_suspend_enter,
-> +};
-> +
-> +static int loongson2_power_button_init(struct device *dev, int irq)
-> +{
-> +	int ret;
-> +	struct input_dev *button;
-> +
-> +	button = input_allocate_device();
-> +	if (!dev)
-> +		return -ENOMEM;
-> +
-> +	button->name = "Power Button";
-> +	button->phys = "pm/button/input0";
-> +	button->id.bustype = BUS_HOST;
-> +	button->dev.parent = NULL;
-> +	input_set_capability(button, EV_KEY, KEY_POWER);
-> +
-> +	ret = input_register_device(button);
-> +	if (ret)
-> +		goto free_dev;
-> +
-> +	dev_pm_set_wake_irq(&button->dev, irq);
-> +	device_set_wakeup_capable(&button->dev, true);
-> +	device_set_wakeup_enable(&button->dev, true);
-> +
-> +	loongson2_pm.dev = button;
-> +	dev_info(dev, "Power Button: Init successful!\n");
-> +
-> +	return 0;
-> +
-> +free_dev:
-> +	input_free_device(button);
-> +
-> +	return ret;
-> +}
-> +
-> +static irqreturn_t loongson2_pm_irq_handler(int irq, void *dev_id)
-> +{
-> +	u16 status = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
-> +
-> +	if (!loongson2_pm.suspended && (status & LOONGSON2_PM1_PWRBTN_STS)) {
-> +		pr_info("Power Button pressed...\n");
-> +		input_report_key(loongson2_pm.dev, KEY_POWER, 1);
-> +		input_sync(loongson2_pm.dev);
-> +		input_report_key(loongson2_pm.dev, KEY_POWER, 0);
-> +		input_sync(loongson2_pm.dev);
-> +	}
-> +
-> +	loongson2_pm_status_clear();
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int __maybe_unused loongson2_pm_suspend(struct device *dev)
-> +{
-> +	loongson2_pm.suspended = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused loongson2_pm_resume(struct device *dev)
-> +{
-> +	loongson2_pm.suspended = false;
-> +
-> +	return 0;
-> +}
-> +static SIMPLE_DEV_PM_OPS(loongson2_pm_ops, loongson2_pm_suspend, loongson2_pm_resume);
-> +
-> +static int loongson2_pm_probe(struct platform_device *pdev)
-> +{
-> +	int irq, retval;
-> +	u64 suspend_addr;
-> +	struct device *dev = &pdev->dev;
-> +
-> +	loongson2_pm.base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(loongson2_pm.base))
-> +		return PTR_ERR(loongson2_pm.base);
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	if (!device_property_read_u64(dev, "loongson,suspend-address", &suspend_addr))
-> +		loongson_sysconf.suspend_addr = (u64)phys_to_virt(suspend_addr);
-> +	else
-> +		dev_err(dev, "No loongson,suspend-address, could not support S3!\n");
-> +
-> +	if (loongson2_power_button_init(dev, irq))
-> +		return -EINVAL;
-> +
-> +	retval = devm_request_irq(&pdev->dev, irq, loongson2_pm_irq_handler,
-> +				  IRQF_SHARED, "pm_irq", &loongson2_pm);
-> +	if (retval)
-> +		return retval;
-> +
-> +	loongson2_pm_irq_enable();
-> +	loongson2_pm_status_clear();
-> +
-> +	if (loongson_sysconf.suspend_addr)
-> +		suspend_set_ops(&loongson2_suspend_ops);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id loongson2_pm_match[] = {
-> +	{ .compatible = "loongson,ls2k1000-pmc", },
-> +	{ .compatible = "loongson,ls2k0500-pmc", },
-> +	{},
-> +};
-> +
-> +static struct platform_driver loongson2_pm_driver = {
-> +	.driver = {
-> +		.name = "ls2k-pm",
-> +		.pm = &loongson2_pm_ops,
-> +		.of_match_table = loongson2_pm_match,
-> +	},
-> +	.probe = loongson2_pm_probe,
-> +};
-> +module_platform_driver(loongson2_pm_driver);
-> +
-> +MODULE_DESCRIPTION("Loongson-2 PM driver");
-> +MODULE_LICENSE("GPL");
-> 
+The reporter on Bugzilla [1] said it fixed the regression, so telling
+regzbot:
 
+#regzbot fix: 54d5e4329efe0d
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217620#c6
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--iSZj5c+AXivxuOj4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZKIlfgAKCRD2uYlJVVFO
+o4VvAQC1HOL3pBDT4GLVcFv6vo9unyPwADyfbTt7FItp8GNDGwD/S1k8ndaOLk2I
+CQNHucPSMLNR09jmYdkOaFrGjSpluAQ=
+=tRvy
+-----END PGP SIGNATURE-----
+
+--iSZj5c+AXivxuOj4--
