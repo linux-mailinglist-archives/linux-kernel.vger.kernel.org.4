@@ -2,75 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4266974753D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA614747542
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjGDPXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S230426AbjGDPZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjGDPXi (ORCPT
+        with ESMTP id S230200AbjGDPZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:23:38 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB3B10E2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:23:26 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688484205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=btwb9fDGkDZ7jnV3QokEO1LHIFVROBuBltSAKFFlyfU=;
-        b=m/bJrBdiQ4r3dm4fK/+8HHJvPBn/jW8CbISsWJhd6smsSEnAyu39fJ4EvX/BJSWTX773ml
-        twRyOvqQBaJbbZyEety5YOKrkg3b4+ZfX1LjVEoBwOHQyHT+6DT+WE7fEdEk4SZfytJN3Y
-        Z5k/mkUthbn2bEyUw3McmYKjaTiUTA9lvc5/Rj9PbYblTk5tBDwUbpbUTqf7+jC068UPvQ
-        qoy1d6RlDRf1obobZNfiIEgJAmtEj2RYloXeuGtU2yD0EoYWzZFm7FAUbhjLuESlVQwkQA
-        zT2bSFYjA8IRwCmXMkQwB1Ds8mL2TngPNtoTFF+Ar4plMPY2H+MoG64a3urs+Q==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BDFC240010;
-        Tue,  4 Jul 2023 15:23:24 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 17:23:23 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH v3 3/5] mtd: rawnand: brcmnand: Fix crash during the
- panic_write
-Message-ID: <20230704172323.2cfe5a89@xps-13>
-In-Reply-To: <20230627193738.19596-4-william.zhang@broadcom.com>
-References: <20230627193738.19596-1-william.zhang@broadcom.com>
-        <20230627193738.19596-4-william.zhang@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Tue, 4 Jul 2023 11:25:14 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8F710CF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:25:11 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0CD3B5C0249;
+        Tue,  4 Jul 2023 11:25:11 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 04 Jul 2023 11:25:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1688484311; x=1688570711; bh=FXe15dxw2eFgPSPM36BqwI66nkQYl/9quUw
+        AMMjIMFE=; b=JvFLQMO5JNMwLSZ/OQFor6bgUfFIJX9OqLmR8ixESZDtO77uACV
+        oOerV31F+dAq7gzTumYj1kctdHh5EAkN5+g0T9BSUXQt7g3/eQ97jwONwtcOq0ex
+        fQbEcjXwLvyS6oD/yZ6gSIqEJT3nOA6eFx+B7ThNgORgQ2VyJU1RtF8+M7xRUrXQ
+        K5W/s/KV8CD4BYEIID/j5ZXrvy28TAksnIU0TBeQ4uiYKeGEbv/DnHcddmF+oOo9
+        LwtX/PDSL83az+09o3c57dNul83+nDBezRS0/HMsaHAwJcP4tOQIeWkKf4/xwm3t
+        kaMbmXeu4init/ytdnmt7RPj+qZ4Rfsrppg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1688484311; x=1688570711; bh=FXe15dxw2eFgPSPM36BqwI66nkQYl/9quUw
+        AMMjIMFE=; b=Czaof1ivS+YXaRXgZUUOXVXVw0pvLLS7gie8KOAZGkreqkin56f
+        IhV0gueOTbxKn8BJGhjzndv0Ou7Tc2poh7PlXltQfDJ95sfaOVb3NsMaH/8zCUtI
+        ErdQbV7/cOmJuBTzEcTLt1DQD7W/PI18Lxh61fbIEumLhO/nbfJcDMZpZn0YGvzw
+        oMbZ1amym4RgQ4NPpzyqsvt7CR4oOZ01tEWhFVRz9bk+iQY1mGPLMc4xo5/4sQxa
+        e3JPIv3TJeJyO2IqiiRpDlGcok9mdZ4UwnykbSCsANLXFC4qKR5A3audgoM1fHp+
+        m4ML/ID2e/T2it5ylh4lFY83h7jciYvaejQ==
+X-ME-Sender: <xms:1jmkZIXzLiWbNhi7lNE_bt6_4633lOU6FyPcIY54IFXtTk-oHGTINg>
+    <xme:1jmkZMlJWSDP7T4jFWjJEtJce53kWajG2SJbKpT2X3sFWtvKuuxY5cCjliH5DSpqc
+    b9nr0vqW2tWgz2RMj4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeggdekjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
+    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:1jmkZMZY-0gUqmNAwQWxCJaaKujGupPxcKARgQtZj2gkK7hEjXwl4g>
+    <xmx:1jmkZHUcMrSC3vG_7ulWPPMhpTQsr2XjE_W1P2ThcBWBfBXdfIJVGw>
+    <xmx:1jmkZCkAB62nYF3d4dz6rmsIQli_ObkTEgCpUDro_x7_d3iRMlsniQ>
+    <xmx:1zmkZH9mHebHs5kceqG08Jt-G5MHETQ31zyBH8LisgUO3n1XlyryRw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C33BCB60089; Tue,  4 Jul 2023 11:25:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
+Mime-Version: 1.0
+Message-Id: <2dff4d81-9b45-4d69-9e30-972f2c9318d9@app.fastmail.com>
+In-Reply-To: <7b55040f-f2d2-372e-cf8a-5ac4a456fdb1@amd.com>
+References: <20230703123557.3355657-1-arnd@kernel.org>
+ <f4bc3739-3ff1-6fa7-5d7d-890f451315bf@amd.com>
+ <788147c6-defd-496a-8174-1571b73d1a71@app.fastmail.com>
+ <f1b190cb-3af7-178b-baeb-b59363868779@amd.com>
+ <9b03246d-b46e-4b91-968a-e9ffc2fc26db@app.fastmail.com>
+ <7b55040f-f2d2-372e-cf8a-5ac4a456fdb1@amd.com>
+Date:   Tue, 04 Jul 2023 17:24:49 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Dave Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>
+Cc:     "Hawking Zhang" <Hawking.Zhang@amd.com>,
+        "Lijo Lazar" <lijo.lazar@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        "YiPeng Chai" <YiPeng.Chai@amd.com>, "Le Ma" <le.ma@amd.com>,
+        "Bokun Zhang" <Bokun.Zhang@amd.com>,
+        "Srinivasan Shanmugam" <srinivasan.shanmugam@amd.com>,
+        "Shiwu Zhang" <shiwu.zhang@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/amdgpu: avoid integer overflow warning in
+ amdgpu_device_resize_fb_bar()
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -83,60 +104,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+On Tue, Jul 4, 2023, at 16:51, Christian K=C3=B6nig wrote:
+> Am 04.07.23 um 16:31 schrieb Arnd Bergmann:
+>> On Tue, Jul 4, 2023, at 14:33, Christian K=C3=B6nig wrote:
+>>>
+>>> Modern AMD GPUs have 16GiB of local memory (VRAM), making those
+>>> accessible to a CPU which can only handle 32bit addresses by resizing
+>>> the BAR is impossible to begin with.
+>>>
+>>> But going a step further even without resizing it is pretty hard to =
+get
+>>> that hardware working on such an architecture.
+>> I'd still like to understand this part better, as we have a lot of
+>> arm64 chips with somewhat flawed PCIe implementations, often with
+>> a tiny 64-bit memory space, but otherwise probably capable of
+>> using a GPU.
+>
+> Yeah, those are unfortunately very well known to us :(
+>
+>> What exactly do you expect to happen here?
+>>
+>> a) Use only part of the VRAM but otherwise work as expected
+>> b) Access all of the VRAM, but at a performance cost for
+>>     bank switching?
+>
+> We have tons of x86 systems where we can't resize the BAR (because of=20
+> lack of BIOS setup of the root PCIe windows). So bank switching is sti=
+ll=20
+> perfectly supported.
 
-william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:36 -0700:
+Ok, good.
 
-> During the panic write path to execute another nand command, if
+> After investigating (which sometimes even includes involving engineers=20
+> from ARM) we usually find that those boards doesn't even remotely comp=
+ly=20
+> to the PCIe specification, both regarding power as well as functional=20
+> things like DMA coherency.
 
-"When executing a NAND command within the panic write path, wait for any
-pending command instead of calling BUG_ON to avoid crashing while
-(already) crashing."
+Makes sense, the power usage is clearly going to make this
+impossible on a lot of boards. I would have expected noncoherent
+DMA to be a solvable problem, since that generally works with
+all drivers that use the dma-mapping interfaces correctly,
+but I understand that drivers/gpu/* often does its own thing
+here, which may make that harder.
 
-> there is a pending command, we should wait for the command instead of
-> calling BUG_ON so we don't crash while crashing.
->=20
-> Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom S=
-TB NAND controller")
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Reviewed-by: Kursad Oney <kursad.oney@broadcom.com>
-> Reviewed-by: Kamal Dasu <kamal.dasu@broadcom.com>
-> ---
->=20
-> Changes in v3: None
-> Changes in v2: None
->=20
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.c
-> index 37c2c7cfa00e..ea03104692bf 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -1608,7 +1608,17 @@ static void brcmnand_send_cmd(struct brcmnand_host=
- *host, int cmd)
-> =20
->  	dev_dbg(ctrl->dev, "send native cmd %d addr 0x%llx\n", cmd, cmd_addr);
-> =20
-> -	BUG_ON(ctrl->cmd_pending !=3D 0);
-> +	/*
-> +	 * If we came here through _panic_write and there is a pending
-> +	 * command, try to wait for it. If it times out, rather than
-> +	 * hitting BUG_ON, just return so we don't crash while crashing.
-> +	 */
-> +	if (oops_in_progress) {
-> +		if (ctrl->cmd_pending &&
-> +			bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0))
-> +			return;
-> +	} else
-> +		BUG_ON(ctrl->cmd_pending !=3D 0);
->  	ctrl->cmd_pending =3D cmd;
-> =20
->  	ret =3D bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0);
-
-LGTM otherwise.
-
-Thanks,
-Miqu=C3=A8l
+     Arnd
