@@ -2,174 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C1B747468
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FED674746E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbjGDOsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
+        id S231775AbjGDOu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbjGDOsF (ORCPT
+        with ESMTP id S229603AbjGDOu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:48:05 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9332B185
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:48:04 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3142a9ffa89so4765547f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688482083; x=1691074083;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kHY6k+r1/uy4g3qvRQQf0oCR/GjTrVR6zNnQNSEOagE=;
-        b=HT3UPxSj8Uu6irQysZar6aud4ndBJVTwOYd0urSiqBjN2hWjStH1ECL9bVUnT2t/Nc
-         x+21LS0R3Ejj0pb2o/0sYWlFCgesVu4hj4IePZveammhc/D5H75+q0fg9rAlC+2EJPym
-         H0SlIgbgBW3YyOH/Rpg5K5ZHr0RViye+UXi7g=
+        Tue, 4 Jul 2023 10:50:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8299185
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688482177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KG7VUiPepL76lIRjn35GDpDWphkvXumaAQTS4F2E7gE=;
+        b=POzBdz3PaX0nJfAbdqHYqdBDhiskAOxnfosYBlRXGQ95UJTN2A0q2mqpkDPu+P96OCC5zT
+        1ELRK4b/YY2JOJerrSrAdtMXL4tIpHFuPnbUhky6ZbDoGfozcfzA9pPNCYvyFKsybpf4Q4
+        8+r7oD3Sja26vhEYfdxqphgKP7seijA=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-1MfHioqZNtGqokSvnXL9Xw-1; Tue, 04 Jul 2023 10:49:33 -0400
+X-MC-Unique: 1MfHioqZNtGqokSvnXL9Xw-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-401e243849cso59951491cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:49:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688482083; x=1691074083;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kHY6k+r1/uy4g3qvRQQf0oCR/GjTrVR6zNnQNSEOagE=;
-        b=CU9uMb/+DixKmjhzXJaHXLuxC8NMZJaKXTGWWS1Mvrs9sghJc9YrvHXcuVZ281oil8
-         7wnaZSVarAX6SEeDPi/y6oNEVTDOVZgMlnM3F/2nqlmnZx2hVSaDQVpqp96edT6U40Yf
-         L8N8vYlALoDvKZba4g47xEXQzNdIk0guPlpzl/AEX0wBhOSwe75XRi21JzFDhuB4Z/i/
-         62KIFOvyYuPUFz5CO6YrJa8DfJvByz0rc2unQsRkO6CvxMCH97uHlConCZINUz4/HMD0
-         SOBDhSQCUYzD4wIPfgU8Bm2pre+oVirzL7Ik+k5ALLzK00xrrWaKDQIA2dwQyD3FTAm1
-         RmYA==
-X-Gm-Message-State: ABy/qLZJK3CeB6e2UZRjzNlXRHEAH+KYSWcf24YmaXqEKThaXDc2QuoN
-        S4RBMScl18l1s1WutMm4nCuTDA==
-X-Google-Smtp-Source: APBJJlElrUehpohXm8KEALVx4CCVHzv6N5c4KwuWnhducTfEjaJECFTGE8IdVpR2SrryOz/nGb4a9A==
-X-Received: by 2002:adf:f589:0:b0:313:f3b5:87cc with SMTP id f9-20020adff589000000b00313f3b587ccmr12432194wro.43.1688482082995;
-        Tue, 04 Jul 2023 07:48:02 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0? (2a01cb0586f567009c8c678d15a0e7e0.ipv6.abo.wanadoo.fr. [2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0])
-        by smtp.gmail.com with ESMTPSA id u14-20020adfdb8e000000b003112ab916cdsm28788545wri.73.2023.07.04.07.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 07:48:02 -0700 (PDT)
-Message-ID: <d6ddcd44-5630-f6ca-8b1f-a994d21edf32@broadcom.com>
-Date:   Tue, 4 Jul 2023 07:48:04 -0700
+        d=1e100.net; s=20221208; t=1688482173; x=1691074173;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KG7VUiPepL76lIRjn35GDpDWphkvXumaAQTS4F2E7gE=;
+        b=BVswgQDyd7jzHOrUlFlMnFzn0gaYXV6srsUKvfRGsi3ns9BN1iJ3cWzNy81OSUO2Do
+         lD+qGso+ToUaPjKOQxeWqnk9CBeEMeuHN2FGH3JYxBJe0N6k3bqZ21n3KVuDqC9ijX2e
+         wM8ive+OoDts2p0TH6nSlWOLBKilBPO78lvEOBPn5BYK9RJTqO8wWwWpd3HBzp6fn3mY
+         KDbz6FH32j5wwTQjeFc/oUp7joNDQzfJMFmQ/BBCLts2g5KkWngI7ZvI5FTxpoxmpkhS
+         4J8VcOQhQPPm7hln72a9ZOIbsDGzjpv3BdmZHWjjNmgzA4K2KSiuOW4Yt87SY02UFoZO
+         a5VQ==
+X-Gm-Message-State: AC+VfDxo+Yfbc0hwkkhYZO9n7jw/u33xpI49gE3dJdc9Mso2mh0LNhg/
+        xDEEu6EGmcKnSacY7zQbv9XofiNaWrp3f5yMyRIM9hUeWT9IDjS6EQj8rbO7MKVGODO54xgzzyW
+        PyutvO7XwhYL9vZ86O3XQFxtADKPHfPOq3rhqnKrK
+X-Received: by 2002:a05:622a:492:b0:400:98e9:fd78 with SMTP id p18-20020a05622a049200b0040098e9fd78mr18741802qtx.40.1688482173316;
+        Tue, 04 Jul 2023 07:49:33 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Sre9SNyDexnL2KDDeUgy2D02z/GxHecRMrIxZcfyhJMqlt9W3/aqZ9ZR2BI6Y7285Mz1jSEdCgsHl4pcvRsA=
+X-Received: by 2002:a05:622a:492:b0:400:98e9:fd78 with SMTP id
+ p18-20020a05622a049200b0040098e9fd78mr18741780qtx.40.1688482173063; Tue, 04
+ Jul 2023 07:49:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/6] power: reset: brcm-kona: Convert to
- devm_platform_ioremap_resource()
-To:     Yangtao Li <frank.li@vivo.com>, Sebastian Reichel <sre@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230704130309.16444-1-frank.li@vivo.com>
- <20230704130309.16444-3-frank.li@vivo.com>
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <20230704130309.16444-3-frank.li@vivo.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c9ad6605ffaa5e8a"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230704133633.1918147-1-npache@redhat.com> <ZKQnzF2sidMmZRyK@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <ZKQnzF2sidMmZRyK@FVFF77S0Q05N.cambridge.arm.com>
+From:   Nico Pache <npache@redhat.com>
+Date:   Tue, 4 Jul 2023 10:49:06 -0400
+Message-ID: <CAA1CXcBkwr7E=UymXJs911qrXW5dLiZmyMAFpr-kJ-Tz3hoimA@mail.gmail.com>
+Subject: Re: [PATCH V2] arm64: properly define SOFT_DIRTY functionality
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        aquini@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c9ad6605ffaa5e8a
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Mark,
 
+On Tue, Jul 4, 2023 at 10:19=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
+>
+> On Tue, Jul 04, 2023 at 09:36:33AM -0400, Nico Pache wrote:
+> > ARM64 has a soft-dirty bit (software dirty) but never properly defines
+> > CONFIG_ARCH_HAS_SOFT_DIRTY or its necessary functions. This patch
+> > introduces the ability to set/clear the soft dirty bit in a similar
+> > manner as the other arches that utilize it.
+>
+> Anshuman already explained that this is not correct -- to enable
+> CONFIG_ARCH_HAS_SOFT_DIRTY, you need *another* PTE bit. Please don't send
+> another version following this approach.
+>
+> Despite its name, pte_sw_dirty() has nothing to do with
+> CONFIG_ARCH_HAS_SOFT_DIRTY. We have pte_hw_dirty() and pte_sw_dirty() bec=
+ause
+> with Hardware Dirty bit management the HW dirty bit is *also* the write
+> permission bit, and to have a dirty non-writeable PTE state we have to us=
+e a SW
+> bit, which is what pte_sw_dirty() handles. Both pte_hw_dirty() and
+> pte_sw_dirty() comprise the regular dirty state.
+>
+> That's *very* different from CONFIG_ARCH_HAS_SOFT_DIRTY, which is about h=
+aving
+> a *separate* software dirty state that can be used for longer-term dirty
+> tracking (whether the page was last touched since some management SW
+> manipulated the page).
+>
+> > However, we must be careful... there are cases where the DBM bit is not
+> > available and the software dirty bit plays a essential role in determin=
+ing
+> > whether or not a page is dirty. In these cases we must not allow the
+> > user to clear the software dirty bit. We can check for these cases by
+> > utilizing the arch_has_hw_pte_young() function which tests the availabi=
+lity
+> > of DBM.
+>
+> Regardless of the above, this doesn't seem to have been thought through. =
+why
+> would it be ok for this to work or not work dependent on DBM?
+It was from my understanding of both reading the code, and the
+following chart that the PTE_DIRTY bit was only used in the absence of
+the DBM bit to determine the dirty state of a page.
+/*
+ * PTE bits configuration in the presence of hardware Dirty Bit Management
+ * (PTE_WRITE =3D=3D PTE_DBM):
+ *
+ * Dirty  Writable | PTE_RDONLY  PTE_WRITE  PTE_DIRTY (sw)
+ *   0      0      |   1           0          0
+ *   0      1      |   1           1          0
+ *   1      0      |   1           0          1
+ *   1      1      |   0           1          x
+ *
+ * When hardware DBM is not present, the sofware PTE_DIRTY bit is updated v=
+ia
+ * the page fault mechanism. Checking the dirty status of a pte becomes:
+ *
+ *   PTE_DIRTY || (PTE_WRITE && !PTE_RDONLY)
+ */
 
+So from my understanding it seems that when DBM is present, it acts as
+the PTE_WRITE bit, and the AF bit is the HW dirty bit. This gives me
+the impression that the PTE_DIRTY bit is redundant; however, When DBM
+is not present PTE_DIRTY becomes crucial in determining the dirty
+state.
 
-On 7/4/2023 3:03 PM, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+-- Nico
+>
+> Thanks,
+> Mark.
+>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: David Hildenbrand <david@redhat.com>
+> > Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> > Cc: Liu Shixin <liushixin2@huawei.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Yu Zhao <yuzhao@google.com>
+> > Signed-off-by: Nico Pache <npache@redhat.com>
+> > ---
+> >  arch/arm64/Kconfig               |   1 +
+> >  arch/arm64/include/asm/pgtable.h | 104 ++++++++++++++++++++++++++-----
+> >  2 files changed, 90 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 7856c3a3e35a..6ea73b8148c5 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -173,6 +173,7 @@ config ARM64
+> >       select HAVE_ARCH_PREL32_RELOCATIONS
+> >       select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+> >       select HAVE_ARCH_SECCOMP_FILTER
+> > +     select HAVE_ARCH_SOFT_DIRTY
+> >       select HAVE_ARCH_STACKLEAK
+> >       select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+> >       select HAVE_ARCH_TRACEHOOK
+> > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/=
+pgtable.h
+> > index 0bd18de9fd97..c4970c9ed114 100644
+> > --- a/arch/arm64/include/asm/pgtable.h
+> > +++ b/arch/arm64/include/asm/pgtable.h
+> > @@ -51,6 +51,20 @@ static inline bool arch_thp_swp_supported(void)
+> >  }
+> >  #define arch_thp_swp_supported arch_thp_swp_supported
+> >
+> > +/*
+> > + * On arm64 without hardware Access Flag, copying from user will fail =
+because
+> > + * the pte is old and cannot be marked young. So we always end up with=
+ zeroed
+> > + * page after fork() + CoW for pfn mappings. We don't always have a
+> > + * hardware-managed access flag on arm64.
+> > + */
+> > +#define arch_has_hw_pte_young                cpu_has_hw_af
+> > +
+> > +/*
+> > + * Experimentally, it's cheap to set the access flag in hardware and w=
+e
+> > + * benefit from prefaulting mappings as 'old' to start with.
+> > + */
+> > +#define arch_wants_old_prefaulted_pte        cpu_has_hw_af
+> > +
+> >  /*
+> >   * Outside of a few very special situations (e.g. hibernation), we alw=
+ays
+> >   * use broadcast TLB invalidation instructions, therefore a spurious p=
+age
+> > @@ -121,8 +135,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_=
+t phys)
+> >  })
+> >
+> >  #define pte_hw_dirty(pte)    (pte_write(pte) && !(pte_val(pte) & PTE_R=
+DONLY))
+> > -#define pte_sw_dirty(pte)    (!!(pte_val(pte) & PTE_DIRTY))
+> > -#define pte_dirty(pte)               (pte_sw_dirty(pte) || pte_hw_dirt=
+y(pte))
+> > +#define pte_soft_dirty(pte)  (!!(pte_val(pte) & PTE_DIRTY))
+> > +#define pte_dirty(pte)               (pte_soft_dirty(pte) || pte_hw_di=
+rty(pte))
+> > +#define pte_swp_soft_dirty(pte)      pte_soft_dirty(pte)
+> >
+> >  #define pte_valid(pte)               (!!(pte_val(pte) & PTE_VALID))
+> >  /*
+> > @@ -189,7 +204,8 @@ static inline pte_t pte_mkwrite(pte_t pte)
+> >
+> >  static inline pte_t pte_mkclean(pte_t pte)
+> >  {
+> > -     pte =3D clear_pte_bit(pte, __pgprot(PTE_DIRTY));
+> > +     if (!arch_has_hw_pte_young())
+> > +             pte =3D clear_pte_bit(pte, __pgprot(PTE_DIRTY));
+> >       pte =3D set_pte_bit(pte, __pgprot(PTE_RDONLY));
+> >
+> >       return pte;
+> > @@ -1077,25 +1093,83 @@ static inline void update_mmu_cache(struct vm_a=
+rea_struct *vma,
+> >  #define phys_to_ttbr(addr)   (addr)
+> >  #endif
+> >
+> > -/*
+> > - * On arm64 without hardware Access Flag, copying from user will fail =
+because
+> > - * the pte is old and cannot be marked young. So we always end up with=
+ zeroed
+> > - * page after fork() + CoW for pfn mappings. We don't always have a
+> > - * hardware-managed access flag on arm64.
+> > - */
+> > -#define arch_has_hw_pte_young                cpu_has_hw_af
+> > +static inline bool pud_sect_supported(void)
+> > +{
+> > +     return PAGE_SIZE =3D=3D SZ_4K;
+> > +}
+> >
+> > +#ifdef CONFIG_ARM64_HW_AFDBM
+> >  /*
+> > - * Experimentally, it's cheap to set the access flag in hardware and w=
+e
+> > - * benefit from prefaulting mappings as 'old' to start with.
+> > + * if we have the DBM bit we can utilize the software dirty bit as
+> > + * a mechanism to introduce the soft_dirty functionality; however, wit=
+hout
+> > + * it this bit is crucial to determining if a entry is dirty and we ca=
+nnot
+> > + * clear it via software. DBM can also be disabled or broken on some e=
+arly
+> > + * armv8 devices, so check its availability before modifying it.
+> >   */
+> > -#define arch_wants_old_prefaulted_pte        cpu_has_hw_af
+> > +static inline pte_t pte_clear_soft_dirty(pte_t pte)
+> > +{
+> > +     if (!arch_has_hw_pte_young())
+> > +             return pte;
+> >
+> > -static inline bool pud_sect_supported(void)
+> > +     return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
+> > +}
+> > +
+> > +static inline pte_t pte_mksoft_dirty(pte_t pte)
+> >  {
+> > -     return PAGE_SIZE =3D=3D SZ_4K;
+> > +     if (!arch_has_hw_pte_young())
+> > +             return pte;
+> > +
+> > +     return set_pte_bit(pte, __pgprot(PTE_DIRTY));
+> > +}
+> > +
+> > +static inline pte_t pte_swp_clear_soft_dirty(pte_t pte)
+> > +{
+> > +     if (!arch_has_hw_pte_young())
+> > +             return pte;
+> > +
+> > +     return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
+> > +}
+> > +
+> > +static inline pte_t pte_swp_mksoft_dirty(pte_t pte)
+> > +{
+> > +     if (!arch_has_hw_pte_young())
+> > +             return pte;
+> > +
+> > +     return set_pte_bit(pte, __pgprot(PTE_DIRTY));
+> > +}
+> > +
+> > +static inline int pmd_soft_dirty(pmd_t pmd)
+> > +{
+> > +     return pte_soft_dirty(pmd_pte(pmd));
+> > +}
+> > +
+> > +static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
+> > +{
+> > +     return pte_pmd(pte_clear_soft_dirty(pmd_pte(pmd)));
+> > +}
+> > +
+> > +static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
+> > +{
+> > +     return pte_pmd(pte_mksoft_dirty(pmd_pte(pmd)));
+> >  }
+> >
+> > +#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+> > +static inline int pmd_swp_soft_dirty(pmd_t pmd)
+> > +{
+> > +     return pmd_soft_dirty(pmd);
+> > +}
+> > +
+> > +static inline pmd_t pmd_swp_clear_soft_dirty(pmd_t pmd)
+> > +{
+> > +     return pmd_clear_soft_dirty(pmd);
+> > +}
+> > +
+> > +static inline pmd_t pmd_swp_mksoft_dirty(pmd_t pmd)
+> > +{
+> > +     return pmd_mksoft_dirty(pmd);
+> > +}
+> > +#endif /* CONFIG_ARCH_ENABLE_THP_MIGRATION */
+> > +#endif /* CONFIG_ARM64_HW_AFDBM */
+> >
+> >  #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
+> >  #define ptep_modify_prot_start ptep_modify_prot_start
+> > --
+> > 2.41.0
+> >
+>
 
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
-
---000000000000c9ad6605ffaa5e8a
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIN6Wmf/iQJ6VDdTV
-vvbv1avyb1kRBu1fciPswvPJhcy+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDcwNDE0NDgwM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCKMr1rH6AvXm6T+R/5qG+830jUGa42bS94
-WVReu2of5uKoOZ/5hkd2Llk2N3sq3Kp4WvNSUXzOB/Id5gW+IfW2RKJCWebTg5dLjNfR8f1bq+iI
-i7Hn8XJr6tZ+uPFIdXfvjkbkUCC/4LTPEpN2XyPi6LW+fOy3mocyDWO1O9Q+m60pKsINWFcmsW6i
-hDuv6r9F71vSGI2Vurgzm0Brbg3znpnRK0mRyb5OqxnYBITYFTkDd8zURuXTrUVblyLf52MWt8g4
-rb9QCa+e0X/M67HyWoVjmw1DBSwrrXzHXqygf+fddgw1FvvV9djsBuILmxZI+QoyIPNECGjcBXi/
-ArAB
---000000000000c9ad6605ffaa5e8a--
