@@ -2,123 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF43F747144
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8933474714A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjGDMZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
+        id S231685AbjGDM12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjGDMZC (ORCPT
+        with ESMTP id S231653AbjGDM1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:25:02 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7481A1BD4
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:23:26 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so89203271fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688473405; x=1691065405;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uPValZyTZ8WT4pXLvEOIhNkjZRCsSVMvy0kqcxXBZWY=;
-        b=GbdNYU+53uc+CKJ45SjHdFYvihr23ISMMItqnnGph2QrBQp/yUMObVlUB5z18Fww6W
-         V3fldaqEl6L+CEcp8/o4l5MeC26PsbGQXiTDGgZp3Ptioa6a9IES2HzueIOT7VyOTN61
-         bjquV6U0C5dzQJvTdxRdYqxI34m0L0zIo5Tiei5DBfaiYD23RrrjWjomMgQS9bdPis6V
-         cdi8Xj60xM914Rj+lfjdlREdLmdWQ5IpQcBKnJzq9xBHTLacA6ImPgMFeD/Z/Bz5DM0N
-         mXLOunrwwhKfvcGwfdSVKQH4J07PeT/P/5SZDXhbQJk0o2Glnwd5l11l0jV0a4F8Ey0Y
-         lLCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688473405; x=1691065405;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uPValZyTZ8WT4pXLvEOIhNkjZRCsSVMvy0kqcxXBZWY=;
-        b=RKZnxfzW66jAEPyOTDpSYQqvPGGlgKlaj8I6t/jsFGh6yD7p8UPdZW7ogThs/O84Ib
-         kTBdPMAB829lTZD+u5J9g8dhLiw5WNmtYKniS0O8aMMeybWq5dkh3roHiSr7v9Te1vw8
-         soee8oCJ0snuSv53Fk34Dlh2XX6sjur2JrnnXxtVowD7b/Hrjvht8r3/IDNnkEYz+/ad
-         4a7hRYPY9I0xhAydGfGZQ00Nq2H5Ur949AOEwr/K+1uhs57U1aCCw50/wg/d5jGLOA8v
-         Sso42eikMhorZaZpHoCptfw90sMKue6+SKAqLSwsBjEiIoFuV6vl3EKP9+HUyTfQac2n
-         zgnA==
-X-Gm-Message-State: ABy/qLYmaCt6HmpHgm4jAl3LeVCK85HgDqo+9gRR8j0MJmhEeI0os+1u
-        C22L1VKQM+OTAfak6lcIsDPmaA==
-X-Google-Smtp-Source: APBJJlGhow9mucQnVPsfHwcdatGIOezpi0wujhzokvFVMFGT/fK19zshJEpL7q0k7GTqRVHtWMA6Kw==
-X-Received: by 2002:a2e:7011:0:b0:2b6:e958:d03 with SMTP id l17-20020a2e7011000000b002b6e9580d03mr4190511ljc.30.1688473404846;
-        Tue, 04 Jul 2023 05:23:24 -0700 (PDT)
-Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id y16-20020a2e9790000000b002b6d465583csm2851817lji.126.2023.07.04.05.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 05:23:24 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 04 Jul 2023 14:23:18 +0200
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8250: Mark SMMUs as DMA coherent
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230704-topic-8250_pcie_dmac-v1-2-799603a980b0@linaro.org>
-References: <20230704-topic-8250_pcie_dmac-v1-0-799603a980b0@linaro.org>
-In-Reply-To: <20230704-topic-8250_pcie_dmac-v1-0-799603a980b0@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688473400; l=1012;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=VBShug28IBIFJfOo9caAInSc6q5XHytMqyraNym9TJs=;
- b=3Q7TSlPOV0jaUPz/ndqxXhZeVAyVR+DygeEGccfP5sWFJmt2hzoRB/YMfoX+lmk8Wcf//cyYm
- xvYJbE9aEYbC3Kc97Jj+kSOPYiwCaXBnFbflUPm9IZbP5VT0a1NVThO
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 08:27:06 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B75010D0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:26:35 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id B5DCF5C035D;
+        Tue,  4 Jul 2023 08:26:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 04 Jul 2023 08:26:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1688473592; x=1688559992; bh=PyQ6plTYSpz3qzON9fE4kLUBzehylHzFdDq
+        XyOgLcvE=; b=W77S1TQLBvy4PGVojukXY3qROfvcIqKfpp/nBKGH7ekWnnc3mac
+        GXslhBK60I6NKAMd8sOg2loMZJyYKa5TDtel7hJQv16/1Ue9uuR3oZT5ypG3IoZO
+        Q9s9N44TMrGD/mvjXafzgFrFHimoi/WYU7i3cEnqN5qp6FA0oiAiK4khkbzpNdjk
+        7tBQ0e2YlV9aGPRlu1OOfvqE54RRqNIdvE7d4V716wCqwjeidPYnXlZM7eZFLXfD
+        pua2W+yosiXEx9NkeljVm+f8spE1HBI2XL/aJa5h1PoGxwifAiGCZ7NlxwGHekUu
+        mQEjtn+YvQCHl4B7DOOhPWv7aGBeDTaiZEA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1688473592; x=1688559992; bh=PyQ6plTYSpz3qzON9fE4kLUBzehylHzFdDq
+        XyOgLcvE=; b=IPocYXY7TnafTvok9h1lETy4GCn/FhjYgMijmoCjvkOE3UfIZTk
+        UiSNhMXXS3BigYlIwW6RIFE1CpOEphaB1sStCz8s20dG3gRzbZg6UYPdOFi2rAnm
+        0Z0mTeJ7zZgj/SKuZbMOA509ImEpZ73TE+W66RENpRF6g0hRInbaoXaCVejO1EY9
+        Nw/c2JK+j0yyNyPFEpFx0f2hKv+d6ASTfvg6AduwmwzZ41oG/hN+rXTe58SVvO3q
+        svEEAdmR2ON6GaX0y5KkawBi4XdgYS0BT8pGOytMZXdZN0OQaDtUH80Wzjo6CDGh
+        aT5J94WDzrb0Jmr0NU1KEzo3LNND+hZxUTw==
+X-ME-Sender: <xms:-A-kZAGiH5z4tS9ps_N9F_yGho1DcFLpTElwHhvdo51Y3EHTQaVt6Q>
+    <xme:-A-kZJX85mPqrG1j_i6mLFZ6vat0SF_TcP0AsWxh541mujfZ8v2QgXEYVB4OcUOGz
+    8L1S-sGYi26NTFXGL4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeggdehvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
+    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:-A-kZKLBAxdDoaIjkb9VkHBZXUaDP5GSWs9DJW0RlYDnzLhw_g-_dQ>
+    <xmx:-A-kZCFqzG5BZfZGEk72aIsC9mV8qyyuq2WHqf7kofy3mJGwpCEc3w>
+    <xmx:-A-kZGWaEoWiFM3DVnE_pIRVNfvOdunOcWzm3pKBMekHEvvTH1GgSg>
+    <xmx:-A-kZHtfA1FxCKncC-yJ6kkYFO3ldXBwf5BNX1MJdRwGbYbVs9hnSg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7578FB60086; Tue,  4 Jul 2023 08:26:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
+Mime-Version: 1.0
+Message-Id: <788147c6-defd-496a-8174-1571b73d1a71@app.fastmail.com>
+In-Reply-To: <f4bc3739-3ff1-6fa7-5d7d-890f451315bf@amd.com>
+References: <20230703123557.3355657-1-arnd@kernel.org>
+ <f4bc3739-3ff1-6fa7-5d7d-890f451315bf@amd.com>
+Date:   Tue, 04 Jul 2023 14:24:09 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Dave Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>
+Cc:     "Hawking Zhang" <Hawking.Zhang@amd.com>,
+        "Lijo Lazar" <lijo.lazar@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        "YiPeng Chai" <YiPeng.Chai@amd.com>, "Le Ma" <le.ma@amd.com>,
+        "Bokun Zhang" <Bokun.Zhang@amd.com>,
+        "Srinivasan Shanmugam" <srinivasan.shanmugam@amd.com>,
+        "Shiwu Zhang" <shiwu.zhang@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/amdgpu: avoid integer overflow warning in
+ amdgpu_device_resize_fb_bar()
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SMMUs on SM8250 are cache-coherent. Mark them as such.
+On Tue, Jul 4, 2023, at 08:54, Christian K=C3=B6nig wrote:
+> Am 03.07.23 um 14:35 schrieb Arnd Bergmann:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> On 32-bit architectures comparing a resource against a value larger t=
+han
+>> U32_MAX can cause a warning:
+>>
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1344:18: error: result of =
+comparison of constant 4294967296 with expression of type 'resource_size=
+_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constan=
+t-out-of-range-compare]
+>>                      res->start > 0x100000000ull)
+>>                      ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+>>
+>> The compiler is right that this cannot happen in this configuration, =
+which
+>> is ok, so just add a cast to shut up the warning.
+>
+> Well it doesn't make sense to compile that driver on systems with only=20
+> 32bit phys_addr_t in the first place.
 
-Fixes: a89441fcd09d ("arm64: dts: qcom: sm8250: add apps_smmu node")
-Fixes: 04a3605b184e ("arm64: dts: qcom: add sm8250 GPU nodes")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Not sure I understand the specific requirement. Do you mean the entire
+amdgpu driver requires 64-bit BAR addressing, or just the bits that
+resize the BARs?
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 1af0eed9eef5..ccc38c205de3 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2729,6 +2729,7 @@ adreno_smmu: iommu@3da0000 {
- 			clock-names = "ahb", "bus", "iface";
- 
- 			power-domains = <&gpucc GPU_CX_GDSC>;
-+			dma-coherent;
- 		};
- 
- 		slpi: remoteproc@5c00000 {
-@@ -5399,6 +5400,7 @@ apps_smmu: iommu@15000000 {
- 					<GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 697 IRQ_TYPE_LEVEL_HIGH>,
- 					<GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH>;
-+			dma-coherent;
- 		};
- 
- 		adsp: remoteproc@17300000 {
+> It might be cleaner to just not build the whole driver on such systems=20
+> or at least leave out this function.
 
--- 
-2.41.0
+How about this version? This also addresses the build failure, but
+I don't know if this makes any sense:
 
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -1325,6 +1325,9 @@ int amdgpu_device_resize_fb_bar(struct amdgpu_devi=
+ce *adev)
+        u16 cmd;
+        int r;
+=20
++       if (!IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
++               return 0;
++
+        /* Bypass for VF */
+        if (amdgpu_sriov_vf(adev))
+                return 0;
+
+     Arnd
