@@ -2,103 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246CF746E08
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71397746E0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjGDJ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S231230AbjGDJ4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjGDJ4X (ORCPT
+        with ESMTP id S231255AbjGDJ4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:56:23 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96E0CA;
-        Tue,  4 Jul 2023 02:56:15 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qGclY-00040o-SF; Tue, 04 Jul 2023 11:56:12 +0200
-Message-ID: <db4bf839-df6a-c2b9-a03c-3b9d1680c2a9@leemhuis.info>
-Date:   Tue, 4 Jul 2023 11:56:11 +0200
+        Tue, 4 Jul 2023 05:56:36 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F2AE5;
+        Tue,  4 Jul 2023 02:56:34 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688464592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mMapt+1v6arSkASxO8Vo/k1eb4URuf8TQG4qlhn8MnA=;
+        b=MqsYEmANYbQeHQzDbkLhMUahxnUMbuzqWizhWc2AjfbV/tbNF8tsEpgVAK0lHnZt7SADVD
+        pj9s56P5VDsQkjoDpoN4gz4JDh35m0ZolCz6wDDkrfZ6jqETug28jcpXZf9j6iAtbe1zxO
+        UveLyrixfCgqolvN/xfNUfyIA/4tJsx3Rnm1Xu/gtIgrXW9vPY3t1vZP0cIgnXSWJfd/v4
+        DlPL6/xCmg++MDDhsv0w1zlQCG4DKii69CLqch37HeqTjxwLgOboN9ph6LGjG4DTxVoVcm
+        Zag5KVmebxeQKwJ8ap/rMOiC40SKCt98ZFZBN1AlRFKQBk/FwPwVAtCWINO2Aw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D4F882000C;
+        Tue,  4 Jul 2023 09:56:29 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 11:56:28 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 2/2] mtd: rawnand: meson: support for 512B ECC
+ step size
+Message-ID: <20230704115628.55320428@xps-13>
+In-Reply-To: <aede4639-0e99-565a-c997-c414342c66af@sberdevices.ru>
+References: <20230628092937.538683-1-AVKrasnov@sberdevices.ru>
+        <20230628092937.538683-3-AVKrasnov@sberdevices.ru>
+        <20230704103617.4affae8a@xps-13>
+        <9e6eaa87-887c-f955-113a-43860c8ea00c@sberdevices.ru>
+        <20230704114110.25ca9de4@xps-13>
+        <aede4639-0e99-565a-c997-c414342c66af@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 6.3 00/13] 6.3.12-rc1 review
-Content-Language: en-US, de-DE
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-        Vegard Nossum <vegard.nossum@oracle.com>
-References: <20230703184519.206275653@linuxfoundation.org>
- <CA+G9fYvf-sw8tCHjxhoMvHrtzzdE69EwvB2PmypUkGDdCFFASA@mail.gmail.com>
- <2023070411-steadfast-overtly-02a3@gregkh>
- <2023070416-wow-phrasing-b92c@gregkh>
- <37f9e884-6535-1ed7-8675-d98d0a6d8b36@oracle.com>
- <2023070444-untimed-clerical-565a@gregkh>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-In-Reply-To: <2023070444-untimed-clerical-565a@gregkh>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1688464577;42f6fc46;
-X-HE-SMSGID: 1qGclY-00040o-SF
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.07.23 10:47, Greg Kroah-Hartman wrote:
-> On Tue, Jul 04, 2023 at 02:13:03PM +0530, Harshit Mogalapalli wrote:
->> On 04/07/23 1:54 pm, Greg Kroah-Hartman wrote:
->>>>> While running LTP hugetlb testing on x86 the following kernel BUG noticed
->>>>> on running stable-rc 6.3.12-rc1.
->>
->> Have you looked at Patch 9 of this series:
->>
->> https://lore.kernel.org/stable/2023070416-wow-phrasing-b92c@gregkh/T/#m12068530e846ac8b9668bd83941d82ec3f22ac15
->>
->> Looks very much related, it also has a note on Backporting.
->> As I think it could be related, I am sharing this.(But haven't tested
->> anything)
-> 
-> Yes, that's the offending patch.  I should have read over the full
-> changelogs before doing bisection, but bisection/test proved that this
-> was not correct for 6.3.y at this point in time.
+Hi Arseniy,
 
-FWIW, I'm preparing a few small tweaks for
-Documentation/process/stable-kernel-rules.rst (to be submitted after the
-merge window). I among others consider adding something like this that
-might help avoiding this situation:
+avkrasnov@sberdevices.ru wrote on Tue, 4 Jul 2023 12:46:51 +0300:
 
-```
-To delay pick up of patches submitted via :ref:`option_1`, use the
-following format:
+> On 04.07.2023 12:41, Miquel Raynal wrote:
+> > Hi Arseniy,
+> >=20
+> > avkrasnov@sberdevices.ru wrote on Tue, 4 Jul 2023 12:23:03 +0300:
+> >  =20
+> >> On 04.07.2023 11:36, Miquel Raynal wrote: =20
+> >>> Hi Arseniy,
+> >>>
+> >>> AVKrasnov@sberdevices.ru wrote on Wed, 28 Jun 2023 12:29:36 +0300:
+> >>>    =20
+> >>>> Meson NAND supports both 512B and 1024B ECC step size.
+> >>>>
+> >>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> >>>> ---
+> >>>>  drivers/mtd/nand/raw/meson_nand.c | 47 +++++++++++++++++++++++-----=
+---
+> >>>>  1 file changed, 35 insertions(+), 12 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/ra=
+w/meson_nand.c
+> >>>> index 345212e8c691..6cc4f63b86c8 100644
+> >>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+> >>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> >>>> @@ -135,6 +135,7 @@ struct meson_nfc_nand_chip {
+> >>>>  struct meson_nand_ecc {
+> >>>>  	u32 bch;
+> >>>>  	u32 strength;
+> >>>> +	u32 size;
+> >>>>  };
+> >>>> =20
+> >>>>  struct meson_nfc_data {
+> >>>> @@ -190,7 +191,8 @@ struct meson_nfc {
+> >>>>  };
+> >>>> =20
+> >>>>  enum {
+> >>>> -	NFC_ECC_BCH8_1K		=3D 2,
+> >>>> +	NFC_ECC_BCH8_512	=3D 1,
+> >>>> +	NFC_ECC_BCH8_1K,
+> >>>>  	NFC_ECC_BCH24_1K,
+> >>>>  	NFC_ECC_BCH30_1K,
+> >>>>  	NFC_ECC_BCH40_1K,
+> >>>> @@ -198,15 +200,16 @@ enum {
+> >>>>  	NFC_ECC_BCH60_1K,
+> >>>>  };
+> >>>> =20
+> >>>> -#define MESON_ECC_DATA(b, s)	{ .bch =3D (b),	.strength =3D (s)}
+> >>>> +#define MESON_ECC_DATA(b, s, sz)	{ .bch =3D (b), .strength =3D (s),=
+ .size =3D (sz) }
+> >>>> =20
+> >>>>  static struct meson_nand_ecc meson_ecc[] =3D {
+> >>>> -	MESON_ECC_DATA(NFC_ECC_BCH8_1K, 8),
+> >>>> -	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24),
+> >>>> -	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30),
+> >>>> -	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40),
+> >>>> -	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50),
+> >>>> -	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60),
+> >>>> +	MESON_ECC_DATA(NFC_ECC_BCH8_512, 8,  512),
+> >>>> +	MESON_ECC_DATA(NFC_ECC_BCH8_1K,  8,  1024),
+> >>>> +	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24, 1024),
+> >>>> +	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30, 1024),
+> >>>> +	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40, 1024),
+> >>>> +	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50, 1024),
+> >>>> +	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60, 1024),
+> >>>>  };
+> >>>> =20
+> >>>>  static int meson_nand_calc_ecc_bytes(int step_size, int strength)
+> >>>> @@ -224,8 +227,27 @@ static int meson_nand_calc_ecc_bytes(int step_s=
+ize, int strength)
+> >>>> =20
+> >>>>  NAND_ECC_CAPS_SINGLE(meson_gxl_ecc_caps,
+> >>>>  		     meson_nand_calc_ecc_bytes, 1024, 8, 24, 30, 40, 50, 60);
+> >>>> -NAND_ECC_CAPS_SINGLE(meson_axg_ecc_caps,
+> >>>> -		     meson_nand_calc_ecc_bytes, 1024, 8);
+> >>>> +
+> >>>> +static const int axg_stepinfo_strengths[] =3D { 8 };
+> >>>> +static const struct nand_ecc_step_info axg_stepinfo_1024 =3D {
+> >>>> +	.stepsize =3D 1024,
+> >>>> +	.strengths =3D axg_stepinfo_strengths,
+> >>>> +	.nstrengths =3D ARRAY_SIZE(axg_stepinfo_strengths)
+> >>>> +};
+> >>>> +
+> >>>> +static const struct nand_ecc_step_info axg_stepinfo_512 =3D {
+> >>>> +	.stepsize =3D 512,
+> >>>> +	.strengths =3D axg_stepinfo_strengths,
+> >>>> +	.nstrengths =3D ARRAY_SIZE(axg_stepinfo_strengths)
+> >>>> +};
+> >>>> +
+> >>>> +static const struct nand_ecc_step_info axg_stepinfo[] =3D { axg_ste=
+pinfo_1024, axg_stepinfo_512 };
+> >>>> +
+> >>>> +static const struct nand_ecc_caps meson_axg_ecc_caps =3D {
+> >>>> +	.stepinfos =3D axg_stepinfo,
+> >>>> +	.nstepinfos =3D ARRAY_SIZE(axg_stepinfo),
+> >>>> +	.calc_ecc_bytes =3D meson_nand_calc_ecc_bytes,
+> >>>> +};
+> >>>> =20
+> >>>>  static struct meson_nfc_nand_chip *to_meson_nand(struct nand_chip *=
+nand)
+> >>>>  {
+> >>>> @@ -1259,7 +1281,8 @@ static int meson_nand_bch_mode(struct nand_chi=
+p *nand)
+> >>>>  		return -EINVAL;
+> >>>> =20
+> >>>>  	for (i =3D 0; i < ARRAY_SIZE(meson_ecc); i++) {
+> >>>> -		if (meson_ecc[i].strength =3D=3D nand->ecc.strength) {
+> >>>> +		if (meson_ecc[i].strength =3D=3D nand->ecc.strength &&
+> >>>> +		    meson_ecc[i].size =3D=3D nand->ecc.size) {
+> >>>>  			meson_chip->bch_mode =3D meson_ecc[i].bch;
+> >>>>  			return 0;
+> >>>>  		}
+> >>>> @@ -1278,7 +1301,7 @@ static int meson_nand_attach_chip(struct nand_=
+chip *nand)
+> >>>>  	struct meson_nfc *nfc =3D nand_get_controller_data(nand);
+> >>>>  	struct meson_nfc_nand_chip *meson_chip =3D to_meson_nand(nand);
+> >>>>  	struct mtd_info *mtd =3D nand_to_mtd(nand);
+> >>>> -	int nsectors =3D mtd->writesize / 1024;
+> >>>> +	int nsectors =3D mtd->writesize / 512;   =20
+> >>>
+> >>> This cannot be unconditional, right?   =20
+> >>
+> >> Hello Miquel!
+> >>
+> >> Yes, this code looks strange. 'nsectors' is used to calculate space in=
+ OOB
+> >> that could be used by ECC engine (this value will be passed as 'oobava=
+il'
+> >> to 'nand_ecc_choose_conf()'). Idea of 512 is to consider "worst" case
+> >> for ECC, e.g. minimal number of bytes for ECC engine (and at the same =
+time
+> >> maximum number of free bytes). For Meson, if ECC step size is 512, the=
+n we
+> >> have 4 x 2 free bytes in OOB (if step size if 1024 then we have 2 x 2 =
+free
+> >> bytes in OOB).
+> >>
+> >> I think this code could be reworked in the following way:
+> >>
+> >> if ECC step size is already known here (from DTS), calculate 'nsectors=
+' using
+> >> given value (div by 512 for example). Otherwise calculate 'nsectors' i=
+n the
+> >> current manner: =20
+> >=20
+> > It will always be known when these function are run. There is no
+> > guessing here. =20
+>=20
+> Hm I checked, that but if step size is not set in DTS, here it will be 0,=
+=20
+> then it will be selected in 'nand_ecc_choose_conf()' according provided '=
+ecc_caps'
+> and 'oobavail'...
+>=20
+> Anyway, I'll do the following thing:
+>=20
+> int nsectors;
+>=20
+> if (nand->ecc.size)
+>     nsectors =3D mtd->writesize / nand->ecc.size; <--- this is for 512 ECC
 
-.. code-block:: none
+You should set nand->ecc.size in ->attach_chip() instead.
 
-     Cc: <stable@vger.kernel.org> # after 4 weeks in mainline
+> else
+>     nsectors =3D mtd->writesize / 1024; <--- this is for default 1024 ECC
+>=20
+> Thanks, Arseniy
+>=20
+> >  =20
+> >>
+> >> int nsectors =3D mtd->writesize / 1024;
+> >>
+> >> Moreover 1024 is default ECC step size for this driver, so default beh=
+aviour
+> >> will be preserved. =20
+> >=20
+> > Yes, otherwise you would break existing users.
+> >  =20
+> >>
+> >> Thanks, Arseniy
+> >> =20
+> >>>    =20
+> >>>>  	int raw_writesize;
+> >>>>  	int ret;
+> >>>>     =20
+> >>>
+> >>>
+> >>> Thanks,
+> >>> Miqu=C3=A8l   =20
+> >=20
+> >=20
+> > Thanks,
+> > Miqu=C3=A8l =20
 
-For any other requests related to patches submitted via :ref:`option_1`,
-just add a note to the stable tag. This for example can be used to point
-out known problems:
 
-.. code-block:: none
-
-     Cc: <stable@vger.kernel.org> # see patch description, needs
-adjustments for 6.3 and earlier
-
-```
-
-Greg, if this is stupid or in case you want it to say something else,
-just say so.
-
-Ciao, Thorsten
+Thanks,
+Miqu=C3=A8l
