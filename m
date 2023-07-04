@@ -2,138 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0422747543
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19E7747548
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjGDP0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S231478AbjGDP13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbjGDP0K (ORCPT
+        with ESMTP id S231694AbjGDP1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:26:10 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8FCBD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:26:08 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688484367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O5qqU0Kxcet4KnwRLYAfKVI4AV4hzg5i/RVgRnzmxGo=;
-        b=DTuSkRut6d2zmR+QLC356DceKemf8eFqnjdqrLQjyKbT5Y1e+DeqXx0oTqytEN6A8HYcDJ
-        bK6nwL9BwtfIK4bayKvc6tFGZJmHH4j/vM4WY9Nb01SPL9SeZ1fqb9bGY8kBwPmnxic1Ij
-        wJCItyIbgdBfHhSMxEti1k8WMY58DpmkUR+o2hZwc0weZx7ZPVoAZ6IEM73xRn9Mh2UMPc
-        LEhyLh10p5bojoP9RFZsG5M3GFB2Txq1kLQIp62UowGfjnipDGJ6ZVN6f6pG2iMuHgk15a
-        rxphBspFw/6E76rN3KxNWYQPpmv9Ry8N2xbkI8APSjdy5bqd5Ww1O8l2s1cNMw==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E673B1BF206;
-        Tue,  4 Jul 2023 15:26:05 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 17:26:04 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH v3 3/5] mtd: rawnand: brcmnand: Fix crash during the
- panic_write
-Message-ID: <20230704172604.6924d2af@xps-13>
-In-Reply-To: <20230627193738.19596-4-william.zhang@broadcom.com>
-References: <20230627193738.19596-1-william.zhang@broadcom.com>
-        <20230627193738.19596-4-william.zhang@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 4 Jul 2023 11:27:22 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730411AA;
+        Tue,  4 Jul 2023 08:27:21 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-55b5a3915f5so2763290a12.0;
+        Tue, 04 Jul 2023 08:27:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688484441; x=1691076441;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dBHybsETmQhR4EOdGU54nBMdz7E2WSrdp2Kj9VKU2vA=;
+        b=Mn4ahNLuXWAyKdQL40r6Dyvy+zrQdSgv1RJbFjyShK/rpkvkmVvfT+5wMLZGIC+Qoc
+         9DMG1Hu/vfR//U4Bl7WEeNSEc9gwa2w7J3oVOBoVIxl/9UGfCJsZ1e7+i69FMVcCB7HN
+         DPn9CtxPfZKYLPGrPDHTO9kmK0yk6rXMxlFkGqUJHX3uxLq02qQyx48JoXZPq5mXyxqv
+         9PoSrekVb4W4EMG5o9ONdJT6OEJNyOJbNnThTWvzXZ/epq/qHWX9xCKvse9l/abQb4/H
+         qdYk8UccUiOOaMAGMQ8aqhYVkMNsJJYVDOHMVFY9hDV8kitDLRjIZ1eP9Sg6P5jhZoFp
+         3nAw==
+X-Gm-Message-State: ABy/qLb6U5VB8a2ruQoKyskpGkHXCQ0RQiINHDEdFNmY0kxswM7lke3G
+        O6wIjjxsGIov66zMzi0okjI=
+X-Google-Smtp-Source: APBJJlH540wVvniNrmM3OfeMzR4O20DskguGHzSe2eDGyMcTNqmXYKVUUoBwmt+Ihp+QZbSThUMrKg==
+X-Received: by 2002:a05:6a20:9190:b0:12e:61a1:a298 with SMTP id v16-20020a056a20919000b0012e61a1a298mr5844347pzd.20.1688484440749;
+        Tue, 04 Jul 2023 08:27:20 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id v7-20020a1709029a0700b001b7fd27144dsm15578679plp.40.2023.07.04.08.27.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 08:27:20 -0700 (PDT)
+Message-ID: <8fd68b78-3d77-2534-01c7-7c8c7cde2e86@acm.org>
+Date:   Tue, 4 Jul 2023 08:27:18 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1] drivers: scsi: remove duplicate logical judgments
+Content-Language: en-US
+To:     Minjie Du <duminjie@vivo.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com
+References: <20230704073752.5498-1-duminjie@vivo.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230704073752.5498-1-duminjie@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+On 7/4/23 00:37, Minjie Du wrote:
+> Please check this.
 
-william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:36 -0700:
-
-> During the panic write path to execute another nand command, if
-> there is a pending command, we should wait for the command instead of
-> calling BUG_ON so we don't crash while crashing.
->=20
-> Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom S=
-TB NAND controller")
-
-The Fixes tag looks wrong.
-
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Reviewed-by: Kursad Oney <kursad.oney@broadcom.com>
-> Reviewed-by: Kamal Dasu <kamal.dasu@broadcom.com>
-> ---
->=20
-> Changes in v3: None
-> Changes in v2: None
->=20
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.c
-> index 37c2c7cfa00e..ea03104692bf 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -1608,7 +1608,17 @@ static void brcmnand_send_cmd(struct brcmnand_host=
- *host, int cmd)
-> =20
->  	dev_dbg(ctrl->dev, "send native cmd %d addr 0x%llx\n", cmd, cmd_addr);
-> =20
-> -	BUG_ON(ctrl->cmd_pending !=3D 0);
-> +	/*
-> +	 * If we came here through _panic_write and there is a pending
-> +	 * command, try to wait for it. If it times out, rather than
-> +	 * hitting BUG_ON, just return so we don't crash while crashing.
-> +	 */
-> +	if (oops_in_progress) {
-> +		if (ctrl->cmd_pending &&
-> +			bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0))
-> +			return;
-> +	} else
-> +		BUG_ON(ctrl->cmd_pending !=3D 0);
->  	ctrl->cmd_pending =3D cmd;
-> =20
->  	ret =3D bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0);
-
+Without feedback from someone who has access to the datasheet this patch 
+probably should not be applied. The repeated inb() calls may be on purpose.
 
 Thanks,
-Miqu=C3=A8l
+
+Bart.
