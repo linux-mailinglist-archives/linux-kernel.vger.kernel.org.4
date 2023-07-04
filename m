@@ -2,162 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1402274749D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4C27474A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjGDO6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
+        id S230259AbjGDO76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjGDO6i (ORCPT
+        with ESMTP id S229971AbjGDO7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:58:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD47B10CA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:58:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 4 Jul 2023 10:59:37 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6345710CA;
+        Tue,  4 Jul 2023 07:59:35 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id D6D47120056;
+        Tue,  4 Jul 2023 17:59:33 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru D6D47120056
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688482773;
+        bh=QqMgquqipSlP9zH8819FUOffDSsMIheYOnoKQYVcXkM=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=JZvTuS2Kb7/pyohFSDNxVUHzcD+VnVvrY1Kljk6fNWv704shSk0P+l8lctIyP/Gfj
+         EE9A+fkkdpDUV0xLdFuYx/uVrY4iIALxutr/MAkjwRwHqL4dTUIlldeFWQzaITrt/3
+         PmzNhnFcrgjf1NmLgjTBt+Ycl/Nk0zNS4HFHwuz6rcE/nQNv2HuGrKjhFqRnyH64eR
+         Mrb2bU7+hfIuHGlXTBlM0LFPD3i1EIaFnJHAjrBI2/Z8AAwdPQ865GaUplU1w6IHqA
+         nC2SgvIqEVRhDe647zoWE1uOmMnZPuJR50DMNKxglcfHyuEjW6H7HWSJiix4WZ3U4Y
+         kl5rC5Z1Zg7Ew==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DBEF61291
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 14:58:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B27C433C8;
-        Tue,  4 Jul 2023 14:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688482716;
-        bh=TqHLxq6TgLs4mAvW37Gf9sulJ3v19NarWJwdoDxqmqE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MVhADanhafYJGF3952CbMFV7tj3X38l35gED65EcGVnYgIBiqmC+4jgoSwHovTnBy
-         V8y/TNnLawcZFJ/SmZvo+9KzN7pdDXaXRLG+cXItRdhx5csNKPLVBSHFom9w6bjIcr
-         W3VgmCkAFdh3f7lDZJLMicf2FcHPadzX402BuztafTKoqA0jG3EqTSbQAnLyjiEmoj
-         EX37+diYCMluQwPs0SKp963f4i374/+goqX8p5Z0tvcJ799hhpbDe08s7VtiVuR2YC
-         N3qA7kcy+V5Pq6PpxBw4T1ihzCTDpak1jWfTX77zVSz3phkpjjOC1Y7OUs5u0Ju2ke
-         hRO5r/tQ+EEZQ==
-Message-ID: <65143701-4c19-ab66-1500-abd1162639cd@kernel.org>
-Date:   Tue, 4 Jul 2023 22:58:33 +0800
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 17:59:33 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 4 Jul
+ 2023 17:59:23 +0300
+Date:   Tue, 4 Jul 2023 17:59:33 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>
+CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <jbrunet@baylibre.com>, <jirislaby@kernel.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <kelvin.zhang@amlogic.com>, <xianwei.zhao@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 3/5] tty: serial: meson: apply ttyS devname instead of
+ ttyAML for new SoCs
+Message-ID: <20230704145933.y3o3fhjj6q7df44d@CAB-WSD-L081021>
+References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+ <20230704135936.14697-4-ddrokosov@sberdevices.ru>
+ <eb0dab5b-2fc7-728c-c6e0-43d2db422ed5@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: do not issue small discard commands
- during checkpoint
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Daejun Park <daejun7.park@samsung.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230613203947.2745943-1-jaegeuk@kernel.org>
- <ZInmkgjDnAUD5Nk0@google.com>
- <50d5fa8c-4fe9-8a03-be78-0b5383e55b62@kernel.org>
- <ZKP6EJ5dZ4f4wScp@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZKP6EJ5dZ4f4wScp@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <eb0dab5b-2fc7-728c-c6e0-43d2db422ed5@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178426 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:7.1.1,5.0.1;libera.irclog.whitequark.org:7.1.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/04 13:59:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/04 13:58:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/7/4 18:53, Jaegeuk Kim wrote:
-> On 07/03, Chao Yu wrote:
->> On 2023/6/15 0:10, Jaegeuk Kim wrote:
->>> If there're huge # of small discards, this will increase checkpoint latency
->>> insanely. Let's issue small discards only by trim.
->>>
->>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->>> ---
->>>
->>>    Change log from v1:
->>>     - move the skip logic to avoid dangling objects
->>>
->>>    fs/f2fs/segment.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->>> index 8c7af8b4fc47..0457d620011f 100644
->>> --- a/fs/f2fs/segment.c
->>> +++ b/fs/f2fs/segment.c
->>> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
->>>    			len = next_pos - cur_pos;
->>>    			if (f2fs_sb_has_blkzoned(sbi) ||
->>> -			    (force && len < cpc->trim_minlen))
->>> +					!force || len < cpc->trim_minlen)
->>>    				goto skip;
->>
->> Sorry for late reply.
->>
->> We have a configuration for such case, what do you think of setting
->> max_small_discards to zero? otherwise, w/ above change, max_small_discards
->> logic may be broken?
->>
->> What:           /sys/fs/f2fs/<disk>/max_small_discards
->> Date:           November 2013
->> Contact:        "Jaegeuk Kim" <jaegeuk.kim@samsung.com>
->> Description:    Controls the issue rate of discard commands that consist of small
->>                  blocks less than 2MB. The candidates to be discarded are cached until
->>                  checkpoint is triggered, and issued during the checkpoint.
->>                  By default, it is disabled with 0.
->>
->> Or, if we prefer to disable small_discards by default, what about below change:
+Hello Neil,
+
+Thank you for quick feedback!
+
+On Tue, Jul 04, 2023 at 04:42:39PM +0200, neil.armstrong@linaro.org wrote:
+> On 04/07/2023 15:59, Dmitry Rokosov wrote:
+> > It is worth noting that the devname ttyS is a widely recognized tty name
+> > and is commonly used by many uart device drivers. Given the established
+> > usage and compatibility concerns, it may not be feasible to change the
+> > devname for older SoCs. However, for new definitions, it is acceptable
+> > and even recommended to use a new devname to help ensure clarity and
+> > avoid any potential conflicts on lower or upper software levels. In
+> > addition, modify the meson_uart_dt match data for g12a, a1, and s4 to
+> > their appropriate values to ensure proper devname values and
+> > functionality.
 > 
-> I think small_discards is fine, but need to avoid long checkpoint latency only.
+> I'm not confident about modifying a global struct from a probe,
+> I think you should add a separate meson_uart_driver/meson_serial_console couple
+> with ttyS instead of ttyAML, refer to the right uart_driver in meson_uart_data
+> and in probe() register it and pass it to uart_add_one_port().
 
-I didn't get you, do you mean we can still issue small discard by
-fstrim, so small_discards functionality is fine?
+Could you provide some insight into why you believe this solution may
+not be acceptable? It appears that the meson_uart_driver and
+meson_serial_console are not labeled with __init, which means it stay in
+memory forever.
 
-Thanks,
+To clarify, are you suggesting a solution that involves segregating the
+meson_uart_driver and meson_serial_console objects for each scenario and
+subsequently declaring pointers to both objects within the
+meson_uart_data? I want to make sure that I have accurately grasped the
+essence of your proposed approach.
 
+> > 
+> > For more information please refer to IRC discussion at [1].
+> > 
+> > Links:
+> >      [1]: https://libera.irclog.whitequark.org/linux-amlogic/2023-07-03
+> > 
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >   drivers/tty/serial/meson_uart.c | 33 +++++++++++++++++++++++++++++++--
+> >   1 file changed, 31 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> > index 87c0eb5f2dba..361f9326b527 100644
+> > --- a/drivers/tty/serial/meson_uart.c
+> > +++ b/drivers/tty/serial/meson_uart.c
+> > @@ -82,6 +82,7 @@ static struct uart_driver meson_uart_driver;
+> >   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
+> >   struct meson_uart_data {
+> > +	const char *dev_name;
+> >   	bool has_xtal_div2;
+> >   };
+> > @@ -683,6 +684,7 @@ static int meson_uart_probe_clocks(struct platform_device *pdev,
+> >   static int meson_uart_probe(struct platform_device *pdev)
+> >   {
+> > +	const struct meson_uart_data *priv_data;
+> >   	struct resource *res_mem;
+> >   	struct uart_port *port;
+> >   	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
+> > @@ -729,6 +731,18 @@ static int meson_uart_probe(struct platform_device *pdev)
+> >   	if (ret)
+> >   		return ret;
+> > +	priv_data = device_get_match_data(&pdev->dev);
+> > +
+> > +	if (priv_data) {
+> > +		struct console *cons = meson_uart_driver.cons;
+> > +
+> > +		meson_uart_driver.dev_name = priv_data->dev_name;
+> > +
+> > +		if (cons)
+> > +			strscpy(cons->name, priv_data->dev_name,
+> > +				sizeof(cons->name));
+> > +	}
+> > +
+> >   	if (!meson_uart_driver.state) {
+> >   		ret = uart_register_driver(&meson_uart_driver);
+> >   		if (ret)
+> > @@ -748,7 +762,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+> >   	port->x_char = 0;
+> >   	port->ops = &meson_uart_ops;
+> >   	port->fifosize = fifosize;
+> > -	port->private_data = (void *)device_get_match_data(&pdev->dev);
+> > +	port->private_data = (void *)priv_data;
+> >   	meson_ports[pdev->id] = port;
+> >   	platform_set_drvdata(pdev, port);
+> > @@ -780,6 +794,17 @@ static int meson_uart_remove(struct platform_device *pdev)
+> >   }
+> >   static struct meson_uart_data meson_g12a_uart_data = {
+> > +	.dev_name = "ttyAML",
+> > +	.has_xtal_div2 = true,
+> > +};
+> > +
+> > +static struct meson_uart_data meson_a1_uart_data = {
+> > +	.dev_name = "ttyS",
+> > +	.has_xtal_div2 = false,
+> > +};
+> > +
+> > +static struct meson_uart_data meson_s4_uart_data = {
+> > +	.dev_name = "ttyS",
+> >   	.has_xtal_div2 = true,
+> >   };
+> > @@ -794,7 +819,11 @@ static const struct of_device_id meson_uart_dt_match[] = {
+> >   	},
+> >   	{
+> >   		.compatible = "amlogic,meson-s4-uart",
+> > -		.data = (void *)&meson_g12a_uart_data,
+> > +		.data = (void *)&meson_s4_uart_data,
+> > +	},
+> > +	{
+> > +		.compatible = "amlogic,meson-a1-uart",
+> > +		.data = (void *)&meson_a1_uart_data,
+> >   	},
+> >   	{ /* sentinel */ },
+> >   };
 > 
->>
->>  From eb89d9b56e817e3046d7fa17165b12416f09d456 Mon Sep 17 00:00:00 2001
->> From: Chao Yu <chao@kernel.org>
->> Date: Mon, 3 Jul 2023 09:06:53 +0800
->> Subject: [PATCH] Revert "f2fs: enable small discard by default"
->>
->> This reverts commit d618ebaf0aa83d175658aea5291e0c459d471d39 in order
->> to disable small discard by default, so that if there're huge number of
->> small discards, it will decrease checkpoint's latency obviously.
->>
->> Also, this patch reverts 9ac00e7cef10 ("f2fs: do not issue small discard
->> commands during checkpoint"), due to it breaks small discard feature which
->> may be configured via sysfs entry max_small_discards.
->>
->> Fixes: 9ac00e7cef10 ("f2fs: do not issue small discard commands during checkpoint")
->> Signed-off-by: Chao Yu <chao@kernel.org>
->> ---
->>   fs/f2fs/segment.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->> index 14c822e5c9c9..0a313368f18b 100644
->> --- a/fs/f2fs/segment.c
->> +++ b/fs/f2fs/segment.c
->> @@ -2193,7 +2193,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
->>   			len = next_pos - cur_pos;
->>
->>   			if (f2fs_sb_has_blkzoned(sbi) ||
->> -					!force || len < cpc->trim_minlen)
->> +			    (force && len < cpc->trim_minlen))
->>   				goto skip;
->>
->>   			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
->> @@ -2269,7 +2269,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
->>   	atomic_set(&dcc->queued_discard, 0);
->>   	atomic_set(&dcc->discard_cmd_cnt, 0);
->>   	dcc->nr_discards = 0;
->> -	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
->> +	dcc->max_discards = 0;
->>   	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
->>   	dcc->min_discard_issue_time = DEF_MIN_DISCARD_ISSUE_TIME;
->>   	dcc->mid_discard_issue_time = DEF_MID_DISCARD_ISSUE_TIME;
->> -- 
->> 2.40.1
->>
->>
->>
->>>    			f2fs_issue_discard(sbi, entry->start_blkaddr + cur_pos,
+
+-- 
+Thank you,
+Dmitry
