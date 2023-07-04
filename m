@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1DE746D6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BA7746D91
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjGDJdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S231296AbjGDJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjGDJdI (ORCPT
+        with ESMTP id S232160AbjGDJeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:33:08 -0400
+        Tue, 4 Jul 2023 05:34:09 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49138138
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:33:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE4319AB
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:33:28 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1qGcOv-0006tn-RM; Tue, 04 Jul 2023 11:32:50 +0200
+        id 1qGcOv-0006tz-RR; Tue, 04 Jul 2023 11:32:49 +0200
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qGcOs-00C09S-LO; Tue, 04 Jul 2023 11:32:46 +0200
+        id 1qGcOu-00C09y-Jg; Tue, 04 Jul 2023 11:32:48 +0200
 Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qGcOq-002TxU-TE; Tue, 04 Jul 2023 11:32:44 +0200
+        id 1qGcOq-002TxX-U5; Tue, 04 Jul 2023 11:32:44 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-rockchip@lists.infradead.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -43,10 +43,12 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v7 00/26] Add perf support to the rockchip-dfi driver
-Date:   Tue,  4 Jul 2023 11:32:16 +0200
-Message-Id: <20230704093242.583575-1-s.hauer@pengutronix.de>
+Subject: [PATCH v7 01/26] PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+Date:   Tue,  4 Jul 2023 11:32:17 +0200
+Message-Id: <20230704093242.583575-2-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230704093242.583575-1-s.hauer@pengutronix.de>
+References: <20230704093242.583575-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -62,93 +64,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional change in this series, only the accidently slipped in link:
-tags have been removed and some Acked-by: from Conor Dooley are added.
+As a matter of fact the regmap_pmu already is mandatory because
+it is used unconditionally in the driver. Bail out gracefully in
+probe() rather than crashing later.
 
-I hope that someone steps forward and applies this series. Unfortunately
-I haven't heard a word from the official maintainers to this series. So
-maybe Heiko, how about you?
+Fixes: b9d1262bca0af ("PM / devfreq: event: support rockchip dfi controller")
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
 
-Sascha
+Notes:
+    Changes since v4:
+    - move to beginning of the series to make it easier to backport to stable
+    - Add a Fixes: tag
+    - add missing of_node_put()
 
-Changes since v6:
-- Add some Acked-by
-- remove link: tags
+ drivers/devfreq/event/rockchip-dfi.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-Changes since v5:
-- Add missing initialization of &dfi->last_perf_count which resulted
-  in wrong data sometimes
-- Drop interrupt-names property from binding
-- Add patch to add rockchip,rk3588-pmugrf to dt-bindings
-- Add more reviewed-by tags
-
-Changes since v4:
-- Add device tree changes for RK3588
-- Use seqlock to protect perf counter values from hrtimer
-- Unconditionally enable DFI when perf is enabled
-- Bring back changes to dts/binding patches that were lost in v4
-
-Changes since v3:
-- Add RK3588 support
-
-Changes since v2:
-- Fix broken reference to binding
-- Add Reviewed-by from Rob
-
-Changes since v1:
-- Fix example to actually match the binding and fix the warnings resulted thereof
-- Make addition of rockchip,rk3568-dfi an extra patch
-
-Sascha Hauer (26):
-  PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
-  PM / devfreq: rockchip-dfi: Embed desc into private data struct
-  PM / devfreq: rockchip-dfi: use consistent name for private data
-    struct
-  PM / devfreq: rockchip-dfi: Add SoC specific init function
-  PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
-  PM / devfreq: rockchip-dfi: Use free running counter
-  PM / devfreq: rockchip-dfi: introduce channel mask
-  PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
-  PM / devfreq: rockchip-dfi: Clean up DDR type register defines
-  PM / devfreq: rockchip-dfi: Add RK3568 support
-  PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
-  PM / devfreq: rockchip-dfi: Handle LPDDR4X
-  PM / devfreq: rockchip-dfi: Pass private data struct to internal
-    functions
-  PM / devfreq: rockchip-dfi: Prepare for multiple users
-  PM / devfreq: rockchip-dfi: give variable a better name
-  PM / devfreq: rockchip-dfi: Add perf support
-  PM / devfreq: rockchip-dfi: make register stride SoC specific
-  PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
-  PM / devfreq: rockchip-dfi: add support for RK3588
-  dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
-  dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
-  dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
-  dt-bindings: soc: rockchip: grf: add rockchip,rk3588-pmugrf
-  arm64: dts: rockchip: rk3399: Enable DFI
-  arm64: dts: rockchip: rk356x: Add DFI
-  arm64: dts: rockchip: rk3588s: Add DFI
-
- .../bindings/devfreq/event/rockchip,dfi.yaml  |  74 ++
- .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
- .../rockchip,rk3399-dmc.yaml                  |   2 +-
- .../devicetree/bindings/soc/rockchip/grf.yaml |   1 +
- arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
- arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  16 +
- drivers/devfreq/event/rockchip-dfi.c          | 799 +++++++++++++++---
- drivers/devfreq/rk3399_dmc.c                  |  10 +-
- include/soc/rockchip/rk3399_grf.h             |   9 +-
- include/soc/rockchip/rk3568_grf.h             |  13 +
- include/soc/rockchip/rk3588_grf.h             |  18 +
- include/soc/rockchip/rockchip_grf.h           |  18 +
- 13 files changed, 848 insertions(+), 138 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
- delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
- create mode 100644 include/soc/rockchip/rk3568_grf.h
- create mode 100644 include/soc/rockchip/rk3588_grf.h
- create mode 100644 include/soc/rockchip/rockchip_grf.h
-
+diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
+index 39ac069cabc75..74893c06aa087 100644
+--- a/drivers/devfreq/event/rockchip-dfi.c
++++ b/drivers/devfreq/event/rockchip-dfi.c
+@@ -193,14 +193,15 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, PTR_ERR(data->clk),
+ 				     "Cannot get the clk pclk_ddr_mon\n");
+ 
+-	/* try to find the optional reference to the pmu syscon */
+ 	node = of_parse_phandle(np, "rockchip,pmu", 0);
+-	if (node) {
+-		data->regmap_pmu = syscon_node_to_regmap(node);
+-		of_node_put(node);
+-		if (IS_ERR(data->regmap_pmu))
+-			return PTR_ERR(data->regmap_pmu);
+-	}
++	if (!node)
++		return dev_err_probe(&pdev->dev, -ENODEV, "Can't find pmu_grf registers\n");
++
++	data->regmap_pmu = syscon_node_to_regmap(node);
++	of_node_put(node);
++	if (IS_ERR(data->regmap_pmu))
++		return PTR_ERR(data->regmap_pmu);
++
+ 	data->dev = dev;
+ 
+ 	desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
 -- 
 2.39.2
 
