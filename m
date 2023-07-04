@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCED7476D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E107476E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjGDQhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S231627AbjGDQiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjGDQhS (ORCPT
+        with ESMTP id S229615AbjGDQiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:37:18 -0400
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283A6CF;
-        Tue,  4 Jul 2023 09:37:18 -0700 (PDT)
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1b7ef3e74edso29177865ad.0;
-        Tue, 04 Jul 2023 09:37:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688488637; x=1691080637;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qq9caxBhUaIDTOUts0hMPoGeTAHn1nr/fwkbfDRFOV4=;
-        b=DRODGkvGkssu8sbpH5JfFdL0Dwx1OfH+U7SSFY6gIJ0v6LTLqeNqjhBf8nmyPy4gG2
-         oiNgpFAtVRu9NdjJ8AXflAkzXUDRBtm1DwKH6+dv1MqxwskzxumNO5juQO8oDWlkMBY8
-         oMbR6wrLHLaBYM3LSFbtupluYCA8UKra9TkS14fNUvBVnA50/sSvLxoG+0JRkMGxohtC
-         4XFthla/1NcoJIUkd+Nh6VfWNefjn3uzOfEVCLURL1eFBJPdi9+Ej0TIRoo94qo1q9N5
-         YY+bjRQ9RjJcevtmfry7JvF1lFpLiu1nEkmZpTbFpZgJt7x1T83M/CiMTZTyCmMzQs3j
-         A+Ww==
-X-Gm-Message-State: ABy/qLZkIhcqZa19ZXVgKzV3v167qMEV//dp+1Hr1qss+3U2TLyIUTvb
-        irGKM6CN31PVMcqsDLArFdE=
-X-Google-Smtp-Source: APBJJlFLrXdz6T8wRfchr9R6PTEOz95tWasBcijz9afT2zIq9026AzCHmKf2iLbvuD5b+Zi1eMkf+g==
-X-Received: by 2002:a17:902:8682:b0:1b8:95fc:d12 with SMTP id g2-20020a170902868200b001b895fc0d12mr4921692plo.54.1688488637557;
-        Tue, 04 Jul 2023 09:37:17 -0700 (PDT)
-Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902c3c600b001b8918da8d1sm4605652plj.80.2023.07.04.09.37.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 09:37:15 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 01:37:13 +0900
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc:     alberto.dassatti@heig-vd.ch, dlemoal@kernel.org,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI
- address
-Message-ID: <20230704163713.GB435329@rocinante>
-References: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 4 Jul 2023 12:38:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B68CF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:38:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD06761301
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 16:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 228A7C433C7;
+        Tue,  4 Jul 2023 16:38:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1688488700;
+        bh=SRt5OSq7UcsVoo2ymLntkRLL6RnihDX9GuA6gQcoxW4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hCn4l+cvagF7z1989a+b2iGQ7nKLnYNN3obSQ3+2Pb16X0nXchttRXUOH4aGXYRqJ
+         OBIrBTZ64N/CaA+xbpsgiU/Kjx0M0iWUXJfFOKitdB643jwRA+G/EZZ4nd5vJJuGDZ
+         p6J6r9IA7cNQ0i1LRZY+PFWae32zplgxotUDLMlw=
+Date:   Tue, 4 Jul 2023 09:38:19 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: page_alloc: avoid false page outside zone error
+ info
+Message-Id: <20230704093819.48443ca7789043a640c8a07a@linux-foundation.org>
+In-Reply-To: <feb41501-163a-58d6-1996-8d6ebc9d800e@huawei.com>
+References: <20230704111823.940331-1-linmiaohe@huawei.com>
+        <ZKQM2lg7524dIAQl@casper.infradead.org>
+        <feb41501-163a-58d6-1996-8d6ebc9d800e@huawei.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 4 Jul 2023 20:36:00 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
 
-> A 32-bit mask was used on the 64-bit PCI address used for mapping MSIs.
-> This would result in the upper 32 bits being unintentionally zeroed and
-> MSIs getting mapped to incorrect PCI addresses if the address had any
-> of the upper bits set.
+> On 2023/7/4 20:13, Matthew Wilcox wrote:
+> > On Tue, Jul 04, 2023 at 07:18:23PM +0800, Miaohe Lin wrote:
+> >> @@ -470,6 +470,8 @@ static int page_outside_zone_boundaries(struct zone *zone, struct page *page)
+> >>  		sp = zone->spanned_pages;
+> >>  		if (!zone_spans_pfn(zone, pfn))
+> >>  			ret = 1;
+> >> +		else
+> >> +			ret = 0;
+> > 
+> > Surely 'ret = zone_spans_pfn(zone, pfn);' ?
 > 
-> Replace 32-bit mask by appropriate 64-bit mask.
+> Do you mean 'ret = !zone_spans_pfn(zone, pfn);'?  This format looks fine to me.
+> 
+> > 
+> > Also, did you spot this by inspection or do you have a test-case or bug
+> > report?  Should this have a Fixes: tag?
+> 
+> This is from code inspection. The race window should be really small thus hard to trigger
+> in real world. And yes, it seems Fixes tag is a really ancient commit:
+> 
+> 	Fixes: bdc8cb984576 ("[PATCH] memory hotplug locking: zone span seqlock")
+> 
 
-Applied to controller/rockchip, thank you!
+Thanks.  I updated the changelog:
 
-[1/1] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI address
-      https://git.kernel.org/pci/pci/c/251c859f4b6f
+: If pfn is outside zone boundaries in the first round, ret will be set to
+: 1.  But if pfn is changed to inside the zone boundaries in zone span
+: seqretry path, ret is still set to 1 leading to false page outside zone
+: error info.
+: 
+: This is from code inspection.  The race window should be really small thus
+: hard to trigger in real world.
+: 
+: Link: https://lkml.kernel.org/r/20230704111823.940331-1-linmiaohe@huawei.com
+: Fixes: bdc8cb984576 ("[PATCH] memory hotplug locking: zone span seqlock")
 
-	Krzysztof
+and I made the change suggested by Matthew:
+
+--- a/mm/page_alloc.c~mm-page_alloc-avoid-false-page-outside-zone-error-info-fix
++++ a/mm/page_alloc.c
+@@ -468,10 +468,7 @@ static int page_outside_zone_boundaries(
+ 		seq = zone_span_seqbegin(zone);
+ 		start_pfn = zone->zone_start_pfn;
+ 		sp = zone->spanned_pages;
+-		if (!zone_spans_pfn(zone, pfn))
+-			ret = 1;
+-		else
+-			ret = 0;
++		ret = !zone_spans_pfn(zone, pfn);
+ 	} while (zone_span_seqretry(zone, seq));
+ 
+ 	if (ret)
+_
+
