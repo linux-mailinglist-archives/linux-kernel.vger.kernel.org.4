@@ -2,111 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69EE7477B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29B77477BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjGDRWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S231218AbjGDR0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjGDRWR (ORCPT
+        with ESMTP id S229615AbjGDR0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:22:17 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15BD10C1;
-        Tue,  4 Jul 2023 10:22:16 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1b078b34df5so5722037fac.2;
-        Tue, 04 Jul 2023 10:22:16 -0700 (PDT)
+        Tue, 4 Jul 2023 13:26:04 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07141E76
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:26:03 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b6f9edac8dso11985651fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:26:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688491336; x=1691083336;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7FZLomDWDbjdWX61WSlseufijU603RigLg7aNYHBJY=;
-        b=K1fe2Rcalt7NRZxlZdobMv7vh0ZEDnCcEUDgWPJy+StZMldSwPBP6fMT+fkU0vOvP2
-         /QYZmJ5+ZSn06Pt+4JNEso0RD0R522NQ/9YRYC26ACWTmMkhJHBCOTbEShktgPqw5MGH
-         OEGF9gfqo+YX1TAySIYzMRU6AyNAdSLKPvw7AWDW9VqCAAAnX8rfAC3xHQPb3PSQK0ZN
-         XYloU27NjWZqY/JqVpg71EzuXlsBBIXMlfBo0BrbRTjBdfwbTuuJX1+AwH9Zu36a7zOc
-         9OD+81RRk7fgUNFxRDIIJCnNWlnMdLyLZrGL8n8Q4ppfZ4B3IXmrHUOZo3VpxvqhSfes
-         ECrA==
+        d=joelfernandes.org; s=google; t=1688491561; x=1691083561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J3DzlEIK3VQkSx1rkZscROCQHkagDt9CFs2s1aPNi+0=;
+        b=W/f0RbbpH373Lb+jlIoNdUX3QZVvg8+fGkg2qvftQAAvT081nnSdrFcLsu/yhaxXpe
+         LoPUEEEmpt1G1K/stHKPYB2RNf0Wl7RmpRJ2YSl02YZIyAK8pm0kHSGVaGb1m5U/gHVD
+         6Azp6nit/ZXFQafN4vCI5knjK+9Rw6dq7lrRQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688491336; x=1691083336;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z7FZLomDWDbjdWX61WSlseufijU603RigLg7aNYHBJY=;
-        b=Mk8Ay2JHXW5NSxpS41Z6rp5MVuRXSoEwXLP6mY4I85FzudC/3lBBRWbXHHo9ywA80R
-         +Pd8gMhcOmNoFC+x2EYSEQeqTHmQBZSUKdWHNnya5rwvphGsdgsuWHx4oMFSK/CDbaqf
-         lvDVoln0LWsjjlHMAge/gxiY9ZGzTN+Oe2TaIGpZnx3gYVO45GGJtORsH5J5sJS81aES
-         49kfgqO26g571nBuUKt+sy+O372swlrSORFnR2rct+G4xDsGt+xFTCzHTKe2PKHPD5ZJ
-         weOxRVXpNu0NrdXpiMHwdt3BGqYBi7ICm89xhwEBUSkRWDdmcb67hrJyn1vbLqHQvZCt
-         tDzw==
-X-Gm-Message-State: ABy/qLbrKcNt0R5EwRn8Kf/5m4QLqVolWuEEVymmQtopocpKFfz8/xc6
-        9BRrzeYeNW12MEeiEqiRONU=
-X-Google-Smtp-Source: ACHHUZ6VEkTnut83c2dLjWl3PWRuAfEErbUOknHJwrNB91eQi5DvHdrZEnrnqA9zB6XzgUSOcEOjbA==
-X-Received: by 2002:a05:6870:ac0d:b0:191:f657:13ee with SMTP id kw13-20020a056870ac0d00b00191f65713eemr15602832oab.11.1688491336194;
-        Tue, 04 Jul 2023 10:22:16 -0700 (PDT)
-Received: from [192.168.1.119] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id z11-20020a9d65cb000000b006b884bbb4f3sm6045994oth.26.2023.07.04.10.22.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 10:22:15 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <9ccf927e-7e68-91c4-3cfc-0ff535abe0a6@lwfinger.net>
-Date:   Tue, 4 Jul 2023 12:22:14 -0500
+        d=1e100.net; s=20221208; t=1688491561; x=1691083561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J3DzlEIK3VQkSx1rkZscROCQHkagDt9CFs2s1aPNi+0=;
+        b=K5RYX6Sb6Todo3NbqXlzxN8zhajshNpDqCYm54yRJE52cWvPt40SFlHkM8R1ta5qsy
+         OP+47MSTG6Lf1fboH3kjybehcnTbeIr97uin7+5kLeRMJ9JXikFzNbHdbYFyvk6i9s4n
+         hyyMpuv6KJopXcK+X+UYKz4NJX1kZtFWd90m3ZjMhlYaKA7f4Uuyfxe72BFDG9IpABwX
+         kzumQ5Di85MndzuWnNxkAILrWtPsFdroeZVngHZy7XFSlIKUdOWx8LohgQUGlo4epWEf
+         YjQv+x4KVIgPyxSqreXu1kzjtgRn1XD1Z14ZhaA/KNOBWtWYyhDPjY7fU+1tPs9wGH68
+         Ywqg==
+X-Gm-Message-State: ABy/qLaRgKroo4Fh3hLn4zffMqeZue3fq+vv8NltftAZfb/pRf09c/eI
+        uwLe5eFQMRMclOXyRAm/yNdT+gcl5Y5aTjX4rBQYqw==
+X-Google-Smtp-Source: APBJJlG8+l/84etZVoJlausDLa8mM7trb1otYtsvE+NIeg1QK9UFGBW7BqihXpI4zXMQ3p01Oc9lF8hYA9R3l3GBzRc=
+X-Received: by 2002:a05:651c:105a:b0:2b6:d8d4:f871 with SMTP id
+ x26-20020a05651c105a00b002b6d8d4f871mr6704935ljm.40.1688491560875; Tue, 04
+ Jul 2023 10:26:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] wifi: rtw89: debug: fix error code in
- rtw89_debug_priv_send_h2c_set()
-To:     Zhang Shurong <zhang_shurong@foxmail.com>, pkshih@realtek.com
-Cc:     kvalo@kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <tencent_54814178D4285CA3D64B8CDC90D49A6CB10A@qq.com>
-Content-Language: en-US
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <tencent_54814178D4285CA3D64B8CDC90D49A6CB10A@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <cover.1686239016.git.bristot@kernel.org> <e08a76013ff2b6a83028e8fdf3b8a6a0aa677d58.1686239016.git.bristot@kernel.org>
+ <xhsmhpm5mw2gm.mognet@vschneid.remote.csb> <70837b44-4d21-9d70-d13b-2b6168fd02e3@redhat.com>
+In-Reply-To: <70837b44-4d21-9d70-d13b-2b6168fd02e3@redhat.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 4 Jul 2023 13:25:49 -0400
+Message-ID: <CAEXW_YS3vkhdggmOaB2_Y9NL7a9Fi8ZamN3mpbBDCvVa4e3W4Q@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 4/6] sched/deadline: Introduce deadline servers
+To:     Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/23 11:55, Zhang Shurong wrote:
-> If there is a failure during rtw89_fw_h2c_raw() rtw89_debug_priv_send_h2c
-> should return negative error code instead of a positive value count.
-> 
-> Fix this bug by returning correct error code.
-> 
-> The changes in this version:
-> - fix some compile error
-> 
-> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+On Tue, Jul 4, 2023 at 11:52=E2=80=AFAM Daniel Bristot de Oliveira
+<bristot@redhat.com> wrote:
+>
+>
+> Back from EOSS...
+>
+> On 6/23/23 18:47, Valentin Schneider wrote:
+> > On 08/06/23 17:58, Daniel Bristot de Oliveira wrote:
+> >> @@ -2033,9 +2147,20 @@ static struct task_struct *pick_next_task_dl(st=
+ruct rq *rq)
+> >>      struct task_struct *p;
+> >>
+> >>      p =3D pick_task_dl(rq);
+> >> -    if (p)
+> >> +    if (!p)
+> >> +            return p;
+> >> +
+> >> +    /*
+> >> +     * XXX: re-check !dl_server, changed from v2 because of
+> >> +     * pick_next_task_dl change
+> >> +     */
+> >> +    if (!dl_server(&p->dl))
+> >>              set_next_task_dl(rq, p, true);
+> >>
+> >
+> > Should this be
+> >
+> >        if (!p->server)
+> >
+> > instead? AFAICT dl_server(&p->dl) can never be true since there's no
+> > pi_se-like link to the server via the dl_se, only via the task_struct, =
+and
+> > the server pick cannot return the server itself (as it's a pure sched_e=
+ntity).
+>
+> makes sense... I will check that in the v4.
 
-I have two comments on the patch itself:
+Makes sense to me too. Since p is either a real DL task or a CFS task,
+"if (dl_server(&p->dl))" is incorrect.  "if (p->server)" is the right
+check.
 
-1) Whenever you have a fix for the code, you need to annotate it using the 
-"Fixes: tag". See file Documentation/process/submitting-patches.rst in your 
-source tree.
+Optionally, a BUG_ON() as well could be added to make sure the p
+returned by pick_task_dl() is always false:
+BUG_ON(dl_server(&p->dl));
 
-2) The version change stuff should be in the following order:
+thanks,
 
-Signed-off-by: ....
----
-v2 - fixed compile error
----
-Body of patch.
+ - Joel
 
-Placing it where you did would cause the details of "making the sausage" be 
-saved in the commit log. The reviewer and maintainer need to see it, but not the 
-end user.
 
-Larry
 
+>
+> >
+> >> +    /* XXX not quite right */
+> >> +    if (hrtick_enabled(rq))
+> >> +            start_hrtick_dl(rq, &p->dl);
+> >> +
+> >
+> > IIUC that got hauled out of set_next_task_dl() to cover the case where =
+we
+> > pick the server (+ the server pick) and want to more thoroughly enforce=
+ the
+> > server's bandwidth. If so, what's the issue with starting the hrtick he=
+re?
+>
+> I think that the commend was added more as a check if it is correct... it=
+ seems it is.
+>
+> Thanks Vale!
+> -- Daniel
+>
+> >
+> >>      return p;
+> >>  }
+> >>
+> >
+>
