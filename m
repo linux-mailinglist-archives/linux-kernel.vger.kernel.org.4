@@ -2,81 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D374747154
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11CA747157
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjGDM20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S231726AbjGDM2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjGDM2V (ORCPT
+        with ESMTP id S229610AbjGDM2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:28:21 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A909E9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:28:20 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-635decc135eso23641596d6.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google; t=1688473699; x=1691065699;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l5YpNQ9k3FxEI6NyEQ6O/c948FLcVDYur8dACWC8IMo=;
-        b=MKbpxpd3h33Jur04KbPUrCLTlVIAAu5iv7+InZ2Ld/h7aQEoYZjAV/1l7GNlBXhBs/
-         SBy7ElK8A3XM0+bIPwHaC+MmN5ZHDIgtcMt0tbcTmJ/TCFBrs4T9BMNP4X7XwieicLlM
-         3Uf0jz/gYRqoPW9beXrjMAL/7Ilt9EiZwz9MQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688473699; x=1691065699;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:date
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l5YpNQ9k3FxEI6NyEQ6O/c948FLcVDYur8dACWC8IMo=;
-        b=ceRglCcZ+Z++7cRcx+Rmw9P059OHRvhwbBoJvcOXkULqvdalRi0e7CIIZadOfSnFPa
-         hSHIiT1Zw9HPtpztrZ82xUiLQepsPRUHXH7+7ioaCGtJz9XBwylWyEfrV437+WA2RUXy
-         YzCbOygfldnRBZoOiCeK+T59AD9P1tAfQOKXCfCSfNNBSN03a4fR+NxUkslj+y5N3d0j
-         D9ga9XhhN3LJ1hO3JbsnYxpbtoakIVvd9F7p8NgRkn+B8JA+N4hB31t1IsD9wPQ/ah51
-         RzGVoA6d/vHelXnV5uJKOFLDYzVPCe3HYBqvY36gCve2OJl4xmT0uTAwktLuMZafnqzz
-         Q2ig==
-X-Gm-Message-State: AC+VfDwFDhHJTr7Ac5T+1cly12YiSU6hxUhy8Fib5Czx21a2P5zLoA/z
-        DSPg0IRfsLcDFRc3vGpTUZHcEA==
-X-Google-Smtp-Source: ACHHUZ6ytBJOoBgDRsxovcaKyYEdk2QBLDw+FxvVzCXKV9CmY3KSb9amNV59gJ8MDByp7CHlrPVdRA==
-X-Received: by 2002:ad4:5ba6:0:b0:623:5c93:77eb with SMTP id 6-20020ad45ba6000000b006235c9377ebmr22037706qvq.13.1688473699061;
-        Tue, 04 Jul 2023 05:28:19 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id oj2-20020a056214440200b00631fc149a19sm1667137qvb.110.2023.07.04.05.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 05:28:18 -0700 (PDT)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Tue, 4 Jul 2023 08:28:08 -0400 (EDT)
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 08/10] Documentation: admin-guide: Add riscv
- sysctl_perf_user_access
-In-Reply-To: <20230703124647.215952-9-alexghiti@rivosinc.com>
-Message-ID: <72d2ad7a-601a-a06a-5587-3843971dddf3@maine.edu>
-References: <20230703124647.215952-1-alexghiti@rivosinc.com> <20230703124647.215952-9-alexghiti@rivosinc.com>
+        Tue, 4 Jul 2023 08:28:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F3010F9;
+        Tue,  4 Jul 2023 05:28:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 217F861230;
+        Tue,  4 Jul 2023 12:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9CEC433C7;
+        Tue,  4 Jul 2023 12:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688473715;
+        bh=eAnnv+dDV9eU46cnv4COWRKpmReSFfmKhoejTXImYPU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z6fjDnuvhzCBPiy5g7CnAG0oRDmwrNtho1EjwGTU7aXf5ppGM0U1rPd/I9QuIA1M0
+         a3/kHKq0qRClXiTUhmbxqcRkaO36/IhWDU4Ncjz02x+pUmbe4dZEGUtdzL2fcjCh8Z
+         TerM7Vs29xllT5hqiZfzAGmXEa5Y652sqUJHnUI4=
+Date:   Tue, 4 Jul 2023 13:28:31 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org, Vegard Nossum <vegard.nossum@oracle.com>
+Subject: Re: [PATCH 6.3 00/13] 6.3.12-rc1 review
+Message-ID: <2023070446-sublevel-humid-7b01@gregkh>
+References: <20230703184519.206275653@linuxfoundation.org>
+ <CA+G9fYvf-sw8tCHjxhoMvHrtzzdE69EwvB2PmypUkGDdCFFASA@mail.gmail.com>
+ <2023070411-steadfast-overtly-02a3@gregkh>
+ <2023070416-wow-phrasing-b92c@gregkh>
+ <37f9e884-6535-1ed7-8675-d98d0a6d8b36@oracle.com>
+ <2023070444-untimed-clerical-565a@gregkh>
+ <db4bf839-df6a-c2b9-a03c-3b9d1680c2a9@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db4bf839-df6a-c2b9-a03c-3b9d1680c2a9@leemhuis.info>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,23 +65,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 04, 2023 at 11:56:11AM +0200, Thorsten Leemhuis wrote:
+> On 04.07.23 10:47, Greg Kroah-Hartman wrote:
+> > On Tue, Jul 04, 2023 at 02:13:03PM +0530, Harshit Mogalapalli wrote:
+> >> On 04/07/23 1:54 pm, Greg Kroah-Hartman wrote:
+> >>>>> While running LTP hugetlb testing on x86 the following kernel BUG noticed
+> >>>>> on running stable-rc 6.3.12-rc1.
+> >>
+> >> Have you looked at Patch 9 of this series:
+> >>
+> >> https://lore.kernel.org/stable/2023070416-wow-phrasing-b92c@gregkh/T/#m12068530e846ac8b9668bd83941d82ec3f22ac15
+> >>
+> >> Looks very much related, it also has a note on Backporting.
+> >> As I think it could be related, I am sharing this.(But haven't tested
+> >> anything)
+> > 
+> > Yes, that's the offending patch.  I should have read over the full
+> > changelogs before doing bisection, but bisection/test proved that this
+> > was not correct for 6.3.y at this point in time.
+> 
+> FWIW, I'm preparing a few small tweaks for
+> Documentation/process/stable-kernel-rules.rst (to be submitted after the
+> merge window). I among others consider adding something like this that
+> might help avoiding this situation:
+> 
+> ```
+> To delay pick up of patches submitted via :ref:`option_1`, use the
+> following format:
+> 
+> .. code-block:: none
+> 
+>      Cc: <stable@vger.kernel.org> # after 4 weeks in mainline
+> 
+> For any other requests related to patches submitted via :ref:`option_1`,
+> just add a note to the stable tag. This for example can be used to point
+> out known problems:
+> 
+> .. code-block:: none
+> 
+>      Cc: <stable@vger.kernel.org> # see patch description, needs
+> adjustments for 6.3 and earlier
+> 
+> ```
+> 
+> Greg, if this is stupid or in case you want it to say something else,
+> just say so.
 
+That looks great, hopefully people notice this.  We still have a huge
+number of people refusing to even put cc: stable in a patch, let alone
+these extra hints :)
 
-On Mon, 3 Jul 2023, Alexandre Ghiti wrote:
+thanks,
 
-> -=================================
-> +perf_user_access (arm64 and riscv only)
-> +=======================================
-
-so I complained about this when support for this went in for arm64.
-
-Why do we have two separate ways of getting this info, one for x86 and one 
-for arm64/riscv?
-
-Could we get x86 patched to use the same interface?
-
-It's a pain for tool users to have to maintain multiple code paths because 
-the various architectures can't agree on how to export this info to 
-userspace.
-
-Vince
+greg k-h
