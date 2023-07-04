@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C7A7472A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30EC7472AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjGDNWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
+        id S230489AbjGDNXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbjGDNVu (ORCPT
+        with ESMTP id S230200AbjGDNX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:21:50 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7044A198A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:21:34 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-992f15c36fcso510896566b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688476892; x=1691068892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RBSF1NolQO8rskeUSMv3t8uDwxMXaGRNLk5ilo4Ryuw=;
-        b=pNiEfh7s3N/B+0ZxCLnR0kBEzaW0kSO6X8+7eP1ur1DXCI6lW6OySCKvEMl3hfKhF5
-         VNnmJuVnJfDw6Xo9akbj7qi1PsFZJ+XagzITJ9aRQmiGrVnXgPFqe5or4p4lYnNjzDa/
-         Oi3cWN0Iv2VfnqMw+3BqoFYDG+i3CKppYBkE8BMVMRm5S/5qTvMNVcB3FYhHU8l6m6ba
-         Vo8SLZJULu06uwSccIK2tEEIssQpPhph6+qdA/d7hzgDNFlE7EgndHOplSTJj8PY+sVz
-         2HsEiP5QnrE91awtaGCmnIuxp3WjX47iPO5BCXcfgf9D6uJGeddnmAOAkCuIGOekoloS
-         IDuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688476892; x=1691068892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBSF1NolQO8rskeUSMv3t8uDwxMXaGRNLk5ilo4Ryuw=;
-        b=XDE78BEPRyWNDHDZVSL38xRCeIECENc9Hl5lPf2yIX6wjUkK+8GM4LIdQTpMpK2Lok
-         ifm5LEPVzkuWbQv5XS4XfsxGQPFmhUc/S+5W42ACbrbF6l2olCj5X5BYXLGAGmu5nQ19
-         5L4v0MLiBH/E98695/eSbkZB1BjWVrPXC55HByknGUDCiCozfMj4H/m5N8y2MbapATt/
-         JyVS/gCnVC6ykzA4+x6RDwZnI0MzJc9ebwAldvbj8BJZJCpUbOwVelrD+QGQPwcMsYq6
-         5WUoeZZPabfrbJzS7unQPRrmhNlZ2W4hSj0YYjIpkCVL2wQzMpw6eqDj+BX0wR2K3AkC
-         rFeQ==
-X-Gm-Message-State: ABy/qLY6RMWIRmRPwwa94uvOBHCdRI59Wp1f4mcytnnFuwK1FL0l6cKr
-        4w/5PtMjElpfItG8gYSANRdefiSfU6dO0G7eUmU=
-X-Google-Smtp-Source: ACHHUZ7GruU2SMpelDGt/k32whGmAdH3xrb4LP13iZfv51rQJZeKedemsN+25543YUVb0HiPq59Phg==
-X-Received: by 2002:a17:906:af15:b0:987:9823:b9f with SMTP id lx21-20020a170906af1500b0098798230b9fmr10240987ejb.28.1688476892394;
-        Tue, 04 Jul 2023 06:21:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id r21-20020a1709067fd500b009828e26e519sm13100150ejs.122.2023.07.04.06.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 06:21:31 -0700 (PDT)
-Message-ID: <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
-Date:   Tue, 4 Jul 2023 15:21:30 +0200
+        Tue, 4 Jul 2023 09:23:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B8EF10CA
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:23:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F175D1474;
+        Tue,  4 Jul 2023 06:24:05 -0700 (PDT)
+Received: from [10.1.35.40] (C02Z41KALVDN.cambridge.arm.com [10.1.35.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8B323F663;
+        Tue,  4 Jul 2023 06:23:21 -0700 (PDT)
+Message-ID: <dd9ea461-df2d-afe1-a67c-c73ac1cb96b4@arm.com>
+Date:   Tue, 4 Jul 2023 14:23:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20230704092200.85401-1-william.qiu@starfivetech.com>
- <20230704092200.85401-3-william.qiu@starfivetech.com>
- <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
- <eba1e868-6371-42fe-91be-bcbee54d1aff@sirena.org.uk>
- <4afd90d9-f1bd-f40d-1c79-50fef1406ab7@linaro.org>
- <6307c5b2-64d2-405f-b1a5-696d4184f6a0@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6307c5b2-64d2-405f-b1a5-696d4184f6a0@sirena.org.uk>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v2 3/5] mm: Default implementation of
+ arch_wants_pte_order()
+From:   Ryan Roberts <ryan.roberts@arm.com>
+To:     Yu Zhao <yuzhao@google.com>, "Yin, Fengwei" <fengwei.yin@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230703135330.1865927-1-ryan.roberts@arm.com>
+ <20230703135330.1865927-4-ryan.roberts@arm.com>
+ <ac6802f6-01a2-6b39-38c7-2fe3cea75dde@intel.com>
+ <CAOUHufbmv0pZ1h9AxBj-SD7OqRZYudHMtXzQxcwD4ky-sFd8kg@mail.gmail.com>
+ <CAOUHufbpCU_Z7g1QPJ0+HzE9sdNpSh=Mzi0EByLPu5TE4S_UcQ@mail.gmail.com>
+ <6d389825-1fc0-5c16-7858-2290fd632682@arm.com>
+In-Reply-To: <6d389825-1fc0-5c16-7858-2290fd632682@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,23 +58,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2023 15:16, Mark Brown wrote:
-> On Tue, Jul 04, 2023 at 02:27:57PM +0200, Krzysztof Kozlowski wrote:
+On 04/07/2023 13:36, Ryan Roberts wrote:
+> On 04/07/2023 04:59, Yu Zhao wrote:
+>> On Mon, Jul 3, 2023 at 9:02 PM Yu Zhao <yuzhao@google.com> wrote:
+>>>
+>>> On Mon, Jul 3, 2023 at 8:23 PM Yin, Fengwei <fengwei.yin@intel.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 7/3/2023 9:53 PM, Ryan Roberts wrote:
+>>>>> arch_wants_pte_order() can be overridden by the arch to return the
+>>>>> preferred folio order for pte-mapped memory. This is useful as some
+>>>>> architectures (e.g. arm64) can coalesce TLB entries when the physical
+>>>>> memory is suitably contiguous.
+>>>>>
+>>>>> The first user for this hint will be FLEXIBLE_THP, which aims to
+>>>>> allocate large folios for anonymous memory to reduce page faults and
+>>>>> other per-page operation costs.
+>>>>>
+>>>>> Here we add the default implementation of the function, used when the
+>>>>> architecture does not define it, which returns the order corresponding
+>>>>> to 64K.
+>>>>>
+>>>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>>>>> ---
+>>>>>  include/linux/pgtable.h | 13 +++++++++++++
+>>>>>  1 file changed, 13 insertions(+)
+>>>>>
+>>>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+>>>>> index a661a17173fa..f7e38598f20b 100644
+>>>>> --- a/include/linux/pgtable.h
+>>>>> +++ b/include/linux/pgtable.h
+>>>>> @@ -13,6 +13,7 @@
+>>>>>  #include <linux/errno.h>
+>>>>>  #include <asm-generic/pgtable_uffd.h>
+>>>>>  #include <linux/page_table_check.h>
+>>>>> +#include <linux/sizes.h>
+>>>>>
+>>>>>  #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_FOLDED) - \
+>>>>>       defined(__PAGETABLE_PMD_FOLDED) != CONFIG_PGTABLE_LEVELS
+>>>>> @@ -336,6 +337,18 @@ static inline bool arch_has_hw_pte_young(void)
+>>>>>  }
+>>>>>  #endif
+>>>>>
+>>>>> +#ifndef arch_wants_pte_order
+>>>>> +/*
+>>>>> + * Returns preferred folio order for pte-mapped memory. Must be in range [0,
+>>>>> + * PMD_SHIFT-PAGE_SHIFT) and must not be order-1 since THP requires large folios
+>>>>> + * to be at least order-2.
+>>>>> + */
+>>>>> +static inline int arch_wants_pte_order(struct vm_area_struct *vma)
+>>>>> +{
+>>>>> +     return ilog2(SZ_64K >> PAGE_SHIFT);
+>>>> Default value which is not related with any silicon may be: PAGE_ALLOC_COSTLY_ORDER?
+>>>>
+>>>> Also, current pcp list support cache page with order 0...PAGE_ALLOC_COSTLY_ORDER, 9.
+>>>> If the pcp could cover the page, the pressure to zone lock will be reduced by pcp.
+>>>
+>>> The value of PAGE_ALLOC_COSTLY_ORDER is reasonable but again it's a
+>>> s/w policy not a h/w preference. Besides, I don't think we can include
+>>> mmzone.h in pgtable.h.
+>>
+>> I think we can make a compromise:
+>> 1. change the default implementation of arch_has_hw_pte_young() to return 0, and
+>> 2. in memory.c, we can try PAGE_ALLOC_COSTLY_ORDER for archs that
+>> don't override arch_has_hw_pte_young(), or if its return value is too
+>> large to fit.
+>> This should also take care of the regression, right?
 > 
->> Also see:
->> "every Co-developed-by: must be immediately
->> followed by a Signed-off-by: of the associated co-author."
+> I think you are suggesting that we use 0 as a sentinel which we then translate
+> to PAGE_ALLOC_COSTLY_ORDER? I already have a max_anon_folio_order() function in
+> memory.c (actually it is currently a macro defined as arch_wants_pte_order()).
 > 
->> https://elixir.bootlin.com/linux/v6.4/source/Documentation/process/submitting-patches.rst#L467
+> So it would become (I'll talk about the vma concern separately in the thread
+> where you raised it):
 > 
-> Oh, that seems unhelpful especially with it not lining up with the DCO.
+> static inline int max_anon_folio_order(struct vm_area_struct *vma)
+> {
+> 	int order = arch_wants_pte_order(vma);
+> 
+> 	return order ? order : PAGE_ALLOC_COSTLY_ORDER;
+> }
+> 
+> Correct?
 
-I assume the intention was here that if I attribute some co-author with
-Co-developed-by, then I know that author, therefore I expect author to
-explicitly participate in DCO chain.
+Actually, I'm not sure its a good idea to default to a fixed order. If running
+on an arch with big base pages (e.g. powerpc with 64K pages?), that will soon
+add up to a big chunk of memory, which could be wasteful?
 
-Otherwise, just drop the Co-developed-by.
+PAGE_ALLOC_COSTLY_ORDER = 3 so with 64K base page, that 512K. Is that a concern?
+Wouldn't it be better to define this as an absolute size? Or even the min of
+PAGE_ALLOC_COSTLY_ORDER and an absolute size?
 
-Best regards,
-Krzysztof
+
+> 
+> I don't see how it fixes the regression (assume you're talking about
+> Speedometer) though? On arm64 arch_wants_pte_order() will still be returning
+> order-4.
+> 
 
