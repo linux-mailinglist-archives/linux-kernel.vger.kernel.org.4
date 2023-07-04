@@ -2,89 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA2B74779C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B05C7477A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjGDRTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
+        id S231912AbjGDRTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGDRTE (ORCPT
+        with ESMTP id S229793AbjGDRTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:19:04 -0400
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7469AE76;
-        Tue,  4 Jul 2023 10:19:02 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 058E3100069;
-        Tue,  4 Jul 2023 20:19:01 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 058E3100069
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688491141;
-        bh=+h4yVW7FjpHQ+urNjtfPriUNzJFyj06QNNvg77/XYRs=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-        b=maqmeQDMdiiQvgMVedC+XspuixWr+zxXEFZTeF5UtiGvFx5XCJ40bGxz5RX1RMZfa
-         couGVJuc3ltmrWFN8iUrKslX2Nnemmuu2SiIfQAgfETfl7rv8mx+W4G/HOBUhRa7kS
-         wypwIq6yGYZEWSeung19nxdbQ1qdLWU6EKB0LRTDqHPjLnvpd5Y2I88GMVFKZ8gxL3
-         0MiHKoFM3S1eh5esAv5FsEmI4Nt1+5SdBHqFUVTBqOoBczy0kuiMdsH/lI7VF9wQNq
-         OtSSj3HGGkwdjI7EFePVoQFdVaIgiEEbvXGdwpVATqLoHbhwGQnDrTUCwV2RpxmbDS
-         I26/yimdAVLuQ==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Tue,  4 Jul 2023 20:19:00 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 4 Jul
- 2023 20:18:49 +0300
-Date:   Tue, 4 Jul 2023 20:19:00 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Conor Dooley <conor@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <jirislaby@kernel.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <kelvin.zhang@amlogic.com>,
-        <xianwei.zhao@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 5/5] arm64: dts: meson: a1: change uart compatible
- string
-Message-ID: <20230704171900.ulnnpkuzvtbbqa3d@CAB-WSD-L081021>
-References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
- <20230704135936.14697-6-ddrokosov@sberdevices.ru>
- <20230704-cannabis-cannon-19397cd806bc@spud>
- <20230704170843.wksxekltre2ob4en@CAB-WSD-L081021>
- <20230704-staff-smilingly-401b99e28edd@spud>
+        Tue, 4 Jul 2023 13:19:30 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B0F10D7;
+        Tue,  4 Jul 2023 10:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1688491164;
+        bh=XoqjGAAisrMB/Pfyua6e1oRHYcJ+y87IfUpKWBoC9wk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=N2D2FNXOyS0ABkYSbbOai7GzSARmAlho0m8eLsvqFxANOIuMOhO1LxydQEjhJqWyn
+         s4diZvaronIi3ssoqSJLXbG2Evq/maxxdpiOJUSEh/lXO8vRT9kOiXIgk6/vlSH72L
+         SoAmwZR1oFltK2T3OZT7oqpbU9kE+AnZRPw+R71IXS3aARtVDA+vkBW3RoghrODyGA
+         LNHHXSzwcvpj5hUxSspofjvrHBgPIgFJeLfkY/HYpuR6P21DoPavis1F8YwgHyI9Cm
+         lKxMFY44J/zevh4FFKsVftiCQZvvfa9EmOv/54AsOL+YBt7uD0VDfqyCww4cIbuzEA
+         6CZ5BEHfIqYSw==
+Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QwTzv6tQ7z1C97;
+        Tue,  4 Jul 2023 13:19:23 -0400 (EDT)
+From:   Olivier Dion <odion@efficios.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+In-Reply-To: <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+Organization: EfficiOS
+References: <87ttukdcow.fsf@laura>
+ <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+Date:   Tue, 04 Jul 2023 13:19:23 -0400
+Message-ID: <87ilazd278.fsf@laura>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230704-staff-smilingly-401b99e28edd@spud>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178431 [Jul 04 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,33 +64,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 06:10:46PM +0100, Conor Dooley wrote:
-> On Tue, Jul 04, 2023 at 08:08:43PM +0300, Dmitry Rokosov wrote:
-> > On Tue, Jul 04, 2023 at 06:02:58PM +0100, Conor Dooley wrote:
-> > > On Tue, Jul 04, 2023 at 04:59:36PM +0300, Dmitry Rokosov wrote:
-> > > > In the current implementation, the meson-a1 configuration incorporates a
-> > > > unique compatibility tag "amlogic,meson-a1-uart' within the meson-uart
-> > > > driver due to its usage of the new console device name "ttyS".
-> > > > Consequently, the previous compatibility tag designated for the
-> > > > 'amlogic,meson-gx-uart' configuration has become obsolete and is no
-> > > > longer relevant to the current setup.
-> > > 
-> > > I don't really see why you would remove the gx-uart to be honest, and
-> > > not use it as a fallback. Neil's platform though, so his call :)
-> > > 
-> > 
-> > Because of amlogic,meson-gx-uart has legacy devname, we do not want to
-> > use it in the A1.
-> 
-> Which I did read in your commit message, fallback being the operative
-> word here.
+On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+>> This is a request for comments on extending the atomic builtins API to
+>> help avoiding redundant memory barriers.  Indeed, there are
+>
+> What atomic builtins API are you talking about?  The kernel's?  That's 
+> what it sounded like when I first read this sentence -- why else post 
+> your message on a kernel mailing list?
 
-Although it is difficult for me to envision a situation where we would
-require this fallback, but gx-uart fallback will function from a kernel
-perspective (without taking into account bootloader setup or userspace
-daemon script). I don't have any objections to stay gx-uart as a
-fallback, will do it in the v2.
+Good point, we meant the `__atomic' builtins from GCC and Clang.  Sorry
+for the confusion.
+
+[...]
+
+>> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
+>> have implicit memory barriers before/after the operations [1-2], while
+>> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
+>> do not have any ordering guarantees of an atomic thread fence
+>> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+>
+> After reading what you wrote below, I realized that the API you're 
+> thinking of modifying is the one used by liburcu for user programs.  
+> It's a shame you didn't mention this in either the subject line or the 
+> first few paragraphs of the email; that would have made understanding 
+> the message a little easier.
+
+Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
+the toolchain's atomic builtins and not the LKMM itself.  The reason why
+we've reached out to the Linux kernel developers is because the
+original Userspace RCU uatomic API is based on the LKMM.
+
+> In any case, your proposal seems reasonable to me at first glance, with 
+> two possible exceptions:
+>
+> 1.	I can see why you have special fences for before/after load, 
+> 	store, and rmw operations.  But why clear?  In what way is 
+> 	clearing an atomic variable different from storing a 0 in it?
+
+We could indeed group the clear with the store.
+
+We had two approaches in mind:
+
+  a) A before/after pair by category of operation:
+
+     - load
+     - store
+     - RMW
+  
+  b) A before/after pair for every operation:
+
+     - load
+     - store
+     - exchange
+     - compare_exchange
+     - {add,sub,and,xor,or,nand}_fetch
+     - fetch_{add,sub,and,xor,or,nand}
+     - test_and_set
+     - clear
+
+If we go for the grouping in a), we have to take into account that the
+barriers emitted need to cover the worse case scenario.  As an example,
+Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
+returned value is not used.
+
+Therefore, for the grouping in a), all RMW would need to emit a memory
+barrier (with Clang on x86-64).  But with the scheme in b), we can emit
+the barrier explicitly for the exchange operation.  We however question
+the usefulness of this kind of optimization made by the compiler, since
+a user should use a store operation instead.
+
+> 2.	You don't have a special fence for use after initializing an 
+> 	atomic.  This operation can be treated specially, because at the 
+> 	point where an atomic is initialized, it generally has not yet 
+> 	been made visible to any other threads.
+
+I assume that you're referring to something like std::atomic_init from
+C++11 and deprecated in C++20?  I do not see any scenario on any
+architecture where a compiler would emit an atomic operation for the
+initialization of an atomic variable.  If a memory barrier is required
+in this situation, then an explicit one can be emitted using the
+existing API.
+
+In our case -- with the compiler's atomic builtins -- the initialization
+of a variable can be done without any atomic operations and does not
+require any memory barrier.  This is a consequence of being capable of
+working with integral-scalar/pointer type without an atomic qualifier.
+
+> Therefore the fence which would normally appear after a store (or
+> clear) generally need not appear after an initialization, and you
+> might want to add a special API to force the generation of such a
+> fence.
+
+I am puzzled by this.  Initialization of a shared variable does not need
+to be atomic until its publication.  Could you expand on this?
+
+Thanks for the feedback,
+	Olivier
 
 -- 
-Thank you,
-Dmitry
+Olivier Dion
+EfficiOS Inc.
+https://www.efficios.com
