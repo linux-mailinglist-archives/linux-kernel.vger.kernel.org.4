@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B9574713E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD09747145
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbjGDMZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        id S231678AbjGDMZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjGDMYc (ORCPT
+        with ESMTP id S231925AbjGDMYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:24:32 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9015C1BCB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:23:23 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b6f52e1c5cso9921621fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:23:23 -0700 (PDT)
+        Tue, 4 Jul 2023 08:24:34 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED3E10D9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:23:24 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6f9edac8dso6852071fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688473402; x=1691065402;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6HXiDnQ0NiIURb63rI5A4UzqYhuJjljFFAXFRa3vQSM=;
-        b=wV64RoIfLZ65I1BCz5eVLIjxu6o4ANcQjo8OzxBkXfVu6XfkqWwQrGPy+AayEuLdBv
-         Mrc/rrWHNKA65mNnkDKzD1HuGHpvKhd/ftSQ+keCCHvXoG/UnII8LiwAYRskgoT0D+oG
-         CRhAQao1TmX4CyLiY75n8tHU7SHJsQtraxyv0hnJ/jBEkDIcxipWho0T5yXwSST1an+L
-         hh3mOV4zp2FIBqV2qkF6PCn6GaNv1q1qjWgSyYODgJ8dHdM4H2igfUahcS2HqJo9IwgL
-         AW9+7UZn9iAWu0RzddUvOEG67E9KsNgdxbuUKFTjPIVLA9aFodxIJgORJn7Zcq25X3XK
-         cvCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688473402; x=1691065402;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1688473403; x=1691065403;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6HXiDnQ0NiIURb63rI5A4UzqYhuJjljFFAXFRa3vQSM=;
-        b=hRjrtjGLvcwQ4nPgSC6rXHmfkXQmvZczxl6WyJ3AXjpjrjLMDcadbUCcDf9m5n/Hve
-         N45+uN2ruHfn+cVK1SWj/yFY/Isa9omfp/oRdlZz9EJBQqdA4Slm8KEShkXJVj5eHDOm
-         ahEH0TnzH0FQwHN82k3F/GvWujAxo3LH01Kl7BaGkaTectHlX0lCfv+fOcavY7DlH0St
-         hjrprKusEhy+rGyEBWKODQtCbhmIPD5jF0WWms7R50If+Z/N3ALQwkTRtLgHiC2n3Iok
-         BsmFtxdPsGLuRgMXHgUEtlYOI+Tf1RwiIVdqCmwWINUXkcaZlD6d3B4pX4///OLqn+ez
-         U1Lw==
-X-Gm-Message-State: ABy/qLb4zB1fUnJb97KLpApVAOS2fUp8oE7ypQQJqDWO7HuTdiVy2LEp
-        0SKGtcQXBKpmhK+sHlZKEs5eGA==
-X-Google-Smtp-Source: APBJJlEJaa47JJg66kpWGHDDlwikd2xdZLU1im4O5/CE+X2qZDWepIcHRTE2kenBPZun9cCYGtB8GA==
-X-Received: by 2002:a2e:9d18:0:b0:2b6:dac0:affe with SMTP id t24-20020a2e9d18000000b002b6dac0affemr7589783lji.31.1688473401751;
-        Tue, 04 Jul 2023 05:23:21 -0700 (PDT)
+        bh=BfZetCTb7qe7Kln5fO24A0lyGB1o99Go22cdh/m51mI=;
+        b=EWHnEA4c8uuC1fr46CXolQALOCRN68WA20PAqWLsKKtk9oe3/gW2wGv9E6otaU5dBD
+         oOhpeQTAQ0/DuJUvyVhr+oO17vaRcmjVsmlC943z57EegfqS3jkGJypE9+YV+x+DGeQd
+         tqM9u+vOpS1Lel5xY7YjDHHqlFjX8jC0CShO5bQjkC7uv6rDiVNVbEgLhDkmqbWgfBLp
+         NZ9L7nRo7L+bB85kF/EBjWOmHG7MZhFSiBQrwBFGEF8rwo7kOCSXq2fw61CJbvF0DiSb
+         UxBJalUbMhf26o9CcpJBRSO8h3dLS5HvnJMaxNXMUFl1sBrtCh01vs6/1AOyiq8f//Ei
+         e0bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688473403; x=1691065403;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BfZetCTb7qe7Kln5fO24A0lyGB1o99Go22cdh/m51mI=;
+        b=JryztwWXXSuQu7nNL0fQVb4j9ymtwCxtgMqls/7Be+2B3dV00uxO9eriQ17l4kzitU
+         0QewMwmLUCyDMuecZnsWpumkUEAgoZnuFr/JGUHlgQKedHqHh01WaBjj/gZrHg6s25gZ
+         j82xCISezwWIfPPx1SDDCuJ4qx7fMpG9Jk6RzJrMZHMfkszWZFCkcDYsBT9Sq2v9FjYD
+         x/jqQlPxYQRnNaaiS2pgYwdbq7csOjFiL1DrJMnMEj2G3ClTynUlD7w1/0l9YX78IPwh
+         d5SR1Q3/KFD9Uhh1r1KFSbjOYlU0pQFzyUhoF1FXvIVuGlP0bQZ+UZYyuLGlLINkECjD
+         vrLA==
+X-Gm-Message-State: ABy/qLb7N7mwMOHl7qaqS5abVs2Bi74zf/IbgsqFF0SqLQZWydZNDIoY
+        1ZSXI7m3zL7CpERmTM9t0/6TdA==
+X-Google-Smtp-Source: APBJJlHQFoYtY1ofS4Y3l6PYo9Tv8feS5VF5rVSPfgGH1Wtqm6pEb8or7GWii4bcd9pG8QgxNYmk1g==
+X-Received: by 2002:a2e:3611:0:b0:2b6:fa8d:ff91 with SMTP id d17-20020a2e3611000000b002b6fa8dff91mr762817lja.3.1688473403097;
+        Tue, 04 Jul 2023 05:23:23 -0700 (PDT)
 Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id y16-20020a2e9790000000b002b6d465583csm2851817lji.126.2023.07.04.05.23.20
+        by smtp.gmail.com with ESMTPSA id y16-20020a2e9790000000b002b6d465583csm2851817lji.126.2023.07.04.05.23.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 05:23:21 -0700 (PDT)
+        Tue, 04 Jul 2023 05:23:22 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH 0/2] 8250 dma-coherent
-Date:   Tue, 04 Jul 2023 14:23:16 +0200
-Message-Id: <20230704-topic-8250_pcie_dmac-v1-0-799603a980b0@linaro.org>
+Date:   Tue, 04 Jul 2023 14:23:17 +0200
+Subject: [PATCH 1/2] arm64: dts: qcom: sm8250: Mark PCIe hosts as DMA
+ coherent
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADQPpGQC/x2N0QrCMAwAf2Xk2UCsDjd/RcZIs+gCsyutijD27
- wYf7+C4DaoW0wrXZoOiH6u2JofjoQGZOT0UbXKGQOFEFzrja80m2IWWxiym4/RkwTZQL8J9R5H
- B08hVMRZOMnuc3sviMhe92/f/ug37/gNOJZ7QewAAAA==
+Message-Id: <20230704-topic-8250_pcie_dmac-v1-1-799603a980b0@linaro.org>
+References: <20230704-topic-8250_pcie_dmac-v1-0-799603a980b0@linaro.org>
+In-Reply-To: <20230704-topic-8250_pcie_dmac-v1-0-799603a980b0@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -72,11 +73,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688473400; l=544;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688473400; l=1039;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ebgvHGWJNSmcCaSzNGCH5tKf9n7ahelosAOLZnkzPCQ=;
- b=MYS/FAKFBE1TycqhgUSOBDW4NPv9r+lPUDEmVpQQKWU/cgJvUOeI9zseedjElHf8o/VzB8ijV
- Yb0J5sFe/gMBtlL9j7psBL9SOBwFqijkft02IFnQ9wwOe806+Rz1IGy
+ bh=/trrPqlOGVYGD4KobXwWL7iAusm8QIT3+NP76Mg5xnE=;
+ b=bC54OwHZByqZwcz9qOumBMtmQW7JnNGGGIhkwtwVRQumSxGz3BtQgwkgw8FarJdJTPzBlyT+v
+ 1fN+x3Qh2l6DNhIhdRMg61U3+ODuEdrrhaqcZ2WZzJ14uixsHAecPTE
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,21 +90,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SMMUs and PCIe hosts on SM8250 are cache-coherent. Mark them as such.
+The PCIe hosts on SM8250 are cache-coherent. Mark them as such.
 
+Fixes: e53bdfc00977 ("arm64: dts: qcom: sm8250: Add PCIe support")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (2):
-      arm64: dts: qcom: sm8250: Mark PCIe hosts as DMA coherent
-      arm64: dts: qcom: sm8250: Mark SMMUs as DMA coherent
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
----
-base-commit: 1c6f93977947dbba1fc4d250c4eb8a7d4cfdecf1
-change-id: 20230704-topic-8250_pcie_dmac-5209cca980ba
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 1efa07f2caff..1af0eed9eef5 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -1905,6 +1905,7 @@ pcie0: pci@1c00000 {
+ 
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pcie0_default_state>;
++			dma-coherent;
+ 
+ 			status = "disabled";
+ 		};
+@@ -2011,6 +2012,7 @@ pcie1: pci@1c08000 {
+ 
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pcie1_default_state>;
++			dma-coherent;
+ 
+ 			status = "disabled";
+ 		};
+@@ -2119,6 +2121,7 @@ pcie2: pci@1c10000 {
+ 
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pcie2_default_state>;
++			dma-coherent;
+ 
+ 			status = "disabled";
+ 		};
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.41.0
 
