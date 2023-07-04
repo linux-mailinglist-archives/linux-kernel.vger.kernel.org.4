@@ -2,122 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0B97478E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499A47478E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjGDUGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 16:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S231715AbjGDUHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 16:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjGDUGJ (ORCPT
+        with ESMTP id S231250AbjGDUHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:06:09 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2AD10D9;
-        Tue,  4 Jul 2023 13:06:08 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so724287266b.2;
-        Tue, 04 Jul 2023 13:06:08 -0700 (PDT)
+        Tue, 4 Jul 2023 16:07:03 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8B718B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:07:02 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56ff81be091so62927677b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 13:07:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688501167; x=1691093167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OKWAUZq2LMZPHtm5CDvILwRT0rAIVFmH6pWCRnU0qnw=;
-        b=SkdJTcPyWaVeyIUbTXl7qT9rX83oc+1C51++R1LIl6+mVF3I8f2eBDl8DwBP+uuLHv
-         s8iaivafWsuHhcZKtMPF0vUSwNPutoX6aBvxujJOkk5p8B6cQ9QgCWf61uz5vKSyEVCh
-         ns13e3tPSTzRbFat37pHToKkuzVfJMH9tS/Ce0qmWbSwPXibgBt/bhZlVeyiOtQlhm2G
-         vIqFv3BZcJBt8K6Vl6qh1JMUUNJ9rz3YUzH1u/A0zbDmMukdX+0Z33clbZz0Q0j7nHQ+
-         jgttUQCmx1W+ppdjJ+mbBQnGb6bSYuMe4n1ZZkVpl+pNCvUQoupmAe/w+cdveI3DMy3X
-         hxVg==
+        d=google.com; s=20221208; t=1688501221; x=1691093221;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r8il2W3A+Y7dZW8xauwfpOUi9D6SLUIEJNmGFcA4NVg=;
+        b=6VCAkwu8Vj/qi03mCMziSMUtK2HemZuvC0I/OyVXR3EqfP3G6zpDUX/yE5A84wYXHs
+         Vprk+pCbwwr5BJIsl2f7iCstULYXel5PXQjVyFU8x4ocxvsmJu/Ijw9ucU9zSExQSPVJ
+         GjfBPz+I4GWvxMeyFmWCK+hZnrn51I2seHLCHVjcRPGORoPK3UC0L3RotkOC9Mpu7r22
+         63WqExhTkViW4O6Pxql2AJSPXAmeeLluTcOHO6Kga2OWz7K11pb+2XVjOc/Ovw26usyn
+         NFE/enwZP1tGesPvIGeRCKvuC/KSspHC43PLVf8huMbGaGy2Y2IHO2VvZnoKNaEc8d3t
+         OWjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688501167; x=1691093167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OKWAUZq2LMZPHtm5CDvILwRT0rAIVFmH6pWCRnU0qnw=;
-        b=Fa8E13KaLBUnSQl+mvXXD60WRh7XNzkLkBY27ZKQ2aw+PZlA/BOM8Nfl6nndP6+716
-         ADpQ3ATUn/DhthatgeyP/jwbsAMu3Uf/zI0xjP6DjuBggLCHLMfnmHqHy75f2Y9VEPoR
-         Qws6mxI3oG7mIwJuYohHuR4OVTSfDfaWsnzOoLwdUipqf03SvsrmixIYWaPno141Cc6a
-         dRKGMrhyE0Zlap9Cc1Q5ZPKldfKlxj0HKjNJdOUTi2fmA1fhPhX3e5lzW3/p/1F97xjp
-         QER46Vi5GuLD01jQN+IPOmFC3TMlUwuTz+JaMjE+5Bk06504SowCfR8LO6Ig7Ob2EFVv
-         Uqqg==
-X-Gm-Message-State: ABy/qLZJSJsK7JBnW0w7x16t3RXy0JsSCfUMuD59/RUZ7DeSf3SGk1th
-        HOp76ZJTsXx3i5kdAhZC8Gw=
-X-Google-Smtp-Source: APBJJlGWBEpjs9whdpAfmUG1S8ouqxb57kqZzCyNHPuNr8kM2V4BRS8J4IN48uFsTBxbx/EbQsE+/w==
-X-Received: by 2002:a17:907:76e7:b0:97b:956f:e6b5 with SMTP id kg7-20020a17090776e700b0097b956fe6b5mr10673097ejc.23.1688501166855;
-        Tue, 04 Jul 2023 13:06:06 -0700 (PDT)
-Received: from [192.168.0.107] ([77.126.161.239])
-        by smtp.gmail.com with ESMTPSA id gw26-20020a170906f15a00b009929d998abcsm8022416ejb.209.2023.07.04.13.06.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 13:06:06 -0700 (PDT)
-Message-ID: <f0538006-6641-eaf6-b7b5-b3ef57afc652@gmail.com>
-Date:   Tue, 4 Jul 2023 23:06:02 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net-next v10 08/16] tls: Inline do_tcp_sendpages()
-To:     Jakub Kicinski <kuba@kernel.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Gal Pressman <gal@nvidia.com>, ranro@nvidia.com,
-        samiram@nvidia.com, drort@nvidia.com,
-        Tariq Toukan <tariqt@nvidia.com>
-References: <ecbb5d7e-7238-28e2-1a17-686325e2bb50@gmail.com>
- <4c49176f-147a-4283-f1b1-32aac7b4b996@gmail.com>
- <20230522121125.2595254-1-dhowells@redhat.com>
- <20230522121125.2595254-9-dhowells@redhat.com>
- <2267272.1686150217@warthog.procyon.org.uk>
- <5a9d4ffb-a569-3f60-6ac8-070ab5e5f5ad@gmail.com>
- <776549.1687167344@warthog.procyon.org.uk>
- <7337a904-231d-201d-397a-7bbe7cae929f@gmail.com>
- <20230630102143.7deffc30@kernel.org>
-Content-Language: en-US
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20230630102143.7deffc30@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688501221; x=1691093221;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r8il2W3A+Y7dZW8xauwfpOUi9D6SLUIEJNmGFcA4NVg=;
+        b=EJAAZTqYvBxHMaTUTg1iWk/Dp+yb/sK4+rz118+HxZcCRxSZcpxtjPmQevYJmrep3o
+         Mbk+aySGQsFfBpHUMBJXv7fXw9toBeP+SjHwJtB85rA82AnpNWRKeqIVFCLdOAXa/6hP
+         ixsOFp8BRrkHelTpWL0HdcFHlgaHBYUBX8rFsKJ10JwxRdb18UzGKI3ldX/A80+dtFHC
+         3JIZtIcBzCnxPNAqKZofCo078hkcaboqx5+OHQcZG4sQ8P+LNg3zq8C0jgEJYwQbFRts
+         kTFqmlavZ6fEr5Sykc9mUOsvrsReByMW7y/sfwb3onIKTg34HdCLZesL75xZ9RG7iAwm
+         uzMw==
+X-Gm-Message-State: ABy/qLYlYtJNqXr8uMyb+J5DLNdAY7sQ+RpXyAImv13Qr8u5SrZb5+XL
+        Ojn+92vQOa3eHXzWbab2qXdACsGEGQ8=
+X-Google-Smtp-Source: APBJJlEeX9skwLcSa6ScHb3JM5//3ONAkxhpQ7w9Tg9rQrPR9RX9XqSOF0TFni9TD5TubYd6ol0QzlgFmOw=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:9164:ef9f:8918:e2b6])
+ (user=surenb job=sendgmr) by 2002:a81:4109:0:b0:56f:f77c:3c7d with SMTP id
+ o9-20020a814109000000b0056ff77c3c7dmr103135ywa.3.1688501221474; Tue, 04 Jul
+ 2023 13:07:01 -0700 (PDT)
+Date:   Tue,  4 Jul 2023 13:06:56 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230704200656.2526715-1-surenb@google.com>
+Subject: [PATCH 1/1] fork: lock VMAs of the parent process when forking
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     jirislaby@kernel.org, jacobly.alt@gmail.com,
+        holger@applied-asynchrony.com, hdegoede@redhat.com,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        chriscli@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, rppt@kernel.org, jannh@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When forking a child process, parent write-protects an anonymous page
+and COW-shares it with the child being forked using copy_present_pte().
+Parent's TLB is flushed right before we drop the parent's mmap_lock in
+dup_mmap(). If we get a write-fault before that TLB flush in the parent,
+and we end up replacing that anonymous page in the parent process in
+do_wp_page() (because, COW-shared with the child), this might lead to
+some stale writable TLB entries targeting the wrong (old) page.
+Similar issue happened in the past with userfaultfd (see flush_tlb_page()
+call inside do_wp_page()).
+Lock VMAs of the parent process when forking a child, which prevents
+concurrent page faults during fork operation and avoids this issue.
+This fix can potentially regress some fork-heavy workloads. Kernel build
+time did not show noticeable regression on a 56-core machine while a
+stress test mapping 10000 VMAs and forking 5000 times in a tight loop
+shows ~5% regression. If such fork time regression is unacceptable,
+disabling CONFIG_PER_VMA_LOCK should restore its performance. Further
+optimizations are possible if this regression proves to be problematic.
 
+Suggested-by: David Hildenbrand <david@redhat.com>
+Reported-by: Jiri Slaby <jirislaby@kernel.org>
+Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@ke=
+rnel.org/
+Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+Closes: https://lore.kernel.org/all/b198d649-f4bf-b971-31d0-e8433ec2a34c@ap=
+plied-asynchrony.com/
+Reported-by: Jacob Young <jacobly.alt@gmail.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling first"=
+)
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+ kernel/fork.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 30/06/2023 20:21, Jakub Kicinski wrote:
-> On Tue, 27 Jun 2023 19:49:22 +0300 Tariq Toukan wrote:
->> Unfortunately, it still happens:
->>
->> ------------[ cut here ]------------
->> WARNING: CPU: 2 PID: 93427 at net/core/skbuff.c:7013
-> 
-> I can't repro it on net-next with basic TLS 1.2 sendmsg/stream
-> test + device offload, let us know if you still see it.
+diff --git a/kernel/fork.c b/kernel/fork.c
+index b85814e614a5..d2e12b6d2b18 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -686,6 +686,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *=
+mm,
+ 	for_each_vma(old_vmi, mpnt) {
+ 		struct file *file;
+=20
++		vma_start_write(mpnt);
+ 		if (mpnt->vm_flags & VM_DONTCOPY) {
+ 			vm_stat_account(mm, mpnt->vm_flags, -vma_pages(mpnt));
+ 			continue;
+--=20
+2.41.0.255.g8b1d071c50-goog
 
-Hi,
-
-Unfortunately, it still repros for us.
-
-We are collecting more info on how the repro is affected by the 
-different parameters.
-
-Regards,
-Tariq
