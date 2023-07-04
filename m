@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08983746B52
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A772F746B5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjGDH6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S230467AbjGDIA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjGDH6r (ORCPT
+        with ESMTP id S229595AbjGDIAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:58:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00769E52
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688457486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T+z65LvmorUornhZW4Ei6pDZqxls4YGQhYkabgi/Fgo=;
-        b=ci+glooc0TZVNvX45QBbEZjz5t6Pfn2gwdEOTSBin1sAmxu1sszjU+Zrd9K5fi0SPReFz1
-        FGxum1TBG8r7yc68RUwPPsAgwe04RWi/9n3ojucHCoc1N6Sm0lpKqv3gEqaH9+06PFmtKA
-        WVUvTD93XGzh2hvfIRkd1zyLslJJ3A0=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-205-Weg6cSr9MbON8EXK67tVyA-1; Tue, 04 Jul 2023 03:58:04 -0400
-X-MC-Unique: Weg6cSr9MbON8EXK67tVyA-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b6ef65eaadso9928281fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:58:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688457482; x=1691049482;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T+z65LvmorUornhZW4Ei6pDZqxls4YGQhYkabgi/Fgo=;
-        b=dhPAgHM55OrOxfgGv+GuwUg1TxwJYpkLm6ZqE693L8GDA+0eNgUzWzjl5guwBziFLA
-         +ehLt7brg+aGp6Mogc9196wF+noo13MSO3RAzguDhX8vINfTFr3cMBJ7GnBi00hEfptL
-         ubRUeLrIHL7jfMSzvvEqDzNdyoP4QQzNrlRf7lzI7cn0hIcfPigo122BeasxlOWpolc0
-         ijMjnvntOEkGPkslNhq6KOM28kKDA0EnvD3jTXlUbQGCQ2bohP7jpp5SSgkZF08uz0Xh
-         aQBMy+ocXLlb8AGEpCDiQT3Ml10Pl8icCfOswnW5Y52fs1UStrAVgxtIYNTcKi/0+bP3
-         auRA==
-X-Gm-Message-State: ABy/qLZEnzXUBKLgyRoLPXYfP+wdC0DcxRFXiEK4GyO7CtioN/Da7W+n
-        qUf+9FTJFYkPxPTAs7+8yYK3ikm3zeUNzqkrRctV8nbgCZ427RHQc1Ak4f1JwyVJi7jtmLe4TTZ
-        RCTId7DaNiPBAu6Wix5NgY3Mw
-X-Received: by 2002:a2e:9159:0:b0:2b4:78f6:d335 with SMTP id q25-20020a2e9159000000b002b478f6d335mr9686694ljg.8.1688457482306;
-        Tue, 04 Jul 2023 00:58:02 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGP5ieUAuoHkl1LDfFH6zWVviU5R2QJOtqbelgfD+Ggwr/XJ6o+iJfxnnHrp7TPWS1RTCoQZA==
-X-Received: by 2002:a2e:9159:0:b0:2b4:78f6:d335 with SMTP id q25-20020a2e9159000000b002b478f6d335mr9686681ljg.8.1688457482001;
-        Tue, 04 Jul 2023 00:58:02 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p8-20020a7bcc88000000b003fb225d414fsm22874960wma.21.2023.07.04.00.58.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 00:58:01 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] fbdev: Move core fbdev symbols to a separate
- Kconfig file
-In-Reply-To: <ZKPHmJDsUtG7nROo@smile.fi.intel.com>
-References: <20230703230534.997525-1-javierm@redhat.com>
- <20230703230534.997525-3-javierm@redhat.com>
- <ZKPHmJDsUtG7nROo@smile.fi.intel.com>
-Date:   Tue, 04 Jul 2023 09:58:00 +0200
-Message-ID: <87bkgsyupj.fsf@minerva.mail-host-address-is-not-set>
+        Tue, 4 Jul 2023 04:00:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F61BD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 226CD6117C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E6B7C433C7;
+        Tue,  4 Jul 2023 08:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688457621;
+        bh=vU2jOdZ5LLyWKgEHZBnAwSo71oT39lJC++2uk0MUGbk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XHp+Hs2JhHl1RFxbfZK/NaC++Nys7AA/C7FARVmMBKrYYsKSWOIXthZX1iXpeUyvH
+         mgHmFrS0zclbCWqAYoKQ/ydbtN9SHJC3UQL4Gess9n1x4aEI+vjtv80YqkFMDU6VFp
+         AqPAyovltrHCKeutz1bcCPNgSjyII3zCgoWE2F04=
+Date:   Tue, 4 Jul 2023 09:00:19 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jacob Young <jacobly.alt@gmail.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: Fwd: Memory corruption in multithreaded user space program while
+ calling fork
+Message-ID: <2023070453-plod-swipe-cfbf@gregkh>
+References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
+ <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info>
+ <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
+ <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
+ <2023070359-evasive-regroup-f3b8@gregkh>
+ <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+On Tue, Jul 04, 2023 at 12:45:39AM -0700, Suren Baghdasaryan wrote:
+> On Mon, Jul 3, 2023 at 11:44 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Jul 03, 2023 at 11:27:19AM -0700, Suren Baghdasaryan wrote:
+> > > On Mon, Jul 3, 2023 at 11:08 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > >
+> > > > On Mon, Jul 3, 2023 at 2:53 AM Linux regression tracking (Thorsten
+> > > > Leemhuis) <regressions@leemhuis.info> wrote:
+> > > > >
+> > > > > On 02.07.23 14:27, Bagas Sanjaya wrote:
+> > > > > > I notice a regression report on Bugzilla [1]. Quoting from it:
+> > > > > >
+> > > > > >> After upgrading to kernel version 6.4.0 from 6.3.9, I noticed frequent but random crashes in a user space program.  After a lot of reduction, I have come up with the following reproducer program:
+> > > > > > [...]
+> > > > > >> After tuning the various parameters for my computer, exit code 2, which indicates that memory corruption was detected, occurs approximately 99% of the time.  Exit code 1, which occurs approximately 1% of the time, means it ran out of statically-allocated memory before reproducing the issue, and increasing the memory usage any more only leads to diminishing returns.  There is also something like a 0.1% chance that it segfaults due to memory corruption elsewhere than in the statically-allocated buffer.
+> > > > > >>
+> > > > > >> With this reproducer in hand, I was able to perform the following bisection:
+> > > > > > [...]
+> > > > > >
+> > > > > > See Bugzilla for the full thread.
+> > > > >
+> > > > > Additional details from
+> > > > > https://bugzilla.kernel.org/show_bug.cgi?id=217624#c5 :
+> > > > >
+> > > > > ```
+> > > > > I can confirm that v6.4 with 0bff0aaea03e2a3ed6bfa302155cca8a432a1829
+> > > > > reverted no longer causes any memory corruption with either my
+> > > > > reproducer or the original program.
+> > > > > ```
+> > > > >
+> > > > > FWIW: 0bff0aaea03 ("x86/mm: try VMA lock-based page fault handling
+> > > > > first") [merged for v6.4-rc1, authored by Suren Baghdasaryan [already CCed]]
+> > > > >
+> > > > > That's the same commit that causes build problems with go:
+> > > > >
+> > > > > https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
+> > > >
+> > > > Thanks! I'll investigate this later today. After discussing with
+> > > > Andrew, we would like to disable CONFIG_PER_VMA_LOCK by default until
+> > > > the issue is fixed. I'll post a patch shortly.
+> > >
+> > > Posted at: https://lore.kernel.org/all/20230703182150.2193578-1-surenb@google.com/
+> >
+> > As that change fixes something in 6.4, why not cc: stable on it as well?
+> 
+> Sorry, I thought since per-VMA locks were introduced in 6.4 and this
+> patch is fixing 6.4 I didn't need to send it to stable for older
+> versions. Did I miss something?
 
-> On Tue, Jul 04, 2023 at 01:05:26AM +0200, Javier Martinez Canillas wrote:
->> The drivers/video/fbdev/Kconfig defines both symbols for fbdev drivers and
->> core fbdev symbols, that can be enabled independently of the fbdev drivers.
->> 
->> Split the Kconfig in two, one that only has the symbols for fbdev drivers
->> and another one that contains the fbdev core symbols.
->
-> ...
->
->>  source "drivers/video/fbdev/omap/Kconfig"
->>  source "drivers/video/fbdev/omap2/Kconfig"
->>  source "drivers/video/fbdev/mmp/Kconfig"
->> +
->> +source "drivers/video/fbdev/core/Kconfig"
->
-> Hmm... Shan't we start Kconfig from core options?
->
-
-I added after the drivers because Geert said that preferred that way
-(unless I misunderstood him from our conversations in IRC).
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+6.4.y is a stable kernel tree right now, so yes, it needs to be included
+there :)
 
