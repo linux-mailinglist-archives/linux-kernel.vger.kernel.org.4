@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B34746B18
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4C9746B1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjGDHvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S231523AbjGDHvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjGDHvd (ORCPT
+        with ESMTP id S229736AbjGDHvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:51:33 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A129B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:51:32 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b895a06484so9413555ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:51:32 -0700 (PDT)
+        Tue, 4 Jul 2023 03:51:37 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A679B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:51:36 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-5634db21a78so3639185eaf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:51:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688457091; x=1691049091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aMukUmhg9wLAu2yBqM0oINI7mMwOTLZl3bN36SrnOr8=;
-        b=cRVBIQCrKObRhmaLXecoUVxQsUHCjiJKYZ0ly8h6tFMoM0eLgUDXUWJk32DqnCxO+f
-         tGeGpE33VlCPoiqMfjSqd6S3tJ2TvTeLl7h0DUrokBmx8zDNIpVXhbzzzMGHZ5biNSav
-         y2d2OuhDSSGEvEXqc+mGYPELnmc8pkr1vb3j4=
+        d=chromium.org; s=google; t=1688457095; x=1691049095;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kK+di2LH2O2PIVMiKS4D/tuGXEaFYURT1f0nc5afMRA=;
+        b=AN1PbDYID8uXga3qYegkFGjesKwc0Hlh/fi8AmJAU1/smu162cLbw0Y60BCvXS/NQa
+         xxi7dK9Xc3uBscDPa3brvsKzNqz2xE6KDB/zQ94CKEkYBMGicId1sub8nxB7zvTwk449
+         5jItIUUfNJdzEetuDKpMFg599Q6jMYqYE5Ygc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688457091; x=1691049091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aMukUmhg9wLAu2yBqM0oINI7mMwOTLZl3bN36SrnOr8=;
-        b=IhZqbgWVuHE/qixOuyaRWfy3V2mNh7T2mF7iuD7CrQwyaY2v41GWeSauzi4Nw4bYiD
-         k4x1VKAODn7D/cKCA8wtgjevio4T2UpKhBWxoYHRpe2kd+372fR5sAIf2G/BbjPLn4Dp
-         bAZ3m1NM/MCbh8YIXq9j1IRegswb5MMnKbnTKPeTSHvPP+sQ3m1NtgrehJzq0lXKJLIp
-         eiymK7OHsKKMNPZiiHOzUaJVn8jE+T8oMJGkDOPa2bnTx+zqdB8gGS90H1frISNg1Lnh
-         UheekYXpRwN34261Riqc/2fmhq3BdBrN+GMMe/CsvXL4tNXDdoSI0CoPyxC6YXY5QOkf
-         Vf8Q==
-X-Gm-Message-State: ABy/qLZ5RwpN9axvI1tFFgJD0nxNFshs+ANgQP/OhdFlmHvUxm5E0xvB
-        684w95Ammfqeqf7r1WRawCpPhw==
-X-Google-Smtp-Source: APBJJlEctDgwHsY+S2P2fswARZSXKXk3Zs/xgfXsJF16vV890y1gz4uktViIaSV118r4sHxFU5Z0xA==
-X-Received: by 2002:a17:902:820a:b0:1b8:a720:f513 with SMTP id x10-20020a170902820a00b001b8a720f513mr310386pln.30.1688457091501;
-        Tue, 04 Jul 2023 00:51:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688457095; x=1691049095;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kK+di2LH2O2PIVMiKS4D/tuGXEaFYURT1f0nc5afMRA=;
+        b=BepksBy1zFXt1d/8UW5Io8ilnwQfuBZKOw5tiykOxL2hfw57+g9Oe5P94wsh5OiXpP
+         wP0qy0q8YbTv6A9dXVn5/ccdDj3CPFVrhuf0qYJMXzANlrUrHOK/i5tk8/oEouMdsvLK
+         EIa6YUh5di9SwwdrCzNtaBvy7Pqdp5TaE7OOjyo1tyMqIgEXWGGMdK21kKPG5xlR24Ez
+         yWkFpK/VTLFtr3rK7BYW8nS66aIbDVl7GDSd83nm0qisxmpbGpd8Gsf1+AuGWkRxzgQb
+         ONXnNuToa7EkRwHNtXKM/STD+zr3QJUt+mM9xBl6kSiNEpMNUtEk1e62Mq26iudAsWJc
+         HHhA==
+X-Gm-Message-State: AC+VfDy9AFmAFbPsgCLfMLVkVYpH1BSSA7uhe9asvzwK6HMoISyYlQg0
+        MZtxlHoP+4L4CJ1DaPONa45rSA==
+X-Google-Smtp-Source: ACHHUZ6QINB9a6PnyEez1WUpngKCHju6pHXnmFm3K1Dg70QA+/T/oNbclZKeG1lrixsFr0eCuXP5Nw==
+X-Received: by 2002:a05:6808:238d:b0:3a3:61fc:f913 with SMTP id bp13-20020a056808238d00b003a361fcf913mr15281455oib.0.1688457095409;
+        Tue, 04 Jul 2023 00:51:35 -0700 (PDT)
 Received: from localhost ([2401:fa00:8f:203:a11b:bff7:d8ae:bb0])
-        by smtp.gmail.com with UTF8SMTPSA id ix14-20020a170902f80e00b001b80b583092sm13758539plb.210.2023.07.04.00.51.29
+        by smtp.gmail.com with UTF8SMTPSA id px4-20020a17090b270400b0024e37e0a67dsm10734152pjb.20.2023.07.04.00.51.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 00:51:31 -0700 (PDT)
+        Tue, 04 Jul 2023 00:51:35 -0700 (PDT)
 From:   David Stevens <stevensd@chromium.org>
 X-Google-Original-From: David Stevens <stevensd@google.com>
 To:     Sean Christopherson <seanjc@google.com>
@@ -54,108 +55,74 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         Peter Xu <peterx@redhat.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org, David Stevens <stevensd@chromium.org>
-Subject: [PATCH v7 0/8] KVM: allow mapping non-refcounted pages
-Date:   Tue,  4 Jul 2023 16:50:45 +0900
-Message-ID: <20230704075054.3344915-1-stevensd@google.com>
+        kvm@vger.kernel.org
+Subject: [PATCH v7 1/8] KVM: Assert that a page's refcount is elevated when marking accessed/dirty
+Date:   Tue,  4 Jul 2023 16:50:46 +0900
+Message-ID: <20230704075054.3344915-2-stevensd@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+In-Reply-To: <20230704075054.3344915-1-stevensd@google.com>
+References: <20230704075054.3344915-1-stevensd@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+From: Sean Christopherson <seanjc@google.com>
 
-This patch series adds support for mapping VM_IO and VM_PFNMAP memory
-that is backed by struct pages that aren't currently being refcounted
-(e.g. tail pages of non-compound higher order allocations) into the
-guest.
+Assert that a page's refcount is elevated, i.e. that _something_ holds a
+reference to the page, when KVM marks a page as accessed and/or dirty.
+KVM typically doesn't hold a reference to pages that are mapped into the
+guest, e.g. to allow page migration, compaction, swap, etc., and instead
+relies on mmu_notifiers to react to changes in the primary MMU.
 
-Our use case is virtio-gpu blob resources [1], which directly map host
-graphics buffers into the guest as "vram" for the virtio-gpu device.
-This feature currently does not work on systems using the amdgpu driver,
-as that driver allocates non-compound higher order pages via
-ttm_pool_alloc_page.
+Incorrect handling of mmu_notifier events (or similar mechanisms) can
+result in KVM keeping a mapping beyond the lifetime of the backing page,
+i.e. can (and often does) result in use-after-free.  Yelling if KVM marks
+a freed page as accessed/dirty doesn't prevent badness as KVM usually
+only does A/D updates when unmapping memory from the guest, i.e. the
+assertion fires well after an underlying bug has occurred, but yelling
+does help detect, triage, and debug use-after-free bugs.
 
-First, this series replaces the __gfn_to_pfn_memslot API with a more
-extensible __kvm_faultin_pfn API. The updated API rearranges
-__gfn_to_pfn_memslot's args into a struct and where possible packs the
-bool arguments into a FOLL_ flags argument. The refactoring changes do
-not change any behavior, except as noted in the PPC change.
+Note, the assertion must use page_count(), NOT page_ref_count()!  For
+hugepages, the returned struct page may be a tailpage and thus not have
+its own refcount.
 
-When introduced in the refactoring, __kvm_faultin_pfn implies FOLL_GET
-to preserve existing behavior. From there, the API is made to support
-mapping non-refcounted pages by respecting the FOLL_GET flag.
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ virt/kvm/kvm_main.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-This series only adds support for non-refcounted pages to the x86 MMU.
-Other MMUs can likely be updated without too much difficulty, but it is
-not needed at this point. Updating other parts of KVM (e.g. pfncache) is
-not straightforward [2].
-
-[1]
-https://patchwork.kernel.org/project/dri-devel/cover/20200814024000.2485-1-gurchetansingh@chromium.org/
-[2] https://lore.kernel.org/all/ZBEEQtmtNPaEqU1i@google.com/
-
-v6 -> v7:
- - Replace __gfn_to_pfn_memslot with a more flexible __kvm_faultin_pfn,
-   and extend that API to support non-refcounted pages.
-v5 -> v6:
- - rebase on kvm next branch
- - rename gfn_to_pfn_page to gfn_to_pfn_noref
- - fix uninitialized outparam in error case of __kvm_faultin_pfn
- - add kvm_release_pfn_noref_clean for releasing pfn/page pair
-v4 -> v5:
- - rebase on kvm next branch again
-v3 -> v4:
- - rebase on kvm next branch again
- - Add some more context to a comment in ensure_pfn_ref
-v2 -> v3:
- - rebase on kvm next branch
-v1 -> v2:
- - Introduce new gfn_to_pfn_page functions instead of modifying the
-   behavior of existing gfn_to_pfn functions, to make the change less
-   invasive.
- - Drop changes to mmu_audit.c
- - Include Nicholas Piggin's patch to avoid corrupting refcount in the
-   follow_pte case, and use it in depreciated gfn_to_pfn functions.
- - Rebase on kvm/next
-David Stevens (7):
-  KVM: Introduce __kvm_follow_pfn function
-  KVM: Make __kvm_follow_pfn not imply FOLL_GET
-  KVM: x86/mmu: Migrate to __kvm_follow_pfn
-  KVM: x86/mmu: Don't pass FOLL_GET to __kvm_follow_pfn
-  KVM: arm64: Migrate to __kvm_follow_pfn
-  KVM: PPC: Migrate to __kvm_follow_pfn
-  KVM: remove __gfn_to_pfn_memslot
-
-Sean Christopherson (1):
-  KVM: Assert that a page's refcount is elevated when marking
-    accessed/dirty
-
- arch/arm64/kvm/mmu.c                   |  25 +--
- arch/powerpc/include/asm/kvm_book3s.h  |   2 +-
- arch/powerpc/kvm/book3s_64_mmu_hv.c    |  38 ++---
- arch/powerpc/kvm/book3s_64_mmu_radix.c |  50 +++---
- arch/powerpc/kvm/book3s_hv_nested.c    |   4 +-
- arch/x86/kvm/mmu/mmu.c                 |  77 ++++++---
- arch/x86/kvm/mmu/mmu_internal.h        |   1 +
- arch/x86/kvm/mmu/paging_tmpl.h         |   9 +-
- arch/x86/kvm/mmu/spte.c                |   4 +-
- arch/x86/kvm/mmu/spte.h                |  12 +-
- arch/x86/kvm/mmu/tdp_mmu.c             |  22 +--
- include/linux/kvm_host.h               |  26 +++
- virt/kvm/kvm_main.c                    | 210 +++++++++++++------------
- virt/kvm/kvm_mm.h                      |   3 +-
- virt/kvm/pfncache.c                    |   8 +-
- 15 files changed, 282 insertions(+), 209 deletions(-)
-
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index b838c8f71349..371bd783ff2b 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2885,6 +2885,19 @@ EXPORT_SYMBOL_GPL(kvm_vcpu_unmap);
+ 
+ static bool kvm_is_ad_tracked_page(struct page *page)
+ {
++	/*
++	 * Assert that KVM isn't attempting to mark a freed page as Accessed or
++	 * Dirty, i.e. that KVM's MMU doesn't have a use-after-free bug.  KVM
++	 * (typically) doesn't pin pages that are mapped in KVM's MMU, and
++	 * instead relies on mmu_notifiers to know when a mapping needs to be
++	 * zapped/invalidated.  Unmapping from KVM's MMU must happen _before_
++	 * KVM returns from its mmu_notifier, i.e. the page should have an
++	 * elevated refcount at this point even though KVM doesn't hold a
++	 * reference of its own.
++	 */
++	if (WARN_ON_ONCE(!page_count(page)))
++		return false;
++
+ 	/*
+ 	 * Per page-flags.h, pages tagged PG_reserved "should in general not be
+ 	 * touched (e.g. set dirty) except by its owner".
 -- 
 2.41.0.255.g8b1d071c50-goog
 
