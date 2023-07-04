@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F4215747604
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9025747605
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjGDQCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S231559AbjGDQCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjGDQCc (ORCPT
+        with ESMTP id S231488AbjGDQCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:02:32 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DCE7A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:02:30 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-766fd5f9536so425214385a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20221208.gappssmtp.com; s=20221208; t=1688486550; x=1691078550;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vGounWSX2Ta3v2i79JYImPXzwvWuhBfpeJNjehKi004=;
-        b=rc0Z7y7TRSX2d+1KPwiGFAhYt8WzwvmJqI3TYwOtVT7uvUJyHaeN5LaGt1mKP6LKnC
-         uKq/8vW9itima9B31SpAz2mexuJEkJdzIMVLK3cmvR/s+Y7cz9KbMRjSAgMJ+7VFtPVG
-         dIJu6aXSkK+O7myNN/V/OfAmFqOzWcohTDSY287Ugp/Fag9pxnuwih1IXXP6cNdp9XKK
-         lmXRumrxbC3Uemv/foXY+rq8vEePWATO3BKLYjB3LRWaqrVZhwfReNd4+XXK5P6fmFHk
-         ikG+Oh3DBXvPMPhfFoQHTQiPEtlhp2z93JMi/J6KDiEtY7ZJC7WpFdzK/n0WaokgzzGA
-         kRQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688486550; x=1691078550;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vGounWSX2Ta3v2i79JYImPXzwvWuhBfpeJNjehKi004=;
-        b=NmostboBlo+JGGqpS37LPP9XzUlxg3GtBX880mR2K1bnk6avnwUH/KUuZUUovccISk
-         jeJONbnSJqZg3gZkSabgzv2FLF8PNnwgWvorHx936J9lSov2cwbRZ11BGegCEaP9cK3M
-         MMeGmurMfvijSjvQXO514fl/AuzzMnc+8TcHs7rkUttCb6RK3nzj6BaeiRAwYIEWEhRw
-         Yqova8Wr+35mZeQGs2B8gaB3km36D5IVjuuwsI8oHxaypWGmjzRGZy6qo/hhfNdq6UFo
-         4AMgVBT5VLbdztGBitbzfdBtqg0JjcLDVJ3wlyErBvLztntDLuYidsiQc8ytsKJPRhAn
-         QnwA==
-X-Gm-Message-State: ABy/qLbFwYZQwBZibIV3Qm2Zi3vN8o9X//IdcFNizWfWofgfy5KNCfr7
-        k/xmmcsTElfnmKQLA93di1Et9A==
-X-Google-Smtp-Source: APBJJlE+NmKZaXt8xrhE1cfKOONdr0uQa7f/tA9YGQWR7rwjnOqQDPa3QaGrSLMkEeuqZM5bZwMHBg==
-X-Received: by 2002:a05:620a:4096:b0:765:575b:415 with SMTP id f22-20020a05620a409600b00765575b0415mr17754462qko.24.1688486549669;
-        Tue, 04 Jul 2023 09:02:29 -0700 (PDT)
-Received: from localhost.localdomain (modemcable125.110-19-135.mc.videotron.ca. [135.19.110.125])
-        by smtp.gmail.com with ESMTPSA id l15-20020ad4444f000000b0062439f05b87sm12659236qvt.45.2023.07.04.09.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 09:02:29 -0700 (PDT)
-From:   Jonathan Marek <jonathan@marek.ca>
-To:     freedreno@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
-        GPU), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm/dpu: add missing flush and fetch bits for DMA4/DMA5 planes
-Date:   Tue,  4 Jul 2023 12:01:04 -0400
-Message-Id: <20230704160106.26055-1-jonathan@marek.ca>
-X-Mailer: git-send-email 2.26.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 12:02:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3A210CF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:02:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F180C612F0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 16:02:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E318C433C7;
+        Tue,  4 Jul 2023 16:02:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688486567;
+        bh=K6O4QE0VUWya7g8/u6RPt+8szEvhoKa/X2Dx+F5+88c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c1lHn2THkohybSzBJUIFYn0e5Z5jZ01mHVjC/DXsf2mOax936+SRvOm0KykNCZuTw
+         JO0V0rSO6UThqO+wVNJwvnh8nzaPrgQu40V0hmTbJHZ41DGpYh3o9t1UbE2arqEtDv
+         6dvT/SDXglOiNTPxh8uzB4EguPuB9d4KSm/c3ng3cziGZNIVpypw62kNTF/7uSWJbs
+         US5VDo0rEJxZdvezo68ud3oPRkQKhfz5iVEkS5IfCPlnV8eOFIspBpZmbY0wfuPRQG
+         /nsSQOrdHajGHz3WCn2vO3r1ZUrMtHk/fcJzgxhsUUFEUWOlx+a/dIaM88ucG8Hsw1
+         R8Kf+jGYn5uXA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGiUH-00ATbr-1g;
+        Tue, 04 Jul 2023 17:02:45 +0100
+Date:   Tue, 04 Jul 2023 17:02:44 +0100
+Message-ID: <86pm57wtp7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zenghui Yu <yuzenghui@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kunkun Jiang <jiangkunkun@huawei.com>,
+        <wanghaibin.wang@huawei.com>
+Subject: Re: [PATCH] irqchip/gic-v4.1: Properly lock VPEs when doing a directLPI invalidation
+In-Reply-To: <ee9123ca-95fc-4482-cee1-965cfe6b89b4@huawei.com>
+References: <20230617073242.3199746-1-maz@kernel.org>
+        <b665e102-eba9-cd4f-5b4e-ccbd77444233@huawei.com>
+        <86wmzgx1va.wl-maz@kernel.org>
+        <ee9123ca-95fc-4482-cee1-965cfe6b89b4@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: yuzenghui@huawei.com, linux-kernel@vger.kernel.org, tglx@linutronix.de, jiangkunkun@huawei.com, wanghaibin.wang@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note that with this, DMA4/DMA5 are still non-functional, but at least
-display *something* in modetest instead of nothing or underflow.
+On Tue, 04 Jul 2023 16:42:32 +0100,
+Zenghui Yu <yuzenghui@huawei.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 2023/7/4 2:54, Marc Zyngier wrote:
+> > On Thu, 29 Jun 2023 15:52:24 +0100,
+> > Zenghui Yu <yuzenghui@huawei.com> wrote:
+> >> 
+> >> Hi Marc,
+> >> 
+> >> Nit: I think the Subject header can be changed to 'irqchip/gic-v4' as
+> >> the bug it fixes only affects GICv4 HW. v4.1 is unaffected.
+> > 
+> > I'm not so sure.
+> > 
+> > v4.0 didn't allow direct invalidation of VPE doorbells (we had to use
+> > the fake device hack), except for the HiSi special that implemented
+> > DirectLPI despite the presence of multiple ITSs. It was a violation of
+> > the architecture, but it really saved the day by making invalidations
+> > cheap enough.
+> 
+> [ I should've mentioned that I had reproduced the bug and tested your
+> patch on my 920, which is, yeah, a HiSi implementation of GICv4.0 with
+> DirectLPI supported. But ]
+> 
+> > 
+> > Only with v4.1 did we get architectural support for doorbell
+> > invalidation via a register instead of a command for a fake device.
+> > 
+> > So as far as the architecture is concerned, this should only affect
+> > v4.1. As a side effect, it also affect HiSi's v4.0 implementations.
+> 
+> ... iiuc the bug we're fixing is that we perform a register based
+> invalidation for doorbells (via its_vpe_[un]mask_irq/its_vpe_send_inv),
+> acquire and release the per-RD lock with a *race* against a concurrent
+> its_map_vm(), which would modify the vpe->col_idx behind our backs and
+> affect the lock we're looking for.
+> 
+> its_vpe_[un]mask_irq() are callbacks for the v4.0 irqchip, i.e.,
+> its_vpe_irq_chip.
+> 
+> With v4.1, we switch to use its_vpe_4_1_irq_chip and invalidate
+> doorbells by sending the new INVDB command (and shouldn't be affected by
+> this bug).
 
-Fixes: efcd0107727c ("drm/msm/dpu: add support for SM8550")
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Gah, of course you're right. And we hardly ever invalidate DBs with
+v4.1 anyway since we can always say whether we want the doorbell or
+not when exiting residency on the RD (based on trapping WFI or not).
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index bbdc95ce374a..52222af5975f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -51,7 +51,7 @@
- 
- static const u32 fetch_tbl[SSPP_MAX] = {CTL_INVALID_BIT, 16, 17, 18, 19,
- 	CTL_INVALID_BIT, CTL_INVALID_BIT, CTL_INVALID_BIT, CTL_INVALID_BIT, 0,
--	1, 2, 3, CTL_INVALID_BIT, CTL_INVALID_BIT};
-+	1, 2, 3, 4, 5};
- 
- static const struct dpu_ctl_cfg *_ctl_offset(enum dpu_ctl ctl,
- 		const struct dpu_mdss_cfg *m,
-@@ -206,6 +206,12 @@ static void dpu_hw_ctl_update_pending_flush_sspp(struct dpu_hw_ctl *ctx,
- 	case SSPP_DMA3:
- 		ctx->pending_flush_mask |= BIT(25);
- 		break;
-+	case SSPP_DMA4:
-+		ctx->pending_flush_mask |= BIT(13);
-+		break;
-+	case SSPP_DMA5:
-+		ctx->pending_flush_mask |= BIT(14);
-+		break;
- 	case SSPP_CURSOR0:
- 		ctx->pending_flush_mask |= BIT(22);
- 		break;
+Apologies for the noise, and thanks for putting me right!
+
+	M.
+
 -- 
-2.26.1
-
+Without deviation from the norm, progress is not possible.
