@@ -2,149 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BEB747609
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA55747611
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjGDQDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
+        id S231363AbjGDQF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbjGDQDo (ORCPT
+        with ESMTP id S230232AbjGDQF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:03:44 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551D210C8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:03:43 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-57a1f51d7a7so10806747b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:03:43 -0700 (PDT)
+        Tue, 4 Jul 2023 12:05:26 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E78E7A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:05:25 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-c2cf4e61bc6so6679726276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:05:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688486622; x=1691078622;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ThWaRfiQI9Y2zPB0jOGll+3lvvzwKEYuVB5/fEadW24=;
-        b=1G5ZKRpQvMi6W+jmE8ub5dJeJlxbYBL30Dld2sGE0jGIh4pBJkparpgbY6X3koq/jZ
-         9g+w0TuaYGHZl27XCXZmG+7CPzvq555V/M1u4Q1o6K8x8Ny1PLqYZEoRKCUHyb+Y70dI
-         uBRHmI/rt4y3gkCQlfmPG1mrv6Vp0NRaNPnW3xuq6LBs3vpTAK9mFbzVtQjSJdhDF3gn
-         OJOlc2lgtywf5qtUGf5eClnJ/DlUSgDiVgxe4+xMH66lLR9gKhagSbS7FM4N2TW1Ak9a
-         q7fzTwEYYTKo4YcVc/r5tuNaJO9KBQwhVG9584Mvf2RQ2kUyvk+4ApeeGd9aS7kq6QuH
-         tlGw==
+        d=linaro.org; s=google; t=1688486724; x=1691078724;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o0bIvavwh39cojjj0M3fvmyiHYK336zCUqmMtpFKq3o=;
+        b=Edx4/t0jJNXA8jsWr5MU02zwuPSSLKouBlotiGVO2PEEKkYWspwsE2gmMAJ1YStbt6
+         Vx2HhgcGeXS7F0/zp02eyLdLrWAS8yGBcttzJQWwVS0AOuf35FRjLAmvQqaPKsMlskKN
+         MLIsdE+qEW2XzICZIVVUJQt3On/G43rhULaT5lj0YxS613ehByRGxvbLQBqTfwXkBmYO
+         GS6hnVGQS+5wjc1ku0yhufRCvkIVPaA2pbl0ZflQxTmznTBfGyfag97Nk/Wl/8Pyp1GF
+         AG01EEu0JswkjMoTz45AVfSotvsEZ2Q/6HBbhnc30qa6VI4AX5n57cXMIn0jlQWnvFDK
+         p5rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688486622; x=1691078622;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ThWaRfiQI9Y2zPB0jOGll+3lvvzwKEYuVB5/fEadW24=;
-        b=ZACL4t1Ufht2XtwV9IMJoSEYzlKShPLn6Uc253UDM3JlbblScL+0ysXriYQbFRdhVk
-         2UKpEy6CqJCG9Y9NvqpyCZ9t20AJVpd0hxNShtQaHoAva0KKfq9843OObuG1GeoL/VC7
-         De+q7LDnNQb9F9ci8c6qDKqSIu7i6dNRJAhvEWu0hTgztQ3imooNHKtYWRiXFcj61Jus
-         BnZ4uoBKHb9RuUYlACIMtiFpunTSxfk+henJ26jno73oAty8MhmlhUuB7qHkUj2cqmWW
-         +UqeShNu1cKwUPoS4faPvpuPmBNu0yKI7+71RqZ8HllXL5Tt7VHjjF73sm30H5o3QoIr
-         RaYA==
-X-Gm-Message-State: ABy/qLZpmFRH+esZ2xD/DyU2bLcDzV9arHRBqAhnPccN6KmpjLcq5fbt
-        4p2AVDVkbAajvTsIq7FIc7Cq0A==
-X-Google-Smtp-Source: APBJJlFQKEt+GJy0q7ZaawYolC37LR4/HdrndIBCrzGqd8RmTfZQfh9o4zEhy6GGc4uBo5NvU6StNw==
-X-Received: by 2002:a25:2307:0:b0:c16:8d80:227d with SMTP id j7-20020a252307000000b00c168d80227dmr13176783ybj.65.1688486622226;
-        Tue, 04 Jul 2023 09:03:42 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id v11-20020a25848b000000b00bf3438d6301sm4519026ybk.0.2023.07.04.09.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 09:03:41 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 09:03:29 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
- page
-In-Reply-To: <ZKQhW2aHJHsnkJhv@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-Message-ID: <c8aeb847-3d91-b5e5-48d1-20d411b58574@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com> <20230628211624.531cdc58@thinkpad-T15> <cd7c2851-1440-7220-6c53-16b343b1474@google.com> <ZJ2hsM5Tn+yUZ5ZV@ziepe.ca> <20230629175645.7654d0a8@thinkpad-T15>
- <edaa96f-80c1-1252-acbb-71c4f045b035@google.com> <7bef5695-fa4a-7215-7e9d-d4a83161c7ab@google.com> <ZKQhW2aHJHsnkJhv@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+        d=1e100.net; s=20221208; t=1688486724; x=1691078724;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o0bIvavwh39cojjj0M3fvmyiHYK336zCUqmMtpFKq3o=;
+        b=TChVJQ/lh3c79cSjH1VOS3vxEkA5q/OX5RaBxv6XfgfN3jCCirXKRyTMc7bG4oEEH/
+         8BMR744hYDIzBS0c/WFnNhmNY+ZHCGsWXQood4yP1P6VTX1HIPtT/ohWdbaductBSYBK
+         d81peEGjw1YjRiulzvCt2YNmRnKROVfJG43mQmo7baWQHFKypQTB1jYk0O91Yi7sSyLA
+         Y4ELPhGtmlsSxw1X5ZFVyCcSFCgfNIMkMg1cfh+1h87QzGX2pc5VtoWbAU96GLcBqSUC
+         YIlpc4w348XGQOWJfpNVY3vlvjTBQFiFwzC4y69Rc9DB1+Bx9iT0W7JSg0xyT3U3ikFq
+         zArg==
+X-Gm-Message-State: ABy/qLZ9vwgPKot8W8o+6gQ6HLtNq1A4VaRBhsFbE0uo73n4fqUmrHVR
+        TyDs+zcB1/kn+StnqbWeLd3Ppb1TWJAdRpt3WmA7fQ==
+X-Google-Smtp-Source: APBJJlFq9JMvEVBMpVGYtKel274O4gRqs6omP9fI/C3ozbtpysUcbqdytZ8XTtZ+cmvgsLz4DMPYU7RNnZJ53AyW5qg=
+X-Received: by 2002:a25:e789:0:b0:b9e:889:420f with SMTP id
+ e131-20020a25e789000000b00b9e0889420fmr14225188ybh.12.1688486724644; Tue, 04
+ Jul 2023 09:05:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230319125524.58803-1-aford173@gmail.com>
+In-Reply-To: <20230319125524.58803-1-aford173@gmail.com>
+From:   Yongqin Liu <yongqin.liu@linaro.org>
+Date:   Wed, 5 Jul 2023 00:05:13 +0800
+Message-ID: <CAMSo37Whxvp82i9hr-L-O4Qo9Pxkh5L+hFXqw9hNQ+asrD6oyA@mail.gmail.com>
+Subject: Re: [PATCH V2] drm/bridge: adv7533: Fix adv7533_mode_valid for
+ adv7533 and adv7535
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, dmitry.baryshkov@linaro.org,
+        aford@beaconembedded.com, Robert Foss <rfoss@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-kernel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023, Alexander Gordeev wrote:
-> On Sat, Jul 01, 2023 at 09:32:38PM -0700, Hugh Dickins wrote:
-> > On Thu, 29 Jun 2023, Hugh Dickins wrote:
-> 
-> Hi Hugh,
-> 
-> ...
-> > No, not quite the same rules as before: I came to realize that using
-> > list_add_tail() for the HH pages would be liable to put a page on the
-> > list which forever blocked reuse of PP list_add_tail() pages after it
-> > (could be solved by a list_move() somewhere, but we have agreed to
-> > prefer simplicity).
-> 
-> Just to make things more clear for me: do I understand correctly that this
-> was an attempt to add HH fragments to pgtable_list from pte_free_defer()?
+Hi, Adam, All
 
-Yes, from page_table_free() called from pte_free_defer(): I had claimed
-they could be put on the list (or not) without needing to consider their
-HH-ness, apart from wanting to list_add_tail() rather than list_add() them.
+On Sun, 19 Mar 2023 at 20:55, Adam Ford <aford173@gmail.com> wrote:
+>
+> When dynamically switching lanes was removed, the intent of the code
+> was to check to make sure that higher speed items used 4 lanes, but
+> it had the unintended consequence of removing the slower speeds for
+> 4-lane users.
+>
+> This attempts to remedy this by doing a check to see that the
+> max frequency doesn't exceed the chip limit, and a second
+> check to make sure that the max bit-rate doesn't exceed the
+> number of lanes * max bit rate / lane.
+>
+> Fixes: 9a0cdcd6649b ("drm/bridge: adv7533: remove dynamic lane switching from adv7533 bridge")
+> Reviewed-by: Robert Foss <rfoss@kernel.org>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+>
+> V2:  Fix whitespace in comment
+>      Remove TODO comment
+>      Add R-B from Robert.
 
-But then realized that this category of list_add_tail() pages would block
-access to the others.
+With this change, the ACK android-mainline based hikey960 build failed
+to show UI on the HDMI
+monitor connected, but it works if I revert this change.
+Here is the serial console output: http://ix.io/4zK8
 
-But I think I was mistaken then to say "could be solved by a list_move()
-somewhere"; because "somewhere" would have had to be __tlb_remove_table()
-when it removes PP-bits, which would bring us back to the issues of
-getting a spinlock from an mm which might already be freed.
+Not sure if you have any idea what the problem is there,
+and how to have it fixed.
 
-Hugh
+Please let me know if you need any other information.
+
+Thanks,
+Yongqin Liu
+
+> diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> index fdfeadcefe80..7e3e56441aed 100644
+> --- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> +++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> @@ -103,22 +103,19 @@ void adv7533_dsi_power_off(struct adv7511 *adv)
+>  enum drm_mode_status adv7533_mode_valid(struct adv7511 *adv,
+>                                         const struct drm_display_mode *mode)
+>  {
+> -       int lanes;
+> +       unsigned long max_lane_freq;
+>         struct mipi_dsi_device *dsi = adv->dsi;
+> +       u8 bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
+>
+> -       if (mode->clock > 80000)
+> -               lanes = 4;
+> -       else
+> -               lanes = 3;
+> -
+> -       /*
+> -        * TODO: add support for dynamic switching of lanes
+> -        * by using the bridge pre_enable() op . Till then filter
+> -        * out the modes which shall need different number of lanes
+> -        * than what was configured in the device tree.
+> -        */
+> -       if (lanes != dsi->lanes)
+> -               return MODE_BAD;
+> +       /* Check max clock for either 7533 or 7535 */
+> +       if (mode->clock > (adv->type == ADV7533 ? 80000 : 148500))
+> +               return MODE_CLOCK_HIGH;
+> +
+> +       /* Check max clock for each lane */
+> +       max_lane_freq = (adv->type == ADV7533 ? 800000 : 891000);
+> +
+> +       if (mode->clock * bpp > max_lane_freq * adv->num_dsi_lanes)
+> +               return MODE_CLOCK_HIGH;
+>
+>         return MODE_OK;
+>  }
+> --
+> 2.34.1
+>
+
+
+--
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
