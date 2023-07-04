@@ -2,96 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A275B746AA1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381C9746AA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjGDH2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S229624AbjGDH3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjGDH17 (ORCPT
+        with ESMTP id S229779AbjGDH3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:27:59 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8552C1A4
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:27:58 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51d804c7d14so5942521a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688455677; x=1691047677;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3YoY+iSD6Np9p95iaJOkPaZT5d5FqBDJwy3gxODYPIM=;
-        b=ZYwoymNdL4pHjRlq3LRAPmwddv8/opiq5FRFEUDc312dEzBw3nUl2ptJ81guCMMxkY
-         Q0Jo+fxLK+NYOVRi+TgUFm55kxo4lgi42H0vZZUvsUSLxyiXkOmSwCgRoWJ6yB07OHgw
-         kB6Bqp4U7xwf+RltOIXSkgdIflGTCilR+Yskip739qZZKZ9dV9qV8fEHfRATnCkI0MbI
-         JpmJHH/aw9Rm4Sw7EfoBvFtYEJULviPOT/l2PCP0LccJfsPlzOu5zWXdATNa8pXisFMU
-         jOJ+gvrNzf3k7QzkNY9em9+rbwdVr2xnGNDS0jffO01vH3ZgDyUou4cunpsMcZMzgni0
-         4Q0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688455677; x=1691047677;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3YoY+iSD6Np9p95iaJOkPaZT5d5FqBDJwy3gxODYPIM=;
-        b=bHN1+KkMRqCT5hdUs84DLwTHKDJ9WglvcvsmHLcm+9RS+f6nKcPAlHBZm7LnoJ5yHW
-         kmGYJGfgNLUMp+XEeT0VVs96z2uv6ofg/QkZFpIj4KQNE8o7GtClb0MR8HcXW5u/hW/D
-         oph1jsjQmaq7QEfeTVwou0OXj/lVvYP+ES5T7XkEUvgLcD6H+Ys4an9Xp5qQ0EgBH8RO
-         N39XEN8iSP1MncwRFt+oj99mjNTFtsPsragV/4B2iVSxuMvVo7HFcaZiCJCpdkz5r5s4
-         we2NLQGIgAGlgmdBO0IFolq0A7C9/J+9XyGRGWl8JkjorWgr2D2NNQ4bR7kwiOek8JIj
-         iCZQ==
-X-Gm-Message-State: ABy/qLacM/hUS9+4Xc3y/QP9KKICDoG+fwn2QL4vQnEe8BYFo6sNF91P
-        PGB847QhN5+jR+23xui0JAXmXA==
-X-Google-Smtp-Source: APBJJlF3lwsUUl5he9hWhqVwK2wsuzCzvElTQPZv9+BAYLgg8PPM83ZwmFKGnT7RGtq4NA18Bx4BqA==
-X-Received: by 2002:aa7:cb47:0:b0:51e:d4b:3c9d with SMTP id w7-20020aa7cb47000000b0051e0d4b3c9dmr4847864edt.23.1688455677150;
-        Tue, 04 Jul 2023 00:27:57 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id u21-20020a056402065500b0051de3c6c5e5sm6010424edx.94.2023.07.04.00.27.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 00:27:56 -0700 (PDT)
-Message-ID: <1df9a1cd-980f-3f09-fbbb-bc24b80af8fb@linaro.org>
-Date:   Tue, 4 Jul 2023 09:27:53 +0200
+        Tue, 4 Jul 2023 03:29:01 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550D71A4;
+        Tue,  4 Jul 2023 00:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688455740; x=1719991740;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dd1Sg+yvGRCMK4qS7rla7Bc3UQ0v4Y0W0jwyCQOUzaY=;
+  b=EBVvWZxDQzspoZx5ARhmHDVqgQ063Dt91+OBcyrLnRmUFf8XzD/Tg2iE
+   tT1bM/Y4Jp7FS2oDFsBqlr5ntZuDvlyOfHhwA0E35gChRkW5K1ih6oHR8
+   wexqbSecOEOc0umrfSXlybHKUv0RkL6HWHDbv4WEQpuNLfcl2NG5ODQCp
+   ljVKx6ei3nQ+eEVUMlXKFuxwojpJj/m+pfyxWTMWtHQ/L8+7B8zCkcgDh
+   F277qoQSkR4wIahJBJe1qvysHZNZUM31mldSuZYqzpCVDPl5MVJWXgkGw
+   XEJHHFae2ghXlvGfdbEyJYUkCxr3cXEtpzJtyrePWJjGMcD8cYopGKP9+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="426742223"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="426742223"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:28:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="753977598"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="753977598"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jul 2023 00:28:13 -0700
+Date:   Tue, 4 Jul 2023 15:28:12 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 11/22] x86/virt/tdx: Fill out TDMRs to cover all TDX
+ memory regions
+Message-ID: <20230704072812.3ihw26iqke5zntwq@yy-desk-7060>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <a4794b1c6fe8994bfe5fb6d3067bf2a7682fdb4a.1687784645.git.kai.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] drm/exynos: fix a possible null-pointer dereference due
- to data race in exynos_drm_crtc_atomic_disable()
-Content-Language: en-US
-To:     Tuo Li <islituo@gmail.com>
-Cc:     inki.dae@samsung.com, sw0312.kim@samsung.com,
-        kyungmin.park@samsung.com, airlied@gmail.com, daniel@ffwll.ch,
-        alim.akhtar@samsung.com, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@outlook.com, BassCheck <bass@buaa.edu.cn>
-References: <20230630021906.1035115-1-islituo@gmail.com>
- <207f70b5-e017-33bc-bf46-206b3fb69a04@linaro.org>
- <CADm8Ten-1yBdQFaETvS19j=_UFC4GEJqH38DU=7xPXLkOnvvzg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CADm8Ten-1yBdQFaETvS19j=_UFC4GEJqH38DU=7xPXLkOnvvzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4794b1c6fe8994bfe5fb6d3067bf2a7682fdb4a.1687784645.git.kai.huang@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 05:00, Tuo Li wrote:
-> Hello,
-> 
-> Thanks for your reply! The report is publicly available at
-> https://sites.google.com/view/basscheck/home. And this
-> patch is from the 8th report on this website.
+On Tue, Jun 27, 2023 at 02:12:41AM +1200, Kai Huang wrote:
+> Start to transit out the "multi-steps" to construct a list of "TD Memory
+> Regions" (TDMRs) to cover all TDX-usable memory regions.
+>
+> The kernel configures TDX-usable memory regions by passing a list of
+> TDMRs "TD Memory Regions" (TDMRs) to the TDX module.  Each TDMR contains
+> the information of the base/size of a memory region, the base/size of the
+> associated Physical Address Metadata Table (PAMT) and a list of reserved
+> areas in the region.
+>
+> Do the first step to fill out a number of TDMRs to cover all TDX memory
+> regions.  To keep it simple, always try to use one TDMR for each memory
+> region.  As the first step only set up the base/size for each TDMR.
+>
+> Each TDMR must be 1G aligned and the size must be in 1G granularity.
+> This implies that one TDMR could cover multiple memory regions.  If a
+> memory region spans the 1GB boundary and the former part is already
+> covered by the previous TDMR, just use a new TDMR for the remaining
+> part.
+>
+> TDX only supports a limited number of TDMRs.  Disable TDX if all TDMRs
+> are consumed but there is more memory region to cover.
+>
+> There are fancier things that could be done like trying to merge
+> adjacent TDMRs.  This would allow more pathological memory layouts to be
+> supported.  But, current systems are not even close to exhausting the
+> existing TDMR resources in practice.  For now, keep it simple.
+>
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
 
+Reviewed-by: Yuan Yao <yuan.yao@intel.com>
 
-Great, thank you!
-
-Best regards,
-Krzysztof
-
+>
+> v11 -> v12:
+>  - Improved comments around looping over TDX memblock to create TDMRs.
+>    (Dave).
+>  - Added code to pr_warn() when consumed TDMRs reaching maximum TDMRs
+>    (Dave).
+>  - BIT_ULL(30) -> SZ_1G (Kirill)
+>  - Removed unused TDMR_PFN_ALIGNMENT (Sathy)
+>  - Added tags from Kirill/Sathy
+>
+> v10 -> v11:
+>  - No update
+>
+> v9 -> v10:
+>  - No change.
+>
+> v8 -> v9:
+>
+>  - Added the last paragraph in the changelog (Dave).
+>  - Removed unnecessary type cast in tdmr_entry() (Dave).
+>
+> ---
+>  arch/x86/virt/vmx/tdx/tdx.c | 103 +++++++++++++++++++++++++++++++++++-
+>  arch/x86/virt/vmx/tdx/tdx.h |   3 ++
+>  2 files changed, 105 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index e28615b60f9b..2ffc1517a93b 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -341,6 +341,102 @@ static void free_tdmr_list(struct tdmr_info_list *tdmr_list)
+>  			tdmr_list->max_tdmrs * tdmr_list->tdmr_sz);
+>  }
+>
+> +/* Get the TDMR from the list at the given index. */
+> +static struct tdmr_info *tdmr_entry(struct tdmr_info_list *tdmr_list,
+> +				    int idx)
+> +{
+> +	int tdmr_info_offset = tdmr_list->tdmr_sz * idx;
+> +
+> +	return (void *)tdmr_list->tdmrs + tdmr_info_offset;
+> +}
+> +
+> +#define TDMR_ALIGNMENT		SZ_1G
+> +#define TDMR_ALIGN_DOWN(_addr)	ALIGN_DOWN((_addr), TDMR_ALIGNMENT)
+> +#define TDMR_ALIGN_UP(_addr)	ALIGN((_addr), TDMR_ALIGNMENT)
+> +
+> +static inline u64 tdmr_end(struct tdmr_info *tdmr)
+> +{
+> +	return tdmr->base + tdmr->size;
+> +}
+> +
+> +/*
+> + * Take the memory referenced in @tmb_list and populate the
+> + * preallocated @tdmr_list, following all the special alignment
+> + * and size rules for TDMR.
+> + */
+> +static int fill_out_tdmrs(struct list_head *tmb_list,
+> +			  struct tdmr_info_list *tdmr_list)
+> +{
+> +	struct tdx_memblock *tmb;
+> +	int tdmr_idx = 0;
+> +
+> +	/*
+> +	 * Loop over TDX memory regions and fill out TDMRs to cover them.
+> +	 * To keep it simple, always try to use one TDMR to cover one
+> +	 * memory region.
+> +	 *
+> +	 * In practice TDX supports at least 64 TDMRs.  A 2-socket system
+> +	 * typically only consumes less than 10 of those.  This code is
+> +	 * dumb and simple and may use more TMDRs than is strictly
+> +	 * required.
+> +	 */
+> +	list_for_each_entry(tmb, tmb_list, list) {
+> +		struct tdmr_info *tdmr = tdmr_entry(tdmr_list, tdmr_idx);
+> +		u64 start, end;
+> +
+> +		start = TDMR_ALIGN_DOWN(PFN_PHYS(tmb->start_pfn));
+> +		end   = TDMR_ALIGN_UP(PFN_PHYS(tmb->end_pfn));
+> +
+> +		/*
+> +		 * A valid size indicates the current TDMR has already
+> +		 * been filled out to cover the previous memory region(s).
+> +		 */
+> +		if (tdmr->size) {
+> +			/*
+> +			 * Loop to the next if the current memory region
+> +			 * has already been fully covered.
+> +			 */
+> +			if (end <= tdmr_end(tdmr))
+> +				continue;
+> +
+> +			/* Otherwise, skip the already covered part. */
+> +			if (start < tdmr_end(tdmr))
+> +				start = tdmr_end(tdmr);
+> +
+> +			/*
+> +			 * Create a new TDMR to cover the current memory
+> +			 * region, or the remaining part of it.
+> +			 */
+> +			tdmr_idx++;
+> +			if (tdmr_idx >= tdmr_list->max_tdmrs) {
+> +				pr_warn("initialization failed: TDMRs exhausted.\n");
+> +				return -ENOSPC;
+> +			}
+> +
+> +			tdmr = tdmr_entry(tdmr_list, tdmr_idx);
+> +		}
+> +
+> +		tdmr->base = start;
+> +		tdmr->size = end - start;
+> +	}
+> +
+> +	/* @tdmr_idx is always the index of the last valid TDMR. */
+> +	tdmr_list->nr_consumed_tdmrs = tdmr_idx + 1;
+> +
+> +	/*
+> +	 * Warn early that kernel is about to run out of TDMRs.
+> +	 *
+> +	 * This is an indication that TDMR allocation has to be
+> +	 * reworked to be smarter to not run into an issue.
+> +	 */
+> +	if (tdmr_list->max_tdmrs - tdmr_list->nr_consumed_tdmrs < TDMR_NR_WARN)
+> +		pr_warn("consumed TDMRs reaching limit: %d used out of %d\n",
+> +				tdmr_list->nr_consumed_tdmrs,
+> +				tdmr_list->max_tdmrs);
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Construct a list of TDMRs on the preallocated space in @tdmr_list
+>   * to cover all TDX memory regions in @tmb_list based on the TDX module
+> @@ -350,10 +446,15 @@ static int construct_tdmrs(struct list_head *tmb_list,
+>  			   struct tdmr_info_list *tdmr_list,
+>  			   struct tdsysinfo_struct *sysinfo)
+>  {
+> +	int ret;
+> +
+> +	ret = fill_out_tdmrs(tmb_list, tdmr_list);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/*
+>  	 * TODO:
+>  	 *
+> -	 *  - Fill out TDMRs to cover all TDX memory regions.
+>  	 *  - Allocate and set up PAMTs for each TDMR.
+>  	 *  - Designate reserved areas for each TDMR.
+>  	 *
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index 193764afc602..3086f7ad0522 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -123,6 +123,9 @@ struct tdx_memblock {
+>  	unsigned long end_pfn;
+>  };
+>
+> +/* Warn if kernel has less than TDMR_NR_WARN TDMRs after allocation */
+> +#define TDMR_NR_WARN 4
+> +
+>  struct tdmr_info_list {
+>  	void *tdmrs;	/* Flexible array to hold 'tdmr_info's */
+>  	int nr_consumed_tdmrs;	/* How many 'tdmr_info's are in use */
+> --
+> 2.40.1
+>
