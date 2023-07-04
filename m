@@ -2,94 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F377469A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 08:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982BE7469A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 08:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjGDGZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 02:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        id S230492AbjGDG0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 02:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjGDGZO (ORCPT
+        with ESMTP id S230014AbjGDG0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 02:25:14 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CB8E54
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 23:25:08 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9741caaf9d4so447330166b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 23:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688451907; x=1691043907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9gXLbcQakGOuD9xEtAslIaebWUauZ1RX8TuYQEBPUVc=;
-        b=xSMRQAliLvhuDESAsKTgXWLEaEErgpxYiZEp4WUdnlIajkTIjUdradyi6+28eYsRoK
-         1Up1eKR8cbP1LTZBIuBCbbTXMqjjUSaIFj4cXqEaW8+gWIP06tbOy85E07q7H5eVeFE+
-         JFoKWQDwsX3/AmNVO6vDr4RHvNsCcJD0+uUEE/vAtqhiYVwvYNltqNQEleay7Ge2MEzc
-         ztKz0CFae+BS9nwzQS9gDq6Ukwnjb5pZ5gIZ3ZEk79tWON7y5PpkMyYk2SLoCxuFlGDc
-         aGAb47E6ngH0D5V9bmqNdK2q/lgQNew1ptZJq35gIJEJ+P7J7K5Shjb45ry2QEE5DoP9
-         rF1g==
+        Tue, 4 Jul 2023 02:26:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6CBE62
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 23:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688451924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n1UW578Mk3qJeWq3VtxngfydoAxkUFd/Ag1VEF+BPYE=;
+        b=dj0XH1YaV7f+u8w4UVtv6r81f7yBmBBkPa1C4W4+ysRfJ/3fsebXffbRma0kgm4DTc8f3W
+        u2IMlZZ3VwNwQAvFRNBhPHv+lc86bSjcjY4O+KRZzkJBYaQuLuNlr3Z4umuvc/GXdi92eh
+        7q0C7Z0NFwWpXaE1HATddcbCkwscCWk=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-169-JUidL0RGMEOGkBpqLYMDug-1; Tue, 04 Jul 2023 02:25:23 -0400
+X-MC-Unique: JUidL0RGMEOGkBpqLYMDug-1
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-666ee6aeddbso5239106b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 23:25:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688451907; x=1691043907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gXLbcQakGOuD9xEtAslIaebWUauZ1RX8TuYQEBPUVc=;
-        b=Ihvvr3RJq04LIRWofoSrPUTK5efyuPLv5kk9aj+qZpkBnW3AOA3fC9N8AyJLyv1HYZ
-         LpYjD4QB6i0FV3AqJGuT9byaIoc0DyTD3S7FtbgRlv2DbNh9+wQUagZWHo4ERzSwSg3d
-         zhbkVFDJsoTFaUdMG0XF8GTVYwVZ2ipqE+w3MaJ4EGVaZYh/Hdn9VV9wBHl4Y1mRs4rI
-         3yQYLMBwSgwM05qQIsLDbr4BUQY1e4JSQiw07Ren2htftcoZ4x7EeMx+ijD65fIotvjq
-         pM2rcIZS/6M/JVJYk6d7SZe230UTjGCId86Pk7H6ZiB3OsV+KW903Asd0/H6pMmuuFbB
-         ntVg==
-X-Gm-Message-State: ABy/qLbMQNhojFvufMnuZQtPNLFxn4tMR9vmvn1kMC/WQ0vpajGIII+o
-        u0iBGKzlslocw86IrhVHbowB9w==
-X-Google-Smtp-Source: APBJJlFf70iU68uuAsACk+p1i0iiLiZZc2D4Lk4akWYnHOTrbQbjHx8k7fL02j7c1jBDCYaC3seXVA==
-X-Received: by 2002:a17:907:9844:b0:98e:2b00:c509 with SMTP id jj4-20020a170907984400b0098e2b00c509mr9125002ejc.30.1688451907419;
-        Mon, 03 Jul 2023 23:25:07 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id qq2-20020a17090720c200b00992aea2c55dsm6597272ejb.153.2023.07.03.23.25.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 23:25:07 -0700 (PDT)
-Message-ID: <08b503ac-98bd-dd8c-bf1e-c81f1ed0b47b@linaro.org>
-Date:   Tue, 4 Jul 2023 08:25:04 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 06/10] dt-bindings: pinctrl: qcom-pmic-gpio: Add pmx75
- support
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linus.walleij@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, sboyd@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688395346-3126-7-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1688395346-3126-7-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688451922; x=1691043922;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n1UW578Mk3qJeWq3VtxngfydoAxkUFd/Ag1VEF+BPYE=;
+        b=XhhmzNwsMHNRcli15zRkkHu70KIdmNuXdFXlETKQitSWWZB/WhUAgL9zm+hEgx6hwP
+         Z6AQYEiSLj/rYtmHCQsMvf/vHspvDK20xKvkeBIyrrjgpHLDYwnlaRPMVddijBNrhuN6
+         AJPYqCYGmQkxXoTWwN3NYdzNPXOHNG+YibrZAXBgbm8U6byxTxYt61Ulnk+Hzk3mXBZb
+         Y38v+8dfAUgbPcYEJqPGxNmZTbKfX38P89JsASEqR9v9eZtlsv8s7p5DqWm30PiP/6sq
+         hR70tMyceFomkO0VK27UVqs3xxyZJKQ0d/APdp3hU4NyQiIDHexVbRw3CdgGWQjaJKbD
+         CwsQ==
+X-Gm-Message-State: ABy/qLaJ0vslc97oXUf2Ei9xgIIQhFHN4kwDV2FnEsJZjV4Wc52k85PK
+        WLLt6hzwMHel7tlBe9WfCFi5cXCzHTvu1qGmlWUbXWzrL/TPfxNHoRdzj7ZKouL0u5fuJYZpixm
+        dtub4ptYGlLTkfxnKeICgf0gz
+X-Received: by 2002:a05:6a00:248f:b0:668:852a:ffc4 with SMTP id c15-20020a056a00248f00b00668852affc4mr14313188pfv.4.1688451922014;
+        Mon, 03 Jul 2023 23:25:22 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGUEat3h/Gp4e2swECKkXvj+rcpMv0mMF7hjDvc6iNbxstabGj8dzc4eRLol97NHSQTyjCYrA==
+X-Received: by 2002:a05:6a00:248f:b0:668:852a:ffc4 with SMTP id c15-20020a056a00248f00b00668852affc4mr14313175pfv.4.1688451921738;
+        Mon, 03 Jul 2023 23:25:21 -0700 (PDT)
+Received: from smtpclient.apple ([115.96.131.170])
+        by smtp.gmail.com with ESMTPSA id b15-20020aa7810f000000b0065da94fe921sm8688303pfi.50.2023.07.03.23.25.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jul 2023 23:25:21 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.3\))
+Subject: Re: [PATCH v3] hv/hv_kvp_daemon: Add support for keyfile config based
+ connection profile in NM
+From:   Ani Sinha <anisinha@redhat.com>
+In-Reply-To: <20230523053627.GA10913@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Date:   Tue, 4 Jul 2023 11:55:15 +0530
+Cc:     Wei Liu <wei.liu@kernel.org>, Olaf Hering <olaf@aepfle.de>,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D903A1FA-A56B-43B5-9A65-6F25EC0B5137@redhat.com>
+References: <1683265875-3706-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <20230508095340.2ca1630f.olaf@aepfle.de>
+ <ZFknuu+f74e1zHZe@liuwe-devbox-debian-v2>
+ <20230508191246.2fcd6eb5.olaf@aepfle.de>
+ <ZFkuY4dmwiPsUJ3+@liuwe-devbox-debian-v2>
+ <20230523053627.GA10913@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.3)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 16:42, Rohit Agarwal wrote:
-> Add support for the pmx75 GPIO support to the Qualcomm PMIC GPIO
-> binding.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> On 23-May-2023, at 11:06 AM, Shradha Gupta =
+<shradhagupta@linux.microsoft.com> wrote:
+>=20
+> On Mon, May 08, 2023 at 05:16:19PM +0000, Wei Liu wrote:
+>> On Mon, May 08, 2023 at 07:12:46PM +0200, Olaf Hering wrote:
+>>> Mon, 8 May 2023 16:47:54 +0000 Wei Liu <wei.liu@kernel.org>:
+>>>=20
+>>>> Olaf, is this a reviewed-by from you? :-)
+>>>=20
+>>> Sorry, I did not review the new functionality, just tried to make =
+sure there will be no regression for existing consumers.
+>>=20
+>> Okay, this is fine, too. Thank you for looking into this.
+>>=20
 
-Best regards,
-Krzysztof
+Folks, can we close on this patchset sooner? We at Red Hat also are =
+interested in seeing this feature merged.
+
+Thanks,
 
