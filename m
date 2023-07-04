@@ -2,167 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B05C7477A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBA17477A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjGDRTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S231932AbjGDRTz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 13:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGDRTa (ORCPT
+        with ESMTP id S231929AbjGDRTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:19:30 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B0F10D7;
-        Tue,  4 Jul 2023 10:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1688491164;
-        bh=XoqjGAAisrMB/Pfyua6e1oRHYcJ+y87IfUpKWBoC9wk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=N2D2FNXOyS0ABkYSbbOai7GzSARmAlho0m8eLsvqFxANOIuMOhO1LxydQEjhJqWyn
-         s4diZvaronIi3ssoqSJLXbG2Evq/maxxdpiOJUSEh/lXO8vRT9kOiXIgk6/vlSH72L
-         SoAmwZR1oFltK2T3OZT7oqpbU9kE+AnZRPw+R71IXS3aARtVDA+vkBW3RoghrODyGA
-         LNHHXSzwcvpj5hUxSspofjvrHBgPIgFJeLfkY/HYpuR6P21DoPavis1F8YwgHyI9Cm
-         lKxMFY44J/zevh4FFKsVftiCQZvvfa9EmOv/54AsOL+YBt7uD0VDfqyCww4cIbuzEA
-         6CZ5BEHfIqYSw==
-Received: from localhost (modemcable094.169-200-24.mc.videotron.ca [24.200.169.94])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QwTzv6tQ7z1C97;
-        Tue,  4 Jul 2023 13:19:23 -0400 (EDT)
-From:   Olivier Dion <odion@efficios.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-In-Reply-To: <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
-Organization: EfficiOS
-References: <87ttukdcow.fsf@laura>
- <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
-Date:   Tue, 04 Jul 2023 13:19:23 -0400
-Message-ID: <87ilazd278.fsf@laura>
+        Tue, 4 Jul 2023 13:19:54 -0400
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C0510E3;
+        Tue,  4 Jul 2023 10:19:50 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2b69e11fa0aso18954111fa.0;
+        Tue, 04 Jul 2023 10:19:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688491189; x=1691083189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=djFoL9yA4A3P0CFXEsgPw3vyPD7HgfIIM4MzWUQV+Cw=;
+        b=Wg0lsbRoh+KyiD5mbwca8Hy4fr5lQkLxQL9jJZcKjzruMVbUEdL55zwzLYhU+wzu/X
+         94Qr+rvIsnR/OonxLaYsA2/Zu03TD1fFOaZaMGskaZiQQ8iwU/U61cfapSXcy8nXj4Za
+         hbwL4OVDdbPo3Z06wN/DMqJLyz7c9NQrbJMtKRSGoZ4NcaRn0rjtBAL98wNBeCQg6ZXu
+         0AfmZcstCJpy0gqFn3wFLqCXUqMWrpRz/rCrULPE/wH05qRKhEOsJhXG8+RmBJ2z7g99
+         6nXhUnyr1sH4AfqfgtntpGDdvNgtfP+L4DuQvQEKZlcK1c5UkWrFRFBWV+l+o3S6oNf5
+         xx4Q==
+X-Gm-Message-State: ABy/qLZJpjTSl2Fz/xhj69XP0IM9igJE/AjsgN3pJIBP8884aAF+zbY1
+        qTHCDbQh4gAGw8/MZQAVQkqTH2LkqMxsYOhLczOB76OT
+X-Google-Smtp-Source: APBJJlFfoGZ7F1/ydLXS47EzcnpnC24NMO96NIFrzxf26OgEU6tONYZkEEZo9c5+C481ZPBt678CcegoWndFSWEMq7s=
+X-Received: by 2002:a05:651c:1a29:b0:2b6:af68:6803 with SMTP id
+ by41-20020a05651c1a2900b002b6af686803mr11320995ljb.4.1688491188712; Tue, 04
+ Jul 2023 10:19:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230703130125.997208-1-ben.dooks@codethink.co.uk>
+In-Reply-To: <20230703130125.997208-1-ben.dooks@codethink.co.uk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Jul 2023 19:19:37 +0200
+Message-ID: <CAJZ5v0icycz_6=h40WP1Yxu0QWFZT7fqKezax=ekb2mrbx5j8A@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: actbl2: change to be16/be32 types for big endian data
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     acpica-devel@lists.linuxfoundation.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lenb@kernel.org,
+        nvdimm@lists.linux.dev, Dan Williams <dan.j.williams@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
->> This is a request for comments on extending the atomic builtins API to
->> help avoiding redundant memory barriers.  Indeed, there are
+On Mon, Jul 3, 2023 at 3:01 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
 >
-> What atomic builtins API are you talking about?  The kernel's?  That's 
-> what it sounded like when I first read this sentence -- why else post 
-> your message on a kernel mailing list?
-
-Good point, we meant the `__atomic' builtins from GCC and Clang.  Sorry
-for the confusion.
-
-[...]
-
->> fully-ordered atomic operations like xchg and cmpxchg success in LKMM
->> have implicit memory barriers before/after the operations [1-2], while
->> atomic operations using the __ATOMIC_SEQ_CST memory order in C11/C++11
->> do not have any ordering guarantees of an atomic thread fence
->> __ATOMIC_SEQ_CST with respect to other non-SEQ_CST operations [3].
+> Some of the fields in struct acpi_nfit_control_region are used in big
+> endian format, and thus are generatng warnings from spare where the
+> member is passed to one of the conversion functions.
 >
-> After reading what you wrote below, I realized that the API you're 
-> thinking of modifying is the one used by liburcu for user programs.  
-> It's a shame you didn't mention this in either the subject line or the 
-> first few paragraphs of the email; that would have made understanding 
-> the message a little easier.
-
-Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
-the toolchain's atomic builtins and not the LKMM itself.  The reason why
-we've reached out to the Linux kernel developers is because the
-original Userspace RCU uatomic API is based on the LKMM.
-
-> In any case, your proposal seems reasonable to me at first glance, with 
-> two possible exceptions:
+> Fix the following sparse warnings by changing the data types:
 >
-> 1.	I can see why you have special fences for before/after load, 
-> 	store, and rmw operations.  But why clear?  In what way is 
-> 	clearing an atomic variable different from storing a 0 in it?
+> drivers/acpi/nfit/core.c:1403:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1403:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1403:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1403:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1412:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1412:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1412:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1412:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1421:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1421:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1421:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1421:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1430:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1430:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1430:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1430:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1440:25: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1440:25: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1440:25: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1440:25: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1449:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1449:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1449:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1449:41: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1468:41: warning: cast to restricted __le16
+> drivers/acpi/nfit/core.c:1502:41: warning: cast to restricted __le16
+> drivers/acpi/nfit/core.c:1527:41: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1527:41: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1527:41: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1527:41: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1527:41: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1527:41: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1792:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1792:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1792:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1792:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1794:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1794:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1794:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1794:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1795:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1795:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1795:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1795:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1795:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1795:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1798:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1798:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1798:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1798:33: warning: cast to restricted __be16
+> drivers/acpi/nfit/core.c:1799:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1799:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1799:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1799:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1799:33: warning: cast to restricted __be32
+> drivers/acpi/nfit/core.c:1799:33: warning: cast to restricted __be32
+>
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 
-We could indeed group the clear with the store.
+First off, this falls under the ACPICA rule mentioned before.
 
-We had two approaches in mind:
+Second, all ACPI is little-endian by the spec, so I'm not sure what is
+going on here.
 
-  a) A before/after pair by category of operation:
-
-     - load
-     - store
-     - RMW
-  
-  b) A before/after pair for every operation:
-
-     - load
-     - store
-     - exchange
-     - compare_exchange
-     - {add,sub,and,xor,or,nand}_fetch
-     - fetch_{add,sub,and,xor,or,nand}
-     - test_and_set
-     - clear
-
-If we go for the grouping in a), we have to take into account that the
-barriers emitted need to cover the worse case scenario.  As an example,
-Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
-returned value is not used.
-
-Therefore, for the grouping in a), all RMW would need to emit a memory
-barrier (with Clang on x86-64).  But with the scheme in b), we can emit
-the barrier explicitly for the exchange operation.  We however question
-the usefulness of this kind of optimization made by the compiler, since
-a user should use a store operation instead.
-
-> 2.	You don't have a special fence for use after initializing an 
-> 	atomic.  This operation can be treated specially, because at the 
-> 	point where an atomic is initialized, it generally has not yet 
-> 	been made visible to any other threads.
-
-I assume that you're referring to something like std::atomic_init from
-C++11 and deprecated in C++20?  I do not see any scenario on any
-architecture where a compiler would emit an atomic operation for the
-initialization of an atomic variable.  If a memory barrier is required
-in this situation, then an explicit one can be emitted using the
-existing API.
-
-In our case -- with the compiler's atomic builtins -- the initialization
-of a variable can be done without any atomic operations and does not
-require any memory barrier.  This is a consequence of being capable of
-working with integral-scalar/pointer type without an atomic qualifier.
-
-> Therefore the fence which would normally appear after a store (or
-> clear) generally need not appear after an initialization, and you
-> might want to add a special API to force the generation of such a
-> fence.
-
-I am puzzled by this.  Initialization of a shared variable does not need
-to be atomic until its publication.  Could you expand on this?
-
-Thanks for the feedback,
-	Olivier
-
--- 
-Olivier Dion
-EfficiOS Inc.
-https://www.efficios.com
+> ---
+>  drivers/acpi/nfit/core.c |  8 ++++----
+>  include/acpi/actbl2.h    | 18 +++++++++---------
+>  2 files changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+> index 07204d482968..0fcc247fdfac 100644
+> --- a/drivers/acpi/nfit/core.c
+> +++ b/drivers/acpi/nfit/core.c
+> @@ -2194,15 +2194,15 @@ static const struct attribute_group *acpi_nfit_region_attribute_groups[] = {
+>  /* enough info to uniquely specify an interleave set */
+>  struct nfit_set_info {
+>         u64 region_offset;
+> -       u32 serial_number;
+> +       __be32 serial_number;
+>         u32 pad;
+>  };
+>
+>  struct nfit_set_info2 {
+>         u64 region_offset;
+> -       u32 serial_number;
+> -       u16 vendor_id;
+> -       u16 manufacturing_date;
+> +       __be32 serial_number;
+> +       __be16 vendor_id;
+> +       __be16 manufacturing_date;
+>         u8 manufacturing_location;
+>         u8 reserved[31];
+>  };
+> diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
+> index 0029336775a9..c1df59aa8855 100644
+> --- a/include/acpi/actbl2.h
+> +++ b/include/acpi/actbl2.h
+> @@ -1716,18 +1716,18 @@ struct acpi_nfit_smbios {
+>  struct acpi_nfit_control_region {
+>         struct acpi_nfit_header header;
+>         u16 region_index;
+> -       u16 vendor_id;
+> -       u16 device_id;
+> -       u16 revision_id;
+> -       u16 subsystem_vendor_id;
+> -       u16 subsystem_device_id;
+> -       u16 subsystem_revision_id;
+> +       __be16 vendor_id;
+> +       __be16 device_id;
+> +       __be16  revision_id;
+> +       __be16 subsystem_vendor_id;
+> +       __be16 subsystem_device_id;
+> +       __be16 subsystem_revision_id;
+>         u8 valid_fields;
+>         u8 manufacturing_location;
+> -       u16 manufacturing_date;
+> +       __be16 manufacturing_date;
+>         u8 reserved[2];         /* Reserved, must be zero */
+> -       u32 serial_number;
+> -       u16 code;
+> +       __be32 serial_number;
+> +       __le16 code;
+>         u16 windows;
+>         u64 window_size;
+>         u64 command_offset;
+> --
+> 2.40.1
+>
