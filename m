@@ -2,140 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4939A746AAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF031746AB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjGDHcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
+        id S230494AbjGDHcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjGDHb7 (ORCPT
+        with ESMTP id S229624AbjGDHcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:31:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E4511C;
-        Tue,  4 Jul 2023 00:31:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A9B261161;
-        Tue,  4 Jul 2023 07:31:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C3EC433C9;
-        Tue,  4 Jul 2023 07:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688455917;
-        bh=PjGkpkF+D5SrFko09IJTFD6Zhw0UYMl5RKch1zse0Qg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qp+rv8Vv49+hvqq1oXM55Wa+O6EHGQZqgMJXYBFlr82XGZUgJ0xU6iTIBb/loM5UZ
-         anDO5a6Sh8n79een+STk7+DWV9JzvQEu/QK8eGRwFBCySPDB8KHpVrH7Lmj6Yp55dq
-         2tgMurMVVv6j58YTSa2VLA41B/TR9jgiT2ZrZfBs=
-Date:   Tue, 4 Jul 2023 08:31:55 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org, Vishal Bhoj <vishal.bhoj@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
-Subject: Re: [PATCH 5.15 00/15] 5.15.120-rc1 review
-Message-ID: <2023070427-filled-brewing-d678@gregkh>
-References: <20230703184518.896751186@linuxfoundation.org>
- <CA+G9fYueycAbx7DDR3S57d43UX49SOGnW6igQUZ0voEcapxdYw@mail.gmail.com>
- <d25d0195-b40e-2a03-de75-1bdc1aaf404c@gmx.de>
+        Tue, 4 Jul 2023 03:32:48 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B1A11C;
+        Tue,  4 Jul 2023 00:32:47 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-78362f57500so271178839f.3;
+        Tue, 04 Jul 2023 00:32:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688455966; x=1691047966;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/6OMYh5IbkuJhkVtA222shrGSiZUIaKu3Yl/3z7DSeI=;
+        b=WAYpbhzv5GO7tdwh4f7PI44kyLuGEIenr3Nm593vQ8V3/a+8gOVUJQAi62JKQ2UWy0
+         gWr+qSs+gMzCX0k5bBKXB2x8b5kQey9bmPsHTw5LJgnK7oljWXwNiqjVaPjPVtlDuGpI
+         50EZZUheegklLEc07mRt9zpOwq2ieXGroRUMPC7HFpS5DQ6TAlHr2UAIy6iyosRSA4Hd
+         S4py0vrL8f8X8YRd85iUuYLWiubGo7/oNHaejwPJrefW4j/lT2masIDNj0P5H1i54eVj
+         z+RefM/vPWBntbkVYnG3Ov63SkkSATSGwoN7cAirvYj8vax92iJfDa3yw5FZmx5jN0ua
+         yHjw==
+X-Gm-Message-State: AC+VfDyskukHQHdq+QaTCGqsp5ErBHT2VqS4++2vm3deGLU4gAJKrqyk
+        bXE6UMV0zUFPN+3Bs5Cm+g0EWCGiZw==
+X-Google-Smtp-Source: ACHHUZ5ZBWdw/np7sXrcUFJbEnnFpFSrla7vxr5ZBfA9bINWPkpe4fGc19lM78tkAdC6ByIGl4ywtg==
+X-Received: by 2002:a5e:8506:0:b0:785:d67c:d2a0 with SMTP id i6-20020a5e8506000000b00785d67cd2a0mr13546746ioj.2.1688455966313;
+        Tue, 04 Jul 2023 00:32:46 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id w29-20020a02cf9d000000b0041d7ad74b36sm5003056jar.17.2023.07.04.00.32.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 00:32:45 -0700 (PDT)
+Received: (nullmailer pid 1192025 invoked by uid 1000);
+        Tue, 04 Jul 2023 07:32:43 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d25d0195-b40e-2a03-de75-1bdc1aaf404c@gmx.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     shawnguo@kernel.org, linux-imx@nxp.com, abelvesa@kernel.org,
+        mturquette@baylibre.com, peng.fan@nxp.com, kernel@pengutronix.de,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org, s.hauer@pengutronix.de,
+        sboyd@kernel.org, shengjiu.wang@gmail.com,
+        linux-kernel@vger.kernel.org, conor+dt@kernel.org,
+        robh+dt@kernel.org
+In-Reply-To: <1688449175-1677-2-git-send-email-shengjiu.wang@nxp.com>
+References: <1688449175-1677-1-git-send-email-shengjiu.wang@nxp.com>
+ <1688449175-1677-2-git-send-email-shengjiu.wang@nxp.com>
+Message-Id: <168845596348.1191928.11987600164269347678.robh@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: clock: imx8-acm: Add audio clock mux
+ support
+Date:   Tue, 04 Jul 2023 01:32:43 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 09:16:36AM +0200, Helge Deller wrote:
-> On 7/4/23 09:00, Naresh Kamboju wrote:
-> > On Tue, 4 Jul 2023 at 00:27, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > 
-> > > This is the start of the stable review cycle for the 5.15.120 release.
-> > > There are 15 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Wed, 05 Jul 2023 18:45:08 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > > The whole patch series can be found in one patch at:
-> > >          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.120-rc1.gz
-> > > or in the git tree and branch at:
-> > >          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > > and the diffstat can be found below.
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > 
-> > Following build regressions noticed on stable-rc 5.15.
-> > This build failure started happening from v5.15.119 from date June 28, 2023.
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> > Regressions found on parisc:
-> > 
-> >    - build/gcc-11-allnoconfig
-> >    - build/gcc-11-defconfig
-> >    - build/gcc-11-tinyconfig
-> > 
-> > Build errors:
-> > =============
-> > arch/parisc/include/asm/assembly.h: Assembler messages:
-> > arch/parisc/include/asm/assembly.h:75: Error: symbol `sp' is already defined
-> > arch/parisc/include/asm/assembly.h:77: Error: symbol `ipsw' is already defined
-> > make[3]: *** [scripts/Makefile.build:391: arch/parisc/kernel/head.o] Error 1
-> > arch/parisc/include/asm/assembly.h: Assembler messages:
-> 
-> Greg, could you please pull in the following upstream commit?
-> It was backported to kernels > 6.0, but with newer binutils it's probably
-> needed for kernels < 6.0 as well:
-> 
-> commit b5b2a02bcaac7c287694aa0db4837a07bf178626
-> Author: Ben Hutchings <benh@debian.org>
-> Date:   Thu Jun 15 00:00:02 2023 +0200
-> 
->     parisc: Delete redundant register definitions in <asm/assembly.h>
-> 
->     We define sp and ipsw in <asm/asmregs.h> using ".reg", and when using
->     current binutils (snapshot 2.40.50.20230611) the definitions in
->     <asm/assembly.h> using "=" conflict with those:
-> 
->     arch/parisc/include/asm/assembly.h: Assembler messages:
->     arch/parisc/include/asm/assembly.h:93: Error: symbol `sp' is already defined
->     arch/parisc/include/asm/assembly.h:95: Error: symbol `ipsw' is already defined
-> 
->     Delete the duplicate definitions in <asm/assembly.h>.
-> 
->     Also delete the definition of gp, which isn't used anywhere.
-> 
->     Signed-off-by: Ben Hutchings <benh@debian.org>
->     Cc: stable@vger.kernel.org # v6.0+
->     Signed-off-by: Helge Deller <deller@gmx.de>
 
-Sure, now queued up!
+On Tue, 04 Jul 2023 13:39:33 +0800, Shengjiu Wang wrote:
+> Add the clock dt-binding file for audio clock mux. which
+> is the IP for i.MX8QM, i.MX8QXP, i.MX8DXL.
+> 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>  .../devicetree/bindings/clock/imx8-acm.yaml   | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/imx8-acm.yaml
+> 
 
-I'll be pushing out some -rc2 releases soon with this fix, and a few
-others that I missed in a bit.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-thanks for the report and the quick response,
+yamllint warnings/errors:
 
-greg k-h
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/imx8-acm.yaml: title: 'NXP i.MX8 Audio Clock Mux Binding' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
+	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1688449175-1677-2-git-send-email-shengjiu.wang@nxp.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
