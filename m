@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB2A746C9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9223C746C96
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjGDJAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
+        id S231766AbjGDJAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjGDJAx (ORCPT
+        with ESMTP id S230414AbjGDJAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:00:53 -0400
+        Tue, 4 Jul 2023 05:00:06 -0400
+X-Greylist: delayed 3349 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Jul 2023 02:00:03 PDT
 Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3F1127;
-        Tue,  4 Jul 2023 02:00:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F752127;
+        Tue,  4 Jul 2023 02:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
         s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=pdzv+xI6LcnCXo3BAyXVu+UZRpBEl0z68P4lik4FM0Y=; b=SptdBhtDVrom16wG6CY22PJmCD
-        TW/O4kCLRacvGZHoseVkItjx/fiyEsQl2mku4SZ2+PJ79qxyh8qjJ+TcPIeT3MdU9MDRyJrraT029
-        vBrAx9W2zj443I0oyLjSMmJA6S7wEB0WZbjaG2j3StRLjSUNMCf3k88KCFG3HIQkGexBnBPBn+4ml
-        MNfNrCZAceWZp6Ta0CTcA5E1ry79b21fo2a7HN4U+P55f1X2h4UbC8zz7rkNe0YyLx5xa6g13ujEn
-        mZgvBE+Uu/gQXNCq3GeCzYX8yGEefzB+CTr0vUPuTiZuYRsudQt48NHJMUKQW4sl1/3OCJTxRan5m
-        QcSbqU8Q==;
+        bh=jM+TtMP9aKuqji/7LgTWiurmTk0GfsL2Jv2TGbk6/bU=; b=PZNwwdZO7AB9Wp+MmHl7kWIWmW
+        9fvQRGFrIzF2mRupJNfp4ag+TIBZqrZ/bcf1WqBURdEmK7GBfkwXLQ/d1cT5UWohTC2wcSmWSUs9w
+        3PV5fSBnUOPj5ZejUYMHUhvwZT2gS+vu680ICVZbPcgbJATB4Wgy3aGQ5P9IVMhgK4OHiBVvKxY6E
+        JtSvdA7F8howtiuUwm4nlYzqUjZvtQBQ1679UFznfZfvSUPd2Br2yXv4hE/EFtoa1U1/nqKGUQ3es
+        RGChHez9ofgNhh5Ze4Ud6lkHl3eZ8++l8lb1q2Tr9LrjlMCkgLMrkH/KHpSE9PNNK53kMSt0oN8rb
+        WPK1m9YQ==;
 Received: from [89.212.21.243] (port=50488 helo=localhost.localdomain)
         by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.96)
         (envelope-from <andrej.picej@norik.com>)
-        id 1qGb19-009KMj-30;
-        Tue, 04 Jul 2023 10:04:11 +0200
+        id 1qGb1A-009KMj-01;
+        Tue, 04 Jul 2023 10:04:12 +0200
 From:   Andrej Picej <andrej.picej@norik.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
         kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, upstream@phytec.de
-Subject: [PATCH 1/2] ARM: dts: imx6: phytec: fix RTC interrupt level
-Date:   Tue,  4 Jul 2023 10:03:03 +0200
-Message-Id: <20230704080304.816942-2-andrej.picej@norik.com>
+Subject: [PATCH 2/2] ARM: dts: imx6: pfla02: Fix SD card reboot problem
+Date:   Tue,  4 Jul 2023 10:03:04 +0200
+Message-Id: <20230704080304.816942-3-andrej.picej@norik.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230704080304.816942-1-andrej.picej@norik.com>
 References: <20230704080304.816942-1-andrej.picej@norik.com>
@@ -67,31 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RTC interrupt level should be set to "LOW". This was revealed by the
-introduction of commit:
-
-  f181987ef477 ("rtc: m41t80: use IRQ flags obtained from fwnode")
-
-which changed the way IRQ type is obtained.
+If regulator is not marked as always-on the regulator gets disabled on
+reboot breaking the next boot.
 
 Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 ---
- arch/arm/boot/dts/imx6qdl-phytec-mira.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-phytec-mira.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-mira.dtsi
-index 1a599c294ab8..1ca4d219609f 100644
---- a/arch/arm/boot/dts/imx6qdl-phytec-mira.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-phytec-mira.dtsi
-@@ -182,7 +182,7 @@ i2c_rtc: rtc@68 {
- 		pinctrl-0 = <&pinctrl_rtc_int>;
- 		reg = <0x68>;
- 		interrupt-parent = <&gpio7>;
--		interrupts = <8 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts = <8 IRQ_TYPE_LEVEL_LOW>;
- 		status = "disabled";
- 	};
- };
+diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+index 80adb2a02cc9..25d6a036d5b8 100644
+--- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+@@ -192,6 +192,7 @@ vdd_3v3_pmic_io_reg: ldo6 {
+ 			vdd_sd0_reg: ldo9 {
+ 				regulator-min-microvolt = <3300000>;
+ 				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
+ 			};
+ 
+ 			vdd_sd1_reg: ldo10 {
 -- 
 2.25.1
 
