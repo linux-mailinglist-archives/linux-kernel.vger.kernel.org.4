@@ -2,64 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9C7747032
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B569747037
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjGDLzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 07:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S230262AbjGDL4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 07:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGDLzE (ORCPT
+        with ESMTP id S229441AbjGDL4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 07:55:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE66DAF;
-        Tue,  4 Jul 2023 04:55:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DBEB6121F;
-        Tue,  4 Jul 2023 11:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3574C433C8;
-        Tue,  4 Jul 2023 11:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688471701;
-        bh=PTDbCPaR6uX8PvQlhuK8A36BSPCbCEz7P9ZKnKcicq0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YHWfpZY60LtXCfmshUNa2DsEmFUfLYIEqJONCmA/2aXt5vwiefGzwy/uDOB4IVeRa
-         jY+5xwJQ2f3jHU2RaXAs3l8eKCsGSrGnCUqojJs9vUkv93ZeXkgsyYvqCVR1x2MU+c
-         OjiH2leYI8e//6TvM0RVK4CZf5gI40D3PrzFDh1vkJhlBZ/8uR9r2OZ/oINnN/Bpte
-         1xKlY9Wn+QhKblV6vm8F3HVpnPS8x8RfoU2kzS5inkmFy6YY2CfE8U8NUSVjfkMuJQ
-         xqS8QSM1hHRza8ZZn9hxvAJ7JLTzn4RjQPL7JxhHFzdmAFLOSO1ySDSuVpLz8VVSYh
-         TU/FBXwN14IgQ==
-Date:   Tue, 4 Jul 2023 12:54:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: dwc: Provide deinit callback for i.MX
-Message-ID: <9e7d3961-4189-4141-a342-d15a34fefc9d@sirena.org.uk>
-References: <20230703-pci-imx-regulator-cleanup-v1-1-b6c050ae2bad@kernel.org>
- <CAOMZO5AghPUsVqMRdByR9hOatwHmgx90mq1HyZYFGkw1WaAY_Q@mail.gmail.com>
+        Tue, 4 Jul 2023 07:56:11 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB81B18D
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:56:09 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b6a16254a4so82317021fa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 04:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688471768; x=1691063768;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0uWXTtzRor2oUBjLKY36+LrPcrmYgFnt2f4Nhe+LjrM=;
+        b=q7aZvds8czfjlapaHMKIwdPQCwgFWt1IKtjiUHAQPoEjrGHy+mK1M/cJw/cffU0Ex/
+         51J6HJx6cJ6xHxLcXgP4CEfDjmP3DANYxa+CzP1Zb1W3OuA9jgZeOZiVfy1BC4mvsTEs
+         fP0q0VwS+0tKoLbpv8nSSpG1NqhDBnUQxke7uL13g5hg6PTLeeV/TeSezakNs81C/qS8
+         9RQCAwiEsWUwVX2O3EOCXFYfxFnrzRCs/X9Fkb51c/M5OtXEJfDJDHNWMrUEFd771CGX
+         9MJ7CcWyA9A67FuJ5FnAlAoqY9KC8JtcjLvMLUEq+rNwvYFYFZCE55nOZUod6tRWZkzC
+         jHMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688471768; x=1691063768;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0uWXTtzRor2oUBjLKY36+LrPcrmYgFnt2f4Nhe+LjrM=;
+        b=flLXPLk1ps7xXy+hpYJU5aoKvtwylR67bwiNHcDHLnKegZAIoQ5ov5/y+E3p6qK6+v
+         oACfWiJi++Tk0sSDD6FTSZMZcoaaSABf8ucyvcSdpHUgtNK2WiW5f+wopW/KI8/c+IFm
+         PpaGMD091xjEPK9pJ+Ha35+66KFiJJtnGwA3wULukq94bQTx11agDzB7gM9zVy1St+iS
+         T9SgT5grC/gO25wVA8hcYSQD5tyI5BaBKyiNur+EZ29OnFOF7tZmLAxoXJnv9XCDmCI+
+         tTbffozPHp2795blqLqnOnz2kKWlc/H0xhwbsqkIhckQoW0BSwYrNNUZXNf2Yus8oqN9
+         Cr+Q==
+X-Gm-Message-State: ABy/qLblUMSXUlyXPrLTn2CBnbss4DuF0gdqSvkc4AGz68bUJZvVB+fU
+        NvmgEZpU8Zt+o6vs0/DLR/knEg==
+X-Google-Smtp-Source: APBJJlGw8dBuq5cZbx3NDZwnsFkt0mCIHTN1XIVUiZPCMEUC2O08bCKCyfsRQziZZTLyrzxRi7IvbA==
+X-Received: by 2002:a2e:87cb:0:b0:2b6:e7b7:74b3 with SMTP id v11-20020a2e87cb000000b002b6e7b774b3mr4344677ljj.27.1688471767931;
+        Tue, 04 Jul 2023 04:56:07 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id f6-20020a2e3806000000b00295a96a0f6csm5568146lja.102.2023.07.04.04.56.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 04:56:07 -0700 (PDT)
+Message-ID: <801e16d1-7c41-dd80-3ed5-7e3e1b578d06@linaro.org>
+Date:   Tue, 4 Jul 2023 14:56:06 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RJaCUe86uaOocYwV"
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5AghPUsVqMRdByR9hOatwHmgx90mq1HyZYFGkw1WaAY_Q@mail.gmail.com>
-X-Cookie: Memory fault - where am I?
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/2] clk: qcom: videocc-sm8350: Add SC8280XP support
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230703-topic-8280_videocc-v1-0-8959d4d0a93e@linaro.org>
+ <20230703-topic-8280_videocc-v1-2-8959d4d0a93e@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230703-topic-8280_videocc-v1-2-8959d4d0a93e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,50 +85,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/07/2023 21:09, Konrad Dybcio wrote:
+> SC8280XP, being a partial derivative of SM8350, shares almost the exact
+> same videocc block. Extend the 8350 driver to support the bigger brother.
+> 
+> The only notable changes are higher possible frequencies on some clocks
+> and some switcheroo within the XO/sleep registers (probably due to some
+> different board crystal configuration).
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
---RJaCUe86uaOocYwV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-On Tue, Jul 04, 2023 at 08:50:15AM -0300, Fabio Estevam wrote:
+Minor nits below
 
-> I recall seeing this regulator warning before:
-> f81f095e8771 ("PCI: imx6: Allow to probe when dw_pcie_wait_for_link() fai=
-ls")
+> ---
+>   drivers/clk/qcom/videocc-sm8350.c | 42 ++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 41 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/qcom/videocc-sm8350.c b/drivers/clk/qcom/videocc-sm8350.c
+> index b148877fc73d..581ad4440615 100644
+> --- a/drivers/clk/qcom/videocc-sm8350.c
+> +++ b/drivers/clk/qcom/videocc-sm8350.c
+> @@ -41,6 +41,10 @@ static const struct pll_vco lucid_5lpe_vco[] = {
+>   	{ 249600000, 1750000000, 0 },
+>   };
+>   
+> +static const struct pll_vco lucid_5lpe_vco_8280[] = {
 
-> I think the real issue is why does the probe fail when the link is not up?
+Nit: _sc8280xp?
 
-Well, they're both issues - if someone unloads or unbinds the driver we
-can still trigger this, even if the probe succeeded.
+> +	{ 249600000, 1800000000, 0 },
+> +};
+> +
+>   static const struct alpha_pll_config video_pll0_config = {
+>   	.l = 0x25,
+>   	.alpha = 0x8000,
+> @@ -159,6 +163,16 @@ static const struct freq_tbl ftbl_video_cc_mvs0_clk_src[] = {
+>   	{ }
+>   };
+>   
+> +static const struct freq_tbl ftbl_video_cc_mvs0_clk_src_8280[] = {
 
-> It should not fail to probe. At least, this was the original intention
-> with Rob's commit:
+And same here
 
-> 886a9c134755 ("PCI: dwc: Move link handling into common code")
+> +	F(720000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+> +	F(1014000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+> +	F(1098000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+> +	F(1332000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+> +	F(1599000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+> +	F(1680000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
+> +	{ }
+> +};
+> +
+>   static struct clk_rcg2 video_cc_mvs0_clk_src = {
+>   	.cmd_rcgr = 0xb94,
+>   	.mnd_width = 0,
+> @@ -181,6 +195,15 @@ static const struct freq_tbl ftbl_video_cc_mvs1_clk_src[] = {
+>   	{ }
+>   };
+>   
+> +static const struct freq_tbl ftbl_video_cc_mvs1_clk_src_8280[] = {
+> +	F(840000000, P_VIDEO_PLL1_OUT_MAIN, 1, 0, 0),
+> +	F(1098000000, P_VIDEO_PLL1_OUT_MAIN, 1, 0, 0),
+> +	F(1332000000, P_VIDEO_PLL1_OUT_MAIN, 1, 0, 0),
+> +	F(1600000000, P_VIDEO_PLL1_OUT_MAIN, 1, 0, 0),
+> +	F(1800000000, P_VIDEO_PLL1_OUT_MAIN, 1, 0, 0),
+> +	{ }
+> +};
+> +
+>   static struct clk_rcg2 video_cc_mvs1_clk_src = {
+>   	.cmd_rcgr = 0xbb4,
+>   	.mnd_width = 0,
+> @@ -499,6 +522,7 @@ static struct qcom_cc_desc video_cc_sm8350_desc = {
+>   
+>   static int video_cc_sm8350_probe(struct platform_device *pdev)
+>   {
+> +	u32 video_cc_xo_clk_cbcr = 0xeec;
+>   	struct regmap *regmap;
+>   	int ret;
+>   
+> @@ -510,6 +534,21 @@ static int video_cc_sm8350_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		return ret;
+>   
+> +	if (of_device_is_compatible(pdev->dev.of_node, "qcom,sc8280xp-videocc")) {
+> +		video_cc_sleep_clk_src.cmd_rcgr = 0xf38;
+> +		video_cc_sleep_clk.halt_reg = 0xf58;
+> +		video_cc_sleep_clk.clkr.enable_reg = 0xf58;
+> +		video_cc_xo_clk_src.cmd_rcgr = 0xf14;
+> +		video_cc_xo_clk_cbcr = 0xf34;
+> +
+> +		video_pll0.vco_table = video_pll1.vco_table = lucid_5lpe_vco_8280;
+> +		/* No change, but assign it for completeness */
+> +		video_pll0.num_vco = video_pll1.num_vco = ARRAY_SIZE(lucid_5lpe_vco_8280);
+> +
+> +		video_cc_mvs0_clk_src.freq_tbl = ftbl_video_cc_mvs0_clk_src_8280;
+> +		video_cc_mvs1_clk_src.freq_tbl = ftbl_video_cc_mvs1_clk_src_8280;
+> +	}
+> +
+>   	regmap = qcom_cc_map(pdev, &video_cc_sm8350_desc);
+>   	if (IS_ERR(regmap)) {
+>   		pm_runtime_put(&pdev->dev);
+> @@ -525,7 +564,7 @@ static int video_cc_sm8350_probe(struct platform_device *pdev)
+>   	 *      video_cc_xo_clk
+>   	 */
+>   	regmap_update_bits(regmap, 0xe58, BIT(0), BIT(0));
+> -	regmap_update_bits(regmap, 0xeec, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, video_cc_xo_clk_cbcr, BIT(0), BIT(0));
+>   
+>   	ret = qcom_cc_really_probe(pdev, &video_cc_sm8350_desc, regmap);
+>   	pm_runtime_put(&pdev->dev);
+> @@ -534,6 +573,7 @@ static int video_cc_sm8350_probe(struct platform_device *pdev)
+>   }
+>   
+>   static const struct of_device_id video_cc_sm8350_match_table[] = {
+> +	{ .compatible = "qcom,sc8280xp-videocc" },
+>   	{ .compatible = "qcom,sm8350-videocc" },
+>   	{ }
+>   };
+> 
 
-> +       return 0;
->=20
->  err_remove_edma:
->         dw_pcie_edma_remove(pci);
+-- 
+With best wishes
+Dmitry
 
-I have no idea about doing this, all the PCI on the board that I care
-about seems to work fine (and worked fine even with the failure, I'm not
-sure this is being generated by a link that's in use).
-
---RJaCUe86uaOocYwV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSkCI8ACgkQJNaLcl1U
-h9AdOAf+JjQDVzex+YNa8DZECCgYOVwY1gJ6m+ExNYxZ53AmiNfvp4VmQrp1Qtx4
-0swTzBob6WbTd2merzyOSLqa/AEe2vUAnsfFtVdQZybd2MSXiSQMXuZTgFXgUQ5q
-xIJqnUlQUMtXphxgMyPNZsF+qCXJHDWCc7ibgKBeYie186LlDrO39rTsnwz5M8P4
-GKH3hH3AU3CtmFI+H72C/TnAeCz8gbxwIxLrCneVT258OcyrnIXVg9u4K+x/1kMD
-kfoVXzoeFrGWYZLWH7+BbDqjmbct0xuhPed1QUfOiEnflgk6yOv6KFQ9wqAP1a9E
-8X5XelpIwi4BQdfBTaQqqQvYVJ88yw==
-=bPQV
------END PGP SIGNATURE-----
-
---RJaCUe86uaOocYwV--
