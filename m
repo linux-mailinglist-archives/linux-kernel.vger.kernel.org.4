@@ -2,160 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2612B747760
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3816747764
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjGDRCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S231148AbjGDRDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjGDRCR (ORCPT
+        with ESMTP id S229647AbjGDRDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:02:17 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A463DD;
-        Tue,  4 Jul 2023 10:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ZhKBZz3leN0Q/Za+oNwFkabEN7IhOztfe9NSL/Xa2k4=; b=dubEZWQxmthdk2SKqg+AyLH0Ot
-        hm/SdCHaj+Ob/1MGCG0vxvdG0x57hb2B7/455+cDr1M0uzGYAIlf9c17+t29Qjo6xGxdjRhnWD3Xk
-        R7C54ipJbxks0lhuYoCXt6ptzrJulc6FzanKKWFNvQisDg7BEbIOIuLAWEMW0o2gC2XQ=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57370 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qGjPh-0000qh-25; Tue, 04 Jul 2023 13:02:06 -0400
-Date:   Tue, 4 Jul 2023 13:02:04 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pierluigi Passaro <pierluigi.p@variscite.com>,
-        Nate Drude <nate.d@variscite.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
-In-Reply-To: <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
-References: <20230704150240.2022020-1-hugo@hugovil.com>
-        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
-        <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
-        <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
-        <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
-        <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Tue, 4 Jul 2023 13:03:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFFBE5B;
+        Tue,  4 Jul 2023 10:03:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9543261302;
+        Tue,  4 Jul 2023 17:03:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659C3C433C7;
+        Tue,  4 Jul 2023 17:03:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688490184;
+        bh=y9AqRwh1On0/kat6LbvFNyQPBwODOA6fSWAazX4k2/w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PksoyIFvpPZRdzl45MPP+VGF5sO9LknMMYjedKXz+n0nj1gpF9Tj0G2vE9CmjZP+Y
+         U7vOaUpIxZ5vIvOyk0uB7U30iSXFx/wAFd8+S+ieMIPHZ36+gPVIuvk6A62o1juUP+
+         uqrEMxDtAI3GbEa1MQAs89z67oLkaclTZVxAgYACSDdjVqHT3HVmWT6zQfG1f4eHql
+         mijQ7OQ3soPWIYx4EeUTZ5KGQeKSNBFatIfevjlF090tbWxQkufUSOhdOQowIHLWHg
+         yTP88J1xHEPm3nLDTqo5ODVS+LQmlm5s4lrMtOfLt0M3DSOPtowB41ezU7yoai6P25
+         DhHx9XoYifFbA==
+Date:   Tue, 4 Jul 2023 18:02:58 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        jirislaby@kernel.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com, kelvin.zhang@amlogic.com,
+        xianwei.zhao@amlogic.com, kernel@sberdevices.ru,
+        rockosov@gmail.com, linux-amlogic@lists.infradead.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 5/5] arm64: dts: meson: a1: change uart compatible
+ string
+Message-ID: <20230704-cannabis-cannon-19397cd806bc@spud>
+References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+ <20230704135936.14697-6-ddrokosov@sberdevices.ru>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EumZIp4agBc2nn9+"
+Content-Disposition: inline
+In-Reply-To: <20230704135936.14697-6-ddrokosov@sberdevices.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 12:55:41 -0400
-Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-> On Tue, 4 Jul 2023 13:33:10 -0300
-> Fabio Estevam <festevam@gmail.com> wrote:
-> 
-> > Adding some Variscite folks in case they can help to clarify.
-> > 
-> > On Tue, Jul 4, 2023 at 1:20 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > >
-> > > On 04/07/2023 17:31, Hugo Villeneuve wrote:
-> > > > On Tue, 4 Jul 2023 17:08:12 +0200
-> > > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> > > >
-> > > >> On 04/07/2023 17:02, Hugo Villeneuve wrote:
-> > > >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > >>>
-> > > >>> USB OTG is currently broken on the Variscite Symphony EVK and imx8mn
-> > > >>> nano SOM.
-> > > >>>
-> > > >>> Import changes from linux-5.15 branch of  doen't giveto fix it.
-> > > >>>
-> > > >>> Link: https://github.com/varigit/linux-imx.git
-> > > >>> Fixes: 7358e05bddca ("arm64: dts: imx8mn-var-som-symphony: Add Variscite Symphony board with VAR-SOM-MX8MN")
-> > > >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > >>> ---
-> > > >>>  .../dts/freescale/imx8mn-var-som-symphony.dts | 37 ++++++++++++++++++-
-> > > >>>  1 file changed, 35 insertions(+), 2 deletions(-)
-> > > >>>
-> > > >>> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> > > >>> index 406a711486da..aef89198f24c 100644
-> > > >>> --- a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> > > >>> +++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> > > >>> @@ -6,6 +6,7 @@
-> > > >>>
-> > > >>>  /dts-v1/;
-> > > >>>
-> > > >>> +#include <dt-bindings/usb/pd.h>
-> > > >>>  #include "imx8mn-var-som.dtsi"
-> > > >>>
-> > > >>>  / {
-> > > >>> @@ -104,10 +105,29 @@ extcon_usbotg1: typec@3d {
-> > > >>>             compatible = "nxp,ptn5150";
-> > > >>>             reg = <0x3d>;
-> > > >>>             interrupt-parent = <&gpio1>;
-> > > >>> -           interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-> > > >>> +           interrupts = <11 IRQ_TYPE_NONE>;
-> > > >>
-> > > >> That's surprising, why?
-> > > >
-> > > > Hi,
-> > > > the varigit repos log or source code has no information about this
-> > > > particular configuration.
-> > > >
-> > > > In the schematics, the interrupt output pin of the PTN5150 is connected
-> > > > to two different resistors, one of these being connected to GPIO1 pin
-> > > > 11. But these two resistors are not assembled on any versions of the
-> > > > board, so the interrupt pin is currently not used.
-> > >
-> > > OK, so there is no interrupt, but not interrupt of type none. Just drop
-> > > the property and make it optional in the bindings. The driver however
-> > > requires the interrupt, so I wonder how the device is going to work
-> > > without it?
-> > >
-> > > Are you sure that interrupt line is not shorted instead of missing resistor?
-> 
-> Hi,
-> Link for schematics:
-> https://www.variscite.com/wp-content/uploads/2019/07/Symphony-Board-Schematics.zip
-> 
-> In the schematics, both resistors R106 (connected to PTN5150 on one
-> side and GPIO1 pin 11 on the other size) and R131 have the text "NC"
-> near their reference designator. And I visually confirm that R106
-> and R131 are not soldered on the board.
-> 
-> However, GPIO1 pin 11 (the interrupt pin configured in the DTS) is
-> also connected to PTN5150 pin 9 (ID), which has a simple pull-up to
-> 3.3V. So from what I can see/deduce, the DTS interrupt pin
-> will always be 3.3V, and never pulled to GND.
+--EumZIp4agBc2nn9+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ok, I tought pin 9 (ID) was an input, but it is in fact an output
-driven by the PTN5150 so the last sentence is incorrect.
+On Tue, Jul 04, 2023 at 04:59:36PM +0300, Dmitry Rokosov wrote:
+> In the current implementation, the meson-a1 configuration incorporates a
+> unique compatibility tag "amlogic,meson-a1-uart' within the meson-uart
+> driver due to its usage of the new console device name "ttyS".
+> Consequently, the previous compatibility tag designated for the
+> 'amlogic,meson-gx-uart' configuration has become obsolete and is no
+> longer relevant to the current setup.
 
-Hugo.
+I don't really see why you would remove the gx-uart to be honest, and
+not use it as a fallback. Neil's platform though, so his call :)
+
+>=20
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/=
+dts/amlogic/meson-a1.dtsi
+> index c5567031ba12..6273b9c862b3 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> @@ -344,7 +344,7 @@ mux {
+>  			};
+> =20
+>  			uart_AO: serial@1c00 {
+> -				compatible =3D "amlogic,meson-gx-uart",
+> +				compatible =3D "amlogic,meson-a1-uart",
+>  					     "amlogic,meson-ao-uart";
+>  				reg =3D <0x0 0x1c00 0x0 0x18>;
+>  				interrupts =3D <GIC_SPI 25 IRQ_TYPE_EDGE_RISING>;
+> @@ -354,7 +354,7 @@ uart_AO: serial@1c00 {
+>  			};
+> =20
+>  			uart_AO_B: serial@2000 {
+> -				compatible =3D "amlogic,meson-gx-uart",
+> +				compatible =3D "amlogic,meson-a1-uart",
+>  					     "amlogic,meson-ao-uart";
+>  				reg =3D <0x0 0x2000 0x0 0x18>;
+>  				interrupts =3D <GIC_SPI 26 IRQ_TYPE_EDGE_RISING>;
+> --=20
+> 2.36.0
+>=20
+
+--EumZIp4agBc2nn9+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKRQwQAKCRB4tDGHoIJi
+0ni8AP9/Huiz85MEd1lWfxM1nHhevdkGu63rvkUGrwObPKXQFQEA+lioxbMrhHvJ
+V5pJjDNClLTeb0b2t8nCYmO1W1jkzgA=
+=H4B/
+-----END PGP SIGNATURE-----
+
+--EumZIp4agBc2nn9+--
