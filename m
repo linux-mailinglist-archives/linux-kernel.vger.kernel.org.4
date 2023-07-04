@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3240D746E1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199D8746E25
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 12:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbjGDJ7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
+        id S231441AbjGDKAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 06:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjGDJ7f (ORCPT
+        with ESMTP id S231252AbjGDKAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:59:35 -0400
+        Tue, 4 Jul 2023 06:00:20 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F9E119
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:58:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78807E5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:59:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688464721;
+        s=mimecast20190719; t=1688464774;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QkWg/7FR/3tJKua9El11o0Rt2pDwEJayH91NkgyElM8=;
-        b=SUl0TOR9vzZMj93gfrKyJAjEte5HoNGdZPWApvtxOOKwOqb2DUBPl3zOa+7JU8vW9Fixep
-        SIdJ5/CHSVEOALmNqiePcnprcoaNmcMj1wSX1qAchbcyNIMrHDSN6X+Vjog1CLqjTG+3P8
-        lAyPKzpDjDZy+WS5xjhCudrMm6xh7v0=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=892aSalStYsQtwptK7t1c8HIhOOHEUNVf5ArLGswb+M=;
+        b=clAFMLIO/SSTyVkTTgBIlXftRafs8ivjSjjfw2k7bslktXiGb1KMroyZysOSzOVl5cVQK1
+        F9DF73xSzIYV4DC3B15iTg2Y0AOwnsrVJf12Ni9Kd7WQmnYKLEpV9RVXu5V0ed/1gEdghp
+        bADxt142SO+hF2K9uPDqmwumY9yLqTg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-641-fDEepnKKOyGhyTM6zwAQ2Q-1; Tue, 04 Jul 2023 05:58:40 -0400
-X-MC-Unique: fDEepnKKOyGhyTM6zwAQ2Q-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-402391ed8ceso63267561cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 02:58:40 -0700 (PDT)
+ us-mta-19-pk1VdRpcNjWvH_AY0oExgg-1; Tue, 04 Jul 2023 05:59:33 -0400
+X-MC-Unique: pk1VdRpcNjWvH_AY0oExgg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-31273e0507dso3130545f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 02:59:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688464720; x=1691056720;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QkWg/7FR/3tJKua9El11o0Rt2pDwEJayH91NkgyElM8=;
-        b=MKaVNFztA1qU36MmPGZZ3z+20tpLnY3jBGkH6D+46wmXfTpW43y43MvAkW3cSmNp4R
-         Lxaz1ZTKL7iejd0VlGaxUxC75EdaowTlK7g//UHtR4RRpjFXW2jIRm/PvFDtDrfiDPFL
-         QwyJ3wxIwJ+/ACwxIqhrWzEKPdmnWQNQC0wRD9cGvgwWas3ZJ23azF/EKnmUtoYUr4QZ
-         by0BUSHI1DaP1H1JO6BeOhG/j+S2AL1f77VRpMA9rlBJCRIcV8WzDV4QrBUo4x3ErTy6
-         k82P7jSZEOkPz+P/QRMazaPyPz1Ck8eUP8+JdX6H4RLyEGJ+CYdX8aRC64lWvToR605y
-         X0iw==
-X-Gm-Message-State: AC+VfDxCOC4v51DXbexaLitodqg7UIPgIixUCi/Vxz+Lou0URsfjZak5
-        4CgF6KBVdpiEDnbMUUIUgQQO4MZxEycjcTt+gRDLARyVyZ+z/wUpt5nvxXNaowxad5B+myo6KBI
-        /4nfi8yN3BTaSMmyu46tzzolt4nf9cUv+Y54epMvL
-X-Received: by 2002:ac8:5787:0:b0:400:2195:bc with SMTP id v7-20020ac85787000000b00400219500bcmr17542910qta.24.1688464720120;
-        Tue, 04 Jul 2023 02:58:40 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4GSQgbaQjx2pP1UMW3jvTb4506O2MUzIHOHO26Lz3Y0xIbLnqCn4ADlSt8OsrjiZ4bMrJX4PO+Y//k2GkLux8=
-X-Received: by 2002:ac8:5787:0:b0:400:2195:bc with SMTP id v7-20020ac85787000000b00400219500bcmr17542904qta.24.1688464719942;
- Tue, 04 Jul 2023 02:58:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688464772; x=1691056772;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=892aSalStYsQtwptK7t1c8HIhOOHEUNVf5ArLGswb+M=;
+        b=KKhWpDHf67cqYFu9cQ+fuWS8iyHXUPXugCaR/y8Be4FjXD6l9s409PbkyIT9gCAQbb
+         Bbmuvtc66+eSH3E9aK+UEHCFt/RZ9FxHMwhZ0gakjEWOHUhT/EeOxtqfiByfLF58Urk/
+         xDp1CKKrDqUSZ0vX0czSN6biMZ//wpJIxvLf6pgrHhJs0JDzv4mx8RSpf5jxUHcvqc7t
+         3IyKngFycCzHhdZ2DRlqY4/EMUXoX3pQNodPxORKpN7un+1xOK5o96fnRZ/Y6TmUABPN
+         SWsmc/BRA9cxYjh7AOEdpx/tBqVC547SUNykhn5FGZtKZaMiYS092e9ZMgvRyHOQ4RFF
+         3UYg==
+X-Gm-Message-State: ABy/qLZ45cA5Fva4Hl4rvDszKi8JJWqxbEk2RMjNh/j9Y/P4qWRX9el0
+        tzs3kZxA5khrA8li6ofFR7GQiAHqEQz8iurg9TFIs1OJkfIc79R8v9EbbH5w0S8zQEOxSMc4tXF
+        lUF+Bxjc3l0w3kNVQq55jy2Ru
+X-Received: by 2002:a5d:61d1:0:b0:314:12c:4322 with SMTP id q17-20020a5d61d1000000b00314012c4322mr9924369wrv.4.1688464772566;
+        Tue, 04 Jul 2023 02:59:32 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFd/q5uFdR61nqrA+b7m+WX8tW3+kCffk5PcW2uKNzWMNMUWwL7eXK2DeOry/96kNoaIexczg==
+X-Received: by 2002:a5d:61d1:0:b0:314:12c:4322 with SMTP id q17-20020a5d61d1000000b00314012c4322mr9924352wrv.4.1688464772214;
+        Tue, 04 Jul 2023 02:59:32 -0700 (PDT)
+Received: from redhat.com ([2.52.13.33])
+        by smtp.gmail.com with ESMTPSA id x8-20020a5d60c8000000b003142b0d98b4sm8771005wrt.37.2023.07.04.02.59.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 02:59:31 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 05:59:28 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Maxime Coquelin <maxime.coquelin@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>, xieyongji@bytedance.com,
+        david.marchand@redhat.com, lulu@redhat.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
+Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
+Message-ID: <20230704055840-mutt-send-email-mst@kernel.org>
+References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
+ <20230702093530-mutt-send-email-mst@kernel.org>
+ <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
+ <571e2fbc-ea6a-d231-79f0-37529e05eb98@redhat.com>
+ <20230703174043-mutt-send-email-mst@kernel.org>
+ <0630fc62-a414-6083-eed8-48b36acc7723@redhat.com>
 MIME-Version: 1.0
-References: <20230703135526.930004-1-npache@redhat.com>
-In-Reply-To: <20230703135526.930004-1-npache@redhat.com>
-From:   Nico Pache <npache@redhat.com>
-Date:   Tue, 4 Jul 2023 05:58:13 -0400
-Message-ID: <CAA1CXcACazBN2Hy0NLVUpMWs_UmgvPn5968aJCOyy=NPmH5Q9Q@mail.gmail.com>
-Subject: Re: [RFC] arm64: properly define SOFT_DIRTY for arm64
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     aquini@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0630fc62-a414-6083-eed8-48b36acc7723@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -79,159 +87,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Whoops I pulled but never actually rebased... commit e1fd09e3d1dd
-("mm: x86, arm64: add arch_has_hw_pte_young()") changed
-arch_faults_on_old_pte() into !arch_has_hw_pte_young(). Following up
-with a V2 shortly.
+On Tue, Jul 04, 2023 at 10:43:07AM +0200, Maxime Coquelin wrote:
+> 
+> 
+> On 7/3/23 23:45, Michael S. Tsirkin wrote:
+> > On Mon, Jul 03, 2023 at 09:43:49AM +0200, Maxime Coquelin wrote:
+> > > 
+> > > On 7/3/23 08:44, Jason Wang wrote:
+> > > > On Sun, Jul 2, 2023 at 9:37 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > 
+> > > > > On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
+> > > > > > This small series enables virtio-net device type in VDUSE.
+> > > > > > With it, basic operation have been tested, both with
+> > > > > > virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+> > > > > > adding VDUSE support using split rings layout (merged in
+> > > > > > DPDK v23.07-rc1).
+> > > > > > 
+> > > > > > Control queue support (and so multiqueue) has also been
+> > > > > > tested, but requires a Kernel series from Jason Wang
+> > > > > > relaxing control queue polling [1] to function reliably.
+> > > > > > 
+> > > > > > [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
+> > > > > 
+> > > > > Jason promised to post a new version of that patch.
+> > > > > Right Jason?
+> > > > 
+> > > > Yes.
+> > > > 
+> > > > > For now let's make sure CVQ feature flag is off?
+> > > > 
+> > > > We can do that and relax on top of my patch.
+> > > 
+> > > I agree? Do you prefer a features negotiation, or failing init (like
+> > > done for VERSION_1) if the VDUSE application advertises CVQ?
+> > > 
+> > > Thanks,
+> > > Maxime
+> > 
+> > Unfortunately guests fail probe if feature set is inconsistent.
+> > So I don't think passing through features is a good idea,
+> > you need a list of legal bits. And when doing this,
+> > clear CVQ and everything that depends on it.
+> 
+> Since this is temporary, while cvq is made more robust, I think it is
+> better to fail VDUSE device creation if CVQ feature is advertised by the
+> VDUSE application, instead of ensuring features depending on CVQ are
+> also cleared.
+> 
+> Jason seems to think likewise, would that work for you?
+> 
+> Thanks,
+> Maxime
 
--- Nico
+Nothing is more permanent than temporary solutions.
+My concern would be that hardware devices then start masking CVQ
+intentionally just to avoid the pain of broken software.
 
-On Mon, Jul 3, 2023 at 10:06=E2=80=AFAM Nico Pache <npache@redhat.com> wrot=
-e:
->
-> ARM64 has a soft-dirty bit (software dirty) but never properly defines
-> CONFIG_ARCH_HAS_SOFT_DIRTY or its necessary functions. This patch
-> introduces the ability to set/clear the soft dirty bit in a similar
-> manner as the other arches that utilize it.
->
-> However, we must be careful... there are cases where the DBM bit is not
-> available and the software dirty bit plays a essential role in determinin=
-g
-> whether or not a page is dirty. In these cases we must not allow the
-> user to clear the software dirty bit. We can test for these cases by
-> utilizing the arch_faults_on_old_pte() function which test the availabili=
-ty
-> of DBM.
->
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> Cc: Liu Shixin <liushixin2@huawei.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Yu Zhao <yuzhao@google.com>
-> Signed-off-by: Nico Pache <npache@redhat.com>
-> ---
->  arch/arm64/Kconfig               |  1 +
->  arch/arm64/include/asm/pgtable.h | 77 +++++++++++++++++++++++++++++++-
->  2 files changed, 76 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 891ab530a665..4de491627f49 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -173,6 +173,7 @@ config ARM64
->         select HAVE_ARCH_PREL32_RELOCATIONS
->         select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
->         select HAVE_ARCH_SECCOMP_FILTER
-> +       select HAVE_ARCH_SOFT_DIRTY
->         select HAVE_ARCH_STACKLEAK
->         select HAVE_ARCH_THREAD_STRUCT_WHITELIST
->         select HAVE_ARCH_TRACEHOOK
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pg=
-table.h
-> index 0bd18de9fd97..a0a15ffa2417 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -121,8 +121,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t =
-phys)
->  })
->
->  #define pte_hw_dirty(pte)      (pte_write(pte) && !(pte_val(pte) & PTE_R=
-DONLY))
-> -#define pte_sw_dirty(pte)      (!!(pte_val(pte) & PTE_DIRTY))
-> -#define pte_dirty(pte)         (pte_sw_dirty(pte) || pte_hw_dirty(pte))
-> +#define pte_soft_dirty(pte)    (!!(pte_val(pte) & PTE_DIRTY))
-> +#define pte_dirty(pte)         (pte_soft_dirty(pte) || pte_hw_dirty(pte)=
-)
-> +#define pte_swp_soft_dirty(pte)        pte_soft_dirty(pte)
->
->  #define pte_valid(pte)         (!!(pte_val(pte) & PTE_VALID))
->  /*
-> @@ -1096,6 +1097,78 @@ static inline bool pud_sect_supported(void)
->         return PAGE_SIZE =3D=3D SZ_4K;
->  }
->
-> +#ifdef CONFIG_ARM64_HW_AFDBM
-> +/*
-> + * if we have the DBM bit we can utilize the software dirty bit as
-> + * a mechanism to introduce the soft_dirty functionality; however, witho=
-ut
-> + * it this bit is crucial to determining if a entry is dirty and we cann=
-ot
-> + * clear it via software. DBM can also be disabled or broken on some ear=
-ly
-> + * armv8 devices, so check its availability before modifying it.
-> + */
-> +static inline pte_t pte_clear_soft_dirty(pte_t pte)
-> +{
-> +       if (arch_faults_on_old_pte())
-> +               return pte;
-> +
-> +       return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline pte_t pte_mksoft_dirty(pte_t pte)
-> +{
-> +       if (arch_faults_on_old_pte())
-> +               return pte;
-> +
-> +       return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline pte_t pte_swp_clear_soft_dirty(pte_t pte)
-> +{
-> +       if (arch_faults_on_old_pte())
-> +               return pte;
-> +
-> +       return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline pte_t pte_swp_mksoft_dirty(pte_t pte)
-> +{
-> +       if (arch_faults_on_old_pte())
-> +               return pte;
-> +
-> +       return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline int pmd_soft_dirty(pmd_t pmd)
-> +{
-> +       return pte_soft_dirty(pmd_pte(pmd));
-> +}
-> +
-> +static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
-> +{
-> +       return pte_pmd(pte_clear_soft_dirty(pmd_pte(pmd)));
-> +}
-> +
-> +static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
-> +{
-> +       return pte_pmd(pte_mksoft_dirty(pmd_pte(pmd)));
-> +}
-> +
-> +#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-> +static inline int pmd_swp_soft_dirty(pmd_t pmd)
-> +{
-> +       return pmd_soft_dirty(pmd);
-> +}
-> +
-> +static inline pmd_t pmd_swp_clear_soft_dirty(pmd_t pmd)
-> +{
-> +       return pmd_clear_soft_dirty(pmd);
-> +}
-> +
-> +static inline pmd_t pmd_swp_mksoft_dirty(pmd_t pmd)
-> +{
-> +       return pmd_mksoft_dirty(pmd);
-> +}
-> +#endif /* CONFIG_ARCH_ENABLE_THP_MIGRATION */
-> +#endif /* CONFIG_ARM64_HW_AFDBM */
->
->  #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
->  #define ptep_modify_prot_start ptep_modify_prot_start
-> --
-> 2.41.0
->
+> > 
+> > 
+> > > > Thanks
+> > > > 
+> > > > > 
+> > > > > > RFC -> v1 changes:
+> > > > > > ==================
+> > > > > > - Fail device init if it does not support VERSION_1 (Jason)
+> > > > > > 
+> > > > > > Maxime Coquelin (2):
+> > > > > >     vduse: validate block features only with block devices
+> > > > > >     vduse: enable Virtio-net device type
+> > > > > > 
+> > > > > >    drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
+> > > > > >    1 file changed, 11 insertions(+), 4 deletions(-)
+> > > > > > 
+> > > > > > --
+> > > > > > 2.41.0
+> > > > > 
+> > > > 
+> > 
 
