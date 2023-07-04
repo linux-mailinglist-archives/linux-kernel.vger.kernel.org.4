@@ -2,140 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8E27468BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354A87468DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjGDFIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 01:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S230176AbjGDFVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 01:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjGDFH7 (ORCPT
+        with ESMTP id S229994AbjGDFVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:07:59 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7AE1B0
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:07:53 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-666e64e97e2so2651368b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 22:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1688447273; x=1691039273;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yEK3MGVob10iHTS5iKmj9mov/a9Z0JHKPt0QQ9mDo9g=;
-        b=Vybgv0OQeX/6z7nZ2kdt8af/KgUBNJE+NAoTuQ6oTimRuKBHhBlIA4pMTVyOskQEUc
-         RJSyf33iJhcVqr/xNVVCTsaUNnQ/OuxvHBKANMsxN3ghZLgF3dar8cE7MfAOh7gkSFDC
-         HecYFG8tkJGF1VzRXAPQA7p24XjA6j6q2J7TReMOvXKu+LZ6kqbxqJaubVzQaXH7hLXX
-         gzIaDJiTck4ZysH0NooOrld1rJDDpwA2SOWAfEElZ+rGlK0p/DvM4MnKKD48BGgXpEmC
-         JbcHkzGnDFiL1w8ExoXmw4YZjsS/OXp0bqHFMi/lKqREIYqQo0xjHremhE1jgZksiRmg
-         o8Wg==
+        Tue, 4 Jul 2023 01:21:47 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4ED8E52
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:21:41 -0700 (PDT)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D2EC43F734
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688448099;
+        bh=1v+am1Z8ymQUGghyM5chvEt9+BuF/dKqLqYQx56m9zI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=vB2FndN/lPH3vxR3Bwz6s+54wM8vqm/pYmDno2kkJVCm2Zl5magnsntALQ6gQ1nNM
+         gn5S15ylr0Z2UseHRDLjEJnSyzmhZ7bx1FtdzlA6nV1j/AQbS+1DCcTNOfwkzWA1Ae
+         rKfaRJKWf13iaFKBtbMd2WcYx5zu9TWVqZFEIRC809dB/rPev2E49Fd8Vwj+J2kp3Q
+         I9RMx9eSahCo9s/0rfDs3vCR9+4gnuF9PhqM21+GHZWGtVYDJTP3NqFnJXdw9T/F7U
+         7vREIpX31zGFPc/Os6Jk6cLI1D0DO5ZLS3RKLwR3UBwwDvu7Qbcg60CZz86iejqSHj
+         GF+E5FZyQxcww==
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9874fbf5c95so592377566b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 22:21:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688447273; x=1691039273;
+        d=1e100.net; s=20221208; t=1688448098; x=1691040098;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yEK3MGVob10iHTS5iKmj9mov/a9Z0JHKPt0QQ9mDo9g=;
-        b=Kem39yjgiHg3gM7dNHRTZ5kz5hh/UYZMspJJffFtVqk514OLt6XgvO3pmQrtEAaYP6
-         fctky3RbpEobhhL9g92WQEf0iy8IgwyniOgv3+ULNci7susyBzrJuCk+1/mFPkAG39ZJ
-         F0sVXpN09ItQ7/ymPY6SG35CzHhXT0fs/27a6D9HQgTFqSMhOtEDEqmpk4XZlvUNT7h5
-         tva12DPICVNGsCvwcnTOd+qpt3dUJi1f2CMgfUuulMIu8wKBHKskLO4nJjB3LbCxB0D+
-         dp5jSewYtyQVGRYyYmaFNTzmw+hboFYo2abyw/KOmpUI3epuO8rBvH6B/Qh/TL7ufM1P
-         Zl3Q==
-X-Gm-Message-State: ABy/qLaD7cz2YwPcC6RvK63wqnrwr45M0Zpwhk5X70a8Nnyq8LB0Bwf5
-        8clV1TURiFpw7jvVxgUmNmIkUw==
-X-Google-Smtp-Source: APBJJlFgr2ePE2VS5nmoQIhosRnrM+okwhC8T3OIv/v4UT43clXElusIoAUyB+8H9jJ2UsHZO/qzkQ==
-X-Received: by 2002:a05:6a00:13a1:b0:677:bdc:cd6b with SMTP id t33-20020a056a0013a100b006770bdccd6bmr13638452pfg.19.1688447272644;
-        Mon, 03 Jul 2023 22:07:52 -0700 (PDT)
-Received: from yc.huaqin.com ([101.78.151.205])
-        by smtp.gmail.com with ESMTPSA id y10-20020aa7804a000000b00669c99d05fasm14834333pfm.150.2023.07.03.22.07.49
+        bh=1v+am1Z8ymQUGghyM5chvEt9+BuF/dKqLqYQx56m9zI=;
+        b=HUkekSVtFhZgnKH1U7YbKPe5X9HVHVfhG9DBHACEh7gOUhWdQe3wA7FHe7Fu27i3LW
+         he85ukvKQ20VcTM0kesGCcAYvGHl/1r7Pbz8dYs/mQwG1qE6Io7BAlCxpQ3bze5J4J4r
+         lnYXowSfNq2am148ZTdVrNntu+VHdlAhry+tr4UVaPilBiKLEUK/XokB7k6xI+7/qjCI
+         pbDH93rU35woTJj39LSBF8j7U4SxVoWhg4KbAvcgbQBWb+9sjgfVO1hCb4A2okTd/Pce
+         EOUV8RzEEj2dxbMN6ZWj/kIEIx+0KUM2p3gQbwcN1OhK7RXauHIm3TN3YmYsxQYUgikK
+         KPDA==
+X-Gm-Message-State: AC+VfDy+GW08sYJYcsWJmMTmTJfoHdo6sghTIg9LSE3Ix3/nZLQpt2bH
+        kolpVtehHjXOtIErWRtErGUNhwuDroMXKhTmCJUTv6oWiY2S1BsMYdOizwwNG8iHnaPROyPGlOw
+        LRpp2uUjf81gIHuXPouqWJAfmfPKISB04LoypQ6xeaQ==
+X-Received: by 2002:a17:907:6e1b:b0:98e:1c4b:10e2 with SMTP id sd27-20020a1709076e1b00b0098e1c4b10e2mr13287223ejc.20.1688448098176;
+        Mon, 03 Jul 2023 22:21:38 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6KaBtBsknIGzT43R9yW1TZOTc6kL/88ouJOfFvTX2qde5kXfxpEFdhmAwOmJNRYKLkFyB6Sg==
+X-Received: by 2002:a17:907:6e1b:b0:98e:1c4b:10e2 with SMTP id sd27-20020a1709076e1b00b0098e1c4b10e2mr13287209ejc.20.1688448097892;
+        Mon, 03 Jul 2023 22:21:37 -0700 (PDT)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-95-234-206-203.retail.telecomitalia.it. [95.234.206.203])
+        by smtp.gmail.com with ESMTPSA id a10-20020a17090640ca00b0098e025cda3bsm12706377ejk.141.2023.07.03.22.21.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 22:07:52 -0700 (PDT)
-From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-To:     sam@ravnborg.org, neil.armstrong@linaro.org, daniel@ffwll.ch,
-        airlied@gmail.com, dianders@google.com, hsinyi@google.com
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-Subject: [PATCH] drm/panel: Add avdd/avee delay for Starry-himax83102-j02 and Starry-ili9882t panel
-Date:   Tue,  4 Jul 2023 13:07:44 +0800
-Message-Id: <20230704050744.1196293-1-yangcong5@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 03 Jul 2023 22:21:37 -0700 (PDT)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] btf, scripts: rust: drop is_rust_module.sh
+Date:   Tue,  4 Jul 2023 07:21:36 +0200
+Message-Id: <20230704052136.155445-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From power on/off sequence for panel data sheet[1], T2 timing VSP to VSN
-needs 1ms delay when power on, and VSN to VSP also needs 1ms delay when
-power off. Some pmic may not be able to adjust the delay internally, so
-let's add a delay between avdd/avee regulator gpio to meet the timing of
-panel.
+With commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+we are now able to use pahole directly to identify Rust compilation
+units (CUs) and exclude them from generating BTF debugging information
+(when DEBUG_INFO_BTF is enabled).
 
-[1]: https://github.com/HimaxSoftware/Doc/tree/main/Himax_Chipset_Power_Sequence
+And if pahole doesn't support the --lang-exclude flag, we can't enable
+both RUST and DEBUG_INFO_BTF at the same time.
 
-Fixes: 59bba51ec2a5 ("drm/panel: Fine tune Starry-ili9882t panel HFP and HBP")
-Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+So, in any case, the script is_rust_module.sh is just redundant and we
+can drop it.
+
+NOTE: we may also be able to drop the "Rust loadable module" mark
+inside Rust modules, but it seems safer to keep it for now to make sure
+we are not breaking any external tool that may potentially rely on it.
+
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 ---
- drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ rust/macros/module.rs     |  2 +-
+ scripts/Makefile.modfinal |  2 --
+ scripts/is_rust_module.sh | 16 ----------------
+ 3 files changed, 1 insertion(+), 19 deletions(-)
+ delete mode 100755 scripts/is_rust_module.sh
 
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-index dc276c346fd1..b44a6871d97c 100644
---- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-@@ -37,6 +37,7 @@ struct panel_desc {
- 	unsigned int lanes;
- 	bool discharge_on_disable;
- 	bool lp11_before_reset;
-+	int avdd_avee_delay;
- };
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index fb1244f8c2e6..d62d8710d77a 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -199,7 +199,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+             /// Used by the printing macros, e.g. [`info!`].
+             const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
  
- struct boe_panel {
-@@ -1798,6 +1799,7 @@ static int boe_panel_unprepare(struct drm_panel *panel)
- 
- 	if (boe->desc->discharge_on_disable) {
- 		regulator_disable(boe->avee);
-+		usleep_range(boe->desc->avdd_avee_delay, boe->desc->avdd_avee_delay * 2);
- 		regulator_disable(boe->avdd);
- 		usleep_range(5000, 7000);
- 		gpiod_set_value(boe->enable_gpio, 0);
-@@ -1808,6 +1810,7 @@ static int boe_panel_unprepare(struct drm_panel *panel)
- 		gpiod_set_value(boe->enable_gpio, 0);
- 		usleep_range(1000, 2000);
- 		regulator_disable(boe->avee);
-+		usleep_range(boe->desc->avdd_avee_delay, boe->desc->avdd_avee_delay * 2);
- 		regulator_disable(boe->avdd);
- 		usleep_range(5000, 7000);
- 		regulator_disable(boe->pp1800);
-@@ -1843,6 +1846,7 @@ static int boe_panel_prepare(struct drm_panel *panel)
- 	ret = regulator_enable(boe->avdd);
- 	if (ret < 0)
- 		goto poweroff1v8;
-+	usleep_range(boe->desc->avdd_avee_delay, boe->desc->avdd_avee_delay * 2);
- 	ret = regulator_enable(boe->avee);
- 	if (ret < 0)
- 		goto poweroffavdd;
-@@ -2134,6 +2138,7 @@ static const struct panel_desc starry_himax83102_j02_desc = {
- 		      MIPI_DSI_MODE_LPM,
- 	.init_cmds = starry_himax83102_j02_init_cmd,
- 	.lp11_before_reset = true,
-+	.avdd_avee_delay = 1500,
- };
- 
- static const struct drm_display_mode starry_ili9882t_default_mode = {
-@@ -2162,6 +2167,7 @@ static const struct panel_desc starry_ili9882t_desc = {
- 		      MIPI_DSI_MODE_LPM,
- 	.init_cmds = starry_ili9882t_init_cmd,
- 	.lp11_before_reset = true,
-+	.avdd_avee_delay = 1500,
- };
- 
- static int boe_panel_get_modes(struct drm_panel *panel,
+-            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
++            /// The \"Rust loadable module\" mark.
+             //
+             // This may be best done another way later on, e.g. as a new modinfo
+             // key or a new section. For the moment, keep it simple.
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index fc19f67039bd..b3a6aa8fbe8c 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -41,8 +41,6 @@ quiet_cmd_btf_ko = BTF [M] $@
+       cmd_btf_ko = 							\
+ 	if [ ! -f vmlinux ]; then					\
+ 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+-	elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then 		\
+-		printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
+ 	else								\
+ 		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+ 		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
+diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
+deleted file mode 100755
+index 464761a7cf7f..000000000000
+--- a/scripts/is_rust_module.sh
++++ /dev/null
+@@ -1,16 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# is_rust_module.sh module.ko
+-#
+-# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
+-
+-set -e
+-
+-# Using the `16_` prefix ensures other symbols with the same substring
+-# are not picked up (even if it would be unlikely). The last part is
+-# used just in case LLVM decides to use the `.` suffix.
+-#
+-# In the future, checking for the `.comment` section may be another
+-# option, see https://github.com/rust-lang/rust/pull/97550.
+-${NM} "$*" | grep -qE '^[0-9a-fA-F]+ [Rr] _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
 -- 
-2.25.1
+2.40.1
 
