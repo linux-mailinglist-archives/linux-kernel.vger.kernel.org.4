@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5D174681B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 05:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BDA74681D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 05:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjGDDvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 23:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
+        id S230218AbjGDDv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 23:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjGDDvP (ORCPT
+        with ESMTP id S229579AbjGDDvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 23:51:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A771B6;
-        Mon,  3 Jul 2023 20:51:12 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qw82s464lz1HCqB;
-        Tue,  4 Jul 2023 11:50:45 +0800 (CST)
-Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 4 Jul
- 2023 11:51:09 +0800
-Message-ID: <f6764156-ec85-ad0a-f0b7-030f24f4dee4@huawei.com>
-Date:   Tue, 4 Jul 2023 11:51:08 +0800
+        Mon, 3 Jul 2023 23:51:52 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3165BD;
+        Mon,  3 Jul 2023 20:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1688442710;
+        bh=jPnurMM5cAmrp26T4bxCA7RPH8TaSXemYs2nA77cq3g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GA0XAyK81iGYZa9HMeJmIiVqPh8DWg/HgUDJO6JCTab/IvP8Y8kx2d/BNafMJ+Fbf
+         HSjvRLYJzYMs9mlI855FD9d8VbzvDByRPwh5OsjT4m9T/SAOVxb7I0y29B0QfzGLxc
+         X3YndeGfBS5Ze14C5qljx64rMNg3WV1iLB9FT9QblVMmkymuiOFMW2lrbwySrw8ibt
+         H6YmgbUJ/KNp5Gj2tv9fJHiaZUIa6aqztYCqo0Tsv7mrvShzJplxgUOmE7HKTfxjgX
+         Tkcirabs2zLL0Uy/wbEORHfY1tmFxHz+YK2gtKUzsRxlnJ0QHpImw545oGKEE2oyHL
+         agW63jwJsTyMw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qw8456DNvz4wZw;
+        Tue,  4 Jul 2023 13:51:49 +1000 (AEST)
+Date:   Tue, 4 Jul 2023 13:51:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the vfs-brauner tree
+Message-ID: <20230704135149.014516c7@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH -next v5 1/2] riscv: kdump: Implement
- crashkernel=X,[high,low]
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <kexec@lists.infradead.org>, <linux-doc@vger.kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <conor.dooley@microchip.com>, <guoren@kernel.org>,
-        <heiko@sntech.de>, <bjorn@rivosinc.com>, <alex@ghiti.fr>,
-        <akpm@linux-foundation.org>, <atishp@rivosinc.com>,
-        <thunder.leizhen@huawei.com>, <horms@kernel.org>
-References: <20230511085139.1039088-1-chenjiahao16@huawei.com>
- <20230511085139.1039088-2-chenjiahao16@huawei.com>
- <ZHwKFADVXyNYJBCp@MiWiFi-R3L-srv>
- <852b8777-3c6e-f76b-0413-1c66629f33cd@huawei.com>
- <5c80666c-e6e2-8fa6-50b6-89536315925e@huawei.com>
- <ZKD3tEBknEiF4PZK@MiWiFi-R3L-srv>
-From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
-In-Reply-To: <ZKD3tEBknEiF4PZK@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.26]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/X/yjNzOrjPzi6T=T9y7QebP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/X/yjNzOrjPzi6T=T9y7QebP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/7/2 12:06, Baoquan He wrote:
-> On 07/01/23 at 05:51pm, chenjiahao (C) wrote:
-> ......
->> I have sent v6 patches, implementing the logic above. That fixes the
->> retrying
->>
->> logic and should be aligned with Arm64 code.
-> Hmm, it has improved much, while there's still issue which need be
-> fixed. You missed the case that crsahkernel low is specified as zero
-> explicitly. Obviously your v6 is not able to handle that well. Means
-> your v6 is not aligned with the current arm64 code completely.
->
-> crashkernel=xM,high crashkernel=0M,low
->
->>
->> Please let me know if there is any problem remains.
-> Earlier, I posted below RFC patchset to try to unify the
-> crashkernel=,high support on x86, arm64 and risc-v, the generic arch.
-> Wondering what you think about it. risc-v can be added in with very few
-> change to get the crahskernel=,high support.
->
-> [RFC PATCH 0/4] kdump: add generic functions to simplify crashkernel crashkernel in architecture
->
-> Surely, the crashkernel=,high support can be added independently in
-> advance. Later my patchset can unify them and remove the duplicated code
-> in risc-v. It's up to you and risc-v maintainers/reivewers to take one.
-> Anyway, I will add comment to your v6 to point out the issue.
+Hi all,
 
-It would be great if crashkernel parsing and reserving logic could be
-unified on multiple architectures, the code would be more straightforward
-and easy to use. I will have a more in-depth review of your RFC patchset
-later.
+After merging the vfs-brauner tree, today's linux-next build
+(htmldocs) produced this warning:
 
-Meanwhile, I will continue to update my patchset on risc-v, just wishing
-to complement this feature earlier. When your unify solution get applied,
-simply remove the duplicate part is OK. Before that, I will update my
-risc-v code and further align with the Arm64 logic.
+Documentation/filesystems/locking.rst:119: ERROR: Malformed table.
+Text in column margin in table line 27.
 
-Thanks for your carefully review, I will fix the issue above and send
-v7 patchset soon.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ops             i_rwsem(inode)
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+lookup:         shared
+create:         exclusive
+link:           exclusive (both)
+mknod:          exclusive
+symlink:        exclusive
+mkdir:          exclusive
+unlink:         exclusive (both)
+rmdir:          exclusive (both)(see below)
+rename:         exclusive (all) (see below)
+readlink:       no
+get_link:       no
+setattr:        exclusive
+permission:     no (may not block if called in rcu-walk mode)
+get_inode_acl:  no
+get_acl:        no
+getattr:        no
+listxattr:      no
+fiemap:         no
+update_time:    no
+atomic_open:    shared (exclusive if O_CREAT is set in open flags)
+tmpfile:        no
+fileattr_get:   no or exclusive
+fileattr_set:   exclusive
+get_offset_ctx: no
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-Thanks,
-Jiahao
+Introduced by commit
 
->
-> Thanks
-> Baoquan
->
+  7a3472ae9614 ("libfs: Add directory operations for stable offsets")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/X/yjNzOrjPzi6T=T9y7QebP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSjl1UACgkQAVBC80lX
+0GxG5wf/WcDCcoItg8deiRtj+fs7lapP3cb6gLlwInKYv+5swyjU1xXmqYKtzeYH
+ibuBkY7KZXjCDNVN00CyVn6NjY9PuvsQNkXcy1m8XtC47asSWdvE48kc/kloyh5p
+FjayJoENOAJNJC5Zzx7wDpmyHIu2h1gtkpE3+a2gtCGiA4GlE8ZUbnVbbPiXumn3
+S8zNhCqW79rCBEscvEJg1PQFkUBBmU6jwE4R5e7ERdBzBuRMOnk86CqSqbxxjuRf
+5OP2BzTuqReEeUNoeCEbu/eV3mNysgvP0sbOrz0QTduvUCp5GEQlugwbEQoN3sUy
+eoHeycUXAXfbyw+j8x26e8Xap1glUw==
+=dk7K
+-----END PGP SIGNATURE-----
+
+--Sig_/X/yjNzOrjPzi6T=T9y7QebP--
