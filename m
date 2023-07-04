@@ -2,214 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FBE746CEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AAA746CEF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbjGDJLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S231627AbjGDJME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjGDJLb (ORCPT
+        with ESMTP id S231487AbjGDJL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:11:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62324B3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:11:30 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36491vaZ028854;
-        Tue, 4 Jul 2023 09:11:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
- from : to : cc : subject : in-reply-to : references : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=auLM8XCb45zIEyFKBRvTznnw5zPz5zeVHvh+FnhSYLI=;
- b=say+xf45uyskJ5njZwf60JYcLStDzHb9nUF/DMFnWcsicPUWUiNUxE3fNAupqI0YfhXT
- yYgET/dJcAYFtDxdDQCaKwVmPKdpl6LZrx8iNA9ENRUQAQsQs0TRmUDyxLMbp53AAKus
- M6LZHFr0i9XJ2Zj+N5TcdmAX2LMkuu22P6ilKF5TrlxdyPHw7ajop6S+oF5ENsePNGTC
- dqvOtrYpbb0EoWr3K0/ZMP3UQxac2cm1qU5xi5nA/VurJGD0b+bbeywrKbJKx/TAzx8h
- xuP2cr5FjD16LwgQnlFUmhhYUQxeKxHCXSYMGUezOZu9XA83y2I5XgyVE6KRc1Tfpj3z oA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmgeggaqk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 09:11:09 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36492FvG030380;
-        Tue, 4 Jul 2023 09:11:08 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmgeggak0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 09:11:08 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3647I68F022900;
-        Tue, 4 Jul 2023 09:11:02 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3rjbs5eg07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 09:11:02 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3649B0qQ56099274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Jul 2023 09:11:01 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A847858057;
-        Tue,  4 Jul 2023 09:11:00 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 33DE058058;
-        Tue,  4 Jul 2023 09:11:00 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Jul 2023 09:11:00 +0000 (GMT)
+        Tue, 4 Jul 2023 05:11:58 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2096.outbound.protection.outlook.com [40.107.255.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A2F137
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:11:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WkNBElDraykqjLTRFbiugwxNWmUj9llEyhPSTSaEi/i2GxNBJn1nNAUwfA8LgZRejmsRux9F9rXmM4SZYglMgfi28uENNDhEQt8agiFjB2hjlcFeF4QTaLxVkJzQzn5vurrLsc3E2nNlibd9iwiupLFuo9jZZ4kHihMzfqbOgORv3Kirb1TAMbtY70LXV1VVN2NzIwbEECszLU/6KkNz1sZdJexemxdOS6GSzh52QLUuGEKmU2xPowgl7zDFOADl7KB7tOjWv8My9x88plBPSLRtVVSYw9CwNPDWrnNYcRvbExxa5Yr13KfyZlD5jHyAvZwoG0V5GVM7wdZUgMnUxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F1JblLbZYn+97rf+x0NM+vTxzOU6gRCHl0eZE0GEJ7o=;
+ b=jMjqfDanU4V5OP3eDlV06givLofHJkfgPnneOnQscSiOL20AdNWo0kiLlKrmI0BrJp3YWwIqz2FjImn2hpnW+tfIfPU9RdRhqxQWL+u/HJUaElnL2s+nVBQpdXRzyDm8IwhqR5aE1vKpSFPO7g+0QnWLG+9CvyG1DQEbD3UZ2Gddq1SKphSEoK5BLdiL8BtZzYQgMpsr+xlzZ2NqWANyZ4fr75DBhK2tC6lfNVIpA62AeCh93ItEpt0+PAR2Bd0Hnt5cjDrhYr6wqW39YMASLhgByQ6nj1fxcUYpN96PkoRU7CcWL+oKNl2OFfAcIKM7dmA3kkt8YUPc4RSNcqKeUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F1JblLbZYn+97rf+x0NM+vTxzOU6gRCHl0eZE0GEJ7o=;
+ b=Oxy+2nM59Ase/BrqPnrnVtXJffyu+7rkzAmSFdoXS2cR4GwINCr2Vxtw+eot7xi+EYbWFqi4di4sOjT/iFceNoNRNHjvn8A+89h16EB7GxqknZXPNry4pL537IlfEm2rSWtP1xf8yznkCJREHDx+uZCFkBgz1Wct7ErGCIkahY35rXLrhdwSMolGqtwHah5cjOaag1Usrui4IKBXiRCIkH3JKvntB5JiGcbz0nfX4UZQl3KqiugoAQQRrEAHIZZvBLEKhCaDgrPqt7UhYsuZk+m0Hyz4w4OzxQ2Kfft5d1+qg0xRK5YssFa9KT4ONQPzt9qo4+hfML7FA6/pDk03Eg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ SEYPR06MB5789.apcprd06.prod.outlook.com (2603:1096:101:ba::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6544.24; Tue, 4 Jul 2023 09:11:48 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::c2b:41ab:3b14:f920]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::c2b:41ab:3b14:f920%6]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
+ 09:11:48 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Minjie Du <duminjie@vivo.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com
+Subject: [PATCH v1] sound: riptide: Remove duplicate judgments code
+Date:   Tue,  4 Jul 2023 17:11:31 +0800
+Message-Id: <20230704091131.6662-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0033.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::14) To SG2PR06MB5288.apcprd06.prod.outlook.com
+ (2603:1096:4:1dc::9)
 MIME-Version: 1.0
-Date:   Tue, 04 Jul 2023 11:11:00 +0200
-From:   Tobias Huschle <huschle@linux.ibm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, sshegde@linux.vnet.ibm.com,
-        srikar@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [RFC 0/1] sched/fair: Consider asymmetric scheduler groups in
- load balancer
-In-Reply-To: <26fe6dc1-33c5-b825-c019-b346e8bedc0a@arm.com>
-References: <20230515114601.12737-1-huschle@linux.ibm.com>
- <26fe6dc1-33c5-b825-c019-b346e8bedc0a@arm.com>
-Message-ID: <4c28b46b59bcc083956757074d1fe059@linux.ibm.com>
-X-Sender: huschle@linux.ibm.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0WoULkjnIrHH6q-0CGoEQlxLuGBoNyo3
-X-Proofpoint-ORIG-GUID: 4514zQr9IvCDlOJoLXOLTXuwcf_JfAvM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 clxscore=1011
- suspectscore=0 malwarescore=0 impostorscore=0 bulkscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307040074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|SEYPR06MB5789:EE_
+X-MS-Office365-Filtering-Correlation-Id: b430ebae-3cac-4ffa-9ba4-08db7c6eb255
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ExlJG48rxXOABxPr1GiKbQ4fMKKBh8UQqHTbJswIu1uYaYV3hRAfq2js9uS/fDrK117EHSMNRXScSzZltMHpokh/x9xxeunQEwjfmCmj3OUSbKlQH+oRvJ8bVScmHtTBSEmwqqPqSOkEYtP74n9ilNZg+VuY8MSt/aaFoRSbH4d7G8Rg0/OgR4cGUu+P/vOD5b//ArjHCCHSLU/kwbCyonoObIQlkv0yKq5k3a7CEVCea+yXB79xkcOuL2Q2BH88wXCgP8P7QHmSj/MsPZvQ1yY++UtCenKelwmoVUr/yO5pt/lEpe6zviF7l8GyUIS45XyCPzY7Xo16pbyu5Z7jJYVMwecpuOSaZDt55pj7chJD19jFW1+7JWSejkomKq3CjoZEfFOG16PLjKcpcwRkJTwR54EfbI8ZXGZqYkWqvggCyhRBntRAUSvy6ESkw0mLc+Rt2c2agZdaBTn2c4mx2jOdV3GkCpXpVdOzQtNN+uEo5z1vdRcYG6Cfh3OqqAE17mcZiHgnhuUxB9rJhm1vFwQVRH9s8D8A40Ns3CdOT78phyWKM/2xe/WkVEHNOgJVNnfxaVh/mNJe4egeDkOJEH0NiMr16ninF7xovUTpWkpN5k7thr+anIbtgaXALX8r
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(366004)(396003)(451199021)(8936002)(5660300002)(8676002)(41300700001)(38350700002)(38100700002)(66946007)(66556008)(316002)(4326008)(66476007)(110136005)(36756003)(86362001)(107886003)(6666004)(478600001)(6506007)(26005)(6512007)(186003)(1076003)(52116002)(6486002)(83380400001)(2616005)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vkxeZRT8dKKJMia6lsAYxlTM0zcNeOpgq+TKmqEmiG7yMEMdVzofWYb9R/8I?=
+ =?us-ascii?Q?QfD6XKL5n08m4WykXLrrgSULnJurMsmJ4Q2Emytrf6Jsvwixjr03NRBnmZZy?=
+ =?us-ascii?Q?RQUIv+dm+n/cWsZMNkokAcyauMMcdGeUh2VXOpWWCcILOvaG4a5Yz1/rM+CA?=
+ =?us-ascii?Q?//OErp2ORRbdFxw6Kc4KDJ495mEADdNas7y7V16YDLK6xdE7UAvJIDOKW6i+?=
+ =?us-ascii?Q?4S+jH4kJdZH/Hc14HJ1ahcuLo6J4mc+P68r23LQBG6PmGBE+vGVnKQcEQG9q?=
+ =?us-ascii?Q?QinSRwHgrG1bo5+xhFWLM+MYmVKQldyn0mBYydXzYTHbJsr4QURNHMBb8tei?=
+ =?us-ascii?Q?XWreho2X33cMU4rWzZ5hd0EkSGdzXobUFwjxKnSvLe8BzKxpa8fQFSdt1vH1?=
+ =?us-ascii?Q?ARvRUfmEAqB50hUmCc8LvK1SFb2CqugnFpjqn1xeW+AlE6kApuudNU/nc7uF?=
+ =?us-ascii?Q?FcgD5fjWyj2tm1xcEo2TULnmll0tepNcAUjzsF7dhPb8PcZ9YttxzrpXg8PD?=
+ =?us-ascii?Q?m4UOoVZtBIfq4JLtU2QlwFiXt+LSAO15dwEr/mJnQb3aSoLC46csnsd2lFvr?=
+ =?us-ascii?Q?WZRFAIs0Jwn9L7pAnzH3JVOYA2jybet/4wn0sEXQaycmsR37OijBxfdFnLE0?=
+ =?us-ascii?Q?lIoPKQVfxlbyAZW31abXmgdOtSEwpDsNO4BMWTEZ73HeELKb02Awkj+pYJSG?=
+ =?us-ascii?Q?nJR2dTzmgGyHwUIcPRSGnqw5xvtu+wZglvdhy0YhTtl26h+pYvUsGl/dwP1H?=
+ =?us-ascii?Q?AL718CvzEFdw/2vDs+X165s7lsErjoJ6nEFe9NfdLBJrdDAZx/KfWsDLqxib?=
+ =?us-ascii?Q?xfMQvORC+p7ojiH0M1Z6RAXBraQfcJFcuRiJipZr/XIu7ROKSRl/W7xJgQxe?=
+ =?us-ascii?Q?mpge10mPoE90T8oRbf/5T0vJHXcpquQFKidD0oQ2p2BpP+M7BMhnc0Z3/KgU?=
+ =?us-ascii?Q?EVpREDdkUaTNDL6oO9xl3dtd1EfZ3qUJ64V53l0PA5HzO/zBXdUqwUEuH4y6?=
+ =?us-ascii?Q?0qnaQKQ68JX+FszQKKmijzJY5tdEZQxK4TsCWU/rmVmOGAx/wHNrneiwuioJ?=
+ =?us-ascii?Q?7DnCVh6ZvEZm2o1K/OPebA/RerKhzhOh0b+HVmxpdZAkTOk9+LfYi9AJazcY?=
+ =?us-ascii?Q?7Sxh94jjPaCOdPeYD84FIqBSKk83yhp4Y85UzH2iXgYbiDaAhdr0ncNLyIml?=
+ =?us-ascii?Q?IFhnrbaxKG74FIrI8hFVqYAcBfM6vJQurC4Ch5x6v/ZwQ9pZEunQGuqGRN9c?=
+ =?us-ascii?Q?NVXKEVQOh5HY7c/84poSnO/ok2o9SWKCAj4+yWngKlWizlqTL4o+d4s8Vnon?=
+ =?us-ascii?Q?2X9yG/CoDkn+wlFRlvdxWvZvsWOqFdliIXrHeqr86c8hIXzWOBU3x9vAF5P2?=
+ =?us-ascii?Q?59U5P3acUfNrivC12D6LmR8ITe+Dd7lyKEMHzYaA8YrzLhOFBhHxD+OY9Gyf?=
+ =?us-ascii?Q?7KeXyObVaZsZNUaqldAi1NpvHdjZ7u8hfbEkBDBmgN4EtK1RfBNZhQxhnUV3?=
+ =?us-ascii?Q?V0sy2rVpPHJCMx6kuA2h02Vu7ZWuW/jYxkwegUxc5DbztVYrjo+f4BV/h+Yw?=
+ =?us-ascii?Q?2S7EZQWuBzA9c/+bBTyQR+qBHjVbI4a/KnJlBocz?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b430ebae-3cac-4ffa-9ba4-08db7c6eb255
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 09:11:48.4825
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wy1lBFpvR7GV8c0Q5uP3YfiqV5vdmBY1Xv/y2X/oT4EIS7FgYiz64vne+lccnnE1/Lf9gtLTD5Iq8q304h/KiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5789
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-16 18:35, Dietmar Eggemann wrote:
-> On 15/05/2023 13:46, Tobias Huschle wrote:
->> The current load balancer implementation implies that scheduler 
->> groups,
->> within the same scheduler domain, all host the same number of CPUs.
->> 
->> This appears to be valid for non-s390 architectures. Nevertheless, 
->> s390
->> can actually have scheduler groups of unequal size.
-> 
-> Arm (classical) big.Little had this for years before we switched to 
-> flat
-> scheduling (only MC sched domain) over CPU capacity boundaries for Arm
-> DynamIQ.
-> 
-> Arm64 Juno platform in mainline:
-> 
-> root@juno:~# cat 
-> /sys/devices/system/cpu/cpu*/topology/cluster_cpus_list
-> 0,3-5
-> 1-2
-> 1-2
-> 0,3-5
-> 0,3-5
-> 0,3-5
-> 
-> root@juno:~# cat /proc/schedstat | grep ^domain | awk '{print $1, $2}'
-> 
-> domain0 39 <--
-> domain1 3f
-> domain0 06 <--
-> domain1 3f
-> domain0 06
-> domain1 3f
-> domain0 39
-> domain1 3f
-> domain0 39
-> domain1 3f
-> domain0 39
-> domain1 3f
-> 
-> root@juno:~# cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
-> MC
-> DIE
-> 
-> But we don't have SMT on the mobile processors.
-> 
-> It looks like you are only interested to get group_weight dependency
-> into this 'prefer_sibling' condition of find_busiest_group()?
-> 
-Sorry, looks like your reply hit some bad filter of my mail program.
-Let me answer, although it's a bit late.
+Fix: delate duplicate judgments
+Could you help check it out? Thank you!
 
-Yes, I would like to get the group_weight into the prefer_sibling path.
-Unfortunately, we cannot go for a flat hierarchy as the s390 hardware
-allows to have CPUs to be pretty far apart (cache-wise), which means,
-the load balancer should avoid to move tasks back and forth between
-those CPUs if possible.
+Signed-off-by: Minjie Du <duminjie@vivo.com>
+---
+ sound/pci/riptide/riptide.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-We can't remove SD_PREFER_SIBLING either, as this would cause the load
-balancer to aim for having the same number of idle CPUs in all groups,
-which is a problem as well in asymmetric groups, for example:
-
-With SD_PREFER_SIBLING, aiming for same number of non-idle CPUs
-00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
-                 x     x     x     x      x  x  x  x
-
-Without SD_PREFER_SIBLING, aiming for the same number of idle CPUs
-00 01 02 03 04 05 06 07 08 09 10 11  || 12 13 14 15
-     x  x  x     x  x     x     x  x
-
-
-Hence the idea to add the group_weight to the prefer_sibling path.
-
-I was wondering if this would be the right place to address this issue
-or if I should go down another route.
-
-> We in (classical) big.LITTLE (sd flag SD_ASYM_CPUCAPACITY) remove
-> SD_PREFER_SIBLING from sd->child so we don't run this condition.
-> 
->> The current scheduler behavior causes some s390 configs to use SMT
->> while some cores are still idle, leading to a performance degredation
->> under certain levels of workload.
->> 
->> Please refer to the patch's commit message for more details and an
->> example. This patch is a proposal on how to integrate the size of
->> scheduler groups into the decision process.
->> 
->> This patch is the most basic approach to address this issue and does
->> not claim to be perfect as-is.
->> 
->> Other ideas that also proved to address the problem but are more
->> complex but also potentially more precise:
->>   1. On scheduler group building, count the number of CPUs within each
->>      group that are first in their sibling mask. This represents the
->>      number of CPUs that can be used before running into SMT. This
->>      should be slightly more accurate than using the full group weight
->>      if the number of available SMT threads per core varies.
->>   2. Introduce a new scheduler group classification (smt_busy) in
->>      between of fully_busy and has_spare. This classification would
->>      indicate that a group still has spare capacity, but will run
->>      into SMT when using that capacity. This would make the load
->>      balancer prefer groups with fully idle CPUs over ones that are
->>      about to run into SMT.
->> 
->> Feedback would be greatly appreciated.
->> 
->> Tobias Huschle (1):
->>   sched/fair: Consider asymmetric scheduler groups in load balancer
->> 
->>  kernel/sched/fair.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->> 
+diff --git a/sound/pci/riptide/riptide.c b/sound/pci/riptide/riptide.c
+index b37c877c2..9bf4b2e86 100644
+--- a/sound/pci/riptide/riptide.c
++++ b/sound/pci/riptide/riptide.c
+@@ -958,8 +958,7 @@ getsourcesink(struct cmdif *cif, unsigned char source, unsigned char sink,
+ {
+ 	union cmdret rptr = CMDRET_ZERO;
+ 
+-	if (SEND_RSSV(cif, source, sink, &rptr) &&
+-	    SEND_RSSV(cif, source, sink, &rptr))
++	if (SEND_RSSV(cif, source, sink, &rptr))
+ 		return -EIO;
+ 	*a = rptr.retbytes[0];
+ 	*b = rptr.retbytes[1];
+@@ -978,8 +977,7 @@ getsamplerate(struct cmdif *cif, unsigned char *intdec, unsigned int *rate)
+ 	s = intdec;
+ 	for (i = 0; i < 2; i++) {
+ 		if (*s != 0xff) {
+-			if (SEND_RSRC(cif, *s, &rptr) &&
+-			    SEND_RSRC(cif, *s, &rptr))
++			if (SEND_RSRC(cif, *s, &rptr))
+ 				return -EIO;
+ 			p[i] += rptr.retwords[1];
+ 			p[i] *= rptr.retwords[2];
+@@ -1013,8 +1011,7 @@ setsampleformat(struct cmdif *cif,
+ 	sig = snd_pcm_format_unsigned(format) != 0;
+ 	order = snd_pcm_format_big_endian(format) != 0;
+ 
+-	if (SEND_SETF(cif, mixer, w, ch, order, sig, id) &&
+-	    SEND_SETF(cif, mixer, w, ch, order, sig, id)) {
++	if (SEND_SETF(cif, mixer, w, ch, order, sig, id)) {
+ 		snd_printdd("setsampleformat failed\n");
+ 		return -EIO;
+ 	}
+@@ -1060,7 +1057,7 @@ getmixer(struct cmdif *cif, short num, unsigned short *rval,
+ {
+ 	union cmdret rptr = CMDRET_ZERO;
+ 
+-	if (SEND_RDGV(cif, num, num, &rptr) && SEND_RDGV(cif, num, num, &rptr))
++	if (SEND_RDGV(cif, num, num, &rptr))
+ 		return -EIO;
+ 	*rval = rptr.retwords[0];
+ 	*lval = rptr.retwords[1];
+-- 
+2.39.0
 
