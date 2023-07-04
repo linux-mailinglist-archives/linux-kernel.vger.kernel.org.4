@@ -2,193 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80912747365
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A289D747364
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjGDN7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
+        id S231233AbjGDN7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjGDN7L (ORCPT
+        with ESMTP id S231229AbjGDN66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:59:11 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A37B10E5
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:59:10 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-573a92296c7so51294587b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:59:10 -0700 (PDT)
+        Tue, 4 Jul 2023 09:58:58 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883C5F7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:58:56 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbd33a573cso29019755e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688479149; x=1691071149;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DC8Xq57VnNVy2UPnztEh7pdyCXoL2+wf6j7oIzU/k0U=;
-        b=ied37usOyUZSNNUYFWB/0x9Gp2Xy3VBqOZsdjhUe4raEDydnbYF6HgEiQ3X+pvSQIR
-         H6v+ZACeiuklWaHQuyR+PUR4X1/upWRLXxCWvZj8/qbVWoBvWqe/6sKN21wSoOfELlOc
-         CD08aaZPDspCmCOvI+LpffHdthodD0JLKmoCGvxQZV3rodZFF55UOJFt2YJXQfDNZYV7
-         39xNX8E7YYFfbNKTfbuNdbxVUGDDkGZiDRmib0EsF2Mou0u4OYO/oPWvWmehwRzDFK5D
-         Imt+Bwof1BSr+KwKcJJidytEDE5co5ZNs14Yx3ZfgsJkQv3RnObo5szD3Nqeos8pKDEj
-         Jhbw==
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688479135; x=1691071135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KXukMoiUHsFnABd/wPhkZ9XTrO4JKNHS6gLRhLQfPrw=;
+        b=qAplUnOrZ7sW0L3AtiaFgnB27rPog0XZkibQeE06ehyqFJ7wOpcdx//oLsp0pEoKhE
+         vs6MvQOnZ7gpHFhWR5AramoApQ8e/AevTkjt4v53LmUV+axiPWkAtH2VJ879Qvv7A7QO
+         RULCYSMEXe8tD96lOr6dsB3vd/dD5VQJaV+1QJAkXOcy6TdTevWCklpZR+urflsVtHYO
+         QJzJC7v7SQlAMITu0YwC3WT9KHXH4I7Q1aI0959stm6VZwKvv44WAuFoaHLxlUpm+sUj
+         wkg3WgVWDHc7Bmhd1V3+mqs+lcRuRmDZbfrezwQ0K6HkUo6Jov1gfWu/SY/1JjNd1ee4
+         ietg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479149; x=1691071149;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DC8Xq57VnNVy2UPnztEh7pdyCXoL2+wf6j7oIzU/k0U=;
-        b=KATbMnbnYRAhf9woSnmmzy3+HH3ow/Ug+yaTzylCFc3f9eqoHICZEwXAHIy9AqFNv0
-         ldSJHoDqODVBEFeXB8VV1O6NpFp9Hw4xdnjMJUP4Wc6qT+zlR7WP1tUF6oe0jwbMLgkT
-         B0NyXADnrBEPbxoRYV1fxJ2uzuefjY+0YUz4Ms8yRhh5Q6xFPnmZE4EkmK5l9DKg0jUt
-         KX90coSHrhJqgDrWUT0/cIzqxSvHGt82FnyulODb2kQb2cnqGSCgXFlizsbdZB3jUF54
-         /lsouqX71ouN1pJA5Yao9nBW0kch9mAhYMZMpuBURxrno6yEtBe+Fub/GNHF0uH9sFMu
-         jCng==
-X-Gm-Message-State: ABy/qLZK2JqxpauweEln1ubz2Btg+uSUZnnhC8tGrXh7gynMnDpgeCHx
-        vZ2UYJPoaP0djtkJlbqqc2nImf5Fxct/hkwgIw==
-X-Google-Smtp-Source: APBJJlHCT8YpmjLt4pwJNPMv9gOj/d3Eu5xEqnXGre+LNmaIV7PZ1W8rT72U+lTdniCwmoOaKpA4OJ+vM5tue1x5Dw==
-X-Received: from mr-cloudtop2.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:fb5])
- (user=matteorizzo job=sendgmr) by 2002:a81:4428:0:b0:577:4540:905d with SMTP
- id r40-20020a814428000000b005774540905dmr76533ywa.8.1688479149512; Tue, 04
- Jul 2023 06:59:09 -0700 (PDT)
-Date:   Tue,  4 Jul 2023 13:58:34 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230704135834.3884421-1-matteorizzo@google.com>
-Subject: [PATCH v2] mm/slub: refactor freelist to use custom type
-From:   Matteo Rizzo <matteorizzo@google.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com
-Cc:     jannh@google.com, matteorizzo@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688479135; x=1691071135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KXukMoiUHsFnABd/wPhkZ9XTrO4JKNHS6gLRhLQfPrw=;
+        b=LHziyYbD9ZucJgc0cvD8DRCSnMBUE4RrqdGvmyk2Rb2KvoB0u2PVIZ+HyfxYWZmJfT
+         VVpztVHH2FUPoUIHc9JnnXsF8FOgMk50wb+tbsI1HfCYx4tCScoIQfa6P55fjIgYN5R9
+         rw9eqFg/mueSo5+qzN3kwHFj+QNPDzGUp0OLdvmQ1+NtfRrGLSdzaBs838WYp0txUp2B
+         FywxjjZdILMU+k7yrucWhpHc5avzeGXCKkDivaFHX8S99yDyzBheor//OraNjYemWEnE
+         UX1piZmKxvDdIU5/L0ebDdjsjTb/9XhFEJvHR3tfDhlAMG0Q3zEd9h0TYAvp6sSyEKwN
+         1aqg==
+X-Gm-Message-State: AC+VfDxgKM3JYmyWb6cRYJKnOxHEVoJH2Dol4SuEvb0tFYlCT0w1TWKj
+        PckrxG6X45UWkf1TEIcwXeAAGg==
+X-Google-Smtp-Source: ACHHUZ5F71QlUqoXVjpa302vOdIuAEU7ajQUSk5+RbDFLT2dNXnaQtMNNG3GltJYd9ukODusNi9uSA==
+X-Received: by 2002:a7b:c04a:0:b0:3fb:403d:90c5 with SMTP id u10-20020a7bc04a000000b003fb403d90c5mr10204425wmc.39.1688479134886;
+        Tue, 04 Jul 2023 06:58:54 -0700 (PDT)
+Received: from airbuntu ([104.132.45.103])
+        by smtp.gmail.com with ESMTPSA id w10-20020a1cf60a000000b003f9bd9e3226sm30010310wmc.7.2023.07.04.06.58.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 06:58:54 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 14:58:48 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
+        qyousef@google.com, kernel test robot <lkp@intel.com>
+Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
+ filter out requests
+Message-ID: <20230704135848.jfogmar4o6lmycog@airbuntu>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+ <20230522145702.2419654-4-lukasz.luba@arm.com>
+ <20230531183105.r5tqpdx5axoogkzp@airbuntu>
+ <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
+ <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
+ <20230630132507.hggzz5g2odrabii6@airbuntu>
+ <be79b206-01f8-f3e1-4107-ae6c662cbf47@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <be79b206-01f8-f3e1-4107-ae6c662cbf47@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+On 07/04/23 09:23, Lukasz Luba wrote:
+> Hi Qais,
+> 
+> On 6/30/23 14:25, Qais Yousef wrote:
+> > On 06/30/23 13:01, Qais Yousef wrote:
+> > > On 06/20/23 18:52, Lukasz Luba wrote:
+> > > > Hi Qais,
+> > > > 
+> > > > I have somehow missed your feedback on this series.
+> > > > 
+> > > > On 5/31/23 19:31, Qais Yousef wrote:
+> > > > > On 05/22/23 15:57, Lukasz Luba wrote:
+> > > > > > Some of the frequency update requests coming form the task scheduler
+> > > > > > might be filter out. It can happen when the previous request was served
+> > > > > > not that long ago (in a period smaller than provided by the cpufreq driver
+> > > > > > as minimum for frequency update). In such case, we want to know if some of
+> > > > > > the frequency updates cannot make through.
+> > > > > > Export the new tracepoint as well. That would allow to handle it by a
+> > > > > > toolkit for trace analyzes.
+> > > > > > 
+> > > > > > Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
+> > > > > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > > > ---
+> > > > > >    include/trace/events/sched.h     |  4 ++++
+> > > > > >    kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
+> > > > > >    2 files changed, 12 insertions(+), 2 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+> > > > > > index dbfb30809f15..e34b7cd5de73 100644
+> > > > > > --- a/include/trace/events/sched.h
+> > > > > > +++ b/include/trace/events/sched.h
+> > > > > > @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
+> > > > > >    	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+> > > > > >    	TP_ARGS(tsk, uclamp_id, value));
+> > > > > > +DECLARE_TRACE(schedutil_update_filtered_tp,
+> > > > > > +	TP_PROTO(int cpu),
+> > > > > > +	TP_ARGS(cpu));
+> > > > > > +
+> > > > > >    #endif /* _TRACE_SCHED_H */
+> > > > > >    /* This part must be outside protection */
+> > > > > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > > > > > index f462496e5c07..4f9daf258a65 100644
+> > > > > > --- a/kernel/sched/cpufreq_schedutil.c
+> > > > > > +++ b/kernel/sched/cpufreq_schedutil.c
+> > > > > > @@ -6,6 +6,8 @@
+> > > > > >     * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > >     */
+> > > > > > +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
+> > > > > > +
+> > > > > >    #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
+> > > > > >    struct sugov_tunables {
+> > > > > > @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> > > > > >    	ignore_dl_rate_limit(sg_cpu);
+> > > > > > -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+> > > > > > +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
+> > > > > > +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
+> > > > > >    		return false;
+> > > > > > +	}
+> > > > > 
+> > > > > Can't we have something more generic here too? Are you interested to count
+> > > > > these events? How do you plan to use it?
+> > > > 
+> > > > The plan is to record those events, count them and maybe adjust the FW
+> > > > if the frequency switching capabilities are too low, e.g. 4ms...
+> > > 
+> > > You mean as part of tuning step for the system or at runtime? The latter seems
+> > > to indicate for a proper interface instead.
+> 
+> Not at runtime, the FW change or maybe even the uC would be needed for
+> this. Therefore, our client which experiments with the new platform
+> can run the analysis and spot this. Then it can change the FW
+> if there was an issue, or maybe even upgrade the HW if there are severe
+> issues with delivering needed performance on time (e.g. in high display
+> refresh rates and first-frame drops).
+> 
+> > > 
+> > > IMHO I think the current filtering mechanism needs a bit of a massage.
+> > > 
+> > > One thing I think we must do is to ignore the filter if there's a big sudden
+> > > change in requested frequency. Like for instance if a big task migrates. Then
+> > > prev_cpu should go to lower freq sooner, and new_cpu should change to higher
+> > > frequency sooner too. The filtering makes sense only in steady state situation
+> > > where we are ramping up or down gradually.
+> 
+> This is kind of a heuristic, which is biased for mobiles IMO.
 
-Currently the SLUB code represents encoded freelist entries as "void*".
-That's misleading, those things are encoded under
-CONFIG_SLAB_FREELIST_HARDENED so that they're not actually dereferencable.
+How come? big tasks are not only on mobile? A 500+ task can exist on any
+system?
 
-Give them their own type, and split freelist_ptr() into one function per
-direction (one for encoding, one for decoding).
+> 
+> > > 
+> > > If no one beats me to it, I'll propose something in that regard.
+> > > 
+> > > > 
+> > > > We need those numbers to point out that there is a need for faster
+> > > > FW micro-controller to serve those incoming requests.
+> > > 
+> > > I think there's a big assumption here that the filter is always set correctly
+> > > ;-)
+> 
+> In our case, it is set correctly, the value is coming directly from FW
+> [1]. It is the FW+HW limit, so not much to do with this in the kernel.
+> 
+> > > 
+> > > > 
+> > > > > 
+> > > > > I think this will be a very noisy event by the way.
+> > > > 
+> > > > Could be, but on the other hand for those statistical analysis
+> > > > 'the more the better'. It will also depend on number of
+> > > > CPUs in the cluster, e.g. 4 CPUs vs 1 CPU.
+> > > > 
+> > > > I don't know when we will switch to this per-cpu cpufreq mode
+> > > > when all CPUs behave like independent DVFS. Juno mainline kernel and FW
+> > > > supports that mode. We would have to compare those two modes and
+> > > > measure how much we gain/loose when using one and not the other.
+> > > > 
+> > > > Furthermore, we already suspect some of our integration testing for
+> > > > EAS-mainline (on Juno) failing due to filtered out requests. How much
+> > > > that would impact other boards - it would be nice to see in traces.
+> > > 
+> > > Another problem I think we have is that the DVFS headroom value should be
+> > > a function of this filter. At the moment it is hardcoded to a random value
+> > > which causes power issue.
+> 
+> It's not a random value, as you can see in [1]. This is the main goal
 
-Signed-off-by: Jann Horn <jannh@google.com>
-Co-developed-by: Matteo Rizzo <matteorizzo@google.com>
-Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
----
-v2:
-	* Fix compilation error with SLUB_TINY
-	* Move the freeptr_t typedef to slub.c
+I'm referring to the 25% in map_util_perf().
 
- mm/slub.c | 43 ++++++++++++++++++++++++++++++++-----------
- 1 file changed, 32 insertions(+), 11 deletions(-)
+> for this $subject - provide information with proper test that the FW
+> or HW change is needed. If you like to have a decent performance in
+> your Linux based solution, the faster FW/HW would be needed. I don't
+> want to put more hacks or heuristics which try to workaround performance
+> issues with the HW. E.g. if someone instead of a 200MHz uC running fast
+> FW would put 100MHz uC than should get quality data from integration
+> tests, that such a design might not work well with recent OSes and apps.
+> Currently those kind of 'design' checks are very hard, because require
+> sophisticated knowledge and we are trying to lower that bar for more
+> engineers.
 
-diff --git a/mm/slub.c b/mm/slub.c
-index e3b5d5c0eb3a..f8cc47eff742 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -360,13 +360,19 @@ static struct workqueue_struct *flushwq;
-  * 			Core slab cache functions
-  *******************************************************************/
+I think we're talking about different things ;-)
 
-+/*
-+ * freeptr_t represents a SLUB freelist pointer, which might be encoded
-+ * and not dereferenceable if CONFIG_SLAB_FREELIST_HARDENED is enabled.
-+ */
-+typedef struct { unsigned long v; } freeptr_t;
-+
- /*
-  * Returns freelist pointer (ptr). With hardening, this is obfuscated
-  * with an XOR of the address where the pointer is held and a per-cache
-  * random number.
-  */
--static inline void *freelist_ptr(const struct kmem_cache *s, void *ptr,
--				 unsigned long ptr_addr)
-+static inline freeptr_t freelist_ptr_encode(const struct kmem_cache *s,
-+					    void *ptr, unsigned long ptr_addr)
- {
- #ifdef CONFIG_SLAB_FREELIST_HARDENED
- 	/*
-@@ -379,25 +385,40 @@ static inline void *freelist_ptr(const struct kmem_cache *s, void *ptr,
- 	 * calls get_freepointer() with an untagged pointer, which causes the
- 	 * freepointer to be restored incorrectly.
- 	 */
--	return (void *)((unsigned long)ptr ^ s->random ^
--			swab((unsigned long)kasan_reset_tag((void *)ptr_addr)));
-+	return (freeptr_t){.v = (unsigned long)ptr ^ s->random ^
-+			swab((unsigned long)kasan_reset_tag((void *)ptr_addr))};
- #else
--	return ptr;
-+	return (freeptr_t){.v = (unsigned long)ptr};
- #endif
- }
+> 
+> > > 
+> > > So to summarize I think there are two improvements required (and if anyone has
+> > > the time to try them out go ahead otherwise I'll get to it):
+> > > 
+> > >   1. The filter should only be applied if the history hasn't changed. ie: we are
+> > >      gradually increasing or decreasing PELT. Otherwise we should honour sudden
+> > >      changes ASAP.
+> > >   2. DVFS headroom should be a function of the filter. 25% is too high for
+> > >      500us. It could be too low for 10ms (I don't know).
+> > 
+> > To expand a bit more since it's related. Our  migration margins should depend
+> > on the tick value instead of random magic numbers they are today. More
+> > precisely the balance_interval. If there's a misfit task, then we should
+> > upmigrate it at wake up only if we think it'll become misfit before the load
+> > balancer kicks in. Otherwise the load balancer should do the correction if it
+> > becomes long running/misfit. If the sys admin wants to speed up/slow down
+> > migration it should be throw controlling PELT IMO and not these magic margin
+> > values - which are hardcoded to random values at the moment anyway that are not
+> > suitable for every system.
+> > 
+> > And since we decoupled overutilized from misfit lb; I think our definition
+> > should improve to better detect when the system needs to disable packing and
+> > starts spreading. Current check for overutilized based on misfit is no longer
+> > adequate IMO. Especially when there's a single misfit task in the system.
+> > 
+> > Again, just sharing thoughts in case someone interested to work on this before
+> > I get a chance to share any patches ;-)
+> 
+> Those are all heuristics and some of your ideas are going very beyond
+> the $subject. As I said the main goal for the $subject is to
+> deliver information that the FW/HW might need a re-design (maybe even
+> a more silicon for the uC).
+> 
+> I cannot stop you from creating a dedicated thread with your patches,
+> though ;)
 
-+static inline void *freelist_ptr_decode(const struct kmem_cache *s,
-+					freeptr_t ptr, unsigned long ptr_addr)
-+{
-+	void *decoded;
-+
-+#ifdef CONFIG_SLAB_FREELIST_HARDENED
-+	/* See the comment in freelist_ptr_encode */
-+	decoded = (void *)(ptr.v ^ s->random ^
-+		swab((unsigned long)kasan_reset_tag((void *)ptr_addr)));
-+#else
-+	decoded = (void *)ptr.v;
-+#endif
-+	return decoded;
-+}
-+
- /* Returns the freelist pointer recorded at location ptr_addr. */
- static inline void *freelist_dereference(const struct kmem_cache *s,
- 					 void *ptr_addr)
- {
--	return freelist_ptr(s, (void *)*(unsigned long *)(ptr_addr),
-+	return freelist_ptr_decode(s, *(freeptr_t *)(ptr_addr),
- 			    (unsigned long)ptr_addr);
- }
+Fair enough.
 
- static inline void *get_freepointer(struct kmem_cache *s, void *object)
- {
- 	object = kasan_reset_tag(object);
--	return freelist_dereference(s, object + s->offset);
-+	return freelist_dereference(s, (freeptr_t *)(object + s->offset));
- }
+/me goes away
 
- #ifndef CONFIG_SLUB_TINY
-@@ -421,15 +442,15 @@ __no_kmsan_checks
- static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
- {
- 	unsigned long freepointer_addr;
--	void *p;
-+	freeptr_t p;
-
- 	if (!debug_pagealloc_enabled_static())
- 		return get_freepointer(s, object);
-
- 	object = kasan_reset_tag(object);
- 	freepointer_addr = (unsigned long)object + s->offset;
--	copy_from_kernel_nofault(&p, (void **)freepointer_addr, sizeof(p));
--	return freelist_ptr(s, p, freepointer_addr);
-+	copy_from_kernel_nofault(&p, (freeptr_t *)freepointer_addr, sizeof(p));
-+	return freelist_ptr_decode(s, p, freepointer_addr);
- }
-
- static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
-@@ -441,7 +462,7 @@ static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
- #endif
-
- 	freeptr_addr = (unsigned long)kasan_reset_tag((void *)freeptr_addr);
--	*(void **)freeptr_addr = freelist_ptr(s, fp, freeptr_addr);
-+	*(freeptr_t *)freeptr_addr = freelist_ptr_encode(s, fp, freeptr_addr);
- }
-
- /* Loop over all objects in a slab */
-
-base-commit: 24be4d0b46bb0c3c1dc7bacd30957d6144a70dfc
 --
-2.41.0.255.g8b1d071c50-goog
+Qais Yousef
+
+> 
+> Regards,
+> Lukasz
+> 
+> [1] https://elixir.bootlin.com/linux/v6.4/source/drivers/cpufreq/scmi-cpufreq.c#L224
