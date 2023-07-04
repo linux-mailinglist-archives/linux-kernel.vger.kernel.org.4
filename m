@@ -2,126 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82357746E21
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9564A746E2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 12:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjGDJ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
+        id S231252AbjGDKBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 06:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbjGDJ7r (ORCPT
+        with ESMTP id S230471AbjGDKBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:59:47 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9520139
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:59:45 -0700 (PDT)
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 66ADE3F731
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:59:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688464783;
-        bh=tzatIeUkesboP8srHNWXkntXJNQo5yQ2O5oBQ6pkKDY=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=DVmma5qBFZs/AzjEJvuEWgfHuTjXf69yESN76Z6ONJWm09ORqMMLc61hYwLgv2PJQ
-         dWAYCa+VijNR7SoRHSwiDvPH163OzG/jFnCu8cKrCeX3PRpwvSmJVelnn4et76qlVy
-         MNExUOfhkuVcJCT1aeOXrm3f2nlQB2qzUAsFW6+uK/Sl6NjyI6sE7e5GoaT0cY1eDQ
-         8wAZRZSl7Wx5eiOpgONM3V/YRzGncK/cHzUu3i5nxqHS2CrE++2QIWSbuUvwRH9j8h
-         pA9OlYmeRM0SqjKWgJ+GMpNHhw8jzAdVhepRknXlOyFEKcrkxd5QCbsjE8qxPYkORL
-         jWkw3dvCZMTkQ==
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3a3b8b73cbeso672175b6e.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 02:59:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688464782; x=1691056782;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tzatIeUkesboP8srHNWXkntXJNQo5yQ2O5oBQ6pkKDY=;
-        b=DRdllb4ze+/kSOwWNRJV4QFkYBdH3fla4DL0OUDUwO/JO9v0N/Z4m/WEoaf3vRud3Q
-         KIKZBhz1Y4LpAnfhQ+0X7qZAQWzM0BN5T/p+p1VzT3Msn6y0u2G1/QX4ntftXZGS45DN
-         3iOphbBj4YUbGMqf9rScxewyCui8ZJ1ryYpIypMfw5Mst+0Gp3C53YY09W9bMIxcuFcA
-         lvP9Twc5ihmmLy8K2Jw6We3szcB7HL2KnWWKnQr1agpC1KtnT19zhskdHvzKWSx3gHt9
-         eakcrG9UyhOMrFhj5tQIudzn6FwmHuWN0pdDNZTbBpIpRJhSCJM41hTZVnQU11yWcctm
-         7hzA==
-X-Gm-Message-State: AC+VfDwKAzLPBsBweUZTUW6dC0fMYaoFDAozh3NTRBLsMQpK8Wvg6uwt
-        mdeg3dc3+mLAd/klzhIvWE5uJhEH4U6vvLeEP8ulVWhM5iUdK3Xt0nPfKmPQ95Gce5Ctcv71hPf
-        c2Kx7FtIQW9CQ8ETcd7E7l+V6Nyllel6j4S6pTjTt1g==
-X-Received: by 2002:a05:6808:2203:b0:3a3:69f1:f982 with SMTP id bd3-20020a056808220300b003a369f1f982mr11881575oib.31.1688464782275;
-        Tue, 04 Jul 2023 02:59:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7jzlZBEd/SQq7P5FvTxTpI4pGG7kbACUSej88ZGxR7nxbEKflz+pUTuV9N6QkHgtDNESl7dg==
-X-Received: by 2002:a05:6808:2203:b0:3a3:69f1:f982 with SMTP id bd3-20020a056808220300b003a369f1f982mr11881556oib.31.1688464781935;
-        Tue, 04 Jul 2023 02:59:41 -0700 (PDT)
-Received: from canonical.com (211-75-139-218.hinet-ip.hinet.net. [211.75.139.218])
-        by smtp.gmail.com with ESMTPSA id p66-20020a634245000000b00528513c6bbcsm16086231pga.28.2023.07.04.02.59.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 02:59:41 -0700 (PDT)
-From:   Koba Ko <koba.ko@canonical.com>
-To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] EDAC/i10nm: Fix an inappropriate shift exponent
-Date:   Tue,  4 Jul 2023 17:59:39 +0800
-Message-Id: <20230704095939.119620-1-koba.ko@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 4 Jul 2023 06:01:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7B91F1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 03:01:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8FF92F4;
+        Tue,  4 Jul 2023 03:01:49 -0700 (PDT)
+Received: from [10.163.47.48] (unknown [10.163.47.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 853503F73F;
+        Tue,  4 Jul 2023 03:01:03 -0700 (PDT)
+Message-ID: <c8bbc891-cd52-e34a-8ca7-76314e97cbe3@arm.com>
+Date:   Tue, 4 Jul 2023 15:31:00 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC] arm64: properly define SOFT_DIRTY for arm64
+Content-Language: en-US
+To:     Nico Pache <npache@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     aquini@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>
+References: <20230703135526.930004-1-npache@redhat.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230703135526.930004-1-npache@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A surprising value was determined after a read failure from a DIMM.
+Hi Nico,
 
-Software analyses pointed a data processing issue out.
-`UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
- shift exponent -66 is negative`
+On 7/3/23 19:25, Nico Pache wrote:
+> ARM64 has a soft-dirty bit (software dirty) but never properly defines
+> CONFIG_ARCH_HAS_SOFT_DIRTY or its necessary functions. This patch
+> introduces the ability to set/clear the soft dirty bit in a similar
+> manner as the other arches that utilize it.
+> 
+> However, we must be careful... there are cases where the DBM bit is not
+> available and the software dirty bit plays a essential role in determining
+> whether or not a page is dirty. In these cases we must not allow the
+> user to clear the software dirty bit. We can test for these cases by
+> utilizing the arch_faults_on_old_pte() function which test the availability
+> of DBM.
 
-A special value combination could not be handled so far.
+The current soft-dirty bit is a SW PTE bit i.e PTE_DIRTY, tracking PTE
+dirtiness in absence of HW DBM support, although both these tracking
+methods are very much intertwined. Current pte helpers like pte_dirty(),
+pte_mkdirty(), pte_mkclean(), and pte_wrrotect() etc operate both on
+HW and SW dirty tracking bits irrespective of whether DBM is supported
+or not.
 
-Check if an invalid value was detected by a call of the function “skx_get_dimm_attr”.
-* Print a corresponding error message in this case.
-* Return zero then directly from the function “skx_get_dimm_info”.
+For soft dirty to work, we need a software PTE bit which sticks around
+on the PTE entry until user space (only) clears it and above PTE_DIRTY
+bit cannot be used for that purpose as it could be cleared in the kernel.
 
-Fixes: 4ec656bdf43a ("EDAC, skx_edac: Add EDAC driver for Skylake")
-Signed-off-by: Koba Ko <koba.ko@canonical.com>
----
-v3: According to Markus' comments, simplify and polish the summary and add `Fixes:`
-v2: make error-print explicitly
+static inline pte_t pte_mkclean(pte_t pte)
+{
+        pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
+        pte = set_pte_bit(pte, __pgprot(PTE_RDONLY));
 
- drivers/edac/skx_common.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+        return pte;
+}
 
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 2a00e0503f0d5..ac61db72d2e6b 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -330,7 +330,7 @@ static int skx_get_dimm_attr(u32 reg, int lobit, int hibit, int add,
- 	u32 val = GET_BITFIELD(reg, lobit, hibit);
- 
- 	if (val < minval || val > maxval) {
--		edac_dbg(2, "bad %s = %d (raw=0x%x)\n", name, val, reg);
-+		skx_printk(KERN_ERR, "bad %s = %d (raw=0x%x)\n", name, val, reg);
- 		return -EINVAL;
- 	}
- 	return val + add;
-@@ -351,6 +351,8 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
- 	ranks = numrank(mtr);
- 	rows = numrow(mtr);
- 	cols = imc->hbm_mc ? 6 : numcol(mtr);
-+	if (ranks == -EINVAL || rows == -EINVAL || cols == -EINVAL)
-+		return 0;
- 
- 	if (imc->hbm_mc) {
- 		banks = 32;
--- 
-2.25.1
+BTW arch_faults_on_old_pte() is no longer available mainline.
 
+- Anshuman
+
+> 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> Cc: Liu Shixin <liushixin2@huawei.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Signed-off-by: Nico Pache <npache@redhat.com>
+> ---
+>  arch/arm64/Kconfig               |  1 +
+>  arch/arm64/include/asm/pgtable.h | 77 +++++++++++++++++++++++++++++++-
+>  2 files changed, 76 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 891ab530a665..4de491627f49 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -173,6 +173,7 @@ config ARM64
+>  	select HAVE_ARCH_PREL32_RELOCATIONS
+>  	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+>  	select HAVE_ARCH_SECCOMP_FILTER
+> +	select HAVE_ARCH_SOFT_DIRTY
+>  	select HAVE_ARCH_STACKLEAK
+>  	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+>  	select HAVE_ARCH_TRACEHOOK
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 0bd18de9fd97..a0a15ffa2417 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -121,8 +121,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+>  })
+>  
+>  #define pte_hw_dirty(pte)	(pte_write(pte) && !(pte_val(pte) & PTE_RDONLY))
+> -#define pte_sw_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
+> -#define pte_dirty(pte)		(pte_sw_dirty(pte) || pte_hw_dirty(pte))
+> +#define pte_soft_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
+> +#define pte_dirty(pte)		(pte_soft_dirty(pte) || pte_hw_dirty(pte))
+> +#define pte_swp_soft_dirty(pte)	pte_soft_dirty(pte)
+>  
+>  #define pte_valid(pte)		(!!(pte_val(pte) & PTE_VALID))
+>  /*
+> @@ -1096,6 +1097,78 @@ static inline bool pud_sect_supported(void)
+>  	return PAGE_SIZE == SZ_4K;
+>  }
+>  
+> +#ifdef CONFIG_ARM64_HW_AFDBM
+> +/*
+> + * if we have the DBM bit we can utilize the software dirty bit as
+> + * a mechanism to introduce the soft_dirty functionality; however, without
+> + * it this bit is crucial to determining if a entry is dirty and we cannot
+> + * clear it via software. DBM can also be disabled or broken on some early
+> + * armv8 devices, so check its availability before modifying it.
+> + */
+> +static inline pte_t pte_clear_soft_dirty(pte_t pte)
+> +{
+> +	if (arch_faults_on_old_pte())
+> +		return pte;
+> +
+> +	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
+> +}
+> +
+> +static inline pte_t pte_mksoft_dirty(pte_t pte)
+> +{
+> +	if (arch_faults_on_old_pte())
+> +		return pte;
+> +
+> +	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
+> +}
+> +
+> +static inline pte_t pte_swp_clear_soft_dirty(pte_t pte)
+> +{
+> +	if (arch_faults_on_old_pte())
+> +		return pte;
+> +
+> +	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
+> +}
+> +
+> +static inline pte_t pte_swp_mksoft_dirty(pte_t pte)
+> +{
+> +	if (arch_faults_on_old_pte())
+> +		return pte;
+> +
+> +	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
+> +}
+> +
+> +static inline int pmd_soft_dirty(pmd_t pmd)
+> +{
+> +	return pte_soft_dirty(pmd_pte(pmd));
+> +}
+> +
+> +static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
+> +{
+> +	return pte_pmd(pte_clear_soft_dirty(pmd_pte(pmd)));
+> +}
+> +
+> +static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
+> +{
+> +	return pte_pmd(pte_mksoft_dirty(pmd_pte(pmd)));
+> +}
+> +
+> +#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+> +static inline int pmd_swp_soft_dirty(pmd_t pmd)
+> +{
+> +	return pmd_soft_dirty(pmd);
+> +}
+> +
+> +static inline pmd_t pmd_swp_clear_soft_dirty(pmd_t pmd)
+> +{
+> +	return pmd_clear_soft_dirty(pmd);
+> +}
+> +
+> +static inline pmd_t pmd_swp_mksoft_dirty(pmd_t pmd)
+> +{
+> +	return pmd_mksoft_dirty(pmd);
+> +}
+> +#endif /* CONFIG_ARCH_ENABLE_THP_MIGRATION */
+> +#endif /* CONFIG_ARM64_HW_AFDBM */
+>  
+>  #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
+>  #define ptep_modify_prot_start ptep_modify_prot_start
