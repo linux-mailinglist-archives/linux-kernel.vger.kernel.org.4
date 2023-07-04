@@ -2,103 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0717476EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49197476EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjGDQkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S231682AbjGDQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjGDQkT (ORCPT
+        with ESMTP id S230452AbjGDQkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:40:19 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79DE10EC
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:40:07 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51d9124e1baso6806650a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688488806; x=1691080806;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HXb9doCia3kdxcU1SlSJEDVl+bmephTF+BvWe4qZAlU=;
-        b=NADTMbWIZB9MtAAJVDVeOzPZDmHED94IqgHird+7dj8aIcn4jQO0N4U9VxtXAPd6Sv
-         KhuGkDla/vuo2/CNa82xjgSnwInTpyaseCJv5G9jyvfE2XVt00eVWCc7H8+v0Y0csKoX
-         lZU/D4pr7U5K9ENgerf3/UELcZT+OfJg6KEjE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688488806; x=1691080806;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HXb9doCia3kdxcU1SlSJEDVl+bmephTF+BvWe4qZAlU=;
-        b=Ytsag7nfmZOR2A7ebWRrUugJFAfmq5N5CmAuKm8mgJY4HbP8oD6s1wbGNBuqxEHVU/
-         bIlYAQw/qRBxmJ1rAJ87guZdKEXUL4jETdJAqvBgi6GbUwQ9CRxJnJgh1O6tYayRYECt
-         eEmn10P6hLN9xLxAj0sGFJdeKGt0YMBx12yHqTfn16nL/ZcvE7xNbH9MLxPA2eAT4DU4
-         zH9pT1JHGX4VOxb8d2wEmvQA5G8TzUk1Ub4Z7khbvlZXUkt+HTt4D0sVoDS6VI2Fzp1v
-         TAqjmCWwf0oNqY6Ln3x3o2QCV8h2TzJJpkhZwiyRVI2p7Q7cbqszNSoVt+M6ygMXfjSQ
-         28Vw==
-X-Gm-Message-State: ABy/qLZW71/pSzCb2D5TwlRhUu+oxkQy08Z4JfX3Kcem5d1lPTfAYEqQ
-        C9KyersPnXcgtfywpZWSfDeg17wNaIKiuEMIonlejYuv
-X-Google-Smtp-Source: APBJJlFqkmaiJshCS8UOKhnx0wErCZN1/KiedZEtR+Nb8bc3DfhkAO/m0yxIZfh497uakeZTYpW8Fg==
-X-Received: by 2002:a17:906:85d3:b0:992:d337:6e44 with SMTP id i19-20020a17090685d300b00992d3376e44mr10215902ejy.58.1688488805976;
-        Tue, 04 Jul 2023 09:40:05 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id hk18-20020a170906c9d200b0099290e2c163sm8144083ejb.204.2023.07.04.09.40.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 09:40:05 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51d89664272so6802057a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:40:05 -0700 (PDT)
-X-Received: by 2002:aa7:df17:0:b0:51d:d568:fa4e with SMTP id
- c23-20020aa7df17000000b0051dd568fa4emr9181443edy.41.1688488805133; Tue, 04
- Jul 2023 09:40:05 -0700 (PDT)
+        Tue, 4 Jul 2023 12:40:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CF810D8;
+        Tue,  4 Jul 2023 09:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rt0Sgef/0mx0ZYOvMVPEM6yNpv3ovZQ+3Nf5gB6MWzc=; b=rBDJ16SWf0Ay6zMTwd7f3d6kAy
+        qL6gCNlEfMBkK0U+jU0qBzOfVEhTXG/Jv0AuHH3G28F0sguOTd83Pszb1jR+PaLG5s56Umax07fky
+        V+iLFsLcxqEwkx3CI+pXhlpUSnVO+D96+/aU9xo4KoKnlqy9OpOKBBhZC+Vpw6TFOGUgslA1GZTkZ
+        SBEi2TSZLYKwyfiKoMzYJyrNhynZiXZMtVBtouqBeRApWVW9F5b6hYk8oICgkC4wCyIR5RqJ6hssZ
+        ZWjQWEW9UvhulmSJ8hJiipJeZ+BV+g0ahag6kXdsU0gmmWJLGcd55LQxknsw7phyM1cb1bgZs3jD+
+        /FUXh9nA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qGj4R-009J9Z-4f; Tue, 04 Jul 2023 16:40:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 270993002E1;
+        Tue,  4 Jul 2023 18:40:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 081F120292D0E; Tue,  4 Jul 2023 18:40:04 +0200 (CEST)
+Date:   Tue, 4 Jul 2023 18:40:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
+        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
+Message-ID: <20230704164003.GB83892@hirez.programming.kicks-ass.net>
+References: <20230702025708.784106-1-guoren@kernel.org>
 MIME-Version: 1.0
-References: <000000000000b73abf05ffa60902@google.com> <20230704092451.72974b7a62ae08d48c077e10@linux-foundation.org>
-In-Reply-To: <20230704092451.72974b7a62ae08d48c077e10@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jul 2023 09:39:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whzthQy42SzYb1Bs_6tGyss5=SoiOppSE6onjUWDwA=aw@mail.gmail.com>
-Message-ID: <CAHk-=whzthQy42SzYb1Bs_6tGyss5=SoiOppSE6onjUWDwA=aw@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] WARNING in __gup_longterm_locked
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+6cf44e127903fdf9d929@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230702025708.784106-1-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 at 09:24, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> Thanks.  This is the temporary warning which was added by Linus's
-> a425ac5365f6cb3cc4 ("gup: add warning if some caller would seem to want
-> stack expansion").
+On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> The irqentry_nmi_enter/exit would force the current context into in_interrupt.
+> That would trigger the kernel to dead panic, but the kdb still needs "ebreak" to
+> debug the kernel.
+> 
+> Move irqentry_nmi_enter/exit to exception_enter/exit could correct handle_break
+> of the kernel side.
 
-Yes, and the randomizer system calls aren't very interesting for that warning.
+This doesn't explain much if anything :/
 
-I don't have any good idea for how to distinguish "this is a
-randomizer that is just doing crazy things by its very nature and is
-passing in nonsensical system call arguments" from "this is a real
-application that is doing crazy things that we will sadly have to try
-to be backwards compatible with".
+I'm confused (probably because I don't know RISC-V very well), what's
+EBREAK and how does it happen?
 
-And at the same time, I _really_ don't want that warning to then
-perhaps hide some *other* more real warning from the test automation.
+Specifically, if EBREAK can happen inside an local_irq_disable() region,
+then the below change is actively wrong. Any exception/interrupt that
+can happen while local_irq_disable() must be treated like an NMI.
 
-End result: I'd love for that warning to trigger on real applications
-(including ones run by any cloud test infrastructure, although I doubt
-that infrastructure necessarily runs very interesting loads), but not
-on things like syzbot and trinity that just randomize system calls.
+If that makes kdb unhappy, fix kdb.
 
-Does anybody have any ideas how to tell them apart? Maybe syzbot
-already sets some flag for this purpose that I just haven't thought
-of?
-
-                 Linus
+> Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
+> Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: stable@vger.kernel.org
+> ---
+>  arch/riscv/kernel/traps.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index efc6b649985a..ed0eb9452f9e 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/irq.h>
+>  #include <linux/kexec.h>
+>  #include <linux/entry-common.h>
+> +#include <linux/context_tracking.h>
+>  
+>  #include <asm/asm-prototypes.h>
+>  #include <asm/bug.h>
+> @@ -257,11 +258,11 @@ asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
+>  
+>  		irqentry_exit_to_user_mode(regs);
+>  	} else {
+> -		irqentry_state_t state = irqentry_nmi_enter(regs);
+> +		enum ctx_state prev_state = exception_enter();
+>  
+>  		handle_break(regs);
+>  
+> -		irqentry_nmi_exit(regs, state);
+> +		exception_exit(prev_state);
+>  	}
+>  }
+>  
+> -- 
+> 2.36.1
+> 
