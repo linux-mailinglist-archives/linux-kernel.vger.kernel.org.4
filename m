@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D02D746D45
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466B3746D48
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjGDJZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S231540AbjGDJ0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjGDJZ3 (ORCPT
+        with ESMTP id S229938AbjGDJ0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:25:29 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5980D1B7
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:25:28 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b69dcf45faso87065701fa.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 02:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688462726; x=1691054726;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w3WG4cGF8CRsbmj1ToTEuLfuzUDIEOrIrelQmjq4q3k=;
-        b=o9zy4rdoGn3NN1323n5JeCPR2P82Vf7Xrb/k/pDWdQHvrcIZ5KNk8E5Rc9AOWvUohR
-         8JC5CIa5pDomtb1dfZMDcahgFK74EO8eDQO9LSJYgjPzn4Ic41LS4QQHFX6p621xcc3u
-         XO4jHaVK/oWekFPVOXt8KXkFrL5uwNVhzPe0OW6mFqCpgsPLCDGha7mZqCOpezE+7azY
-         JK43WUYppygu4AR6pSjwNQ4n71biZrLvyDxyiBacmVPLZW4xC0G71z1vFrh8dIliQYVo
-         8F/dIQJ/5ufMEC1w88uKtvPWoHp5fDYBZKYi1NiHQpep1YJRz5d/czwVmMlpXQets9oL
-         KN+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688462726; x=1691054726;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w3WG4cGF8CRsbmj1ToTEuLfuzUDIEOrIrelQmjq4q3k=;
-        b=l8e1IHof7+patguf5IgURxMJZmrJC8yJSTwp+bD00B0DqTaOqSM6PVC4obwLGZHZUX
-         viSpfRXZPldAurhvkXikY4ADrUetDDUZlileGviGyvqJDdFZa5sXY5YrU0Ms16Hs1NIh
-         YNU1XXbstf2mDyEPiMeDQZjh3sZkR05Uktv0v8QYiS2ApGBvTTB/l0+OTm21PIvr0HVc
-         U4HKG4Q++47/qjIyy5jTPErgcMt2AVIvYt0a+K9E9qP9Du+FOAnvkTg1jnZF881fn9rR
-         eq/BLYULJgyDL/zuYVfDxiYygNLzPHvmRHhQ5ksofs+dwUtx6OM1GRRE3hjFDQvSAeDY
-         XMqQ==
-X-Gm-Message-State: ABy/qLb1A1Zgydx8Lvw2xXVk9xfTMW/9vhWsqslt2NxX9alyOHO6g+NR
-        J/BLEs0s+jyp3KA6pgKlCel8UcuzSwHmWgqrB70=
-X-Google-Smtp-Source: APBJJlHbSJ2Cml2qn4cb/1edSGf064IsnqMZE4INWgBRJ+bUKVKGU+1ukWl3wQA36b7Pv4rNzHUvKd3ZOMoslroDlxM=
-X-Received: by 2002:a2e:3218:0:b0:2b6:f1d5:619 with SMTP id
- y24-20020a2e3218000000b002b6f1d50619mr1554642ljy.14.1688462726472; Tue, 04
- Jul 2023 02:25:26 -0700 (PDT)
+        Tue, 4 Jul 2023 05:26:14 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8E8B6;
+        Tue,  4 Jul 2023 02:26:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=dqtmIxbNifx0ASyE7vPUiMcgbpvNHFd86ifBe6b/c3Q=; b=hp1h9O13K4M0nCG4aQvgTxGVdh
+        1IVvh0paFFGpu981/toaLnD4cIJMUq5HB32i+SU9bkrLKATtV8/nzHDnY2DDy2YgAPNYzxlZzYbXc
+        tKxUzN9X7MO8IkpkPFIDF7ELFzsl43Nbk+ZNs9XXL4Uu6/yEL9RQbyNsleh1l9UwLp3s7qgug32Ab
+        6xwIXwplxQ5uu3tgjscvYRD4qY9q8sIV4EkqLQFRtlzLLCl0vjW3dtgdWeQgRydxF0HxJKxXFP0z7
+        2e7Kr2luv/ciR+8GUQC0jS+hPDUGMJLJ0LhLUgy/RoH6UPbDNyVScPuzjoRC+VVdy+/2hQxCc95eb
+        X9SVRTkA==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qGcIP-00036E-II; Tue, 04 Jul 2023 11:26:05 +0200
+Received: from [81.6.34.132] (helo=localhost.localdomain)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qGcIP-000G0v-25; Tue, 04 Jul 2023 11:26:05 +0200
+Subject: Re: [PATCH] libbpf: fix some typo of hashmap init
+To:     John Sanpe <sanpeqf@gmail.com>, ast@kernel.org, andrii@kernel.org
+Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230704085429.3110340-1-sanpeqf@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2af93aa0-a81d-d783-b946-dc7ffc875f4c@iogearbox.net>
+Date:   Tue, 4 Jul 2023 11:26:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20230703150859.6176-1-ubizjak@gmail.com> <87o7ks16gh.fsf@intel.com>
- <CAFULd4YDHqUud94Q1mbKyKqGHh==Gv7+FpNhgm5s1p=0ZwcAXg@mail.gmail.com> <87lefw139r.fsf@intel.com>
-In-Reply-To: <87lefw139r.fsf@intel.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Tue, 4 Jul 2023 11:25:15 +0200
-Message-ID: <CAFULd4azR=ft9kEYN19WjxORcJNT_-v7q3sVs904Bf_td-VgEg@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915/pmu: Use local64_try_cmpxchg in i915_pmu_event_read
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230704085429.3110340-1-sanpeqf@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26959/Tue Jul  4 09:29:23 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 10:37=E2=80=AFAM Jani Nikula <jani.nikula@linux.inte=
-l.com> wrote:
->
-> On Tue, 04 Jul 2023, Uros Bizjak <ubizjak@gmail.com> wrote:
-> > On Tue, Jul 4, 2023 at 9:28=E2=80=AFAM Jani Nikula <jani.nikula@linux.i=
-ntel.com> wrote:
-> >> You could save everyone a lot of time by actually documenting what the=
-se
-> >> functions do. Assume you don't know what local64_try_cmpxchg() does, a=
-nd
-> >> see how many calls you have to go through to figure it out.
-> >
-> > These functions are documented in Documentation/atomic_t.txt (under
-> > "RMW ops:" section), and the difference is explained in a separate
-> > section "CMPXCHG vs TRY_CMPXCGS" in the same file.
->
-> Thanks, but *sigh*.
->
-> No kernel-doc above the functions, not even a regular comment
-> referencing atomic_t.txt.
->
-> $ git grep local.*_try -- Documentation
-> [nothing]
+On 7/4/23 10:54 AM, John Sanpe wrote:
+> rename macro parameters to prevent replacing struct members of hashmap
+> 
+> Signed-off-by: John Sanpe <sanpeqf@gmail.com>
+> ---
+>   tools/lib/bpf/hashmap.h | 16 ++++++++--------
+>   1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/hashmap.h b/tools/lib/bpf/hashmap.h
+> index 0a5bf1937a7c..bae3feaf29d0 100644
+> --- a/tools/lib/bpf/hashmap.h
+> +++ b/tools/lib/bpf/hashmap.h
+> @@ -80,14 +80,14 @@ struct hashmap {
+>   	size_t sz;
+>   };
+>   
+> -#define HASHMAP_INIT(hash_fn, equal_fn, ctx) {	\
+> -	.hash_fn = (hash_fn),			\
+> -	.equal_fn = (equal_fn),			\
+> -	.ctx = (ctx),				\
+> -	.buckets = NULL,			\
+> -	.cap = 0,				\
+> -	.cap_bits = 0,				\
+> -	.sz = 0,				\
+> +#define HASHMAP_INIT(_hash_fn, _equal_fn, _ctx) {	\
+> +	.hash_fn = (_hash_fn),				\
+> +	.equal_fn = (_equal_fn),			\
+> +	.ctx = (_ctx),					\
+> +	.buckets = NULL,				\
+> +	.cap = 0,					\
+> +	.cap_bits = 0,					\
+> +	.sz = 0,					\
+>   }
+>   
+>   void hashmap__init(struct hashmap *map, hashmap_hash_fn hash_fn,
+> 
 
-Unfortunately, this was always the state w.r.t. local.* atomic
-functions. There is an effort to improve the documentation of atomics,
-perhaps it will be also extended to local variants.
-
-Uros.
+Please send a v2 and just remove the whole HASHMAP_INIT. It's not used
+anywhere in libbpf.
