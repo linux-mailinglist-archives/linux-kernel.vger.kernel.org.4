@@ -2,141 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52488747064
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A36747068
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbjGDMFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S231331AbjGDMFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjGDMFU (ORCPT
+        with ESMTP id S231213AbjGDMFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:05:20 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2113.outbound.protection.outlook.com [40.107.117.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1724EE7E;
-        Tue,  4 Jul 2023 05:05:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a8CCqTenTaLxhc40DnRxzypEaBHVMYHO0ezqlfthnk8HdYCMGtZr8AY/H+3RofC3FYDt4a3gyVFOoHuTCRbdeNSvYXeDoGd902+3OQFeyngMURQ5XQ/DZqu8CmbYIVfans7I2465icLcqgFSjKdePLHH/cy9bvyGOmQXErT7bKNWpVYirENUNFHOc+16WegZdDt2jCdxijhEKIyH39jpUhYuvj8zvrLqPbFSlj8836u0H5ine4gECZ+u42JevbDlh7Ag7nLxsiNtEQx1+TZ8NicEeYcCEhGxUUIosddRN8Vw/waPE2xrDGKsUgKbD4vnj3GC02QYXg3rl4zos/qgUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p4d0tcwYrv5GgGAUd/6L2Co9SEbi/PAPzN9VrjkRb1o=;
- b=AclTDQ/1zK1RoinnfuXsbL+1m0Sf3nldqW9DZD2P9Tl6+gibnvHYIbsaf0zM6jithsJiUI5JsMibqO34x+UiOOJmF9WgKX6V1RNoocI8PNIZjuowO9X3WJkKLD9T22Nllb96dT9ZN4O/8psF2AZZwvTq6FUKnMWEnbgaEFQI1n69BzR+TCMRU1QaZV2t6iXuuc7FJh6o13eJeybKXsxkrI3gxzg8r18XIjSmy7DJ1GOnmmKc3CxH5onZEryGr5ECarfNtjfSmPQoJa06wLY8M3Hw2Xm4u52DwKpAq88/xCNeYKgDfcWgo92hTZXo/+uGhhkXbjdVgY6lzbMVhXa3YA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p4d0tcwYrv5GgGAUd/6L2Co9SEbi/PAPzN9VrjkRb1o=;
- b=S2BpF4p6JAjleeINFP2wEyyZrbzDgQCF/cTOzC/f6Py/V0vBn7cxlksSu5sjXw6j4b6FlHOg7I020gkOcWK9ClapRoeRZR036XmjtFXwM6TlPkAhrCpEM1XgPetywQdoW5zTNz4uY3p/mshGaXLIHQYikaeagGADTP+5mTocOq9N+BrviJxLM0pUpBwhWi4E5EQBMpz9Tzdst7vgBgopO/9uGGOqHbqDJz+fKCOZrVix1nx6JEctTfU0SPdIGdXDVvX35FEcjPIiHsmAya/0LQ+O7lfkfCW1jfJIccBVU3kAZHR8c8a8+fvXc2vqkoW/EIEsd/SNWYrFQTq9lyIM1Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
- JH0PR06MB6653.apcprd06.prod.outlook.com (2603:1096:990:31::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6544.24; Tue, 4 Jul 2023 12:05:10 +0000
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::c2b:41ab:3b14:f920]) by SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::c2b:41ab:3b14:f920%6]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 12:05:10 +0000
-From:   Minjie Du <duminjie@vivo.com>
-To:     Lizhi Hou <lizhi.hou@amd.com>, Brian Xu <brian.xu@amd.com>,
-        Raj Kumar Rampelli <raj.kumar.rampelli@amd.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michal Simek <michal.simek@amd.com>,
-        dmaengine@vger.kernel.org (open list:XILINX XDMA DRIVER),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/ZYNQ
-        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
-Subject: [PATCH v1] drivers: xilinx: Fix Judgment of the return value of the devm_ioremap_resource function
-Date:   Tue,  4 Jul 2023 20:04:58 +0800
-Message-Id: <20230704120458.11125-1-duminjie@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYAPR04CA0012.apcprd04.prod.outlook.com
- (2603:1096:404:15::24) To SG2PR06MB5288.apcprd06.prod.outlook.com
- (2603:1096:4:1dc::9)
+        Tue, 4 Jul 2023 08:05:14 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D272D185
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:05:11 -0700 (PDT)
+X-ASG-Debug-ID: 1688472307-1eb14e179d101f0001-xx1T2L
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id G0Eta9LNgFSSPdSJ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 04 Jul 2023 20:05:07 +0800 (CST)
+X-Barracuda-Envelope-From: LeoLiu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 4 Jul
+ 2023 20:05:07 +0800
+Received: from xin.lan (10.32.64.1) by ZXBJMBX03.zhaoxin.com (10.29.252.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 4 Jul
+ 2023 20:05:05 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+From:   LeoLiu-oc <LeoLiu-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
+To:     <lenb@kernel.org>, <james.morse@arm.com>, <tony.luck@intel.com>,
+        <bp@alien8.de>, <bhelgaas@google.com>, <robert.moore@intel.com>,
+        <leoliu-oc@zhaoxin.com>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <acpica-devel@lists.linuxfoundation.org>
+Subject: [PATCH v3 1/5] ACPI/APEI: Add apei_hest_parse_aer()
+Date:   Tue, 4 Jul 2023 20:05:05 +0800
+X-ASG-Orig-Subj: [PATCH v3 1/5] ACPI/APEI: Add apei_hest_parse_aer()
+Message-ID: <20230704120505.1322152-1-LeoLiu-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|JH0PR06MB6653:EE_
-X-MS-Office365-Filtering-Correlation-Id: 620ec6c3-8821-45ad-7ce0-08db7c86ea42
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W4SWH8aj0dX1ClIek7HwWAHlYeyCv58sCx6zpZvqzchK9XPaqTtQJbMOP54vueIEz5SzEfFbYLmAFOAnJbg1i3SqT+03kpgG9JJbcNrsIFhNXEzod8bTTnI4HCL+LnvoEMeIn3/9twL3DsfxvCrZiBAJud8+H4M22yiENlKUX4jVHgP9+4osq+FGIZ0N53R4nFyAIqOn+1+munUcIqcVGDvhLm6f1MhZZtHqRBMIsnHBWxJiiKQcJ6CEVQTJCu6wIESK9rPUehSc/NHkr199UxXIfRb7qbxh8SYJmnsGQmNPANSnc123GBx7023Iq/kP3xMr8rglifLNMk2t+GH8vsaIWCzm2Tyc2ht5VeBDjAsU+BmswPF4FyrMMZWBU1wmv68zZmzYrVMDnkmTDE/089wPQw02G7QLVGjG54zYZjIvQWF0PdF4BHHzysxx4FCCu2JP+jNTPRbbCPAW+34FJTBbVYD4Byx1afz8gttE0jsLltnCwpI6QkSuT1SE3xHpXnXoGyqy2n7IEFL1/NIu+J/e78vEfMJUP+Yk78GvGGfMaxU7Sz2IuDB7hybjriQFhBp6p4cccDVhc344T5mfckVuBzZNKBpqeG0FQAaAqNfIqouGfSnapAG+X+Zr5Aof
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(376002)(39860400002)(136003)(451199021)(110136005)(4744005)(2906002)(478600001)(26005)(6486002)(6666004)(86362001)(41300700001)(52116002)(8936002)(8676002)(5660300002)(36756003)(316002)(6512007)(66556008)(66476007)(66946007)(4326008)(38100700002)(38350700002)(6506007)(1076003)(2616005)(186003)(83380400001)(107886003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DR26hOmZDfnG58AjHjNzpynGaD67DgJHX+woodbBxbR+nFLQ/JwmmOst/u60?=
- =?us-ascii?Q?4ibsmsMKaNr743T/86KTT33YJq5QEyCA5jDFFiBaL/gzbNdPo3Lmf4CjTRyC?=
- =?us-ascii?Q?QN97zzNa45fKCUG5Sv2qremjEBFobCjYKyrcCU3Nr8UU5QOTRKaH4j5vPrwk?=
- =?us-ascii?Q?RGy2KNogdbxm5SFldLDOmaBGXk3RK2rH5BKAlsofToIjSe2g0GlA8Mq3NXYY?=
- =?us-ascii?Q?NZ7WoDNsr1hWB0qcs3T4QxGdEe3gP60Np3Q3l/R/NbrV52ZZbTpK/rt8bfmx?=
- =?us-ascii?Q?k/xO/otqrwkNwLDBBX+3wW3XaRSqZOTBi6g30t0DDlOFUKjYJM4VOPmJdqtL?=
- =?us-ascii?Q?gbtTY8MUj57FdkAvoKhz+1CO5sz/0EibxVQIx7wqMjSJMie3Qze21o1DJRgK?=
- =?us-ascii?Q?9u06Ww0VN+YclRdTiPjNPPwuCZKfrr3d7FocHLBCiL571zTt2/c7NwVIGrNe?=
- =?us-ascii?Q?9kHU1NC8Jc5vc0kQweayBQhAtoBNBYz1zQRdNoNX8+e8J4uud6jvWr/FuyvP?=
- =?us-ascii?Q?5B9kFv1fzfjJIq0PaB/6QMbZIRKSDn4rAaoSiO0sZiL3dA64fE4OoMRawkEe?=
- =?us-ascii?Q?l31Xe/0sVrlzdO5iVrUWLjcE+L7Ja47W1WQwWvvUUwDSucXzY30xIN/PPzRg?=
- =?us-ascii?Q?4CVb+fgGZv2zQumBz9GUXQs2voGaEnb2xQngQPTfKvTpD32zD7F6n1f4tgXy?=
- =?us-ascii?Q?9yvzquvF7bXlfe+7glvozARlYuQmKVXWbV5JBcmzvUcihOycj4gHq2xro/vJ?=
- =?us-ascii?Q?b63bW/OHfo+tAqob4qxqsjbxtj5CVTQ6LGTazAuPudMoDUgs394RQeCaPoID?=
- =?us-ascii?Q?VGAJKwSLWYbWgscxzZf/YkbFDOVZxiJB4oENUz7C6YMNp6CgByuA0Suhx4UB?=
- =?us-ascii?Q?9+W34pIMlwLYonWeUop4QyrbdtmJrgi51hQIp/EgS/lPkjlHzlY6mh/oTC8Y?=
- =?us-ascii?Q?//ni4j0RQjY3aM4Slm2rLjl5MOTsk3/JSF06/ccmMebqktQKAwU0rKH+c/2P?=
- =?us-ascii?Q?AunN2uASf3g/44LdyeC/KVQZmjajw+Y76KbuFTovQFBk8p4AiTIHHFLZ+whV?=
- =?us-ascii?Q?3/oZ4qptvhj0BilI4p6U60qEqrC9vFKlwaLEdCNFc9s+w5aX4tGwoqyhG/in?=
- =?us-ascii?Q?s6tLsDduY1u+dN0xFrPYBqrBkS2IBUaEOVXLRY48cdv5d/nIGmOl2kOCrEUv?=
- =?us-ascii?Q?wsx1zCrd8Ps13AKA7mGweUu+340XyXXjprIhWqc9Gb57AYn2Yt553CY495Pc?=
- =?us-ascii?Q?Z0KKN6wFxT6NLR9LWPKRumsj23MTtSfDxxDt/3z4gnM2b/WU8OHUi/CjbjjV?=
- =?us-ascii?Q?19H9p2gj+lMxHu0HyVMgEATo+VeRDsQde3qa3CL4wr8TA6C0XUVWQRl/dmh6?=
- =?us-ascii?Q?IgWLqmLCsteKJAqfeMz6tdxxkWg5tDmm17/husXGRiEzOO3TsoQFcwjiN4F1?=
- =?us-ascii?Q?z6d7g+MEqDDZxcFPvkXNeWqdqJ9W5qU9b1JtskZ4Zp9ZbQdZnV0/OaEJyBBE?=
- =?us-ascii?Q?SVWyG1PAI0ilx625B2QbiMN35gmTsvyCYSpzvpw3Rf92QdMFD5Dq612EtiDO?=
- =?us-ascii?Q?okkOSasgqAPvx++ogBpPraAQv9zP69A9uOzaCpJD?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 620ec6c3-8821-45ad-7ce0-08db7c86ea42
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 12:05:10.3107
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: diSqHNYMkETvBb9xiGI2mjAz/KjjkbzlOB009AEBAlb23YgsxIICk1w4vhjXTTe4AqWtf6uULezk9IlZ8w82dw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR06MB6653
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.32.64.1]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1688472307
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 7867
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.110906
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IS_ERR() fix devm_ioremap_resource function return judge.
-Could you help check it out?
-Thank you!
+From: leoliu-oc <leoliu-oc@zhaoxin.com>
 
-Signed-off-by: Minjie Du <duminjie@vivo.com>
+apei_hest_parse_aer() is used to parse and extract register values
+from HEST PCIe AER structures.
+
+Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
 ---
- drivers/dma/xilinx/xdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/apei/hest.c | 114 ++++++++++++++++++++++++++++++++++++++-
+ include/acpi/actbl1.h    |  69 ++++++++++++++++++++++++
+ include/acpi/apei.h      |   7 +++
+ 3 files changed, 189 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
-index 93ee298d5..ad5ff6335 100644
---- a/drivers/dma/xilinx/xdma.c
-+++ b/drivers/dma/xilinx/xdma.c
-@@ -892,7 +892,7 @@ static int xdma_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/acpi/apei/hest.c b/drivers/acpi/apei/hest.c
+index 6aef1ee5e1bdb..fb839a5c480ee 100644
+--- a/drivers/acpi/apei/hest.c
++++ b/drivers/acpi/apei/hest.c
+@@ -26,6 +26,7 @@
+ #include <acpi/apei.h>
+ #include <acpi/ghes.h>
  
- 	reg_base = devm_ioremap_resource(&pdev->dev, res);
--	if (!reg_base) {
-+	if (IS_ERR(reg_base)) {
- 		xdma_err(xdev, "ioremap failed");
- 		goto failed;
- 	}
++#include <linux/pci.h>
+ #include "apei-internal.h"
+ 
+ #define HEST_PFX "HEST: "
+@@ -86,7 +87,50 @@ static int hest_esrc_len(struct acpi_hest_header *hest_hdr)
+ 	return len;
+ };
+ 
+-typedef int (*apei_hest_func_t)(struct acpi_hest_header *hest_hdr, void *data);
++static bool hest_source_is_pcie_aer(struct acpi_hest_header *hest_hdr)
++{
++	switch (hest_hdr->type) {
++	case ACPI_HEST_TYPE_AER_ROOT_PORT:
++	case ACPI_HEST_TYPE_AER_ENDPOINT:
++	case ACPI_HEST_TYPE_AER_BRIDGE:
++		return true;
++	default:
++		return false;
++	}
++}
++
++static bool hest_match_type(struct acpi_hest_header *hest_hdr,
++				struct pci_dev *dev)
++{
++	u16 hest_type = hest_hdr->type;
++	u8 pcie_type = pci_pcie_type(dev);
++
++	if ((hest_type == ACPI_HEST_TYPE_AER_ROOT_PORT &&
++		pcie_type == PCI_EXP_TYPE_ROOT_PORT) ||
++		(hest_type == ACPI_HEST_TYPE_AER_ENDPOINT &&
++		pcie_type == PCI_EXP_TYPE_ENDPOINT) ||
++		(hest_type == ACPI_HEST_TYPE_AER_BRIDGE &&
++		(pcie_type == PCI_EXP_TYPE_PCI_BRIDGE || pcie_type == PCI_EXP_TYPE_PCIE_BRIDGE)))
++		return true;
++	return false;
++}
++
++static bool hest_match_pci_devfn(struct acpi_hest_aer_common *p,
++		struct pci_dev *pci)
++{
++	return	ACPI_HEST_SEGMENT(p->bus) == pci_domain_nr(pci->bus) &&
++			ACPI_HEST_BUS(p->bus)     == pci->bus->number &&
++			p->device                 == PCI_SLOT(pci->devfn) &&
++			p->function               == PCI_FUNC(pci->devfn);
++}
++
++static bool hest_match_pci(struct acpi_hest_header *hest_hdr,
++		struct acpi_hest_aer_common *p, struct pci_dev *pci)
++{
++	if (hest_match_type(hest_hdr, pci))
++		return hest_match_pci_devfn(p, pci);
++	return false;
++}
+ 
+ static int apei_hest_parse(apei_hest_func_t func, void *data)
+ {
+@@ -124,6 +168,74 @@ static int apei_hest_parse(apei_hest_func_t func, void *data)
+ 	return 0;
+ }
+ 
++/*
++ * apei_hest_parse_aer - Find the AER structure in the HEST and
++ * match it with the PCIe device.
++ *
++ * @hest_hdr: To save the ACPI AER error source in HEST
++ *
++ * Return 1 if the PCIe dev matched with the ACPI AER error source in
++ * HEST, else return 0.
++ */
++int apei_hest_parse_aer(struct acpi_hest_header *hest_hdr, void *data)
++{
++	struct acpi_hest_parse_aer_info *info = data;
++	struct acpi_hest_aer_endpoint *acpi_hest_aer_endpoint = NULL;
++	struct acpi_hest_aer_root_port *acpi_hest_aer_root_port = NULL;
++	struct acpi_hest_aer_for_bridge *acpi_hest_aer_for_bridge = NULL;
++
++	if (!hest_source_is_pcie_aer(hest_hdr))
++		return 0;
++
++	switch (hest_hdr->type) {
++	case ACPI_HEST_TYPE_AER_ROOT_PORT:
++		acpi_hest_aer_root_port = (struct acpi_hest_aer_root_port *)(hest_hdr + 1);
++		if (acpi_hest_aer_root_port->flags & ACPI_HEST_GLOBAL) {
++			if (hest_match_type(hest_hdr, info->pci_dev)) {
++				info->acpi_hest_aer_root_port = acpi_hest_aer_root_port;
++				info->hest_matched_with_dev = 1;
++			}
++		} else if (hest_match_pci(hest_hdr,
++					(struct acpi_hest_aer_common *)acpi_hest_aer_root_port,
++					info->pci_dev)) {
++			info->acpi_hest_aer_root_port = acpi_hest_aer_root_port;
++			info->hest_matched_with_dev = 1;
++		}
++		break;
++	case ACPI_HEST_TYPE_AER_ENDPOINT:
++		acpi_hest_aer_endpoint = (struct acpi_hest_aer_endpoint *)(hest_hdr + 1);
++		if (acpi_hest_aer_endpoint->flags & ACPI_HEST_GLOBAL) {
++			if (hest_match_type(hest_hdr, info->pci_dev)) {
++				info->acpi_hest_aer_endpoint = acpi_hest_aer_endpoint;
++				info->hest_matched_with_dev = 1;
++			}
++		} else if (hest_match_pci(hest_hdr,
++					(struct acpi_hest_aer_common *)acpi_hest_aer_endpoint,
++					info->pci_dev)) {
++				info->acpi_hest_aer_endpoint = acpi_hest_aer_endpoint;
++				info->hest_matched_with_dev = 1;
++		}
++		break;
++	case ACPI_HEST_TYPE_AER_BRIDGE:
++		acpi_hest_aer_for_bridge = (struct acpi_hest_aer_for_bridge *)(hest_hdr + 1);
++		if (acpi_hest_aer_for_bridge->flags & ACPI_HEST_GLOBAL) {
++			if (hest_match_type(hest_hdr, info->pci_dev)) {
++				info->acpi_hest_aer_for_bridge = acpi_hest_aer_for_bridge;
++				info->hest_matched_with_dev = 1;
++			}
++		} else if (hest_match_pci(hest_hdr,
++					(struct acpi_hest_aer_common *)acpi_hest_aer_for_bridge,
++					info->pci_dev)) {
++				info->acpi_hest_aer_for_bridge = acpi_hest_aer_for_bridge;
++				info->hest_matched_with_dev = 1;
++			}
++		break;
++	default:
++		break;
++	}
++	return info->hest_matched_with_dev;
++}
++
+ /*
+  * Check if firmware advertises firmware first mode. We need FF bit to be set
+  * along with a set of MC banks which work in FF mode.
+diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
+index 58b0490a2ad12..31abe06c6e792 100644
+--- a/include/acpi/actbl1.h
++++ b/include/acpi/actbl1.h
+@@ -1583,6 +1583,75 @@ struct acpi_hest_aer_bridge {
+ 	u32 advanced_capabilities2;
+ };
+ 
++struct acpi_hest_parse_aer_info {
++	struct pci_dev *pci_dev;
++	int hest_matched_with_dev;
++	struct acpi_hest_aer_endpoint *acpi_hest_aer_endpoint;
++	struct acpi_hest_aer_root_port *acpi_hest_aer_root_port;
++	struct acpi_hest_aer_for_bridge *acpi_hest_aer_for_bridge;
++};
++
++/* HEST Sub-structure for PCIe Root Port Structure (6) */
++
++struct acpi_hest_aer_root_port {
++	u16 reserved1;
++	u8 flags;
++	u8 enabled;
++	u32 records_to_preallocate;
++	u32 max_sections_per_record;
++	u32 bus;
++	u16 device;
++	u16 function;
++	u16 device_control;
++	u16 reserved2;
++	u32 uncorrectable_mask;
++	u32 uncorrectable_severity;
++	u32 correctable_mask;
++	u32 advanced_capabilities;
++	u32 root_error_command;
++};
++
++/* HEST Sub-structure for PCIe Endpoint Structure (7) */
++
++struct acpi_hest_aer_endpoint {
++	u16 reserved1;
++	u8 flags;
++	u8 enabled;
++	u32 records_to_preallocate;
++	u32 max_sections_per_record;
++	u32 bus;
++	u16 device;
++	u16 function;
++	u16 device_control;
++	u16 reserved2;
++	u32 uncorrectable_mask;
++	u32 uncorrectable_severity;
++	u32 correctable_mask;
++	u32 advanced_capabilities;
++};
++
++/* HEST Sub-structure for PCIe/PCI-X Bridge Structure (8) */
++
++struct acpi_hest_aer_for_bridge {
++	u16 reserved1;
++	u8 flags;
++	u8 enabled;
++	u32 records_to_preallocate;
++	u32 max_sections_per_record;
++	u32 bus;
++	u16 device;
++	u16 function;
++	u16 device_control;
++	u16 reserved2;
++	u32 uncorrectable_mask;
++	u32 uncorrectable_severity;
++	u32 correctable_mask;
++	u32 advanced_capabilities;
++	u32 uncorrectable_mask2;
++	u32 uncorrectable_severity2;
++	u32 advanced_capabilities2;
++};
++
+ /* 9: Generic Hardware Error Source */
+ 
+ struct acpi_hest_generic {
+diff --git a/include/acpi/apei.h b/include/acpi/apei.h
+index dc60f7db5524f..8a0b2b9edbafe 100644
+--- a/include/acpi/apei.h
++++ b/include/acpi/apei.h
+@@ -33,10 +33,17 @@ void __init acpi_ghes_init(void);
+ static inline void acpi_ghes_init(void) { }
+ #endif
+ 
++typedef int (*apei_hest_func_t)(struct acpi_hest_header *hest_hdr, void *data);
++
+ #ifdef CONFIG_ACPI_APEI
+ void __init acpi_hest_init(void);
++int apei_hest_parse_aer(struct acpi_hest_header *hest_hdr, void *data);
+ #else
+ static inline void acpi_hest_init(void) { }
++static inline int apei_hest_parse_aer(struct acpi_hest_header *hest_hdr, void *data)
++{
++	return -EINVAL;
++}
+ #endif
+ 
+ int erst_write(const struct cper_record_header *record);
 -- 
-2.39.0
+2.34.1
 
