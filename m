@@ -2,111 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BCB7476FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE61747727
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbjGDQlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S231608AbjGDQpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjGDQlc (ORCPT
+        with ESMTP id S231153AbjGDQpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:41:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C886A10F8;
-        Tue,  4 Jul 2023 09:41:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C2F961307;
-        Tue,  4 Jul 2023 16:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 613CEC433C7;
-        Tue,  4 Jul 2023 16:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688488888;
-        bh=SVPdblX3YDY55Q6UtjLbYsorf7soz2DR4bHIEBjDZIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aHi9lr8nVm6HF0BJ5YxREUODkaqRgT+8dw/G9LRK/hK9Rhku7NT5RIFrHDn3prkoB
-         KHJMZR7UjrV8oMT6KtiNxyQ0rd3c14XgOXshImtCHcikHEEqi4UFaCRRL7tFX8xOh0
-         Q/UJP9W9bIVC1GxQMcBXE+6TtES6HCSNR7tdg217QUu01jVJ20TYimWzjIM97juGMW
-         3H3y+yRh61P/sgTBwSLyeRjp5G3jM3Ll1OqhZ02r1jIc+/tWQ4daLD5n3YtdjMA8PT
-         2cyw06urNulmdbk1bCMaiWEC2Qn4ADLd8PWQD2+YjgGCPplxYr2wEqc6xYA0McJem4
-         4lU946xl2yEFg==
-Date:   Tue, 4 Jul 2023 17:41:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v4 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Message-ID: <9de02a94-8043-4355-8925-99e0d1ffb713@sirena.org.uk>
-References: <20230704090453.83980-1-william.qiu@starfivetech.com>
- <20230704090453.83980-3-william.qiu@starfivetech.com>
- <20230704-gooey-lair-2bc45bbd163c@spud>
+        Tue, 4 Jul 2023 12:45:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF5B10D5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688489006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=++31QNnFpybX5MmpnsU7eZDLUx30FaViiXqi2htj32Q=;
+        b=FrZp3K32652/0Rqx+Px7R2+/81/3RUb7GGTS2tGHC6Nndew3JhJ3vHIwJMZcun2AyBzu7l
+        dFJ24DORkLylwAgZJsPIybzVckna+lzdchW45HZ9p1M+VBpiSTC8PJihgYZwiZenGv9kcI
+        tYvJ8RWpYtMNBvmdy7hbSfkw0vk3Luw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-28-Oeevy7mhNnCSx92pyoCaNQ-1; Tue, 04 Jul 2023 12:43:25 -0400
+X-MC-Unique: Oeevy7mhNnCSx92pyoCaNQ-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-31400956ce8so3259919f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:43:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688489004; x=1691081004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=++31QNnFpybX5MmpnsU7eZDLUx30FaViiXqi2htj32Q=;
+        b=Q310zTCsTUgsN8NlRZjHRdmdIiKs0Z8L90Oup5YhK2tNdFJcopvSs1ZT6JHbWMvA+A
+         4V6KTE47Dy918hLkjUK3GuyJqCuD0P2L0z4yLAOYRjoULkv6EYZ+xDw1lp+2Nd9Ua9Yx
+         y6trTVVyPfdl+woGNLTVEycFwCIK9ISu8WzEsw7z1QzffNnqxbtXOt6ZX60S6koGqom8
+         KQl9M5bi/q8K09WFgEr1oSKHhOAH6cHHuZaHZn3pxyLoKokzYJWhBdnfJAIiOE9Sn69E
+         dV5McvDAws0qcW0DvHK+41a6ESwZppS71acqfWtzU6Tq4xdxg5UUvcJL7XZyx+PeoexZ
+         eYIA==
+X-Gm-Message-State: ABy/qLZowwhN62MhuQ41pYH+bcPavB+rKIFchzWdmqWwpPLmjCQPCMsi
+        U8MPxWJ8M1KrXgH2lkX2mDpV66q0Xnwf5glv3KqVIEgrJN/hjrVVGC5mJ2aX2iddQQlHIZ7fs6V
+        44YDjeh/szBulD3+jxYp6cTEx
+X-Received: by 2002:a5d:4fc4:0:b0:313:ebf3:f817 with SMTP id h4-20020a5d4fc4000000b00313ebf3f817mr11139666wrw.22.1688489004439;
+        Tue, 04 Jul 2023 09:43:24 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFLwTkm7jWgBjGyISZ+jMBiAdz5/mJ7POTeZPg0ZURSljLDG/kIWES+tk18V/kyaa6T4rWemQ==
+X-Received: by 2002:a5d:4fc4:0:b0:313:ebf3:f817 with SMTP id h4-20020a5d4fc4000000b00313ebf3f817mr11139646wrw.22.1688489004093;
+        Tue, 04 Jul 2023 09:43:24 -0700 (PDT)
+Received: from redhat.com ([2.52.13.33])
+        by smtp.gmail.com with ESMTPSA id a16-20020adfeed0000000b0031431fb40fasm7742592wrp.89.2023.07.04.09.43.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 09:43:23 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 12:43:20 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Maxime Coquelin <maxime.coquelin@redhat.com>
+Cc:     xieyongji@bytedance.com, jasowang@redhat.com,
+        david.marchand@redhat.com, lulu@redhat.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
+Subject: Re: [PATCH v2 3/3] vduse: Temporarily disable control queue features
+Message-ID: <20230704124245-mutt-send-email-mst@kernel.org>
+References: <20230704164045.39119-1-maxime.coquelin@redhat.com>
+ <20230704164045.39119-4-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="L4GnaeX8yK5XFQS4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230704-gooey-lair-2bc45bbd163c@spud>
-X-Cookie: Memory fault - where am I?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230704164045.39119-4-maxime.coquelin@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 04, 2023 at 06:40:45PM +0200, Maxime Coquelin wrote:
+> Virtio-net driver control queue implementation is not safe
+> when used with VDUSE. If the VDUSE application does not
+> reply to control queue messages, it currently ends up
+> hanging the kernel thread sending this command.
+> 
+> Some work is on-going to make the control queue
+> implementation robust with VDUSE. Until it is completed,
+> let's disable control virtqueue and features that depend on
+> it.
+> 
+> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
+> ---
+>  drivers/vdpa/vdpa_user/vduse_dev.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> index 1271c9796517..04367a53802b 100644
+> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> @@ -1778,6 +1778,25 @@ static struct attribute *vduse_dev_attrs[] = {
+>  
+>  ATTRIBUTE_GROUPS(vduse_dev);
+>  
+> +static void vduse_dev_features_fixup(struct vduse_dev_config *config)
+> +{
+> +	if (config->device_id == VIRTIO_ID_NET) {
+> +		/*
+> +		 * Temporarily disable control virtqueue and features that
+> +		 * depend on it while CVQ is being made more robust for VDUSE.
+> +		 */
+> +		config->features &= ~((1ULL << VIRTIO_NET_F_CTRL_VQ) |
+> +				(1ULL << VIRTIO_NET_F_CTRL_RX) |
+> +				(1ULL << VIRTIO_NET_F_CTRL_VLAN) |
+> +				(1ULL << VIRTIO_NET_F_GUEST_ANNOUNCE) |
+> +				(1ULL << VIRTIO_NET_F_MQ) |
+> +				(1ULL << VIRTIO_NET_F_CTRL_MAC_ADDR) |
+> +				(1ULL << VIRTIO_NET_F_RSS) |
+> +				(1ULL << VIRTIO_NET_F_HASH_REPORT) |
+> +				(1ULL << VIRTIO_NET_F_NOTF_COAL));
+> +	}
+> +}
+> +
 
---L4GnaeX8yK5XFQS4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 04, 2023 at 05:36:03PM +0100, Conor Dooley wrote:
-> On Tue, Jul 04, 2023 at 05:04:52PM +0800, William Qiu wrote:
-> > Add QSPI clock operation in device probe.
-> >=20
-> > Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> > Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp=
-@intel.com/
+This will never be exhaustive, we are adding new features.
+Please add an allowlist with just legal ones instead.
 
-> These Reported-by tags don't seem correct, given they were reports about
-> this patch, not the reason for it - but did you actually check that you
-> fixed the errors that the patch produces?
 
-Yeah, the Reported-bys that LKP sends in response to on list patches are
-a menace, they just generate noise.
+>  static int vduse_create_dev(struct vduse_dev_config *config,
+>  			    void *config_buf, u64 api_version)
+>  {
+> @@ -1793,6 +1812,8 @@ static int vduse_create_dev(struct vduse_dev_config *config,
+>  	if (!dev)
+>  		goto err;
+>  
+> +	vduse_dev_features_fixup(config);
+> +
+>  	dev->api_version = api_version;
+>  	dev->device_features = config->features;
+>  	dev->device_id = config->device_id;
+> -- 
+> 2.41.0
 
-> This particular one seems to complain about a hunk that is still in the
-> patch & the CI running on the RISC-V patchwork is complaining about it.
-
-I'm surprised that builds cleanly anywhere...
-
---L4GnaeX8yK5XFQS4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSkS7IACgkQJNaLcl1U
-h9Cwygf+Lj0XeLehyPuY28oqR7nq3BMn39mQIj5yXEW09p/l4CZZw5/nQLPSE4Jm
-AczOgbi3beJiQmLD3L3d8BAO8JIHTbTJB+KB45GTL9TAUi35rENRnvQ58BEbC3dw
-hGRSzWT4MB6NnwWwB5JncAEACtqgigOD5JVivb11GC6+XmH2A5q4FUP3ZtQpM7Yu
-XoD8W7cWHhwFz0K/kLW8R/zSjp3F16C0yl3hZaOyuYvfPO4KqBBjnByCpazTyVFp
-bdBGgDDW5slxkRAQco2hUBvqyV6zOdqQv5FXPmw7regtL3fn0OnGMjs3p1jZ0Tdn
-Kep9GeD7snkKgqCTvEMXpTvpjBgE6Q==
-=dkuj
------END PGP SIGNATURE-----
-
---L4GnaeX8yK5XFQS4--
