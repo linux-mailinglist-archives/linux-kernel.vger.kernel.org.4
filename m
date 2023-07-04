@@ -2,101 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606B1747792
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC05747791
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjGDRNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S231882AbjGDRNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjGDRNp (ORCPT
+        with ESMTP id S231296AbjGDRNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:13:45 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D8510CB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:13:36 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6a675743dso90327571fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688490814; x=1691082814;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bzyQSD/853Y9P4S63XLg/qiUIMnHBn6Z9RYTswB5rMY=;
-        b=X+mzMB0BBDbDDoBoO5DgvNH3nR5y+/B2W5UP/FDfwnpp4whAu0ADBUxt7PAhU2FgD3
-         0l3yUeJBIs3CGKIsqMjn/x7JOIEP9KF2wGUFWmtNA0cv1uYiQCJEjXN1XCjFe0k6DkGy
-         5zRYoXLrUrBdnznDjik1xinm/NibrYoe0T1O0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688490814; x=1691082814;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bzyQSD/853Y9P4S63XLg/qiUIMnHBn6Z9RYTswB5rMY=;
-        b=ZgV3yglOECiipEKD9rGsrUmlaFQjeVxlxySQ+8/Htzkrpj6p6TIvHC0PPNtd8ozEJm
-         BRTdQDGt30fUcU9zmxMMtbHBlZM+0f/xSRgU+2y6f/U/Zd+SgxkIlh5m2rwuJRIfmOxi
-         SvuQvnvMrnJx9R1+07A3W+hGuwWEHsmUjMWaI8GSMvBkS9k2wLgssTCm5N4Nv8gYCm0Y
-         1p5oSqikZRd9HATbUPer1JBWyQxefYk8dfVD1hgzi8C1gvKp0RbgHjxregx1ea7pvERj
-         KJ5xm6GRPeYiEYwnLeuXUc/PMLCH4dRUgUuJWCKqBs4FmW9uysateXwT1OvU4amnzvqa
-         pGUg==
-X-Gm-Message-State: ABy/qLY5jIC8SLXoZJ/H4QapJe+0TpZWYFzSyWbDiw6CLvdRjTwd41gU
-        gpR3LR6kIxIDqvmW5wx+pYoB16BRni1m+cIsZffQiyx8
-X-Google-Smtp-Source: APBJJlH2p8bvNAbsnS2M9+Kn/Gyqxm5UNZJwzVUnwJsFi9aTDOGs0BStixuzkOj+QP2YHf7j6EtRHQ==
-X-Received: by 2002:a2e:95cc:0:b0:2b6:efc7:2af7 with SMTP id y12-20020a2e95cc000000b002b6efc72af7mr3793291ljh.44.1688490814434;
-        Tue, 04 Jul 2023 10:13:34 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id j12-20020a2e800c000000b002b1d6bfab5csm5873317ljg.22.2023.07.04.10.13.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 10:13:34 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fb41682472so8847933e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:13:33 -0700 (PDT)
-X-Received: by 2002:a05:6512:3487:b0:4f8:565e:f4ae with SMTP id
- v7-20020a056512348700b004f8565ef4aemr10130538lfr.39.1688490813644; Tue, 04
- Jul 2023 10:13:33 -0700 (PDT)
+        Tue, 4 Jul 2023 13:13:34 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FB610F9;
+        Tue,  4 Jul 2023 10:13:29 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 7E528120056;
+        Tue,  4 Jul 2023 20:13:27 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 7E528120056
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688490807;
+        bh=x5+P3mBbHT8h/dCMVR19AT87r5tO9pJjC+bCr6L085w=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=ZItN9dkzQBnkMMIduYiUXs3mFWSrtJDQyUrNru6lKEgiQQeLFooMBGubHPf2YyxeK
+         tZnHUJA2dcFBO0LCCSBsQOCs0QbP0gcKpW6tiMMFBj9EmkHSZOlYP1qUTrIbVTNP4D
+         U2UFPrIpR+0yoOt8UGRfhwyNLAYvMTIDY6KC5Xa7UHyE+AeCVwv04U/XAabrh9iKum
+         JY+8szTJ57jcBlEqlHiWe/tfHZewazHC9viHnmma9I3/fRfevE8ujnW9onf3gLZOYl
+         blRxbreBdej3nJz5CYYVlS2OSZOtu7UCRStqUkUKVD+jbCyGhvvLxOiB4JjP5Ikxs8
+         oczqbr3tyVxPw==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 20:13:27 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 4 Jul
+ 2023 20:13:15 +0300
+Date:   Tue, 4 Jul 2023 20:13:26 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Conor Dooley <conor@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <jirislaby@kernel.org>, <khilman@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <kelvin.zhang@amlogic.com>,
+        <xianwei.zhao@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 3/5] tty: serial: meson: apply ttyS devname instead of
+ ttyAML for new SoCs
+Message-ID: <20230704171326.tyforkt7z23zmgqa@CAB-WSD-L081021>
+References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+ <20230704135936.14697-4-ddrokosov@sberdevices.ru>
+ <20230704-pogo-zeppelin-5fa281f5c9e6@spud>
 MIME-Version: 1.0
-References: <000000000000b73abf05ffa60902@google.com> <20230704092451.72974b7a62ae08d48c077e10@linux-foundation.org>
- <CAHk-=whzthQy42SzYb1Bs_6tGyss5=SoiOppSE6onjUWDwA=aw@mail.gmail.com> <20230704170144.GB1851@sol.localdomain>
-In-Reply-To: <20230704170144.GB1851@sol.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jul 2023 10:13:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjvVRv7yfsAYyRigSWxKyeMb42yzB3hj2U9J1u59MyvUg@mail.gmail.com>
-Message-ID: <CAHk-=wjvVRv7yfsAYyRigSWxKyeMb42yzB3hj2U9J1u59MyvUg@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] WARNING in __gup_longterm_locked
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        syzbot <syzbot+6cf44e127903fdf9d929@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230704-pogo-zeppelin-5fa281f5c9e6@spud>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178431 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 100.64.160.123:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;libera.irclog.whitequark.org:7.1.1;sberdevices.ru:5.0.1,7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/04 13:59:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/04 13:58:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 at 10:01, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> syzkaller just makes system calls.
->
-> Unless you want to do the crazy thing of checking if current->comm begins with
-> "syz", I don't think there is a way to distinguish.
+On Tue, Jul 04, 2023 at 05:57:15PM +0100, Conor Dooley wrote:
+> On Tue, Jul 04, 2023 at 04:59:34PM +0300, Dmitry Rokosov wrote:
+> > It is worth noting that the devname ttyS is a widely recognized tty name
+> > and is commonly used by many uart device drivers. Given the established
+> > usage and compatibility concerns, it may not be feasible to change the
+> > devname for older SoCs. However, for new definitions, it is acceptable
+> > and even recommended to use a new devname to help ensure clarity and
+> > avoid any potential conflicts on lower or upper software levels.
+> 
+> > In
+> > addition, modify the meson_uart_dt match data for g12a, a1, and s4 to
+> > their appropriate values to ensure proper devname values and
+> > functionality.
+> 
+> IMO, this is a separate change that should be in another patch, had to
+> go looking through a several of unrelated $subject patches to understand
+> how the binding patch was going to work.
 
-Yeah, that's what I thought.
+I apologize, but I'm having difficulty understanding your suggestion.
+Are you recommending that a distinct binding patch for meson-uart-a1 be
+sent as part of a separate patch series? From my perspective, isolating
+the binding patch may not provide all the necessary context as it is
+reliant on a separate 'compatible' declaration within the meson-uart
+driver. However, this declaration is interconnected with the devname
+support patchset. Therefore, it seems that all of these patches are
+linked together.
 
-> In the past there's been some discussion of adding a kconfig option like
-> CONFIG_FUZZ_TESTING that would be expected to be enabled in order to run a
-> kernel fuzzer, and changing behavior in certain cases based on that.  Changing
-> behavior in production vs. test is problematic, though...
+> > For more information please refer to IRC discussion at [1].
+> > 
+> > Links:
+> >     [1]: https://libera.irclog.whitequark.org/linux-amlogic/2023-07-03
+> > 
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >  drivers/tty/serial/meson_uart.c | 33 +++++++++++++++++++++++++++++++--
+> >  1 file changed, 31 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> > index 87c0eb5f2dba..361f9326b527 100644
+> > --- a/drivers/tty/serial/meson_uart.c
+> > +++ b/drivers/tty/serial/meson_uart.c
+> > @@ -82,6 +82,7 @@ static struct uart_driver meson_uart_driver;
+> >  static struct uart_port *meson_ports[AML_UART_PORT_NUM];
+> >  
+> >  struct meson_uart_data {
+> > +	const char *dev_name;
+> >  	bool has_xtal_div2;
+> >  };
+> >  
+> > @@ -683,6 +684,7 @@ static int meson_uart_probe_clocks(struct platform_device *pdev,
+> >  
+> >  static int meson_uart_probe(struct platform_device *pdev)
+> >  {
+> > +	const struct meson_uart_data *priv_data;
+> >  	struct resource *res_mem;
+> >  	struct uart_port *port;
+> >  	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
+> > @@ -729,6 +731,18 @@ static int meson_uart_probe(struct platform_device *pdev)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +	priv_data = device_get_match_data(&pdev->dev);
+> > +
+> > +	if (priv_data) {
+> > +		struct console *cons = meson_uart_driver.cons;
+> > +
+> > +		meson_uart_driver.dev_name = priv_data->dev_name;
+> > +
+> > +		if (cons)
+> > +			strscpy(cons->name, priv_data->dev_name,
+> > +				sizeof(cons->name));
+> > +	}
+> > +
+> >  	if (!meson_uart_driver.state) {
+> >  		ret = uart_register_driver(&meson_uart_driver);
+> >  		if (ret)
+> > @@ -748,7 +762,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+> >  	port->x_char = 0;
+> >  	port->ops = &meson_uart_ops;
+> >  	port->fifosize = fifosize;
+> > -	port->private_data = (void *)device_get_match_data(&pdev->dev);
+> > +	port->private_data = (void *)priv_data;
+> >  
+> >  	meson_ports[pdev->id] = port;
+> >  	platform_set_drvdata(pdev, port);
+> > @@ -780,6 +794,17 @@ static int meson_uart_remove(struct platform_device *pdev)
+> >  }
+> >  
+> >  static struct meson_uart_data meson_g12a_uart_data = {
+> > +	.dev_name = "ttyAML",
+> > +	.has_xtal_div2 = true,
+> > +};
+> > +
+> > +static struct meson_uart_data meson_a1_uart_data = {
+> > +	.dev_name = "ttyS",
+> > +	.has_xtal_div2 = false,
+> > +};
+> > +
+> > +static struct meson_uart_data meson_s4_uart_data = {
+> > +	.dev_name = "ttyS",
+> >  	.has_xtal_div2 = true,
+> >  };
+> >  
+> > @@ -794,7 +819,11 @@ static const struct of_device_id meson_uart_dt_match[] = {
+> >  	},
+> >  	{
+> >  		.compatible = "amlogic,meson-s4-uart",
+> > -		.data = (void *)&meson_g12a_uart_data,
+> > +		.data = (void *)&meson_s4_uart_data,
+> > +	},
+> > +	{
+> > +		.compatible = "amlogic,meson-a1-uart",
+> > +		.data = (void *)&meson_a1_uart_data,
+> >  	},
+> >  	{ /* sentinel */ },
+> >  };
+> > -- 
+> > 2.36.0
+> > 
 
-Agreed. The whole point of a fuzzer is to check the real thing. This
-test for GUP expansion really is a pretty specialized thing.
 
-Maybe the WARN_ON_ONCE() could have been just a "pr_warn_once()", but
-at the same time, *if* that condition ever happens in some real
-situation, I'd really want to know just exactly *what* the app in
-question is doing.
 
-                 Linus
+-- 
+Thank you,
+Dmitry
