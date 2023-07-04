@@ -2,118 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25DE746A54
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07ACA746A2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 08:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjGDHJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S230032AbjGDG61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 02:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjGDHJ3 (ORCPT
+        with ESMTP id S229487AbjGDG60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:09:29 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2130.outbound.protection.outlook.com [40.107.117.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C199136;
-        Tue,  4 Jul 2023 00:09:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HhTDlhFBS4/RoNkLYLoIuoZqlfJTOg4YZPvqmxGKR8fLyELIJyAdr40MGUZUwlFApmwe/UGIFeizjHcKZD6m67NFO1YlNBDX05McJoZR3H35a9kfz7xITJtOq1VxT62soabEmp6/ovDElOgBfWYvGGm22uHCyyGaMkl3NE/PEmLJolA28liAu2xJHVo0/693JQrvlb0Z6f7reU+FsOH/v20HQUn0+0oE+rGC9AvtmJ69DQ3i9H8f9sBqVtmDQIxEx6P67uXJMX2iqTGIs+RlXl6UXKn9JHZg4IgQQ+U1ltcHFrJg/aHpG62logavCPBTpdLoQPZTTvUWsvaiuE1wdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bYgeKieRI5XBKT49OYzjNGp8Z0GQXF+qUCsyiaysUM8=;
- b=IZw6U3NIt5AJ7xsp/0imSh0KXzU4sGFpR3ptSYUE40jvDUShzLwTMcUIYBPAkbAF9WcVpjc2B4j+QqRMI8i/Ztzv1Ew3T5+JVB30tAq7MAdDLi6OEYyBRbvp4MZS2B5ppWuuLGW5VbQNn9GcRzkURTQLTnPIRjT3vb1Bju6tXSSZCGI7K41I69Vq4aOl7zP4/oMVowhEkgQF9b4kP6qrjCDVGIijWNHxCejecW04AA5tMp+1U6up1Z4L4urLuErrkO3e4gMtKDlxJlRuf8FYjrmC1ikkRRxFcPq+NHrFHGT43wzrbzKodWZ+vW+aCVnA/GXhghJDY8qbwWhMzHF1SQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bYgeKieRI5XBKT49OYzjNGp8Z0GQXF+qUCsyiaysUM8=;
- b=c6xowx3tL10ZTe0bvl46yiPjB5f5tUqcnjswA7N06EetpK+zGPsDRRglms9jnGUr1i1PkjkQjJY2pkCoM/zdRiuwuHsFIre8RQb5N0NkcawzWtFb8WrJB15K6ucSmloSnGMqsKKm9QyI48uSYTjTd5tMAA4bBkUZhxWpnWh2oTJii8NUwEwL0EEMmBgn3vZBOHUU60nLviOz1MVImRceeZ4GpQ8uYDxUnmgaMsItxpRqvigLgANTRXoZxgexaorKPE6kQD3mli/6O3SHfdEzmlucbvOmZ3zavSxDtI5DRH7Nv0o7X807bdWs26PnH98oS8FqOR7Vgqqsqu4tglrOIw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com (2603:1096:301:11d::13)
- by KL1PR0601MB4586.apcprd06.prod.outlook.com (2603:1096:820:8f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 07:09:22 +0000
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::5c03:58ad:fb2b:49d9]) by PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::5c03:58ad:fb2b:49d9%7]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 07:09:22 +0000
-From:   You Kangren <youkangren@vivo.com>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Damian Muszynski <damian.muszynski@intel.com>,
-        Adam Guerin <adam.guerin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        You Kangren <youkangren@vivo.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Srinivas Kerekare <srinivas.kerekare@intel.com>,
-        qat-linux@intel.com (open list:QAT DRIVER),
-        linux-crypto@vger.kernel.org (open list:CRYPTO API),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH v4] crypto: qat - Replace the if statement with min()
-Date:   Tue,  4 Jul 2023 14:56:39 +0800
-Message-Id: <20230704065643.32220-1-youkangren@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0061.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:31a::13) To PUZPR06MB5936.apcprd06.prod.outlook.com
- (2603:1096:301:11d::13)
+        Tue, 4 Jul 2023 02:58:26 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB66BE;
+        Mon,  3 Jul 2023 23:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1688453904; x=1719989904;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=3mKvlJpyqrm8KLFesfDVIKrJmLCF5r0paQZpEMj5YGA=;
+  b=TDk3DRNqfRN4vl1ODwplnuphPRNg8/4l+Cm7s1pMh5qHTM1Qhzx1aEd9
+   N8QALmjprDsY/ilx6cwV4aP+QcCncW750MmElNJuvPE9krb97/9WGIZVp
+   baJ0n4RwMpnp5zA87LiOgQBBg2XpdxP9oix1TgwDOKoAzGYoBcurVu3Yc
+   sGlZ8nlJQ5fZ+GBhtbYzpNHePuM6pxiaGAnLaHPKK1IyZSi8xzdH3/rP8
+   tJmQ18wtzv6WKhWsS4NMazQXO1ePnNkOtm1UbdiaFMMhSSFUhIwQ39YYV
+   1Fe8WtFepOfZSmZiZtPrkSos0ct1k6mRa2CfqLumTTUr+5VbL0+QAeuWa
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,179,1684792800"; 
+   d="scan'208";a="31737652"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 04 Jul 2023 08:58:21 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 33BCB280087;
+        Tue,  4 Jul 2023 08:58:21 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     NXP Linux Team <linux-imx@nxp.com>,
+        "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] i2c: lpi2c: cache peripheral clock rate
+Date:   Tue, 04 Jul 2023 08:58:20 +0200
+Message-ID: <12242804.O9o76ZdvQC@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230628115824.3470880-1-alexander.sverdlin@siemens.com>
+References: <20230628115824.3470880-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB5936:EE_|KL1PR0601MB4586:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a20d304-57cd-43b9-5402-08db7c5d979e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bs9Ed6szISxF1KaF8m+4LJV1qdDj4LQo6aX1tzYFjdBnr6YNlZjV59YRPUKRvvXgHJUEuKgXc/UVyRAOgmVOU39BMAo8eWZNLCWp/t1AVgDAEeXPXW5xxmMQnbGljOD3MOVCix/IP2SUCjaxuoCCpzXkDsL/jOrBZ0aWvTy+Wl/gYgNNcu/jY6wRXf5G/rtUrVVW/m6bb0xoBh97tnkBmcP4tAcSoshILSUKiTasWsOSYU4I4zpESApO24y6nOtGkSeRAKGcrvy4SmTiMF0hAPH85VBSpbONDqEa62NZ7Y08CIy1F6NMypK3yvnQxm0a0VIkbGrKMUOfaRlDrtQllGcf0hpb3Vxa7jbtIvyKVlqyAZb0dDqX7AwPl/OpZgpDWQn6Q0D8z2Ousyc1yXwFM3TFcuY1xwuzsSMFo4jfQbGnNly6jKsnf6hEvZ7XwrdeiwG3Vir3t+e3JuvlMBbjpVZdYjTAWxDO2zcYK4VaEalhJeGdJWOAjrWPvlOGBhwS02Mkz08KGqFMKbASgrGJXFFMwJDubHQja0s9+5fg1AciApG09rdDDt2Mu7TKfw4ScC6oqZaCwLTL44LC3mijsDHMjRaEXYYkabfw0Hfjs1+HmJAXU8HyVyVe4FrRYmePHQl03JxYU7ZJUBln+bMv4Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5936.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199021)(2906002)(41300700001)(8936002)(8676002)(5660300002)(7416002)(36756003)(86362001)(186003)(2616005)(26005)(478600001)(107886003)(6512007)(6506007)(1076003)(6666004)(6486002)(52116002)(316002)(66476007)(4326008)(66556008)(38350700002)(66946007)(38100700002)(921005)(110136005)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xiQS07ZejqvsOIpyX59Y5rmeFwBFfe3fpLERPyJE5AKfVOHquT3V2SLTtQC6?=
- =?us-ascii?Q?ohxxobPwn8iaylHyzdY5onTiJOwOyEDTHvq9D8SDgQLA8xkCboxmPN/O7Ftq?=
- =?us-ascii?Q?S72KPR9A0HCB400IuWN0EmVQZqKzOXV6MDi3+7rPslJJGfXjoqmlGj2SylS9?=
- =?us-ascii?Q?5THN8WBN1sV/zZq5vjx1SgfkJSv4IvDuv70kA43ERP+XTkmUT6UG1t1C2YEB?=
- =?us-ascii?Q?FzYc0XjDpQGmG3WFlOlgCDgb2NntfBZeUwcfWBbJ0RW7RYPpaZMrrGqEJ1Q1?=
- =?us-ascii?Q?5cq7nyFCdzH3wLvAO6YmUZ9Fp0oBOwu1Ig8BX5kOpNkpLPmy+JbXgXi9TTSx?=
- =?us-ascii?Q?PoZTRVh3wrVaEJCZV7KsRH7uW9qkZE/OodUU/Ac3y1dHCPWvMVndSepS48pA?=
- =?us-ascii?Q?KljzctXSqfSxy+P/fFiHAZ0+26+7RuKxr1xJN02maJHGPuJTUpzNwCnPEvHw?=
- =?us-ascii?Q?h2jlXPTysRASRK+EiX6lZjhFVNXW55HvVB1i+zLaYOQ1444HmJiyi5t9FNKk?=
- =?us-ascii?Q?A5+zPRBEGH9R9fUmJwS8xD0L57VRxfgipCdHgVXeKwJf3WM4U7ngk5t5BmPW?=
- =?us-ascii?Q?M692/8jAN39m76GZ59wN8ZRWG6SOttEx/gHnE7ooCaeawQIkVjz0YEheWBlC?=
- =?us-ascii?Q?2JWpWfiUXj3aEToGJl6ntSIE8hA4ace58kNylpypPii81gAGVklP55zRHUI+?=
- =?us-ascii?Q?x/q9oBuaSFdyNWxGlj9iaxwa6VHn6ra8II0Odt4S6Pn+nRJ521hL5BtSLBtB?=
- =?us-ascii?Q?azbb1ivwZC9LIAmWM2LyXBvUXSCf3kM1RdD7QcNa+ZzOZGCeMhrxIowKk6FG?=
- =?us-ascii?Q?37YU00uzEQe+/+LBe9xGPsyLg8lyxCrMaJjNSBvmCN9ipumbXlAABV2y9H7M?=
- =?us-ascii?Q?ib85WGxr07AGw+SedoPsgfFNp2pSsN//bAldIcVA7WSBS/YwgK4eBzPCsIvx?=
- =?us-ascii?Q?FfEdB6/zTStHndoOXSf2bD8OMAkUFsOoMQ0u5iYGzKyU04GYRFaCN06aoEgY?=
- =?us-ascii?Q?ynbKj4MekGP3GNtJXHRj9UAfMemBKrLOo+tydI3/0gEVb/Zi8KDtBJb/s4Bj?=
- =?us-ascii?Q?FnnCLb+LnbzxCJku1IfD5z3babgzCDQD64efFRULD2jGkNXpvvFSTIoc72HA?=
- =?us-ascii?Q?GQAgBiWn9dU8NqX48tx1AdVxfVz6x4C9iNIl72m5ZQuyKas+lLaeYH1HBZ5v?=
- =?us-ascii?Q?tnQBMYZ/69nkiQfxYO14ARrEWaRZmukD0hEW+IReM/HKEMLitSWjCC4Z3ejD?=
- =?us-ascii?Q?Xz/taCXXjQGpgtmg3H/Im5mL27scTKdaq4sxue3X2ezvLJMqwAgccGbtxVhc?=
- =?us-ascii?Q?XW/yF7Xg1swTFWIiS19BzR1On32hApa78oJtZGpEFOmQLYmZ/7TEf5wfbkFZ?=
- =?us-ascii?Q?QYU798Q3wfGPlCAlRfTKwpAyOhoLC148aZEU4u2Ni864D4lUmN+GlQgSdrdF?=
- =?us-ascii?Q?lCzxxW3LRdYOI1c9si3NL/2NRDK3gfc9GoUEPMuFOFxRTL3ji7mQmtumHpSE?=
- =?us-ascii?Q?kL1XharbQBJ5dQ4Zfc7DxCbN4xWoxprZwDBwnQIyvaoyjW0VCd2PRx+k91SN?=
- =?us-ascii?Q?/TuzNZMc51d3FKWqHqg6swLj8e2R/KhsuS7To7s0?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a20d304-57cd-43b9-5402-08db7c5d979e
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5936.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 07:09:22.2703
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4h8MxoOvwGJUjS+GPisDqz+eWMl8oR8X9VYK2lMdSrshBpwNRm8hKFV1CfVAeDyHjQdaGRw3COA0DSWG9MUQmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4586
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,40 +66,345 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mark UWORD_CPYBUF_SIZE with U suffix to make the type the same with
-words_num and replace the if statement with min() in 
-qat_uclo_wr_uimage_raw_page() to make code shorter
+Am Mittwoch, 28. Juni 2023, 13:58:22 CEST schrieb A. Sverdlin:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+>=20
+> One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
+> under mutex. The second reason if the (false-positive) lockdep splat caus=
+ed
+> by the recursive feature of the "prepare_lock" (one clock instance is I2C
+> peripheral clock and another is pcf85063 RTC as clock provider):
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> WARNING: possible circular locking dependency detected
+> 5.15.71+... #1 Tainted: G           O
+> ------------------------------------------------------
+> .../2332 is trying to acquire lock:
+> ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0x=
+b0
+>=20
+> but task is already holding lock:
+> ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
+> i2c_adapter_lock_bus+0x2c/0x3c
+>=20
+> which lock already depends on the new lock.
+>=20
+> the existing dependency chain (in reverse order) is:
+>=20
+> -> #2 (i2c_register_adapter){+.+.}-{3:3}:
+>        lock_acquire+0x68/0x8c
+>        rt_mutex_lock_nested+0x88/0xe0
+>        i2c_adapter_lock_bus+0x2c/0x3c
+>        i2c_transfer+0x58/0x130
+>        regmap_i2c_read+0x64/0xb0
+>        _regmap_raw_read+0x114/0x440
+>        _regmap_bus_read+0x4c/0x84
+>        _regmap_read+0x6c/0x270
+>        regmap_read+0x54/0x80
+>        pcf85063_probe+0xec/0x4cc
+>        i2c_device_probe+0x10c/0x350
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        device_add+0x398/0x8ac
+>        device_register+0x28/0x40
+>        i2c_new_client_device+0x144/0x290
+>        of_i2c_register_devices+0x18c/0x230
+>        i2c_register_adapter+0x1dc/0x6b0
+>        __i2c_add_numbered_adapter+0x68/0xbc
+>        i2c_add_adapter+0xb0/0xe0
+>        lpi2c_imx_probe+0x354/0x5e0
+>        platform_probe+0x70/0xec
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        deferred_probe_work_func+0xa0/0xfc
+>        process_one_work+0x2ac/0x6f4
+>        worker_thread+0x7c/0x47c
+>        kthread+0x150/0x16c
+>        ret_from_fork+0x10/0x20
+>=20
+> -> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
+>        lock_acquire+0x68/0x8c
+>        __mutex_lock+0x9c/0x4d0
+>        mutex_lock_nested+0x48/0x5c
+>        regmap_lock_mutex+0x1c/0x30
+>        regmap_read+0x44/0x80
+>        pcf85063_clkout_recalc_rate+0x34/0x80
+>        __clk_register+0x520/0x880
+>        devm_clk_register+0x64/0xc4
+>        pcf85063_probe+0x24c/0x4cc
+>        i2c_device_probe+0x10c/0x350
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        device_add+0x398/0x8ac
+>        device_register+0x28/0x40
+>        i2c_new_client_device+0x144/0x290
+>        of_i2c_register_devices+0x18c/0x230
+>        i2c_register_adapter+0x1dc/0x6b0
+>        __i2c_add_numbered_adapter+0x68/0xbc
+>        i2c_add_adapter+0xb0/0xe0
+>        lpi2c_imx_probe+0x354/0x5e0
+>        platform_probe+0x70/0xec
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        deferred_probe_work_func+0xa0/0xfc
+>        process_one_work+0x2ac/0x6f4
+>        worker_thread+0x7c/0x47c
+>        kthread+0x150/0x16c
+>        ret_from_fork+0x10/0x20
+>=20
+> -> #0 (prepare_lock){+.+.}-{3:3}:
+>        __lock_acquire+0x1298/0x20d0
+>        lock_acquire.part.0+0xf0/0x250
+>        lock_acquire+0x68/0x8c
+>        __mutex_lock+0x9c/0x4d0
+>        mutex_lock_nested+0x48/0x5c
+>        clk_prepare_lock+0x50/0xb0
+>        clk_get_rate+0x28/0x80
+>        lpi2c_imx_xfer+0xb0/0xa9c
+>        __i2c_transfer+0x174/0xa80
+>        i2c_transfer+0x68/0x130
+>        regmap_i2c_read+0x64/0xb0
+>        _regmap_raw_read+0x114/0x440
+>        regmap_raw_read+0x19c/0x28c
+>        regmap_bulk_read+0x1b8/0x244
+>        at24_read+0x14c/0x2c4
+>        nvmem_reg_read+0x2c/0x54
+>        bin_attr_nvmem_read+0x8c/0xbc
+>        sysfs_kf_bin_read+0x74/0x94
+>        kernfs_fop_read_iter+0xb0/0x1d0
+>        new_sync_read+0xf0/0x184
+>        vfs_read+0x154/0x1f0
+>        ksys_read+0x70/0x100
+>        __arm64_sys_read+0x24/0x30
+>        invoke_syscall+0x50/0x120
+>        el0_svc_common.constprop.0+0x68/0x124
+>        do_el0_svc+0x30/0x9c
+>        el0_svc+0x54/0x110
+>        el0t_64_sync_handler+0xa4/0x130
+>        el0t_64_sync+0x1a0/0x1a4
+>=20
+> other info that might help us debug this:
+>=20
+> Chain exists of:
+>   prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock -->
+> i2c_register_adapter
+>=20
+>  Possible unsafe locking scenario:
+>=20
+>        CPU0                    CPU1
+>        ----                    ----
+>   lock(i2c_register_adapter);
+>                              =20
+> lock(rtc_pcf85063:560:(&config->regmap)->lock); lock(i2c_register_adapter=
+);
+>   lock(prepare_lock);
+>=20
+>  *** DEADLOCK ***
+>=20
+> 4 locks held by .../2332:
+>  #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at:
+> kernfs_fop_read_iter+0x74/0x1d0 #1: ffff000010fe4400
+> (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0 #2:
+> ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4 #3:
+> ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
+> i2c_adapter_lock_bus+0x2c/0x3c
+>=20
+> stack backtrace:
+> CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
+> Hardware name: ... (DT)
+> Call trace:
+>  dump_backtrace+0x0/0x1d4
+>  show_stack+0x20/0x2c
+>  dump_stack_lvl+0x8c/0xb8
+>  dump_stack+0x18/0x34
+>  print_circular_bug+0x1f8/0x200
+>  check_noncircular+0x130/0x144
+>  __lock_acquire+0x1298/0x20d0
+>  lock_acquire.part.0+0xf0/0x250
+>  lock_acquire+0x68/0x8c
+>  __mutex_lock+0x9c/0x4d0
+>  mutex_lock_nested+0x48/0x5c
+>  clk_prepare_lock+0x50/0xb0
+>  clk_get_rate+0x28/0x80
+>  lpi2c_imx_xfer+0xb0/0xa9c
+>  __i2c_transfer+0x174/0xa80
+>  i2c_transfer+0x68/0x130
+>  regmap_i2c_read+0x64/0xb0
+>  _regmap_raw_read+0x114/0x440
+>  regmap_raw_read+0x19c/0x28c
+>  regmap_bulk_read+0x1b8/0x244
+>  at24_read+0x14c/0x2c4
+>  nvmem_reg_read+0x2c/0x54
+>  bin_attr_nvmem_read+0x8c/0xbc
+>  sysfs_kf_bin_read+0x74/0x94
+>  kernfs_fop_read_iter+0xb0/0x1d0
+>  new_sync_read+0xf0/0x184
+>  vfs_read+0x154/0x1f0
+>  ksys_read+0x70/0x100
+>  __arm64_sys_read+0x24/0x30
+>  invoke_syscall+0x50/0x120
+>  el0_svc_common.constprop.0+0x68/0x124
+>  do_el0_svc+0x30/0x9c
+>  el0_svc+0x54/0x110
+>  el0t_64_sync_handler+0xa4/0x130
+>  el0t_64_sync+0x1a0/0x1a4
+>=20
+> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> ---
+> Changelog:
+> v5: rebased onto Wolfram's i2c/for-next
+> v4: switched to atomic_t
+>     included clk_rate_exclusive_get()/clk_rate_exclusive_put()
+> v3: fixed build error reported by kernel test robot <lkp@intel.com>
 
-Signed-off-by: You Kangren <youkangren@vivo.com>
----
- drivers/crypto/intel/qat/qat_common/qat_uclo.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+The rebase still works as intended.
 
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_uclo.c b/drivers/crypto/intel/qat/qat_common/qat_uclo.c
-index ce837bcc1cab..4bd150d1441a 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_uclo.c
-+++ b/drivers/crypto/intel/qat/qat_common/qat_uclo.c
-@@ -11,7 +11,7 @@
- #include "icp_qat_hal.h"
- #include "icp_qat_fw_loader_handle.h"
- 
--#define UWORD_CPYBUF_SIZE 1024
-+#define UWORD_CPYBUF_SIZE 1024U
- #define INVLD_UWORD 0xffffffffffull
- #define PID_MINOR_REV 0xf
- #define PID_MAJOR_REV (0xf << 4)
-@@ -1986,10 +1986,7 @@ static void qat_uclo_wr_uimage_raw_page(struct icp_qat_fw_loader_handle *handle,
- 	uw_relative_addr = 0;
- 	words_num = encap_page->micro_words_num;
- 	while (words_num) {
--		if (words_num < UWORD_CPYBUF_SIZE)
--			cpylen = words_num;
--		else
--			cpylen = UWORD_CPYBUF_SIZE;
-+		cpylen = min(words_num, UWORD_CPYBUF_SIZE);
- 
- 		/* load the buffer */
- 		for (i = 0; i < cpylen; i++)
--- 
-2.39.0
+Thanks and best regards,
+alexander
+
+> https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
+> v2: added clk_notifier as Alexander suggested
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 47 +++++++++++++++++++++++++++---
+>  1 file changed, 43 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> b/drivers/i2c/busses/i2c-imx-lpi2c.c index c3287c887c6f..02d376096707
+> 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -5,6 +5,7 @@
+>   * Copyright 2016 Freescale Semiconductor, Inc.
+>   */
+>=20
+> +#include <linux/atomic.h>
+>  #include <linux/clk.h>
+>  #include <linux/completion.h>
+>  #include <linux/delay.h>
+> @@ -100,6 +101,8 @@ struct lpi2c_imx_struct {
+>  	__u8			*rx_buf;
+>  	__u8			*tx_buf;
+>  	struct completion	complete;
+> +	struct notifier_block	clk_change_nb;
+> +	atomic_t		rate_per;
+>  	unsigned int		msglen;
+>  	unsigned int		delivered;
+>  	unsigned int		block_data;
+> @@ -198,25 +201,39 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct
+> *lpi2c_imx) } while (1);
+>  }
+>=20
+> +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
+> +				   unsigned long action, void *data)
+> +{
+> +	struct clk_notifier_data *ndata =3D data;
+> +	struct lpi2c_imx_struct *lpi2c_imx =3D container_of(nb,
+> +							  struct=20
+lpi2c_imx_struct,
+> +							 =20
+clk_change_nb);
+> +
+> +	if (action & POST_RATE_CHANGE)
+> +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKHI/=
+2 */
+>  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  {
+>  	u8 prescale, filt, sethold, datavd;
+> -	unsigned int clk_rate, clk_cycle, clkhi, clklo;
+> +	unsigned int clk_cycle, clkhi, clklo;
+>  	enum lpi2c_imx_pincfg pincfg;
+>  	unsigned int temp;
+>=20
+>  	lpi2c_imx_set_mode(lpi2c_imx);
+>=20
+> -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+>  	if (lpi2c_imx->mode =3D=3D HS || lpi2c_imx->mode =3D=3D ULTRA_FAST)
+>  		filt =3D 0;
+>  	else
+>  		filt =3D 2;
+>=20
+>  	for (prescale =3D 0; prescale <=3D 7; prescale++) {
+> -		clk_cycle =3D clk_rate / ((1 << prescale) * lpi2c_imx-
+>bitrate)
+> -			    - 3 - (filt >> 1);
+> +		clk_cycle =3D atomic_read(&lpi2c_imx->rate_per) /
+> +			    ((1 << prescale) * lpi2c_imx->bitrate) - 3 -
+> +			    (filt >> 1);
+>  		clkhi =3D DIV_ROUND_UP(clk_cycle, I2C_CLK_RATIO + 1);
+>  		clklo =3D clk_cycle - clkhi;
+>  		if (clklo < 64)
+> @@ -594,6 +611,28 @@ static int lpi2c_imx_probe(struct platform_device
+> *pdev) if (ret)
+>  		return ret;
+>=20
+> +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
+> +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
+> +					 &lpi2c_imx->clk_change_nb);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "can't register peripheral clock=20
+notifier\n");
+> +	/*
+> +	 * Lock the clock rate to avoid rate change between clk_get_rate()=20
+and
+> +	 * atomic_set()
+> +	 */
+> +	ret =3D clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "can't lock I2C peripheral clock=20
+rate\n");
+> +		return ret;
+> +	}
+> +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx-
+>clks[0].clk));
+> +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
+> +	if (!atomic_read(&lpi2c_imx->rate_per)) {
+> +		dev_err(&pdev->dev, "can't get I2C peripheral clock=20
+rate\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
+>  	pm_runtime_use_autosuspend(&pdev->dev);
+>  	pm_runtime_get_noresume(&pdev->dev);
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
 
