@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19417473BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0525F7473BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjGDOLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S231469AbjGDOLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbjGDOLQ (ORCPT
+        with ESMTP id S231160AbjGDOLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:11:16 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1B5113
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:11:15 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-55b741fd0c5so321327a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:11:15 -0700 (PDT)
+        Tue, 4 Jul 2023 10:11:38 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0AD10E9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:11:32 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-55b741fd0c5so321374a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479875; x=1691071875;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479891; x=1691071891;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JxIfI7L8QtMZ5B4oD7tB4oC/oAl/mItJTbe2vhSQwvU=;
-        b=Q0HCtGy+m+yqgXytqQhl/oK/eRqrAUZnmyhcGucvrKtV+vyH0fl6JF9MeLRXDOdikh
-         kPD+LCMVMPGrvC9PK21P8R53FGTVvNsLJqEqSrZNgIL2c4Qy00fTOc7ZMXjo8TuWc/K8
-         lnf7IimmS/UtfgM6Tvjl0MMcBjh0EmsM7LjhwDySn+LpOwCCGErHVJmOl8wYh5prwvUi
-         xzfIJsrD6G0EJGc6a+GUHpRSdG15iOY51qIiQ/R5qosZ8nIO9Bs6/pTlva1ZQqaxUYck
-         nP8AFGSPtsKDYQbqU6M+Wy+YpGcN0yNJQ9YSxw+hgmOGOhb8OyGBCe0sJXYtS0nMbjvL
-         AvhQ==
+        bh=Pj3KtNcskxGwBQpyjif+BbQZv3sqa1IZuxdbRGC5RTE=;
+        b=JshnIAR8bl71rt3AS3UvaRseV7AvmKEBxHoNNg0/9Qhh8a1yTEPcGhFhTWqHfZeDXO
+         zz5qgL/izraxd+lACmXYz5/XoieedX/a96bKFLIFs+C9JCUM+kgTJy45aunBrt8pI7wp
+         s2BOdmMUUuGkOrDbLfk8RLtcHx6lF3lCNtAp600HpbSgFjPv+cyrTalGob0f6f5gBzut
+         qlBTrFkFe3yTSMx8qWX2NoLmGuh7C0/5BcgvzluimZLJDauzVr1FdM725FboXPc4Q15I
+         GLG4o+IDY/QgjFlIxKEesbCulbASs1+ri51nrsgg622pfAUSMMSHkrlr31t5c+jywUVM
+         NmaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479875; x=1691071875;
+        d=1e100.net; s=20221208; t=1688479891; x=1691071891;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JxIfI7L8QtMZ5B4oD7tB4oC/oAl/mItJTbe2vhSQwvU=;
-        b=BpLyfZwEqGiT6CXpRHxUviP+JIZy+KaBI8dxXypkUqV3L+t5fkh0QOBovYJEBu72Vu
-         m5w1yO49Qa5i/xLh2F/jCJvVKNt4KGeMAPh203WN1NQyqRnfqQsthejFkYAreeEqSfSp
-         PhMwMlQeVIcVYWO77pxNIVcZKaGkBU/liER5JCo820Q1Gb7JKYwQIhnRtWBPWMi5+m/n
-         Z8gYAZ8qDo4S5ePuRYc88MSwWPK9Ld6EPqZYH7OsEbY7IKoIEYCCTknuuUHSuf/eNDUW
-         9FNBLhgZOc51vRDR2qDUw6ZYjNCdHsBH5oS6KLZMOdlMaIT48Ci8MVQXgDUWifLVgvoq
-         DsKg==
-X-Gm-Message-State: ABy/qLZlSIXlEO2S6pw/BL4dOAc2riBC7e0+7BuCWBPKw9eCOTtHW/Yw
-        R6tDl1U5kEuJslW/GfEOrk7flA==
-X-Google-Smtp-Source: APBJJlHa+Mx7cFJFRV4cvt3iY38HAoWgJj0SrcNe9F1wszSRZftWoIzwW9Ulq7ysrP6tB0kmo0UcdA==
-X-Received: by 2002:a17:903:28c7:b0:1b7:f3e6:5727 with SMTP id kv7-20020a17090328c700b001b7f3e65727mr13626965plb.2.1688479875116;
-        Tue, 04 Jul 2023 07:11:15 -0700 (PDT)
+        bh=Pj3KtNcskxGwBQpyjif+BbQZv3sqa1IZuxdbRGC5RTE=;
+        b=KQ6cm0gSd7suE07OX/EFnGP1LNbp9+N+AdKD1blR3OmaSBMm8YY67bwpD44QaTTCvU
+         +iXbqhVEeZdaMHa1TGWQwNQ0LwagfzxPk1GZb/c/TGDiiv5FlHGQ5rPk03DsCuD31720
+         HgTeuzlyQ4p7Do6UnmoaJX4tDi1xNhuxXBJi7+yFoeB1tmO3LLmS1NqlEtpyrR2EWb5N
+         BfBOFqgrGiJpx7ru4QMUwmxkd8HJtoO67DTAk6/9oR3XmKfGzlHAERFpip41c4bLPZLc
+         Z6ak8C1SLG6X9zQK/nF9x3JDdVB3rQv1M2XkKAANYTavpVDM2fCwLcL1DUIdgdeu9np/
+         ZHjg==
+X-Gm-Message-State: ABy/qLaaphwVuzOYC7Fw6Rp81wr5CCSLHkWjhMSnjw8rDjaU5At26BqF
+        3nqHcb2noNCpOxjysnpdNlMLvQ==
+X-Google-Smtp-Source: APBJJlGJqqxOUkEZ0m69EgVitdcB3J4XS5rhZM+9Vu61VUJmXRK/Z/pitJwsMMHB6apqNoot6wAbCA==
+X-Received: by 2002:a17:902:e5c5:b0:1b8:17e8:5472 with SMTP id u5-20020a170902e5c500b001b817e85472mr13650058plf.1.1688479891435;
+        Tue, 04 Jul 2023 07:11:31 -0700 (PDT)
 Received: from carbon-x1.home ([2a01:cb15:81c2:f100:ef7b:e0f7:d376:e859])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.10.59
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.11.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 07:11:14 -0700 (PDT)
+        Tue, 04 Jul 2023 07:11:31 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -80,9 +80,9 @@ Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Evan Green <evan@rivosinc.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC V2 PATCH 5/9] riscv: add support for sysctl unaligned_enabled control
-Date:   Tue,  4 Jul 2023 16:09:20 +0200
-Message-Id: <20230704140924.315594-6-cleger@rivosinc.com>
+Subject: [RFC V2 PATCH 6/9] riscv: add support for SBI misalignment trap delegation
+Date:   Tue,  4 Jul 2023 16:09:21 +0200
+Message-Id: <20230704140924.315594-7-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230704140924.315594-1-cleger@rivosinc.com>
 References: <20230704140924.315594-1-cleger@rivosinc.com>
@@ -98,62 +98,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This sysctl tuning option allows the user to disable misaligned access
-handling globally on the system. This will also be used by misaligned
-detection code to temporarily disable misaligned access handling.
+Add support for misalignment trap delegation by setting it with
+SBI_EXT_FW_FEATURE SBI extension. This extension allows to control SBI
+behavior by requesting to set them to specific value. In order to
+implement prctl(PR_SET_UNALIGN, PR_UNALIGN_SIGBUS) behavior properly, we
+need to let the kernel handle the misalignment error by itself.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- arch/riscv/Kconfig                   | 1 +
- arch/riscv/kernel/traps_misaligned.c | 9 +++++++++
- 2 files changed, 10 insertions(+)
+ arch/riscv/include/asm/sbi.h | 11 +++++++++++
+ arch/riscv/kernel/sbi.c      | 21 +++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c69572fbe613..99fd951def39 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -139,6 +139,7 @@ config RISCV
- 	select RISCV_TIMER if RISCV_SBI
- 	select SIFIVE_PLIC
- 	select SPARSE_IRQ
-+	select SYSCTL_ARCH_UNALIGN_ALLOW
- 	select SYSCTL_EXCEPTION_TRACE
- 	select THREAD_INFO_IN_TASK
- 	select TRACE_IRQFLAGS_SUPPORT
-diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index 804f6c5e0e44..39ec6caa6234 100644
---- a/arch/riscv/kernel/traps_misaligned.c
-+++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -287,6 +287,9 @@ union reg_data {
- 	u64 data_u64;
- };
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index 5b4a1bf5f439..c1b74c7d0d56 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -30,6 +30,7 @@ enum sbi_ext_id {
+ 	SBI_EXT_HSM = 0x48534D,
+ 	SBI_EXT_SRST = 0x53525354,
+ 	SBI_EXT_PMU = 0x504D55,
++	SBI_EXT_FW_FEATURE = 0x46574654,
  
-+/* sysctl hooks */
-+int unaligned_enabled __read_mostly = 1;	/* Enabled by default */
+ 	/* Experimentals extensions must lie within this range */
+ 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
+@@ -236,6 +237,16 @@ enum sbi_pmu_ctr_type {
+ /* Flags defined for counter stop function */
+ #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
+ 
++/* SBI function IDs for FW feature extension */
++#define SBI_EXT_FW_FEATURE_SET		0x0
++#define SBI_EXT_FW_FEATURE_GET		0x1
 +
- int handle_misaligned_load(struct pt_regs *regs)
++enum sbi_fw_features_t {
++	SBI_FW_FEATURE_MISALIGNED_DELEG	= 0,
++
++	SBI_FW_FEATURE_MAX,
++};
++
+ #define SBI_SPEC_VERSION_DEFAULT	0x1
+ #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
+ #define SBI_SPEC_VERSION_MAJOR_MASK	0x7f
+diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+index c672c8ba9a2a..3be48791455a 100644
+--- a/arch/riscv/kernel/sbi.c
++++ b/arch/riscv/kernel/sbi.c
+@@ -494,6 +494,16 @@ int sbi_remote_hfence_vvma_asid(const struct cpumask *cpu_mask,
+ }
+ EXPORT_SYMBOL(sbi_remote_hfence_vvma_asid);
+ 
++static int sbi_fw_feature_set(enum sbi_fw_features_t feature, bool set)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_FW_FEATURE, SBI_EXT_FW_FEATURE_SET, feature,
++			set, 0, 0, 0, 0);
++
++	return sbi_err_map_linux_errno(ret.error);
++}
++
+ static void sbi_srst_reset(unsigned long type, unsigned long reason)
  {
- 	union reg_data val;
-@@ -297,6 +300,9 @@ int handle_misaligned_load(struct pt_regs *regs)
- 
- 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
- 
-+	if (!unaligned_enabled)
-+		return -1;
-+
- 	if (get_insn(regs, epc, &insn))
- 		return -1;
- 
-@@ -387,6 +393,9 @@ int handle_misaligned_store(struct pt_regs *regs)
- 
- 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
- 
-+	if (!unaligned_enabled)
-+		return -1;
-+
- 	if (get_insn(regs, epc, &insn))
- 		return -1;
- 
+ 	sbi_ecall(SBI_EXT_SRST, SBI_EXT_SRST_RESET, type, reason,
+@@ -624,6 +634,17 @@ void __init sbi_init(void)
+ 			sbi_srst_reboot_nb.priority = 192;
+ 			register_restart_handler(&sbi_srst_reboot_nb);
+ 		}
++		/*
++		 * TODO: this will likely need to be updated when SBI extension
++		 * is ratified
++		 */
++		if ((sbi_spec_version >= sbi_mk_version(1, 0)) &&
++		    (sbi_probe_extension(SBI_EXT_FW_FEATURE) > 0)) {
++			pr_info("SBI FW_FEATURE extension detected\n");
++			/* Request misaligned handling delegation */
++			sbi_fw_feature_set(SBI_FW_FEATURE_MISALIGNED_DELEG,
++					   true);
++		}
+ 	} else {
+ 		__sbi_set_timer = __sbi_set_timer_v01;
+ 		__sbi_send_ipi	= __sbi_send_ipi_v01;
 -- 
 2.40.1
 
