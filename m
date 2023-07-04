@@ -2,261 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35723747521
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA643747525
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbjGDPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S229994AbjGDPTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjGDPSm (ORCPT
+        with ESMTP id S231784AbjGDPTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:18:42 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B312BD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:18:41 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688483920;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OOvkfol+in6TlFekwc6yFBfYV4hihVZfvdrg+oeWEiY=;
-        b=fuoeTIaHM53J4Bi7m2dpkM3y/mKzgeEGAk93wTuSL4DYZBF3IVUoDBQid1s6kWvHgkdl9Y
-        vWmuCiD+pdV/lpY1ypI/M+BlhfFoSXKrsqD/EcMM/9NWAjwIdVjt1UYbxlUREMGJwkUhEk
-        jTv1zJXMEytp1Q9gpyss6KkThWksLHl7JfHSrus2KGFTzhhtVaw9MZKD5VxE4f/UQVuXS6
-        FVZTjkXdZIpAj4VzYJW8tGSTN5G2Mg6bozCbmolEMspZRI+FOAXjhTsmtjTi/g/QsRMM1I
-        MvWwx6zEqqLmTVL2kAYDpnLyI+wcpMxqQCo00veg5dMeF7Wzr6p3s2aEskrLZQ==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 33B5B240006;
-        Tue,  4 Jul 2023 15:18:38 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 17:18:37 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH v3 1/5] mtd: rawnand: brcmnand: Fix ECC level field
- setting for v7.2 controller
-Message-ID: <20230704171837.3db54fb8@xps-13>
-In-Reply-To: <20230627193738.19596-2-william.zhang@broadcom.com>
-References: <20230627193738.19596-1-william.zhang@broadcom.com>
-        <20230627193738.19596-2-william.zhang@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 4 Jul 2023 11:19:00 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD6010EC;
+        Tue,  4 Jul 2023 08:18:47 -0700 (PDT)
+Received: from frapeml500002.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QwRFJ3CTLz67cSL;
+        Tue,  4 Jul 2023 23:15:48 +0800 (CST)
+Received: from [10.45.151.231] (10.45.151.231) by
+ frapeml500002.china.huawei.com (7.182.85.205) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 4 Jul 2023 17:18:44 +0200
+Message-ID: <17702e7f-479a-22b8-70d9-56e418c8120b@huawei.com>
+Date:   Tue, 4 Jul 2023 17:18:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [QUESTION] Full user space process isolation?
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Jann Horn <jannh@google.com>
+CC:     Oleg Nesterov <oleg@redhat.com>, Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        LuisChamberlain <mcgrof@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tejun Heo <tj@kernel.org>, <linux-mm@kvack.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>
+References: <eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com>
+ <CAG48ez2oRPBdbfoNxGcV85CXFx1Su+dmhoWXE6rWsXui6_OTPg@mail.gmail.com>
+ <ab8e68962feba9f16ed0a715d46ed003da61cfe8.camel@huaweicloud.com>
+Content-Language: en-US
+From:   Petr Tesarik <petr.tesarik.ext@huawei.com>
+In-Reply-To: <ab8e68962feba9f16ed0a715d46ed003da61cfe8.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.45.151.231]
+X-ClientProxiedBy: frapeml100004.china.huawei.com (7.182.85.167) To
+ frapeml500002.china.huawei.com (7.182.85.205)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+On 7/3/2023 5:28 PM, Roberto Sassu wrote:
+> On Mon, 2023-07-03 at 17:06 +0200, Jann Horn wrote:
+>> On Thu, Jun 22, 2023 at 4:45 PM Roberto Sassu
+>> <roberto.sassu@huaweicloud.com> wrote:
+>>> I wanted to execute some kernel workloads in a fully isolated user
+>>> space process, started from a binary statically linked with klibc,
+>>> connected to the kernel only through a pipe.
+>>
+>> FWIW, the kernel has some infrastructure for this already, see
+>> CONFIG_USERMODE_DRIVER and kernel/usermode_driver.c, with a usage
+>> example in net/bpfilter/.
+> 
+> Thanks, I actually took that code to make a generic UMD management
+> library, that can be used by all use cases:
+> 
+> https://lore.kernel.org/linux-kernel/20230317145240.363908-1-roberto.sassu@huaweicloud.com/
+> 
+>>> I also wanted that, for the root user, tampering with that process is
+>>> as hard as if the same code runs in kernel space.
+>>
+>> I believe that actually making it that hard would probably mean that
+>> you'd have to ensure that the process doesn't use swap (in other
+>> words, it would have to run with all memory locked), because root can
+>> choose where swapped pages are stored. Other than that, if you mark it
+>> as a kthread so that no ptrace access is allowed, you can probably get
+>> pretty close. But if you do anything like that, please leave some way
+>> (like a kernel build config option or such) to enable debugging for
+>> these processes.
+> 
+> I didn't think about the swapping part... thanks!
+> 
+> Ok to enable debugging with a config option.
+> 
+>> But I'm not convinced that it makes sense to try to draw a security
+>> boundary between fully-privileged root (with the ability to mount
+>> things and configure swap and so on) and the kernel - my understanding
+>> is that some kernel subsystems don't treat root-to-kernel privilege
+>> escalation issues as security bugs that have to be fixed.
+> 
+> Yes, that is unfortunately true, and in that case the trustworthy UMD
+> would not make things worse. On the other hand, on systems where that
+> separation is defined, the advantage would be to run more exploitable
+> code in user space, leaving the kernel safe.
+> 
+> I'm thinking about all the cases where the code had to be included in
+> the kernel to run at the same privilege level, but would not use any of
+> the kernel facilities (e.g. parsers).
 
-william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:34 -0700:
+Thanks for reminding me of kexec-tools. The complete image for booting a
+new kernel was originally prepared in user space. With kernel lockdown,
+all this code had to move into the kernel, adding a new syscall and lots
+of complexity to build purgatory code, etc. Yet, this new implementation
+in the kernel does not offer all features of kexec-tools, so both code
+bases continue to exist and are happily diverging...
 
-> v7.2 controller has different ECC level field size and shift in the acc
-> control register than its predecessor and successor controller. It needs
-> to be set specifically.
->=20
-> Fixes: decba6d47869 ("mtd: brcmnand: Add v7.2 controller support")
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
->=20
-> ---
->=20
-> Changes in v3: None
-> Changes in v2:
-> - Use driver static data for ECC level shift
->=20
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 74 +++++++++++++-----------
->  1 file changed, 41 insertions(+), 33 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.c
-> index 2e9c2e2d9c9f..69709419516a 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -272,6 +272,7 @@ struct brcmnand_controller {
->  	const unsigned int	*page_sizes;
->  	unsigned int		page_size_shift;
->  	unsigned int		max_oob;
-> +	u32			ecc_level_shift;
->  	u32			features;
-> =20
->  	/* for low-power standby/resume only */
-> @@ -596,6 +597,34 @@ enum {
->  	INTFC_CTLR_READY		=3D BIT(31),
->  };
-> =20
-> +/***********************************************************************
-> + * NAND ACC CONTROL bitfield
-> + *
-> + * Some bits have remained constant throughout hardware revision, while
-> + * others have shifted around.
-> + ***********************************************************************/
-> +
-> +/* Constant for all versions (where supported) */
-> +enum {
-> +	/* See BRCMNAND_HAS_CACHE_MODE */
-> +	ACC_CONTROL_CACHE_MODE				=3D BIT(22),
-> +
-> +	/* See BRCMNAND_HAS_PREFETCH */
-> +	ACC_CONTROL_PREFETCH				=3D BIT(23),
-> +
-> +	ACC_CONTROL_PAGE_HIT				=3D BIT(24),
-> +	ACC_CONTROL_WR_PREEMPT				=3D BIT(25),
-> +	ACC_CONTROL_PARTIAL_PAGE			=3D BIT(26),
-> +	ACC_CONTROL_RD_ERASED				=3D BIT(27),
-> +	ACC_CONTROL_FAST_PGM_RDIN			=3D BIT(28),
-> +	ACC_CONTROL_WR_ECC				=3D BIT(30),
-> +	ACC_CONTROL_RD_ECC				=3D BIT(31),
-> +
-> +	ACC_CONTROL_ECC_SHIFT				=3D 16,
-> +	/* Only for v7.2 */
-> +	ACC_CONTROL_ECC_EXT_SHIFT			=3D 13,
-> +};
+> If the boundary is extended to user space, some of these components
+> could be moved away from the kernel, and the functionality would be the
+> same without decreasing the security.
 
-These do not look like they fit the purpose of enums. At least keep
-these two last definitions outside like before (you can rename them, I
-don't mind).
+All right, AFAICS your idea is limited to relatively simple cases for
+now. I mean, allowing kexec-tools to run in user space is not easily
+possible when UID 0 is not trusted, because kexec needs to open various
+files and make various other syscalls, which would require a complex LSM
+policy. It looks technically possible to write one, but then the big
+question is if it would be simpler to review and maintain than adding
+more kexec-tools features to the kernel.
 
-LGTM otherwise.
+Anyway, I can sense a general desire to run less code in the most
+privileged system environment. Robert's proposal is one of few that go
+in this direction. What are the alternatives?
 
-> +
->  static inline bool brcmnand_non_mmio_ops(struct brcmnand_controller *ctr=
-l)
->  {
->  #if IS_ENABLED(CONFIG_MTD_NAND_BRCMNAND_BCMA)
-> @@ -737,6 +766,12 @@ static int brcmnand_revision_init(struct brcmnand_co=
-ntroller *ctrl)
->  	else if (of_property_read_bool(ctrl->dev->of_node, "brcm,nand-has-wp"))
->  		ctrl->features |=3D BRCMNAND_HAS_WP;
-> =20
-> +	/* v7.2 has different ecc level shift in the acc register */
-> +	if (ctrl->nand_version =3D=3D 0x0702)
-> +		ctrl->ecc_level_shift =3D ACC_CONTROL_ECC_EXT_SHIFT;
-> +	else
-> +		ctrl->ecc_level_shift =3D ACC_CONTROL_ECC_SHIFT;
-> +
->  	return 0;
->  }
-> =20
-> @@ -931,30 +966,6 @@ static inline int brcmnand_cmd_shift(struct brcmnand=
-_controller *ctrl)
->  	return 0;
->  }
-> =20
-> -/***********************************************************************
-> - * NAND ACC CONTROL bitfield
-> - *
-> - * Some bits have remained constant throughout hardware revision, while
-> - * others have shifted around.
-> - ***********************************************************************/
-> -
-> -/* Constant for all versions (where supported) */
-> -enum {
-> -	/* See BRCMNAND_HAS_CACHE_MODE */
-> -	ACC_CONTROL_CACHE_MODE				=3D BIT(22),
-> -
-> -	/* See BRCMNAND_HAS_PREFETCH */
-> -	ACC_CONTROL_PREFETCH				=3D BIT(23),
-> -
-> -	ACC_CONTROL_PAGE_HIT				=3D BIT(24),
-> -	ACC_CONTROL_WR_PREEMPT				=3D BIT(25),
-> -	ACC_CONTROL_PARTIAL_PAGE			=3D BIT(26),
-> -	ACC_CONTROL_RD_ERASED				=3D BIT(27),
-> -	ACC_CONTROL_FAST_PGM_RDIN			=3D BIT(28),
-> -	ACC_CONTROL_WR_ECC				=3D BIT(30),
-> -	ACC_CONTROL_RD_ECC				=3D BIT(31),
-> -};
-> -
->  static inline u32 brcmnand_spare_area_mask(struct brcmnand_controller *c=
-trl)
->  {
->  	if (ctrl->nand_version =3D=3D 0x0702)
-> @@ -967,18 +978,15 @@ static inline u32 brcmnand_spare_area_mask(struct b=
-rcmnand_controller *ctrl)
->  		return GENMASK(4, 0);
->  }
-> =20
-> -#define NAND_ACC_CONTROL_ECC_SHIFT	16
-> -#define NAND_ACC_CONTROL_ECC_EXT_SHIFT	13
-> -
->  static inline u32 brcmnand_ecc_level_mask(struct brcmnand_controller *ct=
-rl)
->  {
->  	u32 mask =3D (ctrl->nand_version >=3D 0x0600) ? 0x1f : 0x0f;
-> =20
-> -	mask <<=3D NAND_ACC_CONTROL_ECC_SHIFT;
-> +	mask <<=3D ACC_CONTROL_ECC_SHIFT;
-> =20
->  	/* v7.2 includes additional ECC levels */
-> -	if (ctrl->nand_version >=3D 0x0702)
-> -		mask |=3D 0x7 << NAND_ACC_CONTROL_ECC_EXT_SHIFT;
-> +	if (ctrl->nand_version =3D=3D 0x0702)
-> +		mask |=3D 0x7 << ACC_CONTROL_ECC_EXT_SHIFT;
-> =20
->  	return mask;
->  }
-> @@ -992,8 +1000,8 @@ static void brcmnand_set_ecc_enabled(struct brcmnand=
-_host *host, int en)
-> =20
->  	if (en) {
->  		acc_control |=3D ecc_flags; /* enable RD/WR ECC */
-> -		acc_control |=3D host->hwcfg.ecc_level
-> -			       << NAND_ACC_CONTROL_ECC_SHIFT;
-> +		acc_control &=3D ~brcmnand_ecc_level_mask(ctrl);
-> +		acc_control |=3D host->hwcfg.ecc_level << ctrl->ecc_level_shift;
->  	} else {
->  		acc_control &=3D ~ecc_flags; /* disable RD/WR ECC */
->  		acc_control &=3D ~brcmnand_ecc_level_mask(ctrl);
-> @@ -2561,7 +2569,7 @@ static int brcmnand_set_cfg(struct brcmnand_host *h=
-ost,
->  	tmp &=3D ~brcmnand_ecc_level_mask(ctrl);
->  	tmp &=3D ~brcmnand_spare_area_mask(ctrl);
->  	if (ctrl->nand_version >=3D 0x0302) {
-> -		tmp |=3D cfg->ecc_level << NAND_ACC_CONTROL_ECC_SHIFT;
-> +		tmp |=3D cfg->ecc_level << ctrl->ecc_level_shift;
->  		tmp |=3D cfg->spare_area_size;
->  	}
->  	nand_writereg(ctrl, acc_control_offs, tmp);
+Petr T
 
-
-Thanks,
-Miqu=C3=A8l
