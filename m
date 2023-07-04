@@ -2,99 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74844746D52
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D952746D5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbjGDJ2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S231228AbjGDJbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjGDJ2C (ORCPT
+        with ESMTP id S230492AbjGDJbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:28:02 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89B4187
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:28:00 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso6282512276.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 02:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688462880; x=1691054880;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e3TXes7w/Rmbj1DkXFlIvKaLc8Xq0FgJi7YMpllWJrA=;
-        b=OoCw2qkjIS9uiDScfmNBkgBtmk4wM2nR69ViCcOw5vgDxOdTw0w90Ian78v4vjjtl0
-         jOEeYH5dAB9l2vu6zowl1gNS4Knq4xtgos/5Krc4brqkt87G6myHuET4b5h9T4eRTzAH
-         jtjIZTpHCpo1bz/be4ypmzT8DzCk4IrLebNiL7On5eSxPZEiLK9zBhExqgVQRAikyZji
-         wGZzLQKaAdUQ3HS8xgMYwa6pZnr3n4D+awAFX88m9wK7eYgFZGHia9ZLhD8kyCBUxQv+
-         sIJsAV8/whbNvJkxelVWjyf9mWZbmCgDDFMaHHF36MAqJDWkM46Xh0+bZPrBIdRrc6bx
-         PIEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688462880; x=1691054880;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e3TXes7w/Rmbj1DkXFlIvKaLc8Xq0FgJi7YMpllWJrA=;
-        b=A+j1NGu+cpV+vJx6VRg++IAhe6f9U1Al2pQ9zU1F/aKc/pFE45Ys7nLfH3QqQc69w2
-         JuJwhRj2pGMVvuZDJHBJqN4Leu0olrwRt4GXrtP1QwJ6ELovQzIJTukd7WtCAlDRd4Kw
-         QUSdzw+9P9JK4bKL6Vv3Z37cER4hERGSJzPVPS39KMw0sXKB6lPsEbDsA+IP1vQxidw1
-         8zhdxBh1sqqc9y1JwVqo647Vz8hQiPdJdR3+SbMCC8pIW2UfLplV5sqJJRQp71VMqIgi
-         plGTc/V/w+wl0L0mLuHmUI5f8fZdFcnMQmTGN2NZCVlem/s2s7oAnBoFM11lF3VeNLel
-         dWaQ==
-X-Gm-Message-State: ABy/qLZTtiKIGWUZnjtBnV41b1/Isrp33jz07D2tc5EBosQBhXbjaVty
-        wCGVLzj+l1m1//hy+gx3EYvG71Z48xpFexXdXx6ApA==
-X-Google-Smtp-Source: APBJJlGjlh3CvPVpKROT51T36lYrYgCT70VTb+HBZrybLXHHEs7NrC37lmVz+67sLTPrYH9vI8gYMaFOi6LN15jfFD0=
-X-Received: by 2002:a25:1d7:0:b0:c4d:96a2:5d96 with SMTP id
- 206-20020a2501d7000000b00c4d96a25d96mr7651767ybb.34.1688462880018; Tue, 04
- Jul 2023 02:28:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
- <2023062814-chance-flounder-f002@gregkh> <CAL_JsqLO9yey2-4FcWsaGxijiS6hGL0SH9VoMuiyei-u9=Cv=w@mail.gmail.com>
-In-Reply-To: <CAL_JsqLO9yey2-4FcWsaGxijiS6hGL0SH9VoMuiyei-u9=Cv=w@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Jul 2023 11:27:48 +0200
-Message-ID: <CACRpkda3CJ7G4-wDPkWmzg6nyCoEfG+u2cQH6KXWNjbftd90ow@mail.gmail.com>
-Subject: Re: [PATCH v4 00/21] Add Qualcomm Minidump kernel driver related support
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>, corbet@lwn.net,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 05:31:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EF111F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:31:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 01C5120479;
+        Tue,  4 Jul 2023 09:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688463104; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xxBYV5PGHxOojZ6/Vf69b83Mv4nKQ6Ix2pTjW52Xd2E=;
+        b=EuwuNreGaHdJ2Fk7s6PHEKDg3FCcmHiYWvxdvsRjKJ659EHvDlnsb29GcvMehTo7D90fmB
+        4Fy59JubTOvNYsfCg/v5r5DrM5/ZNd/sVvI/TsQ8MDZSe7s0di/J/Sum2ltkndej2oiEds
+        3vxCEky8CB0OdLeF+1zdo4ytSXTmIss=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688463104;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xxBYV5PGHxOojZ6/Vf69b83Mv4nKQ6Ix2pTjW52Xd2E=;
+        b=WfvgNuETT3yz/dlBpoOeyoscnNgZy6sBLamLeW2qaPjeGep/pRBX8qyVvoCYZEGSXCp18k
+        pZlYXheAWgigQyCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB38D133F7;
+        Tue,  4 Jul 2023 09:31:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ByrNMP/mo2TeTwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 04 Jul 2023 09:31:43 +0000
+Date:   Tue, 04 Jul 2023 11:31:43 +0200
+Message-ID: <878rbw2fb4.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Minjie Du <duminjie@vivo.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list),
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH v1] sound: riptide: Remove duplicate judgments code
+In-Reply-To: <20230704091131.6662-1-duminjie@vivo.com>
+References: <20230704091131.6662-1-duminjie@vivo.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 1:12=E2=80=AFAM Rob Herring <robh+dt@kernel.org> wr=
-ote:
+On Tue, 04 Jul 2023 11:11:31 +0200,
+Minjie Du wrote:
+> 
+> Fix: delate duplicate judgments
+> Could you help check it out? Thank you!
 
-> My bigger issue with this whole series is what would this all look
-> like if every SoC vendor upstreamed their own custom dumping
-> mechanism. That would be a mess. (I have similar opinions on the
-> $soc-vendor hypervisors.)
+I'm afraid that it's no right fix.
+The duplicated calls actually send two commands sequentially, and if
+you drop one, it'll change the behavior completely.
 
-I agree with Rob's stance.
+Honestly speaking, I have no idea whether sending twice is mandatory
+for this chip.  It's an ugly driver by reverse engineering, so who
+knows.  We can get rid of it in future.  But it's a different topic.
 
-I think it would be useful to get input from the hwtracing developers
-(Alexander and Mathieu) who faced this "necessarily different" issue
-with all the hwtrace mechanisms and found a way out of it. I suspect
-they can have an idea of how this should be abstracted.
 
-Yours,
-Linus Walleij
+thanks,
+
+Takashi
+
+> 
+> Signed-off-by: Minjie Du <duminjie@vivo.com>
+> ---
+>  sound/pci/riptide/riptide.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/sound/pci/riptide/riptide.c b/sound/pci/riptide/riptide.c
+> index b37c877c2..9bf4b2e86 100644
+> --- a/sound/pci/riptide/riptide.c
+> +++ b/sound/pci/riptide/riptide.c
+> @@ -958,8 +958,7 @@ getsourcesink(struct cmdif *cif, unsigned char source, unsigned char sink,
+>  {
+>  	union cmdret rptr = CMDRET_ZERO;
+>  
+> -	if (SEND_RSSV(cif, source, sink, &rptr) &&
+> -	    SEND_RSSV(cif, source, sink, &rptr))
+> +	if (SEND_RSSV(cif, source, sink, &rptr))
+>  		return -EIO;
+>  	*a = rptr.retbytes[0];
+>  	*b = rptr.retbytes[1];
+> @@ -978,8 +977,7 @@ getsamplerate(struct cmdif *cif, unsigned char *intdec, unsigned int *rate)
+>  	s = intdec;
+>  	for (i = 0; i < 2; i++) {
+>  		if (*s != 0xff) {
+> -			if (SEND_RSRC(cif, *s, &rptr) &&
+> -			    SEND_RSRC(cif, *s, &rptr))
+> +			if (SEND_RSRC(cif, *s, &rptr))
+>  				return -EIO;
+>  			p[i] += rptr.retwords[1];
+>  			p[i] *= rptr.retwords[2];
+> @@ -1013,8 +1011,7 @@ setsampleformat(struct cmdif *cif,
+>  	sig = snd_pcm_format_unsigned(format) != 0;
+>  	order = snd_pcm_format_big_endian(format) != 0;
+>  
+> -	if (SEND_SETF(cif, mixer, w, ch, order, sig, id) &&
+> -	    SEND_SETF(cif, mixer, w, ch, order, sig, id)) {
+> +	if (SEND_SETF(cif, mixer, w, ch, order, sig, id)) {
+>  		snd_printdd("setsampleformat failed\n");
+>  		return -EIO;
+>  	}
+> @@ -1060,7 +1057,7 @@ getmixer(struct cmdif *cif, short num, unsigned short *rval,
+>  {
+>  	union cmdret rptr = CMDRET_ZERO;
+>  
+> -	if (SEND_RDGV(cif, num, num, &rptr) && SEND_RDGV(cif, num, num, &rptr))
+> +	if (SEND_RDGV(cif, num, num, &rptr))
+>  		return -EIO;
+>  	*rval = rptr.retwords[0];
+>  	*lval = rptr.retwords[1];
+> -- 
+> 2.39.0
+> 
