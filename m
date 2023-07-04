@@ -2,178 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFFA7478AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB567478B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjGDTZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 15:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S231417AbjGDTbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 15:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjGDTZh (ORCPT
+        with ESMTP id S229451AbjGDTbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 15:25:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90EB610D9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 12:25:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEB4615DB;
-        Tue,  4 Jul 2023 12:26:17 -0700 (PDT)
-Received: from bogus (unknown [10.57.76.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5715A3F663;
-        Tue,  4 Jul 2023 12:25:32 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 20:25:29 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Mostafa Saleh <smostafa@google.com>
-Cc:     maz@kernel.org, oliver.upton@linux.dev,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com,
-        will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com,
-        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
-        gshan@redhat.com, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v3] KVM: arm64: Use BTI for nvhe
-Message-ID: <20230704192529.d4x2p7ndz2dc4q52@bogus>
-References: <20230530150845.2856828-1-smostafa@google.com>
- <20230704134136.a5znw4jupt5yp5kg@bogus>
- <ZKQqIYRrckLlXqkx@google.com>
- <20230704143339.cqrvntq7rmmb2on3@bogus>
- <ZKRIWJKn7aVSOvjd@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZKRIWJKn7aVSOvjd@google.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 15:31:22 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA83E5B;
+        Tue,  4 Jul 2023 12:31:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 340195C0134;
+        Tue,  4 Jul 2023 15:31:12 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 04 Jul 2023 15:31:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1688499072; x=1688585472; bh=4g
+        tsow0D+6yhLzOvQoS00QH+q8wj07ePGtJBPslxxVE=; b=Z/zEueicl26u7FqUVb
+        mbPwqzwjoyiNO9yEIwFbm3natpL4IVRYgk/1+HpJgxR1c2A1jrCS79Kq0L4CE2Ma
+        n1jhPHiJMwXSajp/lxqvY2pk1NEFxvkdAGqBKPx62iRm/eUUQYGEdr8H3LToWv4b
+        T+MsdftC3j+Zg4teuE0oz2ezUq4BQqYAaEW7g8QqTDC5SxleG6djm6EkLwLPgXR0
+        2NkYBXKiAKyV/fdqi86pt/w1ZSw/lUCTvI4ywLLVNJAhNeBm0JL7V5PO7VzfgI/e
+        XchefDS9JXzz42kY8mhsWTl+zCOOQgx1y0qrFc0KfWaH9ML2tZGmsurxYySJr8ys
+        MeYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688499072; x=1688585472; bh=4gtsow0D+6yhL
+        zOvQoS00QH+q8wj07ePGtJBPslxxVE=; b=KhOWL4jLB0DfevwUQ6W4EaDb+mwkK
+        ObWP6pIfKAyDYRjtLiZHrZPRNtRzfuSB7Rr3Gjz9k//NIc7hTcB9jLV/P5epK7Qm
+        QXb7TN5dr+gR/N0+gaEVxzKBrjSRbnPDNEnVTS4Ymb4gNdLtq4L5iX/lMG2Bziow
+        7Snzpx2A9gHY9jwpznAXZ9uUso+ewM0wNzqbMaebCzZ/ev27fL6+xnD4jizBmSv5
+        UU6Xy19vAjCPXkOJwIc7cMaK5npYMWpvAprXZ1TfoXO0wlDoK2p1hcqt7k30pUvN
+        +TdgcOgewnEeGomjVuggW9I1lDdli4SnmDi4wxhwO2cJwboeo/lqBZ1vg==
+X-ME-Sender: <xms:f3OkZPV1bcpR1t4UTJWGcOEk4u_fSNgwzJOAnH-YKv-gF8MToZX2GA>
+    <xme:f3OkZHlzZwSaZGygnao2xmkvsK5glhgGvCTZyq7LRmsC1YXvtIxzTSuBOWAB59J8W
+    W8gHoWKlRMN5kznqXE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeggddufeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:f3OkZLY4tyqDeo3P1FlDN4zJJZ_7yVpFO6AY5WNEMzdvmrQEhiU4Ew>
+    <xmx:f3OkZKUVoi1uQiP48MGvUcwdPbGCsglF7ZaDzFJ7-7K5cLNLe9-aTw>
+    <xmx:f3OkZJk51VP3ri5pq1nIcRZT0maQIveE1WZuh5fjf75G4fEBJ5EEiA>
+    <xmx:gHOkZPj1e5YDwK2Lxi8-ia2LuFHGd-emnrOd0grZihTpqE8LIYoHrA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 77386B60086; Tue,  4 Jul 2023 15:31:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
+Mime-Version: 1.0
+Message-Id: <72cd95c0-318d-49cd-9a0b-e0a3a227c693@app.fastmail.com>
+In-Reply-To: <20230704190144.2888679-1-linux@roeck-us.net>
+References: <20230704190144.2888679-1-linux@roeck-us.net>
+Date:   Tue, 04 Jul 2023 21:30:51 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Guenter Roeck" <linux@roeck-us.net>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>
+Cc:     "Rich Felker" <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sh: provide unxlate_dev_mem_ptr() in asm/io.h
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 04:27:04PM +0000, Mostafa Saleh wrote:
-> Hi Sudeep,
-> 
-> On Tue, Jul 04, 2023 at 03:33:39PM +0100, Sudeep Holla wrote:
-> > Hi Mostafa,
-> > 
-> > On Tue, Jul 04, 2023 at 02:18:09PM +0000, Mostafa Saleh wrote:
-> > > Hi Sudeep,
-> > > 
-> > > On Tue, Jul 04, 2023 at 02:41:36PM +0100, Sudeep Holla wrote:
-> > > > On Tue, May 30, 2023 at 03:08:45PM +0000, Mostafa Saleh wrote:
-> > > > > CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
-> > > > > However, the nvhe code doesn't make use of it as it doesn't map any
-> > > > > pages with Guarded Page(GP) bit.
-> > > > > 
-> > > > > kvm pgtable code is modified to map executable pages with GP bit
-> > > > > if BTI is enabled for the kernel.
-> > > > > 
-> > > > > At hyp init, SCTLR_EL2.BT is set to 1 to match EL1 configuration
-> > > > > (SCTLR_EL1.BT1) set in bti_enable().
-> > > > > 
-> > > > > One difference between kernel and nvhe code, is that the kernel maps
-> > > > > .text with GP while nvhe maps all the executable pages, this makes
-> > > > > nvhe code need to deal with special initialization code coming from
-> > > > > other executable sections (.idmap.text).
-> > > > > For this we need to add bti instruction at the beginning of
-> > > > > __kvm_handle_stub_hvc as it can be called by  __host_hvc through
-> > > > > branch instruction(br) and unlike SYM_FUNC_START, SYM_CODE_START
-> > > > > doesn’t add bti instruction at the beginning, and it can’t be modified
-> > > > > to add it as it is used with vector tables.
-> > > > > Another solution which is more intrusive is to convert
-> > > > > __kvm_handle_stub_hvc to a function and inject “bti jc” instead of
-> > > > > “bti c” in SYM_FUNC_START
-> > > > >
-> > > > 
-> > > > I was chasing a bug in linux-next yesterday with protected nVHE(pKVM) and
-> > > > cpuidle enabled. The system fails to boot. I just bisected the issue to this
-> > > > patch and also saw this patch landed in the linus tree yesterday/today.
-> > > 
-> > > One of the challenges of BTI is that we need to add explicit BTI instructions
-> > > for assembly code. I checked the code to make sure that nothing was missing,
-> > > but maybe this is not the case.
-> > > Can you please share more about the issue (is ESR a Branch Target Exception,
-> > > call stack...) if possible.
-> > 
-> > I haven't debugged it any further, just reported it as soon as I bisected it.
-> > Reverting this get back the booting system. I am not sure if anything is going
-> > wrong when the CPU is entering suspend(highly unlikely in normal scenario but
-> > I am not so sure with pKVM trapping these PSCI calls now) or when it is woken
-> > up and resuming back. IIUC this now will happen via kvm_hyp_cpu_resume->
-> > __kvm_hyp_init_cpu->___kvm_hyp_init. 
-> 
-> Thanks a lot for the information.
-> 
-> I checked this now, and I believe I found an issue. I see that __kvm_hyp_init_cpu
-> calls kvm_host_psci_cpu_entry indirectly and there is no BTI there.
-> I think this is the only C function that needs special handling.
+On Tue, Jul 4, 2023, at 21:01, Guenter Roeck wrote:
+> The unxlate_dev_mem_ptr() function has no prototype on the sh architecture,
+> which does not include asm-generic/io.h. This results in the following
+> build failure.
 >
-
-So it is in the wake up path. Thanks for the description, now I understand
-the issue and fix better.
-
-> Can you please check if this solves the issue?
+> drivers/char/mem.c: In function 'read_mem':
+> drivers/char/mem.c:164:25: error: implicit declaration of function 
+> 'unxlate_dev_mem_ptr'
 >
-
-Yes, the below patch fixed the issue. Feel free to add when you post the
-formal patch.
-
-Reported-and-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
-
-> diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
-> index c87c63133e10..7df63f364c3c 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/host.S
-> +++ b/arch/arm64/kvm/hyp/nvhe/host.S
-> @@ -297,3 +297,8 @@ SYM_CODE_START(__kvm_hyp_host_forward_smc)
->  
->         ret
->  SYM_CODE_END(__kvm_hyp_host_forward_smc)
-> +
-> +SYM_CODE_START(kvm_host_psci_cpu_entry)
-> +       bti j
-> +       b __kvm_host_psci_cpu_entry
-> +SYM_CODE_END(kvm_host_psci_cpu_entry)
-> diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-> index 08508783ec3d..24543d2a3490 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-> @@ -200,7 +200,7 @@ static int psci_system_suspend(u64 func_id, struct kvm_cpu_context *host_ctxt)
->                          __hyp_pa(init_params), 0);
->  }
->  
-> -asmlinkage void __noreturn kvm_host_psci_cpu_entry(bool is_cpu_on)
-> +asmlinkage void __noreturn __kvm_host_psci_cpu_entry(bool is_cpu_on)
->  {
->         struct psci_boot_args *boot_args;
->         struct kvm_cpu_context *host_ctxt;
-> 
-> 
-> > > Also, is this with CONFIG_ARM_PSCI_CPUIDLE?
-> > 
-> > Yes, basically the cpus can enter cpu_suspend which IIUC pKVM traps and
-> > handle for the host.
-> 
-> My current setup has no CONFIG_ARM_PSCI_CPUIDLE?, I will try to find
-> something I can test with.
+> This compile error is now seen because commit 99b619b37ae1 ("mips: provide
+> unxlate_dev_mem_ptr() in asm/io.h") removed the weak function which was
+> previously in place to handle the problem.
 >
-
-No worries, I can help until you find one.
-
-
-> > > 
-> > > > Not sure if this is something to do with the fact that pKVM skips to
-> > > > __kvm_handle_stub_hvc in __host_hvc.
-> > 
-> > Sorry, my bad. I meant pKVM skips calling __kvm_handle_stub_hvc in __host_hvc
-> > and jumps to __host_exit directly. Sorry for that, one wrong "to" changed the
-> > whole meaning.
-> 
-> I don't see an issue in this, as this path has no indirect branches.
+> Add a trivial macro to the sh header to provide the now missing dummy
+> function.
 >
+> Fixes: 99b619b37ae1 ("mips: provide unxlate_dev_mem_ptr() in asm/io.h")
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Understood.
+Ideally, we should use the asm-generic/io.h header here, but as a hotfix
+this should do.
 
--- 
-Regards,
-Sudeep
+Acked-by: Arnd Bergmann <arnd@arndb.de>
