@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE4C747460
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FC1747463
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjGDOre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S231751AbjGDOr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjGDOrc (ORCPT
+        with ESMTP id S231743AbjGDOrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:47:32 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A60E47
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:47:31 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbc587febfso49939035e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:47:31 -0700 (PDT)
+        Tue, 4 Jul 2023 10:47:53 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB67D10E6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:47:47 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3143b72c5ffso1921941f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:47:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688482050; x=1691074050;
+        d=broadcom.com; s=google; t=1688482066; x=1691074066;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1441CrjTWMG+cND4rvIqeV8XyHFzCLpQN/pAfpK+P9M=;
-        b=JcmnVTFJbZGUnX6H87T7MTqi6c3jH0mpxdje+cqzEj82aeH3bmDQw4io/iKJqdzNUG
-         WwladuisF+P6U2/ecZ8kEsn+RE659p0Op7OWEoqYrAhyL3MiIQhlzVTMo3IQrjvN6o6P
-         trczmr7usipxv9DeyjHg1MKLfH0BiFhOTvZpU=
+        bh=izWaE8oDtp8cvAC/vrmujLT7QuBKXHeOzKT+GLCXN2Q=;
+        b=LKjJ+9oG7QBeWDK0+IgxdzH4ASbiWPZ6HZp+KRs6aB9x6/xKe8+1x37N8e4nT5pydn
+         hqaWhRdcxllCoc5MCufe+Ik7+TKQe5IkNQdkw2glzIagK+V+NPGVGYMuJ2FGZ8uM0KWa
+         T2ggTa2ot1qJoJXSWU2IjU0OopqP7u07mX0eM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688482050; x=1691074050;
+        d=1e100.net; s=20221208; t=1688482066; x=1691074066;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1441CrjTWMG+cND4rvIqeV8XyHFzCLpQN/pAfpK+P9M=;
-        b=fxkn10f8/fK1lwglg1Cl2WlU3gBSMF5EIvAiHzybZuKQ0pSlMtCvl3beN+ElEq+ohh
-         VeiM0ub5hces3gobyVBzZpTdrcvVxcrN72TfieznSvHkF+umM2EIlDZHGEv+/iGFDvcU
-         F2FuqjzHTArDkNhpxcU2njg/ro2sno1LDObYdmbNfhy2LBgA12T6e/Ytjc6NY6rqm1ep
-         hSlbZ5Ua38kTP2KEpr4FGqtBgJYCnWI6WEXM88GVi0gDq2Eqk1ZvHnmDhxldkqpEOX81
-         XnOv++zHBt1gbzez8xRJzlisB5ojTMXQf8+5a18Dm486kM42oUtT4scOFzxQSxvmVlL9
-         FFKQ==
-X-Gm-Message-State: AC+VfDw15TDGIoSYjyFRX0jr4aaNs8c+dDHwDNggN9bpnBaPDZ/9ikL/
-        YEyjdzLMyfv29SsxbUtDpG4gAw==
-X-Google-Smtp-Source: ACHHUZ7ZJf2j3IkCG2IcEr3SWEEAaF2SimLWoSKiyp3VRQRIu4vA2LdbXdrNTBJJqVvjhsoap1GMEA==
-X-Received: by 2002:a05:600c:258:b0:3fa:9823:407 with SMTP id 24-20020a05600c025800b003fa98230407mr10383719wmj.18.1688482050087;
-        Tue, 04 Jul 2023 07:47:30 -0700 (PDT)
+        bh=izWaE8oDtp8cvAC/vrmujLT7QuBKXHeOzKT+GLCXN2Q=;
+        b=BPPPGXB585O8sybHe+TikF0CmDZWfa1lpesS2wZ1RsBHrRHZeGyxtyHQkyumxbpRzN
+         w3W6Hzz5D+AK3HkNyDDQcJyiaPQsnSZEop/Hx9iNOeEFCmHFME5wQqqLOjKhCsZPG7JQ
+         pRChjt7nR132FEAdcyBfyXuSidczTKQaTVxOm4LfsdX2dLsRNKZ6/0jmy1xvuUmueYn3
+         rPCMYaPHn+SZeSA0x6/SsusxCfoknzL2BtN5mmSNNlAFXU+CFLSj5GpDIearkn0RF20B
+         vqH+VjCy34aYNBFVhQNpJNevJN9u8z1DaB/awuxPjTeazTIGbGms3we38P5pG2n81ZT7
+         Kj0Q==
+X-Gm-Message-State: ABy/qLYHZFRs2FTZctGYvoRyDqhXd0sE/h2LOy9voJtA1UYB8QoJ7005
+        ozAZMJF7G1wmsAIRW0ksbSmbsQ==
+X-Google-Smtp-Source: APBJJlENbF1BKk70PGy9UVxusfOSG41M4CneCPsLuQtwH0vGc1IdKm5aVdhMJbBD2l+RgDU/obiBFw==
+X-Received: by 2002:a05:6000:1364:b0:313:e922:3941 with SMTP id q4-20020a056000136400b00313e9223941mr15621533wrz.46.1688482066246;
+        Tue, 04 Jul 2023 07:47:46 -0700 (PDT)
 Received: from ?IPV6:2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0? (2a01cb0586f567009c8c678d15a0e7e0.ipv6.abo.wanadoo.fr. [2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0])
-        by smtp.gmail.com with ESMTPSA id m16-20020a5d6250000000b003068f5cca8csm28458114wrv.94.2023.07.04.07.47.28
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c229800b003fa98908014sm25087165wmf.8.2023.07.04.07.47.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 07:47:29 -0700 (PDT)
-Message-ID: <5aa51d80-1d3f-1365-a84e-6fdecf040a23@broadcom.com>
-Date:   Tue, 4 Jul 2023 07:47:31 -0700
+        Tue, 04 Jul 2023 07:47:44 -0700 (PDT)
+Message-ID: <33bea073-50e1-61fa-4b08-4b059f4e69df@broadcom.com>
+Date:   Tue, 4 Jul 2023 07:47:46 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 1/7] reset: brcmstb: Use
- devm_platform_get_and_ioremap_resource()
-To:     Yangtao Li <frank.li@vivo.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+Subject: Re: [PATCH 2/3] spi: bcm{63xx,bca}-hsspi: update my email address
+To:     Jonas Gorski <jonas.gorski@gmail.com>,
+        William Zhang <william.zhang@broadcom.com>,
+        Kursad Oney <kursad.oney@broadcom.com>,
         Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230704120211.38122-1-frank.li@vivo.com>
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>,
+        Anand Gore <anand.gore@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230630202257.8449-1-jonas.gorski@gmail.com>
+ <20230630202257.8449-2-jonas.gorski@gmail.com>
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <20230704120211.38122-1-frank.li@vivo.com>
+In-Reply-To: <20230630202257.8449-2-jonas.gorski@gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d4119b05ffaa5cb7"
+        boundary="000000000000c83ab405ffaa5d63"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
@@ -73,25 +79,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d4119b05ffaa5cb7
+--000000000000c83ab405ffaa5d63
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 7/4/2023 2:02 PM, Yangtao Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On 6/30/2023 10:22 PM, Jonas Gorski wrote:
+> Update my email address to a working one, as the openwrt.org one is
+> broken since ages.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 
 Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
 Florian
 
---000000000000d4119b05ffaa5cb7
+--000000000000c83ab405ffaa5d63
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -162,14 +167,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILGc158htBU/u7hW
-S50XaQ5zwoKLSPHhWGSJop6IgiCmMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDcwNDE0NDczMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIL5pL3q7w8VSBchP
+aDM84u83BxnEoNSWBCsOPAagt/N5MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDcwNDE0NDc0NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBMxJfTOoDSHWZa5oyTGzT2fnrdDobgNMmp
-ZSX3t9MLNOgRwqNtgnZHKG80GHIOM5P0HF2rE5a8Zr3uyG6gaRYR5PUjmgyn18xgGAMQTQDJ/Xpe
-MPb5fpBNcxadz1i4nFoFDycoYWrpmL73jGz6d/k1GyssWXgZ5h7yp6HtsyxLguTH02fP6aDVyF2W
-S62fHr3ra1WDQWr4piSmWA6qj9roDgaih3hVIEb9erX5IHWbv0vlLdQgspKQxAMmNy5EVaCC5rlg
-xS27V80d1fPYfFwL2MsXK426COspmwcRcuBc03C6PHjQgKmkgyFSNefHQ/2zsXpqUPpyysFXeUlu
-o+UQ
---000000000000d4119b05ffaa5cb7--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDiZLF7BaEy8R3DcOBc7lF1OaJopEdDDDtA
+CtCAZRXLeBmZTedGKx0vvu+TduDoHEIPha0ACiezL44/9Xp0dZK0jmCbCW8ac5HjiOkr6/qJ8LuZ
+nStB9BeXsk62TW30/qH2Au8RMViluHH2foqgb8yiJw4HqzDVO2bmbM4ud5P3TK6iNVsT1MO9/QfN
+OK/qkIhYJtFEEc1SyZQMlLzeS2tarTcxmY/DRN9K8TGAYPdVEkbldCPiF5PXxE9Nrrj20oVeFMTQ
+54l9D8r+anjVXrrlO4GA+cORpbXlsrfdNzdXFKdSl5T7j9VNdOcPKrIy863JlDPSmMDiZp0rGIt6
+/6dP
+--000000000000c83ab405ffaa5d63--
