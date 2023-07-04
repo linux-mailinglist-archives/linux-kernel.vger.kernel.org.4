@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48098747174
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E587747170
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjGDMdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
+        id S229441AbjGDMdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjGDMdO (ORCPT
+        with ESMTP id S231924AbjGDMdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:33:14 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61D9D8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:33:13 -0700 (PDT)
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 77D9F3F731
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 12:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688473992;
-        bh=gy4Y3Oco7V4O0qs2lvEoa7dVI3NuFWh8wF5vNDqvAfY=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=QgIQJRZHNeX6RMvTIqKJyEShxtNVrzwsirfDQFjRmGeaXqph0qFA/lfKXFrsO7o6L
-         yL7F9KC6UeSrMZESxu3aBlHi7AlBt281oLgQjO6qUm8YlMeprYZHv6fFiFXmWDWHlV
-         GeYdg99ZP1j0GjOzKsLX0FTB3zRI0wZega1U15UlDouEqc6rOUB7XC/p9PyGO9z4fq
-         q4uS5BH2NHtxqPtdsO5cMpjEOGYr7flijaO8GlkuZlqXdLtHUErbnnuxuQSiofeix+
-         2HB/87k29RU/tqfiT3LPySM5u+PKqeoxyoT9rNIGWcPn6LKPk8A35O7MIbe7v+sOMf
-         4GZedonMcFLkA==
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-55afcc54d55so5704232a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:33:12 -0700 (PDT)
+        Tue, 4 Jul 2023 08:33:11 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83ACE7B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:33:08 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb9ae4cef6so8769253e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688473987; x=1691065987;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JzgQQIKNDoBtiJAoujjApNzPmxlwUw+BR/55LC+iVio=;
+        b=CfEh/KBX/LDElugpqwu2sDiT5kzXeo1eUeTMkkVqIJI2SqJcdnjVe2vPA2dqVHS1To
+         /DvB2YRM9V3P7Wch1cEt6adXxVs7BbjGuxZ/Vhq0SLNNWwyq4OPGy+biCdIp3o2brOyo
+         +875WKhU9m/NCiMugZ8F4R84ttG3MSGh4kOeMs+jZRbLoGVYQUh10a/jZqZ4jvHnT92f
+         XaKepWIKwo/gHccmOsMfF2VjUwXlbOtmaelEDM7XXjHvrcvLki6YRaV4K1EGdAg69d9V
+         PdlIrairKLZ2UQLKC1Ir5xWwHix969JD4ISXs3esm7Co8feRDKjFLuBsq1cPMfpDdeQ5
+         G0Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688473983; x=1691065983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gy4Y3Oco7V4O0qs2lvEoa7dVI3NuFWh8wF5vNDqvAfY=;
-        b=kiskt0UMHvS2k2MXItOUXVkyOd6ilowojCl6ZAIBDonXefP7doBEVVHIXGlG4VBZyM
-         bRj5Ye6s+kgEVBI1ABc7MTeMgwkup0XiH12dXnoEQyvW1GnTUS9TppOCU0pJLFX8Fqf+
-         cYPSfpLU8spNTAt1i5EeX9HfU2YQhu+Np2URA1JFCFuvq9KQ/3N5G1xueNsk2GWJSNLs
-         B1TTREkb65DIbpg5CjqB+1dYLyI5p1FkL+lTrNJFo4996kTQETdoWzO43ZIXOeuNYnLZ
-         D0DOSO85Qh76/uKuaWyBeam+v5jwIHWutIwXXx722ugO2tIkENP+t3cUPz5mSeFkv0eE
-         U7Fg==
-X-Gm-Message-State: ABy/qLa5QufvG3MKb98aPtTCTJYsK2Rs0YX8L17Dmxu0wVzjCzrIwMOp
-        UkocPcWsRw6Prf4r5u2SZOb7jIfqCgqZKAQKnYhr3sgZ2FXdUj1AgYyDUt2XHVG7LkY09FkGBMq
-        iK3bSAua5nbTkiqUyXkBG//JL0mUy8Has5mfFlll8HsY3N5CQWaBmuV6SrQ==
-X-Received: by 2002:a05:6a21:3814:b0:12e:44:a1a6 with SMTP id yi20-20020a056a21381400b0012e0044a1a6mr8431327pzb.11.1688473983386;
-        Tue, 04 Jul 2023 05:33:03 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGae+2iySp3xgwZd0kWkyY46HWnfktpgUwojgNRFu2M9Wl2v4eWGdhI9PBPcXvWopiWdqDucbx4YO6MZ31PIcI=
-X-Received: by 2002:a05:6a21:3814:b0:12e:44:a1a6 with SMTP id
- yi20-20020a056a21381400b0012e0044a1a6mr8431303pzb.11.1688473983018; Tue, 04
- Jul 2023 05:33:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688473987; x=1691065987;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzgQQIKNDoBtiJAoujjApNzPmxlwUw+BR/55LC+iVio=;
+        b=BNfwtW3R3S9l90KGC02F1GVN2KqZw4YrY/ZhVlbhwPRsfGaoLvu3ZMNIf0HmPaQd74
+         m3xeVAELTyh+h6t/23h4sAPDd+Kf4rWZlCKz/8MTL+6Nm6VVxmtcpuCY8Kq+9I0q2O+I
+         zGdhDH3AHZroLPdD2RHW7EnvtHfktDpx0WCSOwjBCXh2yLJk661i/LQkj8IKceWe5n1N
+         TThxEQwAQIR7owcniTQUvi52G6jgIUh6hZ+iBzaeRfiA+GdZgb8v2DKTwMYoG26jGAMk
+         9ctXa50SAk1tG62q9mlxMJDsAo7e4lQAIWvYR8UxTa6F2uAORwjbHO9gig9eIAhnqAJG
+         fgGw==
+X-Gm-Message-State: ABy/qLYnOV2piAX0iG/SAOl1suleegAQg3qLgQj2ZQQlie3t9f1qyTC0
+        Yqty/wAijftST5VUKUxScO1Jew==
+X-Google-Smtp-Source: APBJJlES1dFuMDEMs90e8mGzZJHQmmY+3FjM1O68m2ZDGiywI0ysXyovZjddRxhtodG9hlyCBhFx7Q==
+X-Received: by 2002:ac2:4ec5:0:b0:4fb:7de4:c837 with SMTP id p5-20020ac24ec5000000b004fb7de4c837mr8424423lfr.68.1688473987006;
+        Tue, 04 Jul 2023 05:33:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id r4-20020a19ac44000000b004fba5c20ab1sm2527946lfc.167.2023.07.04.05.33.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 05:33:06 -0700 (PDT)
+Message-ID: <05666bf0-07f8-1e3a-22bf-fc779e2b7367@linaro.org>
+Date:   Tue, 4 Jul 2023 14:33:04 +0200
 MIME-Version: 1.0
-References: <20230703162509.77828-1-koba.ko@canonical.com> <a0bf3b4c-a528-4507-9bd4-95a0a9eb927d@moroto.mountain>
-In-Reply-To: <a0bf3b4c-a528-4507-9bd4-95a0a9eb927d@moroto.mountain>
-From:   Koba Ko <koba.ko@canonical.com>
-Date:   Tue, 4 Jul 2023 20:32:51 +0800
-Message-ID: <CAJB-X+XtfBm0a4btt6NT9rvdrxETNLNMVQ3G=u513Nh8RKwjWw@mail.gmail.com>
-Subject: Re: [PATCH][V2] EDAC/i10nm: shift exponent is negative
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Elfring <Markus.Elfring@web.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH V2] PCI: qcom: Use PARF_SLV_ADDR_SPACE_SIZE for ops_2_3_3
+Content-Language: en-US
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        sboyd@kernel.org, mturquette@baylibre.com, mani@kernel.org,
+        lpieralisi@kernel.org, bhelgaas@google.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20230703175757.2425540-1-quic_srichara@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230703175757.2425540-1-quic_srichara@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,51 +81,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 8:02=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro.=
-org> wrote:
->
-> Here is a better commit message.  You can just copy and paste it.
-> ------------------------------------------
-> [PATCH v3] EDAC/i10nm: Prevent negative shifts in skx_get_dimm_info().
->
-> UBSAN generated the following warning during a timeout:
->
->     UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
->     shift exponent -66 is negative
->
-> That most likely means that rows, cols, and ranks were all set to
-> -EINVAL.  Address this in two ways.
->
-> 1) Change the debug output in skx_get_dimm_attr() to KERN_ERR so that
->    users will know where exactly the error is.
-> 2) Add a check for errors in skx_get_dimm_info().
->
-> Fixes: 88a242c98740 ("EDAC, skx_common: Separate common code out from skx=
-_edac")
-> Signed-off-by:
-> -----------------------------------------------
+On 3.07.2023 19:57, Sricharan Ramabadhran wrote:
+> PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro is used for IPQ8074
+> 2_3_3 post_init ops. pcie slave addr size was initially set
+> to 0x358, but was wrongly changed to 0x168 as a part of
+> "PCI: qcom: Remove PCIE20_ prefix from register definitions"
+> Fixing it, by using the right macro PARF_SLV_ADDR_SPACE_SIZE
+> and removing the unused PARF_SLV_ADDR_SPACE_SIZE_2_3_3.
+> 
+> Without this pcie bring up on IPQ8074 is broken now.
+> 
+> Fixes: 39171b33f652 ("PCI: qcom: Remove PCIE20_ prefix from register definitions")
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-have sent V3 as per Markus' comments.
-https://patchwork.kernel.org/project/linux-edac/patch/20230704095939.119620=
--1-koba.ko@canonical.com/
-Thanks
->
-> > @@ -351,6 +351,8 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap,=
- struct dimm_info *dimm,
-> >       ranks =3D numrank(mtr);
-> >       rows =3D numrow(mtr);
-> >       cols =3D imc->hbm_mc ? 6 : numcol(mtr);
-> > +     if (ranks =3D=3D -EINVAL || rows =3D=3D -EINVAL || cols =3D=3D -E=
-INVAL)
-> > +             return 0;
->
-> Change this to:
->
->         if (rangks < 0 || rows < 0 || cols < 0)
->                 return 0;
->
-> It's bad form to check for a specific error code unless there is a need.
->
-> regards,
-> dan carpenter
->
+Konrad
+>  [V2] Fixed the 'fixes tag' correctly, subject, right macro usage
+> 
+>  drivers/pci/controller/dwc/pcie-qcom.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 4ab30892f6ef..1689d072fe86 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -43,7 +43,6 @@
+>  #define PARF_PHY_REFCLK				0x4c
+>  #define PARF_CONFIG_BITS			0x50
+>  #define PARF_DBI_BASE_ADDR			0x168
+> -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16c /* Register offset specific to IP ver 2.3.3 */
+>  #define PARF_MHI_CLOCK_RESET_CTRL		0x174
+>  #define PARF_AXI_MSTR_WR_ADDR_HALT		0x178
+>  #define PARF_AXI_MSTR_WR_ADDR_HALT_V2		0x1a8
+> @@ -811,7 +810,7 @@ static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
+>  	u32 val;
+>  
+>  	writel(SLV_ADDR_SPACE_SZ,
+> -		pcie->parf + PARF_SLV_ADDR_SPACE_SIZE_2_3_3);
+> +		pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+>  
+>  	val = readl(pcie->parf + PARF_PHY_CTRL);
+>  	val &= ~PHY_TEST_PWR_DOWN;
