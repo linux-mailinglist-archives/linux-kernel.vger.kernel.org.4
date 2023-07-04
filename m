@@ -2,107 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97719747649
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE20D74764D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjGDQRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S231533AbjGDQSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGDQRK (ORCPT
+        with ESMTP id S231450AbjGDQSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:17:10 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67F6E5
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:17:08 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99317e738e8so419923666b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:17:08 -0700 (PDT)
+        Tue, 4 Jul 2023 12:18:14 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5B8DC;
+        Tue,  4 Jul 2023 09:18:13 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc244d3a8so61082245e9.2;
+        Tue, 04 Jul 2023 09:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1688487427; x=1691079427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0zoSLxvXdWi/Yl+BEgvp6RDAlMoTsWmGbOp6gCR7ij0=;
-        b=IvxDZs5FZwr/WzKLQBOPETWNGRsTF6HYbMFn0CA4Rn6PX6e94Z0KzCbI46ct5SNPVC
-         ZFSay5Q+Bcevmw2q5h3dvgLXq53rthbmWoJkH/qKb0W31EbZZj2D6AN4gcBL3yJlxgIB
-         w3xcNxYg/ddD/es0NxpN1vd5LovJvOdD92AiYBbKibxM/fWGE1sLubha+vgKeM3eaKTW
-         Guw89lFVcKe1sOZDjPmk3oUq5ImJ4KhwlKWH1SwRDyFOAxQh16vkF9nirBx6a/G0DMrL
-         FCZ7kvsrIHo9To5kP6rjdqJZ0LO3deobSvbqjthhmG8YyAPT/EyDjoZPg9jcTwXXPmuR
-         QHUA==
+        d=gmail.com; s=20221208; t=1688487492; x=1691079492;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nI8tUMgDhEdpyNYB/YO1aEnXiY794w1w4iPgAjar+34=;
+        b=ItTeBv4l15fG2/2aUpz7byKAn5g0biOiC/fx8+A6NBIWO8KVs4BNjHVlPBGm22NT5q
+         dxkovBfNoZvC8kQSyTBi+izaSMGhQhi3W/Bp2IfnIqfaVZyosX6+iVO6CDznnfG+L1vs
+         m6fpZyC7RRcXMpkH0UnOQy+NdiqQKYwqWSiwHHsILiBF8re3Dwx+ajIPVPV6IM6Cv+or
+         AyLsrnrQBrTBWde4PVvAEuVIw6r2R0IBWqgOX6sJg+HHNktC+CoeZ7OaHMuWK8xh9RhK
+         G66/YQXM1tU8urtYqHr0zgUlIpYaiGZzd7Ux6W9MI88eOmG4Pptf+XV7cIZwLciPd7eE
+         WaZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688487427; x=1691079427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0zoSLxvXdWi/Yl+BEgvp6RDAlMoTsWmGbOp6gCR7ij0=;
-        b=cHU8whVbUPqlhV1UhoATZdnpDB87/FCTurA1kkT3iQB+YDNlL/z+9jiaXvV5DS48Nc
-         WOskBx9NsVbCkISkDXFxsUgsAqNy4IBH6GRm3WioMn+y/cX1G1flueezOT/Q3j9eq1qS
-         pODSa518szVh7AlGdltemUYBXTCZGxGPcFjEAg0kkAFOcS+jON9T+/KeVfLtGfe7Rexb
-         t2pgDPeYW5v01whzA7V3o5sEBmy0PSw8M1il/8wM7TMhD9Ah8Phl/pCzt7lV/pWSi83x
-         jiKKsvN06YZWJjUertvPu9Eznjfz/Tp7EWE6e6DWm0KRbOgFafQT528VhefxknawKZt6
-         0jWQ==
-X-Gm-Message-State: ABy/qLbifp58RTKhqEI9Xrvlrp/DhWcRQL1UBNFaomXRy7m1PkCluTH+
-        k8N4vlxDr8eYkQoFeaZU/e/w7VPFWEcx0UFN4Edz3A==
-X-Google-Smtp-Source: ACHHUZ72Trq3ak3feJZfX2mvIRzadW3AAT3MBnGmwqh3StyYxyK0jn9H0wssJNSY2G6F09VwGyGhf4P+t7Iyad6P0Qs=
-X-Received: by 2002:a17:906:86d1:b0:988:a0d6:c4fa with SMTP id
- j17-20020a17090686d100b00988a0d6c4famr10290333ejy.13.1688487427344; Tue, 04
- Jul 2023 09:17:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688487492; x=1691079492;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nI8tUMgDhEdpyNYB/YO1aEnXiY794w1w4iPgAjar+34=;
+        b=e1OMAXV5F4SkEeYUlF4I5T5GKDHY0dNd4+zF3YX8q5QgfUhhuhkuwhf+KS/gYszLw0
+         6qYnekOQoODeAjJL9r+vsW7HhDxyycopk+Cd9Xwd9kTGGslyFTxIPBgA+5E8yiL7z1c9
+         xah1KOUVpPDwO96Ks3GJAJ7tnu0MD7PHrtCC9IqYiAG9/iiSOsLrpEtV8HLPsFT+b9IC
+         XPrfSr92kdyGQrGqnr1CkGfAVNb1eQqlhleVZ0I/AUXg0715CjwKYG/oKkUiMcQnSl5F
+         E/grMZhDSap1iiOwst125bbf7zSkUlIqIAd37+4R0aFQmvgDa9THnSizETJEgffGv5oC
+         ILgA==
+X-Gm-Message-State: ABy/qLY2oUF+MInCfdLJIHsjsr1HrZGd8fLtZia+ksVl1xFBjsZIiYHl
+        xPX/gt2W6AJB0hSXHEM754pLNAhcKhlWDeo/NiA=
+X-Google-Smtp-Source: APBJJlG+cnJ/93rVQl1tJXhZpFezKYLGiip0i1kztanotmE2J9rqGcQeahjruTDeuYbCKyVOFI3sSF8cQlR+B99bhrU=
+X-Received: by 2002:adf:ee41:0:b0:314:4db:e0b2 with SMTP id
+ w1-20020adfee41000000b0031404dbe0b2mr10971046wro.15.1688487491565; Tue, 04
+ Jul 2023 09:18:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230630144006.1513270-1-pan@semihalf.com> <20230630144006.1513270-4-pan@semihalf.com>
- <20230630-scrimmage-antelope-7d1f82d491fc@spud> <CAF9_jYT1Fz4hBQrNtgkM6mU-JVH=ZxsJnkaLDsa5uoEV_hTLVA@mail.gmail.com>
- <df7440e2-58b0-9f12-8f37-4f0d9050f934@linaro.org>
-In-Reply-To: <df7440e2-58b0-9f12-8f37-4f0d9050f934@linaro.org>
-From:   =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Date:   Tue, 4 Jul 2023 18:16:56 +0200
-Message-ID: <CAF9_jYSwDdyE6mj8+1bA23MWmFHdm16jTSYaRQiF1kzpUtkMNQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/3] ARM: dts: Add Chameleon v3 video node
+References: <20230628164759.67594-1-dg573847474@gmail.com> <b6d3a872-f32e-bfcd-b603-c08339737045@linaro.org>
+ <CAAo+4rUzusAyyffkCvEq+wJQacqfrcTx-SviqXaTzPsqOkjB7w@mail.gmail.com>
+In-Reply-To: <CAAo+4rUzusAyyffkCvEq+wJQacqfrcTx-SviqXaTzPsqOkjB7w@mail.gmail.com>
+From:   Chengfeng Ye <dg573847474@gmail.com>
+Date:   Wed, 5 Jul 2023 00:18:00 +0800
+Message-ID: <CAAo+4rV1gFhCpS0=bQa-nBmDLrQ2tensXii5GDfEkTb=9SvbhA@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: s3c2410: Fix potential deadlock on &wdt->lock
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dinguyen@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mchehab@kernel.org, upstream@semihalf.com, amstan@chromium.org,
-        ribalda@chromium.org
+Cc:     alim.akhtar@samsung.com, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 2:33=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 03/07/2023 13:44, Pawe=C5=82 Anikiel wrote:
-> >>> diff --git a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleo=
-nv3.dts b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
-> >>> index 422d00cd4c74..5e66363d4ab5 100644
-> >>> --- a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
-> >>> +++ b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
-> >>> @@ -10,6 +10,60 @@ / {
-> >>>       compatible =3D "google,chameleon-v3", "enclustra,mercury-aa1",
-> >>>                    "altr,socfpga-arria10", "altr,socfpga";
-> >>>
-> >>> +     soc {
-> >>> +             video@c0060500 {
-> >>> +                     compatible =3D "google,chv3-video";
-> >>
-> >> This compatible does not seem to be documented & I did not see a comme=
-nt
-> >> about the lack of a binding in the cover letter. What am I missing?
-> >
-> > Yes, the compatible is not documented for now (I'll do that in a later
-> > patchset), sorry for not mentioning that in the cover letter.
->
-> You cannot add undocumented compatible. This cannot be fixed in "a later
-> patchset".
+Please kindly note that I am resending the last email since it did not
+reach maillist.
 
-I meant later revision, I'm certainly not expecting this one to land
-(I sent is as an RFC). Is it really necessary to document the
-compatible to get any form of feedback on the overall structure of the
-driver?
+> Hi, Krzysztof
+> Thanks for the reply.
+> > This interrupt is a threaded interrupt. Therefore the
+> > s3c2410wdt_keepalive() will be called again from process thread. Are you
+> > sure there is deadlock?
+> Is it really that s3c2410wdt_irq is a threaded interrupt? I could be wrong but I can
+> see that the interrupt is registered via the following code. It is the third argument
+> of devm_request_irq but not devm_request_threaded_irq or request_threaded_irq,
+> as far as I know, it should be an interrupt handler for the interrupt line wdt_irq
+> executed under irq context.
+> ret = devm_request_irq(dev, wdt_irq, s3c2410wdt_irq, 0, pdev->name, pdev);
+> > Anyway, please also strip unrelated paths and rather use function names,
+> > not references to lines, because these might be not accurate.
+> No problem, I will provide a new patch with the function name soon.
+> Best Regards,
+> Chengfeng
