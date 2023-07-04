@@ -2,134 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F4C747400
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621E1747402
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjGDOWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
+        id S231753AbjGDOWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjGDOW3 (ORCPT
+        with ESMTP id S231654AbjGDOWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:22:29 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2130.outbound.protection.outlook.com [40.107.93.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A7AE47;
-        Tue,  4 Jul 2023 07:22:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bCF0tumN3BXbr9W0EBTjiQHadxWtpFheadi5lFyMhTfcHzi6n+T8WUt06CjsaXmRDcaptqb36w7dUaMhzQlKTYzo7qtK/vOr1mUa5U3l7YygmGRUGRehcKUTw9HCDir7La7QtiAPlRPQtRYwQMRcFraiBfpgSIpBYFlDmzK0KPM9xRsU9jJrIhRb3BSEO3DrLIt4b/q1YN3wqfvh6ix5HuAQLJz16jCtCWKmbK6lOfx24363pSvo+jIngOJktyJKDAGuv7vYnLh4QollS63ZGtFnekNXJo0NBs8p10z52Ev9OdC7I806X5sBvmv0WSR8ohM6te7oMGHuTCnHD6+znQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Rb30hVl/dNImswCjkUfGBIYuD3068l7cChJS2aeUkAA=;
- b=U1kFNevJMD5PkenE4nR236mw7SLw4uSJVvoAIheAZVObYrkZl2iO18bb5UUbn1yg+6LlXWlLU8+Gb5bl4Baf/MPy7paNixNXArceVTPG76uoZkGYvmvYHGlQTjBWRgVIzMi4AabIuVQxwmHigihHFrdsK/4f8A54a6piCpDxQqs9QFhVNpC49R8tAGCXPcXSxP2cgtJH7gmEyhSQSfu7RgkNixb5I7VWoHvHNV45MEtd3ds4/cIy2XEPKWE6wpXeaBCwfz/6UA77JFv2IBmJqoActL5dX2fsfbQMPWsp0FPvPXRbecowe+Ehm1CvPTJjOT7BTGKkwMK+UAkkAQIr5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rb30hVl/dNImswCjkUfGBIYuD3068l7cChJS2aeUkAA=;
- b=MlTF5p19ZEyv6XG1cmqR139I77MdQ6KZHLY9GeZedlPCe9UNOiBjWgcFNUtoBC8N6FsduDIUVtNjfK3boROyVbOOGMAc5T0FGFXoIfu7xTASvlBFO5yIZh0TZF6Q9+mLI0jvJX90hF7+/rDcbrjcI5zijuSnzJVmVNVqkGP6E0I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH0PR13MB5113.namprd13.prod.outlook.com (2603:10b6:610:112::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 14:22:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 14:22:23 +0000
-Date:   Tue, 4 Jul 2023 15:22:17 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-hardening@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Ahern <dsahern@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org
-Subject: Re: [PATCH] net: Replace strlcpy with strscpy
-Message-ID: <ZKQrGaJzNlLse+js@corigine.com>
-References: <20230703175840.3706231-1-azeemshaikh38@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703175840.3706231-1-azeemshaikh38@gmail.com>
-X-ClientProxiedBy: LO4P123CA0538.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:319::8) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 4 Jul 2023 10:22:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEDA10E0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:22:42 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGgvF-0007G5-SE; Tue, 04 Jul 2023 16:22:29 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGgvE-00C3ZN-Ts; Tue, 04 Jul 2023 16:22:28 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGgvE-002CG3-1t; Tue, 04 Jul 2023 16:22:28 +0200
+Date:   Tue, 4 Jul 2023 16:22:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Yangtao Li <frank.li@vivo.com>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, tglx@linutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 2/5] thermal/drivers/armada: convert to use
+ devm_request_threaded_irq_emsg()
+Message-ID: <20230704142227.65k3kdrnyqqolf6t@pengutronix.de>
+References: <20230703090455.62101-1-frank.li@vivo.com>
+ <20230703090455.62101-3-frank.li@vivo.com>
+ <20230704104608.29527ec3@xps-13>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB5113:EE_
-X-MS-Office365-Filtering-Correlation-Id: 85a5cc31-cf53-40b4-f575-08db7c9a15d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yXOtKNTgS6flqINEsQii/S5UGes310CTQLUrDjd7OXU5is5bptBqxFyQvvRoOYwnNo6fTUFIurZUedgP3VDJxzLVr0P3smgfAn6DZ6NBGk/vhWtTW0q5+po/a7a7jWfCJZyW5lhEWpAkHpzGDc0Ufrqq+IBV93YTAhEFUtZa9eyzPATKmjHE+FYe0eUcYb8PfdSlUNrl2DXYmbtstUy2bxvMbLtJY4F8+eVWyI1cgQiFIGI4go6tCrF+vUxOPuLtxw8iK/aVoZcXpyrAZa44rFSXfUTglrU1ZiS7xp1rfj+B1kZlZLJ/f1AEKiF/Cch+qNW2+Mg/3hbP6dKgYrtNm/tzpMX7QYgO0l+NmRA/wdLmiTh3nO0eEoTIzg0eJbIf+z+wvjte7/sAMg0SnaWqbh0rTF168nF7H/+x17qKV7v/qCSKtFQP4l8sLkhl108+XiUAaSgAvE/SlQznfbQamCE0MY3g8O1YNyB6MwI2XqEg5eq6rG4JRZ8en8NeFOoQx6QRoGLW2xmxgq1lZsNwBA+4UnjjzNPgTqVHFNAMJconQBcrHeNWiWhTaj88CHmKskyv3/hvi2jfjIdWUP5EtFB/6ixD0QZstu09muN2LZggoZ8AU1Mxh0MULKuPcOw1Ks3eusRvml5ZRB/Rgodf+bdmyCCgcj4qiE5KE3l5Wdo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(366004)(346002)(396003)(39830400003)(451199021)(6512007)(6506007)(66476007)(316002)(38100700002)(4326008)(66946007)(66556008)(6916009)(2616005)(83380400001)(186003)(26005)(478600001)(54906003)(4744005)(2906002)(8936002)(8676002)(44832011)(36756003)(5660300002)(86362001)(966005)(6486002)(6666004)(41300700001)(156123004)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bhy/uz2OI0hEVhfil6kn+VOvNq6b774DEnj+uBEGb2KOHnlGLxmzCBVCiPPc?=
- =?us-ascii?Q?/i8IEaBlF/nxyuE9zaBrkPdQASIfIFQA+1hmQH9wiJhOiFxbPmELKil0JbMQ?=
- =?us-ascii?Q?b2Rz20oxvsHBsajUwODyrsAR2pftD1tIjp7hNsdDLprThATtZKh0qeOlMA0w?=
- =?us-ascii?Q?imkUuIRyOIk4sd/nWg0hL66RNFDmUzHQ/MM7kXcUx9rkH8X0fY7Ptci7kJhs?=
- =?us-ascii?Q?hS1fK+cp7clUJ/eMiqZGYgMj71lINHdlSohwEphOXULmpHXgZJ+h0BOrFfHr?=
- =?us-ascii?Q?veoH0szuegkv8o7WOkvyoXYprh2HlwmIyk6TsIVa0xZYfmFKOtkAUpUNEo0c?=
- =?us-ascii?Q?SpkLh9LVFv98VqNV3IQXAys0BbAA97+KaLQodQ/LTrhLvL6EXbl0zzvJo5zO?=
- =?us-ascii?Q?pI0JN+opipniY8Wfc5mEuVgoZunq7DOC0x5B67j5Uj69pp2ygaSknxTEqVbQ?=
- =?us-ascii?Q?zoT0P9/yTzw71ZRWw45dnY3zhC2MX0UBwMmV0yp+GoSDT88tUlPM+2CLxzKe?=
- =?us-ascii?Q?Va1Q66XoVghVYXsl0kUtLM0OUhZa57jZoUmIJTMjVhlNrS2Mn7y008xn2Mjn?=
- =?us-ascii?Q?qJPNSWQTRy6YOV3I7EXul/+nif4DW9GXUSyp2jUJuZfwbgf4CzxIPHig2Av5?=
- =?us-ascii?Q?CkyvpfS7vlH+JaL+QEzkIOjpvQ39Q46U0jHbWkgSb3DHEyXc2fjJCG+cskeK?=
- =?us-ascii?Q?FPJehLw7jD04IuGu9oMTts5nHFveDZlQtYLif5pzENaeJKPOPwuAiYohZL90?=
- =?us-ascii?Q?uWCnjVA/E9bvTQV2tPM9NbxmAh76GmMMqC2HdKMfqA/92/zYLauqVFtwQlU+?=
- =?us-ascii?Q?816uMAmYzcQQTCZZmkPQM0C/zDuL8rpvweuu1P+YZxKwCr3hKncVr8DO1CW3?=
- =?us-ascii?Q?PxAqF0UgLrL94meDKIUg6GfRA6XWvntGe2NleDjlN6R+nVgKALraPuVTNtdm?=
- =?us-ascii?Q?3lT0kzBQiYKU78igwC7J0PvT1dZyTHOHFIIZH/4T48404KXvR9CDNs2IiMnf?=
- =?us-ascii?Q?Ytl57nCK9I+7v21rL3z3aHhpF3cb3dWpO8L+V1bQmGS6t/YB7CQRtmV2BizL?=
- =?us-ascii?Q?oq/tOsCYgq6C9f5nZLJa+/88sHP0FHMIJUxLWizI2ZNyd5Knb1yvBo9TbJYV?=
- =?us-ascii?Q?ARkY24hO5hwrPr3n3eczKdDx9cic+7pv9DCGM3jP/qqYcRxsTBmKV942Bul4?=
- =?us-ascii?Q?/+pvPe9VGEf4Lotjn9xYybTaHfLNILk19x/m6RYLeEGnbGagf7sghxRxvj5N?=
- =?us-ascii?Q?YhQvr2bfWwW8s9t7joL4HakQBK0jlgIjH8Q+zVtsRpJ0ac1/Zl4aDQkRHzAb?=
- =?us-ascii?Q?DXS39Bu4bf8AApLZWhy60L1peYCq9za/sKnJ7PkJ259LwtAt6iuT7er1z9ts?=
- =?us-ascii?Q?RPgrOE5T8jyskBLj2JRqU5zv3n4Wh9FuX9J6B+I9Ygo53BDEjBC/LcCzILYK?=
- =?us-ascii?Q?LAu1oUUqamaQspW/Rg4Bp66Jjg30x6jk0RK1ZX19EDpA1+SEwu3Q/Hg5fhBo?=
- =?us-ascii?Q?JhrF5jXldK0Rh+LxcQpEAkPU1XlNLsIF2QNQVGQIF0KDD+QnDd2HAui5HHro?=
- =?us-ascii?Q?DE3HREY14kfwnks810RSWut3T7GsK2zn/ZHC75oAaNpqBchALYgIlH14lXep?=
- =?us-ascii?Q?nQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85a5cc31-cf53-40b4-f575-08db7c9a15d6
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 14:22:23.7649
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sxx2Rbyk10cvuRcLWrQz7aahoglUVq8hOMGf2OIG6Vjnh8AXpik3MYFRdo1Zs+d9HLASB1zbpqD2eQVTm8YA+7rpYO7W81Glbe7S5AZjK08=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB5113
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lrq6xzeoxwlvs4uu"
+Content-Disposition: inline
+In-Reply-To: <20230704104608.29527ec3@xps-13>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 05:58:40PM +0000, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+--lrq6xzeoxwlvs4uu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello Miquel,
+
+On Tue, Jul 04, 2023 at 10:46:08AM +0200, Miquel Raynal wrote:
+> Hi Yangtao,
+>=20
+> frank.li@vivo.com wrote on Mon,  3 Jul 2023 17:04:51 +0800:
+>=20
+> > There are more than 700 calls to the devm_request_threaded_irq method.
+> > Most drivers only request one interrupt resource, and these error
+> > messages are basically the same. If error messages are printed
+> > everywhere, more than 1000 lines of code can be saved by removing the
+> > msg in the driver.
+> >=20
+> > And tglx point out that:
+> >=20
+> >   If we actually look at the call sites of
+> >   devm_request_threaded_irq() then the vast majority of them print more=
+ or
+> >   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+> >=20
+> >      519 messages total (there are probably more)
+> >=20
+> >      352 unique messages
+> >=20
+> >      323 unique messages after lower casing
+> >=20
+> >          Those 323 are mostly just variants of the same patterns with
+> >          slight modifications in formatting and information provided.
+> >=20
+> >      186 of these messages do not deliver any useful information,
+> >          e.g. "no irq", "
+> >=20
+> >      The most useful one of all is: "could request wakeup irq: %d"
+> >=20
+> >   So there is certainly an argument to be made that this particular
+> >   function should print a well formatted and informative error message.
+> >=20
+> >   It's not a general allocator like kmalloc(). It's specialized and in =
+the
+> >   vast majority of cases failing to request the interrupt causes the
+> >   device probe to fail. So having proper and consistent information why
+> >   the device cannot be used _is_ useful.
+> >=20
+> > Let's use devm_request_threaded_irq_emsg(), which ensure that all error
+> > handling branches print error information. In this way, when this funct=
+ion
+> > fails, the upper-layer functions can directly return an error code with=
+out
+> > missing debugging information. Otherwise, the error message will be
+> > printed redundantly or missing.
+> >=20
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > ---
+> >  drivers/thermal/armada_thermal.c | 13 +++++--------
+> >  1 file changed, 5 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_=
+thermal.c
+> > index 9f6dc4fc9112..a5e140643f00 100644
+> > --- a/drivers/thermal/armada_thermal.c
+> > +++ b/drivers/thermal/armada_thermal.c
+> > @@ -913,15 +913,12 @@ static int armada_thermal_probe(struct platform_d=
+evice *pdev)
+> > =20
+> >  	/* The overheat interrupt feature is not mandatory */
+> >  	if (irq > 0) {
+> > -		ret =3D devm_request_threaded_irq(&pdev->dev, irq,
+> > -						armada_overheat_isr,
+> > -						armada_overheat_isr_thread,
+> > -						0, NULL, priv);
+> > -		if (ret) {
+> > -			dev_err(&pdev->dev, "Cannot request threaded IRQ %d\n",
+> > -				irq);
+> > +		ret =3D devm_request_threaded_irq_emsg(&pdev->dev, irq,
+> > +						     armada_overheat_isr,
+> > +						     armada_overheat_isr_thread,
+> > +						     0, NULL, priv, NULL);
+> > +		if (ret)
+>=20
+> I don't see a patch renaming this helper with s/emsg//, do you plan to
+> keep it like that? I bet nobody outside of this series will notice the
+> new helper and will continue to add error messages because it kind
+> of feels "right" to do so.
+>=20
+> I would rather prefer returning to the original function name which
+> everybody knows/uses.
+
+See https://lore.kernel.org/lkml/87h6qpyzkd.ffs@tglx for why there is a
+new function name.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--lrq6xzeoxwlvs4uu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSkKyIACgkQj4D7WH0S
+/k72twf+KGXXuIhXaaGIjMSadyvpt6IVNAp9odJSncKrJJKTHkdnob2NMnm9PBrx
+uo5d38ab3x3A5iTkUyD90rJsGlP6IPP52LnxUYVaWHTDMpc9rjuBQDjmpyhzToGZ
+SB2wFpN6qwyb7+AgG4LxXaR3e+serv1HnOX2ziyFf6e3MU3tIJh4KiTR/Ye7cCUG
+KvnLtEmudD43+n21FChUKQf7+aR6G64rOCvirHpgmoEQul/XTT5ADU8lksDiYx25
+admLK5ESXwObImzHbZsjl5e/OadNYt5z73WvFQFijceJl+uYyqMBcH2R7lGHAG5M
+pS95JZRrD8tsfo21JG1OhiH2xsO7kA==
+=uBz7
+-----END PGP SIGNATURE-----
+
+--lrq6xzeoxwlvs4uu--
