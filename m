@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C317472FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5685B74730F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjGDNnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        id S230469AbjGDNoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjGDNnG (ORCPT
+        with ESMTP id S230318AbjGDNoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:43:06 -0400
+        Tue, 4 Jul 2023 09:44:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D90511D;
-        Tue,  4 Jul 2023 06:43:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3CA10A;
+        Tue,  4 Jul 2023 06:44:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C50276123A;
-        Tue,  4 Jul 2023 13:43:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62808C433C7;
-        Tue,  4 Jul 2023 13:42:58 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 09:42:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     mhiramat@kernel.org, ebiggers@kernel.org, azeemshaikh38@gmail.com,
-        linux-trace-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tracing/boot: Replace strlcpy with strscpy
-Message-ID: <20230704094248.1b36c3e7@rorschach.local.home>
-In-Reply-To: <202306201335.D6D772A@keescook>
-References: <20230615180420.400769-1-azeemshaikh38@gmail.com>
-        <168729290245.455922.11993639418267016143.b4-ty@chromium.org>
-        <20230620163325.35c9203c@gandalf.local.home>
-        <202306201335.D6D772A@keescook>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1497611DA;
+        Tue,  4 Jul 2023 13:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0110DC433C7;
+        Tue,  4 Jul 2023 13:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688478275;
+        bh=H4vf7WM7e//1spLCgBt6uXZ6Gx9o7KTTE0hMPXndmEE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qpKjFTz5+ezLR2ggcecegf3HfyBY2WjGF7EM0sSQzwufFtUZnPoKpCXODQjvwKte4
+         awDpj49KK/Gz2h+p0fZi8E+oIrrQNOUmo7hUb/ftj13p3q1wc74r9RmcgmjV8WN0Jd
+         jY1POHgmlbjqIC7aGATIxOl6zZMIGcRehqSQpqMA=
+Date:   Tue, 4 Jul 2023 14:44:33 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, samsagax@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors): remove static board variable
+Message-ID: <2023070402-festive-rind-9274@gregkh>
+References: <20230704131715.44454-5-gregkh@linuxfoundation.org>
+ <20230704131715.44454-6-gregkh@linuxfoundation.org>
+ <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023 13:35:14 -0700
-Kees Cook <keescook@chromium.org> wrote:
-
-> > > Applied to for-next/hardening, thanks!
-> > > 
-> > > [1/1] tracing/boot: Replace strlcpy with strscpy
-> > >       https://git.kernel.org/kees/c/b1c38314f756
-> > >   
+On Tue, Jul 04, 2023 at 06:39:07AM -0700, Guenter Roeck wrote:
+> On 7/4/23 06:17, Greg Kroah-Hartman wrote:
+> > Drivers should not have a single static variable for the type of device
+> > they are bound to.  While this driver is really going to only have one
+> > device at a time in the system, remove the static variable and instead,
+> > look up the device type when needed.
 > > 
-> > I was going to add this to my queue.  
 > 
-> Ah, okay, no worries. I will drop it from mine.
+> This is expensive. I think it would be much better to just move
+> the board type detection into the init code and not instantiate
+> the driver in the fist place if the board type is unknown.
 
-Maybe I should have let you take it. I had v1 in my queue, and pushed
-that one :-p
+The board type detection is all over the place in the driver, it's not
+just for "unknown" types, so how about just saving the board type at
+probe time and using it then for all other places?
 
-I'll fix it later.
+> We can handle the static variable separately if it really bothers
+> you that much.
 
-Thanks,
+I did this change to make patch 2/3 more "obvious" what is happening
+when the in_visible() callback happens, so that you don't have to worry
+about the saved value or not.  But this whole patch isn't really needed
+if you don't mind the lookup just happening in the in_visible() callback
+for the first time.
 
--- Steve
+thanks,
+
+greg k-h
