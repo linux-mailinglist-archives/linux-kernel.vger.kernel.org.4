@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C13F746C5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1C7746C5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjGDIte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S231835AbjGDItW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbjGDItI (ORCPT
+        with ESMTP id S229994AbjGDItF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:49:08 -0400
+        Tue, 4 Jul 2023 04:49:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F293110F2;
-        Tue,  4 Jul 2023 01:48:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120D110CE;
+        Tue,  4 Jul 2023 01:48:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A8C66119E;
-        Tue,  4 Jul 2023 08:48:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE33C433CA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C4E36118B;
+        Tue,  4 Jul 2023 08:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097FDC433C7;
         Tue,  4 Jul 2023 08:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688460537;
-        bh=zvTuVs2YUJIWjd+2H/rF7bPq86bQGD26x3z2S4w1GT0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SQCBl16RCbD2rUr46QYzQjQiy8fUncB9hDirEgp806O7bO2QpuP9QO4+HvOsToiRa
-         Udn3dCdv9ALWZnxrrTNoLN5+AW5egOWw7nN/w0NmOMlDIcN3sGRHD9VIogz2JfM+Q9
-         JsgukE7Tuyre8dRtUdxp181ekGeA9pRPvwLicR0IKX7veqZ0FDLBrtQjq6UGK3PCt7
-         729MviFxP037WA+dJmC6Boo9rhYMEbaMxVB0jiaQZULdvHeN/OYAZ3VP0fJjYZWHmN
-         k6Lc9lbgSelCZsJjcT1C7WBQ9DOPV4IX1HDul6RC36Gt6jqgifNUamQKspejCK8I2B
-         mZOuiPc/InTmA==
-Message-ID: <11052797-b006-11bb-e4eb-987ddd568b24@kernel.org>
-Date:   Tue, 4 Jul 2023 10:48:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688460530;
+        bh=EspsVqameX3ivIVN5aauxB90aVJe0cYYkjZn3kRiGLU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jqrIIeXyoc6en53BlOEUtKPKy2iFs8k//xVUesPlJg4UhvaW6h4OlfwtO4e7XCH4T
+         CoYz3wsIqtLPt5rZX6KAMd/0h7QRmgqwtqQDR1FyZSDpwwFaidd5+zlMinBw6mAvnB
+         tSlps86+mnF//ZyPggJTfIf2Mqs2DsqkproNMeyw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+Subject: [PATCH 5.15 00/17] 5.15.120-rc2 review
+Date:   Tue,  4 Jul 2023 09:48:47 +0100
+Message-ID: <20230704084610.981452877@linuxfoundation.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/5] genirq/devres: Add
- devm_request_threaded_irq_emsg()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, mmayer@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, tglx@linutronix.de,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230703090455.62101-1-frank.li@vivo.com>
- <20230703090455.62101-2-frank.li@vivo.com>
- <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
- <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.120-rc2.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.120-rc2
+X-KernelTest-Deadline: 2023-07-06T08:46+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,43 +65,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 19:43, Uwe Kleine-König wrote:
-> Hello Krzysztof,
-> 
-> On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wrote:
->> On 03/07/2023 11:04, Yangtao Li wrote:
->>> There are more than 700 calls to the devm_request_threaded_irq method.
->>> Most drivers only request one interrupt resource, and these error
->>> messages are basically the same. If error messages are printed
->>> everywhere, more than 1000 lines of code can be saved by removing the
->>> msg in the driver.
->>
->>
->> ...
->>
->>> +int devm_request_threaded_irq_emsg(struct device *dev, unsigned int irq,
->>> +				   irq_handler_t handler, irq_handler_t thread_fn,
->>> +				   unsigned long irqflags, const char *devname,
->>> +				   void *dev_id, const char *emsg)
->>> +{
->>> +	int rc;
->>> +
->>> +	rc = devm_request_threaded_irq(dev, irq, handler, NULL, irqflags,
->>> +				       devname, dev_id);
->>> +	if (rc && rc != -EPROBE_DEFER) {
->>> +		dev_err(dev, "Failed to request %sinterrupt %u %s %s: %pe\n",
->>> +			thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev),
->>> +			emsg ? : "", ERR_PTR(rc));
->>
->> It is open-coding dev_err_probe(). Just use dev_err_probe instead.
-> 
-> dev_err_probe is supposed to be only called in probe functions, while
-> devm_request_threaded_irq might be called in other contexts (e.g. when a
-> device is opened). That's why I asked to not use dev_err_probe() in v2
+This is the start of the stable review cycle for the 5.15.120 release.
+There are 17 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-True, but then all the callers of this function will forget to set
-deferred probe reason.
+Responses should be made by Thu, 06 Jul 2023 08:46:01 +0000.
+Anything received after that time might be too late.
 
-Best regards,
-Krzysztof
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.120-rc2.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.120-rc2
+
+Finn Thain <fthain@linux-m68k.org>
+    nubus: Partially revert proc_create_single_data() conversion
+
+Ben Hutchings <benh@debian.org>
+    parisc: Delete redundant register definitions in <asm/assembly.h>
+
+Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+    drm/amdgpu: Validate VM ioctl flags.
+
+Ahmed S. Darwish <darwi@linutronix.de>
+    scripts/tags.sh: Resolve gtags empty index generation
+
+Krister Johansen <kjlx@templeofstupid.com>
+    perf symbols: Symbol lookup with kcore can fail if multiple segments match stext
+
+Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+    Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid resource leak in mtk_thermal_probe"
+
+Mike Hommey <mh@glandium.org>
+    HID: logitech-hidpp: add HIDPP_QUIRK_DELAYED_INIT for the T651.
+
+Jason Gerecke <jason.gerecke@wacom.com>
+    HID: wacom: Use ktime_t rather than int when dealing with timestamps
+
+Krister Johansen <kjlx@templeofstupid.com>
+    bpf: ensure main program has an extable
+
+Oliver Hartkopp <socketcan@hartkopp.net>
+    can: isotp: isotp_sendmsg(): fix return error fix on TX path
+
+Thomas Gleixner <tglx@linutronix.de>
+    x86/smp: Use dedicated cache-line for mwait_play_dead()
+
+Borislav Petkov (AMD) <bp@alien8.de>
+    x86/microcode/AMD: Load late on both threads too
+
+Philip Yang <Philip.Yang@amd.com>
+    drm/amdgpu: Set vmbo destroy after pt bo is created
+
+Jane Chu <jane.chu@oracle.com>
+    mm, hwpoison: when copy-on-write hits poison, take page offline
+
+Tony Luck <tony.luck@intel.com>
+    mm, hwpoison: try to recover from copy-on write faults
+
+Paolo Abeni <pabeni@redhat.com>
+    mptcp: consolidate fallback and non fallback state machine
+
+Paolo Abeni <pabeni@redhat.com>
+    mptcp: fix possible divide by zero in recvmsg()
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                   |  4 +--
+ arch/parisc/include/asm/assembly.h         |  4 ---
+ arch/x86/kernel/cpu/microcode/amd.c        |  2 +-
+ arch/x86/kernel/smpboot.c                  | 24 +++++++++-------
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c |  1 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c     |  4 +++
+ drivers/hid/hid-logitech-hidpp.c           |  2 +-
+ drivers/hid/wacom_wac.c                    |  6 ++--
+ drivers/hid/wacom_wac.h                    |  2 +-
+ drivers/nubus/proc.c                       | 22 ++++++++++----
+ drivers/thermal/mtk_thermal.c              | 14 ++-------
+ include/linux/highmem.h                    | 24 ++++++++++++++++
+ include/linux/mm.h                         |  5 +++-
+ kernel/bpf/verifier.c                      |  7 +++--
+ mm/memory.c                                | 33 ++++++++++++++-------
+ net/can/isotp.c                            |  5 ++--
+ net/mptcp/protocol.c                       | 46 ++++++++++++++----------------
+ net/mptcp/subflow.c                        | 17 ++++++-----
+ scripts/tags.sh                            |  9 +++++-
+ tools/perf/util/symbol.c                   | 17 +++++++++--
+ 20 files changed, 159 insertions(+), 89 deletions(-)
+
 
