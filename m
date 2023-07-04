@@ -2,168 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1AF746DCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84402746DCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjGDJk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S231488AbjGDJlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjGDJkf (ORCPT
+        with ESMTP id S231616AbjGDJkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:40:35 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2094.outbound.protection.outlook.com [40.107.255.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E122979;
-        Tue,  4 Jul 2023 02:38:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RD3ptZbLSRgoTa3pSnxhoyZp60Tqm2dyy9motq4/pdVS44YBtBGM4nE46OBGt70TKkPGpk4BDh0huXkeHbNeFk4c4N9PzNgOotyNuGCH0NnfXEQSNQqtbugj8vWT4LCuVeW2JMWbUej2OISw3UJ7mwvzocNdAauL8eh7QNW7cfK7jD8Fh7+ErtsfXBIOcddyAwV+PLMZL8Uo3sniuOAHD6OX1Va8NOEq3AdoTgsV+YP/i/ROB1nzJcxE5ql0AFoQKFsl2L+ckdgvMHRVsfnFGe4KgmABoFOBYqHv48+vbGrGuCw9rdEhl75O71VNI7Jay+zSnVrKr4iW5D3vyTH8ig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=czZggQmv9oQ7vK3K20QsgpSOBgFoVIKa2AxRU9FHdoU=;
- b=PZcAQXVmTlh64qHSYSrefqP8nL528M324F0kmlDMzGxO56vKKG+OiUws2kR9fbhAbJzYcQn9NfjuwF8dFF7CRWblulHcAPJ5eNG3DKDaV/8ewvXQMKG9cMsJZ71cU9FRW/UNWQ6QyYotoWa6wyciTdjgVN3SNB3Fh2vOxllpMF4cuxz6JrmrL4Atyi4def61cw6V+uwR9hK+t1Kprpw9cDr4zklGhVRviCOCfuafGdgTain14U0EK5W1WX3PA5QL7ji5vMf/i7bMR77lbj6AYUNStOe7v/mhabincWrwH656qpzrWV8K7VGVsqI5DrBKUPbKhT4PUcVDvjPdZz8xIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=czZggQmv9oQ7vK3K20QsgpSOBgFoVIKa2AxRU9FHdoU=;
- b=Ebfdag2G+7NRzmuVDWXQRUNPAbFOS5VtjmsJCsOzzP7/+3c0IOziWLwj/2kuWmUco3DUbVjT3ztDU/bKFlkNwASApJ0zIMTY+E96KjHPEnlDp7+A80xhHRYnxBHIOgVOKkHIbqydry9phTtpB1y8FMPasumslMvEBgQ6rmxVWdedDtwIT0W8tdcEZRy0ZIo3jcolTz+BqNUsJ3HJnp0rbavGkyXXyZd+SCRbwdUT1C7jF3AU4RNQUDi9hCNKO7av3vQIHZpOztNSHD89AnrkI1Kj9jMol8wMPXo44whBWrJotpTzbITPf3Dg2s1PmyoMNOYQRZ+ZYFGkGdG110TFWw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB5565.apcprd06.prod.outlook.com (2603:1096:820:c2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 09:37:08 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 09:37:07 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Helge Deller <deller@gmx.de>, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-fbdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fbdev: imxfb: Convert to devm_platform_ioremap_resource()
-Date:   Tue,  4 Jul 2023 17:36:52 +0800
-Message-Id: <20230704093652.18191-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0153.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::33) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 4 Jul 2023 05:40:37 -0400
+Received: from mail-pf1-f205.google.com (mail-pf1-f205.google.com [209.85.210.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05AC2D4F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:38:29 -0700 (PDT)
+Received: by mail-pf1-f205.google.com with SMTP id d2e1a72fcca58-682abcb2fdeso227412b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 02:38:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688463476; x=1691055476;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=azSqcnqtvoXPhv8yvd/aLp/S/SWoO7oZsZz2Umspmyk=;
+        b=DB3cvOuObj302RdJcE1XTACEKdmdPqbob1vaGuTfd3Q8bu70RP4IcBusxtSF28ZFME
+         erLs0z3gWzfvy4k5ZSZUSiQjic3Uvwv/nw1JsZRP4JQbGZ1OUu9mKqNgwNYo1SHUVnaq
+         L+YNaE/dq3B8Fd4313OMrY6N0fWL09UezfWxVT0rcBuu6XId9FH+gAWZQIJAustcI9gC
+         vYm2H3nWHi+fs+ma4mpkUoTu+PqKGDsASFqGvfSZT2PCDAlIvCyWzj5e6y/l6XUUv+vK
+         Ejdt6UcjwhL1U06Cdf5zb/L+qRm4t75Jhvd2wwAItowyyIpEeeAg/yFyeV+rmplaCquT
+         g6RA==
+X-Gm-Message-State: ABy/qLYV+3ywNCNGS4atfwNO0nAmc5LblF4KgZR4wzfZcr1fJGPeuTQq
+        HhZflOOD/6Bb9ZBIMUatxCmNnzOzwSQ6+QKUe6U9KLJTV+Iq
+X-Google-Smtp-Source: APBJJlHH6QR6XFxrsE/c3/5Y1wQ6vHorElxRPJQGWW2PvgqQjsIzQMjuReU8Ju4ZD0drZ5Buj/E6k8omsKDLE3iqk8Hd9I2oZB3P
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB5565:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5db4ad79-dc31-4a45-ef33-08db7c723bf9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dGefYTqL1LfiVIWrbAAuD8TL1p+thE5qXvmr42luJX1F8Ae0RzQI6WsJJWibgd2VT1lqzpFpyhQKXDYiqaZUSQukLgggVL+f2MQeZnbV9Lc2e6LXZhsmtshNQ7TCXa9xdWoZQsWui7u9bKMyxpYoRWXCedDuhtCimOg32rFx1Tktu8u3qWXWdCiA9L8vozgkgLSgPTRH8z8e/RDii2dewN6OO2TqA1sW9Yk+ILIXhm1cjB/7/OaaoQFGFtyk91ijy8qLwY1wXVzH5QPDl1TGP051k8sxkU+UsZwhXDTY/C6Zkq4dYwE1NbGWx/lRDwcc9zCIeEfl0F8dCX4hObazISeiv+xzoNM3uoexlAgf/uiXbmHVFCJS2lvMPXhL4gSIW9Vfa6ba7XXnJfgG3w0Jpfbzm3Aopi3ObeZ/g75pT/hMqUYjEM971I/IjocRXm2xikL2Yk5eme0Ivri9ww8zz1BhrWOWa5GxK26mqo9gjI8+oRggUIQjsmCg48CMK5p3Mk+ErUymHQQE2sSyJCvWw4iKwaXJTUq4Nvylm8eE6ZlmUt/apQTD9x8iJqA9sQxYh6rCeBRfJpok12YVMRLSBDxsYEErMRxFG+nPH7bqKKa6c0g3KeQFrimKktfY6tu0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199021)(38350700002)(478600001)(110136005)(6666004)(5660300002)(7416002)(8676002)(36756003)(8936002)(86362001)(2906002)(38100700002)(66476007)(4326008)(66946007)(66556008)(316002)(41300700001)(83380400001)(26005)(186003)(1076003)(6506007)(2616005)(6486002)(52116002)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MFyLGIWqcM1mdT9PvfNOWAmhFGeNeowqoSZevXQ+MvcL0gHZsfUsA8f0yNS8?=
- =?us-ascii?Q?BiNS9IDVQSnQLJ4cuqOwtWAKN2BF52360ydqKfnsnIX+Ce2/W2Bbp+PdrY45?=
- =?us-ascii?Q?eP5pMWbE0hCqTvFp/8QltJQ3EH00pxJrhLJFo7Go0DnmxlcNN6NFcLgBx543?=
- =?us-ascii?Q?l9Cdoc+K3tHw835GWEyee+Zsqu5R+UkPmm1Od2rXj1rTu3BNPF5Bxh+ByJGo?=
- =?us-ascii?Q?e++LTDlq3M4pqmohJe+1Q9K5XEHFp+iTaqjK2Yr5S4pj3h28EEUWAXWhtru1?=
- =?us-ascii?Q?0QaFIqV2UZEMgtVyT5Sqzao9zM6/0w1xmkq8E/2K2f5bHmvAwcXd6EMSx1n6?=
- =?us-ascii?Q?wcoJ9yD/pJdKdK17CrasFRJV+zA2jjqk4uHPSd3Hc342AgbWQiyVAkQI1C3c?=
- =?us-ascii?Q?Nxz2b9SSVMwaKtC5fmTQI6w+HeBU3tTKygRjffGlpjJLygbVX+954QhiniEQ?=
- =?us-ascii?Q?cLYvHIdFp8Y1rsfVxphlAQiYxEwjs1TAHCK/cFaCx5lDMYZfAI/h+dI4Omrk?=
- =?us-ascii?Q?2cf88I7zHYt4MQgI1XoYyxTHwO+kaWQuzT+OqqQZzEXZLFh4CL4yuKuv8wJe?=
- =?us-ascii?Q?PyEU5WED7mlY7sxSIKU+R8Mcbo0U3oj+cqC6qvdQiMGMZ5rbTuq4SkltXwyy?=
- =?us-ascii?Q?Igc8C2otbpv4BSKNk2rUDanQW0ir3QdTFF5fo68+q0lVPrMxJT9NG21faTxc?=
- =?us-ascii?Q?PC6FZPVTifMPsOsA8Y5mo6uxlfCDPlIEJf/jc8RFU7JweAJZogiCl5K+M7/E?=
- =?us-ascii?Q?cfMKtX9W2VQACZfOjUXTWlB5mxS7vKiYeQWna9/o8TkoYheuP5D5+qAz0EKu?=
- =?us-ascii?Q?KGhcf+LRmUNuOdFUHYuofUgenc0NRBDg/W1JFEDUiU/nRCgBIxYcoP1otClO?=
- =?us-ascii?Q?/e9DTRXQPOczSpP+4niT3Q99YmAyp9KTfQDwZqqaZTJmqs8thj91y9Wuvh9Y?=
- =?us-ascii?Q?2Wk7QH8RmMslosx7AxJtyzHMD3JsC203R5Al6aPS6KQh8gjXoSyD1X5lKsr+?=
- =?us-ascii?Q?EYaNCYCcJgIPZihhC3qBwG1dF0A6c4Y3mVbYqtVYwbcXoPuyj9K3oOJ/TAqa?=
- =?us-ascii?Q?36YU2cQX22+LpP/wyyIJHAl25XtJoV10V2VVZ2hcxfgsZ/W8UgT7BqEYmKih?=
- =?us-ascii?Q?+HwEhNXOgGy4Wo7aTZo0VrR5T92DpFej8qpavgPd9QLdCCFKAK//KX4MjyVF?=
- =?us-ascii?Q?g6fwWSa5AP5kWdossCDCcDr3MdshIK0EgzVFVUVvTx2gWr4uEia6BoGlsVYo?=
- =?us-ascii?Q?lYOu2XNtNS+sIMtZfzWWiUP2xhYf9mXu4UcBCcJni6MRlYiNsAsRs9donkaC?=
- =?us-ascii?Q?XypBVHN1DwE/sQR1BHiK8jBXS4N+8acm4xGFOKHTJCKF66uspuQbwSClSXYV?=
- =?us-ascii?Q?I4QJLVjFY63ZicLZbb2U2JsfSV/PH6Jwv9PAblDpKcsxpIf/50YajSP1drbD?=
- =?us-ascii?Q?Nf4CovDfoXGSeohhf+2ZNtFf/pLgjoy485CMWHN4SBiqOzP45AE2sG9jlk14?=
- =?us-ascii?Q?0JkmXQi9TtJ8WJDhmFQjr85Xadlg3xeEYhLUN7LLtXp6k2CP+5SLMAJgy9j9?=
- =?us-ascii?Q?ZSzzio5HCuRASx5or5BrR95g04NqdzpltUhyZAbu?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5db4ad79-dc31-4a45-ef33-08db7c723bf9
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 09:37:07.8932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RXMfePyIfciwW6M3kiMx2C7450yCVbENLe2Tu9v/BW7reFpTSKAGNgaknofJwYkI26k8HSA0wFI8YnoPsxVlWA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5565
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6a00:b46:b0:674:a3be:2773 with SMTP id
+ p6-20020a056a000b4600b00674a3be2773mr17206454pfo.5.1688463476208; Tue, 04 Jul
+ 2023 02:37:56 -0700 (PDT)
+Date:   Tue, 04 Jul 2023 02:37:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b73abf05ffa60902@google.com>
+Subject: [syzbot] [mm?] WARNING in __gup_longterm_locked
+From:   syzbot <syzbot+6cf44e127903fdf9d929@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify code.
+Hello,
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
+syzbot found the following issue on:
+
+HEAD commit:    f8566aa4f176 Merge tag 'x86-urgent-2023-07-01' of git://gi..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15ebe50b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7406f415f386e786
+dashboard link: https://syzkaller.appspot.com/bug?extid=6cf44e127903fdf9d929
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e5b04f280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=102dff80a80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/08033ccab6ef/disk-f8566aa4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/04c5c8c7e53a/vmlinux-f8566aa4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/942a1c157a92/bzImage-f8566aa4.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6cf44e127903fdf9d929@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5001 at mm/gup.c:1173 __get_user_pages+0xd49/0x1080 mm/gup.c:1173
+Modules linked in:
+CPU: 1 PID: 5001 Comm: syz-executor229 Not tainted 6.4.0-syzkaller-10062-gf8566aa4f176 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:__get_user_pages+0xd49/0x1080 mm/gup.c:1173
+Code: 89 f8 48 c1 e8 03 80 3c 08 00 0f 85 bc 02 00 00 48 8b 44 24 20 48 8b 80 c0 00 00 00 48 8d 1c e8 e9 ad f7 ff ff e8 37 19 c3 ff <0f> 0b e9 32 f6 ff ff e8 2b 19 c3 ff 0f 0b e8 24 19 c3 ff 44 89 ed
+RSP: 0018:ffffc90003a3f558 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000100 RCX: 0000000000000000
+RDX: ffff888020630000 RSI: ffffffff81c1b599 RDI: 0000000000000007
+RBP: 0000000020006000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000100 R11: 0000000000000001 R12: ffff888018796100
+R13: 0000000000210002 R14: ffff888076f55580 R15: 0000000000000000
+FS:  0000555556272300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000664740 CR3: 0000000029be1000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __get_user_pages_locked mm/gup.c:1456 [inline]
+ __gup_longterm_locked+0x6f9/0x23e0 mm/gup.c:2150
+ internal_get_user_pages_fast+0x16e6/0x32f0 mm/gup.c:3148
+ get_user_pages_fast+0xa8/0xf0 mm/gup.c:3226
+ __iov_iter_get_pages_alloc+0x28c/0x1950 lib/iov_iter.c:1111
+ iov_iter_get_pages2+0xa8/0x100 lib/iov_iter.c:1151
+ iter_to_pipe fs/splice.c:1402 [inline]
+ vmsplice_to_pipe fs/splice.c:1492 [inline]
+ __do_sys_vmsplice+0x50c/0xaa0 fs/splice.c:1556
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2a6e4e4b69
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdb0cc72d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000116
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f2a6e4e4b69
+RDX: 0000000000000001 RSI: 00000000200000c0 RDI: 0000000000000004
+RBP: 00007f2a6e4a8d10 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000246 R12: 00007f2a6e4a8da0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
 ---
- drivers/video/fbdev/imxfb.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
-index adf36690c342..517eb65bbaa6 100644
---- a/drivers/video/fbdev/imxfb.c
-+++ b/drivers/video/fbdev/imxfb.c
-@@ -868,7 +868,6 @@ static int imxfb_probe(struct platform_device *pdev)
- 	struct imxfb_info *fbi;
- 	struct lcd_device *lcd;
- 	struct fb_info *info;
--	struct resource *res;
- 	struct imx_fb_videomode *m;
- 	const struct of_device_id *of_id;
- 	struct device_node *display_np;
-@@ -885,10 +884,6 @@ static int imxfb_probe(struct platform_device *pdev)
- 	if (of_id)
- 		pdev->id_entry = of_id->data;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENODEV;
--
- 	info = framebuffer_alloc(sizeof(struct imxfb_info), &pdev->dev);
- 	if (!info)
- 		return -ENOMEM;
-@@ -970,7 +965,7 @@ static int imxfb_probe(struct platform_device *pdev)
- 		goto failed_getclock;
- 	}
- 
--	fbi->regs = devm_ioremap_resource(&pdev->dev, res);
-+	fbi->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(fbi->regs)) {
- 		ret = PTR_ERR(fbi->regs);
- 		goto failed_ioremap;
-@@ -1043,7 +1038,6 @@ static int imxfb_probe(struct platform_device *pdev)
- failed_map:
- failed_ioremap:
- failed_getclock:
--	release_mem_region(res->start, resource_size(res));
- failed_of_parse:
- 	kfree(info->pseudo_palette);
- failed_init:
--- 
-2.39.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
