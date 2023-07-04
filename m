@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6601F746D1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C040746D23
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231785AbjGDJUF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 05:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S231958AbjGDJUU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 05:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjGDJT5 (ORCPT
+        with ESMTP id S231897AbjGDJT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:19:57 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7EE1B7;
-        Tue,  4 Jul 2023 02:19:54 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        Tue, 4 Jul 2023 05:19:58 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B700E41;
+        Tue,  4 Jul 2023 02:19:55 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4071A823D;
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id BB1CD24E2C1;
         Tue,  4 Jul 2023 17:19:53 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Jul
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Jul
  2023 17:19:53 +0800
 Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
  by EXMBX068.cuchost.com (172.16.6.68) with Microsoft SMTP Server (TLS) id
@@ -35,9 +35,9 @@ CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Linus Walleij <linus.walleij@linaro.org>,
         William Qiu <william.qiu@starfivetech.com>
-Subject: [PATCH v4 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for StarFive JH7110 SoC
-Date:   Tue, 4 Jul 2023 17:19:46 +0800
-Message-ID: <20230704091948.85247-5-william.qiu@starfivetech.com>
+Subject: [PATCH v4 2/3] spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI
+Date:   Tue, 4 Jul 2023 17:19:47 +0800
+Message-ID: <20230704091948.85247-6-william.qiu@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230704091948.85247-1-william.qiu@starfivetech.com>
 References: <20230704091948.85247-1-william.qiu@starfivetech.com>
@@ -48,7 +48,7 @@ X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
  (172.16.6.68)
 X-YovoleRuleAgent: yovoleflag
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,39 +57,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The QSPI controller needs three clock items to work properly on StarFive
-JH7110 SoC, so there is need to change the maxItems's value to 3.
+Add QSPI clock operation in device probe.
 
 Signed-off-by: William Qiu <william.qiu@starfivetech.com>
 Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@intel.com/
+Reported-by: Julia Lawall <julia.lawall@inria.fr>
+Closes: https://lore.kernel.org/r/202306040644.6ZHs55x4-lkp@intel.com/
 ---
- .../devicetree/bindings/spi/cdns,qspi-nor.yaml       | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/spi/spi-cadence-quadspi.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-index b310069762dd..e048cf63215b 100644
---- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-+++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-@@ -70,7 +70,17 @@ properties:
-     maxItems: 1
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 6ddb2dfc0f00..8774f9aaff61 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -63,6 +63,8 @@ struct cqspi_st {
+ 	struct platform_device	*pdev;
+ 	struct spi_master	*master;
+ 	struct clk		*clk;
++	struct clk_bulk_data	*clks;
++	int			num_clks;
+ 	unsigned int		sclk;
  
-   clocks:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 3
+ 	void __iomem		*iobase;
+@@ -1715,6 +1717,16 @@ static int cqspi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	if (of_device_is_compatible(pdev->dev.of_node, "starfive,jh7110-qspi")) {
++		cqspi->num_clks = devm_clk_bulk_get_all(dev, &cqspi->clks);
++		if (cqspi->num_clks < 0) {
++			dev_err(dev, "Cannot claim clock: %u\n", cqspi->num_clks);
++			return -EINVAL;
++		}
 +
-+  clock-names:
-+    oneOf:
-+      - items:
-+          - const: ref
-+      - items:
-+          - const: ref
-+          - const: ahb
-+          - const: apb
++		ret = clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
++		if (ret)
++			dev_err(dev, "Cannot enable clock clks\n");
++
+ 		rstc_ref = devm_reset_control_get_optional_exclusive(dev, "rstc_ref");
+ 		if (IS_ERR(rstc_ref)) {
+ 			ret = PTR_ERR(rstc_ref);
+@@ -1816,6 +1828,9 @@ static void cqspi_remove(struct platform_device *pdev)
  
-   cdns,fifo-depth:
-     description:
+ 	clk_disable_unprepare(cqspi->clk);
+ 
++	if (of_device_is_compatible(pdev->dev.of_node, "starfive,jh7110-qspi"))
++		clk_bulk_disable_unprepare(cqspi->num_clks, cqspi->clks);
++
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ }
+@@ -1831,6 +1846,9 @@ static int cqspi_suspend(struct device *dev)
+ 
+ 	clk_disable_unprepare(cqspi->clk);
+ 
++	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
++		clk_bulk_disable_unprepare(cqspi->num_clks, cqspi->clks);
++
+ 	return ret;
+ }
+ 
+@@ -1840,6 +1858,8 @@ static int cqspi_resume(struct device *dev)
+ 	struct spi_master *master = dev_get_drvdata(dev);
+ 
+ 	clk_prepare_enable(cqspi->clk);
++	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
++		clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
+ 	cqspi_wait_idle(cqspi);
+ 	cqspi_controller_init(cqspi);
+ 
 -- 
 2.34.1
 
