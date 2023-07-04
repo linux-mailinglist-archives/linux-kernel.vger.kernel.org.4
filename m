@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49197476EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5537476FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjGDQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S231745AbjGDQls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjGDQkf (ORCPT
+        with ESMTP id S231548AbjGDQlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:40:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CF810D8;
-        Tue,  4 Jul 2023 09:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rt0Sgef/0mx0ZYOvMVPEM6yNpv3ovZQ+3Nf5gB6MWzc=; b=rBDJ16SWf0Ay6zMTwd7f3d6kAy
-        qL6gCNlEfMBkK0U+jU0qBzOfVEhTXG/Jv0AuHH3G28F0sguOTd83Pszb1jR+PaLG5s56Umax07fky
-        V+iLFsLcxqEwkx3CI+pXhlpUSnVO+D96+/aU9xo4KoKnlqy9OpOKBBhZC+Vpw6TFOGUgslA1GZTkZ
-        SBEi2TSZLYKwyfiKoMzYJyrNhynZiXZMtVBtouqBeRApWVW9F5b6hYk8oICgkC4wCyIR5RqJ6hssZ
-        ZWjQWEW9UvhulmSJ8hJiipJeZ+BV+g0ahag6kXdsU0gmmWJLGcd55LQxknsw7phyM1cb1bgZs3jD+
-        /FUXh9nA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qGj4R-009J9Z-4f; Tue, 04 Jul 2023 16:40:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 270993002E1;
-        Tue,  4 Jul 2023 18:40:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 081F120292D0E; Tue,  4 Jul 2023 18:40:04 +0200 (CEST)
-Date:   Tue, 4 Jul 2023 18:40:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        palmer@dabbelt.com, bjorn@rivosinc.com, daniel.thompson@linaro.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
-Message-ID: <20230704164003.GB83892@hirez.programming.kicks-ass.net>
-References: <20230702025708.784106-1-guoren@kernel.org>
+        Tue, 4 Jul 2023 12:41:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80E5E7A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688488857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hsGJKlN84iS87uycG5CF0XVpQDM2M+LhZ2wWSTw/Kvs=;
+        b=IyB5zdZgsFbW6jCNcbMR5h5YgUOEZ2cmBuc08ky7svKkTz45a44LOjpq2sGGJdzGajDTq/
+        eGSjsWs40Q7q0vjUzMbZEOnpBgd6MnHWzOih+CUhp+jkUcybA70C7dNMg5Rrz5b6Qp6oxO
+        mNKlsMlicTQT8yLdjIKFNdhCl5QUvJU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-159-fDHB3uUIPGW5sea3w8il6A-1; Tue, 04 Jul 2023 12:40:51 -0400
+X-MC-Unique: fDHB3uUIPGW5sea3w8il6A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88AA329AA39A;
+        Tue,  4 Jul 2023 16:40:51 +0000 (UTC)
+Received: from max-t490s.redhat.com (unknown [10.39.208.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6D830492B02;
+        Tue,  4 Jul 2023 16:40:49 +0000 (UTC)
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
+        david.marchand@redhat.com, lulu@redhat.com
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
+        Maxime Coquelin <maxime.coquelin@redhat.com>
+Subject: [PATCH v2 0/3] vduse: add support for networking devices
+Date:   Tue,  4 Jul 2023 18:40:42 +0200
+Message-ID: <20230704164045.39119-1-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230702025708.784106-1-guoren@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> The irqentry_nmi_enter/exit would force the current context into in_interrupt.
-> That would trigger the kernel to dead panic, but the kdb still needs "ebreak" to
-> debug the kernel.
-> 
-> Move irqentry_nmi_enter/exit to exception_enter/exit could correct handle_break
-> of the kernel side.
+This small series enables virtio-net device type in VDUSE.
+With it, basic operation have been tested, both with
+virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+adding VDUSE support using split rings layout (merged in
+DPDK v23.07-rc1).
 
-This doesn't explain much if anything :/
+Control queue support (and so multiqueue) has also been
+tested, but requires a Kernel series from Jason Wang
+relaxing control queue polling [1] to function reliably,
+so while Jason rework is done, a patch is added to disable
+CVQ and features that depend on it (tested also with DPDK
+v23.07-rc1).
 
-I'm confused (probably because I don't know RISC-V very well), what's
-EBREAK and how does it happen?
+[1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
 
-Specifically, if EBREAK can happen inside an local_irq_disable() region,
-then the below change is actively wrong. Any exception/interrupt that
-can happen while local_irq_disable() must be treated like an NMI.
+v1 -> v2 changes:
+=================
+- Add a patch to disable CVQ (Michael)
 
-If that makes kdb unhappy, fix kdb.
+RFC -> v1 changes:
+==================
+- Fail device init if it does not support VERSION_1 (Jason)
 
-> Fixes: f0bddf50586d ("riscv: entry: Convert to generic entry")
-> Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: stable@vger.kernel.org
-> ---
->  arch/riscv/kernel/traps.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index efc6b649985a..ed0eb9452f9e 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -18,6 +18,7 @@
->  #include <linux/irq.h>
->  #include <linux/kexec.h>
->  #include <linux/entry-common.h>
-> +#include <linux/context_tracking.h>
->  
->  #include <asm/asm-prototypes.h>
->  #include <asm/bug.h>
-> @@ -257,11 +258,11 @@ asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
->  
->  		irqentry_exit_to_user_mode(regs);
->  	} else {
-> -		irqentry_state_t state = irqentry_nmi_enter(regs);
-> +		enum ctx_state prev_state = exception_enter();
->  
->  		handle_break(regs);
->  
-> -		irqentry_nmi_exit(regs, state);
-> +		exception_exit(prev_state);
->  	}
->  }
->  
-> -- 
-> 2.36.1
-> 
+Maxime Coquelin (3):
+  vduse: validate block features only with block devices
+  vduse: enable Virtio-net device type
+  vduse: Temporarily disable control queue features
+
+ drivers/vdpa/vdpa_user/vduse_dev.c | 36 ++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
+
+-- 
+2.41.0
+
