@@ -2,38 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14717477E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C6A7477F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbjGDReC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
+        id S231237AbjGDRhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbjGDRdy (ORCPT
+        with ESMTP id S229793AbjGDRhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:33:54 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C94DA;
-        Tue,  4 Jul 2023 10:33:52 -0700 (PDT)
-Received: from ipservice-092-217-072-126.092.217.pools.vodafone-ip.de ([92.217.72.126] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1qGjuP-0000yT-Uj; Tue, 04 Jul 2023 19:33:50 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Joshua Henderson <joshua.henderson@microchip.com>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 4/4] hwrng: pic32 - enable TRNG only while it's used
-Date:   Tue,  4 Jul 2023 19:32:03 +0200
-Message-Id: <20230704173203.70706-5-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230704173203.70706-1-martin@kaiser.cx>
-References: <20230704173203.70706-1-martin@kaiser.cx>
+        Tue, 4 Jul 2023 13:37:31 -0400
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021BDE6D;
+        Tue,  4 Jul 2023 10:37:29 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 6876C100069;
+        Tue,  4 Jul 2023 20:37:28 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 6876C100069
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688492248;
+        bh=0t+mR7aNfe+ylAtBNvEGCWYPJQx/8WNK8PjxOwrmOTA=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type:From;
+        b=EIFPPYpZJB8y2bcROy4Q+4zWKdi0+Ib+gA3lCPMFpqJu4mUljOrGG/pCWOfyJ632J
+         O3cmZMq3vc9YD1iv4z0BHcGK+wWEMaEnkcYQP6lKik2gzxY0m8SciVZFqqU/NbXoqa
+         6q5o35SdgFVj93wzzxtac1lZW61l+jg1XfKXdGMf0a9CaqOPpGPDT1zwgM3QirNDu+
+         4d3NtPQnBnfnP6CD8hxpbloZCPJfj+yIuAkV5nGL1iSSkfwbAQwKhhwn1LVriTRVxT
+         TXK/RSVwFppOizc7LrvjRDzwple+astxMeoW9ArzwFmWyfyaCUnRWRx8pC7C2D3DQO
+         wgcn1eNK6d9pQ==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 20:37:28 +0300 (MSK)
+Received: from [192.168.0.12] (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 4 Jul 2023 20:37:16 +0300
+Message-ID: <59246d83-7c4b-8b34-3173-71bdb698c2aa@sberdevices.ru>
+Date:   Tue, 4 Jul 2023 20:32:13 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 2/2] mtd: rawnand: meson: waiting w/o wired ready/busy
+ pin
+Content-Language: en-US
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230608044728.1328506-1-AVKrasnov@sberdevices.ru>
+ <20230608044728.1328506-3-AVKrasnov@sberdevices.ru>
+ <20230704144357.286281dc@xps-13>
+ <47994f36-27d4-e5e4-73a9-6d4225671eec@sberdevices.ru>
+ <20230704151220.67857861@xps-13>
+ <73849b9c-0700-4946-84a2-428f98f0a6d6@sberdevices.ru>
+In-Reply-To: <73849b9c-0700-4946-84a2-428f98f0a6d6@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178432 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -42,97 +99,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The probe function enables the TRNG hardware before registering the
-driver. If registration fails, probe returns an error, but the TRNG
-remains enabled.
 
-Define init and cleanup functions, enable and disable the hardware there.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/char/hw_random/pic32-rng.c | 41 ++++++++++++++----------------
- 1 file changed, 19 insertions(+), 22 deletions(-)
+On 04.07.2023 16:07, Arseniy Krasnov wrote:
+> 
+> 
+> On 04.07.2023 16:12, Miquel Raynal wrote:
+>> Hi Arseniy,
+>>
+>> avkrasnov@sberdevices.ru wrote on Tue, 4 Jul 2023 15:46:18 +0300:
+>>
+>>> On 04.07.2023 15:43, Miquel Raynal wrote:
+>>>> Hi Arseniy,
+>>>>
+>>>> AVKrasnov@sberdevices.ru wrote on Thu, 8 Jun 2023 07:47:28 +0300:
+>>>>   
+>>>>> If there is no wired ready/busy pin, classic way to wait for command
+>>>>> completion is to use function 'nand_soft_waitrdy()'. Meson NAND has
+>>>>> special command which allows to wait for NAND_STATUS_READY bit without
+>>>>> reading status in a software loop (as 'nand_soft_waitrdy()' does). To
+>>>>> use it send this command along with NAND_CMD_STATUS, then wait for an
+>>>>> interrupt, and after interrupt send NAND_CMD_READ0. So this feature
+>>>>> allows to use interrupt driven waiting without wired ready/busy pin.
+>>>>>
+>>>>> Suggested-by: Liang Yang <liang.yang@amlogic.com>
+>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>>> ---
+>>>>>  drivers/mtd/nand/raw/meson_nand.c | 77 +++++++++++++++++++++++++++++--
+>>>>>  1 file changed, 73 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>>>> index 074e14225c06..9f05e113b4ea 100644
+>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>>> @@ -38,6 +38,7 @@
+>>>>>  #define NFC_CMD_SCRAMBLER_DISABLE	0
+>>>>>  #define NFC_CMD_SHORTMODE_DISABLE	0
+>>>>>  #define NFC_CMD_RB_INT		BIT(14)
+>>>>> +#define NFC_CMD_RB_INT_NO_PIN	((0xb << 10) | BIT(18) | BIT(16))
+>>>>>  
+>>>>>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+>>>>>  
+>>>>> @@ -179,6 +180,7 @@ struct meson_nfc {
+>>>>>  	u32 info_bytes;
+>>>>>  
+>>>>>  	unsigned long assigned_cs;
+>>>>> +	bool no_rb_pin;
+>>>>>  };
+>>>>>  
+>>>>>  enum {
+>>>>> @@ -392,7 +394,42 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
+>>>>>  	}
+>>>>>  }
+>>>>>  
+>>>>> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>>>>> +static int meson_nfc_wait_no_rb_pin(struct meson_nfc *nfc, int timeout_ms,
+>>>>> +				    bool need_cmd_read0)
+>>>>> +{
+>>>>> +	u32 cmd, cfg;
+>>>>> +
+>>>>> +	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+>>>>> +	meson_nfc_drain_cmd(nfc);
+>>>>> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+>>>>> +
+>>>>> +	cfg = readl(nfc->reg_base + NFC_REG_CFG);
+>>>>> +	cfg |= NFC_RB_IRQ_EN;
+>>>>> +	writel(cfg, nfc->reg_base + NFC_REG_CFG);
+>>>>> +
+>>>>> +	reinit_completion(&nfc->completion);
+>>>>> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>>>>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>> +
+>>>>> +	/* use the max erase time as the maximum clock for waiting R/B */
+>>>>> +	cmd = NFC_CMD_RB | NFC_CMD_RB_INT_NO_PIN | nfc->timing.tbers_max;
+>>>>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>> +
+>>>>> +	if (!wait_for_completion_timeout(&nfc->completion,
+>>>>> +					 msecs_to_jiffies(timeout_ms)))
+>>>>> +		return -ETIMEDOUT;
+>>>>> +
+>>>>> +	if (need_cmd_read0) {
+>>>>> +		cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
+>>>>> +		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>> +		meson_nfc_drain_cmd(nfc);
+>>>>> +		meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+>>>>> +	}  
+>>>>
+>>>> I forgot about this, you should avoid open coding core helpers, can you
+>>>> please send a followup patch to use nand_status_op() and
+>>>> nand_exit_status_op() ?  
+>>>
+>>> A ok, so:
+>>> 1) Sending NAND_CMD_STATUS goes to nand_status_op()
+>>> 2) Sending NAND_CMD_READ0 goes to nand_exit_status_op()
+>>>
+>>> Ok, no problem! I'll prepare and send it on this week!
+>>
+>> Exactly. Sorry I had this in mind but I likely forgot to write it
+>> down.
+> 
+> Ok, got it!
 
-diff --git a/drivers/char/hw_random/pic32-rng.c b/drivers/char/hw_random/pic32-rng.c
-index c1b3f5915f03..1902f4389a3f 100644
---- a/drivers/char/hw_random/pic32-rng.c
-+++ b/drivers/char/hw_random/pic32-rng.c
-@@ -38,6 +38,15 @@ struct pic32_rng {
-  */
- #define RNG_TIMEOUT 500
- 
-+static int pic32_rng_init(struct hwrng *rng)
-+{
-+	struct pic32_rng *priv = container_of(rng, struct pic32_rng, rng);
-+
-+	/* enable TRNG in enhanced mode */
-+	writel(TRNGEN | TRNGMOD, priv->base + RNGCON);
-+	return 0;
-+}
-+
- static int pic32_rng_read(struct hwrng *rng, void *buf, size_t max,
- 			  bool wait)
- {
-@@ -59,12 +68,17 @@ static int pic32_rng_read(struct hwrng *rng, void *buf, size_t max,
- 	return -EIO;
- }
- 
-+static void pic32_rng_cleanup(struct hwrng *rng)
-+{
-+	struct pic32_rng *priv = container_of(rng, struct pic32_rng, rng);
-+
-+	writel(0, priv->base + RNGCON);
-+}
-+
- static int pic32_rng_probe(struct platform_device *pdev)
- {
- 	struct pic32_rng *priv;
- 	struct clk *clk;
--	u32 v;
--	int ret;
- 
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -78,28 +92,12 @@ static int pic32_rng_probe(struct platform_device *pdev)
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
- 
--	/* enable TRNG in enhanced mode */
--	v = TRNGEN | TRNGMOD;
--	writel(v, priv->base + RNGCON);
--
- 	priv->rng.name = pdev->name;
-+	priv->rng.init = pic32_rng_init;
- 	priv->rng.read = pic32_rng_read;
-+	priv->rng.cleanup = pic32_rng_cleanup;
- 
--	ret = devm_hwrng_register(&pdev->dev, &priv->rng);
--	if (ret)
--		return ret;
--
--	platform_set_drvdata(pdev, priv);
--
--	return 0;
--}
--
--static int pic32_rng_remove(struct platform_device *pdev)
--{
--	struct pic32_rng *rng = platform_get_drvdata(pdev);
--
--	writel(0, rng->base + RNGCON);
--	return 0;
-+	return devm_hwrng_register(&pdev->dev, &priv->rng);
- }
- 
- static const struct of_device_id pic32_rng_of_match[] __maybe_unused = {
-@@ -110,7 +108,6 @@ MODULE_DEVICE_TABLE(of, pic32_rng_of_match);
- 
- static struct platform_driver pic32_rng_driver = {
- 	.probe		= pic32_rng_probe,
--	.remove		= pic32_rng_remove,
- 	.driver		= {
- 		.name	= "pic32-rng",
- 		.of_match_table = of_match_ptr(pic32_rng_of_match),
--- 
-2.30.2
+Hm, seems 'int nand_exit_status_op(struct nand_chip *chip)' is not exported,
+so I can't use it in the Meson module. While 'nand_status_op()' works ok.
+May I can export 'nand_exit_status_op()?'
 
+Thanks, Arseniy
+
+
+> 
+> Thanks, Arseniy
+> 
+>>
+>> Thanks,
+>> Miquèl
