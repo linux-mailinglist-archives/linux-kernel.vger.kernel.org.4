@@ -2,146 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BBA746C3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEE6746C42
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjGDIoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
+        id S231669AbjGDIqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbjGDIoC (ORCPT
+        with ESMTP id S231320AbjGDIqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:44:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9605A127
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688460196;
+        Tue, 4 Jul 2023 04:46:15 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B47B2;
+        Tue,  4 Jul 2023 01:46:13 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688460371;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5wxHSZzQ3h16AMk8/bw5gkQqg1j0+pjTKVpjRmfziQs=;
-        b=AQ8KTRfJHDMfbyZ6DQjkVpvqZygmBFQPESFlFdKAetYwGkoyPsnYc833tIUaRQEZXj22bS
-        3aoSyDZdGHA3mqFSAMru22o81xBIPXAeUYB7x/mot/da4a1xv/7q54qKHNGi/9sjuppl9V
-        3qOPkGSQLkzgkCFMbOITpffWMFbqQ4U=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-b0syS39oNyakSQYOaSQ38A-1; Tue, 04 Jul 2023 04:43:13 -0400
-X-MC-Unique: b0syS39oNyakSQYOaSQ38A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 222A21C05EB3;
-        Tue,  4 Jul 2023 08:43:13 +0000 (UTC)
-Received: from [10.39.208.32] (unknown [10.39.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9E3C7F6419;
-        Tue,  4 Jul 2023 08:43:09 +0000 (UTC)
-Message-ID: <0630fc62-a414-6083-eed8-48b36acc7723@redhat.com>
-Date:   Tue, 4 Jul 2023 10:43:07 +0200
+        bh=LQjBl3xjsOvqrn/5MSnlNvfmLvFW7KbTctHheLwyri4=;
+        b=Nx+gbrqlmWo18DeiRQmsO25hjYZTl74Ctko9c9XGKlzwBZoCPIXX71gbWa3Y9Ou2tN1xle
+        h1KwBVTYAMeC6ZXXk6R1KQDbvytw3u6BGAUrThI5JwyqvnvIYtSn80B6SjGD0QmvSetWWS
+        s7GND8pJdkB0+tCuEwbqKHVMF7LtmMGr0Ecj2me0fR8YejgsldVz4EydVN0f3nhIcfzoDT
+        R4prtYHVnqTCuSF0DFfNf6xyY7+mSruczDkgDxarYk0TdEU+0B9/lefr2DhwwKrw25If0z
+        qaCbqYZtPnw8770cPqLduqXjWVWbSrin8Ijpos9e14n6IvfKovkjEGFWZxksEQ==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CDAA06000E;
+        Tue,  4 Jul 2023 08:46:09 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 10:46:08 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, mmayer@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, tglx@linutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 2/5] thermal/drivers/armada: convert to use
+ devm_request_threaded_irq_emsg()
+Message-ID: <20230704104608.29527ec3@xps-13>
+In-Reply-To: <20230703090455.62101-3-frank.li@vivo.com>
+References: <20230703090455.62101-1-frank.li@vivo.com>
+        <20230703090455.62101-3-frank.li@vivo.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, xieyongji@bytedance.com,
-        david.marchand@redhat.com, lulu@redhat.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
-References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
- <20230702093530-mutt-send-email-mst@kernel.org>
- <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
- <571e2fbc-ea6a-d231-79f0-37529e05eb98@redhat.com>
- <20230703174043-mutt-send-email-mst@kernel.org>
-Content-Language: en-US
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-In-Reply-To: <20230703174043-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yangtao,
 
+frank.li@vivo.com wrote on Mon,  3 Jul 2023 17:04:51 +0800:
 
-On 7/3/23 23:45, Michael S. Tsirkin wrote:
-> On Mon, Jul 03, 2023 at 09:43:49AM +0200, Maxime Coquelin wrote:
->>
->> On 7/3/23 08:44, Jason Wang wrote:
->>> On Sun, Jul 2, 2023 at 9:37 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->>>>
->>>> On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
->>>>> This small series enables virtio-net device type in VDUSE.
->>>>> With it, basic operation have been tested, both with
->>>>> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
->>>>> adding VDUSE support using split rings layout (merged in
->>>>> DPDK v23.07-rc1).
->>>>>
->>>>> Control queue support (and so multiqueue) has also been
->>>>> tested, but requires a Kernel series from Jason Wang
->>>>> relaxing control queue polling [1] to function reliably.
->>>>>
->>>>> [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
->>>>
->>>> Jason promised to post a new version of that patch.
->>>> Right Jason?
->>>
->>> Yes.
->>>
->>>> For now let's make sure CVQ feature flag is off?
->>>
->>> We can do that and relax on top of my patch.
->>
->> I agree? Do you prefer a features negotiation, or failing init (like
->> done for VERSION_1) if the VDUSE application advertises CVQ?
->>
->> Thanks,
->> Maxime
-> 
-> Unfortunately guests fail probe if feature set is inconsistent.
-> So I don't think passing through features is a good idea,
-> you need a list of legal bits. And when doing this,
-> clear CVQ and everything that depends on it.
+> There are more than 700 calls to the devm_request_threaded_irq method.
+> Most drivers only request one interrupt resource, and these error
+> messages are basically the same. If error messages are printed
+> everywhere, more than 1000 lines of code can be saved by removing the
+> msg in the driver.
+>=20
+> And tglx point out that:
+>=20
+>   If we actually look at the call sites of
+>   devm_request_threaded_irq() then the vast majority of them print more or
+>   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+>=20
+>      519 messages total (there are probably more)
+>=20
+>      352 unique messages
+>=20
+>      323 unique messages after lower casing
+>=20
+>          Those 323 are mostly just variants of the same patterns with
+>          slight modifications in formatting and information provided.
+>=20
+>      186 of these messages do not deliver any useful information,
+>          e.g. "no irq", "
+>=20
+>      The most useful one of all is: "could request wakeup irq: %d"
+>=20
+>   So there is certainly an argument to be made that this particular
+>   function should print a well formatted and informative error message.
+>=20
+>   It's not a general allocator like kmalloc(). It's specialized and in the
+>   vast majority of cases failing to request the interrupt causes the
+>   device probe to fail. So having proper and consistent information why
+>   the device cannot be used _is_ useful.
+>=20
+> Let's use devm_request_threaded_irq_emsg(), which ensure that all error
+> handling branches print error information. In this way, when this function
+> fails, the upper-layer functions can directly return an error code without
+> missing debugging information. Otherwise, the error message will be
+> printed redundantly or missing.
+>=20
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  drivers/thermal/armada_thermal.c | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_th=
+ermal.c
+> index 9f6dc4fc9112..a5e140643f00 100644
+> --- a/drivers/thermal/armada_thermal.c
+> +++ b/drivers/thermal/armada_thermal.c
+> @@ -913,15 +913,12 @@ static int armada_thermal_probe(struct platform_dev=
+ice *pdev)
+> =20
+>  	/* The overheat interrupt feature is not mandatory */
+>  	if (irq > 0) {
+> -		ret =3D devm_request_threaded_irq(&pdev->dev, irq,
+> -						armada_overheat_isr,
+> -						armada_overheat_isr_thread,
+> -						0, NULL, priv);
+> -		if (ret) {
+> -			dev_err(&pdev->dev, "Cannot request threaded IRQ %d\n",
+> -				irq);
+> +		ret =3D devm_request_threaded_irq_emsg(&pdev->dev, irq,
+> +						     armada_overheat_isr,
+> +						     armada_overheat_isr_thread,
+> +						     0, NULL, priv, NULL);
+> +		if (ret)
 
-Since this is temporary, while cvq is made more robust, I think it is
-better to fail VDUSE device creation if CVQ feature is advertised by the
-VDUSE application, instead of ensuring features depending on CVQ are
-also cleared.
+I don't see a patch renaming this helper with s/emsg//, do you plan to
+keep it like that? I bet nobody outside of this series will notice the
+new helper and will continue to add error messages because it kind
+of feels "right" to do so.
 
-Jason seems to think likewise, would that work for you?
+I would rather prefer returning to the original function name which
+everybody knows/uses.
+
+Anyhow, I'm fine with the idea of dropping custom error messages, so
+whatever the final solution:
+
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
 Thanks,
-Maxime
-
-> 
-> 
->>> Thanks
->>>
->>>>
->>>>> RFC -> v1 changes:
->>>>> ==================
->>>>> - Fail device init if it does not support VERSION_1 (Jason)
->>>>>
->>>>> Maxime Coquelin (2):
->>>>>     vduse: validate block features only with block devices
->>>>>     vduse: enable Virtio-net device type
->>>>>
->>>>>    drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
->>>>>    1 file changed, 11 insertions(+), 4 deletions(-)
->>>>>
->>>>> --
->>>>> 2.41.0
->>>>
->>>
-> 
-
+Miqu=C3=A8l
