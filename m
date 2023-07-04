@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0184C7478F3
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2F87478F5
 	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbjGDUXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 16:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S231748AbjGDUYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 16:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjGDUXH (ORCPT
+        with ESMTP id S231250AbjGDUYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:23:07 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21440E76
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:23:06 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-579de633419so40837787b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 13:23:06 -0700 (PDT)
+        Tue, 4 Jul 2023 16:24:50 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E1BE76;
+        Tue,  4 Jul 2023 13:24:49 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-55b5a37acb6so463862a12.0;
+        Tue, 04 Jul 2023 13:24:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688502185; x=1691094185;
+        d=gmail.com; s=20221208; t=1688502288; x=1691094288;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9a6W0nI5dldeYBTATPhb2dlI8SAsLd6hrxr67cmhZ5Q=;
-        b=jDLrG9hng7j9RZclbFbYt97jBiLanCA13I7xQd6CkeRzUmalZDSbrdf2iqtWNylUD+
-         he7LFrNVAAX6/RsVaQATwUviDjceHMnTodzS8pJ56besYOvmt0sGvf+m9cp7F4zTWlXt
-         1Nn1uAaFkkZfVwf7W4qNBfyAxnoGb+K6dY8HXtuSq/IVryIoXxrHmTjbCF2HbLyMHC7t
-         4J2H/VpJMhQ8PJMc/WuW/F6iogspk3v0wJAJjiQgDB0mKQlhcKfx8F0JdjFAms9aqIHp
-         jhfxwMNkFV5nkmLM2Lw/6uzJq+1LbrOFfoT8WnNAa0btOX0BFG3bnIdsuXWXo/yFNbvj
-         gACw==
+        bh=eXcoyB2c2LmPovrfcZqFCh1F+dK1nMZObtAQzAlFgu0=;
+        b=H7/P+BxaeP0N3C+tbkIDNCg32NLgroPE2sONbk5/kGI/NZH9BHeZfzSL6slAIOM8bf
+         hjUiS0bmu0QS5bSKoMeh9nk2ACtJ4fvWXRO6hcYoDJt915cKMlHo8vkztzHy2rTOB8ZD
+         u0cllXoxcq36G+VNI5RLx+SEIw6Kw5Deg3W9fUnV4o4gg8mdAMUlIORZFCMd4R2fVaFF
+         aDPhMuc9X+Da7JuDKu4/nGF51le2Fbwkk89PGTJ3ZZetJ6EJGS7V8/se1Gwn5tFh9fc5
+         DzpWgS2AwuaR7MMG+JxxVye2WcMN8h+Mn99FbxP+g+Dtz0r922k3OxeYn83PsUmp/IaU
+         EAiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688502185; x=1691094185;
+        d=1e100.net; s=20221208; t=1688502288; x=1691094288;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9a6W0nI5dldeYBTATPhb2dlI8SAsLd6hrxr67cmhZ5Q=;
-        b=W2GXLd7ouY2DMM5bEIOeSaCROmHZ/P9LHxRtoYl1+Qq4cV0t1aBaq92+Ob+cmzn995
-         F7U9+ovsCxcABwesxfFfGABprlbUajDt/kEwGH4aUN78JYI91+IGDaXFONwPeCN+2JGY
-         hpfPlU4GmAs+agq38JklhP5cf2sF7hUPwA1UY35yvfa7SZc8OORLEOMvtX7xPvVQ5oFu
-         EMr/QaJPimR39HnOXd3Mls7rNBPgYi2W8HZce25y7DQbSyglZFfGga3I+ZNleC62ImXX
-         UrS7vYwEDJ6kIgtfzUQ9xnQUSWoavuKQ8iBW8GvdbXB/XgjC5g9PMaHjaUrEgo1FZYBE
-         btRw==
-X-Gm-Message-State: ABy/qLY4DOqfiV1GykyFwyLhHfqONY8RKYjcejlVPAoRzibjqoHvYLxm
-        O5Gf/Vzuum844I+xa0StAzTcf6JEyFQCpJ7InVU37g==
-X-Google-Smtp-Source: APBJJlFRxBYFIFi7jQMlJ9b0aiDIcQomVwZEpqQvAEHweseoYSsNoIUfOa0SIsLsBQ7oqNCMb6nS8RBbzB0YIz4DlUs=
-X-Received: by 2002:a81:8344:0:b0:56d:325c:442 with SMTP id
- t65-20020a818344000000b0056d325c0442mr12799162ywf.31.1688502185180; Tue, 04
- Jul 2023 13:23:05 -0700 (PDT)
+        bh=eXcoyB2c2LmPovrfcZqFCh1F+dK1nMZObtAQzAlFgu0=;
+        b=lMb4ST2fi42MBjt4xGXJYPaRVwroVfBvVhUmt7QhITV3P3iIxIO/DTUEw6ZSJjvT3I
+         9vG0BgYAd9X+0wqGL3lE2/keqgNTKW6Bfwzt/+9vyxMpoBIfyM6a1CDBYnp5POFyVimh
+         4cQDbEjHvi821FStTksnTEyx4KcClSIxP3XLKKzoYXCh6kF0r4uPlN+Ry/QtDhfzAHU8
+         TmzQXSagRjbFaquB6tewzForgnCseB+XH8qkSugPChdYz/WlETNHyeLhvXiRaD5PAMmb
+         lNMR9droPO/iEXlDCF9LlE9uz0GeIaqISy6Vu9ggtP7vxH35iYX3G2o8SXLQOELzngER
+         8m1A==
+X-Gm-Message-State: ABy/qLY7UtpWtneINIPe9SlKepzN99hQAufhF1cCGP981Bzq2AjQIOh0
+        +FPLu/Fbq2TbtquqPA+KNeK877KoPzwplQTUv4H8BKyulQ4=
+X-Google-Smtp-Source: APBJJlE75SoXvUcaKn+0M4NzzJRZdJFs9Q59qM9V68AgG6NSgpM5KHfjRyVh308gqb0wj64XVW1sOsE7REkdmConEe8=
+X-Received: by 2002:a05:6a00:280a:b0:676:2a5c:7bc5 with SMTP id
+ bl10-20020a056a00280a00b006762a5c7bc5mr15978772pfb.1.1688502288424; Tue, 04
+ Jul 2023 13:24:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info> <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh> <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh> <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
-In-Reply-To: <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 4 Jul 2023 13:22:54 -0700
-Message-ID: <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20230704184109.991104-1-m.felsch@pengutronix.de> <20230704184109.991104-3-m.felsch@pengutronix.de>
+In-Reply-To: <20230704184109.991104-3-m.felsch@pengutronix.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 4 Jul 2023 17:24:36 -0300
+Message-ID: <CAOMZO5C21f9+ByLVHMaK9wHcCSF3R9W1c1ZCfirx7TuX=786Rw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: freescale: Add DEBIX SOM A and SOM A I/O
+ Board support
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, shawnguo@kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com, marex@denx.de, frieder.schrempf@kontron.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,46 +73,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 9:18=E2=80=AFAM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Tue, 4 Jul 2023 09:00:19 +0100 Greg KH <gregkh@linuxfoundation.org> wr=
-ote:
->
-> > > > > > Thanks! I'll investigate this later today. After discussing wit=
-h
-> > > > > > Andrew, we would like to disable CONFIG_PER_VMA_LOCK by default=
- until
-> > > > > > the issue is fixed. I'll post a patch shortly.
-> > > > >
-> > > > > Posted at: https://lore.kernel.org/all/20230703182150.2193578-1-s=
-urenb@google.com/
-> > > >
-> > > > As that change fixes something in 6.4, why not cc: stable on it as =
-well?
-> > >
-> > > Sorry, I thought since per-VMA locks were introduced in 6.4 and this
-> > > patch is fixing 6.4 I didn't need to send it to stable for older
-> > > versions. Did I miss something?
-> >
-> > 6.4.y is a stable kernel tree right now, so yes, it needs to be include=
-d
-> > there :)
->
-> I'm in wait-a-few-days-mode on this.  To see if we have a backportable
-> fix rather than disabling the feature in -stable.
+Hi Marco,
 
-Ok, I think we have a fix posted at [2]  and it's cleanly applies to
-6.4.y stable branch as well. However fork() performance might slightly
-regress, therefore disabling per-VMA locks by default for now seems to
-be preferable even with this fix (see discussion at
-https://lore.kernel.org/all/54cd9ffb-8f4b-003f-c2d6-3b6b0d2cb7d9@google.com=
-/).
-IOW, both [1] and [2] should be applied to 6.4.y stable. Both apply
-cleanly and I CC'ed stable on [2]. Greg, should I send [1] separately
-to stable@vger?
+On Tue, Jul 4, 2023 at 3:41=E2=80=AFPM Marco Felsch <m.felsch@pengutronix.d=
+e> wrote:
 
-[1] https://lore.kernel.org/all/20230703182150.2193578-1-surenb@google.com/
-[2] https://lore.kernel.org/all/20230704200656.2526715-1-surenb@google.com/
+> +&fec {
+> +       pinctrl-names =3D "default";
+> +       pinctrl-0 =3D <&pinctrl_fec>;
+> +       phy-mode =3D "rgmii-id";
+> +       phy-handle =3D <&ethphy1>;
+> +       fsl,magic-packet;
+> +       phy-reset-gpios =3D <&gpio4 19 GPIO_ACTIVE_LOW>;
+> +       phy-reset-duration =3D <10>;
+> +       phy-reset-post-delay =3D <150>;
 
->
+These properties are deprecated. Please move them under the mdio node.
+
+> +               /*
+> +                * Since USB1 is binded to peripheral mode we need to ens=
+ure
+
+s/binded/bound
+
+> +/* =C2=B5SD Card */
+> +&usdhc2 {
+> +       pinctrl-names =3D "default", "state_100mhz", "state_200mhz";
+> +       pinctrl-0 =3D <&pinctrl_usdhc2>;
+> +       pinctrl-1 =3D <&pinctrl_usdhc2_100mhz>;
+> +       pinctrl-2 =3D <&pinctrl_usdhc2_200mhz>;
+> +       vmmc-supply =3D <&reg_usdhc2_vmmc>;
+> +       bus-width =3D <4>;
+> +       disable-wp;
+> +       no-sdio;
+> +       no-mmc;
+> +
+
+No need for this blank line.
+
+> +       assigned-clocks =3D <&clk IMX8MP_CLK_USDHC2>;
+> +       assigned-clock-rates =3D <400000000>;
+> +
+
+Ditto.
+
+> +
+> +       pmic@25 {
+> +               compatible =3D "nxp,pca9450c";
+> +               reg =3D <0x25>;
+> +               pinctrl-names =3D "default";
+> +               pinctrl-0 =3D <&pinctrl_pmic>;
+> +
+> +               interrupt-parent =3D <&gpio1>;
+> +               interrupts =3D <3 GPIO_ACTIVE_LOW>;
+> +
+> +               regulators {
+> +                       buck1: BUCK1 {
+> +                               regulator-name =3D "BUCK1";
+> +                               regulator-min-microvolt =3D <600000>;
+> +                               regulator-max-microvolt =3D <2187500>;
+> +                               regulator-boot-on;
+> +                               regulator-always-on;
+> +                               regulator-ramp-delay =3D <3125>;
+> +                       };
+> +
+> +                       buck2: BUCK2 {
+> +                               regulator-name =3D "BUCK2";
+> +                               regulator-min-microvolt =3D <600000>;
+> +                               regulator-max-microvolt =3D <2187500>;
+> +                               regulator-boot-on;
+> +                               regulator-always-on;
+> +                               regulator-ramp-delay =3D <3125>;
+> +                               nxp,dvs-run-voltage =3D <950000>;
+> +                               nxp,dvs-standby-voltage =3D <850000>;
+> +                       };
+> +
+> +                       buck4: BUCK4{
+
+Missing space after BUCK4.
+
+> +                               regulator-name =3D "BUCK4";
+> +                               regulator-min-microvolt =3D <600000>;
+> +                               regulator-max-microvolt =3D <3400000>;
+> +                               regulator-boot-on;
+> +                               regulator-always-on;
+> +                       };
+> +
+> +                       buck5: BUCK5{
+
+Ditto.
+
+> +&usdhc3 {
+> +       pinctrl-names =3D "default", "state_100mhz", "state_200mhz";
+> +       pinctrl-0 =3D <&pinctrl_usdhc3>;
+> +       pinctrl-1 =3D <&pinctrl_usdhc3_100mhz>;
+> +       pinctrl-2 =3D <&pinctrl_usdhc3_200mhz>;
+> +       bus-width =3D <8>;
+> +       non-removable;
+> +
+
+No need for this blank line.
+
+
+> +       assigned-clocks =3D <&clk IMX8MP_CLK_USDHC3>;
+> +       assigned-clock-rates =3D <400000000>;
+> +
+
+Ditto.
