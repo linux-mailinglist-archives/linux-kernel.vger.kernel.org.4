@@ -2,98 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A1D746C6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEAF746C69
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjGDIxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S230391AbjGDIx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjGDIxg (ORCPT
+        with ESMTP id S229451AbjGDIx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:53:36 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB961A2;
-        Tue,  4 Jul 2023 01:53:34 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id d2e1a72fcca58-668709767b1so2880425b3a.2;
-        Tue, 04 Jul 2023 01:53:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688460814; x=1691052814;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jo4utTOFZlOpmYZQpJZ1w5TonydZxH/5QRh2ywOl8/s=;
-        b=FRZN8vYPM2rFBLciNSfH259E1rj5uWQ4N4dPNgzNf4y0Z0scqWSi+oJUQUZrEVhAb/
-         oOoWMujAalNciaipXXKIIgQNajnj9DJ2RMd8XkLg/KKHHDbQMW90C5SIG1lLPk2Uvtyn
-         RKIoSo9YkuScoN/b1tbRCvkF9pSfog438/tBKICpfubxAVuSGSeaPkNzS0o/Jk5mdRPc
-         su+YmmdRBgQddFzkvzXR83VAoyt2W8nKG7E8j85ITsfihI+AbZmumzPoO6gGBA32mU90
-         4v6XsIYnVHhOPdkMHSULuCPk8/ra2/1CnGBg67NRvEykRkHJmdtEESuFVHA0teApHlwf
-         9OXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688460814; x=1691052814;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jo4utTOFZlOpmYZQpJZ1w5TonydZxH/5QRh2ywOl8/s=;
-        b=cPFfIEC35g+b06HOtYx7VkDWrFTF13Y6hjusAjZyU7wTPe0y49sMzkPJw094qQDN8a
-         G7jOVIQguPh5EyFQGoGHxuAZNL0dRR8IgvwCrf3vPdApizKFzKygI3Rlq6Gv/r5j7kLs
-         gd3FOemQCpJjcrug49sP1VEE8gvVbrJohn5HUaUhZMB1Gzpnm/HJ5kODm+VDvthbfg9D
-         siUiTZil2mdqJLjVXqjVekPxrF1V4tc+eqPY6qUsgsaCJTM7reV7zPqu029FE7NAWCa0
-         exwUylzpan/MVW8t7cV5VRSVmjT/6u8N+Tj6GO7UwpB9UYMHsCdRIvlf6BsautI2LAD2
-         7g/Q==
-X-Gm-Message-State: ABy/qLZBuVnbpt12JtlUdeZICAQqj7qzWJkT6ySQIFkwJmOHgwdMUhDI
-        2Gz2haudZjXDPfmbxVGBi4b/xUs6DI2cQ66F
-X-Google-Smtp-Source: APBJJlGdBDdI6CvkjhePpsVTcMguXJZHvum6U+F5zEnuUg9cknmAcMM+M0nSG9MCqR3oSM6A8gXTUQ==
-X-Received: by 2002:a05:6a00:998:b0:673:8dfb:af32 with SMTP id u24-20020a056a00099800b006738dfbaf32mr13158303pfg.26.1688460814142;
-        Tue, 04 Jul 2023 01:53:34 -0700 (PDT)
-Received: from localhost.localdomain ([81.70.217.19])
-        by smtp.gmail.com with ESMTPSA id j24-20020a63cf18000000b0054ff075fb31sm15996382pgg.42.2023.07.04.01.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 01:53:33 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     michael.chan@broadcom.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH net-next] bnxt_en: use dev_consume_skb_any() in bnxt_tx_int
-Date:   Tue,  4 Jul 2023 16:52:36 +0800
-Message-Id: <20230704085236.9791-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.40.1
+        Tue, 4 Jul 2023 04:53:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1997115;
+        Tue,  4 Jul 2023 01:53:25 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 26AFE6606ED1;
+        Tue,  4 Jul 2023 09:53:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688460804;
+        bh=/4dyF8HZFtyp5Y+HhxEP3bwZNJAwUnFLGbeU+g9n2hg=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=W3r6fyfFCV1d9e3fbQqWrqlaliK8RIJShsA3JhU6t4EZyN4iWkAeaGI3c56yX1tnH
+         AIiII36iLobpWce1aQFoKmrM9lYwC30dMdNIaTPaW1W36djA7K7sMC0dGJ7po+J+Uk
+         Q+0G44HIScbow+zRuk+KM1HPRgCeaOEiDzSOPZzOJpKo3zHQ4SFM1heRe3bnfSSu5y
+         xmXWRoJsHcw6cSG+wAQSznNP/ZrZq5aSDyj43q5ijt5vopAk2Mcl8Uva0BeeZ1F1rP
+         QI6WkjLbZKkcbgMmuKEBsqyhifcfmK+wc4uhDbV2Nblw8fX8J+67YgJVCoCFbd69t/
+         WsCfOWSGdf/Mg==
+Message-ID: <ef7b62ab-b1f3-b687-7561-1ab65282ba23@collabora.com>
+Date:   Tue, 4 Jul 2023 10:53:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 2/7] ASoC: mediatek: mt7986: support audio clock
+ control
+Content-Language: en-US
+To:     Maso Huang <maso.huang@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230626023501.11120-1-maso.huang@mediatek.com>
+ <20230626023501.11120-3-maso.huang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230626023501.11120-3-maso.huang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Il 26/06/23 04:34, Maso Huang ha scritto:
+> Add audio clock wrapper and audio tuner control.
+> 
+> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
+> ---
+>   sound/soc/mediatek/mt7986/mt7986-afe-clk.c | 75 ++++++++++++++++++++++
+>   sound/soc/mediatek/mt7986/mt7986-afe-clk.h | 18 ++++++
+>   2 files changed, 93 insertions(+)
+>   create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-clk.c
+>   create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-clk.h
+> 
+> diff --git a/sound/soc/mediatek/mt7986/mt7986-afe-clk.c b/sound/soc/mediatek/mt7986/mt7986-afe-clk.c
+> new file mode 100644
+> index 000000000000..a8b5fae05673
+> --- /dev/null
+> +++ b/sound/soc/mediatek/mt7986/mt7986-afe-clk.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * mt7986-afe-clk.c  --  MediaTek 7986 afe clock ctrl
+> + *
+> + * Copyright (c) 2021 MediaTek Inc.
+> + * Author: Vic Wu <vic.wu@mediatek.com>
+> + *         Maso Huang <maso.huang@mediatek.com>
+> + */
+> +
+> +#include <linux/clk.h>
+> +
+> +#include "mt7986-afe-common.h"
+> +#include "mt7986-afe-clk.h"
+> +#include "mt7986-reg.h"
+> +
+> +enum {
+> +	CK_INFRA_AUD_BUS_CK = 0,
+> +	CK_INFRA_AUD_26M_CK,
+> +	CK_INFRA_AUD_L_CK,
+> +	CK_INFRA_AUD_AUD_CK,
+> +	CK_INFRA_AUD_EG2_CK,
+> +	CLK_NUM
+> +};
+> +
+> +static const char *aud_clks[CLK_NUM] = {
+> +	[CK_INFRA_AUD_BUS_CK] = "aud_bus_ck",
+> +	[CK_INFRA_AUD_26M_CK] = "aud_26m_ck",
+> +	[CK_INFRA_AUD_L_CK] = "aud_l_ck",
+> +	[CK_INFRA_AUD_AUD_CK] = "aud_aud_ck",
+> +	[CK_INFRA_AUD_EG2_CK] = "aud_eg2_ck",
+> +};
+> +
+> +int mt7986_init_clock(struct mtk_base_afe *afe)
+> +{
+> +	struct mt7986_afe_private *afe_priv = afe->platform_priv;
+> +	int ret, i;
+> +
+> +	afe_priv->clks = devm_kcalloc(afe->dev, CLK_NUM,
+> +				sizeof(*afe_priv->clks), GFP_KERNEL);
+> +	if (!afe_priv->clks)
+> +		return -ENOMEM;
+> +	afe_priv->num_clks = CLK_NUM;
+> +
+> +	for (i = 0; i < afe_priv->num_clks; i++)
+> +		afe_priv->clks[i].id = aud_clks[i];
+> +
+> +	ret = devm_clk_bulk_get(afe->dev, afe_priv->num_clks, afe_priv->clks);
+> +	if (ret)
+> +		return dev_err_probe(afe->dev, ret, "Failed to get clocks\n");
+> +
+> +	return 0;
+> +}
+> +
+> +int mt7986_afe_enable_clock(struct mtk_base_afe *afe)
+> +{
+> +	struct mt7986_afe_private *afe_priv = afe->platform_priv;
+> +	int ret;
+> +
+> +	ret = clk_bulk_prepare_enable(afe_priv->num_clks, afe_priv->clks);
 
-Replace dev_kfree_skb_any() with dev_consume_skb_any() in bnxt_tx_int()
-to clear the unnecessary noise of "kfree_skb" event.
+You don't need a wrapper function for just a single clk_bulk_prepare_enable() call.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	if (ret)
+> +		return dev_err_probe(afe->dev, ret, "Failed to enable clocks\n");
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(mt7986_afe_enable_clock);
+> +
+> +int mt7986_afe_disable_clock(struct mtk_base_afe *afe)
+> +{
+> +	struct mt7986_afe_private *afe_priv = afe->platform_priv;
+> +
+> +	clk_bulk_disable_unprepare(afe_priv->num_clks, afe_priv->clks);
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index f42e51bd3e42..bcd0f0173cb5 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -685,7 +685,7 @@ static void bnxt_tx_int(struct bnxt *bp, struct bnxt_napi *bnapi, int nr_pkts)
- next_tx_int:
- 		cons = NEXT_TX(cons);
- 
--		dev_kfree_skb_any(skb);
-+		dev_consume_skb_any(skb);
- 	}
- 
- 	WRITE_ONCE(txr->tx_cons, cons);
--- 
-2.40.1
+Same for this one....
+
+... which means that this file will have only mt7986_init_clock() so, ultimately,
+you don't need a mt7986-afe-clk.c file at all.
+Please merge this logic into mt7986-afe-pcm.c, which is also the only user of it.
+
+Thanks,
+Angelo
 
