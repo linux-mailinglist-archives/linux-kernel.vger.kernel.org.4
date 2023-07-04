@@ -2,138 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155C3747438
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6612574743B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjGDOgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S231364AbjGDOhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjGDOgf (ORCPT
+        with ESMTP id S230200AbjGDOhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:36:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52F4E47;
-        Tue,  4 Jul 2023 07:36:32 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QwQMS40rSzqVXh;
-        Tue,  4 Jul 2023 22:36:04 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 4 Jul 2023 22:36:29 +0800
-CC:     <yangyicong@hisilicon.com>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-arm-kernel@lists.infradead.org>,
-        <x86@kernel.org>, <mark.rutland@arm.com>, <ryan.roberts@arm.com>,
-        <will@kernel.org>, <anshuman.khandual@arm.com>,
-        <linux-doc@vger.kernel.org>, <corbet@lwn.net>,
-        <peterz@infradead.org>, <arnd@arndb.de>,
-        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
-        <darren@os.amperecomputing.com>, <huzhanyuan@oppo.com>,
-        <lipeifeng@oppo.com>, <zhangshiming@oppo.com>, <guojian@oppo.com>,
-        <realmz6@gmail.com>, <linux-mips@vger.kernel.org>,
-        <openrisc@lists.librecores.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>, <wangkefeng.wang@huawei.com>,
-        <xhao@linux.alibaba.com>, <prime.zeng@hisilicon.com>,
-        <Jonathan.Cameron@huawei.com>, Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Subject: Re: [RESEND PATCH v9 2/2] arm64: support batched/deferred tlb
- shootdown during page reclamation/migration
-To:     Catalin Marinas <catalin.marinas@arm.com>
-References: <20230518065934.12877-1-yangyicong@huawei.com>
- <20230518065934.12877-3-yangyicong@huawei.com> <ZJ2x6DlmyA3kVh1n@arm.com>
- <ZJ2+37Q7v4odMmEd@arm.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <2f593850-797c-5422-2c80-ce214fac02bb@huawei.com>
-Date:   Tue, 4 Jul 2023 22:36:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 4 Jul 2023 10:37:52 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F98E47;
+        Tue,  4 Jul 2023 07:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688481471; x=1720017471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3uPK0lQLnODbW5urZpqsXqNoSRHmvwzicJIhGoLTkFM=;
+  b=bMFyR4O3Z5LBVuHSyrXZ+TJeLTUe79bo2t8i+ccei59ckkZoDMNo9nlh
+   ffmcMDQEDKZlFp1L5B693nZA1Ya1EZD/RStfuf7+1NHA1h3ypjjn1zKu9
+   Fw2YuPhFuBUKxVdA2mZFRSeK8A9AM4cAS07K+IUirGCj2n78mb/2Ym5L1
+   CpORi+LTssTHoYyWQs3AoItP7LyIfLcC5KjloYgvbWmjy43ojusqoAJ18
+   +xBb9BVDEgjVYKuVA+yV+fQEWWokTPixaO8c+RyD9y1KtvTEwsUhpzmsW
+   gePdoSz8bPlkWFnTMrbXmZQyfucn9fQtu/bydy24nFq7E96yZ1Rw9DqM7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="343469398"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="343469398"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 07:37:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="718940604"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="718940604"
+Received: from posikoya-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.49.196])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 07:37:41 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 27C2A10A08E; Tue,  4 Jul 2023 17:37:40 +0300 (+03)
+Date:   Tue, 4 Jul 2023 17:37:40 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv14 5/9] efi: Add unaccepted memory support
+Message-ID: <20230704143740.bgimyg3bqsgxbm47@box.shutemov.name>
+References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
+ <20230606142637.5171-6-kirill.shutemov@linux.intel.com>
+ <20230703132518.3ukqyolnes47i5r3@techsingularity.net>
 MIME-Version: 1.0
-In-Reply-To: <ZJ2+37Q7v4odMmEd@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703132518.3ukqyolnes47i5r3@techsingularity.net>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/30 1:26, Catalin Marinas wrote:
-> On Thu, Jun 29, 2023 at 05:31:36PM +0100, Catalin Marinas wrote:
->> On Thu, May 18, 2023 at 02:59:34PM +0800, Yicong Yang wrote:
->>> From: Barry Song <v-songbaohua@oppo.com>
->>>
->>> on x86, batched and deferred tlb shootdown has lead to 90%
->>> performance increase on tlb shootdown. on arm64, HW can do
->>> tlb shootdown without software IPI. But sync tlbi is still
->>> quite expensive.
->> [...]
->>>  .../features/vm/TLB/arch-support.txt          |  2 +-
->>>  arch/arm64/Kconfig                            |  1 +
->>>  arch/arm64/include/asm/tlbbatch.h             | 12 ++++
->>>  arch/arm64/include/asm/tlbflush.h             | 33 ++++++++-
->>>  arch/arm64/mm/flush.c                         | 69 +++++++++++++++++++
->>>  arch/x86/include/asm/tlbflush.h               |  5 +-
->>>  include/linux/mm_types_task.h                 |  4 +-
->>>  mm/rmap.c                                     | 12 ++--
->>
->> First of all, this patch needs to be split in some preparatory patches
->> introducing/renaming functions with no functional change for x86. Once
->> done, you can add the arm64-only changes.
->>
-
-got it. will try to split this patch as suggested.
-
->> Now, on the implementation, I had some comments on v7 but we didn't get
->> to a conclusion and the thread eventually died:
->>
->> https://lore.kernel.org/linux-mm/Y7cToj5mWd1ZbMyQ@arm.com/
->>
->> I know I said a command line argument is better than Kconfig or some
->> random number of CPUs heuristics but it would be even better if we don't
->> bother with any, just make this always on.
-
-ok, will make this always on.
-
->> Barry had some comments
->> around mprotect() being racy and that's why we have
->> flush_tlb_batched_pending() but I don't think it's needed (or, for
->> arm64, it can be a DSB since this patch issues the TLBIs but without the
->> DVM Sync). So we need to clarify this (see Barry's last email on the
->> above thread) and before attempting new versions of this patchset. With
->> flush_tlb_batched_pending() removed (or DSB), I have a suspicion such
->> implementation would be faster on any SoC irrespective of the number of
->> CPUs.
+On Mon, Jul 03, 2023 at 02:25:18PM +0100, Mel Gorman wrote:
+> On Tue, Jun 06, 2023 at 05:26:33PM +0300, Kirill A. Shutemov wrote:
+> > efi_config_parse_tables() reserves memory that holds unaccepted memory
+> > configuration table so it won't be reused by page allocator.
+> > 
+> > Core-mm requires few helpers to support unaccepted memory:
+> > 
+> >  - accept_memory() checks the range of addresses against the bitmap and
+> >    accept memory if needed.
+> > 
+> >  - range_contains_unaccepted_memory() checks if anything within the
+> >    range requires acceptance.
+> > 
+> > Architectural code has to provide efi_get_unaccepted_table() that
+> > returns pointer to the unaccepted memory configuration table.
+> > 
+> > arch_accept_memory() handles arch-specific part of memory acceptance.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+> > Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
 > 
-> I think I got the need for flush_tlb_batched_pending(). If
-> try_to_unmap() marks the pte !present and we have a pending TLBI,
-> change_pte_range() will skip the TLB maintenance altogether since it did
-> not change the pte. So we could be left with stale TLB entries after
-> mprotect() before TTU does the batch flushing.
+> By and large, this looks ok from the page allocator perspective as the
+> checks for unaccepted are mostly after watermark checks. However, if you
+> look in the initial fast path, you'll see this
 > 
-> We can have an arch-specific flush_tlb_batched_pending() that can be a
-> DSB only on arm64 and a full mm flush on x86.
+>         /* 
+>          * Forbid the first pass from falling back to types that fragment
+>          * memory until all local zones are considered.
+>          */     
+>         alloc_flags |= alloc_flags_nofragment(ac.preferred_zoneref->zone, gfp);
 > 
+> While checking watermarks should be fine from a functional perspective and
+> the fast paths are unaffected, there is a risk of premature fragmentation
+> until all memory has been accepted. Meeting watermarks does not necessarily
+> mean that fragmentation is avoided as pageblocks can get mixed while still
+> meeting watermarks.
 
-We need to do a flush/dsb in flush_tlb_batched_pending() only in a race
-condition so we first check whether there's a pended batched flush and
-if so do the tlb flush. The pending checking is common and the differences
-among the archs is how to flush the TLB here within the flush_tlb_batched_pending(),
-on arm64 it should only be a dsb.
+Could you elaborate on this scenario?
 
-As we only needs to maintain the TLBs already pended in batched flush,
-does it make sense to only handle those TLBs in flush_tlb_batched_pending()?
-Then we can use the arch_tlbbatch_flush() rather than flush_tlb_mm() in
-flush_tlb_batched_pending() and no arch specific function needed.
+Current code checks the watermark, if it is met, try rmqueue().
 
-Thanks.
+If rmqueue() fails anyway, try to accept more pages and retry the zone if
+it is successful.
 
+I'm not sure how we can get to the 'if (no_fallback) {' case with any
+unaccepted memory in the allowed zones.
+
+I see that there's preferred_zoneref and spread_dirty_pages cases, but
+unaccepted memory seems change nothing for them.
+
+Hm?
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
