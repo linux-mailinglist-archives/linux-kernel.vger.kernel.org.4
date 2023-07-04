@@ -2,200 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CBB746843
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0171A746845
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjGDEHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 00:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S230167AbjGDEIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 00:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjGDEHT (ORCPT
+        with ESMTP id S229546AbjGDEIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 00:07:19 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2046.outbound.protection.outlook.com [40.107.255.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9689CC7;
-        Mon,  3 Jul 2023 21:07:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=krAROz2I6/PlXa9Kho0S4qllBiJ29OZ13lOgzlou27nKaSFcViys2NZbIWgPqwxZnvEIXu5cN44sYIwRdLAhZGrbFuo+6+65aKr2NY8FiQ3ycao4wimXjddW6BValBqETBwZLRwnMjT0/KYSsdSj2ok7CWO7YOmQzc6t1xTiJUdnLq4qz+f6TN8Jr6y4HaCSNqxPkLuAhk1Q24RhFU3Msfh9n4gzGRWrW9RPQWFRY4mdY0cbDkPcT6Frxh9usrhAPO2ynz2aRQ5coWOCj5vX5PplkRUQfQtrOMVIfB6JpL70c569zLkGwak7h7UUtE0jh50SIO5cBMNNJcsCOWqACg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z3kzsNdUuFULS5MjBJUwq/3njUEPkRkeFodN+EVAdv8=;
- b=gujry8A52MjPhmZ63kyJ335QsiiYqBBcdMNFtijj5fK7vaUzMswshxxsfQQ/hW20zgXuHNuSGqYx3CZUYMlioJQ02ankJVLq93JIussRm1Lpkt5ifWnFjJ3mM/YCatg/+5xlkS2c0bpdFFVC55B8K+TAg1aEwYCeSdiydYfoFs4XbfSmJErcXUd2/M7SrxbsShumsemAZ2FEFkQJb2CZ9lxYmySXo/z1bHUYVnoGhWaQzV8MOl7ZzI2ACNQyvXVfkz0cot5z+/nj4wRCdKOxeZwNIcaCC3QVdaNPK+M0O6xwtmz/NhVPIVJ5KZd+sAckz4N7oEWrQLwYengXdL6e2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z3kzsNdUuFULS5MjBJUwq/3njUEPkRkeFodN+EVAdv8=;
- b=kf3Dh3MuRJ8RVoee6oGY8CmvwyOld287B1kYq1Ufre3mkb4cI1b5TLVWPRozpJWjKFwyLVOOiZm6NmRMZ1Eij/umqCZ6PHEHUc27SL4KKgFJgfOawHdjfQEfeVQoTwhg8cnvW1h6/lRs+PZm6UnCdBdaqiMQ1sFahUTHrHXbNAQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from TYZPR02MB5595.apcprd02.prod.outlook.com (2603:1096:400:1c5::12)
- by KL1PR02MB5234.apcprd02.prod.outlook.com (2603:1096:820:7d::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 04:07:14 +0000
-Received: from TYZPR02MB5595.apcprd02.prod.outlook.com
- ([fe80::2e7:47a3:69c4:9e8e]) by TYZPR02MB5595.apcprd02.prod.outlook.com
- ([fe80::2e7:47a3:69c4:9e8e%3]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 04:07:13 +0000
-From:   lipeifeng@oppo.com
-To:     lipeifeng@oppo.com, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhangshiming@oppo.com, guojian@oppo.com
-Subject: [PATCH] block: mq-deadline: rename sort_list to sort_rb
-Date:   Tue,  4 Jul 2023 12:06:26 +0800
-Message-Id: <20230704040626.24899-1-lipeifeng@oppo.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0233.apcprd06.prod.outlook.com
- (2603:1096:4:ac::17) To TY0PR02MB5600.apcprd02.prod.outlook.com
- (2603:1096:400:1b8::9)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR02MB5595:EE_|KL1PR02MB5234:EE_
-X-MS-Office365-Filtering-Correlation-Id: fa1cc1ce-5c0e-4f05-634d-08db7c442567
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UeDu2Az4gcoRQsAlN7DSvNtFOktHCQdMjgKKesR75V0ZbVlNIfIQT4hUvSb/M8XZZc5rm6FRC8+Hf8D5i9qgzVyhAzuzFITCAaB5bF4cJBvLZ/DX7q0F3CThWi9MWOIiDKZ4HBVqxuMaZzgt6CHBWps27BUxksOnDTYRvrpn+4G6VVGkAi/mQcVGJQEHJY860zPnbVt/cMbonfX3rJd7EIdalsktC4O6Af9mseevKcIsarlqvPC0c/ERCBGnXBZC8Nc5Y5y8vzoOn3NaZ85bOfFb9kxz22hpWTWZREwc24SSTmQm12I6Ozr2p5WpquRTXv1X0XeGqK5piVYD/yaYsexbpxjr+eVp1urZQr4MjERIm56qFJDN7XdZeRI+vIt0PYtt7m1Q4MnyaSI79geLdECQDG/BU08xrbCxNkGDROJEC3DBq+fl5pIUE0JiYy26CVj76+7BoL6qxQXiaYm1XyFQLV15mrl5rpCBW3P68Xh+2XaRMVX77xGRsx2N+tvOJyAJp2GeMEQlbP90mCk9mbJDoqGXqsEJ9rCz1cnoZ3tkxg6k/iyHAg34Rg1sntXLGioodH7gqv8vhJH/5NFOMAfpU4j16U9m8KyA5Tckrpc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5595.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199021)(2906002)(9686003)(478600001)(26005)(41300700001)(6666004)(86362001)(6486002)(52116002)(8676002)(8936002)(5660300002)(36756003)(316002)(66476007)(38350700002)(66556008)(66946007)(4326008)(38100700002)(1076003)(6512007)(6506007)(2616005)(186003)(83380400001)(107886003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nfkPDIVu/akiRPM5g9dO4eiSRde15hKzTLmvNLXK2HUlMHxbhQCkg3n8sJrv?=
- =?us-ascii?Q?rtO73yWuHyLt5GcCDBUfvGZhdpxjW3WXnu1JyOnHs/9K/4rc6N9oUDYG9MzD?=
- =?us-ascii?Q?OYXuvLZXyYzgOM+WlgUK532WPnhG7YVW6nfpRndW+6FZ02y+su14UAlkVM2Q?=
- =?us-ascii?Q?Hu8Do6xdtWMr5ISQZg6QhGLMk+YEBNaG+Ug0g+n52HqD/3G++UzKZsF2mvEW?=
- =?us-ascii?Q?2aVlSv6Kgn/mBg7BtI5f382P7kdHWjpErVtpmfQg+9Pp7dXsUftpB91M5DS+?=
- =?us-ascii?Q?YHowm7wip6w+cR3ZNvTy3h0WeftyyYPWCBITMXNeEURhTbBGqiGnnzoUjFvm?=
- =?us-ascii?Q?q+LrTDRd/9OMn60Jrrb8lAVbGuZuZyOGugxcLQcRTPXWfovZxZE1pHO0ViBr?=
- =?us-ascii?Q?zHF5QtB4KVzQZAWcRFJqoJqSvnxt2pOIOqfHJFf2vEJ2GsQWJK8Zi2zLR5q/?=
- =?us-ascii?Q?zGt/gVH0eN8xJzPp63hGJBVYvRfWQ4ca/wsAU8c9wfUcCHBBX3/ftx6etwZ8?=
- =?us-ascii?Q?yeoV7YoJvKHFGt93kkqmeJR0rt61Bljpq4ZP6DgtI6FOcXOx03Nh8acx+kSv?=
- =?us-ascii?Q?q0METlTiaS5CCYt6ah5wqRKbctjjzC8DyrU5vVxB62sccAEGaxUp/+EMWd1H?=
- =?us-ascii?Q?p/RyMMBu3afWCKs2kEVPOTgAkiCFXfgQCHCzVx9+rrurlRxsp3rL1pmJ71OE?=
- =?us-ascii?Q?dbWbTxmDYRodyKp01FH1VbhBpCqRwSzhbfMKbwCJ0Ujd0lYAT9POKCAYnmgO?=
- =?us-ascii?Q?Wd5D8rrUdgn8yD6xBIgqvccLOKExlewMOYkbKToreM5saz0UAvIet52vWrfy?=
- =?us-ascii?Q?l5fICZlUsFg2yPRtUgs3l6tE9Nh8O+RqNTwIxLFlc9BzH/6DDTZXn89WdzBE?=
- =?us-ascii?Q?BoEhuhYPj/mwvKa8AOKHeVUitaUl3phvg4rM31VGrWL1ESZz+edisGYPZkmz?=
- =?us-ascii?Q?W/Ka+6R5po7j0+Prk2+2YdPNiB/GPX3gg0LSA9mmZuC3idWJHeZpPo0cm+lq?=
- =?us-ascii?Q?VH9O27gTP/+3VAq8RvloM3+Uk/CfQOoRm6LKThgdx/Tj6CI+fTpYPJsdX3DF?=
- =?us-ascii?Q?t5pE5445izOIGscgM7/rbJFLgyY1s4jxTH5h6oCNoYKIYjkkjtqc0L7cQapc?=
- =?us-ascii?Q?FpZM3fSRDI3vFOly+sQhy9mYI7Abu53lzpfmYBcjUiJpufN+UDvHrEvNopXI?=
- =?us-ascii?Q?6k9yaLoCoqoaF6bj5wFrNpFsJoNuUPTH39gSn1Efv46iO7Nsvo1qMExuK08T?=
- =?us-ascii?Q?+MmnHT8NRkTAId9/QhuPoKRCuwPq05Eq5AqpgfQZzeM72XTlr05e3UriXvK7?=
- =?us-ascii?Q?rWee2oHjc9RneEt4TnvxqgM+X6ZZcOPZRKPFHGPp6BI9b7Nc45uw82f7rCtg?=
- =?us-ascii?Q?zs7zXUXlPhLRYd7h7+uegomZ0aPA6SAz9+O1+rL1+aNBcg1nvsuY1DYcIEO9?=
- =?us-ascii?Q?6zbYleQ4awIbH8SO9xDEYYDUYcJLM8GDp8lTPKzJJuaVpjFrEz8W6HUHXu5u?=
- =?us-ascii?Q?v1jmBL0h1Twa40xbWc14/5xfHNzdRZOYwvgwfXZEnTndF5y+0lLrJz7rJEAf?=
- =?us-ascii?Q?5ZANK+VP8HVvnXCQLOwOz/zKe0yfZKs1a/FkUN49?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa1cc1ce-5c0e-4f05-634d-08db7c442567
-X-MS-Exchange-CrossTenant-AuthSource: TY0PR02MB5600.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 04:07:13.7981
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sBnqxpOy4WVXh7JzMdVNFBn3JZwYvZdUptg0a2Do6uBlY/I+BIZmxcBYOcW3Ax9S865ss45MPw6TCVcXOaF2jQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR02MB5234
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 00:08:44 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Jul 2023 21:08:43 PDT
+Received: from mx2.ucr.edu (mx2.ucr.edu [138.23.62.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57011CA
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 21:08:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
+  t=1688443723; x=1719979723;
+  h=mime-version:subject:from:in-reply-to:date:cc:
+   content-transfer-encoding:message-id:references:to;
+  bh=6UVlEepawDuM/VPstT4lRiIdcxjkv6S//tPe9iRIdiM=;
+  b=kxD8bZWg7l8gkkbw31ePGFcJn829WGzLJccGvultGH003d8XbX83CFKe
+   WRDnVGXBw9Xhg4P4XbGvY43YFYnMCrtMIDDgS5nzULINx6/lgv2YtMEFN
+   TGurnk1f6ek2GdxG+w87EldpfGqYAoNub4kGX3Jc0FSQSUfOfZxCDw5vv
+   rzj8bmNqs/Gc3zvCim7RcC5owBJT2qrtRIje0si2yOJ4cKaZdjeBRWMK8
+   pG07h7wK1hrB35CTYivXkfPEN63OdvBJd2DtEFCV1/Ds+IpowR7k8UrX2
+   UkfWKx6d8PA/i1rSwG80LIK1AeUAgWcAU+d8G4++Ib/uRnIMlfFzI6Qej
+   w==;
+Received: from mail-pf1-f197.google.com ([209.85.210.197])
+  by smtp2.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jul 2023 21:07:40 -0700
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-668728bb904so6888644b3a.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 21:07:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ucr.edu; s=rmail; t=1688443660; x=1691035660;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rYbBPoCQXFspNQ4UhnwzJ1YkFLkhsAyZYQXFXB1aF9s=;
+        b=Dn4kbeLJ3vxRZvD2Pq8zvlqa8BwoeZrvFfK3lH2tOp60YiFlw8+BxkdcM1KU/cpoQM
+         leFCM6XX0iLMyYEUmBTsD7GqA5TgcrlFAURLgCR7dlAkimlNHjAKxO6SV0OXPoBGXWqu
+         AMc8U1VC1csj7uFxUqGr4GrWWmyril7WDmDXo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688443660; x=1691035660;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rYbBPoCQXFspNQ4UhnwzJ1YkFLkhsAyZYQXFXB1aF9s=;
+        b=fs7J99PHCWgAvI2E8EG2EBfG0+RHpVNetqbF75ELlwejSZpMPPyWQxdibvl8A0NrBi
+         kNJFp/5Uatc0gF4IyFjgZfffQ/vZuWE38GF3IQQa7ZrG5iAhLYsqhI39N+HMRSrzK3rS
+         RgBEY6Pjxa7RmDmIZHiTdeuFYG/FdwPkQHkqYYpONuKV470udUP2Ef/l7yKy5v+ofSB+
+         C9E7Nbs7I6dF+JdwYvPzSlpLQrazl3G4Pgz/VDdhrdwAbQoMnMpq3p6yzzzda5EqaHqZ
+         sc/ShsriFaEfZtPIqBWHYIwaoffBm0C7Dd0WLT8y3d29aDAngT2n5Fy6ePj34Ma9Ww+U
+         uS/w==
+X-Gm-Message-State: ABy/qLbCgOXi8QlEgoq+uFzL0ss8SlbSmfyCFAvcbEGk1cYWMaPr+S0y
+        YUbHGk63f22ejhAvOOvITZU+zQI3tw4m5qqA366htf3wpyjposUuHxPLeexjt4u5QOnMKWIzxPr
+        wt/B47Q+IdJlS/XfIgw+7tVj24g==
+X-Received: by 2002:a05:6a00:15c9:b0:674:8fe0:126f with SMTP id o9-20020a056a0015c900b006748fe0126fmr17355220pfu.27.1688443660220;
+        Mon, 03 Jul 2023 21:07:40 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFu1EI5tuQFJaO3ExIznCFEi5jbLwstf56rh2tmnRfS/qBauGTXaI+xw/iaiHP6ytS9nSbEHw==
+X-Received: by 2002:a05:6a00:15c9:b0:674:8fe0:126f with SMTP id o9-20020a056a0015c900b006748fe0126fmr17355207pfu.27.1688443659871;
+        Mon, 03 Jul 2023 21:07:39 -0700 (PDT)
+Received: from smtpclient.apple ([2601:600:9080:8720:d48c:dec1:96d1:7ea5])
+        by smtp.gmail.com with ESMTPSA id x24-20020aa784d8000000b0065438394fa4sm7457264pfn.90.2023.07.03.21.07.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jul 2023 21:07:39 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
+Subject: Re: How to reproduce the BUG general protection fault in
+ hci_uart_tty_ioctl?
+From:   Weiteng Chen <wchen130@ucr.edu>
+In-Reply-To: <20230704030131.GY5866@linux-l9pv.suse>
+Date:   Mon, 3 Jul 2023 21:07:38 -0700
+Cc:     Yu Hao <yhao016@ucr.edu>, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <191B9131-6E47-49B6-8089-108E2B12B9DC@ucr.edu>
+References: <20230628150140.GU21539@linux-l9pv.suse>
+ <CA+UBctDPEvHdkHMwD340=n02rh+jNRJNNQ5LBZNA+Wm4Keh2ow@mail.gmail.com>
+ <20230704030131.GY5866@linux-l9pv.suse>
+To:     joeyli <jlee@suse.com>
+X-Mailer: Apple Mail (2.3693.20.0.1.32)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lipeifeng <lipeifeng@oppo.com>
+Hi Joey,
 
-Mq-deadline would store request in list:fifo_list and
-rb_tree:sort_list, and sort_list should be renamed to
-sort_rb which is beneficial for understanding.
+Sorry for my late response.
 
-Signed-off-by: lipeifeng <lipeifeng@oppo.com>
----
- block/mq-deadline.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+=
+https://elixir.bootlin.com/linux/v6.3-rc7/source/drivers/bluetooth/hci_ldi=
+sc.c#L764
 
-diff --git a/block/mq-deadline.c b/block/mq-deadline.c
-index 6aa5daf7ae32..b3757b7a6780 100644
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -68,11 +68,11 @@ struct io_stats_per_prio {
- 
- /*
-  * Deadline scheduler data per I/O priority (enum dd_prio). Requests are
-- * present on both sort_list[] and fifo_list[].
-+ * present on both sort_rb[] and fifo_list[].
-  */
- struct dd_per_prio {
- 	struct list_head dispatch;
--	struct rb_root sort_list[DD_DIR_COUNT];
-+	struct rb_root sort_rb[DD_DIR_COUNT];
- 	struct list_head fifo_list[DD_DIR_COUNT];
- 	/* Position of the most recently dispatched request. */
- 	sector_t latest_pos[DD_DIR_COUNT];
-@@ -116,7 +116,7 @@ static const enum dd_prio ioprio_class_to_prio[] = {
- static inline struct rb_root *
- deadline_rb_root(struct dd_per_prio *per_prio, struct request *rq)
- {
--	return &per_prio->sort_list[rq_data_dir(rq)];
-+	return &per_prio->sort_rb[rq_data_dir(rq)];
- }
- 
- /*
-@@ -163,7 +163,7 @@ deadline_latter_request(struct request *rq)
- static inline struct request *deadline_from_pos(struct dd_per_prio *per_prio,
- 				enum dd_data_dir data_dir, sector_t pos)
- {
--	struct rb_node *node = per_prio->sort_list[data_dir].rb_node;
-+	struct rb_node *node = per_prio->sort_rb[data_dir].rb_node;
- 	struct request *rq, *res = NULL;
- 
- 	if (!node)
-@@ -477,7 +477,7 @@ static struct request *__dd_dispatch_request(struct deadline_data *dd,
- 	 */
- 
- 	if (!list_empty(&per_prio->fifo_list[DD_READ])) {
--		BUG_ON(RB_EMPTY_ROOT(&per_prio->sort_list[DD_READ]));
-+		BUG_ON(RB_EMPTY_ROOT(&per_prio->sort_rb[DD_READ]));
- 
- 		if (deadline_fifo_request(dd, per_prio, DD_WRITE) &&
- 		    (dd->starved++ >= dd->writes_starved))
-@@ -494,7 +494,7 @@ static struct request *__dd_dispatch_request(struct deadline_data *dd,
- 
- 	if (!list_empty(&per_prio->fifo_list[DD_WRITE])) {
- dispatch_writes:
--		BUG_ON(RB_EMPTY_ROOT(&per_prio->sort_list[DD_WRITE]));
-+		BUG_ON(RB_EMPTY_ROOT(&per_prio->sort_rb[DD_WRITE]));
- 
- 		dd->starved = 0;
- 
-@@ -711,8 +711,8 @@ static int dd_init_sched(struct request_queue *q, struct elevator_type *e)
- 		INIT_LIST_HEAD(&per_prio->dispatch);
- 		INIT_LIST_HEAD(&per_prio->fifo_list[DD_READ]);
- 		INIT_LIST_HEAD(&per_prio->fifo_list[DD_WRITE]);
--		per_prio->sort_list[DD_READ] = RB_ROOT;
--		per_prio->sort_list[DD_WRITE] = RB_ROOT;
-+		per_prio->sort_rb[DD_READ] = RB_ROOT;
-+		per_prio->sort_rb[DD_WRITE] = RB_ROOT;
- 	}
- 	dd->fifo_expire[DD_READ] = read_expire;
- 	dd->fifo_expire[DD_WRITE] = write_expire;
-@@ -752,7 +752,7 @@ static int dd_request_merge(struct request_queue *q, struct request **rq,
- 	if (!dd->front_merges)
- 		return ELEVATOR_NO_MERGE;
- 
--	__rq = elv_rb_find(&per_prio->sort_list[bio_data_dir(bio)], sector);
-+	__rq = elv_rb_find(&per_prio->sort_rb[bio_data_dir(bio)], sector);
- 	if (__rq) {
- 		BUG_ON(sector != blk_rq_pos(__rq));
- 
--- 
-2.34.1
+switch (cmd) {
+        case HCIUARTSETPROTO:
+                if (!test_and_set_bit(HCI_UART_PROTO_SET, &hu->flags)) {
+                        printk(=E2=80=9Ctest_and_set_bit=E2=80=A6=E2=80=9D=
+) // insert a prink to make the race easy to trigger
+                        err =3D hci_uart_set_proto(hu, arg);
+                        if (err)
+                                clear_bit(HCI_UART_PROTO_SET, =
+&hu->flags);
+                } else
+                        err =3D -EBUSY;
+                break;
+
+        case HCIUARTGETPROTO:
+                if (test_bit(HCI_UART_PROTO_SET, &hu->flags))
+                        err =3D hu->proto->id;  =E2=86=90- null pointer =
+deference
+                else
+                        err =3D -EUNATCH;
+                break;
+
+This is a race condition between HCIUARTSETPROTO and HCIUARTGETPROTO. =
+HCI_UART_PROTO_SET is set before hu->proto is set and thus it may =
+dereference a null pointer.
+
+To easily trigger this bug, I inserted a prink in the source code so =
+that the C producer can easily trigger the bug. Please let me know if =
+you have any questions.
+
+Best,
+Weiteng Chen
+
+> On Jul 3, 2023, at 8:01 PM, joeyli <jlee@suse.com> wrote:
+>=20
+> Hi,
+>=20
+> On Wed, Jun 28, 2023 at 06:57:47PM -0700, Yu Hao wrote:
+>> Hi Weiteng,
+>>=20
+>> Could you give more info about the bug, e.g., kernel configuration,
+>> qemu arguments.
+>>=20
+>=20
+> Base on kernel code, looks that the HCIUARTSETPROTO and =
+HCIUARTGETPROTO
+> blocks in hci_uart_tty_ioctl() should use hci_uart->proto_lock.=20
+>=20
+> I have run the C reproducer a couple of days in qemu, but it did not
+> reproduce issue until now.
+>=20
+> Does anyone know how to reproduce this issue easily?
+>=20
+> Thanks
+> Joey Lee
+>>=20
+>> On Wed, Jun 28, 2023 at 8:02=E2=80=AFAM joeyli <jlee@suse.com> wrote:
+>>>=20
+>>> Hi Yu Hao,
+>>>=20
+>>> I am looking at your "BUG: general protection fault in =
+hci_uart_tty_ioctl":
+>>>=20
+>>> =
+https://lore.kernel.org/all/CA+UBctC3p49aTgzbVgkSZ2+TQcqq4fPDO7yZitFT5uBPD=
+eCO2g@mail.gmail.com/
+>>>=20
+>>> I am trying the C reproducer in your URL, but it is not success yet:
+>>> https://gist.github.com/ZHYfeng/a3e3ff2bdfea5ed5de5475f0b54d55cb
+>>>=20
+>>> I am using v6.2 mainline kernel to run the C reproducer.
+>>>=20
+>>> Could you please provide suggestions for how to reproduce this =
+issue?
+>>> And what is your qemu environment for reproducing issue?
+>>>=20
+>>> Thanks a lot!
+>>> Joey Lee
 
