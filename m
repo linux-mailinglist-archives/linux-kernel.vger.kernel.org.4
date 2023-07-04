@@ -2,77 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1F07475C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ECE7475CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjGDP6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        id S231249AbjGDQAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGDP6F (ORCPT
+        with ESMTP id S229615AbjGDQAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:58:05 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD7710C8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:58:04 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b89cb535afso9730115ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 08:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1688486283; x=1691078283;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Ob5s66nJUuWrzVmIgcpj6gX1pVOIG43sjp0smeuqRk=;
-        b=yTV0wkqS1/NR8efXnnWnTnPtMe05KXibp8pqQ7qrGhZHkRhc5dFDtTt1lCQQEQyuUW
-         I0U/A19V8OfYLMIIBS4YaW0/2gFPbGU0BJVz0OvlUm9rVRLOoIjQp7b8Q43bJwYYZRBc
-         4hlWlUDaF9uwG4nhXY1tcNXBM3ej6HAmBHkzUF0GfdyCZZksWEWNn5RK+53t6VS285dn
-         xr6/wwYpfmDmkhzKyF/+rSnYOIhQ03zjUB+xLHxqihh+28KlRcg7flHvem2BLVKidv4X
-         Rjif9fxwkS/VpS/NqXpaxy7SEOw/EIk2EWGItbyf6GCiUbw1wM+LDRgUTrJcMYOpEWkU
-         HcXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688486283; x=1691078283;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0Ob5s66nJUuWrzVmIgcpj6gX1pVOIG43sjp0smeuqRk=;
-        b=cvslM1d8R+FUBJ1aqKVMMgQHfFEsFFvBmCTV4kvvnuWg7POc7kjTcDFiT3GRfOLavK
-         VNJoCEflMYDW8SWxfa0NQbgGDYwyN982yn3XtS9M3LigFjfELFiR+0Qn+oRd3gIm3bJs
-         EWbOZ+GgIaGe01F+fnXoKQ9znUFbbU/vPUlQVkDkthZEQGyCm+pgaqMnSUJWarCYxNEL
-         eGX/89tVB/LPSOHNVkwYVbHUP1Qu4CuuOybFCkKlDklstkGiVj5YCD4oWZgDRyE1mXvZ
-         hkUcVqntmi7kFamTYoeI0qjixElWPQSmRwO0EaciKOmIz3OB+cD1Uzb8FmVPKdSLf0AT
-         zhkA==
-X-Gm-Message-State: ABy/qLY0Pk8vz8sR0+wrqgHZQvR42ry7VrnnaTYFpMBB0Udn8W0iRULa
-        yUzDs24wVxbNBVpkslWn3s1syA==
-X-Google-Smtp-Source: APBJJlETTmVVFs8YtNneUBEorttJnAIPN63N7o/Y7mFVilt6D8loeh6FMTP8QxF/HYxSqOZo7StQ2Q==
-X-Received: by 2002:a17:902:9696:b0:1b8:971c:b7b8 with SMTP id n22-20020a170902969600b001b8971cb7b8mr4827989plp.47.1688486283606;
-        Tue, 04 Jul 2023 08:58:03 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id h6-20020a170902eec600b001ab2b4105ddsm9344591plb.60.2023.07.04.08.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 08:58:03 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 08:58:00 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, sergey.senozhatsky@gmail.com,
-        pmladek@suse.com, tj@kernel.or,
-        Dave Jones <davej@codemonkey.org.uk>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] netconsole: Append kernel version to message
-Message-ID: <20230704085800.38f05b56@hermes.local>
-In-Reply-To: <ZKQ3o6byAaJfxHK+@gmail.com>
-References: <20230703154155.3460313-1-leitao@debian.org>
-        <20230703113410.6352411d@hermes.local>
-        <ZKQ3o6byAaJfxHK+@gmail.com>
+        Tue, 4 Jul 2023 12:00:17 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DD010C8;
+        Tue,  4 Jul 2023 09:00:15 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id A6301120058;
+        Tue,  4 Jul 2023 19:00:12 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru A6301120058
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688486412;
+        bh=NlclJLW6iFoo+Xt0fn1OTOrZ+APYHvkqRmXZG6Ftu9Y=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=hocKwe86v6D+fUlu2y8/SnQBi1U4037eBgiEWJ8w8/OouoAKzJqKwHHQuNNnznu2a
+         55T90PRqLj7rwX95FOHexZFMZyYylS6mE8XLZv1J4+NHe6eSX0SYnQ6/YWsoO2Wtpx
+         o1wMVCwInWDhs2K3i4Ff3VsvA3tmt0RWjff2DFyARcMYrlAKLNCWQbsCT9x8rKYb7K
+         819aETP1Oo/vKmfW8LKy1ISw9+DH1GXt2tlEV8zTXF+Zc0NTAWIe9buyO+PdF1miYI
+         FdFJXJquAr1NA+PQz4jdaaODUWqkZf+hwqKniK8uMX38WreAwlhh/TDjsdhvzvX8gn
+         4Jov2Q/utejsA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 19:00:12 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 4 Jul
+ 2023 19:00:01 +0300
+Date:   Tue, 4 Jul 2023 19:00:12 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>
+CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <jbrunet@baylibre.com>, <jirislaby@kernel.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <kelvin.zhang@amlogic.com>, <xianwei.zhao@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 3/5] tty: serial: meson: apply ttyS devname instead of
+ ttyAML for new SoCs
+Message-ID: <20230704160012.yoaqgk4plpyd6v26@CAB-WSD-L081021>
+References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+ <20230704135936.14697-4-ddrokosov@sberdevices.ru>
+ <eb0dab5b-2fc7-728c-c6e0-43d2db422ed5@linaro.org>
+ <20230704145933.y3o3fhjj6q7df44d@CAB-WSD-L081021>
+ <9fde3632-2419-d36b-9c54-337155bb482e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <9fde3632-2419-d36b-9c54-337155bb482e@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178428 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 100.64.160.123:7.1.2;127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;libera.irclog.whitequark.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/04 13:59:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/04 13:58:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,41 +93,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 08:15:47 -0700
-Breno Leitao <leitao@debian.org> wrote:
-
-> Hello Stephen,
+On Tue, Jul 04, 2023 at 05:29:57PM +0200, neil.armstrong@linaro.org wrote:
+> Hi.
 > 
-> On Mon, Jul 03, 2023 at 11:34:10AM -0700, Stephen Hemminger wrote:
-> > On Mon,  3 Jul 2023 08:41:54 -0700
-> > leitao@debian.org wrote:
-> >   
-> > > +config NETCONSOLE_UNAME
-> > > +	bool "Add the kernel version to netconsole lines"
-> > > +	depends on NETCONSOLE
-> > > +	default n
-> > > +	help
-> > > +	  This option causes extended netcons messages to be prepended with
-> > > +	  kernel uname version. This can be useful for monitoring a large
-> > > +	  deployment of servers, so, you can easily map outputs to kernel
-> > > +	  versions.  
+> On 04/07/2023 16:59, Dmitry Rokosov wrote:
+> > Hello Neil,
 > > 
-> > This should be runtime configured like other netconsole options.
-> > Not enabled at compile time.  
+> > Thank you for quick feedback!
+> > 
+> > On Tue, Jul 04, 2023 at 04:42:39PM +0200, neil.armstrong@linaro.org wrote:
+> > > On 04/07/2023 15:59, Dmitry Rokosov wrote:
+> > > > It is worth noting that the devname ttyS is a widely recognized tty name
+> > > > and is commonly used by many uart device drivers. Given the established
+> > > > usage and compatibility concerns, it may not be feasible to change the
+> > > > devname for older SoCs. However, for new definitions, it is acceptable
+> > > > and even recommended to use a new devname to help ensure clarity and
+> > > > avoid any potential conflicts on lower or upper software levels. In
+> > > > addition, modify the meson_uart_dt match data for g12a, a1, and s4 to
+> > > > their appropriate values to ensure proper devname values and
+> > > > functionality.
+> > > 
+> > > I'm not confident about modifying a global struct from a probe,
+> > > I think you should add a separate meson_uart_driver/meson_serial_console couple
+> > > with ttyS instead of ttyAML, refer to the right uart_driver in meson_uart_data
+> > > and in probe() register it and pass it to uart_add_one_port().
+> > 
+> > Could you provide some insight into why you believe this solution may
+> > not be acceptable? It appears that the meson_uart_driver and
+> > meson_serial_console are not labeled with __init, which means it stay in
+> > memory forever.
+> Yes but nothing forbids registering a g12a and an a1 uart on the same system,
+> but you modify the meson_uart_driver/meson_serial_console struct.
+> This could cause some issues.
 > 
-> Do you mean I should add a new option to netconsole line? This is the
-> current line format today:
+> In practice this will never happen, but since we don't control the DT passed
+> to the system we must make sure we take in account any scenario.
 > 
-> 	[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
-> 
-> If that is the case, I suppose I want to add something at the beginning
-> of format, that specify that uname should be sent. What about something
-> as?
-> 
-> 	[u][+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
-> 
-> Thanks!
 
-Keep it as simple as possible.
-What ever program is reading udp socket knows where it is coming from.
-The uname is really not needed.
+Yep, agree, this will cause an issue.
+
+> > 
+> > To clarify, are you suggesting a solution that involves segregating the
+> > meson_uart_driver and meson_serial_console objects for each scenario and
+> > subsequently declaring pointers to both objects within the
+> > meson_uart_data? I want to make sure that I have accurately grasped the
+> > essence of your proposed approach.
+> 
+> Not both, only the appropriate one.
+> 
+> So either we make sure ttyAML and ttyS at exclusive at runtime, in this case we can
+> modify the global meson_uart_driver/meson_serial_console, or you add
+> a second set of uart_driver/console structs to handle this improbable case.
+
+Got it, thank you for explanation! I will prepare the v2.
+
+> > 
+> > > > 
+> > > > For more information please refer to IRC discussion at [1].
+> > > > 
+> > > > Links:
+> > > >       [1]: https://libera.irclog.whitequark.org/linux-amlogic/2023-07-03
+> > > > 
+> > > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > > > ---
+> > > >    drivers/tty/serial/meson_uart.c | 33 +++++++++++++++++++++++++++++++--
+> > > >    1 file changed, 31 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> > > > index 87c0eb5f2dba..361f9326b527 100644
+> > > > --- a/drivers/tty/serial/meson_uart.c
+> > > > +++ b/drivers/tty/serial/meson_uart.c
+> > > > @@ -82,6 +82,7 @@ static struct uart_driver meson_uart_driver;
+> > > >    static struct uart_port *meson_ports[AML_UART_PORT_NUM];
+> > > >    struct meson_uart_data {
+> > > > +	const char *dev_name;
+> > > >    	bool has_xtal_div2;
+> > > >    };
+> > > > @@ -683,6 +684,7 @@ static int meson_uart_probe_clocks(struct platform_device *pdev,
+> > > >    static int meson_uart_probe(struct platform_device *pdev)
+> > > >    {
+> > > > +	const struct meson_uart_data *priv_data;
+> > > >    	struct resource *res_mem;
+> > > >    	struct uart_port *port;
+> > > >    	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
+> > > > @@ -729,6 +731,18 @@ static int meson_uart_probe(struct platform_device *pdev)
+> > > >    	if (ret)
+> > > >    		return ret;
+> > > > +	priv_data = device_get_match_data(&pdev->dev);
+> > > > +
+> > > > +	if (priv_data) {
+> > > > +		struct console *cons = meson_uart_driver.cons;
+> > > > +
+> > > > +		meson_uart_driver.dev_name = priv_data->dev_name;
+> > > > +
+> > > > +		if (cons)
+> > > > +			strscpy(cons->name, priv_data->dev_name,
+> > > > +				sizeof(cons->name));
+> > > > +	}
+> > > > +
+> > > >    	if (!meson_uart_driver.state) {
+> > > >    		ret = uart_register_driver(&meson_uart_driver);
+> > > >    		if (ret)
+> > > > @@ -748,7 +762,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+> > > >    	port->x_char = 0;
+> > > >    	port->ops = &meson_uart_ops;
+> > > >    	port->fifosize = fifosize;
+> > > > -	port->private_data = (void *)device_get_match_data(&pdev->dev);
+> > > > +	port->private_data = (void *)priv_data;
+> > > >    	meson_ports[pdev->id] = port;
+> > > >    	platform_set_drvdata(pdev, port);
+> > > > @@ -780,6 +794,17 @@ static int meson_uart_remove(struct platform_device *pdev)
+> > > >    }
+> > > >    static struct meson_uart_data meson_g12a_uart_data = {
+> > > > +	.dev_name = "ttyAML",
+> > > > +	.has_xtal_div2 = true,
+> > > > +};
+> > > > +
+> > > > +static struct meson_uart_data meson_a1_uart_data = {
+> > > > +	.dev_name = "ttyS",
+> > > > +	.has_xtal_div2 = false,
+> > > > +};
+> > > > +
+> > > > +static struct meson_uart_data meson_s4_uart_data = {
+> > > > +	.dev_name = "ttyS",
+> > > >    	.has_xtal_div2 = true,
+> > > >    };
+> > > > @@ -794,7 +819,11 @@ static const struct of_device_id meson_uart_dt_match[] = {
+> > > >    	},
+> > > >    	{
+> > > >    		.compatible = "amlogic,meson-s4-uart",
+> > > > -		.data = (void *)&meson_g12a_uart_data,
+> > > > +		.data = (void *)&meson_s4_uart_data,
+> > > > +	},
+> > > > +	{
+> > > > +		.compatible = "amlogic,meson-a1-uart",
+> > > > +		.data = (void *)&meson_a1_uart_data,
+> > > >    	},
+> > > >    	{ /* sentinel */ },
+> > > >    };
+> > > 
+> > 
+> 
+
+-- 
+Thank you,
+Dmitry
