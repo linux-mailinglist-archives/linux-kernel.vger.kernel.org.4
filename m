@@ -2,214 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C6A7477F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA957477D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjGDRhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S231535AbjGDRdG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 13:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGDRhb (ORCPT
+        with ESMTP id S229645AbjGDRdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:37:31 -0400
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021BDE6D;
-        Tue,  4 Jul 2023 10:37:29 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 6876C100069;
-        Tue,  4 Jul 2023 20:37:28 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 6876C100069
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688492248;
-        bh=0t+mR7aNfe+ylAtBNvEGCWYPJQx/8WNK8PjxOwrmOTA=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type:From;
-        b=EIFPPYpZJB8y2bcROy4Q+4zWKdi0+Ib+gA3lCPMFpqJu4mUljOrGG/pCWOfyJ632J
-         O3cmZMq3vc9YD1iv4z0BHcGK+wWEMaEnkcYQP6lKik2gzxY0m8SciVZFqqU/NbXoqa
-         6q5o35SdgFVj93wzzxtac1lZW61l+jg1XfKXdGMf0a9CaqOPpGPDT1zwgM3QirNDu+
-         4d3NtPQnBnfnP6CD8hxpbloZCPJfj+yIuAkV5nGL1iSSkfwbAQwKhhwn1LVriTRVxT
-         TXK/RSVwFppOizc7LrvjRDzwple+astxMeoW9ArzwFmWyfyaCUnRWRx8pC7C2D3DQO
-         wgcn1eNK6d9pQ==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Tue,  4 Jul 2023 20:37:28 +0300 (MSK)
-Received: from [192.168.0.12] (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Tue, 4 Jul 2023 20:37:16 +0300
-Message-ID: <59246d83-7c4b-8b34-3173-71bdb698c2aa@sberdevices.ru>
-Date:   Tue, 4 Jul 2023 20:32:13 +0300
+        Tue, 4 Jul 2023 13:33:00 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4709CDA;
+        Tue,  4 Jul 2023 10:32:56 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-98e2865e2f2so160154466b.0;
+        Tue, 04 Jul 2023 10:32:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688491975; x=1691083975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lW4LJlumzva12+IQ3BLk1PuvUZFdkFvStFm2FTeBlDo=;
+        b=JoNfASlzzObF5scHE8HLjRklUuAs94F3cVBKJXgbRWZmOveZ+2S6gErN/vmdIvNA14
+         6U1SkDy56Hafr/dBYyyzsXcSXr5nVuJx5sa6E0SxLJUoKlX9k2NlPfl2MCUJWV/I86uS
+         p7YdDIQQUNftSr3jozH6ouk/W2oEoycNz9IpkoZotDBJss+l1RXWkXuzP4TW3f3Oe6/G
+         K8pPIIc+B5lsqOMhJ98Mg+tGawu4WNUUPEqoGj1v8ggAU99Wn+PFkcOu61ZBoqh6QJkJ
+         Iz5u4MlA8SEsVpbgFrzSmoYWi7fVbSTTiZ1zg1LjgjD+l7SzJbfXPf3aTTw9BEUwQHoj
+         oarA==
+X-Gm-Message-State: ABy/qLbesWnHZ0Re+53njriMlJU3B4WfGFkMzoM1XLMr3WaU2AD7tKGE
+        SxrkEMjNJ5wcSN4hjXyrMp27qgm8x2jZHVyFRS8=
+X-Google-Smtp-Source: APBJJlFJ3yLzRjSaZ5TGIc7GshSZ92NCejwA2m9LUyC4vBOSDqHjrz/cvK5NFXGX9h1VI6PkKTZDyyC8vkBxV1WGVHM=
+X-Received: by 2002:a17:906:d112:b0:992:387:44d1 with SMTP id
+ b18-20020a170906d11200b00992038744d1mr7765098ejz.7.1688491974696; Tue, 04 Jul
+ 2023 10:32:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/2] mtd: rawnand: meson: waiting w/o wired ready/busy
- pin
-Content-Language: en-US
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230608044728.1328506-1-AVKrasnov@sberdevices.ru>
- <20230608044728.1328506-3-AVKrasnov@sberdevices.ru>
- <20230704144357.286281dc@xps-13>
- <47994f36-27d4-e5e4-73a9-6d4225671eec@sberdevices.ru>
- <20230704151220.67857861@xps-13>
- <73849b9c-0700-4946-84a2-428f98f0a6d6@sberdevices.ru>
-In-Reply-To: <73849b9c-0700-4946-84a2-428f98f0a6d6@sberdevices.ru>
+References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com> <20230703121411.69606-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230703121411.69606-3-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Jul 2023 19:32:43 +0200
+Message-ID: <CAJZ5v0iZzvdkxe3NjHbiZzDjea=CoK-pGw3hjSoa9u8f87TLtg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] ACPI: platform: Ignore SMB0001 only when it has resources
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Walle <michael@walle.cc>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178432 [Jul 04 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 3, 2023 at 2:14 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> After switching i2c-scmi driver to be a platform one, it stopped
+> being enumerated on number of Kontron platforms, because it's
+> listed in the forbidden_id_list.
+>
+> To resolve the situation, add a flag to driver data to allow devices
+> with no resources in _CRS to be enumerated via platform bus.
+>
+> Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
+> Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
+> Link: https://lore.kernel.org/r/20230621151652.79579-1-andriy.shevchenko@linux.intel.com
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> ---
+>  drivers/acpi/acpi_platform.c | 30 +++++++++++++++++++++++++++---
+>  1 file changed, 27 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
+> index fe00a5783f53..c2ce558bd032 100644
+> --- a/drivers/acpi/acpi_platform.c
+> +++ b/drivers/acpi/acpi_platform.c
+> @@ -9,6 +9,7 @@
+>   */
+>
+>  #include <linux/acpi.h>
+> +#include <linux/bits.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/kernel.h>
+> @@ -19,13 +20,16 @@
+>
+>  #include "internal.h"
+>
+> +/* Exclude devices that have no _CRS resources provided */
+> +#define ACPI_ALLOW_WO_RESOURCES                BIT(0)
+> +
+>  static const struct acpi_device_id forbidden_id_list[] = {
+>         {"ACPI0009", 0},        /* IOxAPIC */
+>         {"ACPI000A", 0},        /* IOAPIC */
+>         {"PNP0000",  0},        /* PIC */
+>         {"PNP0100",  0},        /* Timer */
+>         {"PNP0200",  0},        /* AT DMA Controller */
+> -       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
+> +       {"SMB0001",  ACPI_ALLOW_WO_RESOURCES},  /* ACPI SMBUS virtual device */
+>         { }
+>  };
+>
+> @@ -83,6 +87,15 @@ static void acpi_platform_fill_resource(struct acpi_device *adev,
+>                 dest->parent = pci_find_resource(to_pci_dev(parent), dest);
+>  }
+>
+> +static unsigned int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
+> +{
+> +       bool *has_resources = data;
+> +
+> +       *has_resources = true;
+> +
+> +       return AE_CTRL_TERMINATE;
+> +}
+> +
+>  /**
+>   * acpi_create_platform_device - Create platform device for ACPI device node
+>   * @adev: ACPI device node to create a platform device for.
+> @@ -100,17 +113,28 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+>         struct acpi_device *parent = acpi_dev_parent(adev);
+>         struct platform_device *pdev = NULL;
+>         struct platform_device_info pdevinfo;
+> +       const struct acpi_device_id *match;
+>         struct resource_entry *rentry;
+>         struct list_head resource_list;
+>         struct resource *resources = NULL;
+> +       bool has_resources;
+>         int count;
+>
+>         /* If the ACPI node already has a physical device attached, skip it. */
+>         if (adev->physical_node_count)
+>                 return NULL;
+>
+> -       if (!acpi_match_device_ids(adev, forbidden_id_list))
+> -               return ERR_PTR(-EINVAL);
+> +       match = acpi_match_acpi_device(forbidden_id_list, adev);
+> +       if (match) {
+> +               if (match->driver_data & ACPI_ALLOW_WO_RESOURCES) {
+> +                       acpi_walk_resources(adev->handle, METHOD_NAME__CRS,
+> +                                           acpi_platform_resource_count, &has_resources);
+> +                       if (has_resources)
+> +                               return ERR_PTR(-EINVAL);
+> +               } else {
+> +                       return ERR_PTR(-EINVAL);
+> +               }
+> +       }
+>
+>         INIT_LIST_HEAD(&resource_list);
+>         count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
+> --
 
+Applied as 6.5-rc material along with the rest of the series (except
+for the last patch that has been superseded), but I moved the
+has_resources definition to the block where it is used and added a
+'false' initial value to it. as the code might not work as expected
+without initializing it.
 
-On 04.07.2023 16:07, Arseniy Krasnov wrote:
-> 
-> 
-> On 04.07.2023 16:12, Miquel Raynal wrote:
->> Hi Arseniy,
->>
->> avkrasnov@sberdevices.ru wrote on Tue, 4 Jul 2023 15:46:18 +0300:
->>
->>> On 04.07.2023 15:43, Miquel Raynal wrote:
->>>> Hi Arseniy,
->>>>
->>>> AVKrasnov@sberdevices.ru wrote on Thu, 8 Jun 2023 07:47:28 +0300:
->>>>   
->>>>> If there is no wired ready/busy pin, classic way to wait for command
->>>>> completion is to use function 'nand_soft_waitrdy()'. Meson NAND has
->>>>> special command which allows to wait for NAND_STATUS_READY bit without
->>>>> reading status in a software loop (as 'nand_soft_waitrdy()' does). To
->>>>> use it send this command along with NAND_CMD_STATUS, then wait for an
->>>>> interrupt, and after interrupt send NAND_CMD_READ0. So this feature
->>>>> allows to use interrupt driven waiting without wired ready/busy pin.
->>>>>
->>>>> Suggested-by: Liang Yang <liang.yang@amlogic.com>
->>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>>> ---
->>>>>  drivers/mtd/nand/raw/meson_nand.c | 77 +++++++++++++++++++++++++++++--
->>>>>  1 file changed, 73 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>>>> index 074e14225c06..9f05e113b4ea 100644
->>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>>> @@ -38,6 +38,7 @@
->>>>>  #define NFC_CMD_SCRAMBLER_DISABLE	0
->>>>>  #define NFC_CMD_SHORTMODE_DISABLE	0
->>>>>  #define NFC_CMD_RB_INT		BIT(14)
->>>>> +#define NFC_CMD_RB_INT_NO_PIN	((0xb << 10) | BIT(18) | BIT(16))
->>>>>  
->>>>>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
->>>>>  
->>>>> @@ -179,6 +180,7 @@ struct meson_nfc {
->>>>>  	u32 info_bytes;
->>>>>  
->>>>>  	unsigned long assigned_cs;
->>>>> +	bool no_rb_pin;
->>>>>  };
->>>>>  
->>>>>  enum {
->>>>> @@ -392,7 +394,42 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
->>>>>  	}
->>>>>  }
->>>>>  
->>>>> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
->>>>> +static int meson_nfc_wait_no_rb_pin(struct meson_nfc *nfc, int timeout_ms,
->>>>> +				    bool need_cmd_read0)
->>>>> +{
->>>>> +	u32 cmd, cfg;
->>>>> +
->>>>> +	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
->>>>> +	meson_nfc_drain_cmd(nfc);
->>>>> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
->>>>> +
->>>>> +	cfg = readl(nfc->reg_base + NFC_REG_CFG);
->>>>> +	cfg |= NFC_RB_IRQ_EN;
->>>>> +	writel(cfg, nfc->reg_base + NFC_REG_CFG);
->>>>> +
->>>>> +	reinit_completion(&nfc->completion);
->>>>> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
->>>>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>> +
->>>>> +	/* use the max erase time as the maximum clock for waiting R/B */
->>>>> +	cmd = NFC_CMD_RB | NFC_CMD_RB_INT_NO_PIN | nfc->timing.tbers_max;
->>>>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>> +
->>>>> +	if (!wait_for_completion_timeout(&nfc->completion,
->>>>> +					 msecs_to_jiffies(timeout_ms)))
->>>>> +		return -ETIMEDOUT;
->>>>> +
->>>>> +	if (need_cmd_read0) {
->>>>> +		cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
->>>>> +		writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>> +		meson_nfc_drain_cmd(nfc);
->>>>> +		meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
->>>>> +	}  
->>>>
->>>> I forgot about this, you should avoid open coding core helpers, can you
->>>> please send a followup patch to use nand_status_op() and
->>>> nand_exit_status_op() ?  
->>>
->>> A ok, so:
->>> 1) Sending NAND_CMD_STATUS goes to nand_status_op()
->>> 2) Sending NAND_CMD_READ0 goes to nand_exit_status_op()
->>>
->>> Ok, no problem! I'll prepare and send it on this week!
->>
->> Exactly. Sorry I had this in mind but I likely forgot to write it
->> down.
-> 
-> Ok, got it!
+Please double check the bleeding-edge branch of linux-pm.
 
-Hm, seems 'int nand_exit_status_op(struct nand_chip *chip)' is not exported,
-so I can't use it in the Meson module. While 'nand_status_op()' works ok.
-May I can export 'nand_exit_status_op()?'
-
-Thanks, Arseniy
-
-
-> 
-> Thanks, Arseniy
-> 
->>
->> Thanks,
->> Miquèl
+Thanks!
