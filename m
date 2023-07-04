@@ -2,123 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674807469EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 08:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7069A746A16
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 08:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjGDGrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 02:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S231514AbjGDGuJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 02:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjGDGrr (ORCPT
+        with ESMTP id S230256AbjGDGtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 02:47:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EDC1729;
-        Mon,  3 Jul 2023 23:47:16 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3645UYQl001127;
-        Tue, 4 Jul 2023 06:46:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LADTz5KFksR3v4SZaVmK8Y3HhLsFpalC3H2cpMc/Fk4=;
- b=ZHY3XRGSNC//Ypc9Xq7ouQf7jVXito/HFjaCgxlEA5ajCOzYYfQLJhsMHEM7MHfB4EWT
- YrxG5tZsj9UrDls5VGbkXXyLZuvx70IUshg/zdjOtTL19KS7BYW6PN76AYxACU1QTXtC
- 4EcBHuAohg5IxdLHThBwnnvkHE7p8FGY+XsUP3bpjrM1rmT72AcxZNhRKwwCBv75BD1h
- lkViYECW9bR/scHgYaPjP5ba5OyhekHBxhuvqXgMNwAPUEOFX657pIaD8BOdJEjuaPz3
- wkHk6+7IJJPKL+OU0PRLdc6iIj/ujWfBnRRMSxYahKiSRkPo9uLWOOFPbM24J8wBD9/I mA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rm0061fus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 06:46:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3646kZAP024247
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Jul 2023 06:46:35 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Mon, 3 Jul 2023
- 23:45:59 -0700
-Message-ID: <23832e02-880a-4f7d-2580-7889ede61171@quicinc.com>
-Date:   Tue, 4 Jul 2023 12:15:56 +0530
+        Tue, 4 Jul 2023 02:49:31 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C2CE6B;
+        Mon,  3 Jul 2023 23:49:22 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id B548424E217;
+        Tue,  4 Jul 2023 14:49:15 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Jul
+ 2023 14:49:15 +0800
+Received: from localhost.localdomain (113.72.144.31) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 4 Jul
+ 2023 14:49:14 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        "William Qiu" <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [RESEND PATCH v6 0/7] Add PLL clocks driver and syscon for StarFive JH7110 SoC
+Date:   Tue, 4 Jul 2023 14:46:03 +0800
+Message-ID: <20230704064610.292603-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 01/10] dt-bindings: regulator: Add PMX75 compatibles
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <sboyd@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-References: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688395346-3126-2-git-send-email-quic_rohiagar@quicinc.com>
- <9412f498-64ad-5f08-7184-b7ff4403afdd@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <9412f498-64ad-5f08-7184-b7ff4403afdd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VbQ7Pl4cb-OxL8FQSIprJiYorry3reeG
-X-Proofpoint-GUID: VbQ7Pl4cb-OxL8FQSIprJiYorry3reeG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_03,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=934 adultscore=0 spamscore=0 impostorscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307040056
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.144.31]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[Resending because it has a error about examples in syscon bingdings
+and has to be fixed.]
 
-On 7/4/2023 11:51 AM, Krzysztof Kozlowski wrote:
-> On 03/07/2023 16:42, Rohit Agarwal wrote:
->> Add PMX75 compatibles for PMIC found in SDX75 platform.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->> index b949850..cc72144 100644
->> --- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->> +++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->> @@ -53,6 +53,7 @@ description: |
->>         For PMR735A, smps1 - smps3, ldo1 - ldo7
->>         For PMX55, smps1 - smps7, ldo1 - ldo16
->>         For PMX65, smps1 - smps8, ldo1 - ldo21
->> +      For PMX75, smps1 - smps10, ldo1 - ldo21
->>   
->>   properties:
->>     compatible:
->> @@ -84,6 +85,7 @@ properties:
->>         - qcom,pmr735a-rpmh-regulators
->>         - qcom,pmx55-rpmh-regulators
->>         - qcom,pmx65-rpmh-regulators
->> +      - qcom,pmx75-rpmh-regulators
-> You miss the update to the if:then: parts.
-Thanks for your time. Will add that part as well.
+This patch serises are to add PLL clocks driver and providers by writing
+and reading syscon registers for the StarFive JH7110 RISC-V SoC. And add 
+documentation and nodes to describe StarFive System Controller(syscon)
+Registers. This patch serises are based on Linux 6.4.
 
-Thanks,
-Rohit.
->
-> Best regards,
-> Krzysztof
->
+PLLs are high speed, low jitter frequency synthesizers in JH7110.
+Each PLL clock works in integer mode or fraction mode by some dividers,
+and the dividers are set in several syscon registers.
+The formula for calculating frequency is: 
+Fvco = Fref * (NI + NF) / M / Q1
+
+The first patch adds docunmentation to describe PLL clock bindings,
+and the second patch adds documentation to decribe syscon registers.
+The patch 3 modifies the SYSCRG dibindings and adds PLL clock inputs.
+The patch 4 adds driver to support PLL clocks for JH7110.
+The patch 5 modifies the system clock driver and can select the PLL clock
+source from PLL clocks driver. And the patch 6 adds the 
+stg/sys/aon syscon nodes for JH7110 SoC. The last patch modifies the 
+syscrg node in JH7110 dts file.
+
+Changes since v5: 
+- Rebased on Linux 6.4.
+- Patch 1 fixed some grammatical mistake.
+- Patch 2 added the selection about properties from different syscon
+  modules and madethe example completed.
+- Patch 3 dropped the 'optional' PLL clocks.
+
+v5: https://lore.kernel.org/all/20230613125852.211636-1-xingyu.wu@starfivetech.com/
+
+Changes since v4: 
+- Rebased on Linux 6.4-rc6.
+- Patch 2 dropped the example node about sys-syscon.
+- Patch 3 used PLL clocks as one of optional items in SYSCRG bindings.
+- Patch 4 used the patch instead about PLL clocks driver from Emil.
+- Patch 5 retained the fixed factor PLL clocks as the optional source
+  about PLL clocks in SYSCRG clock driver.
+- Patch 6 added the child node clock-controller as the complete
+  sys-syscon node and patch 7 dropped this part.
+
+v4: https://lore.kernel.org/all/20230512022036.97987-1-xingyu.wu@starfivetech.com/
+
+Changes since v3: 
+- Rebased on Linux 6.4-rc1.
+- Dropped the 'power-controller' property and used 'power-domain-cells'
+  instead in syscon binding.
+- Used the data by of_device_id to get the syscon registers'
+  configuration include offset, mask and shift.
+
+v3: https://lore.kernel.org/all/20230414024157.53203-1-xingyu.wu@starfivetech.com/
+
+Changes since v2: 
+- Rebased on latest JH7110 basic clock drivers.
+- Added the complete documentation to describe syscon register.
+- Added syscon node in JH7110 dts file.
+- Modified the clock rate selection to match the closest rate in
+  PLL driver when setting rate.
+
+v2: https://lore.kernel.org/all/20230316030514.137427-1-xingyu.wu@starfivetech.com/
+
+Changes since v1:
+- Changed PLL clock node to be child of syscon node in dts.
+- Modifed the definitions and names of function in PLL clock driver.
+- Added commit to update syscon and syscrg dt-bindings.
+
+v1: https://lore.kernel.org/all/20230221141147.303642-1-xingyu.wu@starfivetech.com/
+
+William Qiu (2):
+  dt-bindings: soc: starfive: Add StarFive syscon module
+  riscv: dts: starfive: jh7110: Add syscon nodes
+
+Xingyu Wu (5):
+  dt-bindings: clock: Add StarFive JH7110 PLL clock generator
+  dt-bindings: clock: jh7110-syscrg: Add PLL clock inputs
+  clk: starfive: Add StarFive JH7110 PLL clock driver
+  clk: starfive: jh7110-sys: Add PLL clocks source from DTS
+  riscv: dts: starfive: jh7110: Add PLL clocks source in SYSCRG node
+
+ .../bindings/clock/starfive,jh7110-pll.yaml   |  46 ++
+ .../clock/starfive,jh7110-syscrg.yaml         |  18 +-
+ .../soc/starfive/starfive,jh7110-syscon.yaml  |  93 ++++
+ MAINTAINERS                                   |  13 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  30 +-
+ drivers/clk/starfive/Kconfig                  |   9 +
+ drivers/clk/starfive/Makefile                 |   1 +
+ .../clk/starfive/clk-starfive-jh7110-pll.c    | 507 ++++++++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-sys.c    |  45 +-
+ .../dt-bindings/clock/starfive,jh7110-crg.h   |   6 +
+ 10 files changed, 746 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.c
+
+-- 
+2.25.1
+
