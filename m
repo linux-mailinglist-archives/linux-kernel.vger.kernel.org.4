@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E165746FD9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90689746FE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjGDL03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 07:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S230242AbjGDL2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 07:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjGDL02 (ORCPT
+        with ESMTP id S231287AbjGDL16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 07:26:28 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E73B9D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:26:26 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-635e6f8bf77so38775446d6.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 04:26:26 -0700 (PDT)
+        Tue, 4 Jul 2023 07:27:58 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C820BF2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:27:56 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51cb40f13f6so6911341a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 04:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688469985; x=1691061985;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+FYsDzkb/nFvICaGqtvvOOQLqyeNdtUzCrxo8fodtA=;
-        b=onMESjsb0wyIpnpROpY8x6affZkIZT50vMExkUJ2Ka9QyQaeIMLbGfyb0TaAbEKBAI
-         CSEGgXa7dj+OgaVRHgWYAvITi78/fSs8yk/dRQ9hwyOgiEcISTb0f7s/G55UJ1mp3Dzs
-         2JMVyAbd4WNo4VTqZ+Ck906ZXS3yAyihvqZcyEXLjzCZoFHVx1r+u3nd2l6qyg4+cMGC
-         EOtbqSxPr8rMddYeiKVseUsT9yoDbWLdWUSO/e/C0rhOhi4WyXKPGPMxHY7T7VKgayOr
-         MyyQzJkbnoqFeyfSPpDEECtQezzTtIaeXtZlq4vvPd0ldq7EWI8mhmD/znqB0EOio5aK
-         JmvQ==
+        d=futuring-girl-com.20221208.gappssmtp.com; s=20221208; t=1688470075; x=1691062075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tEHN8kv/zUiWgy4LCdHK93+q2EPHQUuAQ4UHUBp2+7o=;
+        b=TMKyon/RMqj8v3axB/OMKH7FLtiDFJ9dKfeRHovlqyfJE5uDkbvTNEg8qdIT3Blp/y
+         rcKityLrQhpDrrLqRsd30fWApdFILzX+KuXWhzvQID3oN84HJfrmkt7os7WgoLxii2Xm
+         eaUJ5HCnwOODeVMWFTxV6H62t3UwAAProjDxgam7RL7jccDLRU+1vwoNq80xLiSgkhL/
+         /K/IpxfgLWm8SaXpx1JmhV2EfmKj95/0Kxe3doqE7iE8F0JPiCJAzEtcSLStQE7uWxDM
+         a8KK7/R5rsfN+cIHTmEvRgU/OyVuMUcY9akXi8EOJw6oCTWPJwhc2GQecvqLA/sVPQ+/
+         ItiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688469985; x=1691061985;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d+FYsDzkb/nFvICaGqtvvOOQLqyeNdtUzCrxo8fodtA=;
-        b=WHE14+g49lePRra/aGnyeKLusDFhL85T4DkZ7a/u9bqb0l/RXRajd/9LFN846W61dd
-         mRXVdgoKN0YPPMnp5UL1kOYOJNUwQ7fFRMAeXL3xYRMeZ+zq5hSqmPl+98af8OogSOxR
-         TCf/Y0Racdl6iwyi0WF45Y2VDKFfspbEtwB+0qaAT0X7SIGhckKYPcltsptCiy9sE1o8
-         z/xFS4yalVZZjF9Ctp5cqc8VkhHASBCtwF9juUR+8b2CZJUTdM3uWxF1ys71fFi6E9qt
-         PK7yNVnkyOWywTi3ULQGHkr2XRENgo3VxBG4Dm2jkcUOz1YBJtYi3Vib5yhyaWH1Q0vX
-         Fdxg==
-X-Gm-Message-State: ABy/qLa0lpW1TeLigI+PxJg0SP9phfEpslLR2XNN410Sdw4q2qeoas5T
-        r4vLQiD2iz4QaX5qlSTxYCAyHFYiYiWE+ro/fAVgEw==
-X-Google-Smtp-Source: APBJJlEqqq6kSJ2f6yJBs8PWXcQYXP7KQN6zCsYdIzwvQZqULqbjhUdEg1tQ98Mu/DbxA3el4ExZMYgTa4V5QNSREgY=
-X-Received: by 2002:a05:6214:248e:b0:637:10b1:b2c6 with SMTP id
- gi14-20020a056214248e00b0063710b1b2c6mr3842990qvb.44.1688469985506; Tue, 04
- Jul 2023 04:26:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688470075; x=1691062075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tEHN8kv/zUiWgy4LCdHK93+q2EPHQUuAQ4UHUBp2+7o=;
+        b=CFQy3bIkdGOva/5sXYtZKeSj0m1ZNFW0OfRj4H/obAhTokIS2BOpPrEvKulopP3hJu
+         omu0Gdt5SLo7DTe7c4nN15vCO6zXCWncBdpZIwnx6uut4NGAU8saxbYXn2+LKAi/fTLA
+         giXnBf5C08FINvkBvv2KxzFUOLpxve1tIcVYoqXtZn8oc/LYwGyuOYH0y6BhMuvIE76C
+         RUZ8zpdLaxnUFTJoj8sS02N/VFRSmDmH6wJD/ac65/gDd9DOTiIebVvK6M1a4YsrC956
+         2B2hZ7QPUij+4smf8lHL2jFMUhJlZc29cSiwGAfHcZmx4Qp4tkZV5AuNkgTG9t9MW3Hu
+         i5vQ==
+X-Gm-Message-State: ABy/qLZlPpYHXbv5eok/hrGliX7+oCWBzPMgzL4bk7E3Fv5wsMghRkpD
+        l/lmUQbfwFHpLxZYb/EXaed/4Q6yDPW0/JGOTVul/Q==
+X-Google-Smtp-Source: APBJJlHGu4FFmWCFmb+vUNh9gFQsSwpK9KXjYVAgV/FEhd+i6bDEYar8yytbjOvvBmWmwyyYiDsyRN8kw99pc17rxrs=
+X-Received: by 2002:a05:6402:2ca:b0:51d:955f:9e17 with SMTP id
+ b10-20020a05640202ca00b0051d955f9e17mr9928219edx.16.1688470075098; Tue, 04
+ Jul 2023 04:27:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230703143820.152479-1-matteorizzo@google.com> <abd3f78b-5027-f859-27c8-296108ec8e92@google.com>
-In-Reply-To: <abd3f78b-5027-f859-27c8-296108ec8e92@google.com>
-From:   Matteo Rizzo <matteorizzo@google.com>
-Date:   Tue, 4 Jul 2023 13:26:12 +0200
-Message-ID: <CAHKB1wJE+1B_t-NDTPEfw+vGSAe=HFScXEu0riA1-3o8s1GEfA@mail.gmail.com>
-Subject: Re: [PATCH] mm/slub: refactor freelist to use custom type
-To:     David Rientjes <rientjes@google.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, jannh@google.com
+References: <20230704084611.071971014@linuxfoundation.org>
+In-Reply-To: <20230704084611.071971014@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Tue, 4 Jul 2023 20:27:44 +0900
+Message-ID: <CAKL4bV4H62QdBJ7G6=QpPRqaG+OkYJ=F9HReS+oyGzKpUCDTNw@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/13] 6.1.38-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 22:10, David Rientjes <rientjes@google.com> wrote:
-> Seems strange this would only appear for configs without CONFIG_SLUB_TINY.
+Hi Greg
+
+On Tue, Jul 4, 2023 at 5:49=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Since lots of files include linux/slab.h I think this may start to be used
-> in non-slab code.  Not sure why it needs to be added to the header file?
+> This is the start of the stable review cycle for the 6.1.38 release.
+> There are 13 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 06 Jul 2023 08:46:01 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.38-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 >
 
-Thanks for the comments! I think that makes sense. I will move the typedef
-to slub.c and move it out of the ifdef (since that also broke the build with
-SLUB_TINY).
+6.1.38-rc2 tested.
 
---
-Matteo
+Build successfully completed.
+Boot successfully completed.
+No dmesg regressions.
+Video output normal.
+Sound output normal.
+
+Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P(x86_64), arch linux)
+
+Thanks
+
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
