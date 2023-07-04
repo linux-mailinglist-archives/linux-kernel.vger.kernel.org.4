@@ -2,96 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EFA747A56
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 01:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FBA747A58
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 01:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjGDXYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 19:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S231491AbjGDXZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 19:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGDXYG (ORCPT
+        with ESMTP id S229512AbjGDXZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 19:24:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA7E10E2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 16:23:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688512999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4PCpsOElklGvTmmWH0OQRonwleLOQrzWZC/RGYQTYPQ=;
-        b=Vk17hLkYP+wOQPkcJOBZCYcxM/zpqLXnZtwEu/Ecx0hG/BqHefzFbo4JCQPZp0YVyJciBa
-        bq+qQOMUYoj/4VirRnbR7zCIK/XADcmsJl1/mn/bosmgrSQuDLD7leihWO80znhUa6b6Ov
-        pzRWYIR1riBHnAWEEFPvB1VYUcMbqLc=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-652-P1tMU-iMM7Kwj1OOnXFyJA-1; Tue, 04 Jul 2023 19:23:17 -0400
-X-MC-Unique: P1tMU-iMM7Kwj1OOnXFyJA-1
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-66a44bf4651so156402b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 16:23:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688512997; x=1691104997;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4PCpsOElklGvTmmWH0OQRonwleLOQrzWZC/RGYQTYPQ=;
-        b=hTog9wXhW9eCytsuNfdeDK0Z415I3VKWvbiPJhQKiIAdXdo22BnMbhb/uzb+jP3zYl
-         VyoWNSwd9lNc8H71uvkvfvq85SMxMkQND5tuUTF0a9Xu9Hm2o/tTIHinPJweZmG2lUQK
-         2V4jI/2gZ9DRZFgMLie4N83gQWl1593DEPQpWznIn6EDlFwfRoqXiWF/NNcYWkHXKqRn
-         eBFvNGqOpzQAfz15BlF01I6spGuN8uU7NE0tgTg+2weuuk8j9BqPbgEOLNqzZa3UWuHU
-         Yy6umXGdERwgLeCS6MR726+8vk0Lb4MWhV1LjkBnivZ+9lov9CemyvCwYQSEt+gkwghn
-         dRgw==
-X-Gm-Message-State: ABy/qLbn3dC4+dgM1dBdzqh0Mz4utsrKxGGD3AoHNJ9PbZwyzA20fTKv
-        uSn+lLLlRaLYwqUmiUGK7VTRGdKblqnJ9y91qAFcfKnMQZVQX7ivVvSmDBCp8b7HqOYQswtL9tb
-        HhMKOtaZUH6u/iuDcfgoyj8pr
-X-Received: by 2002:a05:6a00:1ca9:b0:682:5e8f:d8ba with SMTP id y41-20020a056a001ca900b006825e8fd8bamr724733pfw.11.1688512996827;
-        Tue, 04 Jul 2023 16:23:16 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlG0UBpOEK5SPsF31xr5f/9Wg1BBxO8IhEOWDLX7lSVKCKwsJxsntJWPkQLzTCSx4pQPuvCDfA==
-X-Received: by 2002:a05:6a00:1ca9:b0:682:5e8f:d8ba with SMTP id y41-20020a056a001ca900b006825e8fd8bamr724711pfw.11.1688512996441;
-        Tue, 04 Jul 2023 16:23:16 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id bn10-20020a056a00324a00b0065980654baasm16109591pfb.130.2023.07.04.16.23.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 16:23:15 -0700 (PDT)
-Message-ID: <b977abe4-71b9-daa1-da1b-b111f0afbe51@redhat.com>
-Date:   Wed, 5 Jul 2023 09:23:05 +1000
+        Tue, 4 Jul 2023 19:25:09 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF24110E2;
+        Tue,  4 Jul 2023 16:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=FHRTeexmv1Ud/xXw29PxjXSkBNZLd2io9cIF6fc/k1c=; b=K7j0wGDm0EZKlsvLg+BOfzNHcx
+        2LCYSmaTWfcakorPbX1G1B9OK87OmaZ4tHKStLSy3X/dP3LCJFW/sKN69dYfm3kI6EAlZANedx7ex
+        02MohdEiUMAlM9GvYK6K+HBwS6jPvv99YFs+PrPAMf5kQlKIA+ODyz2BYb9umejmZMDI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qGpO0-000ahY-GN; Wed, 05 Jul 2023 01:24:44 +0200
+Date:   Wed, 5 Jul 2023 01:24:44 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Luo Jie <quic_luoj@quicinc.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] net: phy: at803x: support qca8081 1G chip type
+Message-ID: <66a5f898-e3fd-460a-b604-bb11a000e4e9@lunn.ch>
+References: <20230704090016.7757-1-quic_luoj@quicinc.com>
+ <20230704090016.7757-2-quic_luoj@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RESEND PATCH v5 01/11] KVM: Rename kvm_arch_flush_remote_tlb()
- to kvm_arch_flush_remote_tlbs()
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20230621175002.2832640-1-rananta@google.com>
- <20230621175002.2832640-2-rananta@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230621175002.2832640-2-rananta@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704090016.7757-2-quic_luoj@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,99 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
-> From: David Matlack <dmatlack@google.com>
+On Tue, Jul 04, 2023 at 05:00:15PM +0800, Luo Jie wrote:
+> The qca8081 1G chip version does not support 2.5 capability, which
+> is distinguished from qca8081 2.5G chip according to the bit0 of
+> register mmd7.0x901d.
 > 
-> Rename kvm_arch_flush_remote_tlb() and the associated macro
-> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB to kvm_arch_flush_remote_tlbs() and
-> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS respectively.
+> The fast retrain and master slave seed configs are only needed when
+> the 2.5G capability is supported.
 > 
-> Making the name plural matches kvm_flush_remote_tlbs() and makes it more
-> clear that this function can affect more than one remote TLB.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->   arch/mips/include/asm/kvm_host.h | 4 ++--
->   arch/mips/kvm/mips.c             | 2 +-
->   arch/x86/include/asm/kvm_host.h  | 4 ++--
->   include/linux/kvm_host.h         | 4 ++--
->   virt/kvm/kvm_main.c              | 2 +-
->   5 files changed, 8 insertions(+), 8 deletions(-)
-> 
+> Switch to use genphy_c45_pma_read_abilities for .get_features API.
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+It is better to have lots of small patches, each doing one thing. If
+something regresses, a git bisect gives a much finer idea where the
+problem is. It is also easier to review small patches with good commit
+messages.
 
-> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-> index 957121a495f0b..1473cf923ee37 100644
-> --- a/arch/mips/include/asm/kvm_host.h
-> +++ b/arch/mips/include/asm/kvm_host.h
-> @@ -896,7 +896,7 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
->   static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
->   static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->   
-> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
-> -int kvm_arch_flush_remote_tlb(struct kvm *kvm);
-> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
-> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
->   
->   #endif /* __MIPS_KVM_HOST_H__ */
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index 884be4ef99dc1..6e34bbe244462 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -981,7 +981,7 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
->   
->   }
->   
-> -int kvm_arch_flush_remote_tlb(struct kvm *kvm)
-> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
->   {
->   	kvm_mips_callbacks->prepare_flush_shadow(kvm);
->   	return 1;
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index fb9d1f2d6136c..f6e3aa617d8b8 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1794,8 +1794,8 @@ static inline struct kvm *kvm_arch_alloc_vm(void)
->   #define __KVM_HAVE_ARCH_VM_FREE
->   void kvm_arch_free_vm(struct kvm *kvm);
->   
-> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
-> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
-> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
-> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
->   {
->   	if (kvm_x86_ops.flush_remote_tlbs &&
->   	    !static_call(kvm_x86_flush_remote_tlbs)(kvm))
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 0e571e973bc28..95c3e364f24b4 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1477,8 +1477,8 @@ static inline void kvm_arch_free_vm(struct kvm *kvm)
->   }
->   #endif
->   
-> -#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
-> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
-> +#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
-> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
->   {
->   	return -ENOTSUPP;
->   }
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index cb5c13eee1936..a475ff9ef156d 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -366,7 +366,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
->   	 * kvm_make_all_cpus_request() reads vcpu->mode. We reuse that
->   	 * barrier here.
->   	 */
-> -	if (!kvm_arch_flush_remote_tlb(kvm)
-> +	if (!kvm_arch_flush_remote_tlbs(kvm)
->   	    || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
->   		++kvm->stat.generic.remote_tlb_flush;
->   }
+So please break this patch up.
 
+> -	/* Configure lower ramdom seed to make phy linked as slave mode */
+> -	ret = qca808x_phy_ms_random_seed_set(phydev);
+> -	if (ret)
+> -		return ret;
+> +		/* Configure lower ramdom seed to make phy linked as slave mode */
+> +		ret = qca808x_phy_ms_random_seed_set(phydev);
+> +		if (ret)
+> +			return ret;
+
+Shouldn't this depend on how MDIO_MMD_AN, MDIO_AN_T1_ADV_L bit
+MDIO_AN_T1_ADV_M_MST is set? Maybe the user wants it to prefer master
+rather than slave?
+
+I know you are just trying to move code around, but it does seem like
+a good time to also improve the code.
+
+FYI: net-next is closed at the moment. Officially you should post as
+RFC, or wait until it opens again.
+
+  Andrew
