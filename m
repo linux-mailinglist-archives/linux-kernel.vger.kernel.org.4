@@ -2,122 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE3374665D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 02:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F04746665
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 02:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjGDAI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 20:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S230402AbjGDAMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 20:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjGDAI0 (ORCPT
+        with ESMTP id S229546AbjGDAMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 20:08:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FB818C;
-        Mon,  3 Jul 2023 17:08:25 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 206486606F8B;
-        Tue,  4 Jul 2023 01:08:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688429304;
-        bh=4JJwPVhJWceI5BnfKOE1UA/iozYb0TFlvK3DvXPQdv4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BXlvX5z8i01tDprqMzJ9pazJglUVgXhfbgVgJNqju0KuvNFVx7KmEl3iDRF16Oe0m
-         Zmal4jYRHUqiI8CS9QA571sxdn140uc6Ft6BWeHLGAmUahLz2yVd5cn0E+r3BXv1s6
-         PaQmy5SvbnfxtJPKV7fMW4bjyYXUfK6tzRuz/vLKaUwd+ouPkZPQ/DokIP2qbGYA6c
-         DVGIM/b6OBpr+kc/jFgIbGXX2ncqgTROAvBNHiat8YQ2Gty8kM/EHHc7Tocbcr5RHB
-         fmvQYfzmcQeZdLOjzpoYAGHevCxDsvcSP/wWISx5H7Rn8uhQe84JhCqDAcjxf7keSa
-         OKLtkuJtwtfrA==
-Received: by mercury (Postfix, from userid 1000)
-        id EE77A1061814; Tue,  4 Jul 2023 02:08:21 +0200 (CEST)
-Date:   Tue, 4 Jul 2023 02:08:21 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH RESEND] input: cpcap-pwrbutton: remove initial kernel-doc
- notation
-Message-ID: <20230704000821.z3tx4chw7x6pn6nq@mercury.elektranox.org>
-References: <20230703230005.14877-1-rdunlap@infradead.org>
+        Mon, 3 Jul 2023 20:12:00 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645FA18D;
+        Mon,  3 Jul 2023 17:11:59 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363G824F025335;
+        Tue, 4 Jul 2023 00:11:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=yiF5BxmwrGJSEeDkkkgb4a7C14Hu9K/zXtsiunjNAqs=;
+ b=Z8/kEA00HA0bDVeOrXnePFTUKDNdjDDRM80XCOF3Oxn4SeUjVMIurQheHv1ifUCvGyjJ
+ AQraEg0f8NqnbwmpYaW5yCalAA3OWWqydIqZ8ZVLqrB/bpdjLdJSy6N3pkuOS3M5HOlI
+ 1ur4oj5iudfM+z9fAY/lAVE4w0z/NzugjKjvOv4gjgYvz+IXiI35ZCmHFPgGupB2QQFv
+ oQHkeYu3aa7eeDbhfnWLexjzIcIk9d/WflgEuFnqpUjvRZe783Xg20C2S8/l3cWdIPPl
+ rHE04eYu8kvHC65YKlvMA92jpLxLzA+axoHHv0cu+dRlPW62VQJStWHMxnfp/W3+2bqY Xg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rjc6ckkrp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Jul 2023 00:11:39 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 363Mdv0r039539;
+        Tue, 4 Jul 2023 00:11:38 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rjak3p3y0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Jul 2023 00:11:38 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36402bLL002876;
+        Tue, 4 Jul 2023 00:11:37 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3rjak3p3xe-1;
+        Tue, 04 Jul 2023 00:11:37 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     davem@davemloft.net
+Cc:     david@fries.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, zbr@ioremap.net, brauner@kernel.org,
+        johannes@sipsolutions.net, ecree.xilinx@gmail.com, leon@kernel.org,
+        keescook@chromium.org, socketcan@hartkopp.net, petrm@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        anjali.k.kulkarni@oracle.com
+Subject: [PATCH v7 0/6] Process connector bug fixes & enhancements
+Date:   Mon,  3 Jul 2023 17:11:30 -0700
+Message-ID: <20230704001136.2301645-1-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kjpcjgpcgqhqdsir"
-Content-Disposition: inline
-In-Reply-To: <20230703230005.14877-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-03_17,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ spamscore=0 mlxscore=0 adultscore=0 phishscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307030219
+X-Proofpoint-GUID: p-Vy3N09JMMisnKJCNFjF37mMuagLBlh
+X-Proofpoint-ORIG-GUID: p-Vy3N09JMMisnKJCNFjF37mMuagLBlh
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Oracle DB is trying to solve a performance overhead problem it has been
+facing for the past 10 years and using this patch series, we can fix this
+issue.
 
---kjpcjgpcgqhqdsir
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oracle DB runs on a large scale with 100000s of short lived processes,
+starting up and exiting quickly. A process monitoring DB daemon which
+tracks and cleans up after processes that have died without a proper exit
+needs notifications only when a process died with a non-zero exit code
+(which should be rare).
 
-Hi,
+Due to the pmon architecture, which is distributed, each process is
+independent and has minimal interaction with pmon. Hence fd based
+solutions to track a process's spawning and exit cannot be used. Pmon
+needs to detect the abnormal death of a process so it can cleanup after.
+Currently it resorts to checking /proc every few seconds. Other methods
+we tried like using system call to reduce the above overhead were not
+accepted upstream.
 
-On Mon, Jul 03, 2023 at 04:00:05PM -0700, Randy Dunlap wrote:
-> Change the beginning "/**" in the file to "/*" since it is not a
-> kernel-doc comment. This prevents a kernel-doc warning:
->=20
-> drivers/input/misc/cpcap-pwrbutton.c:2: warning: This comment starts with=
- '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kerne=
-l-doc.rst
->  * CPCAP Power Button Input Driver
->=20
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: linux-input@vger.kernel.org
-> ---
+With this change, we add event based filtering to proc connector module
+so that DB can only listen to the events it is interested in. A new
+event type PROC_EVENT_NONZERO_EXIT is added, which is only sent by kernel
+to a listening application when any process exiting has a non-zero exit
+status.
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+This change will give Oracle DB substantial performance savings - it takes
+50ms to scan about 8K PIDs in /proc, about 500ms for 100K PIDs. DB does
+this check every 3 secs, so over an hour we save 10secs for 100K PIDs.
 
--- Sebastian
+With this, a client can register to listen for only exit or fork or a mix or
+all of the events. This greatly enhances performance - currently, we
+need to listen to all events, and there are 9 different types of events.
+For eg. handling 3 types of events - 8K-forks + 8K-exits + 8K-execs takes
+200ms, whereas handling 2 types - 8K-forks + 8K-exits takes about 150ms,
+and handling just one type - 8K exits takes about 70ms.
 
->  drivers/input/misc/cpcap-pwrbutton.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff -- a/drivers/input/misc/cpcap-pwrbutton.c b/drivers/input/misc/cpcap=
--pwrbutton.c
-> --- a/drivers/input/misc/cpcap-pwrbutton.c
-> +++ b/drivers/input/misc/cpcap-pwrbutton.c
-> @@ -1,4 +1,4 @@
-> -/**
-> +/*
->   * CPCAP Power Button Input Driver
->   *
->   * Copyright (C) 2017 Sebastian Reichel <sre@kernel.org>
+Measuring the time using pidfds for monitoring 8K process exits took 4
+times longer - 200ms, as compared to 70ms using only exit notifications
+of proc connector. Hence, we cannot use pidfd for our use case.
 
---kjpcjgpcgqhqdsir
-Content-Type: application/pgp-signature; name="signature.asc"
+This kind of a new event could also be useful to other applications like
+Google's lmkd daemon, which needs a killed process's exit notification.
 
------BEGIN PGP SIGNATURE-----
+This patch series is organized as follows -
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSjYvIACgkQ2O7X88g7
-+poRKg//ftyAjaih1EVZqXdpDbCI7iqT7gTIuIhCQ8ji2rdcmYT2mPW5n5qtEu2C
-4O8FkwsHTqpmzelbK1l3AlyUeHwPBjzUGRmZq8RiRGNudGvU1z41qzDRDKQhnftM
-3MyKLvWLiGUEQeGla9LDBrCgXz38Y6kUU+NJ3grJySzwCSNubNMGgdwSXXZqOqvQ
-RQKZp5hF8rjuCpsmKdoCVoWLlUfgh3oKfER1Zc8tH+YMFVvkoSs3AsgfTFtQf7I/
-krz5ARlUICpO0B2EnN86DMkNcRZYXkpIbMEMIVfC2eRFyeOpETg6UvILQLkgkFka
-6dZ8TGE1TuJARzl5xMYJgoZkmsuoeU6PH8vAknczFc5Xkkb/RewyATg9x2n5PW1V
-xN/ep247lzEA+ow75Gf7Izj8FlO8NXaU3S79gKx+k7yRA4D5ywQpmNfNAecelZLY
-pdxIsYvZOTexAbLd4h3vKLyVXrp+RSzj9scQaXWXekp1L211ATDebaR6Dsa9Hi3i
-/I5GYkPExvHTrDY1NQQ5quDLSl5MCu1J2byb2PRZU47LMapKYOiYKzuY6u3EMizR
-rkItnSR4EJYnPiu95qeo9UvAa34pmKlgXov7qJUEDQ0s/lsklD5w716cNG61s1JZ
-D0uGCzxeFlgkRvusWCbYd5ZP8XkGGoT97n8El101RtTFM10fqf4=
-=NANQ
------END PGP SIGNATURE-----
+Patch 1 : Needed for patch 3 to work.
+Patch 2 : Needed for patch 3 to work.
+Patch 3 : Fixes some bugs in proc connector, details in the patch.
+Patch 4 : Adds event based filtering for performance enhancements.
+Patch 5 : Allow non-root users access to proc connector events.
+Patch 6 : Selftest code for proc connector.
 
---kjpcjgpcgqhqdsir--
+v6->v7 changes:
+- Incorporated Liam Howlett's comments on v6
+- Incorporated Kalesh Anakkur Purayil's comments
+
+v5->v6 changes:
+- Incorporated Liam Howlett's comments
+- Removed FILTER define from proc_filter.c and added a "-f" run-time
+  option to run new filter code.
+- Made proc_filter.c a selftest in tools/testing/selftests/connector
+
+v4->v5 changes:
+- Change the cover letter
+- Fix a small issue in proc_filter.c
+
+v3->v4 changes:
+- Fix comments by Jakub Kicinski to incorporate root access changes
+  within bind call of connector
+
+v2->v3 changes:
+- Fix comments by Jakub Kicinski to separate netlink (patch 2) (after
+  layering) from connector fixes (patch 3).
+- Minor fixes suggested by Jakub.
+- Add new multicast group level permissions check at netlink layer.
+  Split this into netlink & connector layers (patches 6 & 7)
+
+v1->v2 changes:
+- Fix comments by Jakub Kicinski to keep layering within netlink and
+  update kdocs.
+- Move non-root users access patch last in series so remaining patches
+  can go in first.
+
+v->v1 changes:
+- Changed commit log in patch 4 as suggested by Christian Brauner
+- Changed patch 4 to make more fine grained access to non-root users
+- Fixed warning in cn_proc.c,
+  Reported-by: kernel test robot <lkp@intel.com>
+- Fixed some existing warnings in cn_proc.c
+
+Anjali Kulkarni (6):
+  netlink: Reverse the patch which removed filtering
+  netlink: Add new netlink_release function
+  connector/cn_proc: Add filtering to fix some bugs
+  connector/cn_proc: Performance improvements
+  connector/cn_proc: Allow non-root users access
+  connector/cn_proc: Selftest for proc connector
+
+ drivers/connector/cn_proc.c                   | 112 ++++++-
+ drivers/connector/connector.c                 |  40 ++-
+ drivers/w1/w1_netlink.c                       |   6 +-
+ include/linux/connector.h                     |   8 +-
+ include/linux/netlink.h                       |   6 +
+ include/uapi/linux/cn_proc.h                  |  62 +++-
+ net/netlink/af_netlink.c                      |  33 +-
+ net/netlink/af_netlink.h                      |   4 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/connector/Makefile    |   6 +
+ .../testing/selftests/connector/proc_filter.c | 310 ++++++++++++++++++
+ 11 files changed, 545 insertions(+), 43 deletions(-)
+ create mode 100644 tools/testing/selftests/connector/Makefile
+ create mode 100644 tools/testing/selftests/connector/proc_filter.c
+
+-- 
+2.41.0
+
