@@ -2,188 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F34A747209
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF9074720C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjGDNBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        id S230472AbjGDNDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGDNB2 (ORCPT
+        with ESMTP id S229610AbjGDNDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:01:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B247E70;
-        Tue,  4 Jul 2023 06:01:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB7CB6123B;
-        Tue,  4 Jul 2023 13:01:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742B9C433C7;
-        Tue,  4 Jul 2023 13:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688475686;
-        bh=yuVUTIiWJvRuqLsHSpscA4HcEHnofJddkhC4EZDiI/E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kJAozGZgU7zK0v0m22vDyI067CtOJEBiLpimcGseXRbgL5Ki+dxgp9Gfzas3azDSL
-         LeI7LOc/YBkMsV9L9+9X35uig0Sqhjq+0hxQL6gLp/hV38n9IJuw/XtnRI7Dm0mdXi
-         PgP+2pBv4BsU3XsMIPULEX0NkdldzhSHgBWBmLRn/YmS+wDQrzAHqjR8uhmweuyWyb
-         TvgzTeMMMI85MAu2tWOcj0ZdSbq/yOFu5/8s96hZUJfmjfQSE6sjeSa83rdCU9Jp8V
-         GMF1ONjSuhUYFydXk9fWxZvna/WMS33xOrnk1uVNTGyKzL5fe7+jF4Yw2nOy11/lii
-         y4esb91bLw2NA==
-Date:   Tue, 4 Jul 2023 15:01:21 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     Alexey Gladkov <legion@kernel.org>, bpf@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v1] fs: Add kfuncs to handle idmapped mounts
-Message-ID: <20230704-anrollen-beenden-9187c7b1b570@brauner>
-References: <c35fbb4cb0a3a9b4653f9a032698469d94ca6e9c.1688123230.git.legion@kernel.org>
- <babdf7a8-9663-6d71-821a-34da2aff80e2@huaweicloud.com>
+        Tue, 4 Jul 2023 09:03:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0B910C1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688475746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rDRjVUli4/Wo+gosprzbDZbukIPaouraxRxHctBqUJI=;
+        b=EoOXHKgFIIbRcffB+jAPqwp3nuIDaQvI7MzO0lGNSCL5CpnbEjmuzNjeLFd4trlwuJZB8b
+        8CR3PCjAGnWFRAgPUjv/fGju9yazhYzv9lvFFGbjw+qxaRnfToFQlKErPYN0PIBK1NJusE
+        NTX+9WHbZlBMGVMiso0a3nvwPn5+JcU=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-382-sK1vneRPMpqGEC3u3gs8vQ-1; Tue, 04 Jul 2023 09:02:25 -0400
+X-MC-Unique: sK1vneRPMpqGEC3u3gs8vQ-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7673887b2cfso153913585a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:02:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688475745; x=1691067745;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rDRjVUli4/Wo+gosprzbDZbukIPaouraxRxHctBqUJI=;
+        b=ktESMR79+TBamN9xPyQ5oVT5jIsLaX0E6wf5kCcB98NPCPUSwsJyd9oBrT0xUeXn2X
+         bE0HXPC1jMsMwGus4pDHn0/7XQHK1wE0inIUdFmLW5s3P9Qf58W/qTYJcgXPxR9n8U6h
+         uoLdK86DaxyCuyF2hclpz6gf7B8OzTnWyn+H32zW/4CzpA3v1dbdiv0wikPKt4POQFRi
+         vl2EJmIsakeShGJ/zS6v8RXAGK7QZylKEyio0oMITZooSpNT2lcUIidBssFs2LOwwKn7
+         FFTf0Hr7GRL9KYTRcj9BwRtHWQabj8+bO4G7eAKP4f7OCasxftevZAYG3zfP2jcFrBNu
+         0nQg==
+X-Gm-Message-State: ABy/qLb2CsYwfe9XWp5jgREJT5si/P+Rjbb8AuZNgQVl47jSKMAKNq3Z
+        ctoyditm6nWjF6vrEwQrk6pwjJLgUjukpxxpVG5EImnvlkTeGtcaE5YduGJKSm6qWmLzOVmFQjZ
+        Rol+VpK5Wa4003vPcshG7N0Pc
+X-Received: by 2002:a05:6214:1c44:b0:62f:e386:1e45 with SMTP id if4-20020a0562141c4400b0062fe3861e45mr14935033qvb.1.1688475745318;
+        Tue, 04 Jul 2023 06:02:25 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH1Ng7cnLpEMncNqQT8Wu70KWYSGYSrZZ+7l3UsJbbqOgTckJ0WeHx6v6IWOw9pN7kOy54sMw==
+X-Received: by 2002:a05:6214:1c44:b0:62f:e386:1e45 with SMTP id if4-20020a0562141c4400b0062fe3861e45mr14934983qvb.1.1688475744669;
+        Tue, 04 Jul 2023 06:02:24 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-247-156.dyn.eolo.it. [146.241.247.156])
+        by smtp.gmail.com with ESMTPSA id h1-20020a0cf401000000b0063007ccaf42sm3480598qvl.57.2023.07.04.06.02.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 06:02:24 -0700 (PDT)
+Message-ID: <8ad620b632d723bc2f61ec1efb81d16c465d58bb.camel@redhat.com>
+Subject: Re: [PATCH net-next] bnxt_en: use dev_consume_skb_any() in
+ bnxt_tx_int
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     menglong8.dong@gmail.com, michael.chan@broadcom.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Date:   Tue, 04 Jul 2023 15:02:21 +0200
+In-Reply-To: <20230704085236.9791-1-imagedong@tencent.com>
+References: <20230704085236.9791-1-imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <babdf7a8-9663-6d71-821a-34da2aff80e2@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 07:42:53PM +0800, Hou Tao wrote:
-> Hi,
-> 
-> On 6/30/2023 7:08 PM, Alexey Gladkov wrote:
-> > Since the introduction of idmapped mounts, file handling has become
-> > somewhat more complicated. If the inode has been found through an
-> > idmapped mount the idmap of the vfsmount must be used to get proper
-> > i_uid / i_gid. This is important, for example, to correctly take into
-> > account idmapped files when caching, LSM or for an audit.
-> 
-> Could you please add a bpf selftest for these newly added kfuncs ?
-> >
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > ---
-> >  fs/mnt_idmapping.c | 69 ++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 69 insertions(+)
-> >
-> > diff --git a/fs/mnt_idmapping.c b/fs/mnt_idmapping.c
-> > index 4905665c47d0..ba98ce26b883 100644
-> > --- a/fs/mnt_idmapping.c
-> > +++ b/fs/mnt_idmapping.c
-> > @@ -6,6 +6,7 @@
-> >  #include <linux/mnt_idmapping.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/user_namespace.h>
-> > +#include <linux/bpf.h>
-> >  
-> >  #include "internal.h"
-> >  
-> > @@ -271,3 +272,71 @@ void mnt_idmap_put(struct mnt_idmap *idmap)
-> >  		kfree(idmap);
-> >  	}
-> >  }
-> > +
-> > +__diag_push();
-> > +__diag_ignore_all("-Wmissing-prototypes",
-> > +		  "Global functions as their definitions will be in vmlinux BTF");
-> > +
-> > +/**
-> > + * bpf_is_idmapped_mnt - check whether a mount is idmapped
-> > + * @mnt: the mount to check
-> > + *
-> > + * Return: true if mount is mapped, false if not.
-> > + */
-> > +__bpf_kfunc bool bpf_is_idmapped_mnt(struct vfsmount *mnt)
-> > +{
-> > +	return is_idmapped_mnt(mnt);
-> > +}
-> > +
-> > +/**
-> > + * bpf_file_mnt_idmap - get file idmapping
-> > + * @file: the file from which to get mapping
-> > + *
-> > + * Return: The idmap for the @file.
-> > + */
-> > +__bpf_kfunc struct mnt_idmap *bpf_file_mnt_idmap(struct file *file)
-> > +{
-> > +	return file_mnt_idmap(file);
-> > +}
-> 
-> A dummy question here: the implementation of file_mnt_idmap() is
-> file->f_path.mnt->mnt_idmap, so if the passed file is a BTF pointer, is
-> there any reason why we could not do such dereference directly in bpf
-> program ?
-> > +
-> > +/**
-> > + * bpf_inode_into_vfs_ids - map an inode's i_uid and i_gid down according to an idmapping
-> > + * @idmap: idmap of the mount the inode was found from
-> > + * @inode: inode to map
-> > + *
-> > + * The inode's i_uid and i_gid mapped down according to @idmap. If the inode's
-> > + * i_uid or i_gid has no mapping INVALID_VFSUID or INVALID_VFSGID is returned in
-> > + * the corresponding position.
-> > + *
-> > + * Return: A 64-bit integer containing the current GID and UID, and created as
-> > + * such: *gid* **<< 32 \|** *uid*.
-> > + */
-> > +__bpf_kfunc uint64_t bpf_inode_into_vfs_ids(struct mnt_idmap *idmap,
-> > +		const struct inode *inode)
-> > +{
-> > +	vfsuid_t vfsuid = i_uid_into_vfsuid(idmap, inode);
-> > +	vfsgid_t vfsgid = i_gid_into_vfsgid(idmap, inode);
-> > +
-> > +	return (u64) __vfsgid_val(vfsgid) << 32 |
-> > +		     __vfsuid_val(vfsuid);
-> > +}
-> > +
-> > +__diag_pop();
-> > +
-> > +BTF_SET8_START(idmap_btf_ids)
-> > +BTF_ID_FLAGS(func, bpf_is_idmapped_mnt)
-> > +BTF_ID_FLAGS(func, bpf_file_mnt_idmap)
-> > +BTF_ID_FLAGS(func, bpf_inode_into_vfs_ids)
-> > +BTF_SET8_END(idmap_btf_ids)
-> > +
-> > +static const struct btf_kfunc_id_set idmap_kfunc_set = {
-> > +	.owner = THIS_MODULE,
-> > +	.set   = &idmap_btf_ids,
-> > +};
-> > +
-> > +static int __init bpf_idmap_kfunc_init(void)
-> > +{
-> > +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &idmap_kfunc_set);
-> > +}
-> > +
-> Is BPF_PROG_TYPE_TRACING sufficient for your use case ? It seems
-> BPF_PROG_TYPE_UNSPEC will make these kfuncs be available for all bpf
-> program types.
-> > +late_initcall(bpf_idmap_kfunc_init);
-> 
+On Tue, 2023-07-04 at 16:52 +0800, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+>=20
+> Replace dev_kfree_skb_any() with dev_consume_skb_any() in bnxt_tx_int()
+> to clear the unnecessary noise of "kfree_skb" event.
+>=20
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
 
-I don't want any of these helpers as kfuncs as they are peeking deeply
-into implementation details that we reserve to change. Specifically in
-the light of:
+## Form letter - net-next-closed
 
-    3. kfunc lifecycle expectations part b):
+The merge window for v6.5 has begun and therefore net-next is closed
+for new drivers, features, code refactoring and optimizations.
+We are currently accepting bug fixes only.
 
-    "Unlike with regular kernel symbols, this is expected behavior for BPF
-     symbols, and out-of-tree BPF programs that use kfuncs should be considered
-     relevant to discussions and decisions around modifying and removing those
-     kfuncs. The BPF community will take an active role in participating in
-     upstream discussions when necessary to ensure that the perspectives of such
-     users are taken into account."
+Please repost when net-next reopens after July 10th.
 
-That's too much stability for my taste for these helpers. The helpers
-here exposed have been modified multiple times and once we wean off
-idmapped mounts from user namespaces completely they will change again.
-So I'm fine if they're traceable but not as kfuncs with any - even
-minimal - stability guarantees.
+RFC patches sent for review only are obviously welcome at any time.
+
+See:
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#develop=
+ment-cycle
+--=20
+pw-bot: defer
+
