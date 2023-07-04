@@ -2,55 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30EC7472AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CF37472AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjGDNXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S231228AbjGDNXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjGDNX2 (ORCPT
+        with ESMTP id S230200AbjGDNXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:23:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B8EF10CA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:23:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F175D1474;
-        Tue,  4 Jul 2023 06:24:05 -0700 (PDT)
-Received: from [10.1.35.40] (C02Z41KALVDN.cambridge.arm.com [10.1.35.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8B323F663;
-        Tue,  4 Jul 2023 06:23:21 -0700 (PDT)
-Message-ID: <dd9ea461-df2d-afe1-a67c-c73ac1cb96b4@arm.com>
-Date:   Tue, 4 Jul 2023 14:23:20 +0100
+        Tue, 4 Jul 2023 09:23:53 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19F8F3;
+        Tue,  4 Jul 2023 06:23:52 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-471b3ad20e1so1471891e0c.1;
+        Tue, 04 Jul 2023 06:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688477032; x=1691069032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VSiiFDXjl+Lpp4E2QISeF/M9219YCHb8h6as4n+mP/Q=;
+        b=df8tRDBXMoxgCjpKyZV1RhrAkbjCqRs9SQcULafs37VE6+gBEGVE9JC+UfSVWT1my6
+         OM2LQm1wB3r4Il+kqWIumo5eVmVqpJGiOPV6tOSId6VzIBL5NrIWzHKbnILstoreJ1+Q
+         0xAlKBk4yPeQZjm2lwjILl8TW0a2nGc5aHyYhYmysf3JKTmJrMNVdzFmGRcylFNiaWjb
+         7vdLE8UJKjlJRZ5r1g6q0Vhcrqtw5TXwZ9Nz2iHZIYA/VFFLBROlorbNVe8LrCFli7tq
+         /WBsC1lCxzlal+h/eQxFtLuyEymlzePbagQD6gJ4NZgOkLJnWFEBt0MtugNeQjCZx1SZ
+         WaUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688477032; x=1691069032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VSiiFDXjl+Lpp4E2QISeF/M9219YCHb8h6as4n+mP/Q=;
+        b=Iy+kclFncV8aFZo7FyYObxPIeMtl9V4uUcs6WCK3GD8TOgpustTbF5heTZ7qtB4jvW
+         BGATog50Y+kjBx7v2c+fbW4id/Tz+Saz+WRWqW0iSwkh9bPqEcKIw0I9AfCAyb7FwdEq
+         ZLLCK6aI3FPvCiY7n06Wi1/A1bjcmJtFXrU/LpUkgoBU+ZDBo1tARl4ZauC40dBqB1wn
+         ROvGetpAnwEzPOAKWnhnOhtP2hhpkyu+hjbbJy4bTJgp9Yw9rVmd03GHGoXDswVe5ZoX
+         s1JPA2pmIW+vSzfc1UHTpirJV/V1eWq3/PleEa0IWo0w3Dtj6MRYBY6vw5kWTSpYQdDr
+         POLg==
+X-Gm-Message-State: ABy/qLbYohB0ssqn7+cmTgngP4qx8mQm8fDCP7foIhUxYsOI9PQceUNE
+        Hzrhtf5nI1gs/WvfF7lk9IX+rPh7zSWd9YTVDRA=
+X-Google-Smtp-Source: APBJJlFgXvjChDNg5wodLBZkohrCxkIzY+gZW7QVCivYwEif4CcDQcEG6lbpp3JpXOlkwmA8WP73UkcMZ3ip4jlrOuw=
+X-Received: by 2002:a1f:e484:0:b0:471:b18a:f9e5 with SMTP id
+ b126-20020a1fe484000000b00471b18af9e5mr4149205vkh.4.1688477031784; Tue, 04
+ Jul 2023 06:23:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/5] mm: Default implementation of
- arch_wants_pte_order()
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Yu Zhao <yuzhao@google.com>, "Yin, Fengwei" <fengwei.yin@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-4-ryan.roberts@arm.com>
- <ac6802f6-01a2-6b39-38c7-2fe3cea75dde@intel.com>
- <CAOUHufbmv0pZ1h9AxBj-SD7OqRZYudHMtXzQxcwD4ky-sFd8kg@mail.gmail.com>
- <CAOUHufbpCU_Z7g1QPJ0+HzE9sdNpSh=Mzi0EByLPu5TE4S_UcQ@mail.gmail.com>
- <6d389825-1fc0-5c16-7858-2290fd632682@arm.com>
-In-Reply-To: <6d389825-1fc0-5c16-7858-2290fd632682@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
+ <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
+ <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com> <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
+ <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com> <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
+ <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
+ <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
+ <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
+ <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
+ <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com>
+ <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
+ <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
+ <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
+ <486ae2687cd2e2624c0db1ea1f3d6ca36db15411.camel@redhat.com>
+ <CAA85sZsJEZK0g0fGfH+toiHm_o4pdN+Wo0Wq9fgsUjHXGxgxQA@mail.gmail.com>
+ <CAA85sZs4KkfVojx=vxbDaWhWRpxiHc-RCc2OLD2c+VefRjpTfw@mail.gmail.com>
+ <5688456234f5d15ea9ca0f000350c28610ed2639.camel@redhat.com>
+ <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
+ <CAA85sZs2biYueZsbDqdrMyYfaqH6hnSMpymgbsk=b3W1B7TNRA@mail.gmail.com>
+ <CAA85sZs_H3Dc-mYnj8J5VBEwUJwbHUupP+U-4eG20nfAHBtv4w@mail.gmail.com>
+ <92a4d42491a2c219192ae86fa04b579ea3676d8c.camel@redhat.com>
+ <CAA85sZvtspqfep+6rH8re98-A6rHNNWECvwqVaM=r=0NSSsGzA@mail.gmail.com> <dfbbe91a9c0abe8aba2c00afd3b7f7d6af801d8e.camel@redhat.com>
+In-Reply-To: <dfbbe91a9c0abe8aba2c00afd3b7f7d6af801d8e.camel@redhat.com>
+From:   Ian Kumlien <ian.kumlien@gmail.com>
+Date:   Tue, 4 Jul 2023 15:23:40 +0200
+Message-ID: <CAA85sZuQh0FMoGDFVyOad6G1UB9keodd3OCZ4d4r+xgXDArcVA@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,102 +93,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2023 13:36, Ryan Roberts wrote:
-> On 04/07/2023 04:59, Yu Zhao wrote:
->> On Mon, Jul 3, 2023 at 9:02 PM Yu Zhao <yuzhao@google.com> wrote:
->>>
->>> On Mon, Jul 3, 2023 at 8:23 PM Yin, Fengwei <fengwei.yin@intel.com> wrote:
->>>>
->>>>
->>>>
->>>> On 7/3/2023 9:53 PM, Ryan Roberts wrote:
->>>>> arch_wants_pte_order() can be overridden by the arch to return the
->>>>> preferred folio order for pte-mapped memory. This is useful as some
->>>>> architectures (e.g. arm64) can coalesce TLB entries when the physical
->>>>> memory is suitably contiguous.
->>>>>
->>>>> The first user for this hint will be FLEXIBLE_THP, which aims to
->>>>> allocate large folios for anonymous memory to reduce page faults and
->>>>> other per-page operation costs.
->>>>>
->>>>> Here we add the default implementation of the function, used when the
->>>>> architecture does not define it, which returns the order corresponding
->>>>> to 64K.
->>>>>
->>>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>>>> ---
->>>>>  include/linux/pgtable.h | 13 +++++++++++++
->>>>>  1 file changed, 13 insertions(+)
->>>>>
->>>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
->>>>> index a661a17173fa..f7e38598f20b 100644
->>>>> --- a/include/linux/pgtable.h
->>>>> +++ b/include/linux/pgtable.h
->>>>> @@ -13,6 +13,7 @@
->>>>>  #include <linux/errno.h>
->>>>>  #include <asm-generic/pgtable_uffd.h>
->>>>>  #include <linux/page_table_check.h>
->>>>> +#include <linux/sizes.h>
->>>>>
->>>>>  #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_FOLDED) - \
->>>>>       defined(__PAGETABLE_PMD_FOLDED) != CONFIG_PGTABLE_LEVELS
->>>>> @@ -336,6 +337,18 @@ static inline bool arch_has_hw_pte_young(void)
->>>>>  }
->>>>>  #endif
->>>>>
->>>>> +#ifndef arch_wants_pte_order
->>>>> +/*
->>>>> + * Returns preferred folio order for pte-mapped memory. Must be in range [0,
->>>>> + * PMD_SHIFT-PAGE_SHIFT) and must not be order-1 since THP requires large folios
->>>>> + * to be at least order-2.
->>>>> + */
->>>>> +static inline int arch_wants_pte_order(struct vm_area_struct *vma)
->>>>> +{
->>>>> +     return ilog2(SZ_64K >> PAGE_SHIFT);
->>>> Default value which is not related with any silicon may be: PAGE_ALLOC_COSTLY_ORDER?
->>>>
->>>> Also, current pcp list support cache page with order 0...PAGE_ALLOC_COSTLY_ORDER, 9.
->>>> If the pcp could cover the page, the pressure to zone lock will be reduced by pcp.
->>>
->>> The value of PAGE_ALLOC_COSTLY_ORDER is reasonable but again it's a
->>> s/w policy not a h/w preference. Besides, I don't think we can include
->>> mmzone.h in pgtable.h.
->>
->> I think we can make a compromise:
->> 1. change the default implementation of arch_has_hw_pte_young() to return 0, and
->> 2. in memory.c, we can try PAGE_ALLOC_COSTLY_ORDER for archs that
->> don't override arch_has_hw_pte_young(), or if its return value is too
->> large to fit.
->> This should also take care of the regression, right?
-> 
-> I think you are suggesting that we use 0 as a sentinel which we then translate
-> to PAGE_ALLOC_COSTLY_ORDER? I already have a max_anon_folio_order() function in
-> memory.c (actually it is currently a macro defined as arch_wants_pte_order()).
-> 
-> So it would become (I'll talk about the vma concern separately in the thread
-> where you raised it):
-> 
-> static inline int max_anon_folio_order(struct vm_area_struct *vma)
-> {
-> 	int order = arch_wants_pte_order(vma);
-> 
-> 	return order ? order : PAGE_ALLOC_COSTLY_ORDER;
-> }
-> 
-> Correct?
+On Tue, Jul 4, 2023 at 2:54=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
+e:
+>
+> On Tue, 2023-07-04 at 13:36 +0200, Ian Kumlien wrote:
+> > Propper bug this time:
+> > cat bug.txt | ./scripts/decode_stacktrace.sh vmlinux
+>
+> To be sure, is this with the last patch I shared? this one I mean:
 
-Actually, I'm not sure its a good idea to default to a fixed order. If running
-on an arch with big base pages (e.g. powerpc with 64K pages?), that will soon
-add up to a big chunk of memory, which could be wasteful?
+The current modifications I have, on top of v6.4.1, is:
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index cea28d30abb5..8552caa197f9 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -4272,6 +4272,11 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb=
+,
 
-PAGE_ALLOC_COSTLY_ORDER = 3 so with 64K base page, that 512K. Is that a concern?
-Wouldn't it be better to define this as an absolute size? Or even the min of
-PAGE_ALLOC_COSTLY_ORDER and an absolute size?
+        skb_shinfo(skb)->frag_list =3D NULL;
 
++       /* later code will clear the gso area in the shared info */
++       err =3D skb_header_unclone(skb, GFP_ATOMIC);
++       if (err)
++               goto err_linearize;
++
+        while (list_skb) {
+                nskb =3D list_skb;
+                list_skb =3D list_skb->next;
+@@ -4328,6 +4333,9 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
 
-> 
-> I don't see how it fixes the regression (assume you're talking about
-> Speedometer) though? On arm64 arch_wants_pte_order() will still be returning
-> order-4.
-> 
+        skb->prev =3D tail;
 
++       if (WARN_ON_ONCE(!skb->next))
++               goto err_linearize;
++
+        if (skb_needs_linearize(skb, features) &&
+            __skb_linearize(skb))
+                goto err_linearize;
+---
+
+> https://lore.kernel.org/netdev/92a4d42491a2c219192ae86fa04b579ea3676d8c.c=
+amel@redhat.com/
+>
+> Could you please additionally enable CONFIG_DEBUG_NET in your build?
+
+Sure, will do
+
+> Could you please give a detailed description of your network topology
+> and the running traffic?
+
+This machine has two "real interfaces" and two interfaces that runs as
+bridges for virtual machines
+eno1 - real internal
+eno2 - bridge - internal
+eno3 - real external
+eno4 - bridge - external
+
+The bridges are used by three virtual machines, two of which are
+attached on both networks
+
+Traffic seemed to be video streaming, at least at first, now I don't
+really know. I do have a few smart devices so I assume there is
+a bit of multicast traffic as well - but not really anything unusual as suc=
+h.
+
+> Thanks!
+>
+> Paolo
+>
