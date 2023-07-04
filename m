@@ -2,178 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EDC74729A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521E17472A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjGDNUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
+        id S231209AbjGDNVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjGDNUQ (ORCPT
+        with ESMTP id S231664AbjGDNVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:20:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27B8C10C1
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:20:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53C2FC14;
-        Tue,  4 Jul 2023 06:20:46 -0700 (PDT)
-Received: from [10.1.35.40] (C02Z41KALVDN.cambridge.arm.com [10.1.35.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49D233F663;
-        Tue,  4 Jul 2023 06:20:02 -0700 (PDT)
-Message-ID: <eea2b36d-9c6d-64ca-4e21-57cfd5a93d57@arm.com>
-Date:   Tue, 4 Jul 2023 14:20:01 +0100
+        Tue, 4 Jul 2023 09:21:19 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57AAA10DA;
+        Tue,  4 Jul 2023 06:21:09 -0700 (PDT)
+Received: from loongson.cn (unknown [10.2.9.158])
+        by gateway (Coremail) with SMTP id _____8Dxg_DEHKRktQYAAA--.108S3;
+        Tue, 04 Jul 2023 21:21:08 +0800 (CST)
+Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbSPEHKRk7zYbAA--.34335S2;
+        Tue, 04 Jul 2023 21:21:08 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH 0/2] irqchip/loongson-eiointc: use simple irq route
+Date:   Tue,  4 Jul 2023 21:21:06 +0800
+Message-Id: <20230704132108.1096940-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/5] mm: Default implementation of
- arch_wants_pte_order()
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-4-ryan.roberts@arm.com>
- <CAOUHufa_xFJvFFvmw1Tkdc9cXaZ1GPA1dVSauH+J9zGX-sO1UA@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAOUHufa_xFJvFFvmw1Tkdc9cXaZ1GPA1dVSauH+J9zGX-sO1UA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxbSPEHKRk7zYbAA--.34335S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
+        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42
+        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 20:50, Yu Zhao wrote:
-> On Mon, Jul 3, 2023 at 7:53 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->> arch_wants_pte_order() can be overridden by the arch to return the
->> preferred folio order for pte-mapped memory. This is useful as some
->> architectures (e.g. arm64) can coalesce TLB entries when the physical
->> memory is suitably contiguous.
->>
->> The first user for this hint will be FLEXIBLE_THP, which aims to
->> allocate large folios for anonymous memory to reduce page faults and
->> other per-page operation costs.
->>
->> Here we add the default implementation of the function, used when the
->> architecture does not define it, which returns the order corresponding
->> to 64K.
-> 
-> I don't really mind a non-zero default value. But people would ask why
-> non-zero and why 64KB. Probably you could argue this is the large size
-> all known archs support if they have TLB coalescing. For x86, AMD CPUs
-> would want to override this. I'll leave it to Fengwei to decide
-> whether Intel wants a different default value.>
-> Also I don't like the vma parameter because it makes
-> arch_wants_pte_order() a mix of hw preference and vma policy. From my
-> POV, the function should be only about the former; the latter should
-> be decided by arch-independent MM code. However, I can live with it if
-> ARM MM people think this is really what you want. ATM, I'm skeptical
-> they do.
+Fix return value checking of eiointc_index where int type
+is converted uint32_t and check smaller than 0.
 
-Here's the big picture for what I'm tryng to achieve:
+Add simple irq route support on one eioi node system.
 
- - In the common case, I'd like all programs to get a performance bump by
-automatically and transparently using large anon folios - so no explicit
-requirement on the process to opt-in.
+Bibo Mao (2):
+  irqchip/loongson-eiointc: fix return value checking of eiointc_index
+  irqchip/loongson-eiointc: simplify irq route on one eioi-node system
 
- - On arm64, in the above case, I'd like the preferred folio size to be 64K;
-from the (admittedly limitted) testing I've done that's about where the
-performance knee is and it doesn't appear to increase the memory wastage very
-much. It also has the benefits that for 4K base pages this is the contpte size
-(order-4) so I can take full benefit of contpte mappings transparently to the
-process. And for 16K this is the HPA size (order-2).
+ drivers/irqchip/irq-loongson-eiointc.c | 83 ++++++++++++++++++++++----
+ 1 file changed, 73 insertions(+), 10 deletions(-)
 
- - On arm64 when the process has marked the VMA for THP (or when
-transparent_hugepage=always) but the VMA does not meet the requirements for a
-PMD-sized mapping (or we failed to allocate, ...) then I'd like to map using
-contpte. For 4K base pages this is 64K (order-4), for 16K this is 2M (order-7)
-and for 64K this is 2M (order-5). The 64K base page case is very important since
-the PMD size for that base page is 512MB which is almost impossible to allocate
-in practice.
-
-So one approach would be to define arch_wants_pte_order() as always returning
-the contpte size (remove the vma parameter). Then max_anon_folio_order() in
-memory.c could so this:
-
-
-#define MAX_ANON_FOLIO_ORDER_NOTHP	ilog2(SZ_64K >> PAGE_SHIFT);
-
-static inline int max_anon_folio_order(struct vm_area_struct *vma)
-{
-	int order = arch_wants_pte_order();
-
-	// Fix up default case which returns 0 because PAGE_ALLOC_COSTLY_ORDER
-	// can't be used directly in pgtable.h
-	order = order ? order : PAGE_ALLOC_COSTLY_ORDER;
-
-	if (hugepage_vma_check(vma, vma->vm_flags, false, true, true))
-		return order;
-	else
-		return min(order, MAX_ANON_FOLIO_ORDER_NOTHP);
-}
-
-
-This moves the SW policy into memory.c and gives you PAGE_ALLOC_COSTLY_ORDER (or
-whatever default we decide on) as the default for arches with no override, and
-also meets all my goals above.
-
-> 
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> 
-> After another CPU vendor, e.g., Fengwei, and an ARM MM person, e.g.,
-> Will give the green light:
-> Reviewed-by: Yu Zhao <yuzhao@google.com>
-> 
->> ---
->>  include/linux/pgtable.h | 13 +++++++++++++
->>  1 file changed, 13 insertions(+)
->>
->> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
->> index a661a17173fa..f7e38598f20b 100644
->> --- a/include/linux/pgtable.h
->> +++ b/include/linux/pgtable.h
->> @@ -13,6 +13,7 @@
->>  #include <linux/errno.h>
->>  #include <asm-generic/pgtable_uffd.h>
->>  #include <linux/page_table_check.h>
->> +#include <linux/sizes.h>
->>
->>  #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_FOLDED) - \
->>         defined(__PAGETABLE_PMD_FOLDED) != CONFIG_PGTABLE_LEVELS
->> @@ -336,6 +337,18 @@ static inline bool arch_has_hw_pte_young(void)
->>  }
->>  #endif
->>
->> +#ifndef arch_wants_pte_order
->> +/*
->> + * Returns preferred folio order for pte-mapped memory. Must be in range [0,
->> + * PMD_SHIFT-PAGE_SHIFT) and must not be order-1 since THP requires large folios
-> 
-> The warning is helpful.
-> 
->> + * to be at least order-2.
->> + */
->> +static inline int arch_wants_pte_order(struct vm_area_struct *vma)
->> +{
->> +       return ilog2(SZ_64K >> PAGE_SHIFT);
->> +}
->> +#endif
->> +
->>  #ifndef __HAVE_ARCH_PTEP_GET_AND_CLEAR
->>  static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
->>                                        unsigned long address,
+base-commit: a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451
+-- 
+2.27.0
 
