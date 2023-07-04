@@ -2,173 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA957477D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276CA7477D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjGDRdG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 13:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S230137AbjGDRd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGDRdA (ORCPT
+        with ESMTP id S230259AbjGDRdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:33:00 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4709CDA;
-        Tue,  4 Jul 2023 10:32:56 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-98e2865e2f2so160154466b.0;
-        Tue, 04 Jul 2023 10:32:56 -0700 (PDT)
+        Tue, 4 Jul 2023 13:33:25 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B58D10E3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:33:23 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51d91e9b533so6511574a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1688492001; x=1691084001;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=voSV3r6liSTPswELgXfBz+FbRIZzGdFTovggUY0LZ1c=;
+        b=niI9qf70lz6ehiJfC5AEObc/h1RpkL9AWeQrbq4VstdIAjIdYtxtiE+305qWdgfmIr
+         EGqP51lbJpROOFM446kUlZhkHSvo1czE7oDyobhSC/pEjwlgh9p1Nts6bHvMLwfiR/ll
+         sZovZO3WkNucyZMbpVsNCxUQ6X+Tq8qiYXtFA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688491975; x=1691083975;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lW4LJlumzva12+IQ3BLk1PuvUZFdkFvStFm2FTeBlDo=;
-        b=JoNfASlzzObF5scHE8HLjRklUuAs94F3cVBKJXgbRWZmOveZ+2S6gErN/vmdIvNA14
-         6U1SkDy56Hafr/dBYyyzsXcSXr5nVuJx5sa6E0SxLJUoKlX9k2NlPfl2MCUJWV/I86uS
-         p7YdDIQQUNftSr3jozH6ouk/W2oEoycNz9IpkoZotDBJss+l1RXWkXuzP4TW3f3Oe6/G
-         K8pPIIc+B5lsqOMhJ98Mg+tGawu4WNUUPEqoGj1v8ggAU99Wn+PFkcOu61ZBoqh6QJkJ
-         Iz5u4MlA8SEsVpbgFrzSmoYWi7fVbSTTiZ1zg1LjgjD+l7SzJbfXPf3aTTw9BEUwQHoj
-         oarA==
-X-Gm-Message-State: ABy/qLbesWnHZ0Re+53njriMlJU3B4WfGFkMzoM1XLMr3WaU2AD7tKGE
-        SxrkEMjNJ5wcSN4hjXyrMp27qgm8x2jZHVyFRS8=
-X-Google-Smtp-Source: APBJJlFJ3yLzRjSaZ5TGIc7GshSZ92NCejwA2m9LUyC4vBOSDqHjrz/cvK5NFXGX9h1VI6PkKTZDyyC8vkBxV1WGVHM=
-X-Received: by 2002:a17:906:d112:b0:992:387:44d1 with SMTP id
- b18-20020a170906d11200b00992038744d1mr7765098ejz.7.1688491974696; Tue, 04 Jul
- 2023 10:32:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688492001; x=1691084001;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=voSV3r6liSTPswELgXfBz+FbRIZzGdFTovggUY0LZ1c=;
+        b=MoIR/7gW9GDsiwFMpiPSi6UUaek52zQUlxhTLVXcMpR92REFGDpDF6SqdqsjdRaee6
+         MCjSDlLfYOSVmSGBSJemu4qS++9k3RztF5gpKN9DGbJyNYj5mAz4bJJDLYUl7YLSMgFq
+         hWAZy5OFhM8E4PZWsH9a/DT2Ykc6idCY9LWEVTAofujt7hWsX9OE83BB3kieLp9pAJIz
+         J/HqY7jUt4x42sHPuj/yzIybqczZL3k7qVojEmgFCqIa58CXHWqKXHlG3YIOyfJAj7Sy
+         rCegR3v2+xnMbMpJG79HgPDM41vE4n5Ao2Bx0Ya0V1cML6YQlEj5Mzm7mh1XBNd50eFz
+         kC+A==
+X-Gm-Message-State: ABy/qLZu+fbc0pm56ZHqWCJM7FvqX4m8kMhSl7Kipbwt3QKUoWB6Ly0y
+        Rc+5Z1RY6ZrI+FLlCxTTOm1aeXR9Xwi+mOFxqDI=
+X-Google-Smtp-Source: APBJJlHsQfO4bzGm+NE7pP3Z/pJZH72loPlBskyiVeaBbdPwNWxr2fgtRrjBVIkAOtimINeZlnEhDA==
+X-Received: by 2002:aa7:df85:0:b0:51e:1692:1111 with SMTP id b5-20020aa7df85000000b0051e16921111mr3710970edy.3.1688492001252;
+        Tue, 04 Jul 2023 10:33:21 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-58-49-236.retail.telecomitalia.it. [82.58.49.236])
+        by smtp.gmail.com with ESMTPSA id p18-20020aa7d312000000b0051a2d2f82fdsm12241239edq.6.2023.07.04.10.33.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 10:33:20 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH] ARM: dts: stm32: re-add CAN support on stm32f746
+Date:   Tue,  4 Jul 2023 19:33:17 +0200
+Message-Id: <20230704173317.590190-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com> <20230703121411.69606-3-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230703121411.69606-3-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jul 2023 19:32:43 +0200
-Message-ID: <CAJZ5v0iZzvdkxe3NjHbiZzDjea=CoK-pGw3hjSoa9u8f87TLtg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] ACPI: platform: Ignore SMB0001 only when it has resources
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Michael Walle <michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 2:14 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> After switching i2c-scmi driver to be a platform one, it stopped
-> being enumerated on number of Kontron platforms, because it's
-> listed in the forbidden_id_list.
->
-> To resolve the situation, add a flag to driver data to allow devices
-> with no resources in _CRS to be enumerated via platform bus.
->
-> Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
-> Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
-> Link: https://lore.kernel.org/r/20230621151652.79579-1-andriy.shevchenko@linux.intel.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> ---
->  drivers/acpi/acpi_platform.c | 30 +++++++++++++++++++++++++++---
->  1 file changed, 27 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-> index fe00a5783f53..c2ce558bd032 100644
-> --- a/drivers/acpi/acpi_platform.c
-> +++ b/drivers/acpi/acpi_platform.c
-> @@ -9,6 +9,7 @@
->   */
->
->  #include <linux/acpi.h>
-> +#include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/kernel.h>
-> @@ -19,13 +20,16 @@
->
->  #include "internal.h"
->
-> +/* Exclude devices that have no _CRS resources provided */
-> +#define ACPI_ALLOW_WO_RESOURCES                BIT(0)
-> +
->  static const struct acpi_device_id forbidden_id_list[] = {
->         {"ACPI0009", 0},        /* IOxAPIC */
->         {"ACPI000A", 0},        /* IOAPIC */
->         {"PNP0000",  0},        /* PIC */
->         {"PNP0100",  0},        /* Timer */
->         {"PNP0200",  0},        /* AT DMA Controller */
-> -       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
-> +       {"SMB0001",  ACPI_ALLOW_WO_RESOURCES},  /* ACPI SMBUS virtual device */
->         { }
->  };
->
-> @@ -83,6 +87,15 @@ static void acpi_platform_fill_resource(struct acpi_device *adev,
->                 dest->parent = pci_find_resource(to_pci_dev(parent), dest);
->  }
->
-> +static unsigned int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
-> +{
-> +       bool *has_resources = data;
-> +
-> +       *has_resources = true;
-> +
-> +       return AE_CTRL_TERMINATE;
-> +}
-> +
->  /**
->   * acpi_create_platform_device - Create platform device for ACPI device node
->   * @adev: ACPI device node to create a platform device for.
-> @@ -100,17 +113,28 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
->         struct acpi_device *parent = acpi_dev_parent(adev);
->         struct platform_device *pdev = NULL;
->         struct platform_device_info pdevinfo;
-> +       const struct acpi_device_id *match;
->         struct resource_entry *rentry;
->         struct list_head resource_list;
->         struct resource *resources = NULL;
-> +       bool has_resources;
->         int count;
->
->         /* If the ACPI node already has a physical device attached, skip it. */
->         if (adev->physical_node_count)
->                 return NULL;
->
-> -       if (!acpi_match_device_ids(adev, forbidden_id_list))
-> -               return ERR_PTR(-EINVAL);
-> +       match = acpi_match_acpi_device(forbidden_id_list, adev);
-> +       if (match) {
-> +               if (match->driver_data & ACPI_ALLOW_WO_RESOURCES) {
-> +                       acpi_walk_resources(adev->handle, METHOD_NAME__CRS,
-> +                                           acpi_platform_resource_count, &has_resources);
-> +                       if (has_resources)
-> +                               return ERR_PTR(-EINVAL);
-> +               } else {
-> +                       return ERR_PTR(-EINVAL);
-> +               }
-> +       }
->
->         INIT_LIST_HEAD(&resource_list);
->         count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
-> --
+The revert commit 36a6418bb1259 ("Revert "ARM: dts: stm32: add CAN support
+on stm32f746"") prevented parsing errors due to the lack of CAN3 binding.
 
-Applied as 6.5-rc material along with the rest of the series (except
-for the last patch that has been superseded), but I moved the
-has_resources definition to the block where it is used and added a
-'false' initial value to it. as the code might not work as expected
-without initializing it.
+Now that the binding definition for CAN3 is available in the mainline
+thanks to commit 8f3ef556f8e1a ("dt-bindings: mfd: stm32f7: Add binding
+definition for CAN3"), we can re-add the CAN support and make the driver
+usable again.
 
-Please double check the bleeding-edge branch of linux-pm.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-Thanks!
+ arch/arm/boot/dts/st/stm32f746.dtsi | 47 +++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/arch/arm/boot/dts/st/stm32f746.dtsi b/arch/arm/boot/dts/st/stm32f746.dtsi
+index d1802efd067c..bfff1a58bf3d 100644
+--- a/arch/arm/boot/dts/st/stm32f746.dtsi
++++ b/arch/arm/boot/dts/st/stm32f746.dtsi
+@@ -257,6 +257,23 @@ rtc: rtc@40002800 {
+ 			status = "disabled";
+ 		};
+ 
++		can3: can@40003400 {
++			compatible = "st,stm32f4-bxcan";
++			reg = <0x40003400 0x200>;
++			interrupts = <104>, <105>, <106>, <107>;
++			interrupt-names = "tx", "rx0", "rx1", "sce";
++			resets = <&rcc STM32F7_APB1_RESET(CAN3)>;
++			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
++			st,gcan = <&gcan3>;
++			status = "disabled";
++		};
++
++		gcan3: gcan@40003600 {
++			compatible = "st,stm32f4-gcan", "syscon";
++			reg = <0x40003600 0x200>;
++			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
++		};
++
+ 		usart2: serial@40004400 {
+ 			compatible = "st,stm32f7-uart";
+ 			reg = <0x40004400 0x400>;
+@@ -337,6 +354,36 @@ i2c4: i2c@40006000 {
+ 			status = "disabled";
+ 		};
+ 
++		can1: can@40006400 {
++			compatible = "st,stm32f4-bxcan";
++			reg = <0x40006400 0x200>;
++			interrupts = <19>, <20>, <21>, <22>;
++			interrupt-names = "tx", "rx0", "rx1", "sce";
++			resets = <&rcc STM32F7_APB1_RESET(CAN1)>;
++			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
++			st,can-primary;
++			st,gcan = <&gcan1>;
++			status = "disabled";
++		};
++
++		gcan1: gcan@40006600 {
++			compatible = "st,stm32f4-gcan", "syscon";
++			reg = <0x40006600 0x200>;
++			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
++		};
++
++		can2: can@40006800 {
++			compatible = "st,stm32f4-bxcan";
++			reg = <0x40006800 0x200>;
++			iterrupts = <63>, <64>, <65>, <66>;
++			interrupt-names = "tx", "rx0", "rx1", "sce";
++			resets = <&rcc STM32F7_APB1_RESET(CAN2)>;
++			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN2)>;
++			st,can-secondary;
++			st,gcan = <&gcan1>;
++			status = "disabled";
++		};
++
+ 		cec: cec@40006c00 {
+ 			compatible = "st,stm32-cec";
+ 			reg = <0x40006C00 0x400>;
+-- 
+2.32.0
+
