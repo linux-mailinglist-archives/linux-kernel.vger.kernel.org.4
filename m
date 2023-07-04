@@ -2,200 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A7F74758E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4894574758D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjGDPqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjGDPqI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230129AbjGDPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 4 Jul 2023 11:46:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52517E7E
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:45:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688485520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/PUI+CtLNs4l2I0+iAQpXHNnM5sim5Or6js9Z3l/FyQ=;
-        b=NMeNfl1fCuLPcmOXhCTpEudyiZklK0pLfZb0t7sJLwuX49xsxZwIXRQH2dEw9VQyXIIIfW
-        kDR/GWSTJFcPrU96XTxDpN/owWjF2sryhmqjm56LwKbNFPc1x+93bSnmScU12EtNjCgwS3
-        ri/tBEYRKEQYOAbyE+mlIV7B7YMiE8Q=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-264-KevSMtmrNLeH9sCiPobzzA-1; Tue, 04 Jul 2023 11:45:17 -0400
-X-MC-Unique: KevSMtmrNLeH9sCiPobzzA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3143c941d0bso716908f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 08:45:17 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbjGDPqG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jul 2023 11:46:06 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46C410CA
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:46:05 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53482b44007so2782614a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 08:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688485565; x=1691077565;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ut9W76FKV+Lg/Nk3Q8fpYQfXZYC0YQoH73u8akKRiCM=;
+        b=O5QUE2/eaB2IalpuzNuEpk0Q2Vk7hSTHA+TLIf5LYyCw25zZd1uqEQdOa/qc4kuMsV
+         tXcVLpWfGB6sAdnXlI2kWez7aOgTSOQ68YEtOPTI3xSA5+rU6uJiIwJVvPB8oej3RCfG
+         M5wc2BU0P2AOW3N/ybsxWt25Z/tFG1TEZVjkg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688485516; x=1691077516;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/PUI+CtLNs4l2I0+iAQpXHNnM5sim5Or6js9Z3l/FyQ=;
-        b=BBEKAdVS08CEe00bsP5kgt4elGesurmpHiHshLa/BfkN/CFcmWaYjCEI2FkQ0KVBWo
-         FP2RpluxyDCrOpMnmHORCWN3RLqwZ3EknE8nvjQxC09ri3OEl+ERqInQIpwQGG8RGdSg
-         feebl2wcNouwziZbtM+oGqDpQAp5ubmeNf6FGeRYVd9eCBJuwTpgPg42e8ePqW+Ksb5K
-         JldFCWVxm3j2uXi9BQsCvSwnl1HMNaRTalVooq0EULmy1Sr15Je5z+lAys54I2Bq1uYW
-         wc80T1EeHT8pLRVG7FxVMaiKa2UDvcTNlCCdwyrMI0rn1Ssn7vKJovg+Ttdxw1YlmpFr
-         yEEA==
-X-Gm-Message-State: ABy/qLZ7/d/Z93KzcmxPv/164SSooAwQkCcYAwNDligJeUXq3HNZ11qM
-        eDKL1s4jU0cr1DnRqS29YilrVkysVCiQx1AXXEXGPckdcvkiueB2lojF4HPxBm+IJfbq9xul6ZD
-        UFGqkA0ymWxNlSc1Onn7AXGaC
-X-Received: by 2002:a5d:674d:0:b0:314:13d8:8ae7 with SMTP id l13-20020a5d674d000000b0031413d88ae7mr11780929wrw.26.1688485516323;
-        Tue, 04 Jul 2023 08:45:16 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGHQsomKCUqerVJHD/653LO914nQ9p0VRaFIwyfELGloTwcXrjzg/w2GewNcsvZX5Lc+3kg9A==
-X-Received: by 2002:a5d:674d:0:b0:314:13d8:8ae7 with SMTP id l13-20020a5d674d000000b0031413d88ae7mr11780912wrw.26.1688485515962;
-        Tue, 04 Jul 2023 08:45:15 -0700 (PDT)
-Received: from redhat.com ([2.52.13.33])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c021800b003fbe43238c6sm914770wmi.9.2023.07.04.08.45.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 08:45:15 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 11:45:12 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Eugenio Perez Martin <eperezma@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Subject: Re: [PATCH] vdpa: reject F_ENABLE_AFTER_DRIVER_OK if backend does
- not support it
-Message-ID: <20230704114159-mutt-send-email-mst@kernel.org>
-References: <20230703142218.362549-1-eperezma@redhat.com>
- <20230703105022-mutt-send-email-mst@kernel.org>
- <CAJaqyWf2F_yBLBjj1RiPeJ92_zfq8BSMz8Pak2Vg6QinN8jS1Q@mail.gmail.com>
- <20230704063646-mutt-send-email-mst@kernel.org>
- <CAJaqyWfdPpkD5pY4tfzQdOscLBcrDBhBqzWjMbY_ZKsoyiqGdA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1688485565; x=1691077565;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ut9W76FKV+Lg/Nk3Q8fpYQfXZYC0YQoH73u8akKRiCM=;
+        b=jefJoKb3aCbIGuslodXbSCUYc/e7Lal91lWegC908S57PwrWUWy7rcI90px010gwaf
+         xy7j1TggZ061vxSF4Wxsf5Nv2LBHzcZEnAPcwm1IvQs/kcylgI+NUAiAk1eoedO4Wfw8
+         KHmdcKefqWUbDxoIsXVZV4+AMoCORsmg0rzi2yBeThL4J5sqCcZEuAz3JE+ruUk1jA0s
+         /Lhp31F8QUVY0QSCmngK6V7o4Et0QqkCAn26Zdsj3vDuU9IdWmDcXOXOEEksY9Mf1xx/
+         /tRFpqbqMBVa9dkBbcAU+jc3DxVm3XTJ2KBX2P9ouNcM/Dn6ILV4Tnq0sC7rus0gZ9WY
+         hubw==
+X-Gm-Message-State: ABy/qLY3U0xkWgHgi8PUHzbyDCqwrFiSxjlPOXKUMABrEGgdcb/IUNoa
+        EyiS28tUkGCKz4tS+0CropKFKuoRBT+sP7Hc7TVlwL//UZc7ginx
+X-Google-Smtp-Source: APBJJlHNiEz/TsF8ZoZpcG3iC5rBPXBsnfzkr9aqCwymLema2t/+jBNd7zG2QXsm7C2ggFkH+uvDVgtCWhKoEudf6iQ=
+X-Received: by 2002:a05:6a20:3d1c:b0:10f:52e2:49ec with SMTP id
+ y28-20020a056a203d1c00b0010f52e249ecmr13107156pzi.53.1688485564792; Tue, 04
+ Jul 2023 08:46:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJaqyWfdPpkD5pY4tfzQdOscLBcrDBhBqzWjMbY_ZKsoyiqGdA@mail.gmail.com>
+References: <20230704153630.1591122-1-revest@chromium.org> <20230704153630.1591122-4-revest@chromium.org>
+In-Reply-To: <20230704153630.1591122-4-revest@chromium.org>
+From:   Florent Revest <revest@chromium.org>
+Date:   Tue, 4 Jul 2023 17:45:53 +0200
+Message-ID: <CABRcYmJgOAFMO2Uuyn1sdoTLk1PXrxuqo4Hwkg6UkSDgMOvnYg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
+        anshuman.khandual@arm.com, joey.gouly@arm.com, mhocko@suse.com,
+        keescook@chromium.org, david@redhat.com, peterx@redhat.com,
+        izbyshev@ispras.ru, broonie@kernel.org, szabolcs.nagy@arm.com,
+        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com,
+        linux-stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 01:36:11PM +0200, Eugenio Perez Martin wrote:
-> On Tue, Jul 4, 2023 at 12:38 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Tue, Jul 04, 2023 at 12:25:32PM +0200, Eugenio Perez Martin wrote:
-> > > On Mon, Jul 3, 2023 at 4:52 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Mon, Jul 03, 2023 at 04:22:18PM +0200, Eugenio Pérez wrote:
-> > > > > With the current code it is accepted as long as userland send it.
-> > > > >
-> > > > > Although userland should not set a feature flag that has not been
-> > > > > offered to it with VHOST_GET_BACKEND_FEATURES, the current code will not
-> > > > > complain for it.
-> > > > >
-> > > > > Since there is no specific reason for any parent to reject that backend
-> > > > > feature bit when it has been proposed, let's control it at vdpa frontend
-> > > > > level. Future patches may move this control to the parent driver.
-> > > > >
-> > > > > Fixes: 967800d2d52e ("vdpa: accept VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK backend feature")
-> > > > > Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> > > >
-> > > > Please do send v3. And again, I don't want to send "after driver ok" hack
-> > > > upstream at all, I merged it in next just to give it some testing.
-> > > > We want RING_ACCESS_AFTER_KICK or some such.
-> > > >
-> > >
-> > > Current devices do not support that semantic.
-> >
-> > Which devices specifically access the ring after DRIVER_OK but before
-> > a kick?
-> >
-> 
-> Previous versions of the QEMU LM series did a spurious kick to start
-> traffic at the LM destination [1]. When it was proposed, that spurious
-> kick was removed from the series because to check for descriptors
-> after driver_ok, even without a kick, was considered work of the
-> parent driver.
-> 
-> I'm ok to go back to this spurious kick, but I'm not sure if the hw
-> will read the ring before the kick actually. I can ask.
-> 
-> Thanks!
-> 
-> [1] https://lists.nongnu.org/archive/html/qemu-devel/2023-01/msg02775.html
+On Tue, Jul 4, 2023 at 5:37=E2=80=AFPM Florent Revest <revest@chromium.org>=
+ wrote:
+>
+> Defining a prctl flag as an int is a footgun because on a 64 bit machine
+> and with a variadic implementation of prctl (like in musl and glibc),
+> when used directly as a prctl argument, it can get casted to long with
+> garbage upper bits which would result in unexpected behaviors.
+>
+> This patch changes the constant to an unsigned long to eliminate that
+> possibilities. This does not break UAPI.
+>
+> Fixes: b507808ebce2 ("mm: implement memory-deny-write-execute as a prctl"=
+)
+> Cc: linux-stable@vger.kernel.org
 
-Let's find out. We need to check for ENABLE_AFTER_DRIVER_OK too, no?
-
-
-
-> > > My plan was to convert
-> > > it in vp_vdpa if needed, and reuse the current vdpa ops. Sorry if I
-> > > was not explicit enough.
-> > >
-> > > The only solution I can see to that is to trap & emulate in the vdpa
-> > > (parent?) driver, as talked in virtio-comment. But that complicates
-> > > the architecture:
-> > > * Offer VHOST_BACKEND_F_RING_ACCESS_AFTER_KICK
-> > > * Store vq enable state separately, at
-> > > vdpa->config->set_vq_ready(true), but not transmit that enable to hw
-> > > * Store the doorbell state separately, but do not configure it to the
-> > > device directly.
-> > >
-> > > But how to recover if the device cannot configure them at kick time,
-> > > for example?
-> > >
-> > > Maybe we can just fail if the parent driver does not support enabling
-> > > the vq after DRIVER_OK? That way no new feature flag is needed.
-> > >
-> > > Thanks!
-> > >
-> > > >
-> > > > > ---
-> > > > > Sent with Fixes: tag pointing to git.kernel.org/pub/scm/linux/kernel/git/mst
-> > > > > commit. Please let me know if I should send a v3 of [1] instead.
-> > > > >
-> > > > > [1] https://lore.kernel.org/lkml/20230609121244-mutt-send-email-mst@kernel.org/T/
-> > > > > ---
-> > > > >  drivers/vhost/vdpa.c | 7 +++++--
-> > > > >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > > > > index e1abf29fed5b..a7e554352351 100644
-> > > > > --- a/drivers/vhost/vdpa.c
-> > > > > +++ b/drivers/vhost/vdpa.c
-> > > > > @@ -681,18 +681,21 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-> > > > >  {
-> > > > >       struct vhost_vdpa *v = filep->private_data;
-> > > > >       struct vhost_dev *d = &v->vdev;
-> > > > > +     const struct vdpa_config_ops *ops = v->vdpa->config;
-> > > > >       void __user *argp = (void __user *)arg;
-> > > > >       u64 __user *featurep = argp;
-> > > > > -     u64 features;
-> > > > > +     u64 features, parent_features = 0;
-> > > > >       long r = 0;
-> > > > >
-> > > > >       if (cmd == VHOST_SET_BACKEND_FEATURES) {
-> > > > >               if (copy_from_user(&features, featurep, sizeof(features)))
-> > > > >                       return -EFAULT;
-> > > > > +             if (ops->get_backend_features)
-> > > > > +                     parent_features = ops->get_backend_features(v->vdpa);
-> > > > >               if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
-> > > > >                                BIT_ULL(VHOST_BACKEND_F_SUSPEND) |
-> > > > >                                BIT_ULL(VHOST_BACKEND_F_RESUME) |
-> > > > > -                              BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK)))
-> > > > > +                              parent_features))
-> > > > >                       return -EOPNOTSUPP;
-> > > > >               if ((features & BIT_ULL(VHOST_BACKEND_F_SUSPEND)) &&
-> > > > >                    !vhost_vdpa_can_suspend(v))
-> > > > > --
-> > > > > 2.39.3
-> > > >
-> >
-
+Oops, this was supposed to be stable@vger.kernel.org... I'll fix that
+tag as part of v4.
