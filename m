@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9FD746989
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 08:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9695746986
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 08:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjGDGWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 02:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
+        id S230391AbjGDGVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 02:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjGDGWO (ORCPT
+        with ESMTP id S229595AbjGDGVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 02:22:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED22B2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 23:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688451691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t2SmXZgFnQoS+yb8OXdLl/MHZWbEhLAa6pjpmlK+v+w=;
-        b=KIbcH1ytBcLRCoBJoTE+d1Ws9TPaHd+B5yt3dvYvJGNX9EBT1TkHURSnTZD/UzB8TnxVKK
-        h9y+towNeBjOeQWAxdvURSrIZ6FCKHjAMMX2a5tk1AWwHeIk/+HGAzjklWqBTR1JcPhsYb
-        CPq+MciP7h8oJbUC2Q+DZIyvCuHFS9U=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-376-3Ix_jajEONi7lCs-Q1OPIw-1; Tue, 04 Jul 2023 02:21:30 -0400
-X-MC-Unique: 3Ix_jajEONi7lCs-Q1OPIw-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4fb76659d6cso4831279e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 23:21:29 -0700 (PDT)
+        Tue, 4 Jul 2023 02:21:46 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20851AC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 23:21:44 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51d5569e4d1so4889834a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 23:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688451703; x=1691043703;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vq0/2nxOenOtZq1KpxPmgjEqnbAXYZ9BqZlUzCiIlAo=;
+        b=l2hN4EhcBkBGp0AE1Ry2s5QTwmPcujV6NtQ0vxOH4MnlMsNHIQFhLw5dNeTCFMhGdY
+         P1FxibEEyWzcOyfntL1PVpFrWWAqkTj6skr2eg4RXqhcaL2/8HS+vuV5xO7UJUXhRBFQ
+         gDCFqBzf6ufBOv1GMANon2eDzRnwfXDxrVeiIzopaBcFM6O4Fzy8EJOldzvGYhHrQmLq
+         E4V4Hy8NhY8+N6INWxnLuS44k8JAhAdg4hhAEHANTfQT11RuJIFL8qa5s0T03XaBPudA
+         TxVOfR9L1NdOUYVa1NYvyEv4m/m62kmcfx8zOb3q/KOa623ae6LEAw6D3GF+FN3WUWkk
+         sMJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688451688; x=1691043688;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t2SmXZgFnQoS+yb8OXdLl/MHZWbEhLAa6pjpmlK+v+w=;
-        b=dMLqaiMkCY8ygs+UWl3DbnKvdgvazA3WRzZimKYJhCslo2nDZ7wffPwWX2VLVyWv++
-         Gx2FNydGqd0aKkjsTtWURIL3udTqAz0yejSFic1Whbmyf+JxqKkeeapnNR9VikKWBAFR
-         sG0HmzuIVivm1uubzm0T3Qaa045CT6buRa5iSrxLk/41LASHtx76nXDhznjZ7fe8QrIw
-         J2iapwejEl00gRwDMZ4mmTREU6SsX1CXnXj6FVn7htyOVYUp7jlHlJj8fhgtgQD3PmS9
-         VezotJ2yZpthrFlvStyHIi7ntu24Zx8zCuu/n2jfQVAHRO1FLd7l8AzVBcjzIV9uDiSE
-         zkUg==
-X-Gm-Message-State: ABy/qLZXkD5dJvChitUSyjSBgH/EDvu3ohEyN7lPk6WGgpmspHa/9riN
-        wg/Y6WBv6oAQcNy7q3qh3xpjG1emzlbfOdUG2wS2J1K4xvE8/A37s6tbSERRnKSo/FR0RgJCyY2
-        vT8FuMRPVsOerjPaXlVoDl4y01eNpXZiv
-X-Received: by 2002:a05:6512:33cc:b0:4fb:b615:db86 with SMTP id d12-20020a05651233cc00b004fbb615db86mr3240703lfg.7.1688451687935;
-        Mon, 03 Jul 2023 23:21:27 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHZbp4Q7VCGaFmAbp91XFT3IMGNINf29kUoORnN3loVxMj1PI0PC3Zl+hj4x6WbClnPSWkp9Q==
-X-Received: by 2002:a05:6512:33cc:b0:4fb:b615:db86 with SMTP id d12-20020a05651233cc00b004fbb615db86mr3240681lfg.7.1688451687544;
-        Mon, 03 Jul 2023 23:21:27 -0700 (PDT)
-Received: from redhat.com ([2.52.13.33])
-        by smtp.gmail.com with ESMTPSA id k16-20020a7bc410000000b003fbc9b9699dsm10663856wmi.45.2023.07.03.23.21.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 23:21:26 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 02:21:23 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com,
-        Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH] virtio_ring: use u32 for virtio_max_dma_size
-Message-ID: <20230704020935-mutt-send-email-mst@kernel.org>
-References: <20230510025437.377807-1-pizhenwei@bytedance.com>
+        d=1e100.net; s=20221208; t=1688451703; x=1691043703;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vq0/2nxOenOtZq1KpxPmgjEqnbAXYZ9BqZlUzCiIlAo=;
+        b=Je1LchHfreAi2/bqvNeM6oW7KR3XgFc91r1sbRV6DNNI6u4YGycuOA7tyYhkj8X/r5
+         Ysc1czZNT8HKl/d5is+NqcFtvLddMjvyd2D3aMSLipF0R0hGWhHrzMdjHVwUEavbf89J
+         eZoOH2eG6S1STNcRAxcHmueIog8dWY5LGaMNnrymBKnVhCNztqfiuGt5UuxRNLUmPckz
+         QNH+twiaIyTLc2w+w10bIkJndkdKa9Q5vC0nuv6vYgm3KgtyHG/+WZtu52MkktqhUNKQ
+         9QCD0MA5pkoPY8etaEbVVwhoQu3lVgKzCeSkZCOLIPwaZG+APxy0bij+tMsBia8BEKnU
+         jxRw==
+X-Gm-Message-State: ABy/qLZLOs/1QJ6PGzcLr9bK3g1FIaMKWlBHoBHKKeOf/uaKoJ3Nu0NV
+        b9CHsUXvUqqW0TO75GwUYoyB8A==
+X-Google-Smtp-Source: APBJJlFITTYj1lrz5y0PhfMY6B62r2Da/YPqbUjO1rOVXBPBe3rSyh+mlXst/ofQlWLc4FKsa86N8Q==
+X-Received: by 2002:a05:6402:4494:b0:51b:ec86:b49a with SMTP id er20-20020a056402449400b0051bec86b49amr8381188edb.7.1688451703309;
+        Mon, 03 Jul 2023 23:21:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id v2-20020aa7d9c2000000b0051bee925ca7sm11388042eds.34.2023.07.03.23.21.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 23:21:42 -0700 (PDT)
+Message-ID: <9412f498-64ad-5f08-7184-b7ff4403afdd@linaro.org>
+Date:   Tue, 4 Jul 2023 08:21:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510025437.377807-1-pizhenwei@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 01/10] dt-bindings: regulator: Add PMX75 compatibles
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linus.walleij@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, sboyd@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1688395346-3126-2-git-send-email-quic_rohiagar@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1688395346-3126-2-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 10:54:37AM +0800, zhenwei pi wrote:
-> Both split ring and packed ring use 32bits to describe the length of
-> a descriptor: see struct vring_desc and struct vring_packed_desc.
-> This means the max segment size supported by virtio is U32_MAX.
+On 03/07/2023 16:42, Rohit Agarwal wrote:
+> Add PMX75 compatibles for PMIC found in SDX75 platform.
 > 
-> An example of virtio_max_dma_size in virtio_blk.c:
->   u32 v, max_size;
-> 
->   max_size = virtio_max_dma_size(vdev);  -> implicit convert
->   err = virtio_cread_feature(vdev, VIRTIO_BLK_F_SIZE_MAX,
->                              struct virtio_blk_config, size_max, &v);
->   max_size = min(max_size, v);
-> 
-> There is a risk during implicit convert here, once virtio_max_dma_size
-> returns 4G, max_size becomes 0.
-> 
-> Fixes: e6d6dd6c875e ("virtio: Introduce virtio_max_dma_size()")
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 > ---
->  drivers/virtio/virtio_ring.c | 12 ++++++++----
->  include/linux/virtio.h       |  2 +-
->  2 files changed, 9 insertions(+), 5 deletions(-)
+>  Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index c5310eaf8b46..55cfecf030a1 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -289,12 +289,16 @@ static bool vring_use_dma_api(const struct virtio_device *vdev)
->  	return false;
->  }
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+> index b949850..cc72144 100644
+> --- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+> @@ -53,6 +53,7 @@ description: |
+>        For PMR735A, smps1 - smps3, ldo1 - ldo7
+>        For PMX55, smps1 - smps7, ldo1 - ldo16
+>        For PMX65, smps1 - smps8, ldo1 - ldo21
+> +      For PMX75, smps1 - smps10, ldo1 - ldo21
 >  
-> -size_t virtio_max_dma_size(const struct virtio_device *vdev)
-> +u32 virtio_max_dma_size(const struct virtio_device *vdev)
->  {
-> -	size_t max_segment_size = SIZE_MAX;
-> +	u32 max_segment_size = U32_MAX;
->  
-> -	if (vring_use_dma_api(vdev))
-> -		max_segment_size = dma_max_mapping_size(vdev->dev.parent);
-> +	if (vring_use_dma_api(vdev)) {
-> +		size_t max_dma_size = dma_max_mapping_size(vdev->dev.parent);
-> +
-> +		if (max_dma_size < max_segment_size)
-> +			max_segment_size = max_dma_size;
-> +	}
->  
->  	return max_segment_size;
->  }
+>  properties:
+>    compatible:
+> @@ -84,6 +85,7 @@ properties:
+>        - qcom,pmr735a-rpmh-regulators
+>        - qcom,pmx55-rpmh-regulators
+>        - qcom,pmx65-rpmh-regulators
+> +      - qcom,pmx75-rpmh-regulators
 
-Took a while for me to get this, it's confusing.  I think the issue is
-really in virtio blk, so I would just change max_size there to size_t
-and be done with it.
+You miss the update to the if:then: parts.
 
-
-
-
-> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> index b93238db94e3..1a605f408329 100644
-> --- a/include/linux/virtio.h
-> +++ b/include/linux/virtio.h
-> @@ -147,7 +147,7 @@ int virtio_device_restore(struct virtio_device *dev);
->  #endif
->  void virtio_reset_device(struct virtio_device *dev);
->  
-> -size_t virtio_max_dma_size(const struct virtio_device *vdev);
-> +u32 virtio_max_dma_size(const struct virtio_device *vdev);
->  
->  #define virtio_device_for_each_vq(vdev, vq) \
->  	list_for_each_entry(vq, &vdev->vqs, list)
-> -- 
-> 2.20.1
+Best regards,
+Krzysztof
 
