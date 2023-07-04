@@ -2,143 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8448374703A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C68E74703C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjGDL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 07:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S231334AbjGDL4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 07:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGDL4d (ORCPT
+        with ESMTP id S231356AbjGDL4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 07:56:33 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D49D10CA;
-        Tue,  4 Jul 2023 04:56:30 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 364ALk2U000581;
-        Tue, 4 Jul 2023 11:56:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=trWaaZV2bKzIMHop1+SFTvv6IsksPUMGmEKCtp5IxtU=;
- b=JdrIuW0o3gpUGGggTjbfHCH+QhYs8buD8e/aBB8/GiGZyffdBOpNnZFiP+smWW5/NRnR
- 3BiLuOg+Z5zkbmriOTK/wxSswPXJc0e98N8xlV3egxtJyvXmnyr4gpM41mj1NjlHIu4Q
- VUHm88z1Kq38oaWI1WREpJZ2LKgAU0AOS1OHAJ6x2qo/gLSAu9mQN5R+C2Co9Q0yd5iE
- 9UPgM6Wb3ihfOUCl3u/36qINJ1MQ1EGZuDlw6MrB8WYfYy3LU/8aMX3DexRACGHVsLKE
- L6ZagblXNyVUAOBh9nwvEaoGfzaC0uWEDN0D5E3lnF1UpEt3pWpedSGf8gmt98Vu6a9v Iw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rkyrra7g6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 11:56:26 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 364BuP0I016728
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Jul 2023 11:56:25 GMT
-Received: from [10.214.67.128] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Tue, 4 Jul 2023
- 04:56:22 -0700
-Message-ID: <422ffe93-e390-7379-70ad-e56f73e1da44@quicinc.com>
-Date:   Tue, 4 Jul 2023 17:26:18 +0530
+        Tue, 4 Jul 2023 07:56:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A297810D7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:56:47 -0700 (PDT)
+X-UUID: d74e09ba1a6111ee9cb5633481061a41-20230704
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=kDmDXnjKdjFDPlrVeD7IKJ7Ywmn7ZI+Wx6K1yIaJQEA=;
+        b=U0+UN2ctIVNOINxIiOMPfSIuBl9lpsKl3hpCqX2xCsIMfbTzI2JtgIzMmHlH32EW0guaNVhvSxsdT5RSbJvHG1jn7l1ZJJfUu+9sWpYab0HzshDV+rndfjcVLuu5HU4PwxMG17a7dLAManHQTMvKBTZ4Fd69VqImXhPHDAtSP5Q=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:7f2d32be-69d2-4369-b8b1-e91250455b05,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:95
+X-CID-INFO: VERSION:1.1.27,REQID:7f2d32be-69d2-4369-b8b1-e91250455b05,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:95
+X-CID-META: VersionHash:01c9525,CLOUDID:14558d0d-26a8-467f-b838-f99719a9c083,B
+        ulkID:230704195642DL3I3ZRD,BulkQuantity:1,Recheck:0,SF:28|17|19|48|38|29,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,
+        OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,
+        TF_CID_SPAM_ASC
+X-UUID: d74e09ba1a6111ee9cb5633481061a41-20230704
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 853156001; Tue, 04 Jul 2023 19:56:42 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 4 Jul 2023 19:56:40 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 4 Jul 2023 19:56:40 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yong Wu <yong.wu@mediatek.com>, <iommu@lists.linux.dev>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] iommu/mediatek: Remove a unnecessary checking for larbid
+Date:   Tue, 4 Jul 2023 19:56:34 +0800
+Message-ID: <20230704115634.7727-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] arm64: dts: qcom: qdu1000: Add reserved gpio list
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230704102224.25052-1-quic_kbajaj@quicinc.com>
- <1c6bebd3-6799-5df5-fa46-25e1b7cfd60a@linaro.org>
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-In-Reply-To: <1c6bebd3-6799-5df5-fa46-25e1b7cfd60a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RJdJA10erTQzlfbmwrBv1t8265sYTek3
-X-Proofpoint-ORIG-GUID: RJdJA10erTQzlfbmwrBv1t8265sYTek3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_06,2023-07-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 adultscore=0 impostorscore=0
- mlxlogscore=702 spamscore=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307040101
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix a coverity issue:
 
+>>assignment: Assigning: larbid = (fwspec->ids[0] >> 5) & 0x1fU.
+	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+>>between: At condition larbid >= 32U, the value of larbid must be between
+>>0 and 31.
+>>dead_error_condition: The condition larbid >= 32U cannot be true.
+	if (larbid >= MTK_LARB_NR_MAX)
+>>CID 11306470 (#1 of 1): Logically dead code (DEADCODE)
+>>dead_error_line: Execution cannot reach this statement:
+>>return ERR_PTR(-22L);
+        	return ERR_PTR(-EINVAL);
 
-On 7/4/2023 4:38 PM, Konrad Dybcio wrote:
-> On 4.07.2023 12:22, Komal Bajaj wrote:
->> Add reserved gpio list for QDU1000 and QRU1000 SoCs
->> which will not be used by HLOS.
->>
->> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
->> ---
-> Generally such changes to board files are split into per-board
-> commits.
+The checking "if (larbid >= MTK_LARB_NR_MAX)" is unnecessary.
 
-Sure, will split into per-board commits.
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+---
+Rebase on v6.4-rc1.
+---
+ drivers/iommu/mtk_iommu.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
->
-> Can you explain why these GPIOs will be inaccessible? Some secure
-> I2C peripheral, I'd guess?
-
-These GPIOs are needed by Modem subsystem.
-
-Thanks
-Komal
-
->
-> Konrad
->>   arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 4 ++++
->>   arch/arm64/boot/dts/qcom/qru1000-idp.dts | 4 ++++
->>   2 files changed, 8 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> index 1d22f87fd238..0496e87ddfd5 100644
->> --- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> @@ -471,6 +471,10 @@ &sdhc {
->>   	status = "okay";
->>   };
->>   
->> +&tlmm {
->> +	gpio-reserved-ranges = <28 2>;
->> +};
->> +
->>   &uart7 {
->>   	status = "okay";
->>   };
->> diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> index 2cc893ae4d10..80dadd2f30a3 100644
->> --- a/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> +++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> @@ -448,6 +448,10 @@ &qupv3_id_0 {
->>   	status = "okay";
->>   };
->>   
->> +&tlmm {
->> +	gpio-reserved-ranges = <28 2>;
->> +};
->> +
->>   &uart7 {
->>   	status = "okay";
->>   };
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index aecc7d154f28..67caa90b481b 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -838,9 +838,6 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+ 	 * All the ports in each a device should be in the same larbs.
+ 	 */
+ 	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+-	if (larbid >= MTK_LARB_NR_MAX)
+-		return ERR_PTR(-EINVAL);
+-
+ 	for (i = 1; i < fwspec->num_ids; i++) {
+ 		larbidx = MTK_M4U_TO_LARB(fwspec->ids[i]);
+ 		if (larbid != larbidx) {
+-- 
+2.25.1
 
