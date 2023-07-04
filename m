@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB007746872
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03859746870
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjGDErX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 00:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S230335AbjGDEq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 00:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjGDErH (ORCPT
+        with ESMTP id S230406AbjGDEqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 00:47:07 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071C510FA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 21:46:54 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id BB80C5C017E;
-        Tue,  4 Jul 2023 00:46:53 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 04 Jul 2023 00:46:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1688446013; x=
-        1688532413; bh=I7hwEV3srjyCYS9t+KWnEQ73pm3PsV/kMvHeobjOFJQ=; b=X
-        lXegA7OjSwia35Cvwj9U6IIADHrmmE/GEUE0vKaLiZ0JqiestiZXqCnXi9Y3bmtX
-        rfgoA6QhAz+rLufUskh2r1eaFNijxn3gj0J6I80KktDL9VpMukKz0G5EZhS85b6i
-        IGjGLmBUyCRARx7YZn8RayU+x2WWN60ehsZ3jWKz7wY7YE7DBOTGDq60BWSc0X6H
-        oyZU0o40l1B6RtH5DV3lsLRVlb1Uwf+Ch7zOadohJ5Dzy+T952kwXUrg298zGw1U
-        cxwqYy9652mPrULRN9dC0qWMyM6g8+5qEXtUr+HHkjiqwkz9GxG3V6+5bdtvYaw0
-        vNUw9F/4UZkTBHnFLDcOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688446013; x=
-        1688532413; bh=I7hwEV3srjyCYS9t+KWnEQ73pm3PsV/kMvHeobjOFJQ=; b=a
-        oOR3VF9pK9LHYkU1GsLZh3MXRTx8UXEfnTFj11+Dg6w4X0pZmy1dKg/p26lZAP1n
-        4GkPdwSYSZkaCGnsE+eJVfqCDICLg0kVCStjwUROhC0pbAimyydLUibp890uUDwZ
-        y05ds78HyFA4dhp6gsTZKmJZKoHybOuRQIzlBI9WH9v1LbgvAuKLh9Xcb1N00Fie
-        Z0iIHBp8q4kWFNyOLq6MXrNyItNEIFIobvi84dRvUjRxGeWI2Yml/L7e+lwxirHb
-        hC/8RQApkYmHOL3Bs2QKVdjU0gGMIivFXEOPumv2GJPO/+PmAZ1AkYA2Do+Pe8m7
-        cQZatJUPZMH/njO1UQ7qA==
-X-ME-Sender: <xms:PaSjZPFbBr2dwFDpobYodLh5eLssqb2AuFV483H8s04V64B8XRDafQ>
-    <xme:PaSjZMXHcTrWgMD4QeFyqAkczB_MwDLBjLJNfsfvb9aqg5D04THGbjtzkNAUa8pKy
-    zON9JMTg8IW__kC6sM>
-X-ME-Received: <xmr:PaSjZBJl6RIgEhJt6dv-JQJDy8gGZZgbf9MdmPccSs1Aa3GANLGV9p3cJz4e>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefgdekjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
-    ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpefgteefudfgteduueehteejhfeugf
-    fgleeltedvveethfeuueejfedvgeelveehgfenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:PaSjZNGgqcv1JjlyxNsbjKq0I7Wvk54W-ePd6lMJ2Wz8ioKtg0QTWg>
-    <xmx:PaSjZFUDpdi4p2Nl5XDqV6dLQH8RuHIPJfU8tQDDzksOnGIN0atazA>
-    <xmx:PaSjZINlg8jUb5k-vHleHP7jzBGtGShNdRtIFHKG8r4dLc7RgsEXLA>
-    <xmx:PaSjZAPfGU76qa8pWIV7TtGmUn5Hd58WTkykzh1aEQ-6hZyTxQiX5g>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Jul 2023 00:46:49 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     tiwai@suse.com
-Cc:     perex@perex.cz, sbinding@opensource.cirrus.com,
-        andy.chi@canonical.com, tcrawford@system76.com,
-        tangmeng@uniontech.com, p.jungkamp@gmx.net, kasper93@gmail.com,
-        ruinairas1992@gmail.com, yangyuchi66@gmail.com,
-        yangyingliang@huawei.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v2 5/5] Fixes: 31278997add6 (ALSA: hda/realtek - Add headset quirk for Dell DT)
-Date:   Tue,  4 Jul 2023 16:46:19 +1200
-Message-ID: <20230704044619.19343-6-luke@ljones.dev>
+        Tue, 4 Jul 2023 00:46:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE498E7A;
+        Mon,  3 Jul 2023 21:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=B4nvX/EnYj+edoXbvhTgiPbMRbiJCRZ7KDWEebyGAWg=; b=zsaxWMEx9PdbhQ+BdmET2A32r2
+        rykIJlIQ/2csXBUMiXFlQgVDV/mLf6UQfDnsiOd2fljwzSD8dR6dbiLvcEDT8Vsl28Q+z0OUZOSwm
+        qkicqsB5G8buxX5OTnkXhVsD/jFKt8DoDZghbZ7NUWWHR1FT0dFtVXcDuSd4CPevLc9wNuyjkPzx8
+        4a5Of9aokHO68U4xTv7yF3Ahii9hrAv33ve/bUifK9UXzPqLD9dbyk/YdUKBTCamTOk+0ZwdcWras
+        nzCaM/JIn0Mw7otjuu8r++9vJz8xRJeXDjROWoJebb/TDqvWT7CN16IKuJaSkjc42p8VkWzRjTCqi
+        cWUS0KTg==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qGXw6-00C9DI-0x;
+        Tue, 04 Jul 2023 04:46:46 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-fsdevel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Subject: [PATCH] libfs: fix table format warning
+Date:   Mon,  3 Jul 2023 21:46:43 -0700
+Message-ID: <20230704044643.8622-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230704044619.19343-1-luke@ljones.dev>
-References: <20230704044619.19343-1-luke@ljones.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove an erroneous whitespace.
+Drop the unnecessary colon to make the table formatting correct.
+The colons are not needed and this file uses them sometimes and
+doesn't at other times. Generally they are not preferred in
+documentation tables IMO.
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
+Also extend the table line widths to match the table text.
+
+Fixes: 7a3472ae9614 ("libfs: Add directory operations for stable offsets")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lore.kernel.org/linux-next/20230704135149.014516c7@canb.auug.org.au/T/#u
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Chuck Lever <chuck.lever@oracle.com>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
 ---
- sound/pci/hda/patch_realtek.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/filesystems/locking.rst |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index ba3c113f0be1..1547c40dc7e9 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -5883,7 +5883,7 @@ static void alc_fixup_headset_mode_alc255_no_hp_mic(struct hda_codec *codec,
- 		struct alc_spec *spec = codec->spec;
- 		spec->parse_flags |= HDA_PINCFG_HEADSET_MIC;
- 		alc255_set_default_jack_type(codec);
--	} 
-+	}
- 	else
- 		alc_fixup_headset_mode(codec, fix, action);
- }
--- 
-2.41.0
-
+diff -- a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+--- a/Documentation/filesystems/locking.rst
++++ b/Documentation/filesystems/locking.rst
+@@ -90,9 +90,9 @@ prototypes::
+ locking rules:
+ 	all may block
+ 
+-==============	=============================================
++==============	==================================================
+ ops		i_rwsem(inode)
+-==============	=============================================
++==============	==================================================
+ lookup:		shared
+ create:		exclusive
+ link:		exclusive (both)
+@@ -116,8 +116,8 @@ atomic_open:	shared (exclusive if O_CREA
+ tmpfile:	no
+ fileattr_get:	no or exclusive
+ fileattr_set:	exclusive
+-get_offset_ctx: no
+-==============	=============================================
++get_offset_ctx  no
++==============	==================================================
+ 
+ 
+ 	Additionally, ->rmdir(), ->unlink() and ->rename() have ->i_rwsem
