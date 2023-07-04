@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FA07477B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69EE7477B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjGDRV4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 13:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S231428AbjGDRWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjGDRVy (ORCPT
+        with ESMTP id S229971AbjGDRWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:21:54 -0400
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF34E76;
-        Tue,  4 Jul 2023 10:21:53 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b58330576fso19014691fa.1;
-        Tue, 04 Jul 2023 10:21:53 -0700 (PDT)
+        Tue, 4 Jul 2023 13:22:17 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15BD10C1;
+        Tue,  4 Jul 2023 10:22:16 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1b078b34df5so5722037fac.2;
+        Tue, 04 Jul 2023 10:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688491336; x=1691083336;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7FZLomDWDbjdWX61WSlseufijU603RigLg7aNYHBJY=;
+        b=K1fe2Rcalt7NRZxlZdobMv7vh0ZEDnCcEUDgWPJy+StZMldSwPBP6fMT+fkU0vOvP2
+         /QYZmJ5+ZSn06Pt+4JNEso0RD0R522NQ/9YRYC26ACWTmMkhJHBCOTbEShktgPqw5MGH
+         OEGF9gfqo+YX1TAySIYzMRU6AyNAdSLKPvw7AWDW9VqCAAAnX8rfAC3xHQPb3PSQK0ZN
+         XYloU27NjWZqY/JqVpg71EzuXlsBBIXMlfBo0BrbRTjBdfwbTuuJX1+AwH9Zu36a7zOc
+         9OD+81RRk7fgUNFxRDIIJCnNWlnMdLyLZrGL8n8Q4ppfZ4B3IXmrHUOZo3VpxvqhSfes
+         ECrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688491312; x=1691083312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G4u6eIXf7e98cure07zvGITm6ZjEeaYArMs+Y8ColeM=;
-        b=WCkoqO7bdNSk9uncF+lDxVbpJVlKWfZ5083PSTyANANH52ACxF3EPQFGDh8z5eDh8q
-         XPLZsm/92w2YcTe8hpL+0j/iJj/zCXGMnhItqmLRy2YuBd+aejMsPuzNJSn/iVcbBiPT
-         ZvA699dUVnfmr64iDfwtRksXLLLcncWJSiaGF/zNZs8P0cqMF9SGQezM1jFLd+jblzkI
-         AtwX5gQRFFd+9yu2BSRGWY1W9LPrhYV0yf5Hsi5R8ddSHuc+UL/cK4whBAa2AZTVij3l
-         FjtPgevtC+0Gg/5TJvg8SqXKKJPp+VxdHSmiC/jHe9W0GGBTCRhWZGZcJleYerdsFjOF
-         GUcA==
-X-Gm-Message-State: ABy/qLZ1YxaeCh0LNtKJdxUbpDjusNTkyHsQX9r4fPwgkw+J4+9SdNqd
-        LMzSCcuuBQfIXnPT3VkJ2f6MMxRrEEEnAEicjo4=
-X-Google-Smtp-Source: APBJJlEzVFMq4eEFDvAnGVGxB6cIV+lZaBdnBF+zTrdd1CJZ8L8sBTMbIo2Q2EXSxB/VNYgGZwXg+pY3/OGR8tOISvU=
-X-Received: by 2002:a2e:888e:0:b0:2b6:120a:af65 with SMTP id
- k14-20020a2e888e000000b002b6120aaf65mr9145539lji.3.1688491311701; Tue, 04 Jul
- 2023 10:21:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688491336; x=1691083336;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z7FZLomDWDbjdWX61WSlseufijU603RigLg7aNYHBJY=;
+        b=Mk8Ay2JHXW5NSxpS41Z6rp5MVuRXSoEwXLP6mY4I85FzudC/3lBBRWbXHHo9ywA80R
+         +Pd8gMhcOmNoFC+x2EYSEQeqTHmQBZSUKdWHNnya5rwvphGsdgsuWHx4oMFSK/CDbaqf
+         lvDVoln0LWsjjlHMAge/gxiY9ZGzTN+Oe2TaIGpZnx3gYVO45GGJtORsH5J5sJS81aES
+         49kfgqO26g571nBuUKt+sy+O372swlrSORFnR2rct+G4xDsGt+xFTCzHTKe2PKHPD5ZJ
+         weOxRVXpNu0NrdXpiMHwdt3BGqYBi7ICm89xhwEBUSkRWDdmcb67hrJyn1vbLqHQvZCt
+         tDzw==
+X-Gm-Message-State: ABy/qLbrKcNt0R5EwRn8Kf/5m4QLqVolWuEEVymmQtopocpKFfz8/xc6
+        9BRrzeYeNW12MEeiEqiRONU=
+X-Google-Smtp-Source: ACHHUZ6VEkTnut83c2dLjWl3PWRuAfEErbUOknHJwrNB91eQi5DvHdrZEnrnqA9zB6XzgUSOcEOjbA==
+X-Received: by 2002:a05:6870:ac0d:b0:191:f657:13ee with SMTP id kw13-20020a056870ac0d00b00191f65713eemr15602832oab.11.1688491336194;
+        Tue, 04 Jul 2023 10:22:16 -0700 (PDT)
+Received: from [192.168.1.119] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id z11-20020a9d65cb000000b006b884bbb4f3sm6045994oth.26.2023.07.04.10.22.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 10:22:15 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <9ccf927e-7e68-91c4-3cfc-0ff535abe0a6@lwfinger.net>
+Date:   Tue, 4 Jul 2023 12:22:14 -0500
 MIME-Version: 1.0
-References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com> <20230703121411.69606-6-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230703121411.69606-6-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jul 2023 19:21:40 +0200
-Message-ID: <CAJZ5v0hytwzAPBpnPZnvdU7GhK12P0PJbe9aD+eVrVJhkq1ayA@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] ACPI: scan: Provide symbol declarations
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Michael Walle <michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] wifi: rtw89: debug: fix error code in
+ rtw89_debug_priv_send_h2c_set()
+To:     Zhang Shurong <zhang_shurong@foxmail.com>, pkshih@realtek.com
+Cc:     kvalo@kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <tencent_54814178D4285CA3D64B8CDC90D49A6CB10A@qq.com>
+Content-Language: en-US
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <tencent_54814178D4285CA3D64B8CDC90D49A6CB10A@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 2:14 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Compiler is not happy about a couple of symbols that, it thinks,
-> are not declared:
->
->   warning: symbol 'acpi_device_lock' was not declared. Should it be static?
->   warning: symbol 'acpi_wakeup_device_list' was not declared. Should it be static?
->
-> Include "sleep.h" to have them explicitly declared and make
-> the compiler happy.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 7/4/23 11:55, Zhang Shurong wrote:
+> If there is a failure during rtw89_fw_h2c_raw() rtw89_debug_priv_send_h2c
+> should return negative error code instead of a positive value count.
+> 
+> Fix this bug by returning correct error code.
+> 
+> The changes in this version:
+> - fix some compile error
+> 
+> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 
-I've just applied a patch from Ben Dooks making the exact same change.
+I have two comments on the patch itself:
 
-> ---
->  drivers/acpi/scan.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index ec1c9bec8bae..5b145f1aaa1b 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -23,6 +23,7 @@
->  #include <linux/dma-direct.h>
->
->  #include "internal.h"
-> +#include "sleep.h"
->
->  #define ACPI_BUS_CLASS                 "system_bus"
->  #define ACPI_BUS_HID                   "LNXSYBUS"
-> --
+1) Whenever you have a fix for the code, you need to annotate it using the 
+"Fixes: tag". See file Documentation/process/submitting-patches.rst in your 
+source tree.
+
+2) The version change stuff should be in the following order:
+
+Signed-off-by: ....
+---
+v2 - fixed compile error
+---
+Body of patch.
+
+Placing it where you did would cause the details of "making the sausage" be 
+saved in the commit log. The reviewer and maintainer need to see it, but not the 
+end user.
+
+Larry
+
