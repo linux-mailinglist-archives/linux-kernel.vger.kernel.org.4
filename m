@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CCE7453FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 04:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAE3745413
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jul 2023 05:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjGCCuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jul 2023 22:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S229923AbjGCDMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jul 2023 23:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjGCCuS (ORCPT
+        with ESMTP id S229554AbjGCDMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jul 2023 22:50:18 -0400
+        Sun, 2 Jul 2023 23:12:43 -0400
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E8FBAE44;
-        Sun,  2 Jul 2023 19:50:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0CFBA1BE;
+        Sun,  2 Jul 2023 20:12:40 -0700 (PDT)
 Received: from localhost.localdomain (unknown [219.141.250.2])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 83FBB609158B7;
-        Mon,  3 Jul 2023 10:49:54 +0800 (CST)
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id A79E76096E8F9;
+        Mon,  3 Jul 2023 11:12:39 +0800 (CST)
 X-MD-Sfrom: zeming@nfschina.com
 X-MD-SrcIP: 219.141.250.2
 From:   Li zeming <zeming@nfschina.com>
@@ -25,9 +25,9 @@ To:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
         davem@davemloft.net, mhiramat@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Li zeming <zeming@nfschina.com>
-Subject: [PATCH] =?UTF-8?q?kprobes:=20Remove=20unnecessary=20=E2=80=980?= =?UTF-8?q?=E2=80=99=20values=20from=20ret?=
-Date:   Wed,  5 Jul 2023 03:21:07 +0800
-Message-Id: <20230704192107.2944-1-zeming@nfschina.com>
+Subject: [PATCH] =?UTF-8?q?kprobes:=20Remove=20unnecessary=20=E2=80=98NULL?= =?UTF-8?q?=E2=80=99=20values=20from=20correct=5Fret=5Faddr?=
+Date:   Wed,  5 Jul 2023 03:43:59 +0800
+Message-Id: <20230704194359.3124-1-zeming@nfschina.com>
 X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -41,35 +41,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ret is assigned first, so it does not need to initialize the assignment.
+The 'correct_ret_addr' pointer is always set in the later code, no need
+to initialize it at definition time.
 
 Signed-off-by: Li zeming <zeming@nfschina.com>
 ---
- kernel/kprobes.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/kprobes.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 00e177de91cc..db8a3aa53cf6 100644
+index db8a3aa53cf6..ec50f9f380c1 100644
 --- a/kernel/kprobes.c
 +++ b/kernel/kprobes.c
-@@ -1072,7 +1072,7 @@ static int kprobe_ftrace_enabled;
- static int __arm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
- 			       int *cnt)
+@@ -2007,9 +2007,9 @@ void __weak arch_kretprobe_fixup_return(struct pt_regs *regs,
+ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
+ 					     void *frame_pointer)
  {
--	int ret = 0;
-+	int ret;
+-	kprobe_opcode_t *correct_ret_addr = NULL;
+ 	struct kretprobe_instance *ri = NULL;
+ 	struct llist_node *first, *node = NULL;
++	kprobe_opcode_t *correct_ret_addr;
+ 	struct kretprobe *rp;
  
- 	lockdep_assert_held(&kprobe_mutex);
- 
-@@ -1110,7 +1110,7 @@ static int arm_kprobe_ftrace(struct kprobe *p)
- static int __disarm_kprobe_ftrace(struct kprobe *p, struct ftrace_ops *ops,
- 				  int *cnt)
- {
--	int ret = 0;
-+	int ret;
- 
- 	lockdep_assert_held(&kprobe_mutex);
- 
+ 	/* Find correct address and all nodes for this frame. */
 -- 
 2.18.2
 
