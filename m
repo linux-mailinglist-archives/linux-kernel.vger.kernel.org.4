@@ -2,156 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3815F747616
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCF6747619
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjGDQGJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 12:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S231432AbjGDQHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjGDQGI (ORCPT
+        with ESMTP id S230232AbjGDQHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:06:08 -0400
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0543BE7A;
-        Tue,  4 Jul 2023 09:06:07 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b58330576fso18767341fa.1;
-        Tue, 04 Jul 2023 09:06:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688486765; x=1691078765;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FUYQR1OTGV83aKP/E1cbbGWILiLZ1oIf9GaUQyPplb4=;
-        b=JhLjzIXXQitNFysoATz+whhkqk25+IYV+qgGb72YdQFYX4qic7renoTsCoC5/4ujed
-         4iuHXUSeVY/dI8X1VIcWSfJ5vo3C/ONF3EguI6bQkbtzo8Lhuw4WNz9r6X1Kx4E76D4r
-         6aks8nq5nI4iK9USejm2TMuuJF1o4v+8lcJNU+yAEqkbK6EkF4J7bxzZYmKrMl71Ilxl
-         kj/OQEJ4oO0RSGPlC/Z25vMOOQvmAV3fna8EWI/gekZEI6Or9g2Ri8thg6E724LYJ6OP
-         zIkdts8aa5o5iOpkWszOk+OrBfDrLEKgdXU4c7c5wy4vQFQWC2GP0e6llLvNg4QvAUVi
-         tLpw==
-X-Gm-Message-State: ABy/qLYep9riB43GF7UWNIhYH50tZbT5g5l4+SeOyd7EWVf7+d6mNadY
-        0JtYzL8aYU+7KSmx3E2CXsh4bHiMbwFEsvLNHLqOtQsQoKE=
-X-Google-Smtp-Source: APBJJlGtPqvxIQi/tu5cWjUHqXqFID5rJfjUKqOOlGmPxjKNAk7P4iDoje+JynoZ9YtiqnyubftxILjsC45WIiyNKCM=
-X-Received: by 2002:a2e:870c:0:b0:2b6:cd7f:5ea8 with SMTP id
- m12-20020a2e870c000000b002b6cd7f5ea8mr9298617lji.1.1688486764797; Tue, 04 Jul
- 2023 09:06:04 -0700 (PDT)
+        Tue, 4 Jul 2023 12:07:12 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A22EE7A;
+        Tue,  4 Jul 2023 09:07:10 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 364G6meo127101;
+        Tue, 4 Jul 2023 11:06:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688486808;
+        bh=Qp+vFMfuEysL6yAnzeCFNQYqDH0eM850rxMMqfKTg38=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=UKFGGx+PbiFt+ARgk3EOsuA9BRRj1du8WmWnWArkd8O9+K5neJ0kNKB4uXZLRMFQm
+         AwU2C7ZRaVav3mZ4N02Zcj8BXJ2A5dhXuKksb1wdoFSwKojxj/g2o+tGHeuVzDamZ+
+         He9crasw8UCgpyk+mynEM65fuXTPbPjkcbW5PPqk=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 364G6mLT020501
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 Jul 2023 11:06:48 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 4
+ Jul 2023 11:06:48 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 4 Jul 2023 11:06:48 -0500
+Received: from [10.249.128.37] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 364G6h1s061523;
+        Tue, 4 Jul 2023 11:06:44 -0500
+Message-ID: <a245938e-2140-5f77-ab91-6cfbd3ddf66c@ti.com>
+Date:   Tue, 4 Jul 2023 21:36:43 +0530
 MIME-Version: 1.0
-References: <20230704131715.44454-5-gregkh@linuxfoundation.org> <20230704131715.44454-8-gregkh@linuxfoundation.org>
-In-Reply-To: <20230704131715.44454-8-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jul 2023 18:05:53 +0200
-Message-ID: <CAJZ5v0jsK+o=auHMwcOnqamLS1_cw6D9YRJ4YDs2n-46R=zGYw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] driver core: remove devm_device_add_groups()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net,
-        samsagax@gmail.com, linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [EXTERNAL] Re: [PATCH] PCI: j721e: Fix delay before PERST#
+ deassert
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-omap@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
+References: <20230703162156.GA525196@bhelgaas>
+From:   "Verma, Achal" <a-verma1@ti.com>
+In-Reply-To: <20230703162156.GA525196@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 3:17 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> There is no more in-kernel users of this function, and no driver should
-> ever be using it, so remove it from the kernel.
->
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-> ---
->  drivers/base/core.c    | 45 ------------------------------------------
->  include/linux/device.h |  2 --
->  2 files changed, 47 deletions(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 3dff5037943e..94187c0b577d 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2748,15 +2748,6 @@ static void devm_attr_group_remove(struct device *dev, void *res)
->         sysfs_remove_group(&dev->kobj, group);
->  }
->
-> -static void devm_attr_groups_remove(struct device *dev, void *res)
-> -{
-> -       union device_attr_group_devres *devres = res;
-> -       const struct attribute_group **groups = devres->groups;
-> -
-> -       dev_dbg(dev, "%s: removing groups %p\n", __func__, groups);
-> -       sysfs_remove_groups(&dev->kobj, groups);
-> -}
-> -
->  /**
->   * devm_device_add_group - given a device, create a managed attribute group
->   * @dev:       The device to create the group for
-> @@ -2789,42 +2780,6 @@ int devm_device_add_group(struct device *dev, const struct attribute_group *grp)
->  }
->  EXPORT_SYMBOL_GPL(devm_device_add_group);
->
-> -/**
-> - * devm_device_add_groups - create a bunch of managed attribute groups
-> - * @dev:       The device to create the group for
-> - * @groups:    The attribute groups to create, NULL terminated
-> - *
-> - * This function creates a bunch of managed attribute groups.  If an error
-> - * occurs when creating a group, all previously created groups will be
-> - * removed, unwinding everything back to the original state when this
-> - * function was called.  It will explicitly warn and error if any of the
-> - * attribute files being created already exist.
-> - *
-> - * Returns 0 on success or error code from sysfs_create_group on failure.
-> - */
-> -int devm_device_add_groups(struct device *dev,
-> -                          const struct attribute_group **groups)
-> -{
-> -       union device_attr_group_devres *devres;
-> -       int error;
-> -
-> -       devres = devres_alloc(devm_attr_groups_remove,
-> -                             sizeof(*devres), GFP_KERNEL);
-> -       if (!devres)
-> -               return -ENOMEM;
-> -
-> -       error = sysfs_create_groups(&dev->kobj, groups);
-> -       if (error) {
-> -               devres_free(devres);
-> -               return error;
-> -       }
-> -
-> -       devres->groups = groups;
-> -       devres_add(dev, devres);
-> -       return 0;
-> -}
-> -EXPORT_SYMBOL_GPL(devm_device_add_groups);
-> -
->  static int device_add_attrs(struct device *dev)
->  {
->         const struct class *class = dev->class;
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 66c13965153d..6dd087e4223d 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -1164,8 +1164,6 @@ static inline void device_remove_group(struct device *dev,
->         return device_remove_groups(dev, groups);
->  }
->
-> -int __must_check devm_device_add_groups(struct device *dev,
-> -                                       const struct attribute_group **groups);
->  int __must_check devm_device_add_group(struct device *dev,
->                                        const struct attribute_group *grp);
->
-> --
-> 2.41.0
->
+On 7/3/2023 9:51 PM, Bjorn Helgaas wrote:
+> In subject, "Fix" doesn't convey much information.  Does it increase?
+> Decrease?  How much time are we talking about?  PERST# deassert is at
+> one end of the delay; what event is at the other end?
+Hi Bjorn,
+
+How about "Increase delay to 100ms for PERST# deassert from moment 
+power-rails achieve operating limits"
+> 
+> Some of these useful bits of information could appear in the subject
+> line.
+> 
+> On Mon, Jul 03, 2023 at 04:59:14PM +0530, Achal Verma wrote:
+>> As per the PCIe Card Electromechanical specification REV. 3.0, PERST#
+> 
+> I think the current rev of this spec is r5.0.  Can you cite that
+> instead?  I think the relevant section is r5.0, sec 2.9.2.
+REV 5.0 also quote same TPVPERL=100ms delay.
+I refer REV. 3.0 as pci-j721e controller follows REV. 3.0
+> 
+>> signal should be de-asserted after minimum 100ms from the time power-rails
+>> become stable. Current delay of 100us is observed to be not enough on some
+>> custom platform implemented using TI's K3 SOCs.
+> 
+> Is this delay for the benefit of the Root Port or for the attached
+> Endpoint?  If the latter, my guess is that some Endpoints might
+> tolerate the current shorter delay, while others might require more,
+> and it doesn't sound like "TI's K3 SoC" would be relevant here.
+Its for the endpoints, TI's EVB doesn't exhibit any issues with 100us 
+delay but some customer reported the issue with shorter delay.
+I have been working to refactor this driver to build as a module, I too
+observed the issue on re-probe after remove when delay is lesser.
+> 
+>> So, to ensure 100ms delay to give sufficient time for power-rails and
+>> refclk to become stable, change delay from 100us to 100ms.
+>>
+>>  From PCIe Card Electromechanical specification REV. 3.0 section 2.6.2:
+>> TPVPERL: Power stable to PERST# inactive - 100ms
+>> T-PERST-CLK: REFCLK stable before PERST# inactive - 100 usec.
+> 
+> Numbers like 100ms that come from the PCIe specs should have #defines
+> for them.  If we don't have one already, can you add one, please?
+Sure, will do it in next revision but should this go in some generic PCI 
+header file or just pci-j721e.c
+> 
+>> Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
+>> Signed-off-by: Achal Verma <a-verma1@ti.com>
+>> ---
+>>   drivers/pci/controller/cadence/pci-j721e.c | 9 ++++-----
+>>   1 file changed, 4 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+>> index e70213c9060a..fa2b4c11d2c4 100644
+>> --- a/drivers/pci/controller/cadence/pci-j721e.c
+>> +++ b/drivers/pci/controller/cadence/pci-j721e.c
+>> @@ -499,13 +499,12 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+>>   		/*
+>>   		 * "Power Sequencing and Reset Signal Timings" table in
+>>   		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
+>> -		 * indicates PERST# should be deasserted after minimum of 100us
+>> -		 * once REFCLK is stable. The REFCLK to the connector in RC
+>> -		 * mode is selected while enabling the PHY. So deassert PERST#
+>> -		 * after 100 us.
+>> +		 * indicates PERST# should be deasserted after minimum of 100ms
+>> +		 * after power rails achieve specified operating limits and
+>> +		 * within this period reference clock should also become stable.
+>>   		 */
+>>   		if (gpiod) {
+>> -			usleep_range(100, 200);
+>> +			msleep(100);
+>>   			gpiod_set_value_cansleep(gpiod, 1);
+>>   		}
+>>   
+>> -- 
+>> 2.25.1
+>>
+>>
+>> _______________________________________________
+>> linux-arm-kernel mailing list
+>> linux-arm-kernel@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
