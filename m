@@ -2,146 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C6F7478A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFFA7478AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbjGDTXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 15:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S231522AbjGDTZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 15:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbjGDTXa (ORCPT
+        with ESMTP id S229744AbjGDTZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 15:23:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6063910E0
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 12:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688498559;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mFBR9aLLd+UbaMyLdyzrVxs4N2kaUNBTqCwcKCV+cF4=;
-        b=VeHtMiFRKcTN/DX8ybjtpYwEBqu4LSR2/xDJNwV7f2R0hL+cl7quDp6XEUlTwq6RPtOow4
-        GUIWh1G/dzyBmFnPLudPaYSXY8pxlXCH+EA6KT3otAepZvZ0IdmswYLsiqnOeJmhnr5ALm
-        ujSKGZ8NDCYtzktqg+VjC16WeDd0cO8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-137-bNqzE_xcOrKocHm-YoH1Eg-1; Tue, 04 Jul 2023 15:22:38 -0400
-X-MC-Unique: bNqzE_xcOrKocHm-YoH1Eg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C620D800159;
-        Tue,  4 Jul 2023 19:22:37 +0000 (UTC)
-Received: from [10.39.208.32] (unknown [10.39.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BD7DDF641E;
-        Tue,  4 Jul 2023 19:22:35 +0000 (UTC)
-Message-ID: <1f4ac369-75f8-f65d-6f31-9c4a5a2a357f@redhat.com>
-Date:   Tue, 4 Jul 2023 21:22:34 +0200
+        Tue, 4 Jul 2023 15:25:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90EB610D9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 12:25:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEB4615DB;
+        Tue,  4 Jul 2023 12:26:17 -0700 (PDT)
+Received: from bogus (unknown [10.57.76.100])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5715A3F663;
+        Tue,  4 Jul 2023 12:25:32 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 20:25:29 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Mostafa Saleh <smostafa@google.com>
+Cc:     maz@kernel.org, oliver.upton@linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com,
+        will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com, Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v3] KVM: arm64: Use BTI for nvhe
+Message-ID: <20230704192529.d4x2p7ndz2dc4q52@bogus>
+References: <20230530150845.2856828-1-smostafa@google.com>
+ <20230704134136.a5znw4jupt5yp5kg@bogus>
+ <ZKQqIYRrckLlXqkx@google.com>
+ <20230704143339.cqrvntq7rmmb2on3@bogus>
+ <ZKRIWJKn7aVSOvjd@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/3] vduse: Temporarily disable control queue features
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     xieyongji@bytedance.com, jasowang@redhat.com,
-        david.marchand@redhat.com, lulu@redhat.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
-References: <20230704164045.39119-1-maxime.coquelin@redhat.com>
- <20230704164045.39119-4-maxime.coquelin@redhat.com>
- <20230704124245-mutt-send-email-mst@kernel.org>
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-In-Reply-To: <20230704124245-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZKRIWJKn7aVSOvjd@google.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 04, 2023 at 04:27:04PM +0000, Mostafa Saleh wrote:
+> Hi Sudeep,
+> 
+> On Tue, Jul 04, 2023 at 03:33:39PM +0100, Sudeep Holla wrote:
+> > Hi Mostafa,
+> > 
+> > On Tue, Jul 04, 2023 at 02:18:09PM +0000, Mostafa Saleh wrote:
+> > > Hi Sudeep,
+> > > 
+> > > On Tue, Jul 04, 2023 at 02:41:36PM +0100, Sudeep Holla wrote:
+> > > > On Tue, May 30, 2023 at 03:08:45PM +0000, Mostafa Saleh wrote:
+> > > > > CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+> > > > > However, the nvhe code doesn't make use of it as it doesn't map any
+> > > > > pages with Guarded Page(GP) bit.
+> > > > > 
+> > > > > kvm pgtable code is modified to map executable pages with GP bit
+> > > > > if BTI is enabled for the kernel.
+> > > > > 
+> > > > > At hyp init, SCTLR_EL2.BT is set to 1 to match EL1 configuration
+> > > > > (SCTLR_EL1.BT1) set in bti_enable().
+> > > > > 
+> > > > > One difference between kernel and nvhe code, is that the kernel maps
+> > > > > .text with GP while nvhe maps all the executable pages, this makes
+> > > > > nvhe code need to deal with special initialization code coming from
+> > > > > other executable sections (.idmap.text).
+> > > > > For this we need to add bti instruction at the beginning of
+> > > > > __kvm_handle_stub_hvc as it can be called by  __host_hvc through
+> > > > > branch instruction(br) and unlike SYM_FUNC_START, SYM_CODE_START
+> > > > > doesn’t add bti instruction at the beginning, and it can’t be modified
+> > > > > to add it as it is used with vector tables.
+> > > > > Another solution which is more intrusive is to convert
+> > > > > __kvm_handle_stub_hvc to a function and inject “bti jc” instead of
+> > > > > “bti c” in SYM_FUNC_START
+> > > > >
+> > > > 
+> > > > I was chasing a bug in linux-next yesterday with protected nVHE(pKVM) and
+> > > > cpuidle enabled. The system fails to boot. I just bisected the issue to this
+> > > > patch and also saw this patch landed in the linus tree yesterday/today.
+> > > 
+> > > One of the challenges of BTI is that we need to add explicit BTI instructions
+> > > for assembly code. I checked the code to make sure that nothing was missing,
+> > > but maybe this is not the case.
+> > > Can you please share more about the issue (is ESR a Branch Target Exception,
+> > > call stack...) if possible.
+> > 
+> > I haven't debugged it any further, just reported it as soon as I bisected it.
+> > Reverting this get back the booting system. I am not sure if anything is going
+> > wrong when the CPU is entering suspend(highly unlikely in normal scenario but
+> > I am not so sure with pKVM trapping these PSCI calls now) or when it is woken
+> > up and resuming back. IIUC this now will happen via kvm_hyp_cpu_resume->
+> > __kvm_hyp_init_cpu->___kvm_hyp_init. 
+> 
+> Thanks a lot for the information.
+> 
+> I checked this now, and I believe I found an issue. I see that __kvm_hyp_init_cpu
+> calls kvm_host_psci_cpu_entry indirectly and there is no BTI there.
+> I think this is the only C function that needs special handling.
+>
 
+So it is in the wake up path. Thanks for the description, now I understand
+the issue and fix better.
 
-On 7/4/23 18:43, Michael S. Tsirkin wrote:
-> On Tue, Jul 04, 2023 at 06:40:45PM +0200, Maxime Coquelin wrote:
->> Virtio-net driver control queue implementation is not safe
->> when used with VDUSE. If the VDUSE application does not
->> reply to control queue messages, it currently ends up
->> hanging the kernel thread sending this command.
->>
->> Some work is on-going to make the control queue
->> implementation robust with VDUSE. Until it is completed,
->> let's disable control virtqueue and features that depend on
->> it.
->>
->> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
->> ---
->>   drivers/vdpa/vdpa_user/vduse_dev.c | 21 +++++++++++++++++++++
->>   1 file changed, 21 insertions(+)
->>
->> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
->> index 1271c9796517..04367a53802b 100644
->> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
->> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
->> @@ -1778,6 +1778,25 @@ static struct attribute *vduse_dev_attrs[] = {
->>   
->>   ATTRIBUTE_GROUPS(vduse_dev);
->>   
->> +static void vduse_dev_features_fixup(struct vduse_dev_config *config)
->> +{
->> +	if (config->device_id == VIRTIO_ID_NET) {
->> +		/*
->> +		 * Temporarily disable control virtqueue and features that
->> +		 * depend on it while CVQ is being made more robust for VDUSE.
->> +		 */
->> +		config->features &= ~((1ULL << VIRTIO_NET_F_CTRL_VQ) |
->> +				(1ULL << VIRTIO_NET_F_CTRL_RX) |
->> +				(1ULL << VIRTIO_NET_F_CTRL_VLAN) |
->> +				(1ULL << VIRTIO_NET_F_GUEST_ANNOUNCE) |
->> +				(1ULL << VIRTIO_NET_F_MQ) |
->> +				(1ULL << VIRTIO_NET_F_CTRL_MAC_ADDR) |
->> +				(1ULL << VIRTIO_NET_F_RSS) |
->> +				(1ULL << VIRTIO_NET_F_HASH_REPORT) |
->> +				(1ULL << VIRTIO_NET_F_NOTF_COAL));
->> +	}
->> +}
->> +
+> Can you please check if this solves the issue?
+>
+
+Yes, the below patch fixed the issue. Feel free to add when you post the
+formal patch.
+
+Reported-and-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+
+> diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+> index c87c63133e10..7df63f364c3c 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/host.S
+> +++ b/arch/arm64/kvm/hyp/nvhe/host.S
+> @@ -297,3 +297,8 @@ SYM_CODE_START(__kvm_hyp_host_forward_smc)
+>  
+>         ret
+>  SYM_CODE_END(__kvm_hyp_host_forward_smc)
+> +
+> +SYM_CODE_START(kvm_host_psci_cpu_entry)
+> +       bti j
+> +       b __kvm_host_psci_cpu_entry
+> +SYM_CODE_END(kvm_host_psci_cpu_entry)
+> diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+> index 08508783ec3d..24543d2a3490 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+> @@ -200,7 +200,7 @@ static int psci_system_suspend(u64 func_id, struct kvm_cpu_context *host_ctxt)
+>                          __hyp_pa(init_params), 0);
+>  }
+>  
+> -asmlinkage void __noreturn kvm_host_psci_cpu_entry(bool is_cpu_on)
+> +asmlinkage void __noreturn __kvm_host_psci_cpu_entry(bool is_cpu_on)
+>  {
+>         struct psci_boot_args *boot_args;
+>         struct kvm_cpu_context *host_ctxt;
 > 
 > 
-> This will never be exhaustive, we are adding new features.
-> Please add an allowlist with just legal ones instead.
-
-Ok, got it!
-I'll post a new revision.
-
-Thanks,
-Maxime
-
+> > > Also, is this with CONFIG_ARM_PSCI_CPUIDLE?
+> > 
+> > Yes, basically the cpus can enter cpu_suspend which IIUC pKVM traps and
+> > handle for the host.
 > 
-> 
->>   static int vduse_create_dev(struct vduse_dev_config *config,
->>   			    void *config_buf, u64 api_version)
->>   {
->> @@ -1793,6 +1812,8 @@ static int vduse_create_dev(struct vduse_dev_config *config,
->>   	if (!dev)
->>   		goto err;
->>   
->> +	vduse_dev_features_fixup(config);
->> +
->>   	dev->api_version = api_version;
->>   	dev->device_features = config->features;
->>   	dev->device_id = config->device_id;
->> -- 
->> 2.41.0
-> 
+> My current setup has no CONFIG_ARM_PSCI_CPUIDLE?, I will try to find
+> something I can test with.
+>
 
+No worries, I can help until you find one.
+
+
+> > > 
+> > > > Not sure if this is something to do with the fact that pKVM skips to
+> > > > __kvm_handle_stub_hvc in __host_hvc.
+> > 
+> > Sorry, my bad. I meant pKVM skips calling __kvm_handle_stub_hvc in __host_hvc
+> > and jumps to __host_exit directly. Sorry for that, one wrong "to" changed the
+> > whole meaning.
+> 
+> I don't see an issue in this, as this path has no indirect branches.
+>
+
+Understood.
+
+-- 
+Regards,
+Sudeep
