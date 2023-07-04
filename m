@@ -2,132 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745FC747915
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED03274791E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjGDUlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 16:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S231409AbjGDUo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 16:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjGDUlx (ORCPT
+        with ESMTP id S231366AbjGDUo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:41:53 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951D7DD;
-        Tue,  4 Jul 2023 13:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=HW7ZhyDLqVKFKjCFNLAp0JD1t9Vseu4A09CiQofsdVA=; b=BrAzDcxQh7bvYdJyngJQO7Y3hL
-        8KN8wckDrJFW2YLx4P5BvsjfcKPxb5gnDyLOPUypmEUeWIyZGWwU2jqsVGoqCVRb4O06l7AQcszUa
-        MF0SfZr/QidtkDdh5JQ5vHlax5EBY7f71g4wlPDVw71+X2GwMxs2kvGUQ4OddWhmP71s=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:53038 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qGmqD-0002iu-6G; Tue, 04 Jul 2023 16:41:41 -0400
-Date:   Tue, 4 Jul 2023 16:41:40 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pierluigi Passaro <pierluigi.p@variscite.com>,
-        Nate Drude <nate.d@variscite.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
-In-Reply-To: <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
-References: <20230704150240.2022020-1-hugo@hugovil.com>
-        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
-        <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
-        <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
-        <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
-        <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
-        <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
-        <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Tue, 4 Jul 2023 16:44:56 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3759210D9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:44:54 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3142860734aso30465f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 13:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1688503492; x=1691095492;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D7p+M80U1GYeG4EQloROMoimHvJJ+Gr6Qt5RflHkHcw=;
+        b=M1UqHfYV5iTFuBkMyx2N06hk9zHxdmUXlwD5gsZVNO7zN+QaCZgniU+y2NXMwymf87
+         99Q7D0/M0PHWAmedSvH8oRKU/jz8jNWTj5Pg1rnPAPBR6+nQ1ZGxxi10hWfFTpcDywMI
+         K6nLj6BBEZnPeDX8nD3cmPmebxU2isy4Z8s1rWwnkP/8LW1I5mAxN7c2e/sR/RgwvOga
+         WZoSO9EfD8vRcZBV7mTEbCT9lzW5F9wS0pNXVC1d/HyOhAJkTCEHcLtBkGTsnHGkYiQf
+         3MvRINDYZENsjTFWTYxMb+V4L1cb/6EvqaTsOsejleS4MmQQcerlb2sQQJEjyZcvfKCs
+         veew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688503492; x=1691095492;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D7p+M80U1GYeG4EQloROMoimHvJJ+Gr6Qt5RflHkHcw=;
+        b=ZinO95Iu+RvNldNvygiwwbh/zarCp0hOJD2fE41WeuUPDnMkWjD/23MuXC3eoGrsey
+         0Wdclt+O3P7ksoDPCccThfV1ObzaSLiu+naD8EsSkvU+bM816Hrn029a59ePkbnwjZUC
+         pwgKoiqZkQa7er+MEQmBoxsm/ArSc3/8pGyuBjzJ67mUyylD7NbFZ/jCVhNCxpX4xFtt
+         gDBQuSRipiQeRpWr0/+Dt55zl2j5O8e6PRTqhLAHLxGYDIswZKOlsfdIcLUPJBKFhj3M
+         MjlMuRz6VzMyJFp/Gs8TOl4SyfVOxhyBVao27c/PoKIa3f/OOWS97CHyZj6OtXm+12nw
+         QT6w==
+X-Gm-Message-State: ABy/qLYu4zqr3yCpZTd0Au/tvB6diO12Hy0kDTPN1G/V2vXJsJCNdtyw
+        VJNMq/rBAsj4fwnU1es9CHe2Fw==
+X-Google-Smtp-Source: APBJJlGJDEcokr+GcHU+9Qf/h2qQosHMZUQwXe9EmgGzJ3+LjM6YP7JNYrs43VTmd0jc5qdA5j+VRw==
+X-Received: by 2002:adf:e6c4:0:b0:313:f000:5de6 with SMTP id y4-20020adfe6c4000000b00313f0005de6mr304722wrm.16.1688503492711;
+        Tue, 04 Jul 2023 13:44:52 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id y4-20020a05600c364400b003fa74bff02asm115332wmq.26.2023.07.04.13.44.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 13:44:52 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 0/9] mptcp: fixes for v6.5
+Date:   Tue, 04 Jul 2023 22:44:32 +0200
+Message-Id: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-0-d7e67c274ca5@tessares.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALCEpGQC/z2MQQ7CMAwEv1L5zEppaALlK4hDFQz40FDZBSFV/
+ XstDj3OamcWMlZho0uzkPJXTN7VoT00VF5DfTLk7kwxxGM4hQ6fyWblYUTlGfs6ihU85MeGjAQ
+ tLUqKOZxz16fUk+cm5f/Ba1dymW7rugFyB+rLfwAAAA==
+To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Kishen Maloor <kishen.maloor@intel.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org, Christoph Paasch <cpaasch@apple.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2556;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=LrpdosI7KkBh+7o63PMBiX+cMjX7K8ZvW3l5GVO0yrY=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkpITDht9FvKyasZKl31DMWpyv+rEoet2oV7wpE
+ XA80Kqe93yJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZKSEwwAKCRD2t4JPQmmg
+ c+2ZD/459QZCT25gHkqWmvZaw9TtfYOOfjkLuFEIFGf/8muDhYY55mTQBm3kysY70oNik16HBFH
+ nJETfi3nq0oQ3BxJolaRyC2oN8QK/fgHg2VfYLV8chUw+KeL3QWLN7NgCNXgtVB4lp8pTmmixVz
+ WZnMdpUkutR74JIJddykGKzmQL/XEyQ42dmkf9oQNIpQT4ujoGkKnjkQ0ZjXW6gizWTO9FO6xk/
+ HmfVDFiUmDlXwJyaH2084hWbFCbiVCf00XKFgvRmEGs4xiB/RclIdPVf8QaZcI3fg5UcRxdyrql
+ dqpCm8oTAlo+Qo1hb795aA2wWv/gG94DnMllM7mOwPJrdiL/TlsQWnRrc7kfR9Qe1S9A4IATC0P
+ v0VBQPHFKN1Dmjg+9fYMMG3z/8mBLotJh1QB2PdqsoEvF4MKXD6L1jg6COijonfGbWE+2tAlJzJ
+ 2T0hoGZDolGJzrvCTeIGkiW3X+z00+bao3BfcOgCrpw5SauPEt7ZExSYWVFoYEqpWVfNqu5rE0x
+ 8pkX6/2myChEUXOOPePFDdRXwIY8rjd6vO4pO4UJi+rWqwBlG/2PTIUSAXWjqAVM1d8ms0NeTxp
+ NArL+xGx3CicDjD3OVxVkgwVEzUDLlps/Fnea61gtD7Gtre3zzz78v9FMc6GHHlruqaMZnI+K38
+ pCoOntMnR09+xPQ==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 15:04:37 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+Here is a first batch of fixes for v6.5 and older.
 
-> Hi Hugo,
-> 
-> On Tue, Jul 4, 2023 at 2:02 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
-> 
-> > Ok, I tought pin 9 (ID) was an input, but it is in fact an output
-> > driven by the PTN5150 so the last sentence is incorrect.
-> 
-> Does USB OTG work if you keep interrupts = <11 IRQ_TYPE_LEVEL_LOW> ?
+The fixes are not linked to each others.
 
-Hi Fabio,
-with interrupts = <11 IRQ_TYPE_LEVEL_LOW>, USB OTG doesn't work.
+Patch 1 ensures subflows are unhashed before cleaning the backlog to
+avoid races. This fixes another recent fix from v6.4.
 
-I have added additional debug messages to help diagnose
-(prefixed by DEBUG_IRQ), and here is what I have:
+Patch 2 does not rely on implicit state check in mptcp_listen() to avoid
+races when receiving an MP_FASTCLOSE. A regression from v5.17.
 
-With IRQ_TYPE_LEVEL_LOW:
+The rest fixes issues in the selftests.
 
-$ dmesg | grep 5150
-[    4.729134] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.735257] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    4.749563] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
-[    4.792956] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.799022] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 0
-[    4.803889] ptn5150 1-003d: error -ENOENT: failed to get INT GPIO
-[    4.810085] ptn5150: probe of 1-003d failed with error -2
+Patch 3 makes sure errors when setting up the environment are no longer
+ignored. For v5.17+.
 
+Patch 4 uses 'iptables-legacy' if available to be able to run on older
+kernels. A fix for v5.13 and newer.
 
-With IRQ_TYPE_NONE:
+Patch 5 catches errors when issues are detected with packet marks. Also
+for v5.13+.
 
-$ dmesg | grep 5150
-[    4.726860] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.736050] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    4.768351] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
-[    4.803091] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.809172] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    4.816030] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
-[    4.825915] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.832057] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    4.840722] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
-[    4.889220] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.895271] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    4.901636] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
-[    4.934740] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.940840] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    4.947223] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
-[    4.993208] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    4.999347] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    5.014494] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
-[    5.071615] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
-[    5.077771] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
-[    5.101222] ptn5150 1-003d: DEBUG_IRQ: probe done
+Patch 6 uses the correct variable instead of an undefined one. Even if
+there was no visible impact, it can help to find regressions later. An
+issue visible in v5.19+.
 
-Hugo.
+Patch 7 makes sure errors with some sub-tests are reported to have the
+selftest marked as failed as expected. Also for v5.19+.
+
+Patch 8 adds a kernel config that is required to execute MPTCP
+selftests. It is valid for v5.9+.
+
+Patch 9 fixes issues when validating the userspace path-manager with
+32-bit arch, an issue affecting v5.19+.
+
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Matthieu Baerts (7):
+      selftests: mptcp: connect: fail if nft supposed to work
+      selftests: mptcp: sockopt: use 'iptables-legacy' if available
+      selftests: mptcp: sockopt: return error if wrong mark
+      selftests: mptcp: userspace_pm: use correct server port
+      selftests: mptcp: userspace_pm: report errors with 'remove' tests
+      selftests: mptcp: depend on SYN_COOKIES
+      selftests: mptcp: pm_nl_ctl: fix 32-bit support
+
+Paolo Abeni (2):
+      mptcp: ensure subflow is unhashed before cleaning the backlog
+      mptcp: do not rely on implicit state check in mptcp_listen()
+
+ net/mptcp/protocol.c                               |  7 +++++-
+ tools/testing/selftests/net/mptcp/config           |  1 +
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |  3 +++
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 29 ++++++++++++----------
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c      | 10 ++++----
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  |  4 ++-
+ 6 files changed, 34 insertions(+), 20 deletions(-)
+---
+base-commit: 14bb236b29922c4f57d8c05bfdbcb82677f917c9
+change-id: 20230704-upstream-net-20230704-misc-fixes-6-5-rc1-c52608649559
+
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
