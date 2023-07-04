@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A772F746B5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F38B746B61
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjGDIA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S231148AbjGDIBu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 04:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjGDIAX (ORCPT
+        with ESMTP id S230375AbjGDIBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:00:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F61BD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:00:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 226CD6117C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E6B7C433C7;
-        Tue,  4 Jul 2023 08:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688457621;
-        bh=vU2jOdZ5LLyWKgEHZBnAwSo71oT39lJC++2uk0MUGbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XHp+Hs2JhHl1RFxbfZK/NaC++Nys7AA/C7FARVmMBKrYYsKSWOIXthZX1iXpeUyvH
-         mgHmFrS0zclbCWqAYoKQ/ydbtN9SHJC3UQL4Gess9n1x4aEI+vjtv80YqkFMDU6VFp
-         AqPAyovltrHCKeutz1bcCPNgSjyII3zCgoWE2F04=
-Date:   Tue, 4 Jul 2023 09:00:19 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-Message-ID: <2023070453-plod-swipe-cfbf@gregkh>
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info>
- <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh>
- <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
+        Tue, 4 Jul 2023 04:01:47 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1AFBD;
+        Tue,  4 Jul 2023 01:01:46 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-c11e2b31b95so5886056276.3;
+        Tue, 04 Jul 2023 01:01:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688457706; x=1691049706;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3VFQbKQ0ZnXtJ93rzqEp4TN1FXtg0VMVDun5sAa3KpE=;
+        b=SDquQbPBWpTbehYAmyvhPCkR1YBjoD2kcCsVDC1WE7hT2TyPqMk0zcpEQ+QrP9/WFP
+         yz149Nsu9rx2RFISvczX1V20aE/nwr7KN13G3nLL3HGBUTiwsLcx/kOJlOUyzYDuKV78
+         1bGwV9GVD9Y5860FBgqLOq1FAsuh9efwZv84cwlr/Q7GpcB9j4TXoCQwCw6vLjvsKbqd
+         j1wCsqgCJaeQbG8z+Gtw1efA2ECnxL/ndkpzVwjWKKGv1BRotrRUeHgcWSsxtfM9crR/
+         JB2lLSCBcDsXeMxW39sJ+nlPPzRszb1z+F+/p2zsrKA/NfGGW8Jm7QBxrnFl9q7P9z1r
+         1FWQ==
+X-Gm-Message-State: ABy/qLabVOqQAHqTiKIKxYlwGqLfhYkpmgh3GNpsGxmtx978XVCkr+qw
+        E3BtfcOhU/4XcjRuPAZOMLoR5gMqgrPiog==
+X-Google-Smtp-Source: APBJJlHuE0CyWv1H1OT9oPTvzcdrZ4aBv/ohZ3eDhedacSRBOh5ouERAtTbgDBp9fGCmyX6U/bHOPQ==
+X-Received: by 2002:a25:9e87:0:b0:bcc:571d:a300 with SMTP id p7-20020a259e87000000b00bcc571da300mr10345771ybq.20.1688457705942;
+        Tue, 04 Jul 2023 01:01:45 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id a126-20020a254d84000000b00be45a29d440sm4777189ybb.12.2023.07.04.01.01.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 01:01:44 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-c50c797c31bso2558601276.0;
+        Tue, 04 Jul 2023 01:01:44 -0700 (PDT)
+X-Received: by 2002:a25:6cd4:0:b0:bac:1522:f870 with SMTP id
+ h203-20020a256cd4000000b00bac1522f870mr12173244ybc.52.1688457704084; Tue, 04
+ Jul 2023 01:01:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230703230534.997525-1-javierm@redhat.com> <20230703230534.997525-2-javierm@redhat.com>
+ <CAMuHMdXRg1OUy6UHuH4H+qkK-qO+jTKdVoG_SRM3q_PkyD+Bbw@mail.gmail.com> <87h6qkyuv4.fsf@minerva.mail-host-address-is-not-set>
+In-Reply-To: <87h6qkyuv4.fsf@minerva.mail-host-address-is-not-set>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Jul 2023 10:01:32 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVBkV30X32UWdV5k_PSJfeOF-a5=eCBo_3N2265w+n1hA@mail.gmail.com>
+Message-ID: <CAMuHMdVBkV30X32UWdV5k_PSJfeOF-a5=eCBo_3N2265w+n1hA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] video: Add auxiliary display drivers to Graphics
+ support menu
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Nipun Gupta <nipun.gupta@amd.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 12:45:39AM -0700, Suren Baghdasaryan wrote:
-> On Mon, Jul 3, 2023 at 11:44 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jul 03, 2023 at 11:27:19AM -0700, Suren Baghdasaryan wrote:
-> > > On Mon, Jul 3, 2023 at 11:08 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > On Mon, Jul 3, 2023 at 2:53 AM Linux regression tracking (Thorsten
-> > > > Leemhuis) <regressions@leemhuis.info> wrote:
-> > > > >
-> > > > > On 02.07.23 14:27, Bagas Sanjaya wrote:
-> > > > > > I notice a regression report on Bugzilla [1]. Quoting from it:
-> > > > > >
-> > > > > >> After upgrading to kernel version 6.4.0 from 6.3.9, I noticed frequent but random crashes in a user space program.  After a lot of reduction, I have come up with the following reproducer program:
-> > > > > > [...]
-> > > > > >> After tuning the various parameters for my computer, exit code 2, which indicates that memory corruption was detected, occurs approximately 99% of the time.  Exit code 1, which occurs approximately 1% of the time, means it ran out of statically-allocated memory before reproducing the issue, and increasing the memory usage any more only leads to diminishing returns.  There is also something like a 0.1% chance that it segfaults due to memory corruption elsewhere than in the statically-allocated buffer.
-> > > > > >>
-> > > > > >> With this reproducer in hand, I was able to perform the following bisection:
-> > > > > > [...]
-> > > > > >
-> > > > > > See Bugzilla for the full thread.
-> > > > >
-> > > > > Additional details from
-> > > > > https://bugzilla.kernel.org/show_bug.cgi?id=217624#c5 :
-> > > > >
-> > > > > ```
-> > > > > I can confirm that v6.4 with 0bff0aaea03e2a3ed6bfa302155cca8a432a1829
-> > > > > reverted no longer causes any memory corruption with either my
-> > > > > reproducer or the original program.
-> > > > > ```
-> > > > >
-> > > > > FWIW: 0bff0aaea03 ("x86/mm: try VMA lock-based page fault handling
-> > > > > first") [merged for v6.4-rc1, authored by Suren Baghdasaryan [already CCed]]
-> > > > >
-> > > > > That's the same commit that causes build problems with go:
-> > > > >
-> > > > > https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
-> > > >
-> > > > Thanks! I'll investigate this later today. After discussing with
-> > > > Andrew, we would like to disable CONFIG_PER_VMA_LOCK by default until
-> > > > the issue is fixed. I'll post a patch shortly.
-> > >
-> > > Posted at: https://lore.kernel.org/all/20230703182150.2193578-1-surenb@google.com/
-> >
-> > As that change fixes something in 6.4, why not cc: stable on it as well?
-> 
-> Sorry, I thought since per-VMA locks were introduced in 6.4 and this
-> patch is fixing 6.4 I didn't need to send it to stable for older
-> versions. Did I miss something?
+Hi Javier,
 
-6.4.y is a stable kernel tree right now, so yes, it needs to be included
-there :)
+On Tue, Jul 4, 2023 at 9:54 AM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> Geert Uytterhoeven <geert@linux-m68k.org> writes:
+> > On Tue, Jul 4, 2023 at 1:05 AM Javier Martinez Canillas
+> > <javierm@redhat.com> wrote:
+> >> The drivers in this subsystem are for character-based LCD displays, which
+> >> can fall into the same category of the DRM/KMS and fbdev drivers that are
+> >> located under the "Graphics support" menu. Add auxdisplay there as well.
+> >>
+> >> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> >
+> > Thanks for your patch!
+> >
+> >> --- a/drivers/video/Kconfig
+> >> +++ b/drivers/video/Kconfig
+> >> @@ -30,6 +30,8 @@ if HAS_IOMEM
+> >>  config HAVE_FB_ATMEL
+> >>         bool
+> >>
+> >> +source "drivers/auxdisplay/Kconfig"
+> >
+> > This is inside the "if HAS_IOMEM" section, while there was no
+> > such limitation before.
+> >
+>
+> Gah, I missed that. Thanks a lot for pointing it out.
+>
+> If I move the source outside of the if block, are you OK with this patch?
+>
+> I think Thomas is correct and would make sense to put the character-based
+> drivers next to the DRM and fbdev drivers since all these are for display.
 
+Yes, makes sense to me.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
