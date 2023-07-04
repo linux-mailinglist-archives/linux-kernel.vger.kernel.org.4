@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17866746B74
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3657746B75
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjGDIGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S231642AbjGDIGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbjGDIGE (ORCPT
+        with ESMTP id S231497AbjGDIGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:06:04 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A732810C1
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:05:57 -0700 (PDT)
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A1A693F328
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688457954;
-        bh=KyUic+k3lhFGyHcIl3np2CuPrA8HfLweP+3Dqn477ss=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=UNmp3wb2uhYjNFHl0eb63ZRxJTOsqDTaqaW563LyLcJVnrJcBip9hnjNK1mWPJoX8
-         /9LztpcVHpplf69OzVrP8hZ1iyv2vqYKf06qiv64NxERpGj3ATC8CKaUEoMkVSeTlP
-         MQey4Ns5vZFxMs4PBvIZMAK9LQuU6HZHJapeaODK0oqEZDA1vkSbvDMsWVi5jQ3f1W
-         z/wkbndIK1LaqTPrrl2hw1zQfcX/4pRF+jAWAmGh6mnyexR7OY5gODfTdWPIGbdgJA
-         UczWm5RftFF7/z0M4KX58pO6wPNIWe4BzH6GT8ci61g7o/gRll5xy0A9FXg2scdzq/
-         ZFwpIJYn6R2GQ==
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-666ec28a20dso4869916b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 01:05:54 -0700 (PDT)
+        Tue, 4 Jul 2023 04:06:05 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE27D10E4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:05:59 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51d9128494cso4987644a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 01:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688457958; x=1691049958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CVWPGfFaZM7RIjrMZBy1U4ap/sNPrOgYsjGHVnmKQSk=;
+        b=b2Q098KQfFtpS7gTPdbmgBLG6y6WnS0W4y9w15Mk6VXLKw1YWBD+7g/Z+VmdPH+PFz
+         3RwrbMdE1TcSlKbe6kOsVFP6L5hMYedQEPgAyv2qwi59D6ErYxrSAXczjgxk42JyUsGN
+         OH8OCWfJoTTLzDjWMHKGs7LZY384TmGEUV8rVE+9vnK3fWFQz/4D2IojDuU8v/TmbF0D
+         L0UgKj0lwWON50ppAOvCvY/hKOHZur9fxXgK78td25ykVYgtgewaB0iX7rmLmOsDVCiA
+         yI2zx+Hsn9r8i2GgKggPNsc4ThKwcz0CrfNMLXhYsjqqfJcxI1UoidEFs9zQIcqvF/lD
+         t+cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688457953; x=1691049953;
+        d=1e100.net; s=20221208; t=1688457958; x=1691049958;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KyUic+k3lhFGyHcIl3np2CuPrA8HfLweP+3Dqn477ss=;
-        b=NVFpcY8fc3FZAOaac+lIWsTDWDdfMg5+ArWIzzL5qS+hUZgLmeySeL+rMjicf59buj
-         KOW1OYfccmyOWyZqoJKtGy6Jw9aRT7Hitl7uHY1C9j6/ah1I9IYk/Zzdnc1k2BJeM9e5
-         MzbErxoM1VbuOnZdC/C48VOGC33GdA8vKLF4TZrer/WlmJv+Yciw5L5A6gqMbMX03BcP
-         TJVdXEmSSUwzRUZbprRI9mq+vgItZDqVHCbCfB57ETGeFuMH9S2hgVxFkbYoqcLrshju
-         Y3LyqHlzCLr9GnVgdWGS/ejhbKp747qew1ZxczYLr+omkPF8MAPfP6FehHiPBXLyEBcD
-         SDVA==
-X-Gm-Message-State: ABy/qLZBOzEfB6gMsOde88vNJajGWV6ykNaus9mqdXtAvChr6YsVCg7S
-        eEoUdAeX9GWjLLV62oh8n9E+FVQbj4yik+xQUwy0xOwX1CIXEDulfAC/wqsbsBZNNYqQkHTQtYR
-        nAJM2oWgAV2LckpBji/Oj6/Mc0gVSQYdtKl36UplHAkiX69woAgtzWU7rxQ==
-X-Received: by 2002:a05:6a00:b93:b0:668:711a:7d93 with SMTP id g19-20020a056a000b9300b00668711a7d93mr9939042pfj.19.1688457953213;
-        Tue, 04 Jul 2023 01:05:53 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlE+DtMALYuvUVAQkIm0rXF85n4mhV6VFoX/V08J0R9uCauuzQTrB6GKCpw4T1vFGkR0Uiv+L/35HYKv+EN6td0=
-X-Received: by 2002:a05:6a00:b93:b0:668:711a:7d93 with SMTP id
- g19-20020a056a000b9300b00668711a7d93mr9939021pfj.19.1688457952804; Tue, 04
- Jul 2023 01:05:52 -0700 (PDT)
+        bh=CVWPGfFaZM7RIjrMZBy1U4ap/sNPrOgYsjGHVnmKQSk=;
+        b=J4nhB36auTYnhsthJjwun62nOlmsnN1+ZiygzRptpNtGxwPGcKpqllCg/rAcoE/gb8
+         LZ1niUpUy8OtbbTDsuf/5u2slrCaqBajnEAf2KwT11Edbcz6s0fh07sWrd4HwnF9NPwW
+         WTvOJEQifMK0qXs9FKHBDkCPgq/K44CuzsNk/lDLcrr/hl2o9q5xV7pLevsgz157yM57
+         krXcketzNrcVxp9Ss5ZsIyMQ2RCgdXBHI+jFCrlWoatPbWHMWfCEJNAa+r5RilRaLGoJ
+         683jxvNqd+W4pUGcchMHLNIIm2g1uOxpvHfsrQcs7Vw2MOshFB37nX0fIblDWBwDbUYd
+         pYNQ==
+X-Gm-Message-State: ABy/qLbR+SiRp5xanjXiHnSQvFVS4w3oijzNwN+oEHKa3qc2GXUXadMb
+        /6LPEmgl3HpJ8aYBO5oGjcvZrIOaw0eEMyfCrUGPa00vZ8A9tw==
+X-Google-Smtp-Source: APBJJlFvdD4JojFZIfYCBIl8X+D9YLlLXiIOYn4I/eCNYZMtwhyTmPAnUPUixcI/mqslOeYez4T8nXjkJA+VMLhcPc4=
+X-Received: by 2002:a05:6402:4496:b0:51d:d41b:26a5 with SMTP id
+ er22-20020a056402449600b0051dd41b26a5mr9120655edb.14.1688457957804; Tue, 04
+ Jul 2023 01:05:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230703162509.77828-1-koba.ko@canonical.com> <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
- <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <CAJB-X+X+09-m57JcZcb-_9dKUG3CtAbLXxGTEg7R0bB8pyJx9Q@mail.gmail.com>
- <CAJB-X+XVO29wVxVezjFrgCyXigqEJxAzb0K0wueXNto5K_x2tA@mail.gmail.com> <9c27530e-21f9-15ce-5116-5af5b0c25f53@web.de>
-In-Reply-To: <9c27530e-21f9-15ce-5116-5af5b0c25f53@web.de>
-From:   Koba Ko <koba.ko@canonical.com>
-Date:   Tue, 4 Jul 2023 16:05:41 +0800
-Message-ID: <CAJB-X+Wu-Zd6pCrK54aR9iaeS7PW2VmwB+Y+Qeci7Ut0YcdsRg@mail.gmail.com>
-Subject: Re: [PATCH v2] EDAC/i10nm: shift exponent is negative
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-edac@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
+References: <20230703150859.6176-1-ubizjak@gmail.com> <87o7ks16gh.fsf@intel.com>
+In-Reply-To: <87o7ks16gh.fsf@intel.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Tue, 4 Jul 2023 10:05:46 +0200
+Message-ID: <CAFULd4YDHqUud94Q1mbKyKqGHh==Gv7+FpNhgm5s1p=0ZwcAXg@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915/pmu: Use local64_try_cmpxchg in i915_pmu_event_read
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,95 +74,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 3:16=E2=80=AFPM Markus Elfring <Markus.Elfring@web.d=
-e> wrote:
+On Tue, Jul 4, 2023 at 9:28=E2=80=AFAM Jani Nikula <jani.nikula@linux.intel=
+.com> wrote:
 >
-> > As per suggestions, i modified V3.
-> > could you please take a look
+> On Mon, 03 Jul 2023, Uros Bizjak <ubizjak@gmail.com> wrote:
+> > Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) =3D=
+=3D old
+> > in i915_pmu_event_read.  x86 CMPXCHG instruction returns success in ZF =
+flag,
+> > so this change saves a compare after cmpxchg (and related move instruct=
+ion
+> > in front of cmpxchg).
 > >
-> > Subject: [PATCH][V3] EDAC/i10nm: shift exponent is negative
->
-> Would you like to put the text =E2=80=9C[PATCH v4] EDAC/i10nm: Fix an ina=
-ppropriate shift exponent=E2=80=9D
-> into a subsequent patch?
-
-I didn't send V3 so the suggestions could be put in V3.
-
->
-> I would find further wording variants nicer.
->
->
-> > Because failed to read from DIMM, get the negative value for shift
-> > operation.
->
-> A surprising value was determined after a read failure from a DIMM.
->
->
-> =E2=80=A6
-> > UBSAN complains this error
->
-> Software analyses pointed a data processing issue out.
->
->
-> > `UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
-> >  shift exponent -66 is negative`
+> > Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxc=
+hg
+> > fails. There is no need to re-read the value in the loop.
 > >
-> > when get rows, cols and ranks, the returned error value doesn't be
-> > handled.
+> > No functional change intended.
+> >
+> > Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> > Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> > Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> > Cc: David Airlie <airlied@gmail.com>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> > ---
+> >  drivers/gpu/drm/i915/i915_pmu.c | 9 ++++-----
+> >  1 file changed, 4 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i91=
+5_pmu.c
+> > index d35973b41186..108b675088ba 100644
+> > --- a/drivers/gpu/drm/i915/i915_pmu.c
+> > +++ b/drivers/gpu/drm/i915/i915_pmu.c
+> > @@ -696,12 +696,11 @@ static void i915_pmu_event_read(struct perf_event=
+ *event)
+> >               event->hw.state =3D PERF_HES_STOPPED;
+> >               return;
+> >       }
+> > -again:
+> > -     prev =3D local64_read(&hwc->prev_count);
+> > -     new =3D __i915_pmu_event_read(event);
+> >
+> > -     if (local64_cmpxchg(&hwc->prev_count, prev, new) !=3D prev)
+> > -             goto again;
+> > +     prev =3D local64_read(&hwc->prev_count);
+> > +     do {
+> > +             new =3D __i915_pmu_event_read(event);
+> > +     } while (!local64_try_cmpxchg(&hwc->prev_count, &prev, new));
 >
-> A special value combination could not be handled so far.
+> You could save everyone a lot of time by actually documenting what these
+> functions do. Assume you don't know what local64_try_cmpxchg() does, and
+> see how many calls you have to go through to figure it out.
+
+These functions are documented in Documentation/atomic_t.txt (under
+"RMW ops:" section), and the difference is explained in a separate
+section "CMPXCHG vs TRY_CMPXCGS" in the same file.
+
+Uros.
+
+> Because the next time I encounter this code or a patch like this, I'm
+> probably going to have to do that again.
 >
->
-> > check the return value is EINVAL, if yes, directly return 0 and
-> > show error message explicitly.
->
-> Check if an invalid value was detected by a call of the function =E2=80=
-=9Cskx_get_dimm_attr=E2=80=9D.
->
-> * Print a corresponding error message in this case.
->
-> * Return zero then directly from the function =E2=80=9Cskx_get_dimm_info=
-=E2=80=9D.
->
->
-> =E2=80=A6
-> @@ -351,6 +351,8 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, s=
-truct dimm_info *dimm,
->         ranks =3D numrank(mtr);
->         rows =3D numrow(mtr);
->         cols =3D imc->hbm_mc ? 6 : numcol(mtr);
-> +       if (ranks =3D=3D -EINVAL || rows =3D=3D -EINVAL || cols =3D=3D -E=
-INVAL)
-> +               return 0;
-> =E2=80=A6
->
->
-> Can it be nicer to perform a check for such an error code directly
-> after each variable assignment?
-> (May this condition check be split?)
->
->
-> > Fixes: 4ec656bdf43a13) EDAC, skx_edac: Add EDAC driver for Skylake
->
-> Please properly apply parentheses and double quotes for this tag.
->
-> See also:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
-ocumentation/process/submitting-patches.rst?h=3Dv6.4#n145
->
->
-> > V2 -> V3: simplify the summary and add 'Fixes:'
-> > V1 -> V2: make error-print explicitly
->
-> How do you think about to use more succinct version identifiers
-> for such descriptions?
->
-> V4:
-> =E2=80=A6
->
-> V3:
-> =E2=80=A6
+> To me, the old one was more readable. The optimization is meaningless to
+> me if it's not quantified but reduces readability.
 >
 >
-> Regards,
-> Markus
+> BR,
+> Jani.
+>
+>
+> >
+> >       local64_add(new - prev, &event->count);
+> >  }
+>
+> --
+> Jani Nikula, Intel Open Source Graphics Center
