@@ -2,103 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC6D74798C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71801747990
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjGDVZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 17:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S231204AbjGDV2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 17:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjGDVZL (ORCPT
+        with ESMTP id S229903AbjGDV2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 17:25:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6C318B;
-        Tue,  4 Jul 2023 14:25:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8196861281;
-        Tue,  4 Jul 2023 21:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04F5C433C7;
-        Tue,  4 Jul 2023 21:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688505909;
-        bh=qc56JTBHGohk1G3UBHSzdTOuW9NcRbtT8225a+8pH5Q=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=emtK38XlrYPJvK7UxLe0VHhghuLKeQeRWePjA6wNBBOj1orrQ4WKXP0zh1qDSfs/X
-         dt1Z+Zi/mi6s9iVRg+51zLHKddCU/OAd/H0TKxYaO11JosTLjcx0/eMzvZOMH6RFVG
-         zxCWgQn5rkYEJgfACQxzGz5C+dh48ltQeTxlPfTIwvzCzelcL35jIXmfPOn8izeKZd
-         s2mt441asHp+men5mUbS3CcW5B2JrH1kUXrytQ8Lkr8pG4/p8evSADchqrLnhxTYFk
-         72W0GgjMcy0qoiTiVIFbCRPCJfsGi/XT9DVw3djQjRumGduewmom3KfKs0UYPM4I2F
-         0/Q4/FkK9i+7w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7E9CFCE0CC2; Tue,  4 Jul 2023 14:25:09 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 14:25:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Olivier Dion <odion@efficios.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rnk@google.com, Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-Message-ID: <3f740262-821b-4f39-8f1a-c6d02253986c@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <87ttukdcow.fsf@laura>
- <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
- <87ilazd278.fsf@laura>
- <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 17:28:15 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49439195;
+        Tue,  4 Jul 2023 14:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=wySgJTzp0DwGyi/w7+8EFiBtpc8Kz+inKOVzp7KIGB8=; b=m0dxCKEWN5yw85WdwxLxNDxXCh
+        PTc5rUXUPAx4OzYbPvPUOWjnGcAkBY7VHqxTIPPmmHAfLZVCTAf6o/nDLHW7YcTMUuqVVBvICtSLT
+        t72jkFO+vnqSNYXcumFQcPUiZCW5LzWcpgn1JMvJqYhkKsKzxGSDIRb5dIMGKPQ9OJyc=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:46704 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qGnZ4-00037U-Jy; Tue, 04 Jul 2023 17:28:03 -0400
+Date:   Tue, 4 Jul 2023 17:28:01 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Nate Drude <nate.d@variscite.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <20230704172801.f11422b3f947c625f53af871@hugovil.com>
+In-Reply-To: <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
+References: <20230704150240.2022020-1-hugo@hugovil.com>
+        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
+        <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
+        <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
+        <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
+        <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
+        <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
+        <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
+        <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
+        <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 04:25:45PM -0400, Alan Stern wrote:
-> On Tue, Jul 04, 2023 at 01:19:23PM -0400, Olivier Dion wrote:
+On Tue, 4 Jul 2023 18:02:53 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-[ . . . ]
-
-> > I am puzzled by this.  Initialization of a shared variable does not need
-> > to be atomic until its publication.  Could you expand on this?
+> Hi Hugo,
 > 
-> In the kernel, I believe it sometimes happens that an atomic variable 
-> may be published before it is initialized.  (If that's wrong, Paul or 
-> Peter can correct me.)  But since this doesn't apply to the situations 
-> you're concerned with, you can forget I mentioned it.
+> On Tue, Jul 4, 2023 at 5:41 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
+> 
+> > Hi Fabio,
+> > with interrupts = <11 IRQ_TYPE_LEVEL_LOW>, USB OTG doesn't work.
+> 
+> PTN5150 datasheet says:
+> 
+> "Any changes in the attach/detach events or Rp current source changes
+> will trigger INTB pin to go LOW."
 
-Both use cases exist.
+Hi Fabio,
+it is important to remember that on this board, like I explained
+before, the INTB pin is not connected to anything.
 
-A global atomic is implicitly published at compile time.  If the desired
-initial value is not known until multiple threads are running, then it
-is necessary to be careful.  Hence double-check locking and its various
-replacements.  (Clearly, if you can determine the initial value before
-going multithreaded, life is simpler.)
+It is only the ID pin (9) that is connected to the GPIO1_11 pin.
 
-And dynamically allocated or on-stack storage is the other case, where
-there is a point in time when the storage is private even after multiple
-threads are running.
+> What about:  interrupts = <11 IRQ_TYPE_EDGE_FALLING>; ?
 
-Or am I missing the point?
+With this setting, USB OTG works:
 
-							Thanx, Paul
+$ dmesg | grep 5150
+[    4.833529] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
+[    4.839972] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
+[    4.874173] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
+[    4.896822] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
+[    4.902905] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
+[    4.911190] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
+[    4.918462] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
+[    4.926197] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
+[    4.935210] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
+[    4.947673] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
+[    4.953771] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
+[    4.961104] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
+[    5.052165] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
+[    5.058234] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
+[    5.064632] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
+[    5.096452] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
+[    5.102578] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
+[    5.114959] ptn5150 1-003d: DEBUG_IRQ: error in usb_role_switch_get()
+[    5.187060] ptn5150 1-003d: No VBUS GPIO, ignoring VBUS control
+[    5.193243] ptn5150 1-003d: DEBUG_IRQ: i2c->irq: 42
+[    5.206235] ptn5150 1-003d: DEBUG_IRQ: probe done
+
+
+> Also, please add a pullup to the GPIO1_11 pad.
+
+There is already an external 10K pull-up resistor (R88) to +3.3V 
+on GPIO1_11 pin...
+
+Hugo.
