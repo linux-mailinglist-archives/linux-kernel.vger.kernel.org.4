@@ -2,156 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD9974682A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 05:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D996746830
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbjGDD7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 23:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
+        id S230048AbjGDEBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 00:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGDD7s (ORCPT
+        with ESMTP id S229504AbjGDEBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 23:59:48 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF74BD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 20:59:47 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-401f4408955so503651cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 20:59:47 -0700 (PDT)
+        Tue, 4 Jul 2023 00:01:21 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A10FBD;
+        Mon,  3 Jul 2023 21:01:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IqCoVCqhXI/mpZrDN94LVkFdy1yuNJBYA2DacL93KtQPGdSZcSfqueJ4HujBEisdUXuusHeF+JMTiv4CFP9Ht03NXWWe8DrTNRy4/XD0yTRHFK4ZKnKcCoCZWj8ySQWoIKMREdAJQBiH9sNnSFe44Igx1YfslUWAzvkJ1QmI7knvx53uEjb4ZFF+6Xv0ZNSVmRHiCqwIkDSh6b+TcXnYgz6+7N8infcNHZmVjJQ8Oj0WKCPLB90vnJAusrB4mYA7iXAhNQAn1W05Yzl4mVfiLvG2acBytdfgXEYeC6KbNRgSraZm05Lw6CXuRLg0n5SlErnndZ2ZBwtoYNDQYMfJJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pj/olEsbQcMMhLjC/sOANcpoOYF3GIuvyudyhrik1f0=;
+ b=jBNETjzro30IQiVujUtXDdk7UlFYH57BTRwFQSYxKgUQX6zr5zJFmAlBmzXKXYKIhFHo/hCLk2fBw+tU96nwGUzmwrLQptFUxxT98RGHG02zEwNuFbBZmHIH5Tu2PqssO8lbgqkWmK2L5BO9LRUQg8mtGuRGkwzjOnhSobaymDerSVNoe70ktdFFd6OvMeiEFiq52kJRuYtp4TQYOWe4fIh8aBnANrPV36CzS0/7n+omfiaVnMk3Qjj7oaEHK9IJbejxi5cPbZlgfJqmNp6jZGdIndY+XdK3G4iXjX1ftbLbDTUphmYUIYXV1BHeWZcFO/fIRcpMj8DVvLRX0rjHiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688443186; x=1691035186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zm+cbLzfWv8xQzz04PlgTjHqAfLoOmxEeEXG844VmE8=;
-        b=HIj+iC2rU31igXpNrnKYzp4Bk4To59lPiI9RQ+9xPO7DG8UTuVnh9X0Zo5gGvxpYvW
-         E0u65h2AZ9L29tKE93Zb3lG/RucSwTtaZMttt8uzvzfMh+u5fmRKyCP9sQDv3STbtXDZ
-         dVWKDUoBZTeDl/6Ah3YCWvPi4zxXuCwaN5zYS3r6JT8dMyVUi4wDFa2UgxnAbrmoVZTj
-         EGpFNKzlE2lrjsJcZAc89o09vz+o5mzP96zvaQxvORvBHevnKUPWHqTEHZRIH0qcO0ds
-         4KbOHl1sFjpv0NCkyw2RXVsrAjoNL88cHsQIXm2iuPk0ZXZdeLDDJw6L/a35ud882NiN
-         EXxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688443186; x=1691035186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zm+cbLzfWv8xQzz04PlgTjHqAfLoOmxEeEXG844VmE8=;
-        b=EFP0pFetsDPzXZR/Ij89AIug/K/coMNCqhvjHwPsW7URsRNTCSEb0vwZ9sX0dl3e5w
-         wTWZCx7uJ4qd7OG/kEdTlaACzkDLuAA6nPlvKXU6Z/hn+4jEhsjLIxxW0WQ4EEQaIMzv
-         Lg0k+i/ilHLnlLIsiyJO1OmDbgI7H+l4DS9bSRVsZ+18hUlEVWKT3Zera5ua80bkVmtZ
-         AfP3Lr941CHs01L/oRBx8jj9L0VxWpTfTdlfYcXaNJ7qXN0eCRq1vWiNq9Vkcd0yPInh
-         IgMrhUXGtaUvWrIJq65MU8nfu8OBLFwJuN8xbsVIuW9Ph42ib8BOwA5t0trwxC2R1k23
-         MRkg==
-X-Gm-Message-State: ABy/qLZRtltH/JRH43F/GdI3Ih1DdIH+TsWSrROndyt2tfn/CWXOSPC8
-        o1NHTfRu7TM3uqcUANhzQUGCCQcmvk94ER3cs/jEBg==
-X-Google-Smtp-Source: APBJJlFLbIWWh/EXTophAdzPyJXhAfvQ02fpxkoFTx3lCbvkugucdvVU9jr294theQsiHzkxWsglBzr3u6bN2xE2+VM=
-X-Received: by 2002:ac8:4e4c:0:b0:3f6:97b4:1a4a with SMTP id
- e12-20020ac84e4c000000b003f697b41a4amr47873qtw.20.1688443186346; Mon, 03 Jul
- 2023 20:59:46 -0700 (PDT)
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pj/olEsbQcMMhLjC/sOANcpoOYF3GIuvyudyhrik1f0=;
+ b=YYAQTa4yyWm48/BOBvkHiIhRspLPSeY44U0asnupbEcAGOWLe1UaXL9QEnWUlSSdHxnsMlcm3qpX5V1loY858kFr6re8HKNkISNgbc2QPfdBiPn7ZShKPPV8VUR931JJl+QqgCesKI9zcM0uGssocqGRb3FX0Gc1BaKUddpgWBU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by CH3PR03MB7385.namprd03.prod.outlook.com (2603:10b6:610:19a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
+ 2023 04:01:15 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::6882:b9c1:2b2d:998d]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::6882:b9c1:2b2d:998d%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
+ 04:01:15 +0000
+From:   Hsia-Jun Li <randy.li@synaptics.com>
+To:     linux-media@vger.kernel.org
+Cc:     ayaka@soulik.info, hans.verkuil@cisco.com, tfiga@chromium.org,
+        mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
+        hiroh@chromium.org, hverkuil@xs4all.nl,
+        linux-kernel@vger.kernel.org, nicolas@ndufresne.ca,
+        "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+Subject: [PATCH 0/2] Improve V4L2 M2M job scheduler
+Date:   Tue,  4 Jul 2023 12:00:36 +0800
+Message-ID: <20230704040044.681850-1-randy.li@synaptics.com>
+X-Mailer: git-send-email 2.41.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR01CA0041.prod.exchangelabs.com (2603:10b6:a03:94::18)
+ To DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
 MIME-Version: 1.0
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-4-ryan.roberts@arm.com> <ac6802f6-01a2-6b39-38c7-2fe3cea75dde@intel.com>
- <CAOUHufbmv0pZ1h9AxBj-SD7OqRZYudHMtXzQxcwD4ky-sFd8kg@mail.gmail.com>
-In-Reply-To: <CAOUHufbmv0pZ1h9AxBj-SD7OqRZYudHMtXzQxcwD4ky-sFd8kg@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 3 Jul 2023 21:59:09 -0600
-Message-ID: <CAOUHufbpCU_Z7g1QPJ0+HzE9sdNpSh=Mzi0EByLPu5TE4S_UcQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] mm: Default implementation of arch_wants_pte_order()
-To:     "Yin, Fengwei" <fengwei.yin@intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|CH3PR03MB7385:EE_
+X-MS-Office365-Filtering-Correlation-Id: 885ec4a1-96b5-4199-09e6-08db7c434bf4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6cXcfrPeNFLnwzXc2hukfougmjOBXVdPKcKT+ir+W8O4heasf+IGP8+GzGS4W0TQfryet1CFtAIJplIeE7pZtUqE9mMa9q0VXZbchkw/3o3Fb1qanmM3hqI0PfHe2tMRy8I3N6xF0Z9Iq26/6XTLWnOZhLQ9PQ596+O3IXqwS+6Z7e3veldmanwK0Bg76WKBo7mgw7pFDx9pSNwhtZeeH1T0acNCaPJKrhhfUzu2Ggf1nkXEq3HJewqFa3cy+cWsq3jjIYC2MIufq/VA4Xcfxgep8wM6SgCgnnnNAtToO0tbzXkBcpeAr9FCkGhZSzF5s3jUP+sO8ndeqHnG63sTsFpDyCo3au7qESXEHfXHXNV+fMcfck+ZRKQU3SVY6XYsHPgFWnAoSfCg7cwO1baz8il+Gme7dO6f18JH1HRPNANncgW4/4BqkphrNOJEmJ74Z5bYcMCR1tfpbjTf1XXdNGFuF3muNnla1dEil9Lbn6ni/viWcg13XE6/0Bfec5c5+q+FfPMHs6TU2Hte2P5eF23MmnsxcbS4tCACwlMKyjRCexL7vT3SSBxGmbGROObGxVq6Sg0pusPFNdNff7SGUFgGI2xmWXrTkqKn4nu+YsUc/wZqdnxwqhSp0TDI0sOu
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199021)(41300700001)(38100700002)(6666004)(38350700002)(52116002)(2616005)(107886003)(83380400001)(6506007)(26005)(186003)(1076003)(6512007)(86362001)(6486002)(478600001)(316002)(2906002)(36756003)(66476007)(4326008)(66556008)(66946007)(8936002)(8676002)(6916009)(7416002)(5660300002)(66899021);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QusyktqzlazVPE+xMKNQ888yEevjygxBfyEtWFvICy7nQf3Inur9iihr1Mi7?=
+ =?us-ascii?Q?D/aBXuw0KgZBjsgKjCo2ASngqDc/tq5qdMpE6Bp0Tn/x2SE6837xXrzYaRzT?=
+ =?us-ascii?Q?dHrTOw7L19CG7PBQuWFyR4D7bZPTcMErcgzkoXq3PL0vPQE0MDEGRa3y3b7h?=
+ =?us-ascii?Q?4h0horG0juy3FS0xfwlRZ5duSny66FKQLifUUMzY3njILvjSiePXYmwySGqq?=
+ =?us-ascii?Q?PjNZxdbmaQhqX9Oob812ho9059gfOFa1WO0qMKdCi2ccSwZO69XuaDA1HSjd?=
+ =?us-ascii?Q?3r/P2hdcLXWymWI7AcSMkPp9WYWZK26xqxRRtQiq2akMncibSXicKEHcs9Id?=
+ =?us-ascii?Q?YMkGUmR8IUa2AmAiV1Oo+S+lD7z7AV391t5YKTGtOIAVDjcCyKLl6d9nbXtD?=
+ =?us-ascii?Q?JIXAf1Jz6HpOSCrD86mPOQNYWudS7T5pNCwjarfr4xT01UsM3vfxgI/WO/E8?=
+ =?us-ascii?Q?z+SxOuqzUttcTrOWspSdJqseFc9mjkZSRn9Qmbjs7MWbpPjKuUp62x/E2IXL?=
+ =?us-ascii?Q?MCAKG+91STm59MTrtv2QLr9UhFcJMMJRoEscrZrvozIKjzhb5HlEQXGM71FC?=
+ =?us-ascii?Q?+BIdurTEEWIercrC+/2OGrpvLb+0QAGPqAk4G75DJHObt/QlRFtBsDAhO//s?=
+ =?us-ascii?Q?sNne5ucXpC6ax6GqqCc9VmxN1DZzY9nL94G4czE0o3UThX7i645HkvWMD0hm?=
+ =?us-ascii?Q?RfqEvbBQsib+SiKKjDuxB6EuEncONJtuvQxKxhpH4T66tc3Hz7H5MT6oZbPt?=
+ =?us-ascii?Q?ZXDw+UVDnFeQc9i9Kg0G4DBOKciCgG1ooC594EHQbuwonbYRbIuVlNn7DY9/?=
+ =?us-ascii?Q?I1lnVH3k/aAw2XfDZYmwfdXWxrawNpLlqF1kJdOfwpQ/MItU/jEYW7TOFBhV?=
+ =?us-ascii?Q?jmKaasQckzWTa8ArESBE4N7z0SYyXpn+nsaUZbX4N50lA5xvp4tofz6v7ncG?=
+ =?us-ascii?Q?Z9m1X90M1Isf/SxOyVj57fP+j1n4GX0Dpcoc3uGJd8dJ5ZHNnTU1lb4V5zv4?=
+ =?us-ascii?Q?40TcUUJhKxjkRtgymDIaEw5OkAcMCeNZAG8xE0Ej/dtDkjnvi4do01cDqeyn?=
+ =?us-ascii?Q?2TRbApbR0usY2nMNk/JvxSmHKuHYJg0u7tbAHrDE8prVIpfnYgRPhQ5rGnA1?=
+ =?us-ascii?Q?Gcbs76OOynVlnD/6cBT7ohEv7Aqlpg0eqSQdNDD95ameGWz188+LeDaG97Lv?=
+ =?us-ascii?Q?mZ6QOaed59UbWokVc4gWxwhf40hLdV2mO6dJ+Qjyg0qa3aF4/kuJeT4ZZekw?=
+ =?us-ascii?Q?qV+cLJm3K5H055bWM9R7mqO3Unw3LMnpgF0s2nQLQd0MnCAkFOktHNnhMIBo?=
+ =?us-ascii?Q?uIrBvJdy8UId40GPENcSh1EZv2OtgQwyZTokDBdT02X+RsrgacRlhZavATWQ?=
+ =?us-ascii?Q?xtrkduorCGafpl8b6WZ5lFNpdZGtDdl74wYLRmuhoeRrYya392s5x1ZhWYPG?=
+ =?us-ascii?Q?epDWvwXyn+RsD+jjcI2OUXY2lX7NrHLOREG6rRntiBFEGrKaWkUJbc+44I1Q?=
+ =?us-ascii?Q?PRdCrx+6QFIVsWrZXyrIEYhHiYFAu8ACnZJa5uKJSg08RtcKYXi+dHop9OZK?=
+ =?us-ascii?Q?a04+94RQekCTEF3haE8vEEmbqEdL5k0VPCQdvn6C?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 885ec4a1-96b5-4199-09e6-08db7c434bf4
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 04:01:15.4391
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hkeuNjL+A5+oLV44XtZ0o15KttgA9W3PZF/hcsd98ITOSL/0mcBH+lBasOhtgUdUM0rEsIaOqjFa+iorcaumKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR03MB7385
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 9:02=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Mon, Jul 3, 2023 at 8:23=E2=80=AFPM Yin, Fengwei <fengwei.yin@intel.co=
-m> wrote:
-> >
-> >
-> >
-> > On 7/3/2023 9:53 PM, Ryan Roberts wrote:
-> > > arch_wants_pte_order() can be overridden by the arch to return the
-> > > preferred folio order for pte-mapped memory. This is useful as some
-> > > architectures (e.g. arm64) can coalesce TLB entries when the physical
-> > > memory is suitably contiguous.
-> > >
-> > > The first user for this hint will be FLEXIBLE_THP, which aims to
-> > > allocate large folios for anonymous memory to reduce page faults and
-> > > other per-page operation costs.
-> > >
-> > > Here we add the default implementation of the function, used when the
-> > > architecture does not define it, which returns the order correspondin=
-g
-> > > to 64K.
-> > >
-> > > Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> > > ---
-> > >  include/linux/pgtable.h | 13 +++++++++++++
-> > >  1 file changed, 13 insertions(+)
-> > >
-> > > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > > index a661a17173fa..f7e38598f20b 100644
-> > > --- a/include/linux/pgtable.h
-> > > +++ b/include/linux/pgtable.h
-> > > @@ -13,6 +13,7 @@
-> > >  #include <linux/errno.h>
-> > >  #include <asm-generic/pgtable_uffd.h>
-> > >  #include <linux/page_table_check.h>
-> > > +#include <linux/sizes.h>
-> > >
-> > >  #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_FO=
-LDED) - \
-> > >       defined(__PAGETABLE_PMD_FOLDED) !=3D CONFIG_PGTABLE_LEVELS
-> > > @@ -336,6 +337,18 @@ static inline bool arch_has_hw_pte_young(void)
-> > >  }
-> > >  #endif
-> > >
-> > > +#ifndef arch_wants_pte_order
-> > > +/*
-> > > + * Returns preferred folio order for pte-mapped memory. Must be in r=
-ange [0,
-> > > + * PMD_SHIFT-PAGE_SHIFT) and must not be order-1 since THP requires =
-large folios
-> > > + * to be at least order-2.
-> > > + */
-> > > +static inline int arch_wants_pte_order(struct vm_area_struct *vma)
-> > > +{
-> > > +     return ilog2(SZ_64K >> PAGE_SHIFT);
-> > Default value which is not related with any silicon may be: PAGE_ALLOC_=
-COSTLY_ORDER?
-> >
-> > Also, current pcp list support cache page with order 0...PAGE_ALLOC_COS=
-TLY_ORDER, 9.
-> > If the pcp could cover the page, the pressure to zone lock will be redu=
-ced by pcp.
->
-> The value of PAGE_ALLOC_COSTLY_ORDER is reasonable but again it's a
-> s/w policy not a h/w preference. Besides, I don't think we can include
-> mmzone.h in pgtable.h.
+From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
 
-I think we can make a compromise:
-1. change the default implementation of arch_has_hw_pte_young() to return 0=
-, and
-2. in memory.c, we can try PAGE_ALLOC_COSTLY_ORDER for archs that
-don't override arch_has_hw_pte_young(), or if its return value is too
-large to fit.
-This should also take care of the regression, right?
+The first patch is an old patch, I resend it again.
+I want to make the work thats parses the bitstream
+to extract the sequence information or video resolution
+as a part of V4L2 schedule. Such a work would also
+consume the device's resources likes remote CPU
+time.
+
+Although reuse a flag which no current driver may
+not be a good idea. I could add a new flag for that
+if people like that.
+
+The second is a patch offering a generic solution
+for tracking buffers which have been pushed to
+hardware(or firmware). It didn't record which buffer
+that hardware(firmware) still holds for future
+decoding(likes the reference buffer), while it
+has been sent to the user(dequeue). We may need
+a flag for this work.
+
+Hsia-Jun(Randy) Li (1):
+  media: v4l2-mem2mem: add a list for buf used by hw
+
+Randy Li (1):
+  media: v4l2-mem2mem: allow device run without buf
+
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 30 +++++++++++++++++---------
+ include/media/v4l2-mem2mem.h           | 10 ++++++++-
+ 2 files changed, 29 insertions(+), 11 deletions(-)
+
+-- 
+2.17.1
+
