@@ -2,110 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671C074774C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9C974774E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjGDQzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S231652AbjGDQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbjGDQzc (ORCPT
+        with ESMTP id S231887AbjGDQ4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:55:32 -0400
-X-Greylist: delayed 319 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Jul 2023 09:55:30 PDT
-Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6A71AC;
-        Tue,  4 Jul 2023 09:55:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688489728;
-        bh=Iqendox+1LHXkQVpxAPqWFk4dta4jv2xlFIP2LLV47s=;
-        h=From:To:Cc:Subject:Date;
-        b=jIy2Drx2YcffegUqwS3IMNuQUCbHvcWGht1RH5RxEdMCTcx6LVnPzgtFAlcYQHKaH
-         ayK5i5xjI1d180VSbBuepQOF0FoR4hIGnzYXopkUsnwmv4vPK1HTYf/6VgMX91cafA
-         9+i+G0bXImUULq68GfoKIqXOBWL1oZsk5YLTRAQA=
-Received: from localhost.localdomain ([119.136.250.51])
-        by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
-        id DDB1E2B8; Wed, 05 Jul 2023 00:55:27 +0800
-X-QQ-mid: xmsmtpt1688489727trrmexhxm
-Message-ID: <tencent_54814178D4285CA3D64B8CDC90D49A6CB10A@qq.com>
-X-QQ-XMAILINFO: MBoG/Qi9YTl8NiIlDcsjvCb6hKSmKLd70ylrEoH0xeC83dmBWp1C7CU+w6LdjY
-         jlfPGb1C8uULbbhMKT9pekl4oeHhfaEx73suD1+kZIcpbPri58BWTi+dsqMLTX3RzIx5eclRbM1m
-         XpKb1uam04D98vOcR2NyW1wngpCvXmeidnQXIw4D+0Oit+yQYD7KFGfJd9vl5O18XM5Rt1NT4wtn
-         4W3n5LiUw63iBo9x4TvP/J7yecIWMWRg/g4gSrHZ0Gr6wGDA+0dGWgybP7BfDNL2klP1CpKTHqfF
-         D7IuQuKAYJ9XwxlXY8lI0EXrGKxr7bTxzOJA70Ag8terYtlAgA77igZV9ul1RwNdBrhCqknUxTmB
-         JspgA+8tAyH5Q/EJNLZ/SFPrWBrBls8lQ27M/HH4iznpbDYJxn08vZvs2NuSWcmQ7sfhc+Zh82zz
-         4nw3S8KN8aJ4JXl1F6V5y8IYefepZLxyMW4T3l+7DMl3JfEGjc+l1cxNnHILADG01JfRXzW6r9wu
-         o6A/RS6lZKJsJDFJkSdRstoJRSKCUgyI/JT3iOECDP+pukB9S9pSTvFi6w0HV8fgKdvhlbkKcoZx
-         qrFWWfektLbgEGI3OtrnmC9O8v9YtQCJSukLHmnFd/lCx6lahRcKL1gknh8EpFEbMeplLrkfU36l
-         +mwxOaMolqix0R3Wj6Q3P3qxy4gTURbT07I+rZXAJjuPbLY18GR+e9DRVmsY8faQky+hL6p67p/t
-         8HPyM+AurZZEs6VXdndwz4HOjwbLAkefGXt9NIyzLCVq0p0ZrgWA8faJDeyYsqr69q0BOug1RLRu
-         yB46I53qN9CBcobLwsIwcU6T+zN0ixPpJkpMYRqDwklAsbVaDKCRaQv4XJPbt5IUcdDoX+pfTzPb
-         Et+o/stWu8uGioAhRvvfsSXmC87RO4ipYnx+PLSMCDR10fbl7mMYE8k0KpShXRp+my2fA2eFrQ1t
-         dqdmdmqsDH2ehyTzRJWe9O4FgJehGf43geW7h3IZUNqlvXmu8lyWmtIMTvmonqYi2WBDQx2xacDG
-         Rt6Gdwk9JQBFO5Nrt1D9kYYSmU3P8IEIth07Ao+6c/ypMAv8cG
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     pkshih@realtek.com
-Cc:     kvalo@kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH v2] wifi: rtw89: debug: fix error code in rtw89_debug_priv_send_h2c_set()
-Date:   Wed,  5 Jul 2023 00:55:25 +0800
-X-OQ-MSGID: <20230704165525.10288-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
+        Tue, 4 Jul 2023 12:56:01 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A7410D3;
+        Tue,  4 Jul 2023 09:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ir9+y5TV/whsVJj6sRiC8xzutqWRefem7WoHTqvHtKI=; b=U8sbMgm1YEOWwAXteDHcVi08zW
+        pZ348ePZh5veZhVunmFjkXqG1xB3U7XYfkC317VK3Egw+cyNhtoqj9Lskc4BckyqQ4pgkI42AK2L5
+        7DJkbbV3JVt2m1biNmPPolb0J0XftRKZKDYuTGw9SUVbfTJGWOBI1fNlJh7SZPu/wJM8=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:38500 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qGjJW-0000nG-QE; Tue, 04 Jul 2023 12:55:43 -0400
+Date:   Tue, 4 Jul 2023 12:55:41 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Nate Drude <nate.d@variscite.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
+In-Reply-To: <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
+References: <20230704150240.2022020-1-hugo@hugovil.com>
+        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
+        <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
+        <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
+        <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is a failure during rtw89_fw_h2c_raw() rtw89_debug_priv_send_h2c
-should return negative error code instead of a positive value count.
+On Tue, 4 Jul 2023 13:33:10 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-Fix this bug by returning correct error code.
+> Adding some Variscite folks in case they can help to clarify.
+> 
+> On Tue, Jul 4, 2023 at 1:20 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > On 04/07/2023 17:31, Hugo Villeneuve wrote:
+> > > On Tue, 4 Jul 2023 17:08:12 +0200
+> > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > >> On 04/07/2023 17:02, Hugo Villeneuve wrote:
+> > >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > >>>
+> > >>> USB OTG is currently broken on the Variscite Symphony EVK and imx8mn
+> > >>> nano SOM.
+> > >>>
+> > >>> Import changes from linux-5.15 branch of  doen't giveto fix it.
+> > >>>
+> > >>> Link: https://github.com/varigit/linux-imx.git
+> > >>> Fixes: 7358e05bddca ("arm64: dts: imx8mn-var-som-symphony: Add Variscite Symphony board with VAR-SOM-MX8MN")
+> > >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > >>> ---
+> > >>>  .../dts/freescale/imx8mn-var-som-symphony.dts | 37 ++++++++++++++++++-
+> > >>>  1 file changed, 35 insertions(+), 2 deletions(-)
+> > >>>
+> > >>> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
+> > >>> index 406a711486da..aef89198f24c 100644
+> > >>> --- a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
+> > >>> +++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
+> > >>> @@ -6,6 +6,7 @@
+> > >>>
+> > >>>  /dts-v1/;
+> > >>>
+> > >>> +#include <dt-bindings/usb/pd.h>
+> > >>>  #include "imx8mn-var-som.dtsi"
+> > >>>
+> > >>>  / {
+> > >>> @@ -104,10 +105,29 @@ extcon_usbotg1: typec@3d {
+> > >>>             compatible = "nxp,ptn5150";
+> > >>>             reg = <0x3d>;
+> > >>>             interrupt-parent = <&gpio1>;
+> > >>> -           interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+> > >>> +           interrupts = <11 IRQ_TYPE_NONE>;
+> > >>
+> > >> That's surprising, why?
+> > >
+> > > Hi,
+> > > the varigit repos log or source code has no information about this
+> > > particular configuration.
+> > >
+> > > In the schematics, the interrupt output pin of the PTN5150 is connected
+> > > to two different resistors, one of these being connected to GPIO1 pin
+> > > 11. But these two resistors are not assembled on any versions of the
+> > > board, so the interrupt pin is currently not used.
+> >
+> > OK, so there is no interrupt, but not interrupt of type none. Just drop
+> > the property and make it optional in the bindings. The driver however
+> > requires the interrupt, so I wonder how the device is going to work
+> > without it?
+> >
+> > Are you sure that interrupt line is not shorted instead of missing resistor?
 
-The changes in this version:
-- fix some compile error
+Hi,
+Link for schematics:
+https://www.variscite.com/wp-content/uploads/2019/07/Symphony-Board-Schematics.zip
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+In the schematics, both resistors R106 (connected to PTN5150 on one
+side and GPIO1 pin 11 on the other size) and R131 have the text "NC"
+near their reference designator. And I visually confirm that R106
+and R131 are not soldered on the board.
 
-update
----
- drivers/net/wireless/realtek/rtw89/debug.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+However, GPIO1 pin 11 (the interrupt pin configured in the DTS) is
+also connected to PTN5150 pin 9 (ID), which has a simple pull-up to
+3.3V. So from what I can see/deduce, the DTS interrupt pin
+will always be 3.3V, and never pulled to GND.
 
-diff --git a/drivers/net/wireless/realtek/rtw89/debug.c b/drivers/net/wireless/realtek/rtw89/debug.c
-index 1db2d59d33ff..a679f79b85ec 100644
---- a/drivers/net/wireless/realtek/rtw89/debug.c
-+++ b/drivers/net/wireless/realtek/rtw89/debug.c
-@@ -3026,17 +3026,18 @@ static ssize_t rtw89_debug_priv_send_h2c_set(struct file *filp,
- 	struct rtw89_debugfs_priv *debugfs_priv = filp->private_data;
- 	struct rtw89_dev *rtwdev = debugfs_priv->rtwdev;
- 	u8 *h2c;
-+	int err = 0;
- 	u16 h2c_len = count / 2;
- 
- 	h2c = rtw89_hex2bin_user(rtwdev, user_buf, count);
- 	if (IS_ERR(h2c))
- 		return -EFAULT;
- 
--	rtw89_fw_h2c_raw(rtwdev, h2c, h2c_len);
-+	err = rtw89_fw_h2c_raw(rtwdev, h2c, h2c_len);
- 
- 	kfree(h2c);
- 
--	return count;
-+	return err ? err : count;
- }
- 
- static int
--- 
-2.41.0
-
+Hugo.
