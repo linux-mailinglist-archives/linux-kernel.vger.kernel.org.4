@@ -2,190 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296F4746B90
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFB6746B93
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjGDIJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S230326AbjGDIKL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 04:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjGDIJr (ORCPT
+        with ESMTP id S230421AbjGDIKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:09:47 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6D61AA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:09:44 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbd33a57b6so43661955e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 01:09:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688458183; x=1691050183;
-        h=content-transfer-encoding:in-reply-to:subject:organization
-         :references:cc:to:content-language:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fvBmFcK9SXnfqzwuT+DfReBotxw6B6mSOnCOgONNgv0=;
-        b=Pq175pcSnAl7IBWg926B60sUexUNsN91Xa/FXmI2ntAs3lAcXGzMzqf4IEP6z2ykp9
-         Adjl5UHjXAQG8b4Im0Dof7v6hUdWRtbvmWC3hTxCMF5N2VNgfVITNVQn8/Jf8xUKWf+E
-         7BG6w3II1oRPPgcIYSMC8un0AEKX2h+RaDCShclbX+PeUfqmBWMA01dcSttEvegLWGn0
-         fq2+rYWCegcCvj/dHvaA66hFXc2tQl9YHzQvNN3D8QPQeIBL5ALKdRVi1m+co9bZcItC
-         LtNLXBnjMXpBtBpqBJGhiDoSRiG0h6cBbZZceGDgK8M0NeBtkhbwaCfmgLOvfPmbSYQu
-         50+w==
+        Tue, 4 Jul 2023 04:10:07 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0E11AB;
+        Tue,  4 Jul 2023 01:10:03 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-c5ce57836b8so522648276.1;
+        Tue, 04 Jul 2023 01:10:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688458183; x=1691050183;
-        h=content-transfer-encoding:in-reply-to:subject:organization
-         :references:cc:to:content-language:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fvBmFcK9SXnfqzwuT+DfReBotxw6B6mSOnCOgONNgv0=;
-        b=fXNna6AslS4WOu7c8A02nFmLgZVVNTmZwitQpcAiU9UIriNu0rOjzyl9YDqHSrziFp
-         kKyGyyeS1d/zsk//t4kH+E93k47RHA3ViWDw9o9zuxnjvY9l8/Ilzr0PWoVH19TWrBMv
-         XoLAuhDnKUMswy7E3Afm1xGUeMNjUrrSNYw+PDkT1yj6R0vikGxzkFmFldpvLdYdKidM
-         kLEa+6IeJ5d7jvdmYb+RYfmS7RHqff/v2vBH0YcaQHhxRSGLXwJ8nla7SE6FEdRqgSvI
-         vb4u9WFOU2oBGBOUc8dvHR0lLd1XwZH2rDf2LgA+5mdyGldhuA/WKQTcfby+m42Jr2Lk
-         EYGg==
-X-Gm-Message-State: AC+VfDyQ0f5/ZSAVhz+l1wPjMIHn4y+QGy5TWha2nBBoh66bDDjwjeFJ
-        eGMDidNSMmNTlIJ2SHYaogqUug==
-X-Google-Smtp-Source: ACHHUZ7Djrvqul6xZf1D/plK1Qgd3CmUESVoJdtGZKmCNznyqFyd+//02tHVc7+lyTW8WZM1HIkk4g==
-X-Received: by 2002:a1c:7914:0:b0:3fa:984d:7e94 with SMTP id l20-20020a1c7914000000b003fa984d7e94mr16886762wme.18.1688458183057;
-        Tue, 04 Jul 2023 01:09:43 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:106:cd85:84ae:7b? ([2a01:e0a:982:cbb0:106:cd85:84ae:7b])
-        by smtp.gmail.com with ESMTPSA id l25-20020a1c7919000000b003fbb25da65bsm17017498wme.30.2023.07.04.01.09.42
+        d=1e100.net; s=20221208; t=1688458202; x=1691050202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EZaghZGIezMc1/PkmeAtxZOh9fnJXXLlPyB7qIylXMg=;
+        b=Z1ixxmIhB0U1L1L3bzXFXtdQ1KCUGV+6qKIFBQEtfhB5aKrJP0UbNk5Car7KRuLOf3
+         9Ffseu65MbFkjyJGQDqJ5W/BeXUTxd3e1FGjrjrz0A5gOp1HDulwmQuwCL3jRD+dI4Fq
+         NsG7j64TZCCWXPcGeulrwP1bDee1FaSVggrF3z84SvlA+oGZSPkfF01rljcNnsQmq+r/
+         0vB8cRwpGmy9QIDYtH/7TcbVLWQ/Icsa6VKk23vlcTYTci40yjT8Nr7L7fhmbA59D0zj
+         sxyZO8nLhCXmAtkBkxxi9YEILWIcAA2iKdq+0Ah0bRLQLvIH01gaWT4ZwQtvuNG4vEUd
+         B4cQ==
+X-Gm-Message-State: ABy/qLaUc60jZSRrvieT4r5hWTw3GVuM4IA9Ce2s3Wnvgwj/eJXvVyyu
+        p04KIbcvuGScck37FVHCRdwCFg/wyU23TQ==
+X-Google-Smtp-Source: APBJJlGoN3ZvP01aca/ywxaZlXZSm8xv9annihVBORAZo/QcThiji0GcCL0m9PNHVHTU6KrcTdZn5g==
+X-Received: by 2002:a25:d10:0:b0:c5d:f2af:5a24 with SMTP id 16-20020a250d10000000b00c5df2af5a24mr791407ybn.14.1688458202598;
+        Tue, 04 Jul 2023 01:10:02 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id i1-20020a25b201000000b00c4788bfe468sm1761021ybj.1.2023.07.04.01.10.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 01:09:42 -0700 (PDT)
-Message-ID: <112727a2-29c5-1402-deb7-f35119b4338e@linaro.org>
-Date:   Tue, 4 Jul 2023 10:09:41 +0200
+        Tue, 04 Jul 2023 01:10:01 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c5ce57836b8so522612276.1;
+        Tue, 04 Jul 2023 01:10:01 -0700 (PDT)
+X-Received: by 2002:a25:ad18:0:b0:c12:179f:b78e with SMTP id
+ y24-20020a25ad18000000b00c12179fb78emr11890369ybi.28.1688458200854; Tue, 04
+ Jul 2023 01:10:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Content-Language: en-US
-To:     Xianwei Zhao <xianwei.zhao@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-References: <20230704031636.3215838-1-xianwei.zhao@amlogic.com>
- <20230704031636.3215838-3-xianwei.zhao@amlogic.com>
-Organization: Linaro Developer Services
-Subject: Re: [PATCH 2/2] arm64: dts: add board AN400
-In-Reply-To: <20230704031636.3215838-3-xianwei.zhao@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com> <20230522105049.1467313-4-schnelle@linux.ibm.com>
+In-Reply-To: <20230522105049.1467313-4-schnelle@linux.ibm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Jul 2023 10:09:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXBgh8NTBmZkqoR+ZZM=C=bREVM1KCk4xNC-4BWjSAHOw@mail.gmail.com>
+Message-ID: <CAMuHMdXBgh8NTBmZkqoR+ZZM=C=bREVM1KCk4xNC-4BWjSAHOw@mail.gmail.com>
+Subject: Re: [PATCH v5 03/44] char: add HAS_IOPORT dependencies
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Niklas,
 
-On 04/07/2023 05:16, Xianwei Zhao wrote:
-> Add devicetree support for Amlogic AN400  board based T7 SoC.
-> 
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> ---
->   arch/arm64/boot/dts/amlogic/Makefile          |  1 +
->   .../dts/amlogic/amlogic-t7-a311d2-an400.dts   | 39 +++++++++++++++++++
->   2 files changed, 40 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dts
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-> index 91fa425116ea..8b6f57a94863 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -1,5 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   dtb-$(CONFIG_ARCH_MESON) += amlogic-c3-c302x-aw409.dtb
-> +dtb-$(CONFIG_ARCH_MESON) += amlogic-t7-a311d2-an400.dtb
->   dtb-$(CONFIG_ARCH_MESON) += amlogic-t7-a311d2-khadas-vim4.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
-> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dts b/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dts
-> new file mode 100644
-> index 000000000000..d755e1ee108a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dts
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2023 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "amlogic-t7.dtsi"
-> +
-> +/ {
-> +	model = "Amlogic A311D2 AN400 Development Board";
-> +	compatible = "amlogic,an400", "amlogic,a311d2", "amlogic,t7";
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	aliases {
-> +		serial0 = &uart_a;
-> +	};
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		linux,usable-memory = <0x00000000 0x00000000 0x00000000 0xE0000000
-> +					0x00000001 0x00000000 0x00000000 0x20000000>;
+On Mon, May 22, 2023 at 12:51 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Please use "reg =" instead of linux,usable-memory, which is not a documented property
+Thanks for your patch, which is now commit 1fbb0b203574bb16 ("char:
+add HAS_IOPORT dependencies") upstream.
 
-Please use `make CHECK_DTBS=yes amlogic/amlogic-t7-a311d2-an400.dtb` before posting DT patches,
-and make sure there's no errors except already in-review bindings like here the UART compatible.
+> --- a/drivers/char/Kconfig
+> +++ b/drivers/char/Kconfig
 
-The result here is:
-arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dtb: /: memory@0: 'anyOf' conditional failed, one must be fixed:
-         'reg' is a required property
-         'ranges' is a required property
-         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/root-node.yaml
-arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dtb: /: memory@0: 'linux,usable-memory' does not match any of the regexes: 'pinctrl-[0-9]+'
-         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/memory.yaml
-arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dtb: /: memory@0: 'reg' is a required property
-         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/memory.yaml
+> @@ -340,7 +341,7 @@ config NVRAM
+>
+>  config DEVPORT
+>         bool "/dev/port character device"
+> -       depends on ISA || PCI
+> +       depends on HAS_IOPORT
+>         default y
+>         help
+>           Say Y here if you want to support the /dev/port device. The /dev/port
 
-Please fix this one.
+FTR, this change makes DEVPORT show up on Atari with ATARI_ROM_ISA=y.
+I guess it doesn't matter much, though.
 
-arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dtb: serial@78000: compatible: 'oneOf' conditional failed, one must be fixed:
-         ['amlogic,t7-uart', 'amlogic,meson-s4-uart'] is too short
-         ['amlogic,t7-uart', 'amlogic,meson-s4-uart'] is too long
-         'amlogic,t7-uart' is not one of ['amlogic,meson6-uart', 'amlogic,meson8-uart', 'amlogic,meson8b-uart', 'amlogic,meson-gx-uart', 'amlogic,meson-s4-uart']
-         'amlogic,meson-g12a-uart' was expected
-         'amlogic,meson-ao-uart' was expected
-         'amlogic,meson-gx-uart' was expected
-         From schema: Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dtb: serial@78000: Unevaluated properties are not allowed ('compatible' was unexpected)
-         From schema: Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-an400.dtb: /soc/bus@fe000000/serial@78000: failed to match any schema with compatible: ['amlogic,t7-uart', 'amlogic,meson-s4-uart']
+Gr{oetje,eeting}s,
 
-This one is OK, the UART bindings is reviewed and should be picked up for v6.6
+                        Geert
 
-Neil
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> +	};
-> +
-> +	xtal: xtal-clk {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <24000000>;
-> +		clock-output-names = "xtal";
-> +		#clock-cells = <0>;
-> +	};
-> +};
-> +
-> +&uart_a {
-> +	clocks = <&xtal>, <&xtal>, <&xtal>;
-> +	clock-names = "xtal", "pclk", "baud";
-> +	status = "okay";
-> +};
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
