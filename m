@@ -2,162 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01F1746FBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2736D746FCB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjGDLUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 07:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S231139AbjGDLWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 07:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjGDLUb (ORCPT
+        with ESMTP id S229647AbjGDLWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 07:20:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 634EF10FD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:19:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBCF22F4;
-        Tue,  4 Jul 2023 04:20:35 -0700 (PDT)
-Received: from [10.1.35.40] (C02Z41KALVDN.cambridge.arm.com [10.1.35.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB4C63F73F;
-        Tue,  4 Jul 2023 04:19:51 -0700 (PDT)
-Message-ID: <753fe3a7-e077-09d0-8233-fa834c11d280@arm.com>
-Date:   Tue, 4 Jul 2023 12:19:50 +0100
+        Tue, 4 Jul 2023 07:22:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B229D;
+        Tue,  4 Jul 2023 04:22:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BA8611EB;
+        Tue,  4 Jul 2023 11:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9688BC433C9;
+        Tue,  4 Jul 2023 11:22:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688469749;
+        bh=bWtf92i8/oO3zMlwR5SLYOrLYXhx27D67V8Iypmio+o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rvywrCopXdg0XDl7CE9xtuwtEFzMRdFnLG5B6RMq/g6B8poPgGQYKuYTYBjDTrKo6
+         v9FRy/OxlIpGaB4cCFoX5jMvHX4Wr+2MpZFyMVuUFZyrLAdavaYzj3BWquHzMkMNfO
+         bpoOVkSkpgx3TDxSzYD0gbZTKBqVisLLyYQFePmyHaw6t9/AFj1wnNEIjQ2tUFn53w
+         xEslso4o8h/nlnGoW4LrM8lxpyVELRWR57V6NSbDR3ZlV0YOwEBmHP0hP/qUYPh+Hh
+         ZKBWoHvVOTc1pLMKNxrYL0lo4wH0bdTm1XMfQcws4vk+hw6d7u7g8cL1qy6hloVRLn
+         RD5Ww+GgHPt7Q==
+Date:   Tue, 4 Jul 2023 16:52:24 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: cleanup DTS example whitespaces
+Message-ID: <ZKQA8HxGavlwq550@matsya>
+References: <20230702182308.7583-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/5] mm: Non-pmd-mappable, large folios for
- folio_add_new_anon_rmap()
-To:     "Yin, Fengwei" <fengwei.yin@intel.com>, Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-2-ryan.roberts@arm.com>
- <CAOUHufYtW+6Svaq7pcyBiModTSKn1VU-LKxB_Xwnja=f83X2YA@mail.gmail.com>
- <9e2fe34e-7615-119c-43b3-31d0b8be3af0@intel.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <9e2fe34e-7615-119c-43b3-31d0b8be3af0@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230702182308.7583-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2023 03:13, Yin, Fengwei wrote:
+On 02-07-23, 20:23, Krzysztof Kozlowski wrote:
+> The DTS code coding style expects spaces around '=' sign.
 > 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> On 7/4/2023 3:05 AM, Yu Zhao wrote:
->> On Mon, Jul 3, 2023 at 7:53 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>>
->>> In preparation for FLEXIBLE_THP support, improve
->>> folio_add_new_anon_rmap() to allow a non-pmd-mappable, large folio to be
->>> passed to it. In this case, all contained pages are accounted using the
->>> "small" pages scheme.
->>
->> Nit: In this case, all *subpages*  are accounted using the *order-0
->> folio* (or base page) scheme.
-> Matthew suggested not to use subpage with folio. Using page with folio:
-> https://lore.kernel.org/linux-mm/Y9qiS%2FIxZOMx62t6@casper.infradead.org/
-
-OK, I'll change this to "In this case, all contained pages are accounted using
-the *order-0 folio* (or base page) scheme."
-
+> ---
 > 
->>
->>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>
->> Reviewed-by: Yu Zhao <yuzhao@google.com>
+> Rob,
+> 
+> Maybe this could go via your tree? Rebased on your for-next:
+> v6.4-rc2-45-gf0ac35049606
+> ---
+>  .../bindings/arm/arm,coresight-cti.yaml        | 18 +++++++++---------
+>  .../bindings/arm/keystone/ti,sci.yaml          |  8 ++++----
+>  .../devicetree/bindings/display/msm/gmu.yaml   |  2 +-
+>  .../display/panel/samsung,s6e8aa0.yaml         |  2 +-
+>  .../display/rockchip/rockchip-vop.yaml         |  4 ++--
+>  .../bindings/iio/adc/ti,adc108s102.yaml        |  2 +-
+>  .../bindings/media/renesas,rzg2l-cru.yaml      |  4 ++--
+>  .../devicetree/bindings/media/renesas,vin.yaml |  4 ++--
+>  .../devicetree/bindings/mtd/mtd-physmap.yaml   |  2 +-
+>  .../bindings/net/mediatek-dwmac.yaml           |  2 +-
+>  .../bindings/perf/amlogic,g12-ddr-pmu.yaml     |  4 ++--
+>  .../bindings/phy/mediatek,dsi-phy.yaml         |  2 +-
 
-Thanks!
+Acked-by: Vinod Koul <vkoul@kernel.org>
 
->>
->>>  mm/rmap.c | 26 +++++++++++++++++++-------
->>>  1 file changed, 19 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/mm/rmap.c b/mm/rmap.c
->>> index 1d8369549424..82ef5ba363d1 100644
->>> --- a/mm/rmap.c
->>> +++ b/mm/rmap.c
->>> @@ -1278,31 +1278,43 @@ void page_add_anon_rmap(struct page *page, struct vm_area_struct *vma,
->>>   * This means the inc-and-test can be bypassed.
->>>   * The folio does not have to be locked.
->>>   *
->>> - * If the folio is large, it is accounted as a THP.  As the folio
->>> + * If the folio is pmd-mappable, it is accounted as a THP.  As the folio
->>>   * is new, it's assumed to be mapped exclusively by a single process.
->>>   */
->>>  void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->>>                 unsigned long address)
->>>  {
->>> -       int nr;
->>> +       int nr = folio_nr_pages(folio);
->>> +       int i;
->>> +       struct page *page;
->>>
->>> -       VM_BUG_ON_VMA(address < vma->vm_start || address >= vma->vm_end, vma);
->>> +       VM_BUG_ON_VMA(address < vma->vm_start ||
->>> +                       address + (nr << PAGE_SHIFT) > vma->vm_end, vma);
->>>         __folio_set_swapbacked(folio);
->>>
->>> -       if (likely(!folio_test_pmd_mappable(folio))) {
->>> +       if (!folio_test_large(folio)) {
->>>                 /* increment count (starts at -1) */
->>>                 atomic_set(&folio->_mapcount, 0);
->>> -               nr = 1;
->>> +               __page_set_anon_rmap(folio, &folio->page, vma, address, 1);
->>> +       } else if (!folio_test_pmd_mappable(folio)) {
->>> +               /* increment count (starts at 0) */
->>> +               atomic_set(&folio->_nr_pages_mapped, nr);
->>> +
->>> +               page = &folio->page;
->>> +               for (i = 0; i < nr; i++, page++, address += PAGE_SIZE) {
->>> +                       /* increment count (starts at -1) */
->>> +                       atomic_set(&page->_mapcount, 0);
->>> +                       __page_set_anon_rmap(folio, page, vma, address, 1);
->>> +               }
->>
->> Nit: use folio_page(), e.g.,
-
-Yep, will change for v3.
-
->>
->>   } else if (!folio_test_pmd_mappable(folio)) {
->>     int i;
->>
->>     for (i = 0; i < nr; i++) {
->>       struct page *page = folio_page(folio, i);
->>
->>       /* increment count (starts at -1) */
->>       atomic_set(&page->_mapcount, 0);
->>       __page_set_anon_rmap(folio, page, vma, address + PAGE_SIZE * i, 1);
->>     }
->>     /* increment count (starts at 0) */
->>     atomic_set(&folio->_nr_pages_mapped, nr);
->>   } else {
->>
->>>         } else {
->>>                 /* increment count (starts at -1) */
->>>                 atomic_set(&folio->_entire_mapcount, 0);
->>>                 atomic_set(&folio->_nr_pages_mapped, COMPOUND_MAPPED);
->>> -               nr = folio_nr_pages(folio);
->>>                 __lruvec_stat_mod_folio(folio, NR_ANON_THPS, nr);
->>> +               __page_set_anon_rmap(folio, &folio->page, vma, address, 1);
->>>         }
->>>
->>>         __lruvec_stat_mod_folio(folio, NR_ANON_MAPPED, nr);
->>> -       __page_set_anon_rmap(folio, &folio->page, vma, address, 1);
->>>  }
-
+-- 
+~Vinod
