@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0737473C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985B97473C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjGDOMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S231598AbjGDOMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjGDOMH (ORCPT
+        with ESMTP id S231603AbjGDOMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:12:07 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7599010DA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:12:04 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b7e0904a3aso6750085ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:12:04 -0700 (PDT)
+        Tue, 4 Jul 2023 10:12:30 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1717E171B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:12:21 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b867f9198dso5151025ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:12:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479924; x=1691071924;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479940; x=1691071940;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AzBMq7R5xdVR7lBpakM9B1ewv3x8Aa9s+j6b6UY73u8=;
-        b=hvWRzizVS0S/x2p6tjb3F48jVU/dzlutZSlw8XrL7FD9+thr9gbw2aaqzN6tsZKoSd
-         2Bjqk1qks5xIwsaJ5NMkcL3bSJO3KnFhsi8534y5jjbxdzdwq4hYpuTmR0c/k45hkPI2
-         SSdqBN/57ipAVGH1Gmk3Z0hN+ryPyEr6Ch9u/lhiHjq9W0Pgu99Ycd3dgy18oVMArTzR
-         FDcNwx83BA3zeK//pwth3Bbji/waAPqqHxWVDJ1Vp+S5bLt98xaY0nfYjzC4wA1iq9J4
-         3Q8qbgzRw4CdhSpw1qzUM16Xpz1Oqy8g8bQnaf8MFIkxMvSrkE9rIuIugOSVUf1/Mp3k
-         YBDw==
+        bh=BAz1Akm/B9B/9fUXobAvdXu5vhNqRRhd34VReZOiu/0=;
+        b=4kOCvuxSYIC+H/aG5g5WnJKyEXArtCDX3iPuHYPTABc2rObOGhpnKGYn8nwgQv5AMG
+         tZJgiSUnNHIVW+QWOfEKQJZiG/ERa3ui57/aBwIs2gzEYHMxbZDKnU6oiutSqknnp8em
+         b2CiSYBDHag4AUqF0eAZFKbyUEMnUIXcd26P7GDot5CYybEK+zKbxYLrBE+uXxqBBdyt
+         c3SHqMAkkIYMkAGkC/cEKHPPR0/fpAoTNPc7n/PxknO1y/dnT80pWP5gTVLnx1UhS0eG
+         QEhRXGd6/89Hi0SjyI23vM+wgSpl3FyLaehNEH0jiRw9KHEKqFNrkf/ST02yc9JQUNy7
+         djdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479924; x=1691071924;
+        d=1e100.net; s=20221208; t=1688479940; x=1691071940;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AzBMq7R5xdVR7lBpakM9B1ewv3x8Aa9s+j6b6UY73u8=;
-        b=ULOz/atDkVU7tYqPTi1QCQUAkmT7Zjo1TO2Qe700oIG0frLTQvlrbPsm3Hu4uN7Ttc
-         OetnjhDurgNMbCbgyYlWc9JftKg+Z2Qy1INv8QNvcn98p5AB1Ug43Q/MdN6WyIIRNEAi
-         X/Ty2mQcNWHl1ZU4vr04tn0/b/N52QsnFCkN22YbwFlWPugxPYVCVvs1/BYMgQY+iWl9
-         0vlTuSJLsF7JyZsSgxeoVwkHQxEgNVvxYyACW/Dx6RYfm3v8VymNS5VOXmIaEEWBFnPb
-         tmp6teV9dtsUDoA7vZQWW0TqcQkesJ+lxpoODJrlmChGfbIEFU2pQrlNjQ8tVspJO9YX
-         FmeA==
-X-Gm-Message-State: ABy/qLa+JO7pVulNeIThuseGGFC8eLcNq3Vr+/JHTET3o6nB/b7rMvt8
-        n0EzkJpqtEb7m9Zwy7D+qyxQdw==
-X-Google-Smtp-Source: APBJJlE8+jXKSctC4pk5eGzZC4+H+KcnNBUni6PU53miDEBuzspFdXv1MB6i2skH6gE/0p6Td5KxSA==
-X-Received: by 2002:a17:903:786:b0:1b3:ec39:f42c with SMTP id kn6-20020a170903078600b001b3ec39f42cmr13861775plb.5.1688479923889;
-        Tue, 04 Jul 2023 07:12:03 -0700 (PDT)
+        bh=BAz1Akm/B9B/9fUXobAvdXu5vhNqRRhd34VReZOiu/0=;
+        b=le+ETORYWvB2K/2iQjszgt2gUnaiE47yVCQwggxnvOeuN/Xn+CuU45FbhEVhBL5tdT
+         WxOpN2v6PvwZArdDc3JrIQnomPohbQZ8aQmW2AD3m0Plcnmeuh3SovL782yQMbJ3P0Vv
+         vd4Tfrg3kcZtfefKW8FplByRpWtKAVOlIGlq68yVXvtD4EEdG5nMTWJTxNWl64xaJjiN
+         +F33fGfGkcG61bxxK7eAZprpKZnjtlnN+CB7NgtXMmeyJ+3xtLlg9/jQxcauqVMfzsDY
+         I6BcVEqu42BgWtDjVLUWayvSJiA0Ys1jcu/X6Qe/BfqCXyc0yj24YWrCydUv52cFp6U8
+         mQvw==
+X-Gm-Message-State: ABy/qLa2ETFxCuZ6htAMfUtjzmiUtyhhGDmO0c3OsznQBud+aVraG9OU
+        IPhROBwR3GU8Ro3HzI+Kd7wbSg==
+X-Google-Smtp-Source: APBJJlHyBd5vK43azE7vHDn25p6SsQ0owCfsKSBoiqP1RbBD7jN5YfJE4aMAEKzgN6x1ApTeqn6yig==
+X-Received: by 2002:a17:903:3051:b0:1b8:1591:9f81 with SMTP id u17-20020a170903305100b001b815919f81mr13234157pla.4.1688479940252;
+        Tue, 04 Jul 2023 07:12:20 -0700 (PDT)
 Received: from carbon-x1.home ([2a01:cb15:81c2:f100:ef7b:e0f7:d376:e859])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.11.48
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.12.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 07:12:03 -0700 (PDT)
+        Tue, 04 Jul 2023 07:12:19 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -80,9 +80,9 @@ Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Evan Green <evan@rivosinc.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC V2 PATCH 8/9] riscv: add support for PR_SET_UNALIGN and PR_GET_UNALIGN
-Date:   Tue,  4 Jul 2023 16:09:23 +0200
-Message-Id: <20230704140924.315594-9-cleger@rivosinc.com>
+Subject: [RFC V2 PATCH 9/9] riscv: add floating point insn support to misaligned access emulation
+Date:   Tue,  4 Jul 2023 16:09:24 +0200
+Message-Id: <20230704140924.315594-10-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230704140924.315594-1-cleger@rivosinc.com>
 References: <20230704140924.315594-1-cleger@rivosinc.com>
@@ -98,154 +98,348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that trap support is ready to handle misalignment errors in S-mode,
-allow the user to control the behavior of misalignment accesses using
-prctl(). Add an align_ctl flag in thread_struct which will be used to
-determine if we should SIGBUS the process or not on such fault.
+This support is partially based of openSBI misaligned emulation floating
+point instruction support. It provides support for the existing
+floating point instructions (both for 32/64 bits as well as compressed
+ones). Since floating point registers are not part of the pt_regs
+struct, we need to modify them directly using some assembly. We also
+dirty the pt_regs status in case we modify them to be sure context
+switch will save FP state. With this support, Linux is on par with
+openSBI support.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- arch/riscv/include/asm/cpufeature.h  |  8 ++++++++
- arch/riscv/include/asm/processor.h   |  9 +++++++++
- arch/riscv/kernel/process.c          | 18 ++++++++++++++++++
- arch/riscv/kernel/traps_misaligned.c |  7 +++++++
- 4 files changed, 42 insertions(+)
+ arch/riscv/kernel/fpu.S              | 117 +++++++++++++++++++++
+ arch/riscv/kernel/traps_misaligned.c | 152 ++++++++++++++++++++++++++-
+ 2 files changed, 265 insertions(+), 4 deletions(-)
 
-diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
-index 7e968499db49..e2fd6fc7157f 100644
---- a/arch/riscv/include/asm/cpufeature.h
-+++ b/arch/riscv/include/asm/cpufeature.h
-@@ -6,6 +6,8 @@
- #ifndef _ASM_CPUFEATURE_H
- #define _ASM_CPUFEATURE_H
- 
-+#include <asm/hwprobe.h>
+diff --git a/arch/riscv/kernel/fpu.S b/arch/riscv/kernel/fpu.S
+index dd2205473de7..2785badb247c 100644
+--- a/arch/riscv/kernel/fpu.S
++++ b/arch/riscv/kernel/fpu.S
+@@ -104,3 +104,120 @@ ENTRY(__fstate_restore)
+ 	csrc CSR_STATUS, t1
+ 	ret
+ ENDPROC(__fstate_restore)
 +
- /*
-  * These are probed via a device_initcall(), via either the SBI or directly
-  * from the corresponding CSRs.
-@@ -20,6 +22,12 @@ DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
++#define get_f32(which) fmv.x.s a0, which; j 2f
++#define put_f32(which) fmv.s.x which, a1; j 2f
++#if __riscv_xlen == 64
++# define get_f64(which) fmv.x.d a0, which; j 2f
++# define put_f64(which) fmv.d.x which, a1; j 2f
++#else
++# define get_f64(which) fsd which, 0(a1); j 2f
++# define put_f64(which) fld which, 0(a1); j 2f
++#endif
++
++.macro fp_access_prologue
++	/*
++	 * Compute jump offset to store the correct FP register since we don't
++	 * have indirect FP register access
++	 */
++	sll t0, a0, 3
++	la t2, 1f
++	add t0, t0, t2
++	li t1, SR_FS
++	csrs CSR_STATUS, t1
++	jr t0
++1:
++.endm
++
++.macro fp_access_epilogue
++2:
++	csrc CSR_STATUS, t1
++	ret
++.endm
++
++#define fp_access_body(__access_func) \
++	__access_func(f0); \
++	__access_func(f1); \
++	__access_func(f2); \
++	__access_func(f3); \
++	__access_func(f4); \
++	__access_func(f5); \
++	__access_func(f6); \
++	__access_func(f7); \
++	__access_func(f8); \
++	__access_func(f9); \
++	__access_func(f10); \
++	__access_func(f11); \
++	__access_func(f12); \
++	__access_func(f13); \
++	__access_func(f14); \
++	__access_func(f15); \
++	__access_func(f16); \
++	__access_func(f17); \
++	__access_func(f18); \
++	__access_func(f19); \
++	__access_func(f20); \
++	__access_func(f21); \
++	__access_func(f22); \
++	__access_func(f23); \
++	__access_func(f24); \
++	__access_func(f25); \
++	__access_func(f26); \
++	__access_func(f27); \
++	__access_func(f28); \
++	__access_func(f29); \
++	__access_func(f30); \
++	__access_func(f31)
++
++
++/*
++ * Disable compressed instructions set to keep a constant offset between FP
++ * load/store/move instructions
++ */
++.option norvc
++/*
++ * put_f32_reg - Set a FP register from a register containing the value
++ * a0 = FP register index to be set
++ * a1 = value to be loaded in the FP register
++ */
++SYM_FUNC_START(put_f32_reg)
++	fp_access_prologue
++	fp_access_body(put_f32)
++	fp_access_epilogue
++SYM_FUNC_END(put_f32_reg)
++
++/*
++ * get_f32_reg - Get a FP register value and return it
++ * a0 = FP register index to be retrieved
++ */
++SYM_FUNC_START(get_f32_reg)
++	fp_access_prologue
++	fp_access_body(get_f32)
++	fp_access_epilogue
++SYM_FUNC_END(put_f32_reg)
++
++/*
++ * put_f64_reg - Set a 64 bits FP register from a value or a pointer.
++ * a0 = FP register index to be set
++ * a1 = value/pointer to be loaded in the FP register (when xlen == 32 bits, we
++ * load the value to a pointer).
++ */
++SYM_FUNC_START(put_f64_reg)
++	fp_access_prologue
++	fp_access_body(put_f64)
++	fp_access_epilogue
++SYM_FUNC_END(put_f64_reg)
++
++/*
++ * put_f64_reg - Get a 64 bits FP register value and returned it or store it to
++ *	 	 a pointer.
++ * a0 = FP register index to be retrieved
++ * a1 = If xlen == 32, pointer which should be loaded with the FP register value
++ *	or unused if xlen == 64. In which case the FP register value is returned
++ *	through a0
++ */
++SYM_FUNC_START(get_f64_reg)
++	fp_access_prologue
++	fp_access_body(get_f64)
++	fp_access_epilogue
++SYM_FUNC_END(get_f64_reg)
+diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+index 5fb6758b0bf9..c4c4672a4554 100644
+--- a/arch/riscv/kernel/traps_misaligned.c
++++ b/arch/riscv/kernel/traps_misaligned.c
+@@ -156,6 +156,115 @@
+ #define PRECISION_S 0
+ #define PRECISION_D 1
  
- DECLARE_PER_CPU(long, misaligned_access_speed);
- 
-+static inline bool misaligned_access_emulated(void)
++#ifdef CONFIG_FPU
++
++#define FP_GET_RD(insn)		(insn >> 7 & 0x1F)
++
++extern void put_f32_reg(unsigned long fp_reg, unsigned long value);
++
++static int set_f32_rd(unsigned long insn, struct pt_regs *regs,
++		      unsigned long val)
 +{
-+	return per_cpu(misaligned_access_speed, 0) ==
-+					RISCV_HWPROBE_MISALIGNED_EMULATED;
-+}
++	unsigned long fp_reg = FP_GET_RD(insn);
 +
- void __init misaligned_emulation_init(void);
- 
- #endif
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index 94a0590c6971..4e6667d5ca68 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -7,6 +7,7 @@
- #define _ASM_RISCV_PROCESSOR_H
- 
- #include <linux/const.h>
-+#include <linux/prctl.h>
- 
- #include <vdso/processor.h>
- 
-@@ -39,6 +40,7 @@ struct thread_struct {
- 	unsigned long s[12];	/* s[0]: frame pointer */
- 	struct __riscv_d_ext_state fstate;
- 	unsigned long bad_cause;
-+	unsigned long align_ctl;
- };
- 
- /* Whitelist the fstate from the task_struct for hardened usercopy */
-@@ -51,6 +53,7 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
- 
- #define INIT_THREAD {					\
- 	.sp = sizeof(init_stack) + (long)&init_stack,	\
-+	.align_ctl = PR_UNALIGN_NOPRINT,		\
- }
- 
- #define task_pt_regs(tsk)						\
-@@ -80,6 +83,12 @@ int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid);
- extern void riscv_fill_hwcap(void);
- extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
- 
-+extern int get_unalign_ctl(struct task_struct *, unsigned long addr);
-+extern int set_unalign_ctl(struct task_struct *, unsigned int val);
++	put_f32_reg(fp_reg, val);
++	regs->status |= SR_FS_DIRTY;
 +
-+#define GET_UNALIGN_CTL(tsk, addr)	get_unalign_ctl((tsk), (addr))
-+#define SET_UNALIGN_CTL(tsk, val)	set_unalign_ctl((tsk), (val))
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_PROCESSOR_H */
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index e2a060066730..88a71359396b 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -24,6 +24,7 @@
- #include <asm/switch_to.h>
- #include <asm/thread_info.h>
- #include <asm/cpuidle.h>
-+#include <asm/cpufeature.h>
- 
- register unsigned long gp_in_global __asm__("gp");
- 
-@@ -40,6 +41,23 @@ void arch_cpu_idle(void)
- 	cpu_do_idle();
- }
- 
-+int set_unalign_ctl(struct task_struct *tsk, unsigned int val)
-+{
-+	if (!misaligned_access_emulated())
-+		return -EINVAL;
-+
-+	tsk->thread.align_ctl = val;
 +	return 0;
 +}
 +
-+int get_unalign_ctl(struct task_struct *tsk, unsigned long adr)
-+{
-+	if (!misaligned_access_emulated())
-+		return -EINVAL;
++extern void put_f64_reg(unsigned long fp_reg, unsigned long value);
 +
-+	return put_user(tsk->thread.align_ctl, (unsigned long __user *)adr);
++static int set_f64_rd(unsigned long insn, struct pt_regs *regs, u64 val)
++{
++	unsigned long fp_reg = FP_GET_RD(insn);
++	unsigned long value;
++
++#if __riscv_xlen == 32
++	value = (unsigned long) &val;
++#else
++	value = val;
++#endif
++	put_f64_reg(fp_reg, value);
++	regs->status |= SR_FS_DIRTY;
++
++	return 0;
 +}
 +
- void __show_regs(struct pt_regs *regs)
++#if __riscv_xlen == 32
++extern void get_f64_reg(unsigned long fp_reg, u64 *value);
++
++static u64 get_f64_rs(unsigned long insn, u8 fp_reg_offset,
++		      struct pt_regs *regs)
++{
++	unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
++	u64 val;
++
++	get_f64_reg(fp_reg, &val);
++	regs->status |= SR_FS_DIRTY;
++
++	return val;
++}
++#else
++
++extern unsigned long get_f64_reg(unsigned long fp_reg);
++
++static unsigned long get_f64_rs(unsigned long insn, u8 fp_reg_offset,
++				struct pt_regs *regs)
++{
++	unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
++	unsigned long val;
++
++	val = get_f64_reg(fp_reg);
++	regs->status |= SR_FS_DIRTY;
++
++	return val;
++}
++
++#endif
++
++extern unsigned long get_f32_reg(unsigned long fp_reg);
++
++static unsigned long get_f32_rs(unsigned long insn, u8 fp_reg_offset,
++				struct pt_regs *regs)
++{
++	unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
++	unsigned long val;
++
++	val = get_f32_reg(fp_reg);
++	regs->status |= SR_FS_DIRTY;
++
++	return val;
++}
++
++#else /* CONFIG_FPU */
++static void set_f32_rd(unsigned long insn, struct pt_regs *regs,
++		       unsigned long val) {}
++
++static void set_f64_rd(unsigned long insn, struct pt_regs *regs, u64 val) {}
++
++static unsigned long get_f64_rs(unsigned long insn, u8 fp_reg_offset,
++				struct pt_regs *regs)
++{
++	return 0;
++}
++
++static unsigned long get_f32_rs(unsigned long insn, u8 fp_reg_offset,
++				struct pt_regs *regs)
++{
++	return 0;
++}
++
++#endif
++
++#define GET_F64_RS2(insn, regs) (get_f64_rs(insn, 20, regs))
++#define GET_F64_RS2C(insn, regs) (get_f64_rs(insn, 2, regs))
++#define GET_F64_RS2S(insn, regs) (get_f64_rs(RVC_RS2S(insn), 0, regs))
++
++#define GET_F32_RS2(insn, regs) (get_f32_rs(insn, 20, regs))
++#define GET_F32_RS2C(insn, regs) (get_f32_rs(insn, 2, regs))
++#define GET_F32_RS2S(insn, regs) (get_f32_rs(RVC_RS2S(insn), 0, regs))
++
+ #ifdef CONFIG_RISCV_M_MODE
+ static inline int load_u8(struct pt_regs *regs, const u8 *addr, u8 *r_val)
  {
- 	show_regs_print_info(KERN_DEFAULT);
-diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index 243ef9314734..5fb6758b0bf9 100644
---- a/arch/riscv/kernel/traps_misaligned.c
-+++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -9,6 +9,7 @@
- #include <linux/perf_event.h>
- #include <linux/irq.h>
- #include <linux/stringify.h>
-+#include <linux/prctl.h>
- 
- #include <asm/processor.h>
- #include <asm/ptrace.h>
-@@ -305,6 +306,9 @@ int handle_misaligned_load(struct pt_regs *regs)
- 	if (!unaligned_enabled)
+@@ -374,15 +483,21 @@ int handle_misaligned_load(struct pt_regs *regs)
  		return -1;
+ 	}
  
-+	if (user_mode(regs) && (current->thread.align_ctl & PR_UNALIGN_SIGBUS))
-+		return -1;
++	if (!IS_ENABLED(CONFIG_FPU) && fp)
++		return -EOPNOTSUPP;
 +
- 	if (get_insn(regs, epc, &insn))
- 		return -1;
+ 	val.data_u64 = 0;
+ 	for (i = 0; i < len; i++) {
+ 		if (load_u8(regs, (void *)(addr + i), &val.data_bytes[i]))
+ 			return -1;
+ 	}
  
-@@ -398,6 +402,9 @@ int handle_misaligned_store(struct pt_regs *regs)
- 	if (!unaligned_enabled)
- 		return -1;
+-	if (fp)
+-		return -1;
+-	SET_RD(insn, regs, val.data_ulong << shift >> shift);
++	if (!fp)
++		SET_RD(insn, regs, val.data_ulong << shift >> shift);
++	else if (len == 8)
++		set_f64_rd(insn, regs, val.data_u64);
++	else
++		set_f32_rd(insn, regs, val.data_ulong);
  
-+	if (user_mode(regs) && (current->thread.align_ctl & PR_UNALIGN_SIGBUS))
-+		return -1;
+ 	regs->epc = epc + INSN_LEN(insn);
+ 
+@@ -395,7 +510,7 @@ int handle_misaligned_store(struct pt_regs *regs)
+ 	unsigned long epc = regs->epc;
+ 	unsigned long insn;
+ 	unsigned long addr = regs->badaddr;
+-	int i, len = 0;
++	int i, len = 0, fp = 0;
+ 
+ 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
+ 
+@@ -418,6 +533,14 @@ int handle_misaligned_store(struct pt_regs *regs)
+ 	} else if ((insn & INSN_MASK_SD) == INSN_MATCH_SD) {
+ 		len = 8;
+ #endif
++	} else if ((insn & INSN_MASK_FSD) == INSN_MATCH_FSD) {
++		fp = 1;
++		len = 8;
++		val.data_u64 = GET_F64_RS2(insn, regs);
++	} else if ((insn & INSN_MASK_FSW) == INSN_MATCH_FSW) {
++		fp = 1;
++		len = 4;
++		val.data_ulong = GET_F32_RS2(insn, regs);
+ 	} else if ((insn & INSN_MASK_SH) == INSN_MATCH_SH) {
+ 		len = 2;
+ #if defined(CONFIG_64BIT)
+@@ -436,11 +559,32 @@ int handle_misaligned_store(struct pt_regs *regs)
+ 		   ((insn >> SH_RD) & 0x1f)) {
+ 		len = 4;
+ 		val.data_ulong = GET_RS2C(insn, regs);
++	} else if ((insn & INSN_MASK_C_FSD) == INSN_MATCH_C_FSD) {
++		fp = 1;
++		len = 8;
++		val.data_u64 = GET_F64_RS2S(insn, regs);
++	} else if ((insn & INSN_MASK_C_FSDSP) == INSN_MATCH_C_FSDSP) {
++		fp = 1;
++		len = 8;
++		val.data_u64 = GET_F64_RS2C(insn, regs);
++#if !defined(CONFIG_64BIT)
++	} else if ((insn & INSN_MASK_C_FSW) == INSN_MATCH_C_FSW) {
++		fp = 1;
++		len = 4;
++		val.data_ulong = GET_F32_RS2S(insn, regs);
++	} else if ((insn & INSN_MASK_C_FSWSP) == INSN_MATCH_C_FSWSP) {
++		fp = 1;
++		len = 4;
++		val.data_ulong = GET_F32_RS2C(insn, regs);
++#endif
+ 	} else {
+ 		regs->epc = epc;
+ 		return -1;
+ 	}
+ 
++	if (!IS_ENABLED(CONFIG_FPU) && fp)
++		return -EOPNOTSUPP;
 +
- 	if (get_insn(regs, epc, &insn))
- 		return -1;
- 
+ 	for (i = 0; i < len; i++) {
+ 		if (store_u8(regs, (void *)(addr + i), val.data_bytes[i]))
+ 			return -1;
 -- 
 2.40.1
 
