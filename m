@@ -2,124 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E1A7471D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE607471F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjGDMzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S229971AbjGDM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGDMzf (ORCPT
+        with ESMTP id S231535AbjGDM5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:55:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BC5B1
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688475288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ioWPxV9zU1HRZRvRW9KpWYEne0dVnA+bJiiYdIxAOPo=;
-        b=KiqnJuclE4WqippB+WKgyX+WV/4vSu7SVCUl+i3qn4VtW798+TQU44B4AsEMvlFDC3iZhT
-        emWD3AzB3vvGvgbd2FUlDy/N8XywY2v4TpX0S4h7wJQfAOnCR1c0kUo6XlXlFU2ZW6aarF
-        BH/DeerA8XT7Ow5a9vt9oMbhvIHm9+0=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-562-R_AJOaipPKONC0ZntrH8-A-1; Tue, 04 Jul 2023 08:54:47 -0400
-X-MC-Unique: R_AJOaipPKONC0ZntrH8-A-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-76714d4beebso102069985a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:54:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688475286; x=1691067286;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ioWPxV9zU1HRZRvRW9KpWYEne0dVnA+bJiiYdIxAOPo=;
-        b=Lqz8Kg63AjL5KozOvrGhNh+XLHmn1Avxx1v87B+ktQin2EM8/OfiZG82q53/Z7xyXU
-         21UK4ZZEP4wEhyjO8yJkaD05Keg1ThilWtiv5eDtkEaD2UmwGFpGmYNMYKxyFWRgWe/B
-         y6QCFPWcc1XDoNB22A5BA/xi9q1CN+VzRakNe+hwN45jkWBsk/lvQ1jMOjtywMX/uxI1
-         OB1FXIFST4i+osb8HDaZLngoijsYTHO8Kx0x+3KIX3379JOi98K1EGsGIRVToWvRJQ8e
-         IouK+OstgZ2SUWxanHGE3zk6LVMeTWuvReJIoKzDAJ5Q4SIE7iP2xpaSQsTcytz3qxe4
-         GTPg==
-X-Gm-Message-State: ABy/qLarWc7yL7k/yadB/1y59KEqJiqubarVQrAOypZwECl034d9S0uQ
-        zrX1+sVFoLsdW/JO1pECfKPo+kCpExxoQhD+IBhdWpCzI4PFnyLCMWb75vWdZ/Dyhk3Hw7JWI42
-        bHiLU6EQQswoLC3PjcrvLVTIN
-X-Received: by 2002:a05:6214:4018:b0:635:ec47:bfa4 with SMTP id kd24-20020a056214401800b00635ec47bfa4mr15158359qvb.4.1688475286701;
-        Tue, 04 Jul 2023 05:54:46 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGff3DAVP8rxsCeJdiqdZJEJR0lTXhvEtMOgiBPMRGFUQp2BEEn7tqiM1upp5A0yfH5+B3Pfw==
-X-Received: by 2002:a05:6214:4018:b0:635:ec47:bfa4 with SMTP id kd24-20020a056214401800b00635ec47bfa4mr15158343qvb.4.1688475286407;
-        Tue, 04 Jul 2023 05:54:46 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-247-156.dyn.eolo.it. [146.241.247.156])
-        by smtp.gmail.com with ESMTPSA id z18-20020a0ce992000000b006365b23b5dfsm4989364qvn.23.2023.07.04.05.54.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 05:54:45 -0700 (PDT)
-Message-ID: <dfbbe91a9c0abe8aba2c00afd3b7f7d6af801d8e.camel@redhat.com>
-Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Ian Kumlien <ian.kumlien@gmail.com>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 04 Jul 2023 14:54:42 +0200
-In-Reply-To: <CAA85sZvtspqfep+6rH8re98-A6rHNNWECvwqVaM=r=0NSSsGzA@mail.gmail.com>
-References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
-         <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
-         <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com>
-         <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
-         <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com>
-         <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
-         <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
-         <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
-         <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
-         <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
-         <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com>
-         <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
-         <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
-         <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
-         <486ae2687cd2e2624c0db1ea1f3d6ca36db15411.camel@redhat.com>
-         <CAA85sZsJEZK0g0fGfH+toiHm_o4pdN+Wo0Wq9fgsUjHXGxgxQA@mail.gmail.com>
-         <CAA85sZs4KkfVojx=vxbDaWhWRpxiHc-RCc2OLD2c+VefRjpTfw@mail.gmail.com>
-         <5688456234f5d15ea9ca0f000350c28610ed2639.camel@redhat.com>
-         <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
-         <CAA85sZs2biYueZsbDqdrMyYfaqH6hnSMpymgbsk=b3W1B7TNRA@mail.gmail.com>
-         <CAA85sZs_H3Dc-mYnj8J5VBEwUJwbHUupP+U-4eG20nfAHBtv4w@mail.gmail.com>
-         <92a4d42491a2c219192ae86fa04b579ea3676d8c.camel@redhat.com>
-         <CAA85sZvtspqfep+6rH8re98-A6rHNNWECvwqVaM=r=0NSSsGzA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 08:57:23 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD89710CE;
+        Tue,  4 Jul 2023 05:57:18 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 364Clq1L030500;
+        Tue, 4 Jul 2023 12:57:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=iTDv4VPTfZqUZ7AKCiQnqMYiZmFlxHkGxEf8+CPNWo8=;
+ b=F2z63e/OYzNaCShNERNgVClfVfXi3YLv77s28P2rmWpDMlYrvMKUrWpvHmbMbuYA16Mv
+ usDaskLOxXN2ssxtqJGUWHL+C83KmR3jbibqzp4PPB0FgQUbYPp4/ZInIJT7ybrSzu5O
+ vGPrSTWJEA7hC4YjiCgiPA8wl9VIjd29ZHYYeWdXLePTSETfWsxrHQ1CvtBEmLR8Q7CL
+ 62NI/8kVSECLXFWIeQUmGTIUqnIr9uYX2dAUXC/rSeNSfnp/87WKQmgmY9wA1fqUS0Rg
+ stGyEZMiJr9jh3GdcAD48XIyUoIzjl/U1h7OjnBquq7UgTwNaJCAAJmZrxABNM5k6XXo 4g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmkr887x6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jul 2023 12:57:15 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 364CnP0p003018;
+        Tue, 4 Jul 2023 12:57:14 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmkr887wh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jul 2023 12:57:14 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 364A6PWf008595;
+        Tue, 4 Jul 2023 12:57:14 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3rjbs5ys1e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jul 2023 12:57:13 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 364CvCMW25297190
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Jul 2023 12:57:12 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EACE458055;
+        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33E0F5805E;
+        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.36.177])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
+Message-ID: <b61fedf214cbe72de063a3bf516dd72f80595219.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: require signed IMA policy when UEFI secure boot is
+ enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 04 Jul 2023 08:57:10 -0400
+In-Reply-To: <20230703115442.129725-1-coxu@redhat.com>
+References: <20230703115442.129725-1-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: TAr0e02RnOj9NLIdD-orsSF3sFfLLkK4
+X-Proofpoint-GUID: kHJ-0h6YRVkkA6xkvOne638UU5eyQSgX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-04_07,2023-07-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307040106
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-07-04 at 13:36 +0200, Ian Kumlien wrote:
-> Propper bug this time:
-> cat bug.txt | ./scripts/decode_stacktrace.sh vmlinux
+On Mon, 2023-07-03 at 19:54 +0800, Coiby Xu wrote:
+> With the introduction of the .machine keyring for UEFI-based systems,
+> users are able to add custom CAs keys via MOK. This allow users to sign
+> their own IMA polices. For the sake of security, mandate signed IMA
+> policy when UEFI secure boot is enabled.
+> 
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+>  security/integrity/ima/ima_efi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
+> index 9db66fe310d4..bb2881759505 100644
+> --- a/security/integrity/ima/ima_efi.c
+> +++ b/security/integrity/ima/ima_efi.c
+> @@ -58,6 +58,9 @@ static const char * const sb_arch_rules[] = {
+>  #if !IS_ENABLED(CONFIG_MODULE_SIG)
+>  	"appraise func=MODULE_CHECK appraise_type=imasig",
+>  #endif
+> +#if IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && IS_ENABLED(CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY)
+> +	"appraise func=POLICY_CHECK appraise_type=imasig",
+> +#endif /* CONFIG_INTEGRITY_MACHINE_KEYRING && IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY */
+>  	"measure func=MODULE_CHECK",
+>  	NULL
+>  };
 
-To be sure, is this with the last patch I shared? this one I mean:
+Thanks, Coiby.
 
-https://lore.kernel.org/netdev/92a4d42491a2c219192ae86fa04b579ea3676d8c.cam=
-el@redhat.com/
+Using IS_ENABLED() is not wrong, but unnecessary.  IS_BUILTIN()
+suffices.
 
-Could you please additionally enable CONFIG_DEBUG_NET in your build?
+-- 
+thanks,
 
-Could you please give a detailed description of your network topology
-and the running traffic?
-
-Thanks!
-
-Paolo
+Mimi
 
