@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F678746B28
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF301746B2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbjGDHwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S230259AbjGDHxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjGDHwW (ORCPT
+        with ESMTP id S231620AbjGDHwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:52:22 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE30173B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:52:02 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b8033987baso31904055ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:52:02 -0700 (PDT)
+        Tue, 4 Jul 2023 03:52:32 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE61E19A9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:52:07 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-55b66ca1c80so1811224a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688457122; x=1691049122;
+        d=chromium.org; s=google; t=1688457126; x=1691049126;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QLyQmP5nDh0RgJC6CxbUZRaauZtJFbl0jChhLeFWjJY=;
-        b=YcEN4H40VBFhjUSroHCTQ6NibkY4/dreFivRtQDGr7gpTqvTZYZwVe0bAU1BlFr7Tw
-         uJyTBZW+lzvSd7mHzrU/btQNmpbPixGeevr1thUasCjlICbLKVv58agecCi50tM+ervX
-         xWtDxYDrmZS6HTOxaQPe/+ifjAer7v5B3P0B0=
+        bh=Qee/VKQzM1LmZxAkmmj2aucWtJOH/l94Gljx+K2KDa8=;
+        b=k+iMyiIZ/rvkyJFLnpCxfPh2kihs9hKp7WCZMgRJ/KWcfxGthOuSTxsh7ufzJA/Bf/
+         mzh6BZEJrCQrd57esW6bSICX4N5fXXviTpScCU4T+p1S9Ex1CyHnmwVooY7ZQFENwzJz
+         zEkI3p/OBQ13cxCJNgSaA3m+7cI5QWfuYcJr4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688457122; x=1691049122;
+        d=1e100.net; s=20221208; t=1688457126; x=1691049126;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QLyQmP5nDh0RgJC6CxbUZRaauZtJFbl0jChhLeFWjJY=;
-        b=gBYLIreTrqcolPE10y9CY1h0emYGPZQVyo6ngenRufSOIt/iYhUpfIZYIeZMeraIWH
-         oVpm69rN4X13YNs3OIb0AmzR2ChzzTHjl0q5KKN64FwX+J+AZglhow7Fsp+So6s1u9g0
-         Y4Rz9+cLd4TmFgSwE2NAOfh2VJac3E/a7aLYau1J1RAS14NZzg/o9A3pjL5H1mSVBB4F
-         r3mxj1hhZkWEnDnbiryyB5+y0I3WgzwZ4qYCKReEaTUTqc9VApnQ/n5OLJ51TxKwbL0I
-         aaaZi1FpbY9bhXhJAdn5Y9mox9oFcSytSfn3WviXxWSOGkBWo+BcfMzwc5zmMBFthgzv
-         6UXA==
-X-Gm-Message-State: AC+VfDxfc86yUAvIvIuYeSYhffQiafamFle8UngLJilTLC/6A3k5H4pk
-        TX1JkrqA9zYspdBBebA+JsOxC/g7/zmHMikohGg=
-X-Google-Smtp-Source: ACHHUZ4Cs6VvcY2DlvQtFDLVIBEE3ptFC2QoRwiqnzemyLMsDUP2Zh7EwpxaQZ2k3xDH9fQ4SSovsQ==
-X-Received: by 2002:a17:902:c411:b0:1b6:92f0:b6f5 with SMTP id k17-20020a170902c41100b001b692f0b6f5mr24933837plk.14.1688457122247;
-        Tue, 04 Jul 2023 00:52:02 -0700 (PDT)
+        bh=Qee/VKQzM1LmZxAkmmj2aucWtJOH/l94Gljx+K2KDa8=;
+        b=AlqucU/+808gQrjnU+2waZjXIzd5TkqdZbIgDkhnSZrHBZNW7hG1av5cbU6CQhz6Jk
+         zeoek8zuJ+flq89QbnAZB3tgRLDoATIJssoaDdmUjl9+maZvQ8HQtcGxgikFvAehXIKi
+         lUbKg/gt7Rqo6y+CVu5rmxVigECJt7pYpSC/+PxEtymd0W7KAoGs/aUrzg9YGoJdqcPW
+         TL64l+NytmGEQw/vZapkaxflQLbTB4Y0S5OdT9mrovQ7dajV0+chEiR8PehfRmPHbDv9
+         b4H3Vn1qgrlvQ8PUOnNfHhokXbTIKxrygfMJy/5tyZ5N9mN2dFBbbbkTIMOhAQ0Xk4fu
+         HlhQ==
+X-Gm-Message-State: AC+VfDyGE9T8q4wjBFfUotnlh1cipGANlX/OpftxZ6oYrEWTM8wTk1rM
+        ppfp8uZcDqsB63Lo6D2/m3lKxg==
+X-Google-Smtp-Source: ACHHUZ6+9ouW33wDPBoDXHeV/P1AI/Ns1TtvrKGhlPJ4FwNyTE2MhXe7ejlBjshhe6QIZRhVgVHIEg==
+X-Received: by 2002:a05:6a20:8f0c:b0:117:a2f3:3c93 with SMTP id b12-20020a056a208f0c00b00117a2f33c93mr13849232pzk.2.1688457126666;
+        Tue, 04 Jul 2023 00:52:06 -0700 (PDT)
 Received: from localhost ([2401:fa00:8f:203:a11b:bff7:d8ae:bb0])
-        by smtp.gmail.com with UTF8SMTPSA id b3-20020a170902a9c300b001b53be3d956sm16550209plr.167.2023.07.04.00.51.59
+        by smtp.gmail.com with UTF8SMTPSA id jm23-20020a17090304d700b001b51b3e84cesm16610112plb.166.2023.07.04.00.52.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 00:52:01 -0700 (PDT)
+        Tue, 04 Jul 2023 00:52:06 -0700 (PDT)
 From:   David Stevens <stevensd@chromium.org>
 X-Google-Original-From: David Stevens <stevensd@google.com>
 To:     Sean Christopherson <seanjc@google.com>
@@ -56,9 +56,9 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         kvm@vger.kernel.org, David Stevens <stevensd@chromium.org>
-Subject: [PATCH v7 7/8] KVM: PPC: Migrate to __kvm_follow_pfn
-Date:   Tue,  4 Jul 2023 16:50:52 +0900
-Message-ID: <20230704075054.3344915-8-stevensd@google.com>
+Subject: [PATCH v7 8/8] KVM: remove __gfn_to_pfn_memslot
+Date:   Tue,  4 Jul 2023 16:50:53 +0900
+Message-ID: <20230704075054.3344915-9-stevensd@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 In-Reply-To: <20230704075054.3344915-1-stevensd@google.com>
 References: <20230704075054.3344915-1-stevensd@google.com>
@@ -76,218 +76,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Stevens <stevensd@chromium.org>
 
-Migrate from __gfn_to_pfn_memslot to __kvm_follow_pfn. As part of the
-refactoring, remove the redundant calls to get_user_page_fast_only,
-since the check for !async && !atomic was removed from the KVM generic
-code in b9b33da2aa74. Also, remove the kvm_ro parameter because the KVM
-generic code handles RO memslots.
+All callers have been migrated to __kvm_follow_pfn.
 
 Signed-off-by: David Stevens <stevensd@chromium.org>
 ---
-I have checked that this patch compiles, but I don't have the hardware
-to test it myself.
+ virt/kvm/kvm_main.c | 33 ---------------------------------
+ 1 file changed, 33 deletions(-)
 
- arch/powerpc/include/asm/kvm_book3s.h  |  2 +-
- arch/powerpc/kvm/book3s_64_mmu_hv.c    | 38 +++++++++-----------
- arch/powerpc/kvm/book3s_64_mmu_radix.c | 50 +++++++++++---------------
- arch/powerpc/kvm/book3s_hv_nested.c    |  4 +--
- 4 files changed, 38 insertions(+), 56 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/kvm_book3s.h b/arch/powerpc/include/asm/kvm_book3s.h
-index bbf5e2c5fe09..bf48c511e700 100644
---- a/arch/powerpc/include/asm/kvm_book3s.h
-+++ b/arch/powerpc/include/asm/kvm_book3s.h
-@@ -202,7 +202,7 @@ extern bool kvmppc_hv_handle_set_rc(struct kvm *kvm, bool nested,
- extern int kvmppc_book3s_instantiate_page(struct kvm_vcpu *vcpu,
- 				unsigned long gpa,
- 				struct kvm_memory_slot *memslot,
--				bool writing, bool kvm_ro,
-+				bool writing,
- 				pte_t *inserted_pte, unsigned int *levelp);
- extern int kvmppc_init_vm_radix(struct kvm *kvm);
- extern void kvmppc_free_radix(struct kvm *kvm);
-diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-index 7f765d5ad436..9a4715e73937 100644
---- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
-+++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-@@ -523,6 +523,9 @@ int kvmppc_book3s_hv_page_fault(struct kvm_vcpu *vcpu,
- 	unsigned long rcbits;
- 	long mmio_update;
- 	pte_t pte, *ptep;
-+	struct kvm_follow_pfn foll = {
-+		.allow_write_mapping = true,
-+	};
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 0f7b41f220b6..5b5afd70f239 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2712,39 +2712,6 @@ kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
+ }
+ EXPORT_SYMBOL_GPL(__kvm_follow_pfn);
  
- 	if (kvm_is_radix(kvm))
- 		return kvmppc_book3s_radix_page_fault(vcpu, ea, dsisr);
-@@ -599,29 +602,20 @@ int kvmppc_book3s_hv_page_fault(struct kvm_vcpu *vcpu,
- 	page = NULL;
- 	writing = (dsisr & DSISR_ISSTORE) != 0;
- 	/* If writing != 0, then the HPTE must allow writing, if we get here */
--	write_ok = writing;
--	hva = gfn_to_hva_memslot(memslot, gfn);
- 
--	/*
--	 * Do a fast check first, since __gfn_to_pfn_memslot doesn't
--	 * do it with !atomic && !async, which is how we call it.
--	 * We always ask for write permission since the common case
--	 * is that the page is writable.
--	 */
--	if (get_user_page_fast_only(hva, FOLL_WRITE, &page)) {
--		write_ok = true;
--	} else {
--		/* Call KVM generic code to do the slow-path check */
--		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, false, NULL,
--					   writing, &write_ok, NULL);
--		if (is_error_noslot_pfn(pfn))
--			return -EFAULT;
--		page = NULL;
--		if (pfn_valid(pfn)) {
--			page = pfn_to_page(pfn);
--			if (PageReserved(page))
--				page = NULL;
--		}
-+	foll.slot = memslot;
-+	foll.gfn = gfn;
-+	foll.flags = FOLL_GET | (writing ? FOLL_WRITE : 0);
-+	pfn = __kvm_follow_pfn(&foll);
-+	if (is_error_noslot_pfn(pfn))
-+		return -EFAULT;
-+	page = NULL;
-+	write_ok = foll.writable;
-+	hva = foll.hva;
-+	if (pfn_valid(pfn)) {
-+		page = pfn_to_page(pfn);
-+		if (PageReserved(page))
-+			page = NULL;
- 	}
- 
- 	/*
-diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/book3s_64_mmu_radix.c
-index 461307b89c3a..339d1efcb6c9 100644
---- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
-+++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
-@@ -815,47 +815,39 @@ bool kvmppc_hv_handle_set_rc(struct kvm *kvm, bool nested, bool writing,
- int kvmppc_book3s_instantiate_page(struct kvm_vcpu *vcpu,
- 				   unsigned long gpa,
- 				   struct kvm_memory_slot *memslot,
--				   bool writing, bool kvm_ro,
-+				   bool writing,
- 				   pte_t *inserted_pte, unsigned int *levelp)
- {
- 	struct kvm *kvm = vcpu->kvm;
- 	struct page *page = NULL;
- 	unsigned long mmu_seq;
--	unsigned long hva, gfn = gpa >> PAGE_SHIFT;
--	bool upgrade_write = false;
--	bool *upgrade_p = &upgrade_write;
-+	unsigned long hva, pfn, gfn = gpa >> PAGE_SHIFT;
-+	bool upgrade_write;
- 	pte_t pte, *ptep;
- 	unsigned int shift, level;
- 	int ret;
- 	bool large_enable;
-+	struct kvm_follow_pfn foll = {
-+		.slot = memslot,
-+		.gfn = gfn,
-+		.flags = FOLL_GET | (writing ? FOLL_WRITE : 0),
-+		.allow_write_mapping = true,
-+	};
- 
- 	/* used to check for invalidations in progress */
- 	mmu_seq = kvm->mmu_invalidate_seq;
- 	smp_rmb();
- 
--	/*
--	 * Do a fast check first, since __gfn_to_pfn_memslot doesn't
--	 * do it with !atomic && !async, which is how we call it.
--	 * We always ask for write permission since the common case
--	 * is that the page is writable.
--	 */
--	hva = gfn_to_hva_memslot(memslot, gfn);
--	if (!kvm_ro && get_user_page_fast_only(hva, FOLL_WRITE, &page)) {
--		upgrade_write = true;
--	} else {
--		unsigned long pfn;
+-kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
+-			       bool atomic, bool interruptible, bool *async,
+-			       bool write_fault, bool *writable, hva_t *hva)
+-{
+-	kvm_pfn_t pfn;
+-	struct kvm_follow_pfn foll = {
+-		.slot = slot,
+-		.gfn = gfn,
+-		.flags = FOLL_GET,
+-		.atomic = atomic,
+-		.allow_write_mapping = !!writable,
+-	};
 -
--		/* Call KVM generic code to do the slow-path check */
--		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, false, NULL,
--					   writing, upgrade_p, NULL);
--		if (is_error_noslot_pfn(pfn))
--			return -EFAULT;
--		page = NULL;
--		if (pfn_valid(pfn)) {
--			page = pfn_to_page(pfn);
--			if (PageReserved(page))
--				page = NULL;
--		}
-+	pfn = __kvm_follow_pfn(&foll);
-+	if (is_error_noslot_pfn(pfn))
-+		return -EFAULT;
-+	page = NULL;
-+	hva = foll.hva;
-+	upgrade_write = foll.writable;
-+	if (pfn_valid(pfn)) {
-+		page = pfn_to_page(pfn);
-+		if (PageReserved(page))
-+			page = NULL;
- 	}
- 
- 	/*
-@@ -944,7 +936,6 @@ int kvmppc_book3s_radix_page_fault(struct kvm_vcpu *vcpu,
- 	struct kvm_memory_slot *memslot;
- 	long ret;
- 	bool writing = !!(dsisr & DSISR_ISSTORE);
--	bool kvm_ro = false;
- 
- 	/* Check for unusual errors */
- 	if (dsisr & DSISR_UNSUPP_MMU) {
-@@ -997,7 +988,6 @@ int kvmppc_book3s_radix_page_fault(struct kvm_vcpu *vcpu,
- 					ea, DSISR_ISSTORE | DSISR_PROTFAULT);
- 			return RESUME_GUEST;
- 		}
--		kvm_ro = true;
- 	}
- 
- 	/* Failed to set the reference/change bits */
-@@ -1015,7 +1005,7 @@ int kvmppc_book3s_radix_page_fault(struct kvm_vcpu *vcpu,
- 
- 	/* Try to insert a pte */
- 	ret = kvmppc_book3s_instantiate_page(vcpu, gpa, memslot, writing,
--					     kvm_ro, NULL, NULL);
-+					     NULL, NULL);
- 
- 	if (ret == 0 || ret == -EAGAIN)
- 		ret = RESUME_GUEST;
-diff --git a/arch/powerpc/kvm/book3s_hv_nested.c b/arch/powerpc/kvm/book3s_hv_nested.c
-index 377d0b4a05ee..6d531051df04 100644
---- a/arch/powerpc/kvm/book3s_hv_nested.c
-+++ b/arch/powerpc/kvm/book3s_hv_nested.c
-@@ -1497,7 +1497,6 @@ static long int __kvmhv_nested_page_fault(struct kvm_vcpu *vcpu,
- 	unsigned long n_gpa, gpa, gfn, perm = 0UL;
- 	unsigned int shift, l1_shift, level;
- 	bool writing = !!(dsisr & DSISR_ISSTORE);
--	bool kvm_ro = false;
- 	long int ret;
- 
- 	if (!gp->l1_gr_to_hr) {
-@@ -1577,7 +1576,6 @@ static long int __kvmhv_nested_page_fault(struct kvm_vcpu *vcpu,
- 					ea, DSISR_ISSTORE | DSISR_PROTFAULT);
- 			return RESUME_GUEST;
- 		}
--		kvm_ro = true;
- 	}
- 
- 	/* 2. Find the host pte for this L1 guest real address */
-@@ -1599,7 +1597,7 @@ static long int __kvmhv_nested_page_fault(struct kvm_vcpu *vcpu,
- 	if (!pte_present(pte) || (writing && !(pte_val(pte) & _PAGE_WRITE))) {
- 		/* No suitable pte found -> try to insert a mapping */
- 		ret = kvmppc_book3s_instantiate_page(vcpu, gpa, memslot,
--					writing, kvm_ro, &pte, &level);
-+					writing, &pte, &level);
- 		if (ret == -EAGAIN)
- 			return RESUME_GUEST;
- 		else if (ret)
+-	if (write_fault)
+-		foll.flags |= FOLL_WRITE;
+-	if (async)
+-		foll.flags |= FOLL_NOWAIT;
+-	if (interruptible)
+-		foll.flags |= FOLL_INTERRUPTIBLE;
+-
+-	pfn = __kvm_follow_pfn(&foll);
+-	if (pfn == KVM_PFN_ERR_NEEDS_IO) {
+-		*async = true;
+-		pfn = KVM_PFN_ERR_FAULT;
+-	}
+-	if (hva)
+-		*hva = foll.hva;
+-	if (writable)
+-		*writable = foll.writable;
+-	return pfn;
+-}
+-EXPORT_SYMBOL_GPL(__gfn_to_pfn_memslot);
+-
+ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+ 		      bool *writable)
+ {
 -- 
 2.41.0.255.g8b1d071c50-goog
 
