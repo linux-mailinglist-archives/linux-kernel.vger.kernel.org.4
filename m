@@ -2,158 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCF6747619
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9102B747624
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbjGDQHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S231304AbjGDQMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjGDQHM (ORCPT
+        with ESMTP id S229895AbjGDQL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:07:12 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A22EE7A;
-        Tue,  4 Jul 2023 09:07:10 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 364G6meo127101;
-        Tue, 4 Jul 2023 11:06:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1688486808;
-        bh=Qp+vFMfuEysL6yAnzeCFNQYqDH0eM850rxMMqfKTg38=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=UKFGGx+PbiFt+ARgk3EOsuA9BRRj1du8WmWnWArkd8O9+K5neJ0kNKB4uXZLRMFQm
-         AwU2C7ZRaVav3mZ4N02Zcj8BXJ2A5dhXuKksb1wdoFSwKojxj/g2o+tGHeuVzDamZ+
-         He9crasw8UCgpyk+mynEM65fuXTPbPjkcbW5PPqk=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 364G6mLT020501
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Jul 2023 11:06:48 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 4
- Jul 2023 11:06:48 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 4 Jul 2023 11:06:48 -0500
-Received: from [10.249.128.37] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 364G6h1s061523;
-        Tue, 4 Jul 2023 11:06:44 -0500
-Message-ID: <a245938e-2140-5f77-ab91-6cfbd3ddf66c@ti.com>
-Date:   Tue, 4 Jul 2023 21:36:43 +0530
+        Tue, 4 Jul 2023 12:11:58 -0400
+Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CD8DA;
+        Tue,  4 Jul 2023 09:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tu-berlin.de; l=3292; s=dkim-tub; t=1688487116;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=9pD4Ch4S5j+ANwqD1CPw58d4xO0OpJUusf60fgZFUbo=;
+  b=hfWY4UV33/eHHwR+FaYBf3Z/czA2f7hz/aaixxy6d1lKPsyUXAvm1jRu
+   OUCQhP8/injsL0R5m8qSZUYYV2hQ2Ex8/h/b9y+b83qi80YkOkyo1Q3bL
+   TvAqMnSmPf6dQpz/LjyrbIs029Wd1FE0PbPhQTkcxj2b93fieH7iJEU6d
+   k=;
+X-IronPort-AV: E=Sophos;i="6.01,181,1684792800"; 
+   d="scan'208";a="1396566"
+Received: from mail.tu-berlin.de ([141.23.12.141])
+  by mailrelay.tu-berlin.de with ESMTP; 04 Jul 2023 18:11:53 +0200
+Message-ID: <bdffeca8e222b0126100dec5dcd9d9b186ea6905.camel@mailbox.tu-berlin.de>
+Subject: Re: [PATCH 0/2] bpf, net: Allow setting SO_TIMESTAMPING* from BPF
+From:   =?ISO-8859-1?Q?J=F6rn-Thorben?= Hinz <jthinz@mailbox.tu-berlin.de>
+To:     John Fastabend <john.fastabend@gmail.com>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Martin KaFai Lau" <martin.lau@linux.dev>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Deepa Dinamani <deepa.kernel@gmail.com>
+Date:   Tue, 4 Jul 2023 18:11:51 +0200
+In-Reply-To: <64a33ce7b50d2_6520520875@john.notmuch>
+References: <20230703175048.151683-1-jthinz@mailbox.tu-berlin.de>
+         <64a33ce7b50d2_6520520875@john.notmuch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [EXTERNAL] Re: [PATCH] PCI: j721e: Fix delay before PERST#
- deassert
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-omap@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
-References: <20230703162156.GA525196@bhelgaas>
-From:   "Verma, Achal" <a-verma1@ti.com>
-In-Reply-To: <20230703162156.GA525196@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thank you for the feedback.
 
+Just noticed I missed the =E2=80=9Cbpf-next=E2=80=9D designation in the sub=
+ject. Will
+add that in v2.
 
-On 7/3/2023 9:51 PM, Bjorn Helgaas wrote:
-> In subject, "Fix" doesn't convey much information.  Does it increase?
-> Decrease?  How much time are we talking about?  PERST# deassert is at
-> one end of the delay; what event is at the other end?
-Hi Bjorn,
+On Mon, 2023-07-03 at 14:25 -0700, John Fastabend wrote:
+> J=C3=B6rn-Thorben Hinz wrote:
+> > BPF applications, e.g., a TCP congestion control, might benefit
+> > from
+> > precise packet timestamps. These timestamps are already available
+> > in
+> > __sk_buff and bpf_sock_ops, but could not be requested: A BPF
+> > program
+> > was not allowed to set SO_TIMESTAMPING* on a socket. This change
+> > enables
+> > BPF programs to actively request the generation of timestamps from
+> > a
+> > stream socket.
+> >=20
+> > To reuse the setget_sockopt BPF prog test for
+> > bpf_{get,set}sockopt(SO_TIMESTAMPING_NEW), also implement the
+> > missing
+> > getsockopt(SO_TIMESTAMPING_NEW) in the network stack.
+> >=20
+> > I reckon the way I added getsockopt(SO_TIMESTAMPING_NEW) causes an
+> > API
+> > change: For existing users that set SO_TIMESTAMPING_NEW but queried
+> > SO_TIMESTAMPING_OLD afterwards, it would now look as if no
+> > timestamping
+> > flags have been set. Is this an acceptable change? If not, I=E2=80=99m
+> > happy to
+> > change getsockopt() to only be strict about the newly-implemented
+> > getsockopt(SO_TIMESTAMPING_NEW), or not distinguish between
+> > SO_TIMESTAMPING_NEW and SO_TIMESTAMPING_OLD at all.
+>=20
+> Yeah, I think it would be best if we keep the old behavior and let
+> SO_TIMESTAMPING_OLD return timestamps for both new/old. It looks
+> like it should be relatively easy to implement?
+Alright, I guessed that would be preferred.
 
-How about "Increase delay to 100ms for PERST# deassert from moment 
-power-rails achieve operating limits"
-> 
-> Some of these useful bits of information could appear in the subject
-> line.
-> 
-> On Mon, Jul 03, 2023 at 04:59:14PM +0530, Achal Verma wrote:
->> As per the PCIe Card Electromechanical specification REV. 3.0, PERST#
-> 
-> I think the current rev of this spec is r5.0.  Can you cite that
-> instead?  I think the relevant section is r5.0, sec 2.9.2.
-REV 5.0 also quote same TPVPERL=100ms delay.
-I refer REV. 3.0 as pci-j721e controller follows REV. 3.0
-> 
->> signal should be de-asserted after minimum 100ms from the time power-rails
->> become stable. Current delay of 100us is observed to be not enough on some
->> custom platform implemented using TI's K3 SOCs.
-> 
-> Is this delay for the benefit of the Root Port or for the attached
-> Endpoint?  If the latter, my guess is that some Endpoints might
-> tolerate the current shorter delay, while others might require more,
-> and it doesn't sound like "TI's K3 SoC" would be relevant here.
-Its for the endpoints, TI's EVB doesn't exhibit any issues with 100us 
-delay but some customer reported the issue with shorter delay.
-I have been working to refactor this driver to build as a module, I too
-observed the issue on re-probe after remove when delay is lesser.
-> 
->> So, to ensure 100ms delay to give sufficient time for power-rails and
->> refclk to become stable, change delay from 100us to 100ms.
->>
->>  From PCIe Card Electromechanical specification REV. 3.0 section 2.6.2:
->> TPVPERL: Power stable to PERST# inactive - 100ms
->> T-PERST-CLK: REFCLK stable before PERST# inactive - 100 usec.
-> 
-> Numbers like 100ms that come from the PCIe specs should have #defines
-> for them.  If we don't have one already, can you add one, please?
-Sure, will do it in next revision but should this go in some generic PCI 
-header file or just pci-j721e.c
-> 
->> Fixes: f3e25911a430 ("PCI: j721e: Add TI J721E PCIe driver")
->> Signed-off-by: Achal Verma <a-verma1@ti.com>
->> ---
->>   drivers/pci/controller/cadence/pci-j721e.c | 9 ++++-----
->>   1 file changed, 4 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
->> index e70213c9060a..fa2b4c11d2c4 100644
->> --- a/drivers/pci/controller/cadence/pci-j721e.c
->> +++ b/drivers/pci/controller/cadence/pci-j721e.c
->> @@ -499,13 +499,12 @@ static int j721e_pcie_probe(struct platform_device *pdev)
->>   		/*
->>   		 * "Power Sequencing and Reset Signal Timings" table in
->>   		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
->> -		 * indicates PERST# should be deasserted after minimum of 100us
->> -		 * once REFCLK is stable. The REFCLK to the connector in RC
->> -		 * mode is selected while enabling the PHY. So deassert PERST#
->> -		 * after 100 us.
->> +		 * indicates PERST# should be deasserted after minimum of 100ms
->> +		 * after power rails achieve specified operating limits and
->> +		 * within this period reference clock should also become stable.
->>   		 */
->>   		if (gpiod) {
->> -			usleep_range(100, 200);
->> +			msleep(100);
->>   			gpiod_set_value_cansleep(gpiod, 1);
->>   		}
->>   
->> -- 
->> 2.25.1
->>
->>
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Yes, if there is no objection to making the added
+getsockopt(SO_TIMESTAMPING_NEW) this tiny bit more =E2=80=9Cstrict=E2=80=9D=
+, it=E2=80=99s just
+a matter of modifying the if inserted in sk_getsockopt(). (And, well,
+in the other case I would even remove this if.)
+
+>=20
+> Otherwise the series lgtm.
+Great, thanks.
+
+>=20
+> >=20
+> > J=C3=B6rn-Thorben Hinz (2):
+> > =C2=A0 net: Implement missing getsockopt(SO_TIMESTAMPING_NEW)
+> > =C2=A0 bpf: Allow setting SO_TIMESTAMPING* with bpf_setsockopt()
+> >=20
+> > =C2=A0include/uapi/linux/bpf.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 ++-
+> > =C2=A0net/core/filter.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 | 2 ++
+> > =C2=A0net/core/sock.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 9 +++++++--
+> > =C2=A0tools/include/uapi/linux/bpf.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 3 ++-
+> > =C2=A0tools/testing/selftests/bpf/progs/bpf_tracing_net.h | 2 ++
+> > =C2=A0tools/testing/selftests/bpf/progs/setget_sockopt.c=C2=A0 | 4 ++++
+> > =C2=A06 files changed, 19 insertions(+), 4 deletions(-)
+> >=20
+> > --=20
+> > 2.39.2
+> >=20
+
