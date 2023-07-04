@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532E4746A80
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7A6746A82
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjGDHVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S231322AbjGDHXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGDHVk (ORCPT
+        with ESMTP id S230014AbjGDHXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:21:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5010186;
-        Tue,  4 Jul 2023 00:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688455299; x=1719991299;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dmMqRubBY7jl+nvFgHg9YoaIiWyudbhqZ/7je2LSMIU=;
-  b=ZxmfyoqIrD1Q5aIqfMGssKtNobL7mxEutnz996A3pkTdnlgoQAOcjoej
-   OYIpCgt3AZfx80Z5kkS4K0XefqewL0xhuPyoVQmzOUb44XckrciSwTr+3
-   mgOmsYIQBeoS/ktFxObdw3JpSKfB993QWGthOxadi0mn2tfSPe6BI4uUR
-   HdL9MqJ14qPIgezFztNLOlQyfk6M0swduB6c+JtgpwzYteYtIGAjLwSHf
-   i84LsoJ1NBKKIZxoQBs75bVRskdlsSCfMXoGV4cGouG7DpphzHxIsE6wl
-   PAIjnS2sB/UOvrGQx4z5p/huvLXKbaN7F4s4En0tPoRYP1dfV2Pp94HaZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="426740879"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="426740879"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:21:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="753975095"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="753975095"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jul 2023 00:21:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qGaLr-0024Fd-2I;
-        Tue, 04 Jul 2023 10:21:31 +0300
-Date:   Tue, 4 Jul 2023 10:21:31 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v4 4/5] fbdev: Split frame buffer support in FB and
- FB_CORE symbols
-Message-ID: <ZKPIezsC1zhKRrGU@smile.fi.intel.com>
-References: <20230703230534.997525-1-javierm@redhat.com>
- <20230703230534.997525-5-javierm@redhat.com>
- <ZKPIQngz6WkzASqa@smile.fi.intel.com>
+        Tue, 4 Jul 2023 03:23:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E8C1A1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688455344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bdLaHXWSXyMp87ZNvGpINxLMzOcUGO2IBdu2cJPw4Wc=;
+        b=XRIeug19F2v1OpfXYAYXToT2QAXnE2lAtFEFbajzKqZDIErpXFLHP4KW0UCnRv/m9v2zyi
+        ThvOJV/KdLZ3xFw6kT4YRkRxkAgLbXXNLaOZXaw8I+h6aSgbr5wpyxY/YWI0cfHdJB8UAV
+        ti01lzMS6EQ0aDDnACABQNWWHs78xVM=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-157-k0KuFHe4Mw2RUuIhQvMCfA-1; Tue, 04 Jul 2023 03:22:22 -0400
+X-MC-Unique: k0KuFHe4Mw2RUuIhQvMCfA-1
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b8cc7351f0so911570a34.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:22:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688455342; x=1691047342;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bdLaHXWSXyMp87ZNvGpINxLMzOcUGO2IBdu2cJPw4Wc=;
+        b=h+wYnpxnw06RoRkJO4Ts6IinJgEe7re5z61O7HB43wepVVi6Se99ALfR8R81LRgQIm
+         gzr0G2AUaqiXz24q+7gADQwbaYYKi1aOb0Sv5MjknraXUl6kOOSmulLchS1VmBE4jQgC
+         Xzqn9VxOCNC9CxMykZueUJYtwa+HbTFta6ss+ofRHHJo/7W4PRDPiLN754H/zEtXg3Tz
+         TfWkVwnptMmt1GvwY5qzWBci75Ca7bajslO6BUIKYT+psHWeiLRx8VshtzSrYawaAm77
+         dxDLBjjlmWBTYModYuaBYgVSxLj0CEg811qYpwdVLzbU/PhXjj4fjGuiyruPo72xHQ3l
+         IBBg==
+X-Gm-Message-State: AC+VfDzVbNGVkOEs0NuruQb0CmDVr8yab5rtoQ0WkDS6DlMGq29R7pMr
+        3ev0aTbe4T6UJr8SM+/ndQ9nl6of/wvdk7Sl/+tmMnNzWDKOfXWZlyADVYvN6LleKuK/kTm5vRr
+        Gmj54bsBA5iscy8kBqb3cQKXL
+X-Received: by 2002:a05:6830:917:b0:6b5:33ea:6e11 with SMTP id v23-20020a056830091700b006b533ea6e11mr13103594ott.8.1688455341879;
+        Tue, 04 Jul 2023 00:22:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5+761W4uDVVsjIqNlJix6Ll+/PJrIb4pGNbUIu0+CLwqti8xzBlSixZSbq4q+BWokV5DtPBg==
+X-Received: by 2002:a05:6830:917:b0:6b5:33ea:6e11 with SMTP id v23-20020a056830091700b006b533ea6e11mr13103585ott.8.1688455341661;
+        Tue, 04 Jul 2023 00:22:21 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a800:faf8:1d15:affc:4ee8:6427? ([2804:1b3:a800:faf8:1d15:affc:4ee8:6427])
+        by smtp.gmail.com with ESMTPSA id m9-20020a9d6449000000b006b469ace1b1sm1127509otl.22.2023.07.04.00.22.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 00:22:21 -0700 (PDT)
+Message-ID: <b84ad9aa200457b1cbd5c55a7d860e685f068d7a.camel@redhat.com>
+Subject: Re: [RFC PATCH v2 0/3] Move usages of struct __call_single_data to
+ call_single_data_t
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Guo Ren <guoren@kernel.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 04 Jul 2023 04:22:17 -0300
+In-Reply-To: <CAJ6HWG6dK_-5jjoGJadOXqE=9c0Np-85r9-ymtAt241XrdwW=w@mail.gmail.com>
+References: <20230520052957.798486-1-leobras@redhat.com>
+         <CAJ6HWG6dK_-5jjoGJadOXqE=9c0Np-85r9-ymtAt241XrdwW=w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKPIQngz6WkzASqa@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 10:20:35AM +0300, Andy Shevchenko wrote:
-> On Tue, Jul 04, 2023 at 01:05:28AM +0200, Javier Martinez Canillas wrote:
+On Tue, 2023-06-13 at 00:51 -0300, Leonardo Bras Soares Passos wrote:
+> Friendly ping
+>=20
+> On Sat, May 20, 2023 at 2:30=E2=80=AFAM Leonardo Bras <leobras@redhat.com=
+> wrote:
+> >=20
+> > Changes since RFCv1:
+> > - request->csd moved to the middle of the struct, without size impact
+> > - type change happens in a different patch (thanks Jens Axboe!)
+> > - Improved the third patch to also update the .h file.
+> >=20
+> > Leonardo Bras (3):
+> >   blk-mq: Move csd inside struct request so it's 32-byte aligned
+> >   blk-mq: Change request->csd type to call_single_data_t
+> >   smp: Change signatures to use call_single_data_t
+> >=20
+> >  include/linux/blk-mq.h | 10 +++++-----
+> >  include/linux/smp.h    |  2 +-
+> >  kernel/smp.c           |  4 ++--
+> >  kernel/up.c            |  2 +-
+> >  4 files changed, 9 insertions(+), 9 deletions(-)
+> >=20
+> > --
+> > 2.40.1
+> >=20
 
-...
+Hello Jens,
 
-> Wondering if
-> 
->   if FB_CORE
->   ...
->   endif
-> 
-> makes Kconfig looking better instead of replacing all these "depends on" lines.
+I still want your feedback on this series :)
 
-I meant user visible effect (via `make *config` and in the source code.
+I think I addressed every issue of RFCv1, but if you have any other feedbac=
+k,
+please let me know.
 
-> >  config FB_DEVICE
-> >  	bool "Provide legacy /dev/fb* device"
-> > -	depends on FB
-> > +	depends on FB_CORE
-> >  	default y
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Thanks!
+Leo
 
