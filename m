@@ -2,211 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CCE7477F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5A274780D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjGDRms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S231384AbjGDRw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGDRmp (ORCPT
+        with ESMTP id S230195AbjGDRwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:42:45 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC0DE3;
-        Tue,  4 Jul 2023 10:42:44 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3141c8a6f30so6132569f8f.1;
-        Tue, 04 Jul 2023 10:42:44 -0700 (PDT)
+        Tue, 4 Jul 2023 13:52:25 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EED10C8;
+        Tue,  4 Jul 2023 10:52:23 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666edfc50deso3735533b3a.0;
+        Tue, 04 Jul 2023 10:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688492563; x=1691084563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NlQNkrnXvKOdXSTaMQ5YoM2TC4Y9wQAKvg84V3h8rFY=;
-        b=fQdLCrElvkIdxvhaBGFMrIZeGFHP2Sc/gmw99Sk3Qwnu4LMm0LGIeateRTUqNUwtTQ
-         LMxjr/fDrvwI+Aui3uKtpgMHzYdWsP8pP16voZqBF6tfqzwo6WxHgLbgN28oAaDWMQX7
-         YjZqdNBGsqNWljhjQx0kVK9LnKdt1ZyRdLNhTn+r8IvdwD/DiF6osf324C2lfdBJeLq4
-         3yBnCiqLxeMsf8DyRH9i/P2llP6yuOk4zG1GSLq8pII0LVAd0GK/dWC0iTqdPG+xfIyS
-         dSRvLMG6mSWJQMIfa7iNWLayPnjqaCwp7TklCc/3v0jeuQ9SMMLpivnqBgRJo+nt9eAi
-         +MLA==
+        d=gmail.com; s=20221208; t=1688493143; x=1691085143;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Zx2d7UDCLbvQS87NHg+mG17/iijsxJufJo4WISm7E0o=;
+        b=O8StYMRbijI6xBMOu87q2uUaXOGqg1z8qUSCHH1Cyxr30oXZExWo1IkI1FMsAgT4X0
+         NHm/CR4ABJ5aPuwZrudEytGCHp/Thm98KxEdp5c8gOPrf1w0BoN8IR3q9FWgQiQlO1K3
+         tHzpKnZc1FC6lIcGtMU0w7nP6v5emLK10f/wqc5vLPTtteXnNbD9EplzHCuJV4pFvET7
+         FtFbO1Mtp8EC9KvmasU9PWY9Bz0i1Wo7LwesrtPgeQGVNqclfSGieDs+C1vZYS/zuWDQ
+         G0v2SOSh42LYDxX3fVHLPDW1PDnS4AyPq7wg2XA1n1/F1HOh+I+yMqdd/IqxapRtmS9t
+         THng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688492563; x=1691084563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NlQNkrnXvKOdXSTaMQ5YoM2TC4Y9wQAKvg84V3h8rFY=;
-        b=U/8WeZuWLiSVtWGz5mMvR1KwDnSvzYETU3aadFfMrRwXf91gDA4tNcO0H4A1l+D+G9
-         7AHgxqOh3lZs0E/RzPx6iSFm5o7Vpf4CMSzXc1TY3d0V9IkXgr+QSYNUXiNLfLayBP+3
-         buZl3wDKYDW1Oc/4UjCOE94zFex7RDsMKyC9J6KRCnt27KEPot5SOQFzCZZmNt87j4WA
-         25R9AZjeuxraWmrynueChaoLY4c8Am3SVHN04NxFryfcPhS3lauZr9hYJvjzDwP1vWQW
-         TLhHtRCI4SemnowD5jQ/fXbILgMCO77F/2lMycHCuoH44TzDtpICo9LSrk/5A/N2Zsn6
-         Q7Hg==
-X-Gm-Message-State: ABy/qLZ8UX/gqc4xuPCkebEHl4FsRlLXNj0tTUINbeTvu1NmyFxKVj56
-        2j9kKBoMgb7/QZhidDzQtACHxDvVBCkOHZgsd4tRvQJmBDZ8/Zjx
-X-Google-Smtp-Source: APBJJlFM5S8DXJT0nqjGrnPf/gknweqVFoLwZI01s1xTWcaJKijrjK/wO/2fd09QJz8m9tiFCwKWxbdiSCSisKZ2B54=
-X-Received: by 2002:adf:de0b:0:b0:314:32b6:af3 with SMTP id
- b11-20020adfde0b000000b0031432b60af3mr7207411wrm.5.1688492562750; Tue, 04 Jul
- 2023 10:42:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688493143; x=1691085143;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zx2d7UDCLbvQS87NHg+mG17/iijsxJufJo4WISm7E0o=;
+        b=ec/lRpvtVo5aI99gM+qlMEXMXv53FYa60m4PA3TRXF0Etg7LC7Lcm+7xiW+VLvPPYv
+         ynpN46xlFiVSNdX+miZuq1JDbFQVBfNHrGZS8UgiYsWyDSkDx5ENSvtuq1E+FL621VsX
+         cXJrImLV0KmwLIRuINXPjv/MIa/OM/AnLGHZ370ueIN3237uJ0kmYAxdYZObrBU9CQxj
+         2SNFpTF8jZ3nXcACHU7cE8x0C90H+5kf1kPC8ybePIibGxMYfhJEQQAAk/xP5Sr6E97Z
+         EPJDiSc9zNJdd5GhnL51PwllglVJ/ohKfj3l/MePKxdsNGJY4aD6jFxlPQmEAr7fVslJ
+         2m3A==
+X-Gm-Message-State: ABy/qLbDDMsvZ9ZpJMuZPHOhLcy2H21Zy6VssCVKlXrWT5vVFAox3cqg
+        pyKJ8luCxhp5XzQ2+nJ1ZLE=
+X-Google-Smtp-Source: APBJJlHhrt7o+rOCUD/1BK3I6v798WMkYHj/VJNK4liwSQFR+R5uWjrjXIxqsQIHouyrPKa6UMuN7g==
+X-Received: by 2002:aa7:9acf:0:b0:682:5e8f:d8ba with SMTP id x15-20020aa79acf000000b006825e8fd8bamr18737082pfp.11.1688493142783;
+        Tue, 04 Jul 2023 10:52:22 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:4ede:83d1:b57d:fa38:7670])
+        by smtp.gmail.com with ESMTPSA id c4-20020aa78c04000000b006765cb32558sm14057671pfd.139.2023.07.04.10.52.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 10:52:22 -0700 (PDT)
+From:   Anup Sharma <anupnewsmail@gmail.com>
+X-Google-Original-From: Anup Sharma <AnupSharma>
+Date:   Tue, 4 Jul 2023 23:22:14 +0530
+To:     Anup Sharma <anupnewsmail@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC] Adding Support for Firefox's Gecko Profile Format
+Message-ID: <ZKRcTqAsKxF/Q3fQ@yoga>
+References: <ZHkEWse0NVZhwKR7@yoga>
+ <ZH5YBBWW5ANckoMp@yoga>
+ <CAP-5=fU7ukrQSh_8OwH9C+a-EwCamCrMaZxjqDhE9f+bFJwQBQ@mail.gmail.com>
+ <ZIHPXV5/ZopqcSSc@yoga>
+ <ZIofrGKElc3nkNk0@yoga>
+ <CAP-5=fV9tXNpYHH9DW0cVbRoFLGvG9SNn-MUhuyKuVBRuDqjoA@mail.gmail.com>
+ <ZJyT8bt0LFLw6hKV@yoga>
+ <CAM9d7ch7TdagV+dzj6MCp4fY15Vc4oGJjKAoQDyc=BXqy7qi+A@mail.gmail.com>
+ <287bf3c8-fa0e-8c36-df14-7d728c63c265@intel.com>
+ <ZKQu00bJZwO+Fc6m@yoga>
 MIME-Version: 1.0
-References: <20230628045925.5261-1-dg573847474@gmail.com> <20230704114849.GA6455@unreal>
-In-Reply-To: <20230704114849.GA6455@unreal>
-From:   Chengfeng Ye <dg573847474@gmail.com>
-Date:   Wed, 5 Jul 2023 01:42:31 +0800
-Message-ID: <CAAo+4rXkMM87OJzim=8dACdV=kWK_1yXeD=W5GZzHoJ2Gz6rtw@mail.gmail.com>
-Subject: Re: [PATCH] IB/hfi1: Fix potential deadlock on &sde->flushlist_lock
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZKQu00bJZwO+Fc6m@yoga>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Plus, we already in context where interrupts are stopped.
-
-Indeed they can be called from .ndo_start_xmit callback and
-the document said it is with bh disabled.
-
-But I found some call chain from the user process that seems could
-be called from irq disabled context. For sdma_send_txlist(),
-there is a call chain.
-
--> hfi1_write_iter()  (.write_iter callback)
--> hfi1_user_sdma_process_request()
--> user_sdma_send_pkts()
--> sdma_send_txlist()
-
-The .write_iter seems not to disable irq by default, as mentioned by
-https://www.kernel.org/doc/Documentation/filesystems/vfs.txt
-And I didn't find any explicit disabling or bh or irq along the call path,
-and also see several  copy_from_usr() which cannot be invoked under
-irq context.
-
-
-For sdma_send_txreq(), there is a call chain.
-
--> qp_priv_alloc()
--> iowait_init() (register _hfi1_do_tid_send() as a work queue)
--> _hfi1_do_tid_send() (workqueue)
--> hfi1_do_tid_send()
--> hfi1_verbs_send()
--> sr(qp, ps, 0) (sr could points to hfi1_verbs_send_dm())
--> hfi1_verbs_send_dma()
--> sdma_send_txreq()
-
-_hfi1_do_tid_send() is a work queue without irq disabled by default,
-I also check the remaining call path and also found that there is no explic=
-it
-irq disable, instead the call site of hfi1_verbs_send() is exactly after
-spin_lock_irq_restore(), seems like a hint that it is probably called withi=
-rq
-enable.
-
-Another hint is that the lock acquisition of
-spin_lock_irqsave(&sde->tail_lock, flags);
-just before my patch in the same function also disable irq, seems like anot=
-her
-hint that this function could be called with interrupt disable,
-otherwise the lock/unlock
-for sde->tail_lock does not need to disable irq?
-
-Would be appreciated if you could further check with this.
-
-
-> It can't work as exactly after "ret =3D -ECOMM;" line, there is "goto unl=
-ock"
-> and there hfi1 calls to spin_unlock_irqrestore(..) with same "flags".
-
-Yeah, that's my negligence, and sorry for this. Once you confirm that
-there should
-be some fixes, I would like to provide with v2 patch with the correct fix.
-
-Best Regards,
-Chengfeng
-
-
-Leon Romanovsky <leon@kernel.org> =E4=BA=8E2023=E5=B9=B47=E6=9C=884=E6=97=
-=A5=E5=91=A8=E4=BA=8C 19:48=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Jun 28, 2023 at 04:59:25AM +0000, Chengfeng Ye wrote:
-> > As &sde->flushlist_lock is acquired by timer sdma_err_progress_check()
-> > through layer of calls under softirq context, other process
-> > context code acquiring the lock should disable irq.
+On Tue, Jul 04, 2023 at 08:08:11PM +0530, Anup Sharma wrote:
+> On Thu, Jun 29, 2023 at 09:35:22AM +0300, Adrian Hunter wrote:
+> > On 29/06/23 09:26, Namhyung Kim wrote:
+> > > Hi Anup,
+> > > 
+> > > On Wed, Jun 28, 2023 at 1:11 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> > >>
+> > >> On Wed, Jun 14, 2023 at 01:17:52PM -0700, Ian Rogers wrote:
+> > >>> On Wed, Jun 14, 2023 at 1:14 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> > >>>>
+> > >>>> On Thu, Jun 08, 2023 at 06:23:49PM +0530, Anup Sharma wrote:
+> > >>>> I wanted to take a moment to provide you with an update on the progress
+> > >>>> of our Firefox Gecko converter work. While I must emphasize that the code
+> > >>>> I'm sharing is not the final version, I wanted to share the advancements
+> > >>>> I have made thus far.
+> > >>>>
+> > >>>> This script can generate a JSON format from the output of the "perf script" command.
+> > >>>> I attempted to load this JSON file into profile.firefox.com, and although it
+> > >>>> successfully loaded, the call tree are not visible. I'm certain this issue
+> > >>>> is related to the format of the JSON file or if there is another underlying
+> > >>>> cause. I will continue investigating to determine the cause of this problem.
+> > >>>
+> > >>> Great Anup, progress can be frustrating slow at first but it is a good
+> > >>> milestone to be generating output and having firefox profiler consume
+> > >>> it. You can open up the JavaScript console for the firefox profiler
+> > >>> and it will give some debug output. This should hopefully help you
+> > >>> make progress.
+> > >>
+> > >> This week I tried playing with perf-script-python, the first challenge was
+> > >> figuring out how to parse the data coming from the process_events.
+> > >> Understanding the structure and extracting the necessary information
+> > >> proved to be more complex than anticipated. This required me to spend
+> > >> a significant amount of time researching and experimenting with different
+> > >> parsing techniques.
+> > > 
+> > > I'm not sure what kind of parsing you meant.  IIRC the sample data is
+> > > in a dict and all the information should be available there.  Maybe we
+> > > missed some new sample data types though.
+> > 
+> > Most data is there.  There are existing scripts in
+> > tools/perf/scripts/python/ for reference.
+> > 
+> > There is also the dlfilter API:
+> > 
+> > https://perf.wiki.kernel.org/index.php/Latest_Manual_Page_of_perf-dlfilter.1
 > >
-> > Possible deadlock scenario
-> > sdma_send_txreq()
-> >     -> spin_lock(&sde->flushlist_lock)
-> >         <timer interrupt>
-> >         -> sdma_err_progress_check()
-> >         -> __sdma_process_event()
-> >         -> sdma_set_state()
-> >         -> sdma_flush()
-> >         -> spin_lock_irqsave(&sde->flushlist_lock, flags) (deadlock her=
-e)
-> >
-> > This flaw was found using an experimental static analysis tool we are
-> > developing for irq-related deadlock.
-> >
-> > The tentative patch fix the potential deadlock by spin_lock_irqsave().
-> >
-> > Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-> > ---
-> >  drivers/infiniband/hw/hfi1/sdma.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/=
-hfi1/sdma.c
-> > index bb2552dd29c1..0431f575c861 100644
-> > --- a/drivers/infiniband/hw/hfi1/sdma.c
-> > +++ b/drivers/infiniband/hw/hfi1/sdma.c
-> > @@ -2371,9 +2371,9 @@ int sdma_send_txreq(struct sdma_engine *sde,
-> >       tx->sn =3D sde->tail_sn++;
-> >       trace_hfi1_sdma_in_sn(sde, tx->sn);
-> >  #endif
-> > -     spin_lock(&sde->flushlist_lock);
-> > +     spin_lock_irqsave(&sde->flushlist_lock, flags);
-> >       list_add_tail(&tx->list, &sde->flushlist);
-> > -     spin_unlock(&sde->flushlist_lock);
-> > +     spin_unlock_irqrestore(&sde->flushlist_lock, flags);
-> >       iowait_inc_wait_count(wait, tx->num_desc);
-> >       queue_work_on(sde->cpu, system_highpri_wq, &sde->flush_worker);
-> >       ret =3D -ECOMM;
->
-> It can't work as exactly after "ret =3D -ECOMM;" line, there is "goto unl=
-ock"
-> and there hfi1 calls to spin_unlock_irqrestore(..) with same "flags".
->
-> Plus, we already in context where interrupts are stopped.
->
-> Thanks
->
-> > @@ -2459,7 +2459,7 @@ int sdma_send_txlist(struct sdma_engine *sde, str=
-uct iowait_work *wait,
-> >       *count_out =3D total_count;
-> >       return ret;
-> >  unlock_noconn:
-> > -     spin_lock(&sde->flushlist_lock);
-> > +     spin_lock_irqsave(&sde->flushlist_lock, flags);
-> >       list_for_each_entry_safe(tx, tx_next, tx_list, list) {
-> >               tx->wait =3D iowait_ioww_to_iow(wait);
-> >               list_del_init(&tx->list);
-> > @@ -2472,7 +2472,7 @@ int sdma_send_txlist(struct sdma_engine *sde, str=
-uct iowait_work *wait,
-> >               flush_count++;
-> >               iowait_inc_wait_count(wait, tx->num_desc);
-> >       }
-> > -     spin_unlock(&sde->flushlist_lock);
-> > +     spin_unlock_irqrestore(&sde->flushlist_lock, flags);
-> >       queue_work_on(sde->cpu, system_highpri_wq, &sde->flush_worker);
-> >       ret =3D -ECOMM;
-> >       goto update_tail;
-> > --
-> > 2.17.1
-> >
+> Hello everyone,
+> 
+> I hope you're all doing well. I have been working on the using process_events function and have made
+> progress in developing the converter script. Currently, I am in the testing phase. However, I
+> have encountered a problem after performing some recent compilations. I am no longer receiving
+> the complete callchains in the output as I used to.
+> For Example, when I ran the command perf script -F +pid, the output would include detailed
+> information like the following example:
+> 
+> perf-exec  132554/132554  171854.674582:        356 cycles:P: 
+> 	ffffffff8fab3fc6 arch_static_branch+0x6 (inlined)
+> 	ffffffff8fab3fc6 static_key_false+0x6 (inlined)
+> 	ffffffff8fab3fc6 native_write_msr+0x6 (/lib/modules/6.4.0-rc1/build/vmlinux)
+> 	ffffffff8fa12ca5 intel_pmu_enable_all+0x15 (/lib/modules/6.4.0-rc1/build/vmlinux)
+> 
+> However, in my current situation, the output is limited to the following:
+> 
+> perf  108107/108107  [000] 67650.031827:          1 cycles:P:  
+> ffffffff83ab3fc4 native_write_msr+0x4 (/lib/modules/6.4.0-rc1/build/vmlinux)
+> perf  108107/108107  [000] 67650.031832:          1 cycles:P:
+> ffffffff83ab3fc4 native_write_msr+0x4 (/lib/modules/6.4.0-rc1/build/vmlinux)
+> 
+> It seems to be issue in perf record. I would appreciate any suggestions or assistance
+> in resolving this issue. Thank you all for your help.
+
+My apologies, I realized that I had mistakenly not included the '-g' option,
+and it is now working fine."
+
+> Regards,
+> Anup
+> > > 
+> > >>
+> > >> The second challenge revolved around the usage of event hooks provided with the perf script
+> > >> python event handlers. I found myself deliberating between two approaches. The first
+> > >> approach involved creating custom functions that would be called using the event
+> > >> handlers. These functions would then save the data in an organized format within
+> > >> globally created data structures. The alternative approach was to write the entire
+> > >> logic inside the event handlers themselves.
+> > >>
+> > >> Additionally, I contemplated whether it would be more suitable to handle the creation of
+> > >> a Gecko format for JSON and the profile format within the same script or to separate
+> > >> them into different scripts.
+> > >>
+> > >> I will discuss this points during tomorrow's office hour.
+> > >>
+> > >> However, I have gained a deeper understanding of the problem at hand and will use this
+> > >> knowledge to make more informed decisions and progress more effectively in the coming weeks.
+> > > 
+> > > Sounds like you did a good amount of research on how perf script
+> > > works.  We can talk about the details in the meeting.
+> > > 
+> > > Thanks,
+> > > Namhyung
+> > 
