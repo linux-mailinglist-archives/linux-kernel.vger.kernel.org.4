@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B934C7468FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035FF746901
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjGDFaW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 01:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S229938AbjGDFdA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 01:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGDF34 (ORCPT
+        with ESMTP id S229534AbjGDFc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:29:56 -0400
+        Tue, 4 Jul 2023 01:32:59 -0400
 Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC75BD;
-        Mon,  3 Jul 2023 22:29:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C560E6;
+        Mon,  3 Jul 2023 22:32:58 -0700 (PDT)
 Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
           by outpost.zedat.fu-berlin.de (Exim 4.95)
           with esmtps (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qGYbp-000KjL-Qa; Tue, 04 Jul 2023 07:29:53 +0200
+          id 1qGYem-000LQF-IS; Tue, 04 Jul 2023 07:32:56 +0200
 Received: from p57bd997f.dip0.t-ipconnect.de ([87.189.153.127] helo=suse-laptop.fritz.box)
           by inpost2.zedat.fu-berlin.de (Exim 4.95)
           with esmtpsa (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qGYbp-000dKf-JP; Tue, 04 Jul 2023 07:29:53 +0200
-Message-ID: <4cd47aa1baed1ba9d2d995fdd96d4a9756c8cc17.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 3/4] sh: refactor header include path addition
+          id 1qGYem-000djq-7u; Tue, 04 Jul 2023 07:32:56 +0200
+Message-ID: <bca228079ae6e3063465fdd78054910460426bb2.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 4/4] sh: remove compiler flag duplication
 From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-kbuild@vger.kernel.org
@@ -36,10 +36,10 @@ Cc:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
         Rich Felker <dalias@libc.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         linux-sh@vger.kernel.org
-Date:   Tue, 04 Jul 2023 07:29:52 +0200
-In-Reply-To: <20230219141555.2308306-3-masahiroy@kernel.org>
+Date:   Tue, 04 Jul 2023 07:32:55 +0200
+In-Reply-To: <20230219141555.2308306-4-masahiroy@kernel.org>
 References: <20230219141555.2308306-1-masahiroy@kernel.org>
-         <20230219141555.2308306-3-masahiroy@kernel.org>
+         <20230219141555.2308306-4-masahiroy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.48.3 
@@ -57,28 +57,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, 2023-02-19 at 23:15 +0900, Masahiro Yamada wrote:
-> Shorten the code. No functional change intended.
+> Every compiler flag added by arch/sh/Makefile is passed to the
+> compiler twice.
+> 
+> $(KBUILD_CPPFLAGS) + $(KBUILD_CFLAGS) is used for compiling *.c
+> $(KBUILD_CPPFLAGS) + $(KBUILD_AFLAGS) is used for compiling *.S
+> 
+> Given the above, adding $(cflags-y) to all of KBUILD_{CPP/C/A}FLAGS
+> ends up with duplication.
+> 
+> Add -I options to $(KBUILD_CPPFLAGS), and the rest of $(cflags-y)
+> to KBUILD_{C,A}FLAGS.
 > 
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
 > 
->  arch/sh/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  arch/sh/Makefile | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
 > diff --git a/arch/sh/Makefile b/arch/sh/Makefile
-> index 0625796cfe7f..f1c6aace8acb 100644
+> index f1c6aace8acb..cab2f9c011a8 100644
 > --- a/arch/sh/Makefile
 > +++ b/arch/sh/Makefile
-> @@ -145,8 +145,7 @@ cpuincdir-y			+= cpu-common	# Must be last
+> @@ -145,10 +145,8 @@ cpuincdir-y			+= cpu-common	# Must be last
 >  
 >  drivers-y			+= arch/sh/drivers/
 >  
-> -cflags-y	+= $(foreach d, $(cpuincdir-y), -I $(srctree)/arch/sh/include/$(d)) \
-> -		   $(foreach d, $(machdir-y), -I $(srctree)/arch/sh/include/$(d))
-> +cflags-y	+= $(addprefix -I $(srctree)/arch/sh/include/, $(cpuincdir-y) $(machdir-y))
->  
+> -cflags-y	+= $(addprefix -I $(srctree)/arch/sh/include/, $(cpuincdir-y) $(machdir-y))
+> -
+> +KBUILD_CPPFLAGS		+= $(addprefix -I $(srctree)/arch/sh/include/, $(cpuincdir-y) $(machdir-y))
 >  KBUILD_CFLAGS		+= -pipe $(cflags-y)
->  KBUILD_CPPFLAGS		+= $(cflags-y)
+> -KBUILD_CPPFLAGS		+= $(cflags-y)
+>  KBUILD_AFLAGS		+= $(cflags-y)
+>  
+>  ifeq ($(CONFIG_MCOUNT),y)
 
 Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
