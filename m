@@ -2,183 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C947D746DBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6447746DC3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbjGDJiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S231847AbjGDJkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjGDJiD (ORCPT
+        with ESMTP id S231962AbjGDJjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:38:03 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B332D76;
-        Tue,  4 Jul 2023 02:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688463363; x=1719999363;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KzSG8zPwxiuEhCxKa+1sGQKJsFvciwT8AUYmTM/7rrg=;
-  b=K8pfJC7dB+QDBB88vvoTNlk2jv7YPSAayNtoU14QXxQaaStMDMvzBPy0
-   9tjbBQUzgPW/5LP744ALR3y0bZxfhYlJ1FNVf9wvgE9DLFPwJkfdbtHo8
-   0vwHl6XIMkgc3WGOIMEmY9SzSDN0aDJ1m2tRkQmOUQ4Im0SFqx//oODVT
-   G8PIY5aQtjHvlIrmTkiUfCsX8AUDiIu3VyHSP+UhGMir11KwzCPebXjJz
-   jUuq40hzKJd99Kq8bx/BrnUuYd5ipKG4SpFA/ngyxBxZYIHvtExb0Nb8d
-   O48z+nqAaJDXMm+vZ8qS+gBa+RLh7q1k3HkeP3HiRkpOkTLcJYO9S7i3n
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="366564134"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="366564134"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 02:35:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="696093980"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="696093980"
-Received: from naamamex-mobl.ger.corp.intel.com (HELO [10.13.12.63]) ([10.13.12.63])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 02:35:01 -0700
-Message-ID: <6136a4bd-1818-f875-5355-547ffb3bd25b@linux.intel.com>
-Date:   Tue, 4 Jul 2023 12:34:58 +0300
+        Tue, 4 Jul 2023 05:39:54 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2072d.outbound.protection.outlook.com [IPv6:2a01:111:f400:feab::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5212226BA
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 02:37:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BcVfzsGOHiY38m4ej3oXRK5RsN0B7czlgmp/WQRtxs9bgGA/eLLTilnjA0vO1666YNobY3fq4pNbTAwqQpsO+23xVE3K+XAeTrvoNch/5FFqFYtIeJ/YezGY4UCBhAMw0MjgNYBlvxmGWi7qzw83Yi/7AhrZm7cvZYiYzkeGGBKEZxu5b4iJpWBuExAezx6bMN1yXUyQowaXUVXGYEkqyMDQo6jOdccqXkQCBVUOGfeIY5QflefsBN3QW35nVwaX7cK0RANmtham1tYGS2CUEvcUmkOT5vmF1h2mmxJ4Kai4qMNrkiQZVumQrLkAb95nBF16SPC6E2fNA9wlMF9FKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e8OI6ew5GZ+/KaN67nm4MzAPYFmmgTlVTFAFcXnpJFA=;
+ b=LB6jQ5er+hYObP4M7zMK1qxg2ZkI5TvCzs/yv7Aesy+aMWt8m7EgbQuXub+FXszo/ob1lATREG38IKiOzxXBx+dp7KRtXVfSw/H4UaYFBjjf27ZKX3K4sbDckZ1gnYeX2kaDFEOYVepiLAEHKWoHsVNXXg8wi6JsogmI0KTvaEtGUhBTTd1yORzLbTLcBAoj2USiuCCwFReQq1hduFWrIAd2vLS69VT+QFub9ttOBUu+GbDZD5l/2OMP33svXB8AYlIoFPaWuQE5wV6bfvA7WxPKdw5elL2iRU6LM87NmFWWCzhl4AZUYEtbETMEBAPC1L9R/owpmDNfubg8opoa8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e8OI6ew5GZ+/KaN67nm4MzAPYFmmgTlVTFAFcXnpJFA=;
+ b=FsbFWwLS8oepSxV0riZ9f4qzkC1p781rLf3mkDhndJqMampq3PQyDqjDSP7MRul7fNCIy+ou5d6qPdwrW9ScLEkzjQMgVXpbk+QA1MggeHzG072tTCvT1PqLMESjawpM83mUMNpk30N8hV3UtUCDUwIeLK2NPCRTL6GcjDmqqsppRlh2JT3E0jO1YkUbJERlRIrZCa7jFRtkvMhdzX4zkx54p1RH4bUSw0NCwB0kKkR/AO4hL7H6RCe8LnJM/7BLrIXEfxPbzhkSGC7zZOl4PcfndT8UWsIE/J9xyqcE61/hA3Xy0cTWP4SRWB+NxNp1mzA6hHCxOA8/QKN3PqRkzg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB5565.apcprd06.prod.outlook.com (2603:1096:820:c2::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
+ 2023 09:36:12 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
+ 09:36:11 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Khuong Dinh <khuong@os.amperecomputing.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf: xgene_pmu: Convert to devm_platform_ioremap_resource()
+Date:   Tue,  4 Jul 2023 17:35:55 +0800
+Message-Id: <20230704093556.17926-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0031.apcprd02.prod.outlook.com
+ (2603:1096:4:195::16) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [Intel-wired-lan] [PATCH net v2 4/6] igc: No strict mode in pure
- launchtime/CBS offload
-Content-Language: en-US
-To:     Florian Kauer <florian.kauer@linutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Aravindhan Gunasekaran <aravindhan.gunasekaran@intel.com>,
-        Malli C <mallikarjuna.chilakala@intel.com>
-Cc:     netdev@vger.kernel.org, kurt@linutronix.de,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-References: <20230619100858.116286-1-florian.kauer@linutronix.de>
- <20230619100858.116286-5-florian.kauer@linutronix.de>
-From:   "naamax.meir" <naamax.meir@linux.intel.com>
-In-Reply-To: <20230619100858.116286-5-florian.kauer@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB5565:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c8d6a8e-91ee-49cc-60f5-08db7c7219f1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zVtQmB7foY7sCJDXjRHMknNM/6ubDbTKpkONjZ9gKaunXWYVgNzzFepsm60AK2iUC+tJ6SWKSMZIKeTQBzbqYNqFo1hbBkSuMaMk3zZt/pQtucLZ8Sd3epYLdH485Mf3tn8hKV26uLAO0UZfj7PoNwE8bEoT0qz/u3V/fGXjp2PSM+zYHUvrnz/nplS8j+5kEUVY6o//gVkvNnG/8ER6DNhpk5pXvgJvWLV/sl/2pny2zvS25TunsmlHw6D38JSd07Awo+lTXF2Lzprf69gCIDQ/HRB3vO9/0kXSkiSjmSs0M1n9ABikXc77OT6JsV2Rmbt0wK77f+juiDoYExIuX6LzjJdOFHm1Quwehhtd0OdSx4pPVXbQ4IUrxYc7U3LYFGpuRObg4zZO+/DDk+mXXQuv9CJN4z4ywl3byRXrMtJPvsS4kITOwArEUTr6oPgyDOgx1kU+4TDuGgJ4k2cbQdkk3CUaZLLfe8+uqENL8tA8C2ScqnskThYLDQY+j0zQb8qYWvhwm9YnOpCHgF0WwaIc0juVWRrfmpWIdqk/+SNMNqFUq8jidUef0uai1CFwl5RCbx3l7fCcxuOV53/bYmOrmgkxcVYy8cpmVaEYKy44hipDyiW/mh+MAOCjOZDp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199021)(38350700002)(478600001)(110136005)(6666004)(5660300002)(8676002)(36756003)(8936002)(86362001)(2906002)(38100700002)(66476007)(4326008)(66946007)(66556008)(316002)(41300700001)(83380400001)(26005)(186003)(1076003)(6506007)(2616005)(6486002)(52116002)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Az3O5Q3suSspK4usmLykOxDrhnl+adw32DjskrE5SYmRCLwrtaAFwN0dflUp?=
+ =?us-ascii?Q?bg0ZcOHQeYAo0SnWxZKejtROpO9g+vjUVtevdQvy3jKRUM9dwTP1lyqDRity?=
+ =?us-ascii?Q?H3TsMnhlq53gsz+meMrrFOjx3E0IX7Ae00hiJcw3ax+KEwucskDHLUDPa4Ls?=
+ =?us-ascii?Q?xQZEvUDLz2c9WE2uok1ZFXc3/yFWzcVBP8fjeoygOiUrOSTSJGTm4solBjK/?=
+ =?us-ascii?Q?YP8QmSuFvQgLMdyPAVvAi0tbe6EXejTKDAKCvdz+VsAfHxyLttL6l5M9TRFs?=
+ =?us-ascii?Q?i7lXcW4ENuBkEJ/bx+VQQX8vcKxbbdUgL13w3Z5XzPbmeKBpzqywWukQu4eg?=
+ =?us-ascii?Q?qojt9m/YVco8CyBfndxWEupegu23kGCIT1ChdVL3HHVi0F8L2+WkcgGf1G5J?=
+ =?us-ascii?Q?vDdJ9+AbdR4DTlVfIf7HOx5NdqM1Qi1klp2DsVJbdcw2InBfeCo5hd+EHSgg?=
+ =?us-ascii?Q?lNGGyVHF7rukNWk1uqqxSkkuMWUfdfvjum3NCcxX343v1RdLl47oXYaRCvSk?=
+ =?us-ascii?Q?+wi9XCHnMYzPA2SivSmFSkM1ETpSh1ij92BuaE2GveEGsHhZNJGt1UfS0WjP?=
+ =?us-ascii?Q?CcBT8B4THIpSdAf+l53oTtwpyT0pDKlFCWgg4NMFKp+fYXOErExOgSTcjagh?=
+ =?us-ascii?Q?s0ooDfXrdQXDzYghgeBMr/3hKEkQ1kDhTHYb4Exf8yss3Gylmp1bFEmbpPeL?=
+ =?us-ascii?Q?flvvkHZZAagRr62pI1gRJPOKF2AdDyhnX2PJJbLhnZYakDpWLzxt17MhDN3f?=
+ =?us-ascii?Q?Wf2FmSquH5SosNm6DdGmOrRThqkCv7NejjYHgOtyV9fgXKM7IKV0nAtpmGLi?=
+ =?us-ascii?Q?G4rldxNOWwn+rch4kmWu1aBJ9BKXZrM1RDh4CULmO7d1lBoMqNTnHFDh4WPE?=
+ =?us-ascii?Q?Hpyqos6TWec7AF6m8s1nmBSbtFbjHhLqSnpxtDpW74nSe2GGrxiR8JqXa/uD?=
+ =?us-ascii?Q?D4IO6dZSGzrgcf1oO6Z5C8ExVbqA/ZXrKz8msx7iQIKduc8dusPnyIhoDbSC?=
+ =?us-ascii?Q?j+MxT5+E7lvm79uBRvj5dLnhUzBHmxr13F7wpiw2HtiYnrOuObuCwUQysIvy?=
+ =?us-ascii?Q?b3SbH6xIK5i49pZ9s3yfcEt6GhFApGevLphkmXkpeel1/QAenwPisUFa+TCs?=
+ =?us-ascii?Q?r42bTltCQVDt5oQg99WuHmn6YYI3XNkL/Gw8JWDm3hQmXZ4bkdHkKjEr0dCA?=
+ =?us-ascii?Q?oiVkt8bWsTmO1P1H5I+2Q8iSCK8X1AKwj4zVeknefkBu6ItYztq1Txa09h8M?=
+ =?us-ascii?Q?6cr1RbzlrUr67RirCRsw3h15momvQIJg8XOTz788aRa52aVkStG8dhGuRmmh?=
+ =?us-ascii?Q?Z90gV4au08y4FG/lI12acGVv1Z5ZASCnQUh5kyTTT8YK4Y8ygLMfLuHoJyNu?=
+ =?us-ascii?Q?7wLT7RhvbRTp4v1FMsctoBVFoqRdRJ4cFV98VHFCt/45ZgMjpmcrP1Mc3NMX?=
+ =?us-ascii?Q?nt0LLb6QwhZH4Az0oSfylgVCjLwM6CBqTOHuSNF5GIc7e6B95jX9sHVRmqux?=
+ =?us-ascii?Q?PWcruKT3kHmA6NoDev5nnoaox/AVE3rzDCN7CXxBSMvnb4mroG+gCentJsjy?=
+ =?us-ascii?Q?ud06Rv+pA2bhMdOVBneDljWW8u/efQ8BoaTpTddQ?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c8d6a8e-91ee-49cc-60f5-08db7c7219f1
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 09:36:10.9590
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MXosgQbBk6czY1UEizHWkm41vViyuT9Cy46T/HOS5NM7NEmSyMFvFn9NOtet6z/fb/Wul3zr1DVfatvROO/W2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5565
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/2023 13:08, Florian Kauer wrote:
-> The flags IGC_TXQCTL_STRICT_CYCLE and IGC_TXQCTL_STRICT_END
-> prevent the packet transmission over slot and cycle boundaries.
-> This is important for taprio offload where the slots and
-> cycles correspond to the slots and cycles configured for the
-> network.
-> 
-> However, the Qbv offload feature of the i225 is also used for
-> enabling TX launchtime / ETF offload. In that case, however,
-> the cycle has no meaning for the network and is only used
-> internally to adapt the base time register after a second has
-> passed.
-> 
-> Enabling strict mode in this case would unneccesarily prevent
-> the transmission of certain packets (i.e. at the boundary of a
-> second) and thus interfers with the ETF qdisc that promises
-> transmission at a certain point in time.
-> 
-> Similar to ETF, this also applies to CBS offload that also should
-> not be influenced by strict mode unless taprio offload would be
-> enabled at the same time.
-> 
-> This fully reverts
-> commit d8f45be01dd9 ("igc: Use strict cycles for Qbv scheduling")
-> but its commit message only describes what was already implemented
-> before that commit. The difference to a plain revert of that commit
-> is that it now copes with the base_time = 0 case that was fixed with
-> commit e17090eb2494 ("igc: allow BaseTime 0 enrollment for Qbv")
-> 
-> In particular, enabling strict mode leads to TX hang situations
-> under high traffic if taprio is applied WITHOUT taprio offload
-> but WITH ETF offload, e.g. as in
-> 
->      sudo tc qdisc replace dev enp1s0 parent root handle 100 taprio \
-> 	    num_tc 1 \
-> 	    map 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 \
-> 	    queues 1@0 \
-> 	    base-time 0 \
-> 	    sched-entry S 01 300000 \
-> 	    flags 0x1 \
-> 	    txtime-delay 500000 \
-> 	    clockid CLOCK_TAI
->      sudo tc qdisc replace dev enp1s0 parent 100:1 etf \
-> 	    clockid CLOCK_TAI \
-> 	    delta 500000 \
-> 	    offload \
-> 	    skip_sock_check
-> 
-> and traffic generator
-> 
->      sudo trafgen -i traffic.cfg -o enp1s0 --cpp -n0 -q -t1400ns
-> 
-> with traffic.cfg
-> 
->      #define ETH_P_IP        0x0800
-> 
->      {
->        /* Ethernet Header */
->        0x30, 0x1f, 0x9a, 0xd0, 0xf0, 0x0e,  # MAC Dest - adapt as needed
->        0x24, 0x5e, 0xbe, 0x57, 0x2e, 0x36,  # MAC Src  - adapt as needed
->        const16(ETH_P_IP),
-> 
->        /* IPv4 Header */
->        0b01000101, 0,   # IPv4 version, IHL, TOS
->        const16(1028),   # IPv4 total length (UDP length + 20 bytes (IP header))
->        const16(2),      # IPv4 ident
->        0b01000000, 0,   # IPv4 flags, fragmentation off
->        64,              # IPv4 TTL
->        17,              # Protocol UDP
->        csumip(14, 33),  # IPv4 checksum
-> 
->        /* UDP Header */
->        10,  0, 48, 1,   # IP Src - adapt as needed
->        10,  0, 48, 10,  # IP Dest - adapt as needed
->        const16(5555),   # UDP Src Port
->        const16(6666),   # UDP Dest Port
->        const16(1008),   # UDP length (UDP header 8 bytes + payload length)
->        csumudp(14, 34), # UDP checksum
-> 
->        /* Payload */
->        fill('W', 1000),
->      }
-> 
-> and the observed message with that is for example
-> 
->   igc 0000:01:00.0 enp1s0: Detected Tx Unit Hang
->     Tx Queue             <0>
->     TDH                  <d0>
->     TDT                  <f0>
->     next_to_use          <f0>
->     next_to_clean        <d0>
->   buffer_info[next_to_clean]
->     time_stamp           <ffff661f>
->     next_to_watch        <00000000245a4efb>
->     jiffies              <ffff6e48>
->     desc.status          <1048000>
-> 
-> Fixes: d8f45be01dd9 ("igc: Use strict cycles for Qbv scheduling")
-> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
-> Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
-> ---
->   drivers/net/ethernet/intel/igc/igc_tsn.c | 24 ++++++++++++++++++++++--
->   1 file changed, 22 insertions(+), 2 deletions(-)
+Use devm_platform_ioremap_resource() to simplify code.
 
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ drivers/perf/xgene_pmu.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/perf/xgene_pmu.c b/drivers/perf/xgene_pmu.c
+index 0c32dffc7ede..9972bfc11a5c 100644
+--- a/drivers/perf/xgene_pmu.c
++++ b/drivers/perf/xgene_pmu.c
+@@ -1833,7 +1833,6 @@ static int xgene_pmu_probe(struct platform_device *pdev)
+ 	const struct xgene_pmu_data *dev_data;
+ 	const struct of_device_id *of_id;
+ 	struct xgene_pmu *xgene_pmu;
+-	struct resource *res;
+ 	int irq, rc;
+ 	int version;
+ 
+@@ -1883,8 +1882,7 @@ static int xgene_pmu_probe(struct platform_device *pdev)
+ 	xgene_pmu->version = version;
+ 	dev_info(&pdev->dev, "X-Gene PMU version %d\n", xgene_pmu->version);
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	xgene_pmu->pcppmu_csr = devm_ioremap_resource(&pdev->dev, res);
++	xgene_pmu->pcppmu_csr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(xgene_pmu->pcppmu_csr)) {
+ 		dev_err(&pdev->dev, "ioremap failed for PCP PMU resource\n");
+ 		return PTR_ERR(xgene_pmu->pcppmu_csr);
+-- 
+2.39.0
+
