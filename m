@@ -2,276 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381C9746AA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40F7746AA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjGDH3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S230161AbjGDH2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjGDH3B (ORCPT
+        with ESMTP id S231237AbjGDH2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:29:01 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550D71A4;
-        Tue,  4 Jul 2023 00:29:00 -0700 (PDT)
+        Tue, 4 Jul 2023 03:28:22 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A66E47
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688455740; x=1719991740;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Dd1Sg+yvGRCMK4qS7rla7Bc3UQ0v4Y0W0jwyCQOUzaY=;
-  b=EBVvWZxDQzspoZx5ARhmHDVqgQ063Dt91+OBcyrLnRmUFf8XzD/Tg2iE
-   tT1bM/Y4Jp7FS2oDFsBqlr5ntZuDvlyOfHhwA0E35gChRkW5K1ih6oHR8
-   wexqbSecOEOc0umrfSXlybHKUv0RkL6HWHDbv4WEQpuNLfcl2NG5ODQCp
-   ljVKx6ei3nQ+eEVUMlXKFuxwojpJj/m+pfyxWTMWtHQ/L8+7B8zCkcgDh
-   F277qoQSkR4wIahJBJe1qvysHZNZUM31mldSuZYqzpCVDPl5MVJWXgkGw
-   XEJHHFae2ghXlvGfdbEyJYUkCxr3cXEtpzJtyrePWJjGMcD8cYopGKP9+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="426742223"
+  t=1688455701; x=1719991701;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=RaSyqjD0+GbzkuXBeufMAawG5Hy7Lop++mCBBUAJCK0=;
+  b=cmHgrARIqOEUmtHFr5SNOfx+Wu/lxACUA07QACLYKSURmOT2qaJ+lK7V
+   xofshoBPy0awvK4gqEtXYKsm5Dt33GcwLejxy/CmJzoBEUKHesZmD5QIH
+   LcdgU8qzWcVX+2iDSlKP9YyJrJ1kusRtrusJ0HRkUnFvH65hTBuz4Vl0E
+   5Ikinc9Pm0rawvPMqNM6gRdd/9bLV6BHsslswTY2KxknaKgDHlCfQHwaP
+   LDL2XOsbtDjkZqWCGtBI5yHdpzvNbuIe8HEWOQ4rnCEahUJI0fI6Tne5X
+   2Ay9PSWUoEPD/EdFD8Dggcb+a8GK3ysGzzSZyR7lQ8Sx6m60ADG3/8Re6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393801332"
 X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="426742223"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:28:22 -0700
+   d="scan'208";a="393801332"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:28:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="753977598"
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="784127930"
 X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="753977598"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jul 2023 00:28:13 -0700
-Date:   Tue, 4 Jul 2023 15:28:12 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 11/22] x86/virt/tdx: Fill out TDMRs to cover all TDX
- memory regions
-Message-ID: <20230704072812.3ihw26iqke5zntwq@yy-desk-7060>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <a4794b1c6fe8994bfe5fb6d3067bf2a7682fdb4a.1687784645.git.kai.huang@intel.com>
+   d="scan'208";a="784127930"
+Received: from jbouhlil-mobl.ger.corp.intel.com (HELO localhost) ([10.252.48.173])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:28:17 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Uros Bizjak <ubizjak@gmail.com>, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH] drm/i915/pmu: Use local64_try_cmpxchg in
+ i915_pmu_event_read
+In-Reply-To: <20230703150859.6176-1-ubizjak@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230703150859.6176-1-ubizjak@gmail.com>
+Date:   Tue, 04 Jul 2023 10:28:14 +0300
+Message-ID: <87o7ks16gh.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4794b1c6fe8994bfe5fb6d3067bf2a7682fdb4a.1687784645.git.kai.huang@intel.com>
-User-Agent: NeoMutt/20171215
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:41AM +1200, Kai Huang wrote:
-> Start to transit out the "multi-steps" to construct a list of "TD Memory
-> Regions" (TDMRs) to cover all TDX-usable memory regions.
+On Mon, 03 Jul 2023, Uros Bizjak <ubizjak@gmail.com> wrote:
+> Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) == old
+> in i915_pmu_event_read.  x86 CMPXCHG instruction returns success in ZF flag,
+> so this change saves a compare after cmpxchg (and related move instruction
+> in front of cmpxchg).
 >
-> The kernel configures TDX-usable memory regions by passing a list of
-> TDMRs "TD Memory Regions" (TDMRs) to the TDX module.  Each TDMR contains
-> the information of the base/size of a memory region, the base/size of the
-> associated Physical Address Metadata Table (PAMT) and a list of reserved
-> areas in the region.
+> Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+> fails. There is no need to re-read the value in the loop.
 >
-> Do the first step to fill out a number of TDMRs to cover all TDX memory
-> regions.  To keep it simple, always try to use one TDMR for each memory
-> region.  As the first step only set up the base/size for each TDMR.
+> No functional change intended.
 >
-> Each TDMR must be 1G aligned and the size must be in 1G granularity.
-> This implies that one TDMR could cover multiple memory regions.  If a
-> memory region spans the 1GB boundary and the former part is already
-> covered by the previous TDMR, just use a new TDMR for the remaining
-> part.
->
-> TDX only supports a limited number of TDMRs.  Disable TDX if all TDMRs
-> are consumed but there is more memory region to cover.
->
-> There are fancier things that could be done like trying to merge
-> adjacent TDMRs.  This would allow more pathological memory layouts to be
-> supported.  But, current systems are not even close to exhausting the
-> existing TDMR resources in practice.  For now, keep it simple.
->
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 > ---
+>  drivers/gpu/drm/i915/i915_pmu.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
+> index d35973b41186..108b675088ba 100644
+> --- a/drivers/gpu/drm/i915/i915_pmu.c
+> +++ b/drivers/gpu/drm/i915/i915_pmu.c
+> @@ -696,12 +696,11 @@ static void i915_pmu_event_read(struct perf_event *event)
+>  		event->hw.state = PERF_HES_STOPPED;
+>  		return;
+>  	}
+> -again:
+> -	prev = local64_read(&hwc->prev_count);
+> -	new = __i915_pmu_event_read(event);
+>  
+> -	if (local64_cmpxchg(&hwc->prev_count, prev, new) != prev)
+> -		goto again;
+> +	prev = local64_read(&hwc->prev_count);
+> +	do {
+> +		new = __i915_pmu_event_read(event);
+> +	} while (!local64_try_cmpxchg(&hwc->prev_count, &prev, new));
 
-Reviewed-by: Yuan Yao <yuan.yao@intel.com>
+You could save everyone a lot of time by actually documenting what these
+functions do. Assume you don't know what local64_try_cmpxchg() does, and
+see how many calls you have to go through to figure it out.
 
->
-> v11 -> v12:
->  - Improved comments around looping over TDX memblock to create TDMRs.
->    (Dave).
->  - Added code to pr_warn() when consumed TDMRs reaching maximum TDMRs
->    (Dave).
->  - BIT_ULL(30) -> SZ_1G (Kirill)
->  - Removed unused TDMR_PFN_ALIGNMENT (Sathy)
->  - Added tags from Kirill/Sathy
->
-> v10 -> v11:
->  - No update
->
-> v9 -> v10:
->  - No change.
->
-> v8 -> v9:
->
->  - Added the last paragraph in the changelog (Dave).
->  - Removed unnecessary type cast in tdmr_entry() (Dave).
->
-> ---
->  arch/x86/virt/vmx/tdx/tdx.c | 103 +++++++++++++++++++++++++++++++++++-
->  arch/x86/virt/vmx/tdx/tdx.h |   3 ++
->  2 files changed, 105 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index e28615b60f9b..2ffc1517a93b 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -341,6 +341,102 @@ static void free_tdmr_list(struct tdmr_info_list *tdmr_list)
->  			tdmr_list->max_tdmrs * tdmr_list->tdmr_sz);
+Because the next time I encounter this code or a patch like this, I'm
+probably going to have to do that again.
+
+To me, the old one was more readable. The optimization is meaningless to
+me if it's not quantified but reduces readability.
+
+
+BR,
+Jani.
+
+
+>  
+>  	local64_add(new - prev, &event->count);
 >  }
->
-> +/* Get the TDMR from the list at the given index. */
-> +static struct tdmr_info *tdmr_entry(struct tdmr_info_list *tdmr_list,
-> +				    int idx)
-> +{
-> +	int tdmr_info_offset = tdmr_list->tdmr_sz * idx;
-> +
-> +	return (void *)tdmr_list->tdmrs + tdmr_info_offset;
-> +}
-> +
-> +#define TDMR_ALIGNMENT		SZ_1G
-> +#define TDMR_ALIGN_DOWN(_addr)	ALIGN_DOWN((_addr), TDMR_ALIGNMENT)
-> +#define TDMR_ALIGN_UP(_addr)	ALIGN((_addr), TDMR_ALIGNMENT)
-> +
-> +static inline u64 tdmr_end(struct tdmr_info *tdmr)
-> +{
-> +	return tdmr->base + tdmr->size;
-> +}
-> +
-> +/*
-> + * Take the memory referenced in @tmb_list and populate the
-> + * preallocated @tdmr_list, following all the special alignment
-> + * and size rules for TDMR.
-> + */
-> +static int fill_out_tdmrs(struct list_head *tmb_list,
-> +			  struct tdmr_info_list *tdmr_list)
-> +{
-> +	struct tdx_memblock *tmb;
-> +	int tdmr_idx = 0;
-> +
-> +	/*
-> +	 * Loop over TDX memory regions and fill out TDMRs to cover them.
-> +	 * To keep it simple, always try to use one TDMR to cover one
-> +	 * memory region.
-> +	 *
-> +	 * In practice TDX supports at least 64 TDMRs.  A 2-socket system
-> +	 * typically only consumes less than 10 of those.  This code is
-> +	 * dumb and simple and may use more TMDRs than is strictly
-> +	 * required.
-> +	 */
-> +	list_for_each_entry(tmb, tmb_list, list) {
-> +		struct tdmr_info *tdmr = tdmr_entry(tdmr_list, tdmr_idx);
-> +		u64 start, end;
-> +
-> +		start = TDMR_ALIGN_DOWN(PFN_PHYS(tmb->start_pfn));
-> +		end   = TDMR_ALIGN_UP(PFN_PHYS(tmb->end_pfn));
-> +
-> +		/*
-> +		 * A valid size indicates the current TDMR has already
-> +		 * been filled out to cover the previous memory region(s).
-> +		 */
-> +		if (tdmr->size) {
-> +			/*
-> +			 * Loop to the next if the current memory region
-> +			 * has already been fully covered.
-> +			 */
-> +			if (end <= tdmr_end(tdmr))
-> +				continue;
-> +
-> +			/* Otherwise, skip the already covered part. */
-> +			if (start < tdmr_end(tdmr))
-> +				start = tdmr_end(tdmr);
-> +
-> +			/*
-> +			 * Create a new TDMR to cover the current memory
-> +			 * region, or the remaining part of it.
-> +			 */
-> +			tdmr_idx++;
-> +			if (tdmr_idx >= tdmr_list->max_tdmrs) {
-> +				pr_warn("initialization failed: TDMRs exhausted.\n");
-> +				return -ENOSPC;
-> +			}
-> +
-> +			tdmr = tdmr_entry(tdmr_list, tdmr_idx);
-> +		}
-> +
-> +		tdmr->base = start;
-> +		tdmr->size = end - start;
-> +	}
-> +
-> +	/* @tdmr_idx is always the index of the last valid TDMR. */
-> +	tdmr_list->nr_consumed_tdmrs = tdmr_idx + 1;
-> +
-> +	/*
-> +	 * Warn early that kernel is about to run out of TDMRs.
-> +	 *
-> +	 * This is an indication that TDMR allocation has to be
-> +	 * reworked to be smarter to not run into an issue.
-> +	 */
-> +	if (tdmr_list->max_tdmrs - tdmr_list->nr_consumed_tdmrs < TDMR_NR_WARN)
-> +		pr_warn("consumed TDMRs reaching limit: %d used out of %d\n",
-> +				tdmr_list->nr_consumed_tdmrs,
-> +				tdmr_list->max_tdmrs);
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Construct a list of TDMRs on the preallocated space in @tdmr_list
->   * to cover all TDX memory regions in @tmb_list based on the TDX module
-> @@ -350,10 +446,15 @@ static int construct_tdmrs(struct list_head *tmb_list,
->  			   struct tdmr_info_list *tdmr_list,
->  			   struct tdsysinfo_struct *sysinfo)
->  {
-> +	int ret;
-> +
-> +	ret = fill_out_tdmrs(tmb_list, tdmr_list);
-> +	if (ret)
-> +		return ret;
-> +
->  	/*
->  	 * TODO:
->  	 *
-> -	 *  - Fill out TDMRs to cover all TDX memory regions.
->  	 *  - Allocate and set up PAMTs for each TDMR.
->  	 *  - Designate reserved areas for each TDMR.
->  	 *
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> index 193764afc602..3086f7ad0522 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.h
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -123,6 +123,9 @@ struct tdx_memblock {
->  	unsigned long end_pfn;
->  };
->
-> +/* Warn if kernel has less than TDMR_NR_WARN TDMRs after allocation */
-> +#define TDMR_NR_WARN 4
-> +
->  struct tdmr_info_list {
->  	void *tdmrs;	/* Flexible array to hold 'tdmr_info's */
->  	int nr_consumed_tdmrs;	/* How many 'tdmr_info's are in use */
-> --
-> 2.40.1
->
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
