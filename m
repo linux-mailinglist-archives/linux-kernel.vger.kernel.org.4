@@ -2,126 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB640747024
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8027E747027
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjGDLtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 07:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S231140AbjGDLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 07:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjGDLs5 (ORCPT
+        with ESMTP id S229840AbjGDLuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 07:48:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBF4135;
-        Tue,  4 Jul 2023 04:48:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B54E6121F;
-        Tue,  4 Jul 2023 11:48:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3914C433C7;
-        Tue,  4 Jul 2023 11:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688471335;
-        bh=GJkHeVjvMujvpKVUZcEumEtlW+Gx++DF0djb7kdfwkg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DE9iaSVHwYYugFEJ6VJBPzIKD1MTrwvPZuyPN1pD2IV0OQvmpjDwewHndbpTRTWH0
-         DFDFXq2/EDwcJhSHc/PZcgRJq1jA4uAxNxMx7DxaIzp+xtovXulNKKNEOfqM6HgwZZ
-         kstFok8gLBDbqkw0jxVdeeGYID1YU7uiZpWAFhtqKTnGzCvN5wI9TkvYKEV8S8qHkH
-         ydDcy5xNw0A1tztfenvCUQEWfE2BKo7MDH6on/1uS8t487kyHgnA02czTNwzomqu3b
-         k3x+V/lwtMan1Kwsg6r8aotAgBbN072qcD8C2GIuFTZsDLKOsOfnhqHGnrXK9MGQyz
-         hxPUEs9VePnTQ==
-Date:   Tue, 4 Jul 2023 14:48:49 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Chengfeng Ye <dg573847474@gmail.com>
-Cc:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] IB/hfi1: Fix potential deadlock on &sde->flushlist_lock
-Message-ID: <20230704114849.GA6455@unreal>
-References: <20230628045925.5261-1-dg573847474@gmail.com>
+        Tue, 4 Jul 2023 07:50:23 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0325135
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:49:57 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fb4146e8ceso66927935e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 04:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688471396; x=1691063396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tAiyEsWCWyq2z78cMUwk6PNMXTnMW8+o+CyEZeXTGIU=;
+        b=i8YlNS8TuNFPRBmKNbTcjHjWmx1z1P+n4az1iMaWnaI6OM0PhnyBYanuGfZiZIZfMC
+         bfaszxk52zrYyUNYk2n6WzRhTLtx05UseaVVqtMT7ohajYVrvJN2XAKQiGkzRKFw4x38
+         /b6XufE3lh4MMXzSBt35McFuVAn86A/akbaCIDKO540u5XJ5JXo/C2gXS/O5Y6+2nZue
+         p95wOB/CKUYpQ0YV3U1yBkSELXnB1nWSbxSPfe1FJAMJEmUYoZsD9KO1Gg+2+6FBLlLq
+         M998Q4V1goU5/s/6opq2KGKAYGtlFmn3g5F3+lBbrV4YGVdf2ouRn+3ksJYr6Ff39L0a
+         MFTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688471396; x=1691063396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tAiyEsWCWyq2z78cMUwk6PNMXTnMW8+o+CyEZeXTGIU=;
+        b=Saz2eNj+pFCL6gHALLm34CZYDhnv0hxw4uas3mH2Jvzt7Os+EXCttS6Z23SRncMpZZ
+         M2GAaxbSmiqOsWzHLpuMssgWSt+HdSNp3t8BwIyc2eS6OGdXLoqdLn1Ypee0gUuqKe+n
+         9LjgTUiBvykoi/wwO6gFjW/isqa84lqhUHEO72pOWtUvA/1ht90bpHb4NZZeLcFa8fDy
+         AwqWnNvBT2DoIWf42UnjrQ07h9ORUYubZBCfXJnh+QEmH+pjO6YfiKeTDaCMzVw0LYTJ
+         0iZSeFdS+Bh55uTwEpy07yQgMJ5NpyaimLAZIQu8MWC/G2wE0e077M7P2J8gqDkcZf55
+         XIgQ==
+X-Gm-Message-State: ABy/qLYXRKT+St1/utNvxaIngV49RnlS1WLWrJKQL5Xp9vIMvr7GISZJ
+        SukM3OpyQDwb7Z2d/QCLI0FZEIgTH0UIV3ukrt6Wb0/Ju3iJMpNp3IPlAEVJ
+X-Google-Smtp-Source: APBJJlGgDeT+qBnFnwG8Fv3KXGKcHZ/mCoM8rtmuTMWCmGe1dFobVMzSABUtI1suGCSRJjAfkQvrh7D5GpXTdSWmmYE=
+X-Received: by 2002:a05:6000:12d2:b0:30f:c7e4:d207 with SMTP id
+ l18-20020a05600012d200b0030fc7e4d207mr10129430wrx.61.1688471396138; Tue, 04
+ Jul 2023 04:49:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628045925.5261-1-dg573847474@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230704101942.2819426-1-liushixin2@huawei.com>
+In-Reply-To: <20230704101942.2819426-1-liushixin2@huawei.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 4 Jul 2023 19:49:18 +0800
+Message-ID: <CAMZfGtWW_LhaZe4uUNMiLVs0n48vdA+xdbG14UPz6u0Y3RbvNQ@mail.gmail.com>
+Subject: Re: [External] [PATCH] bootmem: remove the vmemmap pages from
+ kmemleak in free_bootmem_page
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        muchun.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 04:59:25AM +0000, Chengfeng Ye wrote:
-> As &sde->flushlist_lock is acquired by timer sdma_err_progress_check()
-> through layer of calls under softirq context, other process
-> context code acquiring the lock should disable irq.
-> 
-> Possible deadlock scenario
-> sdma_send_txreq()
->     -> spin_lock(&sde->flushlist_lock)
->         <timer interrupt>
->         -> sdma_err_progress_check()
->         -> __sdma_process_event()
->         -> sdma_set_state()
->         -> sdma_flush()
->         -> spin_lock_irqsave(&sde->flushlist_lock, flags) (deadlock here)
-> 
-> This flaw was found using an experimental static analysis tool we are
-> developing for irq-related deadlock.
-> 
-> The tentative patch fix the potential deadlock by spin_lock_irqsave().
-> 
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-> ---
->  drivers/infiniband/hw/hfi1/sdma.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
-> index bb2552dd29c1..0431f575c861 100644
-> --- a/drivers/infiniband/hw/hfi1/sdma.c
-> +++ b/drivers/infiniband/hw/hfi1/sdma.c
-> @@ -2371,9 +2371,9 @@ int sdma_send_txreq(struct sdma_engine *sde,
->  	tx->sn = sde->tail_sn++;
->  	trace_hfi1_sdma_in_sn(sde, tx->sn);
->  #endif
-> -	spin_lock(&sde->flushlist_lock);
-> +	spin_lock_irqsave(&sde->flushlist_lock, flags);
->  	list_add_tail(&tx->list, &sde->flushlist);
-> -	spin_unlock(&sde->flushlist_lock);
-> +	spin_unlock_irqrestore(&sde->flushlist_lock, flags);
->  	iowait_inc_wait_count(wait, tx->num_desc);
->  	queue_work_on(sde->cpu, system_highpri_wq, &sde->flush_worker);
->  	ret = -ECOMM;
+On Tue, Jul 4, 2023 at 5:23=E2=80=AFPM Liu Shixin <liushixin2@huawei.com> w=
+rote:
+>
+> commit dd0ff4d12dd2 ("bootmem: remove the vmemmap pages from kmemleak in
+> put_page_bootmem") fix an overlaps existing problem of kmemleak. But the
+> problem still existed when HAVE_BOOTMEM_INFO_NODE is disabled, because in
+> this case, free_bootmem_page() will call free_reserved_page() directly.
+>
+> Fix the problem by adding kmemleak_free_part() in free_bootmem_page()
+> when HAVE_BOOTMEM_INFO_NODE is disabled.
+>
+> Fixes: f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages associated with=
+ each HugeTLB page")
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 
-It can't work as exactly after "ret = -ECOMM;" line, there is "goto unlock"
-and there hfi1 calls to spin_unlock_irqrestore(..) with same "flags".
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-Plus, we already in context where interrupts are stopped.
-
-Thanks
-
-> @@ -2459,7 +2459,7 @@ int sdma_send_txlist(struct sdma_engine *sde, struct iowait_work *wait,
->  	*count_out = total_count;
->  	return ret;
->  unlock_noconn:
-> -	spin_lock(&sde->flushlist_lock);
-> +	spin_lock_irqsave(&sde->flushlist_lock, flags);
->  	list_for_each_entry_safe(tx, tx_next, tx_list, list) {
->  		tx->wait = iowait_ioww_to_iow(wait);
->  		list_del_init(&tx->list);
-> @@ -2472,7 +2472,7 @@ int sdma_send_txlist(struct sdma_engine *sde, struct iowait_work *wait,
->  		flush_count++;
->  		iowait_inc_wait_count(wait, tx->num_desc);
->  	}
-> -	spin_unlock(&sde->flushlist_lock);
-> +	spin_unlock_irqrestore(&sde->flushlist_lock, flags);
->  	queue_work_on(sde->cpu, system_highpri_wq, &sde->flush_worker);
->  	ret = -ECOMM;
->  	goto update_tail;
-> -- 
-> 2.17.1
-> 
+Thanks.
