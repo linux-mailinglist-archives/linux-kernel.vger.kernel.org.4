@@ -2,444 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985B97473C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0516A7473C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbjGDOMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
+        id S231613AbjGDONI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbjGDOMa (ORCPT
+        with ESMTP id S231664AbjGDOM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:12:30 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1717E171B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:12:21 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b867f9198dso5151025ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:12:21 -0700 (PDT)
+        Tue, 4 Jul 2023 10:12:59 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604B510F9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:12:44 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fbc0314a7bso243310e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:12:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479940; x=1691071940;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BAz1Akm/B9B/9fUXobAvdXu5vhNqRRhd34VReZOiu/0=;
-        b=4kOCvuxSYIC+H/aG5g5WnJKyEXArtCDX3iPuHYPTABc2rObOGhpnKGYn8nwgQv5AMG
-         tZJgiSUnNHIVW+QWOfEKQJZiG/ERa3ui57/aBwIs2gzEYHMxbZDKnU6oiutSqknnp8em
-         b2CiSYBDHag4AUqF0eAZFKbyUEMnUIXcd26P7GDot5CYybEK+zKbxYLrBE+uXxqBBdyt
-         c3SHqMAkkIYMkAGkC/cEKHPPR0/fpAoTNPc7n/PxknO1y/dnT80pWP5gTVLnx1UhS0eG
-         QEhRXGd6/89Hi0SjyI23vM+wgSpl3FyLaehNEH0jiRw9KHEKqFNrkf/ST02yc9JQUNy7
-         djdg==
+        d=linux-foundation.org; s=google; t=1688479962; x=1691071962;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3So2gYeZeNuR/2q5MlAFdt4BonOt1PCCLvQw80QmelA=;
+        b=VMYVeQ/3aOo2t7q5I2qhzWvMI1BoQTPHN1dTxFMKqSuI+BTcu/l9Rp4m2ZZwGpXclf
+         suVev63/PkXCAXBzad/rOT+DokjOk76HpR3M8An9Z8331TIOHDz0nAfHZyJ+cOreIj9F
+         NLPX+0s4cwWM3S/No8zcIOzWq7bzSxwXVhCSQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479940; x=1691071940;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BAz1Akm/B9B/9fUXobAvdXu5vhNqRRhd34VReZOiu/0=;
-        b=le+ETORYWvB2K/2iQjszgt2gUnaiE47yVCQwggxnvOeuN/Xn+CuU45FbhEVhBL5tdT
-         WxOpN2v6PvwZArdDc3JrIQnomPohbQZ8aQmW2AD3m0Plcnmeuh3SovL782yQMbJ3P0Vv
-         vd4Tfrg3kcZtfefKW8FplByRpWtKAVOlIGlq68yVXvtD4EEdG5nMTWJTxNWl64xaJjiN
-         +F33fGfGkcG61bxxK7eAZprpKZnjtlnN+CB7NgtXMmeyJ+3xtLlg9/jQxcauqVMfzsDY
-         I6BcVEqu42BgWtDjVLUWayvSJiA0Ys1jcu/X6Qe/BfqCXyc0yj24YWrCydUv52cFp6U8
-         mQvw==
-X-Gm-Message-State: ABy/qLa2ETFxCuZ6htAMfUtjzmiUtyhhGDmO0c3OsznQBud+aVraG9OU
-        IPhROBwR3GU8Ro3HzI+Kd7wbSg==
-X-Google-Smtp-Source: APBJJlHyBd5vK43azE7vHDn25p6SsQ0owCfsKSBoiqP1RbBD7jN5YfJE4aMAEKzgN6x1ApTeqn6yig==
-X-Received: by 2002:a17:903:3051:b0:1b8:1591:9f81 with SMTP id u17-20020a170903305100b001b815919f81mr13234157pla.4.1688479940252;
-        Tue, 04 Jul 2023 07:12:20 -0700 (PDT)
-Received: from carbon-x1.home ([2a01:cb15:81c2:f100:ef7b:e0f7:d376:e859])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.12.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 07:12:19 -0700 (PDT)
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Evan Green <evan@rivosinc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC V2 PATCH 9/9] riscv: add floating point insn support to misaligned access emulation
-Date:   Tue,  4 Jul 2023 16:09:24 +0200
-Message-Id: <20230704140924.315594-10-cleger@rivosinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230704140924.315594-1-cleger@rivosinc.com>
-References: <20230704140924.315594-1-cleger@rivosinc.com>
+        d=1e100.net; s=20221208; t=1688479962; x=1691071962;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3So2gYeZeNuR/2q5MlAFdt4BonOt1PCCLvQw80QmelA=;
+        b=C7PjuJ7rTMBfBakMe1sEbRUTyODATdHU4+N00TxNYLrL8k2RHYxj6q7IjnajK4EiMO
+         VbXj52BlofJVlWaydBJRkCJbvgQX2lxhvW4jPQorhcYwPkTUVb32rU3n2tV8p2VTJEO7
+         4sI4SSEwVzhSbpa2aV1w29jsXDv17jkcfFeOdva0bjtgdZIbtPXnkHYkEgwcbBZ7Im55
+         UMz97hdEv/Krm9LxjHO/0ax1i53BY4on/tfIk137iCyc1RinDek2pceljD3Siyr+wEhl
+         2iD9H23K2qNyLnGzma2tK7i8lQlbKrbXgWzLXAoAfuag075EVhAhO/bsYfzbuG9fbu/C
+         0bhw==
+X-Gm-Message-State: ABy/qLYNCeCZcn0y409ODGCyivYmDphWERJrIRVqIO54fp8dsL7pSasS
+        M8MAXyJZE5KnSu6WxuuxbxY01VuPFEL296Yv1/PJOTT3
+X-Google-Smtp-Source: APBJJlGH7ePGRDAtRCMRdadEnCwytkhhmxyFxw4YyfTT40hI3k/VegN8aa3WXoVlhM1E4GCR7poCZA==
+X-Received: by 2002:a05:6512:3994:b0:4f6:47a2:7bb4 with SMTP id j20-20020a056512399400b004f647a27bb4mr11577205lfu.60.1688479962204;
+        Tue, 04 Jul 2023 07:12:42 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id v2-20020ac25582000000b004fba077e654sm2823452lfg.194.2023.07.04.07.12.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 07:12:41 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4fb7769f15aso8982255e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:12:41 -0700 (PDT)
+X-Received: by 2002:a05:6512:2386:b0:4fb:763c:af54 with SMTP id
+ c6-20020a056512238600b004fb763caf54mr11708321lfv.62.1688479961179; Tue, 04
+ Jul 2023 07:12:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <202307041023.bcdbbfc0-oliver.sang@intel.com>
+In-Reply-To: <202307041023.bcdbbfc0-oliver.sang@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Jul 2023 07:12:23 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi3Nb4t-JH6BGE5TOynik=-0kXyBGi3bLKTA85rvqHngQ@mail.gmail.com>
+Message-ID: <CAHk-=wi3Nb4t-JH6BGE5TOynik=-0kXyBGi3bLKTA85rvqHngQ@mail.gmail.com>
+Subject: Re: [linus:master] [gup] a425ac5365: WARNING:at_mm/gup.c:#__get_user_pages
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: multipart/mixed; boundary="0000000000004cc04805ffa9e054"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This support is partially based of openSBI misaligned emulation floating
-point instruction support. It provides support for the existing
-floating point instructions (both for 32/64 bits as well as compressed
-ones). Since floating point registers are not part of the pt_regs
-struct, we need to modify them directly using some assembly. We also
-dirty the pt_regs status in case we modify them to be sure context
-switch will save FP state. With this support, Linux is on par with
-openSBI support.
+--0000000000004cc04805ffa9e054
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Clément Léger <cleger@rivosinc.com>
----
- arch/riscv/kernel/fpu.S              | 117 +++++++++++++++++++++
- arch/riscv/kernel/traps_misaligned.c | 152 ++++++++++++++++++++++++++-
- 2 files changed, 265 insertions(+), 4 deletions(-)
+On Tue, 4 Jul 2023 at 00:03, kernel test robot <oliver.sang@intel.com> wrote:
+>
+> we noticed this commit 'add a (temporary) warning' for the case that
+> 'anybody actually does anything quite this strange'.
+> and in our this test, the warning hits. just FYI.
 
-diff --git a/arch/riscv/kernel/fpu.S b/arch/riscv/kernel/fpu.S
-index dd2205473de7..2785badb247c 100644
---- a/arch/riscv/kernel/fpu.S
-+++ b/arch/riscv/kernel/fpu.S
-@@ -104,3 +104,120 @@ ENTRY(__fstate_restore)
- 	csrc CSR_STATUS, t1
- 	ret
- ENDPROC(__fstate_restore)
-+
-+#define get_f32(which) fmv.x.s a0, which; j 2f
-+#define put_f32(which) fmv.s.x which, a1; j 2f
-+#if __riscv_xlen == 64
-+# define get_f64(which) fmv.x.d a0, which; j 2f
-+# define put_f64(which) fmv.d.x which, a1; j 2f
-+#else
-+# define get_f64(which) fsd which, 0(a1); j 2f
-+# define put_f64(which) fld which, 0(a1); j 2f
-+#endif
-+
-+.macro fp_access_prologue
-+	/*
-+	 * Compute jump offset to store the correct FP register since we don't
-+	 * have indirect FP register access
-+	 */
-+	sll t0, a0, 3
-+	la t2, 1f
-+	add t0, t0, t2
-+	li t1, SR_FS
-+	csrs CSR_STATUS, t1
-+	jr t0
-+1:
-+.endm
-+
-+.macro fp_access_epilogue
-+2:
-+	csrc CSR_STATUS, t1
-+	ret
-+.endm
-+
-+#define fp_access_body(__access_func) \
-+	__access_func(f0); \
-+	__access_func(f1); \
-+	__access_func(f2); \
-+	__access_func(f3); \
-+	__access_func(f4); \
-+	__access_func(f5); \
-+	__access_func(f6); \
-+	__access_func(f7); \
-+	__access_func(f8); \
-+	__access_func(f9); \
-+	__access_func(f10); \
-+	__access_func(f11); \
-+	__access_func(f12); \
-+	__access_func(f13); \
-+	__access_func(f14); \
-+	__access_func(f15); \
-+	__access_func(f16); \
-+	__access_func(f17); \
-+	__access_func(f18); \
-+	__access_func(f19); \
-+	__access_func(f20); \
-+	__access_func(f21); \
-+	__access_func(f22); \
-+	__access_func(f23); \
-+	__access_func(f24); \
-+	__access_func(f25); \
-+	__access_func(f26); \
-+	__access_func(f27); \
-+	__access_func(f28); \
-+	__access_func(f29); \
-+	__access_func(f30); \
-+	__access_func(f31)
-+
-+
-+/*
-+ * Disable compressed instructions set to keep a constant offset between FP
-+ * load/store/move instructions
-+ */
-+.option norvc
-+/*
-+ * put_f32_reg - Set a FP register from a register containing the value
-+ * a0 = FP register index to be set
-+ * a1 = value to be loaded in the FP register
-+ */
-+SYM_FUNC_START(put_f32_reg)
-+	fp_access_prologue
-+	fp_access_body(put_f32)
-+	fp_access_epilogue
-+SYM_FUNC_END(put_f32_reg)
-+
-+/*
-+ * get_f32_reg - Get a FP register value and return it
-+ * a0 = FP register index to be retrieved
-+ */
-+SYM_FUNC_START(get_f32_reg)
-+	fp_access_prologue
-+	fp_access_body(get_f32)
-+	fp_access_epilogue
-+SYM_FUNC_END(put_f32_reg)
-+
-+/*
-+ * put_f64_reg - Set a 64 bits FP register from a value or a pointer.
-+ * a0 = FP register index to be set
-+ * a1 = value/pointer to be loaded in the FP register (when xlen == 32 bits, we
-+ * load the value to a pointer).
-+ */
-+SYM_FUNC_START(put_f64_reg)
-+	fp_access_prologue
-+	fp_access_body(put_f64)
-+	fp_access_epilogue
-+SYM_FUNC_END(put_f64_reg)
-+
-+/*
-+ * put_f64_reg - Get a 64 bits FP register value and returned it or store it to
-+ *	 	 a pointer.
-+ * a0 = FP register index to be retrieved
-+ * a1 = If xlen == 32, pointer which should be loaded with the FP register value
-+ *	or unused if xlen == 64. In which case the FP register value is returned
-+ *	through a0
-+ */
-+SYM_FUNC_START(get_f64_reg)
-+	fp_access_prologue
-+	fp_access_body(get_f64)
-+	fp_access_epilogue
-+SYM_FUNC_END(get_f64_reg)
-diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index 5fb6758b0bf9..c4c4672a4554 100644
---- a/arch/riscv/kernel/traps_misaligned.c
-+++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -156,6 +156,115 @@
- #define PRECISION_S 0
- #define PRECISION_D 1
- 
-+#ifdef CONFIG_FPU
-+
-+#define FP_GET_RD(insn)		(insn >> 7 & 0x1F)
-+
-+extern void put_f32_reg(unsigned long fp_reg, unsigned long value);
-+
-+static int set_f32_rd(unsigned long insn, struct pt_regs *regs,
-+		      unsigned long val)
-+{
-+	unsigned long fp_reg = FP_GET_RD(insn);
-+
-+	put_f32_reg(fp_reg, val);
-+	regs->status |= SR_FS_DIRTY;
-+
-+	return 0;
-+}
-+
-+extern void put_f64_reg(unsigned long fp_reg, unsigned long value);
-+
-+static int set_f64_rd(unsigned long insn, struct pt_regs *regs, u64 val)
-+{
-+	unsigned long fp_reg = FP_GET_RD(insn);
-+	unsigned long value;
-+
-+#if __riscv_xlen == 32
-+	value = (unsigned long) &val;
-+#else
-+	value = val;
-+#endif
-+	put_f64_reg(fp_reg, value);
-+	regs->status |= SR_FS_DIRTY;
-+
-+	return 0;
-+}
-+
-+#if __riscv_xlen == 32
-+extern void get_f64_reg(unsigned long fp_reg, u64 *value);
-+
-+static u64 get_f64_rs(unsigned long insn, u8 fp_reg_offset,
-+		      struct pt_regs *regs)
-+{
-+	unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
-+	u64 val;
-+
-+	get_f64_reg(fp_reg, &val);
-+	regs->status |= SR_FS_DIRTY;
-+
-+	return val;
-+}
-+#else
-+
-+extern unsigned long get_f64_reg(unsigned long fp_reg);
-+
-+static unsigned long get_f64_rs(unsigned long insn, u8 fp_reg_offset,
-+				struct pt_regs *regs)
-+{
-+	unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
-+	unsigned long val;
-+
-+	val = get_f64_reg(fp_reg);
-+	regs->status |= SR_FS_DIRTY;
-+
-+	return val;
-+}
-+
-+#endif
-+
-+extern unsigned long get_f32_reg(unsigned long fp_reg);
-+
-+static unsigned long get_f32_rs(unsigned long insn, u8 fp_reg_offset,
-+				struct pt_regs *regs)
-+{
-+	unsigned long fp_reg = (insn >> fp_reg_offset) & 0x1F;
-+	unsigned long val;
-+
-+	val = get_f32_reg(fp_reg);
-+	regs->status |= SR_FS_DIRTY;
-+
-+	return val;
-+}
-+
-+#else /* CONFIG_FPU */
-+static void set_f32_rd(unsigned long insn, struct pt_regs *regs,
-+		       unsigned long val) {}
-+
-+static void set_f64_rd(unsigned long insn, struct pt_regs *regs, u64 val) {}
-+
-+static unsigned long get_f64_rs(unsigned long insn, u8 fp_reg_offset,
-+				struct pt_regs *regs)
-+{
-+	return 0;
-+}
-+
-+static unsigned long get_f32_rs(unsigned long insn, u8 fp_reg_offset,
-+				struct pt_regs *regs)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+#define GET_F64_RS2(insn, regs) (get_f64_rs(insn, 20, regs))
-+#define GET_F64_RS2C(insn, regs) (get_f64_rs(insn, 2, regs))
-+#define GET_F64_RS2S(insn, regs) (get_f64_rs(RVC_RS2S(insn), 0, regs))
-+
-+#define GET_F32_RS2(insn, regs) (get_f32_rs(insn, 20, regs))
-+#define GET_F32_RS2C(insn, regs) (get_f32_rs(insn, 2, regs))
-+#define GET_F32_RS2S(insn, regs) (get_f32_rs(RVC_RS2S(insn), 0, regs))
-+
- #ifdef CONFIG_RISCV_M_MODE
- static inline int load_u8(struct pt_regs *regs, const u8 *addr, u8 *r_val)
- {
-@@ -374,15 +483,21 @@ int handle_misaligned_load(struct pt_regs *regs)
- 		return -1;
- 	}
- 
-+	if (!IS_ENABLED(CONFIG_FPU) && fp)
-+		return -EOPNOTSUPP;
-+
- 	val.data_u64 = 0;
- 	for (i = 0; i < len; i++) {
- 		if (load_u8(regs, (void *)(addr + i), &val.data_bytes[i]))
- 			return -1;
- 	}
- 
--	if (fp)
--		return -1;
--	SET_RD(insn, regs, val.data_ulong << shift >> shift);
-+	if (!fp)
-+		SET_RD(insn, regs, val.data_ulong << shift >> shift);
-+	else if (len == 8)
-+		set_f64_rd(insn, regs, val.data_u64);
-+	else
-+		set_f32_rd(insn, regs, val.data_ulong);
- 
- 	regs->epc = epc + INSN_LEN(insn);
- 
-@@ -395,7 +510,7 @@ int handle_misaligned_store(struct pt_regs *regs)
- 	unsigned long epc = regs->epc;
- 	unsigned long insn;
- 	unsigned long addr = regs->badaddr;
--	int i, len = 0;
-+	int i, len = 0, fp = 0;
- 
- 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
- 
-@@ -418,6 +533,14 @@ int handle_misaligned_store(struct pt_regs *regs)
- 	} else if ((insn & INSN_MASK_SD) == INSN_MATCH_SD) {
- 		len = 8;
- #endif
-+	} else if ((insn & INSN_MASK_FSD) == INSN_MATCH_FSD) {
-+		fp = 1;
-+		len = 8;
-+		val.data_u64 = GET_F64_RS2(insn, regs);
-+	} else if ((insn & INSN_MASK_FSW) == INSN_MATCH_FSW) {
-+		fp = 1;
-+		len = 4;
-+		val.data_ulong = GET_F32_RS2(insn, regs);
- 	} else if ((insn & INSN_MASK_SH) == INSN_MATCH_SH) {
- 		len = 2;
- #if defined(CONFIG_64BIT)
-@@ -436,11 +559,32 @@ int handle_misaligned_store(struct pt_regs *regs)
- 		   ((insn >> SH_RD) & 0x1f)) {
- 		len = 4;
- 		val.data_ulong = GET_RS2C(insn, regs);
-+	} else if ((insn & INSN_MASK_C_FSD) == INSN_MATCH_C_FSD) {
-+		fp = 1;
-+		len = 8;
-+		val.data_u64 = GET_F64_RS2S(insn, regs);
-+	} else if ((insn & INSN_MASK_C_FSDSP) == INSN_MATCH_C_FSDSP) {
-+		fp = 1;
-+		len = 8;
-+		val.data_u64 = GET_F64_RS2C(insn, regs);
-+#if !defined(CONFIG_64BIT)
-+	} else if ((insn & INSN_MASK_C_FSW) == INSN_MATCH_C_FSW) {
-+		fp = 1;
-+		len = 4;
-+		val.data_ulong = GET_F32_RS2S(insn, regs);
-+	} else if ((insn & INSN_MASK_C_FSWSP) == INSN_MATCH_C_FSWSP) {
-+		fp = 1;
-+		len = 4;
-+		val.data_ulong = GET_F32_RS2C(insn, regs);
-+#endif
- 	} else {
- 		regs->epc = epc;
- 		return -1;
- 	}
- 
-+	if (!IS_ENABLED(CONFIG_FPU) && fp)
-+		return -EOPNOTSUPP;
-+
- 	for (i = 0; i < len; i++) {
- 		if (store_u8(regs, (void *)(addr + i), val.data_bytes[i]))
- 			return -1;
--- 
-2.40.1
+Yeah, so it looks like this is trinity doing system calls with random
+arguments, and that will obviously hit the whole
 
+  "GUP will no longer expand the stack, warn if somebody seems to want
+to do GUP under the stack"
+
+test.
+
+So then it will warn if somebody passes in bogus addresses that *used*
+to maybe work.
+
+But with a random argument tester like trinity, passing in random
+bogus addresses is obviously expected, so the warning will trigger
+even if it's not something that we would not want to keep working.
+
+I do not have a good idea for how to not warn for things like syzbot
+and trinity that do random system calls, and only warn for any
+potential real applications that do crazy things and expect them to
+work.
+
+And I *do* want the backtrace from the warning (in this case, it shows
+that it's the "process_vm_readv/writev()" path, which actually might
+be worth adding stack expansion to, the same way __access_remote_vm()
+does).
+
+I guess I can do the limiting manually, and just avoid WARN_ON_ONCE().
+
+If I do just "dump_stack()", will the kernel test robot react to that
+too? IOW, would a patch like the attached make the kernel test robot
+not react?
+
+              Linus
+
+--0000000000004cc04805ffa9e054
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljodbtsf0>
+X-Attachment-Id: f_ljodbtsf0
+
+IG1tL2d1cC5jIHwgMTggKysrKysrKysrKysrKysrKystCiAxIGZpbGUgY2hhbmdlZCwgMTcgaW5z
+ZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL21tL2d1cC5jIGIvbW0vZ3Vw
+LmMKaW5kZXggZWYyOTY0MTY3MWM3Li5jOWQ3OTlkMjhkZTcgMTAwNjQ0Ci0tLSBhL21tL2d1cC5j
+CisrKyBiL21tL2d1cC5jCkBAIC0xMDkxLDYgKzEwOTEsMjEgQEAgc3RhdGljIGludCBjaGVja192
+bWFfZmxhZ3Moc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsIHVuc2lnbmVkIGxvbmcgZ3VwX2Zs
+YWdzKQogCXJldHVybiAwOwogfQogCitzdGF0aWMgdm9pZCBndXBfc3RhY2tfZXhwYW5zaW9uX3dh
+cm5pbmcoY29uc3Qgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsCisJdW5zaWduZWQgbG9uZyBh
+ZGRyKQoreworCXN0YXRpYyB2b2xhdGlsZSB1bnNpZ25lZCBsb25nIG5leHRfd2FybjsKKwl1bnNp
+Z25lZCBsb25nIG5vdyA9IGppZmZpZXMsIG5leHQgPSBuZXh0X3dhcm47CisKKwkvKiBMZXQncyBu
+b3Qgd2FybiBtb3JlIHRoYW4gb25jZSBhbiBob3VyLi4gKi8KKwlpZiAobmV4dCAmJiB0aW1lX2Jl
+Zm9yZShub3csIG5leHQpKQorCQlyZXR1cm47CisJbmV4dF93YXJuID0gbm93ICsgNjAqNjAqSFo7
+CisJcHJfd2FybigiR1VQIG5vIGxvbmdlciBncm93cyB0aGUgc3RhY2sgJWx4LSVseCAoJWx4KVxu
+IiwKKwkJdm1hLT52bV9zdGFydCwgdm1hLT52bV9lbmQsIGFkZHIpOworCWR1bXBfc3RhY2soKTsK
+K30KKwogLyoqCiAgKiBfX2dldF91c2VyX3BhZ2VzKCkgLSBwaW4gdXNlciBwYWdlcyBpbiBtZW1v
+cnkKICAqIEBtbToJCW1tX3N0cnVjdCBvZiB0YXJnZXQgbW0KQEAgLTExNzAsNyArMTE4NSw4IEBA
+IHN0YXRpYyBsb25nIF9fZ2V0X3VzZXJfcGFnZXMoc3RydWN0IG1tX3N0cnVjdCAqbW0sCiAJCWlm
+ICghdm1hIHx8IHN0YXJ0ID49IHZtYS0+dm1fZW5kKSB7CiAJCQl2bWEgPSBmaW5kX3ZtYShtbSwg
+c3RhcnQpOwogCQkJaWYgKHZtYSAmJiAoc3RhcnQgPCB2bWEtPnZtX3N0YXJ0KSkgewotCQkJCVdB
+Uk5fT05fT05DRSh2bWEtPnZtX2ZsYWdzICYgVk1fR1JPV1NET1dOKTsKKwkJCQlpZiAodW5saWtl
+bHkodm1hLT52bV9mbGFncyAmIFZNX0dST1dTRE9XTikpCisJCQkJCWd1cF9zdGFja19leHBhbnNp
+b25fd2FybmluZyh2bWEsIHN0YXJ0KTsKIAkJCQl2bWEgPSBOVUxMOwogCQkJfQogCQkJaWYgKCF2
+bWEgJiYgaW5fZ2F0ZV9hcmVhKG1tLCBzdGFydCkpIHsK
+--0000000000004cc04805ffa9e054--
