@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CB2747909
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B92474790D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGDUcT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 16:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S231280AbjGDUfX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 16:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjGDUcR (ORCPT
+        with ESMTP id S229793AbjGDUfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:32:17 -0400
+        Tue, 4 Jul 2023 16:35:21 -0400
 Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD934E76;
-        Tue,  4 Jul 2023 13:32:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0003BE7B;
+        Tue,  4 Jul 2023 13:35:19 -0700 (PDT)
 Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
           by outpost.zedat.fu-berlin.de (Exim 4.95)
           with esmtps (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qGmh1-001suX-Qh; Tue, 04 Jul 2023 22:32:11 +0200
+          id 1qGmjy-001tUd-KH; Tue, 04 Jul 2023 22:35:14 +0200
 Received: from p5b13a7a5.dip0.t-ipconnect.de ([91.19.167.165] helo=[192.168.178.81])
           by inpost2.zedat.fu-berlin.de (Exim 4.95)
           with esmtpsa (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qGmh1-003X2y-JE; Tue, 04 Jul 2023 22:32:11 +0200
-Message-ID: <d9f6fdf1ba8a3c57e80da0582a6dd8b83b1373df.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v2 2/3] sh: dma: Drop incorrect SH_DMAC_BASE1 for SH4
+          id 1qGmjy-003Xme-Ci; Tue, 04 Jul 2023 22:35:14 +0200
+Message-ID: <f4faecbcc04acb2eb8022327da1ebb56617b732f.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in
+ SH7709
 From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 To:     Artur Rojek <contact@artur-rojek.eu>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
@@ -36,10 +37,10 @@ To:     Artur Rojek <contact@artur-rojek.eu>,
         Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
         linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 04 Jul 2023 22:32:10 +0200
-In-Reply-To: <20230527164452.64797-3-contact@artur-rojek.eu>
+Date:   Tue, 04 Jul 2023 22:35:13 +0200
+In-Reply-To: <20230527164452.64797-4-contact@artur-rojek.eu>
 References: <20230527164452.64797-1-contact@artur-rojek.eu>
-         <20230527164452.64797-3-contact@artur-rojek.eu>
+         <20230527164452.64797-4-contact@artur-rojek.eu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.48.3 
@@ -49,7 +50,8 @@ X-Originating-IP: 91.19.167.165
 X-ZEDAT-Hint: PO
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,29 +59,53 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sat, 2023-05-27 at 18:44 +0200, Artur Rojek wrote:
-> None of the supported SH4 family SoCs features a second DMAC module. As
-> this define negatively impacts DMA channel calculation for the above
-> targets, remove it from the code.
+> According to the hardware manual [1], the DMAC found in SH7709 features
+> only 4 channels.
+> 
+> While at it, also sort the existing targets and clarify that
+> NR_ONCHIP_DMA_CHANNELS must be a multiply of two.
+> 
+> [1] https://www.renesas.com/us/en/document/mah/sh7709s-group-hardware-manual (p. 373)
 > 
 > Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
 > ---
 > 
-> v2: new patch
+> v2: - sort existing targets
+>     - clarify that the value must be a multiply of two
 > 
->  arch/sh/include/cpu-sh4/cpu/dma.h | 1 -
->  1 file changed, 1 deletion(-)
+>  arch/sh/drivers/dma/Kconfig | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/sh/include/cpu-sh4/cpu/dma.h b/arch/sh/include/cpu-sh4/cpu/dma.h
-> index 38187d06b234..e97fb2c79177 100644
-> --- a/arch/sh/include/cpu-sh4/cpu/dma.h
-> +++ b/arch/sh/include/cpu-sh4/cpu/dma.h
-> @@ -13,6 +13,5 @@
->  #define DMAE0_IRQ	evt2irq(0x6c0)
+> diff --git a/arch/sh/drivers/dma/Kconfig b/arch/sh/drivers/dma/Kconfig
+> index 7d54f284ce10..382fbb189fcf 100644
+> --- a/arch/sh/drivers/dma/Kconfig
+> +++ b/arch/sh/drivers/dma/Kconfig
+> @@ -28,17 +28,19 @@ config SH_DMA_API
+>  config NR_ONCHIP_DMA_CHANNELS
+>  	int
+>  	depends on SH_DMA
+> -	default "4" if CPU_SUBTYPE_SH7750  || CPU_SUBTYPE_SH7751  || \
+> -		       CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7091
+> +	default "4" if CPU_SUBTYPE_SH7709 || CPU_SUBTYPE_SH7750  || \
+> +		       CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7751 || \
+> +		       CPU_SUBTYPE_SH7091
+>  	default "8" if CPU_SUBTYPE_SH7750R || CPU_SUBTYPE_SH7751R || \
+>  		       CPU_SUBTYPE_SH7760
+> -	default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7780  || \
+> -			CPU_SUBTYPE_SH7785 || CPU_SUBTYPE_SH7724
+> +	default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7724  || \
+> +			CPU_SUBTYPE_SH7780 || CPU_SUBTYPE_SH7785
+>  	default "6"
+>  	help
+>  	  This allows you to specify the number of channels that the on-chip
+> -	  DMAC supports. This will be 4 for SH7750/SH7751/Sh7750S/SH7091 and 8 for the
+> -	  SH7750R/SH7751R/SH7760, 12 for the SH7723/SH7780/SH7785/SH7724, default is 6.
+> +	  DMAC supports. This will be 4 for SH7709/SH7750/SH7750S/SH7751/SH7091,
+> +	  8 for SH7750R/SH7751R/SH7760, and 12 for SH7723/SH7724/SH7780/SH7785.
+> +	  Default is 6. Must be an even number.
 >  
->  #define SH_DMAC_BASE0	0xffa00000
-> -#define SH_DMAC_BASE1	0xffa00070
->  
->  #endif /* __ASM_CPU_SH4_DMA_H */
+>  config SH_DMABRG
+>  	bool "SH7760 DMABRG support"
 
 Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
