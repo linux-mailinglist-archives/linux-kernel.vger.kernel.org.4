@@ -2,102 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40BA7474A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587077474B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjGDPAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
+        id S231280AbjGDPC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjGDPAf (ORCPT
+        with ESMTP id S229595AbjGDPC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:00:35 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF408E7B;
-        Tue,  4 Jul 2023 08:00:34 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b7f2239bfdso44959985ad.1;
-        Tue, 04 Jul 2023 08:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688482834; x=1691074834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=shPbm+uI5/3SC13jgWVKcgDz0ij5+5a9JEJnuF1lyl4=;
-        b=UC/S3gdPWd6a4p3b2UUCvJ21EhmOKfeF2uNwpHRnsgBiPBLfsSAUQH8uc8eXnkV6PB
-         GCfedF4FF4Ysx2PUUI5KINe5+QFR70c95VVFhnOl9PLOB+B2V3rAV8jNaAenql6to6if
-         Cw6Nbs//dahRBPB1XzBBl7p5HyOKvFITHJbqHE+UvzH4Ze2ndBuv6nfbFIKiu1wnskI9
-         MwXLbvgSm+cbVs9ei8pVK9lc2/a59O3W1HTvKn2czGFQisSqWnOsUbh5uCfsuepUK7ry
-         3LPbugOMYTerMQ25VGdyo1rT+qTm4OaMFFZUJv+KgLSTxJ6iWeUokLtCsZ+eSYqeJKiG
-         U3wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688482834; x=1691074834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=shPbm+uI5/3SC13jgWVKcgDz0ij5+5a9JEJnuF1lyl4=;
-        b=SfUAVuNU9kP66bm1DTl6y1UPLO46P2tEmchUkrRFnIUVfhBuQXPDG1SUgfkYCluNjF
-         1PYH2Uyl+ZlQl9vA+b58BVUIQ6DtkJC7Fr4nyIJwphYSKto5SXlRPeBy2jjDZkp/jLux
-         0txGvG3am3ANlIWEo0Kxso5NcKuqNjOn7cIHxzEXwanlA07MIujOsCp2StSYvOis6juC
-         VNvpC3EZuZPbluG8Ok/ZdoeauT8xUKfPFIfPnt93rQks33VUOx7y8d/PBrbjy8IqJXLt
-         i4qzpPmX2dhwr4KhrtIDFJQMhOIwrB5LevHCeqUrZGSQlAVSj0o2QRV7zY4BUhniL0dy
-         ndMg==
-X-Gm-Message-State: ABy/qLbrQLZB1dNwhFbz6Q4n5aauPmAhq7ag7Zk9fgky+ThoNLVsQpck
-        ymbMWlYt3/iF0yhNyPCQo/temwmr8lQ=
-X-Google-Smtp-Source: APBJJlEwneV0k3503cs/fSP9t90yU5YTlNRbaBPzKSno64BHLJh+C87+uHEJENQ+SjUW99NW8ss7CQ==
-X-Received: by 2002:a17:902:f546:b0:1b6:6f12:502e with SMTP id h6-20020a170902f54600b001b66f12502emr16904934plf.49.1688482834277;
-        Tue, 04 Jul 2023 08:00:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j17-20020a170902c3d100b001b849932030sm10180908plj.198.2023.07.04.08.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 08:00:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH] i2c: mpc: Drop unused variable
-Date:   Tue,  4 Jul 2023 08:00:31 -0700
-Message-Id: <20230704150031.385001-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+        Tue, 4 Jul 2023 11:02:56 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732F2E6;
+        Tue,  4 Jul 2023 08:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=Yk0/HA9dsyiEGz8X10mgrQQ16aYdbHQtRMmaFbwiNLM=; b=N
+        ZhD2DucGYiRpqHKa+7x+qa5F2YclbhrHWSUQJwfmKrrNDnODoxKEBtNC0IWNrU0FM1tffU92yL/IM
+        Yf94VmorSeShoV1OCCNOgF5qym1RnQuQkBru5dwt+FviKi57CjhHuxB/xWpDjPFKANR/XmSW1u2p8
+        SU0m2c8B4E5EBbMo=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:33002 helo=localhost.localdomain)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qGhYD-0008Jr-S8; Tue, 04 Jul 2023 11:02:46 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue,  4 Jul 2023 11:02:40 -0400
+Message-Id: <20230704150240.2022020-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following build error.
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Error log:
-drivers/i2c/busses/i2c-mpc.c: In function 'mpc_i2c_setup_512x':
-drivers/i2c/busses/i2c-mpc.c:310:20: error: unused variable 'pval'
+USB OTG is currently broken on the Variscite Symphony EVK and imx8mn
+nano SOM.
 
-Fixes: 9d178e00583e ("i2c: mpc: Use of_property_read_reg() to parse "reg"")
-Cc: Rob Herring <robh@kernel.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Import changes from linux-5.15 branch of varigit repos to fix it.
+
+Link: https://github.com/varigit/linux-imx.git
+Fixes: 7358e05bddca ("arm64: dts: imx8mn-var-som-symphony: Add Variscite Symphony board with VAR-SOM-MX8MN")
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 ---
- drivers/i2c/busses/i2c-mpc.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../dts/freescale/imx8mn-var-som-symphony.dts | 37 ++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index fb1b640f33b7..f460a7fb4eae 100644
---- a/drivers/i2c/busses/i2c-mpc.c
-+++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -307,7 +307,6 @@ static void mpc_i2c_setup_512x(struct device_node *node,
- {
- 	struct device_node *node_ctrl;
- 	void __iomem *ctrl;
--	const u32 *pval;
- 	u32 idx;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
+index 406a711486da..aef89198f24c 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
+@@ -6,6 +6,7 @@
  
- 	/* Enable I2C interrupts for mpc5121 */
+ /dts-v1/;
+ 
++#include <dt-bindings/usb/pd.h>
+ #include "imx8mn-var-som.dtsi"
+ 
+ / {
+@@ -104,10 +105,29 @@ extcon_usbotg1: typec@3d {
+ 		compatible = "nxp,ptn5150";
+ 		reg = <0x3d>;
+ 		interrupt-parent = <&gpio1>;
+-		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
++		interrupts = <11 IRQ_TYPE_NONE>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_ptn5150>;
+ 		status = "okay";
++
++		port {
++			typec1_dr_sw: endpoint {
++				remote-endpoint = <&usb1_drd_sw>;
++			};
++		};
++
++		typec1_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			data-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++				     PDO_VAR(5000, 20000, 3000)>;
++			op-sink-microwatt = <15000000>;
++			self-powered;
++		};
+ 	};
+ };
+ 
+@@ -148,8 +168,21 @@ &uart3 {
+ };
+ 
+ &usbotg1 {
++	dr_mode = "otg";
++	hnp-disable;
++	srp-disable;
++	adp-disable;
++	usb-role-switch;
+ 	disable-over-current;
+-	extcon = <&extcon_usbotg1>, <&extcon_usbotg1>;
++	samsung,picophy-pre-emp-curr-control = <3>;
++	samsung,picophy-dc-vol-level-adjust = <7>;
++	status = "okay";
++
++	port {
++		usb1_drd_sw: endpoint {
++			remote-endpoint = <&typec1_dr_sw>;
++		};
++	};
+ };
+ 
+ &iomuxc {
 -- 
-2.39.2
+2.30.2
 
