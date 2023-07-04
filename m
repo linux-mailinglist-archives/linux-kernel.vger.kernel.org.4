@@ -2,123 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65ADC747A4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 01:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EFA747A56
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 01:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjGDXSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 19:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S230196AbjGDXYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 19:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjGDXSS (ORCPT
+        with ESMTP id S229512AbjGDXYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 19:18:18 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C37EE72
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 16:18:17 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 7FA383200974;
-        Tue,  4 Jul 2023 19:18:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 04 Jul 2023 19:18:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1688512694; x=1688599094; bh=hQsjQzYTf6onI5Se5FktyD4OeriP0PTfEu5
-        0epn5iqk=; b=g2A2FTbSt1sss1dV5/n6uvwD8oGUVN4ZucR/eMH4PI19fA9SP5R
-        oZWEHn6X/+0KJog11X3WYn1RkWkyVnQndGq1fvPSaL7EHJisIJNvltxzJAEZ8o8P
-        MveHIYKxAASyl+GrDH6QW0EKaeVUN+k6IxotFyfHOPdil+z5PS7HZab/lWE4xTFW
-        qDHtfw1rjgRb6NBrWNBNNm7XfYxQU4VLHCiPBtOdSnvHosm/QBlGsta3P5XnQwZF
-        om2o4FVD1ty2x4AL7RWXPJ3Z29XJQssa11bLz4iYFXQB7ChalDmztttiQAd10xmb
-        CPOqSv/jQubocoFlxeJn2HKlwzMXLvRnCLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1688512694; x=1688599094; bh=hQsjQzYTf6onI5Se5FktyD4OeriP0PTfEu5
-        0epn5iqk=; b=eRk5Asmqe4Q9qJPtd579Z2PmJ6OCiza104EGMLSp/8f0xqfem9Q
-        UMMMd6GTXPwedQeZ/lX5ktLBF4Mmrz4GWz/VUf6C4JSeYj4onO+FJHAyh28YVZ6K
-        iCSYeOyXv+6SgSPSm/Zyf1YzKvpE7QZsv+HxH36PunldHr9UUs4PpfpojKBOQ26k
-        1XJz3Osj5/qvvbdjMVpn5hU4tkmU1nfmhAo1cFFyti5vpkTfd7ntvZwDya09+H6w
-        6T+A1lNPRpm5sQV+CWgVFqQLDRSHqTIfbF7Gj2qDhiPt2FB/0kyx00isxEOdXTO1
-        0gkl3u8jyu2cK6jDwbcmPbb0y9dEziWNOMA==
-X-ME-Sender: <xms:tKikZEEBJ0ybAfMS7kkAUZuw18e7odZMYrb3Jqw_ChCEXOnQKqNXNQ>
-    <xme:tKikZNUKnkXNA49bQk_mVJ6vPcS_DCVSs-xqI6_Mt1iMhI-aoCcuva36AM7xVc2zN
-    8oXfSPJYXv8kN_XU24>
-X-ME-Received: <xmr:tKikZOJSwkti3xrJKFSxBDXYNHQg0OPahYBqFGHb07tyAJb3RM3qWfCewAng_SHHXGexKA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudehgddvtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkuffhvfevffgjfhgtgfgfggesthhqredttderjeenucfhrhhomhepnfhukhgv
-    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
-    epkeefffeujeevueejueegleelhedtgedvledukedttdffhfeifeelvdduheefjeeinecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvse
-    hljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:tKikZGHCb4EhcgViQaGtflbhDKpveg3Hg7n5j0LL7o0BykVzoLpQAA>
-    <xmx:tKikZKWt6BDsVFNxCPVkfRPai-_sN2Ij1cX_RopiUbTjRvI6nSGNNw>
-    <xmx:tKikZJPJFuo7c5fkkuW4xs9MgTwD-BJbnrpM-ZheN0Smsmp0tI1SJw>
-    <xmx:tqikZBNnjlLOS58R-mFj4BcK7R7CvMKODTLwTilu8cbu3ejT3YuxlA>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Jul 2023 19:18:07 -0400 (EDT)
-Message-ID: <ee2e1c4bfc888f4f3285ba0f94a48a5f8f1eca8b.camel@ljones.dev>
-Subject: Re: [PATCH v2 0/5] ALSA: hda/realtek: add extra ROOG laptop quirks
-From:   Luke Jones <luke@ljones.dev>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     tiwai@suse.com, perex@perex.cz, sbinding@opensource.cirrus.com,
-        andy.chi@canonical.com, tcrawford@system76.com,
-        tangmeng@uniontech.com, p.jungkamp@gmx.net, kasper93@gmail.com,
-        ruinairas1992@gmail.com, yangyuchi66@gmail.com,
-        yangyingliang@huawei.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Date:   Wed, 05 Jul 2023 11:18:02 +1200
-In-Reply-To: <878rbw41ln.wl-tiwai@suse.de>
-References: <20230704044619.19343-1-luke@ljones.dev>
-         <878rbw41ln.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (by Flathub.org) 
+        Tue, 4 Jul 2023 19:24:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA7E10E2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 16:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688512999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4PCpsOElklGvTmmWH0OQRonwleLOQrzWZC/RGYQTYPQ=;
+        b=Vk17hLkYP+wOQPkcJOBZCYcxM/zpqLXnZtwEu/Ecx0hG/BqHefzFbo4JCQPZp0YVyJciBa
+        bq+qQOMUYoj/4VirRnbR7zCIK/XADcmsJl1/mn/bosmgrSQuDLD7leihWO80znhUa6b6Ov
+        pzRWYIR1riBHnAWEEFPvB1VYUcMbqLc=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-652-P1tMU-iMM7Kwj1OOnXFyJA-1; Tue, 04 Jul 2023 19:23:17 -0400
+X-MC-Unique: P1tMU-iMM7Kwj1OOnXFyJA-1
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-66a44bf4651so156402b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 16:23:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688512997; x=1691104997;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4PCpsOElklGvTmmWH0OQRonwleLOQrzWZC/RGYQTYPQ=;
+        b=hTog9wXhW9eCytsuNfdeDK0Z415I3VKWvbiPJhQKiIAdXdo22BnMbhb/uzb+jP3zYl
+         VyoWNSwd9lNc8H71uvkvfvq85SMxMkQND5tuUTF0a9Xu9Hm2o/tTIHinPJweZmG2lUQK
+         2V4jI/2gZ9DRZFgMLie4N83gQWl1593DEPQpWznIn6EDlFwfRoqXiWF/NNcYWkHXKqRn
+         eBFvNGqOpzQAfz15BlF01I6spGuN8uU7NE0tgTg+2weuuk8j9BqPbgEOLNqzZa3UWuHU
+         Yy6umXGdERwgLeCS6MR726+8vk0Lb4MWhV1LjkBnivZ+9lov9CemyvCwYQSEt+gkwghn
+         dRgw==
+X-Gm-Message-State: ABy/qLbn3dC4+dgM1dBdzqh0Mz4utsrKxGGD3AoHNJ9PbZwyzA20fTKv
+        uSn+lLLlRaLYwqUmiUGK7VTRGdKblqnJ9y91qAFcfKnMQZVQX7ivVvSmDBCp8b7HqOYQswtL9tb
+        HhMKOtaZUH6u/iuDcfgoyj8pr
+X-Received: by 2002:a05:6a00:1ca9:b0:682:5e8f:d8ba with SMTP id y41-20020a056a001ca900b006825e8fd8bamr724733pfw.11.1688512996827;
+        Tue, 04 Jul 2023 16:23:16 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlG0UBpOEK5SPsF31xr5f/9Wg1BBxO8IhEOWDLX7lSVKCKwsJxsntJWPkQLzTCSx4pQPuvCDfA==
+X-Received: by 2002:a05:6a00:1ca9:b0:682:5e8f:d8ba with SMTP id y41-20020a056a001ca900b006825e8fd8bamr724711pfw.11.1688512996441;
+        Tue, 04 Jul 2023 16:23:16 -0700 (PDT)
+Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
+        by smtp.gmail.com with ESMTPSA id bn10-20020a056a00324a00b0065980654baasm16109591pfb.130.2023.07.04.16.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 16:23:15 -0700 (PDT)
+Message-ID: <b977abe4-71b9-daa1-da1b-b111f0afbe51@redhat.com>
+Date:   Wed, 5 Jul 2023 09:23:05 +1000
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND PATCH v5 01/11] KVM: Rename kvm_arch_flush_remote_tlb()
+ to kvm_arch_flush_remote_tlbs()
+Content-Language: en-US
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20230621175002.2832640-1-rananta@google.com>
+ <20230621175002.2832640-2-rananta@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <20230621175002.2832640-2-rananta@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-07-04 at 08:44 +0200, Takashi Iwai wrote:
-> On Tue, 04 Jul 2023 06:46:14 +0200,
-> Luke D. Jones wrote:
-> >=20
-> > - Adds quirks for various ASUS ROG laptops.
-> > - Fixes up a previous quirk
-> > - Fixes up a whitespace error
-> >=20
-> > This introduces a quirk chain that is similar to the ROG Ally quirk
-> > chain, but
-> > due to the verb configs being currently tested these new quirks do
-> > not use it
-> > and instead add a new chain. It is likely the Ally quirk will be
-> > removed in
-> > favour of this new chain in future.
-> >=20
-> > Luke D. Jones (5):
-> > =C2=A0 ALSA: hda/realtek: Add quirk for ASUS ROG GX650P
-> > =C2=A0 ALSA: hda/realtek: Add quirk for ASUS ROG GA402X
-> > =C2=A0 ALSA: hda/realtek: Amend G634 quirk to enable rear speakers
-> > =C2=A0 ALSA: hda/realtek: Add quirk for ASUS ROG G614Jx
-> > =C2=A0 Fixes: 31278997add6 (ALSA: hda/realtek - Add headset quirk for
-> > Dell
-> > =C2=A0=C2=A0=C2=A0 DT)
->=20
-> Now applied all patches.=C2=A0 The subject line of the last patch was
-> modified to match with the standard.=C2=A0 The Fixes tag was moved to the
-> right place, too.
+On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
+> From: David Matlack <dmatlack@google.com>
+> 
+> Rename kvm_arch_flush_remote_tlb() and the associated macro
+> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB to kvm_arch_flush_remote_tlbs() and
+> __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS respectively.
+> 
+> Making the name plural matches kvm_flush_remote_tlbs() and makes it more
+> clear that this function can affect more than one remote TLB.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>   arch/mips/include/asm/kvm_host.h | 4 ++--
+>   arch/mips/kvm/mips.c             | 2 +-
+>   arch/x86/include/asm/kvm_host.h  | 4 ++--
+>   include/linux/kvm_host.h         | 4 ++--
+>   virt/kvm/kvm_main.c              | 2 +-
+>   5 files changed, 8 insertions(+), 8 deletions(-)
+> 
 
-Thanks mate. I looked at the patch guidelines for that but I must have
-misunderstood it :)
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 957121a495f0b..1473cf923ee37 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -896,7 +896,7 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>   static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+>   static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>   
+> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -int kvm_arch_flush_remote_tlb(struct kvm *kvm);
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+>   
+>   #endif /* __MIPS_KVM_HOST_H__ */
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index 884be4ef99dc1..6e34bbe244462 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -981,7 +981,7 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+>   
+>   }
+>   
+> -int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	kvm_mips_callbacks->prepare_flush_shadow(kvm);
+>   	return 1;
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index fb9d1f2d6136c..f6e3aa617d8b8 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1794,8 +1794,8 @@ static inline struct kvm *kvm_arch_alloc_vm(void)
+>   #define __KVM_HAVE_ARCH_VM_FREE
+>   void kvm_arch_free_vm(struct kvm *kvm);
+>   
+> -#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	if (kvm_x86_ops.flush_remote_tlbs &&
+>   	    !static_call(kvm_x86_flush_remote_tlbs)(kvm))
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 0e571e973bc28..95c3e364f24b4 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1477,8 +1477,8 @@ static inline void kvm_arch_free_vm(struct kvm *kvm)
+>   }
+>   #endif
+>   
+> -#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+> -static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+> +#ifndef __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> +static inline int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>   {
+>   	return -ENOTSUPP;
+>   }
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index cb5c13eee1936..a475ff9ef156d 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -366,7 +366,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+>   	 * kvm_make_all_cpus_request() reads vcpu->mode. We reuse that
+>   	 * barrier here.
+>   	 */
+> -	if (!kvm_arch_flush_remote_tlb(kvm)
+> +	if (!kvm_arch_flush_remote_tlbs(kvm)
+>   	    || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
+>   		++kvm->stat.generic.remote_tlb_flush;
+>   }
+
