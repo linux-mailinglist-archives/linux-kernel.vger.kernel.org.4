@@ -2,181 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858F47471A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0CF7471C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjGDMpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S231304AbjGDMvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGDMpr (ORCPT
+        with ESMTP id S230379AbjGDMvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:45:47 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2139.outbound.protection.outlook.com [40.107.255.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73F9FC;
-        Tue,  4 Jul 2023 05:45:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PbUk/gicjITZJg874b76DIWHTTWfgLcQXWFvBYH8+gUWSJ8gx1UV+ml5LfCmcx/1bObgDE77IJISJZhWAEHEZN9pCZgE6R0DFPZc9xNGRGOFdnqd2wsM+6PSJbpdsm2U4wDZApemYnDEySoV2EHr63mFcaXmYUtzlnhLpm+RmlhP5yZrmn6RUEvqUCjput3c6dIPIbReKI7iMJzqCYGrve9Oyld9J64hjOXKIPo8nrwk+guLTZfX9yHEbVIOYuTU1OvgdY2ZJOmgoscz7+V4KolzvnRgoS/5aP9pSicRYUgz5qpd241LGrAezvpk3LBYUnqSqxOyER/9vzNG16ntjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VYN9bQxVVEqUZS565oPDVkwgcxrWVzNHrsSiU+l3JKY=;
- b=AEjkyCGdSjJ4kNA0w8qLNeuX12M8jQho2b6qD96jOH23YPMYrbqZcEsKVM7XSwwHWBbMwPVzbc6VanUCoIKehRWebnsws/i/4PM00+rPXrernikQzU5DbCXB/5s6fE3OYIS9ba0d0FHmuCq5FiQFaVs4b9T3+e1yFcVkf6nSrfBCk2hpDTHCuDCqukzarGOTNtTzwFeHZn7ZXrjj5jqO1tMpfdDCvpF1HPGNM1fRnZuPJNG7IbEhpZrMKsJaeZcEYk1O+hF4y6+YegL8H25yY7rFHOlPlsWm6t+EQF1QoXPm+X5o4Av4nudm4r09bjoQTfeF5Io4QjhcZF+WsK7ajg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VYN9bQxVVEqUZS565oPDVkwgcxrWVzNHrsSiU+l3JKY=;
- b=VYFNkh+e6H1WUkYg1xkGAIZJBxSKwgWzvEtuSUEqMliyPI1Q/RjGghH6jlItX1YBvqJtzrVlJ6YGF0+NHmoDl2S+Hz/YEuFBmNc+J8vXuAIIDYKOCIAuzMfb4Uq4+QcjycgARX906jj9rhflvqZSHggxbYzgZDqtQTpPzcVIzZNS9Cx5bZB8dQ2GihbFJx6GgbtB4zltSN4ucnR9+eiubcBXhgzQZd9jsGOxyNGn/PVsxQykOX2K2PomUQNZZZ6nK4QAeYVRZ3urblekrrwfuxK+jQ8IlS5snDV9G6dWnF8+1wWYVCJcZ5Nc5oaOuLv6XG3+/5RCaB87ttpQ5Bp9jg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com (2603:1096:301:11d::13)
- by KL1PR06MB5941.apcprd06.prod.outlook.com (2603:1096:820:df::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 12:45:39 +0000
-Received: from PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::5c03:58ad:fb2b:49d9]) by PUZPR06MB5936.apcprd06.prod.outlook.com
- ([fe80::5c03:58ad:fb2b:49d9%7]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 12:45:39 +0000
-From:   You Kangren <youkangren@vivo.com>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        You Kangren <youkangren@vivo.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Adam Guerin <adam.guerin@intel.com>,
-        Srinivas Kerekare <srinivas.kerekare@intel.com>,
-        Damian Muszynski <damian.muszynski@intel.com>,
-        qat-linux@intel.com (open list:QAT DRIVER),
-        linux-crypto@vger.kernel.org (open list:CRYPTO API),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v6] crypto: qat - replace the if statement with min()
-Date:   Tue,  4 Jul 2023 20:45:32 +0800
-Message-Id: <20230704124534.1127-1-youkangren@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0022.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:263::8) To PUZPR06MB5936.apcprd06.prod.outlook.com
- (2603:1096:301:11d::13)
+        Tue, 4 Jul 2023 08:51:33 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D00DB1;
+        Tue,  4 Jul 2023 05:51:31 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id C178B120056;
+        Tue,  4 Jul 2023 15:51:27 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru C178B120056
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688475087;
+        bh=TLQ4bVsJ6/y2FcfOGOxoCr2CNTZbBW/B4otEHDJxOy4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+        b=JOBlX3JdnBRO3v4641iouALiZVk/6soMmfxeiXQ6L6bX/KJgtrB4XL+7i1ImqgSTy
+         4IjM358Sd6o4ANjJDDzT+d3S+LbBVHEADyuSnGowSptC5WYwXibt93E5SobQO4V04l
+         kP5y2tU9H/GjegWASj5XNId+X06Df+Hq2C/6W20ZkFetEyxfBM0alD8q/ev++49WqN
+         aAer9SGgecYFCTXBToLsvNKJzXYEdoPJ8Go6/q2Kv3pGHXlyXFWnejdr+FwBY4bo7T
+         o7jugOycNCxvMFd8WFtaSPPHeuLrV+2LDSdF1qr5naPdH6L47sWYv+ENXxlZfB3YHD
+         a67YQaFgAeaLw==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 15:51:27 +0300 (MSK)
+Received: from [192.168.0.12] (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 4 Jul 2023 15:51:17 +0300
+Message-ID: <47994f36-27d4-e5e4-73a9-6d4225671eec@sberdevices.ru>
+Date:   Tue, 4 Jul 2023 15:46:18 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB5936:EE_|KL1PR06MB5941:EE_
-X-MS-Office365-Filtering-Correlation-Id: 17726d3e-ea79-407c-8acd-08db7c8c9213
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mfqItKgKwPvJlEVZ/2k4qyAjgm2F2QI4FGUSswRAwYmN0zIx8VeqliLLnhp+RGUUc+bP/pYOiZpVrpzVs926Dq3Y18v8tBBs7G4dlhj0hb3BI/LrUcX7g1vuvIevzieraqY/hu5vMModpctvbQ7Yq+oG/5Bgt9qmRo1Wnii2Kqwk2Jhf9N82IS+01jvgL9BO78qVwDSV6lIvQK6NP+RZ3y4ElQhfwWU/EHDQw/T7N8HIbfEJthwnillcVBKwpQF4zmJmtROxyhChV9iHnB+Nq5fgwZlVD653TxbndMzSVAKsWPtX7XfvOE7we57GvREMWpnQrWyLkjR8Ae/3+Nu3j50behZqW1noO74/HNP1pgWMufg0WkwP+jTcBjr8zciHmsduBSDCfiLTlZY9B57L93DzFT34w/TiMALdKRVw86ZRMK+0TCrqDSpHA/CdmJqbSu2bgEvXFdWPHbPvQqqn2SPqhc8V4rIUirheKACRafUB/VJyJtWDy6DzsF9e51P7/ZchJpbOvn5NYi44sLaPTMlbaa+QPEGCqTcptKVr32Wjh0ni7beMobU6FkzcJiDVa/4bjqk6RUswgOYps+m/GrSqN8Z1Pg5YzZgcwsckJXunBHDKLQQyN+IdJV7VebYgrI4toKADbgptS3Dv5wSSCw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5936.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(366004)(136003)(376002)(451199021)(66946007)(7416002)(186003)(6512007)(6506007)(26005)(8936002)(8676002)(1076003)(5660300002)(2906002)(41300700001)(66556008)(4326008)(6666004)(6486002)(316002)(921005)(36756003)(2616005)(66476007)(83380400001)(86362001)(110136005)(478600001)(52116002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IGl20NRJISZCD9WylRUKfzMtqhaRY1FNAaKse9GPppeU8kWmglW/TnwjrxIH?=
- =?us-ascii?Q?fc+70Ryskr82KdCJrnHWAJrXrUcteHqOFwW8JbowAhUk6wJdxGOs9NF3g/Tl?=
- =?us-ascii?Q?crKCZE7Qlge8nE0KuFA7/3SmOoyIBw5PZ72o/ShPPTMvUss+E55QPZW65D40?=
- =?us-ascii?Q?luVOhZnarKfkyP0lz/UUE77UgFDZoVDPawMcMIn0jhhJUwnzcXJ0Robsivzx?=
- =?us-ascii?Q?NdURMpWc6epSq6iSqqmWEAyfWpaNZWvJlkf1JscwGcJqzjLsWhoRljBINHih?=
- =?us-ascii?Q?mbih0lAaFzZAVK+OGMkOi8l1n6SSLrsBuJ0YCiTkgEyzUtUctDGFT8hJa/Fz?=
- =?us-ascii?Q?Esgf4oBX+J44abkWu9+E+VKzl0mlKIaH7pQEQOGapi726Aa2XkGfQyZcHt+G?=
- =?us-ascii?Q?KK+cRL8u397UQvBOttX9G4/8jAsbKk855gPAM0bmOYZnZJFK3bqmfIjVjkRl?=
- =?us-ascii?Q?tIEClDlgFQIKPpzicJHrPibhzuJux0Ro8Mgbn48QSQ97CHbOwlEWWWXX9lHv?=
- =?us-ascii?Q?KPh7inKPvgYyV54zuSoTd7X0L95G0rjXZ2zT9JqJIxdJ0B6fOKPKPhfrEhaY?=
- =?us-ascii?Q?5h5NmudRbfzJl3B5XouPKf9cPYW9xGqjuffkocrMwdUV3UBJiChyM7sIvUVb?=
- =?us-ascii?Q?m7Kuex7+nyv5DPwbjr5DqM+zDttdcvBRl1NbOy5f4+U5Cx070SjiU2aDpKvr?=
- =?us-ascii?Q?Lg8c0lw6D3AG9HAvnhk/oNUi30bnuJQeKq6lvnL0RPc2rc61/Xq6eyQ/G9xY?=
- =?us-ascii?Q?bdkIpf/VY9Z/g7albyXzICGiysOzAv6QmlQLDsuuKfNH5JqZ8PzLid++O6gK?=
- =?us-ascii?Q?RDAF8ZVpKPQHdJC2UNv1OV5wagvZ3f/bsADpHw9cILcv5CZgXqVaKjZmJ6m7?=
- =?us-ascii?Q?cMJAYXzosoY66nyIFSJgH01EL6oGRd7qK51SPTlk59JJb9GFH16VPTMUmwFw?=
- =?us-ascii?Q?9mCJuOyv1nWkW/MfSBq/x4HSDTYizzrQLBsAajrPzBGjqkvZYpSe6TnHxHHi?=
- =?us-ascii?Q?bEyFJufoa8DQgia/UGBm8uajeOeBm5w7KFQPoHaeaaSxrgC8PA4X8wIcfko5?=
- =?us-ascii?Q?YHoYh2x6Z1iq9I0t5DpY7SADw8deQWl+uzIV4RzAp8hEJ3m3Z8QEKsbjEO5/?=
- =?us-ascii?Q?4M1KSM3kgV13ZaAHz487vPB0uXKBiKWqDbdkIfrDcBP5bsbsHFxQAWYmaj35?=
- =?us-ascii?Q?nRixAJ3Lgfyn5mfmhn4cWwkjOaBCg8lzfl95BssoIh1+8JOcKm3rfvnnGTb7?=
- =?us-ascii?Q?uF/ZQwYMpdXRilhlbPrwHBDK/JxvVjbf1XuQsj+InkvChTCTqK9tflpPcsrK?=
- =?us-ascii?Q?J9D6W1gXFK8WhzU/EL02Z5n46xFPHAYSbu1v4F6UWCSzVVTpf+Xtw1AgsV0j?=
- =?us-ascii?Q?eEMIX6ntepgw3u1ZMtTM+eGEe137DUGiycCg3PZQOkGX6r9Keixhsc/nDQzC?=
- =?us-ascii?Q?O7Fn8VLot4iNiyOYkzElmMJBERQrIOXCICZz/DDj0+QjH6Ll3C8Al0cS/Z0t?=
- =?us-ascii?Q?J7UzPuv1J1YKJJAq7xABqK76pBumF8MNhTxYVJxz+z9iQTZH/445RaRukwiT?=
- =?us-ascii?Q?7gv0a8Ke0mKZtYNMn2sNzKbwV7X1AlRHWA2xyOz/?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17726d3e-ea79-407c-8acd-08db7c8c9213
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5936.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 12:45:39.3516
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ekgRoUOEF0VpY32N1sZz8lZhbbuXPXBzNa7isuL6Hh3eFzPoB1j79bDDpkl63pKx5JQnghKZyAoUUG4Xa1rMWA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB5941
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 2/2] mtd: rawnand: meson: waiting w/o wired ready/busy
+ pin
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230608044728.1328506-1-AVKrasnov@sberdevices.ru>
+ <20230608044728.1328506-3-AVKrasnov@sberdevices.ru>
+ <20230704144357.286281dc@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230704144357.286281dc@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178418 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark UWORD_CPYBUF_SIZE with U suffix to make its type the same
-with words_num. Then replace the if statement with min() in
-qat_uclo_wr_uimage_raw_page() to make code shorter.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: You Kangren <youkangren@vivo.com>
----
-Changelog:
-v5->v6:
-- Remove the unnecessary Fixes tag of the patch
-- Change the first letter of "replace" in the headline of the commit message to lower case
 
-v4->v5: 
-- Add the Fixes and Reviewed-by tags of the patch
-- Add the version update information of the patch
+On 04.07.2023 15:43, Miquel Raynal wrote:
+> Hi Arseniy,
+> 
+> AVKrasnov@sberdevices.ru wrote on Thu, 8 Jun 2023 07:47:28 +0300:
+> 
+>> If there is no wired ready/busy pin, classic way to wait for command
+>> completion is to use function 'nand_soft_waitrdy()'. Meson NAND has
+>> special command which allows to wait for NAND_STATUS_READY bit without
+>> reading status in a software loop (as 'nand_soft_waitrdy()' does). To
+>> use it send this command along with NAND_CMD_STATUS, then wait for an
+>> interrupt, and after interrupt send NAND_CMD_READ0. So this feature
+>> allows to use interrupt driven waiting without wired ready/busy pin.
+>>
+>> Suggested-by: Liang Yang <liang.yang@amlogic.com>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>>  drivers/mtd/nand/raw/meson_nand.c | 77 +++++++++++++++++++++++++++++--
+>>  1 file changed, 73 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>> index 074e14225c06..9f05e113b4ea 100644
+>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>> @@ -38,6 +38,7 @@
+>>  #define NFC_CMD_SCRAMBLER_DISABLE	0
+>>  #define NFC_CMD_SHORTMODE_DISABLE	0
+>>  #define NFC_CMD_RB_INT		BIT(14)
+>> +#define NFC_CMD_RB_INT_NO_PIN	((0xb << 10) | BIT(18) | BIT(16))
+>>  
+>>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+>>  
+>> @@ -179,6 +180,7 @@ struct meson_nfc {
+>>  	u32 info_bytes;
+>>  
+>>  	unsigned long assigned_cs;
+>> +	bool no_rb_pin;
+>>  };
+>>  
+>>  enum {
+>> @@ -392,7 +394,42 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
+>>  	}
+>>  }
+>>  
+>> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>> +static int meson_nfc_wait_no_rb_pin(struct meson_nfc *nfc, int timeout_ms,
+>> +				    bool need_cmd_read0)
+>> +{
+>> +	u32 cmd, cfg;
+>> +
+>> +	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+>> +	meson_nfc_drain_cmd(nfc);
+>> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+>> +
+>> +	cfg = readl(nfc->reg_base + NFC_REG_CFG);
+>> +	cfg |= NFC_RB_IRQ_EN;
+>> +	writel(cfg, nfc->reg_base + NFC_REG_CFG);
+>> +
+>> +	reinit_completion(&nfc->completion);
+>> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> +
+>> +	/* use the max erase time as the maximum clock for waiting R/B */
+>> +	cmd = NFC_CMD_RB | NFC_CMD_RB_INT_NO_PIN | nfc->timing.tbers_max;
+>> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> +
+>> +	if (!wait_for_completion_timeout(&nfc->completion,
+>> +					 msecs_to_jiffies(timeout_ms)))
+>> +		return -ETIMEDOUT;
+>> +
+>> +	if (need_cmd_read0) {
+>> +		cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
+>> +		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> +		meson_nfc_drain_cmd(nfc);
+>> +		meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+>> +	}
+> 
+> I forgot about this, you should avoid open coding core helpers, can you
+> please send a followup patch to use nand_status_op() and
+> nand_exit_status_op() ?
 
-v3->v4:
-- Remove the header file <linux/minmax.h> in v3
+A ok, so:
+1) Sending NAND_CMD_STATUS goes to nand_status_op()
+2) Sending NAND_CMD_READ0 goes to nand_exit_status_op()
 
-v2->v3:
-- Add a header file <linux/minmax.h>
-- Mark UWORD_CPYBUF_SIZE with U suffix
-- Change min_t() to min() in qat_uclo_wr_uimage_raw_page()
+Ok, no problem! I'll prepare and send it on this week!
 
-v1->v2:
-- Change min() to min_t() in qat_uclo_wr_uimage_raw_page()
+Thanks, Arseniy
 
- drivers/crypto/intel/qat/qat_common/qat_uclo.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_uclo.c b/drivers/crypto/intel/qat/qat_common/qat_uclo.c
-index ce837bcc1cab..4bd150d1441a 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_uclo.c
-+++ b/drivers/crypto/intel/qat/qat_common/qat_uclo.c
-@@ -11,7 +11,7 @@
- #include "icp_qat_hal.h"
- #include "icp_qat_fw_loader_handle.h"
- 
--#define UWORD_CPYBUF_SIZE 1024
-+#define UWORD_CPYBUF_SIZE 1024U
- #define INVLD_UWORD 0xffffffffffull
- #define PID_MINOR_REV 0xf
- #define PID_MAJOR_REV (0xf << 4)
-@@ -1986,10 +1986,7 @@ static void qat_uclo_wr_uimage_raw_page(struct icp_qat_fw_loader_handle *handle,
- 	uw_relative_addr = 0;
- 	words_num = encap_page->micro_words_num;
- 	while (words_num) {
--		if (words_num < UWORD_CPYBUF_SIZE)
--			cpylen = words_num;
--		else
--			cpylen = UWORD_CPYBUF_SIZE;
-+		cpylen = min(words_num, UWORD_CPYBUF_SIZE);
- 
- 		/* load the buffer */
- 		for (i = 0; i < cpylen; i++)
--- 
-2.39.0
-
+> 
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int meson_nfc_wait_rb_pin(struct meson_nfc *nfc, int timeout_ms)
+>>  {
+>>  	u32 cmd, cfg;
+>>  	int ret = 0;
+>> @@ -420,6 +457,27 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>>  	return ret;
+>>  }
+>>  
+>> +static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms,
+>> +			      bool need_cmd_read0)
+>> +{
+>> +	if (nfc->no_rb_pin) {
+>> +		/* This mode is used when there is no wired R/B pin.
+>> +		 * It works like 'nand_soft_waitrdy()', but instead of
+>> +		 * polling NAND_CMD_STATUS bit in the software loop,
+>> +		 * it will wait for interrupt - controllers checks IO
+>> +		 * bus and when it detects NAND_CMD_STATUS on it, it
+>> +		 * raises interrupt. After interrupt, NAND_CMD_READ0 is
+>> +		 * sent as terminator of the ready waiting procedure if
+>> +		 * needed (for all cases except page programming - this
+>> +		 * is reason of 'need_cmd_read0' flag).
+>> +		 */
+>> +		return meson_nfc_wait_no_rb_pin(nfc, timeout_ms,
+>> +						need_cmd_read0);
+>> +	} else {
+>> +		return meson_nfc_wait_rb_pin(nfc, timeout_ms);
+>> +	}
+>> +}
+>> +
+>>  static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
+>>  {
+>>  	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+>> @@ -623,7 +681,7 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
+>>  	if (in) {
+>>  		nfc->cmdfifo.rw.cmd1 = cs | NFC_CMD_CLE | NAND_CMD_READSTART;
+>>  		writel(nfc->cmdfifo.rw.cmd1, nfc->reg_base + NFC_REG_CMD);
+>> -		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max));
+>> +		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max), true);
+>>  	} else {
+>>  		meson_nfc_cmd_idle(nfc, nfc->timing.tadl);
+>>  	}
+>> @@ -669,7 +727,7 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+>>  
+>>  	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
+>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>> -	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
+>> +	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max), false);
+>>  
+>>  	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
+>>  
+>> @@ -952,7 +1010,8 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
+>>  			break;
+>>  
+>>  		case NAND_OP_WAITRDY_INSTR:
+>> -			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms);
+>> +			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms,
+>> +					   true);
+>>  			if (instr->delay_ns)
+>>  				meson_nfc_cmd_idle(nfc, delay_idle);
+>>  			break;
+>> @@ -1248,6 +1307,7 @@ meson_nfc_nand_chip_init(struct device *dev,
+>>  	struct mtd_info *mtd;
+>>  	int ret, i;
+>>  	u32 tmp, nsels;
+>> +	u32 nand_rb_val = 0;
+>>  
+>>  	nsels = of_property_count_elems_of_size(np, "reg", sizeof(u32));
+>>  	if (!nsels || nsels > MAX_CE_NUM) {
+>> @@ -1287,6 +1347,15 @@ meson_nfc_nand_chip_init(struct device *dev,
+>>  	mtd->owner = THIS_MODULE;
+>>  	mtd->dev.parent = dev;
+>>  
+>> +	ret = of_property_read_u32(np, "nand-rb", &nand_rb_val);
+>> +	if (ret == -EINVAL)
+>> +		nfc->no_rb_pin = true;
+>> +	else if (ret)
+>> +		return ret;
+>> +
+>> +	if (nand_rb_val)
+>> +		return -EINVAL;
+>> +
+>>  	ret = nand_scan(nand, nsels);
+>>  	if (ret)
+>>  		return ret;
+> 
+> 
+> Thanks,
+> Miquèl
