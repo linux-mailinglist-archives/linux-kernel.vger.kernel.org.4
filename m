@@ -2,127 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F602747380
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8E4747382
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjGDOAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S231791AbjGDOAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjGDN7v (ORCPT
+        with ESMTP id S230479AbjGDOAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:59:51 -0400
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D049B10A;
-        Tue,  4 Jul 2023 06:59:49 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 603AF100074;
-        Tue,  4 Jul 2023 16:59:48 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 603AF100074
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688479188;
-        bh=SVqe3A4FxeAdixEi7Nd7L65hAuANY8HEBhEw2Kj2u+8=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-        b=hdI4YxhiDCn0Fjei1lunh5UUBQXuv/PWPY2Kut7+DpZ0ni/LsAdxxFbNd/oRE5AZQ
-         X4ewv+LTy1ULSMm+7vKncmJZtqDj7Vthlv2QOzLjJydEYDtRK/FbqsBbfGTELOQ7Eb
-         d68zYkSrZaQFr/DdOTf1u4mSor/RTYvzcAWNrvKwrytLiUj2cEaetKmDP3ovRC7+P4
-         WMjtgY7aD64RHo1YqoDaZ7ULCp7BDsMAHAK9AQvDEhq4AqB1sWf0/WE8TIe059STdv
-         kzkwrRPf7LF69vzZih+ciEVZWBg7xTn9Cu+tx/QzQgndsqEnR5eOxhxVG2tnD6BXnC
-         Ng+PnNHdji7rw==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Jul 2023 10:00:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29B11704
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:59:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Tue,  4 Jul 2023 16:59:48 +0300 (MSK)
-Received: from localhost.localdomain (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Tue, 4 Jul 2023 16:59:37 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <jirislaby@kernel.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>
-CC:     <kelvin.zhang@amlogic.com>, <xianwei.zhao@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v1 5/5] arm64: dts: meson: a1: change uart compatible string
-Date:   Tue, 4 Jul 2023 16:59:36 +0300
-Message-ID: <20230704135936.14697-6-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
-References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88CC561173
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:59:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC5BC433C7;
+        Tue,  4 Jul 2023 13:59:57 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 09:59:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Donglin Peng <pengdonglin@sangfor.com.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Florent Revest <revest@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: ftrace: fix build error with
+ CONFIG_FUNCTION_GRAPH_TRACER=n
+Message-ID: <20230704095953.6665eaf6@rorschach.local.home>
+In-Reply-To: <ZJ78nyYR9ZDo+xWL@arm.com>
+References: <20230623152204.2216297-1-arnd@kernel.org>
+        <ZJ78nyYR9ZDo+xWL@arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178420 [Jul 04 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the current implementation, the meson-a1 configuration incorporates a
-unique compatibility tag "amlogic,meson-a1-uart' within the meson-uart
-driver due to its usage of the new console device name "ttyS".
-Consequently, the previous compatibility tag designated for the
-'amlogic,meson-gx-uart' configuration has become obsolete and is no
-longer relevant to the current setup.
+On Fri, 30 Jun 2023 17:02:39 +0100
+Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
+> > index 757d01a68ffd0..5ff1942b04fcf 100644
+> > --- a/arch/arm64/kernel/asm-offsets.c
+> > +++ b/arch/arm64/kernel/asm-offsets.c
+> > @@ -213,9 +213,9 @@ int main(void)
+> >    DEFINE(FGRET_REGS_X7,			offsetof(struct fgraph_ret_regs, regs[7]));
+> >    DEFINE(FGRET_REGS_FP,			offsetof(struct fgraph_ret_regs, fp));
+> >    DEFINE(FGRET_REGS_SIZE,		sizeof(struct fgraph_ret_regs));
+> > +#endif
+> >  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> >    DEFINE(FTRACE_OPS_DIRECT_CALL,	offsetof(struct ftrace_ops, direct_call));
+> > -#endif
+> >  #endif
+> >    return 0;
+> >  }  
+> 
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> 
+> Steven, since the fixed commit went in via your tree, could you please
+> pick this up as well for -rc1? Otherwise I'll queue it for -rc2 once the
+> ftrace changes turn up in -rc1.
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I'm working on a fixes pull request for Linus. I'll apply this to it
+and start my testing on it. I should have a pull request to Linus
+before the end of the week.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index c5567031ba12..6273b9c862b3 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -344,7 +344,7 @@ mux {
- 			};
- 
- 			uart_AO: serial@1c00 {
--				compatible = "amlogic,meson-gx-uart",
-+				compatible = "amlogic,meson-a1-uart",
- 					     "amlogic,meson-ao-uart";
- 				reg = <0x0 0x1c00 0x0 0x18>;
- 				interrupts = <GIC_SPI 25 IRQ_TYPE_EDGE_RISING>;
-@@ -354,7 +354,7 @@ uart_AO: serial@1c00 {
- 			};
- 
- 			uart_AO_B: serial@2000 {
--				compatible = "amlogic,meson-gx-uart",
-+				compatible = "amlogic,meson-a1-uart",
- 					     "amlogic,meson-ao-uart";
- 				reg = <0x0 0x2000 0x0 0x18>;
- 				interrupts = <GIC_SPI 26 IRQ_TYPE_EDGE_RISING>;
--- 
-2.36.0
+-- Steve
 
