@@ -2,56 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868017474E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60107747506
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjGDPFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S231664AbjGDPMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGDPFa (ORCPT
+        with ESMTP id S231594AbjGDPMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:05:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F82810CA;
-        Tue,  4 Jul 2023 08:05:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 4 Jul 2023 11:12:18 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E1D10D7;
+        Tue,  4 Jul 2023 08:12:15 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 6C5A8120056;
+        Tue,  4 Jul 2023 18:12:14 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 6C5A8120056
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688483534;
+        bh=MA18R4ahtdeUwMRF3ebCu6zn0dDacp0s1VVqqmBwV7Q=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+        b=ox8qOlaWTO8rk6r8RAc4KQBGMVACKzKeKwGKI6jM7Kv5RRfT17BTQ+1c9yBuy9W14
+         IeLclQ8lh53wRx/JOx/BwldRfCUosLgN6qQEn7b5xXoYE7kshmUk6krtUbrVFgZGQO
+         bi4KRSYGk/t1LU6nQuSTxdQVgfSdBK+evbkPGkfCjWOMz0URwIBa33UoVApW08J1ud
+         kTkM/Vp0rleXvbS/Z2w4vdzKbtrLhNkzzIoJBn1ax+2vS02kAJZgcIsMeDkItiSofo
+         qzCr3j+AiHAXV49Kui+LjuoqIYqRPGMQ4rYWudYnLkyZXlF0qcxXkqOYRLAoINe6Ty
+         s3DkJQInq4KXQ==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E41E161299;
-        Tue,  4 Jul 2023 15:05:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96112C433C7;
-        Tue,  4 Jul 2023 15:05:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688483128;
-        bh=Qkcd9m+SV34/ZmoHIL3vzsBtk3lpli7AUFnp09k5ECU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SNzRM70NlVz3IA8TUYe1rlXFMEeZMYsqqQ8lmHRk5mRY0vDsYO5lb0Tlcvv7/q5u1
-         CRQDRaIW6DihFX0UqgJvnT/5CPcdYF2hPrdqpukdf0sH4XiczO4NRmvsXUYyQ3m+VW
-         Mc0QlzKtTBXwP89SEQuzuajRLwKfXui3Qh/q/MUyRZK3xrEG/k+CK55P2QdMlUE+mM
-         YnAZDWxeTOmi0U/MxfNwMtqDqHytCF7+/hJ3nqa660wrQH9Q3mGCfwo4Z4n/NCfkAk
-         kquHZhc2hzBsPVJ5r1DiYC3P0+yANrFFuSCld4AuOKmAF12nhT0nMJqN/Ueqf385wK
-         iY2ZZTJ5Ymt4w==
-Date:   Tue, 4 Jul 2023 17:05:22 +0200
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Hou Tao <houtao@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v1] fs: Add kfuncs to handle idmapped mounts
-Message-ID: <ZKQ1Mkf5G9CA1/9J@example.org>
-References: <c35fbb4cb0a3a9b4653f9a032698469d94ca6e9c.1688123230.git.legion@kernel.org>
- <babdf7a8-9663-6d71-821a-34da2aff80e2@huaweicloud.com>
- <20230704-anrollen-beenden-9187c7b1b570@brauner>
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 18:12:14 +0300 (MSK)
+Received: from [192.168.0.12] (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 4 Jul 2023 18:12:03 +0300
+Message-ID: <e45afb19-d77b-6ef3-08bf-68e8626371be@sberdevices.ru>
+Date:   Tue, 4 Jul 2023 18:07:04 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704-anrollen-beenden-9187c7b1b570@brauner>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v1 2/2] mtd: rawnand: meson: support for 512B ECC step
+ size
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230628092937.538683-1-AVKrasnov@sberdevices.ru>
+ <20230628092937.538683-3-AVKrasnov@sberdevices.ru>
+ <20230704103617.4affae8a@xps-13>
+ <9e6eaa87-887c-f955-113a-43860c8ea00c@sberdevices.ru>
+ <20230704114110.25ca9de4@xps-13>
+ <aede4639-0e99-565a-c997-c414342c66af@sberdevices.ru>
+ <20230704115628.55320428@xps-13>
+ <ee2eb73a-fb25-58ae-cf7e-83d971b7b8b2@sberdevices.ru>
+ <20230704154106.5c5aafd8@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230704154106.5c5aafd8@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178426 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,155 +103,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 03:01:21PM +0200, Christian Brauner wrote:
-> On Tue, Jul 04, 2023 at 07:42:53PM +0800, Hou Tao wrote:
-> > Hi,
-> > 
-> > On 6/30/2023 7:08 PM, Alexey Gladkov wrote:
-> > > Since the introduction of idmapped mounts, file handling has become
-> > > somewhat more complicated. If the inode has been found through an
-> > > idmapped mount the idmap of the vfsmount must be used to get proper
-> > > i_uid / i_gid. This is important, for example, to correctly take into
-> > > account idmapped files when caching, LSM or for an audit.
-> > 
-> > Could you please add a bpf selftest for these newly added kfuncs ?
-> > >
-> > > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > > ---
-> > >  fs/mnt_idmapping.c | 69 ++++++++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 69 insertions(+)
-> > >
-> > > diff --git a/fs/mnt_idmapping.c b/fs/mnt_idmapping.c
-> > > index 4905665c47d0..ba98ce26b883 100644
-> > > --- a/fs/mnt_idmapping.c
-> > > +++ b/fs/mnt_idmapping.c
-> > > @@ -6,6 +6,7 @@
-> > >  #include <linux/mnt_idmapping.h>
-> > >  #include <linux/slab.h>
-> > >  #include <linux/user_namespace.h>
-> > > +#include <linux/bpf.h>
-> > >  
-> > >  #include "internal.h"
-> > >  
-> > > @@ -271,3 +272,71 @@ void mnt_idmap_put(struct mnt_idmap *idmap)
-> > >  		kfree(idmap);
-> > >  	}
-> > >  }
-> > > +
-> > > +__diag_push();
-> > > +__diag_ignore_all("-Wmissing-prototypes",
-> > > +		  "Global functions as their definitions will be in vmlinux BTF");
-> > > +
-> > > +/**
-> > > + * bpf_is_idmapped_mnt - check whether a mount is idmapped
-> > > + * @mnt: the mount to check
-> > > + *
-> > > + * Return: true if mount is mapped, false if not.
-> > > + */
-> > > +__bpf_kfunc bool bpf_is_idmapped_mnt(struct vfsmount *mnt)
-> > > +{
-> > > +	return is_idmapped_mnt(mnt);
-> > > +}
-> > > +
-> > > +/**
-> > > + * bpf_file_mnt_idmap - get file idmapping
-> > > + * @file: the file from which to get mapping
-> > > + *
-> > > + * Return: The idmap for the @file.
-> > > + */
-> > > +__bpf_kfunc struct mnt_idmap *bpf_file_mnt_idmap(struct file *file)
-> > > +{
-> > > +	return file_mnt_idmap(file);
-> > > +}
-> > 
-> > A dummy question here: the implementation of file_mnt_idmap() is
-> > file->f_path.mnt->mnt_idmap, so if the passed file is a BTF pointer, is
-> > there any reason why we could not do such dereference directly in bpf
-> > program ?
-> > > +
-> > > +/**
-> > > + * bpf_inode_into_vfs_ids - map an inode's i_uid and i_gid down according to an idmapping
-> > > + * @idmap: idmap of the mount the inode was found from
-> > > + * @inode: inode to map
-> > > + *
-> > > + * The inode's i_uid and i_gid mapped down according to @idmap. If the inode's
-> > > + * i_uid or i_gid has no mapping INVALID_VFSUID or INVALID_VFSGID is returned in
-> > > + * the corresponding position.
-> > > + *
-> > > + * Return: A 64-bit integer containing the current GID and UID, and created as
-> > > + * such: *gid* **<< 32 \|** *uid*.
-> > > + */
-> > > +__bpf_kfunc uint64_t bpf_inode_into_vfs_ids(struct mnt_idmap *idmap,
-> > > +		const struct inode *inode)
-> > > +{
-> > > +	vfsuid_t vfsuid = i_uid_into_vfsuid(idmap, inode);
-> > > +	vfsgid_t vfsgid = i_gid_into_vfsgid(idmap, inode);
-> > > +
-> > > +	return (u64) __vfsgid_val(vfsgid) << 32 |
-> > > +		     __vfsuid_val(vfsuid);
-> > > +}
-> > > +
-> > > +__diag_pop();
-> > > +
-> > > +BTF_SET8_START(idmap_btf_ids)
-> > > +BTF_ID_FLAGS(func, bpf_is_idmapped_mnt)
-> > > +BTF_ID_FLAGS(func, bpf_file_mnt_idmap)
-> > > +BTF_ID_FLAGS(func, bpf_inode_into_vfs_ids)
-> > > +BTF_SET8_END(idmap_btf_ids)
-> > > +
-> > > +static const struct btf_kfunc_id_set idmap_kfunc_set = {
-> > > +	.owner = THIS_MODULE,
-> > > +	.set   = &idmap_btf_ids,
-> > > +};
-> > > +
-> > > +static int __init bpf_idmap_kfunc_init(void)
-> > > +{
-> > > +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &idmap_kfunc_set);
-> > > +}
-> > > +
-> > Is BPF_PROG_TYPE_TRACING sufficient for your use case ? It seems
-> > BPF_PROG_TYPE_UNSPEC will make these kfuncs be available for all bpf
-> > program types.
-> > > +late_initcall(bpf_idmap_kfunc_init);
-> > 
+
+
+On 04.07.2023 16:41, Miquel Raynal wrote:
+> Hi Arseniy,
 > 
-> I don't want any of these helpers as kfuncs as they are peeking deeply
-> into implementation details that we reserve to change. Specifically in
-> the light of:
+>>>>>> Yes, this code looks strange. 'nsectors' is used to calculate space in OOB
+>>>>>> that could be used by ECC engine (this value will be passed as 'oobavail'
+>>>>>> to 'nand_ecc_choose_conf()'). Idea of 512 is to consider "worst" case
+>>>>>> for ECC, e.g. minimal number of bytes for ECC engine (and at the same time
+>>>>>> maximum number of free bytes). For Meson, if ECC step size is 512, then we
+>>>>>> have 4 x 2 free bytes in OOB (if step size if 1024 then we have 2 x 2 free
+>>>>>> bytes in OOB).
+>>>>>>
+>>>>>> I think this code could be reworked in the following way:
+>>>>>>
+>>>>>> if ECC step size is already known here (from DTS), calculate 'nsectors' using
+>>>>>> given value (div by 512 for example). Otherwise calculate 'nsectors' in the
+>>>>>> current manner:    
+>>>>>
+>>>>> It will always be known when these function are run. There is no
+>>>>> guessing here.    
+>>>>
+>>>> Hm I checked, that but if step size is not set in DTS, here it will be 0, 
+>>>> then it will be selected in 'nand_ecc_choose_conf()' according provided 'ecc_caps'
+>>>> and 'oobavail'...
+>>>>
+>>>> Anyway, I'll do the following thing:
+>>>>
+>>>> int nsectors;
+>>>>
+>>>> if (nand->ecc.size)
+>>>>     nsectors = mtd->writesize / nand->ecc.size; <--- this is for 512 ECC  
+>>>
+>>> You should set nand->ecc.size in ->attach_chip() instead.  
+>>
+>> Sorry, didn't get it... if ECC step size is set in DTS, then here, in chip attach
+>> callback it will be already known (DT part was processed in 'rawnand_dt_init()').
+>> If ECC step size is unknown (e.g. 0 here), 'nand_ecc_choose_conf()' will set it
+>> according provided ecc caps. What do You mean for "You should set ..." ?
 > 
->     3. kfunc lifecycle expectations part b):
+> The current approach is wrong, it decides the number of ECC chunks
+> (called nsectors in the driver) and then asks the core to decide the
+> number of ECC chunks to use.
+
+Yes! I was also confused about that.
+
 > 
->     "Unlike with regular kernel symbols, this is expected behavior for BPF
->      symbols, and out-of-tree BPF programs that use kfuncs should be considered
->      relevant to discussions and decisions around modifying and removing those
->      kfuncs. The BPF community will take an active role in participating in
->      upstream discussions when necessary to ensure that the perspectives of such
->      users are taken into account."
+> Just provide mtd->oobsize - 2 as last parameter and then rely on the
+> core's logic to find the right ECC step-size/strength?
 > 
-> That's too much stability for my taste for these helpers. The helpers
-> here exposed have been modified multiple times and once we wean off
-> idmapped mounts from user namespaces completely they will change again.
-> So I'm fine if they're traceable but not as kfuncs with any - even
-> minimal - stability guarantees.
+> There is no point in requesting a particular step size without a
+> specific strength, or? So I believe you should provide both in the DTS
+> if you want particular parameters to be applied, otherwise you can let
+> the core decide what is best.
 
-I thought that the mnt_idmap interface is already quite stable. I wanted
-to give a minimal interface to bpf programs.
+So I think this could be a separated patch as it doesn't rely on 512 step size ECC
+support for Meson and may be it should be "Fix" tagged.
 
-Would it be better if I hide the mnt_idmap inside the helper or are you
-against using kfuncs at the moment ?
+Thanks, Arseniy
 
-Like that:
-
-__bpf_kfunc uint64_t bpf_get_file_vfs_ids(struct file *file)
-{
-	struct mnt_idmap *idmap = file_mnt_idmap(file);
-	vfsuid_t vfsuid = i_uid_into_vfsuid(idmap, file->f_inode);
-	vfsgid_t vfsgid = i_gid_into_vfsgid(idmap, file->f_inode);
-
-	return (u64) __vfsgid_val(vfsgid) << 32 |
-		     __vfsuid_val(vfsuid);
-}
-
--- 
-Rgrds, legion
-
+> 
+> Thanks,
+> Miquèl
