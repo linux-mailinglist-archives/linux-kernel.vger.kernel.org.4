@@ -2,222 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D356F746834
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8024A746836
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjGDEBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 00:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S230300AbjGDEDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 00:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjGDEBa (ORCPT
+        with ESMTP id S230464AbjGDECd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 00:01:30 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B265BD;
-        Mon,  3 Jul 2023 21:01:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QK5n2JMWmwbPPkycgWiINovtsGIPg+tMsWOZ8jAth/chmjFFbofhhZedGpcMPnOk7K6hSR2RIYmz6LpBItZgprAgCVKkjA0hp/kMlsBPR3dMbD1hVL1mrfhfJlo+9QEnfkRKVCNCtsj+9b4jMRZuzuaZBKe6MC8D0j5Fk3BwCYvhYxPedbh0qzUcfLUtQsqp9b0lHjzigktMhD5HPcHyn8CcNRsBVoENkr0p+tRBLoAsz3R7m67MUAhav22uCrPPaChjP1D1c6u6J3hPibnkRN0jKrx6I+DMwsD4D9JCxCD78BDRRehYl2Ls+bzqhgfOdY2CF+eW6GzypbMkCaVZOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vZ5quQBoOmUGeDe5qMsjGd2YRmqwU8bGbvl+E2PaBBs=;
- b=c0mgukgQy5HPFjkOBsvj6tlrt7mAFWmQRLdvaiZNmoAl4w92NOBo2IcIfJthNQibYE7+3wwMLok+gOmiHtVr0oRAQHmNw6tChOVjT/vDUAtP5zMsl6gGHk9Q9gs4/tAtRV7azmPRSfD5OIsRkysms4rqicqxejY6Z/zOTcrePmvCxkmnKaFBBOORl14+sgiqjsrZqsF06WdCbCJpuLjJrAVcDbFuDRoFC0SU8gSFISG9B1ZLDiSnF+uG+dl6uftLpDFg6V6RJ0Tdcy41fRG6RzJsQ7mu38duNwfGJQVwT8EBZSlx+xZ6MMZFbmT0Is1LEYZ7zVxWfTHpc87KXfdmVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+        Tue, 4 Jul 2023 00:02:33 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE346E7A;
+        Mon,  3 Jul 2023 21:02:04 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-557790487feso3620416a12.0;
+        Mon, 03 Jul 2023 21:02:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vZ5quQBoOmUGeDe5qMsjGd2YRmqwU8bGbvl+E2PaBBs=;
- b=jV9YgQDEOmxKa4C5EQu/dslVgb1vqHh97J0BZCiLD0J6+GnRVLTp+/jpv+5u4hqiDyg2VtaiYHVYZ3/Ysx94aLyfJHwWTbkcZ6BXJUt3rg5leo1Oc87zIxQNGJnbZt9d2H0WSUBXcxYTA8VjCYepidDPW6ejiMgCsyJ9P7q73AY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by CH3PR03MB7385.namprd03.prod.outlook.com (2603:10b6:610:19a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 04:01:27 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::6882:b9c1:2b2d:998d]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::6882:b9c1:2b2d:998d%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 04:01:27 +0000
-From:   Hsia-Jun Li <randy.li@synaptics.com>
-To:     linux-media@vger.kernel.org
-Cc:     ayaka@soulik.info, hans.verkuil@cisco.com, tfiga@chromium.org,
-        mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
-        hiroh@chromium.org, hverkuil@xs4all.nl,
-        linux-kernel@vger.kernel.org, nicolas@ndufresne.ca,
-        "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
-Subject: [PATCH 2/2] media: v4l2-mem2mem: add a list for buf used by hw
-Date:   Tue,  4 Jul 2023 12:00:38 +0800
-Message-ID: <20230704040044.681850-3-randy.li@synaptics.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230704040044.681850-1-randy.li@synaptics.com>
-References: <20230704040044.681850-1-randy.li@synaptics.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR01CA0041.prod.exchangelabs.com (2603:10b6:a03:94::18)
- To DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+        d=gmail.com; s=20221208; t=1688443324; x=1691035324;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FXPJYPo99iw+nT4G16KHkVbpbdJ+upvLJqGBpDeZzeY=;
+        b=k9MUwBajjYbdCeb7GTBmEic31Qz1nDFqbmSe/SPRV0WR9lS3G4wTU4ilP/flo9Q2n/
+         NVfspHFdGhh5YKwuWJnav1XJqhbkMgfowoeH0utnhCoIPGDLnY7hy2PzDmqx6fYXBpUD
+         IlY+Pe8UjHobAWhWkAkMsE+mtmJhrc/7X2CjXdEqm3uO1aVlVe+vCdJ7/BF1BDrea261
+         jvuE56hETGIawpsptYxgO0vtkINKdxhzC8kWqcb428s+u9MyJIGAepWQLMGgImf9KrvA
+         Sx57uafxbK+8/3TrS2CMaIl6fhUdJqj3E87NdUbfxwPMAS01kjFuPKtTGkF14GqlvEDH
+         Oh5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688443324; x=1691035324;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FXPJYPo99iw+nT4G16KHkVbpbdJ+upvLJqGBpDeZzeY=;
+        b=JaCt7vkAuJ7tfDcfUbnAHWWCxOs5V2+AmUppumubnCLitH3AbQh4TEAsgJ9/3bZcUN
+         g226ofilsU9fkrbmP9jV9EYXUSpRMo2wMQL2Vrvl4wqw/T0/QkC7QYsdBkL7TPMcH06j
+         YSc4sAh8HtNnwl5NL5WMLv5ZpBspnatSVZ01ZEf1PAw/wT6sk6dJSwv1CIbWyxqe20xx
+         z5caEyczJDi9y/9GpBAKMYH5XZENUO6FS8ecVdzRV77l7WZufuqUJchFMxFPaGxveCYP
+         WFFJ8o3WcpIDscYHF01or4p8JDiAw18pKuCCcdpDJBmfwbhTln+n7owYdJs36VefHGo6
+         HsLQ==
+X-Gm-Message-State: AC+VfDzwHrnjAv4zqZonUeHfBzLyr4nTikMTjhzXYXYy94X9kSqLuj0R
+        4P86Bcd7ZhNDigdgO0zG7SViYlI786dr+qnO
+X-Google-Smtp-Source: ACHHUZ5JBnTieP65izFYRX51YsPqO3oGyFrnqmLSE5VxExVpG5DyR0FjCV4dCWLVv4lfYLYAyh4q8Q==
+X-Received: by 2002:a05:6a20:734e:b0:110:9210:f6b8 with SMTP id v14-20020a056a20734e00b001109210f6b8mr16071464pzc.35.1688443324144;
+        Mon, 03 Jul 2023 21:02:04 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id c20-20020a170902c1d400b001b7f95fbec1sm14393093plc.78.2023.07.03.21.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 21:02:02 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 09B70819702B; Tue,  4 Jul 2023 11:01:56 +0700 (WIB)
+Date:   Tue, 4 Jul 2023 11:01:56 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Budi <budikusasi@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: Anyone please do big favor, help
+Message-ID: <ZKOZtP72vmF8d6yi@debian.me>
+References: <CAH0GyZDWhSo+otkEPRDwvHyE29N5ZjhpFT5m4jRnt6buV8gEpA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|CH3PR03MB7385:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c0e4f16-8fed-4e12-e637-08db7c435760
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FbOfHuK0SujUIIMwVrG8YvVen+NkJvAzeNvitveqZGd7UyFoHNjF7dMWRCnGjPmTtat+hZlbU1+8uXnmpItINtI+nEyER+JjlxjvUd4YuA1KvvViFzuwdaaYltCYHPuER5v6ZqB/KIH0897RU3EHVl+20TqJmF3kRix9UdOum33F+wVNIiTjFyZD7/8ghMKvI7U6xF1Yh9ZO9azhhCoFuydhHf++1ekevgGhdppb/8VGTkBzFPoidHzBvD1/sYzmXVmU6Zzv2vTH+vCRpvEIkmllcHU35JcizPkEjum6eAwQJqi8Jq2eA90Eutx31urqFYq86Y+2htApHdkcWHof1ua9q7b9zfT6kmfZLnegxKrP7TEnVZrcAp2yPK8CI1aMOoWR+gskrxuJzjsf9pGJT0nM3HdbWWP/B/ZBu734o5M7EhMiPp8Gpi0jSCq5cmI4zcf1el7ub0JQLEfuxuxKQ4Td7RhfNmy8Ndiz3ejyMGPX+DKijHFZyJpTbmPMG6uSjpmLZ8TZyoTTZ8zZeM8wuNpPLAIfNWbVa39vtJD8bhV0mebALOzVQie+E7Ceo0sowYJ0F+ZdxTZIIKztsEUitEXYtI+Y9hJEpFNlO0VEb0w47anP1D+NGInaqjUQfVmh
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199021)(41300700001)(38100700002)(6666004)(38350700002)(52116002)(2616005)(107886003)(83380400001)(6506007)(26005)(186003)(1076003)(6512007)(86362001)(6486002)(478600001)(316002)(2906002)(36756003)(66476007)(4326008)(66556008)(66946007)(8936002)(8676002)(6916009)(7416002)(5660300002)(66899021);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MmeS6IVp4CBKoqmkE+X3YUhqTmU6sTOiA1AMsyz+QZB5vG9eNu80Klpv9yJ8?=
- =?us-ascii?Q?IqTaKKg7b3e9di6lBHKEj4wijrQ/eSQeBfgzf8C9VMO6UCn8509dKtwXfWDO?=
- =?us-ascii?Q?buf9jCmJCN2hqkc38pSp7jym0Qp8Cz74tiwjK3UFXKQRuwmd6ZxIUiGQ7FyM?=
- =?us-ascii?Q?YKqHBTyGMVgQWHHiRauMm9kk6vj8BXdU3oUM5sSlv7Zg+BQZ2VySxn9UEfvg?=
- =?us-ascii?Q?dAMg2Qm4iNNJ+HrrLMJhg/2EDnXI6MByzCJwM+ezy1P9RfUlIQjzqR2/QtPA?=
- =?us-ascii?Q?bPD4MQC1HwmzQb6wm1/Xokn5c+E9/HpmqBcHsCuUAGMLlyzLoxnmy356SWIi?=
- =?us-ascii?Q?O43PNUe5sOayWEgjhoGJ0A4JBy27P2umcARYX+ivJ2/n9tVdqPBcnGFgzYGa?=
- =?us-ascii?Q?atgBqlabzde5aKGdnwZmQxM9TGHTqJgX+FQlTIB5Hw0iCdIZEhDPWBKn0nQY?=
- =?us-ascii?Q?dhhDR6M48bDK9cDNRuhUgeibK/TPRCNkERRNnayrMwYhtexWvTg7xGh0FHWE?=
- =?us-ascii?Q?kR/raXKRWey7TGtB8kdsCcA2O8n1PMMrjiOqnYHaNtkTKWXVIm/4a95lb6wL?=
- =?us-ascii?Q?HXPZP1/eXWqmN/zHhGyIQ4ZKF3R3E2dAcO+Z6/J1G9hkMq5bk3UV3Lae9jCq?=
- =?us-ascii?Q?9QwMPVam0tukojtelMeqKKKK9nBJuoyUB9LrAgReKAsjuOhJdGkPF/xu0Vzg?=
- =?us-ascii?Q?2Jac69DbbkJpXvgn/iVcHjay3u0udRH+pcgluEnknxXA+vX8DZcqWXxsBV9x?=
- =?us-ascii?Q?VyHB+vTWU53eheXT9iSpf520V4SyFN2/8WFH4S66DOK7ece7MUKXY0sBhdaH?=
- =?us-ascii?Q?OdqsDaHtvrDUMmsvqHFe1KzmhkP7Lsa0DkWcr+UXJT+7HGZ2jAiraagPLFUT?=
- =?us-ascii?Q?/cv+WxbTS7UG845fsDQSmUirbALfGxjPdDkNOxVO08Sd+ORNsC9/0+0gqYya?=
- =?us-ascii?Q?qoR3PpqVn8v1r4RFbcffYZEF48r6ToTHCxZLK5AkmCwfuRhdyxBDouSzUsuE?=
- =?us-ascii?Q?CFwKpLYdMqL3xdK27MLbnANFbcGwPfnMkj3ODpy53lmOHFrcIIKzGcX5BIo5?=
- =?us-ascii?Q?9XJhYY8O67AEZJjkP6KfXTyFwYxizYoVuJFOfC63S5YzcAv8pPJ7smNUMsFH?=
- =?us-ascii?Q?RQgkGno45upFnctTH75CVhnJN8lywmUllpWNTlYLKDuz/ueU8TL3Gj4pwnrG?=
- =?us-ascii?Q?6vsSc9V42VDrf6o21ZggFVGx85eSL4FAFGJ0SbRcOFxP+b2cg99gihDhbWmz?=
- =?us-ascii?Q?hkE8aEMQe9OG2nNRhp9ErT9Ch9MuYNV/C4Hl4LY2K3JuL25K3SCLBzVkPVyZ?=
- =?us-ascii?Q?9TgOhrmCAkGHjWm0dHndsKNjWKQU+mRgFlJpkMr7mPKKyHi6WpbyTMAfMM8N?=
- =?us-ascii?Q?PjppzjMs2mZmCCWPjKcJi5eSpcKKMmCFX7GuNK70GDduYFjhqPf2ivrkf5UZ?=
- =?us-ascii?Q?GGErwHecfV+k08Jtv5vh/zYAgwEfGitWRD0PvfG+60vlo/3C1NDhoiLsmtlq?=
- =?us-ascii?Q?mx1mClmN8o1iDUp9L7StdlzEINvX2vuoh1a/1PvDm1YfHsDoM/4WL5TWbl6h?=
- =?us-ascii?Q?2uvy7Q19QCVpTym0s7coIqaqvyhBlM5bpkCSYypZ?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c0e4f16-8fed-4e12-e637-08db7c435760
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 04:01:27.6491
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Wt0sz6+IVAzTPmXPC/ldagP26DYPTBd+AKO2IIWPMhF/rEphzwGqjxTm2CKGIV7wpoVzQYLEXbEIS4SP+JZuSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR03MB7385
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bTRtgpGUIlP+T0Rn"
+Content-Disposition: inline
+In-Reply-To: <CAH0GyZDWhSo+otkEPRDwvHyE29N5ZjhpFT5m4jRnt6buV8gEpA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
 
-Many drivers have to create its own buf_struct for a
-vb2_queue to track such a state. Also driver has to
-iterate over rdy_queue every times to find out a buffer
-which is not sent to hardware(or firmware), this new
-list just offers the driver a place to store the buffer
-that hardware(firmware) has acknowledged.
+--bTRtgpGUIlP+T0Rn
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-One important advance about this list, it doesn't like
-rdy_queue which both bottom half of the user calling
-could operate it, while the v4l2 worker would as well.
-The v4l2 core could only operate this queue when its
-v4l2_context is not running, the driver would only
-access this new hw_queue in its own worker.
+On Tue, Jul 04, 2023 at 07:46:23AM +0700, Budi wrote:
+> Please one sincerely help, I need huge help
+>=20
+> I build kernel but there's few absolute interrupted compilations
+> resulting in few .o files are defect, cannot be recognized
+>=20
+> In 'make' and 'make modules' this'd be no problem at all as  is
+> capable of resuming whole the process
+> it's solved by deleting those .o files and then redo the build again
+> which will complie those  particular files only
 
-Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
----
- drivers/media/v4l2-core/v4l2-mem2mem.c | 25 +++++++++++++++++--------
- include/media/v4l2-mem2mem.h           | 10 +++++++++-
- 2 files changed, 26 insertions(+), 9 deletions(-)
+In that case, you should `make clean` first.
 
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index c771aba42015..b4151147d5bd 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -321,15 +321,21 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
- 		goto job_unlock;
- 	}
- 
--	src = v4l2_m2m_next_src_buf(m2m_ctx);
--	dst = v4l2_m2m_next_dst_buf(m2m_ctx);
--	if (!src && !m2m_ctx->out_q_ctx.buffered) {
--		dprintk("No input buffers available\n");
--		goto job_unlock;
-+	if (list_empty(&m2m_ctx->out_q_ctx.hw_queue)) {
-+		src = v4l2_m2m_next_src_buf(m2m_ctx);
-+
-+		if (!src && !m2m_ctx->out_q_ctx.buffered) {
-+			dprintk("No input buffers available\n");
-+			goto job_unlock;
-+		}
- 	}
--	if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
--		dprintk("No output buffers available\n");
--		goto job_unlock;
-+
-+	if (list_empty(&m2m_ctx->cap_q_ctx.hw_queue)) {
-+		dst = v4l2_m2m_next_dst_buf(m2m_ctx);
-+		if (!dst && !m2m_ctx->cap_q_ctx.buffered) {
-+			dprintk("No output buffers available\n");
-+			goto job_unlock;
-+		}
- 	}
- 
- 	m2m_ctx->new_frame = true;
-@@ -896,6 +902,7 @@ int v4l2_m2m_streamoff(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 	INIT_LIST_HEAD(&q_ctx->rdy_queue);
- 	q_ctx->num_rdy = 0;
- 	spin_unlock_irqrestore(&q_ctx->rdy_spinlock, flags);
-+	INIT_LIST_HEAD(&q_ctx->hw_queue);
- 
- 	if (m2m_dev->curr_ctx == m2m_ctx) {
- 		m2m_dev->curr_ctx = NULL;
-@@ -1234,6 +1241,8 @@ struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struct v4l2_m2m_dev *m2m_dev,
- 
- 	INIT_LIST_HEAD(&out_q_ctx->rdy_queue);
- 	INIT_LIST_HEAD(&cap_q_ctx->rdy_queue);
-+	INIT_LIST_HEAD(&out_q_ctx->hw_queue);
-+	INIT_LIST_HEAD(&cap_q_ctx->hw_queue);
- 	spin_lock_init(&out_q_ctx->rdy_spinlock);
- 	spin_lock_init(&cap_q_ctx->rdy_spinlock);
- 
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index d6c8eb2b5201..2342656e582d 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -53,9 +53,16 @@ struct v4l2_m2m_dev;
-  *	processed
-  *
-  * @q:		pointer to struct &vb2_queue
-- * @rdy_queue:	List of V4L2 mem-to-mem queues
-+ * @rdy_queue:	List of V4L2 mem-to-mem queues. If v4l2_m2m_buf_queue() is
-+ *		called in struct vb2_ops->buf_queue(), the buffer enqueued
-+ *		by user would be added to this list.
-  * @rdy_spinlock: spin lock to protect the struct usage
-  * @num_rdy:	number of buffers ready to be processed
-+ * @hw_queue:	A list for tracking the buffer is occupied by the hardware
-+ * 		(or device's firmware). A buffer could only be in either
-+ * 		this list or @rdy_queue.
-+ * 		Driver may choose not to use this list while uses its own
-+ * 		private data to do this work.
-  * @buffered:	is the queue buffered?
-  *
-  * Queue for buffers ready to be processed as soon as this
-@@ -68,6 +75,7 @@ struct v4l2_m2m_queue_ctx {
- 	struct list_head	rdy_queue;
- 	spinlock_t		rdy_spinlock;
- 	u8			num_rdy;
-+	struct list_head	hw_queue;
- 	bool			buffered;
- };
- 
--- 
-2.17.1
+>=20
+> but in 'make modules_install, it won't be
+> real case is within Kernel 6.3.9 package
+>=20
+> So how to modify the makefile in order to be able to copy/install the
+> just built modules in pause-resume fashion so after few particular .o
+> files of modules deleted and rebuilt with pause-resume, then the
+> modules copy/install is performed on those only, not the entire
+> modules
 
+IMO, again `make clean` first then rebuild the whole world (just `make`).
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--bTRtgpGUIlP+T0Rn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZKOZsQAKCRD2uYlJVVFO
+o3pQAP9L5cfMbC4TPPaRsv+7jpoRoCwaDfhhGU8tqZlHdA8UcgEAxQKepM5oA3Dx
+ocO6vghV6C552Qoxes36OpGQ6Zpcpwc=
+=Htzl
+-----END PGP SIGNATURE-----
+
+--bTRtgpGUIlP+T0Rn--
