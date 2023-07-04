@@ -2,168 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A377470B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C887470B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjGDMTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S231497AbjGDMTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjGDMS6 (ORCPT
+        with ESMTP id S231460AbjGDMTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:18:58 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C165810EF
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:18:53 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 2594E32009B4;
-        Tue,  4 Jul 2023 08:18:53 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 04 Jul 2023 08:18:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1688473132; x=1688559532; bh=TFejWBSEdC
-        irJhK9+BSCkX03krBBQ5n4YbwiIw1ENxA=; b=AAlBf6c2M4sh+7H1YAM1K7PzvH
-        xTOwlbyncXDXjmjWTuW3rISaNThFjbZEVQxTL4wc/53kMtEAjTHPQ9VdeUxnJLOQ
-        GOkEiQWdo4MoWuISx8UZWF+DYR0k+rhC0zQaw5IJEjFE2879PO7teT6CW2ijLyre
-        ebGrYt0NMxijXY5au4UrBgqBoTkF9qbI8ImAxKHWdvxtVT9M28njSOoTIVMUzuZX
-        1mvOVhc7wzmjxJ/R1MvnebtLUI4hb8UZXVYJhtYavklJYrp6hUMTTAlHPKH5/6pd
-        CHvOq1SUliO5OgW5GN9x9lxtRAKK9iXLvoRNPBs62QvIcW6elcrH1TV+3XrQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1688473132; x=1688559532; bh=TFejWBSEdCirJhK9+BSCkX03krBBQ5n4Ybw
-        iIw1ENxA=; b=MGmIPDWHpPFm16D/CS1d6xbTOWZeVoS5JvFDx4vKjlCGtTrsDyr
-        FCJXt74KaltSreL8faNPG6AkYgNSO2Ub6efn7Sm7+WhDo379/A9LbKqNi3gB9Wh2
-        E9ybHw40oPjkbJoIlVqmKRAdJzD+yj9AjRSSEFDStBkh5WBE1du96k8Yga/ESrDY
-        lJqssPYJvUo69xMvnfWjnmZZ7UTMVaeuG65qlnwdC30IKke/KlB7G2CaCKO6hTHp
-        4qdgnB+UFgcdl0+q4WTERDBUkmsC2PZGERcyH7r5k6V8rmoHGnnn00asG/Z7Qanb
-        Q5Xp1EjsSGAhnQdtgL0r8qzORpTwzuFUwHg==
-X-ME-Sender: <xms:LA6kZISMxGD7b5Y0HJDmPw1IYIkufcCsgP1GtvxmkeIbWicHwtZgJA>
-    <xme:LA6kZFyIlBOMe4iFx1iuQYcg17AGkZzdzldR6rM1Cm82GSxOAXwiURpV0EWWe7hnl
-    8ZL6mdT3xeYsh5Ifp4>
-X-ME-Received: <xmr:LA6kZF0P8TxpI2qCCo4J1wANRL2v4La8nnGFcdWpJRCgke6ASHUBTcy-wV_ThEjVZMmnJ-VY4JNZNWlaTZFtqlRjg-NwuTb4sRw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeggdehtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkgggtugesthdtredttd
-    dtvdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhh
-    ihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepteefieetfeevge
-    dvgfegffehteeljeekkeelueegfffftdfgtdetteekvedvvdfgnecuffhomhgrihhnpehk
-    vghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:LA6kZMCEEJug6CoAx2flDy4RHASHs-s8b-PmhpueZVXS0aDQhlrQzw>
-    <xmx:LA6kZBjKkPq4Of5aFeEY_sOjeY9XjSF9_nGkA3oA7kEobutSZcrlwA>
-    <xmx:LA6kZIo4PmT_W5Qa6HvDEM-iJXqUv6E-1eQyLCVQ4OedEv_zXwhP_g>
-    <xmx:LA6kZBLbW7d7fVomH7uwcfsyQ8PlqHEBIlQBlcTaZnz7xLTJza-JkQ>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Jul 2023 08:18:51 -0400 (EDT)
-Date:   Tue, 4 Jul 2023 21:18:47 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] firewire updates for 6.5-rc1
-Message-ID: <20230704121847.GA26576@workstation.local>
-Mail-Followup-To: Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org
+        Tue, 4 Jul 2023 08:19:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC26510C1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:19:43 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D60666606F8B;
+        Tue,  4 Jul 2023 13:19:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688473182;
+        bh=1oWRHgWywTxFreiAWM2GmCCYIbq74sCQZlxzaMR2F5I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Pz6J+Pt/H8MEotnjUi90buA0wjG8N0JnRe8nNdu00gtpfh4wQR606INVxJl8k1OG+
+         kXksYP8/Rglq/gdt1ImqusTeOTGUn7Ax54m9TfiCOJeR3qoIdv1MzX95TTc+WS+QN8
+         NesEJvaDJAJZI/FmOXTbjlQZw+SS5SkR9gUAWhI2CIJal75IG+YPFrRVE8pf2x8b4E
+         GMZ5+v4Qoa7gtH5xMIcMMaM1KeuJZ7FUkqDIrCuehvPwUrJAPZKsF53K5VcdynxQwh
+         vTjONOyUvbqnIPRqcwl4XheGwwtSV1uuNTMe32gpHis5nWVankxqQtC7HkC0aWP1Fj
+         rI7TqeCnRZ+Pg==
+Message-ID: <633be7a7-0bb8-1575-535e-2f96302198bd@collabora.com>
+Date:   Tue, 4 Jul 2023 14:19:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] iommu/mediatek: Remove a unnecessary checking for larbid
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230704115634.7727-1-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230704115634.7727-1-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Il 04/07/23 13:56, Yong Wu ha scritto:
+> Fix a coverity issue:
+> 
+>>> assignment: Assigning: larbid = (fwspec->ids[0] >> 5) & 0x1fU.
+> 	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+>>> between: At condition larbid >= 32U, the value of larbid must be between
+>>> 0 and 31.
+>>> dead_error_condition: The condition larbid >= 32U cannot be true.
+> 	if (larbid >= MTK_LARB_NR_MAX)
+>>> CID 11306470 (#1 of 1): Logically dead code (DEADCODE)
+>>> dead_error_line: Execution cannot reach this statement:
+>>> return ERR_PTR(-22L);
+>          	return ERR_PTR(-EINVAL);
+> 
+> The checking "if (larbid >= MTK_LARB_NR_MAX)" is unnecessary.
+> 
 
-Please pull firewire updates for v6.5-rc1.
+I agree with the coverity tool in that after the transformation (going through
+the definition of MTK_M4U_TO_LARB) the check is pointless, but I think that the
+right fix here is to check for validity of fwspec->ids[0] instead of simply
+removing validation.
 
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
+Having no validation after mtk_iommu_probe_device() is fine, but that's
+because we assume that *this* function performs all validation steps.
 
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+Regards,
+Angelo
 
-are available in the Git repository at:
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+> Rebase on v6.4-rc1.
+> ---
+>   drivers/iommu/mtk_iommu.c | 3 ---
+>   1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index aecc7d154f28..67caa90b481b 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -838,9 +838,6 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+>   	 * All the ports in each a device should be in the same larbs.
+>   	 */
+>   	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+> -	if (larbid >= MTK_LARB_NR_MAX)
+> -		return ERR_PTR(-EINVAL);
+> -
+>   	for (i = 1; i < fwspec->num_ids; i++) {
+>   		larbidx = MTK_M4U_TO_LARB(fwspec->ids[i]);
+>   		if (larbid != larbidx) {
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git tags/firewire-6.5-rc1
 
-for you to fetch changes up to 3ff256751a2853e1ffaa36958ff933ccc98c6cb5:
-
-  firewire: net: fix use after free in fwnet_finish_incoming_packet() (2023-06-24 14:03:46 +0900)
-
-----------------------------------------------------------------
-firewire updates for 6.5-rc1
-
-The updates consist of three parts; UAPI update, OHCI driver update, and
-several bug fixes.
-
-Firstly, the 1394 OHCI specification defines method to retrieve hardware
-time stamps for asynchronous communication, which was previously
-unavailable in user space. This change adds new events to the UAPI,
-allowing applications to retrieve the time when asynchronous packet are
-received and sent. The new events are tested in the breeding edge of
-libhinawa and look to work well. The new version of libhinawa will be
-released after current merge window is closed.
-
-* https://git.kernel.org/pub/scm/libs/ieee1394/libhinawa.git/
-
-Secondly, the FireWire stack includes a PCM device driver for 1394 OHCI
-hardware, This change modernizes the driver by managed resource (devres)
-framework.
-
-Lastly, the rest of change is bug fixes for firewire-net and firewire-core.
-
-----------------------------------------------------------------
-Takashi Sakamoto (24):
-      firewire: add KUnit test to check layout of UAPI structures
-      firewire: cdev: add new version of ABI to notify time stamp at request/response subaction of transaction
-      firewire: cdev: add new event to notify request subaction with time stamp
-      firewire: cdev: implement new event to notify request subaction with time stamp
-      firewire: core: use union for callback of transaction completion
-      firewire: core: implement variations to send request and wait for response with time stamp
-      firewire: cdev: code refactoring to operate event of response
-      firewire: cdev: add new event to notify response subaction with time stamp
-      firewire: cdev: implement new event to notify response subaction with time stamp
-      firewire: cdev: code refactoring to dispatch event for phy packet
-      firewire: cdev: add new event to notify phy packet with time stamp
-      firewire: cdev: implement new event relevant to phy packet with time stamp
-      firewire: fix build failure due to missing module license
-      firewire: fix warnings to generate UAPI documentation
-      firewire: ohci: use devres for memory object of ohci structure
-      firewire: ohci: use devres for PCI-related resources
-      firewire: ohci: use devres for MMIO region mapping
-      firewire: ohci: use devres for misc DMA buffer
-      firewire: ohci: use devres for requested IRQ
-      firewire: ohci: use devres for list of isochronous contexts
-      firewire: ohci: use devres for IT, IR, AT/receive, and AT/request contexts
-      firewire: ohci: use devres for content of configuration ROM
-      firewire: ohci: release buffer for AR req/resp contexts when managed resource is released
-      firewire: core: obsolete usage of GFP_ATOMIC at building node tree
-
-Zhang Shurong (1):
-      firewire: net: fix use after free in fwnet_finish_incoming_packet()
-
- drivers/firewire/.kunitconfig       |   4 +
- drivers/firewire/Kconfig            |  16 +++
- drivers/firewire/Makefile           |   3 +
- drivers/firewire/core-cdev.c        | 252 +++++++++++++++++++++++++++---------
- drivers/firewire/core-device.c      |   2 +-
- drivers/firewire/core-topology.c    |   2 +-
- drivers/firewire/core-transaction.c |  93 +++++++++----
- drivers/firewire/core.h             |   7 +
- drivers/firewire/net.c              |   6 +-
- drivers/firewire/ohci.c             | 191 +++++++++++----------------
- drivers/firewire/uapi-test.c        |  89 +++++++++++++
- include/linux/firewire.h            |  82 +++++++++++-
- include/uapi/linux/firewire-cdev.h  | 178 +++++++++++++++++++++----
- 13 files changed, 694 insertions(+), 231 deletions(-)
- create mode 100644 drivers/firewire/.kunitconfig
- create mode 100644 drivers/firewire/uapi-test.c
