@@ -2,147 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0516A7473C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D202B7473CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbjGDONI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        id S231664AbjGDONa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjGDOM7 (ORCPT
+        with ESMTP id S231574AbjGDON1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:12:59 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604B510F9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:12:44 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fbc0314a7bso243310e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688479962; x=1691071962;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3So2gYeZeNuR/2q5MlAFdt4BonOt1PCCLvQw80QmelA=;
-        b=VMYVeQ/3aOo2t7q5I2qhzWvMI1BoQTPHN1dTxFMKqSuI+BTcu/l9Rp4m2ZZwGpXclf
-         suVev63/PkXCAXBzad/rOT+DokjOk76HpR3M8An9Z8331TIOHDz0nAfHZyJ+cOreIj9F
-         NLPX+0s4cwWM3S/No8zcIOzWq7bzSxwXVhCSQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479962; x=1691071962;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3So2gYeZeNuR/2q5MlAFdt4BonOt1PCCLvQw80QmelA=;
-        b=C7PjuJ7rTMBfBakMe1sEbRUTyODATdHU4+N00TxNYLrL8k2RHYxj6q7IjnajK4EiMO
-         VbXj52BlofJVlWaydBJRkCJbvgQX2lxhvW4jPQorhcYwPkTUVb32rU3n2tV8p2VTJEO7
-         4sI4SSEwVzhSbpa2aV1w29jsXDv17jkcfFeOdva0bjtgdZIbtPXnkHYkEgwcbBZ7Im55
-         UMz97hdEv/Krm9LxjHO/0ax1i53BY4on/tfIk137iCyc1RinDek2pceljD3Siyr+wEhl
-         2iD9H23K2qNyLnGzma2tK7i8lQlbKrbXgWzLXAoAfuag075EVhAhO/bsYfzbuG9fbu/C
-         0bhw==
-X-Gm-Message-State: ABy/qLYNCeCZcn0y409ODGCyivYmDphWERJrIRVqIO54fp8dsL7pSasS
-        M8MAXyJZE5KnSu6WxuuxbxY01VuPFEL296Yv1/PJOTT3
-X-Google-Smtp-Source: APBJJlGH7ePGRDAtRCMRdadEnCwytkhhmxyFxw4YyfTT40hI3k/VegN8aa3WXoVlhM1E4GCR7poCZA==
-X-Received: by 2002:a05:6512:3994:b0:4f6:47a2:7bb4 with SMTP id j20-20020a056512399400b004f647a27bb4mr11577205lfu.60.1688479962204;
-        Tue, 04 Jul 2023 07:12:42 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac25582000000b004fba077e654sm2823452lfg.194.2023.07.04.07.12.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 07:12:41 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4fb7769f15aso8982255e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:12:41 -0700 (PDT)
-X-Received: by 2002:a05:6512:2386:b0:4fb:763c:af54 with SMTP id
- c6-20020a056512238600b004fb763caf54mr11708321lfv.62.1688479961179; Tue, 04
- Jul 2023 07:12:41 -0700 (PDT)
+        Tue, 4 Jul 2023 10:13:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325E10D5;
+        Tue,  4 Jul 2023 07:13:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 208A3611DB;
+        Tue,  4 Jul 2023 14:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E98C433C8;
+        Tue,  4 Jul 2023 14:13:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688480003;
+        bh=Nk5zRQ565eWa3r6Bd86j1AJU+hDJ5pUdhSqyH4FS99E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HctInVLn9PWcYJ5WhvvFXsWezBRvc5bRarfoujy6BErf4LVVxPqkU/4CBRX+T8njc
+         H8d3k6lSBsCCrZhOLMZvSAMlkL+RnMxbyLWt3Ng5GyfWd32lq9N+rvwcu4TRQnG+Eb
+         7Sg7jRLlI4m/qJ445cqtASjKBSV6SLgLfcGD/8W2c8QdvYaCshqZAJVEp6x263tlzU
+         1L9yE3PmU/eaVlCXIP9ptrS6SgyQ3KewLWvd2hc3JIMjIRMi0BMAevu89+CEk3CfIB
+         nQimzoztuJuII00XmJuYTptsyzPIlRR+kMmFxKs9QgWpVYEMbrxlOJ91YJisnKpKPe
+         20fHdfTJlDZZg==
+Date:   Tue, 4 Jul 2023 15:13:17 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     William Qiu <william.qiu@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [RESEND v1 2/2] riscv: dts: starfive: Add spi node for JH7110 SoC
+Message-ID: <41c905da-ae3e-4acb-bbfa-d33d3306824d@sirena.org.uk>
+References: <20230704092200.85401-1-william.qiu@starfivetech.com>
+ <20230704092200.85401-3-william.qiu@starfivetech.com>
+ <7f3b600d-d315-22d6-b987-eabfe1b04fdf@linaro.org>
+ <eba1e868-6371-42fe-91be-bcbee54d1aff@sirena.org.uk>
+ <4afd90d9-f1bd-f40d-1c79-50fef1406ab7@linaro.org>
+ <6307c5b2-64d2-405f-b1a5-696d4184f6a0@sirena.org.uk>
+ <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
 MIME-Version: 1.0
-References: <202307041023.bcdbbfc0-oliver.sang@intel.com>
-In-Reply-To: <202307041023.bcdbbfc0-oliver.sang@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jul 2023 07:12:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi3Nb4t-JH6BGE5TOynik=-0kXyBGi3bLKTA85rvqHngQ@mail.gmail.com>
-Message-ID: <CAHk-=wi3Nb4t-JH6BGE5TOynik=-0kXyBGi3bLKTA85rvqHngQ@mail.gmail.com>
-Subject: Re: [linus:master] [gup] a425ac5365: WARNING:at_mm/gup.c:#__get_user_pages
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: multipart/mixed; boundary="0000000000004cc04805ffa9e054"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8SqqqwgXKD0N3HXB"
+Content-Disposition: inline
+In-Reply-To: <a8c1a5e7-9938-bf6c-6bb7-6c1e4d8ce08b@linaro.org>
+X-Cookie: Memory fault - where am I?
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004cc04805ffa9e054
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 4 Jul 2023 at 00:03, kernel test robot <oliver.sang@intel.com> wrote:
->
-> we noticed this commit 'add a (temporary) warning' for the case that
-> 'anybody actually does anything quite this strange'.
-> and in our this test, the warning hits. just FYI.
+--8SqqqwgXKD0N3HXB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Yeah, so it looks like this is trinity doing system calls with random
-arguments, and that will obviously hit the whole
+On Tue, Jul 04, 2023 at 03:21:30PM +0200, Krzysztof Kozlowski wrote:
+> On 04/07/2023 15:16, Mark Brown wrote:
+> > On Tue, Jul 04, 2023 at 02:27:57PM +0200, Krzysztof Kozlowski wrote:
 
-  "GUP will no longer expand the stack, warn if somebody seems to want
-to do GUP under the stack"
+> >> Also see:
+> >> "every Co-developed-by: must be immediately
+> >> followed by a Signed-off-by: of the associated co-author."
 
-test.
+> >> https://elixir.bootlin.com/linux/v6.4/source/Documentation/process/submitting-patches.rst#L467
 
-So then it will warn if somebody passes in bogus addresses that *used*
-to maybe work.
+> > Oh, that seems unhelpful especially with it not lining up with the DCO.
 
-But with a random argument tester like trinity, passing in random
-bogus addresses is obviously expected, so the warning will trigger
-even if it's not something that we would not want to keep working.
+> I assume the intention was here that if I attribute some co-author with
+> Co-developed-by, then I know that author, therefore I expect author to
+> explicitly participate in DCO chain.
 
-I do not have a good idea for how to not warn for things like syzbot
-and trinity that do random system calls, and only warn for any
-potential real applications that do crazy things and expect them to
-work.
+Why?  They're not the one sending the patch out, nor are they relying on
+someone else having certified anything.
 
-And I *do* want the backtrace from the warning (in this case, it shows
-that it's the "process_vm_readv/writev()" path, which actually might
-be worth adding stack expansion to, the same way __access_remote_vm()
-does).
+> Otherwise, just drop the Co-developed-by.
 
-I guess I can do the limiting manually, and just avoid WARN_ON_ONCE().
+It seems separately useful.
 
-If I do just "dump_stack()", will the kernel test robot react to that
-too? IOW, would a patch like the attached make the kernel test robot
-not react?
+--8SqqqwgXKD0N3HXB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-              Linus
+-----BEGIN PGP SIGNATURE-----
 
---0000000000004cc04805ffa9e054
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljodbtsf0>
-X-Attachment-Id: f_ljodbtsf0
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSkKP0ACgkQJNaLcl1U
+h9BUCQf+MakDSushGvfaRHCWXKX9k0RiV5f+NZvtmqvrVE86MgvfZXWos/vS+mTd
+KY3WC115btHDG+rP5TdrtREdf/CKBvuZ7f/xb7CuzNrkn9cO4luF7qZKb48jqqQY
++66UT0zca96GKUpT2RQ1HR9sMg6umR7qj2RezJOXLBgHMBwAq6aofIIGVcj1tkzi
+wKcOeluQX1g96OJjcxo/Kj42y/5kQdhMj6GmbVRoRiiMX2MiXcLbIMh15gtYgfmU
+KaP24Oeb9skgN6X8/1hja6swCSqQD2VRbX+aPSYyVncd9uDMx0Ya+7cP14Ex+W8u
+37T11N/kr/NhVOEyHpdjM628LNblHQ==
+=+ena
+-----END PGP SIGNATURE-----
 
-IG1tL2d1cC5jIHwgMTggKysrKysrKysrKysrKysrKystCiAxIGZpbGUgY2hhbmdlZCwgMTcgaW5z
-ZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL21tL2d1cC5jIGIvbW0vZ3Vw
-LmMKaW5kZXggZWYyOTY0MTY3MWM3Li5jOWQ3OTlkMjhkZTcgMTAwNjQ0Ci0tLSBhL21tL2d1cC5j
-CisrKyBiL21tL2d1cC5jCkBAIC0xMDkxLDYgKzEwOTEsMjEgQEAgc3RhdGljIGludCBjaGVja192
-bWFfZmxhZ3Moc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsIHVuc2lnbmVkIGxvbmcgZ3VwX2Zs
-YWdzKQogCXJldHVybiAwOwogfQogCitzdGF0aWMgdm9pZCBndXBfc3RhY2tfZXhwYW5zaW9uX3dh
-cm5pbmcoY29uc3Qgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsCisJdW5zaWduZWQgbG9uZyBh
-ZGRyKQoreworCXN0YXRpYyB2b2xhdGlsZSB1bnNpZ25lZCBsb25nIG5leHRfd2FybjsKKwl1bnNp
-Z25lZCBsb25nIG5vdyA9IGppZmZpZXMsIG5leHQgPSBuZXh0X3dhcm47CisKKwkvKiBMZXQncyBu
-b3Qgd2FybiBtb3JlIHRoYW4gb25jZSBhbiBob3VyLi4gKi8KKwlpZiAobmV4dCAmJiB0aW1lX2Jl
-Zm9yZShub3csIG5leHQpKQorCQlyZXR1cm47CisJbmV4dF93YXJuID0gbm93ICsgNjAqNjAqSFo7
-CisJcHJfd2FybigiR1VQIG5vIGxvbmdlciBncm93cyB0aGUgc3RhY2sgJWx4LSVseCAoJWx4KVxu
-IiwKKwkJdm1hLT52bV9zdGFydCwgdm1hLT52bV9lbmQsIGFkZHIpOworCWR1bXBfc3RhY2soKTsK
-K30KKwogLyoqCiAgKiBfX2dldF91c2VyX3BhZ2VzKCkgLSBwaW4gdXNlciBwYWdlcyBpbiBtZW1v
-cnkKICAqIEBtbToJCW1tX3N0cnVjdCBvZiB0YXJnZXQgbW0KQEAgLTExNzAsNyArMTE4NSw4IEBA
-IHN0YXRpYyBsb25nIF9fZ2V0X3VzZXJfcGFnZXMoc3RydWN0IG1tX3N0cnVjdCAqbW0sCiAJCWlm
-ICghdm1hIHx8IHN0YXJ0ID49IHZtYS0+dm1fZW5kKSB7CiAJCQl2bWEgPSBmaW5kX3ZtYShtbSwg
-c3RhcnQpOwogCQkJaWYgKHZtYSAmJiAoc3RhcnQgPCB2bWEtPnZtX3N0YXJ0KSkgewotCQkJCVdB
-Uk5fT05fT05DRSh2bWEtPnZtX2ZsYWdzICYgVk1fR1JPV1NET1dOKTsKKwkJCQlpZiAodW5saWtl
-bHkodm1hLT52bV9mbGFncyAmIFZNX0dST1dTRE9XTikpCisJCQkJCWd1cF9zdGFja19leHBhbnNp
-b25fd2FybmluZyh2bWEsIHN0YXJ0KTsKIAkJCQl2bWEgPSBOVUxMOwogCQkJfQogCQkJaWYgKCF2
-bWEgJiYgaW5fZ2F0ZV9hcmVhKG1tLCBzdGFydCkpIHsK
---0000000000004cc04805ffa9e054--
+--8SqqqwgXKD0N3HXB--
