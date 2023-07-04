@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF82746913
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1A1746915
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjGDFmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 01:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S230146AbjGDFnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 01:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjGDFmu (ORCPT
+        with ESMTP id S230091AbjGDFnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:42:50 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A9DE52
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:42:47 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-40371070eb7so40331cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 22:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688449367; x=1691041367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YigxfadlPchsL4MPXr4aopZ09B0BS+iCYyFqrVZec08=;
-        b=HTau2IopMSSukmHEEFT7Ajeb1RUP10fLukqvpMl7IZwm9gqqTNbIe/heoE4TID1yWf
-         79TN7IwbbNAicx9pSr/tIucLX+VIOW5x+UET95cJkBOO++e+PvUFOn73BCa7+fsCMUhW
-         iUIu77EjCLYbzdpTz6QCH55aiFYjG1ybd07OyztYAin7wtawkd+0PNqlJp3YvhQISN8I
-         DYu7Knk9NQuoDzhxx3uF0YBEbItm7jSE2qpp/rw9WYXw6cxgb6BMYb+UCZVhSX8f5laW
-         VH4JeflX4FvhYx5ulzHv/kZlkc3ceK0+VITyFE5epcCs09nLDfDkeeBuPTQNkjZJuNIB
-         0OlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688449367; x=1691041367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YigxfadlPchsL4MPXr4aopZ09B0BS+iCYyFqrVZec08=;
-        b=DQ7+9PuQR/NseoQwwXRCjovSfk5Wwgn/+HswWrx1qKekQL4BlcH3Y5vrPl0nR1ynTO
-         NdbPQZ8N7PKXmaeFfAcBSYjXs6DaU/HRoccTjhEDZ0OHlDL9EvjRmM5qAesdM2O3h1pE
-         54c7oHAUhpSKhaRvGYaBcvYSGpCD7qB+D0urBRKn/Zriw6axeiVWBzIaRuRwYfvvu7Hi
-         VTQzL3S/fYA67w3Tb/RuxysBY/8Nf1NcaBy+FpRGkkpoyUVdT0CRYJookTfpW0M5FJGZ
-         7cdKT1yjHCk6p4aVWgbAav59Ajve0D4eWPOdEb6040vVls9cuzBFjrUT7+a7eCWJ38JI
-         iVBg==
-X-Gm-Message-State: ABy/qLZ2dKqooj9X9aYLjkmVqOu8gVFZm47epOOF8KZYJZJml3ZYrGQj
-        fbRh7z27u1dj+IQovt83XlRWn/MqF0nevGnQoxWxIHyovI4sc/VbCW5IMw==
-X-Google-Smtp-Source: APBJJlGSYGP0aXUNUfMGB1LDrsPHibFu70TmMXAlesg4X4WWApqsKf8hnjvcC6yv81eB/X2BJdb+fuPfb+pROgHKAak=
-X-Received: by 2002:ac8:7f12:0:b0:3f8:5b2:aeee with SMTP id
- f18-20020ac87f12000000b003f805b2aeeemr58473qtk.22.1688449366648; Mon, 03 Jul
- 2023 22:42:46 -0700 (PDT)
+        Tue, 4 Jul 2023 01:43:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2DDE59
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:42:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A50972033E;
+        Tue,  4 Jul 2023 05:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1688449377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5NwuPs6s1tLTrj/NTRQSBFohPKNsbBrgq7cDUM/Uak0=;
+        b=m9Km9mZhS2F9ZjGxYlpibsKVONF/cnBP+sjkMfAJ1EF0wct5Cz22mHvDxsOAAF2EOQFTig
+        VZOgVXGochqhf/kAbmgJTk8fMerLOt+bz17uGVN0a62wupZoIpWnwcxitnOn7QVay+atXM
+        IJ3FAxa9mbd/8sl9PAq/eWAXnRkMOi0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5787D1377F;
+        Tue,  4 Jul 2023 05:42:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cT3kE2Gxo2QyXgAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 04 Jul 2023 05:42:57 +0000
+Message-ID: <58f3bf1b-c5dd-7ac1-e765-7fa7eb0ba51b@suse.com>
+Date:   Tue, 4 Jul 2023 07:42:56 +0200
 MIME-Version: 1.0
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-4-ryan.roberts@arm.com> <ac6802f6-01a2-6b39-38c7-2fe3cea75dde@intel.com>
- <CAOUHufbmv0pZ1h9AxBj-SD7OqRZYudHMtXzQxcwD4ky-sFd8kg@mail.gmail.com>
- <CAOUHufbpCU_Z7g1QPJ0+HzE9sdNpSh=Mzi0EByLPu5TE4S_UcQ@mail.gmail.com> <4f86fa34-11d0-8a11-5adf-d099fc9e46b8@intel.com>
-In-Reply-To: <4f86fa34-11d0-8a11-5adf-d099fc9e46b8@intel.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 3 Jul 2023 23:42:10 -0600
-Message-ID: <CAOUHufaC6bZv+U8hLvF9sR2O7tRW+Bzf0BjrFg9OOUpkm6hQQA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] mm: Default implementation of arch_wants_pte_order()
-To:     "Yin, Fengwei" <fengwei.yin@intel.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] x86/xen: fix secondary processor fpu initialization
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20230703130032.22916-1-jgross@suse.com>
+ <573ce7fa-d64f-7351-b64d-01692fc87512@oracle.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <573ce7fa-d64f-7351-b64d-01692fc87512@oracle.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Gw70l1b7G08YSUIj0nFX09au"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,88 +70,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 11:23=E2=80=AFPM Yin, Fengwei <fengwei.yin@intel.com=
-> wrote:
->
->
->
-> On 7/4/2023 11:59 AM, Yu Zhao wrote:
-> > On Mon, Jul 3, 2023 at 9:02=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrot=
-e:
-> >>
-> >> On Mon, Jul 3, 2023 at 8:23=E2=80=AFPM Yin, Fengwei <fengwei.yin@intel=
-.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 7/3/2023 9:53 PM, Ryan Roberts wrote:
-> >>>> arch_wants_pte_order() can be overridden by the arch to return the
-> >>>> preferred folio order for pte-mapped memory. This is useful as some
-> >>>> architectures (e.g. arm64) can coalesce TLB entries when the physica=
-l
-> >>>> memory is suitably contiguous.
-> >>>>
-> >>>> The first user for this hint will be FLEXIBLE_THP, which aims to
-> >>>> allocate large folios for anonymous memory to reduce page faults and
-> >>>> other per-page operation costs.
-> >>>>
-> >>>> Here we add the default implementation of the function, used when th=
-e
-> >>>> architecture does not define it, which returns the order correspondi=
-ng
-> >>>> to 64K.
-> >>>>
-> >>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> >>>> ---
-> >>>>  include/linux/pgtable.h | 13 +++++++++++++
-> >>>>  1 file changed, 13 insertions(+)
-> >>>>
-> >>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> >>>> index a661a17173fa..f7e38598f20b 100644
-> >>>> --- a/include/linux/pgtable.h
-> >>>> +++ b/include/linux/pgtable.h
-> >>>> @@ -13,6 +13,7 @@
-> >>>>  #include <linux/errno.h>
-> >>>>  #include <asm-generic/pgtable_uffd.h>
-> >>>>  #include <linux/page_table_check.h>
-> >>>> +#include <linux/sizes.h>
-> >>>>
-> >>>>  #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_F=
-OLDED) - \
-> >>>>       defined(__PAGETABLE_PMD_FOLDED) !=3D CONFIG_PGTABLE_LEVELS
-> >>>> @@ -336,6 +337,18 @@ static inline bool arch_has_hw_pte_young(void)
-> >>>>  }
-> >>>>  #endif
-> >>>>
-> >>>> +#ifndef arch_wants_pte_order
-> >>>> +/*
-> >>>> + * Returns preferred folio order for pte-mapped memory. Must be in =
-range [0,
-> >>>> + * PMD_SHIFT-PAGE_SHIFT) and must not be order-1 since THP requires=
- large folios
-> >>>> + * to be at least order-2.
-> >>>> + */
-> >>>> +static inline int arch_wants_pte_order(struct vm_area_struct *vma)
-> >>>> +{
-> >>>> +     return ilog2(SZ_64K >> PAGE_SHIFT);
-> >>> Default value which is not related with any silicon may be: PAGE_ALLO=
-C_COSTLY_ORDER?
-> >>>
-> >>> Also, current pcp list support cache page with order 0...PAGE_ALLOC_C=
-OSTLY_ORDER, 9.
-> >>> If the pcp could cover the page, the pressure to zone lock will be re=
-duced by pcp.
-> >>
-> >> The value of PAGE_ALLOC_COSTLY_ORDER is reasonable but again it's a
-> >> s/w policy not a h/w preference. Besides, I don't think we can include
-> >> mmzone.h in pgtable.h.
-> >
-> > I think we can make a compromise:
-> > 1. change the default implementation of arch_has_hw_pte_young() to retu=
-rn 0, and
-> > 2. in memory.c, we can try PAGE_ALLOC_COSTLY_ORDER for archs that
-> > don't override arch_has_hw_pte_young(), or if its return value is too
-> > large to fit.
-> Do you mean arch_wants_pte_order()? Yes. This looks good to me. Thanks.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Gw70l1b7G08YSUIj0nFX09au
+Content-Type: multipart/mixed; boundary="------------vAlMdTjTE2SXGQIzESyPAfiN";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org, x86@kernel.org,
+ Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Message-ID: <58f3bf1b-c5dd-7ac1-e765-7fa7eb0ba51b@suse.com>
+Subject: Re: [PATCH] x86/xen: fix secondary processor fpu initialization
+References: <20230703130032.22916-1-jgross@suse.com>
+ <573ce7fa-d64f-7351-b64d-01692fc87512@oracle.com>
+In-Reply-To: <573ce7fa-d64f-7351-b64d-01692fc87512@oracle.com>
 
-Sorry, copied the wrong function from above and pasted without looking...
+--------------vAlMdTjTE2SXGQIzESyPAfiN
+Content-Type: multipart/mixed; boundary="------------z39WHiKNaxFZC80ifpMOBC5K"
+
+--------------z39WHiKNaxFZC80ifpMOBC5K
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMDMuMDcuMjMgMTk6NTEsIEJvcmlzIE9zdHJvdnNreSB3cm90ZToNCj4gDQo+IA0KPiBP
+biA3LzMvMjMgOTowMCBBTSwgSnVlcmdlbiBHcm9zcyB3cm90ZToNCj4+IE1vdmluZyB0aGUg
+Y2FsbCBvZiBmcHVfX2luaXRfY3B1KCkgZnJvbSBjcHVfaW5pdCgpIHRvIHN0YXJ0X3NlY29u
+ZGFyeSgpDQo+PiBicm9rZSBYZW4gUFYgZ3Vlc3RzLCBhcyB0aG9zZSBkb24ndCBjYWxsIHN0
+YXJ0X3NlY29uZGFyeSgpIGZvciBBUHMuDQo+Pg0KPj4gRml4IHRoYXQgYnkgYWRkaW5nIHRo
+ZSBjYWxsIG9mIGZwdV9faW5pdF9jcHUoKSB0byBjcHVfYnJpbmd1cCgpLCB3aGljaA0KPj4g
+aXMgdGhlIFhlbiBQViByZXBsYWNlbWVudCBvZiBzdGFydF9zZWNvbmRhcnkoKS4NCj4+DQo+
+PiBGaXhlczogYjgxZmFjOTA2YThmICgieDg2L2ZwdTogTW92ZSBGUFUgaW5pdGlhbGl6YXRp
+b24gaW50byANCj4+IGFyY2hfY3B1X2ZpbmFsaXplX2luaXQoKSIpDQo+PiBTaWduZWQtb2Zm
+LWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IA0KPiANCj4gUmV2aWV3
+ZWQtYnk6IEJvcmlzIE9zdHJvdnNreSA8Ym9yaXMub3N0cm92c2t5QG9yYWNsZS5jb20+DQo+
+IA0KDQp4ODYgbWFpbnRhaW5lcnMsIGNvdWxkIHRoaXMgcGxlYXNlIGdvIHRocm91Z2ggdGhl
+IHRpcCB0cmVlPyBUaGUgcGF0Y2ggaXMNCmRlcGVuZGluZyBvbiBvdGhlciA2LjUgcGF0Y2hl
+cyB3aGljaCB3ZW50IGluIHZpYSB0aXAuDQoNCg0KSnVlcmdlbg0K
+--------------z39WHiKNaxFZC80ifpMOBC5K
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------z39WHiKNaxFZC80ifpMOBC5K--
+
+--------------vAlMdTjTE2SXGQIzESyPAfiN--
+
+--------------Gw70l1b7G08YSUIj0nFX09au
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmSjsWAFAwAAAAAACgkQsN6d1ii/Ey96
+owf/X5ApjLsFhOrNfLewRK+1nkdEKFhRd1kjNymIMz3R4KAfY4jJehV269qXMFoND6JqxGjsCn1z
+a85JSXBG7Hs4Z9bW00eNObpWeLrCJfUio/s5SSaASN0F6yoJ6RRBDIH0kg67VbuNR/5MEWCjJEy5
+ed9aOJS7mrgRkPAUu/KdhgTAkrGvWpembXDm3DDSIgv8YnEtzBw8Js9x0hHUdgQNq3jr5uhO1fV+
+Lf0O8M5khNujTiaw9yBP9JRRENzvWIIVx1JfqHo+fhfMEuXxOLB048ytLkQbZHjCBuZb9/9PdoU8
+q5aB0zhlLT0b9KZbOESIJoTMWQRkLNE9RwHiJitWBw==
+=4DAt
+-----END PGP SIGNATURE-----
+
+--------------Gw70l1b7G08YSUIj0nFX09au--
