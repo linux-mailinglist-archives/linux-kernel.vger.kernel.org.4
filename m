@@ -2,67 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9521746DEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3812746DFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjGDJrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
+        id S231131AbjGDJwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 05:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjGDJrA (ORCPT
+        with ESMTP id S230055AbjGDJwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:47:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC735B5;
-        Tue,  4 Jul 2023 02:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FwpevetY3qEoIfFRnsl4wjyTfmQ8ybzfoGFpZ0wcNEw=; b=Ob1q3Yp0F/vKHRXDHBRSDYFMkM
-        KZ0jQ0OGEJWwHXE8IyKnqLNZc6NVskS6JGN6JyLgvTxtPrjna9DMHH7e139KwlnR69haN+C0JZETd
-        edL3Gxdg3sYChxvULplriLkSCcwS4hjr/WcgQ1ZTO+se6AXcOPIm/asXWmVapcyUJPj1fBg7k/RE0
-        QXFXPQZT21fvihLFHEn8gpM4GQ6DL6IQM3bvRQuIr5cY9ZW5svQ4cuZtpcWjqXHXTJbTLqk4CnIBi
-        Eyse70yVPsxcfAtrUJp7PPL9ffEWPO41nqgyEsFRonTlwIjzVnRYoHOEbx/lgcCls9hF+NP6O4Xqq
-        MFq/HH7g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qGcc9-0091z6-Pk; Tue, 04 Jul 2023 09:46:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 37CD2300023;
-        Tue,  4 Jul 2023 11:46:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 052A02028FBD7; Tue,  4 Jul 2023 11:46:27 +0200 (CEST)
-Date:   Tue, 4 Jul 2023 11:46:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Olivier Dion <odion@efficios.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
- Consistency Model (LKMM) and C11/C++11 atomics
-Message-ID: <20230704094627.GS4253@hirez.programming.kicks-ass.net>
-References: <87ttukdcow.fsf@laura>
+        Tue, 4 Jul 2023 05:52:04 -0400
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E58CA;
+        Tue,  4 Jul 2023 02:52:01 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 5CC0110005F;
+        Tue,  4 Jul 2023 12:52:00 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 5CC0110005F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688464320;
+        bh=6aHU9qCXGm3WV8is8vuW6UfIzP5GrTzeuf097Em3H+w=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+        b=KWCIRLzfLA2l5MdNTi1c4llIzIntPopKcbY91bhWKOmVKbqyehCbyGdgv386KIh9L
+         W2g/UE/4N62TbJLXtGhjy/l5MsSvsLMZg3VD2GHyXPojyxAgY5prl1BWAbMuvfKjhc
+         VbFLWjB/SB5uZG/gb/Y2F5eCKz6rqnpBvV83R4te6VwcZ88WK/8QMPsQhASQLok+mS
+         0mlv84KCQg2RSVhvrgLdmrzRsnSEcF2sIk9dcAU7zb+uZHaDIi1TtlT3+56XsmLs6i
+         myrewkKbIByjCXvq85ICmBksJjZvLTbI1kAbNL+G/UVsdnssr9NoyinhpRv9ZjJlC3
+         JWre5jzGWSy6Q==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 12:52:00 +0300 (MSK)
+Received: from [192.168.0.12] (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 4 Jul 2023 12:51:50 +0300
+Message-ID: <aede4639-0e99-565a-c997-c414342c66af@sberdevices.ru>
+Date:   Tue, 4 Jul 2023 12:46:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ttukdcow.fsf@laura>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v1 2/2] mtd: rawnand: meson: support for 512B ECC step
+ size
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230628092937.538683-1-AVKrasnov@sberdevices.ru>
+ <20230628092937.538683-3-AVKrasnov@sberdevices.ru>
+ <20230704103617.4affae8a@xps-13>
+ <9e6eaa87-887c-f955-113a-43860c8ea00c@sberdevices.ru>
+ <20230704114110.25ca9de4@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230704114110.25ca9de4@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178414 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;100.64.160.123:7.1.2;sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,75 +99,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
 
->   int x = 0;
->   int y = 0;
->   int r0, r1;
-> 
->   int dummy;
-> 
->   void t0(void)
->   {
->           __atomic_store_n(&x, 1, __ATOMIC_RELAXED);
-> 
->           __atomic_exchange_n(&dummy, 1, __ATOMIC_SEQ_CST);
->           __atomic_thread_fence(__ATOMIC_SEQ_CST);
-> 
->           r0 = __atomic_load_n(&y, __ATOMIC_RELAXED);
->   }
-> 
->   void t1(void)
->   {
->           __atomic_store_n(&y, 1, __ATOMIC_RELAXED);
->           __atomic_thread_fence(__ATOMIC_SEQ_CST);
->           r1 = __atomic_load_n(&x, __ATOMIC_RELAXED);
->   }
-> 
->   // BUG_ON(r0 == 0 && r1 == 0)
-> 
-> On x86-64 (gcc 13.1 -O2) we get:
-> 
->   t0():
->           movl    $1, x(%rip)
->           movl    $1, %eax
->           xchgl   dummy(%rip), %eax
->           lock orq $0, (%rsp)       ;; Redundant with previous exchange.
->           movl    y(%rip), %eax
->           movl    %eax, r0(%rip)
->           ret
->   t1():
->           movl    $1, y(%rip)
->           lock orq $0, (%rsp)
->           movl    x(%rip), %eax
->           movl    %eax, r1(%rip)
->           ret
 
-So I would expect the compilers to do better here. It should know those
-__atomic_thread_fence() thingies are superfluous and simply not emit
-them. This could even be done as a peephole pass later, where it sees
-consecutive atomic ops and the second being a no-op.
-
-> On x86-64 (clang 16 -O2) we get:
+On 04.07.2023 12:41, Miquel Raynal wrote:
+> Hi Arseniy,
 > 
->   t0():
->           movl    $1, x(%rip)
->           movl    $1, %eax
->           xchgl   %eax, dummy(%rip)
->           mfence                    ;; Redundant with previous exchange.
+> avkrasnov@sberdevices.ru wrote on Tue, 4 Jul 2023 12:23:03 +0300:
+> 
+>> On 04.07.2023 11:36, Miquel Raynal wrote:
+>>> Hi Arseniy,
+>>>
+>>> AVKrasnov@sberdevices.ru wrote on Wed, 28 Jun 2023 12:29:36 +0300:
+>>>   
+>>>> Meson NAND supports both 512B and 1024B ECC step size.
+>>>>
+>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>> ---
+>>>>  drivers/mtd/nand/raw/meson_nand.c | 47 +++++++++++++++++++++++--------
+>>>>  1 file changed, 35 insertions(+), 12 deletions(-)
+>>>>
+>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>>> index 345212e8c691..6cc4f63b86c8 100644
+>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>> @@ -135,6 +135,7 @@ struct meson_nfc_nand_chip {
+>>>>  struct meson_nand_ecc {
+>>>>  	u32 bch;
+>>>>  	u32 strength;
+>>>> +	u32 size;
+>>>>  };
+>>>>  
+>>>>  struct meson_nfc_data {
+>>>> @@ -190,7 +191,8 @@ struct meson_nfc {
+>>>>  };
+>>>>  
+>>>>  enum {
+>>>> -	NFC_ECC_BCH8_1K		= 2,
+>>>> +	NFC_ECC_BCH8_512	= 1,
+>>>> +	NFC_ECC_BCH8_1K,
+>>>>  	NFC_ECC_BCH24_1K,
+>>>>  	NFC_ECC_BCH30_1K,
+>>>>  	NFC_ECC_BCH40_1K,
+>>>> @@ -198,15 +200,16 @@ enum {
+>>>>  	NFC_ECC_BCH60_1K,
+>>>>  };
+>>>>  
+>>>> -#define MESON_ECC_DATA(b, s)	{ .bch = (b),	.strength = (s)}
+>>>> +#define MESON_ECC_DATA(b, s, sz)	{ .bch = (b), .strength = (s), .size = (sz) }
+>>>>  
+>>>>  static struct meson_nand_ecc meson_ecc[] = {
+>>>> -	MESON_ECC_DATA(NFC_ECC_BCH8_1K, 8),
+>>>> -	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24),
+>>>> -	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30),
+>>>> -	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40),
+>>>> -	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50),
+>>>> -	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60),
+>>>> +	MESON_ECC_DATA(NFC_ECC_BCH8_512, 8,  512),
+>>>> +	MESON_ECC_DATA(NFC_ECC_BCH8_1K,  8,  1024),
+>>>> +	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24, 1024),
+>>>> +	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30, 1024),
+>>>> +	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40, 1024),
+>>>> +	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50, 1024),
+>>>> +	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60, 1024),
+>>>>  };
+>>>>  
+>>>>  static int meson_nand_calc_ecc_bytes(int step_size, int strength)
+>>>> @@ -224,8 +227,27 @@ static int meson_nand_calc_ecc_bytes(int step_size, int strength)
+>>>>  
+>>>>  NAND_ECC_CAPS_SINGLE(meson_gxl_ecc_caps,
+>>>>  		     meson_nand_calc_ecc_bytes, 1024, 8, 24, 30, 40, 50, 60);
+>>>> -NAND_ECC_CAPS_SINGLE(meson_axg_ecc_caps,
+>>>> -		     meson_nand_calc_ecc_bytes, 1024, 8);
+>>>> +
+>>>> +static const int axg_stepinfo_strengths[] = { 8 };
+>>>> +static const struct nand_ecc_step_info axg_stepinfo_1024 = {
+>>>> +	.stepsize = 1024,
+>>>> +	.strengths = axg_stepinfo_strengths,
+>>>> +	.nstrengths = ARRAY_SIZE(axg_stepinfo_strengths)
+>>>> +};
+>>>> +
+>>>> +static const struct nand_ecc_step_info axg_stepinfo_512 = {
+>>>> +	.stepsize = 512,
+>>>> +	.strengths = axg_stepinfo_strengths,
+>>>> +	.nstrengths = ARRAY_SIZE(axg_stepinfo_strengths)
+>>>> +};
+>>>> +
+>>>> +static const struct nand_ecc_step_info axg_stepinfo[] = { axg_stepinfo_1024, axg_stepinfo_512 };
+>>>> +
+>>>> +static const struct nand_ecc_caps meson_axg_ecc_caps = {
+>>>> +	.stepinfos = axg_stepinfo,
+>>>> +	.nstepinfos = ARRAY_SIZE(axg_stepinfo),
+>>>> +	.calc_ecc_bytes = meson_nand_calc_ecc_bytes,
+>>>> +};
+>>>>  
+>>>>  static struct meson_nfc_nand_chip *to_meson_nand(struct nand_chip *nand)
+>>>>  {
+>>>> @@ -1259,7 +1281,8 @@ static int meson_nand_bch_mode(struct nand_chip *nand)
+>>>>  		return -EINVAL;
+>>>>  
+>>>>  	for (i = 0; i < ARRAY_SIZE(meson_ecc); i++) {
+>>>> -		if (meson_ecc[i].strength == nand->ecc.strength) {
+>>>> +		if (meson_ecc[i].strength == nand->ecc.strength &&
+>>>> +		    meson_ecc[i].size == nand->ecc.size) {
+>>>>  			meson_chip->bch_mode = meson_ecc[i].bch;
+>>>>  			return 0;
+>>>>  		}
+>>>> @@ -1278,7 +1301,7 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+>>>>  	struct meson_nfc *nfc = nand_get_controller_data(nand);
+>>>>  	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+>>>>  	struct mtd_info *mtd = nand_to_mtd(nand);
+>>>> -	int nsectors = mtd->writesize / 1024;
+>>>> +	int nsectors = mtd->writesize / 512;  
+>>>
+>>> This cannot be unconditional, right?  
+>>
+>> Hello Miquel!
+>>
+>> Yes, this code looks strange. 'nsectors' is used to calculate space in OOB
+>> that could be used by ECC engine (this value will be passed as 'oobavail'
+>> to 'nand_ecc_choose_conf()'). Idea of 512 is to consider "worst" case
+>> for ECC, e.g. minimal number of bytes for ECC engine (and at the same time
+>> maximum number of free bytes). For Meson, if ECC step size is 512, then we
+>> have 4 x 2 free bytes in OOB (if step size if 1024 then we have 2 x 2 free
+>> bytes in OOB).
+>>
+>> I think this code could be reworked in the following way:
+>>
+>> if ECC step size is already known here (from DTS), calculate 'nsectors' using
+>> given value (div by 512 for example). Otherwise calculate 'nsectors' in the
+>> current manner:
+> 
+> It will always be known when these function are run. There is no
+> guessing here.
 
-And that's just terrible :/ Nobody should be using MFENCE for this. And
-using MFENCE after a LOCK prefixes instruction (implicit in this case)
-is just fail, because I don't think C++ atomics cover MMIO and other
-such 'lovely' things.
+Hm I checked, that but if step size is not set in DTS, here it will be 0, 
+then it will be selected in 'nand_ecc_choose_conf()' according provided 'ecc_caps'
+and 'oobavail'...
 
->           movl    y(%rip), %eax
->           movl    %eax, r0(%rip)
->           retq
->   t1():
->           movl    $1, y(%rip)
->           mfence
->           movl    x(%rip), %eax
->           movl    %eax, r1(%rip)
->           retq
+Anyway, I'll do the following thing:
 
+int nsectors;
+
+if (nand->ecc.size)
+    nsectors = mtd->writesize / nand->ecc.size; <--- this is for 512 ECC
+else
+    nsectors = mtd->writesize / 1024; <--- this is for default 1024 ECC
+
+Thanks, Arseniy
+
+> 
+>>
+>> int nsectors = mtd->writesize / 1024;
+>>
+>> Moreover 1024 is default ECC step size for this driver, so default behaviour
+>> will be preserved.
+> 
+> Yes, otherwise you would break existing users.
+> 
+>>
+>> Thanks, Arseniy
+>>
+>>>   
+>>>>  	int raw_writesize;
+>>>>  	int ret;
+>>>>    
+>>>
+>>>
+>>> Thanks,
+>>> Miquèl  
+> 
+> 
+> Thanks,
+> Miquèl
