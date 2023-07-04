@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F367473BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19417473BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjGDOLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S231439AbjGDOLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjGDOLB (ORCPT
+        with ESMTP id S231469AbjGDOLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:11:01 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785B211D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:10:59 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-55acbe0c7e4so548655a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:10:59 -0700 (PDT)
+        Tue, 4 Jul 2023 10:11:16 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1B5113
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:11:15 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-55b741fd0c5so321327a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:11:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479859; x=1691071859;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479875; x=1691071875;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0nyDpPdQazxwk2pvs7+quB1sTF8r3wWKIala/GUDnoY=;
-        b=CZLXwP5VfQFjNrQnljMV5Zy85jJG3k4y+dCeHiq43dFIAPlLI6+Aiw8u7Ewmj6ZKMI
-         n+2VmRvDI146eRvT1T3tUKueL+wVMfiGNCkgHowSMdHmjUhXxC77nDSpU1HjavoSOI8Z
-         7s3o8t88db/r3H9oFk6dS28esOW0KptWw4EDcpiqhwINWZFpDI4YUDxEGLpp/R+Qg2+N
-         r8R4zP+32ZhTE58O4FHU8SuQK6bg4pwmqJ9ozEq7N0kwMILYVuLSx5y3anN59D6P2hyJ
-         2c1rC7vxx/kZY9dKN6Y6OOZa+SeVG6fUBp4FnXLQ6YRLuHyOnoIl1dHz5pGdkSsPSEZU
-         lVyA==
+        bh=JxIfI7L8QtMZ5B4oD7tB4oC/oAl/mItJTbe2vhSQwvU=;
+        b=Q0HCtGy+m+yqgXytqQhl/oK/eRqrAUZnmyhcGucvrKtV+vyH0fl6JF9MeLRXDOdikh
+         kPD+LCMVMPGrvC9PK21P8R53FGTVvNsLJqEqSrZNgIL2c4Qy00fTOc7ZMXjo8TuWc/K8
+         lnf7IimmS/UtfgM6Tvjl0MMcBjh0EmsM7LjhwDySn+LpOwCCGErHVJmOl8wYh5prwvUi
+         xzfIJsrD6G0EJGc6a+GUHpRSdG15iOY51qIiQ/R5qosZ8nIO9Bs6/pTlva1ZQqaxUYck
+         nP8AFGSPtsKDYQbqU6M+Wy+YpGcN0yNJQ9YSxw+hgmOGOhb8OyGBCe0sJXYtS0nMbjvL
+         AvhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479859; x=1691071859;
+        d=1e100.net; s=20221208; t=1688479875; x=1691071875;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0nyDpPdQazxwk2pvs7+quB1sTF8r3wWKIala/GUDnoY=;
-        b=Mo3P7jn/f0Gk5nj6yvXMcwijNTAmt3K3rLAAZo5yI0ObW8r1BDcl4eMlrN4+PKiZSh
-         eKAge2qgLmYRYYenZGMtGiCwUxdji8PazDxiFZ1A0YHSNB2rgVf5GelVCKm9VHAEKWf1
-         p/mHMqLRKbNRHZybv1P8K5hNkTdra7pSfLU1erm1BUohJANwBh2696P+qf7Xy3NoV9BB
-         X7KUm4ZVczLJL9ypJcsN1ftuxabUookl9YX7qfel+a3e8insvsaeu8yjM+sH+nIwyQb9
-         1GrKUEJ9FdlnQfyy96e3neECA/KYwWEGB8AFr8mme6RmlBy7YNNZpz32cLaZthL04TlY
-         7/gg==
-X-Gm-Message-State: ABy/qLbGry6nfjfjmiownFVfpyZkE7cZRAhgTGkTQWOXd8X6bf2xelvw
-        F/eCBfmL1V7a+rwUnIQ4o4flKA==
-X-Google-Smtp-Source: APBJJlGlJHbQn1fjO2ojYVmiw4VmYk3Pe31P5xg00a17Fz/X6ELKBxWagGdfOYtxZ6KCYAit5lucQQ==
-X-Received: by 2002:a17:90b:2396:b0:262:f76d:b29c with SMTP id mr22-20020a17090b239600b00262f76db29cmr14800835pjb.2.1688479858934;
-        Tue, 04 Jul 2023 07:10:58 -0700 (PDT)
+        bh=JxIfI7L8QtMZ5B4oD7tB4oC/oAl/mItJTbe2vhSQwvU=;
+        b=BpLyfZwEqGiT6CXpRHxUviP+JIZy+KaBI8dxXypkUqV3L+t5fkh0QOBovYJEBu72Vu
+         m5w1yO49Qa5i/xLh2F/jCJvVKNt4KGeMAPh203WN1NQyqRnfqQsthejFkYAreeEqSfSp
+         PhMwMlQeVIcVYWO77pxNIVcZKaGkBU/liER5JCo820Q1Gb7JKYwQIhnRtWBPWMi5+m/n
+         Z8gYAZ8qDo4S5ePuRYc88MSwWPK9Ld6EPqZYH7OsEbY7IKoIEYCCTknuuUHSuf/eNDUW
+         9FNBLhgZOc51vRDR2qDUw6ZYjNCdHsBH5oS6KLZMOdlMaIT48Ci8MVQXgDUWifLVgvoq
+         DsKg==
+X-Gm-Message-State: ABy/qLZlSIXlEO2S6pw/BL4dOAc2riBC7e0+7BuCWBPKw9eCOTtHW/Yw
+        R6tDl1U5kEuJslW/GfEOrk7flA==
+X-Google-Smtp-Source: APBJJlHa+Mx7cFJFRV4cvt3iY38HAoWgJj0SrcNe9F1wszSRZftWoIzwW9Ulq7ysrP6tB0kmo0UcdA==
+X-Received: by 2002:a17:903:28c7:b0:1b7:f3e6:5727 with SMTP id kv7-20020a17090328c700b001b7f3e65727mr13626965plb.2.1688479875116;
+        Tue, 04 Jul 2023 07:11:15 -0700 (PDT)
 Received: from carbon-x1.home ([2a01:cb15:81c2:f100:ef7b:e0f7:d376:e859])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.10.43
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.10.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 07:10:58 -0700 (PDT)
+        Tue, 04 Jul 2023 07:11:14 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -80,9 +80,9 @@ Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Evan Green <evan@rivosinc.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC V2 PATCH 4/9] riscv: report perf event for misaligned fault
-Date:   Tue,  4 Jul 2023 16:09:19 +0200
-Message-Id: <20230704140924.315594-5-cleger@rivosinc.com>
+Subject: [RFC V2 PATCH 5/9] riscv: add support for sysctl unaligned_enabled control
+Date:   Tue,  4 Jul 2023 16:09:20 +0200
+Message-Id: <20230704140924.315594-6-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230704140924.315594-1-cleger@rivosinc.com>
 References: <20230704140924.315594-1-cleger@rivosinc.com>
@@ -98,40 +98,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing calls to account for misaligned fault event using
-perf_sw_event().
+This sysctl tuning option allows the user to disable misaligned access
+handling globally on the system. This will also be used by misaligned
+detection code to temporarily disable misaligned access handling.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- arch/riscv/kernel/traps_misaligned.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/riscv/Kconfig                   | 1 +
+ arch/riscv/kernel/traps_misaligned.c | 9 +++++++++
+ 2 files changed, 10 insertions(+)
 
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c69572fbe613..99fd951def39 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -139,6 +139,7 @@ config RISCV
+ 	select RISCV_TIMER if RISCV_SBI
+ 	select SIFIVE_PLIC
+ 	select SPARSE_IRQ
++	select SYSCTL_ARCH_UNALIGN_ALLOW
+ 	select SYSCTL_EXCEPTION_TRACE
+ 	select THREAD_INFO_IN_TASK
+ 	select TRACE_IRQFLAGS_SUPPORT
 diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index 9daed7d756ae..804f6c5e0e44 100644
+index 804f6c5e0e44..39ec6caa6234 100644
 --- a/arch/riscv/kernel/traps_misaligned.c
 +++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -6,6 +6,7 @@
- #include <linux/init.h>
- #include <linux/mm.h>
- #include <linux/module.h>
-+#include <linux/perf_event.h>
- #include <linux/irq.h>
- #include <linux/stringify.h>
+@@ -287,6 +287,9 @@ union reg_data {
+ 	u64 data_u64;
+ };
  
-@@ -294,6 +295,8 @@ int handle_misaligned_load(struct pt_regs *regs)
- 	unsigned long addr = regs->badaddr;
- 	int i, fp = 0, shift = 0, len = 0;
++/* sysctl hooks */
++int unaligned_enabled __read_mostly = 1;	/* Enabled by default */
++
+ int handle_misaligned_load(struct pt_regs *regs)
+ {
+ 	union reg_data val;
+@@ -297,6 +300,9 @@ int handle_misaligned_load(struct pt_regs *regs)
  
-+	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
+ 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
+ 
++	if (!unaligned_enabled)
++		return -1;
 +
  	if (get_insn(regs, epc, &insn))
  		return -1;
  
-@@ -382,6 +385,8 @@ int handle_misaligned_store(struct pt_regs *regs)
- 	unsigned long addr = regs->badaddr;
- 	int i, len = 0;
+@@ -387,6 +393,9 @@ int handle_misaligned_store(struct pt_regs *regs)
  
-+	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
+ 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
+ 
++	if (!unaligned_enabled)
++		return -1;
 +
  	if (get_insn(regs, epc, &insn))
  		return -1;
