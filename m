@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A289D747364
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CBA747374
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjGDN7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S231687AbjGDN7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjGDN66 (ORCPT
+        with ESMTP id S231511AbjGDN7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:58:58 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883C5F7
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:58:56 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbd33a573cso29019755e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688479135; x=1691071135;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KXukMoiUHsFnABd/wPhkZ9XTrO4JKNHS6gLRhLQfPrw=;
-        b=qAplUnOrZ7sW0L3AtiaFgnB27rPog0XZkibQeE06ehyqFJ7wOpcdx//oLsp0pEoKhE
-         vs6MvQOnZ7gpHFhWR5AramoApQ8e/AevTkjt4v53LmUV+axiPWkAtH2VJ879Qvv7A7QO
-         RULCYSMEXe8tD96lOr6dsB3vd/dD5VQJaV+1QJAkXOcy6TdTevWCklpZR+urflsVtHYO
-         QJzJC7v7SQlAMITu0YwC3WT9KHXH4I7Q1aI0959stm6VZwKvv44WAuFoaHLxlUpm+sUj
-         wkg3WgVWDHc7Bmhd1V3+mqs+lcRuRmDZbfrezwQ0K6HkUo6Jov1gfWu/SY/1JjNd1ee4
-         ietg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479135; x=1691071135;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KXukMoiUHsFnABd/wPhkZ9XTrO4JKNHS6gLRhLQfPrw=;
-        b=LHziyYbD9ZucJgc0cvD8DRCSnMBUE4RrqdGvmyk2Rb2KvoB0u2PVIZ+HyfxYWZmJfT
-         VVpztVHH2FUPoUIHc9JnnXsF8FOgMk50wb+tbsI1HfCYx4tCScoIQfa6P55fjIgYN5R9
-         rw9eqFg/mueSo5+qzN3kwHFj+QNPDzGUp0OLdvmQ1+NtfRrGLSdzaBs838WYp0txUp2B
-         FywxjjZdILMU+k7yrucWhpHc5avzeGXCKkDivaFHX8S99yDyzBheor//OraNjYemWEnE
-         UX1piZmKxvDdIU5/L0ebDdjsjTb/9XhFEJvHR3tfDhlAMG0Q3zEd9h0TYAvp6sSyEKwN
-         1aqg==
-X-Gm-Message-State: AC+VfDxgKM3JYmyWb6cRYJKnOxHEVoJH2Dol4SuEvb0tFYlCT0w1TWKj
-        PckrxG6X45UWkf1TEIcwXeAAGg==
-X-Google-Smtp-Source: ACHHUZ5F71QlUqoXVjpa302vOdIuAEU7ajQUSk5+RbDFLT2dNXnaQtMNNG3GltJYd9ukODusNi9uSA==
-X-Received: by 2002:a7b:c04a:0:b0:3fb:403d:90c5 with SMTP id u10-20020a7bc04a000000b003fb403d90c5mr10204425wmc.39.1688479134886;
-        Tue, 04 Jul 2023 06:58:54 -0700 (PDT)
-Received: from airbuntu ([104.132.45.103])
-        by smtp.gmail.com with ESMTPSA id w10-20020a1cf60a000000b003f9bd9e3226sm30010310wmc.7.2023.07.04.06.58.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 06:58:54 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 14:58:48 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
-        qyousef@google.com, kernel test robot <lkp@intel.com>
-Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
- filter out requests
-Message-ID: <20230704135848.jfogmar4o6lmycog@airbuntu>
-References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-4-lukasz.luba@arm.com>
- <20230531183105.r5tqpdx5axoogkzp@airbuntu>
- <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
- <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
- <20230630132507.hggzz5g2odrabii6@airbuntu>
- <be79b206-01f8-f3e1-4107-ae6c662cbf47@arm.com>
+        Tue, 4 Jul 2023 09:59:49 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BD9E76;
+        Tue,  4 Jul 2023 06:59:46 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 44F16120055;
+        Tue,  4 Jul 2023 16:59:44 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 44F16120055
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688479184;
+        bh=r6SG7lpLI9I/NbwtRkLknIz0u9uOXQx48vgR4sPGnQg=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=BsWXiXBNVIt0liZsYWa9pyaBtocrh/m98ikOb4r0RJCJyYIFERS4Lc8VIu7AMrtiK
+         83GKyeBM+v25HaVoX78N0zAHxHIhyBjQp3j+Ny2KkEewkqWaRH9pU0+8FlxlKmwOoW
+         ywtixPfBY7FmNS/i2TJefpiIczflsTSXX3xOTQ40cXJ8Zl9w89cz8V/JAA6n8u2RmL
+         Xmc+yH8hbh3ajT9N2NCQJJ4NyPyJNcwWZAQOTO3bf+Xnjxwuovwe7+ymWxnickMZyx
+         JH6UlnxsVB/n5Fz93iCfWlumDNxIEBknxlOmFSp8uCNCD94J3hQ0olk5HFGK1kbZPo
+         aFvpK9BTJg48A==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Tue,  4 Jul 2023 16:59:44 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 4 Jul 2023 16:59:33 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <jirislaby@kernel.org>, <khilman@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>
+CC:     <kelvin.zhang@amlogic.com>, <xianwei.zhao@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v1 0/5] tty: serial: meson: support ttyS devname
+Date:   Tue, 4 Jul 2023 16:59:31 +0300
+Message-ID: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <be79b206-01f8-f3e1-4107-ae6c662cbf47@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178421 [Jul 04 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;libera.irclog.whitequark.org:7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/04 08:48:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/04 08:48:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,194 +87,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/23 09:23, Lukasz Luba wrote:
-> Hi Qais,
-> 
-> On 6/30/23 14:25, Qais Yousef wrote:
-> > On 06/30/23 13:01, Qais Yousef wrote:
-> > > On 06/20/23 18:52, Lukasz Luba wrote:
-> > > > Hi Qais,
-> > > > 
-> > > > I have somehow missed your feedback on this series.
-> > > > 
-> > > > On 5/31/23 19:31, Qais Yousef wrote:
-> > > > > On 05/22/23 15:57, Lukasz Luba wrote:
-> > > > > > Some of the frequency update requests coming form the task scheduler
-> > > > > > might be filter out. It can happen when the previous request was served
-> > > > > > not that long ago (in a period smaller than provided by the cpufreq driver
-> > > > > > as minimum for frequency update). In such case, we want to know if some of
-> > > > > > the frequency updates cannot make through.
-> > > > > > Export the new tracepoint as well. That would allow to handle it by a
-> > > > > > toolkit for trace analyzes.
-> > > > > > 
-> > > > > > Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
-> > > > > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> > > > > > ---
-> > > > > >    include/trace/events/sched.h     |  4 ++++
-> > > > > >    kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
-> > > > > >    2 files changed, 12 insertions(+), 2 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-> > > > > > index dbfb30809f15..e34b7cd5de73 100644
-> > > > > > --- a/include/trace/events/sched.h
-> > > > > > +++ b/include/trace/events/sched.h
-> > > > > > @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
-> > > > > >    	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
-> > > > > >    	TP_ARGS(tsk, uclamp_id, value));
-> > > > > > +DECLARE_TRACE(schedutil_update_filtered_tp,
-> > > > > > +	TP_PROTO(int cpu),
-> > > > > > +	TP_ARGS(cpu));
-> > > > > > +
-> > > > > >    #endif /* _TRACE_SCHED_H */
-> > > > > >    /* This part must be outside protection */
-> > > > > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > > > > index f462496e5c07..4f9daf258a65 100644
-> > > > > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > > > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > > > > @@ -6,6 +6,8 @@
-> > > > > >     * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > >     */
-> > > > > > +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
-> > > > > > +
-> > > > > >    #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
-> > > > > >    struct sugov_tunables {
-> > > > > > @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> > > > > >    	ignore_dl_rate_limit(sg_cpu);
-> > > > > > -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
-> > > > > > +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
-> > > > > > +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
-> > > > > >    		return false;
-> > > > > > +	}
-> > > > > 
-> > > > > Can't we have something more generic here too? Are you interested to count
-> > > > > these events? How do you plan to use it?
-> > > > 
-> > > > The plan is to record those events, count them and maybe adjust the FW
-> > > > if the frequency switching capabilities are too low, e.g. 4ms...
-> > > 
-> > > You mean as part of tuning step for the system or at runtime? The latter seems
-> > > to indicate for a proper interface instead.
-> 
-> Not at runtime, the FW change or maybe even the uC would be needed for
-> this. Therefore, our client which experiments with the new platform
-> can run the analysis and spot this. Then it can change the FW
-> if there was an issue, or maybe even upgrade the HW if there are severe
-> issues with delivering needed performance on time (e.g. in high display
-> refresh rates and first-frame drops).
-> 
-> > > 
-> > > IMHO I think the current filtering mechanism needs a bit of a massage.
-> > > 
-> > > One thing I think we must do is to ignore the filter if there's a big sudden
-> > > change in requested frequency. Like for instance if a big task migrates. Then
-> > > prev_cpu should go to lower freq sooner, and new_cpu should change to higher
-> > > frequency sooner too. The filtering makes sense only in steady state situation
-> > > where we are ramping up or down gradually.
-> 
-> This is kind of a heuristic, which is biased for mobiles IMO.
+During a IRC discussion with Neil, as reported in reference [1], an idea
+emerged to provide support for a standard devname 'ttyS' in new SoCs
+such as A1, S4, T7, C3 and others. The current devname 'ttyAML' is not
+widely known and has caused several issues with both low and high-level
+software, without any apparent justification for its implementation.
+Consequently, it has been deemed necessary to introduce the 'ttyS'
+devname for all new 'compatible' entries, while still retaining backward
+compatibility with the old 'ttyAML' devname by supporting it in parallel
+with the new approach. This patch series therefore aims to implement
+these changes.
 
-How come? big tasks are not only on mobile? A 500+ task can exist on any
-system?
+Links:
+    [1]: https://libera.irclog.whitequark.org/linux-amlogic/2023-07-03
 
-> 
-> > > 
-> > > If no one beats me to it, I'll propose something in that regard.
-> > > 
-> > > > 
-> > > > We need those numbers to point out that there is a need for faster
-> > > > FW micro-controller to serve those incoming requests.
-> > > 
-> > > I think there's a big assumption here that the filter is always set correctly
-> > > ;-)
-> 
-> In our case, it is set correctly, the value is coming directly from FW
-> [1]. It is the FW+HW limit, so not much to do with this in the kernel.
-> 
-> > > 
-> > > > 
-> > > > > 
-> > > > > I think this will be a very noisy event by the way.
-> > > > 
-> > > > Could be, but on the other hand for those statistical analysis
-> > > > 'the more the better'. It will also depend on number of
-> > > > CPUs in the cluster, e.g. 4 CPUs vs 1 CPU.
-> > > > 
-> > > > I don't know when we will switch to this per-cpu cpufreq mode
-> > > > when all CPUs behave like independent DVFS. Juno mainline kernel and FW
-> > > > supports that mode. We would have to compare those two modes and
-> > > > measure how much we gain/loose when using one and not the other.
-> > > > 
-> > > > Furthermore, we already suspect some of our integration testing for
-> > > > EAS-mainline (on Juno) failing due to filtered out requests. How much
-> > > > that would impact other boards - it would be nice to see in traces.
-> > > 
-> > > Another problem I think we have is that the DVFS headroom value should be
-> > > a function of this filter. At the moment it is hardcoded to a random value
-> > > which causes power issue.
-> 
-> It's not a random value, as you can see in [1]. This is the main goal
+Dmitry Rokosov (5):
+  tty: serial: meson: use dev_err_probe
+  tty: serial: meson: redesign the module to platform_driver
+  tty: serial: meson: apply ttyS devname instead of ttyAML for new SoCs
+  dt-bindings: serial: amlogic,meson-uart: support Amlogic A1
+  arm64: dts: meson: a1: change uart compatible string
 
-I'm referring to the 25% in map_util_perf().
+ .../bindings/serial/amlogic,meson-uart.yaml   |  2 +
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi     |  4 +-
+ drivers/tty/serial/meson_uart.c               | 83 ++++++++++---------
+ 3 files changed, 47 insertions(+), 42 deletions(-)
 
-> for this $subject - provide information with proper test that the FW
-> or HW change is needed. If you like to have a decent performance in
-> your Linux based solution, the faster FW/HW would be needed. I don't
-> want to put more hacks or heuristics which try to workaround performance
-> issues with the HW. E.g. if someone instead of a 200MHz uC running fast
-> FW would put 100MHz uC than should get quality data from integration
-> tests, that such a design might not work well with recent OSes and apps.
-> Currently those kind of 'design' checks are very hard, because require
-> sophisticated knowledge and we are trying to lower that bar for more
-> engineers.
+-- 
+2.36.0
 
-I think we're talking about different things ;-)
-
-> 
-> > > 
-> > > So to summarize I think there are two improvements required (and if anyone has
-> > > the time to try them out go ahead otherwise I'll get to it):
-> > > 
-> > >   1. The filter should only be applied if the history hasn't changed. ie: we are
-> > >      gradually increasing or decreasing PELT. Otherwise we should honour sudden
-> > >      changes ASAP.
-> > >   2. DVFS headroom should be a function of the filter. 25% is too high for
-> > >      500us. It could be too low for 10ms (I don't know).
-> > 
-> > To expand a bit more since it's related. Our  migration margins should depend
-> > on the tick value instead of random magic numbers they are today. More
-> > precisely the balance_interval. If there's a misfit task, then we should
-> > upmigrate it at wake up only if we think it'll become misfit before the load
-> > balancer kicks in. Otherwise the load balancer should do the correction if it
-> > becomes long running/misfit. If the sys admin wants to speed up/slow down
-> > migration it should be throw controlling PELT IMO and not these magic margin
-> > values - which are hardcoded to random values at the moment anyway that are not
-> > suitable for every system.
-> > 
-> > And since we decoupled overutilized from misfit lb; I think our definition
-> > should improve to better detect when the system needs to disable packing and
-> > starts spreading. Current check for overutilized based on misfit is no longer
-> > adequate IMO. Especially when there's a single misfit task in the system.
-> > 
-> > Again, just sharing thoughts in case someone interested to work on this before
-> > I get a chance to share any patches ;-)
-> 
-> Those are all heuristics and some of your ideas are going very beyond
-> the $subject. As I said the main goal for the $subject is to
-> deliver information that the FW/HW might need a re-design (maybe even
-> a more silicon for the uC).
-> 
-> I cannot stop you from creating a dedicated thread with your patches,
-> though ;)
-
-Fair enough.
-
-/me goes away
-
---
-Qais Yousef
-
-> 
-> Regards,
-> Lukasz
-> 
-> [1] https://elixir.bootlin.com/linux/v6.4/source/drivers/cpufreq/scmi-cpufreq.c#L224
