@@ -2,124 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E587747170
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BED0747176
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbjGDMdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S230218AbjGDMeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 08:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbjGDMdL (ORCPT
+        with ESMTP id S230052AbjGDMeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:33:11 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83ACE7B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:33:08 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb9ae4cef6so8769253e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 05:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688473987; x=1691065987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JzgQQIKNDoBtiJAoujjApNzPmxlwUw+BR/55LC+iVio=;
-        b=CfEh/KBX/LDElugpqwu2sDiT5kzXeo1eUeTMkkVqIJI2SqJcdnjVe2vPA2dqVHS1To
-         /DvB2YRM9V3P7Wch1cEt6adXxVs7BbjGuxZ/Vhq0SLNNWwyq4OPGy+biCdIp3o2brOyo
-         +875WKhU9m/NCiMugZ8F4R84ttG3MSGh4kOeMs+jZRbLoGVYQUh10a/jZqZ4jvHnT92f
-         XaKepWIKwo/gHccmOsMfF2VjUwXlbOtmaelEDM7XXjHvrcvLki6YRaV4K1EGdAg69d9V
-         PdlIrairKLZ2UQLKC1Ir5xWwHix969JD4ISXs3esm7Co8feRDKjFLuBsq1cPMfpDdeQ5
-         G0Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688473987; x=1691065987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JzgQQIKNDoBtiJAoujjApNzPmxlwUw+BR/55LC+iVio=;
-        b=BNfwtW3R3S9l90KGC02F1GVN2KqZw4YrY/ZhVlbhwPRsfGaoLvu3ZMNIf0HmPaQd74
-         m3xeVAELTyh+h6t/23h4sAPDd+Kf4rWZlCKz/8MTL+6Nm6VVxmtcpuCY8Kq+9I0q2O+I
-         zGdhDH3AHZroLPdD2RHW7EnvtHfktDpx0WCSOwjBCXh2yLJk661i/LQkj8IKceWe5n1N
-         TThxEQwAQIR7owcniTQUvi52G6jgIUh6hZ+iBzaeRfiA+GdZgb8v2DKTwMYoG26jGAMk
-         9ctXa50SAk1tG62q9mlxMJDsAo7e4lQAIWvYR8UxTa6F2uAORwjbHO9gig9eIAhnqAJG
-         fgGw==
-X-Gm-Message-State: ABy/qLYnOV2piAX0iG/SAOl1suleegAQg3qLgQj2ZQQlie3t9f1qyTC0
-        Yqty/wAijftST5VUKUxScO1Jew==
-X-Google-Smtp-Source: APBJJlES1dFuMDEMs90e8mGzZJHQmmY+3FjM1O68m2ZDGiywI0ysXyovZjddRxhtodG9hlyCBhFx7Q==
-X-Received: by 2002:ac2:4ec5:0:b0:4fb:7de4:c837 with SMTP id p5-20020ac24ec5000000b004fb7de4c837mr8424423lfr.68.1688473987006;
-        Tue, 04 Jul 2023 05:33:07 -0700 (PDT)
-Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id r4-20020a19ac44000000b004fba5c20ab1sm2527946lfc.167.2023.07.04.05.33.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 05:33:06 -0700 (PDT)
-Message-ID: <05666bf0-07f8-1e3a-22bf-fc779e2b7367@linaro.org>
-Date:   Tue, 4 Jul 2023 14:33:04 +0200
-MIME-Version: 1.0
+        Tue, 4 Jul 2023 08:34:08 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237C5D8
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:34:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KbL7lfsuX7iGGHkCNA8xP65UJe/IeX13o4DLqSRoWK6fH0dF2kAziiFxlLyMgpKwEl0uLGhYGQFBGcz2FjJ7/cNj1tSdyjnLWOZbSLgPJoih31sjHXoPZyrrIBCjOKpBcL9QQ0JBzns/hMOBOy2uRKdaYZLg6Dg2L1vOdkrfcDTFxEJHkIsOL8r67aM10ew1xy/1+cIcak30cnlxQq6DSRbzG2B7qoEv2p+iSA93RYXKOswzuGODyLfGYq3soS5M8ATekEIGbBJc1uNakbzlCtnXbLtwbCU9jznyk0/JCEcdo0lf+QiRjqfgP1y2abwwlaroWfaqNHv+rF70PZOPAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QANYLM1LgXxuJcfCmiYCT3FTy/GGfdRhSgso4xlOxB0=;
+ b=FwAO7TzSnm9XBi2YIU/I4STuqVwHhBI9/rNZ0nO2o4PKDgdgAPWzwGWW6E91QFXm2oB8Q/8X0F1SYS+hB9JBCvieVLWcum1N/Stu9Hz0EmN3k0U+IJwmfdVNXXKw6IB/ldmEUJmfrNJaEfJtYfTAXyA4en84BkyvNyB7PT7CdQUEqYQ/5suOdua22mLlKYS6E7SrbTQJBwKUf8o3lc5cWiHZhdoAhOpBhDFGqXS7HY7GmEW0LX4bm5PWvJnfnhDCXly6J+qA4gV/VGxaJIRQ4Bgf2r709wIActBZh/Y3eaj7uA+DlYzGuIb0lr70OgxjPT/uj9VQ/rgDIsChtjciFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QANYLM1LgXxuJcfCmiYCT3FTy/GGfdRhSgso4xlOxB0=;
+ b=BwIELXNI82NEtIU8FyDYSJDgnn88iJIl0kryr8ACz+BN2VQ0aIA6xmU6s3nbMCO2EV1y+fA/uCms2BRtQKIdiezpR3yVtwY6aC70uE0KHHdWrus+4+JO61E9463o8fmeh5eA9ybvj+uO8MI8hgNjAKQvXWClvpeyl6a1jNGr9/M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by PH7PR12MB5735.namprd12.prod.outlook.com (2603:10b6:510:1e2::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
+ 2023 12:34:04 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::384a:95a4:8819:ee84]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::384a:95a4:8819:ee84%7]) with mapi id 15.20.6565.016; Tue, 4 Jul 2023
+ 12:34:04 +0000
+Message-ID: <f1b190cb-3af7-178b-baeb-b59363868779@amd.com>
+Date:   Tue, 4 Jul 2023 14:33:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V2] PCI: qcom: Use PARF_SLV_ADDR_SPACE_SIZE for ops_2_3_3
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/amdgpu: avoid integer overflow warning in
+ amdgpu_device_resize_fb_bar()
 Content-Language: en-US
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        sboyd@kernel.org, mturquette@baylibre.com, mani@kernel.org,
-        lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20230703175757.2425540-1-quic_srichara@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230703175757.2425540-1-quic_srichara@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Hawking Zhang <Hawking.Zhang@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>, Le Ma <le.ma@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>,
+        Shiwu Zhang <shiwu.zhang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230703123557.3355657-1-arnd@kernel.org>
+ <f4bc3739-3ff1-6fa7-5d7d-890f451315bf@amd.com>
+ <788147c6-defd-496a-8174-1571b73d1a71@app.fastmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <788147c6-defd-496a-8174-1571b73d1a71@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0077.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::16) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH7PR12MB5735:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2672766-70b0-4028-9f6d-08db7c8af3b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sVvkdTB5s/QssHlTl2xZ8UOusZtWm/gTjXdUbTBz1xk3H1WlIt5b6WdqjMhmazq3/aQSy92LXVlTEVzwMmK1xP+shQFERa3zVP4Vx2tkrk5u5TRVLL81xDPXH09QkUn59ZX/n2/qd4wLz62DpwXBIpiYtKCURSFLKrKV8YzfzRI3wo034KqfQFTwREoZQ8WFX2k8UK4G8R56RP0WHx9Y1O4oOjFhtCnMN2z8tdtvQCL3xO8Sx5KSVhhbZJxOLrMCQWlK0Yr/2WO66XONzr/H1H+4g17nIb9g5AUZtcXuJ1Eb+h0heYkbILjlRMYjC56xqVs7cDodoQGAJVmWYXkIrTDYqjBfwfNaLR7Z5T9cxMQJzY2BkZyE+GQwdy8MhHzrLbZOuPda8282XHWZAKrnqGVqjOgIGmXND1vpJtklIMx6Jfn2hJg/xOGcWemrSJ5Rl/a/XfqtnXs6sQl/xmjX9LtRU3Cavo9TJD2xEbmszO/oF/1xcz5d6FB4IpJzyRH3rsM18KoFN7ioHxDBr0OCW7N9DLR+vquiu/SQSSXgA4p9iFFRqX/zrR3AIqbHYODm3iQLU3lRqS5l3POjDKs0fj9XEOUlA3VxxuhyyRp6i7E4bfIwdYmelaCDBcCVxZg/XbYInc4ThmX+6OdLnk1twA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(39860400002)(376002)(396003)(451199021)(4326008)(66574015)(31686004)(316002)(66946007)(66556008)(86362001)(186003)(6512007)(66476007)(6506007)(83380400001)(2616005)(31696002)(2906002)(6486002)(38100700002)(6666004)(5660300002)(478600001)(8676002)(110136005)(54906003)(8936002)(41300700001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UEpjUlJPUGx1MTJFTklGeFNGUHZFOVBZODBtZFc1QjU2VnQwL2lMM1p6YzZr?=
+ =?utf-8?B?WG9tSUV3Wm4rOUZUZWIzNFF3ckdjbW8wTjRnckFYS0ErT29LWktVa2dTN2py?=
+ =?utf-8?B?MmNmcS8zaGVHYUJ4cGc0elFDSFkxRElUTDR1YzF0Z0FOaUJXLzdUVmpzWDhl?=
+ =?utf-8?B?OXluVVVrcUNMMTBLUkJQQ24xZzN5Z0VDL1N2OVVIY0hiaUN3bXd1dWQ5TkxP?=
+ =?utf-8?B?UXRRNWtpMmhIQXNLb1VMeFhXQ2pvWGJzM3hmazhQL2NtamVvaHBoQVZQZU4r?=
+ =?utf-8?B?cGZibVhheTRDN3IrUXB1TnJlUE9XTEZ2UytLV3FpaEI2cWhINlQ4VUJodElF?=
+ =?utf-8?B?Tmp1NTA3ZjVSOEV5WGRkSnRabHZHcDByU3RINWZCUjJoa1k5Z2Vla1pwakJm?=
+ =?utf-8?B?dHMrdUl3c1FzdXRoVWR3cnBacVIweStKbnJSUlcrdjlpVXJHT25CVC9kd3hY?=
+ =?utf-8?B?ejhINUduU1djV2hMNG1tNjFLNENLSjkwOGt0bm83YmNDeCt5cFJ3bzFWaktF?=
+ =?utf-8?B?UTRPYi9BRUtRcjUrMTJGQzlVeTJabkhIL3F3azg3QVBEMVUvcWFUNnhpaFha?=
+ =?utf-8?B?R21XN1k3TjdqaXRjY0hSNGpVZUpkOEVtZU41cTFMUXdUSzQ1d1JYT2JleUNY?=
+ =?utf-8?B?RGd1aFY2eVJydTRyZEo4Q3MzTzZoZStNRmNFY1JXZ242WTdQdytJKzVHOHl5?=
+ =?utf-8?B?R0t3Y1I4YzVsVTN0bTAvVllSMEk0SDA5U0c3eDFjT1llaGxjZmxCSFhlVlAv?=
+ =?utf-8?B?MWRVUDhrNFl4Q0VYWitrV2kvcHBldXZyOHEzY1VhS1ZFcXJIbmQwU1pJMVVN?=
+ =?utf-8?B?b1dZS1ZDYkEwaStjR1BYWXVGQkJvcDd0Sk9LZVA1dXhaUENwTHJpTTBvOUVW?=
+ =?utf-8?B?cDVMY3hBVUZrZjNKL2Q1UTlzV0dzVGdsWjdNcFJHaC9QQ2s0TytEQkZjQ0pQ?=
+ =?utf-8?B?Nkl6MHV2SnViRW9OeWwzNkxWVk1MVzFwM0J3bE1ZZ3BsL0JyLytsUGZra3hJ?=
+ =?utf-8?B?TldCbGwvSngrRDI0TGVuTWdROUNPM3lyVTRhZVN1V3dCSzdRNU5uTllodXVJ?=
+ =?utf-8?B?cXpGcU5tS1JsdXREa0hEeDI5UUFzbGZxNGpTbEJqcnFySzFPNHBDWGV4VUJ2?=
+ =?utf-8?B?a3k2c1l0bmVrdGxYNWFwL09pOFNZU2VKN25xMkR3NGJZKzNod3MwUGhvVy9J?=
+ =?utf-8?B?empkKzh0alEvdTBLRDJmUDBQQ01zMnJadHRUcS82aWwzeklHNXMxWVZWRC93?=
+ =?utf-8?B?ekJpdDZLcGZuellDY3BOOU1oWEZLSWc3TW4vZGpiRjVZL01yaXhNWGpVOXRs?=
+ =?utf-8?B?YjI4WVAyUktYY2dBdEVjTWtUczRPQXExMC9Uc3NBKzY2a0ZyaWhIRExCY2R2?=
+ =?utf-8?B?R2tUaFFndkMzZFBZZllvUk9scUtkTFBjYVJBL3hNZ2RFZm1VN3NSNW5JMzZ0?=
+ =?utf-8?B?Ykc0NXNPT0dSTVZZQUpBQ1RNVjFqMmtZLzZQWHZ1RE96SHZjVTl6YWRsZitT?=
+ =?utf-8?B?cnRFeUdyMVJVUDgzek1VSGd3bmdTVmJMZ2J1Zjc0VlhYeUpjRWZXWjdMbUFP?=
+ =?utf-8?B?dVdiZ2lyL29QKzd2SXNkd29kTlJXUHRRM0wrSCttNUpMRmNiVGZ3Q0VrdlJR?=
+ =?utf-8?B?SmgwTmx1aVZrQkMrRDVRcEYwU09SWEZVcElmYW9HZWlDSVdybndqUWZPcjMv?=
+ =?utf-8?B?MkFDdFpQd1NPRWJHRWZJSjk3OTBQWU8yb3NiajNHYk5vTDZRa1Y2akVSN3h5?=
+ =?utf-8?B?amc2YlljYjhWYTBnTENjenRqcWJwbVdXRFl2VzZZZ3UyUHF0VjgwYWRBZGQv?=
+ =?utf-8?B?eHFkdzU2ODFFWFcvWVZZT3RZYjFaZWgvRlAvSlZXaEFrczV5MmkyNGVMbWdi?=
+ =?utf-8?B?SUtjZVZJcWdIeEVFN2pNWnA1TEh5cG5ZeXJ0V1VQYlB1dzVCZEx6WjNsd3VM?=
+ =?utf-8?B?K043MHhEVFpHaXpENVNTbEJBTjVsam80aEd2NVBXZ0pEZDdLT2ZlL3BxVWNX?=
+ =?utf-8?B?UElTK3NjU3l5MVZKSGJNUXQrK0VmNE9OK05HVkY1d1puSWRKcDRxeUc1ZGZk?=
+ =?utf-8?B?L21FaUl2SVN0SVNvWVhDZDdDMFM5NmViWTRLbGhXdFg1VHNCMmRuTEk4V2Fl?=
+ =?utf-8?B?VFhjb0pKd1lveUZWK2pTRU14WEliT3FmZjJ2UGtiMlpwMGxLK1NUZDI4clRS?=
+ =?utf-8?Q?uLp3BMXLk68aj3R8u7egiVH69HAeGAwT7aGmV0yywtzn?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2672766-70b0-4028-9f6d-08db7c8af3b5
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 12:34:04.1375
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WsijI8iz5/aQflP/FJJWtPQs4/xUZ0yY2g9WA4GvlowNRmHzSf9rVs4EJE99gNhk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5735
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3.07.2023 19:57, Sricharan Ramabadhran wrote:
-> PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro is used for IPQ8074
-> 2_3_3 post_init ops. pcie slave addr size was initially set
-> to 0x358, but was wrongly changed to 0x168 as a part of
-> "PCI: qcom: Remove PCIE20_ prefix from register definitions"
-> Fixing it, by using the right macro PARF_SLV_ADDR_SPACE_SIZE
-> and removing the unused PARF_SLV_ADDR_SPACE_SIZE_2_3_3.
-> 
-> Without this pcie bring up on IPQ8074 is broken now.
-> 
-> Fixes: 39171b33f652 ("PCI: qcom: Remove PCIE20_ prefix from register definitions")
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Am 04.07.23 um 14:24 schrieb Arnd Bergmann:
+> On Tue, Jul 4, 2023, at 08:54, Christian König wrote:
+>> Am 03.07.23 um 14:35 schrieb Arnd Bergmann:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> On 32-bit architectures comparing a resource against a value larger than
+>>> U32_MAX can cause a warning:
+>>>
+>>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1344:18: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>>>                       res->start > 0x100000000ull)
+>>>                       ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+>>>
+>>> The compiler is right that this cannot happen in this configuration, which
+>>> is ok, so just add a cast to shut up the warning.
+>> Well it doesn't make sense to compile that driver on systems with only
+>> 32bit phys_addr_t in the first place.
+> Not sure I understand the specific requirement. Do you mean the entire
+> amdgpu driver requires 64-bit BAR addressing, or just the bits that
+> resize the BARs?
 
-Konrad
->  [V2] Fixed the 'fixes tag' correctly, subject, right macro usage
-> 
->  drivers/pci/controller/dwc/pcie-qcom.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 4ab30892f6ef..1689d072fe86 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -43,7 +43,6 @@
->  #define PARF_PHY_REFCLK				0x4c
->  #define PARF_CONFIG_BITS			0x50
->  #define PARF_DBI_BASE_ADDR			0x168
-> -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16c /* Register offset specific to IP ver 2.3.3 */
->  #define PARF_MHI_CLOCK_RESET_CTRL		0x174
->  #define PARF_AXI_MSTR_WR_ADDR_HALT		0x178
->  #define PARF_AXI_MSTR_WR_ADDR_HALT_V2		0x1a8
-> @@ -811,7 +810,7 @@ static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
->  	u32 val;
->  
->  	writel(SLV_ADDR_SPACE_SZ,
-> -		pcie->parf + PARF_SLV_ADDR_SPACE_SIZE_2_3_3);
-> +		pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
->  
->  	val = readl(pcie->parf + PARF_PHY_CTRL);
->  	val &= ~PHY_TEST_PWR_DOWN;
+Well a bit of both.
+
+Modern AMD GPUs have 16GiB of local memory (VRAM), making those 
+accessible to a CPU which can only handle 32bit addresses by resizing 
+the BAR is impossible to begin with.
+
+But going a step further even without resizing it is pretty hard to get 
+that hardware working on such an architecture.
+
+>> It might be cleaner to just not build the whole driver on such systems
+>> or at least leave out this function.
+> How about this version? This also addresses the build failure, but
+> I don't know if this makes any sense:
+>
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -1325,6 +1325,9 @@ int amdgpu_device_resize_fb_bar(struct amdgpu_device *adev)
+>          u16 cmd;
+>          int r;
+>   
+> +       if (!IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
+> +               return 0;
+> +
+
+Yes, if that suppresses the warning as well then that makes perfect 
+sense to me.
+
+Regards,
+Christian.
+
+>          /* Bypass for VF */
+>          if (amdgpu_sriov_vf(adev))
+>                  return 0;
+>
+>       Arnd
+
