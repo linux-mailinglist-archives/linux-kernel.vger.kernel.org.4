@@ -2,152 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CC0746793
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 04:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD55746799
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 04:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjGDCaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 22:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S230335AbjGDCcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 22:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjGDCaM (ORCPT
+        with ESMTP id S229844AbjGDCcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 22:30:12 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC1FE59
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 19:30:09 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-98df3dea907so594410266b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 19:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688437807; x=1691029807;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aO7eVml/O3X6+0FbiNIO683uCX1yJlTsFWTwSAnwfZw=;
-        b=SL8qA8aTYyLZtPQIBrBzUgO8eWCCxqiLdnKYPvDnOCCAuIoTpBSwRftLEhxWwN+ZLW
-         7zWghFJjCwFWbCEZ77hGR/2EAhjZciJ76YXnffYImtyKNbhJBUNSDk9BJGx4unDJGMTZ
-         suPcOn2OXDj0IWQU9j8EpWIQqybEtaG55qCl8=
+        Mon, 3 Jul 2023 22:32:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A40188
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 19:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688437914;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ted07POMAjXkCxr60JUuoQPLiHenYB1eh+ROZj9qTg=;
+        b=WRXnA/RBYxrLj8/ATCENTRHT/Tl5HhnIWGi6YfFJRVybnqAALhuzssu3BGfPiRyuiIpvJj
+        Y4AKLck66POqRy5Ra3NK25rOEHtCctEomAdB7AMmCBbEAUn9ssXYS0gj7KuvI+vWrxz1qz
+        YD3J9kgotinwabZ+UxEd79xhVAFMoIM=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-KwS3W-QWP3ejosr1gcfxWw-1; Mon, 03 Jul 2023 22:31:53 -0400
+X-MC-Unique: KwS3W-QWP3ejosr1gcfxWw-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4f01644f62eso4425857e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 19:31:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688437807; x=1691029807;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aO7eVml/O3X6+0FbiNIO683uCX1yJlTsFWTwSAnwfZw=;
-        b=eaXESoAZuwQNW1Ji369s4uI0uE+ssUwF8R4dubnbS86X2CY4LdGkfa9RWJwbYwuijT
-         pj8LJHV1FQAnCa0zmEsU9YoN4a66tmaLNhaQDq+Cmb77/A9nXCSbwINXhXbR48Vr7uIy
-         DtDSMK3I72FhinT0eaF/NeQOPiRHtXKfPHVCqFlOsn+svOnJdoxYRiB0XaV40dzugXd1
-         95BXO1mlM75ndmY6c7+Fq3IXPCHZXLta3AP+4J57nKXekDqP0bu0xzqv+DsvbULpIn1H
-         f0ZHhnyt1LGj0vmBMSbbcrv75X2eno8o6R3JpxzkEJuEFo0VBrl/Wp8pzogkCTFTpHNl
-         xlEw==
-X-Gm-Message-State: AC+VfDyNoq+HxhW0fZ/ab0RGrIKvJwFIhT4lHPoFuYg6gKa8rvKOWHRi
-        o03TK/58qgIabFzvIUUCIsLW2ehfYoVT3HKKMGPTKCl3
-X-Google-Smtp-Source: APBJJlH5A55D9ai0xwlnZ8gexQcNjrzuY2lsMZQm23VRsHsYvFRuccgMS1TqXYLgzAIn25gAb+EojA==
-X-Received: by 2002:a17:906:4e06:b0:992:2c5a:808e with SMTP id z6-20020a1709064e0600b009922c5a808emr9020722eju.7.1688437807227;
-        Mon, 03 Jul 2023 19:30:07 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id j18-20020a170906831200b0098733a40bb7sm12673099ejx.155.2023.07.03.19.30.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 19:30:06 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51d804c7d14so5723653a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 19:30:05 -0700 (PDT)
-X-Received: by 2002:aa7:d8d9:0:b0:51d:e498:201 with SMTP id
- k25-20020aa7d8d9000000b0051de4980201mr8047997eds.27.1688437805666; Mon, 03
- Jul 2023 19:30:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688437911; x=1691029911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9ted07POMAjXkCxr60JUuoQPLiHenYB1eh+ROZj9qTg=;
+        b=K6UAv6Nb1sRI4XmB/6o8cUCVS9Zf2nyQVZ2Ew0Iqz9Sp/WtUDqDtrdDtngtNOVzxF7
+         n0v3ox3OB0oQk1D18ReyOXbSb1T0SVlDaz9yeWRuA8ldnak+IcmcwAN1GV6E3TfWepG+
+         00euF29WxemXLnlCWTHv0eFheZeeucy4FDTy7SXEqxp3ieeBn965M2T4MJ3QCJAsjjhe
+         AiVdr/M7lqyTcBvEtrnK/6WdEsEOyXaN6BHwhPtUGGMJnvVyLgIU9n/mkKnsJSVQ+fSz
+         uXfDsYs7ja3QU19h0M0yfGwTlFkzF4+7d/UwKLuxfu94B0uiKgK+h1bRSzwaoJlTVsOF
+         CqlQ==
+X-Gm-Message-State: ABy/qLa/21cEiSLcCFRfWQATu7pdr4FAnuOf+02C1eRvtC76X4a+nFqv
+        Mww+edkAmHSlpz+IbZ7VPA4gasxGOQkhVZGFF6fPaVBB3F6C0SAx0GsmNZ4FPgpQ5ftDMsTEE5t
+        iFGe5z3pJeqMWVpCpv72VYlSYW8XZMJuuRFwTKPRY
+X-Received: by 2002:a2e:b165:0:b0:2b6:de59:1ba4 with SMTP id a5-20020a2eb165000000b002b6de591ba4mr5146454ljm.20.1688437911781;
+        Mon, 03 Jul 2023 19:31:51 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEankywN0m0pyVhlEKLjGH/ScUvE8FF66a/JMtbnyvq6ch5zE2f6KfMC9jixVttfTAnoEWdGkjeni0rrC1He1g=
+X-Received: by 2002:a2e:b165:0:b0:2b6:de59:1ba4 with SMTP id
+ a5-20020a2eb165000000b002b6de591ba4mr5146438ljm.20.1688437911506; Mon, 03 Jul
+ 2023 19:31:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZKIsoMOT71uwCIZX@xsang-OptiPlex-9020> <CAHk-=wg1_8L+e09_RuX=Z_49oLn8=w82YzCk+kybS-ymSd_zbA@mail.gmail.com>
- <ZKN6CdkKyxBShPHi@xsang-OptiPlex-9020>
-In-Reply-To: <ZKN6CdkKyxBShPHi@xsang-OptiPlex-9020>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Jul 2023 19:29:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjXEzCV7HGPS=2zgJJ8R14e97hAesQ_7fjFZNS=jOADYw@mail.gmail.com>
-Message-ID: <CAHk-=wjXEzCV7HGPS=2zgJJ8R14e97hAesQ_7fjFZNS=jOADYw@mail.gmail.com>
-Subject: Re: [mm] 408579cd62: WARNING:suspicious_RCU_usage
-To:     Oliver Sang <oliver.sang@intel.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com
-Content-Type: multipart/mixed; boundary="000000000000a1f7f705ffa00fe0"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230703175329.3259672-1-i.maximets@ovn.org>
+In-Reply-To: <20230703175329.3259672-1-i.maximets@ovn.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 4 Jul 2023 10:31:39 +0800
+Message-ID: <CACGkMEs1WyKwSuE2H0bkYigjhqHYJy6pPGnQLjWgOFt9+89hJA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] xsk: honor SO_BINDTODEVICE on bind
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stefan Hajnoczi <stefanha@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a1f7f705ffa00fe0
-Content-Type: text/plain; charset="UTF-8"
-
-On Mon, 3 Jul 2023 at 18:48, Oliver Sang <oliver.sang@intel.com> wrote:
+On Tue, Jul 4, 2023 at 1:53=E2=80=AFAM Ilya Maximets <i.maximets@ovn.org> w=
+rote:
 >
-> by patch [1], we found the warning is not fixed.
-
-Hmm. I already committed that "fix" as obvious, since the main
-difference in commit 408579cd627a ("mm: Update do_vmi_align_munmap()
-return semantics") around that validate_mm() call was how it did that
-mmap_read_unlock().
-
-> we also found there are some changes in stack backtrace. now it's as below:
-> (detail dmesg is attached)
+> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
+> A privileged process might create the socket and pass it to a
+> non-privileged process for later use.  However, that process will be
+> able to bind the socket to any network interface.  Even though it will
+> not be able to receive any traffic without modification of the BPF map,
+> the situation is not ideal.
 >
-> [   26.412372][    T1] stack backtrace:
-> [   26.412846][    T1] CPU: 0 PID: 1 Comm: systemd Not tainted 6.4.0-09908-gcb226fb1fb7a #1
-> [   26.413506][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-> [   26.414326][    T1] Call Trace:
-> [   26.414605][    T1]  <TASK>
-> [   26.414847][    T1]  dump_stack_lvl+0x73/0xc0
-> [   26.415225][    T1]  lockdep_rcu_suspicious+0x1b7/0x280
-> [   26.415669][    T1]  mas_start+0x280/0x400
-> [   26.416037][    T1]  mas_find+0x27a/0x400
-> [   26.416391][    T1]  validate_mm+0x8b/0x2c0
-> [   26.416757][    T1]  __se_sys_brk+0xa35/0xc00
+> Sockets already have a mechanism that can be used to restrict what
+> interface they can be attached to.  That is SO_BINDTODEVICE.
+>
+> To change the SO_BINDTODEVICE binding the process will need CAP_NET_RAW.
+>
+> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
+> workflow when non-privileged process is using AF_XDP.
+>
+> The intended workflow is following:
+>
+>   1. First process creates a bare socket with socket(AF_XDP, ...).
+>   2. First process loads the XSK program to the interface.
+>   3. First process adds the socket fd to a BPF map.
+>   4. First process ties socket fd to a particular interface using
+>      SO_BINDTODEVICE.
+>   5. First process sends socket fd to a second process.
+>   6. Second process allocates UMEM.
+>   7. Second process binds socket to the interface with bind(...).
+>   8. Second process sends/receives the traffic.
+>
+> All the steps above are possible today if the first process is
+> privileged and the second one has sufficient RLIMIT_MEMLOCK and no
+> capabilities.  However, the second process will be able to bind the
+> socket to any interface it wants on step 7 and send traffic from it.
+> With the proposed change, the second process will be able to bind
+> the socket only to a specific interface chosen by the first process
+> at step 4.
+>
+> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 
-Ok, that is indeed a very different stack trace.
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-So maybe the fix is a real fix, but the first complaint shut up
-lockdep, so this is the *second* and unrelated complaint.
+Is this a stable material or not?
 
-And indeed: it turns out that do_vma_munmap() does this:
+Thanks
 
-        ret = do_vmi_align_munmap(vmi, vma, mm, start, end, uf, unlock);
-        validate_mm(mm);
+> ---
+>
+> RFC --> PATCH:
+>   * Better explained intended workflow in a commit message.
+>   * Added ACK from Magnus.
+>
+>  Documentation/networking/af_xdp.rst | 9 +++++++++
+>  net/xdp/xsk.c                       | 6 ++++++
+>  2 files changed, 15 insertions(+)
+>
+> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networki=
+ng/af_xdp.rst
+> index 247c6c4127e9..1cc35de336a4 100644
+> --- a/Documentation/networking/af_xdp.rst
+> +++ b/Documentation/networking/af_xdp.rst
+> @@ -433,6 +433,15 @@ start N bytes into the buffer leaving the first N by=
+tes for the
+>  application to use. The final option is the flags field, but it will
+>  be dealt with in separate sections for each UMEM flag.
+>
+> +SO_BINDTODEVICE setsockopt
+> +--------------------------
+> +
+> +This is a generic SOL_SOCKET option that can be used to tie AF_XDP
+> +socket to a particular network interface.  It is useful when a socket
+> +is created by a privileged process and passed to a non-privileged one.
+> +Once the option is set, kernel will refuse attempts to bind that socket
+> +to a different interface.  Updating the value requires CAP_NET_RAW.
+> +
+>  XDP_STATISTICS getsockopt
+>  -------------------------
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 5a8c0dd250af..386ff641db0f 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -886,6 +886,7 @@ static int xsk_bind(struct socket *sock, struct socka=
+ddr *addr, int addr_len)
+>         struct sock *sk =3D sock->sk;
+>         struct xdp_sock *xs =3D xdp_sk(sk);
+>         struct net_device *dev;
+> +       int bound_dev_if;
+>         u32 flags, qid;
+>         int err =3D 0;
+>
+> @@ -899,6 +900,11 @@ static int xsk_bind(struct socket *sock, struct sock=
+addr *addr, int addr_len)
+>                       XDP_USE_NEED_WAKEUP))
+>                 return -EINVAL;
+>
+> +       bound_dev_if =3D READ_ONCE(sk->sk_bound_dev_if);
+> +
+> +       if (bound_dev_if && bound_dev_if !=3D sxdp->sxdp_ifindex)
+> +               return -EINVAL;
+> +
+>         rtnl_lock();
+>         mutex_lock(&xs->mutex);
+>         if (xs->state !=3D XSK_READY) {
+> --
+> 2.40.1
+>
 
-and so we have *another* validate_mm() that is now done outside the lock.
-
-That one is actually pretty pointless. We've *just* validated the mm
-already inside do_vmi_align_munmap(), except we only did it in one of
-the two return cases.
-
-So I think the fix is to just move that validate_mm() into the other
-return case of do_vmi_align_munmap(), and remove it from the caller.
-
-IOW, something like the attached (NOTE! This is in *addition* to the
-previous patch, which is the same as the one you quoted, just with
-slightly different whitespace as commit ae80b4041984: "mm: validate
-the mm before dropping the mmap lock").
-
-               Linus
-
---000000000000a1f7f705ffa00fe0
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljno9i7t0>
-X-Attachment-Id: f_ljno9i7t0
-
-IG1tL21tYXAuYyB8IDYgKystLS0tCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA0
-IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL21tL21tYXAuYyBiL21tL21tYXAuYwppbmRleCA1
-NDdiNDA1MzE3OTEuLjIwNGRkY2Q1MjYyNSAxMDA2NDQKLS0tIGEvbW0vbW1hcC5jCisrKyBiL21t
-L21tYXAuYwpAQCAtMjU3MSw2ICsyNTcxLDcgQEAgZG9fdm1pX2FsaWduX211bm1hcChzdHJ1Y3Qg
-dm1hX2l0ZXJhdG9yICp2bWksIHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLAogCV9fbXRfZGVz
-dHJveSgmbXRfZGV0YWNoKTsKIHN0YXJ0X3NwbGl0X2ZhaWxlZDoKIG1hcF9jb3VudF9leGNlZWRl
-ZDoKKwl2YWxpZGF0ZV9tbShtbSk7CiAJcmV0dXJuIGVycm9yOwogfQogCkBAIC0zMDE5LDEyICsz
-MDIwLDkgQEAgaW50IGRvX3ZtYV9tdW5tYXAoc3RydWN0IHZtYV9pdGVyYXRvciAqdm1pLCBzdHJ1
-Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSwKIAkJYm9vbCB1bmxvY2spCiB7CiAJc3RydWN0IG1tX3N0
-cnVjdCAqbW0gPSB2bWEtPnZtX21tOwotCWludCByZXQ7CiAKIAlhcmNoX3VubWFwKG1tLCBzdGFy
-dCwgZW5kKTsKLQlyZXQgPSBkb192bWlfYWxpZ25fbXVubWFwKHZtaSwgdm1hLCBtbSwgc3RhcnQs
-IGVuZCwgdWYsIHVubG9jayk7Ci0JdmFsaWRhdGVfbW0obW0pOwotCXJldHVybiByZXQ7CisJcmV0
-dXJuIGRvX3ZtaV9hbGlnbl9tdW5tYXAodm1pLCB2bWEsIG1tLCBzdGFydCwgZW5kLCB1ZiwgdW5s
-b2NrKTsKIH0KIAogLyoK
---000000000000a1f7f705ffa00fe0--
