@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40F7746AA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4939A746AAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjGDH2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
+        id S230427AbjGDHcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjGDH2W (ORCPT
+        with ESMTP id S229624AbjGDHb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:28:22 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A66E47
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688455701; x=1719991701;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=RaSyqjD0+GbzkuXBeufMAawG5Hy7Lop++mCBBUAJCK0=;
-  b=cmHgrARIqOEUmtHFr5SNOfx+Wu/lxACUA07QACLYKSURmOT2qaJ+lK7V
-   xofshoBPy0awvK4gqEtXYKsm5Dt33GcwLejxy/CmJzoBEUKHesZmD5QIH
-   LcdgU8qzWcVX+2iDSlKP9YyJrJ1kusRtrusJ0HRkUnFvH65hTBuz4Vl0E
-   5Ikinc9Pm0rawvPMqNM6gRdd/9bLV6BHsslswTY2KxknaKgDHlCfQHwaP
-   LDL2XOsbtDjkZqWCGtBI5yHdpzvNbuIe8HEWOQ4rnCEahUJI0fI6Tne5X
-   2Ay9PSWUoEPD/EdFD8Dggcb+a8GK3ysGzzSZyR7lQ8Sx6m60ADG3/8Re6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393801332"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="393801332"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:28:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="784127930"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="784127930"
-Received: from jbouhlil-mobl.ger.corp.intel.com (HELO localhost) ([10.252.48.173])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:28:17 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Uros Bizjak <ubizjak@gmail.com>, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH] drm/i915/pmu: Use local64_try_cmpxchg in
- i915_pmu_event_read
-In-Reply-To: <20230703150859.6176-1-ubizjak@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230703150859.6176-1-ubizjak@gmail.com>
-Date:   Tue, 04 Jul 2023 10:28:14 +0300
-Message-ID: <87o7ks16gh.fsf@intel.com>
+        Tue, 4 Jul 2023 03:31:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E4511C;
+        Tue,  4 Jul 2023 00:31:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A9B261161;
+        Tue,  4 Jul 2023 07:31:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C3EC433C9;
+        Tue,  4 Jul 2023 07:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688455917;
+        bh=PjGkpkF+D5SrFko09IJTFD6Zhw0UYMl5RKch1zse0Qg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qp+rv8Vv49+hvqq1oXM55Wa+O6EHGQZqgMJXYBFlr82XGZUgJ0xU6iTIBb/loM5UZ
+         anDO5a6Sh8n79een+STk7+DWV9JzvQEu/QK8eGRwFBCySPDB8KHpVrH7Lmj6Yp55dq
+         2tgMurMVVv6j58YTSa2VLA41B/TR9jgiT2ZrZfBs=
+Date:   Tue, 4 Jul 2023 08:31:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org, Vishal Bhoj <vishal.bhoj@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Subject: Re: [PATCH 5.15 00/15] 5.15.120-rc1 review
+Message-ID: <2023070427-filled-brewing-d678@gregkh>
+References: <20230703184518.896751186@linuxfoundation.org>
+ <CA+G9fYueycAbx7DDR3S57d43UX49SOGnW6igQUZ0voEcapxdYw@mail.gmail.com>
+ <d25d0195-b40e-2a03-de75-1bdc1aaf404c@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d25d0195-b40e-2a03-de75-1bdc1aaf404c@gmx.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jul 2023, Uros Bizjak <ubizjak@gmail.com> wrote:
-> Use local64_try_cmpxchg instead of local64_cmpxchg (*ptr, old, new) == old
-> in i915_pmu_event_read.  x86 CMPXCHG instruction returns success in ZF flag,
-> so this change saves a compare after cmpxchg (and related move instruction
-> in front of cmpxchg).
->
-> Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
-> fails. There is no need to re-read the value in the loop.
->
-> No functional change intended.
->
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> ---
->  drivers/gpu/drm/i915/i915_pmu.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
-> index d35973b41186..108b675088ba 100644
-> --- a/drivers/gpu/drm/i915/i915_pmu.c
-> +++ b/drivers/gpu/drm/i915/i915_pmu.c
-> @@ -696,12 +696,11 @@ static void i915_pmu_event_read(struct perf_event *event)
->  		event->hw.state = PERF_HES_STOPPED;
->  		return;
->  	}
-> -again:
-> -	prev = local64_read(&hwc->prev_count);
-> -	new = __i915_pmu_event_read(event);
->  
-> -	if (local64_cmpxchg(&hwc->prev_count, prev, new) != prev)
-> -		goto again;
-> +	prev = local64_read(&hwc->prev_count);
-> +	do {
-> +		new = __i915_pmu_event_read(event);
-> +	} while (!local64_try_cmpxchg(&hwc->prev_count, &prev, new));
+On Tue, Jul 04, 2023 at 09:16:36AM +0200, Helge Deller wrote:
+> On 7/4/23 09:00, Naresh Kamboju wrote:
+> > On Tue, 4 Jul 2023 at 00:27, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > > 
+> > > This is the start of the stable review cycle for the 5.15.120 release.
+> > > There are 15 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > > 
+> > > Responses should be made by Wed, 05 Jul 2023 18:45:08 +0000.
+> > > Anything received after that time might be too late.
+> > > 
+> > > The whole patch series can be found in one patch at:
+> > >          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.120-rc1.gz
+> > > or in the git tree and branch at:
+> > >          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> > > and the diffstat can be found below.
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > 
+> > Following build regressions noticed on stable-rc 5.15.
+> > This build failure started happening from v5.15.119 from date June 28, 2023.
+> > 
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > 
+> > Regressions found on parisc:
+> > 
+> >    - build/gcc-11-allnoconfig
+> >    - build/gcc-11-defconfig
+> >    - build/gcc-11-tinyconfig
+> > 
+> > Build errors:
+> > =============
+> > arch/parisc/include/asm/assembly.h: Assembler messages:
+> > arch/parisc/include/asm/assembly.h:75: Error: symbol `sp' is already defined
+> > arch/parisc/include/asm/assembly.h:77: Error: symbol `ipsw' is already defined
+> > make[3]: *** [scripts/Makefile.build:391: arch/parisc/kernel/head.o] Error 1
+> > arch/parisc/include/asm/assembly.h: Assembler messages:
+> 
+> Greg, could you please pull in the following upstream commit?
+> It was backported to kernels > 6.0, but with newer binutils it's probably
+> needed for kernels < 6.0 as well:
+> 
+> commit b5b2a02bcaac7c287694aa0db4837a07bf178626
+> Author: Ben Hutchings <benh@debian.org>
+> Date:   Thu Jun 15 00:00:02 2023 +0200
+> 
+>     parisc: Delete redundant register definitions in <asm/assembly.h>
+> 
+>     We define sp and ipsw in <asm/asmregs.h> using ".reg", and when using
+>     current binutils (snapshot 2.40.50.20230611) the definitions in
+>     <asm/assembly.h> using "=" conflict with those:
+> 
+>     arch/parisc/include/asm/assembly.h: Assembler messages:
+>     arch/parisc/include/asm/assembly.h:93: Error: symbol `sp' is already defined
+>     arch/parisc/include/asm/assembly.h:95: Error: symbol `ipsw' is already defined
+> 
+>     Delete the duplicate definitions in <asm/assembly.h>.
+> 
+>     Also delete the definition of gp, which isn't used anywhere.
+> 
+>     Signed-off-by: Ben Hutchings <benh@debian.org>
+>     Cc: stable@vger.kernel.org # v6.0+
+>     Signed-off-by: Helge Deller <deller@gmx.de>
 
-You could save everyone a lot of time by actually documenting what these
-functions do. Assume you don't know what local64_try_cmpxchg() does, and
-see how many calls you have to go through to figure it out.
+Sure, now queued up!
 
-Because the next time I encounter this code or a patch like this, I'm
-probably going to have to do that again.
+I'll be pushing out some -rc2 releases soon with this fix, and a few
+others that I missed in a bit.
 
-To me, the old one was more readable. The optimization is meaningless to
-me if it's not quantified but reduces readability.
+thanks for the report and the quick response,
 
-
-BR,
-Jani.
-
-
->  
->  	local64_add(new - prev, &event->count);
->  }
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+greg k-h
