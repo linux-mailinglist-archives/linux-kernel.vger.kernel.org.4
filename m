@@ -2,89 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310DD747813
+	by mail.lfdr.de (Postfix) with ESMTP id 7B335747814
 	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjGDR5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S230490AbjGDR6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjGDR5R (ORCPT
+        with ESMTP id S230195AbjGDR6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:57:17 -0400
-Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8499910C8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:57:13 -0700 (PDT)
-Date:   Tue, 04 Jul 2023 17:57:06 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail; t=1688493430; x=1688752630;
-        bh=A2izVLmKnAOTqixZ0m4jX7wiQ2V2QLpbP3fSp42+WRM=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=jLOT0tTOSkxg8LjsDKwNgrKPXhldiiJRdpMIbXZkpOBkxXNeUOuZRywdmJQ3P5Iyj
-         5gS9lyB8ymKw9JkTmUADEugrz8sXHNTeCwLtupS9/s7OeQgB1AQn78MreulGdGYQlP
-         jeEnR3wNf2uCLNv5pbKuOXwfqjoNiqedMqpfxmLt5Ky4be6d9eGZmEVAMAiknPZ09x
-         zf2Rpba1PK1XH0rt8t3qh5e4LQielBdGT/2IM1JpXdSAxhd0zc878dNGrRObqt96k8
-         7TtIV+42MtycK7nRw24lo+YlCQTldLM2P7571yupf7SyqqynFLkf2W/fHsZ9qWtnlk
-         MJwvS5XEUjwaA==
-To:     Sebastian Wick <sebastian.wick@redhat.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     =?utf-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        pierre-eric.pelloux-prayer@amd.com,
-        =?utf-8?Q?Marek_Ol=C5=A1=C3=A1k?= <maraeo@gmail.com>,
-        =?utf-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
-        Italo Nicola <italonicola@collabora.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        wayland-devel@lists.freedesktop.org,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        dri-devel@lists.freedesktop.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, hwentlan@amd.com,
-        christian.koenig@amd.com, joshua@froggi.es
-Subject: Re: [PATCH v4 1/6] drm: allow DRM_MODE_PAGE_FLIP_ASYNC for atomic commits
-Message-ID: <p-vKlt6LWsnO1-Ent-Y3sCt_NhITc2WrYQarRLJ2fIjxYFenrM9zCg6_YZxyh0gAaCXeBWGBnS5ww_aeT-EG95IsDTm5J-YegFrbINCC98w=@emersion.fr>
-In-Reply-To: <CA+hFU4y+kHitNsqb1WC6dHE5hr=1S6gJeyHXC5mv9Ads5mdgWw@mail.gmail.com>
-References: <20230701020917.143394-1-andrealmeid@igalia.com> <20230701020917.143394-2-andrealmeid@igalia.com> <CA+hFU4y+kHitNsqb1WC6dHE5hr=1S6gJeyHXC5mv9Ads5mdgWw@mail.gmail.com>
-Feedback-ID: 1358184:user:proton
+        Tue, 4 Jul 2023 13:58:10 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E94D10C9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:58:10 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b52875b8d9so545725ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688493489; x=1691085489;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CtDTa/zSYu1BtyXYBgWZdAlFvHTcMeojuniPxpUE6tA=;
+        b=HMkq/TKthPMoIlp8Xt1Kp+9IvRlxP2uVxW94fU1Rs1XeFolcrAwGpkhoHBhuROkt2x
+         twdybnJM+tOmScV6iQRFKO8oZj992lBbu6CxZQuUyR+hDvab/6a5DsIxVbBjG2FUnCG/
+         29UyYReZ9+xaUpv1bdXU7bM9eCLonxHp8wWgFzm+Vz3PHZ9pMKj1lXwp7KI5kTxO7hoI
+         K2EXoPEIM1nuKW9pAss/7qb9RvajvevvxIBQAFqfNUALVdhY/W9P/lIaG4PlifV4l99l
+         FX0lh+GMpIqKXra2FJt0BIF8lK2qX++XFi+55Q+5sOr0KFmhcrI6HrqsU0bUemx2xTJh
+         x6dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688493489; x=1691085489;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CtDTa/zSYu1BtyXYBgWZdAlFvHTcMeojuniPxpUE6tA=;
+        b=hxtxOGGjkr6Cen8ox/QlAUQYImsFFZL6/WCmKcn539vPdB4QeT0nRW2B+WHQrHbLTp
+         jHDFgED1Nd1TqNTHLLEh+kXZ7CBWfvnIn31exiwDDXZFNXMDiXSsY/ojj1abuzL24vJU
+         S4UP5VBqNXeDx3UZmhklOZHZdl66XNsAIZSDyJEPX+flzlUxC/q3T9fCd0I07NG10zRy
+         6oPUasUzgVB1Kvo988+J+hSE1rzIbm3mHDSBcZyOby32ZZhBfYzA1xFxQ2KahPIivOAV
+         2h0m9dKHqWu+LFQGYjKFkfSBeRnVzMLWTCo9yG53HHGAJIc+w2a9+7rbiK1C+j3oIbEq
+         ZPQw==
+X-Gm-Message-State: ABy/qLbCVjw1pNPOtogOP2fe5ttWShx8XEwOjzqtqtWmz4jnMxGIqANW
+        jKOS1J/E7xltJ1nOfwS6FLP1Bw==
+X-Google-Smtp-Source: APBJJlFk3YR1aUikjR6v2zDx4YgeL6uaf8BWmv4x9KrRM1f1S1Efo4GNieq5PMBdgBHMg75l4o73Yg==
+X-Received: by 2002:a17:902:fb8e:b0:1b0:cea:2956 with SMTP id lg14-20020a170902fb8e00b001b00cea2956mr1117plb.29.1688493489455;
+        Tue, 04 Jul 2023 10:58:09 -0700 (PDT)
+Received: from [2620:0:1008:15:17fc:1b56:71df:89b7] ([2620:0:1008:15:17fc:1b56:71df:89b7])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902d30400b001b8a7e1b116sm1502829plc.191.2023.07.04.10.58.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 10:58:08 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 10:58:08 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Matteo Rizzo <matteorizzo@google.com>
+cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, jannh@google.com
+Subject: Re: [PATCH v2] mm/slub: refactor freelist to use custom type
+In-Reply-To: <20230704135834.3884421-1-matteorizzo@google.com>
+Message-ID: <f4f0e0b8-e04f-132b-7dbd-8bf1fc717544@google.com>
+References: <20230704135834.3884421-1-matteorizzo@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, July 4th, 2023 at 19:06, Sebastian Wick <sebastian.wick@redhat.=
-com> wrote:
+On Tue, 4 Jul 2023, Matteo Rizzo wrote:
 
-> > + * When used with atomic uAPI, the driver will return an error if the =
-hardware
-> > + * doesn't support performing an asynchronous page-flip for this updat=
-e.
-> > + * User-space should handle this, e.g. by falling back to a regular pa=
-ge-flip.
-> > + *
-> > + * Note, some hardware might need to perform one last synchronous page=
--flip
-> > + * before being able to switch to asynchronous page-flips. As an excep=
-tion,
-> > + * the driver will return success even though that first page-flip is =
-not
-> > + * asynchronous.
->=20
-> What would happen if one commits another async KMS update before the
-> first page flip? Does one receive EAGAIN, does it amend the previous
-> commit? What happens to the timing feedback?
->=20
-> This seems really risky to include tbh. I would prefer if we would not
-> add such special cases for now.
+> From: Jann Horn <jannh@google.com>
+> 
+> Currently the SLUB code represents encoded freelist entries as "void*".
+> That's misleading, those things are encoded under
+> CONFIG_SLAB_FREELIST_HARDENED so that they're not actually dereferencable.
+> 
+> Give them their own type, and split freelist_ptr() into one function per
+> direction (one for encoding, one for decoding).
+> 
+> Signed-off-by: Jann Horn <jannh@google.com>
+> Co-developed-by: Matteo Rizzo <matteorizzo@google.com>
+> Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
 
-This is not a new case, i915 already does this with the legacy API to
-address some hw issues. Sadly I don't think we can do anything about
-it.
+Acked-by: David Rientjes <rientjes@google.com>
