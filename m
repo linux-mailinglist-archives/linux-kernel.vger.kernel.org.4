@@ -2,79 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0F97476CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E731B7476CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjGDQdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S231445AbjGDQf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjGDQdY (ORCPT
+        with ESMTP id S229647AbjGDQfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:33:24 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB26F2;
-        Tue,  4 Jul 2023 09:33:22 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5576ad1b7e7so506548a12.1;
-        Tue, 04 Jul 2023 09:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688488402; x=1691080402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RQvB9pazQpz+2yHd1djg/ZPNR7htVfRGfkEykcgrM+o=;
-        b=m5bCQ4yYE38W4kirdl6kjCOOk6SLdEjKK0boE6sZWiaXSOG1pWqXeNuExeh+qtpdcT
-         6H/UlVHbGeNy3s4h5qaawbcAhgb8Q26QXFfLssk7GHwgmDFHWrSi+eNQee9S9zl8/SaE
-         Zje9cr+Ey4fyyTZwDdVyRs+8F3ShYW/zOfD/0/+1P+jB7MRPMSqF4r5LhUe+v2W0Y1LQ
-         xR9EcjURDlJ4AWkMaVM/+JkN8c30HQ2nnCr9ea4sE3Uc4r9q93Yur/cQO0EIlkD02z9n
-         OCAuq8wZJvm/sskf6qunELA8KcIMSjd57eXxXsqTnxhUI+oZ2sX94QKT5x4Ko5u3h15r
-         tSWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688488402; x=1691080402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RQvB9pazQpz+2yHd1djg/ZPNR7htVfRGfkEykcgrM+o=;
-        b=YrNU6b1r0bzeSsKwL7+3J/9J7lvSXrXasFHpISKsNpQBd0PHZozrP0raMZ2MX6F+D9
-         dDfD3nsYooabQo1U/uICdPyhl8fwjhRgvGDQRsABvyaTvsDuR5bcVVwmd4SyrQ+BuguA
-         k5MmIP5n+j4svUhj9dhvkB/KjvLkKjhO4qa6EUKnpjgXbrNVI0saFzol33xAgliQ3g6D
-         xtYbtS9liIemOgymq6oAzH4oDev0Bbkz3zL5826JRp7/rwDWWLvozwa9wCIZqdC6AQ2P
-         MzLvV6grBBrRpMPUg3XyYrxsdrwEZiIQqkHUPx0L9TESy+AtC+tZp+dlwaC4379DFSp/
-         3q5g==
-X-Gm-Message-State: AC+VfDxbKVQ8xGnroVZ9fQV9Sj0C9wAqCU2ROzlI/kxK7roUOcoNUfRc
-        ZhZsxWuImcfuW7+8hVkGxys1zx6+30UFsMM2nyg=
-X-Google-Smtp-Source: ACHHUZ56wqlzlBO53OuIFzdwzdzS2tSMbSG9qqqSnbk5ymiIHeod7V2AHmHwAOLFZ4mgluSW8PUxA4fKt7PYIhWniJw=
-X-Received: by 2002:a05:6a20:3d1a:b0:100:b92b:e8be with SMTP id
- y26-20020a056a203d1a00b00100b92be8bemr20744718pzi.2.1688488402042; Tue, 04
- Jul 2023 09:33:22 -0700 (PDT)
+        Tue, 4 Jul 2023 12:35:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFC40E7A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:35:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23D0B15BF;
+        Tue,  4 Jul 2023 09:36:02 -0700 (PDT)
+Received: from R913NWR2.arm.com (unknown [10.163.47.13])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A19993F73F;
+        Tue,  4 Jul 2023 09:35:17 -0700 (PDT)
+From:   Faiz Abbas <faiz.abbas@arm.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     liviu.dudau@arm.com, airlied@gmail.com, daniel@ffwll.ch,
+        faiz.abbas@arm.com
+Subject: [PATCH v2] drm/arm/komeda: Remove component framework and add a simple encoder
+Date:   Tue,  4 Jul 2023 22:04:54 +0530
+Message-Id: <20230704163454.5138-1-faiz.abbas@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230704150240.2022020-1-hugo@hugovil.com> <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
- <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com> <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
-In-Reply-To: <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 4 Jul 2023 13:33:10 -0300
-Message-ID: <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pierluigi Passaro <pierluigi.p@variscite.com>,
-        Nate Drude <nate.d@variscite.com>
-Cc:     Hugo Villeneuve <hugo@hugovil.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,71 +40,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding some Variscite folks in case they can help to clarify.
+The Komeda driver always expects the remote connector node to initialize
+an encoder. It uses the component aggregator framework which consists
+of component->bind() calls used to initialize the remote encoder and attach
+it to the crtc. This makes it incompatible with connector drivers which
+implement drm_bridge APIs.
 
-On Tue, Jul 4, 2023 at 1:20=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 04/07/2023 17:31, Hugo Villeneuve wrote:
-> > On Tue, 4 Jul 2023 17:08:12 +0200
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> >> On 04/07/2023 17:02, Hugo Villeneuve wrote:
-> >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >>>
-> >>> USB OTG is currently broken on the Variscite Symphony EVK and imx8mn
-> >>> nano SOM.
-> >>>
-> >>> Import changes from linux-5.15 branch of  doen't giveto fix it.
-> >>>
-> >>> Link: https://github.com/varigit/linux-imx.git
-> >>> Fixes: 7358e05bddca ("arm64: dts: imx8mn-var-som-symphony: Add Varisc=
-ite Symphony board with VAR-SOM-MX8MN")
-> >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >>> ---
-> >>>  .../dts/freescale/imx8mn-var-som-symphony.dts | 37 +++++++++++++++++=
-+-
-> >>>  1 file changed, 35 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dt=
-s b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> >>> index 406a711486da..aef89198f24c 100644
-> >>> --- a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> >>> +++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> >>> @@ -6,6 +6,7 @@
-> >>>
-> >>>  /dts-v1/;
-> >>>
-> >>> +#include <dt-bindings/usb/pd.h>
-> >>>  #include "imx8mn-var-som.dtsi"
-> >>>
-> >>>  / {
-> >>> @@ -104,10 +105,29 @@ extcon_usbotg1: typec@3d {
-> >>>             compatible =3D "nxp,ptn5150";
-> >>>             reg =3D <0x3d>;
-> >>>             interrupt-parent =3D <&gpio1>;
-> >>> -           interrupts =3D <11 IRQ_TYPE_LEVEL_LOW>;
-> >>> +           interrupts =3D <11 IRQ_TYPE_NONE>;
-> >>
-> >> That's surprising, why?
-> >
-> > Hi,
-> > the varigit repos log or source code has no information about this
-> > particular configuration.
-> >
-> > In the schematics, the interrupt output pin of the PTN5150 is connected
-> > to two different resistors, one of these being connected to GPIO1 pin
-> > 11. But these two resistors are not assembled on any versions of the
-> > board, so the interrupt pin is currently not used.
->
-> OK, so there is no interrupt, but not interrupt of type none. Just drop
-> the property and make it optional in the bindings. The driver however
-> requires the interrupt, so I wonder how the device is going to work
-> without it?
->
-> Are you sure that interrupt line is not shorted instead of missing resist=
-or?
->
-> Best regards,
-> Krzysztof
->
+Remove all component framework calls from the komeda driver and declare and
+attach an encoder inside komeda_crtc_add().
+
+The remote connector driver has to implement the DRM bridge APIs which
+can be used to glue the encoder to the remote connector. Since we
+usually pair this with a component encoder that also implements a
+drm_bridge, dropping support is not expected to affect users of this
+driver.
+
+Signed-off-by: Faiz Abbas <faiz.abbas@arm.com>
+---
+ .../gpu/drm/arm/display/komeda/komeda_crtc.c  | 23 +++++++-
+ .../gpu/drm/arm/display/komeda/komeda_drv.c   | 57 ++-----------------
+ .../gpu/drm/arm/display/komeda/komeda_kms.c   | 10 +---
+ .../gpu/drm/arm/display/komeda/komeda_kms.h   |  3 +
+ 4 files changed, 32 insertions(+), 61 deletions(-)
+
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+index 4cc07d6bb9d82..e5a8a80b173f4 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+@@ -13,6 +13,8 @@
+ #include <drm/drm_crtc_helper.h>
+ #include <drm/drm_print.h>
+ #include <drm/drm_vblank.h>
++#include <drm/drm_simple_kms_helper.h>
++#include <drm/drm_bridge.h>
+ 
+ #include "komeda_dev.h"
+ #include "komeda_kms.h"
+@@ -613,9 +615,11 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
+ 			   struct komeda_crtc *kcrtc)
+ {
+ 	struct drm_crtc *crtc = &kcrtc->base;
++	struct drm_device *base = &kms->base;
++	struct drm_bridge *bridge;
+ 	int err;
+ 
+-	err = drm_crtc_init_with_planes(&kms->base, crtc,
++	err = drm_crtc_init_with_planes(base, crtc,
+ 					get_crtc_primary(kms, kcrtc), NULL,
+ 					&komeda_crtc_funcs, NULL);
+ 	if (err)
+@@ -625,6 +629,23 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
+ 
+ 	crtc->port = kcrtc->master->of_output_port;
+ 
++
++	/* Construct an encoder for each pipeline and attach it to the remote
++	 * bridge
++	 */
++	kcrtc->encoder.possible_crtcs = drm_crtc_mask(crtc);
++	err = drm_simple_encoder_init(base, &kcrtc->encoder,
++				      DRM_MODE_ENCODER_TMDS);
++	if (err)
++		return err;
++
++	bridge = devm_drm_of_get_bridge(base->dev, kcrtc->master->of_node,
++					KOMEDA_OF_PORT_OUTPUT, 0);
++	if (IS_ERR(bridge))
++		return PTR_ERR(bridge);
++
++	err = drm_bridge_attach(&kcrtc->encoder, bridge, NULL, 0);
++
+ 	drm_crtc_enable_color_mgmt(crtc, 0, true, KOMEDA_COLOR_LUT_SIZE);
+ 
+ 	return err;
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+index 9fce4239d4ad4..98e7ca1ad8fe7 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+@@ -7,7 +7,6 @@
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/platform_device.h>
+-#include <linux/component.h>
+ #include <linux/pm_runtime.h>
+ #include <drm/drm_fb_helper.h>
+ #include <drm/drm_module.h>
+@@ -27,13 +26,11 @@ struct komeda_dev *dev_to_mdev(struct device *dev)
+ 	return mdrv ? mdrv->mdev : NULL;
+ }
+ 
+-static void komeda_unbind(struct device *dev)
++static int komeda_platform_remove(struct platform_device *pdev)
+ {
++	struct device *dev = &pdev->dev;
+ 	struct komeda_drv *mdrv = dev_get_drvdata(dev);
+ 
+-	if (!mdrv)
+-		return;
+-
+ 	komeda_kms_detach(mdrv->kms);
+ 
+ 	if (pm_runtime_enabled(dev))
+@@ -45,10 +42,13 @@ static void komeda_unbind(struct device *dev)
+ 
+ 	dev_set_drvdata(dev, NULL);
+ 	devm_kfree(dev, mdrv);
++
++	return 0;
+ }
+ 
+-static int komeda_bind(struct device *dev)
++static int komeda_platform_probe(struct platform_device *pdev)
+ {
++	struct device *dev = &pdev->dev;
+ 	struct komeda_drv *mdrv;
+ 	int err;
+ 
+@@ -88,52 +88,7 @@ static int komeda_bind(struct device *dev)
+ free_mdrv:
+ 	devm_kfree(dev, mdrv);
+ 	return err;
+-}
+-
+-static const struct component_master_ops komeda_master_ops = {
+-	.bind	= komeda_bind,
+-	.unbind	= komeda_unbind,
+-};
+ 
+-static void komeda_add_slave(struct device *master,
+-			     struct component_match **match,
+-			     struct device_node *np,
+-			     u32 port, u32 endpoint)
+-{
+-	struct device_node *remote;
+-
+-	remote = of_graph_get_remote_node(np, port, endpoint);
+-	if (remote) {
+-		drm_of_component_match_add(master, match, component_compare_of, remote);
+-		of_node_put(remote);
+-	}
+-}
+-
+-static int komeda_platform_probe(struct platform_device *pdev)
+-{
+-	struct device *dev = &pdev->dev;
+-	struct component_match *match = NULL;
+-	struct device_node *child;
+-
+-	if (!dev->of_node)
+-		return -ENODEV;
+-
+-	for_each_available_child_of_node(dev->of_node, child) {
+-		if (of_node_cmp(child->name, "pipeline") != 0)
+-			continue;
+-
+-		/* add connector */
+-		komeda_add_slave(dev, &match, child, KOMEDA_OF_PORT_OUTPUT, 0);
+-		komeda_add_slave(dev, &match, child, KOMEDA_OF_PORT_OUTPUT, 1);
+-	}
+-
+-	return component_master_add_with_match(dev, &komeda_master_ops, match);
+-}
+-
+-static int komeda_platform_remove(struct platform_device *pdev)
+-{
+-	component_master_del(&pdev->dev, &komeda_master_ops);
+-	return 0;
+ }
+ 
+ static const struct of_device_id komeda_of_match[] = {
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_kms.c b/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
+index 451746ebbe713..95eb53c284366 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
+@@ -4,7 +4,6 @@
+  * Author: James.Qian.Wang <james.qian.wang@arm.com>
+  *
+  */
+-#include <linux/component.h>
+ #include <linux/interrupt.h>
+ 
+ #include <drm/drm_atomic.h>
+@@ -307,17 +306,13 @@ struct komeda_kms_dev *komeda_kms_attach(struct komeda_dev *mdev)
+ 	if (err)
+ 		goto cleanup_mode_config;
+ 
+-	err = component_bind_all(mdev->dev, kms);
+-	if (err)
+-		goto cleanup_mode_config;
+-
+ 	drm_mode_config_reset(drm);
+ 
+ 	err = devm_request_irq(drm->dev, mdev->irq,
+ 			       komeda_kms_irq_handler, IRQF_SHARED,
+ 			       drm->driver->name, drm);
+ 	if (err)
+-		goto free_component_binding;
++		goto cleanup_mode_config;
+ 
+ 	drm_kms_helper_poll_init(drm);
+ 
+@@ -329,8 +324,6 @@ struct komeda_kms_dev *komeda_kms_attach(struct komeda_dev *mdev)
+ 
+ free_interrupts:
+ 	drm_kms_helper_poll_fini(drm);
+-free_component_binding:
+-	component_unbind_all(mdev->dev, drm);
+ cleanup_mode_config:
+ 	drm_mode_config_cleanup(drm);
+ 	komeda_kms_cleanup_private_objs(kms);
+@@ -346,7 +339,6 @@ void komeda_kms_detach(struct komeda_kms_dev *kms)
+ 	drm_dev_unregister(drm);
+ 	drm_kms_helper_poll_fini(drm);
+ 	drm_atomic_helper_shutdown(drm);
+-	component_unbind_all(mdev->dev, drm);
+ 	drm_mode_config_cleanup(drm);
+ 	komeda_kms_cleanup_private_objs(kms);
+ 	drm->dev_private = NULL;
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_kms.h b/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
+index 7339339ef6b87..9b070d504f4ad 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
+@@ -85,6 +85,9 @@ struct komeda_crtc {
+ 
+ 	/** @disable_done: this flip_done is for tracing the disable */
+ 	struct completion *disable_done;
++
++	/** @encoder: encoder at the end of the pipeline */
++	struct drm_encoder encoder;
+ };
+ 
+ /**
+-- 
+2.25.1
+
