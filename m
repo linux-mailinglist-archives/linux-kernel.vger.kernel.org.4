@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCB374765F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B1D747660
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjGDQXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
+        id S231559AbjGDQXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjGDQXP (ORCPT
+        with ESMTP id S231534AbjGDQXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Jul 2023 12:23:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92365DC
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:22:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688487754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JEbE+8f35ggewzZYNnfdnK2Dc2UOo1hQkfffSP6zams=;
-        b=AhqQATK7MbD/onEC91KqqFjhPhPKWOdhPoTTwYCerGhsgNTemEoyAQqG3eKo9RynFg/DMq
-        q84iWS8Lz+OsEgSevNlAbnlrU9FKD54PosoOeigJEAnu19kACnsWCPsaadDQLi5YS+2P3U
-        oShkDOtUvtSCfXnw6Zz+BfQCy4kRGwY=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-203-0FHX78ioMsC3SnhKV8U1Bg-1; Tue, 04 Jul 2023 12:22:33 -0400
-X-MC-Unique: 0FHX78ioMsC3SnhKV8U1Bg-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-565d1b86a64so49246167b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:22:33 -0700 (PDT)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E677E7A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:23:14 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51d5569e4d1so5588766a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688487792; x=1691079792;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=87qn+jDFmVjTjNNSNN4hyKbPaUWhaGHKw5mutwlghV0=;
+        b=thqIhKjk+3/lpsVetwxdSSKRYKPie8Yu9UjOxT00FG6lJDDk+cB3qEV8ST5s9r03JU
+         zJIWyZwoj7zgqNV4bVsM0ZKU6pegDD8RoYyBaeV+OdqsSSJNWLtOKI1BzQyrNXYdlUzu
+         0+tW8+zN/UVYPusbOoYjuF7FHBglodu34DadggW6qU5Z8lTaemgfwtHHvwM+nXm/62NQ
+         ucCACu17Lx2174722iVdgZe3uTnikofS/iVLJ3dnQ2u0z5zvdUqVVbE9DBx90Gtr0vLR
+         3B+ySh7CwpA6V/Ikw0og//MbN/8mYOifyyxu2UHjVprnWfLvCkPSaoHBUSSwEZRicFYB
+         LUYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688487753; x=1691079753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JEbE+8f35ggewzZYNnfdnK2Dc2UOo1hQkfffSP6zams=;
-        b=MOeNVgWlzMKHGi/72oRorvH6cD80VM/O3rCFJ1qcE9vh/+UNPkNw9AASalBqRD4pNo
-         ONTekc/5xlWuBCSI0VrbbdKXi96WeoF7RFgzEpQ4VfP+PGL4D0vCsIswGtJFkmGtZ7dH
-         BajnLMy7N93UmBLUNHsN43IkN+mYyC3E0PybgeEa5D+R4b3Ffl3EWhSse//X4VRwqM3P
-         8RvGVYUBqS3skM9DJcp+2a/5hOHMW4hUVwelLeW++bJqSh4IMR28/Q3cow+e6Lj2nXrH
-         xAAAplCnFqUH83XzvUb5WT3cLnANEgM//0G0NG5f1x5gd2hiEOs/vkyv2YeGE0ZEvK0i
-         qzyw==
-X-Gm-Message-State: ABy/qLYWXFWc/KSuk6z3xySJf8GZxck2mulvBIOj8WADj3A6n8Gse3k3
-        5SWaaabWsZ16gvS7KT0wMfjeggQG7RcNKCaTKRQ3mLODMHMOe9rfng8HiJXy0Wl162rFx4yfIq8
-        hRJ+oJHoBNxPfkfOwDdfrAGbM+sfnW/0Xxv162Y1q/sf6v4lv
-X-Received: by 2002:a81:9283:0:b0:577:1a7f:1d8 with SMTP id j125-20020a819283000000b005771a7f01d8mr14270075ywg.22.1688487752906;
-        Tue, 04 Jul 2023 09:22:32 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEnaRG0fc85OSCzWDXGD+BlmBU/HE7Uhfv9CtyDA+iKGrH0x/UCTkyS27cEdrHyKES76iZNdLnALUJ32kb3KMM=
-X-Received: by 2002:a81:9283:0:b0:577:1a7f:1d8 with SMTP id
- j125-20020a819283000000b005771a7f01d8mr14270064ywg.22.1688487752732; Tue, 04
- Jul 2023 09:22:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688487792; x=1691079792;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=87qn+jDFmVjTjNNSNN4hyKbPaUWhaGHKw5mutwlghV0=;
+        b=j9O7WndbhyDR8Ctp9gH2GLg4fn3I9j55FpjTka/K+vuE9GG0AWsWi/TuRIB6Lolt4w
+         LZx0caE6Ch8EjBPK0kUSFgrB7yuMPZ2/OAc+ZwSW16JcqdjeUmnmC1pi6AIxik5BuD0d
+         0JbFNEHHQFHO9TXaILhV1Y5S9OXCfs5tFfPvlQAMgNs7+2jZcWH8U9uLHzNg223BfWIc
+         B5hQS/j7G0ZlK6i8IXnUAovub+nUf7AwJsk5mjlYjFQtDl5hHoGd2GFvtoFc5BWNmxSw
+         RXWjJ0ILMt63ejZWbvtq5DYeRVswjCp7ewMmvye4zQ8GdBxOEyCJG/EwVnrEyEsMi2gz
+         puXA==
+X-Gm-Message-State: ABy/qLYY4vhzK3ukSH7UIksbOheqTc5oxc8tofe1Y/B3wabJAvafIGaI
+        9d7ZezDnbjRgP981ngBNB1+syg==
+X-Google-Smtp-Source: ACHHUZ7/NIpswkXshblERoeHprWOJkw+WrHbAmIg2j08RnIJ3GKG/arya5htPe+byj4V25F0fpNT4A==
+X-Received: by 2002:a17:907:9867:b0:97e:56d5:b885 with SMTP id ko7-20020a170907986700b0097e56d5b885mr8788602ejc.60.1688487792504;
+        Tue, 04 Jul 2023 09:23:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id ha22-20020a170906a89600b0098e0c0cfb66sm12873649ejb.38.2023.07.04.09.23.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 09:23:12 -0700 (PDT)
+Message-ID: <e9fe352a-92fc-023b-8ce2-9a82cbeaada9@linaro.org>
+Date:   Tue, 4 Jul 2023 18:23:10 +0200
 MIME-Version: 1.0
-References: <20230704104725.2510-1-machel@vivo.com>
-In-Reply-To: <20230704104725.2510-1-machel@vivo.com>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Tue, 4 Jul 2023 12:22:21 -0400
-Message-ID: <CAK-6q+jQcyyAtMD5tjzjrJg8Auy6HuugJomiSokwRhqRifVpCA@mail.gmail.com>
-Subject: Re: [Cluster-devel] [PATCH v1] fs:dlm:Fix NULL pointer dereference
- bug in accept_from_sock()
-To:     Wang Ming <machel@vivo.com>
-Cc:     Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH 3/3] ARM: dts: Add Chameleon v3 video node
+Content-Language: en-US
+To:     =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>
+Cc:     Conor Dooley <conor@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dinguyen@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mchehab@kernel.org, upstream@semihalf.com, amstan@chromium.org,
+        ribalda@chromium.org
+References: <20230630144006.1513270-1-pan@semihalf.com>
+ <20230630144006.1513270-4-pan@semihalf.com>
+ <20230630-scrimmage-antelope-7d1f82d491fc@spud>
+ <CAF9_jYT1Fz4hBQrNtgkM6mU-JVH=ZxsJnkaLDsa5uoEV_hTLVA@mail.gmail.com>
+ <df7440e2-58b0-9f12-8f37-4f0d9050f934@linaro.org>
+ <CAF9_jYSwDdyE6mj8+1bA23MWmFHdm16jTSYaRQiF1kzpUtkMNQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAF9_jYSwDdyE6mj8+1bA23MWmFHdm16jTSYaRQiF1kzpUtkMNQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 04/07/2023 18:16, Paweł Anikiel wrote:
+>>>>> +     soc {
+>>>>> +             video@c0060500 {
+>>>>> +                     compatible = "google,chv3-video";
+>>>>
+>>>> This compatible does not seem to be documented & I did not see a comment
+>>>> about the lack of a binding in the cover letter. What am I missing?
+>>>
+>>> Yes, the compatible is not documented for now (I'll do that in a later
+>>> patchset), sorry for not mentioning that in the cover letter.
+>>
+>> You cannot add undocumented compatible. This cannot be fixed in "a later
+>> patchset".
+> 
+> I meant later revision, I'm certainly not expecting this one to land
+> (I sent is as an RFC).
 
-On Tue, Jul 4, 2023 at 6:56=E2=80=AFAM Wang Ming <machel@vivo.com> wrote:
->
-> newcon -> sock is NULL but dereferenced.
-> First check newcon. Whether sock is a null pointer.
-> If so, the subsequent operations are skipped.
-> If it is not empty, perform subsequent operations.
->
+That's not clear. RFC is interpreted differently by different people.
+Some just ignore it entirely, some still review.
 
-did you experience some null pointer dereference? If so, on which kernel wa=
-s it?
+> Is it really necessary to document the
+> compatible to get any form of feedback on the overall structure of the
+> driver?
 
-> Signed-off-by: Wang Ming <machel@vivo.com>
-> ---
->  fs/dlm/lowcomms.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
-> index 9f14ea9f6..ea18b9478 100644
-> --- a/fs/dlm/lowcomms.c
-> +++ b/fs/dlm/lowcomms.c
-> @@ -1081,9 +1081,12 @@ static int accept_from_sock(void)
->                 add_sock(newsock, newcon);
->
+Depends on the person. Anyway no problem for me - I will just ignore the
+patchset.
 
-Here in add_sock() we assign newcon->sock =3D newsock. It cannot fail
-and newsock cannot be null, so holding the newcon->sock_lock write
-protected _should_ be safe that others don't manipulate newcon->sock.
-It should, that's why I am asking if you experienced some issue here?
-
->                 /* check if we receved something while adding */
-> -               lock_sock(newcon->sock->sk);
-> -               lowcomms_queue_rwork(newcon);
-> -               release_sock(newcon->sock->sk);
-
-see above, newcon->sock should always be set at this point.
-
-> +               if (newcon->sock) {
-> +                       lock_sock(newcon->sock->sk);
-> +                       lowcomms_queue_rwork(newcon);
-> +                       release_sock(newcon->sock->sk);
-> +               }
-> +
->         }
->         up_write(&newcon->sock_lock);
->         srcu_read_unlock(&connections_srcu, idx);
-
-- Alex
+Best regards,
+Krzysztof
 
