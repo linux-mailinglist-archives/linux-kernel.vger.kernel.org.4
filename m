@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22A6746926
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E8874692C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjGDFpk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 01:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S230167AbjGDFsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 01:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjGDFph (ORCPT
+        with ESMTP id S230014AbjGDFsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:45:37 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D971BAB;
-        Mon,  3 Jul 2023 22:45:36 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qGYqx-000NmI-2S; Tue, 04 Jul 2023 07:45:31 +0200
-Received: from p57bd997f.dip0.t-ipconnect.de ([87.189.153.127] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qGYqw-000fD4-RD; Tue, 04 Jul 2023 07:45:31 +0200
-Message-ID: <485e9274ebf29da4075b40c2888f95a6cdc6d4ed.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in
- SH7709
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 04 Jul 2023 07:45:30 +0200
-In-Reply-To: <CAMuHMdV=kc1sZfsBad99ofbUBUyuZ_fAekdkFJYp9Rhskf9xWg@mail.gmail.com>
-References: <20230527164452.64797-1-contact@artur-rojek.eu>
-         <20230527164452.64797-4-contact@artur-rojek.eu>
-         <CAMuHMdV3gn8g-gKam71K=WfT3CVNwvz5eKPSh2Fqi3wVg7ZwNw@mail.gmail.com>
-         <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
-         <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
-         <8205bc2cb9f983914ff6920deed3f54893713ba0.camel@physik.fu-berlin.de>
-         <d5667e9675bf8be35b1a5414d443b8f371b1bd9e.camel@physik.fu-berlin.de>
-         <CAMuHMdV=kc1sZfsBad99ofbUBUyuZ_fAekdkFJYp9Rhskf9xWg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
+        Tue, 4 Jul 2023 01:48:17 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D6CEE
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:48:16 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51de9c2bc77so4229818a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 22:48:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688449695; x=1691041695;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UdcpK0TGfVOpUi3FvoqQbLWi9UKO2fgo/3u0cXln2gQ=;
+        b=AYAvf1isMLVmdOpZc3LRZjhsbRslrPlDiin+0tKpT2x7Tx+qyCifBpoKVRjIXiprTQ
+         y/9JT67EGaOiVuAeQK2rF+gmLzABWwWaWk+lYhDA7vj/y4mIi9W3nQnpK6by00ijHDbJ
+         CySiJANyWOzQ1X1JaplkNY9NI3conxU7GX635X4bOF/B2V7VOHvh0p2t7x2LEdgWN67p
+         ksvR7WQGh+hkVfcQ1XsLjh5cnwTDT+TjV3eXWOB8AEiFVCIZt/05TtJBl87SAXIn6G/n
+         JorMbsUVHhGgiHg6jGkbol9jNbsRzYO5y74wWQmlDFqM6t6w57P1nFGONzJ/G9BUGJ+t
+         Z56A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688449695; x=1691041695;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdcpK0TGfVOpUi3FvoqQbLWi9UKO2fgo/3u0cXln2gQ=;
+        b=EL+q6cu2s9bOTcsQxBf2GE6DDJp5TppgHVvXsmrWkTHCXyul5+CMwaoXrQYKuIxkt/
+         rOR0C+0L97exJbTxNCgWDy697A6GmnaPmnkWyJEDCkaILANJEr57BNfQGtIQihKs5mFA
+         UFY3wyHQsJe/13tun5zlyXa61qM7v/S/tKEqwj+FjApS/hgOlmogUSFABLEcYWRORUHT
+         MNgiwfVa9nv1CVpUSp+td2rFmaMUy+MWHLAJO7AhaLbQq/5VtlXJCLhHWlfl3jZgGB0n
+         XSgV3Z8nyunZgIFbzCqlzZEsQrjWPQbfvEe6ahnrryYEwZQ+d8a9Zv5jy9vF3TM9m0VD
+         skVg==
+X-Gm-Message-State: ABy/qLbDUfzAlBfArdH0R4feThhKrf2aiuQPQSQn9FH3W5NIil/leWCO
+        +x9zGeq/CV6mJog0IQkqLJKmTA==
+X-Google-Smtp-Source: APBJJlEr9YF/9CNvGTe9vjpKd20FUAoxwqrMpGl6gocRSWRY/Mtmuh2yQ0ohbrUFyjLn8JQKjpzgTg==
+X-Received: by 2002:a17:906:3453:b0:974:771e:6bf0 with SMTP id d19-20020a170906345300b00974771e6bf0mr8047779ejb.56.1688449695121;
+        Mon, 03 Jul 2023 22:48:15 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906948e00b009886aaeb722sm12793010ejx.137.2023.07.03.22.48.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 22:48:14 -0700 (PDT)
+Message-ID: <01c7baae-4cc7-79af-8839-6f72b5175ef9@linaro.org>
+Date:   Tue, 4 Jul 2023 07:48:12 +0200
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.127
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: amlogic: add board AN400
+Content-Language: en-US
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+References: <20230704031636.3215838-1-xianwei.zhao@amlogic.com>
+ <20230704031636.3215838-2-xianwei.zhao@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230704031636.3215838-2-xianwei.zhao@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert!
-
-On Sat, 2023-06-17 at 13:09 +0200, Geert Uytterhoeven wrote:
-> Hi Adrian,
+On 04/07/2023 05:16, Xianwei Zhao wrote:
+> Add the board AN400 tree bindings based Amloigc T7 SoC.
 > 
-> On Sat, Jun 17, 2023 at 9:32 AM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
-> > On Thu, 2023-06-08 at 12:03 +0200, John Paul Adrian Glaubitz wrote:
-> > > > > > That is actually safer, as the user can override NR_ONCHIP_DMA_CHANNELS
-> > > > > > when configuring his kernel, thus breaking DMA  due to an incorrect
-> > > > > > value of SH_DMAC_NR_MD_CH.
-> > > > > > 
-> > > > > > Unfortunately we cannot protect against that when using a single DMAC,
-> > > > > > as SH_DMAC_NR_MD_CH can be either 4, 6, or 8.
-> > > > > > 
-> > > > > > Perhaps this configuration should be moved from Kconfig to <cpu/dma.h>,
-> > > > > > to protect against a user overriding this value?
-> > > > > 
-> > > > > Isn't SH_DMAC_NR_MD_CH already hardwired to the SoC being used?
-> > > > 
-> > > > It depends on CONFIG_NR_ONCHIP_DMA_CHANNELS, while it
-> > > > should be fixed based on the SoC.
-> > > 
-> > > I agree. However, I would be fine with merging this patch set first and fixing
-> > > this particular issue in a follow-up series.
-> > 
-> > So, my suggestion is to take this series as-is for 6.5, then get the other issues
-> > you mentioned fixed for 6.6. I think it's already a gain when these issues are
-> > fixed and the kernel boots on the HP Journada 680 again.
-> 
-> Sure, I don't want to block the acceptance of this series at all.
-> Thanks!
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 
-Apologies for the late reply. Would you mind adding your Reviewed-by to this patch
-before I review and apply the series?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Adrian
+Best regards,
+Krzysztof
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
