@@ -2,87 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301587466F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDA17466FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjGDBsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 21:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S231304AbjGDBuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 21:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjGDBsr (ORCPT
+        with ESMTP id S229897AbjGDBuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 21:48:47 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3D1E62
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:48:44 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f875b267d9so7940600e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 18:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688435322; x=1691027322;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hPcmiNRu5a9AozN6iymhFCjsOvfJRXHmdam3G86CLFE=;
-        b=gYU8iHbiaUiJ3KnEAIDXkrff8NCfwaLM71g9tKkGq7oiEjnDW8o0D+Q+fsprX5CsIz
-         pVsjw8yo6JCS2lm31MbqVSXm3YZ9uizq6RLj40uTAWUqgkLvVIhPLKDoD5nQ9A93az3g
-         JZMAFIWcaVD7I4FFYT0HpC7Gd2BHBdQ+MucdE=
+        Mon, 3 Jul 2023 21:50:52 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1576E54
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:50:50 -0700 (PDT)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 74CF83F19A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688435448;
+        bh=xRjzAE0n5uIgT1izeqo8Qt3qb3EDeNKGoRxIM7nbkoA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=eYRB9ymFWvP4l1f3DIYXJm6h3CjvKssUan205Z10JGaWiTc4a9zxnvawFj7MKCnJz
+         ZrrzPbgr4mspT+y2PuYzsyfjFJzBrgPMzazRg1rC9clALYNTfdIEymMOYZv1lADpV7
+         QeGASqTDQ1CYn1aEOQQ8WrYXS4hdPLNzkmkOxtqqNXRECesTLTAmHY74KGpNLBNYNJ
+         hz8MuI7BjJgv0N9k9wMuyGM4m9ZI7hkOAXq2EvQV2B6X4ac6feee6xmydDeYFGvAlu
+         mhMw6zPNCoSDTrBMNUHyyatWtrq9H2PUecVKbVLFixTtZAFXUKMV9CY1hAoGGx6VGV
+         OcnrWwmD2EYgA==
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-6686e4499b1so5143885b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 18:50:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688435322; x=1691027322;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hPcmiNRu5a9AozN6iymhFCjsOvfJRXHmdam3G86CLFE=;
-        b=IEVm8d1qavyTDkvsCbyqXfve+G/b+0Jy04xS6rLPZeUDnUOdu/Iy8514X2AKlwLlBN
-         rUgfKg1zOMQs4y+AoM4Adhpe2Cdq7HNuVxsOmIIDu5iClp0MiAHZ+B1jPIErukXFyyCe
-         tr7oJkESTDEEO8DU7kxCTWEFxUUK27XR/KZOPO28JO2Ul0EYFkAgdm5pRvjbWs2JKb6H
-         HKQ5cx2K+6T0F7X+YAqu2MA27zJOQ4ZYBFLC75h8U/KGPZ/fbRQv7mdps2lx7aFqbL01
-         B5TN1WShua1DeYbV/QL8dmaPbjF5c/C6zqFO75uTm3aGt5Vj0MkYplcF38h8yMe2pakd
-         cMGg==
-X-Gm-Message-State: ABy/qLZvqRbk8xZQKmHdISpFU7TkMhmQf+OeJF7jIs53TGq00qOb534k
-        mxOAPU8Jfvu2KQ6wWB+VG27kCYZYdguQfKHpiMHhCxRr
-X-Google-Smtp-Source: APBJJlG9FPEboBNeyVtXNro4ZJPLwPjquInJVpIc1fN8tzk3jPP1G5AL9cuRbUyiWdcszyOA4yfY6Q==
-X-Received: by 2002:ac2:5059:0:b0:4fb:7c94:b3e4 with SMTP id a25-20020ac25059000000b004fb7c94b3e4mr7550318lfm.29.1688435322581;
-        Mon, 03 Jul 2023 18:48:42 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id t4-20020ac24c04000000b004fb7584b7absm4138635lfq.5.2023.07.03.18.48.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 18:48:41 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b6a152a933so78163871fa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 18:48:41 -0700 (PDT)
-X-Received: by 2002:a2e:98c7:0:b0:2b4:6f0c:4760 with SMTP id
- s7-20020a2e98c7000000b002b46f0c4760mr7442851ljj.11.1688435321141; Mon, 03 Jul
- 2023 18:48:41 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688435446; x=1691027446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xRjzAE0n5uIgT1izeqo8Qt3qb3EDeNKGoRxIM7nbkoA=;
+        b=c0wcUMmO1C5QDHUMce65PaMc9re/3WGJ7sJqz61mBDMh26Lt7G6Z5bqv9RL3IVxC5s
+         ZRM8gmlZOfkdS6EhZPeLlgCATc3ck794/c+SwpyA8S4nrJ2ufyDpKxf1vRVj5AyM0rET
+         tgLTye9xOniwzi6U4ew7caFCHXfvgkHNFTjmH4ybtlOCO/MPKmhrCBmj6Jh9PzN0wkyL
+         0ETHcI3qWKaxR+zh4hE+Di+xKQ56UpxMilFgUlWDucVqDvHnodvEhQ7j7aKuPj6Wqacr
+         XbEmCI9W8szR3sjRuI3D/1ggKz7CPU8j1+4Gz15dMjSxVsQTiizrs2ELiu9YFuOadvYT
+         ka1A==
+X-Gm-Message-State: ABy/qLbjbMm19d6A4yLkpNC1v/YR6N1RmkjBeBLig81+ZtbVJM47aufd
+        YHPXqaZYITANVsoDvbx7t+Ew68e6A6/7KpjJTX921uIGiCp+eifgL2yZKAnOCMDzwoyG84Ua8KQ
+        VRI6XwsSgMZ5A64KmptH2jKaZd9J4tW5yrAhUt4VbufU4Dpg8WJ/QFLrtTw==
+X-Received: by 2002:a05:6a00:c91:b0:657:f26e:b01a with SMTP id a17-20020a056a000c9100b00657f26eb01amr12396882pfv.26.1688435446043;
+        Mon, 03 Jul 2023 18:50:46 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHX437TWfJBK7YTXwsR6fw6ywkRfC1jA00N3tmzfj+k09vE6RLFcxGk2IJ0KTcV5UzDvOiDWYCDWDyp3EUiYP8=
+X-Received: by 2002:a05:6a00:c91:b0:657:f26e:b01a with SMTP id
+ a17-20020a056a000c9100b00657f26eb01amr12396872pfv.26.1688435445547; Mon, 03
+ Jul 2023 18:50:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230704010003.86352-1-sj@kernel.org>
-In-Reply-To: <20230704010003.86352-1-sj@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Jul 2023 18:48:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgciVavgh6ZafkYJxOw4aAkCOG=RH5487bOcT3TEKKK+w@mail.gmail.com>
-Message-ID: <CAHk-=wgciVavgh6ZafkYJxOw4aAkCOG=RH5487bOcT3TEKKK+w@mail.gmail.com>
-Subject: Re: [PATCH] arch/arm64/mm/fault: Fix undeclared variable error in do_page_fault()
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, surenb@google.com,
-        Liam.Howlett@oracle.com, catalin.marinas@arm.com, will@kernel.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+References: <20230703162509.77828-1-koba.ko@canonical.com> <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
+ <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Koba Ko <koba.ko@canonical.com>
+Date:   Tue, 4 Jul 2023 09:50:33 +0800
+Message-ID: <CAJB-X+UB+eYoYOOVH2bqnnVEJcLrxaj5A7-zyfgBM7hOf4y8zw@mail.gmail.com>
+Subject: Re: [PATCH v2] EDAC/i10nm: shift exponent is negative
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Markus Elfring <Markus.Elfring@web.de>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 18:00, SeongJae Park <sj@kernel.org> wrote:
+On Tue, Jul 4, 2023 at 5:51=E2=80=AFAM Luck, Tony <tony.luck@intel.com> wro=
+te:
 >
-> Commit ae870a68b5d1 ("arm64/mm: Convert to using
-> lock_mm_and_find_vma()") made do_page_fault() to use 'vma' even if
-> CONFIG_PER_VMA_LOCK is not defined, but the declaration is still in the
-> ifdef.
+> > > UBSAN complains this error
+> > > ~~~
+> > >  UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
+> > =E2=80=A6
+> > > ~~~
+> > >
+> > > when get rows, cols and ranks, the returned error value doesn't be
+> > > handled.
+> > >
+> > > check the return value is EINVAL, if yes, directly return 0.
+> > =E2=80=A6
+> >
+> > * Please improve this change description further.
+>
+> To be specific. Initially you reported this because of the UBSAN error
+> report. But, after community discussion you now know that the problem
+> is that one or more of the rows/cols/ranks has a value that the EDAC driv=
+er
+> doesn't expect and probably can handle.
+>
+> So, in V2, the commit message should start with the information these
+> values are out of range and mention this was discovered when UBSAN
+> put out a warning about a negative shift. No need to include the whole
+> of the UBSAN stack trace.
+>
+> Then describe the two fixes that this patch includes. One is to change th=
+e
+> edac debug message into a console error message to enable further
+> debug of this issue. The other is to skip the unrecognized DIMM.
+>
+> > * How do you think about to add the tag =E2=80=9CFixes=E2=80=9D?
+>
+> This is a good idea.  Use git blame, or dig into the GIT history to
+> find the commit where this code was introduced (hint .. git blame
+> says:
+> 88a242c98740 ("EDAC, skx_common: Separate common code out from skx_edac")
+> but that obviously just refactored code, so you should dig back more into
+> the history.
+>
+> > > V2: make error-print explicitly
+> > > ---
+> >
+> > Would you like to avoid a misplaced marker line here?
+> >
+> > See also:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/process/submitting-patches.rst?h=3Dv6.4#n686
+>
+> That's an excellent resource.
 
-Duh. Thanks. Applied.
+Thanks for your advices and I will modify.
+here's part of dmesg enabled EDAC_DEBUG
+~~~
+[    4.032332] EDAC DEBUG: skx_register_mci: MC#1: mci =3D 00000000799db99e
+[    4.032334] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
+mcddrtcfg 0xffffffff (mc1 ch0 dimm0)
+[    4.032335] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
+ffff)
+[    4.032337] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
+fff)
+[    4.032338] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
+fff)
+[    4.032339] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
+mcddrtcfg 0xffffffff (mc1 ch0 dimm1)
+[    4.032340] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
+ffff)
+[    4.032341] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
+fff)
+[    4.032341] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
+fff)
+[    4.032343] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
+mcddrtcfg 0xffffffff (mc1 ch1 dimm0)
+[    4.032344] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
+ffff)
+[    4.032345] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
+fff)
+[    4.032346] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
+fff)
+[    4.032347] EDAC DEBUG: i10nm_get_dimm_config: dimmmtr 0xffffffff
+mcddrtcfg 0xffffffff (mc1 ch1 dimm1)
+[    4.032348] EDAC DEBUG: skx_get_dimm_attr: bad ranks =3D 3 (raw=3D0xffff=
+ffff)
+[    4.032349] EDAC DEBUG: skx_get_dimm_attr: bad rows =3D 7 (raw=3D0xfffff=
+fff)
+[    4.032349] EDAC DEBUG: skx_get_dimm_attr: bad cols =3D 3 (raw=3D0xfffff=
+fff)
+~~~
 
-              Linus
+I shared the whole dmesg through g-drive.
+https://drive.google.com/file/d/1epnDZNezGiJsK1eT4UNOi8_igcBSXtiF/view?usp=
+=3Dsharing
+
+>
+> -Tony
