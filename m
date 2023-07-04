@@ -2,164 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC24747290
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6623747295
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjGDNTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S230145AbjGDNUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbjGDNTQ (ORCPT
+        with ESMTP id S231148AbjGDNUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:19:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7A11731
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688476651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kRXNwgWnFU9ZqZTTaRpnSrUAwofFRUsqVGfrl1t654U=;
-        b=DjhPbrsjBiel1DFiH+uE1016na+qck9JjoiTRuUKuaJ2xT1hU0olF3r0W7oSdg/YVd23EZ
-        6p1oVebOr0cPhij158OQqSEo5BPPHS71URpzHvMXfU1k+jO2x3fqqzWPOu7H7esn9O/STJ
-        RxYbtTW9YiYumqftKfM4T6JXCNJCdrw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-116-7jjORAkmPd25ysBKCGMs1Q-1; Tue, 04 Jul 2023 09:17:27 -0400
-X-MC-Unique: 7jjORAkmPd25ysBKCGMs1Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5FAE41044594;
-        Tue,  4 Jul 2023 13:17:27 +0000 (UTC)
-Received: from [10.39.208.32] (unknown [10.39.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6CC7140C2063;
-        Tue,  4 Jul 2023 13:17:25 +0000 (UTC)
-Message-ID: <8128857f-e292-2e41-cdb9-9c5d4a2f79c7@redhat.com>
-Date:   Tue, 4 Jul 2023 15:17:22 +0200
+        Tue, 4 Jul 2023 09:20:06 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BE91732
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:19:46 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6a0d91e80so91065551fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1688476784; x=1691068784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mBGvKJ2raiXHwqCxo5f1RgualxPoi7vbtFSakbXU4rI=;
+        b=MIwhp176yCo2oeFytKDt/P81xuVIswC3q98hyWwlSTNc3bMZ9encq9LC83jA8/4hEy
+         wIUuiLUP1P2PFT30Vb2nJKvAf5xnKpRcH0clAOJ9VMgZ3AqIQSIUxAQ/D/MMEP0bktbS
+         b/ek8LQXuCih/Ex9SFtyRH7nLMkB5vT9IJmzY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688476784; x=1691068784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mBGvKJ2raiXHwqCxo5f1RgualxPoi7vbtFSakbXU4rI=;
+        b=TFdN+VoW3phFZSVAUZOhT9LuZxJNf2jBlWhL6e+Qwm99G8Qxa/eAQC6U9VbSk77nUG
+         CyTslvvtAq6IN/35Do5jjx9PT3jMMz6xM2xW15i22E/jy7JPna0UMoBnX0oroIz+6hC5
+         Apas1ATWqiJn4hJVyE8zSGZ2meV1GOzoz8W8pKt4UXw7fzIyJhLaw+LNiEWzJZb2xEZD
+         3o05KvkH3rgDSeL1PT3BY102WwIx7ONcSVMcIvYdDa/Fxg3XmVIdn++wB4vhafe7dGr+
+         QQhmuyysOAdcqV5uzsDTWjY0M6VaQW5OWgbgrhcAeiM6rr6u1TavDWS5Y6t7VokU6Di6
+         ma7Q==
+X-Gm-Message-State: ABy/qLZpj6R4ytfBP1j9Lbz3XvNkNXy9qRCsiTL3ZiXA30oSteBfWUP8
+        wxsPMMuw3K2MSkYy7w+WXvBX3afwnaCscNfTSO5Omw==
+X-Google-Smtp-Source: APBJJlF/Id93QzmcWeur89f4EyZYN//iy5DLKx1CS2z+nh8M7OSy5VE5SnDBJ4YaSz+AZ8t+AzIvmTvm1JMd9+eGdJA=
+X-Received: by 2002:a2e:9d86:0:b0:2b6:cf0f:1fbf with SMTP id
+ c6-20020a2e9d86000000b002b6cf0f1fbfmr8910419ljj.42.1688476783946; Tue, 04 Jul
+ 2023 06:19:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 0/2] vduse: add support for networking devices
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, xieyongji@bytedance.com,
-        david.marchand@redhat.com, lulu@redhat.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        xuanzhuo@linux.alibaba.com, eperezma@redhat.com
-References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
- <20230702093530-mutt-send-email-mst@kernel.org>
- <CACGkMEtoW0nW8w6_Ew8qckjvpNGN_idwpU3jwsmX6JzbDknmQQ@mail.gmail.com>
- <571e2fbc-ea6a-d231-79f0-37529e05eb98@redhat.com>
- <20230703174043-mutt-send-email-mst@kernel.org>
- <0630fc62-a414-6083-eed8-48b36acc7723@redhat.com>
- <20230704055840-mutt-send-email-mst@kernel.org>
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-In-Reply-To: <20230704055840-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <1688011324-42406-1-git-send-email-CruzZhao@linux.alibaba.com> <20230704053946.GA658436@ziqianlu-dell>
+In-Reply-To: <20230704053946.GA658436@ziqianlu-dell>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 4 Jul 2023 09:19:32 -0400
+Message-ID: <CAEXW_YQpv8Ha5Yx=OthBiELt0BovuuLTe1kO9=R2PptkWsHHvA@mail.gmail.com>
+Subject: Re: [PATCH v3] sched/core: introduce sched_core_idle_cpu()
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Cruz Zhao <CruzZhao@linux.alibaba.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, boqun.feng@gmail.com,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        qiang1.zhang@intel.com, jstultz@google.com,
+        clingutla@codeaurora.org, nsaenzju@redhat.com, tglx@linutronix.de,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 4, 2023 at 1:40=E2=80=AFAM Aaron Lu <aaron.lu@intel.com> wrote:
+>
+> On Thu, Jun 29, 2023 at 12:02:04PM +0800, Cruz Zhao wrote:
+> > As core scheduling introduced, a new state of idle is defined as
+> > force idle, running idle task but nr_running greater than zero.
+> >
+> > If a cpu is in force idle state, idle_cpu() will return zero. This
+> > result makes sense in some scenarios, e.g., load balance,
+> > showacpu when dumping, and judge the RCU boost kthread is starving.
+> >
+> > But this will cause error in other scenarios, e.g., tick_irq_exit():
+> > When force idle, rq->curr =3D=3D rq->idle but rq->nr_running > 0, resul=
+ts
+> > that idle_cpu() returns 0. In function tick_irq_exit(), if idle_cpu()
+> > is 0, tick_nohz_irq_exit() will not be called, and ts->idle_active will
+> > not become 1, which became 0 in tick_nohz_irq_enter().
+> > ts->idle_sleeptime won't update in function update_ts_time_stats(), if
+> > ts->idle_active is 0, which should be 1. And this bug will result that
+> > ts->idle_sleeptime is less than the actual value, and finally will
+> > result that the idle time in /proc/stat is less than the actual value.
+> >
+> > To solve this problem, we introduce sched_core_idle_cpu(), which
+> > returns 1 when force idle. We audit all users of idle_cpu(), and
+> > change idle_cpu() into sched_core_idle_cpu() in function
+> > tick_irq_exit().
+> >
+> > v2-->v3: Only replace idle_cpu() with sched_core_idle_cpu() in
+> > function tick_irq_exit(). And modify the corresponding commit log.
+> >
+> > Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+> > Reviewed-by: Peter Zijlstra <peterz@infradead.org>
+> > Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> > Reviewed-by: Joel Fernandes <joel@joelfernandes.org>
+> > Link: https://lore.kernel.org/lkml/1687631295-126383-1-git-send-email-C=
+ruzZhao@linux.alibaba.com
+> > ---
+> >  include/linux/sched.h |  2 ++
+> >  kernel/sched/core.c   | 13 +++++++++++++
+> >  kernel/softirq.c      |  2 +-
+> >  3 files changed, 16 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index b09a83bfad8b..73e61c0f10a7 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -2430,9 +2430,11 @@ extern void sched_core_free(struct task_struct *=
+tsk);
+> >  extern void sched_core_fork(struct task_struct *p);
+> >  extern int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_=
+type type,
+> >                               unsigned long uaddr);
+> > +extern int sched_core_idle_cpu(int cpu);
+> >  #else
+> >  static inline void sched_core_free(struct task_struct *tsk) { }
+> >  static inline void sched_core_fork(struct task_struct *p) { }
+> > +static inline int sched_core_idle_cpu(int cpu) { return idle_cpu(cpu);=
+ }
+> >  #endif
+> >
+> >  extern void sched_set_stop_task(int cpu, struct task_struct *stop);
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index 71c1a0f232b4..c80088956987 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -7286,6 +7286,19 @@ struct task_struct *idle_task(int cpu)
+> >       return cpu_rq(cpu)->idle;
+> >  }
+> >
+> > +#ifdef CONFIG_SCHED_CORE
+> > +int sched_core_idle_cpu(int cpu)
+> > +{
+> > +     struct rq *rq =3D cpu_rq(cpu);
+> > +
+> > +     if (sched_core_enabled(rq) && rq->curr =3D=3D rq->idle)
+> > +             return 1;
+>
+> If the intention is to consider forced idle cpus as idle, then should
+> the above condition written as:
+>
+>         if (sched_core_enabled(rq) && rq->core->core_forceidle_count)
+>                 return 1;
+> ?
+>
+> Or as long as a single cookied task is running, all normal idle cpus are
+> regarded forced idle here and 1 is returned while previously, idle_cpu()
+> is called for those cpus and if they have wakeup task pending, they are
+> not regarded as idle so looks like a behaviour change.
+>
 
+Ah you're right, great insight. _sigh_ I should not have missed that
+during review. It will change idle_cpu() behavior if core sched is
+enabled...
 
-On 7/4/23 11:59, Michael S. Tsirkin wrote:
-> On Tue, Jul 04, 2023 at 10:43:07AM +0200, Maxime Coquelin wrote:
->>
->>
->> On 7/3/23 23:45, Michael S. Tsirkin wrote:
->>> On Mon, Jul 03, 2023 at 09:43:49AM +0200, Maxime Coquelin wrote:
->>>>
->>>> On 7/3/23 08:44, Jason Wang wrote:
->>>>> On Sun, Jul 2, 2023 at 9:37 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->>>>>>
->>>>>> On Tue, Jun 27, 2023 at 01:36:50PM +0200, Maxime Coquelin wrote:
->>>>>>> This small series enables virtio-net device type in VDUSE.
->>>>>>> With it, basic operation have been tested, both with
->>>>>>> virtio-vdpa and vhost-vdpa using DPDK Vhost library series
->>>>>>> adding VDUSE support using split rings layout (merged in
->>>>>>> DPDK v23.07-rc1).
->>>>>>>
->>>>>>> Control queue support (and so multiqueue) has also been
->>>>>>> tested, but requires a Kernel series from Jason Wang
->>>>>>> relaxing control queue polling [1] to function reliably.
->>>>>>>
->>>>>>> [1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
->>>>>>
->>>>>> Jason promised to post a new version of that patch.
->>>>>> Right Jason?
->>>>>
->>>>> Yes.
->>>>>
->>>>>> For now let's make sure CVQ feature flag is off?
->>>>>
->>>>> We can do that and relax on top of my patch.
->>>>
->>>> I agree? Do you prefer a features negotiation, or failing init (like
->>>> done for VERSION_1) if the VDUSE application advertises CVQ?
->>>>
->>>> Thanks,
->>>> Maxime
->>>
->>> Unfortunately guests fail probe if feature set is inconsistent.
->>> So I don't think passing through features is a good idea,
->>> you need a list of legal bits. And when doing this,
->>> clear CVQ and everything that depends on it.
->>
->> Since this is temporary, while cvq is made more robust, I think it is
->> better to fail VDUSE device creation if CVQ feature is advertised by the
->> VDUSE application, instead of ensuring features depending on CVQ are
->> also cleared.
->>
->> Jason seems to think likewise, would that work for you?
->>
->> Thanks,
->> Maxime
-> 
-> Nothing is more permanent than temporary solutions.
-> My concern would be that hardware devices then start masking CVQ
-> intentionally just to avoid the pain of broken software.
-
-Got it, I'll add a patch on top that filters out CVQ feature and all the
-features that depend on it.
-
-Thanks,
-Maxime
-
-> 
->>>
->>>
->>>>> Thanks
->>>>>
->>>>>>
->>>>>>> RFC -> v1 changes:
->>>>>>> ==================
->>>>>>> - Fail device init if it does not support VERSION_1 (Jason)
->>>>>>>
->>>>>>> Maxime Coquelin (2):
->>>>>>>      vduse: validate block features only with block devices
->>>>>>>      vduse: enable Virtio-net device type
->>>>>>>
->>>>>>>     drivers/vdpa/vdpa_user/vduse_dev.c | 15 +++++++++++----
->>>>>>>     1 file changed, 11 insertions(+), 4 deletions(-)
->>>>>>>
->>>>>>> --
->>>>>>> 2.41.0
->>>>>>
->>>>>
->>>
-> 
-
+ - Joel
