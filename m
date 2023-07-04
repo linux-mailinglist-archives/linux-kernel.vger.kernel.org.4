@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707DA747731
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8496747734
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjGDQvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S231366AbjGDQwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjGDQvn (ORCPT
+        with ESMTP id S229595AbjGDQwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:51:43 -0400
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CE91AC;
-        Tue,  4 Jul 2023 09:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688489496;
-        bh=cIg2PICXNPUsFX6awcRmfhx7g4SJNWbhIdMrQNCN3aY=;
-        h=From:To:Cc:Subject:Date;
-        b=eX+biQaka25vcEH843I6gO/gfaVVGlzdGFZzNFXntPEbqfDTLfLE3TeS/sahRdCxK
-         or2kRbIJBN+pdqd/crbgTDDiD831eSNVgnNSqESey6is3ajJbo16cQgzSxJUmJSxzE
-         Mqa0AorvmoquItSqnxnlClmjd3ZzCHUZ9QvJMnvE=
-Received: from localhost.localdomain ([119.136.250.51])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id C85AE8D9; Wed, 05 Jul 2023 00:50:05 +0800
-X-QQ-mid: xmsmtpt1688489405tni7sipgq
-Message-ID: <tencent_75CD234BE106B55B02EE46AAB672AB0DAC05@qq.com>
-X-QQ-XMAILINFO: NKDEJ657lpu+v/ezi0CXmzCQFDGl9yP6n/RU6Lw7NJzJcNyukpzws2S2r0HpYQ
-         RPr3om061uvHSBXKCuzK4iHvWnNR0Q2NhySymWKWSzo6hYkeDHNpD1vF45Tc0luqov2/3znvI6vs
-         y0VFvG1K6uual1lf7OTCF83HJfJajKN5KZ1WuMbdcKUvfZUHWhA+YhW5lUmWR6P5Gir+bPjmPQd4
-         six9bd9ITXIA2scOH+IHjo05zPVZKJa2bGGBzNAL7DojmkTZTpfneMqh4JRjUbilXwOQrJgi28Jj
-         YEsJ3bi6hsM+d+cdyCdbNOm0w8pp96SCAbiOF5MZm92n1Efr3X9wUAHrje4XGq5eNHwpgSBctJfB
-         agNkE7hp4zS1gDRu0inELCLuzTR+6MI2JCKbU3OpLCDeyNGGM4AGDcNqky37Cy2xCHF+fgVEXYI5
-         TC1i4AMRDFIpQnkZm/FzI2uN+pa9LQkveqLMhcPJ4bzq29oDkyvN8WmCvTEkmw2MmsZzU96giNpp
-         UXmNodqKOGP7wNoWTAx3UMjXE2LTX8vXJ58t3aIAsjzOTXDDU+oIMOLhIKh1CTlj96FniOc58ick
-         BXCBiC+N957jx1r0gjClkPzNm85BlQdPBczkF7gDer8SUzZTxktQXhMR8dFFuA8mbulxPwsOjGRn
-         OJZupN90QNSw3kwEhBN3KjBaIarVXip0UdpHH7J+8+mFyWOGKHwvDxKAmt6HuKOytVb4+QftzyDD
-         xbBOdOdapk2LuLkt05/2MEJ5B7wJOZc2T/OGZerplSrONMNTEFDa2X7j/sQBebrlJfUB3LX3ZQ6R
-         hHHdiCP/JWQdMdayAyycViX78XMAVZGvYKZmuDlGFFBohU89QZVuhYGX99jD+h2Vfj10tzcVDZ9L
-         gEFLsyAuKRNO5e4M4+ZmtuuEnooBBMuazC0NqCGm7CgyMf3JiE6yxy5vpN2AKL8tOpGuQZpMDuaI
-         qQGkdtzKjhVcO5nrjRz5pZ19xqgIUf7jcX+XRSpDXvtufhxfCobA==
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     pkshih@realtek.com
-Cc:     kvalo@kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] wifi: rtw89: debug: fix error code in rtw89_debug_priv_send_h2c_set()
-Date:   Wed,  5 Jul 2023 00:50:02 +0800
-X-OQ-MSGID: <20230704165002.30911-1-zhang_shurong@foxmail.com>
+        Tue, 4 Jul 2023 12:52:15 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC44DD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 09:52:13 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51d9128494cso5593550a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 09:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1688489532; x=1691081532;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NCEuud2npCtaP+WAwUQoRnlKY8hdkU19aLP9Y84PvRg=;
+        b=VI57yG1MiCludDVUSlMzYw8RlbygdCdy7DU1GtAtpp4ZqiXttzsdWHfm0fk/OIyF1K
+         6GRq0T/Hw23jT/wf2JejLA58GHEmUyowJjP92JgIxOM7fdJq+iCsUZprvS3HV0u9PBWH
+         oemiTCPAm6+QgcYQUIHxHTkCpSkDEwM24DTIzucfIAhLQ6pRorQZZd873SMoFgtR9YZL
+         tGx0ZMzuhLwXRX1/m0e/zNLGAyZDVpJ+jcQGbjh27qT+fhjYnD4cpXXJbmIWtNxZRlhu
+         wVI7vuHqkQE+eTtqi8bromcpMh+TzHh/pDx8HEUe1I862SRmUfSqX2bYDhEa4w+OQKnG
+         +tdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688489532; x=1691081532;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NCEuud2npCtaP+WAwUQoRnlKY8hdkU19aLP9Y84PvRg=;
+        b=Ciqw0ZyXZzzfSgbVTx/X0FigyNBcufEEdQGr7eXNDcvrSLFKmb2F91ty/RlsGiSv26
+         tWTEBuUzxMA48tNC1GJwJAMLsNTxvo6HxMiAQgyfiCYAeVarTkqc0mIHpvlXVfYhdM0Z
+         8ZNUtEgivVELqg4vOPlP2SpelPrChKcgkx8xalQ6qxjWuLSdEKir0VQzhysaN/MpMeDD
+         bo0Pa9Hua5Q+jzUILtQIkhXObZFdhcnLrqGIBQTfdjFO3CNfF+71PkdfGwVZeh2kUAIc
+         m0Y2FSbzY28ROzywgVg5rVpyRB8nARntoPqAP2fGT+GdynLVOYtILC4VJ3f6uk7Zx0kL
+         QxCA==
+X-Gm-Message-State: ABy/qLZluC69pqBqOSZW2My0IQHISHR9f3x0FdTuj23BqKZOCVFMiNOb
+        6dyjXI2nhVY0VGLwRmTz13MpHp0+0LYkiiloLz8=
+X-Google-Smtp-Source: APBJJlFmC1hy+2lDGDv/PJFcapa3pXqHpnvzlzeQUFrvLzx32a7XVI0J6/Qfxr3huJyRQP03KgwJMA==
+X-Received: by 2002:aa7:df93:0:b0:51d:a124:62cb with SMTP id b19-20020aa7df93000000b0051da12462cbmr10146841edy.28.1688489531957;
+        Tue, 04 Jul 2023 09:52:11 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id d17-20020a056402001100b0051a53d7b160sm11969824edu.80.2023.07.04.09.52.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 09:52:11 -0700 (PDT)
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-kernel@vger.kernel.org (open list),
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>, gost.dev@samsung.com,
+        linux-block@vger.kernel.org (open list:BLOCK LAYER),
+        Christoph Hellwig <hch@infradead.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: [PATCH v5 0/5] ublk: enable zoned storage support
+Date:   Tue,  4 Jul 2023 18:52:04 +0200
+Message-ID: <20230704165209.514591-1-nmi@metaspace.dk>
 X-Mailer: git-send-email 2.41.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,41 +78,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is a failure during rtw89_fw_h2c_raw() rtw89_debug_priv_send_h2c
-should return negative error code instead of a positive value count.
+From: Andreas Hindborg <a.hindborg@samsung.com>
 
-Fix this bug by returning correct error code.
+Hi All,
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
- drivers/net/wireless/realtek/rtw89/debug.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+This patch set adds zoned storage support to `ublk`. The first 3 patches do some
+house cleaning in preparation for the last patch. The last patch adds support
+for report_zones and the following operations:
 
-diff --git a/drivers/net/wireless/realtek/rtw89/debug.c b/drivers/net/wireless/realtek/rtw89/debug.c
-index 1db2d59d33ff..96481dd2b1d3 100644
---- a/drivers/net/wireless/realtek/rtw89/debug.c
-+++ b/drivers/net/wireless/realtek/rtw89/debug.c
-@@ -3026,17 +3026,18 @@ static ssize_t rtw89_debug_priv_send_h2c_set(struct file *filp,
- 	struct rtw89_debugfs_priv *debugfs_priv = filp->private_data;
- 	struct rtw89_dev *rtwdev = debugfs_priv->rtwdev;
- 	u8 *h2c;
-+	int err = 0;
- 	u16 h2c_len = count / 2;
- 
- 	h2c = rtw89_hex2bin_user(rtwdev, user_buf, count);
- 	if (IS_ERR(h2c))
- 		return -EFAULT;
- 
--	rtw89_fw_h2c_raw(rtwdev, h2c, h2c_len);
-+	err = rtw89_fw_h2c_raw(rtwdev, h2c, h2c_len);
- 
- 	kfree(h2c);
- 
--	return count;
-+	return err ? ERR_PTR(err) : count;
- }
- 
- static int
+ - REQ_OP_ZONE_OPEN
+ - REQ_OP_ZONE_CLOSE
+ - REQ_OP_ZONE_FINISH
+ - REQ_OP_ZONE_RESET
+ - REQ_OP_ZONE_APPEND
+
+Changes for v5:
+ - Merge zone append patch and zone ops patch
+ - Use defines instead of enum for opcodes
+ - Add a helper `ublk_dev_is_zoned()`
+ - Add a helper `ublk_dev_is_user_copy()`
+ - Fix a leak in `ublk_report_zones()`
+ - Use goto to handle cleanup in `ublk_report_zones()`
+ - Change name of module from `ublk` back to `ublk_drv` and rename source files
+ - Fail to add device if user copy is not supported (implicitly fail to start device under same condition)
+ - Fail to add device if kernel is not compiled with CONFIG_BLK_DEV_ZONED
+ - Fail to apply device parameters if chunk_sectors is not set while zoned support is requested
+ - Change kconfig entry
+ - Check max open/active zones are valid
+ - Document UBLK_IO_OP_REPORT_ZONES buffer format
+ - Use function stubs rather than if(IS_ENABLED(...))
+ - Improve validation of zoned parameters
+
+A user space component based on ubdsrv is available for testing [1] with the
+"loop" target. No changes are required for user space for v4 -> v5.
+
+Read/write and zone operations are tested with zenfs [3].
+
+The zone append path is tested with fio -> zonefs -> ublk -> null_blk.
+
+The implementation of zone append requires ublk user copy feature, and therefore
+the series is based on branch for-next (6afa337a3789) of [4].
+
+[1] https://github.com/metaspace/ubdsrv/commit/7de0d901c329fde7dc5a2e998952dd88bf5e668b
+[2] https://lore.kernel.org/linux-block/20230316145539.300523-1-nmi@metaspace.dk/
+[3] https://github.com/westerndigitalcorporation/zenfs
+[4] https://git.kernel.dk/linux.git
+
+Andreas Hindborg (5):
+  ublk: add opcode offsets for DRV_IN/DRV_OUT
+  ublk: move types to shared header file
+  ublk: rename driver files to prepare for multiple translation units
+  ublk: add helper to check if device supports user copy
+  ublk: enable zoned storage support
+
+ MAINTAINERS                          |   4 +-
+ drivers/block/Kconfig                |   5 +
+ drivers/block/Makefile               |   2 +
+ drivers/block/ublk-zoned.c           | 225 +++++++++++++++++++++++++++
+ drivers/block/{ublk_drv.c => ublk.c} | 186 ++++++++++------------
+ drivers/block/ublk.h                 | 180 +++++++++++++++++++++
+ include/uapi/linux/ublk_cmd.h        |  44 +++++-
+ 7 files changed, 533 insertions(+), 113 deletions(-)
+ create mode 100644 drivers/block/ublk-zoned.c
+ rename drivers/block/{ublk_drv.c => ublk.c} (95%)
+ create mode 100644 drivers/block/ublk.h
+
+
+base-commit: 3261ea42710e9665c9151006049411bd23b5411f
 -- 
 2.41.0
 
