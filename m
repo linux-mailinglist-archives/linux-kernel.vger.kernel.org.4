@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B402746A4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CD0746A50
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjGDHGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S231268AbjGDHIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjGDHGu (ORCPT
+        with ESMTP id S230028AbjGDHIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:06:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9324FFB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:06:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 417272F4;
-        Tue,  4 Jul 2023 00:07:30 -0700 (PDT)
-Received: from [10.57.76.103] (unknown [10.57.76.103])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 574903F762;
-        Tue,  4 Jul 2023 00:06:45 -0700 (PDT)
-Message-ID: <82d3332e-beff-85ff-c1fd-0d46345b69b5@arm.com>
-Date:   Tue, 4 Jul 2023 08:06:42 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] mm: riscv: fix an unsafe pte read in huge_pte_alloc()
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Hugh Dickins <hughd@google.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        linux-riscv@lists.infradead.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        James Houghton <jthoughton@google.com>
-References: <20230703190044.311730-1-jhubbard@nvidia.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230703190044.311730-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 03:08:19 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D982136;
+        Tue,  4 Jul 2023 00:08:19 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b89114266dso17126935ad.0;
+        Tue, 04 Jul 2023 00:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688454498; x=1691046498;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3QSBORDVW5k2buwTkXzNiNoPGGqOZzae03kTOF+RVSo=;
+        b=PYEOW9zIgAsNL9l0PbiWAISqeRxsMFljrPe3hyFhDFaDU3UmiRt0RpA9G0y/acDdGX
+         l7/Jd7OxLmjKKZpKJ8vnGlqfvyzwjnYXbi+38gIY6nlWPiwfWcxmpas1y31MJqLr0ATD
+         1uVeyMerVkE1YtkAHO6zB+JrsCxZqHVKPvaNti5NCdq0BmTwKQe5VARd57IGTyRHuEee
+         jyfhVW+w3BeMVEMwSFTngE4eh+y7KV2jTvvGdpjcOqpBuoLbe4sgj+jE0crgNG6nPESl
+         sgpxm5GJdbsP+LpTczWZV+neZpcjefWiRphS0HCac6yPzUH1h/6Ypwr2t0c9RvCg18rL
+         l/Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688454498; x=1691046498;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3QSBORDVW5k2buwTkXzNiNoPGGqOZzae03kTOF+RVSo=;
+        b=exHzuzNrJ/2byVKKTCYMee5lkaTXkeUoqmj/jcoTZcIOBeh7jCMVXLBqHOU3TFE76N
+         e40MJ/r3zdFTu6rOPjKXpoV2CL9Lr354moB8dAzgBe4V86gUuSjm3N307jHA25uu0ILV
+         2J6I483EAT0rtT7+g3TC/1MrHG0DbZpRew2WSe8Ap4vVU9V5R7Vd9OChZPTHm5utHjLw
+         qMuUZPNyfbBQBZlGIjxd2n9qkHmDoUIPUAVvVWwqeefSHOHeaNhcvXGhFSdBCmr8jM48
+         mTMM419Eu6+bJ3HGxo82vC/J6n+fd8Y8pZUKFSnTMVZrpV2vEkEGxQCWRuRROwEMhs0P
+         f/3Q==
+X-Gm-Message-State: ABy/qLbD/cw4TyZf//XfuoHpmjSfL8rYWCLSOsmV8vDxlLPQi/uo5Tu4
+        Hh1qn2XmCueWw+YovLiTx4Y=
+X-Google-Smtp-Source: APBJJlEcjPPVO+rQY7XGJaL7px2FduCNvz4NWrbnyALMIyBZ6RIaUK6UDvx6qyqwC2QNfnN08oEgLQ==
+X-Received: by 2002:a17:903:2594:b0:1b2:28ca:d16 with SMTP id jb20-20020a170903259400b001b228ca0d16mr12878627plb.44.1688454498470;
+        Tue, 04 Jul 2023 00:08:18 -0700 (PDT)
+Received: from MSCND1355B05.fareast.nevint.com ([183.242.39.186])
+        by smtp.gmail.com with ESMTPSA id be4-20020a170902aa0400b001b52891bd45sm16395497plb.57.2023.07.04.00.08.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 00:08:17 -0700 (PDT)
+From:   Zqiang <qiang.zhang1211@gmail.com>
+To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, qiang.zhang1211@gmail.com
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] srcu: Priority check rcu_gp_is_expedited() in synchronize_srcu()
+Date:   Tue,  4 Jul 2023 15:08:09 +0800
+Message-Id: <20230704070809.31951-1-qiang.zhang1211@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 20:00, John Hubbard wrote:
-> The WARN_ON_ONCE() statement in riscv's huge_pte_alloc() is susceptible
-> to false positives, because the pte is read twice at the C language
-> level, locklessly, within the same conditional statement. Depending on
-> compiler behavior, this can lead to generated machine code that actually
-> reads the pte just once, or twice. Reading twice will expose the code to
-> changing pte values and cause incorrect behavior.
-> 
-> In [1], similar code actually caused a kernel crash on 64-bit x86, when
-> using clang to build the kernel, but only after the conversion from *pte
-> reads, to ptep_get(pte). The latter uses READ_ONCE(), which forced a
-> double read of *pte.
-> 
-> Rather than waiting for the upcoming ptep_get() conversion, just convert
+Since the atomic variable rcu_expedited_nesting is initialized to
+true, so the rcu_gp_is_expedited() is always return true during
+system startup until the rcu_end_inkernel_boot() is called. this
+means that without setting rcupdate.rcu_normal=1 and before the
+rcu_end_inkernel_boot() is executed, regardless of whether the
+return value of srcu_might_be_idle() is true, call synchronize_srcu()
+always fall back to synchronize_srcu_expedited(), so there is
+no need to checking srcu_might_be_idle() return value.
 
-I'm not sure there is any upcoming ptep_get() conversion for riscv? Not from me
-at least - my focus was on the generic code to suficiently encapsulate it as an
-enabler for some follow on arm64 changes.
+For the rcupdate.rcu_normal=0, rcupdate.rcu_normal_after_boot=0 and
+rcupdate.rcu_expedited=1 kernels, there is also no need to checking
+srcu_might_be_idle() return value.
 
-> this part of the code now, but in a way that avoids the above problem:
-> take a single snapshot of the pte before using it in the WARN
-> conditional.
-> 
-> As expected, this preparatory step does not actually change the
-> generated code ("make mm/hugetlbpage.s"), on riscv64, when using a gcc
-> 12.2 cross compiler.
-> 
-> [1] https://lore.kernel.org/20230630013203.1955064-1-jhubbard@nvidia.com
-> 
-> Suggested-by: James Houghton <jthoughton@google.com>
-> Cc: Ryan Roberts <ryan.roberts@arm.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+This commit therefore priority check rcu_gp_is_expedited() return value
+in synchronize_srcu().
 
-Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
+Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
+---
+ kernel/rcu/srcutree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  arch/riscv/mm/hugetlbpage.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/mm/hugetlbpage.c b/arch/riscv/mm/hugetlbpage.c
-> index 542883b3b49b..96225a8533ad 100644
-> --- a/arch/riscv/mm/hugetlbpage.c
-> +++ b/arch/riscv/mm/hugetlbpage.c
-> @@ -73,7 +73,11 @@ pte_t *huge_pte_alloc(struct mm_struct *mm,
->  	}
->  
->  out:
-> -	WARN_ON_ONCE(pte && pte_present(*pte) && !pte_huge(*pte));
-> +	if (pte) {
-> +		pte_t pteval = ptep_get_lockless(pte);
-> +
-> +		WARN_ON_ONCE(pte_present(pteval) && !pte_huge(pteval));
-> +	}
->  	return pte;
->  }
->  
-> 
-> base-commit: 0a8d6c9c7128a93689fba384cdd7f72b0ce19abd
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 20d7a238d675..a819f11d9b90 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -1435,7 +1435,7 @@ EXPORT_SYMBOL_GPL(synchronize_srcu_expedited);
+  */
+ void synchronize_srcu(struct srcu_struct *ssp)
+ {
+-	if (srcu_might_be_idle(ssp) || rcu_gp_is_expedited())
++	if (rcu_gp_is_expedited() || srcu_might_be_idle(ssp))
+ 		synchronize_srcu_expedited(ssp);
+ 	else
+ 		__synchronize_srcu(ssp, true);
+-- 
+2.17.1
 
