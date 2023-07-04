@@ -2,71 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E9C7473A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A02A7473AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjGDOIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S231481AbjGDOIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjGDOIE (ORCPT
+        with ESMTP id S231415AbjGDOIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:08:04 -0400
-Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A55113;
-        Tue,  4 Jul 2023 07:08:03 -0700 (PDT)
-Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
-        by unicorn.mansr.com (Postfix) with ESMTPS id 6C3CF15360;
-        Tue,  4 Jul 2023 15:08:01 +0100 (BST)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id 253D3219FC1; Tue,  4 Jul 2023 15:08:01 +0100 (BST)
-From:   Mans Rullgard <mans@mansr.com>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>
-Cc:     Helge Deller <deller@gmx.de>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] backlight: led_bl: fix initial power state
-Date:   Tue,  4 Jul 2023 15:07:50 +0100
-Message-ID: <20230704140750.25799-1-mans@mansr.com>
-X-Mailer: git-send-email 2.41.0
+        Tue, 4 Jul 2023 10:08:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD90511D;
+        Tue,  4 Jul 2023 07:08:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B08F6114F;
+        Tue,  4 Jul 2023 14:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B05FC433C7;
+        Tue,  4 Jul 2023 14:08:08 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 10:08:07 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux trace kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] tracing/boot: Test strscpy() against less than zero for
+ error
+Message-ID: <20230704100807.707d1605@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The condition for the initial power state based on the default
-brightness value is reversed.  Fix it.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Fixes: ae232e45acf9 ("backlight: add led-backlight driver")
-Signed-off-by: Mans Rullgard <mans@mansr.com>
+Instead of checking for -E2BIG, it is better to just check for less than
+zero of strscpy() for error. Testing for -E2BIG is not very robust, and
+the calling code does not really care about the error code, just that
+there was an error.
+
+One of the updates to convert strlcpy() to strscpy() had a v2 version
+that changed the test from testing against -E2BIG to less than zero, but I
+took the v1 version that still tested for -E2BIG.
+
+Link: https://lore.kernel.org/linux-trace-kernel/20230615180420.400769-1-azeemshaikh38@gmail.com/
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/video/backlight/led_bl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/trace/trace_boot.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/video/backlight/led_bl.c b/drivers/video/backlight/led_bl.c
-index 3259292fda76..28e83618a296 100644
---- a/drivers/video/backlight/led_bl.c
-+++ b/drivers/video/backlight/led_bl.c
-@@ -200,8 +200,8 @@ static int led_bl_probe(struct platform_device *pdev)
- 	props.type = BACKLIGHT_RAW;
- 	props.max_brightness = priv->max_brightness;
- 	props.brightness = priv->default_brightness;
--	props.power = (priv->default_brightness > 0) ? FB_BLANK_POWERDOWN :
--		      FB_BLANK_UNBLANK;
-+	props.power = (priv->default_brightness > 0) ? FB_BLANK_UNBLANK :
-+		      FB_BLANK_POWERDOWN;
- 	priv->bl_dev = backlight_device_register(dev_name(&pdev->dev),
- 			&pdev->dev, priv, &led_bl_ops, &props);
- 	if (IS_ERR(priv->bl_dev)) {
+diff --git a/kernel/trace/trace_boot.c b/kernel/trace/trace_boot.c
+index 5fe525f1b8cc..7ccc7a8e155b 100644
+--- a/kernel/trace/trace_boot.c
++++ b/kernel/trace/trace_boot.c
+@@ -31,7 +31,7 @@ trace_boot_set_instance_options(struct trace_array *tr, struct xbc_node *node)
+ 
+ 	/* Common ftrace options */
+ 	xbc_node_for_each_array_value(node, "options", anode, p) {
+-		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+ 			pr_err("String is too long: %s\n", p);
+ 			continue;
+ 		}
+@@ -87,7 +87,7 @@ trace_boot_enable_events(struct trace_array *tr, struct xbc_node *node)
+ 	const char *p;
+ 
+ 	xbc_node_for_each_array_value(node, "events", anode, p) {
+-		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+ 			pr_err("String is too long: %s\n", p);
+ 			continue;
+ 		}
+@@ -486,7 +486,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+ 
+ 	p = xbc_node_find_value(enode, "filter", NULL);
+ 	if (p && *p != '\0') {
+-		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+ 			pr_err("filter string is too long: %s\n", p);
+ 		else if (apply_event_filter(file, buf) < 0)
+ 			pr_err("Failed to apply filter: %s\n", buf);
+@@ -494,7 +494,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+ 
+ 	if (IS_ENABLED(CONFIG_HIST_TRIGGERS)) {
+ 		xbc_node_for_each_array_value(enode, "actions", anode, p) {
+-			if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
++			if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+ 				pr_err("action string is too long: %s\n", p);
+ 			else if (trigger_process_regex(file, buf) < 0)
+ 				pr_err("Failed to apply an action: %s\n", p);
 -- 
-2.41.0
+2.39.2
 
