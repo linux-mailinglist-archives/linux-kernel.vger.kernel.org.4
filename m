@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BC7747783
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666F6747786
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbjGDRKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        id S231860AbjGDRKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjGDRKP (ORCPT
+        with ESMTP id S231511AbjGDRKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:10:15 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7751E72
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:10:13 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-40371070eb7so187341cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:10:13 -0700 (PDT)
+        Tue, 4 Jul 2023 13:10:35 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACC2F3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:10:34 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9924ac01f98so711409066b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:10:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688490613; x=1691082613;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YZZgqpZksNE4Bs7ESika3g3oCcyL0AnOsQIxWBGrP+0=;
-        b=zQ/68cLNfPdOGpe9SfTvHbkdFrMSA22+m5WYbQSD4UJ396k8NtDDr3p7dkm5OaBMbf
-         vc4kMghM/N5SlP7sO4z4zF7EDp9o+xCZJoMuUeCaXMCz8iASw+gtB6v/9R8a+tg0VDJe
-         nFRkzbUjJtxHv3kfROEpDETG7FclmO0h9XoaAKEX3+kyW2GCuRhwFS+tEiGChU0MYeCW
-         av8boMsnCIgsl8kTsBkn2k30TmNNUX687sp0XMAyrrFJb+QsLGoegNP9vjxYg+BnPqq/
-         6o5j+ZxWwd3PlnSTmqBc7svsM1D3w6QRHmCqljSHW6bB2FSr+6CiBZRSOqbDMv5BBTa2
-         hB+Q==
+        d=linux-foundation.org; s=google; t=1688490633; x=1691082633;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NInIoTXHnfyzm6QF9CbEiMuJrtrExLNeYRgH/orq6kw=;
+        b=akjDXgUAKFymHvwP62XXmHCA9GMcfWmrZ7wrQwCXE7ec9cT/uge4aFmaVG80tkwh7H
+         gdl/Fc7P/X/JBAFiE/vBIn2yVZ6V2XSrfNT7Oyqplj80hKKduNO8AxHOCoII2p+c8aRp
+         3WBWiHLKukFXhIPKkA3IHFbj40PRnNhhHvb9M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688490613; x=1691082613;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YZZgqpZksNE4Bs7ESika3g3oCcyL0AnOsQIxWBGrP+0=;
-        b=TDVmsbRM+qj6WfVsw+iQqrTWI35FiZelHW7aSYvmjkBsjF8coF9ntRZzU7agc6m23l
-         g1poOXG31nV7ZYXpAbLkAqvXQPx48OOH/vAOF0YD0OPmbicCNSY8kKw3ASOzSbJAZmA8
-         gdvx/69/eVD47z4OuZf8Um0gT65yp3jkBamQunAA+WQdCZe7HAetp7FWkDDBp1pOXtd5
-         jjrlGoISfOpfX/TwMRw/wVjPNpIm1kWqt2PpepfWUOiP4gGnCUma6Vv0/I9JUgRCuumI
-         L0fz5gOoh8h8WTKO1gtR1Dp3zAUB9KQ0TTCBw6ngOq0XYJG66+RbG/1HQROHMdtylSxv
-         z/NQ==
-X-Gm-Message-State: ABy/qLZvJoaU1BGcwCRuQKnp0b8lbbyeEIL02HHrPcOK0hg+RWkWX3V7
-        2pBUqQ2ZlRopZetQ85d6LM+43lmlNVLA66e5C35wLg==
-X-Google-Smtp-Source: APBJJlHJA+4pTMG1uz+RTYxp+HZbAYvFg0JaBtspOYxwocYh1zKXNaeOd2PnhLiIBAFvvMDERZWZCt7kveNONa4s+x8=
-X-Received: by 2002:ac8:5908:0:b0:3f8:3065:7fc5 with SMTP id
- 8-20020ac85908000000b003f830657fc5mr126181qty.1.1688490612831; Tue, 04 Jul
- 2023 10:10:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688490633; x=1691082633;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NInIoTXHnfyzm6QF9CbEiMuJrtrExLNeYRgH/orq6kw=;
+        b=GBHydXFgWkBAlGAgpEfX09+B2kYN1nVFL+yCwvYklS0/HzhomtVt+lsThgkDfIJw04
+         mI1g1pP5zfxe52RnaVfqmr5E7VLdXfMn33UjKdQx5tidLA2LttDvcMVvqqnKrqR6b3X8
+         JAViYgtt6iTO9NxmBinprfnvYOYUIdaVgwzyBHfZAHo7uDn473lUQkmvnCHYbXoZQAb+
+         OiQ7Mitgk803SMJyYNvRSqOftob0btIccchwWmAUsD9KrKS8XAWe8v2sAIX6n8Om/blL
+         Zm2TheJ6E3aTMXVBi14bkeATXR6tYzTHoL7ekaNeHaxrWrjL7YxKSml1tSVu+b672ILF
+         nJ6A==
+X-Gm-Message-State: ABy/qLYZ/QMhbXYE7Hol+j2aB2rX3vDEBrAPCy84sEFERkMY+JmCH5CC
+        ueLlQlTMjs0qoj91ioebFAnSeFtf6ATKYeiOY01mO0SG
+X-Google-Smtp-Source: APBJJlEAwjkLe9cGUQ5rLzvwE2ygMUOrJTESc/OlA6eJv2R3zdLzke9huvZF9meGAGKbizyHX4eqDQ==
+X-Received: by 2002:a17:906:edbd:b0:992:c0bc:34a2 with SMTP id sa29-20020a170906edbd00b00992c0bc34a2mr9704255ejb.42.1688490632868;
+        Tue, 04 Jul 2023 10:10:32 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id t13-20020a1709063e4d00b00992ae4cf3c1sm7266276eji.186.2023.07.04.10.10.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 10:10:32 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso6846017a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:10:32 -0700 (PDT)
+X-Received: by 2002:aa7:d9d6:0:b0:51e:527:3c64 with SMTP id
+ v22-20020aa7d9d6000000b0051e05273c64mr7824520eds.16.1688490631850; Tue, 04
+ Jul 2023 10:10:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230704143628.1177124-1-james.clark@arm.com>
-In-Reply-To: <20230704143628.1177124-1-james.clark@arm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 4 Jul 2023 10:10:00 -0700
-Message-ID: <CAP-5=fVzFsgh6PC2EPJi8XpwTpdoSqqNnLgM-AYeHLzCWiQwZw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf test: Fix event parsing test on Arm
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
+References: <20230704092309.22669-1-vegard.nossum@oracle.com>
+ <20230704100852.23452-1-vegard.nossum@oracle.com> <CAHk-=wgy2q9viwq-bAqaq8X_WQHNqDsu1AzfeYXAcDQRZmCoAw@mail.gmail.com>
+ <7cf14d1b-1a3a-fea7-0d2c-409ab828569b@oracle.com>
+In-Reply-To: <7cf14d1b-1a3a-fea7-0d2c-409ab828569b@oracle.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Jul 2023 10:10:14 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg70vQAKPOqo-Ym6n47KSpm09kc-dmKME9Sd1HUcdZ-sg@mail.gmail.com>
+Message-ID: <CAHk-=wg70vQAKPOqo-Ym6n47KSpm09kc-dmKME9Sd1HUcdZ-sg@mail.gmail.com>
+Subject: Re: [PATCH] module: always complete idempotent loads
+To:     Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        George Kennedy <george.kennedy@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com,
+        Johan Hovold <johan@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rudi Heitbaum <rudi@heitbaum.com>,
+        David Hildenbrand <david@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 7:38=E2=80=AFAM James Clark <james.clark@arm.com> wr=
-ote:
+On Tue, 4 Jul 2023 at 08:12, Vegard Nossum <vegard.nossum@oracle.com> wrote:
 >
-> The test looks for a PMU from sysfs with type =3D PERF_TYPE_RAW when
-> opening a raw event. Arm doesn't have a real raw PMU, only core PMUs
-> with unique types other than raw.
->
-> Instead of looking for a matching PMU, just test that the event type
-> was parsed as raw and skip the PMU search on Arm. The raw event type
-> test should also apply to all platforms so add it outside of the ifdef.
->
-> Fixes: aefde50a446b ("perf test: Fix parse-events tests for >1 core PMU")
-> Signed-off-by: James Clark <james.clark@arm.com>
+> Maybe just do the f_mode check in finit_module()? Or... new helper,
+> fdget_mode()??
 
-Acked-by: Ian Rogers <irogers@google.com>
+I actually wanted to do a fdget_read/write() helper long ago: we
+already basically pass in a "this mode is not ok" flag for the
+FMODE_PATH case, and it's sad how many extra "do we have
+FMODE_READ/WRITE" tests we have when it would actually make tons of
+sense to just check it at fdget() time.
 
-Thanks,
-Ian
+But I created the patch, and then decided it was just churn for
+something that didn't matter a lot.
 
-> ---
->  tools/perf/tests/parse-events.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+The existing "mode" argument to __fget_light() and __fget() would end
+up split into "error if these bits are set" (existing) and "error if
+these bits are _not_ set" (new) arguments.
+
+It was straightforward, but I looked at the patch, and then looked at
+all the existing users that currently check the error separately, and
+went "bah", and threw it all away.
+
+Which is not to say it's not the right thing to do. Maybe we should at
+some point. But doing it right (ie doing it in that helper before we
+even bother with reference counting etc) is just a bit too much work.
+
+The alternative is, of course, to just have a *truly* stupid wrapper
+that does the error checking and does the "fdput()" if FMODE_READ
+wasn't set. But that's just disgusting.
+
+Anyway, for this module case, I just moved it out to the caller.
+
+> Apart from this, there is another bit that looks a bit weird:
 >
-> diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-eve=
-nts.c
-> index 133218e51ab4..21f79aa31233 100644
-> --- a/tools/perf/tests/parse-events.c
-> +++ b/tools/perf/tests/parse-events.c
-> @@ -108,10 +108,21 @@ static int test__checkevent_raw(struct evlist *evli=
-st)
->         TEST_ASSERT_VAL("wrong number of entries", 0 !=3D evlist->core.nr=
-_entries);
+> len = kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODULE);
+> if (len < 0) {
+>      mod_stat_inc(&failed_kreads);
+>      mod_stat_add_long(len, &invalid_kread_bytes);
 >
->         perf_evlist__for_each_evsel(&evlist->core, evsel) {
-> -               struct perf_pmu *pmu =3D NULL;
-> +               struct perf_pmu *pmu __maybe_unused =3D NULL;
->                 bool type_matched =3D false;
->
->                 TEST_ASSERT_VAL("wrong config", test_perf_config(evsel, 0=
-x1a));
-> +               TEST_ASSERT_VAL("event not parsed as raw type",
-> +                               evsel->attr.type =3D=3D PERF_TYPE_RAW);
-> +#if defined(__aarch64__)
-> +               /*
-> +                * Arm doesn't have a real raw type PMU in sysfs, so raw =
-events
-> +                * would never match any PMU. However, RAW events on Arm =
-will
-> +                * always successfully open on the first available core P=
-MU
-> +                * so no need to test for a matching type here.
-> +                */
-> +               type_matched =3D raw_type_match =3D true;
-> +#else
->                 while ((pmu =3D perf_pmus__scan(pmu)) !=3D NULL) {
->                         if (pmu->type =3D=3D evsel->attr.type) {
->                                 TEST_ASSERT_VAL("PMU type expected once",=
- !type_matched);
-> @@ -120,6 +131,7 @@ static int test__checkevent_raw(struct evlist *evlist=
-)
->                                         raw_type_match =3D true;
->                         }
->                 }
-> +#endif
->                 TEST_ASSERT_VAL("No PMU found for type", type_matched);
->         }
->         TEST_ASSERT_VAL("Raw PMU not matched", raw_type_match);
-> --
-> 2.34.1
->
+> I don't think we should be adding error codes to byte counts.
+
+Ack. I fixed that at the same time as a "multiple problems with the
+error paths".
+
+                 Linus
