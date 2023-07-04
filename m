@@ -2,107 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C087474733C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACA874733D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjGDNtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S231417AbjGDNtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbjGDNtO (ORCPT
+        with ESMTP id S230486AbjGDNtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:49:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660C1739
+        Tue, 4 Jul 2023 09:49:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBED5173F
         for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:49:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC7BA61259
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:49:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77992C433C7;
-        Tue,  4 Jul 2023 13:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688478547;
-        bh=1X3duhdH+Vvopd9cLifHrkGNg6yeXoAd+LCibcEFA40=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T4V7aoWyJlpne02DABkkRMO9+Hm6hk27HaJoTqMKhsLY67I3s21tOrW/OYLJo9QoU
-         ej+792qhw/24dBm36iCjeWwlfnL7P2iuwQDsIODcE+DUgKPBCF4mzlOl3vGTX+c5RT
-         paabrpWgC605RN0cGCMVJ/zl7izkrxkgKAkz21v+yF4owB/lQouDEmXHMBLrE+L1DL
-         I9EUTvg9OwSaLvne6nasjtCJ7d4TjFWkEJW60gdd0ECUYHyKy6G9uVEPfOjSChYSu3
-         nwaUrtu7dZDpdYei0eM60mjAfLoWSGFePSO+2DGF6IBqew8l2T+FNKZ4CNysQW/Ji0
-         Pb0SpmoTVfPYQ==
-Date:   Tue, 4 Jul 2023 14:49:02 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        support.opensource@diasemi.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com,
-        Martin Fuzzey <martin.fuzzey@flowbird.group>,
-        linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Subject: Re: [PATCH RFC v4 07/13] regulator: find active protections during
- initialization
-Message-ID: <ca0b3bbb-dfa4-454c-9304-318fbd8e7f78@sirena.org.uk>
-References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
- <20230419-dynamic-vmon-v4-7-4d3734e62ada@skidata.com>
- <030a99f7-98f3-a24d-612c-d460859fc276@gmail.com>
- <08d6fc5d-30bc-4a55-a495-2a73b5800f79@sirena.org.uk>
- <CAJpcXm6sPgW+z93sObv8rNjFxPsd4uzhHNNQaGmUR07kB0-BRg@mail.gmail.com>
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D65614BF;
+        Tue,  4 Jul 2023 06:49:51 -0700 (PDT)
+Received: from [10.163.47.13] (unknown [10.163.47.13])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 193D03F73F;
+        Tue,  4 Jul 2023 06:49:06 -0700 (PDT)
+Message-ID: <90f386c3-b2bb-b876-80df-c67005e89a66@arm.com>
+Date:   Tue, 4 Jul 2023 19:19:04 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W63c7pdVT9Jje+c+"
-Content-Disposition: inline
-In-Reply-To: <CAJpcXm6sPgW+z93sObv8rNjFxPsd4uzhHNNQaGmUR07kB0-BRg@mail.gmail.com>
-X-Cookie: Memory fault - where am I?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] drm/arm/komeda: Remove component framework and add a
+ simple encoder
+Content-Language: en-US
+To:     Liviu Dudau <liviu.dudau@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@gmail.com, daniel@ffwll.ch
+References: <20230621084116.26882-1-faiz.abbas@arm.com>
+ <ZJ1UJaNJese6g2Ia@e110455-lin.cambridge.arm.com>
+From:   Mohammad Faiz Abbas Rizvi <faiz.abbas@arm.com>
+In-Reply-To: <ZJ1UJaNJese6g2Ia@e110455-lin.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Liviu,
 
---W63c7pdVT9Jje+c+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 6/29/2023 3:21 PM, Liviu Dudau wrote:
+> Hi Faiz,
+>
+> Thanks for the patch and for addressing what was at some moment on my "nice to
+> improve / cleanup" list. Sorry for the delay in responding, I had to revive
+> the bits of an old setup to be able to test this properly, with 2 encoders
+> attached.
+>
+> On Wed, Jun 21, 2023 at 02:11:16PM +0530, Faiz Abbas wrote:
+>> The Komeda driver always expects the remote connector node to initialize
+>> an encoder. It uses the component aggregator framework which consists
+>> of component->bind() calls used to initialize the remote encoder and attach
+>> it to the crtc. This is different from other drm implementations which expect
+>> the display driver to supply a crtc and connect an encoder to it.
+> I think both approaches are valid in DRM. We don't want to remove the component
+> framework because it is doing the wrong thing, but because we cannot use it
+> with drivers that implement the drm_bridge API. Given that we usually pair with
+> a component encoder that also implements a drm_bridge, dropping support for
+> component framework should not affect the users of the driver.
 
-On Mon, Jul 03, 2023 at 08:43:47PM +0200, Benjamin Bara wrote:
-> On Mon, 26 Jun 2023 at 18:49, Mark Brown <broonie@kernel.org> wrote:
+Sounds good. I will update the commit message to emphasize the bridge API.
 
-> > Yes, this isn't really the idiom we normally adopt - the default thing
-> > is to just leave the hardware untouched, that should not usually be
-> > regarded as a problem.
+>> Remove all component framework calls from the komeda driver and declare and
+>> attach an encoder inside komeda_crtc_add().
+> Unfortunately you haven't removed all component framework calls. The hint for
+> that is that you have not removed the #include <linux/component.h> line from
+> any of the files. Specifically, komeda_kms_attach()/detach() still calls
+> component_unbind_all() which will crash with your patch applied.
 
-> Thanks for clarifying. I will now activate the constraint instead of erroring
-> out. This guarantees that the workaround will still be applied, so basically
-> similar to the current bd718x7 implementation. I would still keep the message as
-> a warn, or should I drop it too? My idea is to let the user know that there is
-> some kind of monitoring going on but the device-tree is not aware of it.
+Good catch. Will remove that stuff in v2.
 
-I would leave the warning off, I'd say it's more unusual that it might
-be possible to disable the montioring than that it's being enabled - a
-lot of devices either have fixed limits or only allow the limit to be
-configured without allowing it to be completely disabled.
+>> The remote connector driver has to implement the DRM bridge APIs which
+>> can be used to glue the encoder to the remote connector.
+>>
+>> Signed-off-by: Faiz Abbas <faiz.abbas@arm.com>
+>> ---
+>>  .../gpu/drm/arm/display/komeda/komeda_crtc.c  | 22 +++++++-
+>>  .../gpu/drm/arm/display/komeda/komeda_drv.c   | 56 ++-----------------
+>>  .../gpu/drm/arm/display/komeda/komeda_kms.c   |  4 --
+>>  .../gpu/drm/arm/display/komeda/komeda_kms.h   |  3 +
+>>  4 files changed, 30 insertions(+), 55 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+>> index cea3fd5772b57..144736a69b0ee 100644
+>> --- a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+>> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+>> @@ -12,6 +12,8 @@
+>>  #include <drm/drm_atomic_helper.h>
+>>  #include <drm/drm_print.h>
+>>  #include <drm/drm_vblank.h>
+>> +#include <drm/drm_simple_kms_helper.h>
+>> +#include <drm/drm_bridge.h>
+>>  
+>>  #include "komeda_dev.h"
+>>  #include "komeda_kms.h"
+>> @@ -612,9 +614,11 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
+>>  			   struct komeda_crtc *kcrtc)
+>>  {
+>>  	struct drm_crtc *crtc = &kcrtc->base;
+>> +	struct drm_device *base = &kms->base;
+>> +	struct drm_bridge *bridge;
+>>  	int err;
+>>  
+>> -	err = drm_crtc_init_with_planes(&kms->base, crtc,
+>> +	err = drm_crtc_init_with_planes(base, crtc,
+>>  					get_crtc_primary(kms, kcrtc), NULL,
+>>  					&komeda_crtc_funcs, NULL);
+>>  	if (err)
+>> @@ -626,6 +630,22 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
+>>  
+>>  	drm_crtc_enable_color_mgmt(crtc, 0, true, KOMEDA_COLOR_LUT_SIZE);
+> I would move this line after the bridges are being initialised, just in case in the future
+> colour management will propagate some info down to the bridges.
 
---W63c7pdVT9Jje+c+
-Content-Type: application/pgp-signature; name="signature.asc"
+Sure. I'll move it down.
 
------BEGIN PGP SIGNATURE-----
+.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSkI00ACgkQJNaLcl1U
-h9BCkwf/VJYuQry5uylU4oN4StQNYW3IdVi/i/Wh4QmjuJxcJfQMUINKRyKB/Yet
-ZOoP03oOc6woS0amSyXu37BG0dz2rYCMGNNmg66LyVTi+wfsn3d+S9C5j4ciVUfX
-HpRYtz3PNWvp3uBJjWwz3fAVGITXE7qw1lgKt49irty7Q+txsAruinu789Vnq0+l
-HulQzceHMlfNmqg56Ty3TsmTN/O0Twsn7XNuCZCTQFaIuzypFiNHsyf1RD4eb5Vo
-+yzjhcOzcUbvO8le/plklmueBo3iTV1SGH9JwmTfWqaTQGopYObHoXIaA1P6DObx
-FBQpLj+gdoiw4qvjwWzDrNAlRt7Pgw==
-=jc9a
------END PGP SIGNATURE-----
+.
 
---W63c7pdVT9Jje+c+--
+.
+
+>>  };
+>>  
+>>  /**
+>> -- 
+>> 2.25.1
+>>
+> Code looks good and turns out swapping drm_bridge for component framework is not that painful. If you send v2
+> with the comments addressed I should be able to test it now and review the patch much sooner.
+>
+> One issue I have observed from my testing of your patch is that on `rmmod komeda` we fail to disable the
+> interrupts after drm_kms_helper_poll_fini() call in komeda_kms_detach(), then we NULL the drm->dev_private
+> before we get an interrupt which causes komeda_kms_irq_handler() to access the NULL pointer. This is not
+> something caused by your patch, but if you want to test module removal I think you should be aware of this.
+
+I'll keep this in mind while testing.
+
+Thanks,
+Faiz
+
