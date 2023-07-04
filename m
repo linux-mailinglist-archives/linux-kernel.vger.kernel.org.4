@@ -2,150 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE6D747385
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BB87472B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjGDOCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S231503AbjGDNYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjGDOBi (ORCPT
+        with ESMTP id S231463AbjGDNX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:01:38 -0400
-Received: from mail-pg1-f208.google.com (mail-pg1-f208.google.com [209.85.215.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6391728
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:01:17 -0700 (PDT)
-Received: by mail-pg1-f208.google.com with SMTP id 41be03b00d2f7-55b406bbd77so5309280a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:01:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479275; x=1691071275;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OAJrIpPYsWuzkKicppsd7MNNDIGXlm7pXpjIQFZBeio=;
-        b=YGUheaWSTPNdvZHFHZ63YhPge6WXemQnQH51pVPSKnpa+Jteu6NuGGJIAslL3Dar15
-         27F0UX0LDtFgnUr9BHugEoio0754UOCXxgB2NM7wwIiZAehdXZRZrQI8Y/r6z1+4731w
-         xlTP7A+nIF5A5AizewZhrVb9nualDggxjTVE9hG08Nb5I8SmDRCbdxW4JBZNAHR8JCpr
-         HTMEeVqU3XE2dyQ5glQj6tMLE0oAXArFKL6RGOhjfgcMwClmdBz3jzU3iZEnUeqzT2uI
-         37MbfJqCicS6JuC+4kl0MYuDN+XKjZZBMuicTfbTYOP1QM1HsW7wZFkl/+BSyKh7LvlR
-         RjoA==
-X-Gm-Message-State: ABy/qLYtFrlDUwFqBrD79XW8Fzxx1aDr3iZpDXtzrE9p61CmCCRhtjP2
-        6bVUf9IBvz/MLV97Yh5iZppc978MVqgyMjBA76F6hECoHy6Y
-X-Google-Smtp-Source: APBJJlGX4eLqwacKHZtmGRo7GlT1QTl55Rjvwfiq4SMYYmeIA3CYU2tiLQdewQDtU+lFVqZ/KMRTt3ByDYq2La4t9QO2UdnWjMpr
+        Tue, 4 Jul 2023 09:23:59 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC55F3;
+        Tue,  4 Jul 2023 06:23:56 -0700 (PDT)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QwNjg14d2zLnfG;
+        Tue,  4 Jul 2023 21:21:43 +0800 (CST)
+Received: from huawei.com (10.67.174.205) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 4 Jul
+ 2023 21:23:54 +0800
+From:   Chen Jiahao <chenjiahao16@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <kexec@lists.infradead.org>, <linux-doc@vger.kernel.org>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <conor.dooley@microchip.com>, <guoren@kernel.org>,
+        <heiko@sntech.de>, <bjorn@rivosinc.com>, <alex@ghiti.fr>,
+        <akpm@linux-foundation.org>, <atishp@rivosinc.com>,
+        <bhe@redhat.com>, <thunder.leizhen@huawei.com>, <horms@kernel.org>
+Subject: [PATCH -next v7 0/2] support allocating crashkernel above 4G explicitly on riscv
+Date:   Tue, 4 Jul 2023 21:23:25 +0000
+Message-ID: <20230704212327.1687310-1-chenjiahao16@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a63:5c02:0:b0:553:b2a0:4ddd with SMTP id
- q2-20020a635c02000000b00553b2a04dddmr7882265pgb.2.1688479275716; Tue, 04 Jul
- 2023 07:01:15 -0700 (PDT)
-Date:   Tue, 04 Jul 2023 07:01:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007096ce05ffa9b7aa@google.com>
-Subject: [syzbot] [arm?] BUG: unable to handle kernel paging request in invoke_syscall
-From:   syzbot <syzbot+a5638594f1bc152f1200@syzkaller.appspotmail.com>
-To:     catalin.marinas@arm.com, keescook@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.205]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On riscv, the current crash kernel allocation logic is trying to
+allocate within 32bit addressible memory region by default, if
+failed, try to allocate without 4G restriction.
 
-syzbot found the following issue on:
+In need of saving DMA zone memory while allocating a relatively large
+crash kernel region, allocating the reserved memory top down in
+high memory, without overlapping the DMA zone, is a mature solution.
+Hence this patchset introduces the parameter option crashkernel=X,[high,low].
 
-HEAD commit:    3a8a670eeeaa Merge tag 'net-next-6.5' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1652699f280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ce7f4ca96cdf82c7
-dashboard link: https://syzkaller.appspot.com/bug?extid=a5638594f1bc152f1200
-compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1645c714a80000
+One can reserve the crash kernel from high memory above DMA zone range
+by explicitly passing "crashkernel=X,high"; or reserve a memory range
+below 4G with "crashkernel=X,low". Besides, there are few rules need
+to take notice:
+1. "crashkernel=X,[high,low]" will be ignored if "crashkernel=size"
+   is specified.
+2. "crashkernel=X,low" is valid only when "crashkernel=X,high" is passed
+   and there is enough memory to be allocated under 4G.
+3. When allocating crashkernel above 4G and no "crashkernel=X,low" is
+   specified, a 128M low memory will be allocated automatically for
+   swiotlb bounce buffer.
+See Documentation/admin-guide/kernel-parameters.txt for more information.
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/384ffdcca292/non_bootable_disk-3a8a670e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a940531a9b86/vmlinux-3a8a670e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4f3cbae5be61/Image-3a8a670e.gz.xz
+To verify loading the crashkernel, adapted kexec-tools is attached below:
+https://github.com/chenjh005/kexec-tools/tree/build-test-riscv-v2
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a5638594f1bc152f1200@syzkaller.appspotmail.com
+Following test cases have been performed as expected:
+1) crashkernel=256M                          //low=256M
+2) crashkernel=1G                            //low=1G
+3) crashkernel=4G                            //high=4G, low=128M(default)
+4) crashkernel=4G crashkernel=256M,high      //high=4G, low=128M(default), high is ignored
+5) crashkernel=4G crashkernel=256M,low       //high=4G, low=128M(default), low is ignored
+6) crashkernel=4G,high                       //high=4G, low=128M(default)
+7) crashkernel=256M,low                      //low=0M, invalid
+8) crashkernel=4G,high crashkernel=256M,low  //high=4G, low=256M
+9) crashkernel=4G,high crashkernel=4G,low    //high=0M, low=0M, invalid
+10) crashkernel=512M@0xd0000000              //low=512M
+11) crashkernel=1G,high crashkernel=0M,low   //high=1G, low=0M
 
-Unable to handle kernel paging request at virtual address bfff800082cebd10
-Mem abort info:
-  ESR = 0x0000000086000004
-  EC = 0x21: IABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000042480000
-[bfff800082cebd10] pgd=10000000bffff803, p4d=10000000bffff803, pud=10000000bfffe803, pmd=1000000043834003, pte=0068000048f30f07
-Internal error: Oops: 0000000086000004 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3234 Comm: udevd Not tainted 6.4.0-syzkaller-04247-g3a8a670eeeaa #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : 0xbfff800082cebd10
-lr : 0xffff800082cebd10
-sp : ffff800082cf3df0
-x29: ffff800082cf3df0 x28: f9ff00000705af40 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-x23: 0000000060000000 x22: 0000ffffa736068c x21: 00000000ffffffff
-x20: f9ff00000705af40 x19: ffff800082cf3eb0 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000 x15: ffff800082cf3c88
-x14: 0000000000000000 x13: 0000000000001000 x12: 0000000000000000
-x11: 0000000000000000 x10: 0000000000000701 x9 : 0000000600000000
-x8 : 000000001dcd6500 x7 : 0000000000000027 x6 : 0000ffffef8c1df8
-x5 : 0000ffffef8c1df8 x4 : 0000000000000008 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : f9ff00000705af40 x0 : 0000000000000000
-Call trace:
- 0xbfff800082cebd10
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xe4 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x38/0xa4 arch/arm64/kernel/syscall.c:191
- el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0xc0/0xc4 arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x19c/0x1a0 arch/arm64/kernel/entry.S:591
-Code: 00000002 00000000 eed50f00 041d12ac (82cebd30) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	00000002 	udf	#2
-   4:	00000000 	udf	#0
-   8:	eed50f00 	.inst	0xeed50f00 ; undefined
-   c:	041d12ac 	.inst	0x041d12ac ; undefined
-* 10:	82cebd30 	.inst	0x82cebd30 ; undefined <-- trapping instruction
+Changes since [v7]:
+1. Minor refactor: move crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE
+   into the !high branch when the first allocation fails. Not changing
+   the result but further align with Arm64 logic, refer to Baoquan's
+   comment.
+2. Add test case "crashkernel=1G,high crashkernel=0M,low", the result
+   also matches out expectation.
 
+Changes since [v6]:
+1. Introduce the "high" flag to mark whether "crashkernel=X,high"
+   is passed. Fix the retrying logic between "crashkernel=X,high"
+   case and others when the first allocation attempt fails.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes since [v5]:
+1. Update the crashkernel allocation logic when crashkernel=X,high
+   is specified. In this case, region above 4G will directly get
+   reserved as crashkernel, rather than trying lower 32bit allocation
+   first.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes since [v4]:
+1. Update some imprecise code comments for cmdline parsing.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+Changes since [v3]:
+1. Update to print warning and return explicitly on failure when
+   crashkernel=size@offset is specified. Not changing the result
+   in this case but making the logic more straightforward.
+2. Some minor cleanup.
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Changes since [v2]:
+1. Update the allocation logic to ensure the high crashkernel
+   region is reserved strictly above dma32_phys_limit.
+2. Clean up some minor format problems.
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Chen Jiahao (2):
+  riscv: kdump: Implement crashkernel=X,[high,low]
+  docs: kdump: Update the crashkernel description for riscv
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+ .../admin-guide/kernel-parameters.txt         | 15 +--
+ arch/riscv/kernel/setup.c                     |  5 +
+ arch/riscv/mm/init.c                          | 93 +++++++++++++++++--
+ 3 files changed, 99 insertions(+), 14 deletions(-)
 
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+2.34.1
+
