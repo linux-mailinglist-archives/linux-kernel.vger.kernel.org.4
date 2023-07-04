@@ -2,361 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7F8746F03
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 12:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AF4746F36
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 12:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjGDKoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 06:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S230379AbjGDK4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 06:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGDKoA (ORCPT
+        with ESMTP id S229994AbjGDK4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 06:44:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E03184
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 03:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688467391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uEFf8IweK/2NTi+/cPDtasQ38LRXnMtCi68paJV591U=;
-        b=VrHgUe9qDDMZ0xMIU80+2KgrtOcw4CAEoOKHKCaV6Qy9e4zJiotwxE651O934fauKEbwv/
-        gm4Xl46He18T3kSDz5Ue+ogyF/IO2dyIYhla7vL4uAL6HlA2wrQO+604SeQ+I4oZTy3EjA
-        OLTL8T4M5NmkcehBQTY81FMLPL1ouiU=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-127-HdYPT_zVN9-0KIdpitpaaw-1; Tue, 04 Jul 2023 06:43:10 -0400
-X-MC-Unique: HdYPT_zVN9-0KIdpitpaaw-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-977e6c94186so388378266b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 03:43:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688467389; x=1691059389;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uEFf8IweK/2NTi+/cPDtasQ38LRXnMtCi68paJV591U=;
-        b=RsvDKU8mOw+cFlz9zWwbHo9LnBhvyNazXM1CNgl17SPy0/iWMifR0CyEF56sBP0ZEE
-         pquVJRfSuaboTWWGxeyLXvWV6mybX2MR02abBjB8E40pvEzmxCrk1dRD5AYOVNn1jSOf
-         sxDoi0RO2+HCDCzIbzLN5wxGi6dln5/o1mi9wq7ayO4FCJJmyd2/bAEiVWY68mdH0po7
-         zT6kf73uElbLPmdsB7m7KE5NCIaXKZBL4IX/mIIRBgLU34tNpACqJUoSH58lk4BJ65MY
-         htTZEzUdNSPkG0gC2yTJpU1wESqGZ6PeijlEhioacA1Vzn/VeNRFfGZ3CPgLBJ2w3j76
-         uH3w==
-X-Gm-Message-State: ABy/qLZua8xA84WV1D66UdgidYwDtaFPCu4uwdkGTf2E6FpCUpbgmOrQ
-        pmhDWUI9q7IW4I7RR36L4ub2Y9xWP3E+1/XSolxKeQmvZmdzxEo8VV568LrQXLLjUNK4XmgoxoN
-        M9X8bMJqOBFH5ckPdeFwqsJlaB4xlXRny
-X-Received: by 2002:a17:907:984b:b0:982:bb95:5014 with SMTP id jj11-20020a170907984b00b00982bb955014mr9792145ejc.64.1688467388932;
-        Tue, 04 Jul 2023 03:43:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7fVEL8UBsxh8FbxtmFvWQZ5aAW+mNYUK+xcV12Cr84Wh0/RXihkwsEDaVE/W2Y4q5IYOH7Mw==
-X-Received: by 2002:a17:907:984b:b0:982:bb95:5014 with SMTP id jj11-20020a170907984b00b00982bb955014mr9792131ejc.64.1688467388547;
-        Tue, 04 Jul 2023 03:43:08 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170906250a00b0096a6be0b66dsm13101770ejb.208.2023.07.04.03.43.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 03:43:08 -0700 (PDT)
-Message-ID: <43369522-5e39-a90c-5263-cd4eacba3e24@redhat.com>
-Date:   Tue, 4 Jul 2023 12:43:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v17 00/13] hp-bioscfg driver
-Content-Language: en-US, nl
-To:     Jorge Lopez <jorgealtxwork@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas@t-8ch.de, ilpo.jarvinen@linux.intel.com
-References: <20230608163319.18934-1-jorge.lopez2@hp.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230608163319.18934-1-jorge.lopez2@hp.com>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 4 Jul 2023 06:56:12 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2113.outbound.protection.outlook.com [40.107.117.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DFE6E
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 03:56:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BBbiFBKqOYtGgH3009fQSQNRMSGI7+cwMP9iA14sQ7O63pdO2MiUBFlESsoHhtncVJzWteMICddRGKGNr6RFbe0Fn/eEXYRfyqoF3biWXjbyPLm8L628EUakRC2Tw8ws1AxhGbGTIhMEowPlfDFr3jZpNQOvXS8BLIlpSIcxl2dY3/I5Shww7ozpRJFwCvkeRh6hI8bGkPqCKhgf3cYcIni46AHM/7WDW499o5XY9NGp7v+Hzh+i+h2y3uQ5Vc22OXqORCDTd55CGhkT3gUO/Au+rXh8i10W5NBYovHeb4FopJdnQl6fgAMEtMYNWeyk23uGx95LaWTNwEA9afaipQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GATdcBtm33VGNndw4XBx09kvDrIZUihrfBlr7VqigtI=;
+ b=i1mSwLZyOvfnrJs5xk6NnW+SmvyiylC2p6BtkbuFNWM1EovWMhHqb0F+IHfZRgXxAEa580DFbiOAL2ipikqNB4UWIP6CRMNTbGxMsqOR3uO9DNg4YrkMFrXln+wFWyET9lYNJujyAnFjC1yumhqHdpmLSGLq8Ep2wJ2cBuTJMsMtYBunz9qUt2MiMy6Qu8BDy/DHcjB+vSugQHfaReNQMpIgk62Z0HzhnHQl3tmlAXstqVjVH6fxRpZAx/j65mL/TQ2Wkxj0cmL3q+mmshbigizWGTI5NiG5a+jKxMcwvAIIYzKypaRQiO+Wngf31b9nqkqQETQAnguVpQ2mFjZPaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GATdcBtm33VGNndw4XBx09kvDrIZUihrfBlr7VqigtI=;
+ b=hyxlvkDXiaSdJqUH2nD0lNkaf+sqnr9mb4I0UsT+Gsc8u0YCUlPFx1ig4AgrTvcABH3Ud9T13wEUU0uC0EKylyOmqnrF8cNLvPyX5ysHUJT452HMfoL+VGjnk8kVJOyEyPHO7WeeDS1eas21timONg5rwDcR5lBOuFgQjOBJfxQAkTIW9MJUdc8wldYvJMb1IeDPzhftSEYLP/sbtUGv+vuQorvYZAAmdFJYRODSFqhOauv2IbSDFEdKd2lnyJcZb36D7pBVKQHKv+ioBQA7d0anCyuBvHMzmCxYZNnyHEBNZc8TFJxr7KQQJh+GvLxUJPYviwbIXZnOmwHFmOhmOg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18) by
+ TYZPR06MB6401.apcprd06.prod.outlook.com (2603:1096:400:419::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
+ 2023 10:56:07 +0000
+Received: from SG2PR06MB3743.apcprd06.prod.outlook.com
+ ([fe80::7dfd:a3ed:33ca:9cc8]) by SG2PR06MB3743.apcprd06.prod.outlook.com
+ ([fe80::7dfd:a3ed:33ca:9cc8%6]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
+ 10:56:07 +0000
+From:   Wang Ming <machel@vivo.com>
+To:     Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com, Wang Ming <machel@vivo.com>
+Subject: [PATCH v1] fs:dlm:Fix NULL pointer dereference bug in accept_from_sock()
+Date:   Tue,  4 Jul 2023 18:47:16 +0800
+Message-Id: <20230704104725.2510-1-machel@vivo.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0020.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::7)
+ To SG2PR06MB3743.apcprd06.prod.outlook.com (2603:1096:4:d0::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3743:EE_|TYZPR06MB6401:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8fcda751-4a5d-47f9-e0ee-08db7c7d4460
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zBNv80N+Yr56NfIER5QYTEFwsqzo0dQKf7vv1pYWVXv8bLd0tPEnAGJUiTRaJ+oM7IWB3t6e7Bs1ac3ehvl9aCYEIo+ID1qJsjY9Um9lb3RzdU4AiTorplTVvcg6u98CiGVHZRvjFcICHcp49ite3aUa1yrUEsrdg4v5l+ikxQ+W79CZ0d28dCTJSHRSjEk9sKyW7vFdjPmvIAE+wR1B0w/lPpEgfCH+45gYfhgNSB3o4OdHrq7akoJw/3z497YQbDKqPxU2j5yreK8/E/XZFQSzkMNDG2U6e2ddzS5vsgBh4zwZmVQB/ScyY5+i19QjM2PWSAVF0vYGk10qAXq7i0CUHj+CUHdg/TRkBJONM8GdETHK7yLGqYvS8K/wc8TkHtj/FpmtTEyVgjNeg9dBTV6V8yROOnIWbG5meAVvO1SPB60OfOOtbDWHZYcqFgu93Wk+kvfmxiJitdlGxi9exbhN1+w1wVYeHjvOGvNGcCk9jJ9Fitvrvg5Wj3h/3D52t/KVPFxuxxg/pt8DslpNO73lrMXziNAfFitj7A07M/gUz2kJZlAF7TSkxogW/jzwZ/rKZN5qvC4obil3bk8dY59vtnmX3vtEBmF6C9xNf68/nC1yT3wlL8l4Zkm9xEbG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3743.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39850400004)(346002)(136003)(396003)(366004)(451199021)(107886003)(26005)(478600001)(1076003)(6666004)(6512007)(6506007)(86362001)(2616005)(186003)(38350700002)(38100700002)(66476007)(66556008)(4326008)(66946007)(110136005)(83380400001)(52116002)(6486002)(316002)(8676002)(8936002)(4744005)(41300700001)(2906002)(5660300002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v7R3YhZqbJhxXIkDz3FvbL1IJWPuML3xyZXFayUO025DGz2+Sg7H9+k92QDZ?=
+ =?us-ascii?Q?GyXGHvRoys+kITXz73qzjOENVVmYA15epmpeeOS3z0YYzewrMNi+7aLNhwH9?=
+ =?us-ascii?Q?Z7PlXi8hXQYAUF20Sm1p7SFBN/Qmjy9+M4ZtRHklWqrnRyYymSan0VRl3Yjr?=
+ =?us-ascii?Q?H2NHJrTEDFGGeCrLWmHN0YoSXUZKeYk6PaNwmA3U7pdmCjXsKGNj7NVo9TQl?=
+ =?us-ascii?Q?EtszEny/NTm6LHdO3vnUae/C8jAoSlHCIzZbaUqEgQAAOC3cljekjw7fmY4c?=
+ =?us-ascii?Q?Hc95Bu8scLDCDFvr7/WScKMpohr2x7Rqekgu1oSO+pWT1k6cNGS7jY8H6SAY?=
+ =?us-ascii?Q?MRGSHFNUzO7CFVvUJ93kayVtjWbZkkJqBJ9Pu6oxHJGO1C3rlhtrLPQMphI0?=
+ =?us-ascii?Q?N5Ia4zHl4EFeK29T303J4aOcKJLV3Ts7YvYDVFdlJPNA5YgjMFaonCT/neQW?=
+ =?us-ascii?Q?XZcnPHkpxhnl6dLPw42IxK9ogth0iGKBXv4x28Cz3E8r4TpN3/eXruSDihny?=
+ =?us-ascii?Q?uNQ/CTLbE78wG7ZHuNwMfrq4pMsSCFETwWAOrWsUUR/1JoxanpyPSac5f600?=
+ =?us-ascii?Q?T6OEWz6dyGCB9xckojL1bySDahjTjMcXN1EWI8v807oBC6W+MR6hGhy9Jdhy?=
+ =?us-ascii?Q?F9bwFox6hrQsgfuaoCY+BzfJUhZvlfuhD3IDiDl//O146lnVWKxNxFbES1Ox?=
+ =?us-ascii?Q?q27Lhd0TSPecJwNvofrc9jtJDcccpU98lNDXbEyvbUn7cC719VgthJ2s8cSF?=
+ =?us-ascii?Q?5P4X5g2eiPdy9NMrBZnDn16MGJST9lObJOrzsLRaox/I97dsw5WQaUrc0Vt+?=
+ =?us-ascii?Q?Elu6ZQV4pPeLUygB58PBat2bnmcfwk1QnVwpRghGIoq15Ap65yCqZ74ZbVmU?=
+ =?us-ascii?Q?bzPiJEbelEbLh9zIKJIzMRlqIdJ6lffHvbXs+HmhYP8stRS8MjF4E5bG4QEH?=
+ =?us-ascii?Q?D3/SdVkFVULRsVK1R7IVJHTuUZvUOuhj3TG9yEuKiOkfbO1uWh7LvEzYKB/H?=
+ =?us-ascii?Q?zW0bK4rgqNPFpw44EIFcHKeqhiijCxNzqtv2/6GghW8Ajds4k/A+t5kzWULA?=
+ =?us-ascii?Q?Db0d321tAzeKK0Pzoo+BqgETJvgSbBa2qsNZ4e63f241WsQAmzoA8u1W3RDF?=
+ =?us-ascii?Q?QMEDTWikBztQypcf7lKbMMs6lA8Z1IbW8ksQU8i3EQhwR7/c58Yvu+ENG7Vf?=
+ =?us-ascii?Q?vT33R2dhP1RDkJDkWSkanijYxUgXwtW/eWR32ZS42JjPtFsvfGy1y/x3xQPL?=
+ =?us-ascii?Q?hEFgDUEPSgTCka3MJVlxHc3mrCI5R49nYhKj8CtlNxyXNNnlN045XbzwRzT6?=
+ =?us-ascii?Q?ic3RpoJECEWeuZXk4zFiSkQO80LfS/zSlDWh//mGCC452eL2x7s+8q5Myu57?=
+ =?us-ascii?Q?ujsrceU2pw7f2ZVjtdRrW1J4HnxnlQyU05HuL294RjqMJ/y3+5Tg+IxI6itL?=
+ =?us-ascii?Q?mEQvoBfV5CRCnDDrRMNwRNZsWNPNTttrSrCOyLXMjPLLUrSswCNK50cDxWZa?=
+ =?us-ascii?Q?EFgYzUDJJpLHfVEqtuOv9V28lgBrMmLw9/Npjhbdfzv/vXIVJ8QCVj3iJzg3?=
+ =?us-ascii?Q?/orXQNQnStZ4WCOOiUot3dJfsGLBF2P3Hp1RX89X?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8fcda751-4a5d-47f9-e0ee-08db7c7d4460
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3743.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 10:56:06.4534
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: B3Y8ySFXn9cM6WO3Z7dhSCVeNFtuHLpTNcy6bDiGrGAIp5fGFqVTWJL4Gr/h8eSZRwe8IVsFDHkpbzoaUu4wIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6401
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+newcon -> sock is NULL but dereferenced.
+First check newcon. Whether sock is a null pointer.
+If so, the subsequent operations are skipped.
+If it is not empty, perform subsequent operations.
 
-On 6/8/23 18:33, Jorge Lopez wrote:
-> HP BIOS Configuration driver purpose is to provide a driver supporting
-> the latest sysfs class firmware attributes framework allowing the user
-> to change BIOS settings and security solutions on HP Inc.’s commercial
-> notebooks.
-> 
-> Many features of HP Commercial notebooks can be managed using Windows
-> Management Instrumentation (WMI). WMI is an implementation of Web-Based
-> Enterprise Management (WBEM) that provides a standards-based interface
-> for changing and monitoring system settings. HP BIOSCFG driver provides
-> a native Linux solution and the exposed features facilitates the
-> migration to Linux environments.
-> 
-> The Linux security features to be provided in hp-bioscfg driver enables
-> managing the BIOS settings and security solutions via sysfs, a virtual
-> filesystem that can be used by user-mode applications. The new
-> documentation cover HP-specific firmware sysfs attributes such Secure
-> Platform Management and Sure Start. Each section provides security
-> feature description and identifies sysfs directories and files exposed
-> by the driver.
-> 
-> Many HP Commercial notebooks include a feature called Secure Platform
-> Management (SPM), which replaces older password-based BIOS settings
-> management with public key cryptography. PC secure product management
-> begins when a target system is provisioned with cryptographic keys
-> that are used to ensure the integrity of communications between system
-> management utilities and the BIOS.
-> 
-> HP Commercial notebooks have several BIOS settings that control its
-> behaviour and capabilities, many of which are related to security.
-> To prevent unauthorized changes to these settings, the system can
-> be configured to use a cryptographic signature-based authorization
-> string that the BIOS will use to verify authorization to modify the
-> setting.
-> 
-> Linux Security components are under development and not published yet.
-> The only linux component is the driver (hp bioscfg) at this time.
-> Other published security components are under Windows.
-> 
-> Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+Signed-off-by: Wang Ming <machel@vivo.com>
+---
+ fs/dlm/lowcomms.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Patches which are added to review-hans now are intended for
-the next kernel cycle. This branch will get rebased to the next
-rc1 when it is out and after the rebasing the contents of review-hans
-will be pushed to the platform-drivers-x86/for-next branch.
-
-Regards,
-
-Hans
-
-
-> 
-> ---
-> Based on the latest platform-drivers-x86.git/for-next
-> 
-> History
-> 
-> Version 17
-> 	Only patches marked [update] changed between version 17 and 16
-> 	Added helper routine to handle all common data for all attributes.
-> 	Corrected spaces found prior and after a '"'.
->         Update commit message to reflect comments from reviewers
->        
-> 
-> 	Patches
-> 	 Documentation                  [update]
-> 	 biosattr-interface
-> 	 bioscfg 			[update]
-> 	 bioscfg-h 			[update]
-> 	 enum-attributes 		[update]
-> 	 int-attributes 		[update]
-> 	 order-list-attributes 		[update]
-> 	 passwdattr-interface           [update]
-> 	 spmobj-attributes
-> 	 string-attributes 		[update]
-> 	 surestart-attributes
-> 	 Makefile ../hp/Makefile ../hp/Kconfig 
-> 	 MAINTAINERS
-> 
-> Version 16
-> 	Only patches marked [update] changed between version 16 and 15
-> 
-> 	Patches
-> 	 Documentation
-> 	 biosattr-interface
-> 	 bioscfg 			[update]
-> 	 bioscfg-h 			[update]
-> 	 enum-attributes 		[update]
-> 	 int-attributes 		[update]
-> 	 order-list-attributes 		[update]
-> 	 passwdattr-interface
-> 	 spmobj-attributes
-> 	 string-attributes 		[update]
-> 	 surestart-attributes
-> 	 Makefile ../hp/Makefile ../hp/Kconfig 
-> 	 MAINTAINERS
-> 
-> 
-> Version 15
-> 	Only patches marked [update] changed between version 15 and 14
-> 
-> 	Patches
-> 	 Documentation			[update]
-> 	 biosattr-interface
-> 	 bioscfg
-> 	 bioscfg-h
-> 	 enum-attributes
-> 	 int-attributes
-> 	 order-list-attributes
-> 	 passwdattr-interface
-> 	 spmobj-attributes		[update]
-> 	 string-attributes
-> 	 surestart-attributes 
-> 	 Makefile ../hp/Makefile ../hp/Kconfig 
-> 	 MAINTAINERS
-> 
-> Version 14
-> 	Only patches marked [update] changed between version 14 and 13
-> 	Sorted commit patches alphabetically
-> 	Rename ordered-attributes to order-list-attributes
-> 
-> 	Patches
-> 	 Documentation
-> 	 biosattr-interface 		[update]
-> 	 bioscfg
-> 	 bioscfg-h
-> 	 enum-attributes 		[update]
-> 	 int-attributes
-> 	 order-list-attributes
-> 	 passwdattr-interface
-> 	 spmobj-attributes
-> 	 string-attributes
-> 	 surestart-attributes 
-> 	 Makefile ../hp/Makefile ../hp/Kconfig 
-> 	 MAINTAINERS
-> 
-> 
-> Version 13
-> 	Only patches marked [update] changed between version 12 and 13
-> 	Sorted commit patches alphabetically
-> 	Rename ordered-attributes to order-list-attributes
-> 
-> 	Patches
-> 	 Documentation 			[update]
-> 	 biosattr-interface 		[update]
-> 	 bioscfg 			[update]
-> 	 bioscfg-h 			[update]
-> 	 enum-attributes 		[update]
-> 	 int-attributes 		[update]
-> 	 order-list-attributes 		[update]
-> 	 passwdattr-interface 		[update]
-> 	 spmobj-attributes 		[update]
-> 	 string-attributes 		[update]
-> 	 surestart-attributes 		[update] 
-> 	 Makefile ../hp/Makefile ../hp/Kconfig 
-> 	 MAINTAINERS
-> 
-> Version 12
-> 	Only patches marked [update] changed between version 11 and 12
-> 
-> 	Patches
-> 	 Documentation 			[update]
-> 	 biosattr-interface 		[update]
-> 	 bioscfg 			[update]
-> 	 int-attributes 		[update]
-> 	 ordered-attributes 		[update]
-> 	 passwdobj-attributes 	[deleted]
-> 	 string-attributes 		[update]
-> 	 bioscfg-h 			[update]
-> 	 enum-attributes 		[update]
-> 	 passwdattr-interface 		[update]
-> 	 spmobj-attributes 		[update]
-> 	 surestart-attributes 		[update] 
-> 	 Makefile ../hp/Makefile ../hp/Kconfig [update]
-> 	 MAINTAINERS
-> 
-> 
-> Version 11
-> 	Only patches marked [update] changed between version 10 and 11
-> 
-> 	Patches
-> 	 Documentation
-> 	 biosattr-interface 		[update]
-> 	 bioscfg
-> 	 int-attributes
-> 	 ordered-attributes
-> 	 passwdobj-attributes 		[update]
-> 	 string-attributes
-> 	 bioscfg-h
-> 	 enum-attributes
-> 	 passwdattr-interface
-> 	 spmobj-attributes 		[update]
-> 	 surestart-attributes 		[update]
-> 	 Makefile ../hp/Makefile ../hp/Kconfig
-> 	 MAINTAINERS
-> 
-> Version 10
-> 	Break down changes to single files per patch
-> 	Removed SPM/statusbin support
-> 	Patches
-> 	 Documentation
-> 	 biosattr-interface
-> 	 bioscfg
-> 	 int-attributes
-> 	 ordered-attributes
-> 	 passwdobj-attributes
-> 	 string-attributes
-> 	 bioscfg-h
-> 	 enum-attributes
-> 	 passwdattr-interface
-> 	 spmobj-attributes
-> 	 surestart-attributes
-> 	 Makefile ../hp/Makefile ../hp/Kconfig
-> 	 MAINTAINERS
-> 
-> Version 9
-> 	Includes only sysfs-class-firmware-attributes documentation
-> 
-> Version 8
-> 	Includes only sysfs-class-firmware-attributes documentation
-> 
-> Version 7
-> 	Includes only sysfs-class-firmware-attributes documentation
-> 
-> 
-> Jorge Lopez (13):
->   hp-bioscfg: Documentation
->   hp-bioscfg: bioscfg-h
->   hp-bioscfg: bioscfg
->   hp-bioscfg: biosattr-interface
->   hp-bioscfg: enum-attributes
->   hp-bioscfg: int-attributes
->   hp-bioscfg: order-list-attributes
->   hp-bioscfg: passwdobj-attributes
->   hp-bioscfg: spmobj-attributes
->   hp-bioscfg: string-attributes
->   hp-bioscfg: surestart-attributes
->   hp-bioscfg: Makefile
->   hp-bioscfg: MAINTAINERS
-> 
->  .../testing/sysfs-class-firmware-attributes   |  101 +-
->  MAINTAINERS                                   |    6 +
->  drivers/platform/x86/hp/Kconfig               |   16 +
->  drivers/platform/x86/hp/Makefile              |    1 +
->  drivers/platform/x86/hp/hp-bioscfg/Makefile   |   11 +
->  .../x86/hp/hp-bioscfg/biosattr-interface.c    |  312 +++++
->  drivers/platform/x86/hp/hp-bioscfg/bioscfg.c  | 1055 +++++++++++++++++
->  drivers/platform/x86/hp/hp-bioscfg/bioscfg.h  |  487 ++++++++
->  .../x86/hp/hp-bioscfg/enum-attributes.c       |  447 +++++++
->  .../x86/hp/hp-bioscfg/int-attributes.c        |  409 +++++++
->  .../x86/hp/hp-bioscfg/order-list-attributes.c |  436 +++++++
->  .../x86/hp/hp-bioscfg/passwdobj-attributes.c  |  543 +++++++++
->  .../x86/hp/hp-bioscfg/spmobj-attributes.c     |  386 ++++++
->  .../x86/hp/hp-bioscfg/string-attributes.c     |  390 ++++++
->  .../x86/hp/hp-bioscfg/surestart-attributes.c  |  132 +++
->  15 files changed, 4730 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/Makefile
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.h
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/order-list-attributes.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/string-attributes.c
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
-> 
+diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
+index 9f14ea9f6..ea18b9478 100644
+--- a/fs/dlm/lowcomms.c
++++ b/fs/dlm/lowcomms.c
+@@ -1081,9 +1081,12 @@ static int accept_from_sock(void)
+ 		add_sock(newsock, newcon);
+ 
+ 		/* check if we receved something while adding */
+-		lock_sock(newcon->sock->sk);
+-		lowcomms_queue_rwork(newcon);
+-		release_sock(newcon->sock->sk);
++		if (newcon->sock) {
++			lock_sock(newcon->sock->sk);
++			lowcomms_queue_rwork(newcon);
++			release_sock(newcon->sock->sk);
++		}
++
+ 	}
+ 	up_write(&newcon->sock_lock);
+ 	srcu_read_unlock(&connections_srcu, idx);
+-- 
+2.25.1
 
