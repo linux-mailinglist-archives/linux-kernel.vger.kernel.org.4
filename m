@@ -2,155 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29828747A0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 00:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4272747A10
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 00:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjGDWFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 18:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S231421AbjGDWOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 18:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjGDWFB (ORCPT
+        with ESMTP id S230507AbjGDWOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 18:05:01 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A61E76
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 15:05:00 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-c5ffb6cda23so656934276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 15:05:00 -0700 (PDT)
+        Tue, 4 Jul 2023 18:14:32 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4019B10C8
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 15:14:31 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9939fbb7191so16732066b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 15:14:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688508299; x=1691100299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nswOflL+ad3Rf8OdqQYDYHaGrkZ9dAMLf54yrOYBn/c=;
-        b=uWDLDVCv+cij7Hgi1Dfyr9iYQ1IdZH68Kx0m/+1EN0oyYPmGjjkclXXBbFwVdPM2yH
-         AVHBn4wuVtu2DZ9INL0uK6cnZInJcl2+pwwUCKHPvEP/M8v7Out/g1itOkKVHPIxwihZ
-         xYI0wflgLgYZcwlVIYA07695rhSEHx0ncHS8v0w9o0or/zlXHzUtQM4S/DHuXuBqEjSX
-         1MHEVGC+Sfa6ZZOytGkLjCZFflKm35xQw8zHDl0gDWv8dlF8PW1s3MHLfAxrNMfR6uMU
-         Kay/b1fyx27XReXEAEcfb0D8ekyWpR8/l2wt4q2zbSSZqvlvA3J5k4wvwSnIgqYt4zFx
-         7glQ==
+        d=linux-foundation.org; s=google; t=1688508869; x=1691100869;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IcGCOea3YEKw3Z0BdC3JX6yVfvpjQ2aXU5gSorSGoSk=;
+        b=KkPcn2HAvJTcRtU26+KnV1CBWodWaWyh0/vwH5oFdhFfhAzIhWqwDGo3NFmFU5eW0+
+         C8LHUKpZOaB34xjDX+a4TmO3/N7YdgzpaaoOBj0gDv8jsMGbPwPhM/TCAQKANnQfUqMn
+         47ZmBJVRctATktYDZoFSloiVwijwjc3BR/GDE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688508299; x=1691100299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nswOflL+ad3Rf8OdqQYDYHaGrkZ9dAMLf54yrOYBn/c=;
-        b=a9Xy5TbkeZ8nwJmIC+XzQ6jEH3RSYJbk39x4vi3a+OP7nF33IG7r+60dJCfP35ZSs5
-         3O0PMxH9pLbpNV6wvO48Crdie/Rlv7L6YBN3vBseInoyQjOo1dnIeIHIPn0J3BYdDEGV
-         F58r4d1cxBEw7ODJH8JATgcWH6BRrT+zDgXcZu2o9P2fB7DKw42JV3o6B9q9JdshrsvS
-         +S+Ih2/euCRaul5qcGVz1uBmPRNH2Ddn4/Nz8B73SUtAAgMaH1fXT/KDDe2MkOLG3LK/
-         wcvElofoDW+bJOLbSE7Ab2kB5Y/M9IvQa8P/U8f51EqsmscGDK/1bREKuAxp1qr/Zb3e
-         wl8A==
-X-Gm-Message-State: ABy/qLbD20kh1R97esiIjg0HFzHoOYfG/VunyCh3i4Qny5nLiiG2hm1Q
-        waQ9PMJsikX5wq/byGotSS35HqKeQZAVL8ivAsOWCnx7yGCub2KW76I=
-X-Google-Smtp-Source: APBJJlFn5VR+cnfVz1hYer80K/3NNixQJwpfU/KzY+2o39e/PwrqHafpMNiEhbiPGgr7TJ9T1M42aVv9KpISdV3ua7E=
-X-Received: by 2002:a25:ac20:0:b0:c42:97f9:cda6 with SMTP id
- w32-20020a25ac20000000b00c4297f9cda6mr10984031ybi.29.1688508299539; Tue, 04
- Jul 2023 15:04:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688508869; x=1691100869;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IcGCOea3YEKw3Z0BdC3JX6yVfvpjQ2aXU5gSorSGoSk=;
+        b=iq44ia38mzGv8x7NAzBUyObzCBt0J2x22wejEbBaSvCvMgsH7UbusrsoxNuQzoSX4o
+         JVIcpZ8wvokS/brKsZV42D5KkLR+UUzpGsNTafI3vM8jh9XQERU+3s4TjznlKkREMkVN
+         PtW8FIhLLhaPW8GyvKNBeAGsfp0J/LH08XotiQShfqRMaC6Vx65coDTaffA7wmreGpZL
+         S/QKZxmrx4bjSlQrKcBRUnylLUQFRehmoXZK29p7FR23VTFCvvEnJhm3Ris0ZGupdoDU
+         eLNqaFe6U2NtDCF+1rnKBqxpo5Fd8jTI0Pl2aqXW4Mg+V627MHpgbs4bOHVBJV1f7/O7
+         t2yg==
+X-Gm-Message-State: ABy/qLbXmUYpnZDXJlM3MuVcj4GyAW7SO3M2P5IXfjXpmQJItljuCyYI
+        KXd7hMN0c5Uiu5MX0a9U9Uh9l9kd45NQK+NiV0p35j6K
+X-Google-Smtp-Source: APBJJlEbvM6pLL2lKLpV09D4WRlwqjMir0enh8OoSACMF4kvoRRe7fhiIO9KLygRLm3kQxASf9yXcg==
+X-Received: by 2002:a17:907:86a3:b0:982:a022:a540 with SMTP id qa35-20020a17090786a300b00982a022a540mr493775ejc.11.1688508869662;
+        Tue, 04 Jul 2023 15:14:29 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170906660700b009935aba3a9dsm3932732ejp.48.2023.07.04.15.14.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 15:14:29 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so204961a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 15:14:28 -0700 (PDT)
+X-Received: by 2002:a05:6402:2547:b0:51a:4039:b9e with SMTP id
+ l7-20020a056402254700b0051a40390b9emr468288edb.9.1688508868151; Tue, 04 Jul
+ 2023 15:14:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info> <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh> <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh> <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
- <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com> <20230704142846.524daa14ff921ed7eb534594@linux-foundation.org>
-In-Reply-To: <20230704142846.524daa14ff921ed7eb534594@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 4 Jul 2023 15:04:48 -0700
-Message-ID: <CAJuCfpFA3NudeyUyL65B3rnt-8sk1cnoh0uESYuS+LaDsGZu+g@mail.gmail.com>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com>
+ <20230704211509.GA21834@1wt.eu> <CAHk-=wjH4O6v_EwVB=t_6Haky2jOiejHbCkCTvgNQWo1ghy8-w@mail.gmail.com>
+ <20230704213415.GA21872@1wt.eu> <CAHk-=wjPEjrB7eCukREhWu-0qfjbFD-K8sk1TYYRgeHzYr1tuQ@mail.gmail.com>
+ <20230704215600.GA22271@1wt.eu>
+In-Reply-To: <20230704215600.GA22271@1wt.eu>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Jul 2023 15:14:11 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whMytacPBHfKKi8GYdgfadNy5LA-1TDHrTtz22eJr2B1Q@mail.gmail.com>
+Message-ID: <CAHk-=whMytacPBHfKKi8GYdgfadNy5LA-1TDHrTtz22eJr2B1Q@mail.gmail.com>
+Subject: Re: Overly aggressive .gitignore file?
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 2:28=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
+On Tue, 4 Jul 2023 at 14:56, Willy Tarreau <w@1wt.eu> wrote:
 >
-> On Tue, 4 Jul 2023 13:22:54 -0700 Suren Baghdasaryan <surenb@google.com> =
-wrote:
->
-> > On Tue, Jul 4, 2023 at 9:18=E2=80=AFAM Andrew Morton <akpm@linux-founda=
-tion.org> wrote:
-> > >
-> > > On Tue, 4 Jul 2023 09:00:19 +0100 Greg KH <gregkh@linuxfoundation.org=
-> wrote:
-> > >
-> > > > > > > > Thanks! I'll investigate this later today. After discussing=
- with
-> > > > > > > > Andrew, we would like to disable CONFIG_PER_VMA_LOCK by def=
-ault until
-> > > > > > > > the issue is fixed. I'll post a patch shortly.
-> > > > > > >
-> > > > > > > Posted at: https://lore.kernel.org/all/20230703182150.2193578=
--1-surenb@google.com/
-> > > > > >
-> > > > > > As that change fixes something in 6.4, why not cc: stable on it=
- as well?
-> > > > >
-> > > > > Sorry, I thought since per-VMA locks were introduced in 6.4 and t=
-his
-> > > > > patch is fixing 6.4 I didn't need to send it to stable for older
-> > > > > versions. Did I miss something?
-> > > >
-> > > > 6.4.y is a stable kernel tree right now, so yes, it needs to be inc=
-luded
-> > > > there :)
-> > >
-> > > I'm in wait-a-few-days-mode on this.  To see if we have a backportabl=
-e
-> > > fix rather than disabling the feature in -stable.
-> >
-> > Ok, I think we have a fix posted at [2]  and it's cleanly applies to
-> > 6.4.y stable branch as well. However fork() performance might slightly
-> > regress, therefore disabling per-VMA locks by default for now seems to
-> > be preferable even with this fix (see discussion at
-> > https://lore.kernel.org/all/54cd9ffb-8f4b-003f-c2d6-3b6b0d2cb7d9@google=
-.com/).
-> > IOW, both [1] and [2] should be applied to 6.4.y stable. Both apply
-> > cleanly and I CC'ed stable on [2]. Greg, should I send [1] separately
-> > to stable@vger?
-> >
-> > [1] https://lore.kernel.org/all/20230703182150.2193578-1-surenb@google.=
-com/
->
-> This one isn't sufficient for .configs which already have
-> PER_VMA_LOCK=3Dy.  Using `depends on BROKEN' would be better.
->
-> > [2] https://lore.kernel.org/all/20230704200656.2526715-1-surenb@google.=
-com/
-> >
->
-> We're still awaiting tester input on this?
+> This point I perfectly understand, but there's also this "ls" command
+> that lists file names starting with 2023-* if required.
 
-Yeah, and it seems to be negative... Anyway, I'll post a dependency on BROK=
-EN.
+You know what? I'm done arguing with you.
 
->
-> I think a clean new fully-changelogged two-patch series would be the
-> best way to handle this.  Please ensure that the [0/2] intro clearly
-> explains what we're proposing here, and why.
->
-> Also, "might slightly regress" is a bit weak.  These things are
-> measurable, no?  Because a better solution would be to fix 6.4.x and
-> mainline and leave it at that.
->
+Sure. I could also do "echo * | grep 2023" or something.
+
+Or I could just remember every single mbx file I ever used.
+
+Or maybe I could remember to just delete them immediately after using.
+
+Or I could do any number of other things.
+
+But what do you think "git status" is supposed to do?
+
+Here's a theory - it's supposed to tell me about the status of my git tree.
+
+Maybe it's supposed to tell me about extra files that maybe I should
+be aware of. Maybe I should delete them. Maybe I should commit them.
+Who knows?
+
+Or maybe it's supposed to tell me that I've forgotten to push, or that
+I have diffs I haven't committed.
+
+All those things that are specific to having a git tree, that tools
+like 'ls' simply don't know to do.
+
+It's a crazy theory, I know. But just go with it, ok.
+
+And  *if* we pretend for a moment that this is what "git status" is
+supposed to do, then maybe it should have reminded me about stale
+random files in that directory that ACTIVELY BREAK MY WORKFLOW.
+
+Maybe that isn't your workflow.
+
+Maybe you're perfectly fine not getting a unique auto-complete,
+because you *want* your git directory filled with irrelevant crap.
+
+Or maybe you just always do "ls" religiously and look for random files
+in general, because  you are bored and it fills up that dead time.
+
+But how about you just accept the fact that for some of us, the whole
+point of 'git status" is to tell about these kinds of things, ok?
+
+I'm now done. I have reverted that commit in my tree and pushed it
+out, because while I was interested in hearing about any possible
+other use for that overly aggressive gitignore entry, I'm not in the
+least interested in you trying to teach me about esoteric tools like
+'ls', or telling me that "unsuccessful auto-complete is still an
+auto-complete".
+
+              Linus
