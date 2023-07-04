@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD137476D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCED7476D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjGDQgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S231620AbjGDQhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjGDQgJ (ORCPT
+        with ESMTP id S229615AbjGDQhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:36:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC6DF2;
-        Tue,  4 Jul 2023 09:36:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BC99612F5;
-        Tue,  4 Jul 2023 16:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB81AC433C8;
-        Tue,  4 Jul 2023 16:36:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688488568;
-        bh=SpCc/weuyI1enRk2z+oPYTNzEGwpO7yEdehgY7f+AWo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PHuqBcTPhFwBuGWWekOGnA+R20jbK7lqaqwuyE7UQGbmEC3xmdVaH8gUy8+PSq2dW
-         MzJ/RgUxbPfHyW2YgQbSoMCEhuGlHSNZH0vh5y+/5Oa+J/5CNZwbsV963ZYqD0j+Ko
-         wVTpn7IPAtTb0/WswB3KvI15qMDfCVPCn56MhPfl++jKWOwm9GWBhc7TlvBmjuc7pT
-         w+0zP9tAOAtBA/dYRcPTyVifr91lh4DATbndhr5eqLXwP/51RdAEmj/68uv58EML+x
-         cnZOIMvBySTdyK3NOwehaCrIKogaGBVA753mu0SjtuinC4w0ds+hofBltK+MwYzBPJ
-         N1b6uSCjwfCug==
-Date:   Tue, 4 Jul 2023 17:36:03 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-Subject: Re: [PATCH v4 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Message-ID: <20230704-gooey-lair-2bc45bbd163c@spud>
-References: <20230704090453.83980-1-william.qiu@starfivetech.com>
- <20230704090453.83980-3-william.qiu@starfivetech.com>
+        Tue, 4 Jul 2023 12:37:18 -0400
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283A6CF;
+        Tue,  4 Jul 2023 09:37:18 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1b7ef3e74edso29177865ad.0;
+        Tue, 04 Jul 2023 09:37:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688488637; x=1691080637;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qq9caxBhUaIDTOUts0hMPoGeTAHn1nr/fwkbfDRFOV4=;
+        b=DRODGkvGkssu8sbpH5JfFdL0Dwx1OfH+U7SSFY6gIJ0v6LTLqeNqjhBf8nmyPy4gG2
+         oiNgpFAtVRu9NdjJ8AXflAkzXUDRBtm1DwKH6+dv1MqxwskzxumNO5juQO8oDWlkMBY8
+         oMbR6wrLHLaBYM3LSFbtupluYCA8UKra9TkS14fNUvBVnA50/sSvLxoG+0JRkMGxohtC
+         4XFthla/1NcoJIUkd+Nh6VfWNefjn3uzOfEVCLURL1eFBJPdi9+Ej0TIRoo94qo1q9N5
+         YY+bjRQ9RjJcevtmfry7JvF1lFpLiu1nEkmZpTbFpZgJt7x1T83M/CiMTZTyCmMzQs3j
+         A+Ww==
+X-Gm-Message-State: ABy/qLZkIhcqZa19ZXVgKzV3v167qMEV//dp+1Hr1qss+3U2TLyIUTvb
+        irGKM6CN31PVMcqsDLArFdE=
+X-Google-Smtp-Source: APBJJlFLrXdz6T8wRfchr9R6PTEOz95tWasBcijz9afT2zIq9026AzCHmKf2iLbvuD5b+Zi1eMkf+g==
+X-Received: by 2002:a17:902:8682:b0:1b8:95fc:d12 with SMTP id g2-20020a170902868200b001b895fc0d12mr4921692plo.54.1688488637557;
+        Tue, 04 Jul 2023 09:37:17 -0700 (PDT)
+Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id j6-20020a170902c3c600b001b8918da8d1sm4605652plj.80.2023.07.04.09.37.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 09:37:15 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 01:37:13 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
+Cc:     alberto.dassatti@heig-vd.ch, dlemoal@kernel.org,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI
+ address
+Message-ID: <20230704163713.GB435329@rocinante>
+References: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oezgEO9YoqNnv0Dg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230704090453.83980-3-william.qiu@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230703085845.2052008-1-rick.wertenbroek@gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---oezgEO9YoqNnv0Dg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> A 32-bit mask was used on the 64-bit PCI address used for mapping MSIs.
+> This would result in the upper 32 bits being unintentionally zeroed and
+> MSIs getting mapped to incorrect PCI addresses if the address had any
+> of the upper bits set.
+> 
+> Replace 32-bit mask by appropriate 64-bit mask.
 
-Hey William,
+Applied to controller/rockchip, thank you!
 
-On Tue, Jul 04, 2023 at 05:04:52PM +0800, William Qiu wrote:
-> Add QSPI clock operation in device probe.
->=20
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@i=
-ntel.com/
+[1/1] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI address
+      https://git.kernel.org/pci/pci/c/251c859f4b6f
 
-These Reported-by tags don't seem correct, given they were reports about
-this patch, not the reason for it - but did you actually check that you
-fixed the errors that the patch produces?
-
-This particular one seems to complain about a hunk that is still in the
-patch & the CI running on the RISC-V patchwork is complaining about it.
-
-Cheers,
-Conor.
-
-> @@ -1840,6 +1858,8 @@ static int cqspi_resume(struct device *dev)
->  	struct spi_master *master =3D dev_get_drvdata(dev);
-> =20
->  	clk_prepare_enable(cqspi->clk);
-> +	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
-> +		clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
->  	cqspi_wait_idle(cqspi);
->  	cqspi_controller_init(cqspi);
-> =20
-> --=20
-> 2.34.1
->=20
-
---oezgEO9YoqNnv0Dg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKRKcwAKCRB4tDGHoIJi
-0pUKAP4wCw+hgpLoiMvepR3gmuLN/5ClOIQW3zICq88ap7eALgD/c9nTYk9tJZ8T
-KdMpFaUJKzecsdmo6+5ZMbLvRRp2GwI=
-=yjLt
------END PGP SIGNATURE-----
-
---oezgEO9YoqNnv0Dg--
+	Krzysztof
