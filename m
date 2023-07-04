@@ -2,132 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FC8747A93
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 01:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B9C747A94
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 01:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjGDXzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 19:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S229892AbjGDX5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 19:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjGDXze (ORCPT
+        with ESMTP id S229532AbjGDX5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 19:55:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0291B7
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 16:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688514888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mna+dhhTYjAdqDBDtMfl56DYIGVzwso+E96k6VKVls0=;
-        b=Wa7BrcOmPI0f7tqlo51bYXjgXNXvlWrpR9Yn8RyK5lQkryG8TZAvLg5aTNJq7F5DxXQqyU
-        3H5SqjMo4qtmXoPGzv3Tcjy+OdlTQyfpzDtdxcf3cJ1kXqy9GGc9rAN13pr6tJoCM0i3vm
-        6PcoiigxNosn48nd48SCpoXqYBepIKs=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-319-Wezru0YlNueMReo5wHMOWw-1; Tue, 04 Jul 2023 19:54:47 -0400
-X-MC-Unique: Wezru0YlNueMReo5wHMOWw-1
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-39fb9cce400so5160316b6e.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 16:54:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688514886; x=1691106886;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mna+dhhTYjAdqDBDtMfl56DYIGVzwso+E96k6VKVls0=;
-        b=brZgeLW8puuX6tlpxKSKqA0xAU2y3xiasKcgN3LI5xpsMoC/ODKiik80hg2s/nxCwS
-         Tqeco+y7EsMWad2CAb6MvZVDsVAdZYnnYD3NjXfm32MAvpAAMTf366d7B8f3fRzSyJvY
-         n3B8cV3QG0mcrmDKdKM4BdYhDd5lsTEgDg7Wv1iupR+e7EtE22TXDobrAV5/0pP3MFy9
-         6sSO7/T1B2WHb2q0GWhUS6tdlBywZ95Fyog07XkLFUnKCiLh/IXBe+9GlHTvufLQ7Ki5
-         4dowRl4DVrIyOSyL0tFCUyonevIWKug5yZapI7koHf6aZstJPUyUIG0S2xqAxJQyC7fe
-         VLfA==
-X-Gm-Message-State: ABy/qLb5R2o46QKpLEMT89b6GZ7XGkr8bi412BQUfWB8JtZVRQyIvrgS
-        HUHOErmEJ0Rowx7R1VBMOQuOnO+C0HPjc1yn7Ekc1btOiOg2z3B4cr+sKDoeVWNi3vlzb0snpxM
-        46qcvim2RyNOWYQcIhvC43P3K
-X-Received: by 2002:a05:6808:1a17:b0:3a3:a8ce:c659 with SMTP id bk23-20020a0568081a1700b003a3a8cec659mr9277923oib.1.1688514886547;
-        Tue, 04 Jul 2023 16:54:46 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEnYXHnAZgQaIRTnEPMZWgHY6PvyvdCKGOrf+hZuU/jzXUZFjXk6Vz5A95OweIIvkeHyw48vA==
-X-Received: by 2002:a05:6808:1a17:b0:3a3:a8ce:c659 with SMTP id bk23-20020a0568081a1700b003a3a8cec659mr9277900oib.1.1688514886348;
-        Tue, 04 Jul 2023 16:54:46 -0700 (PDT)
-Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902c20200b001b03a7a40e7sm12047419pll.19.2023.07.04.16.54.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 16:54:45 -0700 (PDT)
-Message-ID: <a0e4b07c-dea8-e45e-7bc8-588f8cbcb537@redhat.com>
-Date:   Wed, 5 Jul 2023 09:54:36 +1000
+        Tue, 4 Jul 2023 19:57:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A10DE41
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 16:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=12jw7f37Y05R+QFxMlhYK7Zaoz60JCyqvKUQKE8Aprs=; b=Epqs/HbhRoft4XM5q4tKqGXcOk
+        0jFcDZF01KB1zjYQKv3tprKnDYITw7X/XyAc/PgoK/A9BZ3ihs3DLb8XObg0zwQDK1FbGPv772wGN
+        /xryW9aQF7CGjipkbPDIER5mW30SKc+Og96eGXmIXmPUYDT41vo6lWNzei6pDwmT5dkcnuR/MKeg5
+        qHm+Ske3XlDLBrTexloPScJF48aex2SNsVUbuGhWUHVnY7nNVZ9zR/9CL0+5UpX/rWMCANtBMG72B
+        sO9aRAtmguhssvFIAK3GT/rZCXXbwKQJSGkju+K8UPR6UWB83MyCPo3o9GRc1tES700+9+hfc13Zh
+        ilOVsdTQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qGptd-009ZtG-FJ; Tue, 04 Jul 2023 23:57:25 +0000
+Date:   Wed, 5 Jul 2023 00:57:25 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     "Yin, Fengwei" <fengwei.yin@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
+Message-ID: <ZKSx5Udt3Oh8Kr35@casper.infradead.org>
+References: <20230703135330.1865927-1-ryan.roberts@arm.com>
+ <20230703135330.1865927-5-ryan.roberts@arm.com>
+ <6865a59e-9e40-282d-c434-b7c757388b65@intel.com>
+ <f364d9f1-8f7b-f531-ab9e-400c57a60c16@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RESEND PATCH v5 03/11] KVM: Allow range-based TLB invalidation
- from common code
-Content-Language: en-US
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20230621175002.2832640-1-rananta@google.com>
- <20230621175002.2832640-4-rananta@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20230621175002.2832640-4-rananta@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f364d9f1-8f7b-f531-ab9e-400c57a60c16@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 04, 2023 at 03:20:35PM +0100, Ryan Roberts wrote:
+> On 04/07/2023 04:45, Yin, Fengwei wrote:
+> > 
+> > On 7/3/2023 9:53 PM, Ryan Roberts wrote:
+> >> Introduce FLEXIBLE_THP feature, which allows anonymous memory to be
+> > THP is for huge page which is 2M size. We are not huge page here. But
+> > I don't have good name either.
+> 
+> Is that really true? On arm64 with 16K pages, huge pages are 32M and with 64K
+> base page, they are 512M. So huge pages already have a variable size. And they
+> sometimes get PTE-mapped. So can't we just think of this as an extension of the
+> THP feature?
 
+The confusing thing is that we have counters for the number of THP
+allocated (and number of THP mapped), and for those we always use
+PMD-size folios.
 
-On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
-> From: David Matlack <dmatlack@google.com>
-> 
-> Make kvm_flush_remote_tlbs_range() visible in common code and create a
-> default implementation that just invalidates the whole TLB.
-> 
-> This paves the way for several future features/cleanups:
-> 
->   - Introduction of range-based TLBI on ARM.
->   - Eliminating kvm_arch_flush_remote_tlbs_memslot()
->   - Moving the KVM/x86 TDP MMU to common code.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->   arch/x86/include/asm/kvm_host.h |  3 +++
->   arch/x86/kvm/mmu/mmu.c          |  9 ++++-----
->   arch/x86/kvm/mmu/mmu_internal.h |  3 ---
->   include/linux/kvm_host.h        |  9 +++++++++
->   virt/kvm/kvm_main.c             | 13 +++++++++++++
->   5 files changed, 29 insertions(+), 8 deletions(-)
-> 
+If we must have a config option, then this is ANON_LARGE_FOLIOS.
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+But why do we need a config option?  We don't have one for the
+page cache, and we're better off for it.  Yes, it depends on
+CONFIG_TRANSPARENT_HUGEPAGE today, but that's more of an accidental
+heritage, and it'd be great to do away with that dependency eventually.
 
-Thanks,
-Gavin
-
+Hardware support isn't needed.  Large folios benefit us from a software
+point of view.  if we need a chicken bit, we can edit the source code
+to not create anon folios larger than order 0.
