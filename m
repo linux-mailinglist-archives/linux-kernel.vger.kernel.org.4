@@ -2,108 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F323747417
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD0674741E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbjGDO2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
+        id S231452AbjGDO3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbjGDO1y (ORCPT
+        with ESMTP id S230379AbjGDO3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:27:54 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8CDE75
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:27:51 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5703cb4bcb4so61422377b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688480871; x=1691072871;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N4R6luG93HjxPfObPcZTcu6qIcxDhgXDUA+lCxYcsSI=;
-        b=C5JP2ukxDAPmAKA6NIKf6hEZ2C3gBylwmmANY0V3PeAYaHs8NwLe2Kt6LxT5NkLeRO
-         RvBEySrUxHpc3hRW8zGFXbLOjOkSXQ4EhaviPHv37ev50/kXRW/rkGPFik/K+MGP5JQz
-         S9ptD9hM4lR6FOplQUCW6CFDFr9gdPKP4BxtHJjDqrrEXqPmAsNrvMobkHKUpqcm8whu
-         sA+X3JfZTQ4qMtj6Iuwou/XkpddH8UGLqqconQyMTehLTQxmqvEzrfv6XB6G0nb0xIrO
-         1CZILVDyhyoDUi4/L5SzEHCBT6pUy0R5idmXd/ait83I/VdZcTZOjcxtQHSYGlYQIMB/
-         KS8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688480871; x=1691072871;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=N4R6luG93HjxPfObPcZTcu6qIcxDhgXDUA+lCxYcsSI=;
-        b=AQCKify0DtSda+zTq+eZVSTU952/b+juPYAKmAKXl4Fh6QG0de4iySzEWCVEcP8wm6
-         PRv1r/lDzQUxbtB7R95spezMcdO5v7BGggX0l/YcfLKI7hi/hJFMfctfEXTUsSRO0Ro1
-         /QE+T/K8wo8L3Y0CREk1rcLsefQcE4TRMyEVpIxwmEdMhsyKvIQWI8RdJFISgfbnbInA
-         P8nacNf6LkBpovXjHwzMgFZIFc03ReYtZjfCr6GFPQucodQfKU2n6CohUDexLqu2ZTr3
-         jPmXDnwij8dZc0LxvzC3Z40fIomq30yniytmuYdeFDwWc8t5Cl9Tj4J/7x6gN2ER38LN
-         0Y9g==
-X-Gm-Message-State: ABy/qLbQRgNPgL2SXA095SMCGCiXqu2YuM1wgZSdnueei3aJsHP+Sy9R
-        rfNYti1TGixoV2ggaDMN+lQlp89Rbg==
-X-Google-Smtp-Source: APBJJlE+jL5PoQn1d0xQeDZ1IrjBRWFO0wQcaRBkAUFB7DmhbAdpa6gM9td1SbWpAOXIhz5atXQkEA==
-X-Received: by 2002:a0d:d74e:0:b0:578:5e60:dcc9 with SMTP id z75-20020a0dd74e000000b005785e60dcc9mr10295115ywd.10.1688480870923;
-        Tue, 04 Jul 2023 07:27:50 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.186.55])
-        by smtp.gmail.com with ESMTPSA id x137-20020a0dd58f000000b00577374e8abasm2805974ywd.87.2023.07.04.07.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 07:27:50 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b::37a])
-        by serve.minyard.net (Postfix) with ESMTPSA id 20FD91800E8;
-        Tue,  4 Jul 2023 14:27:49 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 09:27:47 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Andrew Jeffery <andrew@aj.id.au>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chengfeng Ye <dg573847474@gmail.com>
-Subject: Re: [PATCH] ipmi: fix potential deadlock on &kcs_bmc->lock
-Message-ID: <ZKQsY3DXXDbxy0om@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <20230627152449.36093-1-dg573847474@gmail.com>
- <ZJwd0UDKYcK9AvSf@mail.minyard.net>
- <9691d898-22a9-4902-871d-73f5dafabf86@app.fastmail.com>
+        Tue, 4 Jul 2023 10:29:45 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FACE49;
+        Tue,  4 Jul 2023 07:29:42 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688480981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zhC+KWn+e1iSNCp2dmqL3RwKmWOqhZYUPme+wcWSUyk=;
+        b=YYowUOH/d+UO3jZfLAm3vj5YK/nP7y0Oj6nvyFmHYqJ+cz3BLsG1XEY6xCo2xRG75E45tI
+        d4Rr1ys9ooc9p5lUM6q3QAgs2XL4xhLlXHhpQgHojO8oBYQ3pFfU/SbvTUZE2oxDnlwpcR
+        sYjDJxQmjBnXmAgaj9Zz56v84kRGToC/LxeDL/eFrskYD+29W/6Hd8RGPB82i0T6QyHNjP
+        0gCoLhjW3tN3HJd63Gq8zy9wrjUrEL9otMSFRQzL+6p0eAL7sOgy7uAqL05JZp0vrMpNoM
+        9VMrTL7xeOPsXuPbDNQyVhJVV1kXh2u8xqpbd0GNFWAikbc7Vywo2alyT+2sww==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D6C1060008;
+        Tue,  4 Jul 2023 14:29:38 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 16:29:37 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Yangtao Li <frank.li@vivo.com>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, tglx@linutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 2/5] thermal/drivers/armada: convert to use
+ devm_request_threaded_irq_emsg()
+Message-ID: <20230704162937.2600d5b0@xps-13>
+In-Reply-To: <20230704142227.65k3kdrnyqqolf6t@pengutronix.de>
+References: <20230703090455.62101-1-frank.li@vivo.com>
+        <20230703090455.62101-3-frank.li@vivo.com>
+        <20230704104608.29527ec3@xps-13>
+        <20230704142227.65k3kdrnyqqolf6t@pengutronix.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9691d898-22a9-4902-871d-73f5dafabf86@app.fastmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:31:02AM +0930, Andrew Jeffery wrote:
-> Hi Corey, Chengfeng,
-> 
-> On Wed, 28 Jun 2023, at 21:17, Corey Minyard wrote:
-> > Indeed, this looks like an issue.
-> >
-> > Andrew, any opinions on this?  The attached patch will work, the other
-> > option would be to disable interrupts when calling
-> > kcs_bmc_handle_event() in the timer handler.  But then you have to worry
-> > about RT.
-> 
-> Right, I think we'd do best to not over-complicate things.
-> spin_lock_irq{save,restore}() are the intuitive choice to me.
-> 
-> I'll follow up with R-b/T-b tags once I've booted the patch
-> and done some testing.
+Hi Uwe,
 
-Thanks.  This is in my for-next tree, I'd like to get this in the merge
-window, which I believe ends this Sunday.
+u.kleine-koenig@pengutronix.de wrote on Tue, 4 Jul 2023 16:22:27 +0200:
 
-> >> This flaw was found using an experimental static analysis tool we are
-> >> developing for irq-related deadlock.
+> Hello Miquel,
+>=20
+> On Tue, Jul 04, 2023 at 10:46:08AM +0200, Miquel Raynal wrote:
+> > Hi Yangtao,
+> >=20
+> > frank.li@vivo.com wrote on Mon,  3 Jul 2023 17:04:51 +0800:
+> >  =20
+> > > There are more than 700 calls to the devm_request_threaded_irq method.
+> > > Most drivers only request one interrupt resource, and these error
+> > > messages are basically the same. If error messages are printed
+> > > everywhere, more than 1000 lines of code can be saved by removing the
+> > > msg in the driver.
+> > >=20
+> > > And tglx point out that:
+> > >=20
+> > >   If we actually look at the call sites of
+> > >   devm_request_threaded_irq() then the vast majority of them print mo=
+re or
+> > >   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+> > >=20
+> > >      519 messages total (there are probably more)
+> > >=20
+> > >      352 unique messages
+> > >=20
+> > >      323 unique messages after lower casing
+> > >=20
+> > >          Those 323 are mostly just variants of the same patterns with
+> > >          slight modifications in formatting and information provided.
+> > >=20
+> > >      186 of these messages do not deliver any useful information,
+> > >          e.g. "no irq", "
+> > >=20
+> > >      The most useful one of all is: "could request wakeup irq: %d"
+> > >=20
+> > >   So there is certainly an argument to be made that this particular
+> > >   function should print a well formatted and informative error messag=
+e.
+> > >=20
+> > >   It's not a general allocator like kmalloc(). It's specialized and i=
+n the
+> > >   vast majority of cases failing to request the interrupt causes the
+> > >   device probe to fail. So having proper and consistent information w=
+hy
+> > >   the device cannot be used _is_ useful.
+> > >=20
+> > > Let's use devm_request_threaded_irq_emsg(), which ensure that all err=
+or
+> > > handling branches print error information. In this way, when this fun=
+ction
+> > > fails, the upper-layer functions can directly return an error code wi=
+thout
+> > > missing debugging information. Otherwise, the error message will be
+> > > printed redundantly or missing.
+> > >=20
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > > ---
+> > >  drivers/thermal/armada_thermal.c | 13 +++++--------
+> > >  1 file changed, 5 insertions(+), 8 deletions(-)
+> > >=20
+> > > diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armad=
+a_thermal.c
+> > > index 9f6dc4fc9112..a5e140643f00 100644
+> > > --- a/drivers/thermal/armada_thermal.c
+> > > +++ b/drivers/thermal/armada_thermal.c
+> > > @@ -913,15 +913,12 @@ static int armada_thermal_probe(struct platform=
+_device *pdev)
+> > > =20
+> > >  	/* The overheat interrupt feature is not mandatory */
+> > >  	if (irq > 0) {
+> > > -		ret =3D devm_request_threaded_irq(&pdev->dev, irq,
+> > > -						armada_overheat_isr,
+> > > -						armada_overheat_isr_thread,
+> > > -						0, NULL, priv);
+> > > -		if (ret) {
+> > > -			dev_err(&pdev->dev, "Cannot request threaded IRQ %d\n",
+> > > -				irq);
+> > > +		ret =3D devm_request_threaded_irq_emsg(&pdev->dev, irq,
+> > > +						     armada_overheat_isr,
+> > > +						     armada_overheat_isr_thread,
+> > > +						     0, NULL, priv, NULL);
+> > > +		if (ret) =20
+> >=20
+> > I don't see a patch renaming this helper with s/emsg//, do you plan to
+> > keep it like that? I bet nobody outside of this series will notice the
+> > new helper and will continue to add error messages because it kind
+> > of feels "right" to do so.
+> >=20
+> > I would rather prefer returning to the original function name which
+> > everybody knows/uses. =20
+>=20
+> See https://lore.kernel.org/lkml/87h6qpyzkd.ffs@tglx for why there is a
+> new function name.
 
-Will this tool be available for general use?  It's obviously quite
-handy.
+Yes of course, I fully understand Thomas' concerns, but I am
+questioning the usefulness of creating such helper if it's not the
+default. People will continue to use [devm_]request_threaded_irq()
+without noticing the new helper. If we want to make this change useful,
+I believe we should:
+- target all users
+- at the end of the series: atomically include the error message in
+  request_threaded_irq() and rename all callers of the _verbose variant
+  which will eventually vanish.
 
--corey
+Otherwise this is a lot of noise for very little progress, IMHO :)
+
+Thanks,
+Miqu=C3=A8l
