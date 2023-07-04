@@ -2,73 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A27747431
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E72174743C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjGDOfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S231744AbjGDOiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjGDOft (ORCPT
+        with ESMTP id S231528AbjGDOiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:35:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D69DE47;
-        Tue,  4 Jul 2023 07:35:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E50C522432;
-        Tue,  4 Jul 2023 14:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688481346; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1Jacfn/7Hr8ZOCMTak1z7qptVuLSxy2D+yd/NGiugyc=;
-        b=dP4kzefg/ivdfntqveAu8p6SD7A7DK+2LqnFdcDWXKixHadmsQUUW/MDy2E3ysVzMuf7Hm
-        oIWK1L4NbqXiPiQOp+uRx62ulzg4dvpzS182qClGjW2dsX53xcVickxbgIIqHL3N1GmIIA
-        0ePI+GR0dwxP/N1j2jYk2+Vc43D3pJ0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688481346;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1Jacfn/7Hr8ZOCMTak1z7qptVuLSxy2D+yd/NGiugyc=;
-        b=1t3YyoDdcql+sm1bmn3mFloQuC/6pAqKxQKD0y6vlQCGyUwIWq4e+TxkbKxJfsraHaDM8m
-        7fiNVNurCajAHfCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B012E1346D;
-        Tue,  4 Jul 2023 14:35:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JN6lKEIupGQOfwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 04 Jul 2023 14:35:46 +0000
-Date:   Tue, 4 Jul 2023 16:35:44 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: print module name on refcount error
-Message-ID: <20230704163544.660621f3@endymion.delvare>
-In-Reply-To: <ZKQZHZt8YV0GosrZ@dhcp22.suse.cz>
-References: <20230626123252.73dbc139@endymion.delvare>
-        <ZJwLy5anSgFzbTUP@dhcp22.suse.cz>
-        <20230704144312.032b4ddd@endymion.delvare>
-        <ZKQZHZt8YV0GosrZ@dhcp22.suse.cz>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        Tue, 4 Jul 2023 10:38:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F21610D2;
+        Tue,  4 Jul 2023 07:38:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71ED4152B;
+        Tue,  4 Jul 2023 07:38:53 -0700 (PDT)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 44E6E3F73F;
+        Tue,  4 Jul 2023 07:38:09 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org, irogers@google.com
+Cc:     James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] perf test: Fix event parsing test on Arm
+Date:   Tue,  4 Jul 2023 15:36:27 +0100
+Message-Id: <20230704143628.1177124-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +48,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 15:05:33 +0200, Michal Hocko wrote:
-> On Tue 04-07-23 14:43:12, Jean Delvare wrote:
-> > On Wed, 28 Jun 2023 12:30:35 +0200, Michal Hocko wrote:  
-> > > Would it make sense to also print the refcnt here? In our internal bug
-> > > report it has turned out that this was an overflow (put missing) rather
-> > > than an underflow (too many put calls). Seeing the value could give a
-> > > clue about that. We had to configure panic_on_warn to capture a dump to
-> > > learn more which is rather impractical.  
-> > 
-> > Well, other calls to module_put() or try_module_get() could happen in
-> > parallel, so at the time we print refcnt, its value could be different
-> > from the one which triggered the WARN.  
-> 
-> Racess with module_put should be impossible because all of them should
-> fail, right?
+The test looks for a PMU from sysfs with type = PERF_TYPE_RAW when
+opening a raw event. Arm doesn't have a real raw PMU, only core PMUs
+with unique types other than raw.
 
-Most probably yes, but after taking a deeper look at the code, I
-wouldn't swear. For example delete_module() will decrement refcnt and
-increment it again if the module can't actually be removed. This could
-get refcnt to positive again briefly, at which point another
-module_put() could succeed.
+Instead of looking for a matching PMU, just test that the event type
+was parsed as raw and skip the PMU search on Arm. The raw event type
+test should also apply to all platforms so add it outside of the ifdef.
 
-> Races with put are possible but we do not need an exact
-> value to tell the difference between over and underflow, no?
+Fixes: aefde50a446b ("perf test: Fix parse-events tests for >1 core PMU")
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/tests/parse-events.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-Indeed not. But my other points still stand. Plus, if you really want
-to know the refcnt value, it's already visible in /sys/module/*/refcnt
-and lsmod.
-
+diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
+index 133218e51ab4..21f79aa31233 100644
+--- a/tools/perf/tests/parse-events.c
++++ b/tools/perf/tests/parse-events.c
+@@ -108,10 +108,21 @@ static int test__checkevent_raw(struct evlist *evlist)
+ 	TEST_ASSERT_VAL("wrong number of entries", 0 != evlist->core.nr_entries);
+ 
+ 	perf_evlist__for_each_evsel(&evlist->core, evsel) {
+-		struct perf_pmu *pmu = NULL;
++		struct perf_pmu *pmu __maybe_unused = NULL;
+ 		bool type_matched = false;
+ 
+ 		TEST_ASSERT_VAL("wrong config", test_perf_config(evsel, 0x1a));
++		TEST_ASSERT_VAL("event not parsed as raw type",
++				evsel->attr.type == PERF_TYPE_RAW);
++#if defined(__aarch64__)
++		/*
++		 * Arm doesn't have a real raw type PMU in sysfs, so raw events
++		 * would never match any PMU. However, RAW events on Arm will
++		 * always successfully open on the first available core PMU
++		 * so no need to test for a matching type here.
++		 */
++		type_matched = raw_type_match = true;
++#else
+ 		while ((pmu = perf_pmus__scan(pmu)) != NULL) {
+ 			if (pmu->type == evsel->attr.type) {
+ 				TEST_ASSERT_VAL("PMU type expected once", !type_matched);
+@@ -120,6 +131,7 @@ static int test__checkevent_raw(struct evlist *evlist)
+ 					raw_type_match = true;
+ 			}
+ 		}
++#endif
+ 		TEST_ASSERT_VAL("No PMU found for type", type_matched);
+ 	}
+ 	TEST_ASSERT_VAL("Raw PMU not matched", raw_type_match);
 -- 
-Jean Delvare
-SUSE L3 Support
+2.34.1
+
