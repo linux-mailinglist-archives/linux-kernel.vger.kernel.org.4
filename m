@@ -2,102 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971F3747453
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01056747454
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbjGDOot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S231708AbjGDOpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGDOor (ORCPT
+        with ESMTP id S231382AbjGDOo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:44:47 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCD3E47;
-        Tue,  4 Jul 2023 07:44:46 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5576ad1b7e7so488717a12.1;
-        Tue, 04 Jul 2023 07:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688481886; x=1691073886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xgtSIuMRfTClfmMjvb+ApNrn15orir6jxdTmVNFshZ4=;
-        b=E3b7quBOxg97PGrhefBmfqeOG7zqSECrznALGZ7dfk1ZFvley1A1eL6+7kwU63S0FT
-         bkT5UEWCES5roeqrTiVp8NJRvVSCl8RFloIsOqsQMWuZyIm9PjK6E1FSQMC9Z7GbJbOO
-         j4hhdEtSNfKp94Pc9BvNT6K3W/1yyV6pQJdMrLHF9xtVh0Pbz4YfxGa7aFLdRI+kConO
-         KZGnEQAkycr0ZtYW0GEvqVVOJHAE//CTFUN/WOMILqkiWuL5NC+ZiRLnwiOI1qGPYMnR
-         cSUuv/VGhkVLYIeH+bzLWkOrXArKntBuWqE0Udp9yoiG1eZh9g0CB0Bh3BXz15W5S9UY
-         M9aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688481886; x=1691073886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xgtSIuMRfTClfmMjvb+ApNrn15orir6jxdTmVNFshZ4=;
-        b=WRZb7nvT3vTFjyXEqkZBDhUtPZZUCFWWYVHXzthnuG6NtRhNuaL9WAv5Btyy6iimu5
-         Dv68JZbDQcCTjU0v9ZdBqSK1mY6cduZ/ohqZi9/Pl01U5zvfz8uLsdbDIKXkPKR4meks
-         OmMzitCOlD1L/1LZ3IyYHTWSXgbHNM90DP0GMCTpixzM5EE9fXjQyrid3xzGEJwezbGG
-         1W7O5VYTB12B1cVCHHBl1dBCS4q3bNUCMnIqr/LRgM/X9J3TqwOCMeyrUqIkpPyZGv9P
-         ymxCUp8CPAOZBrfIcY3/ueqnaeS2bx9+2fN09aAgKgoIYmisPRBFIJrSsE+SZQu7yvET
-         BJCw==
-X-Gm-Message-State: ABy/qLbtDO6WQezn02eHvEN6lKw8EnlPqS3D9nKuqp4DmbeBOFaCxLu/
-        TJTAOa68rLoaxZcI5l+5QKxuuaUctnSAQq9mcWY=
-X-Google-Smtp-Source: APBJJlFO4HgsT2gnFinOZVWVKm068r9kMZxzdgaLU9fOvk+y8o/Nm6XYT6g93GgrPI3eZvEHP2GgPD9kEykY+ZvArPY=
-X-Received: by 2002:aa7:980a:0:b0:677:bb4c:c321 with SMTP id
- e10-20020aa7980a000000b00677bb4cc321mr14744292pfl.0.1688481886337; Tue, 04
- Jul 2023 07:44:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230704134800.204542-1-hugo@hugovil.com>
-In-Reply-To: <20230704134800.204542-1-hugo@hugovil.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 4 Jul 2023 11:44:34 -0300
-Message-ID: <CAOMZO5DnEL=UFO_Y1N2o9rAW3d+BddavNWCrVi7sVf7Q0xmdxg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som: add missing pull-up for
- onboard PHY reset pinmux
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 10:44:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B0B10D3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:44:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 816C1611DB
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 14:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14A3C433C7;
+        Tue,  4 Jul 2023 14:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688481892;
+        bh=lxhuBwB0JRbnb5pA0aXShpARIqzZaHCZ0lxC4k4Ng+A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B1dxsGnjE3f9KhDfugOBUuNnqJdOOJgn8GJPek9hQUzRWwQrJRJBwo2Pl5MSpfzeP
+         YgjlY3sAorwyAtvNEMD1LVXKDg3a8xNRIxU2AfRNKZ73JGbGfrNLqVj6mi5ANk6Y/6
+         kommWkCZTx3j4cddtI9ZC3Ojl6+HJceiIZQLFM2C/3s20P+y+yHnjut0X2jhLC5d6F
+         djf/aFTuX8QMNshBzRS3byLHeOSqrDXWgMx6GF4lp4CWWanhEQ13tmg4a13r9VrgJh
+         76I5oMStMOPlUZmEMEcKdQ5hso45ehhfuSMVXr0JoKIPBVPyXl/Z/fS9+1mUSIh7rj
+         XeHGmMe9+E5SA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGhGs-00ASU6-Eo;
+        Tue, 04 Jul 2023 15:44:50 +0100
+Date:   Tue, 04 Jul 2023 15:44:50 +0100
+Message-ID: <86ttujwxb1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Hanks Chen <hanks.chen@mediatek.com>,
+        Cheng-Yuh.Wu@mediatek.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3: Workaround for GIC-700 erratum 2941627
+In-Reply-To: <20230704123436.127449-1-lpieralisi@kernel.org>
+References: <20230704123436.127449-1-lpieralisi@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org, hanks.chen@mediatek.com, Cheng-Yuh.Wu@mediatek.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 10:48=E2=80=AFAM Hugo Villeneuve <hugo@hugovil.com> =
-wrote:
->
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->
-> For SOMs with an onboard PHY, the RESET_N pull-up resistor is
-> currently deactivated in the pinmux configuration. When the pinmux
-> code selects the GPIO function for this pin, with a default direction
-> of input, this prevents the RESET_N pin from being taken to the proper
-> 3.3V level (deasserted), and this results in the PHY being not
-> detected since it is held in reset.
->
-> Taken from RESET_N pin description in ADIN13000 datasheet:
->     This pin requires a 1K pull-up resistor to AVDD_3P3.
->
-> Activate the pull-up resistor to fix the issue.
->
-> Fixes: ade0176dd8a0 ("arm64: dts: imx8mn-var-som: Add Variscite VAR-SOM-M=
-X8MN System on Module")
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Lorenzo,
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+On Tue, 04 Jul 2023 13:34:36 +0100,
+Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
+> 
+> GIC700 erratum 2941627 may cause GIC-700 missing SPIs wake
+> requests when SPIs are deactivated while targeting a
+> sleeping CPU - ie a CPU for which the redistributor:
+> 
+> GICR_WAKER.ProcessorSleep == 1
+> 
+> This runtime situation can happen if an SPI that has been
+> activated on a core is retargeted to a different core, it
+> becomes pending and the target core subsequently enters a
+> power state quiescing the respective redistributor.
+> 
+> When this situation is hit, the de-activation carried out
+> on the core that activated the SPI (through either ICC_EOIR1_EL1
+> or ICC_DIR_EL1 register writes) does not trigger a wake
+> requests for the sleeping GIC redistributor even if the SPI
+> is pending.
+> 
+> Fix the erratum by de-activating the SPI using the
+
+s/Fix/ Work around/
+
+> redistributor GICD_ICACTIVER register if the runtime
+> conditions require it (ie the IRQ was retargeted between
+> activation and de-activation).
+> 
+> Signed-off-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> ---
+>  Documentation/arm64/silicon-errata.rst |  3 ++
+>  drivers/irqchip/irq-gic-v3.c           | 71 +++++++++++++++++++++++++-
+>  2 files changed, 73 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+> index 9e311bc43e05..e77c57a0adf8 100644
+> --- a/Documentation/arm64/silicon-errata.rst
+> +++ b/Documentation/arm64/silicon-errata.rst
+> @@ -141,6 +141,9 @@ stable kernels.
+>  | ARM            | MMU-500         | #841119,826419  | N/A                         |
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  +----------------+-----------------+-----------------+-----------------------------+
+> +| ARM            | GIC-700         | #2941627        | ARM64_ERRATUM_2941627       |
+> ++----------------+-----------------+-----------------+-----------------------------+
+> ++----------------+-----------------+-----------------+-----------------------------+
+>  | Broadcom       | Brahma-B53      | N/A             | ARM64_ERRATUM_845719        |
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  | Broadcom       | Brahma-B53      | N/A             | ARM64_ERRATUM_843419        |
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index a605aa79435a..a0a9ccf23742 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -68,6 +68,8 @@ struct gic_chip_data {
+>  static void __iomem *t241_dist_base_alias[T241_CHIPS_MAX] __read_mostly;
+>  static DEFINE_STATIC_KEY_FALSE(gic_nvidia_t241_erratum);
+>  
+> +static DEFINE_STATIC_KEY_FALSE(gic_arm64_2941627_erratum);
+> +
+>  static struct gic_chip_data gic_data __read_mostly;
+>  static DEFINE_STATIC_KEY_TRUE(supports_deactivate_key);
+>  
+> @@ -591,10 +593,35 @@ static void gic_irq_nmi_teardown(struct irq_data *d)
+>  	gic_irq_set_prio(d, GICD_INT_DEF_PRI);
+>  }
+>  
+> +static bool gic_arm64_erratum_2941627_needed(struct irq_data *d)
+> +{
+> +	if (!static_branch_unlikely(&gic_arm64_2941627_erratum))
+> +		return false;
+> +
+> +	/*
+> +	 * The workaround is needed if the IRQ is an SPI and
+> +	 * the target cpu is different from the one we are
+> +	 * executing on.
+> +	 */
+> +	return !((gic_irq_in_rdist(d)) || gic_irq(d) >= 8192 ||
+> +		  cpumask_equal(irq_data_get_effective_affinity_mask(d),
+> +				cpumask_of(smp_processor_id())));
+
+I dislike this statement for multiple reasons:
+
+- it is written as a negation, making it harder than strictly
+  necessary to parse as it is the opposite of the comment above
+
+- gic_irq_in_rdist() and gic_irq(d) >= 8192 are two ways of checking
+  the interrupt range -- maybe we should just do that
+
+- cpumask_equal() is *slow* if you have more that 64 CPUs, something
+  that is increasingly common -- a better option would be to check
+  whether the current CPU is in the mask or not, which would be enough
+  as we only have a single affinity bit set
+
+- smp_processor_id() can check for preemption, which is pointless
+  here, as we're doing things under the irq_desc raw spinlock.
+
+I would expect something like:
+
+	enum gic_intid_range range = get_intid_range(d);
+
+	return (range == SGI_RANGE || range == ESPI_RANGE) &&
+	       !cpumask_test_cpu(raw_smp_processor_id(),
+				 irq_data_get_effective_affinity_mask(d));
+
+> +}
+> +
+>  static void gic_eoi_irq(struct irq_data *d)
+>  {
+>  	write_gicreg(gic_irq(d), ICC_EOIR1_EL1);
+>  	isb();
+> +
+> +	if (gic_arm64_erratum_2941627_needed(d)) {
+> +		/*
+> +		 * Make sure the GIC stream deactivate packet
+> +		 * issued by ICC_EOIR1_EL1 has completed before
+> +		 * deactivating through GICD_IACTIVER.
+> +		 */
+> +		dsb(sy);
+> +		gic_poke_irq(d, GICD_ICACTIVER);
+> +	}
+>  }
+>  
+>  static void gic_eoimode1_eoi_irq(struct irq_data *d)
+> @@ -605,7 +632,11 @@ static void gic_eoimode1_eoi_irq(struct irq_data *d)
+>  	 */
+>  	if (gic_irq(d) >= 8192 || irqd_is_forwarded_to_vcpu(d))
+>  		return;
+> -	gic_write_dir(gic_irq(d));
+> +
+> +	if (!gic_arm64_erratum_2941627_needed(d))
+> +		gic_write_dir(gic_irq(d));
+> +	else
+> +		gic_poke_irq(d, GICD_ICACTIVER);
+>  }
+>  
+>  static int gic_set_type(struct irq_data *d, unsigned int type)
+> @@ -1796,6 +1827,25 @@ static bool gic_enable_quirk_nvidia_t241(void *data)
+>  	return true;
+>  }
+>  
+> +static bool gic_enable_quirk_arm64_2941627(void *data)
+> +{
+> +	/*
+> +	 * If CPUidle is not enabled the erratum runtime
+> +	 * conditions can't be hit, since that requires:
+> +	 *
+> +	 * - A core entering a deep power state with
+> +	 *   the associated GIC redistributor asleep
+> +	 *   and an IRQ active and pending targeted at it
+> +	 * - A different core handling the IRQ and
+> +	 *   related GIC operations at the same time
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_CPU_IDLE))
+> +		return false;
+
+Could this still hit on a system that traps WFI to EL3 and uses this
+as a way to enter a low-power mode?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
