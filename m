@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459D2746CA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 11:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324D2746C81
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjGDJB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 05:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S231589AbjGDI61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjGDJBX (ORCPT
+        with ESMTP id S229793AbjGDI6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 05:01:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724FD136;
-        Tue,  4 Jul 2023 02:01:22 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3647SHfW001949;
-        Tue, 4 Jul 2023 09:01:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=iuL3l82E6mA/+2tHzLNUByCLAF4ByaXEaGTYJkIsLzY=;
- b=n5nMroXvvgEFaQYgLDEcKIBeKTadk9FJGqm1RL7Bgc6FlPrB6bbB42xrP3dGcbgDnR5l
- cZ+LsZLWVZtepgks/PhK4lA4BdhMUH3d2a6WwyxT+3TwrVuZkMKDhwKFo1mRa48ls/Cx
- OZ2xqNHxi9TIqg7YxMYY3q5AbojYfaGDcXWfDvmT+4/PnTOcBqNgUEFGPfC3GC/1EtTk
- At4WusUKUvUr7AMBH4K73EvrQV3ps/HUSZtMh/wo/kn3vY/8h+pCZT4nJyeU0kOGuAsa
- 1Z+30SOp1Ie24BExvucOCzQu/xQRwSxvi3PFsHNt0gbGUQGTRYwKSgkz+5Bn/Cqbf9y5 6Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rkv1dja4m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 09:01:04 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 364911vO015662
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Jul 2023 09:01:01 GMT
-Received: from akronite-sh-dev02.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.7; Tue, 4 Jul 2023 02:00:58 -0700
-From:   Luo Jie <quic_luoj@quicinc.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Luo Jie <quic_luoj@quicinc.com>
-Subject: [PATCH v1 2/2] net: phy: at803x: add qca8081 fifo reset on the link changed
-Date:   Tue, 4 Jul 2023 17:00:16 +0800
-Message-ID: <20230704090016.7757-3-quic_luoj@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230704090016.7757-1-quic_luoj@quicinc.com>
-References: <20230704090016.7757-1-quic_luoj@quicinc.com>
+        Tue, 4 Jul 2023 04:58:25 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8EE127
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688461104; x=1719997104;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=5Wgbu7wK7rFcmaZB1337sSETmf/kxZ+SZA/q+zURtiA=;
+  b=ThDc/TAZ1bolFr5QkM4rsrOv01+ah6RahK5C1y627Q904XI0RQh8qxaI
+   n3cqxnXcMSzwb8BeKNN4Z37KiI+XvLIaD2aDCrPwgeeyjMJ6bJ3/AzXsl
+   oFPfxvTI2JxBhlAhJxPzAMd4hmHf4c5Y+E+PLFJKgogEIO1P5bQSDIA4e
+   +HeHxmHhu25jxUbBftS9WUXJRw2BArcD01D45bmrI6Yoft7DnePEz6UOB
+   k/IR1jcDF3viG3C4gB2qJ64NuGOApwLhs1f/VP9dnZhuz7ntOCQ7wski6
+   ZIKh5tOkWxhRgSh+RfZ4a+8LpPDWswj1h0P7/ZtMr0gFvK+YlBzlBHCjp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="352902743"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="352902743"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 01:58:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="784156657"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="784156657"
+Received: from xpf.sh.intel.com ([10.239.182.130])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Jul 2023 01:58:21 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     dvyukov@google.com, nogikh@google.com, linux-kernel@vger.kernel.org
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        syzkaller@googlegroups.com, keescook@google.com,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org
+Subject: [PATCH v1 1/1] x86/kernel: Increase kcov coverage under arch/x86/kernel folder
+Date:   Tue,  4 Jul 2023 17:00:41 +0800
+Message-Id: <582ab7050597df7a996c11df048f168995b30747.1688460800.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1688460800.git.pengfei.xu@intel.com>
+References: <cover.1688460800.git.pengfei.xu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EyLBkwgWWsRMmhMM4RKx9KKzbQXv2e1i
-X-Proofpoint-ORIG-GUID: EyLBkwgWWsRMmhMM4RKx9KKzbQXv2e1i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_04,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307040074
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,54 +64,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The qca8081 sgmii fifo needs to be reset on link down and
-released on the link up in case of any abnormal issue
-such as the packet blocked on the PHY.
+Currently kcov instrument is disabled for object files under arch/x86/kernel
+folder.
+For object files under arch/x86/kernel, actually just disabling the kcov
+instrument of files:"head32.o or head64.o and sev.o" could achieve
+successful booting and provide kcov coverage for object files that do not
+disable kcov instrument.
+The additional kcov coverage collected from arch/x86/kernel folder helps
+kernel fuzzing efforts to find bugs.
 
-Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
+Link to related improvement discussion is below:
+https://groups.google.com/g/syzkaller/c/Dsl-RYGCqs8/m/x-tfpTyFBAAJ
+Related ticket is as follow:
+https://bugzilla.kernel.org/show_bug.cgi?id=198443
+
+Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
 ---
- drivers/net/phy/at803x.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/x86/kernel/Makefile | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index 86cb030e5ebf..c26dec1763f3 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -276,6 +276,9 @@
- #define QCA808X_PHY_MMD7_CHIP_TYPE		0x901d
- #define QCA808X_PHY_CHIP_TYPE_1G		BIT(0)
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 4070a01c11b7..00df34c263cc 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -33,11 +33,10 @@ KCSAN_SANITIZE := n
+ KMSAN_SANITIZE_head$(BITS).o				:= n
+ KMSAN_SANITIZE_nmi.o					:= n
  
-+#define QCA8081_PHY_SERDES_MMD1_FIFO_CTRL	0x9072
-+#define QCA8081_PHY_FIFO_RSTN			BIT(11)
-+
- MODULE_DESCRIPTION("Qualcomm Atheros AR803x and QCA808X PHY driver");
- MODULE_AUTHOR("Matus Ujhelyi");
- MODULE_LICENSE("GPL");
-@@ -2018,6 +2021,16 @@ static int qca808x_get_features(struct phy_device *phydev)
- 	return 0;
- }
+-# If instrumentation of this dir is enabled, boot hangs during first second.
+-# Probably could be more selective here, but note that files related to irqs,
+-# boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
+-# non-deterministic coverage.
+-KCOV_INSTRUMENT		:= n
++# If instrumentation of the following files is enabled, boot hangs during
++# first second.
++KCOV_INSTRUMENT_head$(BITS).o				:= n
++KCOV_INSTRUMENT_sev.o					:= n
  
-+static void qca808x_link_change_notify(struct phy_device *phydev)
-+{
-+	/* Assert interface sgmii fifo on link down, deassert it on link up,
-+	 * the interface device address is always phy address added by 1.
-+	 */
-+	mdiobus_c45_modify_changed(phydev->mdio.bus, phydev->mdio.addr + 1,
-+			MDIO_MMD_PMAPMD, QCA8081_PHY_SERDES_MMD1_FIFO_CTRL,
-+			QCA8081_PHY_FIFO_RSTN, phydev->link ? QCA8081_PHY_FIFO_RSTN : 0);
-+}
-+
- static struct phy_driver at803x_driver[] = {
- {
- 	/* Qualcomm Atheros AR8035 */
-@@ -2196,6 +2209,7 @@ static struct phy_driver at803x_driver[] = {
- 	.soft_reset		= qca808x_soft_reset,
- 	.cable_test_start	= qca808x_cable_test_start,
- 	.cable_test_get_status	= qca808x_cable_test_get_status,
-+	.link_change_notify	= qca808x_link_change_notify,
- }, };
+ CFLAGS_irq.o := -I $(srctree)/$(src)/../include/asm/trace
  
- module_phy_driver(at803x_driver);
 -- 
-2.17.1
+2.31.1
 
