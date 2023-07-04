@@ -2,181 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2F87478F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3E67478F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbjGDUYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 16:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S230219AbjGDUZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 16:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjGDUYu (ORCPT
+        with ESMTP id S229469AbjGDUZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:24:50 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E1BE76;
-        Tue,  4 Jul 2023 13:24:49 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-55b5a37acb6so463862a12.0;
-        Tue, 04 Jul 2023 13:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688502288; x=1691094288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eXcoyB2c2LmPovrfcZqFCh1F+dK1nMZObtAQzAlFgu0=;
-        b=H7/P+BxaeP0N3C+tbkIDNCg32NLgroPE2sONbk5/kGI/NZH9BHeZfzSL6slAIOM8bf
-         hjUiS0bmu0QS5bSKoMeh9nk2ACtJ4fvWXRO6hcYoDJt915cKMlHo8vkztzHy2rTOB8ZD
-         u0cllXoxcq36G+VNI5RLx+SEIw6Kw5Deg3W9fUnV4o4gg8mdAMUlIORZFCMd4R2fVaFF
-         aDPhMuc9X+Da7JuDKu4/nGF51le2Fbwkk89PGTJ3ZZetJ6EJGS7V8/se1Gwn5tFh9fc5
-         DzpWgS2AwuaR7MMG+JxxVye2WcMN8h+Mn99FbxP+g+Dtz0r922k3OxeYn83PsUmp/IaU
-         EAiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688502288; x=1691094288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eXcoyB2c2LmPovrfcZqFCh1F+dK1nMZObtAQzAlFgu0=;
-        b=lMb4ST2fi42MBjt4xGXJYPaRVwroVfBvVhUmt7QhITV3P3iIxIO/DTUEw6ZSJjvT3I
-         9vG0BgYAd9X+0wqGL3lE2/keqgNTKW6Bfwzt/+9vyxMpoBIfyM6a1CDBYnp5POFyVimh
-         4cQDbEjHvi821FStTksnTEyx4KcClSIxP3XLKKzoYXCh6kF0r4uPlN+Ry/QtDhfzAHU8
-         TmzQXSagRjbFaquB6tewzForgnCseB+XH8qkSugPChdYz/WlETNHyeLhvXiRaD5PAMmb
-         lNMR9droPO/iEXlDCF9LlE9uz0GeIaqISy6Vu9ggtP7vxH35iYX3G2o8SXLQOELzngER
-         8m1A==
-X-Gm-Message-State: ABy/qLY7UtpWtneINIPe9SlKepzN99hQAufhF1cCGP981Bzq2AjQIOh0
-        +FPLu/Fbq2TbtquqPA+KNeK877KoPzwplQTUv4H8BKyulQ4=
-X-Google-Smtp-Source: APBJJlE75SoXvUcaKn+0M4NzzJRZdJFs9Q59qM9V68AgG6NSgpM5KHfjRyVh308gqb0wj64XVW1sOsE7REkdmConEe8=
-X-Received: by 2002:a05:6a00:280a:b0:676:2a5c:7bc5 with SMTP id
- bl10-20020a056a00280a00b006762a5c7bc5mr15978772pfb.1.1688502288424; Tue, 04
- Jul 2023 13:24:48 -0700 (PDT)
+        Tue, 4 Jul 2023 16:25:49 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6FEE7E76
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:25:46 -0700 (PDT)
+Received: (qmail 1108780 invoked by uid 1000); 4 Jul 2023 16:25:45 -0400
+Date:   Tue, 4 Jul 2023 16:25:45 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Olivier Dion <odion@efficios.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, rnk@google.com,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+Message-ID: <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
+References: <87ttukdcow.fsf@laura>
+ <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+ <87ilazd278.fsf@laura>
 MIME-Version: 1.0
-References: <20230704184109.991104-1-m.felsch@pengutronix.de> <20230704184109.991104-3-m.felsch@pengutronix.de>
-In-Reply-To: <20230704184109.991104-3-m.felsch@pengutronix.de>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 4 Jul 2023 17:24:36 -0300
-Message-ID: <CAOMZO5C21f9+ByLVHMaK9wHcCSF3R9W1c1ZCfirx7TuX=786Rw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: freescale: Add DEBIX SOM A and SOM A I/O
- Board support
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, shawnguo@kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, marex@denx.de, frieder.schrempf@kontron.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ilazd278.fsf@laura>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+On Tue, Jul 04, 2023 at 01:19:23PM -0400, Olivier Dion wrote:
+> On Mon, 03 Jul 2023, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > On Mon, Jul 03, 2023 at 03:20:31PM -0400, Olivier Dion wrote:
+> >> This is a request for comments on extending the atomic builtins API to
+> >> help avoiding redundant memory barriers.  Indeed, there are
+> >
+> > What atomic builtins API are you talking about?  The kernel's?  That's 
+> > what it sounded like when I first read this sentence -- why else post 
+> > your message on a kernel mailing list?
+> 
+> Good point, we meant the `__atomic' builtins from GCC and Clang.  Sorry
+> for the confusion.
 
-On Tue, Jul 4, 2023 at 3:41=E2=80=AFPM Marco Felsch <m.felsch@pengutronix.d=
-e> wrote:
+Oh, is that it?  Then I misunderstood entirely; I thought you were 
+talking about augmenting the set of functions or macros made available 
+in liburcu.  I did not realize you intended to change the compilers.
 
-> +&fec {
-> +       pinctrl-names =3D "default";
-> +       pinctrl-0 =3D <&pinctrl_fec>;
-> +       phy-mode =3D "rgmii-id";
-> +       phy-handle =3D <&ethphy1>;
-> +       fsl,magic-packet;
-> +       phy-reset-gpios =3D <&gpio4 19 GPIO_ACTIVE_LOW>;
-> +       phy-reset-duration =3D <10>;
-> +       phy-reset-post-delay =3D <150>;
+> Indeed, our intent is to discuss the Userspace RCU uatomic API by extending
+> the toolchain's atomic builtins and not the LKMM itself.  The reason why
+> we've reached out to the Linux kernel developers is because the
+> original Userspace RCU uatomic API is based on the LKMM.
 
-These properties are deprecated. Please move them under the mdio node.
+But why do you want to change the compilers to better support urcu?  
+That seems like going about things backward; wouldn't it make more sense 
+to change urcu to better match the facilities offered by the current 
+compilers?
 
-> +               /*
-> +                * Since USB1 is binded to peripheral mode we need to ens=
-ure
+What if everybody started to do this: modifying the compilers to better 
+support their pet projects?  The end result would be chaos!
 
-s/binded/bound
+> > 1.	I can see why you have special fences for before/after load, 
+> > 	store, and rmw operations.  But why clear?  In what way is 
+> > 	clearing an atomic variable different from storing a 0 in it?
+> 
+> We could indeed group the clear with the store.
+> 
+> We had two approaches in mind:
+> 
+>   a) A before/after pair by category of operation:
+> 
+>      - load
+>      - store
+>      - RMW
+>   
+>   b) A before/after pair for every operation:
+> 
+>      - load
+>      - store
+>      - exchange
+>      - compare_exchange
+>      - {add,sub,and,xor,or,nand}_fetch
+>      - fetch_{add,sub,and,xor,or,nand}
+>      - test_and_set
+>      - clear
+> 
+> If we go for the grouping in a), we have to take into account that the
+> barriers emitted need to cover the worse case scenario.  As an example,
+> Clang can emit a store for a exchange with SEQ_CST on x86-64, if the
+> returned value is not used.
+> 
+> Therefore, for the grouping in a), all RMW would need to emit a memory
+> barrier (with Clang on x86-64).  But with the scheme in b), we can emit
+> the barrier explicitly for the exchange operation.  We however question
+> the usefulness of this kind of optimization made by the compiler, since
+> a user should use a store operation instead.
 
-> +/* =C2=B5SD Card */
-> +&usdhc2 {
-> +       pinctrl-names =3D "default", "state_100mhz", "state_200mhz";
-> +       pinctrl-0 =3D <&pinctrl_usdhc2>;
-> +       pinctrl-1 =3D <&pinctrl_usdhc2_100mhz>;
-> +       pinctrl-2 =3D <&pinctrl_usdhc2_200mhz>;
-> +       vmmc-supply =3D <&reg_usdhc2_vmmc>;
-> +       bus-width =3D <4>;
-> +       disable-wp;
-> +       no-sdio;
-> +       no-mmc;
-> +
+So in the end you settled on a compromise?
 
-No need for this blank line.
+> > 2.	You don't have a special fence for use after initializing an 
+> > 	atomic.  This operation can be treated specially, because at the 
+> > 	point where an atomic is initialized, it generally has not yet 
+> > 	been made visible to any other threads.
+> 
+> I assume that you're referring to something like std::atomic_init from
+> C++11 and deprecated in C++20?  I do not see any scenario on any
+> architecture where a compiler would emit an atomic operation for the
+> initialization of an atomic variable.  If a memory barrier is required
+> in this situation, then an explicit one can be emitted using the
+> existing API.
+> 
+> In our case -- with the compiler's atomic builtins -- the initialization
+> of a variable can be done without any atomic operations and does not
+> require any memory barrier.  This is a consequence of being capable of
+> working with integral-scalar/pointer type without an atomic qualifier.
+> 
+> > Therefore the fence which would normally appear after a store (or
+> > clear) generally need not appear after an initialization, and you
+> > might want to add a special API to force the generation of such a
+> > fence.
+> 
+> I am puzzled by this.  Initialization of a shared variable does not need
+> to be atomic until its publication.  Could you expand on this?
 
-> +       assigned-clocks =3D <&clk IMX8MP_CLK_USDHC2>;
-> +       assigned-clock-rates =3D <400000000>;
-> +
+In the kernel, I believe it sometimes happens that an atomic variable 
+may be published before it is initialized.  (If that's wrong, Paul or 
+Peter can correct me.)  But since this doesn't apply to the situations 
+you're concerned with, you can forget I mentioned it.
 
-Ditto.
-
-> +
-> +       pmic@25 {
-> +               compatible =3D "nxp,pca9450c";
-> +               reg =3D <0x25>;
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&pinctrl_pmic>;
-> +
-> +               interrupt-parent =3D <&gpio1>;
-> +               interrupts =3D <3 GPIO_ACTIVE_LOW>;
-> +
-> +               regulators {
-> +                       buck1: BUCK1 {
-> +                               regulator-name =3D "BUCK1";
-> +                               regulator-min-microvolt =3D <600000>;
-> +                               regulator-max-microvolt =3D <2187500>;
-> +                               regulator-boot-on;
-> +                               regulator-always-on;
-> +                               regulator-ramp-delay =3D <3125>;
-> +                       };
-> +
-> +                       buck2: BUCK2 {
-> +                               regulator-name =3D "BUCK2";
-> +                               regulator-min-microvolt =3D <600000>;
-> +                               regulator-max-microvolt =3D <2187500>;
-> +                               regulator-boot-on;
-> +                               regulator-always-on;
-> +                               regulator-ramp-delay =3D <3125>;
-> +                               nxp,dvs-run-voltage =3D <950000>;
-> +                               nxp,dvs-standby-voltage =3D <850000>;
-> +                       };
-> +
-> +                       buck4: BUCK4{
-
-Missing space after BUCK4.
-
-> +                               regulator-name =3D "BUCK4";
-> +                               regulator-min-microvolt =3D <600000>;
-> +                               regulator-max-microvolt =3D <3400000>;
-> +                               regulator-boot-on;
-> +                               regulator-always-on;
-> +                       };
-> +
-> +                       buck5: BUCK5{
-
-Ditto.
-
-> +&usdhc3 {
-> +       pinctrl-names =3D "default", "state_100mhz", "state_200mhz";
-> +       pinctrl-0 =3D <&pinctrl_usdhc3>;
-> +       pinctrl-1 =3D <&pinctrl_usdhc3_100mhz>;
-> +       pinctrl-2 =3D <&pinctrl_usdhc3_200mhz>;
-> +       bus-width =3D <8>;
-> +       non-removable;
-> +
-
-No need for this blank line.
-
-
-> +       assigned-clocks =3D <&clk IMX8MP_CLK_USDHC3>;
-> +       assigned-clock-rates =3D <400000000>;
-> +
-
-Ditto.
+Alan
