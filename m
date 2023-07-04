@@ -2,135 +2,544 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C787466E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9317466E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjGDBgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 21:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
+        id S231237AbjGDBgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 21:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjGDBgw (ORCPT
+        with ESMTP id S229955AbjGDBgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 21:36:52 -0400
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A598EE76;
-        Mon,  3 Jul 2023 18:36:47 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id D4305100024;
-        Tue,  4 Jul 2023 04:36:45 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru D4305100024
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688434605;
-        bh=9d2SacWrLQhIifC5uQWe8H+fWqQ4hgB6GNB4ZvX7lF0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-        b=lHJEXYBRUxDrK/MWMqffWfo39uCoSGF0vI0ZMEj6zcCilolOa/CI7zAYyMoOxiyGu
-         E9D2zTwb4HwiWb95OzZh4l8Wvl469U5HzebkSkt3YiynDqJbG24WqwF6O/o9LFdOCN
-         NWIhqM8GV/kDY5vczMhRRZ4cgLgGKwOBzGaS+AuT/lLWDo+1hzMRQhjulHUZTdwTRK
-         +NWgfXDFLjtXVpCGv5N7Ja5wwiVN1Gt/FUD+C9qA+tTlYSlwGJqJLv/YA4ipnnGrTh
-         Yab2HLXwbUSCj99cHWEdo0+qMRoKb2pEOpOy5bIsK5DwUEEGEHem5P+zHQ2/fjWaSQ
-         CGhIQR4IXe9WA==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Tue,  4 Jul 2023 04:36:45 +0300 (MSK)
-Received: from [192.168.1.127] (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Tue, 4 Jul 2023 04:36:39 +0300
-Message-ID: <fd219f32-7783-59ce-99c7-8f00616085dd@sberdevices.ru>
-Date:   Tue, 4 Jul 2023 04:32:23 +0300
+        Mon, 3 Jul 2023 21:36:20 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA43AE4E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:36:18 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-401d1d967beso555461cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 18:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688434578; x=1691026578;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8yD+j63IlPX6Oxohw2v8p6cUDw/4hfG0D1dupj02blo=;
+        b=lPheyFPOdIARgikhT2HA6JkatLfoRopl+Hkkk5EZdcMtAhoxKgruswk3VgaGSdZT/q
+         AwqsPXojmBqr2hS7VKv82E74HBQmBTRgWqNS/G9A+C9bZS3Z8Y2k9ZeDaQbhSdO3CZ/R
+         dEeh97Ag10TzLTMa67GxomTisNKecZVUUWKvkDHI980PrhqdeBAKh5v6GqcGzIFYIAEQ
+         07gPSYLvmV/yrzAKXBd+nKWfLQFqy0XRAzZ9Ijkh65ZkP7JSM6+2wqyAKxb5H+V4twv4
+         DDliNTcWHJTaL9YqvRDLu8tEfvOeENj2MheyRtyf10Pjp1XyErxS8qvI4BR5YCWBuYBL
+         TA8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688434578; x=1691026578;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8yD+j63IlPX6Oxohw2v8p6cUDw/4hfG0D1dupj02blo=;
+        b=ETPs2YKGijNxSBLiyDgRrKN25LpbdVvlZ0tBivlgngmjJb85oeLmv5hbA1CopnzKvD
+         F5omW9kkmks+h1Z0zxRKQT1pplMv9etkkRi5IH4CWVZrgOF/oP22Y0weuw0c2jvUB4lI
+         vGPd4ijcBh2fNk22K3wuQ3Bf4to5lRBvRiT9GBUkFoC6IY30LwmSvC3VLy08L+f2xs5n
+         hPHUf/1sqx95N8mesrDznXBymE2/D1v8q319SFqQ1JiYQ8do2bvq9Abn/qwNV5Bh8IVL
+         71inck8Sz3p15mxSFH3Kht8TxgzyPGi6RwrbSttqdNVzELbZOcSyTvGqho60TixwkUtq
+         0Hug==
+X-Gm-Message-State: ABy/qLZPa+9pdt4aIXTqTtlGJe9MDgE3oSYuEWMUKAjAjnOXGpj3DqrH
+        GdTHgVpjITFnoEu8S2aiqpG4vqS+UySXyuAfWTiEVw==
+X-Google-Smtp-Source: APBJJlFT6LDzh411+p8Nv3qxlRQNPQ7+fahMCv0UXJtEuQEg8z15fbg9Zwi5fShONQKjiRIoRXw9AFGZRBz7YCjDvgM=
+X-Received: by 2002:ac8:4e4c:0:b0:3f8:5b2:aeec with SMTP id
+ e12-20020ac84e4c000000b003f805b2aeecmr38618qtw.20.1688434577662; Mon, 03 Jul
+ 2023 18:36:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 4/5] meson saradc: add channel labels
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
-        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
-        <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>
-References: <20230627224017.1724097-1-gnstark@sberdevices.ru>
- <20230627224017.1724097-5-gnstark@sberdevices.ru>
- <20230702171614.00000480@Huawei.com>
-From:   George Stark <gnstark@sberdevices.ru>
-In-Reply-To: <20230702171614.00000480@Huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178409 [Jul 03 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: GNStark@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_from_domain_doesnt_match_to}, p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/03 21:28:00 #21559073
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230703135330.1865927-1-ryan.roberts@arm.com> <20230703135330.1865927-5-ryan.roberts@arm.com>
+In-Reply-To: <20230703135330.1865927-5-ryan.roberts@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 3 Jul 2023 19:35:41 -0600
+Message-ID: <CAOUHufaK82K8Sa35T7z3=gkm4GB0cWD3aqeZF6mYx82v7cOTeA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: multipart/mixed; boundary="0000000000003ae8c205ff9f4fb5"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/2/23 12:16, Jonathan Cameron wrote:
-> On Wed, 28 Jun 2023 01:37:17 +0300
-> George Stark <gnstark@sberdevices.ru> wrote:
+--0000000000003ae8c205ff9f4fb5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jul 3, 2023 at 7:53=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com> =
+wrote:
 >
->> Add attribute 'label' to all iio channels.
-> Why?  Reasoning is more useful here than a simple statement of 'what'.
-Adding labels make sense only for newly-added channels,
-base channels' default node names are close enough to datasheet names.
-Ack for extending the commit message.
->> Signed-off-by: George Stark <GNStark@sberdevices.ru>
->> ---
->>   drivers/iio/adc/meson_saradc.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
->> index b87f05dfb322..85970fe852af 100644
->> --- a/drivers/iio/adc/meson_saradc.c
->> +++ b/drivers/iio/adc/meson_saradc.c
->> @@ -1058,8 +1058,20 @@ static int meson_sar_adc_calib(struct iio_dev *indio_dev)
->>   	return ret;
->>   }
->>   
->> +static int read_label(struct iio_dev *indio_dev,
->> +		      struct iio_chan_spec const *chan,
->> +		      char *label)
->> +{
->> +	if (chan->type == IIO_TEMP)
->> +		return sprintf(label, "%s\n", "temp-sensor");
->> +	if (chan->type == IIO_VOLTAGE)
->> +		return sprintf(label, "channel-%d\n", chan->channel);
->> +	return 0;
->> +}
->> +
->>   static const struct iio_info meson_sar_adc_iio_info = {
->>   	.read_raw = meson_sar_adc_iio_info_read_raw,
->> +	.read_label = read_label,
->>   };
->>   
->>   static const struct meson_sar_adc_param meson_sar_adc_meson8_param = {
+> Introduce FLEXIBLE_THP feature, which allows anonymous memory to be
+> allocated in large folios of a specified order. All pages of the large
+> folio are pte-mapped during the same page fault, significantly reducing
+> the number of page faults. The number of per-page operations (e.g. ref
+> counting, rmap management lru list management) are also significantly
+> reduced since those ops now become per-folio.
+>
+> The new behaviour is hidden behind the new FLEXIBLE_THP Kconfig, which
+> defaults to disabled for now; there is a long list of todos to make
+> FLEXIBLE_THP robust with existing features (e.g. compaction, mlock, some
+> madvise ops, etc). These items will be tackled in subsequent patches.
+>
+> When enabled, the preferred folio order is as returned by
+> arch_wants_pte_order(), which may be overridden by the arch as it sees
+> fit. Some architectures (e.g. arm64) can coalsece TLB entries if a
 
--- 
-Best regards
-George
+coalesce
 
+> contiguous set of ptes map physically contigious, naturally aligned
+
+contiguous
+
+> memory, so this mechanism allows the architecture to optimize as
+> required.
+>
+> If the preferred order can't be used (e.g. because the folio would
+> breach the bounds of the vma, or because ptes in the region are already
+> mapped) then we fall back to a suitable lower order.
+>
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  mm/Kconfig  |  10 ++++
+>  mm/memory.c | 168 ++++++++++++++++++++++++++++++++++++++++++++++++----
+>  2 files changed, 165 insertions(+), 13 deletions(-)
+>
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 7672a22647b4..1c06b2c0a24e 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -822,6 +822,16 @@ config READ_ONLY_THP_FOR_FS
+>           support of file THPs will be developed in the next few release
+>           cycles.
+>
+> +config FLEXIBLE_THP
+> +       bool "Flexible order THP"
+> +       depends on TRANSPARENT_HUGEPAGE
+> +       default n
+
+The default value is already N.
+
+> +       help
+> +         Use large (bigger than order-0) folios to back anonymous memory=
+ where
+> +         possible, even if the order of the folio is smaller than the PM=
+D
+> +         order. This reduces the number of page faults, as well as other
+> +         per-page overheads to improve performance for many workloads.
+> +
+>  endif # TRANSPARENT_HUGEPAGE
+>
+>  #
+> diff --git a/mm/memory.c b/mm/memory.c
+> index fb30f7523550..abe2ea94f3f5 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3001,6 +3001,116 @@ static vm_fault_t fault_dirty_shared_page(struct =
+vm_fault *vmf)
+>         return 0;
+>  }
+>
+> +#ifdef CONFIG_FLEXIBLE_THP
+> +/*
+> + * Allocates, zeros and returns a folio of the requested order for use a=
+s
+> + * anonymous memory.
+> + */
+> +static struct folio *alloc_anon_folio(struct vm_area_struct *vma,
+> +                                     unsigned long addr, int order)
+> +{
+> +       gfp_t gfp;
+> +       struct folio *folio;
+> +
+> +       if (order =3D=3D 0)
+> +               return vma_alloc_zeroed_movable_folio(vma, addr);
+> +
+> +       gfp =3D vma_thp_gfp_mask(vma);
+> +       folio =3D vma_alloc_folio(gfp, order, vma, addr, true);
+> +       if (folio)
+> +               clear_huge_page(&folio->page, addr, folio_nr_pages(folio)=
+);
+> +
+> +       return folio;
+> +}
+> +
+> +/*
+> + * Preferred folio order to allocate for anonymous memory.
+> + */
+> +#define max_anon_folio_order(vma)      arch_wants_pte_order(vma)
+> +#else
+> +#define alloc_anon_folio(vma, addr, order) \
+> +                               vma_alloc_zeroed_movable_folio(vma, addr)
+> +#define max_anon_folio_order(vma)      0
+> +#endif
+> +
+> +/*
+> + * Returns index of first pte that is not none, or nr if all are none.
+> + */
+> +static inline int check_ptes_none(pte_t *pte, int nr)
+> +{
+> +       int i;
+> +
+> +       for (i =3D 0; i < nr; i++) {
+> +               if (!pte_none(ptep_get(pte++)))
+> +                       return i;
+> +       }
+> +
+> +       return nr;
+> +}
+> +
+> +static int calc_anon_folio_order_alloc(struct vm_fault *vmf, int order)
+> +{
+> +       /*
+> +        * The aim here is to determine what size of folio we should allo=
+cate
+> +        * for this fault. Factors include:
+> +        * - Order must not be higher than `order` upon entry
+> +        * - Folio must be naturally aligned within VA space
+> +        * - Folio must be fully contained inside one pmd entry
+> +        * - Folio must not breach boundaries of vma
+> +        * - Folio must not overlap any non-none ptes
+> +        *
+> +        * Additionally, we do not allow order-1 since this breaks assump=
+tions
+> +        * elsewhere in the mm; THP pages must be at least order-2 (since=
+ they
+> +        * store state up to the 3rd struct page subpage), and these page=
+s must
+> +        * be THP in order to correctly use pre-existing THP infrastructu=
+re such
+> +        * as folio_split().
+> +        *
+> +        * Note that the caller may or may not choose to lock the pte. If
+> +        * unlocked, the result is racy and the user must re-check any ov=
+erlap
+> +        * with non-none ptes under the lock.
+> +        */
+> +
+> +       struct vm_area_struct *vma =3D vmf->vma;
+> +       int nr;
+> +       unsigned long addr;
+> +       pte_t *pte;
+> +       pte_t *first_set =3D NULL;
+> +       int ret;
+> +
+> +       order =3D min(order, PMD_SHIFT - PAGE_SHIFT);
+> +
+> +       for (; order > 1; order--) {
+
+I'm not sure how we can justify this policy. As an initial step, it'd
+be a lot easier to sell if we only considered the order of
+arch_wants_pte_order() and the order 0.
+
+> +               nr =3D 1 << order;
+> +               addr =3D ALIGN_DOWN(vmf->address, nr << PAGE_SHIFT);
+> +               pte =3D vmf->pte - ((vmf->address - addr) >> PAGE_SHIFT);
+> +
+> +               /* Check vma bounds. */
+> +               if (addr < vma->vm_start ||
+> +                   addr + (nr << PAGE_SHIFT) > vma->vm_end)
+> +                       continue;
+> +
+> +               /* Ptes covered by order already known to be none. */
+> +               if (pte + nr <=3D first_set)
+> +                       break;
+> +
+> +               /* Already found set pte in range covered by order. */
+> +               if (pte <=3D first_set)
+> +                       continue;
+> +
+> +               /* Need to check if all the ptes are none. */
+> +               ret =3D check_ptes_none(pte, nr);
+> +               if (ret =3D=3D nr)
+> +                       break;
+> +
+> +               first_set =3D pte + ret;
+> +       }
+> +
+> +       if (order =3D=3D 1)
+> +               order =3D 0;
+> +
+> +       return order;
+> +}
+
+Everything above can be simplified into two helpers:
+vmf_pte_range_changed() and alloc_anon_folio() (or whatever names you
+prefer). Details below.
+
+>  /*
+>   * Handle write page faults for pages that can be reused in the current =
+vma
+>   *
+> @@ -3073,7 +3183,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf=
+)
+>                 goto oom;
+>
+>         if (is_zero_pfn(pte_pfn(vmf->orig_pte))) {
+> -               new_folio =3D vma_alloc_zeroed_movable_folio(vma, vmf->ad=
+dress);
+> +               new_folio =3D alloc_anon_folio(vma, vmf->address, 0);
+
+This seems unnecessary for now. Later on, we could fill in an aligned
+area with multiple write-protected zero pages during a read fault and
+then replace them with a large folio here.
+
+>                 if (!new_folio)
+>                         goto oom;
+>         } else {
+> @@ -4040,6 +4150,9 @@ static vm_fault_t do_anonymous_page(struct vm_fault=
+ *vmf)
+>         struct folio *folio;
+>         vm_fault_t ret =3D 0;
+>         pte_t entry;
+> +       int order;
+> +       int pgcount;
+> +       unsigned long addr;
+>
+>         /* File mapping without ->vm_ops ? */
+>         if (vma->vm_flags & VM_SHARED)
+> @@ -4081,24 +4194,51 @@ static vm_fault_t do_anonymous_page(struct vm_fau=
+lt *vmf)
+>                         pte_unmap_unlock(vmf->pte, vmf->ptl);
+>                         return handle_userfault(vmf, VM_UFFD_MISSING);
+>                 }
+> -               goto setpte;
+> +               if (uffd_wp)
+> +                       entry =3D pte_mkuffd_wp(entry);
+> +               set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
+> +
+> +               /* No need to invalidate - it was non-present before */
+> +               update_mmu_cache(vma, vmf->address, vmf->pte);
+> +               goto unlock;
+> +       }
+
+Nor really needed IMO. Details below.
+
+=3D=3D=3D
+
+> +       /*
+> +        * If allocating a large folio, determine the biggest suitable or=
+der for
+> +        * the VMA (e.g. it must not exceed the VMA's bounds, it must not
+> +        * overlap with any populated PTEs, etc). We are not under the pt=
+l here
+> +        * so we will need to re-check that we are not overlapping any po=
+pulated
+> +        * PTEs once we have the lock.
+> +        */
+> +       order =3D uffd_wp ? 0 : max_anon_folio_order(vma);
+> +       if (order > 0) {
+> +               vmf->pte =3D pte_offset_map(vmf->pmd, vmf->address);
+> +               order =3D calc_anon_folio_order_alloc(vmf, order);
+> +               pte_unmap(vmf->pte);
+>         }
+
+=3D=3D=3D
+
+The section above together with the section below should be wrapped in a he=
+lper.
+
+> -       /* Allocate our own private page. */
+> +       /* Allocate our own private folio. */
+>         if (unlikely(anon_vma_prepare(vma)))
+>                 goto oom;
+
+=3D=3D=3D
+
+> -       folio =3D vma_alloc_zeroed_movable_folio(vma, vmf->address);
+> +       folio =3D alloc_anon_folio(vma, vmf->address, order);
+> +       if (!folio && order > 0) {
+> +               order =3D 0;
+> +               folio =3D alloc_anon_folio(vma, vmf->address, order);
+> +       }
+
+=3D=3D=3D
+
+One helper returns a folio of order arch_wants_pte_order(), or order 0
+if it fails to allocate that order, e.g.,
+
+folio =3D alloc_anon_folio(vmf);
+
+And if vmf_orig_pte_uffd_wp(vmf) is true, the helper allocates order 0
+regardless of arch_wants_pte_order(). Upon success, it can update
+vmf->address, since if we run into a race with another PF, we exit the
+fault handler and retry anyway.
+
+>         if (!folio)
+>                 goto oom;
+>
+> +       pgcount =3D 1 << order;
+> +       addr =3D ALIGN_DOWN(vmf->address, pgcount << PAGE_SHIFT);
+
+As shown above, the helper already updates vmf->address. And mm/ never
+used pgcount before -- the convention is nr_pages =3D folio_nr_pages().
+
+>         if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL))
+>                 goto oom_free_page;
+>         folio_throttle_swaprate(folio, GFP_KERNEL);
+>
+>         /*
+>          * The memory barrier inside __folio_mark_uptodate makes sure tha=
+t
+> -        * preceding stores to the page contents become visible before
+> -        * the set_pte_at() write.
+> +        * preceding stores to the folio contents become visible before
+> +        * the set_ptes() write.
+
+We don't have set_ptes() yet.
+
+>          */
+>         __folio_mark_uptodate(folio);
+>
+> @@ -4107,11 +4247,12 @@ static vm_fault_t do_anonymous_page(struct vm_fau=
+lt *vmf)
+>         if (vma->vm_flags & VM_WRITE)
+>                 entry =3D pte_mkwrite(pte_mkdirty(entry));
+>
+> -       vmf->pte =3D pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->addre=
+ss,
+> -                       &vmf->ptl);
+> +       vmf->pte =3D pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf=
+->ptl);
+>         if (vmf_pte_changed(vmf)) {
+>                 update_mmu_tlb(vma, vmf->address, vmf->pte);
+>                 goto release;
+> +       } else if (order > 0 && check_ptes_none(vmf->pte, pgcount) !=3D p=
+gcount) {
+> +               goto release;
+>         }
+
+Need new helper:
+
+  if (vmf_pte_range_changed(vmf, nr_pages)) {
+    for (i =3D 0; i < nr_pages; i++)
+      update_mmu_tlb(vma, vmf->address + PAGE_SIZE * i, vmf->pte + i);
+    goto release;
+  }
+
+(It should be fine to call update_mmu_tlb() even if it's not really necessa=
+ry.)
+
+>         ret =3D check_stable_address_space(vma->vm_mm);
+> @@ -4125,16 +4266,17 @@ static vm_fault_t do_anonymous_page(struct vm_fau=
+lt *vmf)
+>                 return handle_userfault(vmf, VM_UFFD_MISSING);
+>         }
+>
+> -       inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+> -       folio_add_new_anon_rmap(folio, vma, vmf->address);
+> +       folio_ref_add(folio, pgcount - 1);
+> +       add_mm_counter(vma->vm_mm, MM_ANONPAGES, pgcount);
+> +       folio_add_new_anon_rmap(folio, vma, addr);
+>         folio_add_lru_vma(folio, vma);
+> -setpte:
+> +
+>         if (uffd_wp)
+>                 entry =3D pte_mkuffd_wp(entry);
+> -       set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
+> +       set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
+
+We would have to do it one by one for now.
+
+>         /* No need to invalidate - it was non-present before */
+> -       update_mmu_cache(vma, vmf->address, vmf->pte);
+> +       update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
+
+Ditto.
+
+How about this (by moving mk_pte()  and its friends here):
+...
+        folio_add_lru_vma(folio, vma);
+
+        for (i =3D 0; i < nr_pages; i++) {
+                entry =3D mk_pte(folio_page(folio, i), vma->vm_page_prot);
+                entry =3D pte_sw_mkyoung(entry);
+                if (vma->vm_flags & VM_WRITE)
+                        entry =3D pte_mkwrite(pte_mkdirty(entry));
+setpte:
+                if (uffd_wp)
+                        entry =3D pte_mkuffd_wp(entry);
+                set_pte_at(vma->vm_mm, vmf->address + PAGE_SIZE * i,
+vmf->pte + i, entry);
+
+                /* No need to invalidate - it was non-present before */
+                update_mmu_cache(vma, vmf->address + PAGE_SIZE * i,
+vmf->pte + i);
+        }
+
+>  unlock:
+>         pte_unmap_unlock(vmf->pte, vmf->ptl);
+>         return ret;
+
+Attaching a small patch in case anything above is not clear. Please
+take a look. Thanks.
+
+--0000000000003ae8c205ff9f4fb5
+Content-Type: text/x-patch; charset="US-ASCII"; name="anon_folios.patch"
+Content-Disposition: attachment; filename="anon_folios.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljnm9ju40>
+X-Attachment-Id: f_ljnm9ju40
+
+ZGlmZiAtLWdpdCBhL21tL21lbW9yeS5jIGIvbW0vbWVtb3J5LmMKaW5kZXggNDBhMjY5NDU3Yzhi
+Li4wNGZkYjg1MjlmNjggMTAwNjQ0Ci0tLSBhL21tL21lbW9yeS5jCisrKyBiL21tL21lbW9yeS5j
+CkBAIC00MDYzLDYgKzQwNjMsOCBAQCB2bV9mYXVsdF90IGRvX3N3YXBfcGFnZShzdHJ1Y3Qgdm1f
+ZmF1bHQgKnZtZikKICAqLwogc3RhdGljIHZtX2ZhdWx0X3QgZG9fYW5vbnltb3VzX3BhZ2Uoc3Ry
+dWN0IHZtX2ZhdWx0ICp2bWYpCiB7CisJaW50IGkgPSAwOworCWludCBucl9wYWdlcyA9IDE7CiAJ
+Ym9vbCB1ZmZkX3dwID0gdm1mX29yaWdfcHRlX3VmZmRfd3Aodm1mKTsKIAlzdHJ1Y3Qgdm1fYXJl
+YV9zdHJ1Y3QgKnZtYSA9IHZtZi0+dm1hOwogCXN0cnVjdCBmb2xpbyAqZm9saW87CkBAIC00MTA3
+LDEwICs0MTA5LDEyIEBAIHN0YXRpYyB2bV9mYXVsdF90IGRvX2Fub255bW91c19wYWdlKHN0cnVj
+dCB2bV9mYXVsdCAqdm1mKQogCS8qIEFsbG9jYXRlIG91ciBvd24gcHJpdmF0ZSBwYWdlLiAqLwog
+CWlmICh1bmxpa2VseShhbm9uX3ZtYV9wcmVwYXJlKHZtYSkpKQogCQlnb3RvIG9vbTsKLQlmb2xp
+byA9IHZtYV9hbGxvY196ZXJvZWRfbW92YWJsZV9mb2xpbyh2bWEsIHZtZi0+YWRkcmVzcyk7CisJ
+Zm9saW8gPSBhbGxvY19hbm9uX2ZvbGlvKHZtZik7IC8vIHVwZGF0ZXMgdm1mLT5hZGRyZXNzIGFj
+Y29yZGluZ2x5CiAJaWYgKCFmb2xpbykKIAkJZ290byBvb207CiAKKwlucl9wYWdlcyA9IGZvbGlv
+X25yX3BhZ2VzKGZvbGlvKTsKKwogCWlmIChtZW1fY2dyb3VwX2NoYXJnZShmb2xpbywgdm1hLT52
+bV9tbSwgR0ZQX0tFUk5FTCkpCiAJCWdvdG8gb29tX2ZyZWVfcGFnZTsKIAlmb2xpb190aHJvdHRs
+ZV9zd2FwcmF0ZShmb2xpbywgR0ZQX0tFUk5FTCk7CkBAIC00MTIyLDE3ICs0MTI2LDEzIEBAIHN0
+YXRpYyB2bV9mYXVsdF90IGRvX2Fub255bW91c19wYWdlKHN0cnVjdCB2bV9mYXVsdCAqdm1mKQog
+CSAqLwogCV9fZm9saW9fbWFya191cHRvZGF0ZShmb2xpbyk7CiAKLQllbnRyeSA9IG1rX3B0ZSgm
+Zm9saW8tPnBhZ2UsIHZtYS0+dm1fcGFnZV9wcm90KTsKLQllbnRyeSA9IHB0ZV9zd19ta3lvdW5n
+KGVudHJ5KTsKLQlpZiAodm1hLT52bV9mbGFncyAmIFZNX1dSSVRFKQotCQllbnRyeSA9IHB0ZV9t
+a3dyaXRlKHB0ZV9ta2RpcnR5KGVudHJ5KSk7Ci0KIAl2bWYtPnB0ZSA9IHB0ZV9vZmZzZXRfbWFw
+X2xvY2sodm1hLT52bV9tbSwgdm1mLT5wbWQsIHZtZi0+YWRkcmVzcywKIAkJCSZ2bWYtPnB0bCk7
+CiAJaWYgKCF2bWYtPnB0ZSkKIAkJZ290byByZWxlYXNlOwotCWlmICh2bWZfcHRlX2NoYW5nZWQo
+dm1mKSkgewotCQl1cGRhdGVfbW11X3RsYih2bWEsIHZtZi0+YWRkcmVzcywgdm1mLT5wdGUpOwor
+CWlmICh2bWZfcHRlX3JhbmdlX2NoYW5nZWQodm1mLCBucl9wYWdlcykpIHsKKwkJZm9yIChpID0g
+MDsgaSA8IG5yX3BhZ2VzOyBpKyspCisJCQl1cGRhdGVfbW11X3RsYih2bWEsIHZtZi0+YWRkcmVz
+cyArIFBBR0VfU0laRSAqIGksIHZtZi0+cHRlICsgaSk7CiAJCWdvdG8gcmVsZWFzZTsKIAl9CiAK
+QEAgLTQxNDcsMTYgKzQxNDcsMjQgQEAgc3RhdGljIHZtX2ZhdWx0X3QgZG9fYW5vbnltb3VzX3Bh
+Z2Uoc3RydWN0IHZtX2ZhdWx0ICp2bWYpCiAJCXJldHVybiBoYW5kbGVfdXNlcmZhdWx0KHZtZiwg
+Vk1fVUZGRF9NSVNTSU5HKTsKIAl9CiAKLQlpbmNfbW1fY291bnRlcih2bWEtPnZtX21tLCBNTV9B
+Tk9OUEFHRVMpOworCWZvbGlvX3JlZl9hZGQoZm9saW8sIG5yX3BhZ2VzIC0gMSk7CisJYWRkX21t
+X2NvdW50ZXIodm1hLT52bV9tbSwgTU1fQU5PTlBBR0VTLCBucl9wYWdlcyk7CiAJZm9saW9fYWRk
+X25ld19hbm9uX3JtYXAoZm9saW8sIHZtYSwgdm1mLT5hZGRyZXNzKTsKIAlmb2xpb19hZGRfbHJ1
+X3ZtYShmb2xpbywgdm1hKTsKKworCWZvciAoaSA9IDA7IGkgPCBucl9wYWdlczsgaSsrKSB7CisJ
+CWVudHJ5ID0gbWtfcHRlKGZvbGlvX3BhZ2UoZm9saW8sIGkpLCB2bWEtPnZtX3BhZ2VfcHJvdCk7
+CisJCWVudHJ5ID0gcHRlX3N3X21reW91bmcoZW50cnkpOworCQlpZiAodm1hLT52bV9mbGFncyAm
+IFZNX1dSSVRFKQorCQkJZW50cnkgPSBwdGVfbWt3cml0ZShwdGVfbWtkaXJ0eShlbnRyeSkpOwog
+c2V0cHRlOgotCWlmICh1ZmZkX3dwKQotCQllbnRyeSA9IHB0ZV9ta3VmZmRfd3AoZW50cnkpOwot
+CXNldF9wdGVfYXQodm1hLT52bV9tbSwgdm1mLT5hZGRyZXNzLCB2bWYtPnB0ZSwgZW50cnkpOwor
+CQlpZiAodWZmZF93cCkKKwkJCWVudHJ5ID0gcHRlX21rdWZmZF93cChlbnRyeSk7CisJCXNldF9w
+dGVfYXQodm1hLT52bV9tbSwgdm1mLT5hZGRyZXNzICsgUEFHRV9TSVpFICogaSwgdm1mLT5wdGUg
+KyBpLCBlbnRyeSk7CiAKLQkvKiBObyBuZWVkIHRvIGludmFsaWRhdGUgLSBpdCB3YXMgbm9uLXBy
+ZXNlbnQgYmVmb3JlICovCi0JdXBkYXRlX21tdV9jYWNoZSh2bWEsIHZtZi0+YWRkcmVzcywgdm1m
+LT5wdGUpOworCQkvKiBObyBuZWVkIHRvIGludmFsaWRhdGUgLSBpdCB3YXMgbm9uLXByZXNlbnQg
+YmVmb3JlICovCisJCXVwZGF0ZV9tbXVfY2FjaGUodm1hLCB2bWYtPmFkZHJlc3MgKyBQQUdFX1NJ
+WkUgKiBpLCB2bWYtPnB0ZSArIGkpOworCX0KIHVubG9jazoKIAlpZiAodm1mLT5wdGUpCiAJCXB0
+ZV91bm1hcF91bmxvY2sodm1mLT5wdGUsIHZtZi0+cHRsKTsK
+--0000000000003ae8c205ff9f4fb5--
