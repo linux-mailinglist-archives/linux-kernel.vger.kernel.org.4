@@ -2,139 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29497466CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D187B7466CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjGDBKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 21:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S230322AbjGDBL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 21:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGDBKT (ORCPT
+        with ESMTP id S229793AbjGDBLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 21:10:19 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD578E5C;
-        Mon,  3 Jul 2023 18:10:09 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b6ef64342aso13308061fa.3;
-        Mon, 03 Jul 2023 18:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688433008; x=1691025008;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NanNEKu00OV4dGi7G0zvqpvZhV9czNdIron8MRqRfZI=;
-        b=eLCXFaLroQ5MoaLRSPbNjWaACX61zx1cLYCRkq3boGYpFlVmf8gtDCfzTAw2qdS3Ub
-         ozu8Ff4DqPjlyqIbk/MtR7tq1BYGzsWtkTT7gFrBQ/S+rBGY+a5FqO86Mh7S7Lodvd6/
-         d1t56l5wcCUN7lU4sIr+FBq3VcR4xcxN7uYojfMdTGTlyJ69Zii2bollYU8snTcP4v5v
-         4cgFMeQ5R1c+5ogbAsMLV0DvNXruXSAscfFxZWXXWHfnDBfbMFoC8hs8bE5gg71RY0Pw
-         Bx2+ahtaEvxVOLWc9DPAFQW5JJo+ZC/2wKRECxa8Pk7mRMnXLM7Rwa5WD3Nx+dT3Uyxw
-         geSQ==
+        Mon, 3 Jul 2023 21:11:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0110FE72
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688433032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tHvy2cSjRNLBspkBnwHleNI4FVF/3lOoEAeskedvTOg=;
+        b=Wo0ndSWrd24Qs2Nvemgrxu/06Wcd9ChrcC6mARjxT+CWdaGqgplEssGz8t8zE3QzBWLZkS
+        UVcRYBkIo9+Bb/y/EE87WoZVKOrGahwn6Z6GndUlt1P+loATY8SIXik1aHbKwu1D5r9jIG
+        fxv5q2EbeolrZ8Sqj/mQuctgXyRhP/k=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-504-xDmW0awBMBah3YY4dLDfmw-1; Mon, 03 Jul 2023 21:10:30 -0400
+X-MC-Unique: xDmW0awBMBah3YY4dLDfmw-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1b895a9f4ccso17330665ad.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 18:10:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688433008; x=1691025008;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NanNEKu00OV4dGi7G0zvqpvZhV9czNdIron8MRqRfZI=;
-        b=hhtKT2DqFJtW42PPDacCQ/m6aUYftBXJ6w7E331bZF73Je6TtYKrGa7H8EZagcr9s9
-         0OjI4sWhTpIq2epuLXLe/+KmlTHda/2h0omGsCy5LTV5QIMza/OPbQ1S39lpBLuxy7D4
-         9W4G0JD3GcVibNasJW1YdAqfGmAegH7jmEmSCZ7MQah41XxoJyZBLiKsEl6zyN44f8tI
-         4zzkKakD+UgVw0y897JqsfAevRXi41SF6ZSn8gmZ0j6R9uPM8+iOxW0UccRh6iQAk3z1
-         oqHzKzrDxojUXpc+pGcEiI3yuErkrrv5d0G5rL6lKKRYCsJ7sgjrA9Ee1L5k2icWcqFa
-         3VHQ==
-X-Gm-Message-State: ABy/qLbepFZA5OIVnneNbvnr2BA1bpyTRXw+A1xMIwGMIVInI5l/TyV1
-        09Qx6mzdxh7F4O+QjmYhYqzwQ2tammlssfpVfnE=
-X-Google-Smtp-Source: APBJJlGiNQwrknvCAy76rNcAE/MkDTPW2U3FZfJqSOgzlNETgHG1hunCNunvnDb4FfPWDhNrPhJSZ0ADPdMbvQoO9hw=
-X-Received: by 2002:a2e:918e:0:b0:2b6:e96c:5414 with SMTP id
- f14-20020a2e918e000000b002b6e96c5414mr2899927ljg.52.1688433007852; Mon, 03
- Jul 2023 18:10:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688433030; x=1691025030;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tHvy2cSjRNLBspkBnwHleNI4FVF/3lOoEAeskedvTOg=;
+        b=VbhzU99VvOGKTKxqdrKtM82j3pEDSpXL071HDs6r6GBzAHbNCR6o80/Vg3ik5MH6NP
+         iGKIfhpjY6D6aG50sBKmAIL719Rhqycq66I6wD6bDR7GquCFGR3RX4+B9X4vU+KFLXsH
+         PhLw5CWnwDwH5xtCAGx7tDzzP88Yw1lM6OwsZ2VOojtFrUgNJtMkrxp6GCQG8qHrJ6lz
+         wXLLnlfYW3HL0u8QzcAjNTxnXwPF21zdnJ330b/YNYrUHmi/u/tzU3Dfh02Yctip1RzL
+         +D6IfP9Ua58r+1L80SHz0HHYc/NrC9CNnPvrHp0guE69S0EDt4o2N/P3AtbF8h6FikC7
+         FpfQ==
+X-Gm-Message-State: ABy/qLbwvosX9MYz52FFlGBhkvZ9a+gz3ilC5YQ+xq9SilOBT4TPmItS
+        5wx/CTeLv84/gJWoo+68KNVCaMEOW5r0wKDZyrlMwnCTRmftC5Nyy14cxbZ/8KOh73QofnlFVnf
+        tZybHKaO2o4lIzvGdaUIX5/wj
+X-Received: by 2002:a17:902:e80c:b0:1b4:5697:d9a8 with SMTP id u12-20020a170902e80c00b001b45697d9a8mr11428310plg.24.1688433029779;
+        Mon, 03 Jul 2023 18:10:29 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEkUcs+Igdu1cGCcdWMRT4RWhJygrdqtCuKld769XYQogZn8ImhvI35kbP5T5WjvG7mZV0IdQ==
+X-Received: by 2002:a17:902:e80c:b0:1b4:5697:d9a8 with SMTP id u12-20020a170902e80c00b001b45697d9a8mr11428293plg.24.1688433029436;
+        Mon, 03 Jul 2023 18:10:29 -0700 (PDT)
+Received: from [10.72.12.93] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170902a51200b001b7fb1a8200sm14137286plq.258.2023.07.03.18.10.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 18:10:29 -0700 (PDT)
+Message-ID: <f885fddd-d511-0e31-cafe-b766144e6207@redhat.com>
+Date:   Tue, 4 Jul 2023 09:10:22 +0800
 MIME-Version: 1.0
-References: <cover.1688010022.git.haibo1.xu@intel.com> <f44c3aa46971d524319c6340f9ce1b00c0182fd2.1688010022.git.haibo1.xu@intel.com>
- <20230702-49c5545eb1ae2d0cf11c7b95@orel>
-In-Reply-To: <20230702-49c5545eb1ae2d0cf11c7b95@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Tue, 4 Jul 2023 09:09:56 +0800
-Message-ID: <CAJve8om-r67p7WojymsfP0T3MdZWchhujCZMzGyQ8de2AbykBQ@mail.gmail.com>
-Subject: Re: [PATCH v5 10/13] KVM: selftests: Only do get/set tests on present
- blessed list
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+Content-Language: en-US
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     Gregory Farnum <gfarnum@redhat.com>,
+        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
+ <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
+ <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+ <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
+ <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
+ <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
+ <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
+ <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com>
+ <CAEivzxcr99sERxZX17rZ5jW9YSzAWYvAjOOhBH+FqRoso2=yng@mail.gmail.com>
+ <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com>
+ <64241ff0-9af3-6817-478f-c24a0b9de9b3@redhat.com>
+ <CAEivzxeF51ZEKhQ-0M35nooZ7_cZgk1-q75-YbkeWpZ9RuHG4A@mail.gmail.com>
+ <4c4f73d8-8238-6ab8-ae50-d83c1441ac05@redhat.com>
+ <CAEivzxeQGkemxVwJ148b_+OmntUAWkdL==yMiTMN+GPyaLkFPg@mail.gmail.com>
+ <CAEivzxeBNOeufOraU27Y+qVApVjAoLhzwPnw0HSkqSt6P3MV9w@mail.gmail.com>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <CAEivzxeBNOeufOraU27Y+qVApVjAoLhzwPnw0HSkqSt6P3MV9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 4:18=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> On Sat, Jul 01, 2023 at 09:42:58PM +0800, Haibo Xu wrote:
-> > Only do the get/set tests on present and blessed registers
-> > since we don't know the capabilities of any new ones.
-> >
-> > Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > ---
-> >  tools/testing/selftests/kvm/get-reg-list.c | 29 ++++++++++++++--------
-> >  1 file changed, 18 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing=
-/selftests/kvm/get-reg-list.c
-> > index c61090806007..74fb6f6fdd09 100644
-> > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > @@ -49,6 +49,10 @@ extern int vcpu_configs_n;
-> >       for_each_reg_filtered(i)                                         =
-       \
-> >               if (!find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
-> >
-> > +#define for_each_present_blessed_reg(i)                      \
-> > +     for ((i) =3D 0; (i) < blessed_n; ++(i))           \
-> > +             if (find_reg(reg_list->reg, reg_list->n, blessed_reg[i]))
->
-> I just realized this is backwards. We need 'i' to index reg_list->reg in
-> the body of the loop. That means we need to write this as
->
-> #define for_each_present_blessed_reg(i)                                  =
-       \
->         for_each_reg(i)                                                  =
-       \
->                 if (find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
->
-> (Which, in hindsight, makes sense since we're replacing a for_each_reg()
-> loop.)
->
 
-Sure, I will update it in v6.
+On 6/26/23 19:49, Aleksandr Mikhalitsyn wrote:
+> On Mon, Jun 26, 2023 at 1:23 PM Aleksandr Mikhalitsyn
+> <aleksandr.mikhalitsyn@canonical.com> wrote:
+>> On Mon, Jun 26, 2023 at 4:12 AM Xiubo Li <xiubli@redhat.com> wrote:
+>>>
+>>> On 6/24/23 15:11, Aleksandr Mikhalitsyn wrote:
+>>>> On Sat, Jun 24, 2023 at 3:37 AM Xiubo Li <xiubli@redhat.com> wrote:
+>>>>> [...]
+>>>>>
+>>>>>    > > >
+>>>>>    > > > I thought about this too and came to the same conclusion, that
+>>>>> UID/GID
+>>>>>    > > > based
+>>>>>    > > > restriction can be applied dynamically, so detecting it on mount-time
+>>>>>    > > > helps not so much.
+>>>>>    > > >
+>>>>>    > > For this you please raise one PR to ceph first to support this, and in
+>>>>>    > > the PR we can discuss more for the MDS auth caps. And after the PR
+>>>>>    > > getting merged then in this patch series you need to check the
+>>>>>    > > corresponding option or flag to determine whether could the idmap
+>>>>>    > > mounting succeed.
+>>>>>    >
+>>>>>    > I'm sorry but I don't understand what we want to support here. Do we
+>>>>> want to
+>>>>>    > add some new ceph request that allows to check if UID/GID-based
+>>>>>    > permissions are applied for
+>>>>>    > a particular ceph client user?
+>>>>>
+>>>>> IMO we should prevent user to set UID/GID-based permisions caps from
+>>>>> ceph side.
+>>>>>
+>>>>> As I know currently there is no way to prevent users to set MDS auth
+>>>>> caps, IMO in ceph side at least we need one flag or option to disable
+>>>>> this once users want this fs cluster sever for idmap mounts use case.
+>>>> How this should be visible from the user side? We introducing a new
+>>>> kernel client mount option,
+>>>> like "nomdscaps", then pass flag to the MDS and MDS should check that
+>>>> MDS auth permissions
+>>>> are not applied (on the mount time) and prevent them from being
+>>>> applied later while session is active. Like that?
+>>>>
+>>>> At the same time I'm thinking about protocol extension that adds 2
+>>>> additional fields for UID/GID. This will allow to correctly
+>>>> handle everything. I wanted to avoid any changes to the protocol or
+>>>> server-side things. But if we want to change MDS side,
+>>>> maybe it's better then to go this way?
+>> Hi Xiubo,
+>>
+>>> There is another way:
+>>>
+>>> For each client it will have a dedicated client auth caps, something like:
+>>>
+>>> client.foo
+>>>     key: *key*
+>>>     caps: [mds] allow r, allow rw path=/bar
+>>>     caps: [mon] allow r
+>>>     caps: [osd] allow rw tag cephfs data=cephfs_a
+>> Do we have any infrastructure to get this caps list on the client side
+>> right now?
+>> (I've taken a quick look through the code and can't find anything
+>> related to this.)
+> I've found your PR that looks related https://github.com/ceph/ceph/pull/48027
 
-Thanks!
+Yeah, after this we need to do some extra work in kclient and then it 
+will be easy to check the caps I think.
 
-> Thanks,
-> drew
+Thanks
+
+- Xiubo
+
+>>> When mounting this client with idmap enabled, then we can just check the
+>>> above [mds] caps, if there has any UID/GID based permissions set, then
+>>> fail the mounting.
+>> understood
+>>
+>>> That means this kind client couldn't be mounted with idmap enabled.
+>>>
+>>> Also we need to make sure that once there is a mount with idmap enabled,
+>>> the corresponding client caps couldn't be append the UID/GID based
+>>> permissions. This need a patch in ceph anyway IMO.
+>> So, yeah we will need to effectively block cephx permission changes if
+>> there is a client mounted with
+>> an active idmapped mount. Sounds as something that require massive
+>> changes on the server side.
+>>
+>> At the same time this will just block users from using idmapped mounts
+>> along with UID/GID restrictions.
+>>
+>> If you want me to change server-side anyways, isn't it better just to
+>> extend cephfs protocol to properly
+>> handle UID/GIDs with idmapped mounts? (It was originally proposed by Christian.)
+>> What we need to do here is to add a separate UID/GID fields for ceph
+>> requests those are creating a new inodes
+>> (like mknod, symlink, etc).
+>>
+>> Kind regards,
+>> Alex
+>>
+>>> Thanks
+>>>
+>>> - Xiubo
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>> Thanks,
+>>>> Alex
+>>>>
+>>>>> Thanks
+>>>>>
+>>>>> - Xiubo
+>>>>>
+
