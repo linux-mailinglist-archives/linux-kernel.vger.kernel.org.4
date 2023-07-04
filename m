@@ -2,142 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C545574685C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A773874685E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjGDE15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 00:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S230318AbjGDEaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 00:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjGDE1z (ORCPT
+        with ESMTP id S229786AbjGDEaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 00:27:55 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E879FB
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 21:27:54 -0700 (PDT)
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 705FC3F84D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688444872;
-        bh=m0rCEv/CsWJXjSYog6lgIFb5mJu+Vk0RYpsqlz5EQgw=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=mct1QJWXui7o8rz8IqrYksf+2z+Z8hoc1Pf47AOW3WQBbRQoGzr+ekyLZVAnDHJxL
-         wfJOG5gvdCxvIMea1fKvPzmd51lkx+WrN4fhG7RLe9dfpqVP1GLiVd/Uf4wrez1NHf
-         ctrYKAfS1Fdu+a5OzJYNE2OKiZlA7uuYdTHEfKWEADwxjkaVfVD7dY1KvNW9FlHcLC
-         3aPOIfYVbIo1hZFZiCAdfc4qFMEH0Avq7VkbbBCex+EQSan09r3aJVW0SeetwfcqMe
-         2t48+cQOGI0eLZ0XmKkBfApot7RtkRgw4CdFppzkGDZRyHbu+L0/jvYMygWBzzbIFO
-         C58E2U0zuLT5w==
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765de3a3404so614549085a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 21:27:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688444871; x=1691036871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m0rCEv/CsWJXjSYog6lgIFb5mJu+Vk0RYpsqlz5EQgw=;
-        b=gveO69PyMLQTtdNc6jZaQdACY5AvnhDn/Nbps7LSakHgdw7ivCUXoCLVZa/IO+JWiY
-         CyWn/udqmPRYtRSgDoR9TTQpY8jqS1SEkHZZ5nEcpAT+E5xv8KHYUhZvvEWFDcLDnIjX
-         d2HvZLRWYWL+GQeLcaSMtdc/IYfOVEiQl5LmFI7stOkfF+2sBc0a+ykxJjOnCqpvu+uO
-         fEDOI3tTcDbU1/k1ilsjYgCegjJSYdv1azYY2m+JmHE06t5uGbJfevmTazW+DDLuz2IT
-         6LXePIPMIAlM9oJVafIy38njGYS5P1kg/1OD2M2G3nqivOM1RyM/4j9heJ6ZemFSwWNf
-         nfMA==
-X-Gm-Message-State: ABy/qLYM0ASC2sFeHXbC/L/Jpt4iunnwxivTd0V8gInIEXZfl4m+SlhI
-        xIppfNfcRgGtM9L9TVqeo+6q6ybRDUIpyTmvlPNwYffI3XIaOSfthtM4Oyf/W0YVt8dBFo3rVkw
-        tJd8BRHqExbu15sIqbIhBNtT99xu2M0wx1NPtf8I44I1b0cDtx9sSqZAn2Q==
-X-Received: by 2002:a05:620a:b5c:b0:767:5984:3ca7 with SMTP id x28-20020a05620a0b5c00b0076759843ca7mr6999499qkg.40.1688444871305;
-        Mon, 03 Jul 2023 21:27:51 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHOsoF3MvuVfKPaOCOEnX8/u9de7EY76LvgJfQExxXORdqkpExnQsaMwauVJoTxReymyk+AkQdcliPNEhc8KR4=
-X-Received: by 2002:a05:620a:b5c:b0:767:5984:3ca7 with SMTP id
- x28-20020a05620a0b5c00b0076759843ca7mr6999487qkg.40.1688444871081; Mon, 03
- Jul 2023 21:27:51 -0700 (PDT)
+        Tue, 4 Jul 2023 00:30:00 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2097.outbound.protection.outlook.com [40.107.117.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8625FB;
+        Mon,  3 Jul 2023 21:29:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mx5FJHLT2QEVeObFcVHtlr70+WflSxPgAOAsl1nq2is0rQhKi61prlWWYDKrS0O7gniG8rspbqbhvifrQrCSMdQzv6J/YW/vzseUOt1YSuN3L1Ipci0yHyYHQFFLsYnqJywPp0rmaIbQ39oE+4R8aKbfgshhcixXHonP94agtgZpyN8rwQGE4eX+FvK7OQsSyj5jV+irJUzZCNW46aFse9+oFdW8Q88aMxxILoSos2TfiVXnGLHZdmULnTtqcrK2o0DDgrdBebHLDK3VYLoeCCJB8K8UMlXhrrdcxtxbo9v0b/IzjGOZKC6wqXrd4iTtFVHDp096TrLEDd5K0OE6Qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w0ZTHLG/KYFWfNgGH4DXvAQWu1NqLiwthLi1OO+a5jo=;
+ b=Uj00KSTimcK1gbHdVIMjvroQ8mpeumcwVMcROgNfQQnN+1ypLLVht5KAkymAkEZh3Y6hqOoFkKzB1SfCXezgHyKZ9ElICTQatCHU7YwT6w59l/K+/OOEkttgXYNHUxkneAX8+uEpoAJ6tSSYe9MGS6sjkgto56JfoZtGq4SamDxKshPZLn9yGgiTCtV3fJYk/cr8u0Wg/lq1QcWLHgCV6HrQBDyByR46rt5Sr1Ocb0m1Kj4JCo0oEGVDX73ZBiPxT0i0Mju+/S8AMbqJ2a+PGCe2DIDFjMjLf92WZbsZRlXmpyx0xYWKF1Ped4flWpm4zONM2VvEE6nj9ZuD/RnJpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w0ZTHLG/KYFWfNgGH4DXvAQWu1NqLiwthLi1OO+a5jo=;
+ b=WLdA+4zP4z4YI7FaZqdsHDOeGHrDTR1qKUqulDWkPaB+/PwnUIp0Eb5s5bfdKdOFd/8nwObmDitow9bn+C10k5a9Kff1kryK4zRMYB02wrCtJHdRgDEKI70hJnoE/3O91EFmzB8bSixc0fkJRBEFPMqa5l/sdizcmAotfOjVuNw2Tbb5BLZ9H9xJ7u/M/THHwDDllHei1+3U2xJq6fqT7URV+srKXRqcfCNVYuSSpUcv0ADEmuMlPTe3tkokyvFG1KRyUEUrDuXuKYa4M6+5MSxvEWa+i+e0bizW+bdh6F+0i7dp0RjuB5zAN3rfwgLw+Z8KhY3qmbf9SYq1JF6LXA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
+ SEYPR06MB6729.apcprd06.prod.outlook.com (2603:1096:101:16b::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
+ 2023 04:29:52 +0000
+Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::c2b:41ab:3b14:f920]) by SG2PR06MB5288.apcprd06.prod.outlook.com
+ ([fe80::c2b:41ab:3b14:f920%6]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
+ 04:29:52 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Markus.Elfring@web.de, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        sfr@canb.auug.org.au, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v3] um: vector: Replace undo_user_init in old code with out_free_netdev
+Date:   Tue,  4 Jul 2023 12:29:42 +0800
+Message-Id: <20230704042942.3984-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGAP274CA0014.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::26)
+ To SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9)
 MIME-Version: 1.0
-References: <20230516033133.340936-1-kai.heng.feng@canonical.com>
- <IA1PR11MB61718EFB6DB1BF95CB1CEA5089799@IA1PR11MB6171.namprd11.prod.outlook.com>
- <SJ1PR11MB608384487F94EC485C91F47CFC799@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <CAAd53p56=CpWpPEOD2YdCneJX-XxO93MHMQHbLRB7VCYweW7SQ@mail.gmail.com> <CAAd53p7rpY7uUE-zBQOy3XBmB_JO96qYxkSZr26nZ+qcdT=COA@mail.gmail.com>
-In-Reply-To: <CAAd53p7rpY7uUE-zBQOy3XBmB_JO96qYxkSZr26nZ+qcdT=COA@mail.gmail.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 4 Jul 2023 12:27:39 +0800
-Message-ID: <CAAd53p41Ku1m1rapeqb1xtD+kKuk+BaUW=dumuoF0ZO3GhFjFA@mail.gmail.com>
-Subject: Re: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM is absent
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        "kao, acelan" <acelan.kao@canonical.com>,
-        Borislav Petkov <bp@alien8.de>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|SEYPR06MB6729:EE_
+X-MS-Office365-Filtering-Correlation-Id: 471a884e-e11a-4809-8dab-08db7c474f56
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MwH5vRAHj+2uQmL3Unck9MDjyrQtZ5260cI803r283fuV6hR/atejaZMytoAXcBmunNGk30onVpukbBVyvT7PGXtWIJB6PFo6atxkErUj5NZy0qabIlYg0mNDwicIVycvv5520NkmjByEVM/K0gA2J+ChTYFSBzLxEV1Y8oh6iDzd1IsxTT4V/crTUJUSHncNoIpQF+o3E0WEF0HKUSu7vSSCno5XkvL5fV0UXelH6mWjIHuI06xUJwE3i6qXzNEtf/g8ow6gAztQ7wzkvSYWA/LeYBMjSXa/e3gCsF6omZHxmZoCA9juzL6/ByC+kbBQ+4Nwom/KDBObcyt86/1wY49xhDRGlKyKq2h8E+0lP8ukJ8SPTlhmNYE9YHVPeMgd00iN3I8OXsZyp5eXj0f0JaP99qdRFO0j2r3LAJJ/K48rVZFViFymK/i8UjWoKDwrZQa09o0v6X9EN7VtyyLJXCEmEgigciH2Phvu0CoEun5PTc7TuRvoYd8H6z6J+2qOEixQxSOFT24pMABgc5C2OGlHSVM6fZQ2qu79U1Z1ibzs5qC8rJSjdvrYBTaR+IZDkczVZpGAe0mWtfCrohrzUlPqYuwhGGeNr3I8CyqJnc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(136003)(396003)(39860400002)(451199021)(2906002)(83380400001)(86362001)(107886003)(38100700002)(38350700002)(2616005)(5660300002)(66556008)(8936002)(8676002)(66476007)(66946007)(36756003)(41300700001)(316002)(4326008)(52116002)(6506007)(186003)(26005)(1076003)(6666004)(478600001)(6512007)(966005)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cHqO9fX9+walb23uwPG/dOwqnyZVgyrzXJjAEMtDJNlah2w0g4GJ4o/MMVzU?=
+ =?us-ascii?Q?5GEoEh2/ANf2ahNo+VbMFHbsxjLNzWKi6DP2piJNbqDOtWSQf2AOIQVbFjsY?=
+ =?us-ascii?Q?NhFbjhoBDPkMuiU7Ub1RX81xxM+4n9Hm42SMeBChzHZiuZGWKXTcBUwv7/Rp?=
+ =?us-ascii?Q?yaIEzpKaXLtVRShdyph3u7xYCsLUlyYJ9qkKScw1tN5I+tUxe21WOMnkY77+?=
+ =?us-ascii?Q?93C7GPd+ZG3EAWhE3wPnuySANXk34JJht8JcrTt6vpiMsUg5ZX+ymuTVlErd?=
+ =?us-ascii?Q?0TmmU1kcyVeq5RBISFLkiKMpJSSZdabIxnzOL6RhnOOX5eQgihYLoXrkhBhV?=
+ =?us-ascii?Q?0ITn04rbO1TFmVlig9kJ/axLeA6VbTfWBdTfnPidpe/2sgmRbhRNR/0JaI8V?=
+ =?us-ascii?Q?U9Wzql1e4vGwtK5drNO1Zu5u0oG0UxCD/vrqol4wnWaQEWkPNMRw8lFVf5iX?=
+ =?us-ascii?Q?OClwyuCcqVuM91IlJjcmRRPK36xO77S9Nz7gA8DbPOlChScjUIUfqD9y1y3N?=
+ =?us-ascii?Q?1aQrTGM394h8kF2qCw5Af5c3aqVn2ZZS/E5+Np/ktE94kwQ00NC0tb+1wTBc?=
+ =?us-ascii?Q?dCuDnCpRytQso/gqYSMrvzkNb0cACDjQniak7FrQ9nE+sO3rzb78jzS3I78Y?=
+ =?us-ascii?Q?3++ETSGBQrOnzejx/Sety6aVuoSQdVnT4sf/NrTRwmyog0S3uUrpr8HUKkW3?=
+ =?us-ascii?Q?1NDRNT9iBgZkmVSfFx0+PYjyQA+ae2ya5pSgjvKbYhLKzREeaUj3/OFAqKNQ?=
+ =?us-ascii?Q?KJkAnFNRZbI1YdfPbg8wWa5h5VFAPu+fwDULGmYBeoFypAsqZ6Vr8JHqUtvC?=
+ =?us-ascii?Q?TwA21zkNZaxskRZryHnac/EC+oJAkPCq6y7L9kahPSTAsOrWG4OpH6INcuJa?=
+ =?us-ascii?Q?Y2YnST5c+HnUhjXJHlcmCwZ6y3PfG7mJstNcJRgTn5DGLD1OeLeYQj2Rk4v5?=
+ =?us-ascii?Q?p8VgRROfPQNlrHssXorROTfmNeIJci3L8YIQTQ4Hkjwqz5q0NbCTYiUbz5PD?=
+ =?us-ascii?Q?HeIoUvkADnTHgBY592ZChP5LPevwy8tzqif0pfMMeuYm+5J58ccII4WYYLWx?=
+ =?us-ascii?Q?9bheBv2St5+rMHg/TZZBH04VxFnw+SCYaOElrGXGK4epe3j01B3Z9YwKuYI2?=
+ =?us-ascii?Q?ottQOrXGUF0OBP+kU+FAeWN4VOLJkdRkvBeS5Gapk7zCEMcb2xyRpnZJnWld?=
+ =?us-ascii?Q?IjUKBgUYVphMu70jt3Uk/iF8RNP+lCvJs0qn+0AULyq3ThxNDyt1JslL+79+?=
+ =?us-ascii?Q?rQPdKn5NS3GgFLF7+mnO4fvE0I8ddLHAxm7IL0gaEeV2SHvALdPOPN1Lv5Oy?=
+ =?us-ascii?Q?Xa/6ZW8QUEa9vpEYWCOoKI2M5VIi00qPGNwtD69l9JVtTE5wE0ynS1SsolfH?=
+ =?us-ascii?Q?ObCPSbzF+l+oa3PArDlwDd+nm3IJb/uKlGANsD/2ZaKoRwqWkXLB+A1j0jHB?=
+ =?us-ascii?Q?FMMoXw8LO53IwaSFCdPDlXVIWiS2+M+VpdzLyuMVSh9+YsJTWTgPeTTjav0I?=
+ =?us-ascii?Q?E9dmrTitY6e72nh+5OsKRLXqNWhb/U9Db3IJ4t1Ye7wf/jxOkhfjK1kGL9OH?=
+ =?us-ascii?Q?mvDq1H8k51kPs31zJVnns9F9F3cdgL9f3Z5NW2Za?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 471a884e-e11a-4809-8dab-08db7c474f56
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 04:29:52.0771
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6gU/t4RpnJnRF71m4wXxN0Jehp+Y/NGcaydvljlNP1d5aeGRGjABamB5j4mqKnyTh1XXNXp9xc50+spmgeZ3vQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6729
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 3:58=E2=80=AFPM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> On Wed, May 17, 2023 at 3:49=E2=80=AFPM Kai-Heng Feng
-> <kai.heng.feng@canonical.com> wrote:
-> >
-> > On Wed, May 17, 2023 at 1:13=E2=80=AFAM Luck, Tony <tony.luck@intel.com=
-> wrote:
-> > >
-> > > >> [   13.875282] Hardware name: HP HP Z4 G5 Workstation Desktop PC/8=
-962,
-> > > > > BIOS U61 Ver. 01.01.15 04/19/2023
-> > >
-> > >
-> > > >> When a DIMM slot is empty, the read value of mtr can be 0xffffffff=
-, therefore
-> > >
-> > > > Looked like a buggy BIOS/hw that didn't set the mtr register.
-> > > >
-> > > > 1. Did you print the mtr register whose value was 0xffffffff?
-> > > > 2. Can you take a dmesg log with kernel "CONFIG_EDAC_DEBUG=3Dy" ena=
-bled?
-> > > > 3. What was the CPU? Please take the output of "lscpu".
-> > > > 4. Did you verify your patch that the issue was fixed on your syste=
-ms?
-> > >
-> > > I wonder if BIOS is "hiding" some devices from the OS? The 0xffffffff=
- return is
-> > > the standard PCI response for reading a non-existent register. But th=
-at doesn't
-> > > quite make sense with having a "dimm present" bit in the MTR register=
-. If
-> > > the register only exists if the DIMM is present, then there is no nee=
-d for
-> > > a "dimm present" bit.
-> >
-> > I wonder if the "non-existent register" read is intended?
-> >
-> > >
-> > > Some "lspci" output may also be useful.
-> >
-> > lspci can be found in [1]:
-> >
-> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217453
->
-> A gentle ping...
+Thanks for your response and suggestions,
+I made some mistakes. This is a resubmitted patch.
+I got some errors with my local repository,
+so I lost the commit SHA-1 ID.
+Fixes: ("drivers: use free_netdev before return in vector_eth_configure()")
+Please check this link to see previous replies.
+Link: https://lore.kernel.org/all/8854675f-99e7-314e-c986-8dc954ee4a27@web.de/
 
-Another gentle ping...
+This patch make out_free_netdev replace undo_user_init,
+fix etherdev leak in error return path.
 
->
-> >
-> > Kai-Heng
-> >
-> > >
-> > > -Tony
+
+Signed-off-by: Minjie Du <duminjie@vivo.com>
+---
+ arch/um/drivers/vector_kern.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
+index 131b7cb29..7ae6ab8df 100644
+--- a/arch/um/drivers/vector_kern.c
++++ b/arch/um/drivers/vector_kern.c
+@@ -1646,7 +1646,7 @@ static void vector_eth_configure(
+ 	err = register_netdevice(dev);
+ 	rtnl_unlock();
+ 	if (err)
+-		goto out_undo_user_init;
++		goto out_free_netdev;
+ 
+ 	spin_lock(&vector_devices_lock);
+ 	list_add(&device->list, &vector_devices);
+@@ -1654,8 +1654,6 @@ static void vector_eth_configure(
+ 
+ 	return;
+ 
+-out_undo_user_init:
+-	return;
+ out_free_netdev:
+ 	free_netdev(dev);
+ out_free_device:
+-- 
+2.39.0
+
