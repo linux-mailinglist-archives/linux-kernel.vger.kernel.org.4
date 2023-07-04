@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F107468EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C127468F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjGDF05 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 01:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        id S229971AbjGDF2c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 01:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjGDF04 (ORCPT
+        with ESMTP id S229505AbjGDF2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:26:56 -0400
+        Tue, 4 Jul 2023 01:28:30 -0400
 Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3623DBD;
-        Mon,  3 Jul 2023 22:26:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E758FBD;
+        Mon,  3 Jul 2023 22:28:29 -0700 (PDT)
 Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
           by outpost.zedat.fu-berlin.de (Exim 4.95)
           with esmtps (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qGYYu-000K0B-3G; Tue, 04 Jul 2023 07:26:52 +0200
+          id 1qGYaS-000KEh-Iy; Tue, 04 Jul 2023 07:28:28 +0200
 Received: from p57bd997f.dip0.t-ipconnect.de ([87.189.153.127] helo=suse-laptop.fritz.box)
           by inpost2.zedat.fu-berlin.de (Exim 4.95)
           with esmtpsa (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qGYYt-000d1u-S1; Tue, 04 Jul 2023 07:26:52 +0200
-Message-ID: <bf8e46bc0e6d564cf8633f21098d5b6f7ccb6018.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 1/4] sh: fix -Wmissing-include-dirs warnings for various
- platforms
+          id 1qGYaS-000dCz-BX; Tue, 04 Jul 2023 07:28:28 +0200
+Message-ID: <898f6befcbeef9d685773143355088f38fe6e6e4.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 2/4] sh: move build rule of cchips/hd6446x/ to
+ arch/sh/Kbuild
 From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
         Rich Felker <dalias@libc.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         linux-sh@vger.kernel.org
-Date:   Tue, 04 Jul 2023 07:26:51 +0200
-In-Reply-To: <20230219141555.2308306-1-masahiroy@kernel.org>
+Date:   Tue, 04 Jul 2023 07:28:27 +0200
+In-Reply-To: <20230219141555.2308306-2-masahiroy@kernel.org>
 References: <20230219141555.2308306-1-masahiroy@kernel.org>
+         <20230219141555.2308306-2-masahiroy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.48.3 
@@ -60,111 +60,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Hi Masahiro!
 
 On Sun, 2023-02-19 at 23:15 +0900, Masahiro Yamada wrote:
-> The 0day bot reports a lot of warnings (or errors due to CONFIG_WERROR)
-> like this:
+> This is the last user of core-y in ARCH=sh.
 > 
->   cc1: error: arch/sh/include/mach-hp6xx: No such file or directory [-Werror=missing-include-dirs]
+> Use the standard obj-y syntax.
 > 
-> Indeed, arch/sh/include/mach-hp6xx does not exist.
-> 
-> -Wmissing-include-dirs is W=1 warning, but it may be annoying
-> when CONFIG_BTRFS_FS is enabled because fs/btrfs/Makefile
-> unconditionally adds this warning option.
-> 
-> arch/sh/Makefile defines machdir-y for two purposes:
-> 
->  - Build platform code in arch/sh/boards/mach-*/
->  - Add arch/sh/include/mach-*/ to the header search path
-> 
-> For the latter, some platforms use arch/sh/include/mach-common/ instead
-> of having its own arch/sh/include/mach-*/.
-> 
-> Drop unneeded machdir-y to not include non-existing include directory.
-> 
-> To build arch/sh/boards/mach-*/, use the standard obj-y syntax in
-> arch/sh/boards/Makefile.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202302190641.30VVXnPb-lkp@intel.com/
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
 > 
->  arch/sh/Makefile        | 18 +-----------------
->  arch/sh/boards/Makefile | 19 +++++++++++++++++++
->  2 files changed, 20 insertions(+), 17 deletions(-)
+>  arch/sh/Kbuild   | 2 ++
+>  arch/sh/Makefile | 3 ---
+>  2 files changed, 2 insertions(+), 3 deletions(-)
 > 
+> diff --git a/arch/sh/Kbuild b/arch/sh/Kbuild
+> index be171880977e..056efec72c2a 100644
+> --- a/arch/sh/Kbuild
+> +++ b/arch/sh/Kbuild
+> @@ -3,5 +3,7 @@ obj-y				+= kernel/ mm/ boards/
+>  obj-$(CONFIG_SH_FPU_EMU)	+= math-emu/
+>  obj-$(CONFIG_USE_BUILTIN_DTB)	+= boot/dts/
+>  
+> +obj-$(CONFIG_HD6446X_SERIES)	+= cchips/hd6446x/
+> +
+>  # for cleaning
+>  subdir- += boot
 > diff --git a/arch/sh/Makefile b/arch/sh/Makefile
-> index 5c8776482530..a9cad5137f92 100644
+> index a9cad5137f92..0625796cfe7f 100644
 > --- a/arch/sh/Makefile
 > +++ b/arch/sh/Makefile
-> @@ -116,31 +116,15 @@ export ld-bfd
->  
->  # Mach groups
->  machdir-$(CONFIG_SOLUTION_ENGINE)		+= mach-se
-> -machdir-$(CONFIG_SH_HP6XX)			+= mach-hp6xx
->  machdir-$(CONFIG_SH_DREAMCAST)			+= mach-dreamcast
->  machdir-$(CONFIG_SH_SH03)			+= mach-sh03
-> -machdir-$(CONFIG_SH_RTS7751R2D)			+= mach-r2d
-> -machdir-$(CONFIG_SH_HIGHLANDER)			+= mach-highlander
->  machdir-$(CONFIG_SH_MIGOR)			+= mach-migor
-> -machdir-$(CONFIG_SH_AP325RXA)			+= mach-ap325rxa
->  machdir-$(CONFIG_SH_KFR2R09)			+= mach-kfr2r09
->  machdir-$(CONFIG_SH_ECOVEC)			+= mach-ecovec24
-> -machdir-$(CONFIG_SH_SDK7780)			+= mach-sdk7780
->  machdir-$(CONFIG_SH_SDK7786)			+= mach-sdk7786
->  machdir-$(CONFIG_SH_X3PROTO)			+= mach-x3proto
-> -machdir-$(CONFIG_SH_SH7763RDP)			+= mach-sh7763rdp
-> -machdir-$(CONFIG_SH_SH4202_MICRODEV)		+= mach-microdev
+> @@ -126,9 +126,6 @@ machdir-$(CONFIG_SH_X3PROTO)			+= mach-x3proto
 >  machdir-$(CONFIG_SH_LANDISK)			+= mach-landisk
-> -machdir-$(CONFIG_SH_LBOX_RE2)			+= mach-lboxre2
-> -machdir-$(CONFIG_SH_RSK)			+= mach-rsk
-> -
-> -ifneq ($(machdir-y),)
-> -core-y	+= $(addprefix arch/sh/boards/, \
-> -	     $(filter-out ., $(patsubst %,%/,$(machdir-y))))
-> -endif
-> -
-> -# Common machine type headers. Not part of the arch/sh/boards/ hierarchy.
-> -machdir-y	+= mach-common
-> +machdir-y					+= mach-common
+>  machdir-y					+= mach-common
 >  
->  # Companion chips
->  core-$(CONFIG_HD6446X_SERIES)	+= arch/sh/cchips/hd6446x/
-> diff --git a/arch/sh/boards/Makefile b/arch/sh/boards/Makefile
-> index 4002a22a7c40..b57219436ace 100644
-> --- a/arch/sh/boards/Makefile
-> +++ b/arch/sh/boards/Makefile
-> @@ -18,3 +18,22 @@ obj-$(CONFIG_SH_APSH4A3A)	+= board-apsh4a3a.o
->  obj-$(CONFIG_SH_APSH4AD0A)	+= board-apsh4ad0a.o
->  
->  obj-$(CONFIG_SH_DEVICE_TREE)	+= of-generic.o
-> +
-> +obj-$(CONFIG_SOLUTION_ENGINE)	+= mach-se/
-> +obj-$(CONFIG_SH_HP6XX)		+= mach-hp6xx/
-> +obj-$(CONFIG_SH_DREAMCAST)	+= mach-dreamcast/
-> +obj-$(CONFIG_SH_SH03)		+= mach-sh03/
-> +obj-$(CONFIG_SH_RTS7751R2D)	+= mach-r2d/
-> +obj-$(CONFIG_SH_HIGHLANDER)	+= mach-highlander/
-> +obj-$(CONFIG_SH_MIGOR)		+= mach-migor/
-> +obj-$(CONFIG_SH_AP325RXA)	+= mach-ap325rxa/
-> +obj-$(CONFIG_SH_KFR2R09)	+= mach-kfr2r09/
-> +obj-$(CONFIG_SH_ECOVEC)		+= mach-ecovec24/
-> +obj-$(CONFIG_SH_SDK7780)	+= mach-sdk7780/
-> +obj-$(CONFIG_SH_SDK7786)	+= mach-sdk7786/
-> +obj-$(CONFIG_SH_X3PROTO)	+= mach-x3proto/
-> +obj-$(CONFIG_SH_SH7763RDP)	+= mach-sh7763rdp/
-> +obj-$(CONFIG_SH_SH4202_MICRODEV)+= mach-microdev/
-> +obj-$(CONFIG_SH_LANDISK)	+= mach-landisk/
-> +obj-$(CONFIG_SH_LBOX_RE2)	+= mach-lboxre2/
-> +obj-$(CONFIG_SH_RSK)		+= mach-rsk/
-
-Can you fix the tabs so that the mach directories are all aligned?
-
-Other than that:
+> -# Companion chips
+> -core-$(CONFIG_HD6446X_SERIES)	+= arch/sh/cchips/hd6446x/
+> -
+>  #
+>  # CPU header paths
+>  #
 
 Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-
-Adrian
 
 -- 
  .''`.  John Paul Adrian Glaubitz
