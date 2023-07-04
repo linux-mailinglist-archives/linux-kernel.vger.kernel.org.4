@@ -2,126 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A9A7474F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575217474F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjGDPIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S231383AbjGDPJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbjGDPIS (ORCPT
+        with ESMTP id S231243AbjGDPJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:08:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E245A10CF
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:08:17 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98df3dea907so674536866b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 08:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688483296; x=1691075296;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D3zDnTtGNuT1E6yZFaZ/zNDj8BnaMTvIa2O34NjwFss=;
-        b=Kv1ja5c0LWVZA9c8wPq32wEL3jos+gFSScdXoAJ8syfa3qIlsDMI1rF+DCUrFX7Ndi
-         ehWfXIiN4SYjBiIYAQDGmR6fUPoQ8vyjeg2QySK3N10eI08NkNHdQeoicISFkBde53Dz
-         oYPPeb0Cwjv5hGpjRlkq4VB9yC0pIWz3VYlS4oizcK/wCRBsJf1bYuE+1p7w2smXmzup
-         pQMVy68ZvO9fpZT6d17r/dnSX5LfB/WTqKL888EgsJkJKYM6y8Duk8YAv+ZKuAU6Y0cJ
-         PvpWxez3Ge2iRbkrsZNoFdh/u6ZWOFwaHwECkkuByJAwpSYfulPxGwAlvi9/J7acsktW
-         g8sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688483296; x=1691075296;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D3zDnTtGNuT1E6yZFaZ/zNDj8BnaMTvIa2O34NjwFss=;
-        b=K5lu9lxCOpl1AFAsEnm3Y3GvMqiVHcktX2qKO1EqBkhi/GEGDoBIyQkOmULXSM0cAs
-         WbpeORx+htq1Epww9fd6LY0ws+OGaxfk4mJRd/n89bjtYRzjjjuF0Ed9uQnzSNvFl2Oy
-         exKkhIT8jxqntb8MVnWh/LgB2wue1gHzSAXI8vRmXZLkIjFRNbQNHs/7hQk7KEk4Jeuk
-         Am71iTy9R9buKR+sv+29Sqr+lfLnKCQM+W9ld37GBfOkzBFAgIyVilHZsMBHAb06mwDE
-         8P72n8/W0PLJLhizQqRL2Vc1SHHdGeSZCfyArjxkGSLwCd/yvjLTdrMTv/rEGV+lwDdt
-         pHGw==
-X-Gm-Message-State: AC+VfDzqqMgGYnYzlTgP52WLUa+B5PkEP5YVzeR/3zrq//FccksSC3fW
-        8UEIosJC4Bn01hOcBlk7qoqgCw==
-X-Google-Smtp-Source: APBJJlHpZSK9BA5IIBUMNSzaFQEio+bEpAwvxesVHFjK2O/yvRvXOSNKrpZTmgIe2ijwwdIX5uqdmg==
-X-Received: by 2002:a17:906:4e06:b0:992:2c5a:808e with SMTP id z6-20020a1709064e0600b009922c5a808emr10651266eju.7.1688483296390;
-        Tue, 04 Jul 2023 08:08:16 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id t21-20020a170906065500b00993928e4d1bsm758893ejb.24.2023.07.04.08.08.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 08:08:15 -0700 (PDT)
-Message-ID: <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
-Date:   Tue, 4 Jul 2023 17:08:12 +0200
+        Tue, 4 Jul 2023 11:09:02 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633910CF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:09:00 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688483339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2e1y57kMTneCeOtV2lfhgiriEfxFx2Hg2M8j4ecPq1c=;
+        b=mvQc7yb3VPnLvTVztzn7lcdFYh4ZeB0JalspSDn7QOQyDaubg3/7+6FEJzdWE8thvvxzxU
+        Vu//sqJiKAkbN+g2DFQZAADDNiuYAAAEM05HlbKnaJ/QxbcC/nJhHcwPi8gA5Qomgx4t9Z
+        GHmfk8VrTxcF/J90mfFusWsYsT0x5GIg34f1jch6fb9zibTBgL7YhPRLBySAa9mUdJi5Eo
+        0pQSaHjHOLgSi8bB+VSynLPRpFhqOq/0yPZH4XP5hG4L6qtnj8SBele2sh7SDabyU+JgLm
+        4ri/O3B/5Qs1FwtzJtKALdFX0fU8aDRB8JjzV+1GGtkFJlR/C9ZiGaw0/+xdXw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E7DCF1C000A;
+        Tue,  4 Jul 2023 15:08:58 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 17:08:58 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+Subject: Re: [PATCH v3 2/3] mtd: rawnand: rockchip-nand-controller: copy
+ hwecc PA data to oob_poi buffer
+Message-ID: <20230704170858.2a64c181@xps-13>
+In-Reply-To: <539cfba7-dd6f-015e-b990-a2335cb3aac9@gmail.com>
+References: <0047fc52-bc45-a768-8bdd-c0f12cddc17e@gmail.com>
+        <539cfba7-dd6f-015e-b990-a2335cb3aac9@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-To:     Hugo Villeneuve <hugo@hugovil.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230704150240.2022020-1-hugo@hugovil.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230704150240.2022020-1-hugo@hugovil.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2023 17:02, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> USB OTG is currently broken on the Variscite Symphony EVK and imx8mn
-> nano SOM.
-> 
-> Import changes from linux-5.15 branch of varigit repos to fix it.
-> 
-> Link: https://github.com/varigit/linux-imx.git
-> Fixes: 7358e05bddca ("arm64: dts: imx8mn-var-som-symphony: Add Variscite Symphony board with VAR-SOM-MX8MN")
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Hi Johan,
+
+jbx6244@gmail.com wrote on Thu, 15 Jun 2023 19:34:13 +0200:
+
+> Rockchip boot blocks are written per 4 x 512 byte sectors per page.
+> Each page must have a page address (PA) pointer in OOB to the next page.
+
+Only when used as boot device I guess? It's a BootROM limitation.
+
+> Pages are written in a pattern depending on the NAND chip ID.
+> This logic used to build a page pattern table is not fully disclosed and
+> is not easy to fit in the MTD framework.
+> The formula in rk_nfc_write_page_hwecc() function is not correct.
+> Make hwecc and raw behavior identical.
+
+So this is a fix as well, deserves a tag. Whatever the reason why you
+need this, the issue you are solving is: write_page_hwecc and
+write_page_raw are not aligned.
+
+> Generate boot block page address and pattern for hwecc in user space
+> and copy PA data to/from the already reserved last 4 bytes before EEC
+
+ECC
+
+> in the chip->oob_poi data layout.
+>=20
+> This patch breaks all existing jffs2 users that have free OOB overlap
+> with the reserved space for PA data.
+>=20
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 > ---
->  .../dts/freescale/imx8mn-var-som-symphony.dts | 37 ++++++++++++++++++-
->  1 file changed, 35 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> index 406a711486da..aef89198f24c 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> @@ -6,6 +6,7 @@
->  
->  /dts-v1/;
->  
-> +#include <dt-bindings/usb/pd.h>
->  #include "imx8mn-var-som.dtsi"
->  
->  / {
-> @@ -104,10 +105,29 @@ extcon_usbotg1: typec@3d {
->  		compatible = "nxp,ptn5150";
->  		reg = <0x3d>;
->  		interrupt-parent = <&gpio1>;
-> -		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupts = <11 IRQ_TYPE_NONE>;
+>=20
+> Changed V3:
+>   Change prefixes
+>   Reword
+> ---
+>  .../mtd/nand/raw/rockchip-nand-controller.c   | 34 ++++++++++++-------
+>  1 file changed, 21 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mt=
+d/nand/raw/rockchip-nand-controller.c
+> index 37fc07ba5..5a0468034 100644
+> --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
+> +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+> @@ -598,7 +598,7 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *=
+chip, const u8 *buf,
+>  	int pages_per_blk =3D mtd->erasesize / mtd->writesize;
+>  	int ret =3D 0, i, boot_rom_mode =3D 0;
+>  	dma_addr_t dma_data, dma_oob;
+> -	u32 reg;
+> +	u32 tmp;
+>  	u8 *oob;
+>=20
+>  	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
+> @@ -625,6 +625,13 @@ static int rk_nfc_write_page_hwecc(struct nand_chip =
+*chip, const u8 *buf,
+>  	 *
+>  	 *   0xFF 0xFF 0xFF 0xFF | BBM OOB1 OOB2 OOB3 | ...
+>  	 *
+> +	 * The code here just swaps the first 4 bytes with the last
+> +	 * 4 bytes without losing any data.
+> +	 *
+> +	 * The chip->oob_poi data layout:
+> +	 *
+> +	 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
+> +	 *
+>  	 * Configure the ECC algorithm supported by the boot ROM.
+>  	 */
+>  	if ((page < (pages_per_blk * rknand->boot_blks)) &&
+> @@ -635,21 +642,17 @@ static int rk_nfc_write_page_hwecc(struct nand_chip=
+ *chip, const u8 *buf,
+>  	}
+>=20
+>  	for (i =3D 0; i < ecc->steps; i++) {
+> -		if (!i) {
+> -			reg =3D 0xFFFFFFFF;
+> -		} else {
+> +		if (!i)
+> +			oob =3D chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
+> +		else
+>  			oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
+> -			reg =3D oob[0] | oob[1] << 8 | oob[2] << 16 |
+> -			      oob[3] << 24;
+> -		}
+>=20
+> -		if (!i && boot_rom_mode)
 
-That's surprising, why?
+So we no longer need boot_rom_mode? Or do we?
+
+> -			reg =3D (page & (pages_per_blk - 1)) * 4;
+> +		tmp =3D oob[0] | oob[1] << 8 | oob[2] << 16 | oob[3] << 24;
+>=20
+>  		if (nfc->cfg->type =3D=3D NFC_V9)
+> -			nfc->oob_buf[i] =3D reg;
+> +			nfc->oob_buf[i] =3D tmp;
+>  		else
+> -			nfc->oob_buf[i * (oob_step / 4)] =3D reg;
+> +			nfc->oob_buf[i * (oob_step / 4)] =3D tmp;
+>  	}
+>=20
+>  	dma_data =3D dma_map_single(nfc->dev, (void *)nfc->page_buf,
+> @@ -812,12 +815,17 @@ static int rk_nfc_read_page_hwecc(struct nand_chip =
+*chip, u8 *buf, int oob_on,
+>  		goto timeout_err;
+>  	}
+>=20
+> -	for (i =3D 1; i < ecc->steps; i++) {
+> -		oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
+> +	for (i =3D 0; i < ecc->steps; i++) {
+> +		if (!i)
+> +			oob =3D chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
+> +		else
+> +			oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
+> +
+>  		if (nfc->cfg->type =3D=3D NFC_V9)
+>  			tmp =3D nfc->oob_buf[i];
+>  		else
+>  			tmp =3D nfc->oob_buf[i * (oob_step / 4)];
+> +
+>  		*oob++ =3D (u8)tmp;
+>  		*oob++ =3D (u8)(tmp >> 8);
+>  		*oob++ =3D (u8)(tmp >> 16);
+> --
+> 2.30.2
+>=20
 
 
-Best regards,
-Krzysztof
-
+Thanks,
+Miqu=C3=A8l
