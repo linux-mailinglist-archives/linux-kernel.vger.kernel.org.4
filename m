@@ -2,152 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F80D747554
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B571747558
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjGDPa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
+        id S231664AbjGDPbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjGDPay (ORCPT
+        with ESMTP id S229971AbjGDPbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:30:54 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E17E1B6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:30:53 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688484652;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dZX16cb0vysqNBL15q7yQtbXUFPDe1wHeaQILrdlWpc=;
-        b=alTsk9caUlt0vIzwV4iDsME7+ossT3XY51toxhwiV9KXtoCzrCr/PnkHy/Y/lWRttvIfQz
-        p020Sm1vdFCREet1PQwSNBSIncyv4tBC9tED4Jsvvwaw8lzXNwuQNb1Mw0owQb0+2SIkiU
-        C6eVevnS/CCllnnNTCf1WAOFnH6FGvs6ijt1xgtCP5dlhr7aCtkgYt1K2mA6O2LHLgZTuZ
-        RIMyOZD14q0WKNNPfg8z3c8Fun0gmYC5OnAbfBXq8hlormHJT47ajC6VXq7oDQFk0P4HIk
-        iqZhzHGrQzCvcj1zTuLfzdb8N7WvC+nbAs48vqdiv7dH+mCd0QXeK4T6rNncUg==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 82425E0011;
-        Tue,  4 Jul 2023 15:30:48 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 17:30:47 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH v3 5/5] mtd: rawnand: brcmnand: Fix mtd oobsize
-Message-ID: <20230704173047.395e445e@xps-13>
-In-Reply-To: <20230627193738.19596-6-william.zhang@broadcom.com>
-References: <20230627193738.19596-1-william.zhang@broadcom.com>
-        <20230627193738.19596-6-william.zhang@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 4 Jul 2023 11:31:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630A91AA
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:31:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0058D61291
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 15:31:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68882C433C8;
+        Tue,  4 Jul 2023 15:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688484676;
+        bh=gQG0YqGI0Xfsz6O+bbFroZSKnVbb8Krn+2+51tLo/NE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=h3xvmSsevsF3AfZlVBIDp2WtIJMLJdOW9zNcDVLGjNrFbPIvlXBJjWNp3TtwnaGjD
+         fFOM/pJeIj8W81NwJyZFUcGpahhfNJbPsbqffUO/n3X/mpgidSxi2thpQsC9laBV2F
+         XOwFtH/pWF+KDGg2eQW+dbLDUu/a+reJ3TnTx202r1r+PhqdZEv5y+hfi9PDrfX23l
+         8TBaFRxX6ku6j6UjM4+vAErc0zJdsv5EcP8/4d+pH/AbdLGVr5RO/2N1GIqE9FXV9N
+         F6sbKWzFLayHWtsXyJoYnF9I62F2ro0LggRXClc7DXRl2aNR1Z203m8n0NsRBZXiWg
+         Jxo0G5M5Buu4w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qGhzm-00ATCv-4P;
+        Tue, 04 Jul 2023 16:31:14 +0100
+Date:   Tue, 04 Jul 2023 16:31:13 +0100
+Message-ID: <86r0pnwv5q.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Hanks Chen <hanks.chen@mediatek.com>,
+        Cheng-Yuh.Wu@mediatek.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3: Workaround for GIC-700 erratum 2941627
+In-Reply-To: <ZKQ6ce1pbYHGVIsA@lpieralisi>
+References: <20230704123436.127449-1-lpieralisi@kernel.org>
+        <86ttujwxb1.wl-maz@kernel.org>
+        <ZKQ6ce1pbYHGVIsA@lpieralisi>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org, hanks.chen@mediatek.com, Cheng-Yuh.Wu@mediatek.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+On Tue, 04 Jul 2023 16:27:45 +0100,
+Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
+> 
+> On Tue, Jul 04, 2023 at 03:44:50PM +0100, Marc Zyngier wrote:
+> 
+> [...]
+> 
+> > > +	return !((gic_irq_in_rdist(d)) || gic_irq(d) >= 8192 ||
+> > > +		  cpumask_equal(irq_data_get_effective_affinity_mask(d),
+> > > +				cpumask_of(smp_processor_id())));
+> > 
+> > I dislike this statement for multiple reasons:
+> > 
+> > - it is written as a negation, making it harder than strictly
+> >   necessary to parse as it is the opposite of the comment above
+> > 
+> > - gic_irq_in_rdist() and gic_irq(d) >= 8192 are two ways of checking
+> >   the interrupt range -- maybe we should just do that
+> > 
+> > - cpumask_equal() is *slow* if you have more that 64 CPUs, something
+> >   that is increasingly common -- a better option would be to check
+> >   whether the current CPU is in the mask or not, which would be enough
+> >   as we only have a single affinity bit set
+> > 
+> > - smp_processor_id() can check for preemption, which is pointless
+> >   here, as we're doing things under the irq_desc raw spinlock.
+> > 
+> > I would expect something like:
+> > 
+> > 	enum gic_intid_range range = get_intid_range(d);
+> > 
+> > 	return (range == SGI_RANGE || range == ESPI_RANGE) &&
+> > 	       !cpumask_test_cpu(raw_smp_processor_id(),
+> > 				 irq_data_get_effective_affinity_mask(d));
+> > 
+> 
+> s/SGI/SPI - just noticed, for the records.
 
-william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:38 -0700:
-
-> brcmnand controller can only access the flash spare area up to certain
-> bytes based on the ECC level. It can be less than the actual flash spare
-> area size. For example, for many NAND chip supporting ECC BCH-8, it has
-> 226 bytes spare area. But controller can only uses 218 bytes. So brcmand
-> driver overrides the mtd oobsize with the controller's accessible spare
-> area size. When the nand base driver utilizes the nand_device object, it
-> resets the oobsize back to the actual flash spare aprea size from
-> nand_memory_organization structure and controller may not able to access
-> all the oob area as mtd advises.
->=20
-> This change fixes the issue by overriding the oobsize in the
-> nand_memory_organization structure to the controller's accessible spare
-> area size.
-
-I am clearly not a big fan of this solution. memorg should be and
-remain a read only object. Can you please find another solution?
-
->=20
-> Fixes: a7ab085d7c16 ("mtd: rawnand: Initialize the nand_device object")
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->=20
-> ---
->=20
-> Changes in v3: None
-> Changes in v2: None
->=20
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.c
-> index 407bf79cbaf4..39c7f547db1f 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -2647,6 +2647,8 @@ static int brcmnand_setup_dev(struct brcmnand_host =
-*host)
->  	struct nand_chip *chip =3D &host->chip;
->  	const struct nand_ecc_props *requirements =3D
->  		nanddev_get_ecc_requirements(&chip->base);
-> +	struct nand_memory_organization *memorg =3D
-> +		nanddev_get_memorg(&chip->base);
->  	struct brcmnand_controller *ctrl =3D host->ctrl;
->  	struct brcmnand_cfg *cfg =3D &host->hwcfg;
->  	char msg[128];
-> @@ -2668,10 +2670,11 @@ static int brcmnand_setup_dev(struct brcmnand_hos=
-t *host)
->  	if (cfg->spare_area_size > ctrl->max_oob)
->  		cfg->spare_area_size =3D ctrl->max_oob;
->  	/*
-> -	 * Set oobsize to be consistent with controller's spare_area_size, as
-> -	 * the rest is inaccessible.
-> +	 * Set mtd and memorg oobsize to be consistent with controller's
-> +	 * spare_area_size, as the rest is inaccessible.
->  	 */
->  	mtd->oobsize =3D cfg->spare_area_size * (mtd->writesize >> FC_SHIFT);
-> +	memorg->oobsize =3D mtd->oobsize;
-> =20
->  	cfg->device_size =3D mtd->size;
->  	cfg->block_size =3D mtd->erasesize;
-
+Indeed. As you can tell, I didn't really test the damn thing...
 
 Thanks,
-Miqu=C3=A8l
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
