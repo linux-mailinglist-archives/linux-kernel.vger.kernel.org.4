@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19E7747548
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9C874754B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjGDP13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S231521AbjGDP2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjGDP1W (ORCPT
+        with ESMTP id S231559AbjGDP1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:27:22 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730411AA;
-        Tue,  4 Jul 2023 08:27:21 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-55b5a3915f5so2763290a12.0;
-        Tue, 04 Jul 2023 08:27:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688484441; x=1691076441;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dBHybsETmQhR4EOdGU54nBMdz7E2WSrdp2Kj9VKU2vA=;
-        b=Mn4ahNLuXWAyKdQL40r6Dyvy+zrQdSgv1RJbFjyShK/rpkvkmVvfT+5wMLZGIC+Qoc
-         9DMG1Hu/vfR//U4Bl7WEeNSEc9gwa2w7J3oVOBoVIxl/9UGfCJsZ1e7+i69FMVcCB7HN
-         DPn9CtxPfZKYLPGrPDHTO9kmK0yk6rXMxlFkGqUJHX3uxLq02qQyx48JoXZPq5mXyxqv
-         9PoSrekVb4W4EMG5o9ONdJT6OEJNyOJbNnThTWvzXZ/epq/qHWX9xCKvse9l/abQb4/H
-         qdYk8UccUiOOaMAGMQ8aqhYVkMNsJJYVDOHMVFY9hDV8kitDLRjIZ1eP9Sg6P5jhZoFp
-         3nAw==
-X-Gm-Message-State: ABy/qLb6U5VB8a2ruQoKyskpGkHXCQ0RQiINHDEdFNmY0kxswM7lke3G
-        O6wIjjxsGIov66zMzi0okjI=
-X-Google-Smtp-Source: APBJJlH540wVvniNrmM3OfeMzR4O20DskguGHzSe2eDGyMcTNqmXYKVUUoBwmt+Ihp+QZbSThUMrKg==
-X-Received: by 2002:a05:6a20:9190:b0:12e:61a1:a298 with SMTP id v16-20020a056a20919000b0012e61a1a298mr5844347pzd.20.1688484440749;
-        Tue, 04 Jul 2023 08:27:20 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id v7-20020a1709029a0700b001b7fd27144dsm15578679plp.40.2023.07.04.08.27.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 08:27:20 -0700 (PDT)
-Message-ID: <8fd68b78-3d77-2534-01c7-7c8c7cde2e86@acm.org>
-Date:   Tue, 4 Jul 2023 08:27:18 -0700
+        Tue, 4 Jul 2023 11:27:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DABA1A4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:27:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F016128B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 15:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBFCC433C8;
+        Tue,  4 Jul 2023 15:27:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688484470;
+        bh=qUdWowWIkYFtnfXdxb32NHn0VbYNimiXJawRxIFxkSM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s664yN5VLDy2qSr5Y2mQ2AD6gEkyBn/S9mB+USWiSd7bDDNWQs/9+6rU2ZuojzA2n
+         knYf6brty31tilj4ogSVkCGlUnnbN3brUk4Y8qmosc0w6A+hqmxw+wuVQEr3t03xfz
+         L7jp2GqB0JmhSDQEtkg7qWj5wI4u/qqN2WDefsmtcfhTu3x9rYx5rLJRODtL+z3lD1
+         o660VJdMRmtDrIUxmhfAbvh67NXJmixBKx1MfLMpDrDS62jgdL5eamEakAPdg+7D/e
+         Y2D6Y3EUiASguU06msX6SeWNzeDGYQio/nCFoUvZcwEvv/9ORgAsNifnLJ9B05MEBM
+         Fzq1IYiFH7XPg==
+Date:   Tue, 4 Jul 2023 17:27:45 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Hanks Chen <hanks.chen@mediatek.com>,
+        Cheng-Yuh.Wu@mediatek.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3: Workaround for GIC-700 erratum 2941627
+Message-ID: <ZKQ6ce1pbYHGVIsA@lpieralisi>
+References: <20230704123436.127449-1-lpieralisi@kernel.org>
+ <86ttujwxb1.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1] drivers: scsi: remove duplicate logical judgments
-Content-Language: en-US
-To:     Minjie Du <duminjie@vivo.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-References: <20230704073752.5498-1-duminjie@vivo.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230704073752.5498-1-duminjie@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86ttujwxb1.wl-maz@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,12 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/23 00:37, Minjie Du wrote:
-> Please check this.
+On Tue, Jul 04, 2023 at 03:44:50PM +0100, Marc Zyngier wrote:
 
-Without feedback from someone who has access to the datasheet this patch 
-probably should not be applied. The repeated inb() calls may be on purpose.
+[...]
+
+> > +	return !((gic_irq_in_rdist(d)) || gic_irq(d) >= 8192 ||
+> > +		  cpumask_equal(irq_data_get_effective_affinity_mask(d),
+> > +				cpumask_of(smp_processor_id())));
+> 
+> I dislike this statement for multiple reasons:
+> 
+> - it is written as a negation, making it harder than strictly
+>   necessary to parse as it is the opposite of the comment above
+> 
+> - gic_irq_in_rdist() and gic_irq(d) >= 8192 are two ways of checking
+>   the interrupt range -- maybe we should just do that
+> 
+> - cpumask_equal() is *slow* if you have more that 64 CPUs, something
+>   that is increasingly common -- a better option would be to check
+>   whether the current CPU is in the mask or not, which would be enough
+>   as we only have a single affinity bit set
+> 
+> - smp_processor_id() can check for preemption, which is pointless
+>   here, as we're doing things under the irq_desc raw spinlock.
+> 
+> I would expect something like:
+> 
+> 	enum gic_intid_range range = get_intid_range(d);
+> 
+> 	return (range == SGI_RANGE || range == ESPI_RANGE) &&
+> 	       !cpumask_test_cpu(raw_smp_processor_id(),
+> 				 irq_data_get_effective_affinity_mask(d));
+> 
+
+s/SGI/SPI - just noticed, for the records.
 
 Thanks,
-
-Bart.
+Lorenzo
