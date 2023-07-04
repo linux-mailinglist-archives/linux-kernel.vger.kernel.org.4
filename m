@@ -2,126 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F167466BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3427C7466C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 03:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjGDBHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 21:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S229622AbjGDBJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 21:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjGDBHB (ORCPT
+        with ESMTP id S230294AbjGDBJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 21:07:01 -0400
-Received: from mail-pf1-f206.google.com (mail-pf1-f206.google.com [209.85.210.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D75E186
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:06:52 -0700 (PDT)
-Received: by mail-pf1-f206.google.com with SMTP id d2e1a72fcca58-6686e4499b1so5114399b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 18:06:52 -0700 (PDT)
+        Mon, 3 Jul 2023 21:09:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2187BE49
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 18:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688432942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WXCms+65LqYKrmZBhhf/y9w2Ow+x0tGEGBk7yYwG+Bc=;
+        b=BP+vM54At6m7wRiZPLnwC0uiL/y65a94Al32Injz7Py6Nskx6l0DAJBljefga3CJh8NoAK
+        KleDb8CGnXnXHf5xkEXfFLyFaq2cDdnYqcWBN0OzunaZLmOjEzoXEeWEpYXOKuNbXTQa39
+        /C/csR/E1hGxptpbKi9zWLcFp8xRanE=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-582-alh9DDOFPkmFGaRev2R1IQ-1; Mon, 03 Jul 2023 21:09:01 -0400
+X-MC-Unique: alh9DDOFPkmFGaRev2R1IQ-1
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b89e3715acso12120935ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 18:09:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688432812; x=1691024812;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20221208; t=1688432940; x=1691024940;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqZVw5iy9wm+NL6G7zzWaylrTMrQYUH43hi2qTIk1Ts=;
-        b=gL6aISohZNwjK91/cpoTE7v92Lb7r7KVfpCbdH/qs3TMrRZivVToBAX59bDjp61Fz6
-         9ZQRlGZZxTwNoTwyJ6xaQTrRtq88/mTMwpIpzsLZx7lTnBhJ1mV5szqnoQ8ZJ2T9VJrk
-         mqCtUgcA+UYS6MUOPa0bhmQoA5x+ydZuq63mXvMmUv2ZaqYjf509ziaP4aAOxozElvtI
-         QxO7rq8fVpi9HGHwBi95F5j1qOAJEyBFEXnViwN1pOkIssE1dSRojX+nuqLSKU9lyoDm
-         no7cq02vSvPI0eMrcl05VfOpghLnxp5X3+F/G5dHIfxwMEBkmmAaWyLa/pNp9VbKsmTy
-         wsRw==
-X-Gm-Message-State: ABy/qLamM0dd+RA2YtWMCKNKbZmqlW87m4T2lmPKKiAakGsHYfHIXfTj
-        PzC+BZf9/gcmi8cWmBfoPhofV5Pp1rV4HeGIx1pYr4d18g2z
-X-Google-Smtp-Source: APBJJlElPLL/AetUqQqU7MX319VXijTlocQI8/GI7xxAScL6T0rnQOgBUqOKuR7rqGuJ8dydi8La6krGKkGsJ7MVTMIITPun9/iU
+        bh=WXCms+65LqYKrmZBhhf/y9w2Ow+x0tGEGBk7yYwG+Bc=;
+        b=ZniizQwNYbA0rNwpM7JrpwCQ3AD4O8sO3+7iJDq6KDAyLHKiOOrnxEYBVWvi+TjeZu
+         pkeC8fdfQvgNvOXKAm4kRbaru4KOHhBoR2aR5ckQ9CwXs87m6h+SMiOxu4yJ6b8LMAxV
+         J46cO6V5uoEJEFk5RP1X75NNz+k2KzEryBrQatgN8cHLDa8puzUcmxiP8dPVIUDcBeKA
+         chaprd+tsGoAlYKTiKal3aBDqXopQuTv69mE0l+KObALj5DTSVGlQHW5ke3eOSY/YB3q
+         sttUj0KVfV6wOElIpxtL+4HaTF/B6KPfYnXcZ3ENwTa3wJSRoNQN5ruZT32XhCV2ND3o
+         vLTg==
+X-Gm-Message-State: ABy/qLY4NWRZqlellCdo76GHuxORUABzlNLlZyS3JPD1GyGaPvsY5rfa
+        sZ47MamSasGA84C5p65RX3h9q38TnO+HEah7yWFo/wdc/EAl7RQ1GYobj4KD8aHjAiiq1aRFfhe
+        0WurEhTGaKWUvSaQ+2lZtD8UBZmO1lwcVJ9Z71Q==
+X-Received: by 2002:a17:902:ab81:b0:1b8:21f:bcc2 with SMTP id f1-20020a170902ab8100b001b8021fbcc2mr8285845plr.34.1688432940154;
+        Mon, 03 Jul 2023 18:09:00 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlF8J/qamT+QxSmLqt2/HMj0wZqnpxCzoME3hFQuIzuCGLQWUFGxKr2LCAZv7luGDotwZXtVWQ==
+X-Received: by 2002:a17:902:ab81:b0:1b8:21f:bcc2 with SMTP id f1-20020a170902ab8100b001b8021fbcc2mr8285835plr.34.1688432939786;
+        Mon, 03 Jul 2023 18:08:59 -0700 (PDT)
+Received: from [10.72.12.93] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id w1-20020a170902d70100b001b523714ed5sm15873685ply.252.2023.07.03.18.08.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 18:08:59 -0700 (PDT)
+Message-ID: <0a42c5d0-0479-e60e-ac84-be3b915c62d9@redhat.com>
+Date:   Tue, 4 Jul 2023 09:08:46 +0800
 MIME-Version: 1.0
-X-Received: by 2002:aa7:88d6:0:b0:67a:fe8f:83f8 with SMTP id
- k22-20020aa788d6000000b0067afe8f83f8mr14610406pff.5.1688432811787; Mon, 03
- Jul 2023 18:06:51 -0700 (PDT)
-Date:   Mon, 03 Jul 2023 18:06:51 -0700
-In-Reply-To: <0000000000001b4f6505fd59fb12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f94c8005ff9ee5c4@google.com>
-Subject: Re: [syzbot] [ext4?] WARNING: locking bug in __ext4_ioctl
-From:   syzbot <syzbot+a537ff48a9cb940d314c@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Xiubo Li <xiubli@redhat.com>
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     Gregory Farnum <gfarnum@redhat.com>,
+        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
+ <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
+ <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+ <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
+ <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
+ <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
+ <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
+ <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com>
+ <CAEivzxcr99sERxZX17rZ5jW9YSzAWYvAjOOhBH+FqRoso2=yng@mail.gmail.com>
+ <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com>
+ <64241ff0-9af3-6817-478f-c24a0b9de9b3@redhat.com>
+ <CAEivzxeF51ZEKhQ-0M35nooZ7_cZgk1-q75-YbkeWpZ9RuHG4A@mail.gmail.com>
+ <4c4f73d8-8238-6ab8-ae50-d83c1441ac05@redhat.com>
+ <CAEivzxeQGkemxVwJ148b_+OmntUAWkdL==yMiTMN+GPyaLkFPg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAEivzxeQGkemxVwJ148b_+OmntUAWkdL==yMiTMN+GPyaLkFPg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Sorry, not sure, why my last reply wasn't sent out.
 
-HEAD commit:    a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.ke..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=131dbb80a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=12d3428a307a1111
-dashboard link: https://syzkaller.appspot.com/bug?extid=a537ff48a9cb940d314c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1489ffb8a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145c302ca80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d5b4ad8feb6a/disk-a901a356.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b59c91556f58/vmlinux-a901a356.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dcd583b21e5c/bzImage-a901a356.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/45e4aa281996/mount_2.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a537ff48a9cb940d314c@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-Looking for class "&ei->i_data_sem" with key __key.0, but found a different class "&ei->i_data_sem" with the same key
-WARNING: CPU: 1 PID: 5185 at kernel/locking/lockdep.c:940 look_up_lock_class+0xac/0x130 kernel/locking/lockdep.c:940
-Modules linked in:
-CPU: 1 PID: 5185 Comm: syz-executor404 Not tainted 6.4.0-syzkaller-10173-ga901a3568fd2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:look_up_lock_class+0xac/0x130 kernel/locking/lockdep.c:940
-Code: 39 48 8b 55 00 48 81 fa a0 b9 48 90 74 2c 80 3d d3 f3 75 04 00 75 23 48 c7 c7 40 6e 6c 8a c6 05 c3 f3 75 04 01 e8 a4 2f 2e f7 <0f> 0b eb 0c e8 ab 5b f5 f9 85 c0 75 48 45 31 e4 48 83 c4 08 4c 89
-RSP: 0018:ffffc90003e5f808 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: ffffffff92256381 RCX: 0000000000000000
-RDX: ffff888021afd940 RSI: ffffffff814c24f7 RDI: 0000000000000001
-RBP: ffff8880745ce688 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffffffff918a84f0
-R13: 0000000000000001 R14: ffff8880745ce688 R15: 0000000000000000
-FS:  0000555557100300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f9070243138 CR3: 0000000015297000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- register_lock_class+0xbe/0x1120 kernel/locking/lockdep.c:1292
- __lock_acquire+0x109/0x5e20 kernel/locking/lockdep.c:5021
- lock_acquire kernel/locking/lockdep.c:5761 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
- down_write_nested+0x96/0x200 kernel/locking/rwsem.c:1689
- ext4_double_down_write_data_sem+0x67/0x80 fs/ext4/move_extent.c:58
- swap_inode_boot_loader fs/ext4/ioctl.c:423 [inline]
- __ext4_ioctl+0x2942/0x4650 fs/ext4/ioctl.c:1427
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x19d/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f90701d1249
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdf78879a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 69662f7375622f2e RCX: 00007f90701d1249
-RDX: 0000000000000000 RSI: 0000000000006611 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffdf78879d0 R09: 00007ffdf78879d0
-R10: 00007ffdf7887420 R11: 0000000000000246 R12: 00007ffdf78879cc
-R13: 00007ffdf7887a20 R14: 00007ffdf78879e0 R15: 000000000000003d
- </TASK>
+Do it again.
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+On 6/26/23 19:23, Aleksandr Mikhalitsyn wrote:
+> On Mon, Jun 26, 2023 at 4:12 AM Xiubo Li<xiubli@redhat.com>  wrote:
+>> On 6/24/23 15:11, Aleksandr Mikhalitsyn wrote:
+>>> On Sat, Jun 24, 2023 at 3:37 AM Xiubo Li<xiubli@redhat.com>  wrote:
+>>>> [...]
+>>>>
+>>>>    > > >
+>>>>    > > > I thought about this too and came to the same conclusion, that
+>>>> UID/GID
+>>>>    > > > based
+>>>>    > > > restriction can be applied dynamically, so detecting it on mount-time
+>>>>    > > > helps not so much.
+>>>>    > > >
+>>>>    > > For this you please raise one PR to ceph first to support this, and in
+>>>>    > > the PR we can discuss more for the MDS auth caps. And after the PR
+>>>>    > > getting merged then in this patch series you need to check the
+>>>>    > > corresponding option or flag to determine whether could the idmap
+>>>>    > > mounting succeed.
+>>>>    >
+>>>>    > I'm sorry but I don't understand what we want to support here. Do we
+>>>> want to
+>>>>    > add some new ceph request that allows to check if UID/GID-based
+>>>>    > permissions are applied for
+>>>>    > a particular ceph client user?
+>>>>
+>>>> IMO we should prevent user to set UID/GID-based permisions caps from
+>>>> ceph side.
+>>>>
+>>>> As I know currently there is no way to prevent users to set MDS auth
+>>>> caps, IMO in ceph side at least we need one flag or option to disable
+>>>> this once users want this fs cluster sever for idmap mounts use case.
+>>> How this should be visible from the user side? We introducing a new
+>>> kernel client mount option,
+>>> like "nomdscaps", then pass flag to the MDS and MDS should check that
+>>> MDS auth permissions
+>>> are not applied (on the mount time) and prevent them from being
+>>> applied later while session is active. Like that?
+>>>
+>>> At the same time I'm thinking about protocol extension that adds 2
+>>> additional fields for UID/GID. This will allow to correctly
+>>> handle everything. I wanted to avoid any changes to the protocol or
+>>> server-side things. But if we want to change MDS side,
+>>> maybe it's better then to go this way?
+> Hi Xiubo,
+>
+>> There is another way:
+>>
+>> For each client it will have a dedicated client auth caps, something like:
+>>
+>> client.foo
+>>     key: *key*
+>>     caps: [mds] allow r, allow rw path=/bar
+>>     caps: [mon] allow r
+>>     caps: [osd] allow rw tag cephfs data=cephfs_a
+> Do we have any infrastructure to get this caps list on the client side
+> right now?
+> (I've taken a quick look through the code and can't find anything
+> related to this.)
+
+I am afraid there is no.
+
+But just after the following ceph PR gets merged it will be easy to do this:
+
+https://github.com/ceph/ceph/pull/48027
+
+This is still under testing.
+
+>> When mounting this client with idmap enabled, then we can just check the
+>> above [mds] caps, if there has any UID/GID based permissions set, then
+>> fail the mounting.
+> understood
+>
+>> That means this kind client couldn't be mounted with idmap enabled.
+>>
+>> Also we need to make sure that once there is a mount with idmap enabled,
+>> the corresponding client caps couldn't be append the UID/GID based
+>> permissions. This need a patch in ceph anyway IMO.
+> So, yeah we will need to effectively block cephx permission changes if
+> there is a client mounted with
+> an active idmapped mount. Sounds as something that require massive
+> changes on the server side.
+
+Maybe no need much, it should be simple IMO. But I am not 100% sure.
+
+> At the same time this will just block users from using idmapped mounts
+> along with UID/GID restrictions.
+>
+> If you want me to change server-side anyways, isn't it better just to
+> extend cephfs protocol to properly
+> handle UID/GIDs with idmapped mounts? (It was originally proposed by Christian.)
+> What we need to do here is to add a separate UID/GID fields for ceph
+> requests those are creating a new inodes
+> (like mknod, symlink, etc).
+
+BTW, could you explain it more ? How could this resolve the issue we are 
+discussing here ?
+
+Thanks
+
+- Xiubo
+
+
+>
+> Kind regards,
+> Alex
+>
+>> Thanks
+>>
+>> - Xiubo
+>>
+>>
+>>
+>>
+>>
+>>> Thanks,
+>>> Alex
+>>>
+>>>> Thanks
+>>>>
+>>>> - Xiubo
+>>>>
+
