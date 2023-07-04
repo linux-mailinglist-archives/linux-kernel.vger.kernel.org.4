@@ -2,143 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6612574743B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD2974743E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjGDOhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
+        id S230200AbjGDOia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjGDOhw (ORCPT
+        with ESMTP id S231578AbjGDOiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:37:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F98E47;
-        Tue,  4 Jul 2023 07:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688481471; x=1720017471;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3uPK0lQLnODbW5urZpqsXqNoSRHmvwzicJIhGoLTkFM=;
-  b=bMFyR4O3Z5LBVuHSyrXZ+TJeLTUe79bo2t8i+ccei59ckkZoDMNo9nlh
-   ffmcMDQEDKZlFp1L5B693nZA1Ya1EZD/RStfuf7+1NHA1h3ypjjn1zKu9
-   Fw2YuPhFuBUKxVdA2mZFRSeK8A9AM4cAS07K+IUirGCj2n78mb/2Ym5L1
-   CpORi+LTssTHoYyWQs3AoItP7LyIfLcC5KjloYgvbWmjy43ojusqoAJ18
-   +xBb9BVDEgjVYKuVA+yV+fQEWWokTPixaO8c+RyD9y1KtvTEwsUhpzmsW
-   gePdoSz8bPlkWFnTMrbXmZQyfucn9fQtu/bydy24nFq7E96yZ1Rw9DqM7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="343469398"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="343469398"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 07:37:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="718940604"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="718940604"
-Received: from posikoya-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.49.196])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 07:37:41 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 27C2A10A08E; Tue,  4 Jul 2023 17:37:40 +0300 (+03)
-Date:   Tue, 4 Jul 2023 17:37:40 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Tue, 4 Jul 2023 10:38:25 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B31E10C3;
+        Tue,  4 Jul 2023 07:38:20 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b5ef64bca6so4984505a34.3;
+        Tue, 04 Jul 2023 07:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688481499; x=1691073499;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AF17IbQd8ZxHv7cFvNY+odT1eF0QJFR1h0MLd8BIYjc=;
+        b=G2VE6fm00EqQKlsyVd2xRtU0thb2VUFW9Cp7ckYKcedpsaiaO/kJGhu2TcW9BR0gg0
+         hbug9YpxF3kmBEV4rbKlgS5a3AyEwBKV66bdb4tDBEHtEax7w2jCbEyVrmVnGduAS/qd
+         11GwlsZjBmlMvFH9pf7snQyNdhJH/kE+qzTe/mzoo98HVFPyY4ZHcTViX/4bIlhDfxlU
+         H2lrm6mEmG+WuW9EEBHOgQZiP6F0uXoK9nBu91alCyGWmQwz52RPle/pFb7EW9qM2o5I
+         mDCPh2SYU9yjQrW6RndJm/7ncbV0GWPy+fOpshMH8IXfR4VJWQptEu0v39z7E3bsdfbF
+         rFsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688481499; x=1691073499;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AF17IbQd8ZxHv7cFvNY+odT1eF0QJFR1h0MLd8BIYjc=;
+        b=iEd2rPWUwlJI/We8TSRbcItZ1/DivtcQLopxPgAGHIiUY3x3MSqgPc0JCskdP1fffB
+         lGlcnALiF2ni+xaumoLyHsl1urHfHgBRJRdUDenZISBlsIXI07KW9yG051TNleZdR2de
+         mymcswP5580ghq9QAFZuQmGu/wtyZBS9BdbilQjvRS1WM3meSNxfRf6vvQr0v8sxJRoO
+         nFEn7SgYoJIyOV8NIIJ5fKqVKXks79hrmw2U+f3wqSHU20Rx8Vy5hl87JWuzR+o6hST/
+         /E9gpP7NXu+8gE8gff7oO7OhumCBCL6c7iktb986BVJoA/RgHTc3jcKxzhmpvZZRwDpM
+         SNbA==
+X-Gm-Message-State: AC+VfDyDY5pi/i1zHT43Xuhr9joytZpJurVFxLg7ZHYkCXliEDnjIa3d
+        1C3RPjN2Qeioc9OHS56LN58=
+X-Google-Smtp-Source: ACHHUZ7DjkC8tG2WJV9SVeV9pXtt3YOIHU0Xt7K81GGg7u+bu1MSmZrzgrf/bZvjNdCLxLL2O73t+g==
+X-Received: by 2002:aca:d19:0:b0:396:4977:e148 with SMTP id 25-20020aca0d19000000b003964977e148mr12199716oin.9.1688481499354;
+        Tue, 04 Jul 2023 07:38:19 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:4ede:ce27:3b63:fdb3:caf6])
+        by smtp.gmail.com with ESMTPSA id b13-20020aa7870d000000b0067a1f4f4f7dsm12978864pfo.169.2023.07.04.07.38.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 07:38:18 -0700 (PDT)
+From:   Anup Sharma <anupnewsmail@gmail.com>
+X-Google-Original-From: Anup Sharma <AnupSharma>
+Date:   Tue, 4 Jul 2023 20:08:11 +0530
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Anup Sharma <anupnewsmail@gmail.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv14 5/9] efi: Add unaccepted memory support
-Message-ID: <20230704143740.bgimyg3bqsgxbm47@box.shutemov.name>
-References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
- <20230606142637.5171-6-kirill.shutemov@linux.intel.com>
- <20230703132518.3ukqyolnes47i5r3@techsingularity.net>
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC] Adding Support for Firefox's Gecko Profile Format
+Message-ID: <ZKQu00bJZwO+Fc6m@yoga>
+References: <ZHENW4HOIo0F6FnN@yoga>
+ <ZHkEWse0NVZhwKR7@yoga>
+ <ZH5YBBWW5ANckoMp@yoga>
+ <CAP-5=fU7ukrQSh_8OwH9C+a-EwCamCrMaZxjqDhE9f+bFJwQBQ@mail.gmail.com>
+ <ZIHPXV5/ZopqcSSc@yoga>
+ <ZIofrGKElc3nkNk0@yoga>
+ <CAP-5=fV9tXNpYHH9DW0cVbRoFLGvG9SNn-MUhuyKuVBRuDqjoA@mail.gmail.com>
+ <ZJyT8bt0LFLw6hKV@yoga>
+ <CAM9d7ch7TdagV+dzj6MCp4fY15Vc4oGJjKAoQDyc=BXqy7qi+A@mail.gmail.com>
+ <287bf3c8-fa0e-8c36-df14-7d728c63c265@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230703132518.3ukqyolnes47i5r3@techsingularity.net>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <287bf3c8-fa0e-8c36-df14-7d728c63c265@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 02:25:18PM +0100, Mel Gorman wrote:
-> On Tue, Jun 06, 2023 at 05:26:33PM +0300, Kirill A. Shutemov wrote:
-> > efi_config_parse_tables() reserves memory that holds unaccepted memory
-> > configuration table so it won't be reused by page allocator.
+On Thu, Jun 29, 2023 at 09:35:22AM +0300, Adrian Hunter wrote:
+> On 29/06/23 09:26, Namhyung Kim wrote:
+> > Hi Anup,
 > > 
-> > Core-mm requires few helpers to support unaccepted memory:
+> > On Wed, Jun 28, 2023 at 1:11 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> >>
+> >> On Wed, Jun 14, 2023 at 01:17:52PM -0700, Ian Rogers wrote:
+> >>> On Wed, Jun 14, 2023 at 1:14 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> >>>>
+> >>>> On Thu, Jun 08, 2023 at 06:23:49PM +0530, Anup Sharma wrote:
+> >>>> I wanted to take a moment to provide you with an update on the progress
+> >>>> of our Firefox Gecko converter work. While I must emphasize that the code
+> >>>> I'm sharing is not the final version, I wanted to share the advancements
+> >>>> I have made thus far.
+> >>>>
+> >>>> This script can generate a JSON format from the output of the "perf script" command.
+> >>>> I attempted to load this JSON file into profile.firefox.com, and although it
+> >>>> successfully loaded, the call tree are not visible. I'm certain this issue
+> >>>> is related to the format of the JSON file or if there is another underlying
+> >>>> cause. I will continue investigating to determine the cause of this problem.
+> >>>
+> >>> Great Anup, progress can be frustrating slow at first but it is a good
+> >>> milestone to be generating output and having firefox profiler consume
+> >>> it. You can open up the JavaScript console for the firefox profiler
+> >>> and it will give some debug output. This should hopefully help you
+> >>> make progress.
+> >>
+> >> This week I tried playing with perf-script-python, the first challenge was
+> >> figuring out how to parse the data coming from the process_events.
+> >> Understanding the structure and extracting the necessary information
+> >> proved to be more complex than anticipated. This required me to spend
+> >> a significant amount of time researching and experimenting with different
+> >> parsing techniques.
 > > 
-> >  - accept_memory() checks the range of addresses against the bitmap and
-> >    accept memory if needed.
-> > 
-> >  - range_contains_unaccepted_memory() checks if anything within the
-> >    range requires acceptance.
-> > 
-> > Architectural code has to provide efi_get_unaccepted_table() that
-> > returns pointer to the unaccepted memory configuration table.
-> > 
-> > arch_accept_memory() handles arch-specific part of memory acceptance.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-> > Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+> > I'm not sure what kind of parsing you meant.  IIRC the sample data is
+> > in a dict and all the information should be available there.  Maybe we
+> > missed some new sample data types though.
 > 
-> By and large, this looks ok from the page allocator perspective as the
-> checks for unaccepted are mostly after watermark checks. However, if you
-> look in the initial fast path, you'll see this
+> Most data is there.  There are existing scripts in
+> tools/perf/scripts/python/ for reference.
 > 
->         /* 
->          * Forbid the first pass from falling back to types that fragment
->          * memory until all local zones are considered.
->          */     
->         alloc_flags |= alloc_flags_nofragment(ac.preferred_zoneref->zone, gfp);
+> There is also the dlfilter API:
 > 
-> While checking watermarks should be fine from a functional perspective and
-> the fast paths are unaffected, there is a risk of premature fragmentation
-> until all memory has been accepted. Meeting watermarks does not necessarily
-> mean that fragmentation is avoided as pageblocks can get mixed while still
-> meeting watermarks.
+> https://perf.wiki.kernel.org/index.php/Latest_Manual_Page_of_perf-dlfilter.1
+>
+Hello everyone,
 
-Could you elaborate on this scenario?
+I hope you're all doing well. I have been working on the using process_events function and have made
+progress in developing the converter script. Currently, I am in the testing phase. However, I
+have encountered a problem after performing some recent compilations. I am no longer receiving
+the complete callchains in the output as I used to.
+For Example, when I ran the command perf script -F +pid, the output would include detailed
+information like the following example:
 
-Current code checks the watermark, if it is met, try rmqueue().
+perf-exec  132554/132554  171854.674582:        356 cycles:P: 
+	ffffffff8fab3fc6 arch_static_branch+0x6 (inlined)
+	ffffffff8fab3fc6 static_key_false+0x6 (inlined)
+	ffffffff8fab3fc6 native_write_msr+0x6 (/lib/modules/6.4.0-rc1/build/vmlinux)
+	ffffffff8fa12ca5 intel_pmu_enable_all+0x15 (/lib/modules/6.4.0-rc1/build/vmlinux)
 
-If rmqueue() fails anyway, try to accept more pages and retry the zone if
-it is successful.
+However, in my current situation, the output is limited to the following:
 
-I'm not sure how we can get to the 'if (no_fallback) {' case with any
-unaccepted memory in the allowed zones.
+perf  108107/108107  [000] 67650.031827:          1 cycles:P:  
+ffffffff83ab3fc4 native_write_msr+0x4 (/lib/modules/6.4.0-rc1/build/vmlinux)
+perf  108107/108107  [000] 67650.031832:          1 cycles:P:
+ffffffff83ab3fc4 native_write_msr+0x4 (/lib/modules/6.4.0-rc1/build/vmlinux)
 
-I see that there's preferred_zoneref and spread_dirty_pages cases, but
-unaccepted memory seems change nothing for them.
+It seems to be issue in perf record. I would appreciate any suggestions or assistance
+in resolving this issue. Thank you all for your help.
 
-Hm?
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards,
+Anup
+> > 
+> >>
+> >> The second challenge revolved around the usage of event hooks provided with the perf script
+> >> python event handlers. I found myself deliberating between two approaches. The first
+> >> approach involved creating custom functions that would be called using the event
+> >> handlers. These functions would then save the data in an organized format within
+> >> globally created data structures. The alternative approach was to write the entire
+> >> logic inside the event handlers themselves.
+> >>
+> >> Additionally, I contemplated whether it would be more suitable to handle the creation of
+> >> a Gecko format for JSON and the profile format within the same script or to separate
+> >> them into different scripts.
+> >>
+> >> I will discuss this points during tomorrow's office hour.
+> >>
+> >> However, I have gained a deeper understanding of the problem at hand and will use this
+> >> knowledge to make more informed decisions and progress more effectively in the coming weeks.
+> > 
+> > Sounds like you did a good amount of research on how perf script
+> > works.  We can talk about the details in the meeting.
+> > 
+> > Thanks,
+> > Namhyung
+> 
