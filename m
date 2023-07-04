@@ -2,183 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2FC746680
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 02:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774A1746685
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 02:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjGDATF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 20:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
+        id S229591AbjGDAT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 20:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjGDAS7 (ORCPT
+        with ESMTP id S229818AbjGDAT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 20:18:59 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F32DE6D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 17:18:24 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-55b5a3915f5so2360761a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 17:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688429903; x=1691021903;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5o23Iu39e3OIONFSj282h74DwqacDMnB3TCrmdFJIM8=;
-        b=Qyq4jbbcMmpPz5Cznk2Qkp4TqFzJoe8d7s695eDssZvcVyAD855oUv5+iU8u6fLwLX
-         z90uoBJjpBDaIbdj5Y6hTqIf5+YN5MwRra8/zsqcQJ4M+AKh0e1KC46UcLhJYAsHzoFF
-         pxkvPeOeHo7W/4ZIW+c45CcyvPhxgUvvY50VPOsuhmI+XNNhpydvPJXqcFDL4jdPI6An
-         iJ3pr7M2QhZ4TcgcR75JFsF3t8Vah8dMXPJ8fP5yHRW6vaQ+kHOxPJXWXSUQ1eH/4mHv
-         TgajaR2h+IkXbPmhmAQNumuQj0URFKaReFYDXFyZ7lXg9AHOiRqp1evHI3hQcVGrBbfT
-         PXNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688429903; x=1691021903;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5o23Iu39e3OIONFSj282h74DwqacDMnB3TCrmdFJIM8=;
-        b=lRsvQOCBckERCQpdw9VfsCOjBrCnQqbebsdG4avkNfZJim6YsmoTOrIiGlSLJct0Xg
-         MjnqG0PuS/Pz/Wy0qxYzX8X+hZ2rinzAuQFt1oSruBCRtEVIjaeegXSE+Nzo21utHl+X
-         cEGsdjM6gi1vcqgQ7KCJGded/Oph/l/6PkHDQxquKzG7S8xY+9JS9LCP9q51rHMA8W2d
-         AqAAGZSnc0zB9HbDYS/zPXtZJ4D6eM9WIC6dGyfcndISfDQIoLrFVdSfp3vq2lI5TUA+
-         +cE2K9QxQPbG2Wsbo3oLlNQ3lJZFVZiL9+Ui35cn0gcrTXmtxSVeo0HsbAYLptXVetK9
-         4LgA==
-X-Gm-Message-State: ABy/qLbFKq4KZxUTYb7T4uPCFbSDjC7oh5PYgemBIFhDQBXk4lZ7gztU
-        wemMWYk/+G+gnib112GaW3LmiA==
-X-Google-Smtp-Source: APBJJlF+wwZOEuuppIYrWhooY2UAhMT9iKvEGMeG1kAUzbvR5MEo6fFf8aQUZWSqrT/hu+nohX4ixA==
-X-Received: by 2002:a05:6a20:a10b:b0:12e:641b:454a with SMTP id q11-20020a056a20a10b00b0012e641b454amr4752721pzk.30.1688429903455;
-        Mon, 03 Jul 2023 17:18:23 -0700 (PDT)
-Received: from [10.255.136.59] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id q14-20020a170902dace00b001b893b689a0sm2741799plx.84.2023.07.03.17.18.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 17:18:22 -0700 (PDT)
-Message-ID: <7a8f7a66-f454-a4af-b42e-29c2aab6d3a4@bytedance.com>
-Date:   Tue, 4 Jul 2023 08:18:17 +0800
+        Mon, 3 Jul 2023 20:19:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13E3B2;
+        Mon,  3 Jul 2023 17:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=GZ2o4xCGeoGC59blIkDg8t7pr1dFfxoXJHHg/nPdT/4=; b=kY2jcs///rQumVDs589v/pWbzp
+        NUTjmNmDsUEqR6JsTpe5/r8r0l7NmNWWgSM6QG7Y4ZYZbgMqAC4CnrEhp5jgs72NWgpHEMQtglYQN
+        KRsrDevH48DNm701IewRN0m19ZX/2oeJPHu07Kb3eYeLgRLqC6cqF5Lwkl4tEeuqqf7hjqIBQ53bA
+        8P4d6HqM/zyJbTw0oQ76iCFvS7Y0AO5cO8pTNKSajH5UbHKKzmEmRusnOo293gFsT1Ts6CiRQqo8D
+        gaHef0Xl0EbZn5OhyoqjY9yHOJV+phKVWmpky3Bg9k2NxYuSOZL9yw+pmyF79yDxE/7Iavbn9pM61
+        sYqWpJnw==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qGTlr-00BjFU-1h;
+        Tue, 04 Jul 2023 00:19:55 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH] docs: panic: cleanups for panic params
+Date:   Mon,  3 Jul 2023 17:19:54 -0700
+Message-ID: <20230704001954.20518-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: PING Re: [PATCH] virtio_ring: use u32 for virtio_max_dma_size
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-References: <20230510025437.377807-1-pizhenwei@bytedance.com>
- <1683689214.9647853-1-xuanzhuo@linux.alibaba.com>
- <20230509233907-mutt-send-email-mst@kernel.org>
- <CACGkMEujVhZrU2Wa3=-6DAgK5x8suC9EDxMxt5nN3Y1-LAVcUA@mail.gmail.com>
- <20230510000603-mutt-send-email-mst@kernel.org>
-Content-Language: en-US
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20230510000603-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Move 'panic_print' to its correct place in alphabetical order.
+Add parameter format for 'pause_on_oops'.
 
-This seems to be ignored...
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+---
+ Documentation/admin-guide/kernel-parameters.txt |   30 +++++++-------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-On 5/10/23 12:06, Michael S. Tsirkin wrote:
-> On Wed, May 10, 2023 at 12:04:50PM +0800, Jason Wang wrote:
->> On Wed, May 10, 2023 at 11:44 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->>>
->>> On Wed, May 10, 2023 at 11:26:54AM +0800, Xuan Zhuo wrote:
->>>> On Wed, 10 May 2023 10:54:37 +0800, zhenwei pi <pizhenwei@bytedance.com> wrote:
->>>>> Both split ring and packed ring use 32bits to describe the length of
->>>>> a descriptor: see struct vring_desc and struct vring_packed_desc.
->>>>> This means the max segment size supported by virtio is U32_MAX.
->>>>>
->>>>> An example of virtio_max_dma_size in virtio_blk.c:
->>>>>    u32 v, max_size;
->>>>>
->>>>>    max_size = virtio_max_dma_size(vdev);  -> implicit convert
->>>>>    err = virtio_cread_feature(vdev, VIRTIO_BLK_F_SIZE_MAX,
->>>>>                               struct virtio_blk_config, size_max, &v);
->>>>>    max_size = min(max_size, v);
->>>>>
->>>>> There is a risk during implicit convert here, once virtio_max_dma_size
->>>>> returns 4G, max_size becomes 0.
->>>>>
->>>>> Fixes: e6d6dd6c875e ("virtio: Introduce virtio_max_dma_size()")
->>>>> Cc: Joerg Roedel <jroedel@suse.de>
->>>>> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
->>>>> ---
->>>>>   drivers/virtio/virtio_ring.c | 12 ++++++++----
->>>>>   include/linux/virtio.h       |  2 +-
->>>>>   2 files changed, 9 insertions(+), 5 deletions(-)
->>>>>
->>>>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->>>>> index c5310eaf8b46..55cfecf030a1 100644
->>>>> --- a/drivers/virtio/virtio_ring.c
->>>>> +++ b/drivers/virtio/virtio_ring.c
->>>>> @@ -289,12 +289,16 @@ static bool vring_use_dma_api(const struct virtio_device *vdev)
->>>>>      return false;
->>>>>   }
->>>>>
->>>>> -size_t virtio_max_dma_size(const struct virtio_device *vdev)
->>>>> +u32 virtio_max_dma_size(const struct virtio_device *vdev)
->>>>
->>>>
->>>> LGTM
->>>>
->>>> But, should we change the parameter to vq, then use the dma_dev?
->>>>
->>>> @Jason
->>>>
->>>> Thanks.
->>>>
->>>
->>>
->>> that would be an unrelated rework.
->>
->> Probably, but I think it's better to be done on top otherwise we may forget.
->>
->> Thanks
-> 
-> Just to make things clear I'm merging fixes for this
-> release but cleanups belong in the next one.
-> 
->>>
->>>>>   {
->>>>> -   size_t max_segment_size = SIZE_MAX;
->>>>> +   u32 max_segment_size = U32_MAX;
->>>>>
->>>>> -   if (vring_use_dma_api(vdev))
->>>>> -           max_segment_size = dma_max_mapping_size(vdev->dev.parent);
->>>>> +   if (vring_use_dma_api(vdev)) {
->>>>> +           size_t max_dma_size = dma_max_mapping_size(vdev->dev.parent);
->>>>> +
->>>>> +           if (max_dma_size < max_segment_size)
->>>>> +                   max_segment_size = max_dma_size;
->>>>> +   }
->>>>>
->>>>>      return max_segment_size;
->>>>>   }
->>>>> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
->>>>> index b93238db94e3..1a605f408329 100644
->>>>> --- a/include/linux/virtio.h
->>>>> +++ b/include/linux/virtio.h
->>>>> @@ -147,7 +147,7 @@ int virtio_device_restore(struct virtio_device *dev);
->>>>>   #endif
->>>>>   void virtio_reset_device(struct virtio_device *dev);
->>>>>
->>>>> -size_t virtio_max_dma_size(const struct virtio_device *vdev);
->>>>> +u32 virtio_max_dma_size(const struct virtio_device *vdev);
->>>>>
->>>>>   #define virtio_device_for_each_vq(vdev, vq) \
->>>>>      list_for_each_entry(vq, &vdev->vqs, list)
->>>>> --
->>>>> 2.20.1
->>>>>
->>>
-> 
-
--- 
-zhenwei pi
+diff -- a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4037,20 +4037,6 @@
+ 			timeout < 0: reboot immediately
+ 			Format: <timeout>
+ 
+-	panic_print=	Bitmask for printing system info when panic happens.
+-			User can chose combination of the following bits:
+-			bit 0: print all tasks info
+-			bit 1: print system memory info
+-			bit 2: print timer info
+-			bit 3: print locks info if CONFIG_LOCKDEP is on
+-			bit 4: print ftrace buffer
+-			bit 5: print all printk messages in buffer
+-			bit 6: print all CPUs backtrace (if available in the arch)
+-			*Be aware* that this option may print a _lot_ of lines,
+-			so there are risks of losing older messages in the log.
+-			Use this option carefully, maybe worth to setup a
+-			bigger log buffer with "log_buf_len" along with this.
+-
+ 	panic_on_taint=	Bitmask for conditionally calling panic() in add_taint()
+ 			Format: <hex>[,nousertaint]
+ 			Hexadecimal bitmask representing the set of TAINT flags
+@@ -4067,6 +4053,20 @@
+ 	panic_on_warn	panic() instead of WARN().  Useful to cause kdump
+ 			on a WARN().
+ 
++	panic_print=	Bitmask for printing system info when panic happens.
++			User can chose combination of the following bits:
++			bit 0: print all tasks info
++			bit 1: print system memory info
++			bit 2: print timer info
++			bit 3: print locks info if CONFIG_LOCKDEP is on
++			bit 4: print ftrace buffer
++			bit 5: print all printk messages in buffer
++			bit 6: print all CPUs backtrace (if available in the arch)
++			*Be aware* that this option may print a _lot_ of lines,
++			so there are risks of losing older messages in the log.
++			Use this option carefully, maybe worth to setup a
++			bigger log buffer with "log_buf_len" along with this.
++
+ 	parkbd.port=	[HW] Parallel port number the keyboard adapter is
+ 			connected to, default is 0.
+ 			Format: <parport#>
+@@ -4186,7 +4186,7 @@
+ 			mode 0, bit 1 is for mode 1, and so on.  Mode 0 only
+ 			allowed by default.
+ 
+-	pause_on_oops=
++	pause_on_oops=<int>
+ 			Halt all CPUs after the first oops has been printed for
+ 			the specified number of seconds.  This is to be used if
+ 			your oopses keep scrolling off the screen.
