@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E1474693B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FD274693C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjGDFzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 01:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S230254AbjGDF4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 01:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjGDFzJ (ORCPT
+        with ESMTP id S229595AbjGDF4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:55:09 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793F6130;
-        Mon,  3 Jul 2023 22:55:07 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QwBlj2CLHzLnWh;
-        Tue,  4 Jul 2023 13:52:49 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 4 Jul 2023 13:55:00 +0800
-Subject: Re: [PATCH] scsi: hisi_sas: Fix potential deadlock on &hisi_hba->lock
-To:     Chengfeng Ye <dg573847474@gmail.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-References: <20230628153010.57705-1-dg573847474@gmail.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <eb9476ed-8dc3-a7b6-7478-b7fba3d8e33b@hisilicon.com>
-Date:   Tue, 4 Jul 2023 13:54:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Tue, 4 Jul 2023 01:56:13 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2060B130
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:56:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VmbECYU_1688450166;
+Received: from 30.221.145.16(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VmbECYU_1688450166)
+          by smtp.aliyun-inc.com;
+          Tue, 04 Jul 2023 13:56:07 +0800
+Message-ID: <74a8a369-c3b0-b338-fa8f-fdd7c252efaf@linux.alibaba.com>
+Date:   Tue, 4 Jul 2023 13:56:05 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230628153010.57705-1-dg573847474@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [RFC 0/2] erofs: introduce bloom filter for xattr
+Content-Language: en-US
+To:     Alexander Larsson <alexl@redhat.com>
+Cc:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
+ <c316bc55-cc4d-f05a-8936-2cde217b8dd2@linux.alibaba.com>
+ <CAL7ro1FjnO52tawLeu-wNtk+upN1ShxeFYE1AiFUh1JN2oo0hA@mail.gmail.com>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <CAL7ro1FjnO52tawLeu-wNtk+upN1ShxeFYE1AiFUh1JN2oo0hA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,130 +46,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
 
-在 2023/6/28 星期三 23:30, Chengfeng Ye 写道:
-> As &hisi_hba->lock is acquired by hard irq int_abnormal_v1_hw(),
-> other acquisition of the same lock under process context should
-> disable irq, otherwise deadlock could happen if the
-> irq preempt the execution while the lock is held in process context
-> on the same CPU.
->
-> [Interrupt]: int_abnormal_v1_hw()
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c:1447
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:2050
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1079
->      -->spin_lock_irqsave(&hisi_hba->lock, flags);
->
-> [Process Context]: hisi_sas_clear_nexus_ha()
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1932
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1135
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1116
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1105
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:166
->      -->spin_lock(&hisi_hba->lock);
->
-> [Process Context]: hisi_sas_dev_found()
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:665
->      -->spin_lock(&hisi_hba->lock);
->
-> [Process Context]: hisi_sas_queue_command()
->      -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:188
->      -->spin_lock(&hisi_hba->lock);
->
-> This flaw was found by an experimental static analysis tool I am
-> developing for irq-related deadlock, which reported the above
-> warning when analyzing the linux kernel 6.4-rc7 release.
->
-> The tentative patch fix the potential deadlock by spin_lock_irqsave().
+On 7/3/23 3:25 PM, Alexander Larsson wrote:
 
-Thank you for reporting it.
-But we consider about removing  hisi_hba->lock in function 
-hisi_sas_port_notify_formed()
-which is called by int_abnormal_v1_hw(), as we think it is not necessary 
-to add hisi_hba->lock in this function.
-So please ignore it and still thank you for pointing out the issue.
+> 
+> Can't you just add a magic constant to the seed? Then we can come up
+> with one that gives a good spread and hardcode that.
+> 
 
+I tried Alex's proposal of making a constant magic as part of the seed like:
+
+```
+xxh32(name, strlen(name), SEED_MAGIC + index)
+```
+
+>> where `index` represents the index of corresponding predefined name
+>> prefix (e.g. EROFS_XATTR_INDEX_USER), while `name` represents the name
+>> after stripping the above predefined name prefix (e.g.
+>> "overlay.metacopy" for "user.overlay.metacopy")
+
+
+I tried SEED_MAGIC in range [0, UINT32_MAX], trying to find a constant
+magic giving a best spread.
+
+There are totally 30 commonly used xattrs and 32 bits could be mapped
+into.  I failed to find the most perfect constant magic which maps these
+30 xattrs to exactly 30 bits with no conflict.
+
+Later I can only select a magic from those that 1) maps 30 xattrs into
+29 bits (with one conflict) and 2) at least xattrs like selinux, ima,
+evm, apparmor are unconflicted to each other.  Following are all
+candidates and the conflicted xattrs:
+
+```
+seed: 745a51e
+bit 29: user.overlay.opaque, security.selinux,
+
+seed: fb08ad9
+bit 10: user.overlay.impure, system.posix_acl_access,
+
+seed: 11aa6c32
+bit 19: user.overlay.redirect, security.SMACK64MMAP,
+
+seed: 1438d503
+bit 10: trusted.overlay.protattr, security.ima,
+
+seed: 14ccea75
+bit 30: user.overlay.upper, security.ima,
+
+seed: 1d6a0d15
+bit 31: trusted.overlay.upper, user.overlay.metacopy,
+
+seed: 25bbe08f
+bit 31: trusted.overlay.metacopy, user.overlay.metacopy,
+
+seed: 2649da2a
+bit  6: user.overlay.nlink, security.SMACK64TRANSMUTE,
+
+seed: 2b9180b2
+bit 29: user.overlay.impure, security.evm,
+
+seed: 2c5d7862
+bit 16: user.overlay.upper, system.posix_acl_default,
+
+seed: 322040a6
+bit 17: trusted.overlay.impure, user.overlay.metacopy,
+
+seed: 328bcb8c
+bit 30: user.overlay.opaque, security.evm,
+
+seed: 35afc469
+bit  3: trusted.overlay.opaque, user.overlay.origin,
+
+seed: 435bed25
+bit  4: trusted.overlay.upper, security.SMACK64MMAP,
+
+seed: 43a853af
+bit  3: trusted.overlay.protattr, security.selinux,
+
+seed: 4930f511
+bit 22: trusted.overlay.origin, security.SMACK64,
+
+seed: 4acdce1d
+bit 21: user.overlay.opaque, security.selinux,
+
+seed: 4fc5f2b0
+bit 24: user.overlay.redirect, system.posix_acl_default,
+
+seed: 50632396
+bit  6: security.SMACK64, system.posix_acl_access,
+
+seed: 535f6351
+bit  3: system.posix_acl_access, user.mime_type,
+
+seed: 56f4306e
+bit  9: user.overlay.redirect, security.SMACK64MMAP,
+
+seed: 637e2bd9
+bit 22: trusted.overlay.upper, security.evm,
+
+seed: 6ab57b38
+bit  9: trusted.overlay.upper, user.overlay.metacopy,
+
+seed: 7113bd57
+bit 19: trusted.overlay.redirect, security.SMACK64,
+
+seed: 753e3f24
+bit  6: user.overlay.redirect, security.SMACK64EXEC,
+
+seed: 81883030
+bit  0: trusted.overlay.upper, security.SMACK64IPOUT,
+
+seed: 835f9f14
+bit 27: security.SMACK64EXEC, system.posix_acl_access,
+
+seed: 938fbb78
+bit 28: user.overlay.upper, security.apparmor,
+
+seed: 953bb3e9
+bit 30: user.overlay.protattr, system.posix_acl_access,
+
+seed: 962ccd7f
+bit 29: trusted.overlay.nlink, security.SMACK64IPOUT,
+
+seed: 9fff798e
+bit  3: user.overlay.nlink, user.mime_type,
+
+seed: a2e324eb
+bit 28: trusted.overlay.nlink, user.overlay.impure,
+
+seed: a6e00cef
+bit 26: user.overlay.opaque, security.SMACK64TRANSMUTE,
+
+seed: ae26aaa9
+bit  0: trusted.overlay.metacopy, user.overlay.impure,
+
+seed: b2172573
+bit 14: trusted.overlay.upper, security.ima,
+
+seed: b5917739
+bit  8: trusted.overlay.protattr, user.overlay.impure,
+
+seed: c01a4919
+bit 22: trusted.overlay.nlink, user.overlay.upper,
+
+seed: c1fa0c0a
+bit 19: security.SMACK64TRANSMUTE, user.mime_type,
+
+seed: cbd314d7
+bit  6: trusted.overlay.upper, security.SMACK64IPOUT,
+
+seed: cc6dd8ee
+bit  2: trusted.overlay.nlink, user.overlay.upper,
+
+seed: cc922efd
+bit  3: trusted.overlay.opaque, user.overlay.opaque,
+
+seed: cd478c17
+bit  6: trusted.overlay.metacopy, user.overlay.metacopy,
+
+seed: d35be1c8
+bit  9: trusted.overlay.protattr, security.SMACK64MMAP,
+
+seed: d3914458
+bit  1: trusted.overlay.redirect, security.SMACK64IPIN,
+
+seed: f3251337
+bit  7: user.overlay.opaque, security.SMACK64IPOUT,
+
+seed: f37d8900
+bit  9: trusted.overlay.impure, user.overlay.protattr,
+
+seed: fafd6c93
+bit  0: security.SMACK64, user.mime_type,
+
+seed: fcd35cbb
+bit  3: trusted.overlay.upper, user.overlay.redirect,
+
+seed: fe2e058a
+bit 14: user.overlay.impure, user.mime_type,
+```
+
+
+Among all these candidates, I would prefer the following three
+candidates as for each inode the same xattr of overlayfs family xattrs,
+e.g. "overlay.metacopy", can not be prefixed with "trusted." and "user."
+at the same time.
+
+```
+seed: 25bbe08f
+bit 31: trusted.overlay.metacopy, user.overlay.metacopy,
+
+seed: cc922efd
+bit  3: trusted.overlay.opaque, user.overlay.opaque,
+
+seed: cd478c17
+bit  6: trusted.overlay.metacopy, user.overlay.metacopy,
+```
+
+
+Any other idea?
+
+
+-- 
 Thanks,
-Shawn
-
->
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-> ---
->   drivers/scsi/hisi_sas/hisi_sas_main.c | 17 ++++++++++-------
->   1 file changed, 10 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> index 412431c901a7..47c5062a732e 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> @@ -161,11 +161,12 @@ static void hisi_sas_slot_index_clear(struct hisi_hba *hisi_hba, int slot_idx)
->   
->   static void hisi_sas_slot_index_free(struct hisi_hba *hisi_hba, int slot_idx)
->   {
-> +	unsigned long flags;
->   	if (hisi_hba->hw->slot_index_alloc ||
->   	    slot_idx < HISI_SAS_RESERVED_IPTT) {
-> -		spin_lock(&hisi_hba->lock);
-> +		spin_lock_irqsave(&hisi_hba->lock, flags);
->   		hisi_sas_slot_index_clear(hisi_hba, slot_idx);
-> -		spin_unlock(&hisi_hba->lock);
-> +		spin_unlock_irqrestore(&hisi_hba->lock, flags);
->   	}
->   }
->   
-> @@ -181,11 +182,12 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
->   {
->   	int index;
->   	void *bitmap = hisi_hba->slot_index_tags;
-> +	unsigned long flags;
->   
->   	if (rq)
->   		return rq->tag + HISI_SAS_RESERVED_IPTT;
->   
-> -	spin_lock(&hisi_hba->lock);
-> +	spin_lock_irqsave(&hisi_hba->lock, flags);
->   	index = find_next_zero_bit(bitmap, HISI_SAS_RESERVED_IPTT,
->   				   hisi_hba->last_slot_index + 1);
->   	if (index >= HISI_SAS_RESERVED_IPTT) {
-> @@ -193,13 +195,13 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
->   				HISI_SAS_RESERVED_IPTT,
->   				0);
->   		if (index >= HISI_SAS_RESERVED_IPTT) {
-> -			spin_unlock(&hisi_hba->lock);
-> +			spin_unlock_irqrestore(&hisi_hba->lock, flags);
->   			return -SAS_QUEUE_FULL;
->   		}
->   	}
->   	hisi_sas_slot_index_set(hisi_hba, index);
->   	hisi_hba->last_slot_index = index;
-> -	spin_unlock(&hisi_hba->lock);
-> +	spin_unlock_irqrestore(&hisi_hba->lock, flags);
->   
->   	return index;
->   }
-> @@ -658,11 +660,12 @@ static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
->   {
->   	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
->   	struct hisi_sas_device *sas_dev = NULL;
-> +	unsigned long flags;
->   	int last = hisi_hba->last_dev_id;
->   	int first = (hisi_hba->last_dev_id + 1) % HISI_SAS_MAX_DEVICES;
->   	int i;
->   
-> -	spin_lock(&hisi_hba->lock);
-> +	spin_lock_irqsave(&hisi_hba->lock, flags);
->   	for (i = first; i != last; i %= HISI_SAS_MAX_DEVICES) {
->   		if (hisi_hba->devices[i].dev_type == SAS_PHY_UNUSED) {
->   			int queue = i % hisi_hba->queue_count;
-> @@ -682,7 +685,7 @@ static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
->   		i++;
->   	}
->   	hisi_hba->last_dev_id = i;
-> -	spin_unlock(&hisi_hba->lock);
-> +	spin_unlock_irqrestore(&hisi_hba->lock, flags);
->   
->   	return sas_dev;
->   }
-
+Jingbo
