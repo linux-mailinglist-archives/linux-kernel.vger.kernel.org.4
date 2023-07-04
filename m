@@ -2,60 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3A7747470
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B70747474
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjGDOu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S231829AbjGDOv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjGDOu6 (ORCPT
+        with ESMTP id S231842AbjGDOvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:50:58 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFB710D3;
-        Tue,  4 Jul 2023 07:50:55 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688482254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hAa7biTsEED7+TVhihDfqMHafKwUs8+5OXhvg/ElE2s=;
-        b=YWOIxp7ej0lyjKKecyJ5g5EpkiQ0RanVWn9ynveagXeTCSCdxEuVU/rrz47+vjlr/C4fO4
-        LZkvdu37RdsbaAdhsVevTFxHZK8bo7b7lD9/Hm/caoZ9Ehz+Frww2+kVM7rcfY08vaOlm7
-        b+ttbprF9qH/WPTgxsZRu6mm99WoTttwdLn4FIHfJQzMhjm5Ft7fiEGiw7DhHOjc3vsZH6
-        gSUC071MEX+YTN7N93yDZsvXZg6/35YCLq3cYnUOca/l5yWXBI7ul9BQtx+YctOCC8PWak
-        X4nKtlA8XpKpm6IbFy0GX63yH23yAOMomYH4WfaHP4HjpWpGPQ2OplFXxfylQQ==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 331CB2000B;
-        Tue,  4 Jul 2023 14:50:53 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 16:50:52 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     mani@kernel.org, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_srichara@quicinc.com
-Subject: Re: [PATCH v4 1/5] mtd: rawnand: qcom: Implement exec_op()
-Message-ID: <20230704165052.30039969@xps-13>
-In-Reply-To: <20230615073143.25079-1-quic_mdalam@quicinc.com>
-References: <20230615073143.25079-1-quic_mdalam@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 4 Jul 2023 10:51:21 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410FE10DD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:51:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GM8am9BTfDgGi0JGWuZknq4kxJ18D8oFi+L8BhXnVFqDoV0SLQiqJ8CFe0rnXL0YBkDeC+2Suozj60Tc7l81k2FlbPAtX6lxQsRYWqDjbdCcNeV3vZaM+dmrGyhc6CyiP7X/1uDzWCUai1fniGv/nYmgJ1PvEltpIOtjRxDn9hUtXwE3OR7ftjUl41Myy2cJQK6P9/SaiSz9jbI8GK17F2BvcyYwgNtPU0ljKOm/tHMLChCQmJkh2oA87kyZZTTbTSanIWFUbQwlzS85hr/nQ0Wuv2SOnXM2lW6KBKpbzJSMQd9kTUjQSkLEnVPfXNkQ1RKnOOy+mxc1z6sAetOVHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cg1cgCdC9WQRnaMh9QyHJwbC1zbdDXeP3IFuMGvFkxw=;
+ b=npmq0Ss5SyJ14rCrjpG/v0A6j/SU3yEJrwlcI+XLREhzzceJQHYC+W5jZ9ellgEmhPnSwB2a/HTz/UxHZuTAPS6HmZUyqoMjEQ8oS6wR3ivErRH8YCQFAWRBZjzxsx9Wa1Ni+x5UFeI8BFxH43lEM6QqwOD372QSqf1NLvZUGOl8GZgUmQ20+4BKrYmH8lstg/GhTatUntLkKTI9dk3YE+HBcivrHb+b69odyvQPR2LW17yZRaNQDkPv3e9mMuCTJzdFiUiYNg5DnrgqnzBe6r10AXPa8vPuyRRdTf0wRlw2pl6vi0JY84KLrlG2r4AjZmeZP8yAwiv4dqWDqbNBsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cg1cgCdC9WQRnaMh9QyHJwbC1zbdDXeP3IFuMGvFkxw=;
+ b=OWiN193/G/ALVAk64jMRp+PTQGiBSbfzt4KL2/lq/Hv4McYbijNdGatju4YBJDFctaIS6CwsVgSScNAcMeiR8KrFPfCPBTfsjwsIXOY5mR0vjAgoSkfa3Veopn6rG88bxkNoOF4FLxl+J1b2J3MsImqL+MS9GZW7hd/3HpRRyBk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SA3PR12MB8022.namprd12.prod.outlook.com (2603:10b6:806:307::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
+ 2023 14:51:17 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::384a:95a4:8819:ee84]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::384a:95a4:8819:ee84%7]) with mapi id 15.20.6565.016; Tue, 4 Jul 2023
+ 14:51:17 +0000
+Message-ID: <7b55040f-f2d2-372e-cf8a-5ac4a456fdb1@amd.com>
+Date:   Tue, 4 Jul 2023 16:51:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/amdgpu: avoid integer overflow warning in
+ amdgpu_device_resize_fb_bar()
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Hawking Zhang <Hawking.Zhang@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>, Le Ma <le.ma@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>,
+        Shiwu Zhang <shiwu.zhang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230703123557.3355657-1-arnd@kernel.org>
+ <f4bc3739-3ff1-6fa7-5d7d-890f451315bf@amd.com>
+ <788147c6-defd-496a-8174-1571b73d1a71@app.fastmail.com>
+ <f1b190cb-3af7-178b-baeb-b59363868779@amd.com>
+ <9b03246d-b46e-4b91-968a-e9ffc2fc26db@app.fastmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <9b03246d-b46e-4b91-968a-e9ffc2fc26db@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0057.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:93::17) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SA3PR12MB8022:EE_
+X-MS-Office365-Filtering-Correlation-Id: de471d65-046e-42ed-8603-08db7c9e1ee4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7Bw1IUAFs0kLtk2IbxRANOubmQyWyynnDlM2QOdld3SG3FUUwffrcFgFSzB0uT+ZWbvm22/xzUrjP26slRUSblW0qBeda0JRXwMkh9G6XVAVtIxAXORXsjS0fJChNeiMTk5pjSoWYcuioMzfWtNQSfU2KOFT5tuxx65r8NQLHZWHYWERvIR0OrpKpBvU617Hw6JkneUe2aa+4tNg7GewGtNE0WGjn3J8ljdq2cBZK8M0OL0bcWw80ZmN6/OTOJ0YfNAeOc4W4VIBBdZSuCKoCjWuv3XFuBazpyrO+VPVROlo1af/GoCQs3JgNc6804IFtlMHcTd43TrN5wzPAcdZCq+K6Ne8bMAyw0q3Ewr8qhmFnrrr+R+zrw6JclJIbm+09JETVz+Ig5iTiAWomlNfCtWSKigyQAfZrjgLQ5BjbOkg+pyt7BlRbiYKfSm7L17fEXntoCJ2ilxeZ1Ps5ZEgEpfGaCPkgUsdQLCZfXF+vICVFNYNNL4rrqOMSaCPiC35TFws70wZ01vBCTGyBCrgOLVHtOZ0IJtyKuvd5OymuuH+jdoK1y3HKE/SGJIs+z0MKUMhk3xHn/aggn/eQFxeMS2SCgAMFEuRaVxuBzyIMiPeF6nOlZsd7eb4xPPZ7+ddZFMQ7VN05oEdVcpRimzmQw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199021)(31686004)(478600001)(6666004)(6512007)(6506007)(31696002)(86362001)(2616005)(186003)(38100700002)(54906003)(66476007)(66556008)(4326008)(66946007)(66574015)(110136005)(83380400001)(6486002)(316002)(8676002)(8936002)(41300700001)(2906002)(5660300002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Sit3ZTdDQndaTUF3KzUvRmtDN2plQzZYY2RRbUxYeVZEQ1VsV3dVVUtKWEpj?=
+ =?utf-8?B?ZlI5WXdkWHM5UWdjQ3lRczU4Wjd0RWVKL01YRUJ5Q3dQNkZXcHhjVUp6UmtW?=
+ =?utf-8?B?ci9IUEpWaWtnbjJaRGs5RGpSYVpyZDhmS3BuVU9UUDlMa2M3TXBaTTdRVmE1?=
+ =?utf-8?B?K2hLb1pRU0h4dzJYanhhbWo1bXpVUlZaV05mTGE5MEhtVERnd2RpOHNKTHJM?=
+ =?utf-8?B?TFE5YnJEaXovSU9qMzV3OFErZ2hkazdUNkQ4by9FZ1JoY0xNaEtTbWVhZmtn?=
+ =?utf-8?B?NGc2K081Y3BBUWQweTVaODZ0bVRWSTNyRXpkQW5MMmJjc2xNd3ZMM1JMc0d4?=
+ =?utf-8?B?UlhiUDZrOVN3V2Z1dzNkeW5YQjZCME9LSnpia2x4MEszMWVick16M3lFUk9j?=
+ =?utf-8?B?NlZrek83R2ZXNlRrL00xelRBRU9WTi9udlo1Um1rQ2xud3hDU2NuODFEcG1s?=
+ =?utf-8?B?aGtBcU0vQk5kK3c2QkE3cFBIWXNtRU10bytTSm9Od3ZseUNwcm1uK2dTYjNK?=
+ =?utf-8?B?ejRGV242MDFrY1pJS3h2dnVLZlcrdlZvS2trMkNQK3ljL3Ezd0xIMTFTNjA0?=
+ =?utf-8?B?c1djWUVyT2E1TE5SNVFDQ0pBMzZpQjVFTlNvZEhGbHlSWk9rdWlxRDhBNkdI?=
+ =?utf-8?B?NmI4bnJsNFphMjF5UG1QbE5IVlFuS0RTRUFFbTM3RE9aREdtQ0ZZUzFsdUZB?=
+ =?utf-8?B?K0NXaU5YV1hhUWo0SFhaTGhHRHFpamwzbFRPSldlbnB1ZnRJODdoSU5BMHhV?=
+ =?utf-8?B?RWEvbVNKWHgwL0dmelpMZmt4UldHQjBEeHpMWkh1QnNwRmJLVGg4bEorTE5i?=
+ =?utf-8?B?L3JZOEJzSWdYMEtuY05sUURjbXl6Z0Z2VGlCWVRabmZKbDZDYXJIUXA3azA5?=
+ =?utf-8?B?cmtjOWx6L1QrTGxJQmtnMXVWejB2aGx6bnYzcVloMmJtTlh5L0xScHhHdERP?=
+ =?utf-8?B?R3ZJRzVLTXg3V055dStrOXBSeTZtcnRadjd0cVNFaWtOZjQvcUh3VklXeWlD?=
+ =?utf-8?B?d2ZTUUxuajNHVzRNdFU0d1pTUDdrcWtxWFNRUGpkRy8vRFJwdWxMVkwwNzBR?=
+ =?utf-8?B?dU5VK0Y0M0R2Tmhnc1Jkb3ZhdDBpck10eHZhQWJuNWJ4bFlFZzdZbFExWk5z?=
+ =?utf-8?B?NzRyb0JoU3ZXZGlvNzBCRWhGWG00RmE5b0hUNG1iRGFJMlRac2ZSbWJuYkxp?=
+ =?utf-8?B?SzJ2MzhuTHNCZFpIMjRzV1Z2cE92aGY4aE1hMVNBK3lFdzNkN3NobEdQTDNE?=
+ =?utf-8?B?T285OWFBTlN2bUVwSTd1enh0K2EwMzlNb2MweS91WUpYelBCdVIzMGh5Z1Jq?=
+ =?utf-8?B?SVBqVElDeWlVdnJzQi9XSmgvbE1MN0tHL3JSZFVZNC9peC9SaTVERzMwVXVh?=
+ =?utf-8?B?UUVCZWQ0SUdlVlYzaTM3aHlQRE96Qjc1RlNLc0Y1bmptUUdBOHltZTRCaDgy?=
+ =?utf-8?B?K3dhWXlVaERrTGsycUsvT05xZTFHMXplWVY0TWhXVjNyNG9rQittWjBPTEZ6?=
+ =?utf-8?B?UEEzcGpFR3VLaDNVY1ppR0xsZEJSTVEyMVpRTHRzaDR0cVZ6aEZseG51cXU0?=
+ =?utf-8?B?OVoxRjI1dkhVYjEvbmVZMzdONXliSXVlUnViVTVFY3FuN1lnNWNicktoOHQv?=
+ =?utf-8?B?UEhXZGl5ZjQyNDlscVZ6R1lOL1M1TWNxaVkrK3RONFlVbjhpelVtMCtKZCtF?=
+ =?utf-8?B?dm81SDJTMm5HSXNoTUcxdkNwc3FsVTNXQ2lsL0RFVktDRG1FKzFkTUxGaTRa?=
+ =?utf-8?B?NVM3anFCMXFZbUowbkdmQS9vaEdPNjBlT2tCSTRSWVNQUHdBY1Y4enM5WjNs?=
+ =?utf-8?B?RGQ1M1NSaEE5dnZ3eWxxbnNMbDBuTFpyTklmTVJxV3AxZVNzWEQzWkp0OXRh?=
+ =?utf-8?B?aEM2SEMvRVozcUMrSlNCQTlMZmpHcENCVWRvcWV4Y0ZHREFobndXQnFYaFd2?=
+ =?utf-8?B?UUZEbm9lNGpaejY0NU84T08rZHYraXd0SGFwaWhINkhlUXlsQ0JFN2FwSmdx?=
+ =?utf-8?B?eXZMMjQ1QnFvTzdnN3VqbnZtVjJta0FrZVdYM1F6a1F6QVp6T2xNa1lmZHFJ?=
+ =?utf-8?B?MUs0Z1dMQ1VtMEgrTU91Ly8rWFg1MFRPMXpTTnVhenQ3N2hOUGJodDZia0Q5?=
+ =?utf-8?B?ZkxhZ01PTnAyak10ZGJEYWRicU1NZHJuM2tRK3pycDEvM0lOV0VyQ21jdTVl?=
+ =?utf-8?Q?umFMpI3ZykCk9K7WzxYMMbbzzrvpHNNtfqVsU9BJVmYz?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: de471d65-046e-42ed-8603-08db7c9e1ee4
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 14:51:16.9325
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PpaPvPofPZLFVLf/0LP9BNpD/QVBj2Vx6wDT5MbbWF3VtkJctbVv76Zfm0Y3yUD0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8022
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,269 +142,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Am 04.07.23 um 16:31 schrieb Arnd Bergmann:
+> On Tue, Jul 4, 2023, at 14:33, Christian König wrote:
+>> Am 04.07.23 um 14:24 schrieb Arnd Bergmann:
+>>> On Tue, Jul 4, 2023, at 08:54, Christian König wrote:
+>>>> Am 03.07.23 um 14:35 schrieb Arnd Bergmann:
+>>> Not sure I understand the specific requirement. Do you mean the entire
+>>> amdgpu driver requires 64-bit BAR addressing, or just the bits that
+>>> resize the BARs?
+>> Well a bit of both.
+>>
+>> Modern AMD GPUs have 16GiB of local memory (VRAM), making those
+>> accessible to a CPU which can only handle 32bit addresses by resizing
+>> the BAR is impossible to begin with.
+>>
+>> But going a step further even without resizing it is pretty hard to get
+>> that hardware working on such an architecture.
+> I'd still like to understand this part better, as we have a lot of
+> arm64 chips with somewhat flawed PCIe implementations, often with
+> a tiny 64-bit memory space, but otherwise probably capable of
+> using a GPU.
 
-quic_mdalam@quicinc.com wrote on Thu, 15 Jun 2023 13:01:39 +0530:
+Yeah, those are unfortunately very well known to us :(
 
-> Implement exec_op() so we can later get rid of the legacy interface
-> implementation.
->=20
-> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> ---
-> Change in [v4]
->=20
-> * No change for this patch, since this is part of exec_op
->   series posting new patch.
->=20
-> Change in [v3]
->=20
-> * Removed NAND_CMD_STATUS check in pre_command and move
->   it to status exec_op.
->=20
-> * Removed min() , since this check not needed
->=20
-> * Removed all the dummy APIs of exec_ops, and added it
->   into same patch where its getting added.
->=20
-> * Added qcom_check_op() API to check for unsupported feature
->   by controller in check_only path.
->=20
-> Change in [v2]
->=20
-> * Missed to post Cover-letter, so posting v2 patch with cover-letter
->=20
-> Change in [v1]
->=20
-> * Added initial support for exec_ops.
->=20
->  drivers/mtd/nand/raw/qcom_nandc.c | 159 ++++++++++++++++++++++++++++++
->  1 file changed, 159 insertions(+)
->=20
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qco=
-m_nandc.c
-> index 72d6168d8a1b..d9c4c9fe2fe8 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -157,6 +157,7 @@
->  #define	OP_PAGE_PROGRAM_WITH_ECC	0x7
->  #define	OP_PROGRAM_PAGE_SPARE		0x9
->  #define	OP_BLOCK_ERASE			0xa
-> +#define	OP_CHECK_STATUS			0xc
->  #define	OP_FETCH_ID			0xb
->  #define	OP_RESET_DEVICE			0xd
-> =20
-> @@ -235,6 +236,8 @@ nandc_set_reg(chip, reg,			\
->   */
->  #define NAND_ERASED_CW_SET		BIT(4)
-> =20
-> +#define MAX_ADDRESS_CYCLE		5
-> +#define MAX_CHUNK_SIZE			SZ_8K
+> What exactly do you expect to happen here?
+>
+> a) Use only part of the VRAM but otherwise work as expected
+> b) Access all of the VRAM, but at a performance cost for
+>     bank switching?
 
-New line.
+We have tons of x86 systems where we can't resize the BAR (because of 
+lack of BIOS setup of the root PCIe windows). So bank switching is still 
+perfectly supported.
 
->  /*
->   * This data type corresponds to the BAM transaction which will be used =
-for all
->   * NAND transfers.
-> @@ -447,6 +450,29 @@ struct qcom_nand_boot_partition {
->  	u32 page_size;
->  };
-> =20
-> +/*
-> + * Qcom op for each exec_op transfer
-> + *
-> + * @data_instr:			data instruction pointer
-> + * @data_instr_idx:		data instruction index
-> + * @rdy_timeout_ms:		wait ready timeout in ms
-> + * @rdy_delay_ns:		Additional delay in ns
-> + * @addr1_reg:			Address1 register value
-> + * @addr2_reg:			Address2 register value
-> + * @cmd_reg:			CMD register value
-> + * @flag:			flag for misc instruction
-> + */
-> +struct qcom_op {
-> +	const struct nand_op_instr *data_instr;
-> +	unsigned int data_instr_idx;
-> +	unsigned int rdy_timeout_ms;
-> +	unsigned int rdy_delay_ns;
-> +	u32 addr1_reg;
-> +	u32 addr2_reg;
-> +	u32 cmd_reg;
-> +	u8 flag;
-> +};
-> +
->  /*
->   * NAND chip structure
->   *
-> @@ -2867,8 +2893,141 @@ static int qcom_nand_attach_chip(struct nand_chip=
- *chip)
->  	return 0;
->  }
-> =20
-> +static int qcom_op_cmd_mapping(struct qcom_nand_controller *nandc, u8 cm=
-d,
-> +			       struct qcom_op *q_op)
-> +{
-> +	int ret;
-> +
-> +	switch (cmd) {
-> +	case NAND_CMD_RESET:
-> +		ret =3D OP_RESET_DEVICE;
-> +		break;
-> +	case NAND_CMD_READID:
-> +		ret =3D OP_FETCH_ID;
-> +		break;
-> +	case NAND_CMD_PARAM:
-> +		if (nandc->props->qpic_v2)
-> +			ret =3D OP_PAGE_READ_ONFI_READ;
-> +		else
-> +			ret =3D OP_PAGE_READ;
-> +		break;
-> +	case NAND_CMD_ERASE1:
-> +	case NAND_CMD_ERASE2:
-> +		ret =3D OP_BLOCK_ERASE;
-> +		break;
-> +	case NAND_CMD_STATUS:
-> +		ret =3D OP_CHECK_STATUS;
-> +		break;
-> +	case NAND_CMD_PAGEPROG:
-> +		ret =3D OP_PROGRAM_PAGE;
-> +		break;
-> +	default:
+> c) Require kernel changes to make a) or b) work, otherwise
+>     fail to load
+> d) have no chance of working even with driver changes
 
-Again, this is not a supported case, you should handle it. And this
-must be checked upon check_only conditions as well.
+Yeah, that is usually what happens on those arm64 system with flawed 
+PCIe implementations.
 
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +/* NAND framework ->exec_op() hooks and related helpers */
-> +static void qcom_parse_instructions(struct nand_chip *chip,
-> +				    const struct nand_subop *subop,
-> +					struct qcom_op *q_op)
-> +{
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	const struct nand_op_instr *instr =3D NULL;
-> +	unsigned int op_id;
-> +	int i;
-> +
-> +	memset(q_op, 0, sizeof(*q_op));
-> +
-> +	for (op_id =3D 0; op_id < subop->ninstrs; op_id++) {
-> +		unsigned int offset, naddrs;
-> +		const u8 *addrs;
-> +
-> +		instr =3D &subop->instrs[op_id];
-> +
-> +		switch (instr->type) {
-> +		case NAND_OP_CMD_INSTR:
-> +			q_op->cmd_reg =3D qcom_op_cmd_mapping(nandc, instr->ctx.cmd.opcode, q=
-_op);
-> +			q_op->rdy_delay_ns =3D instr->delay_ns;
-> +			break;
-> +
-> +		case NAND_OP_ADDR_INSTR:
-> +			offset =3D nand_subop_get_addr_start_off(subop, op_id);
-> +			naddrs =3D nand_subop_get_num_addr_cyc(subop, op_id);
-> +			addrs =3D &instr->ctx.addr.addrs[offset];
-> +			for (i =3D 0; i < MAX_ADDRESS_CYCLE; i++) {
-> +				if (i < 4)
-> +					q_op->addr1_reg |=3D (u32)addrs[i] << i * 8;
-> +				else
-> +					q_op->addr2_reg |=3D addrs[i];
-> +			}
-> +			q_op->rdy_delay_ns =3D instr->delay_ns;
-> +			break;
-> +
-> +		case NAND_OP_DATA_IN_INSTR:
-> +			q_op->data_instr =3D instr;
-> +			q_op->data_instr_idx =3D op_id;
-> +			q_op->rdy_delay_ns =3D instr->delay_ns;
-> +			fallthrough;
-> +		case NAND_OP_DATA_OUT_INSTR:
-> +			q_op->rdy_delay_ns =3D instr->delay_ns;
-> +			break;
-> +
-> +		case NAND_OP_WAITRDY_INSTR:
-> +			q_op->rdy_timeout_ms =3D instr->ctx.waitrdy.timeout_ms;
-> +			q_op->rdy_delay_ns =3D instr->delay_ns;
-> +			break;
-> +		}
-> +	}
-> +}
-> +
-> +static int qcom_check_op(struct nand_chip *chip,
-> +			 const struct nand_operation *op)
-> +{
-> +	const struct nand_op_instr *instr;
-> +	int op_id;
-> +
-> +	for (op_id =3D 0; op_id < op->ninstrs; op_id++) {
-> +		instr =3D &op->instrs[op_id];
-> +
-> +		switch (instr->type) {
-> +		case NAND_OP_CMD_INSTR:
-> +			if (instr->ctx.cmd.opcode =3D=3D NAND_CMD_READCACHESEQ ||
-> +			    instr->ctx.cmd.opcode =3D=3D NAND_CMD_READCACHEEND)
-> +				return -ENOTSUPP;
+The problem is not even BAR resize, basically we already had tons of 
+customers which came to us and complained that amdgpu doesn't load or 
+crashes the system after a few seconds.
 
-Do you really need this check? These operations have specific pattern,
-no? I believe you should not need this check.
-> +			break;
-> +		case NAND_OP_ADDR_INSTR:
-> +			if (instr->ctx.addr.naddrs > MAX_ADDRESS_CYCLE)
-> +				return -ENOTSUPP;
+After investigating (which sometimes even includes involving engineers 
+from ARM) we usually find that those boards doesn't even remotely comply 
+to the PCIe specification, both regarding power as well as functional 
+things like DMA coherency.
 
-This one is not needed either, as long as you properly define the
-patterns.
+Regards,
+Christian.
 
-> +
-> +			break;
-> +		case NAND_OP_DATA_IN_INSTR:
-> +		case NAND_OP_DATA_OUT_INSTR:
-> +			if (instr->ctx.data.len > MAX_CHUNK_SIZE)
+>
+>>>> It might be cleaner to just not build the whole driver on such systems
+>>>> or at least leave out this function.
+>>> How about this version? This also addresses the build failure, but
+>>> I don't know if this makes any sense:
+>>>
+>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+>>> @@ -1325,6 +1325,9 @@ int amdgpu_device_resize_fb_bar(struct amdgpu_device *adev)
+>>>           u16 cmd;
+>>>           int r;
+>>>    
+>>> +       if (!IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
+>>> +               return 0;
+>>> +
+>> Yes, if that suppresses the warning as well then that makes perfect
+>> sense to me.
+> Ok, I'll send that as a v2 then.
+>
+>      Arnd
 
-Same.
-> +				return -ENOTSUPP;
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int qcom_nand_exec_op(struct nand_chip *chip,
-> +			     const struct nand_operation *op,
-> +			bool check_only)
-> +{
-> +	if (check_only)
-> +		return qcom_check_op(chip, op);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct nand_controller_ops qcom_nandc_ops =3D {
->  	.attach_chip =3D qcom_nand_attach_chip,
-> +	.exec_op =3D qcom_nand_exec_op,
-
-I understand the idea of making the series easier to review, and I
-thank you for that, but in practice the series is not bisectable. I
-doubt the driver works right after patch 1.
-
-You will likely need two patches, one to add exec_op, one to remove the
-legacy implementation.
-
->  };
-> =20
->  static void qcom_nandc_unalloc(struct qcom_nand_controller *nandc)
-
-
-Thanks,
-Miqu=C3=A8l
