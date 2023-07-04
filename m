@@ -2,130 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F2A7478FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30972747905
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 22:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjGDU1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 16:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S231140AbjGDUa2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 16:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGDU1M (ORCPT
+        with ESMTP id S229753AbjGDUaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:27:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC0BE7B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:27:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E88961382
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 20:27:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3982FC433CA;
-        Tue,  4 Jul 2023 20:27:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688502430;
-        bh=iy5HUoGWTmpxSmUZjQ7hawlWnCOJsYYvnUq8MjJB9z8=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=Ci6kXfZf1O1MqOZcgOdTuORv5v8w6CmGXOKCzTuY88/inW894MEyA7DRy27w/3+4c
-         bbmiw7pj2zPj3ikbYw1J85MatELjtHtES8+3Zo7U8p1LFu6M3dHJbNMQapbmWSHpZq
-         qGn5kzZ55V2OhtDR6xrz5Qd9fTQ9FMTQor/I260tSYAmaFW1tvFmkXlZdGkxpS8WC/
-         ABWzssv0KeFdaBquM7j/4FaDpPpp7slap6ld0n8sxL3KNKnbAk3aFpar5G6CFuOiv0
-         G2uygMS+ovRqbgpGJdJgUU1+ceYYwJjT/CcSeuKp8UJNOKbQnmeprEXaqd1arfbELg
-         0CfDZxTzTVYng==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1C55027C0054;
-        Tue,  4 Jul 2023 16:27:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 04 Jul 2023 16:27:09 -0400
-X-ME-Sender: <xms:nICkZPRRjojFpFkJvcv0V_RqD_fzhm556pFt6nh4lSK-KZ778fiBSQ>
-    <xme:nICkZAw5IG_B5ttc8MD18_fLjq3a2dt_hWuyFU8enJDwBu-U313l5L6dLqRWkaVnR
-    48fUfa2VjrzVvc5F7w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeggddugeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedvtddtffejfeeggefgleefgfeghfehfeefffetgffgleegudevveet
-    hfefjeevkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudej
-    tddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusg
-    druggv
-X-ME-Proxy: <xmx:nICkZE1qaTrVneGGwS-peGSGtKXmS6ILMKpioi0pWIyQFMAjOn-nLA>
-    <xmx:nICkZPDcQp7soEz7_-_jthVNxii_9NrAOqfkaMhmVxB5h5YiQaxPrA>
-    <xmx:nICkZIh2e35QQn6HG_6t33ZXHQTRI6GuLrcHw0IL_5gR_d8NABUzhA>
-    <xmx:nYCkZEyr0iv-kgCEOc11Wgc6kQqDjSsuhakPjPse0bizQLO1ahbvnQ>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 88EECB60086; Tue,  4 Jul 2023 16:27:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
-Mime-Version: 1.0
-Message-Id: <753120c5-dcf4-46ff-9319-e8aa035e2488@app.fastmail.com>
-In-Reply-To: <CAF=yD-K7NiEROeHM5GzW2ArtprcYg7WFwPFz7+0LOOT2DCY_+A@mail.gmail.com>
-References: <20230703175048.151683-1-jthinz@mailbox.tu-berlin.de>
- <64a33ce7b50d2_6520520875@john.notmuch>
- <bdffeca8e222b0126100dec5dcd9d9b186ea6905.camel@mailbox.tu-berlin.de>
- <CAF=yD-K7NiEROeHM5GzW2ArtprcYg7WFwPFz7+0LOOT2DCY_+A@mail.gmail.com>
-Date:   Tue, 04 Jul 2023 22:26:47 +0200
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
-        =?UTF-8?Q?J=C3=B6rn-Thorben_Hinz?= <jthinz@mailbox.tu-berlin.de>
-Cc:     "John Fastabend" <john.fastabend@gmail.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, shuah <shuah@kernel.org>,
-        "Willem de Bruijn" <willemb@google.com>,
-        "Deepa Dinamani" <deepa.kernel@gmail.com>
-Subject: Re: [PATCH 0/2] bpf, net: Allow setting SO_TIMESTAMPING* from BPF
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 16:30:25 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F34E76;
+        Tue,  4 Jul 2023 13:30:24 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1qGmfC-001sRK-9Q; Tue, 04 Jul 2023 22:30:18 +0200
+Received: from p5b13a7a5.dip0.t-ipconnect.de ([91.19.167.165] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1qGmfC-003WTr-1Z; Tue, 04 Jul 2023 22:30:18 +0200
+Message-ID: <0ec80cb69e4ea5eed6ee29ed7f58ea649fb5c65e.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v2 1/3] sh: dma: Fix dma channel offset calculation
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Artur Rojek <contact@artur-rojek.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 04 Jul 2023 22:30:17 +0200
+In-Reply-To: <20230527164452.64797-2-contact@artur-rojek.eu>
+References: <20230527164452.64797-1-contact@artur-rojek.eu>
+         <20230527164452.64797-2-contact@artur-rojek.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.3 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.167.165
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023, at 21:36, Willem de Bruijn wrote:
->> On Mon, 2023-07-03 at 14:25 -0700, John Fastabend wrote:
->> > J=C3=B6rn-Thorben Hinz wrote:
->> Yes, if there is no objection to making the added
->> getsockopt(SO_TIMESTAMPING_NEW) this tiny bit more =E2=80=9Cstrict=E2=
-=80=9D, it=E2=80=99s just
->> a matter of modifying the if inserted in sk_getsockopt(). (And, well,
->> in the other case I would even remove this if.)
->
-> The difference is in the struct that is returned, on 32-bit platforms.
-> Both calls should always be allowed? See also
-> put_cmsg_scm_timestamping64 vs put_cmsg_scm_timestamping.
->
-> For the second patch: the _OLD/_NEW was introduced to work around
-> limitations on 32-bit platforms. This is intended to be transparent to
-> users, by defining SO_TIMESTAMPING accordingly.
->
-> Can the new BPF code always enforce the 64-bit version, that is, only
-> implement the _NEW variants? And perhaps just call it SO_TIMESTAMPING
-> directly.
+On Sat, 2023-05-27 at 18:44 +0200, Artur Rojek wrote:
+> Various SoCs of the SH3, SH4 and SH4A family, which use this driver,
+> feature a differing number of DMA channels, which can be distributed
+> between up to two DMAC modules. Existing implementation fails to
+> correctly accommodate for all those variations, resulting in wrong
+> channel offset calculations and leading to kernel panics.
+> 
+> Rewrite dma_base_addr() in order to properly calculate channel offsets
+> in a DMAC module. Fix dmaor_read_reg() and dmaor_write_reg(), so that
+> the correct DMAC module base is selected for the DMAOR register.
+> 
+> Fixes: 7f47c7189b3e8f19 ("sh: dma: More legacy cpu dma chainsawing.")
+> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+> ---
+> 
+> v2: also handle differing numbers of DMAC modules and channels
+> 
+>  arch/sh/drivers/dma/dma-sh.c | 37 +++++++++++++++++++++++-------------
+>  1 file changed, 24 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/sh/drivers/dma/dma-sh.c b/arch/sh/drivers/dma/dma-sh.c
+> index 96c626c2cd0a..306fba1564e5 100644
+> --- a/arch/sh/drivers/dma/dma-sh.c
+> +++ b/arch/sh/drivers/dma/dma-sh.c
+> @@ -18,6 +18,18 @@
+>  #include <cpu/dma-register.h>
+>  #include <cpu/dma.h>
+>  
+> +/*
+> + * Some of the SoCs feature two DMAC modules. In such a case, the channels are
+> + * distributed equally among them.
+> + */
+> +#ifdef	SH_DMAC_BASE1
+> +#define	SH_DMAC_NR_MD_CH	(CONFIG_NR_ONCHIP_DMA_CHANNELS / 2)
+> +#else
+> +#define	SH_DMAC_NR_MD_CH	CONFIG_NR_ONCHIP_DMA_CHANNELS
+> +#endif
+> +
+> +#define	SH_DMAC_CH_SZ		0x10
+> +
+>  /*
+>   * Define the default configuration for dual address memory-memory transfer.
+>   * The 0x400 value represents auto-request, external->external.
+> @@ -29,7 +41,7 @@ static unsigned long dma_find_base(unsigned int chan)
+>  	unsigned long base = SH_DMAC_BASE0;
+>  
+>  #ifdef SH_DMAC_BASE1
+> -	if (chan >= 6)
+> +	if (chan >= SH_DMAC_NR_MD_CH)
+>  		base = SH_DMAC_BASE1;
+>  #endif
+>  
+> @@ -40,13 +52,13 @@ static unsigned long dma_base_addr(unsigned int chan)
+>  {
+>  	unsigned long base = dma_find_base(chan);
+>  
+> -	/* Normalize offset calculation */
+> -	if (chan >= 9)
+> -		chan -= 6;
+> -	if (chan >= 4)
+> -		base += 0x10;
+> +	chan = (chan % SH_DMAC_NR_MD_CH) * SH_DMAC_CH_SZ;
+> +
+> +	/* DMAOR is placed inside the channel register space. Step over it. */
+> +	if (chan >= DMAOR)
+> +		base += SH_DMAC_CH_SZ;
+>  
+> -	return base + (chan * 0x10);
+> +	return base + chan;
+>  }
+>  
+>  #ifdef CONFIG_SH_DMA_IRQ_MULTI
+> @@ -250,12 +262,11 @@ static int sh_dmac_get_dma_residue(struct dma_channel *chan)
+>  #define NR_DMAOR	1
+>  #endif
+>  
+> -/*
+> - * DMAOR bases are broken out amongst channel groups. DMAOR0 manages
+> - * channels 0 - 5, DMAOR1 6 - 11 (optional).
+> - */
+> -#define dmaor_read_reg(n)		__raw_readw(dma_find_base((n)*6))
+> -#define dmaor_write_reg(n, data)	__raw_writew(data, dma_find_base(n)*6)
+> +#define dmaor_read_reg(n)		__raw_readw(dma_find_base((n) * \
+> +						    SH_DMAC_NR_MD_CH) + DMAOR)
+> +#define dmaor_write_reg(n, data)	__raw_writew(data, \
+> +						     dma_find_base((n) * \
+> +						     SH_DMAC_NR_MD_CH) + DMAOR)
+>  
+>  static inline int dmaor_reset(int no)
+>  {
 
-I guess that depends on how the returned timestamps are interpreted.
+Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
-In normal userspace code, the 'struct scm_timestamping' is defined
-in terms of the libc-provided 'struct timespec'. If this is a normal
-glibc based distro binary, then it probably expects the old format.
-
-OTOH, if the code reading the timestamp data is in BPF code itself,
-it's probably safe to mandate that to use the time64 format and
-define the timespec type as __kernel_timespec with 64-bit members.
-
-     Arnd
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
