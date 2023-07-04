@@ -2,145 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A324474797F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01529747986
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjGDVRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 17:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S230426AbjGDVU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 17:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbjGDVRj (ORCPT
+        with ESMTP id S229903AbjGDVU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 17:17:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39165E2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 14:16:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688505412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VV04n37U8nBXKx7jlfEZg7R8H9gfvZ1yfEmW1FTRWAc=;
-        b=LDOmEEyxrmHT8Ccjq6ljx8l6JikH5iba0NFkW4DXzZm2iwyDN7r9WzkvQMDyYZV9Fp18tO
-        pJYKNwL8T6oxnJv8CVJ7uN19vYt1ttOLA4F+Pejvqlv7K9bfo1DVeTby0lnjt7h0RlTGDA
-        jkd2hfi4iLP2Gv2YBbarurcI+aFD33s=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-519-2nDJUH9FPRGNG9BZpNC2ig-1; Tue, 04 Jul 2023 17:16:51 -0400
-X-MC-Unique: 2nDJUH9FPRGNG9BZpNC2ig-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-765ad67e600so108135485a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 14:16:51 -0700 (PDT)
+        Tue, 4 Jul 2023 17:20:57 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD5D127
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 14:20:56 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9891c73e0fbso13088866b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 14:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688505654; x=1691097654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=n75Dh2puDmWxs7IMDzFSoZlMiY6RQZaHybFGnsL1ZMY=;
+        b=QOODvko3WFZFhybeNOP3lbChfYO1Uc3IsA5HH7WSwBUgpgyh1EyfYWsHcn3/OiI0s5
+         EZEjJG6l6ecCFsAopwbb9PHUYFUDDCWOF/SvmiZrJLJHszYY7zanT9wcNB7r6h7J5bZs
+         Tv9sfBOAsIbeONQX2EOkPHY5M2SHe9I/Rslnw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688505410; x=1691097410;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VV04n37U8nBXKx7jlfEZg7R8H9gfvZ1yfEmW1FTRWAc=;
-        b=jSFjnrwl2cHMKsH+kEeOcWQhAhWlo+rqI/KvBGbSUOQmoi1TBMX0bZBYkkjSTpE6Cs
-         hEmAq7pEOn7dGsSebedHVVw8BTlvYP9hiug4lNkFJ4/AY+Pak8i8IMll1G4pIj0eCSWD
-         MQ0qIE/SYW5ialOd/hxqM4lwkiIFnQMuqyG1CwWSnaGZE3VKIDhw8QgeJwQDS2PHpIdX
-         hEu9uy9fMnWTdYraw6Lbuj3Cd5CaXNcEW1HekFZ6GQzxQP0vcI/XJtADCWgOGJ1dc4Cv
-         /98llb77QhKJ80s3xh6pz4HxTHv2/fQ/hAQN+oJTQsYWeslDzhQUP5sdd3PszaXlFIWW
-         wZ0g==
-X-Gm-Message-State: AC+VfDyVBKa89e1nQZB9Nj7tu/RqpLSaUu2i2CIKbEV+XCQh8o+z4yxZ
-        F03p9p0pQIC9LCbsxcwyJQYPtGtLDf9L8kgaQHxO/jknhrZ8pFHKxzfFU6HQywedGV1qyWz8T26
-        a5K6UveqZ30t6X1ra9PovNHod
-X-Received: by 2002:a05:620a:4487:b0:765:435c:a4fa with SMTP id x7-20020a05620a448700b00765435ca4famr20273156qkp.0.1688505410588;
-        Tue, 04 Jul 2023 14:16:50 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4h9qxm2qr2McyrSm55+RKE46g3KUdAtCtYdQn6fLq1MJrI38m4oaSBNE07KxZKvdH+XrvoEw==
-X-Received: by 2002:a05:620a:4487:b0:765:435c:a4fa with SMTP id x7-20020a05620a448700b00765435ca4famr20273141qkp.0.1688505410353;
-        Tue, 04 Jul 2023 14:16:50 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id i4-20020a05620a144400b0076728319575sm6994582qkl.27.2023.07.04.14.16.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 14:16:50 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 17:16:48 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] mm: userfaultfd: add basic documentation for
- UFFDIO_POISON
-Message-ID: <ZKSMQOUB99HjlUN5@x1n>
-References: <20230629205040.665834-1-axelrasmussen@google.com>
- <20230629205040.665834-6-axelrasmussen@google.com>
+        d=1e100.net; s=20221208; t=1688505654; x=1691097654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n75Dh2puDmWxs7IMDzFSoZlMiY6RQZaHybFGnsL1ZMY=;
+        b=PODNybGg1kIlusyRY9B8uHoncnHO7BJulEj5qU5doczDmtWJhm297sPzCdxAmbsqfy
+         MPoUQoNyjMYI4ci7/3Chkl0KxJmsO22Ide19mP/iLNpHEyWDjrfc1S8ff3h4u5wwe4GL
+         fW1ss2m3jStabnonDWX1xaF6nc/oP9eXJE44NTQ+jKvFvZTz8xm5hC1Y1a9xeCVb96Kz
+         DDfpBPaU00NX5a4XX80D0qmHp0/hQ/PwDsekLnmRtVhW9gO/JBk7qFgU8Y4emc87KEJC
+         q/PDGT6y5gW/AWBTtzzk/Louh9JR8lyXW5gAlQUmIP4AmezMj5CVTJCh/LqnPATtZvgK
+         Umtw==
+X-Gm-Message-State: ABy/qLaCiNlu5xtylKsHjbJWlz5ozRzJLbv2hy70SIfi2tbC90jIjRlJ
+        eiBkIZHjLGNs5Jpzn6oMQxiA+EIZmcH0X7CKUk+ddQ==
+X-Google-Smtp-Source: APBJJlG6E+8J7PsAhmgqAa0ltSpiT4k+4qdznvEB9FsH9ucjZ+iCAI95dEoI5ct2lYwuDM/XxkJJMQ==
+X-Received: by 2002:a17:907:2d2c:b0:98d:ebb7:a8b0 with SMTP id gs44-20020a1709072d2c00b0098debb7a8b0mr419800ejc.14.1688505654415;
+        Tue, 04 Jul 2023 14:20:54 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id qk3-20020a170906d9c300b00984822540c9sm13784266ejb.96.2023.07.04.14.20.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 14:20:53 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so139411a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 14:20:53 -0700 (PDT)
+X-Received: by 2002:a17:907:7f26:b0:966:1bf2:2af5 with SMTP id
+ qf38-20020a1709077f2600b009661bf22af5mr379213ejc.22.1688505653634; Tue, 04
+ Jul 2023 14:20:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230629205040.665834-6-axelrasmussen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com>
+ <20230704211509.GA21834@1wt.eu>
+In-Reply-To: <20230704211509.GA21834@1wt.eu>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Jul 2023 14:20:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjH4O6v_EwVB=t_6Haky2jOiejHbCkCTvgNQWo1ghy8-w@mail.gmail.com>
+Message-ID: <CAHk-=wjH4O6v_EwVB=t_6Haky2jOiejHbCkCTvgNQWo1ghy8-w@mail.gmail.com>
+Subject: Re: Overly aggressive .gitignore file?
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 01:50:40PM -0700, Axel Rasmussen wrote:
-> Just describe the feature at a really basic level.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+On Tue, 4 Jul 2023 at 14:15, Willy Tarreau <w@1wt.eu> wrote:
+>
+> I don't understand why your completion on "git am" should rely on
+> *tracked* files.
 
-The final enablement of the feature can be squashed into this doc update
-patch too.
+It doesn't.
 
-Acked-by: Peter Xu <peterx@redhat.com>
+Read that email again.
 
-> ---
->  Documentation/admin-guide/mm/userfaultfd.rst | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-> index 7c304e432205..b19053436369 100644
-> --- a/Documentation/admin-guide/mm/userfaultfd.rst
-> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
-> @@ -244,6 +244,21 @@ write-protected (so future writes will also result in a WP fault). These ioctls
->  support a mode flag (``UFFDIO_COPY_MODE_WP`` or ``UFFDIO_CONTINUE_MODE_WP``
->  respectively) to configure the mapping this way.
->  
-> +Memory Poisioning Emulation
-> +---------------------------
-> +
-> +In response to a fault (either missing or minor), an action userspace can
-> +take to "resolve" it is to issue a ``UFFDIO_POISON``. This will cause any
-> +future faulters to either get a SIGBUS, or in KVM's case the guest will
-> +receive an MCE as if there were hardware memory poisoning.
-> +
-> +This is used to emulate hardware memory poisoning. Imagine a VM running on a
-> +machine which experiences a real hardware memory error. Later, we live migrate
-> +the VM to another physical machine. Since we want the migration to be
-> +transparent to the guest, we want that same address range to act as if it was
-> +still poisoned, even though it's on a new physical host which ostentisbly
-> +doesn't have a memory error in the exact same spot.
-> +
->  QEMU/KVM
->  ========
->  
-> -- 
-> 2.41.0.255.g8b1d071c50-goog
-> 
+It fails on *untracked* files that are hidden from "git status" and
+friends by our .gitignore pattern:
 
--- 
-Peter Xu
+   *.mbx
 
+added by commit 534066a983df (".gitignore: ignore *.cover and *.mbx")
+
+So when I have those old stale mbx files around, I don't see them,
+because "git status" will happily say
+
+    nothing to commit, working tree clean
+
+with no mention of those old turds.
+
+Really. Try it.
+
+> From a workflow perspective that makes no sense,
+> as by definition, git am will consume only *untracked* files.
+
+I don't think you actually read my email.
+
+            Linus
