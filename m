@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A42074778A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360CA7477BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjGDRK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
+        id S231528AbjGDRYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjGDRKy (ORCPT
+        with ESMTP id S229451AbjGDRYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:10:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63F9E76;
-        Tue,  4 Jul 2023 10:10:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BF4C61313;
-        Tue,  4 Jul 2023 17:10:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D70C433C8;
-        Tue,  4 Jul 2023 17:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688490652;
-        bh=8Dr/7AdunY9Rh66EGYBdO6pdEuVWqkq1brkfB1efLMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=spDp7NPZHlvHh8f8/hg7JANXwWf/A8Jb3ygxaIrl7kIgexT9jjiuSMxasIY6gf9k5
-         0uc296A9hDKKK9E7uZ9P+WJKxVefn95W+Httd683yp42N0+gZNPaT745DR3MJRggpt
-         J2BUMm6251psBOWBCz1+Xgv58q9CuWkJohZZZliAIoL7E5xvCXsfMOmYF8oDkd7KtP
-         IgMshHbvODfuuUyNMZxpPd+d0VRtuyifYk5ukDQzI8rc5vloiLq8vxjTsO4yxM5tpg
-         MXXl3yrAuSJUS03QaSoHwE3flhU5m6AUkddU15Pbrxn1LQnZWAJYmpEHwQ7qiDievD
-         bu5YEfhD3AW4w==
-Date:   Tue, 4 Jul 2023 18:10:46 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        neil.armstrong@linaro.org, jbrunet@baylibre.com,
-        jirislaby@kernel.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, kelvin.zhang@amlogic.com,
-        xianwei.zhao@amlogic.com, kernel@sberdevices.ru,
-        rockosov@gmail.com, linux-amlogic@lists.infradead.org,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 5/5] arm64: dts: meson: a1: change uart compatible
- string
-Message-ID: <20230704-staff-smilingly-401b99e28edd@spud>
-References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
- <20230704135936.14697-6-ddrokosov@sberdevices.ru>
- <20230704-cannabis-cannon-19397cd806bc@spud>
- <20230704170843.wksxekltre2ob4en@CAB-WSD-L081021>
+        Tue, 4 Jul 2023 13:24:37 -0400
+X-Greylist: delayed 636 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Jul 2023 10:24:35 PDT
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6558E10D5;
+        Tue,  4 Jul 2023 10:24:35 -0700 (PDT)
+Received: from ipservice-092-217-072-126.092.217.pools.vodafone-ip.de ([92.217.72.126] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1qGjb8-0000oy-J7; Tue, 04 Jul 2023 19:13:54 +0200
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-samsung-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH] hwrng: exynos - switch to DEFINE_SIMPLE_DEV_PM_OPS
+Date:   Tue,  4 Jul 2023 19:10:51 +0200
+Message-Id: <20230704171051.69763-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3ZqyNyARjhPwp6q6"
-Content-Disposition: inline
-In-Reply-To: <20230704170843.wksxekltre2ob4en@CAB-WSD-L081021>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+SIMPLE_DEV_PM_OPS is deprecated, replace it with DEFINE_SIMPLE_DEV_PM_OPS
+and use pm_sleep_ptr for setting the driver's pm routines. We can now
+remove the __maybe_unused qualifier in the suspend and resume functions.
 
---3ZqyNyARjhPwp6q6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+---
+compile-tested only
 
-On Tue, Jul 04, 2023 at 08:08:43PM +0300, Dmitry Rokosov wrote:
-> On Tue, Jul 04, 2023 at 06:02:58PM +0100, Conor Dooley wrote:
-> > On Tue, Jul 04, 2023 at 04:59:36PM +0300, Dmitry Rokosov wrote:
-> > > In the current implementation, the meson-a1 configuration incorporate=
-s a
-> > > unique compatibility tag "amlogic,meson-a1-uart' within the meson-uart
-> > > driver due to its usage of the new console device name "ttyS".
-> > > Consequently, the previous compatibility tag designated for the
-> > > 'amlogic,meson-gx-uart' configuration has become obsolete and is no
-> > > longer relevant to the current setup.
-> >=20
-> > I don't really see why you would remove the gx-uart to be honest, and
-> > not use it as a fallback. Neil's platform though, so his call :)
-> >=20
->=20
-> Because of amlogic,meson-gx-uart has legacy devname, we do not want to
-> use it in the A1.
+ drivers/char/hw_random/exynos-trng.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Which I did read in your commit message, fallback being the operative
-word here.
+diff --git a/drivers/char/hw_random/exynos-trng.c b/drivers/char/hw_random/exynos-trng.c
+index 9cc3d542dd0f..30207b7ac5f4 100644
+--- a/drivers/char/hw_random/exynos-trng.c
++++ b/drivers/char/hw_random/exynos-trng.c
+@@ -185,14 +185,14 @@ static int exynos_trng_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused exynos_trng_suspend(struct device *dev)
++static int exynos_trng_suspend(struct device *dev)
+ {
+ 	pm_runtime_put_sync(dev);
+ 
+ 	return 0;
+ }
+ 
+-static int __maybe_unused exynos_trng_resume(struct device *dev)
++static int exynos_trng_resume(struct device *dev)
+ {
+ 	int ret;
+ 
+@@ -205,7 +205,7 @@ static int __maybe_unused exynos_trng_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(exynos_trng_pm_ops, exynos_trng_suspend,
++static DEFINE_SIMPLE_DEV_PM_OPS(exynos_trng_pm_ops, exynos_trng_suspend,
+ 			 exynos_trng_resume);
+ 
+ static const struct of_device_id exynos_trng_dt_match[] = {
+@@ -219,7 +219,7 @@ MODULE_DEVICE_TABLE(of, exynos_trng_dt_match);
+ static struct platform_driver exynos_trng_driver = {
+ 	.driver = {
+ 		.name = "exynos-trng",
+-		.pm = &exynos_trng_pm_ops,
++		.pm = pm_sleep_ptr(&exynos_trng_pm_ops),
+ 		.of_match_table = exynos_trng_dt_match,
+ 	},
+ 	.probe = exynos_trng_probe,
+-- 
+2.30.2
 
---3ZqyNyARjhPwp6q6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKRSlgAKCRB4tDGHoIJi
-0q1CAQCJDaZX5TQ96AtLIC2BAMcsEl3+ACdSRUZh8O6dA4AmVQD5AT3UxCGqKIP8
-MQ0E7A15dvDYTT1+a0WE9Zuf+uLlkg4=
-=BCBN
------END PGP SIGNATURE-----
-
---3ZqyNyARjhPwp6q6--
