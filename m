@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01529747986
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC6D74798C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjGDVU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 17:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S231147AbjGDVZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 17:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjGDVU5 (ORCPT
+        with ESMTP id S229903AbjGDVZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 17:20:57 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD5D127
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 14:20:56 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9891c73e0fbso13088866b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 14:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688505654; x=1691097654;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=n75Dh2puDmWxs7IMDzFSoZlMiY6RQZaHybFGnsL1ZMY=;
-        b=QOODvko3WFZFhybeNOP3lbChfYO1Uc3IsA5HH7WSwBUgpgyh1EyfYWsHcn3/OiI0s5
-         EZEjJG6l6ecCFsAopwbb9PHUYFUDDCWOF/SvmiZrJLJHszYY7zanT9wcNB7r6h7J5bZs
-         Tv9sfBOAsIbeONQX2EOkPHY5M2SHe9I/Rslnw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688505654; x=1691097654;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n75Dh2puDmWxs7IMDzFSoZlMiY6RQZaHybFGnsL1ZMY=;
-        b=PODNybGg1kIlusyRY9B8uHoncnHO7BJulEj5qU5doczDmtWJhm297sPzCdxAmbsqfy
-         MPoUQoNyjMYI4ci7/3Chkl0KxJmsO22Ide19mP/iLNpHEyWDjrfc1S8ff3h4u5wwe4GL
-         fW1ss2m3jStabnonDWX1xaF6nc/oP9eXJE44NTQ+jKvFvZTz8xm5hC1Y1a9xeCVb96Kz
-         DDfpBPaU00NX5a4XX80D0qmHp0/hQ/PwDsekLnmRtVhW9gO/JBk7qFgU8Y4emc87KEJC
-         q/PDGT6y5gW/AWBTtzzk/Louh9JR8lyXW5gAlQUmIP4AmezMj5CVTJCh/LqnPATtZvgK
-         Umtw==
-X-Gm-Message-State: ABy/qLaCiNlu5xtylKsHjbJWlz5ozRzJLbv2hy70SIfi2tbC90jIjRlJ
-        eiBkIZHjLGNs5Jpzn6oMQxiA+EIZmcH0X7CKUk+ddQ==
-X-Google-Smtp-Source: APBJJlG6E+8J7PsAhmgqAa0ltSpiT4k+4qdznvEB9FsH9ucjZ+iCAI95dEoI5ct2lYwuDM/XxkJJMQ==
-X-Received: by 2002:a17:907:2d2c:b0:98d:ebb7:a8b0 with SMTP id gs44-20020a1709072d2c00b0098debb7a8b0mr419800ejc.14.1688505654415;
-        Tue, 04 Jul 2023 14:20:54 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id qk3-20020a170906d9c300b00984822540c9sm13784266ejb.96.2023.07.04.14.20.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 14:20:53 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so139411a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 14:20:53 -0700 (PDT)
-X-Received: by 2002:a17:907:7f26:b0:966:1bf2:2af5 with SMTP id
- qf38-20020a1709077f2600b009661bf22af5mr379213ejc.22.1688505653634; Tue, 04
- Jul 2023 14:20:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com>
- <20230704211509.GA21834@1wt.eu>
-In-Reply-To: <20230704211509.GA21834@1wt.eu>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jul 2023 14:20:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjH4O6v_EwVB=t_6Haky2jOiejHbCkCTvgNQWo1ghy8-w@mail.gmail.com>
-Message-ID: <CAHk-=wjH4O6v_EwVB=t_6Haky2jOiejHbCkCTvgNQWo1ghy8-w@mail.gmail.com>
-Subject: Re: Overly aggressive .gitignore file?
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
+        Tue, 4 Jul 2023 17:25:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6C318B;
+        Tue,  4 Jul 2023 14:25:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8196861281;
+        Tue,  4 Jul 2023 21:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04F5C433C7;
+        Tue,  4 Jul 2023 21:25:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688505909;
+        bh=qc56JTBHGohk1G3UBHSzdTOuW9NcRbtT8225a+8pH5Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=emtK38XlrYPJvK7UxLe0VHhghuLKeQeRWePjA6wNBBOj1orrQ4WKXP0zh1qDSfs/X
+         dt1Z+Zi/mi6s9iVRg+51zLHKddCU/OAd/H0TKxYaO11JosTLjcx0/eMzvZOMH6RFVG
+         zxCWgQn5rkYEJgfACQxzGz5C+dh48ltQeTxlPfTIwvzCzelcL35jIXmfPOn8izeKZd
+         s2mt441asHp+men5mUbS3CcW5B2JrH1kUXrytQ8Lkr8pG4/p8evSADchqrLnhxTYFk
+         72W0GgjMcy0qoiTiVIFbCRPCJfsGi/XT9DVw3djQjRumGduewmom3KfKs0UYPM4I2F
+         0/Q4/FkK9i+7w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7E9CFCE0CC2; Tue,  4 Jul 2023 14:25:09 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 14:25:09 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Olivier Dion <odion@efficios.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rnk@google.com, Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, gcc@gcc.gnu.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Bridging the gap between the Linux Kernel Memory
+ Consistency Model (LKMM) and C11/C++11 atomics
+Message-ID: <3f740262-821b-4f39-8f1a-c6d02253986c@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <87ttukdcow.fsf@laura>
+ <feb9c2c0-24ce-40bf-a865-5898ffad3005@rowland.harvard.edu>
+ <87ilazd278.fsf@laura>
+ <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bcdd09ec-b98f-42d6-b59d-64db953076f6@rowland.harvard.edu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 at 14:15, Willy Tarreau <w@1wt.eu> wrote:
->
-> I don't understand why your completion on "git am" should rely on
-> *tracked* files.
+On Tue, Jul 04, 2023 at 04:25:45PM -0400, Alan Stern wrote:
+> On Tue, Jul 04, 2023 at 01:19:23PM -0400, Olivier Dion wrote:
 
-It doesn't.
+[ . . . ]
 
-Read that email again.
+> > I am puzzled by this.  Initialization of a shared variable does not need
+> > to be atomic until its publication.  Could you expand on this?
+> 
+> In the kernel, I believe it sometimes happens that an atomic variable 
+> may be published before it is initialized.  (If that's wrong, Paul or 
+> Peter can correct me.)  But since this doesn't apply to the situations 
+> you're concerned with, you can forget I mentioned it.
 
-It fails on *untracked* files that are hidden from "git status" and
-friends by our .gitignore pattern:
+Both use cases exist.
 
-   *.mbx
+A global atomic is implicitly published at compile time.  If the desired
+initial value is not known until multiple threads are running, then it
+is necessary to be careful.  Hence double-check locking and its various
+replacements.  (Clearly, if you can determine the initial value before
+going multithreaded, life is simpler.)
 
-added by commit 534066a983df (".gitignore: ignore *.cover and *.mbx")
+And dynamically allocated or on-stack storage is the other case, where
+there is a point in time when the storage is private even after multiple
+threads are running.
 
-So when I have those old stale mbx files around, I don't see them,
-because "git status" will happily say
+Or am I missing the point?
 
-    nothing to commit, working tree clean
-
-with no mention of those old turds.
-
-Really. Try it.
-
-> From a workflow perspective that makes no sense,
-> as by definition, git am will consume only *untracked* files.
-
-I don't think you actually read my email.
-
-            Linus
+							Thanx, Paul
