@@ -2,184 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F05A7474FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758C6747502
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjGDPLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S231436AbjGDPL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjGDPLU (ORCPT
+        with ESMTP id S231408AbjGDPLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:11:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340F5E6;
-        Tue,  4 Jul 2023 08:11:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C59086117E;
-        Tue,  4 Jul 2023 15:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294E9C433C7;
-        Tue,  4 Jul 2023 15:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688483478;
-        bh=wUuv2k6yustQUKSmYCZmh7t4L/YAMvaj2AqZ/Hb5lOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RBhTevwfWaqSqdhx0njmTYyw5MwzcyeJWbHAQ1w1FMw+p1zfm2LEVnA/hYUEJCeLm
-         5eyrigJg9WW+XJAotEWqCKds4O9UNxPhcEUnLbD+n1D7FuGS9O+rNMeZEzmTx5M5gt
-         7Ehsmw/WTVajSnU03YevXok4oTSlEy4E9ExdyTpeEVONQk2J8lVzdjqtPkxYf5oiz8
-         FXG/GppAS67xAqXLWde27IneOKGizDnHlCB82kuYlV3re/UOSt4NswL+OoZigAjHmx
-         qyx8Fh9rY2Ygj1rwL6XvCJcGhQZYPgrZ+y1TmTzeoF0w82qO6fGE/3Onc4Dy0D8zIH
-         Xl2XOveZeOnTw==
-Date:   Tue, 4 Jul 2023 17:11:12 +0200
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v1] fs: Add kfuncs to handle idmapped mounts
-Message-ID: <ZKQ2kBiRDsQREw6f@example.org>
-References: <c35fbb4cb0a3a9b4653f9a032698469d94ca6e9c.1688123230.git.legion@kernel.org>
- <babdf7a8-9663-6d71-821a-34da2aff80e2@huaweicloud.com>
+        Tue, 4 Jul 2023 11:11:50 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC05CE6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:11:22 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-666e3b15370so3098909b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 08:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1688483482; x=1691075482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mfwAeExHr+y1pYJrIRZuSm3ldW4dUztFq7/VB374kRE=;
+        b=Hgm7cMwKS2E1aaVm4N2j15ZRGZeS5++jtefy5hLwxJBMqZdR2eZAiBCG7fH/pWo5/Z
+         +Or2oafDAxsv54g5zDJsbcXVI+zkVT58kBPYKmGXDB7l6yD5YMha+39iqaZ5KkW7CLOB
+         TMPiq2UJ4vd9OGze1qYwU7Hu+/6m4uyRd4mmMgNFc2wnwXgjxAbdMT45XQKdLGcPc421
+         V4q2JCY/dFgC0JbTxL5uAY3Px6fvyXB5en+Gwj65sPGZUClYy2MwkQbNzTZpl+Tl9Bym
+         xgT3pVuyH66UTH2T/OqVTJP2f6MxdX42Ex1FddMPJc8t+2df4Tzfuekhm7W99lTwwH54
+         ZQUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688483482; x=1691075482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mfwAeExHr+y1pYJrIRZuSm3ldW4dUztFq7/VB374kRE=;
+        b=JVXqI0+p7aYno/JMvuQbZvlyPdEWQ2Lw4zdsANUDnCg8QdrqeGIgIfCnwwPh/+v4Ny
+         HcgobkSsr+bNJuyeesLWFMdD2uMk6tE/Prax+eyAca07EQ6smbFOTqCRiBW3jfaMVpRc
+         CM9PGcj7+79G9rugzBedBlNRgYjQksFeerJHA8m+Gi8F4OwG+7qtOzy+EiEUOkY7DMCI
+         m/SIxilaRKkYJHVIcM4bxSnIEiWvbHLVvlE2WEF9B1DCbm5lIntpGxa+2Bf5biR6UlUc
+         O4g+L7QsMGSl1kwhGYHSGXYrhMMCtgFd8tDgD5lnwgrvqAy2PiJUHO3qGMWaEOfpx99n
+         E2qQ==
+X-Gm-Message-State: AC+VfDyJTTNri0NFDMYC7KA2U+0KYKOeHTjotZ5ro+ToZIcyQudUSTvU
+        j6YiaFx11RgRoSisTMH5B3D6WcvwF0Nc8xz/S1Q=
+X-Google-Smtp-Source: ACHHUZ6lFU9RHatoa8CPtTUvL3I3VmS429+p4CCImxVgdfEnS0NnIkvpMK/ERbsPk9tKKuel9Z9Yjw==
+X-Received: by 2002:a05:6a20:5495:b0:125:a429:a19c with SMTP id i21-20020a056a20549500b00125a429a19cmr14123250pzk.48.1688483482403;
+        Tue, 04 Jul 2023 08:11:22 -0700 (PDT)
+Received: from [10.254.70.13] ([139.177.225.251])
+        by smtp.gmail.com with ESMTPSA id t18-20020aa79392000000b0063d24fcc2b7sm9889956pfe.1.2023.07.04.08.11.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 08:11:21 -0700 (PDT)
+Message-ID: <c5f29a53-aae2-1d1b-9c98-5878a046d1f3@bytedance.com>
+Date:   Tue, 4 Jul 2023 23:11:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <babdf7a8-9663-6d71-821a-34da2aff80e2@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v4 33/35] maple_tree: Update testing code for
+ mas_{next,prev,walk}
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20230518145544.1722059-1-Liam.Howlett@oracle.com>
+ <20230518145544.1722059-34-Liam.Howlett@oracle.com>
+ <CAMuHMdV4T53fOw7VPoBgPR7fP6RYqf=CBhD_y_vOg53zZX_DnA@mail.gmail.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <CAMuHMdV4T53fOw7VPoBgPR7fP6RYqf=CBhD_y_vOg53zZX_DnA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 07:42:53PM +0800, Hou Tao wrote:
-> Hi,
+
+
+在 2023/7/3 02:20, Geert Uytterhoeven 写道:
+> Hi Liam,
 > 
-> On 6/30/2023 7:08 PM, Alexey Gladkov wrote:
-> > Since the introduction of idmapped mounts, file handling has become
-> > somewhat more complicated. If the inode has been found through an
-> > idmapped mount the idmap of the vfsmount must be used to get proper
-> > i_uid / i_gid. This is important, for example, to correctly take into
-> > account idmapped files when caching, LSM or for an audit.
+> On Thu, May 18, 2023 at 9:37 PM Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+>> Now that the functions have changed the limits, update the testing of
+>> the maple tree to test these new settings.
+>>
+>> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 > 
-> Could you please add a bpf selftest for these newly added kfuncs ?
-> >
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > ---
-> >  fs/mnt_idmapping.c | 69 ++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 69 insertions(+)
-> >
-> > diff --git a/fs/mnt_idmapping.c b/fs/mnt_idmapping.c
-> > index 4905665c47d0..ba98ce26b883 100644
-> > --- a/fs/mnt_idmapping.c
-> > +++ b/fs/mnt_idmapping.c
-> > @@ -6,6 +6,7 @@
-> >  #include <linux/mnt_idmapping.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/user_namespace.h>
-> > +#include <linux/bpf.h>
-> >  
-> >  #include "internal.h"
-> >  
-> > @@ -271,3 +272,71 @@ void mnt_idmap_put(struct mnt_idmap *idmap)
-> >  		kfree(idmap);
-> >  	}
-> >  }
-> > +
-> > +__diag_push();
-> > +__diag_ignore_all("-Wmissing-prototypes",
-> > +		  "Global functions as their definitions will be in vmlinux BTF");
-> > +
-> > +/**
-> > + * bpf_is_idmapped_mnt - check whether a mount is idmapped
-> > + * @mnt: the mount to check
-> > + *
-> > + * Return: true if mount is mapped, false if not.
-> > + */
-> > +__bpf_kfunc bool bpf_is_idmapped_mnt(struct vfsmount *mnt)
-> > +{
-> > +	return is_idmapped_mnt(mnt);
-> > +}
-> > +
-> > +/**
-> > + * bpf_file_mnt_idmap - get file idmapping
-> > + * @file: the file from which to get mapping
-> > + *
-> > + * Return: The idmap for the @file.
-> > + */
-> > +__bpf_kfunc struct mnt_idmap *bpf_file_mnt_idmap(struct file *file)
-> > +{
-> > +	return file_mnt_idmap(file);
-> > +}
+> Thanks for your patch, which is now commit eb2e817f38cafbf7
+> ("maple_tree: update testing code for mas_{next,prev,walk}") in
 > 
-> A dummy question here: the implementation of file_mnt_idmap() is
-> file->f_path.mnt->mnt_idmap, so if the passed file is a BTF pointer, is
-> there any reason why we could not do such dereference directly in bpf
-> program ?
-
-I wanted to provide a minimal API for bpf programs. I thought that this
-interface is stable enough, but after reading Christian's answer, it looks
-like I was wrong.
-
-> > +
-> > +/**
-> > + * bpf_inode_into_vfs_ids - map an inode's i_uid and i_gid down according to an idmapping
-> > + * @idmap: idmap of the mount the inode was found from
-> > + * @inode: inode to map
-> > + *
-> > + * The inode's i_uid and i_gid mapped down according to @idmap. If the inode's
-> > + * i_uid or i_gid has no mapping INVALID_VFSUID or INVALID_VFSGID is returned in
-> > + * the corresponding position.
-> > + *
-> > + * Return: A 64-bit integer containing the current GID and UID, and created as
-> > + * such: *gid* **<< 32 \|** *uid*.
-> > + */
-> > +__bpf_kfunc uint64_t bpf_inode_into_vfs_ids(struct mnt_idmap *idmap,
-> > +		const struct inode *inode)
-> > +{
-> > +	vfsuid_t vfsuid = i_uid_into_vfsuid(idmap, inode);
-> > +	vfsgid_t vfsgid = i_gid_into_vfsgid(idmap, inode);
-> > +
-> > +	return (u64) __vfsgid_val(vfsgid) << 32 |
-> > +		     __vfsuid_val(vfsuid);
-> > +}
-> > +
-> > +__diag_pop();
-> > +
-> > +BTF_SET8_START(idmap_btf_ids)
-> > +BTF_ID_FLAGS(func, bpf_is_idmapped_mnt)
-> > +BTF_ID_FLAGS(func, bpf_file_mnt_idmap)
-> > +BTF_ID_FLAGS(func, bpf_inode_into_vfs_ids)
-> > +BTF_SET8_END(idmap_btf_ids)
-> > +
-> > +static const struct btf_kfunc_id_set idmap_kfunc_set = {
-> > +	.owner = THIS_MODULE,
-> > +	.set   = &idmap_btf_ids,
-> > +};
-> > +
-> > +static int __init bpf_idmap_kfunc_init(void)
-> > +{
-> > +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &idmap_kfunc_set);
-> > +}
-> > +
-> Is BPF_PROG_TYPE_TRACING sufficient for your use case ? It seems
-> BPF_PROG_TYPE_UNSPEC will make these kfuncs be available for all bpf
-> program types.
-
-This can be used not only in BPF_PROG_TYPE_TRACING but also at least for
-BPF_PROG_TYPE_LSM.
-
-> > +late_initcall(bpf_idmap_kfunc_init);
+>> --- a/lib/test_maple_tree.c
+>> +++ b/lib/test_maple_tree.c
+>> @@ -2011,7 +2011,7 @@ static noinline void __init next_prev_test(struct maple_tree *mt)
+>>
+>>          val = mas_next(&mas, ULONG_MAX);
+>>          MT_BUG_ON(mt, val != NULL);
+>> -       MT_BUG_ON(mt, mas.index != ULONG_MAX);
+>> +       MT_BUG_ON(mt, mas.index != 0x7d6);
 > 
+> On m68k (ARAnyM):
 > 
-
--- 
-Rgrds, legion
-
+>      TEST STARTING
+> 
+>      BUG at next_prev_test:2014 (1)
+>      Pass: 3749128 Run:3749129
+> 
+> And after that it seems to hang[*].
+> 
+> After adding a debug print (thus shifting all line numbers by +1):
+> 
+>      next_prev_test:mas.index = 0x138e
+>      BUG at next_prev_test:2015 (1)
+> 
+> 0x138e = 5006, while the expected value is 0x7d6 = 2006.
+I took a look. The return value 5006 is correct while the
+expected value is wrong. This is a problem with the test,
+it is not compatible with 32-bit systems.
+> 
+> I guess converting this test to the KUnit framework would make it a
+> bit easier to investigate failures...
+> 
+> [*] Left the debug one running, and I got a few more:
+> 
+>      BUG at check_empty_area_window:2656 (1)
+>      Pass: 3754275 Run:3754277
+>      BUG at check_empty_area_window:2657 (1)
+>      Pass: 3754275 Run:3754278
+>      BUG at check_empty_area_window:2658 (1)
+>      Pass: 3754275 Run:3754279
+>      BUG at check_empty_area_window:2662 (1)
+>      Pass: 3754275 Run:3754280
+>      BUG at check_empty_area_window:2663 (1)
+>      Pass: 3754275 Run:3754281
+>      maple_tree: 3804518 of 3804524 tests passed
+> 
+> So the full test took more than 20 minutes...
+> 
+>>          MT_BUG_ON(mt, mas.last != ULONG_MAX);
+>>
+>>          val = mas_prev(&mas, 0);
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds
