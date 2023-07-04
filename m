@@ -2,43 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FD274693C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD62746945
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjGDF4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 01:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S229610AbjGDF5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 01:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjGDF4N (ORCPT
+        with ESMTP id S229595AbjGDF52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:56:13 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2060B130
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:56:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VmbECYU_1688450166;
-Received: from 30.221.145.16(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VmbECYU_1688450166)
-          by smtp.aliyun-inc.com;
-          Tue, 04 Jul 2023 13:56:07 +0800
-Message-ID: <74a8a369-c3b0-b338-fa8f-fdd7c252efaf@linux.alibaba.com>
-Date:   Tue, 4 Jul 2023 13:56:05 +0800
+        Tue, 4 Jul 2023 01:57:28 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F791E5B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 22:57:26 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51d80d81d6eso6150964a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 22:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688450245; x=1691042245;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ArafajhkK4cFBXCxi4x8GmLW6nX9wjFH15qR/2p7CyM=;
+        b=NtZsucGnDSuql+9fvbmGD0BxyvMogak6Y5smEqXX8YVtwaMtHZZ1C/TGlyDDoMak1a
+         haGaMkG1VU2aV8G9ouvmhF2bUT4R7l4z7IpK6rWEsQOIASdpe/ETlyxhdNMHA1K0IAXI
+         nuqu7D3vk1N5XXGoxqp97McDiFeIx/d2WDA8EXrw/d4mjEHvqQ9Xm/NQoidg4jGB/4tn
+         LQyQINMHJ0B6gUmy6EKdTmk9v8aoK/SbhVsxA7v90azH6n7VT5YSeuUuoLCFlvH9R0G4
+         ovqIMFrBmkbIyBLF5UOq/9OGMltcQdmd2K73ozPB/ooxRpFAkVe78oy5UYKqy/j5tswu
+         V7wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688450245; x=1691042245;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ArafajhkK4cFBXCxi4x8GmLW6nX9wjFH15qR/2p7CyM=;
+        b=LY6oaGwOt15tqONljtame3giQFD+y9XZSSLJkMYtZWZYzN6KHEj9rsBk0woG69LzJ+
+         RkLYvRDmQaUea5hxLRPlIoyKODGReVoyFVZ1SLDQz+kFuPpsy8ji7AF2inw/hIONcRlH
+         +N8KRp5jNB9zmTKeWENmXuhpgsooT9ddGA3ndxDoaEB3ufwjlvRsFpQG+OctVeraf4SN
+         2Im37TUoFE7Siw3xE/C2U18U+HGx28ICg+Vx10BTIKrvd8Uo2qHrEPfXirl6Uo+Olxrk
+         57SH4RL0LgdwZ+7s+WeHmneUZkILtXloppoqaeL0DritoeoP/RNKqM5s+CWGj3DNmRcE
+         SYhQ==
+X-Gm-Message-State: ABy/qLYldo6whYHLg7kpOomhjM9Gbb/frBZYyAYy7bn3r4R23babHuAy
+        TsZVlvEwbaYeU53IbgDcSkeONQ==
+X-Google-Smtp-Source: APBJJlGLdz4OnkPHg9QESQPK4xkTqc+rD1zI9xMSBTVlJ3pUKrE8wYmXdm39x7xyr77A57uxd3eyPg==
+X-Received: by 2002:a05:6402:5149:b0:51d:9bf3:40c5 with SMTP id n9-20020a056402514900b0051d9bf340c5mr8832051edd.20.1688450245125;
+        Mon, 03 Jul 2023 22:57:25 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05640200d500b0051bfc7763c2sm11462697edu.25.2023.07.03.22.57.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 22:57:24 -0700 (PDT)
+Message-ID: <f0609361-6fb6-a446-4e23-646201943923@linaro.org>
+Date:   Tue, 4 Jul 2023 07:57:21 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [RFC 0/2] erofs: introduce bloom filter for xattr
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 08/21] dt-bindings: reserved-memory: Add qcom,ramoops
+ binding
 Content-Language: en-US
-To:     Alexander Larsson <alexl@redhat.com>
-Cc:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
- <c316bc55-cc4d-f05a-8936-2cde217b8dd2@linux.alibaba.com>
- <CAL7ro1FjnO52tawLeu-wNtk+upN1ShxeFYE1AiFUh1JN2oo0hA@mail.gmail.com>
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-In-Reply-To: <CAL7ro1FjnO52tawLeu-wNtk+upN1ShxeFYE1AiFUh1JN2oo0hA@mail.gmail.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, corbet@lwn.net,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        conor+dt@kernel.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com, mathieu.poirier@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
+        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <1687955688-20809-9-git-send-email-quic_mojha@quicinc.com>
+ <CAL_JsqJ_TTnGjjB2d8_FKHpWBRG5GHLoWnabCKjsdeZ4QFdNEg@mail.gmail.com>
+ <cacbbb02-732e-076e-50bf-292d20a4d722@quicinc.com>
+ <58a26b9e-a48d-d567-c310-193a2c52521e@linaro.org>
+ <5447f9f8-55b4-8bed-66a6-1c9d62b02c79@quicinc.com>
+ <CAGE=qrq0CuO4J-6yC=YZ4xjL67o9QTqpei0ovX-X_8MLVeEH6g@mail.gmail.com>
+ <ba04bb7b-6599-6f41-09a8-834ee280830d@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ba04bb7b-6599-6f41-09a8-834ee280830d@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,209 +91,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/07/2023 17:55, Mukesh Ojha wrote:
+> 
+> 
+> On 7/3/2023 12:50 PM, Krzysztof Kozlowski wrote:
+>> On Mon, 3 Jul 2023 at 08:22, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+>>> On 7/2/2023 1:42 PM, Krzysztof Kozlowski wrote:
+>>>>>> The big difference is if firmware is not deciding where this log
+>>>>>> lives, then it doesn't need to be in DT. How does anything except the
+>>>>>> kernel that allocates the log find the logs?
+>>>>>
+>>>>> Yes, you are correct, firmware is not deciding where the logs lives
+>>>>> instead here, Kernel has reserved the region where the ramoops region
+>>>>> lives and later with the minidump registration where, physical
+>>>>> address/size/virtual address(for parsing) are passed and that is how
+>>>>> firmware is able to know and dump those region before triggering system
+>>>>> reset.
+>>>>
+>>>> Your explanation does not justify storing all this in DT. Kernel can
+>>>> allocate any memory it wishes, store there logs and pass the address to
+>>>> the firmware. That's it, no need for DT.
+>>>
+>>> If you go through the driver, you will know that what it does, is
+>>
+>> We talk about bindings and I should not be forced to look at the
+>> driver to be able to understand them. Bindings should stand on their
+>> own.
+> 
+> Why can't ramoops binding have one more feature where it can add a flag 
+> *dynamic* to indicate the regions are dynamic and it is for platforms
+> where there is another entity 'minidump' who is interested in these
+> regions.
 
-
-On 7/3/23 3:25 PM, Alexander Larsson wrote:
+Because we do not define dynamic stuff in Devicetree. Dynamic means
+defined by SW or runtime configurable. It is against the entire idea of
+Devicetree which is for non-discoverable hardware.
 
 > 
-> Can't you just add a magic constant to the seed? Then we can come up
-> with one that gives a good spread and hardcode that.
+>>
+>>> just create platform device for actual ramoops driver to probe and to
+>>
+>> Not really justification for Devicetree anyway. Whatever your driver
+>> is doing, is driver's business, not bindings.
+>>
+>>> provide this it needs exact set of parameters of input what original
+>>> ramoops DT provides, we need to keep it in DT as maintaining this in
+>>> driver will not scale well with different size/parameter size
+>>> requirement for different targets.
+>>
+>> Really? Why? I don't see a problem in scaling. At all.
 > 
+> I had attempted it here,
+> 
+> https://lore.kernel.org/lkml/1683133352-10046-10-git-send-email-quic_mojha@quicinc.com/
+> 
+> but got comments related to hard coding and some in favor of having
+> the same set of properties what ramoops has/provides
+> 
+> https://lore.kernel.org/lkml/e25723bf-be85-b458-a84c-1a45392683bb@gmail.com/
+> 
+> https://lore.kernel.org/lkml/202305161347.80204C1A0E@keescook/
+
+Then you were tricked. I don't get why someone else suggests that
+non-hardware property should be part of Devicetree, but anyway it's the
+call of Devicetree binding maintainers, not someone else. DT is not
+dumping ground for all the system configuration variables.
+
+
+>>
+>>>
+>>>>
+>>>>>
+>>>>> A part of this registration code you can find in 11/21
+>>>>>
+>>>>>> I'm pretty sure I already said all this before.
+>>>>>
+>>>>> Yes, you said this before but that's the reason i came up with vendor
+>>>>> ramoops instead of changing traditional ramoops binding.
+>>>>
+>>>> That's unexpected conclusion. Adding more bindings is not the answer to
+>>>> comment that it should not be in the DTS in the first place.
+>>>
+>>> Please suggest, what is the other way being above text as requirement..
+>>
+>> I do not see any requirement for us there. Forcing me to figure out
+>> how to add non-hardware property to DT is not the way to convince
+>> reviewers. But if you insist - we have ABI for this, called sysfs. If
+>> it is debugging feature, then debugfs.
+> 
+> ramoops already support module params and a way to pass these parameters
+> from bootargs but it also need to know the hard-codes addresses, so, 
+> doing something in sysfs will be again duplication with ramoops driver..
+
+Why do you need hard-coded addresses?
+
+> 
+> If this can be accommodated under ramoops, this will be very small 
+> change, like this
+> 
+> https://lore.kernel.org/lkml/20230622005213.458236-1-isaacmanjarres@google.com/
+
+That's also funny patch - missing bindings updated, missing CC DT
+maintainers.
+
+Best regards,
+Krzysztof
 
-I tried Alex's proposal of making a constant magic as part of the seed like:
-
-```
-xxh32(name, strlen(name), SEED_MAGIC + index)
-```
-
->> where `index` represents the index of corresponding predefined name
->> prefix (e.g. EROFS_XATTR_INDEX_USER), while `name` represents the name
->> after stripping the above predefined name prefix (e.g.
->> "overlay.metacopy" for "user.overlay.metacopy")
-
-
-I tried SEED_MAGIC in range [0, UINT32_MAX], trying to find a constant
-magic giving a best spread.
-
-There are totally 30 commonly used xattrs and 32 bits could be mapped
-into.  I failed to find the most perfect constant magic which maps these
-30 xattrs to exactly 30 bits with no conflict.
-
-Later I can only select a magic from those that 1) maps 30 xattrs into
-29 bits (with one conflict) and 2) at least xattrs like selinux, ima,
-evm, apparmor are unconflicted to each other.  Following are all
-candidates and the conflicted xattrs:
-
-```
-seed: 745a51e
-bit 29: user.overlay.opaque, security.selinux,
-
-seed: fb08ad9
-bit 10: user.overlay.impure, system.posix_acl_access,
-
-seed: 11aa6c32
-bit 19: user.overlay.redirect, security.SMACK64MMAP,
-
-seed: 1438d503
-bit 10: trusted.overlay.protattr, security.ima,
-
-seed: 14ccea75
-bit 30: user.overlay.upper, security.ima,
-
-seed: 1d6a0d15
-bit 31: trusted.overlay.upper, user.overlay.metacopy,
-
-seed: 25bbe08f
-bit 31: trusted.overlay.metacopy, user.overlay.metacopy,
-
-seed: 2649da2a
-bit  6: user.overlay.nlink, security.SMACK64TRANSMUTE,
-
-seed: 2b9180b2
-bit 29: user.overlay.impure, security.evm,
-
-seed: 2c5d7862
-bit 16: user.overlay.upper, system.posix_acl_default,
-
-seed: 322040a6
-bit 17: trusted.overlay.impure, user.overlay.metacopy,
-
-seed: 328bcb8c
-bit 30: user.overlay.opaque, security.evm,
-
-seed: 35afc469
-bit  3: trusted.overlay.opaque, user.overlay.origin,
-
-seed: 435bed25
-bit  4: trusted.overlay.upper, security.SMACK64MMAP,
-
-seed: 43a853af
-bit  3: trusted.overlay.protattr, security.selinux,
-
-seed: 4930f511
-bit 22: trusted.overlay.origin, security.SMACK64,
-
-seed: 4acdce1d
-bit 21: user.overlay.opaque, security.selinux,
-
-seed: 4fc5f2b0
-bit 24: user.overlay.redirect, system.posix_acl_default,
-
-seed: 50632396
-bit  6: security.SMACK64, system.posix_acl_access,
-
-seed: 535f6351
-bit  3: system.posix_acl_access, user.mime_type,
-
-seed: 56f4306e
-bit  9: user.overlay.redirect, security.SMACK64MMAP,
-
-seed: 637e2bd9
-bit 22: trusted.overlay.upper, security.evm,
-
-seed: 6ab57b38
-bit  9: trusted.overlay.upper, user.overlay.metacopy,
-
-seed: 7113bd57
-bit 19: trusted.overlay.redirect, security.SMACK64,
-
-seed: 753e3f24
-bit  6: user.overlay.redirect, security.SMACK64EXEC,
-
-seed: 81883030
-bit  0: trusted.overlay.upper, security.SMACK64IPOUT,
-
-seed: 835f9f14
-bit 27: security.SMACK64EXEC, system.posix_acl_access,
-
-seed: 938fbb78
-bit 28: user.overlay.upper, security.apparmor,
-
-seed: 953bb3e9
-bit 30: user.overlay.protattr, system.posix_acl_access,
-
-seed: 962ccd7f
-bit 29: trusted.overlay.nlink, security.SMACK64IPOUT,
-
-seed: 9fff798e
-bit  3: user.overlay.nlink, user.mime_type,
-
-seed: a2e324eb
-bit 28: trusted.overlay.nlink, user.overlay.impure,
-
-seed: a6e00cef
-bit 26: user.overlay.opaque, security.SMACK64TRANSMUTE,
-
-seed: ae26aaa9
-bit  0: trusted.overlay.metacopy, user.overlay.impure,
-
-seed: b2172573
-bit 14: trusted.overlay.upper, security.ima,
-
-seed: b5917739
-bit  8: trusted.overlay.protattr, user.overlay.impure,
-
-seed: c01a4919
-bit 22: trusted.overlay.nlink, user.overlay.upper,
-
-seed: c1fa0c0a
-bit 19: security.SMACK64TRANSMUTE, user.mime_type,
-
-seed: cbd314d7
-bit  6: trusted.overlay.upper, security.SMACK64IPOUT,
-
-seed: cc6dd8ee
-bit  2: trusted.overlay.nlink, user.overlay.upper,
-
-seed: cc922efd
-bit  3: trusted.overlay.opaque, user.overlay.opaque,
-
-seed: cd478c17
-bit  6: trusted.overlay.metacopy, user.overlay.metacopy,
-
-seed: d35be1c8
-bit  9: trusted.overlay.protattr, security.SMACK64MMAP,
-
-seed: d3914458
-bit  1: trusted.overlay.redirect, security.SMACK64IPIN,
-
-seed: f3251337
-bit  7: user.overlay.opaque, security.SMACK64IPOUT,
-
-seed: f37d8900
-bit  9: trusted.overlay.impure, user.overlay.protattr,
-
-seed: fafd6c93
-bit  0: security.SMACK64, user.mime_type,
-
-seed: fcd35cbb
-bit  3: trusted.overlay.upper, user.overlay.redirect,
-
-seed: fe2e058a
-bit 14: user.overlay.impure, user.mime_type,
-```
-
-
-Among all these candidates, I would prefer the following three
-candidates as for each inode the same xattr of overlayfs family xattrs,
-e.g. "overlay.metacopy", can not be prefixed with "trusted." and "user."
-at the same time.
-
-```
-seed: 25bbe08f
-bit 31: trusted.overlay.metacopy, user.overlay.metacopy,
-
-seed: cc922efd
-bit  3: trusted.overlay.opaque, user.overlay.opaque,
-
-seed: cd478c17
-bit  6: trusted.overlay.metacopy, user.overlay.metacopy,
-```
-
-
-Any other idea?
-
-
--- 
-Thanks,
-Jingbo
