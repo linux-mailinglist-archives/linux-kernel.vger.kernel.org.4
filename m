@@ -2,175 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEAF746C69
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6E1746C75
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjGDIx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        id S230146AbjGDIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjGDIx0 (ORCPT
+        with ESMTP id S230472AbjGDIzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:53:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1997115;
-        Tue,  4 Jul 2023 01:53:25 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 26AFE6606ED1;
-        Tue,  4 Jul 2023 09:53:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688460804;
-        bh=/4dyF8HZFtyp5Y+HhxEP3bwZNJAwUnFLGbeU+g9n2hg=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=W3r6fyfFCV1d9e3fbQqWrqlaliK8RIJShsA3JhU6t4EZyN4iWkAeaGI3c56yX1tnH
-         AIiII36iLobpWce1aQFoKmrM9lYwC30dMdNIaTPaW1W36djA7K7sMC0dGJ7po+J+Uk
-         Q+0G44HIScbow+zRuk+KM1HPRgCeaOEiDzSOPZzOJpKo3zHQ4SFM1heRe3bnfSSu5y
-         xmXWRoJsHcw6cSG+wAQSznNP/ZrZq5aSDyj43q5ijt5vopAk2Mcl8Uva0BeeZ1F1rP
-         QI6WkjLbZKkcbgMmuKEBsqyhifcfmK+wc4uhDbV2Nblw8fX8J+67YgJVCoCFbd69t/
-         WsCfOWSGdf/Mg==
-Message-ID: <ef7b62ab-b1f3-b687-7561-1ab65282ba23@collabora.com>
-Date:   Tue, 4 Jul 2023 10:53:20 +0200
+        Tue, 4 Jul 2023 04:55:39 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCCC136;
+        Tue,  4 Jul 2023 01:55:38 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d2e1a72fcca58-666eec46206so4374563b3a.3;
+        Tue, 04 Jul 2023 01:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688460937; x=1691052937;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qaOalho3nqRwTHuUgTDLzMxibsA/eLeaCFoxfQgxC3g=;
+        b=Lf8Z0jR9X+Mp/jKqeetxppnVfQtNHdOZ9ErjuTJQ8jvNfPwWsgHViNqq4SpVghiAIn
+         PxjnNr43TbIU3qwrjPi03ww8KUe7HRan68O4qX4YI8sMI81bom61e+F5JDE2ptQrAbCV
+         6vdFhsUj28XXBp5JIP5Qxgbw3r95MkZFtZgIRyx2/Y8yMwls8Etixib7w7aGRlUkMyRU
+         /Fw1WIoxdJH+HbKh4g6AFwNxawG/d13BmrSHCyMwoiTsPd4DelegI8MXkdZMPLZcAjkP
+         Bo2JWkQBVmhXSDDEWOtoUMTGXnljk5yQ+iCuLvZTJkbnPxswz+BrvSbXvBfjbnMa8irM
+         GlGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688460937; x=1691052937;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qaOalho3nqRwTHuUgTDLzMxibsA/eLeaCFoxfQgxC3g=;
+        b=daRafbJGoYte71r7e9ecWrfiZ/ViHVtmZMWVH+U8oNFPMN1yQzIV1px3WYsdWmEr9Z
+         2trxnY2hswwovWLpqSQB8JYRu0msQ214saJ+EoKWu6KjyK71wUV7qsd8C3cNGdld8Ty/
+         p3RxOmfXnqiRt65eBugbF6xmnd+xGFsuhLhF/XFZFn38FyQ1dT5EMvsrCf8lmXmR7k85
+         6Hdmzsacki081ui9iLPQHIluLuiaBW7MxnT3K+VQ2Q3AAS6L0XgmtOp18pKyG5O3/GNc
+         1p/AKryALTuw4GcBkWZmTuvY/EN9T/wIacHPgWrg9l6/ywHibM8ogU56fYyPmPDvh4Eg
+         +Hqw==
+X-Gm-Message-State: AC+VfDyHcH86TXx4wh1GQovGPi+VYOSn+u3tOAOhKFIRf+GYAcEq3vt7
+        ybnYzEelsqI0wtp3mVbx/ac=
+X-Google-Smtp-Source: ACHHUZ4S70dsmZu1O+752LEEMqHpgjwxNkRfPkOI+GALKcmWQmEo9altAEg7roJBXXQa7RVdTpZukQ==
+X-Received: by 2002:a05:6a20:3c92:b0:12c:6268:cd31 with SMTP id b18-20020a056a203c9200b0012c6268cd31mr17011918pzj.47.1688460937461;
+        Tue, 04 Jul 2023 01:55:37 -0700 (PDT)
+Received: from localhost ([2409:8a3c:3609:db21:fbac:2cf0:59be:e1b8])
+        by smtp.gmail.com with ESMTPSA id fe21-20020a056a002f1500b0066ebaeb149dsm14443282pfb.88.2023.07.04.01.55.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 01:55:37 -0700 (PDT)
+From:   John Sanpe <sanpeqf@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, John Sanpe <sanpeqf@gmail.com>
+Subject: [PATCH] libbpf: fix some typo of hashmap init
+Date:   Tue,  4 Jul 2023 16:54:29 +0800
+Message-Id: <20230704085429.3110340-1-sanpeqf@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/7] ASoC: mediatek: mt7986: support audio clock
- control
-Content-Language: en-US
-To:     Maso Huang <maso.huang@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230626023501.11120-1-maso.huang@mediatek.com>
- <20230626023501.11120-3-maso.huang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230626023501.11120-3-maso.huang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/06/23 04:34, Maso Huang ha scritto:
-> Add audio clock wrapper and audio tuner control.
-> 
-> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
-> ---
->   sound/soc/mediatek/mt7986/mt7986-afe-clk.c | 75 ++++++++++++++++++++++
->   sound/soc/mediatek/mt7986/mt7986-afe-clk.h | 18 ++++++
->   2 files changed, 93 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-clk.c
->   create mode 100644 sound/soc/mediatek/mt7986/mt7986-afe-clk.h
-> 
-> diff --git a/sound/soc/mediatek/mt7986/mt7986-afe-clk.c b/sound/soc/mediatek/mt7986/mt7986-afe-clk.c
-> new file mode 100644
-> index 000000000000..a8b5fae05673
-> --- /dev/null
-> +++ b/sound/soc/mediatek/mt7986/mt7986-afe-clk.c
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * mt7986-afe-clk.c  --  MediaTek 7986 afe clock ctrl
-> + *
-> + * Copyright (c) 2021 MediaTek Inc.
-> + * Author: Vic Wu <vic.wu@mediatek.com>
-> + *         Maso Huang <maso.huang@mediatek.com>
-> + */
-> +
-> +#include <linux/clk.h>
-> +
-> +#include "mt7986-afe-common.h"
-> +#include "mt7986-afe-clk.h"
-> +#include "mt7986-reg.h"
-> +
-> +enum {
-> +	CK_INFRA_AUD_BUS_CK = 0,
-> +	CK_INFRA_AUD_26M_CK,
-> +	CK_INFRA_AUD_L_CK,
-> +	CK_INFRA_AUD_AUD_CK,
-> +	CK_INFRA_AUD_EG2_CK,
-> +	CLK_NUM
-> +};
-> +
-> +static const char *aud_clks[CLK_NUM] = {
-> +	[CK_INFRA_AUD_BUS_CK] = "aud_bus_ck",
-> +	[CK_INFRA_AUD_26M_CK] = "aud_26m_ck",
-> +	[CK_INFRA_AUD_L_CK] = "aud_l_ck",
-> +	[CK_INFRA_AUD_AUD_CK] = "aud_aud_ck",
-> +	[CK_INFRA_AUD_EG2_CK] = "aud_eg2_ck",
-> +};
-> +
-> +int mt7986_init_clock(struct mtk_base_afe *afe)
-> +{
-> +	struct mt7986_afe_private *afe_priv = afe->platform_priv;
-> +	int ret, i;
-> +
-> +	afe_priv->clks = devm_kcalloc(afe->dev, CLK_NUM,
-> +				sizeof(*afe_priv->clks), GFP_KERNEL);
-> +	if (!afe_priv->clks)
-> +		return -ENOMEM;
-> +	afe_priv->num_clks = CLK_NUM;
-> +
-> +	for (i = 0; i < afe_priv->num_clks; i++)
-> +		afe_priv->clks[i].id = aud_clks[i];
-> +
-> +	ret = devm_clk_bulk_get(afe->dev, afe_priv->num_clks, afe_priv->clks);
-> +	if (ret)
-> +		return dev_err_probe(afe->dev, ret, "Failed to get clocks\n");
-> +
-> +	return 0;
-> +}
-> +
-> +int mt7986_afe_enable_clock(struct mtk_base_afe *afe)
-> +{
-> +	struct mt7986_afe_private *afe_priv = afe->platform_priv;
-> +	int ret;
-> +
-> +	ret = clk_bulk_prepare_enable(afe_priv->num_clks, afe_priv->clks);
+rename macro parameters to prevent replacing struct members of hashmap
 
-You don't need a wrapper function for just a single clk_bulk_prepare_enable() call.
+Signed-off-by: John Sanpe <sanpeqf@gmail.com>
+---
+ tools/lib/bpf/hashmap.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-> +	if (ret)
-> +		return dev_err_probe(afe->dev, ret, "Failed to enable clocks\n");
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(mt7986_afe_enable_clock);
-> +
-> +int mt7986_afe_disable_clock(struct mtk_base_afe *afe)
-> +{
-> +	struct mt7986_afe_private *afe_priv = afe->platform_priv;
-> +
-> +	clk_bulk_disable_unprepare(afe_priv->num_clks, afe_priv->clks);
-
-Same for this one....
-
-... which means that this file will have only mt7986_init_clock() so, ultimately,
-you don't need a mt7986-afe-clk.c file at all.
-Please merge this logic into mt7986-afe-pcm.c, which is also the only user of it.
-
-Thanks,
-Angelo
+diff --git a/tools/lib/bpf/hashmap.h b/tools/lib/bpf/hashmap.h
+index 0a5bf1937a7c..bae3feaf29d0 100644
+--- a/tools/lib/bpf/hashmap.h
++++ b/tools/lib/bpf/hashmap.h
+@@ -80,14 +80,14 @@ struct hashmap {
+ 	size_t sz;
+ };
+ 
+-#define HASHMAP_INIT(hash_fn, equal_fn, ctx) {	\
+-	.hash_fn = (hash_fn),			\
+-	.equal_fn = (equal_fn),			\
+-	.ctx = (ctx),				\
+-	.buckets = NULL,			\
+-	.cap = 0,				\
+-	.cap_bits = 0,				\
+-	.sz = 0,				\
++#define HASHMAP_INIT(_hash_fn, _equal_fn, _ctx) {	\
++	.hash_fn = (_hash_fn),				\
++	.equal_fn = (_equal_fn),			\
++	.ctx = (_ctx),					\
++	.buckets = NULL,				\
++	.cap = 0,					\
++	.cap_bits = 0,					\
++	.sz = 0,					\
+ }
+ 
+ void hashmap__init(struct hashmap *map, hashmap_hash_fn hash_fn,
+-- 
+2.40.1
 
