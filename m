@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643C8746AE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C176746AE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjGDHnO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 03:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        id S231487AbjGDHnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjGDHnI (ORCPT
+        with ESMTP id S231127AbjGDHnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:43:08 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8D4CA;
-        Tue,  4 Jul 2023 00:43:07 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qGagf-0019oK-Cv; Tue, 04 Jul 2023 09:43:01 +0200
-Received: from p57bd997f.dip0.t-ipconnect.de ([87.189.153.127] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qGagf-000zd1-5x; Tue, 04 Jul 2023 09:43:01 +0200
-Message-ID: <1af44c63f3fdffb3bb5d0cf718cc470ef8459c33.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in
- SH7709
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 04 Jul 2023 09:43:00 +0200
-In-Reply-To: <CAMuHMdUtgUu36uMOS0ij=1_oFKeqj2kwb_4DkhxAsrZQisMpew@mail.gmail.com>
-References: <20230527164452.64797-1-contact@artur-rojek.eu>
-         <20230527164452.64797-4-contact@artur-rojek.eu>
-         <CAMuHMdV3gn8g-gKam71K=WfT3CVNwvz5eKPSh2Fqi3wVg7ZwNw@mail.gmail.com>
-         <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
-         <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
-         <8205bc2cb9f983914ff6920deed3f54893713ba0.camel@physik.fu-berlin.de>
-         <d5667e9675bf8be35b1a5414d443b8f371b1bd9e.camel@physik.fu-berlin.de>
-         <CAMuHMdV=kc1sZfsBad99ofbUBUyuZ_fAekdkFJYp9Rhskf9xWg@mail.gmail.com>
-         <485e9274ebf29da4075b40c2888f95a6cdc6d4ed.camel@physik.fu-berlin.de>
-         <CAMuHMdUtgUu36uMOS0ij=1_oFKeqj2kwb_4DkhxAsrZQisMpew@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
+        Tue, 4 Jul 2023 03:43:39 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9B3E73;
+        Tue,  4 Jul 2023 00:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1688456612;
+  x=1719992612;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=fSDO3rrBra1awm9kf+KLRv/kWybe/6y7zQStYPKcuJE=;
+  b=PlI8YPbsUZPf8lQcW/lE5uR9+rbGO5Iu3Fq+IU+obsG70Gn1mMRUUtK+
+   o/Yuz5qcOW6J/BglKElPRCnk7iLF+h46Cz8Jl8esbeCfW51E8l8pxkApj
+   D6Efne75hS1XdB8zqt6sIdEuDPccGp/aIEGS3Qtqx+F5bI9hj3TaJQHV1
+   kio0rkbB5WZhucnv1YcMRhzHcxk/tHIknnrRS7gg0ZN6YSayVzG4sJMn+
+   d9ku7msHD8V8YlpdM8+/QocjezLbnO6h8rRU5m8qIJOR9Du8rvnKNQ6HN
+   AraErZt+0po4UyuOV7M8mV3fC5FRiATOwJP/ur5lTMHhyawOnetx9pUUB
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+Date:   Tue, 4 Jul 2023 09:43:29 +0200
+Subject: [PATCH] power: supply: Propagate of_node to child device
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.127
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20230704-power-of-v1-1-cc82d2eda65b@axis.com>
+X-B4-Tracking: v=1; b=H4sIAKDNo2QC/x2NQQrDMAwEvxJ0rsB1DQn9SunBStaNLlaQoS2E/
+ L1Oj7PMMjs1uKLRfdjJ8damVjtcLwPNa64vsC6dKYZ4C2NIvNkHzlY4IWYJIkjTQl2X3MDiuc7
+ reShm6Zw3R9Hvv/B4HscPzuYD0nEAAAA=
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@axis.com>, Vincent Whitchurch <vincent.whitchurch@axis.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert!
+Ensure that the dynamically created power supply device sets its
+->of_node if the parent device has one.  This brings it in line with
+several other subsystems (see git grep 'of_node =.*parent.*of_node') and
+allows easier identification of the device from udev rules and similar.
 
-On Tue, 2023-07-04 at 09:32 +0200, Geert Uytterhoeven wrote:
-> Hi Adrian,
-> 
-> On Tue, Jul 4, 2023 at 7:45 AM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
-> > On Sat, 2023-06-17 at 13:09 +0200, Geert Uytterhoeven wrote:
-> > > On Sat, Jun 17, 2023 at 9:32 AM John Paul Adrian Glaubitz
-> > > <glaubitz@physik.fu-berlin.de> wrote:
-> > > > On Thu, 2023-06-08 at 12:03 +0200, John Paul Adrian Glaubitz wrote:
-> > > > > > > > That is actually safer, as the user can override NR_ONCHIP_DMA_CHANNELS
-> > > > > > > > when configuring his kernel, thus breaking DMA  due to an incorrect
-> > > > > > > > value of SH_DMAC_NR_MD_CH.
-> > > > > > > > 
-> > > > > > > > Unfortunately we cannot protect against that when using a single DMAC,
-> > > > > > > > as SH_DMAC_NR_MD_CH can be either 4, 6, or 8.
-> > > > > > > > 
-> > > > > > > > Perhaps this configuration should be moved from Kconfig to <cpu/dma.h>,
-> > > > > > > > to protect against a user overriding this value?
-> > > > > > > 
-> > > > > > > Isn't SH_DMAC_NR_MD_CH already hardwired to the SoC being used?
-> > > > > > 
-> > > > > > It depends on CONFIG_NR_ONCHIP_DMA_CHANNELS, while it
-> > > > > > should be fixed based on the SoC.
-> > > > > 
-> > > > > I agree. However, I would be fine with merging this patch set first and fixing
-> > > > > this particular issue in a follow-up series.
-> > > > 
-> > > > So, my suggestion is to take this series as-is for 6.5, then get the other issues
-> > > > you mentioned fixed for 6.6. I think it's already a gain when these issues are
-> > > > fixed and the kernel boots on the HP Journada 680 again.
-> > > 
-> > > Sure, I don't want to block the acceptance of this series at all.
-> > > Thanks!
-> > 
-> > Apologies for the late reply. Would you mind adding your Reviewed-by to this patch
-> > before I review and apply the series?
-> 
-> With "must be a multiply of two" and "Must be an even number" removed.
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Before this patch:
 
-Thanks. I guess, I will drop the whole
+ /sys/class/power_supply# ls -l bq256xx-battery/of_node
+ ls: cannot access 'bq256xx-battery/of_node': No such file or directory
+ # ls -l bq256xx-battery/hwmon1/of_node
+ ls: cannot access 'bq256xx-battery/hwmon1/of_node': No such file or directory
 
-	"and clarify that NR_ONCHIP_DMA_CHANNELS must be a multiply of two"
+After:
 
-then. Correct?
+ /sys/class/power_supply# ls -l bq256xx-battery/of_node
+ lrwxrwxrwx 1 root root 0 May 17 09:14 bq256xx-battery/of_node ->
+ ../../../../../../../../firmware/devicetree/base/virtio@1/i2c/bq25619@09
+ # ls -l bq256xx-battery/hwmon1/of_node
+ lrwxrwxrwx 1 root root 0 May 17 09:14 bq256xx-battery/hwmon1/of_node ->
+ ../../../../../../../../../firmware/devicetree/base/virtio@1/i2c/bq25619@09
 
-Adrian
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/power/supply/power_supply_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 3791aec69ddc6..8769d82dd9c3d 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1368,6 +1368,7 @@ __power_supply_register(struct device *parent,
+ 	dev->class = power_supply_class;
+ 	dev->type = &power_supply_dev_type;
+ 	dev->parent = parent;
++	dev->of_node = parent->of_node;
+ 	dev->release = power_supply_dev_release;
+ 	dev_set_drvdata(dev, psy);
+ 	psy->desc = desc;
+
+---
+base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
+change-id: 20230704-power-of-4e2ab0bbe48d
+
+Best regards,
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Vincent Whitchurch <vincent.whitchurch@axis.com>
+
