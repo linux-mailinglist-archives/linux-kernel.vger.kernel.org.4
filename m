@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0D67477E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9CB7477EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjGDRem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S231772AbjGDRfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 13:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbjGDRek (ORCPT
+        with ESMTP id S231441AbjGDRfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:34:40 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D111BD2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:34:14 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9924ac01f98so713469666b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:34:14 -0700 (PDT)
+        Tue, 4 Jul 2023 13:35:15 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916F41732
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 10:34:57 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc0609cd6so58439975e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 10:34:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1688492053; x=1691084053;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E82hjoqhMKWrCTgt/fXbmQjWVshoS0GVNipXIUdN9/k=;
-        b=MknyirkMO5L5olTeZIB+6FibKKcCcnwpxx/lCEzrasyo2VaFLkGQnFAE3XfyPXBBrd
-         5JxMLWQ7UgqdselInS83IA00I+bXOSMIaqZdnLoXYlsLnBsPk9jsj1FkP2NEBYAB8Itd
-         3avYV1f8udp3EgWdoV4qLZSWIHNNmDKUnRAkE=
+        d=linaro.org; s=google; t=1688492094; x=1691084094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qJ64lF89VpbBy1ulIr9SZuXHSuhm2fS1ISkB9mGrhk=;
+        b=UaNfZIHtqk8sEbad/eQ98L/1Xhl2t0Rk2Cg/sDrY56rhiua4m2qDFulF1/qLVjRl+S
+         cKvYQ7uLAy5lu4t51ZX4buDN3G7HRRoHRzYeYqY3SMkVnx6TD1+UVZnRhrmxhQ61Q493
+         +Or8Aijqk1dkK7CSdnUQ1vOR7Wh3zf4K7rSv9EmlxbtiBCk4J2FIJxt4rBWo9Zo96Exn
+         yM5TdQuJNG3DazERTfy13G3Tk7f6vcCKSD7SqSonGaPU7vrvAWP7act/UC/JQXTLdKwA
+         os9+ZDwZWt6eHP78vqaKcB7cqPXG0zTGfRuw1v6yl6U81iH3tcsxFcy8dg0dKeW4zs9a
+         FYeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688492053; x=1691084053;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E82hjoqhMKWrCTgt/fXbmQjWVshoS0GVNipXIUdN9/k=;
-        b=R13x3ACZuvIEdog3e05gMIJ6OSpzJ/A5HbvA6mPaUAJ+wHgivVTznuxYlO5OBYDx/G
-         WQB5AQIlZdoUpmPSjjayCGG64DwruzZgRcbyVti91l/BlkQJQxduAx+QhWb273K8ASR2
-         lXckyXMhiJvttVBxFCjK//+c+iD1Gs+C78zIjzwamlIdfUyron5EyGhgrtucIIaBdKXq
-         onHfWpOwuo8AmKCgIMWD1HNPzeTdQNw5qTY0TyUgfT6WXGIhOnoqVDYWHsYOSzvKMfSx
-         FJ+vn/i/IVeefNawKurpaUTwdo00T92OUtv8g7aKlJ3E2OZF+xbwjLumSeTONvwFiXD8
-         Vbww==
-X-Gm-Message-State: ABy/qLaEQw9taeqcIxWA8b1/AkzU1Yg93m0gyBE+ZuskXGT/vrmzbWCY
-        Bc6oMC1Mi6DSF0eeT8L365chG6OKaUK1EsBeEcI=
-X-Google-Smtp-Source: APBJJlEUTY/dtc0SSVLyoiRR0j7AGo68Z6RwBaNZuNo7uqPpDBL2Z2MiKGW2gWb95F8odAa5qV455Q==
-X-Received: by 2002:a17:906:a88b:b0:988:4a48:6ff3 with SMTP id ha11-20020a170906a88b00b009884a486ff3mr10024044ejb.30.1688492052935;
-        Tue, 04 Jul 2023 10:34:12 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-58-49-236.retail.telecomitalia.it. [82.58.49.236])
-        by smtp.gmail.com with ESMTPSA id v24-20020a1709064e9800b00992ca779f42sm6724645eju.97.2023.07.04.10.34.11
+        d=1e100.net; s=20221208; t=1688492094; x=1691084094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3qJ64lF89VpbBy1ulIr9SZuXHSuhm2fS1ISkB9mGrhk=;
+        b=b7rB3H4VtpDFe38H5noDNiaOhJiA/tMGh0//BT/eCvf32ybmOyaRCtml+zBwqQWiIE
+         Sl3YSIgUhY6sk5xNT6tMyw5c6aZBmMPNc2zXXsUJQ4wCPNc6w9NLDSLu6bF//2jaHESG
+         OmqXpFYpt++Xl97xFB/BlPX3q2+trkk0B8azJ7q56//S46XxK/CZZ6P9wulUa5rauPxx
+         sx7K8NegVP+QfpNYz0Z7QTSqSZ4wo9coS+7fLV914pAx33mM0DEbqke/rvEiOlyYsM4V
+         XAHUmIh1FvZG1BebIVhP6X3G4m/5U3jr/MdUNCoc0MleomSeJUs9WmQqUsa7WM+fF6VO
+         oljg==
+X-Gm-Message-State: AC+VfDwXc/jFK4JnNwDAYbdNCnXYXWdU8W3ymG26YmlZbRtpVgE4xD0p
+        8UfDWQhupnMNCaISTHeCRlMMQA==
+X-Google-Smtp-Source: ACHHUZ5jn9n9ZjzIR1LoKOiyjbakRHjBusBJI/fMlOmuJoqSwT0055ZXuMXIRChWey7suI30Cuw7cA==
+X-Received: by 2002:a1c:4c10:0:b0:3fa:991c:2af9 with SMTP id z16-20020a1c4c10000000b003fa991c2af9mr10773167wmf.16.1688492094251;
+        Tue, 04 Jul 2023 10:34:54 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id u16-20020a7bcb10000000b003fbb5142c4bsm17163518wmj.18.2023.07.04.10.34.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 10:34:12 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH 2/2] ARM: dts: stm32: add touchscreen on stm32f746-disco board
-Date:   Tue,  4 Jul 2023 19:34:07 +0200
-Message-Id: <20230704173407.590544-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230704173407.590544-1-dario.binacchi@amarulasolutions.com>
-References: <20230704173407.590544-1-dario.binacchi@amarulasolutions.com>
+        Tue, 04 Jul 2023 10:34:53 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 18:34:51 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     guoren@kernel.org, arnd@arndb.de, palmer@rivosinc.com,
+        tglx@linutronix.de, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
+        palmer@dabbelt.com, bjorn@rivosinc.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] riscv: entry: Fixup do_trap_break from kernel side
+Message-ID: <20230704173451.GD385243@aspen.lan>
+References: <20230702025708.784106-1-guoren@kernel.org>
+ <20230704164003.GB83892@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704164003.GB83892@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -75,49 +78,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch adds support for touchscreen on the stm32f746-disco board.
+On Tue, Jul 04, 2023 at 06:40:03PM +0200, Peter Zijlstra wrote:
+> On Sat, Jul 01, 2023 at 10:57:07PM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The irqentry_nmi_enter/exit would force the current context into in_interrupt.
+> > That would trigger the kernel to dead panic, but the kdb still needs "ebreak" to
+> > debug the kernel.
+> >
+> > Move irqentry_nmi_enter/exit to exception_enter/exit could correct handle_break
+> > of the kernel side.
+>
+> This doesn't explain much if anything :/
+>
+> I'm confused (probably because I don't know RISC-V very well), what's
+> EBREAK and how does it happen?
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
+Among other things ebreak is part of the BUG() macro (although it is
+also used to programmatically enter kgdb).
 
- arch/arm/boot/dts/st/stm32f746-disco.dts | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
 
-diff --git a/arch/arm/boot/dts/st/stm32f746-disco.dts b/arch/arm/boot/dts/st/stm32f746-disco.dts
-index c11616ed5fc6..4830ccd48cb3 100644
---- a/arch/arm/boot/dts/st/stm32f746-disco.dts
-+++ b/arch/arm/boot/dts/st/stm32f746-disco.dts
-@@ -45,6 +45,7 @@
- #include "stm32f746-pinctrl.dtsi"
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
- 
- / {
- 	model = "STMicroelectronics STM32F746-DISCO board";
-@@ -99,6 +100,22 @@ &i2c1 {
- 	status = "okay";
- };
- 
-+&i2c3 {
-+	pinctrl-0 = <&i2c3_pins_a>;
-+	pinctrl-names = "default";
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	touchscreen@38 {
-+		compatible = "edt,edt-ft5306";
-+		reg = <0x38>;
-+		interrupt-parent = <&gpioi>;
-+		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
-+		touchscreen-size-x = <480>;
-+		touchscreen-size-y = <272>;
-+	};
-+};
-+
- &sdio1 {
- 	status = "okay";
- 	vmmc-supply = <&mmc_vcard>;
--- 
-2.32.0
+> Specifically, if EBREAK can happen inside an local_irq_disable() region,
+> then the below change is actively wrong. Any exception/interrupt that
+> can happen while local_irq_disable() must be treated like an NMI.
+>
+> If that makes kdb unhappy, fix kdb.
 
+The only relationship this problem has to kgdb/kdb is that is was found
+using the kgdb test suite. However the panic is absolutely nothing to
+do with kgdb.
+
+I would never normally be so sure regarding the absence of bugs in kgdb
+but in this case it can be reproduced when kgdb is not enabled in the
+KConfig which I think puts it in the clear!
+
+Reproduction is simply:
+
+  /bin/echo BUG > /sys/kernel/debug/provoke-crash/DIRECT
+
+Above will panic the kernel but, absent options specifically requesting
+a panic, this should kill the echo process rather than killing the kernel.
+
+
+Daniel.
