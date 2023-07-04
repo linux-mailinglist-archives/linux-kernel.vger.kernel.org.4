@@ -2,141 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70C974704D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 14:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165AC746F92
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 13:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjGDMCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 08:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S231652AbjGDLOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 07:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjGDMCd (ORCPT
+        with ESMTP id S231527AbjGDLNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:02:33 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2090.outbound.protection.outlook.com [40.107.255.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA89185
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 05:02:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HLDcFx6by+VFhhQOK/0ooZu4ezNj+PuXjOXF8j4w8QM+8x1VhUN71qFTVi+7bD1uYXzYviS6meVmJEl6vE/K2Zmxz+V7YbzHNhd95GgXP5tRBPBoKW7dhB/4D/wbLiPg8bsmF7AY6gfrug2ZmogdD6Y3oyzC1yb7ibdrd9r5geC+QJjfUoITPewVHVgurofVCFf1jwyz0wquJq8s7ir0HhjBkXCZI8LmDpUcDZvwcWr9kB2zBfaQDNoyXzqJCfENCh0P/LigG1SS/FmdCMxy//79yhX22l2VZCO0VLeKJQ/l4yxYD0nz4LoGOEO0WSDy4mvBFFmfQDxpwRzOlSeUJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s4qH/EEc772Hh1Fa91uEXK3Fyy2YZ1pkJB/En7fGXK0=;
- b=P8/UddceVDRf00hNco1Ug8urBi3e/w3HhuYJ+vFxfQNDq7PZtWN4SKiiA3mYByENc1Q96NU5FrjCimWmw+qwohR+XFc0WKKYnys1/B70F6vZfZr7TlZdSlVifJSatUTLqA/Rkly5BtJft0eJn/WKjfSTkXx+zrEKROKyeSB8l4EVBBICa/gfJTK+n7Quds7MnXG2II5QxpRKkuIW2sqF3lIec6Q91UFZOcdTYQlUmxjmioLdQATRwKVm/2A2PsPiwn2WEz6SmiaXuwkVr+bnjxefxvzrlDUFrqvBFfW5XFf9Vmys67z4MKXRcQdnj1fLOQEkCeU4zKTzQMaeZ7A9Xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s4qH/EEc772Hh1Fa91uEXK3Fyy2YZ1pkJB/En7fGXK0=;
- b=h/zvBnwnsOfS54rwfKR6aLW6KtbluhT1W+j1dGK1+TRg0tlY+Y5agLyvIqVTEvu7OM46O6PElBT4agyOg06C3Bw34D4nYaREe2CxPBFGPPZJO67HppNkBpKOupksgW0lvyXHE0z4aihk9Nblh4gOnTHatHB7gtWHOoyXNrH/JQHwGyP+Rui1PfLfFv1dzlQeO5lycBG8A7NPzIcoI0xzVQKmF9k1/bStnsdlrs5GtM3hXUbep7FbAYrASN3kpKIUwQEoepMJoJsiBLlO8j+sV05L6EIbgVFwPX3496ri5Kk45VH9tb+eDIytb8qoCtvXQ+y2Vodv6YDtPkYfVk9V4Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB4999.apcprd06.prod.outlook.com (2603:1096:101:4a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 12:02:24 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 12:02:23 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] reset: brcmstb: Use devm_platform_get_and_ioremap_resource()
-Date:   Tue,  4 Jul 2023 20:02:05 +0800
-Message-Id: <20230704120211.38122-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0144.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::24) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 4 Jul 2023 07:13:46 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0ABD710C1;
+        Tue,  4 Jul 2023 04:13:43 -0700 (PDT)
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 814FB303CE;
+        Tue,  4 Jul 2023 13:13:40 +0200 (CEST)
+From:   tumic@gpxsee.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v8 0/2] Digiteq Automotive MGB4 driver
+Date:   Tue,  4 Jul 2023 15:13:37 +0200
+Message-Id: <20230704131339.2177-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB4999:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c64e55f-a4eb-447a-7054-08db7c86867e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WYGGy/o9kuWkNCWDNO+bEYmpadWG5oNTqhyNimMXDvnuhQRxbdcUbH1sUMZJQVb+dzekXoME0RQaj3JJzE6Xf/JAZpZja3/EtOyi3olYdZ5DEkvGYu3yRLiQxk87s1KAIJaDCLspw2/2JwJnVvUuuPMzGmqtd+pvKdgCZ0+3TzbmP2uuJp4HwvR/P85/hiED3KtSZt4Ew9bqvdn3PUDzU54whflS53iwyvHyVL8eeAxqhPPIf5Ca97ZwjE7zh6bfndyDHROaCTJEO7NS5QtvaGI99L7zuTOwjBXo5s61y9EWgt81FfO684+GeG/OPX5Z3nOGeUHFi398ueTQAOVcvOCcjFafm/umMBYkZSbu52/5U7X31I7M5wrJeYUnMs/U8VWh72nQXAm6j7EwoI8pqBgiVlafk2JYRZ4aKsqrdaXzk6iqovKEuPjEWMrua27dO00aQyePfw3x3oMvBmsWY81Ho3e2uwYaydyReJiKJATkBvOBTy8Keq88LOBQ3FhjfRnkgVCiyr/s5AtRa309PUEQmC9nfBICsKi1LNSeEcXIszleqWAI55bv9+SBKXXo1CLLr1uMCat41MshpsYnEN2/8MPDmL5VCVc5NAyGGk6HeXcOYzBGi7IlbBj4sjTtvgzWZ6pSOkSHTzQ70TrX0A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(366004)(346002)(136003)(451199021)(6666004)(38100700002)(52116002)(38350700002)(2906002)(4744005)(6486002)(8936002)(110136005)(8676002)(36756003)(41300700001)(478600001)(5660300002)(66946007)(66476007)(1076003)(6512007)(186003)(26005)(86362001)(6506007)(66556008)(316002)(4326008)(2616005)(83380400001)(133343001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6AcaqFYe++UKEMzY1r23Ch6dVUfgmknH4xdO7MFVv8AbaygdHbvJ8hX+zeGN?=
- =?us-ascii?Q?KDez9uZTMpknsbfmKeDzbYQeyzlQSnc3ZXccjs+XuVrh5zON2ogN7slFfh8c?=
- =?us-ascii?Q?nYPlXhqdPSZG0PUai7ViXAvGsmzsb4kRlGoiK3hjAViCozQ0wVOS+6cPbxON?=
- =?us-ascii?Q?JZLZHRVnRCnbC/RlfmaN+UA+h8/jbcYhrrZQ136wQbaxU4MNvf9B6ki44DOn?=
- =?us-ascii?Q?Lt+D1yAs8jvZIhFFrDQyXx9r96k6XuoWzokR4Hc9EphlCk31+ys4/oy4tSDg?=
- =?us-ascii?Q?sqj7OJIRiOHoHtXxhW6WtlRR68IyxdHJCabZ1q6KHKleckEP7vF3lcG3VdpR?=
- =?us-ascii?Q?zjlVp09GMJ9TuxeY9uHNVVhXMpa5v6FkucyqNIdSC2RacUWP2shmmDvUVl+n?=
- =?us-ascii?Q?uOjYGsXxwfZc2ZpfPoIRka8LXUGDcdnSykCM3wc3ZtDTHcXyH975S7jMQ/sR?=
- =?us-ascii?Q?hIIpdD7KYUwaZMyBOIxfGWbFZSZ2wkVos9MgxOAnAayh22LfL5jWnasHJAQJ?=
- =?us-ascii?Q?opZStAvKs8qsSQ+pTERbPO6MPgjxUyOwFvy4EwIwdJIIuzCgbYFm332KwDIL?=
- =?us-ascii?Q?bxvLZ+j//cluGFNlOeF1RUlYPjdFyOuYETRbmDY5R4rPqsHUiNkU9cdiOQTQ?=
- =?us-ascii?Q?2WDpctmQrGR7AkPTjH/kneFjM6WV2W0FrYUUwaSmbUK9QIG8y1bDJUvFaYU/?=
- =?us-ascii?Q?jtuJpAESmlP8IcdEvpLRe1hkrjYgYb6ZU5vwBnI3RvZx2Qm64PCxD8yKVomh?=
- =?us-ascii?Q?KTFBwW5T3OpY9s+7f2MCVUlGR3Y1/2wftP1CarD54OF9m/Iy56S9G+M5Rcj+?=
- =?us-ascii?Q?uzToBWex3p6brKQoZGFRAmAZLl1WMuBvt4rDNc3AhWKEq78yVspeQwa0xINv?=
- =?us-ascii?Q?UlkfzdaloUc5e2vFqH2TfbzRus48KU92eG1xDuxqZa0OERE2okM+Aa0YDUfb?=
- =?us-ascii?Q?oi5L/vKPffP3+1yeThBo6ROO+lE38YQPnWwxvhGA3ecUzxRSUZV86mNDVV2e?=
- =?us-ascii?Q?R1QdXerY3+K5buSRNT9hBrIuetR8dnYtMg8KSxvRHJBc45xIdfsmjEN9dwMb?=
- =?us-ascii?Q?bnxnv4ShFP03buTbnSj0Fdex0ryOqGD24q7T5SkVy6YxIryE2L7MQklbJUBd?=
- =?us-ascii?Q?TRsSzVOkG9kkuoJsy6bV6uqgWYaaTHel5Yks390nLetxfR2ECBEPDNoC4Pzi?=
- =?us-ascii?Q?SvSMpGTusf2ZZJFvreD98FMtj272meo0xVDV8WCcG30zRCr9pBxNj7++6WgP?=
- =?us-ascii?Q?+0gV1htFhRNR1YiDz3BwQFCSON4EMn9WB2C1KZPCkRyYyoYDA+hL3rLlIQuq?=
- =?us-ascii?Q?aO3AiP2Sg2FJnXtfTlEFHu3tnz/pV6Xiy3eeVTKq1M1JghTczguDlG75qPRb?=
- =?us-ascii?Q?2yxH9jOWDNfgq+5ZpcKR7Pa8QcFeUhzXHHjG6AJaJtfQ28yUArBn6VSEICUX?=
- =?us-ascii?Q?ituqIVI3nWa1fd+NSaqhUialfD5MSnta2nQnyX0m7f6AY9l87dPlpz1fLs9l?=
- =?us-ascii?Q?eZglhkBIjkT2Fniq4gHG6/qdxfRYfAFJdxt+SzrX6bwU31/c65KcT1iFmTcn?=
- =?us-ascii?Q?IW2f1GQRIObMb0McIW5wwcmCu8PashZuc8faDOQo?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c64e55f-a4eb-447a-7054-08db7c86867e
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 12:02:22.9385
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HnKDMymO2nXKNzI/RVAxHfv3uFO34dFUaJk5jLZr32ODoFj1pqMeyVovml6OW1N2a8r50I6ZBgMhiElYqe/BwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB4999
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/reset/reset-brcmstb.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Hi,
+This patch adds a driver for the Digiteq Automotive MGB4 grabber card.
+MGB4 is a modular frame grabber PCIe card for automotive video interfaces
+(FPD-Link and GMSL for now). It is based on a Xilinx FPGA and uses their
+XDMA IP core for DMA transfers. Additionally, Xilinx I2C and SPI IP cores
+which already have drivers in linux are used in the design.
 
-diff --git a/drivers/reset/reset-brcmstb.c b/drivers/reset/reset-brcmstb.c
-index 42c9d5241c53..810fe76452d6 100644
---- a/drivers/reset/reset-brcmstb.c
-+++ b/drivers/reset/reset-brcmstb.c
-@@ -90,8 +90,7 @@ static int brcmstb_reset_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->base = devm_ioremap_resource(kdev, res);
-+	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
+The driver is a quite standard v4l2 driver, with one exception - there are
+a lot of sysfs options that may/must be set before opening the v4l2 device
+to adapt the card on a specific signal (see mgb4.rst for details)
+as the card must be able to work with various signal sources (or displays)
+that can not be auto-detected.
+
+Changes in v8:
+* Fixed broken video buffer size computation.
+* Fixed switched I2C deserializers addresses.
+* Do not depend on hwmon.
+
+Changes in v7:
+* Now using hwmon for FPGA temperature reporting.
+* Now using VIDIOC_S_FMT and v4l2_pix_format.bytesperline for setting
+  the alignment.
+* Removed the magic sleep when loading the i2c/spi adapter modules (solved by
+  request_module() calls with propper - "platform:" prefixed - module
+  names).
+* Now properly reporting all the timings info in the VIDIOC_G_DV_TIMINGS
+  ioctls.
+* Updated the documentation.
+* Minor fixes as discussed in the v6 review.
+* Added debugfs access to the FPGA registers.
+
+Changes in v6:
+* Rebased to current master that includes the Xilinx XDMA driver.
+
+Changes in v5:
+* Removed unused <linux/version.h> includes
+
+Changes in v4:
+* Redesigned the signal change handling logic. Now using the propper timings
+  API in the video input driver and a propper open() syscall check/logic in
+  the video output driver.
+* Fixed all minor issues from v3 review.
+* 'checkpatch.pl --strict' used for checking the code.
+
+Changes in v3:
+* Rebased the DMA transfers part to use the new XDMA driver from Xilinx/AMD
+
+Changes in v2:
+* Completely rewritten the original Xilinx's XDMA driver to meet kernel code
+  standards.
+* Added all required "to" and "cc" mail addresses.
+
+
+===== v4l2-compliance results - input =====
+
+v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+
+Compliance test for mgb4 device /dev/video0:
+
+Driver Info:
+        Driver name      : mgb4
+        Card type        : MGB4 PCIe Card
+        Bus info         : PCI:0000:01:00.0
+        Driver version   : 6.4.0
+        Capabilities     : 0x85200001
+                Video Capture
+                Read/Write
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x05200001
+                Video Capture
+                Read/Write
+                Streaming
+                Extended Pix Format
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+        test invalid ioctls: OK
+
+Allow for multiple opens:
+        test second /dev/video0 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 1 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK
+        test VIDIOC_DV_TIMINGS_CAP: OK
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls (Input 0):
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+        test VIDIOC_QUERYCTRL: OK (Not Supported)
+        test VIDIOC_G/S_CTRL: OK (Not Supported)
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+                warn: v4l2-test-controls.cpp(1139): V4L2_CID_DV_RX_POWER_PRESENT not found for input 0
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 0 Private Controls: 0
+
+Format ioctls (Input 0):
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+        test VIDIOC_G/S_PARM: OK
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK (Not Supported)
+        test Composing: OK (Not Supported)
+        test Scaling: OK (Not Supported)
+
+Codec ioctls (Input 0):
+        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls (Input 0):
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+
+Total for mgb4 device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 1
+
+===== v4l2-compliance results - output =====
+
+v4l2-compliance 1.24.1, 64 bits, 64-bit time_t
+
+Compliance test for mgb4 device /dev/video2:
+
+Driver Info:
+        Driver name      : mgb4
+        Card type        : MGB4 PCIe Card
+        Bus info         : PCI:0000:01:00.0
+        Driver version   : 6.4.0
+        Capabilities     : 0x85200002
+                Video Output
+                Read/Write
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x05200002
+                Video Output
+                Read/Write
+                Streaming
+                Extended Pix Format
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+        test invalid ioctls: OK
+
+Allow for multiple opens:
+        test second /dev/video2 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 1 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls (Output 0):
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+        test VIDIOC_QUERYCTRL: OK (Not Supported)
+        test VIDIOC_G/S_CTRL: OK (Not Supported)
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 0 Private Controls: 0
+
+Format ioctls (Output 0):
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+        test VIDIOC_G/S_PARM: OK (Not Supported)
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK (Not Supported)
+        test Composing: OK (Not Supported)
+        test Scaling: OK (Not Supported)
+
+Codec ioctls (Output 0):
+        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls (Output 0):
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+
+Total for mgb4 device /dev/video2: 45, Succeeded: 45, Failed: 0, Warnings: 0
+
+Martin Tůma (2):
+  Added Digiteq Automotive MGB4 driver
+  Added Digiteq Automotive MGB4 driver documentation
+
+ Documentation/admin-guide/media/mgb4.rst      | 369 +++++++
+ .../admin-guide/media/pci-cardlist.rst        |   1 +
+ .../admin-guide/media/v4l-drivers.rst         |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/media/pci/Kconfig                     |   1 +
+ drivers/media/pci/Makefile                    |   1 +
+ drivers/media/pci/mgb4/Kconfig                |  17 +
+ drivers/media/pci/mgb4/Makefile               |   6 +
+ drivers/media/pci/mgb4/mgb4_cmt.c             | 244 +++++
+ drivers/media/pci/mgb4/mgb4_cmt.h             |  17 +
+ drivers/media/pci/mgb4/mgb4_core.c            | 711 +++++++++++++
+ drivers/media/pci/mgb4/mgb4_core.h            |  72 ++
+ drivers/media/pci/mgb4/mgb4_dma.c             | 123 +++
+ drivers/media/pci/mgb4/mgb4_dma.h             |  18 +
+ drivers/media/pci/mgb4/mgb4_i2c.c             | 140 +++
+ drivers/media/pci/mgb4/mgb4_i2c.h             |  35 +
+ drivers/media/pci/mgb4/mgb4_io.h              |  33 +
+ drivers/media/pci/mgb4/mgb4_regs.c            |  30 +
+ drivers/media/pci/mgb4/mgb4_regs.h            |  35 +
+ drivers/media/pci/mgb4/mgb4_sysfs.h           |  18 +
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c        | 757 ++++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c       | 700 +++++++++++++
+ drivers/media/pci/mgb4/mgb4_sysfs_pci.c       |  71 ++
+ drivers/media/pci/mgb4/mgb4_trigger.c         | 208 ++++
+ drivers/media/pci/mgb4/mgb4_trigger.h         |   8 +
+ drivers/media/pci/mgb4/mgb4_vin.c             | 930 ++++++++++++++++++
+ drivers/media/pci/mgb4/mgb4_vin.h             |  69 ++
+ drivers/media/pci/mgb4/mgb4_vout.c            | 594 +++++++++++
+ drivers/media/pci/mgb4/mgb4_vout.h            |  65 ++
+ 29 files changed, 5281 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/mgb4.rst
+ create mode 100644 drivers/media/pci/mgb4/Kconfig
+ create mode 100644 drivers/media/pci/mgb4/Makefile
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_cmt.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_core.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_dma.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_i2c.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_io.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_regs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_in.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_out.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_sysfs_pci.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_trigger.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vin.h
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.c
+ create mode 100644 drivers/media/pci/mgb4/mgb4_vout.h
+
+
+base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
 -- 
-2.39.0
+2.40.1
 
