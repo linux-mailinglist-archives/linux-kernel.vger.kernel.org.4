@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F26747757
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC1D747759
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjGDQ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S231497AbjGDQ7I convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 12:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbjGDQ65 (ORCPT
+        with ESMTP id S231463AbjGDQ7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:58:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C946C1AC;
-        Tue,  4 Jul 2023 09:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DabEsTadhQxjy5l0iivtu039CZEIVIYM+Tg+eA1/T04=; b=uAHjvH5ak/q0Cyv04hU2og4/RD
-        HeQk6Efk5ea8ZyqH1x1gsPaBJOFNh54yiE32FGfIkjxSOFRHoq7t/nh/Dli247dERND8/oHpunIsn
-        0sv0fxIhAzuB7qpjwjh017LEznjHtow93ZIiVqERpqu4mn8QTNLxesgBaj9ZQP1frXCN0C7tmI87G
-        5X3421T7KYkERxRsw5sh3KbrdTu0EQ+ORwf19gBzw6ELDUnAkAIRegxVFiIUiiYA3sHY2FB9czD8f
-        sEUfi43cubRIt3Zj8z6f6667HPyYR86dgMT85ONknDdql7d0JNViDcTQJWTWqCgq14X7AMscLC0D6
-        femuk+Lw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qGjMM-009JrU-8j; Tue, 04 Jul 2023 16:58:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C764F3002B1;
-        Tue,  4 Jul 2023 18:58:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A1EBE2029A1AD; Tue,  4 Jul 2023 18:58:36 +0200 (CEST)
-Date:   Tue, 4 Jul 2023 18:58:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ying Huang <ying.huang@intel.com>,
-        Dan J Williams <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230704165836.GB462772@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
- <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
- <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
- <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
- <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
- <20230630183020.GA4253@hirez.programming.kicks-ass.net>
- <20230630190514.GH3436214@ls.amr.corp.intel.com>
- <ZJ9IKALhz1Q6ogu1@google.com>
+        Tue, 4 Jul 2023 12:59:07 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EA2E7A;
+        Tue,  4 Jul 2023 09:59:05 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-98273ae42d0so172555066b.0;
+        Tue, 04 Jul 2023 09:59:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688489944; x=1691081944;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OAlSSxBehGH6lUwuQMai6c7y1ew80Y5pcnFyOnaXcsM=;
+        b=ILyd5PFbo7345lbPiobk+RvEk53V9ETVPH8Nt2YCkAet6VsS3Xl53LbYj9ye6Trswk
+         A51tEj7gYkWngixh4h3bPYgJNB84Yn7ga88DIL1jxx4ItpyVdx4HabCPHY0Z3rZajCbk
+         4x/0pSt2QQioNVOwRwK63xtR4NxjWnW3N7+hmmNsivjwsETEkgj2AyZpsX+O7vcxUih1
+         3bem1Q6azcPxGlKXTFz5RU0eFh1sq1o9CNUmaLjaAKAylKRoJCpob0zzhE4fAFIEtFc4
+         aZZsl2EoXc1KmAFwLN2XK7EFnPEWgQ41KNxuY761udumzD2h//JwLzQKHaMJR6DX+HQW
+         Fv7Q==
+X-Gm-Message-State: ABy/qLavIGB+OZycVDHK/OjZvsrpzcLPBPxcfEAy96anvUuui7mER8nk
+        4yzyh2bxWxbtI8eU72At49UsDHeAjJL8LuJ/IH3T9IvZ
+X-Google-Smtp-Source: APBJJlE8/xMyNdRtuI1jlQtIf6BWl4dUxua12L5DUFMQxeCsWS1oh8+0+LOear6ys+nGi6Wr8ydtc5szpYFhf3KPBYo=
+X-Received: by 2002:a17:906:35d5:b0:98d:eaa8:8c27 with SMTP id
+ p21-20020a17090635d500b0098deaa88c27mr10842186ejb.1.1688489944072; Tue, 04
+ Jul 2023 09:59:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJ9IKALhz1Q6ogu1@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230704074506.2304939-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20230704074506.2304939-1-kai.heng.feng@canonical.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Jul 2023 18:58:53 +0200
+Message-ID: <CAJZ5v0jwO1NJ_x2t3RV-kYDmVY9UtyexznCSZMAmQ-gK4dWCmA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: video: Invoke _PS0 at boot for ACPI video
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 02:24:56PM -0700, Sean Christopherson wrote:
+On Tue, Jul 4, 2023 at 9:46 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> Screen brightness can only be changed once on some HP laptops.
+>
+> Vendor identified the root cause as Linux doesn't invoke _PS0 at boot
+> for all ACPI devices:
 
-> Waiting until userspace attempts to create the first TDX guest adds complexity
-> and limits what KVM can do to harden itself.  Currently, all feature support in
-> KVM is effectively frozen at module load.  E.g. most of the setup code is
-> contained in __init functions, many module-scoped variables are effectively 
-> RO after init (though they can't be marked as such until we smush kvm-intel.ko
-> and kvm-amd.ko into kvm.ko, which is tentatively the long-term plan).  All of
-> those patterns would get tossed aside if KVM waits until userspace attempts to
-> create the first guest.
+This part of the changelog is confusing, because the evaluation of
+_PS0 is not a separate operation.  _PS0 gets evaluated when devices
+undergo transitions from low-power states to D0.
 
-....
+>     Scope (\_SB.PC00.GFX0)
+>     {
+>         Scope (DD1F)
+>         {
+>             Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+>             {
+>                 If (CondRefOf (\_SB.PC00.LPCB.EC0.SSBC))
+>                 {
+>                     \_SB.PC00.LPCB.EC0.SSBC ()
+>                 }
+>             }
+>             ...
+>         }
+>         ...
+>     }
+>
+> _PS0 doesn't get invoked for all ACPI devices because of commit
+> 7cd8407d53ef ("ACPI / PM: Do not execute _PS0 for devices without _PSC
+> during initialization").
 
-People got poked and the following was suggested:
+And yes, Linux doesn't put all of the ACPI devices into D0 during
+initialization, but the above commit has a little to do with that.
 
-On boot do:
+> For now explicitly call _PS0 for ACPI video to workaround the issue.
 
- TDH.SYS.INIT
- TDH.SYS.LP.INIT
- TDH.SYS.CONFIG
- TDH.SYS.KEY.CONFIG
+This is not what the patch is doing.
 
-This should get TDX mostly sorted, but doesn't consume much resources.
-Then later, when starting the first TDX guest, do the whole
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/acpi/acpi_video.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
+> index 62f4364e4460..793259bd18c8 100644
+> --- a/drivers/acpi/acpi_video.c
+> +++ b/drivers/acpi/acpi_video.c
+> @@ -2027,6 +2027,8 @@ static int acpi_video_bus_add(struct acpi_device *device)
+>         if (error)
+>                 goto err_put_video;
+>
+> +       acpi_device_fix_up_power_extended(device);
+> +
 
- TDH.TDMR.INIT
+I would like to know what Hans thinks about this.
 
-dance to set up the PAMT array -- which is what gobbles up memory. From
-what I understand the TDH.TDMR.INIT thing is not one of those
-excessively long calls.
-
-If we have concerns about allocating the PAMT array, can't we use CMA
-for this? Allocate the whole thing at boot as CMA such that when not
-used for TDX it can be used for regular things like userspace and
-filecache pages?
-
-Those TDH.SYS calls should be enough to ensure TDX is actually working,
-no?
+>         pr_info("%s [%s] (multi-head: %s  rom: %s  post: %s)\n",
+>                ACPI_VIDEO_DEVICE_NAME, acpi_device_bid(device),
+>                video->flags.multihead ? "yes" : "no",
+> --
