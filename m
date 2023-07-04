@@ -2,174 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7B7746E9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 12:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C4C746E88
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 12:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjGDK1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 06:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
+        id S231510AbjGDKZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 06:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbjGDK1R (ORCPT
+        with ESMTP id S231535AbjGDKZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 06:27:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69B51720
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 03:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688466370;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NACau5wNdfF9cBpcRDB4PdaraQX5g3P3BOInJlILPJs=;
-        b=LyoIi8T4rldQbisX2sVXN5hJv33RfctidYIxsP8HzraZjcJmBeGeEJMu/f7cvB8RDrm2vC
-        vaWP7tBX6i0Q5a8ReNPPj1fkxYDc7yE/ailRqWCa89l51bG0Zc5Bhwbem2x0s/t1sYo17c
-        4ccVugiARVUbjIP4UFb/2/Bn2tUuUGA=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-335--zRALzyFPGCWBK9DpgYJ2g-1; Tue, 04 Jul 2023 06:26:09 -0400
-X-MC-Unique: -zRALzyFPGCWBK9DpgYJ2g-1
-Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-c4e0342c50dso3135541276.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 03:26:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688466369; x=1691058369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NACau5wNdfF9cBpcRDB4PdaraQX5g3P3BOInJlILPJs=;
-        b=GoAgW1EMTi4+RY4GZl99A27lPRY7WK9yo+Lb7kEF5zavGyibfXRN/mk27pkIP8nElK
-         +MpfNsRryjPvWjWJhhhjJo4wUpIOs0Abjciz911jEmom4ZBJzpg8VIEBp7IfN/pLOUH2
-         Df2Yv6yoIsDvdopOJ+3yN2cflSdU6VxT+86JjjbaGaeMqVT6IZGIDYtj+Lk9vxIrTSjL
-         9mSjSAC2FYin7yqo+4sBetmYHbxXPjhNdvzQ0bVKBap6liyd0nqpU64vSODXccV+hB8q
-         ayTeYUlmRbAsreDmFMJhqN8jNiLRDiy6sWb57DbFhB/BCxeaPZyQhiTQnYosb+j91pVQ
-         +bZA==
-X-Gm-Message-State: ABy/qLZAW/S0paliiKqxmEa3viHZ5Qai87B1Q/Oeczg7nvonMFyPgxrm
-        v3UZGA0gVFqA+WHmUSZtyuOTR0wdpIqJF7t368pHrv3aY3c2+sGoSxJJ29+acCIpbc/m8DZHaaY
-        Mc2hiV9KNVnCYFhRM6QSFEc0+bo4AGdkIPO9VqWnYlLX64aZ0
-X-Received: by 2002:a25:6814:0:b0:bfe:bf77:64fd with SMTP id d20-20020a256814000000b00bfebf7764fdmr12220354ybc.12.1688466368789;
-        Tue, 04 Jul 2023 03:26:08 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlF+L7YZgpPC1a/i4PKGYiZXN4PzCqEmdcCDCKNBfLZMyqBzpFv+JZ1Og8EWyPBXcp3Fpvqatc6r0dRqi4N1fAA=
-X-Received: by 2002:a25:6814:0:b0:bfe:bf77:64fd with SMTP id
- d20-20020a256814000000b00bfebf7764fdmr12220350ybc.12.1688466368546; Tue, 04
- Jul 2023 03:26:08 -0700 (PDT)
+        Tue, 4 Jul 2023 06:25:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1843184;
+        Tue,  4 Jul 2023 03:25:40 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79EC26606FA4;
+        Tue,  4 Jul 2023 11:25:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688466339;
+        bh=OK1hVnQx2+QUut5ekc5MMXkV5OBtCioWQbQvC+CYWOk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AAvx7lsehf+CnXxI5/sKpl2B5gtl72kS9T7gr//4AF3eLhN9/q+jS4IaO3wUGZIId
+         wAY67Qm+rGP4bAHSmoc8YiH4XNn3ZGQL1orgBhzNIf/C/UmQbAHlewEvgEgjQXH81G
+         w1RXBoXgIcachDJ2kCxNjPFcFxV30FhwjDbDjbvj/Cqa6Qlp2DjDJxvPiLCOjUz1Yg
+         6oTz+1M9Z5iftOxrUl6pk1y3I8YJykugGeuVy0zSQP3U18A87MUSvPJk5WI06+gh8U
+         goqnrgntzicd0wfPgqinNDdDznm5Ib5x8gQfP/k00B5nL7SX4Ywvg+KBlxcb6pLdKP
+         3dL7OYFfji1sA==
+Message-ID: <59b1b17b-64f8-1f60-7206-4d0a03e4eecb@collabora.com>
+Date:   Tue, 4 Jul 2023 12:25:36 +0200
 MIME-Version: 1.0
-References: <20230703142218.362549-1-eperezma@redhat.com> <20230703105022-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230703105022-mutt-send-email-mst@kernel.org>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 4 Jul 2023 12:25:32 +0200
-Message-ID: <CAJaqyWf2F_yBLBjj1RiPeJ92_zfq8BSMz8Pak2Vg6QinN8jS1Q@mail.gmail.com>
-Subject: Re: [PATCH] vdpa: reject F_ENABLE_AFTER_DRIVER_OK if backend does not
- support it
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 3/8] soc: mediatek: pm-domains: Split bus_prot_mask
+Content-Language: en-US
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230627131040.3418538-1-msp@baylibre.com>
+ <20230627131040.3418538-4-msp@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230627131040.3418538-4-msp@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 4:52=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com> =
-wrote:
->
-> On Mon, Jul 03, 2023 at 04:22:18PM +0200, Eugenio P=C3=A9rez wrote:
-> > With the current code it is accepted as long as userland send it.
-> >
-> > Although userland should not set a feature flag that has not been
-> > offered to it with VHOST_GET_BACKEND_FEATURES, the current code will no=
-t
-> > complain for it.
-> >
-> > Since there is no specific reason for any parent to reject that backend
-> > feature bit when it has been proposed, let's control it at vdpa fronten=
-d
-> > level. Future patches may move this control to the parent driver.
-> >
-> > Fixes: 967800d2d52e ("vdpa: accept VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_=
-OK backend feature")
-> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
->
-> Please do send v3. And again, I don't want to send "after driver ok" hack
-> upstream at all, I merged it in next just to give it some testing.
-> We want RING_ACCESS_AFTER_KICK or some such.
->
+Il 27/06/23 15:10, Markus Schneider-Pargmann ha scritto:
+> bus_prot_mask is used for all operations, set clear and acknowledge. In
+> preparation of m8365 power domain support split this one mask into two,
+> one mask for set and clear, another one for acknowledge.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
+>   drivers/soc/mediatek/mtk-pm-domains.c | 24 ++++++++++++++----------
+>   drivers/soc/mediatek/mtk-pm-domains.h | 14 ++++++++------
+>   2 files changed, 22 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
+> index aa9ab413479e..c801fa763e89 100644
+> --- a/drivers/soc/mediatek/mtk-pm-domains.c
+> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
+> @@ -123,18 +123,20 @@ static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd, st
+>   	int i, ret;
+>   
+>   	for (i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
+> -		u32 val, mask = bpd[i].bus_prot_mask;
+> +		u32 val;
+> +		u32 set_clr_mask = bpd[i].bus_prot_set_clr_mask;
+> +		u32 sta_mask = bpd[i].bus_prot_sta_mask;
+>   
+> -		if (!mask)
+> +		if (!set_clr_mask)
+>   			break;
+>   
+>   		if (bpd[i].flags & BUS_PROT_REG_UPDATE)
+> -			regmap_set_bits(regmap, bpd[i].bus_prot_set, mask);
+> +			regmap_set_bits(regmap, bpd[i].bus_prot_set, set_clr_mask);
+>   		else
+> -			regmap_write(regmap, bpd[i].bus_prot_set, mask);
+> +			regmap_write(regmap, bpd[i].bus_prot_set, set_clr_mask);
+>   
+>   		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
+> -					       val, (val & mask) == mask,
+> +					       val, (val & sta_mask) == sta_mask,
+>   					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+>   		if (ret)
+>   			return ret;
+> @@ -160,21 +162,23 @@ static int _scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
+>   	int i, ret;
+>   
+>   	for (i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
+> -		u32 val, mask = bpd[i].bus_prot_mask;
+> +		u32 val;
+> +		u32 set_clr_mask = bpd[i].bus_prot_set_clr_mask;
+> +		u32 sta_mask = bpd[i].bus_prot_sta_mask;
 
-Current devices do not support that semantic. My plan was to convert
-it in vp_vdpa if needed, and reuse the current vdpa ops. Sorry if I
-was not explicit enough.
+Only one nitpick: val should be declared after the others....
+That's just for readability and nothing else, obviously.
 
-The only solution I can see to that is to trap & emulate in the vdpa
-(parent?) driver, as talked in virtio-comment. But that complicates
-the architecture:
-* Offer VHOST_BACKEND_F_RING_ACCESS_AFTER_KICK
-* Store vq enable state separately, at
-vdpa->config->set_vq_ready(true), but not transmit that enable to hw
-* Store the doorbell state separately, but do not configure it to the
-device directly.
+Anyway, after that change:
 
-But how to recover if the device cannot configure them at kick time,
-for example?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Maybe we can just fail if the parent driver does not support enabling
-the vq after DRIVER_OK? That way no new feature flag is needed.
-
-Thanks!
-
->
-> > ---
-> > Sent with Fixes: tag pointing to git.kernel.org/pub/scm/linux/kernel/gi=
-t/mst
-> > commit. Please let me know if I should send a v3 of [1] instead.
-> >
-> > [1] https://lore.kernel.org/lkml/20230609121244-mutt-send-email-mst@ker=
-nel.org/T/
-> > ---
-> >  drivers/vhost/vdpa.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > index e1abf29fed5b..a7e554352351 100644
-> > --- a/drivers/vhost/vdpa.c
-> > +++ b/drivers/vhost/vdpa.c
-> > @@ -681,18 +681,21 @@ static long vhost_vdpa_unlocked_ioctl(struct file=
- *filep,
-> >  {
-> >       struct vhost_vdpa *v =3D filep->private_data;
-> >       struct vhost_dev *d =3D &v->vdev;
-> > +     const struct vdpa_config_ops *ops =3D v->vdpa->config;
-> >       void __user *argp =3D (void __user *)arg;
-> >       u64 __user *featurep =3D argp;
-> > -     u64 features;
-> > +     u64 features, parent_features =3D 0;
-> >       long r =3D 0;
-> >
-> >       if (cmd =3D=3D VHOST_SET_BACKEND_FEATURES) {
-> >               if (copy_from_user(&features, featurep, sizeof(features))=
-)
-> >                       return -EFAULT;
-> > +             if (ops->get_backend_features)
-> > +                     parent_features =3D ops->get_backend_features(v->=
-vdpa);
-> >               if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
-> >                                BIT_ULL(VHOST_BACKEND_F_SUSPEND) |
-> >                                BIT_ULL(VHOST_BACKEND_F_RESUME) |
-> > -                              BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRI=
-VER_OK)))
-> > +                              parent_features))
-> >                       return -EOPNOTSUPP;
-> >               if ((features & BIT_ULL(VHOST_BACKEND_F_SUSPEND)) &&
-> >                    !vhost_vdpa_can_suspend(v))
-> > --
-> > 2.39.3
->
 
