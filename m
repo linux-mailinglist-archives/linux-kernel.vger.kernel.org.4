@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A77747A1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 00:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59BC4747A1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 00:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjGDWU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 18:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S231488AbjGDWVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 18:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbjGDWUW (ORCPT
+        with ESMTP id S230219AbjGDWVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 18:20:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF38E7B;
-        Tue,  4 Jul 2023 15:20:21 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 170DB1EC0411;
-        Wed,  5 Jul 2023 00:20:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1688509220;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=DYR9hAz3rDQalm/RdUseeoijBoiPmBCuez9RUze2Jmk=;
-        b=AewNkijxRaoyWaJPvJF6Ea7RnZQQJR6BRKs3onT1XCjy1rT3+X1c1ALSb9wr7uBOsqVMO6
-        2naHj7OP/QR6suQkt2yzk5/722T6s+7Rdvk+AETUoUfMGXOhWgcV5KbO7zVOYsfPZBXZZr
-        GzN2e3PlVoObTOEUUGyhNODLkQdE8lI=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-        reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id yi7bw3IKtw5u; Tue,  4 Jul 2023 22:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1688509216; bh=jL6uSfBqNDPocAax2P6VBh9QZjlwPpa5/eC7tTGcSuA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dSJxX6hP6I0eMV+X+3UTunv3irjEQIEhRES5RMR4pbbBhhbrBznYTqc1I02a/zVNx
-         9cyEksmAQDLRBS1mdChoqBaQSNvINxSek6zN8n9JAKXjfD5tzU6UItPy4wf0tuW4ju
-         npX3sUQEcTPmNG0qbLkLawVcdayzsoVV3OyC9Nf0LuKULlfS8/+acFFE8zTasvBg//
-         YEFF3ml50yFLcNh8R2MlcowGfNtH+iUjTk5DW2HZaW67Rd38qw7jPzwY0ksZSqZL5d
-         W/PakyDt0ZuoAvudhXtuzUCWub8voioD4P90k34h8YFWrYGb8n+1GHLVI2BUr7H4Jv
-         dNU+uTqm5pp5EP1ARXV8h+yZGdJsL1j4qbOv8iXjuYitWbsSBo9vIdPOSADnIpwECF
-         NQnT1ZB7JaMbn3HMFJZS3Q6EftC0e0u+fyPfBeju9NecP+iVtNWsFmy0iM0nkDm29W
-         1fGRcOX+CBj9sj20F+oQEtIyPlQvIV95AsynatRvjufV7HjBQ2xjwtyYJEvRegRgJV
-         AxRF2nEAryYywo5mFZG22eAiQWXnAqt1v751rqbBG16cIJBfedhpW7H8tV7MzvPJ2g
-         RhgYRIQ4wcIJbjhM3d0I1rGm3IEorDQCVsyui7RI4kmcrIGWbvVxJS0Glakmtyb3HQ
-         kGyZO+UqZ1vux1osFZM41JJ8=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        Tue, 4 Jul 2023 18:21:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409E2E7B;
+        Tue,  4 Jul 2023 15:21:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34E0B40E0191;
-        Tue,  4 Jul 2023 22:20:14 +0000 (UTC)
-From:   Borislav Petkov <bp@alien8.de>
-To:     linux-kbuild@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] kbuild: Enable -Wenum-conversion by default
-Date:   Wed,  5 Jul 2023 00:19:51 +0200
-Message-ID: <20230704221951.7396-1-bp@alien8.de>
-X-Mailer: git-send-email 2.41.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D33E061377;
+        Tue,  4 Jul 2023 22:21:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18497C433C7;
+        Tue,  4 Jul 2023 22:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688509295;
+        bh=zvw/mDYDfWKt/nf/UUoCzc7T+cN/cP+PxbobIDiIOi8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=npI6pcNrbUA4mj2CaNsW7a7zk2p+EAuvqUSDtutievqz13OIqEqndI6Y96UHpEKJK
+         6p8Lva217GO4RGvmHaGlg6F62xj2VftUhpqy8yFw7iO8s52m3IaIICRMrdMkD9p1cu
+         pLRFSDX6Z7fmvtLm1J09qzjizPatJsxM4c82jT6z02i8mT5MYcXb1GHmvWwrsyz/1v
+         yzk26wPz3GzagAZ5CcSu7m/xr+uwaD/PQzcSa5rg4cnwPSHNpIE01lknG4C9AcQwqG
+         y8oBN9jXU6SCYOK4FslwLfPwUBTqXr6elFOYY5Hh7cE4tMYUMIcTZdtev+PXtzcOBd
+         gs9Sdp0koxdyg==
+Date:   Tue, 4 Jul 2023 23:21:29 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [RESEND PATCH v6 2/7] dt-bindings: soc: starfive: Add StarFive
+ syscon module
+Message-ID: <20230704-parcel-pavestone-71900e35406d@spud>
+References: <20230704064610.292603-1-xingyu.wu@starfivetech.com>
+ <20230704064610.292603-3-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="X3k1Y95kYeIlaDWM"
+Content-Disposition: inline
+In-Reply-To: <20230704064610.292603-3-xingyu.wu@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-This diagnostic checks whether there is a type mismatch when
-converting enums (assign an enum of type A to an enum of type B, for
-example) and it caught a legit issue recently. The reason it didn't show
-is because that warning is enabled only with -Wextra with GCC. Clang,
-however, enables it by default.
+--X3k1Y95kYeIlaDWM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-GCC folks were considering enabling it by default but it was too noisy
-back then:
+On Tue, Jul 04, 2023 at 02:46:05PM +0800, Xingyu Wu wrote:
+> From: William Qiu <william.qiu@starfivetech.com>
+>=20
+> Add documentation to describe StarFive System Controller Registers.
+>=20
+> Co-developed-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
 
-  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D78736
+This looks good to me now, thanks for keeping at it.
 
-Now that due to clang all those warnings have been fixed, enable it with
-GCC too.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-allmodconfig tests done with: x86, arm{,64}, powerpc{,64}, riscv
-crossbuilds.
+Cheers,
+Conor.
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+--X3k1Y95kYeIlaDWM
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/Makefile b/Makefile
-index 7a5a175f708f..428132b3d6dd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1082,6 +1082,9 @@ KBUILD_CFLAGS   +=3D $(call cc-option,-Werror=3Dinc=
-ompatible-pointer-types)
- # Require designated initializers for all marked structures
- KBUILD_CFLAGS   +=3D $(call cc-option,-Werror=3Ddesignated-init)
-=20
-+# Warn if there is an enum types mismatch
-+KBUILD_CFLAGS	+=3D $(call cc-option,-Wenum-conversion)
-+
- # change __FILE__ to the relative path from the srctree
- KBUILD_CPPFLAGS +=3D $(call cc-option,-fmacro-prefix-map=3D$(srctree)/=3D=
-)
-=20
---=20
-2.41.0
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKSbaQAKCRB4tDGHoIJi
+0jUMAQD0A+H8IQHZIwrq+Sf+CN/N8upNkt9KWFQ+VUDQIj2I4wEA3OF7RUmRKi+D
+M1wrWqJq6nv5GGSCGs51WUljkCkBTAA=
+=o3Mb
+-----END PGP SIGNATURE-----
+
+--X3k1Y95kYeIlaDWM--
