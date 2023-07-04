@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60769747745
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB4C747748
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjGDQxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S231648AbjGDQyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbjGDQxT (ORCPT
+        with ESMTP id S231859AbjGDQx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:53:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B63B19B4;
-        Tue,  4 Jul 2023 09:52:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3B156131D;
-        Tue,  4 Jul 2023 16:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FDAC433C7;
-        Tue,  4 Jul 2023 16:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688489566;
-        bh=GB/Rdvj+JyWe7WpPDtMzus3DrdwxG/xoxqmHr0YmZLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ujDoJ7yb8zX9Py7fV0KIW1BnP4JjNmT3zOtFbV69JFDi41Vl3g3WeGARbGcGhHoRR
-         ZLacTr+rTnr8WtaQcnZzO/cv8BscYEoUyDH53+mBFMFmRsKQaIgo8oNZLU+fhR3gJ0
-         G0MblMGO5IcxfwU4vWD2doVuIk8E8cjNjqr0NMdY=
-Date:   Tue, 4 Jul 2023 17:52:43 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, samsagax@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors): remove static board variable
-Message-ID: <2023070424-strangely-whiff-7d97@gregkh>
-References: <20230704131715.44454-5-gregkh@linuxfoundation.org>
- <20230704131715.44454-6-gregkh@linuxfoundation.org>
- <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
- <2023070402-festive-rind-9274@gregkh>
- <cb71b00e-0225-ea24-b30e-4d615af026f0@roeck-us.net>
- <2023070425-jujitsu-ladder-195e@gregkh>
- <fd1cab46-0a51-6aab-8fda-f603fd4e0058@roeck-us.net>
+        Tue, 4 Jul 2023 12:53:57 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6827173C;
+        Tue,  4 Jul 2023 09:53:24 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbc244d386so63778145e9.2;
+        Tue, 04 Jul 2023 09:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688489590; x=1691081590;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6X46p/v45YXoW3BdBBZYISaaAyjIN+YgHZ7H48FuHJU=;
+        b=rVZrx+uc46MV8vFmTkQUHOsSfj+Ea/gfLcAoDgFVIk83t+9NVj0WJrQPHSND5i2KIe
+         UPuAV15kHCCV5yqfThsBoRdBssG+oLuPAnLKdaQpX+H25oipwzrnxovRJYQQryiNL5Oc
+         NE3n2ZA9YmgNbjtPEL4xCg1HNhPtxidkciM4HPrOSzPbCojM6uzZpyQo0ntt0KHOZGgi
+         Qoi5hkbeNGKgcQYAc0rZD8yEEf06YlSge2XIMPQbZYgqHmzIb+91lAvA4LMDEiZendyO
+         iNdqzJENofxteqIVG0vioT0+MIR6+byxXradrUiCc5E0bVeju+406nSnm62jvGUHe1fm
+         IE8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688489590; x=1691081590;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6X46p/v45YXoW3BdBBZYISaaAyjIN+YgHZ7H48FuHJU=;
+        b=CdlOihSZaY79MGsy0j43LHVJeCYop6KDAeIB1E6cV6IlKvmnZm4FXx2KbUCFljz4BV
+         +J46aDd8PC+f04L86pvvQGLRmcaenyiXyYeyloccfRPKFCNpumkOl9K7aMj4L24FGwHg
+         rmX9nlIcU3KojXhZ/FkWXEfE+aIQpx+nhdk64yBljQUe7H3jCbvDlHGmwgz0eixKJKbC
+         n87V74hb+MAd0XKaBMTdprwVuyi6VXz6txNCELKh5j0QIeCFJDFzOeZLgSDb0eRX3f2h
+         hZtj3yoRFzVRRKuAZF0F0AKvDOXM9kna/SRjmHVE5E1GO7mFKvPnUTZ+JXdLzeSFIhbs
+         9cHw==
+X-Gm-Message-State: ABy/qLbT+/nMGQh8B7mDDxxE1TtbB5AhikVQjDkEQsK0WUUZDq23sAVC
+        DryWmC7ebZOQG4gG3yRdfzlB78D7zck=
+X-Google-Smtp-Source: APBJJlEYOXGRphrO4SkMWru9BIX7s+yP6/RWwOXYhBB8ipdXBjtCRmjHjaYI/qnu+WwTlQOSzPPjwQ==
+X-Received: by 2002:a1c:f713:0:b0:3fb:d60f:8a8e with SMTP id v19-20020a1cf713000000b003fbd60f8a8emr6486901wmh.31.1688489589960;
+        Tue, 04 Jul 2023 09:53:09 -0700 (PDT)
+Received: from amir-ThinkPad-T480.lan ([5.29.249.86])
+        by smtp.gmail.com with ESMTPSA id p8-20020a7bcc88000000b003fb225d414fsm24216421wma.21.2023.07.04.09.53.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 09:53:09 -0700 (PDT)
+From:   Amir Goldstein <amir73il@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org
+Subject: [GIT PULL] overlayfs update for 6.5 - part 2
+Date:   Tue,  4 Jul 2023 19:53:04 +0300
+Message-Id: <20230704165304.658275-1-amir73il@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd1cab46-0a51-6aab-8fda-f603fd4e0058@roeck-us.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,80 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 09:43:39AM -0700, Guenter Roeck wrote:
-> On 7/4/23 09:14, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 04, 2023 at 07:14:54AM -0700, Guenter Roeck wrote:
-> > > On 7/4/23 06:44, Greg Kroah-Hartman wrote:
-> > > > On Tue, Jul 04, 2023 at 06:39:07AM -0700, Guenter Roeck wrote:
-> > > > > On 7/4/23 06:17, Greg Kroah-Hartman wrote:
-> > > > > > Drivers should not have a single static variable for the type of device
-> > > > > > they are bound to.  While this driver is really going to only have one
-> > > > > > device at a time in the system, remove the static variable and instead,
-> > > > > > look up the device type when needed.
-> > > > > > 
-> > > > > 
-> > > > > This is expensive. I think it would be much better to just move
-> > > > > the board type detection into the init code and not instantiate
-> > > > > the driver in the fist place if the board type is unknown.
-> > > > 
-> > > > The board type detection is all over the place in the driver, it's not
-> > > > just for "unknown" types, so how about just saving the board type at
-> > > > probe time and using it then for all other places?
-> > > > 
-> > > 
-> > > I must be missing something. The current code detects the board type
-> > > only once, in the probe function. Otherwise the static variable is used.
-> > > You are replacing it with repeated calls to get_board_type().
-> > > The whole point of the static variable is to avoid the cost of repeated
-> > > calls to dmi_first_match().
-> > 
-> > Ah, ok, yes, I was refering to the fact that the driver relies on the
-> > detection of the device type in lots of different places (and doesn't
-> > ever error out from the detection call.)
-> > 
-> 
-> I am lost again. Current code:
-> 
->         dmi_entry = dmi_first_match(dmi_table);
->         if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
->                 return -ENODEV;
-> 
-> 
-> 
-> > > > > We can handle the static variable separately if it really bothers
-> > > > > you that much.
-> > > > 
-> > > > I did this change to make patch 2/3 more "obvious" what is happening
-> > > > when the in_visible() callback happens, so that you don't have to worry
-> > > > about the saved value or not.  But this whole patch isn't really needed
-> > > > if you don't mind the lookup just happening in the in_visible() callback
-> > > > for the first time.
-> > > > 
-> > > 
-> > > That would at least be a minimal change, and just add one extra lookup
-> > > which is only called once (or zero, if it is used to save the board type).
-> > 
-> > Ok, I'll switch it up, but really, it's just a simple table lookup loop,
-> > and none of the detection calls are on a "hot path" that I can
-> > determine.  Or am I missing something?
-> > 
-> > > As I said, my solution would be to move the board type detection
-> > > into the init function and not instantiate the driver in the first
-> > > place if the probe function would bail out anyway.
-> > 
-> > That's not the case today, the only way the probe function would fail
-> > today is if the registering of the sysfs files fail.  It does not matter
-> > if the board detection call passes or not.
-> > 
-> 
-> Again,
->         dmi_entry = dmi_first_match(dmi_table);
->         if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
->                 return -ENODEV;
->                 ^^^^^^^^^^^^^^^
-> 
-> What am I missing ?
+Hi Linus,
 
-Nothing, I'm missing it, sorry.  Been a long day, let me redo this...
+This is a small "move code around" followup by Christian to his
+work on porting overlayfs to the new mount api for 6.5.
 
-greg k-h
+This branch merges cleanly with master and passes the usual tests.
+It has been sitting in linux-next for a few days and yesterday
+it was updated with a build warning fix reported by Arnd [1].
+
+It is not strictly necessary to have this merged for rc1, but it will
+make things a bit cleaner and simpler for the next development cycle
+when I hand overlayfs over to Miklos.
+
+Thanks,
+Amir.
+
+[1] https://lore.kernel.org/linux-unionfs/CAOQ4uxj5v=zTsiXvHGD70nMcKSvTVwM2G0raCDePY64gofu+AQ@mail.gmail.com/
+
+The following changes since commit a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451:
+
+  Merge tag 'iomap-6.5-merge-1' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux (2023-07-02 11:14:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/overlayfs/vfs.git ovl-update-6.5-2
+
+for you to fetch changes up to 7fb7998b599a2e1f3744fbd34a3e7145da841ed1:
+
+  ovl: move all parameter handling into params.{c,h} (2023-07-03 16:08:17 +0300)
+
+----------------------------------------------------------------
+overlayfs update for 6.5 - part 2
+
+----------------------------------------------------------------
+Christian Brauner (1):
+      ovl: move all parameter handling into params.{c,h}
+
+ fs/overlayfs/overlayfs.h |  41 +---
+ fs/overlayfs/params.c    | 532 ++++++++++++++++++++++++++++++++++++++++++++++-
+ fs/overlayfs/params.h    |  42 ++++
+ fs/overlayfs/super.c     | 530 +---------------------------------------------
+ 4 files changed, 581 insertions(+), 564 deletions(-)
+ create mode 100644 fs/overlayfs/params.h
