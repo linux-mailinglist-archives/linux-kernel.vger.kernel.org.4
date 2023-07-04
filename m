@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC4A7466B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 02:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAB67466B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 02:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjGDAxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 20:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S230379AbjGDA5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 20:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjGDAxD (ORCPT
+        with ESMTP id S229622AbjGDA5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 20:53:03 -0400
-X-Greylist: delayed 65 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Jul 2023 17:53:00 PDT
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7200F136;
-        Mon,  3 Jul 2023 17:53:00 -0700 (PDT)
-Received: from unicom146.biz-email.net
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id ZXD00050;
-        Tue, 04 Jul 2023 08:51:50 +0800
-Received: from lihongweizz00.home.langchao.com (10.180.207.169) by
- jtjnmail201601.home.langchao.com (10.100.2.1) with Microsoft SMTP Server id
- 15.1.2507.27; Tue, 4 Jul 2023 08:51:50 +0800
-From:   lihongweizz <lihongweizz@inspur.com>
-To:     <sagi@grimberg.me>, <mgurtovoy@nvidia.com>, <jgg@ziepe.ca>,
-        <leon@kernel.org>
-CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rock Li <lihongweizz@inspur.com>
-Subject: [PATCH] IB/iser: Protect tasks cleanup in case iser connection was stopped
-Date:   Tue, 4 Jul 2023 08:51:44 +0800
-Message-ID: <20230704005144.1172-1-lihongweizz@inspur.com>
-X-Mailer: git-send-email 2.40.1.windows.1
+        Mon, 3 Jul 2023 20:57:33 -0400
+X-Greylist: delayed 320 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Jul 2023 17:57:32 PDT
+Received: from out-8.mta1.migadu.com (out-8.mta1.migadu.com [95.215.58.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80956137
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 17:57:32 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688431928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9PvMF+hM/tczQlWv3CZcoKeqGsQQ6VNHOk9FPhNfzNc=;
+        b=QYXS2UfB9fTOuQpIwrkK8of/jfOc1fLqLKs6PHdxgbFg8nLcpk3/ConRj1BiU7j0WCo28n
+        daS2Mm1suhkZfCV9ZqOjFCpyOONbNFubKyg6htLLwJBilt9OjYbjTlOpmT57JWEevu0M2T
+        nWPQm6VALEzldSnhheqDa/Q0KUbBky0=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH] kasan: fix type cast in memory_is_poisoned_n
+Date:   Tue,  4 Jul 2023 02:52:05 +0200
+Message-Id: <8c9e0251c2b8b81016255709d4ec42942dcaf018.1688431866.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.180.207.169]
-tUid:   20237040851508f3372386f2df8ea6a16e04484201e48
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rock Li <lihongweizz@inspur.com>
+From: Andrey Konovalov <andreyknvl@google.com>
 
-We met a crash issue as below:
-...
- #7 [ff61b991f6f63d10] page_fault at ffffffffab80111e
-    [exception RIP: iscsi_iser_cleanup_task+13]
-    RIP: ffffffffc046c04d RSP: ff61b991f6f63dc0 RFLAGS: 00010246
-    RAX: 0000000000000000 RBX: ff4bd0aalf7a5610 RCX: ff61b991f6f63dc8
-    RDX: ff61b991f6f63d68 RSI: ff61b991f6f63d58 RDI: ff4bd0aalf6cdc00
-    RBP: 0000000000000005 R8: 0000000000000073 R9: 0000000000000005
-    R10: 0000000000000000 R11: 00000ccde3e0f5c0 R12: ff4bd08c0e0631f8
-    R13: ff4bd0a95ffd3c78 R14: ff4bd0a95ffd3c78 R15: ff4bd0aalf6cdc00
-    ORIG_RAX: ffffffffffffffff CS: 0010 SS: 0018
- #8 [ff616991f6f63dc0] __iscsi_put_task at ffffffffc0bd3652 [libiscsi]
- #9 [ff61b991f6f63e00] iscsi_put_task at ffffffffc0bd36e9 [libiscsi]
-...
+Commit bb6e04a173f0 ("kasan: use internal prototypes matching gcc-13
+builtins") introduced a bug into the memory_is_poisoned_n implementation:
+it effectively removed the cast to a signed integer type after applying
+KASAN_GRANULE_MASK.
 
-After analysing the vmcore, we find that the iser connection was already
-stopped before abort handler running. The iser_conn is already unbindded
-and released. So we add iser connection validation check inside cleanup
-task to fix this corner case.
+As a result, KASAN started failing to properly check memset, memcpy,
+and other similar functions.
 
-Signed-off-by: Rock Li <lihongweizz@inspur.com>
+Fix the bug by adding the cast back (through an additional signed integer
+variable to make the code more readable).
+
+Fixes: bb6e04a173f0 ("kasan: use internal prototypes matching gcc-13 builtins")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/infiniband/ulp/iser/iscsi_iser.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ mm/kasan/generic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
-index bb9aaff92ca3..35dfbf41fc40 100644
---- a/drivers/infiniband/ulp/iser/iscsi_iser.c
-+++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
-@@ -366,7 +366,12 @@ static void iscsi_iser_cleanup_task(struct iscsi_task *task)
- 	struct iscsi_iser_task *iser_task = task->dd_data;
- 	struct iser_tx_desc *tx_desc = &iser_task->desc;
- 	struct iser_conn *iser_conn = task->conn->dd_data;
--	struct iser_device *device = iser_conn->ib_conn.device;
-+	struct iser_device *device;
-+
-+	/* stop connection might happens before iser cleanup work */
-+	if (!iser_conn)
-+		return;
-+	device = iser_conn->ib_conn.device;
+diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+index 5b4c97baa656..4d837ab83f08 100644
+--- a/mm/kasan/generic.c
++++ b/mm/kasan/generic.c
+@@ -130,9 +130,10 @@ static __always_inline bool memory_is_poisoned_n(const void *addr, size_t size)
+ 	if (unlikely(ret)) {
+ 		const void *last_byte = addr + size - 1;
+ 		s8 *last_shadow = (s8 *)kasan_mem_to_shadow(last_byte);
++		s8 last_accessible_byte = (unsigned long)last_byte & KASAN_GRANULE_MASK;
  
- 	/* DEVICE_REMOVAL event might have already released the device */
- 	if (!device)
+ 		if (unlikely(ret != (unsigned long)last_shadow ||
+-			(((long)last_byte & KASAN_GRANULE_MASK) >= *last_shadow)))
++			     last_accessible_byte >= *last_shadow))
+ 			return true;
+ 	}
+ 	return false;
 -- 
-2.27.0
+2.25.1
 
