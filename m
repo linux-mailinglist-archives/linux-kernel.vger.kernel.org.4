@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7D474757F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24D8747580
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjGDPm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S231237AbjGDPmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjGDPm0 (ORCPT
+        with ESMTP id S230232AbjGDPmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:42:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB40E76
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:42:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0108B6124D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 15:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4FF0C433C7;
-        Tue,  4 Jul 2023 15:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688485344;
-        bh=o5dj9Kjl7vvHnsLs0SMupSPpdUwYaSVo+kjmjoFynV8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=BXszOKT5g+8zRjVQtbbRL3Ow+hZmbrid6te/zfzTD0LztSrfXeB5a32JauYvyRqgC
-         T6g1qOufqcepiNM5sQHvDCxYh3XicHKDhfesMCufrGfACg117KGs/ZAKsKMpm1hV4n
-         +NGijJM7PIDJdulsMbVnyb5hT5MPKzCN2fx6CVv46I8CrPD3Yk8leEoZrnKREV+xaM
-         4r+cm2lK6kX+h3nR2TmlZ//Z8Qt3abPRbuQpg9N734q9DryWDpsI/juntBJJJZZyAp
-         EH1yMLqUtWN7HAnFrSntAu2yH6NsERG43Zxrn2040fWj9S1EaTFbiejkr0J+kBWEgE
-         u118CTZV+uoqg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20230630202257.8449-1-jonas.gorski@gmail.com>
-References: <20230630202257.8449-1-jonas.gorski@gmail.com>
-Subject: Re: (subset) [PATCH 1/3] MAINTAINERS: add myself for spi-bcm63xx
-Message-Id: <168848534358.86644.6954201495019514994.b4-ty@kernel.org>
-Date:   Tue, 04 Jul 2023 16:42:23 +0100
+        Tue, 4 Jul 2023 11:42:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA59E7E
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:42:42 -0700 (PDT)
+Received: from kwepemm600007.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QwRnl1rrLzLndS;
+        Tue,  4 Jul 2023 23:40:27 +0800 (CST)
+Received: from [10.174.185.179] (10.174.185.179) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 4 Jul 2023 23:42:38 +0800
+Subject: Re: [PATCH] irqchip/gic-v4.1: Properly lock VPEs when doing a
+ directLPI invalidation
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kunkun Jiang <jiangkunkun@huawei.com>,
+        <wanghaibin.wang@huawei.com>
+References: <20230617073242.3199746-1-maz@kernel.org>
+ <b665e102-eba9-cd4f-5b4e-ccbd77444233@huawei.com>
+ <86wmzgx1va.wl-maz@kernel.org>
+From:   Zenghui Yu <yuzenghui@huawei.com>
+Message-ID: <ee9123ca-95fc-4482-cee1-965cfe6b89b4@huawei.com>
+Date:   Tue, 4 Jul 2023 23:42:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <86wmzgx1va.wl-maz@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.185.179]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 22:22:54 +0200, Jonas Gorski wrote:
-> I noticed the driver is unclaimed. Since I was the last one doing
-> substantial work on it, add me as the maintainer.
+Hi Marc,
+
+On 2023/7/4 2:54, Marc Zyngier wrote:
+> On Thu, 29 Jun 2023 15:52:24 +0100,
+> Zenghui Yu <yuzenghui@huawei.com> wrote:
+>>
+>> Hi Marc,
+>>
+>> Nit: I think the Subject header can be changed to 'irqchip/gic-v4' as
+>> the bug it fixes only affects GICv4 HW. v4.1 is unaffected.
 > 
-> As it is only found in legacy products, mark it as "Odd Fixes"
-> instead of "Maintained".
+> I'm not so sure.
 > 
+> v4.0 didn't allow direct invalidation of VPE doorbells (we had to use
+> the fake device hack), except for the HiSi special that implemented
+> DirectLPI despite the presence of multiple ITSs. It was a violation of
+> the architecture, but it really saved the day by making invalidations
+> cheap enough.
+
+[ I should've mentioned that I had reproduced the bug and tested your
+patch on my 920, which is, yeah, a HiSi implementation of GICv4.0 with
+DirectLPI supported. But ]
+
 > 
-> [...]
+> Only with v4.1 did we get architectural support for doorbell
+> invalidation via a register instead of a command for a fake device.
+> 
+> So as far as the architecture is concerned, this should only affect
+> v4.1. As a side effect, it also affect HiSi's v4.0 implementations.
 
-Applied to
+... iiuc the bug we're fixing is that we perform a register based
+invalidation for doorbells (via its_vpe_[un]mask_irq/its_vpe_send_inv),
+acquire and release the per-RD lock with a *race* against a concurrent
+its_map_vm(), which would modify the vpe->col_idx behind our backs and
+affect the lock we're looking for.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+its_vpe_[un]mask_irq() are callbacks for the v4.0 irqchip, i.e.,
+its_vpe_irq_chip.
 
-Thanks!
-
-[2/3] spi: bcm{63xx,bca}-hsspi: update my email address
-      commit: 879a879c216a41f5403d8d3dbc204a48501912bf
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+With v4.1, we switch to use its_vpe_4_1_irq_chip and invalidate
+doorbells by sending the new INVDB command (and shouldn't be affected by
+this bug).
 
 Thanks,
-Mark
-
+Zenghui
