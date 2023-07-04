@@ -2,256 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35BE7473B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012187473B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjGDOIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 10:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S231250AbjGDOJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 10:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjGDOI3 (ORCPT
+        with ESMTP id S230482AbjGDOJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 10:08:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB06BC9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:08:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5760150C;
-        Tue,  4 Jul 2023 07:09:04 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.31.180])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE7A43F73F;
-        Tue,  4 Jul 2023 07:08:20 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 15:08:12 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Nico Pache <npache@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        aquini@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH V2] arm64: properly define SOFT_DIRTY functionality
-Message-ID: <ZKQnzF2sidMmZRyK@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230704133633.1918147-1-npache@redhat.com>
+        Tue, 4 Jul 2023 10:09:55 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B21119
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 07:09:54 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b89b0c73d7so1813005ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 07:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688479794; x=1691071794;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pNVc/lWNaJwg4YvT+IkALxQ0qVnRk5RlYxkisizUmPs=;
+        b=sOqO8Mdo3qKCn6fETzd5E7/dNhb5a6LaIqkkyzVK1sqsXQAVRcCsYAciANkmKC9spO
+         rqZR/gEIUj0TDHTHBkWt9Rs0Wl45Z1qIVvgDJDrH/5fRqbhRBeE4tRMLcj5uPToR7QTU
+         +jj6z84V/93X/fkMU9FKJB7Hb9C62h2EYPyfO6Nbp+8Tjta0WJU33Z3eM6qL63RjL7d4
+         G81F/kCkUBAMsPJQOBW38L2F5zU4Wo9p9O98BOqcWEu0AtWMpZunJ62q965uMK9h86nf
+         B2ahUkAdEnKIIbSxcexTV9Ms/h/6DJFG0uHQIW62iesFclXubNU2ur9p6J0nvWXkO8rj
+         f+pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688479794; x=1691071794;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pNVc/lWNaJwg4YvT+IkALxQ0qVnRk5RlYxkisizUmPs=;
+        b=JyUSbhxzI02jvCMbZvj+Cjv4T8qp6RaZiPc3gyqAJkuhTjyo8iPusa7RHZ+w6XNjq2
+         +2c2dsj10scSxAlUBzwwS2+U4Aj7SE5+rQvTdzl+OMEuKc6Vz7rBvjRORZCqvTlKi/jv
+         YUwiYnOIykyC3VGSx0HUZ7Iwik6u5U56CVKNohMa045dSGTSfKEYGo5F8d/+7WcCkPzS
+         9hInjKJ4hIhNzSFTTh9M7q1ogAesfpOye9A9o34q5EEgHBoPKjkvKGc1ZBP+RbOfKLcR
+         CFN6A8g0PPOsRD6uASEmnwRRwVw9HPQqAuV7cmywUdJXwqJy14U+LKNxq25x4KGlLHZs
+         te5A==
+X-Gm-Message-State: ABy/qLY4DVbV8BS4Tv/zJJxcoc/lAt0tCsbxB04WmYaq19H4n2c5HUZa
+        fbLbjUnI7jT+0A9ZSzA+orfcKw==
+X-Google-Smtp-Source: APBJJlE9RI0DK4Ion+iq8cniS+0A4G82a4j2L2B88L3T8BciKJ3WuLozAI9h6jz3YXIjkYI/2YnGFg==
+X-Received: by 2002:a17:902:fa46:b0:1b8:a8e5:e8bc with SMTP id lb6-20020a170902fa4600b001b8a8e5e8bcmr936049plb.6.1688479793572;
+        Tue, 04 Jul 2023 07:09:53 -0700 (PDT)
+Received: from carbon-x1.home ([2a01:cb15:81c2:f100:ef7b:e0f7:d376:e859])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17183735pls.99.2023.07.04.07.09.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 07:09:53 -0700 (PDT)
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Evan Green <evan@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RFC V2 PATCH 0/9] Add support to handle misaligned accesses in S-mode
+Date:   Tue,  4 Jul 2023 16:09:15 +0200
+Message-Id: <20230704140924.315594-1-cleger@rivosinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704133633.1918147-1-npache@redhat.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 09:36:33AM -0400, Nico Pache wrote:
-> ARM64 has a soft-dirty bit (software dirty) but never properly defines
-> CONFIG_ARCH_HAS_SOFT_DIRTY or its necessary functions. This patch
-> introduces the ability to set/clear the soft dirty bit in a similar
-> manner as the other arches that utilize it.
+Since commit 61cadb9 ("Provide new description of misaligned load/store
+behavior compatible with privileged architecture.") in the RISC-V ISA
+manual, it is stated that misaligned load/store might not be supported.
+However, the RISC-V kernel uABI describes that misaligned accesses are
+supported. In order to support that, this series adds support for S-mode
+handling of misaligned accesses, SBI call for misaligned trap delegation
+as well prctl support for PR_SET_UNALIGN.
 
-Anshuman already explained that this is not correct -- to enable
-CONFIG_ARCH_HAS_SOFT_DIRTY, you need *another* PTE bit. Please don't send
-another version following this approach.
+Handling misaligned access in kernel allows for a finer grain control
+of the misaligned accesses behavior, and thanks to the prctl call, can
+allow disabling misaligned access emulation to generate SIGBUS. User
+space can then optimize its software by removing such access based on
+SIGBUS generation.
 
-Despite its name, pte_sw_dirty() has nothing to do with
-CONFIG_ARCH_HAS_SOFT_DIRTY. We have pte_hw_dirty() and pte_sw_dirty() because
-with Hardware Dirty bit management the HW dirty bit is *also* the write
-permission bit, and to have a dirty non-writeable PTE state we have to use a SW
-bit, which is what pte_sw_dirty() handles. Both pte_hw_dirty() and
-pte_sw_dirty() comprise the regular dirty state.
+This series relies on a SBI extension [1] allowing to request delegation of
+the misaligned load/store traps to the S-mode software. This extension
+has been submitted for review to the riscv tech-prs group. An OpenSBI
+implementation for this spec is available at [2].
 
-That's *very* different from CONFIG_ARCH_HAS_SOFT_DIRTY, which is about having
-a *separate* software dirty state that can be used for longer-term dirty
-tracking (whether the page was last touched since some management SW
-manipulated the page).
+This series can be tested using the spike simulator [3] which allows to
+either handles misaligned access in hardware or let the software do it.
 
-> However, we must be careful... there are cases where the DBM bit is not
-> available and the software dirty bit plays a essential role in determining
-> whether or not a page is dirty. In these cases we must not allow the
-> user to clear the software dirty bit. We can check for these cases by
-> utilizing the arch_has_hw_pte_young() function which tests the availability
-> of DBM.
+With hardware misaligned access support:
+$ ./spike --misaligned --initrd=rootfs.cpio \
+  --kernel=arch/riscv/boot/Image opensbi_fw_jump.elf
 
-Regardless of the above, this doesn't seem to have been thought through. why
-would it be ok for this to work or not work dependent on DBM?
+Without hardware misaligned access support:
+$ ./spike --initrd=rootfs.cpio --kernel=arch/riscv/boot/Image \
+   opensbi_fw_jump.elf
 
-Thanks,
-Mark.
+[1] https://lists.riscv.org/g/tech-prs/message/540
+[2] https://github.com/rivosinc/opensbi/tree/dev/cleger/fw_feature_upstream
+[3] https://github.com/riscv-software-src/riscv-isa-sim
 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> Cc: Liu Shixin <liushixin2@huawei.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Yu Zhao <yuzhao@google.com>
-> Signed-off-by: Nico Pache <npache@redhat.com>
-> ---
->  arch/arm64/Kconfig               |   1 +
->  arch/arm64/include/asm/pgtable.h | 104 ++++++++++++++++++++++++++-----
->  2 files changed, 90 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 7856c3a3e35a..6ea73b8148c5 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -173,6 +173,7 @@ config ARM64
->  	select HAVE_ARCH_PREL32_RELOCATIONS
->  	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
->  	select HAVE_ARCH_SECCOMP_FILTER
-> +	select HAVE_ARCH_SOFT_DIRTY
->  	select HAVE_ARCH_STACKLEAK
->  	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
->  	select HAVE_ARCH_TRACEHOOK
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 0bd18de9fd97..c4970c9ed114 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -51,6 +51,20 @@ static inline bool arch_thp_swp_supported(void)
->  }
->  #define arch_thp_swp_supported arch_thp_swp_supported
->  
-> +/*
-> + * On arm64 without hardware Access Flag, copying from user will fail because
-> + * the pte is old and cannot be marked young. So we always end up with zeroed
-> + * page after fork() + CoW for pfn mappings. We don't always have a
-> + * hardware-managed access flag on arm64.
-> + */
-> +#define arch_has_hw_pte_young		cpu_has_hw_af
-> +
-> +/*
-> + * Experimentally, it's cheap to set the access flag in hardware and we
-> + * benefit from prefaulting mappings as 'old' to start with.
-> + */
-> +#define arch_wants_old_prefaulted_pte	cpu_has_hw_af
-> +
->  /*
->   * Outside of a few very special situations (e.g. hibernation), we always
->   * use broadcast TLB invalidation instructions, therefore a spurious page
-> @@ -121,8 +135,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->  })
->  
->  #define pte_hw_dirty(pte)	(pte_write(pte) && !(pte_val(pte) & PTE_RDONLY))
-> -#define pte_sw_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
-> -#define pte_dirty(pte)		(pte_sw_dirty(pte) || pte_hw_dirty(pte))
-> +#define pte_soft_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
-> +#define pte_dirty(pte)		(pte_soft_dirty(pte) || pte_hw_dirty(pte))
-> +#define pte_swp_soft_dirty(pte)	pte_soft_dirty(pte)
->  
->  #define pte_valid(pte)		(!!(pte_val(pte) & PTE_VALID))
->  /*
-> @@ -189,7 +204,8 @@ static inline pte_t pte_mkwrite(pte_t pte)
->  
->  static inline pte_t pte_mkclean(pte_t pte)
->  {
-> -	pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +	if (!arch_has_hw_pte_young())
-> +		pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
->  	pte = set_pte_bit(pte, __pgprot(PTE_RDONLY));
->  
->  	return pte;
-> @@ -1077,25 +1093,83 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->  #define phys_to_ttbr(addr)	(addr)
->  #endif
->  
-> -/*
-> - * On arm64 without hardware Access Flag, copying from user will fail because
-> - * the pte is old and cannot be marked young. So we always end up with zeroed
-> - * page after fork() + CoW for pfn mappings. We don't always have a
-> - * hardware-managed access flag on arm64.
-> - */
-> -#define arch_has_hw_pte_young		cpu_has_hw_af
-> +static inline bool pud_sect_supported(void)
-> +{
-> +	return PAGE_SIZE == SZ_4K;
-> +}
->  
-> +#ifdef CONFIG_ARM64_HW_AFDBM
->  /*
-> - * Experimentally, it's cheap to set the access flag in hardware and we
-> - * benefit from prefaulting mappings as 'old' to start with.
-> + * if we have the DBM bit we can utilize the software dirty bit as
-> + * a mechanism to introduce the soft_dirty functionality; however, without
-> + * it this bit is crucial to determining if a entry is dirty and we cannot
-> + * clear it via software. DBM can also be disabled or broken on some early
-> + * armv8 devices, so check its availability before modifying it.
->   */
-> -#define arch_wants_old_prefaulted_pte	cpu_has_hw_af
-> +static inline pte_t pte_clear_soft_dirty(pte_t pte)
-> +{
-> +	if (!arch_has_hw_pte_young())
-> +		return pte;
->  
-> -static inline bool pud_sect_supported(void)
-> +	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline pte_t pte_mksoft_dirty(pte_t pte)
->  {
-> -	return PAGE_SIZE == SZ_4K;
-> +	if (!arch_has_hw_pte_young())
-> +		return pte;
-> +
-> +	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline pte_t pte_swp_clear_soft_dirty(pte_t pte)
-> +{
-> +	if (!arch_has_hw_pte_young())
-> +		return pte;
-> +
-> +	return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline pte_t pte_swp_mksoft_dirty(pte_t pte)
-> +{
-> +	if (!arch_has_hw_pte_young())
-> +		return pte;
-> +
-> +	return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> +}
-> +
-> +static inline int pmd_soft_dirty(pmd_t pmd)
-> +{
-> +	return pte_soft_dirty(pmd_pte(pmd));
-> +}
-> +
-> +static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
-> +{
-> +	return pte_pmd(pte_clear_soft_dirty(pmd_pte(pmd)));
-> +}
-> +
-> +static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
-> +{
-> +	return pte_pmd(pte_mksoft_dirty(pmd_pte(pmd)));
->  }
->  
-> +#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-> +static inline int pmd_swp_soft_dirty(pmd_t pmd)
-> +{
-> +	return pmd_soft_dirty(pmd);
-> +}
-> +
-> +static inline pmd_t pmd_swp_clear_soft_dirty(pmd_t pmd)
-> +{
-> +	return pmd_clear_soft_dirty(pmd);
-> +}
-> +
-> +static inline pmd_t pmd_swp_mksoft_dirty(pmd_t pmd)
-> +{
-> +	return pmd_mksoft_dirty(pmd);
-> +}
-> +#endif /* CONFIG_ARCH_ENABLE_THP_MIGRATION */
-> +#endif /* CONFIG_ARM64_HW_AFDBM */
->  
->  #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
->  #define ptep_modify_prot_start ptep_modify_prot_start
-> -- 
-> 2.41.0
-> 
+Changes in V2:
+ - Fix prototypes declaration for handle_misaligned_load/store()
+ - Fix build for !CONFIG_FPU
+ - Added conditional build for various part of misaligned code handling
+ - Added in-kernel misalignement fault support to be equivalent to
+   existing SBI support
+ - Added support for misalignment emulation detection for hwprobe
+   reporting
+ - Modified set/get_unaligned_ctl to use this detection of emulation
+ - Added support for sysctl "unaligned_enabled"
+
+Clément Léger (9):
+  riscv: remove unused functions in traps_misaligned.c
+  riscv: avoid missing prototypes warning
+  riscv: add support for misaligned handling in S-mode
+  riscv: report perf event for misaligned fault
+  riscv: add support for sysctl unaligned_enabled control
+  riscv: add support for SBI misalignment trap delegation
+  riscv: report misaligned accesses emulation to hwprobe
+  riscv: add support for PR_SET_UNALIGN and PR_GET_UNALIGN
+  riscv: add floating point insn support to misaligned access emulation
+
+ arch/riscv/Kconfig                    |   1 +
+ arch/riscv/include/asm/cpufeature.h   |  10 +
+ arch/riscv/include/asm/entry-common.h |   3 +
+ arch/riscv/include/asm/processor.h    |   9 +
+ arch/riscv/include/asm/sbi.h          |  11 +
+ arch/riscv/kernel/Makefile            |   2 +-
+ arch/riscv/kernel/fpu.S               | 117 +++++++++
+ arch/riscv/kernel/process.c           |  18 ++
+ arch/riscv/kernel/sbi.c               |  21 ++
+ arch/riscv/kernel/setup.c             |   2 +
+ arch/riscv/kernel/traps.c             |   9 -
+ arch/riscv/kernel/traps_misaligned.c  | 352 ++++++++++++++++++++++----
+ 12 files changed, 498 insertions(+), 57 deletions(-)
+
+-- 
+2.40.1
+
