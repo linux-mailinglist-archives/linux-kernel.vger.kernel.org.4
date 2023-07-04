@@ -2,99 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8BC74685A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C545574685C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 06:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjGDE1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 00:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S230300AbjGDE15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 00:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjGDE1I (ORCPT
+        with ESMTP id S229786AbjGDE1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 00:27:08 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E54C107;
-        Mon,  3 Jul 2023 21:27:07 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363Nn3Qj003044;
-        Mon, 3 Jul 2023 21:27:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0220;
- bh=SZd0IB0NpIrm/6zW9J7ZnFkHt59bmYQVt5I2cU0EAgI=;
- b=WX33rD+arvBVt4VKNYmQwcQlw+BxJxPn6rMeOctImrrFuMZXP3s3gMAuMQkuh766ZlN9
- Vj5P0zWswEBvR/ln8GerA8VTuTDEQgrfGphnnCqpwGlYpA6LYMbOU1JuSX5eQfQvqXcF
- 8fqE4h3BZHbtRscciTzy4j1Na88sz7o/YxbBy8UPIQQ0oS20aypMiynjKaQ37N0ZREp6
- d3i1Erg2HZFdLvoKrhxa7YdjWNzUCkS3B3Z27BEmaPB4xuOOMMIrvHxA20OKbomnwatb
- +gAoqIykZs3SxBORgwytpBxLjSeCiEqEGm5gm7jdkf4EIrv2CzNykAT/HeJj0RxkTzpJ uA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3rjknj6hf0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jul 2023 21:27:01 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 3 Jul
- 2023 21:26:59 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 3 Jul 2023 21:26:58 -0700
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id F03B63F7040;
-        Mon,  3 Jul 2023 21:26:54 -0700 (PDT)
-From:   Hariprasad Kelam <hkelam@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <davem@davemloft.net>, <sgoutham@marvell.com>,
-        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
-        <sbhatta@marvell.com>, <richardcochran@gmail.com>
-Subject: [net Patch v2] octeontx-af: fix hardware timestamp configuration
-Date:   Tue, 4 Jul 2023 09:56:53 +0530
-Message-ID: <20230704042653.11303-1-hkelam@marvell.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 4 Jul 2023 00:27:55 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E879FB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 21:27:54 -0700 (PDT)
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 705FC3F84D
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 04:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688444872;
+        bh=m0rCEv/CsWJXjSYog6lgIFb5mJu+Vk0RYpsqlz5EQgw=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=mct1QJWXui7o8rz8IqrYksf+2z+Z8hoc1Pf47AOW3WQBbRQoGzr+ekyLZVAnDHJxL
+         wfJOG5gvdCxvIMea1fKvPzmd51lkx+WrN4fhG7RLe9dfpqVP1GLiVd/Uf4wrez1NHf
+         ctrYKAfS1Fdu+a5OzJYNE2OKiZlA7uuYdTHEfKWEADwxjkaVfVD7dY1KvNW9FlHcLC
+         3aPOIfYVbIo1hZFZiCAdfc4qFMEH0Avq7VkbbBCex+EQSan09r3aJVW0SeetwfcqMe
+         2t48+cQOGI0eLZ0XmKkBfApot7RtkRgw4CdFppzkGDZRyHbu+L0/jvYMygWBzzbIFO
+         C58E2U0zuLT5w==
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-765de3a3404so614549085a.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jul 2023 21:27:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688444871; x=1691036871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m0rCEv/CsWJXjSYog6lgIFb5mJu+Vk0RYpsqlz5EQgw=;
+        b=gveO69PyMLQTtdNc6jZaQdACY5AvnhDn/Nbps7LSakHgdw7ivCUXoCLVZa/IO+JWiY
+         CyWn/udqmPRYtRSgDoR9TTQpY8jqS1SEkHZZ5nEcpAT+E5xv8KHYUhZvvEWFDcLDnIjX
+         d2HvZLRWYWL+GQeLcaSMtdc/IYfOVEiQl5LmFI7stOkfF+2sBc0a+ykxJjOnCqpvu+uO
+         fEDOI3tTcDbU1/k1ilsjYgCegjJSYdv1azYY2m+JmHE06t5uGbJfevmTazW+DDLuz2IT
+         6LXePIPMIAlM9oJVafIy38njGYS5P1kg/1OD2M2G3nqivOM1RyM/4j9heJ6ZemFSwWNf
+         nfMA==
+X-Gm-Message-State: ABy/qLYM0ASC2sFeHXbC/L/Jpt4iunnwxivTd0V8gInIEXZfl4m+SlhI
+        xIppfNfcRgGtM9L9TVqeo+6q6ybRDUIpyTmvlPNwYffI3XIaOSfthtM4Oyf/W0YVt8dBFo3rVkw
+        tJd8BRHqExbu15sIqbIhBNtT99xu2M0wx1NPtf8I44I1b0cDtx9sSqZAn2Q==
+X-Received: by 2002:a05:620a:b5c:b0:767:5984:3ca7 with SMTP id x28-20020a05620a0b5c00b0076759843ca7mr6999499qkg.40.1688444871305;
+        Mon, 03 Jul 2023 21:27:51 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHOsoF3MvuVfKPaOCOEnX8/u9de7EY76LvgJfQExxXORdqkpExnQsaMwauVJoTxReymyk+AkQdcliPNEhc8KR4=
+X-Received: by 2002:a05:620a:b5c:b0:767:5984:3ca7 with SMTP id
+ x28-20020a05620a0b5c00b0076759843ca7mr6999487qkg.40.1688444871081; Mon, 03
+ Jul 2023 21:27:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: iPGDCSWAXf-LMuXdMd6HzOXsPAM7y5yh
-X-Proofpoint-ORIG-GUID: iPGDCSWAXf-LMuXdMd6HzOXsPAM7y5yh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_01,2023-06-30_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230516033133.340936-1-kai.heng.feng@canonical.com>
+ <IA1PR11MB61718EFB6DB1BF95CB1CEA5089799@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <SJ1PR11MB608384487F94EC485C91F47CFC799@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAAd53p56=CpWpPEOD2YdCneJX-XxO93MHMQHbLRB7VCYweW7SQ@mail.gmail.com> <CAAd53p7rpY7uUE-zBQOy3XBmB_JO96qYxkSZr26nZ+qcdT=COA@mail.gmail.com>
+In-Reply-To: <CAAd53p7rpY7uUE-zBQOy3XBmB_JO96qYxkSZr26nZ+qcdT=COA@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 4 Jul 2023 12:27:39 +0800
+Message-ID: <CAAd53p41Ku1m1rapeqb1xtD+kKuk+BaUW=dumuoF0ZO3GhFjFA@mail.gmail.com>
+Subject: Re: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM is absent
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        "kao, acelan" <acelan.kao@canonical.com>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAC block on CN10K (RPM) supports hardware timestamp configuration. The
-previous patch which added timestamp configuration support has a bug.
-Though the netdev driver requests to disable timestamp configuration,
-the driver is always enabling it.
+On Wed, Jun 14, 2023 at 3:58=E2=80=AFPM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> On Wed, May 17, 2023 at 3:49=E2=80=AFPM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> >
+> > On Wed, May 17, 2023 at 1:13=E2=80=AFAM Luck, Tony <tony.luck@intel.com=
+> wrote:
+> > >
+> > > >> [   13.875282] Hardware name: HP HP Z4 G5 Workstation Desktop PC/8=
+962,
+> > > > > BIOS U61 Ver. 01.01.15 04/19/2023
+> > >
+> > >
+> > > >> When a DIMM slot is empty, the read value of mtr can be 0xffffffff=
+, therefore
+> > >
+> > > > Looked like a buggy BIOS/hw that didn't set the mtr register.
+> > > >
+> > > > 1. Did you print the mtr register whose value was 0xffffffff?
+> > > > 2. Can you take a dmesg log with kernel "CONFIG_EDAC_DEBUG=3Dy" ena=
+bled?
+> > > > 3. What was the CPU? Please take the output of "lscpu".
+> > > > 4. Did you verify your patch that the issue was fixed on your syste=
+ms?
+> > >
+> > > I wonder if BIOS is "hiding" some devices from the OS? The 0xffffffff=
+ return is
+> > > the standard PCI response for reading a non-existent register. But th=
+at doesn't
+> > > quite make sense with having a "dimm present" bit in the MTR register=
+. If
+> > > the register only exists if the DIMM is present, then there is no nee=
+d for
+> > > a "dimm present" bit.
+> >
+> > I wonder if the "non-existent register" read is intended?
+> >
+> > >
+> > > Some "lspci" output may also be useful.
+> >
+> > lspci can be found in [1]:
+> >
+> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217453
+>
+> A gentle ping...
 
-This patch fixes the same.
+Another gentle ping...
 
-Fixes: d1489208681d ("octeontx2-af: cn10k: RPM hardware timestamp configuration")
-Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
----
-v2 * tag the patch to correct tree
-
-
- drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c
-index 4b8559ac0404..095b2cc4a699 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_cgx.c
-@@ -763,7 +763,7 @@ static int rvu_cgx_ptp_rx_cfg(struct rvu *rvu, u16 pcifunc, bool enable)
- 	cgxd = rvu_cgx_pdata(cgx_id, rvu);
-
- 	mac_ops = get_mac_ops(cgxd);
--	mac_ops->mac_enadis_ptp_config(cgxd, lmac_id, true);
-+	mac_ops->mac_enadis_ptp_config(cgxd, lmac_id, enable);
- 	/* If PTP is enabled then inform NPC that packets to be
- 	 * parsed by this PF will have their data shifted by 8 bytes
- 	 * and if PTP is disabled then no shift is required
---
-2.17.1
+>
+> >
+> > Kai-Heng
+> >
+> > >
+> > > -Tony
