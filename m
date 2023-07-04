@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10411747891
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5F7747898
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjGDTLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 15:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S231521AbjGDTOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 15:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjGDTLM (ORCPT
+        with ESMTP id S231409AbjGDTOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 15:11:12 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADD010D5;
-        Tue,  4 Jul 2023 12:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688497870; x=1720033870;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N+jEsHLauGx61KnltWviK6hcwVBEgkMktElW+SHC/C4=;
-  b=CBAoVYrSBzLcjIK6rmsU6x2mGdfCJN//bvOyFU+UkCRr5nisHmeK8BmO
-   dm+kNZaLPkuije4+YOZ6umn8MFyGTDLbVarPJw/JXhlYVHO4dNyAH2Wv6
-   5AQROg2oB0bX2+1ObntNDsAeCLb6fA1lVQJZ4IfL2ZJI2JMocFmi6op6B
-   Mgu26sdPATayzYZkHsHHoTU4vsUudXPF6fI+hrv2nnbroTSIUOrhygwKG
-   odK28OvvKeSzCjPdxwek3THDFJ9iwuqhggAbffJVBz99CBWymS6lw1xUC
-   blBlVSNTFMGsdNsG2El1+TJsEa8AOotcTMurMudYV/TFKEToN9bizBjmX
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="429218477"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="429218477"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 12:11:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="832249738"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="832249738"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Jul 2023 12:11:05 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qGlQW-000ITj-28;
-        Tue, 04 Jul 2023 19:11:04 +0000
-Date:   Wed, 5 Jul 2023 03:11:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        CK Hu <ck.hu@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        linaro-mm-sig@lists.linaro.org, linux-mediatek@lists.infradead.org,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-media@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [v4, PATCH] drm/mediatek: add dma buffer control for drm plane
- disable
-Message-ID: <202307050325.QZv71se7-lkp@intel.com>
-References: <20230704090432.5844-1-yongqiang.niu@mediatek.com>
+        Tue, 4 Jul 2023 15:14:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42E610D5;
+        Tue,  4 Jul 2023 12:14:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D3661348;
+        Tue,  4 Jul 2023 19:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEA2C433C8;
+        Tue,  4 Jul 2023 19:14:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688498057;
+        bh=774aSqho5oCbt5eD+KXB3aukhvZSsdRso4l6bcpL69k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hcoONUGGc2ahSTNq9xiKhhd8ppl7hhbCGCWSPF8Z8G2rZY/zePt28kCq42/Jonmto
+         qdigjrE3jEVWuHtHZ84YUpVx/tDbRSvseCVFe1MSBfHXRKe5B/d8OXLx+9Z4emvbYa
+         srhWBskW4AlkHH7hXb7qz02gHISop8/bZOrq+T6BXYApZkJmvUiakSRnctjPMiqXKo
+         PwkOXDorzAISgnf0C06+utAnzQeqIMXt7fjlDowk5+lKl5RskGdr++J3KLXtVftqgF
+         Wf4np0rT2pT+H13phzgUK4ByKb4WZhse8qT3uUI1kCFKvxjqKcPl7/YyUNdYH2CwD0
+         OnV4/Mg/qIkZQ==
+Date:   Tue, 4 Jul 2023 20:14:11 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        jirislaby@kernel.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com, kelvin.zhang@amlogic.com,
+        xianwei.zhao@amlogic.com, kernel@sberdevices.ru,
+        rockosov@gmail.com, linux-amlogic@lists.infradead.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 3/5] tty: serial: meson: apply ttyS devname instead of
+ ttyAML for new SoCs
+Message-ID: <20230704-goofiness-maximum-a964d2fd0dcd@spud>
+References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+ <20230704135936.14697-4-ddrokosov@sberdevices.ru>
+ <20230704-pogo-zeppelin-5fa281f5c9e6@spud>
+ <20230704171326.tyforkt7z23zmgqa@CAB-WSD-L081021>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Tecr9VZAi6Q825ui"
 Content-Disposition: inline
-In-Reply-To: <20230704090432.5844-1-yongqiang.niu@mediatek.com>
+In-Reply-To: <20230704171326.tyforkt7z23zmgqa@CAB-WSD-L081021>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yongqiang,
 
-kernel test robot noticed the following build errors:
+--Tecr9VZAi6Q825ui
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.4 next-20230704]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Tue, Jul 04, 2023 at 08:13:26PM +0300, Dmitry Rokosov wrote:
+> On Tue, Jul 04, 2023 at 05:57:15PM +0100, Conor Dooley wrote:
+> > On Tue, Jul 04, 2023 at 04:59:34PM +0300, Dmitry Rokosov wrote:
+> > > It is worth noting that the devname ttyS is a widely recognized tty n=
+ame
+> > > and is commonly used by many uart device drivers. Given the establish=
+ed
+> > > usage and compatibility concerns, it may not be feasible to change the
+> > > devname for older SoCs. However, for new definitions, it is acceptable
+> > > and even recommended to use a new devname to help ensure clarity and
+> > > avoid any potential conflicts on lower or upper software levels.
+> >=20
+> > > In
+> > > addition, modify the meson_uart_dt match data for g12a, a1, and s4 to
+> > > their appropriate values to ensure proper devname values and
+> > > functionality.
+> >=20
+> > IMO, this is a separate change that should be in another patch, had to
+> > go looking through a several of unrelated $subject patches to understand
+> > how the binding patch was going to work.
+>=20
+> I apologize, but I'm having difficulty understanding your suggestion.
+> Are you recommending that a distinct binding patch for meson-uart-a1 be
+> sent as part of a separate patch series? From my perspective, isolating
+> the binding patch may not provide all the necessary context as it is
+> reliant on a separate 'compatible' declaration within the meson-uart
+> driver. However, this declaration is interconnected with the devname
+> support patchset. Therefore, it seems that all of these patches are
+> linked together.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yongqiang-Niu/drm-mediatek-add-dma-buffer-control-for-drm-plane-disable/20230704-170623
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230704090432.5844-1-yongqiang.niu%40mediatek.com
-patch subject: [v4, PATCH] drm/mediatek: add dma buffer control for drm plane disable
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230705/202307050325.QZv71se7-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230705/202307050325.QZv71se7-lkp@intel.com/reproduce)
+Maybe it is just a case of how the commit message was written, where the
+SoCs responsible for the changes appear only "in addition". At the
+moment, it seemed like an unrelated addition that was sneaking into the
+commit to me, who was trying to find the code change that made the DT
+side of things valid,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307050325.QZv71se7-lkp@intel.com/
+Re-phrasing the commit message to explain that the a1 is the reason for
+this change, rather than mentioning the SoCs as an apparent afterthought
+would make sense to me here. As would splitting reworking the code to
+support devname stuff in one commit & adding the new match for the a1 in
+another. Whatever works for you.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+--Tecr9VZAi6Q825ui
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> ERROR: modpost: module mediatek-drm uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKRvgwAKCRB4tDGHoIJi
+0hkeAP9Lzm0lKzEJQ3nWw1mwEopF3oZdVmvGVOFiRIQgcx/mqAEAvkAFRCWE9JpX
+UsLys1kHTzKs1mYt4FxBmbpH8kN20g4=
+=7yrx
+-----END PGP SIGNATURE-----
+
+--Tecr9VZAi6Q825ui--
