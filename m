@@ -2,157 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2E474735B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3835274735D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjGDNzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S231428AbjGDNzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjGDNzG (ORCPT
+        with ESMTP id S231140AbjGDNzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:55:06 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DF1F2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:55:05 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-c581c758ad8so1824368276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688478904; x=1691070904;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bbInuMOaeGH2/pfUXBP7Ae3B0+gOG6gDsXRs6oqX8sQ=;
-        b=B68oywBDw6QM9sPH3nKNiCHT/pSIoiCPuIIkzAkCxCa8GJ5lpYfWjfDdH0trlCaTJd
-         2xK/cpi/YT3sxzulpr3nj7jYseH50FY4ahSlV4PfRQzRvZwgKh9pOb4hfs8EwW4ovnNp
-         Ju6CXm1AvuUp/Y4cp94R1qefX9ERrpQJto1M4iRQiIQEMybWzU4iCYjJLHo1UEZC95Tt
-         +EgY7Q8FnyB6hjhllftqxmwgCaqTUMtD6gKvd9Wsaj1XoO7T+70WMobYUaP3QofKXC1I
-         52FEykZzJyaJMWXRy27mu3oi48ll39hqlYQKQoZUMp4JlG1KCgZejX9l2AG1uFWaxBPY
-         6PnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688478904; x=1691070904;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bbInuMOaeGH2/pfUXBP7Ae3B0+gOG6gDsXRs6oqX8sQ=;
-        b=TjyKbartPKAKaI85IAXmC0NWlNPUcM2weYPpM8fIatZaCJoqQlmOt2vVuzJAKS6/b2
-         U7Udfwr3+f0jezGdFBIt0MSbOEKZKWXWhAVt+5NiXVFtzX69pTeEyjgo0qtDvNcmS6/U
-         Phc5R3bXXKevH/HJaSWyMCodErSOPwvGqNe7CgGEoHGPkZ2eWoFyeBuIjrH/PFDFHUM0
-         Sfm/uFEnHCUP8I0sN7rGIqgn4Im2keLtdd9fzRfuZHLWm4DLMNiZ+cUKYvLUCyriUybK
-         dnoYryfSed8aWK195Nd9yGGNQJEunucCXHi1d1U2oxLuGrg3uiesqqvjdc1vbMiILvxp
-         uKkQ==
-X-Gm-Message-State: ABy/qLacLdlYOQfO6KOjh29NpkumKE5HQbpvRi4fzNbZgN7YkUiyPaDp
-        Xeliz38jyEZ9SbI2ZTfLHQw1ONtXioPTZXQ+lWpkgw==
-X-Google-Smtp-Source: APBJJlE/ZZiKuvpdnr9LwWHHgdmOPydDsK5lYvgSF5VC1VJFhX6g20gb+lSl/bQIvqlE5yD64J2YYrOM5X4CtMON5GA=
-X-Received: by 2002:a25:b326:0:b0:c01:287b:41f9 with SMTP id
- l38-20020a25b326000000b00c01287b41f9mr10447897ybj.59.1688478904309; Tue, 04
- Jul 2023 06:55:04 -0700 (PDT)
+        Tue, 4 Jul 2023 09:55:12 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED62CEE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:55:10 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688478909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LiM73AlJxucWg3z48BYnYknSUwAWZ4Kmkn1Nr2ACD0A=;
+        b=IHfecc42WPCyTP/PnqTrZOs7N03YcFRFZJKCEFYdXufKv2oorUwKVv90kcwwrSH8eupA5j
+        J9IMYOK67moY3cu0UZZrC5WIA3eH+SzLYpTQoETAR2OKPiRGoXPiLF6OCzIDP+nhwl48GD
+        hQyHE29Sl3SyJ1JOMBNlgbgLrlYKynPFO5kzIOZBgGUPsQI24b9wkAinVfsttf2dpAfGw1
+        KkR9F+qzDqirxssUAs+KlAqhI1g1l0LM6leHN2Ht1mQ8xE8pUSIJeI2yIQuN70PFC+NHBk
+        OwnBMPh3GtF2vDNmt2+3YiQIny5Q/PLpLl//HsVQiMIxRdvaDND2Wi+cfkmWOQ==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 59B4040009;
+        Tue,  4 Jul 2023 13:55:08 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 15:55:07 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Lothar =?UTF-8?B?V2HDn21hbm4=?= <LW@KARO-electronics.de>
+Cc:     Felix Matouschek <felix@matouschek.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC] Bad ecc layout in drivers/mtd/nand/spi/xtx.c
+Message-ID: <20230704155507.0643a856@xps-13>
+In-Reply-To: <20230704123743.7f4c87af@ipc1.ka-ro>
+References: <20230704123743.7f4c87af@ipc1.ka-ro>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230621144019.3219858-1-abel.vesa@linaro.org> <20230621144019.3219858-5-abel.vesa@linaro.org>
-In-Reply-To: <20230621144019.3219858-5-abel.vesa@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 4 Jul 2023 15:54:28 +0200
-Message-ID: <CAPDyKFpPNYYxECPpk0Qbos70WeZgOXCtu7qXGGzvLLizzrdjtA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 4/4] PM: domains: Add and set generic sync state callback
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 16:40, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> For every provider that doesn't register a sync_state callback,
-> register a generic one. This new generic sync_state callback queues up a
-> power off request.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/base/power/domain.c | 23 +++++++++++++++++++++++
->  include/linux/pm_domain.h   |  3 +++
->  2 files changed, 26 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5967ade160e2..ec16db0599ac 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -654,6 +654,27 @@ static void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
->         queue_work(pm_wq, &genpd->power_off_work);
->  }
->
-> +/**
-> + * pm_genpd_power_off_unused_sync_state - Power off all domains for provider.
-> + * @dev: Provider's device.
-> + *
-> + * Request power off for all unused domains of the provider.
-> + * This should be used exclusively as sync state callback for genpd providers.
-> + */
-> +void pm_genpd_power_off_unused_sync_state(struct device *dev)
-> +{
-> +       struct generic_pm_domain *genpd;
-> +
-> +       mutex_lock(&gpd_list_lock);
-> +
-> +       list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> +               if (genpd->provider && genpd->provider->dev == dev)
+Hi Lothar,
 
-Not all genpds have the ->provider assigned. Moreover, the
-of_genpd_mutex is protecting the list of providers, we should use that
-instead.
+Thanks for the report.
 
-> +                       genpd_queue_power_off_work(genpd);
-> +
-> +       mutex_unlock(&gpd_list_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(pm_genpd_power_off_unused_sync_state);
+LW@KARO-electronics.de wrote on Tue, 4 Jul 2023 12:37:43 +0200:
 
-Why does this need to be exported? Is there a provider that assigns
-it's own sync state callback that needs to call this? If that is the
-case, I would prefer to see a user of this API as a part of the series
-too.
+> Hi,
+>=20
+> while trying to add support for the 'XT26G01C' variant of the XTX
+> SPI-nand chip I noticed a flaw in the ECC layout of the existing
+> driver.
+> According to the  XT26G01A datasheet the first eight bytes of the OOB
+> area are not protected by ECC:
+> Offset      ECC  Bytes  Area               Description
+> 800H 807H    No      8  Spare 4, Group E   This Area is not covered by in=
+ternal ECC,
+>                                            800H is reserved for bad block=
+ mark       =20
+> 808H 82FH   Yes 40 Spare 5 , Group F       User Meta Data Area covered by=
+ internal ECC.
+> 830H 83FH    No 16 Spare 6 , Group G       ECC_EN=3D1: this area contains=
+ Internal ECC Data, Read-Only,
+>                                            Programming to this area will =
+be ignored
+>                                            ECC_EN=3D0: this area is writa=
+ble for user
+>=20
+> But the driver defines bytes 1..47 as user OOB area:
+> |static int xt26g0xa_ooblayout_free(struct mtd_info *mtd, int section,
+> |				   struct mtd_oob_region *region)
+> |{
+> |	if (section)
+> |		return -ERANGE;
+> |
+> |	region->offset =3D 1;
+> |	region->length =3D 47;
+> |
+> |	return 0;
+> |}
+>=20
+> IMO this should be:
+> |	region->offset =3D 8;
+> |	region->length =3D 40;
+> to have the whole user oob area protected by ECC.
+>=20
+> Obviously this cannot simply be changed in the driver because it would
+> break access to flash that was programmed with the current parameters.
+> Since the data structures that provide the oob layout are completely
+> static and cannot be modified at runtime (e.g. depending on some DTB
+> property) the only way I see to provide a layout with ECC protection
+> for the whole user metadata would be a Kconfig option to select one or
+> the other layout at compile time.
+>=20
+> Any comments or better ideas?
 
-> +
->  /**
->   * genpd_keep_on - Tells if the domain should skip the power 'off' request
->   * @genpd: PM domain to be checked.
-> @@ -2329,6 +2350,8 @@ static int genpd_add_provider(struct device_node *np, genpd_xlate_t xlate,
->         cp->xlate = xlate;
->         fwnode_dev_initialized(&np->fwnode, true);
->
-> +       dev_set_drv_sync_state(np->fwnode.dev, pm_genpd_power_off_unused_sync_state);
-> +
->         mutex_lock(&of_genpd_mutex);
->         list_add(&cp->link, &of_genpd_providers);
->         mutex_unlock(&of_genpd_mutex);
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 3eb32c4b6d4f..78164244b89f 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -279,6 +279,9 @@ static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
->         return -EOPNOTSUPP;
->  }
->
-> +static inline void pm_genpd_power_off_unused_sync_state(struct device *dev)
-> +{ }
-> +
->  static inline int dev_pm_genpd_set_performance_state(struct device *dev,
->                                                      unsigned int state)
->  {
+These offsets do not reflect the protected area but the user area,
+which can be used (at the users own risks). Somehow the only real user
+is jffs2 upstream, and jffs2 was meant to be replaced a long time ago
+by UBI which actually workaround-ed this limitation by not using the
+OOB area at all. We do not have a real way to distinguish what is ECC
+protected or not in the OOB area.
 
-Kind regards
-Uffe
+So unless you want to solve a real problem, I would advise to keep it
+as it is.
+
+Thanks,
+Miqu=C3=A8l
