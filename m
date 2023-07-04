@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00AF7468E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A6A7468E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 07:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjGDFYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 01:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S230238AbjGDFYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 01:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjGDFYI (ORCPT
+        with ESMTP id S230146AbjGDFYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 01:24:08 -0400
+        Tue, 4 Jul 2023 01:24:09 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F65E49;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C408E52;
         Mon,  3 Jul 2023 22:24:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=ATUS35pTWGGIbN1gecgRrYg2fY7uuWWpFqHk1R/svhg=; b=dEmavBcxYytSqqvsUB+4lX3vj8
-        dys2oB3OfSBO7JL7C3FaIoH3Ymz/0G7TuJuDTs0Olzn6sXQdINzf1aOZlVbriKSPretJeuvrQKViT
-        JBQVUooozAgfMdeMaKHUTaaU34evLZgucZWobYuHP0MLiVcApzBGjNZzypMPJXDZjIvCnnWILRYwE
-        nURzxdHMvL39Q7mrMzTn24mNXOQwkQEgQe1hkTZT/lP+SKsd2MCIOKcZ/DohuC7axk1TVkoU0kdh5
-        JBTjp0YkEEYbfAam6Z7zlZ44Cz5YBaRz0+0ldAc7NpZGvVonkpbQY2b9Iw3qGHLJ4PyfRLKQPswOK
-        uLdQHywQ==;
+        bh=hgDOe718j7PFvCpJQd59expryvQV5xbxa5ErU2Tl+0g=; b=vvkUhJYxFKhGLRj1eLEAWrEuiE
+        TaSOVGomfPOyTrZF6X2dkZfVmMNdFCKxMWAJ0fQzEPLcPdPfLwPCf+tTJyow78fK2LYYsZKKam1wq
+        iraiVXOuh3qbuuU20tji+7dilsg2RxRoYrntnH17ONMNGS6bRZq8dX2muwVNz8PZaRCuL9Thz7Zlt
+        nuB9Z1sEJx/4P0O20+IPs1zZYj0CZKWqlBV1yPLpR7HtEoZh8/cGvcnxzMlXp9zEz3zz9jxFK1iHn
+        GmYdTmO381xpgbIJAPN+PZCBKgyzAOv3ZJiVR9K+pHuU1+M2+gC1TSc19AtS6kG810SUY4NpyrOCF
+        sZQYXn9g==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qGYWE-00CCEU-1L;
+        id 1qGYWE-00CCEU-2d;
         Tue, 04 Jul 2023 05:24:06 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 2/3] jiffies: add kernel-doc for all APIs
-Date:   Mon,  3 Jul 2023 22:24:04 -0700
-Message-ID: <20230704052405.5089-2-rdunlap@infradead.org>
+Subject: [PATCH 3/3] time: add kernel-doc in time.c
+Date:   Mon,  3 Jul 2023 22:24:05 -0700
+Message-ID: <20230704052405.5089-3-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230704052405.5089-1-rdunlap@infradead.org>
 References: <20230704052405.5089-1-rdunlap@infradead.org>
@@ -54,10 +54,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add kernel-doc notation in <linux/jiffies.h> for interfaces that
-don't already have it (i.e. most interfaces).
-
-Fix some formatting and typos in other comments.
+Add kernel-doc for all APIs that do not already have it.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: John Stultz <jstultz@google.com>
@@ -66,336 +63,380 @@ Cc: Stephen Boyd <sboyd@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 ---
- include/linux/jiffies.h |  197 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 176 insertions(+), 21 deletions(-)
+ kernel/time/time.c |  169 ++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 158 insertions(+), 11 deletions(-)
 
-diff -- a/include/linux/jiffies.h b/include/linux/jiffies.h
---- a/include/linux/jiffies.h
-+++ b/include/linux/jiffies.h
-@@ -72,9 +72,15 @@ extern int register_refined_jiffies(long
+diff -- a/kernel/time/time.c b/kernel/time/time.c
+--- a/kernel/time/time.c
++++ b/kernel/time/time.c
+@@ -365,11 +365,14 @@ SYSCALL_DEFINE1(adjtimex_time32, struct
+ }
  #endif
  
- /*
-- * The 64-bit value is not atomic - you MUST NOT read it
-+ * The 64-bit value is not atomic on 32-bit systems - you MUST NOT read it
-  * without sampling the sequence number in jiffies_lock.
-  * get_jiffies_64() will do this for you as appropriate.
-+ *
-+ * jiffies and jiffies_64 are at the same address for little-endian systems
-+ * and for 64-bit big-endian systems.
-+ * On 32-bit big-endian systems, jiffies is the lower 32 bits of jiffies_64
-+ * (i.e., at address @jiffies_64 + 4).
-+ * See arch/ARCH/kernel/vmlinux.lds.S
-  */
- extern u64 __cacheline_aligned_in_smp jiffies_64;
- extern unsigned long volatile __cacheline_aligned_in_smp __jiffy_arch_data jiffies;
-@@ -82,6 +88,14 @@ extern unsigned long volatile __cachelin
- #if (BITS_PER_LONG < 64)
- u64 get_jiffies_64(void);
- #else
-+/**
-+ * get_jiffies_64 - read the 64-bit non-atomic jiffies_64 value
-+ *
-+ * When BITS_PER_LONG < 64, this uses sequence number sampling using
-+ * jiffies_lock to protect the 64-bit read.
-+ *
-+ * Return: current 64-bit jiffies value
-+ */
- static inline u64 get_jiffies_64(void)
- {
- 	return (u64)jiffies;
-@@ -89,39 +103,76 @@ static inline u64 get_jiffies_64(void)
- #endif
- 
- /*
-- *	These inlines deal with timer wrapping correctly. You are 
-- *	strongly encouraged to use them
-+ *	These inlines deal with timer wrapping correctly. You are
-+ *	strongly encouraged to use them:
-  *	1. Because people otherwise forget
-  *	2. Because if the timer wrap changes in future you won't have to
-  *	   alter your driver code.
-- *
-- * time_after(a,b) returns true if the time a is after time b.
-+ */
-+
-+/**
-+ * time_after - returns true if the time a is after time b.
-+ * @a: first comparable as unsigned long
-+ * @b: second comparable as unsigned long
-  *
-  * Do this with "<0" and ">=0" to only test the sign of the result. A
-  * good compiler would generate better code (and a really good compiler
-  * wouldn't care). Gcc is currently neither.
-+ *
-+ * Return: %true is time a is after time b, otherwise %false.
-  */
- #define time_after(a,b)		\
- 	(typecheck(unsigned long, a) && \
- 	 typecheck(unsigned long, b) && \
- 	 ((long)((b) - (a)) < 0))
-+/**
-+ * time_before - returns true if the time a is before time b.
-+ * @a: first comparable as unsigned long
-+ * @b: second comparable as unsigned long
-+ *
-+ * Return: %true is time a is before time b, otherwise %false.
-+ */
- #define time_before(a,b)	time_after(b,a)
- 
-+/**
-+ * time_after_eq - returns true if the time a is after or the same as time b.
-+ * @a: first comparable as unsigned long
-+ * @b: second comparable as unsigned long
-+ *
-+ * Return: %true is time a is after or the same as time b, otherwise %false.
-+ */
- #define time_after_eq(a,b)	\
- 	(typecheck(unsigned long, a) && \
- 	 typecheck(unsigned long, b) && \
- 	 ((long)((a) - (b)) >= 0))
-+/**
-+ * time_before_eq - returns true if the time a is before or the same as time b.
-+ * @a: first comparable as unsigned long
-+ * @b: second comparable as unsigned long
-+ *
-+ * Return: %true is time a is before or the same as time b, otherwise %false.
-+ */
- #define time_before_eq(a,b)	time_after_eq(b,a)
- 
 -/*
-- * Calculate whether a is in the range of [b, c].
+- * Convert jiffies to milliseconds and back.
 +/**
-+ * time_in_range - Calculate whether a is in the range of [b, c].
-+ * @a: time to test
-+ * @b: beginning of the range
-+ * @c: end of the range
-+ *
-+ * Return: %true is time a is in the range [b, c], otherwise %false.
-  */
- #define time_in_range(a,b,c) \
- 	(time_after_eq(a,b) && \
- 	 time_before_eq(a,c))
- 
--/*
-- * Calculate whether a is in the range of [b, c).
-+/**
-+ * time_in_range_open - Calculate whether a is in the range of [b, c).
-+ * @a: time to test
-+ * @b: beginning of the range
-+ * @c: end of the range
-+ *
-+ * Return: %true is time a is in the range [b, c), otherwise %false.
-  */
- #define time_in_range_open(a,b,c) \
- 	(time_after_eq(a,b) && \
-@@ -129,45 +180,138 @@ static inline u64 get_jiffies_64(void)
- 
- /* Same as above, but does so with platform independent 64bit types.
-  * These must be used when utilizing jiffies_64 (i.e. return value of
-- * get_jiffies_64() */
-+ * get_jiffies_64()). */
-+
-+/**
-+ * time_after64 - returns true if the time a is after time b.
-+ * @a: first comparable as __u64
-+ * @b: second comparable as __u64
-+ *
-+ * This must be used when utilizing jiffies_64 (i.e. return value of
-+ * get_jiffies_64()).
-+ *
-+ * Return: %true is time a is after time b, otherwise %false.
-+ */
- #define time_after64(a,b)	\
- 	(typecheck(__u64, a) &&	\
- 	 typecheck(__u64, b) && \
- 	 ((__s64)((b) - (a)) < 0))
-+/**
-+ * time_before64 - returns true if the time a is before time b.
-+ * @a: first comparable as __u64
-+ * @b: second comparable as __u64
-+ *
-+ * This must be used when utilizing jiffies_64 (i.e. return value of
-+ * get_jiffies_64()).
-+ *
-+ * Return: %true is time a is before time b, otherwise %false.
-+ */
- #define time_before64(a,b)	time_after64(b,a)
- 
-+/**
-+ * time_after_eq64 - returns true if the time a is after or the same as time b.
-+ * @a: first comparable as __u64
-+ * @b: second comparable as __u64
-+ *
-+ * This must be used when utilizing jiffies_64 (i.e. return value of
-+ * get_jiffies_64()).
-+ *
-+ * Return: %true is time a is after or the same as time b, otherwise %false.
-+ */
- #define time_after_eq64(a,b)	\
- 	(typecheck(__u64, a) && \
- 	 typecheck(__u64, b) && \
- 	 ((__s64)((a) - (b)) >= 0))
-+/**
-+ * time_before_eq64 - returns true if the time a is before or the same as time b.
-+ * @a: first comparable as __u64
-+ * @b: second comparable as __u64
-+ *
-+ * This must be used when utilizing jiffies_64 (i.e. return value of
-+ * get_jiffies_64()).
-+ *
-+ * Return: %true is time a is before or the same as time b, otherwise %false.
-+ */
- #define time_before_eq64(a,b)	time_after_eq64(b,a)
- 
-+/**
-+ * time_in_range64 - Calculate whether a is in the range of [b, c].
-+ * @a: time to test
-+ * @b: beginning of the range
-+ * @c: end of the range
-+ *
-+ * Return: %true is time a is in the range [b, c], otherwise %false.
-+ */
- #define time_in_range64(a, b, c) \
- 	(time_after_eq64(a, b) && \
- 	 time_before_eq64(a, c))
- 
- /*
-- * These four macros compare jiffies and 'a' for convenience.
-+ * These eight macros compare jiffies[_64] and 'a' for convenience.
-  */
- 
--/* time_is_before_jiffies(a) return true if a is before jiffies */
-+/**
-+ * time_is_before_jiffies - return true if a is before jiffies
-+ * @a: time (unsigned long) to compare to jiffies
-+ *
-+ * Return: %true is time a is before jiffies, otherwise %false.
-+ */
- #define time_is_before_jiffies(a) time_after(jiffies, a)
-+/**
-+ * time_is_before_jiffies64 - return true if a is before jiffies_64
-+ * @a: time (__u64) to compare to jiffies_64
-+ *
-+ * Return: %true is time a is before jiffies_64, otherwise %false.
-+ */
- #define time_is_before_jiffies64(a) time_after64(get_jiffies_64(), a)
- 
--/* time_is_after_jiffies(a) return true if a is after jiffies */
-+/**
-+ * time_is_after_jiffies - return true if a is after jiffies
-+ * @a: time (unsigned long) to compare to jiffies
-+ *
-+ * Return: %true is time a is after jiffies, otherwise %false.
-+ */
- #define time_is_after_jiffies(a) time_before(jiffies, a)
-+/**
-+ * time_is_after_jiffies64 - return true if a is after jiffies_64
-+ * @a: time (__u64) to compare to jiffies_64
-+ *
-+ * Return: %true is time a is after jiffies_64, otherwise %false.
-+ */
- #define time_is_after_jiffies64(a) time_before64(get_jiffies_64(), a)
- 
--/* time_is_before_eq_jiffies(a) return true if a is before or equal to jiffies*/
-+/**
-+ * time_is_before_eq_jiffies - return true if a is before or equal to jiffies
-+ * @a: time (unsigned long) to compare to jiffies
-+ *
-+ * Return: %true is time a is before or the same as jiffies, otherwise %false.
-+ */
- #define time_is_before_eq_jiffies(a) time_after_eq(jiffies, a)
-+/**
-+ * time_is_before_eq_jiffies64 - return true if a is before or equal to jiffies_64
-+ * @a: time (__u64) to compare to jiffies_64
-+ *
-+ * Return: %true is time a is before or the same jiffies_64, otherwise %false.
-+ */
- #define time_is_before_eq_jiffies64(a) time_after_eq64(get_jiffies_64(), a)
- 
--/* time_is_after_eq_jiffies(a) return true if a is after or equal to jiffies*/
-+/**
-+ * time_is_after_eq_jiffies - return true if a is after or equal to jiffies
-+ * @a: time (unsigned long) to compare to jiffies
-+ *
-+ * Return: %true is time a is after or the same as jiffies, otherwise %false.
-+ */
- #define time_is_after_eq_jiffies(a) time_before_eq(jiffies, a)
-+/**
-+ * time_is_after_eq_jiffies64 - return true if a is after or equal to jiffies_64
-+ * @a: time (__u64) to compare to jiffies_64
-+ *
-+ * Return: %true is time a is after or the same as jiffies_64, otherwise %false.
-+ */
- #define time_is_after_eq_jiffies64(a) time_before_eq64(get_jiffies_64(), a)
- 
- /*
-- * Have the 32 bit jiffies value wrap 5 minutes after boot
-+ * Have the 32-bit jiffies value wrap 5 minutes after boot
-  * so jiffies wrap bugs show up earlier.
-  */
- #define INITIAL_JIFFIES ((unsigned long)(unsigned int) (-300*HZ))
-@@ -278,7 +422,7 @@ extern unsigned long preset_lpj;
- #if BITS_PER_LONG < 64
- # define MAX_SEC_IN_JIFFIES \
- 	(long)((u64)((u64)MAX_JIFFY_OFFSET * TICK_NSEC) / NSEC_PER_SEC)
--#else	/* take care of overflow on 64 bits machines */
-+#else	/* take care of overflow on 64-bit machines */
- # define MAX_SEC_IN_JIFFIES \
- 	(SH_DIV((MAX_JIFFY_OFFSET >> SEC_JIFFIE_SC) * TICK_NSEC, NSEC_PER_SEC, 1) - 1)
- 
-@@ -290,6 +434,12 @@ extern unsigned long preset_lpj;
- extern unsigned int jiffies_to_msecs(const unsigned long j);
- extern unsigned int jiffies_to_usecs(const unsigned long j);
- 
-+/**
-+ * jiffies_to_nsecs - Convert jiffies to nanoseconds
++ * jiffies_to_msecs - Convert jiffies to milliseconds
 + * @j: jiffies value
+  *
+  * Avoid unnecessary multiplications/divisions in the
+- * two most common HZ cases:
++ * two most common HZ cases.
++ *
++ * Return: milliseconds value
+  */
+ unsigned int jiffies_to_msecs(const unsigned long j)
+ {
+@@ -388,6 +391,12 @@ unsigned int jiffies_to_msecs(const unsi
+ }
+ EXPORT_SYMBOL(jiffies_to_msecs);
+ 
++/**
++ * jiffies_to_usecs - Convert jiffies to microseconds
++ * @j: jiffies value
++ *
++ * Return: microseconds value
++ */
+ unsigned int jiffies_to_usecs(const unsigned long j)
+ {
+ 	/*
+@@ -408,8 +417,15 @@ unsigned int jiffies_to_usecs(const unsi
+ }
+ EXPORT_SYMBOL(jiffies_to_usecs);
+ 
+-/*
++/**
+  * mktime64 - Converts date to seconds.
++ * @year0: year to convert
++ * @mon0: month to convert
++ * @day: day to convert
++ * @hour: hour to convert
++ * @min: minute to convert
++ * @sec: second to convert
++ *
+  * Converts Gregorian date to seconds since 1970-01-01 00:00:00.
+  * Assumes input in normal date format, i.e. 1980-12-31 23:59:59
+  * => year=1980, mon=12, day=31, hour=23, min=59, sec=59.
+@@ -427,6 +443,8 @@ EXPORT_SYMBOL(jiffies_to_usecs);
+  *
+  * An encoding of midnight at the end of the day as 24:00:00 - ie. midnight
+  * tomorrow - (allowable under ISO 8601) is supported.
++ *
++ * Return: seconds since the epoch time for the given input date
+  */
+ time64_t mktime64(const unsigned int year0, const unsigned int mon0,
+ 		const unsigned int day, const unsigned int hour,
+@@ -471,8 +489,7 @@ EXPORT_SYMBOL(ns_to_kernel_old_timeval);
+  * Set seconds and nanoseconds field of a timespec variable and
+  * normalize to the timespec storage format
+  *
+- * Note: The tv_nsec part is always in the range of
+- *	0 <= tv_nsec < NSEC_PER_SEC
++ * Note: The tv_nsec part is always in the range of 0 <= tv_nsec < NSEC_PER_SEC.
+  * For negative values only the tv_sec field is negative !
+  */
+ void set_normalized_timespec64(struct timespec64 *ts, time64_t sec, s64 nsec)
+@@ -501,7 +518,7 @@ EXPORT_SYMBOL(set_normalized_timespec64)
+  * ns_to_timespec64 - Convert nanoseconds to timespec64
+  * @nsec:       the nanoseconds value to be converted
+  *
+- * Returns the timespec64 representation of the nsec parameter.
++ * Return: the timespec64 representation of the nsec parameter.
+  */
+ struct timespec64 ns_to_timespec64(s64 nsec)
+ {
+@@ -548,6 +565,8 @@ EXPORT_SYMBOL(ns_to_timespec64);
+  * runtime.
+  * The _msecs_to_jiffies helpers are the HZ dependent conversion
+  * routines found in include/linux/jiffies.h
++ *
++ * Return: jiffies value
+  */
+ unsigned long __msecs_to_jiffies(const unsigned int m)
+ {
+@@ -560,6 +579,12 @@ unsigned long __msecs_to_jiffies(const u
+ }
+ EXPORT_SYMBOL(__msecs_to_jiffies);
+ 
++/**
++ * __usecs_to_jiffies: - convert microseconds to jiffies
++ * @u:	time in milliseconds
++ *
++ * Return: jiffies value
++ */
+ unsigned long __usecs_to_jiffies(const unsigned int u)
+ {
+ 	if (u > jiffies_to_usecs(MAX_JIFFY_OFFSET))
+@@ -568,7 +593,10 @@ unsigned long __usecs_to_jiffies(const u
+ }
+ EXPORT_SYMBOL(__usecs_to_jiffies);
+ 
+-/*
++/**
++ * timespec64_to_jiffies - convert a timespec64 value to jiffies
++ * @value: pointer to &struct timespec64
++ *
+  * The TICK_NSEC - 1 rounds up the value to the next resolution.  Note
+  * that a remainder subtract here would not do the right thing as the
+  * resolution values don't fall on second boundaries.  I.e. the line:
+@@ -582,8 +610,9 @@ EXPORT_SYMBOL(__usecs_to_jiffies);
+  *
+  * The >> (NSEC_JIFFIE_SC - SEC_JIFFIE_SC) converts the scaled nsec
+  * value to a scaled second value.
++ *
++ * Return: jiffies value
+  */
+-
+ unsigned long
+ timespec64_to_jiffies(const struct timespec64 *value)
+ {
+@@ -601,6 +630,11 @@ timespec64_to_jiffies(const struct times
+ }
+ EXPORT_SYMBOL(timespec64_to_jiffies);
+ 
++/**
++ * jiffies_to_timespec64 - convert jiffies value to &struct timespec64
++ * @jiffies: jiffies value
++ * @value: pointer to &struct timespec64
++ */
+ void
+ jiffies_to_timespec64(const unsigned long jiffies, struct timespec64 *value)
+ {
+@@ -618,6 +652,13 @@ EXPORT_SYMBOL(jiffies_to_timespec64);
+ /*
+  * Convert jiffies/jiffies_64 to clock_t and back.
+  */
++
++/**
++ * jiffies_to_clock_t - Convert jiffies to clock_t
++ * @x: jiffies value
++ *
++ * Return: jiffies converted to clock_t (CLOCKS_PER_SEC)
++ */
+ clock_t jiffies_to_clock_t(unsigned long x)
+ {
+ #if (TICK_NSEC % (NSEC_PER_SEC / USER_HZ)) == 0
+@@ -632,6 +673,12 @@ clock_t jiffies_to_clock_t(unsigned long
+ }
+ EXPORT_SYMBOL(jiffies_to_clock_t);
+ 
++/**
++ * clock_t_to_jiffies - Convert clock_t to jiffies
++ * @x: clock_t value
++ *
++ * Return: clock_t value converted to jiffies
++ */
+ unsigned long clock_t_to_jiffies(unsigned long x)
+ {
+ #if (HZ % USER_HZ)==0
+@@ -649,6 +696,12 @@ unsigned long clock_t_to_jiffies(unsigne
+ }
+ EXPORT_SYMBOL(clock_t_to_jiffies);
+ 
++/**
++ * jiffies_64_to_clock_t - Convert jiffies_64 to clock_t
++ * @x: jiffies_64 value
++ *
++ * Return: jiffies_64 value converted to 64-bit "clock_t" (CLOCKS_PER_SEC)
++ */
+ u64 jiffies_64_to_clock_t(u64 x)
+ {
+ #if (TICK_NSEC % (NSEC_PER_SEC / USER_HZ)) == 0
+@@ -671,6 +724,12 @@ u64 jiffies_64_to_clock_t(u64 x)
+ }
+ EXPORT_SYMBOL(jiffies_64_to_clock_t);
+ 
++/**
++ * nsec_to_clock_t - Convert nsec value to clock_t
++ * @x: nsec value
++ *
++ * Return: nsec value converted to 64-bit "clock_t" (CLOCKS_PER_SEC)
++ */
+ u64 nsec_to_clock_t(u64 x)
+ {
+ #if (NSEC_PER_SEC % USER_HZ) == 0
+@@ -687,6 +746,12 @@ u64 nsec_to_clock_t(u64 x)
+ #endif
+ }
+ 
++/**
++ * jiffies64_to_nsecs - Convert jiffies64 to nanoseconds
++ * @j: jiffies64 value
 + *
 + * Return: nanoseconds value
 + */
- static inline u64 jiffies_to_nsecs(const unsigned long j)
+ u64 jiffies64_to_nsecs(u64 j)
  {
- 	return (u64)jiffies_to_usecs(j) * NSEC_PER_USEC;
-@@ -353,12 +503,14 @@ static inline unsigned long _msecs_to_ji
-  *
-  * msecs_to_jiffies() checks for the passed in value being a constant
-  * via __builtin_constant_p() allowing gcc to eliminate most of the
-- * code, __msecs_to_jiffies() is called if the value passed does not
-+ * code. __msecs_to_jiffies() is called if the value passed does not
-  * allow constant folding and the actual conversion must be done at
-  * runtime.
-- * the HZ range specific helpers _msecs_to_jiffies() are called both
-+ * The HZ range specific helpers _msecs_to_jiffies() are called both
-  * directly here and from __msecs_to_jiffies() in the case where
-  * constant folding is not possible.
+ #if !(NSEC_PER_SEC % HZ)
+@@ -697,6 +762,12 @@ u64 jiffies64_to_nsecs(u64 j)
+ }
+ EXPORT_SYMBOL(jiffies64_to_nsecs);
+ 
++/**
++ * jiffies64_to_msecs - Convert jiffies64 to milliseconds
++ * @j: jiffies64 value
 + *
-+ * Return: jiffies value
-  */
- static __always_inline unsigned long msecs_to_jiffies(const unsigned int m)
++ * Return: milliseconds value
++ */
+ u64 jiffies64_to_msecs(const u64 j)
  {
-@@ -400,12 +552,14 @@ static inline unsigned long _usecs_to_ji
-  *
-  * usecs_to_jiffies() checks for the passed in value being a constant
-  * via __builtin_constant_p() allowing gcc to eliminate most of the
-- * code, __usecs_to_jiffies() is called if the value passed does not
-+ * code. __usecs_to_jiffies() is called if the value passed does not
-  * allow constant folding and the actual conversion must be done at
-  * runtime.
-- * the HZ range specific helpers _usecs_to_jiffies() are called both
-+ * The HZ range specific helpers _usecs_to_jiffies() are called both
-  * directly here and from __msecs_to_jiffies() in the case where
-  * constant folding is not possible.
+ #if HZ <= MSEC_PER_SEC && !(MSEC_PER_SEC % HZ)
+@@ -719,6 +790,8 @@ EXPORT_SYMBOL(jiffies64_to_msecs);
+  * note:
+  *   NSEC_PER_SEC = 10^9 = (5^9 * 2^9) = (1953125 * 512)
+  *   ULLONG_MAX ns = 18446744073.709551615 secs = about 584 years
 + *
-+ * Return: jiffies value
++ * Return: nsecs converted to jiffies64 value
   */
- static __always_inline unsigned long usecs_to_jiffies(const unsigned int u)
+ u64 nsecs_to_jiffies64(u64 n)
  {
-@@ -422,6 +576,7 @@ extern unsigned long timespec64_to_jiffi
- extern void jiffies_to_timespec64(const unsigned long jiffies,
- 				  struct timespec64 *value);
- extern clock_t jiffies_to_clock_t(unsigned long x);
-+
- static inline clock_t jiffies_delta_to_clock_t(long delta)
+@@ -750,6 +823,8 @@ EXPORT_SYMBOL(nsecs_to_jiffies64);
+  * note:
+  *   NSEC_PER_SEC = 10^9 = (5^9 * 2^9) = (1953125 * 512)
+  *   ULLONG_MAX ns = 18446744073.709551615 secs = about 584 years
++ *
++ * Return: nsecs converted to jiffies value
+  */
+ unsigned long nsecs_to_jiffies(u64 n)
  {
- 	return jiffies_to_clock_t(max(0L, delta));
+@@ -757,10 +832,16 @@ unsigned long nsecs_to_jiffies(u64 n)
+ }
+ EXPORT_SYMBOL_GPL(nsecs_to_jiffies);
+ 
+-/*
+- * Add two timespec64 values and do a safety check for overflow.
++/**
++ * timespec64_add_safe - Add two timespec64 values and do a safety check
++ * for overflow.
++ * @lhs: first (left) timespec64 to add
++ * @rhs: second (right) timespec64 to add
++ *
+  * It's assumed that both values are valid (>= 0).
+  * And, each timespec64 is in normalized form.
++ *
++ * Return: sum of @lhs + @rhs
+  */
+ struct timespec64 timespec64_add_safe(const struct timespec64 lhs,
+ 				const struct timespec64 rhs)
+@@ -778,6 +859,15 @@ struct timespec64 timespec64_add_safe(co
+ 	return res;
+ }
+ 
++/**
++ * get_timespec64 - get user's time value into kernel space
++ * @ts: destination &struct timespec64
++ * @uts: user's time value as &struct __kernel_timespec
++ *
++ * Handles compat or 32-bit modes.
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int get_timespec64(struct timespec64 *ts,
+ 		   const struct __kernel_timespec __user *uts)
+ {
+@@ -801,6 +891,14 @@ int get_timespec64(struct timespec64 *ts
+ }
+ EXPORT_SYMBOL_GPL(get_timespec64);
+ 
++/**
++ * put_timespec64 - convert timespec64 value to __kernel_timespec format and
++ * 		    copy the latter to userspace
++ * @ts: input &struct timespec64
++ * @uts: user's &struct __kernel_timespec
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int put_timespec64(const struct timespec64 *ts,
+ 		   struct __kernel_timespec __user *uts)
+ {
+@@ -839,6 +937,15 @@ static int __put_old_timespec32(const st
+ 	return copy_to_user(cts, &ts, sizeof(ts)) ? -EFAULT : 0;
+ }
+ 
++/**
++ * get_old_timespec32 - get user's old-format time value into kernel space
++ * @ts: destination &struct timespec64
++ * @uts: user's old-format time value (&struct old_timespec32)
++ *
++ * Handles X86_X32_ABI compatibility conversion.
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int get_old_timespec32(struct timespec64 *ts, const void __user *uts)
+ {
+ 	if (COMPAT_USE_64BIT_TIME)
+@@ -848,6 +955,16 @@ int get_old_timespec32(struct timespec64
+ }
+ EXPORT_SYMBOL_GPL(get_old_timespec32);
+ 
++/**
++ * put_old_timespec32 - convert timespec64 value to &struct old_timespec32 and
++ * 			copy the latter to userspace
++ * @ts: input &struct timespec64
++ * @uts: user's &struct old_timespec32
++ *
++ * Handles X86_X32_ABI compatibility conversion.
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int put_old_timespec32(const struct timespec64 *ts, void __user *uts)
+ {
+ 	if (COMPAT_USE_64BIT_TIME)
+@@ -857,6 +974,13 @@ int put_old_timespec32(const struct time
+ }
+ EXPORT_SYMBOL_GPL(put_old_timespec32);
+ 
++/**
++ * get_itimerspec64 - get user's &struct __kernel_itimerspec into kernel space
++ * @it: destination &struct itimerspec64
++ * @uit: user's &struct __kernel_itimerspec
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int get_itimerspec64(struct itimerspec64 *it,
+ 			const struct __kernel_itimerspec __user *uit)
+ {
+@@ -872,6 +996,14 @@ int get_itimerspec64(struct itimerspec64
+ }
+ EXPORT_SYMBOL_GPL(get_itimerspec64);
+ 
++/**
++ * put_itimerspec64 - convert &struct itimerspec64 to __kernel_itimerspec format
++ * 		      and copy the latter to userspace
++ * @it: input &struct itimerspec64
++ * @uit: user's &struct __kernel_itimerspec
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int put_itimerspec64(const struct itimerspec64 *it,
+ 			struct __kernel_itimerspec __user *uit)
+ {
+@@ -887,6 +1019,13 @@ int put_itimerspec64(const struct itimer
+ }
+ EXPORT_SYMBOL_GPL(put_itimerspec64);
+ 
++/**
++ * get_old_itimerspec32 - get user's &struct old_itimerspec32 into kernel space
++ * @its: destination &struct itimerspec64
++ * @uits: user's &struct old_itimerspec32
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int get_old_itimerspec32(struct itimerspec64 *its,
+ 			const struct old_itimerspec32 __user *uits)
+ {
+@@ -898,6 +1037,14 @@ int get_old_itimerspec32(struct itimersp
+ }
+ EXPORT_SYMBOL_GPL(get_old_itimerspec32);
+ 
++/**
++ * put_old_itimerspec32 - convert &struct itimerspec64 to &struct
++ *			  old_itimerspec32 and copy the latter to userspace
++ * @its: input &struct itimerspec64
++ * @uits: user's &struct old_itimerspec32
++ *
++ * Return: %0 on success or negative errno on error
++ */
+ int put_old_itimerspec32(const struct itimerspec64 *its,
+ 			struct old_itimerspec32 __user *uits)
+ {
