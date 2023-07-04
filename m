@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CBA747374
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F04747379
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 16:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjGDN7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S231623AbjGDN7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjGDN7t (ORCPT
+        with ESMTP id S231510AbjGDN7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Jul 2023 09:59:49 -0400
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BD9E76;
-        Tue,  4 Jul 2023 06:59:46 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 44F16120055;
-        Tue,  4 Jul 2023 16:59:44 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 44F16120055
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486FBE6D;
+        Tue,  4 Jul 2023 06:59:47 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 3F940100069;
+        Tue,  4 Jul 2023 16:59:45 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 3F940100069
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688479184;
-        bh=r6SG7lpLI9I/NbwtRkLknIz0u9uOXQx48vgR4sPGnQg=;
+        s=mail; t=1688479185;
+        bh=EtvSf+vqP9FOlSRxzL4nhak0b5LMcwi8O2nGQTCTz7k=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-        b=BsWXiXBNVIt0liZsYWa9pyaBtocrh/m98ikOb4r0RJCJyYIFERS4Lc8VIu7AMrtiK
-         83GKyeBM+v25HaVoX78N0zAHxHIhyBjQp3j+Ny2KkEewkqWaRH9pU0+8FlxlKmwOoW
-         ywtixPfBY7FmNS/i2TJefpiIczflsTSXX3xOTQ40cXJ8Zl9w89cz8V/JAA6n8u2RmL
-         Xmc+yH8hbh3ajT9N2NCQJJ4NyPyJNcwWZAQOTO3bf+Xnjxwuovwe7+ymWxnickMZyx
-         JH6UlnxsVB/n5Fz93iCfWlumDNxIEBknxlOmFSp8uCNCD94J3hQ0olk5HFGK1kbZPo
-         aFvpK9BTJg48A==
+        b=J4rBARU+YHzxAYxCtemsaSPS7Qar6wgSlFeS9x+sW9lzyNv+/gfusSvbh8iOIIBB7
+         cp2zHKoeEa83SVYZvdZp62+eOZ04w5pWKhbja1VwV/o6yZC7aM/zA4tt5eDCjNIHWk
+         A70LYMY8abl6YmXHZ1kc4q0Yo7fqep+l8fhlLnNKsUvyXOE9zTJ6ANR01/hUKqglb5
+         yRKdvJReN2SAHui+ETNrl553nLXThajwBG++2nCRRN0sPNWOPOFKdFiJ6T+hahIToT
+         XyxS0khkyAHENfhxVv6nPULaaSyQ3Y0wDzmkk/mCDom31bExyy60MwW707PjMUsT4u
+         VbOVMOKeswFxw==
 Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Tue,  4 Jul 2023 16:59:44 +0300 (MSK)
+        Tue,  4 Jul 2023 16:59:45 +0300 (MSK)
 Received: from localhost.localdomain (100.64.160.123) by
  p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Tue, 4 Jul 2023 16:59:33 +0300
+ 15.2.1118.30; Tue, 4 Jul 2023 16:59:34 +0300
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
@@ -51,10 +51,12 @@ CC:     <kelvin.zhang@amlogic.com>, <xianwei.zhao@amlogic.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v1 0/5] tty: serial: meson: support ttyS devname
-Date:   Tue, 4 Jul 2023 16:59:31 +0300
-Message-ID: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+Subject: [PATCH v1 1/5] tty: serial: meson: use dev_err_probe
+Date:   Tue, 4 Jul 2023 16:59:32 +0300
+Message-ID: <20230704135936.14697-2-ddrokosov@sberdevices.ru>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
+References: <20230704135936.14697-1-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -63,18 +65,18 @@ X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
  p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
 X-KSMG-Rule-ID: 10
 X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178421 [Jul 04 2023]
+X-KSMG-AntiSpam-Lua-Profiles: 178420 [Jul 04 2023]
 X-KSMG-AntiSpam-Version: 5.9.59.0
 X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
 X-KSMG-AntiSpam-Rate: 0
 X-KSMG-AntiSpam-Status: not_detected
 X-KSMG-AntiSpam-Method: none
 X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;libera.irclog.whitequark.org:7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
 X-MS-Exchange-Organization-SCL: -1
 X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2023/07/04 08:48:00
-X-KSMG-LinksScanning: Clean, bases: 2023/07/04 08:48:00
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
 X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/04 05:54:00 #21559896
 X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,32 +89,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a IRC discussion with Neil, as reported in reference [1], an idea
-emerged to provide support for a standard devname 'ttyS' in new SoCs
-such as A1, S4, T7, C3 and others. The current devname 'ttyAML' is not
-widely known and has caused several issues with both low and high-level
-software, without any apparent justification for its implementation.
-Consequently, it has been deemed necessary to introduce the 'ttyS'
-devname for all new 'compatible' entries, while still retaining backward
-compatibility with the old 'ttyAML' devname by supporting it in parallel
-with the new approach. This patch series therefore aims to implement
-these changes.
+Use dev_err_probe() helper for error checking and standard logging.
+It makes the driver's probe() function a little bit shorter.
 
-Links:
-    [1]: https://libera.irclog.whitequark.org/linux-amlogic/2023-07-03
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+ drivers/tty/serial/meson_uart.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Dmitry Rokosov (5):
-  tty: serial: meson: use dev_err_probe
-  tty: serial: meson: redesign the module to platform_driver
-  tty: serial: meson: apply ttyS devname instead of ttyAML for new SoCs
-  dt-bindings: serial: amlogic,meson-uart: support Amlogic A1
-  arm64: dts: meson: a1: change uart compatible string
-
- .../bindings/serial/amlogic,meson-uart.yaml   |  2 +
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi     |  4 +-
- drivers/tty/serial/meson_uart.c               | 83 ++++++++++---------
- 3 files changed, 47 insertions(+), 42 deletions(-)
-
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index 2501db5a7aaf..169f028956ae 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -726,8 +726,8 @@ static int meson_uart_probe(struct platform_device *pdev)
+ 	of_property_read_u32(pdev->dev.of_node, "fifo-size", &fifosize);
+ 
+ 	if (meson_ports[pdev->id]) {
+-		dev_err(&pdev->dev, "port %d already allocated\n", pdev->id);
+-		return -EBUSY;
++		return dev_err_probe(&pdev->dev, -EBUSY,
++			      "port %d already allocated\n", pdev->id);
+ 	}
+ 
+ 	port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), GFP_KERNEL);
 -- 
 2.36.0
 
