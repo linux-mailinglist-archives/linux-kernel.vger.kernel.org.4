@@ -2,111 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB567478B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777887478B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 21:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjGDTbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 15:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        id S231555AbjGDTcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 15:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjGDTbW (ORCPT
+        with ESMTP id S229451AbjGDTct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 15:31:22 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA83E5B;
-        Tue,  4 Jul 2023 12:31:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 340195C0134;
-        Tue,  4 Jul 2023 15:31:12 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 04 Jul 2023 15:31:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688499072; x=1688585472; bh=4g
-        tsow0D+6yhLzOvQoS00QH+q8wj07ePGtJBPslxxVE=; b=Z/zEueicl26u7FqUVb
-        mbPwqzwjoyiNO9yEIwFbm3natpL4IVRYgk/1+HpJgxR1c2A1jrCS79Kq0L4CE2Ma
-        n1jhPHiJMwXSajp/lxqvY2pk1NEFxvkdAGqBKPx62iRm/eUUQYGEdr8H3LToWv4b
-        T+MsdftC3j+Zg4teuE0oz2ezUq4BQqYAaEW7g8QqTDC5SxleG6djm6EkLwLPgXR0
-        2NkYBXKiAKyV/fdqi86pt/w1ZSw/lUCTvI4ywLLVNJAhNeBm0JL7V5PO7VzfgI/e
-        XchefDS9JXzz42kY8mhsWTl+zCOOQgx1y0qrFc0KfWaH9ML2tZGmsurxYySJr8ys
-        MeYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688499072; x=1688585472; bh=4gtsow0D+6yhL
-        zOvQoS00QH+q8wj07ePGtJBPslxxVE=; b=KhOWL4jLB0DfevwUQ6W4EaDb+mwkK
-        ObWP6pIfKAyDYRjtLiZHrZPRNtRzfuSB7Rr3Gjz9k//NIc7hTcB9jLV/P5epK7Qm
-        QXb7TN5dr+gR/N0+gaEVxzKBrjSRbnPDNEnVTS4Ymb4gNdLtq4L5iX/lMG2Bziow
-        7Snzpx2A9gHY9jwpznAXZ9uUso+ewM0wNzqbMaebCzZ/ev27fL6+xnD4jizBmSv5
-        UU6Xy19vAjCPXkOJwIc7cMaK5npYMWpvAprXZ1TfoXO0wlDoK2p1hcqt7k30pUvN
-        +TdgcOgewnEeGomjVuggW9I1lDdli4SnmDi4wxhwO2cJwboeo/lqBZ1vg==
-X-ME-Sender: <xms:f3OkZPV1bcpR1t4UTJWGcOEk4u_fSNgwzJOAnH-YKv-gF8MToZX2GA>
-    <xme:f3OkZHlzZwSaZGygnao2xmkvsK5glhgGvCTZyq7LRmsC1YXvtIxzTSuBOWAB59J8W
-    W8gHoWKlRMN5kznqXE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudeggddufeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:f3OkZLY4tyqDeo3P1FlDN4zJJZ_7yVpFO6AY5WNEMzdvmrQEhiU4Ew>
-    <xmx:f3OkZKUVoi1uQiP48MGvUcwdPbGCsglF7ZaDzFJ7-7K5cLNLe9-aTw>
-    <xmx:f3OkZJk51VP3ri5pq1nIcRZT0maQIveE1WZuh5fjf75G4fEBJ5EEiA>
-    <xmx:gHOkZPj1e5YDwK2Lxi8-ia2LuFHGd-emnrOd0grZihTpqE8LIYoHrA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 77386B60086; Tue,  4 Jul 2023 15:31:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
-Mime-Version: 1.0
-Message-Id: <72cd95c0-318d-49cd-9a0b-e0a3a227c693@app.fastmail.com>
-In-Reply-To: <20230704190144.2888679-1-linux@roeck-us.net>
-References: <20230704190144.2888679-1-linux@roeck-us.net>
-Date:   Tue, 04 Jul 2023 21:30:51 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Guenter Roeck" <linux@roeck-us.net>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>
-Cc:     "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sh: provide unxlate_dev_mem_ptr() in asm/io.h
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 15:32:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F38B110C9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 12:32:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3AFB1650;
+        Tue,  4 Jul 2023 12:33:29 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 385D03F663;
+        Tue,  4 Jul 2023 12:32:46 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH] KVM: arm64: Handle kvm_arm_init failure correctly in finalize_pkvm
+Date:   Tue,  4 Jul 2023 20:32:43 +0100
+Message-ID: <20230704193243.3300506-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023, at 21:01, Guenter Roeck wrote:
-> The unxlate_dev_mem_ptr() function has no prototype on the sh architecture,
-> which does not include asm-generic/io.h. This results in the following
-> build failure.
->
-> drivers/char/mem.c: In function 'read_mem':
-> drivers/char/mem.c:164:25: error: implicit declaration of function 
-> 'unxlate_dev_mem_ptr'
->
-> This compile error is now seen because commit 99b619b37ae1 ("mips: provide
-> unxlate_dev_mem_ptr() in asm/io.h") removed the weak function which was
-> previously in place to handle the problem.
->
-> Add a trivial macro to the sh header to provide the now missing dummy
-> function.
->
-> Fixes: 99b619b37ae1 ("mips: provide unxlate_dev_mem_ptr() in asm/io.h")
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Currently there is no synchronisation between finalize_pkvm() and
+kvm_arm_init() initcalls. The finalize_pkvm() proceeds happily even if
+kvm_arm_init() fails resulting in the following warning on all the CPUs
+and eventually a HYP panic:
 
-Ideally, we should use the asm-generic/io.h header here, but as a hotfix
-this should do.
+  | kvm [1]: IPA Size Limit: 48 bits
+  | kvm [1]: Failed to init hyp memory protection
+  | kvm [1]: error initializing Hyp mode: -22
+  |
+  | <snip>
+  |
+  | WARNING: CPU: 0 PID: 0 at arch/arm64/kvm/pkvm.c:226 _kvm_host_prot_finalize+0x30/0x50
+  | Modules linked in:
+  | CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0 #237
+  | Hardware name: FVP Base RevC (DT)
+  | pstate: 634020c5 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+  | pc : _kvm_host_prot_finalize+0x30/0x50
+  | lr : __flush_smp_call_function_queue+0xd8/0x230
+  |
+  | Call trace:
+  |  _kvm_host_prot_finalize+0x3c/0x50
+  |  on_each_cpu_cond_mask+0x3c/0x6c
+  |  pkvm_drop_host_privileges+0x4c/0x78
+  |  finalize_pkvm+0x3c/0x5c
+  |  do_one_initcall+0xcc/0x240
+  |  do_initcall_level+0x8c/0xac
+  |  do_initcalls+0x54/0x94
+  |  do_basic_setup+0x1c/0x28
+  |  kernel_init_freeable+0x100/0x16c
+  |  kernel_init+0x20/0x1a0
+  |  ret_from_fork+0x10/0x20
+  | Failed to finalize Hyp protection: -22
+  |     dtb=fvp-base-revc.dtb
+  | kvm [95]: nVHE hyp BUG at: arch/arm64/kvm/hyp/nvhe/mem_protect.c:540!
+  | kvm [95]: nVHE call trace:
+  | kvm [95]:  [<ffff800081052984>] __kvm_nvhe_hyp_panic+0xac/0xf8
+  | kvm [95]:  [<ffff800081059644>] __kvm_nvhe_handle_host_mem_abort+0x1a0/0x2ac
+  | kvm [95]:  [<ffff80008105511c>] __kvm_nvhe_handle_trap+0x4c/0x160
+  | kvm [95]:  [<ffff8000810540fc>] __kvm_nvhe___skip_pauth_save+0x4/0x4
+  | kvm [95]: ---[ end nVHE call trace ]---
+  | kvm [95]: Hyp Offset: 0xfffe8db00ffa0000
+  | Kernel panic - not syncing: HYP panic:
+  | PS:a34023c9 PC:0000f250710b973c ESR:00000000f2000800
+  | FAR:ffff000800cb00d0 HPFAR:000000000880cb00 PAR:0000000000000000
+  | VCPU:0000000000000000
+  | CPU: 3 PID: 95 Comm: kworker/u16:2 Tainted: G        W          6.4.0 #237
+  | Hardware name: FVP Base RevC (DT)
+  | Workqueue: rpciod rpc_async_schedule
+  | Call trace:
+  |  dump_backtrace+0xec/0x108
+  |  show_stack+0x18/0x2c
+  |  dump_stack_lvl+0x50/0x68
+  |  dump_stack+0x18/0x24
+  |  panic+0x138/0x33c
+  |  nvhe_hyp_panic_handler+0x100/0x184
+  |  new_slab+0x23c/0x54c
+  |  ___slab_alloc+0x3e4/0x770
+  |  kmem_cache_alloc_node+0x1f0/0x278
+  |  __alloc_skb+0xdc/0x294
+  |  tcp_stream_alloc_skb+0x2c/0xf0
+  |  tcp_sendmsg_locked+0x3d0/0xda4
+  |  tcp_sendmsg+0x38/0x5c
+  |  inet_sendmsg+0x44/0x60
+  |  sock_sendmsg+0x1c/0x34
+  |  xprt_sock_sendmsg+0xdc/0x274
+  |  xs_tcp_send_request+0x1ac/0x28c
+  |  xprt_transmit+0xcc/0x300
+  |  call_transmit+0x78/0x90
+  |  __rpc_execute+0x114/0x3d8
+  |  rpc_async_schedule+0x28/0x48
+  |  process_one_work+0x1d8/0x314
+  |  worker_thread+0x248/0x474
+  |  kthread+0xfc/0x184
+  |  ret_from_fork+0x10/0x20
+  | SMP: stopping secondary CPUs
+  | Kernel Offset: 0x57c5cb460000 from 0xffff800080000000
+  | PHYS_OFFSET: 0x80000000
+  | CPU features: 0x00000000,1035b7a3,ccfe773f
+  | Memory Limit: none
+  | ---[ end Kernel panic - not syncing: HYP panic:
+  | PS:a34023c9 PC:0000f250710b973c ESR:00000000f2000800
+  | FAR:ffff000800cb00d0 HPFAR:000000000880cb00 PAR:0000000000000000
+  | VCPU:0000000000000000 ]---
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Fix it by checking for the successfull initialisation of kvm_arm_init()
+in finalize_pkvm() before proceeding any futher.
+
+Fixes: 87727ba2bb05 ("KVM: arm64: Ensure CPU PMU probes before pKVM host de-privilege")
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>
+Cc: James Morse <james.morse@arm.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Zenghui Yu <yuzenghui@huawei.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ arch/arm64/include/asm/virt.h | 1 +
+ arch/arm64/kvm/arm.c          | 9 ++++++++-
+ arch/arm64/kvm/pkvm.c         | 2 +-
+ 3 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/include/asm/virt.h b/arch/arm64/include/asm/virt.h
+index 5227db7640c8..261d6e9df2e1 100644
+--- a/arch/arm64/include/asm/virt.h
++++ b/arch/arm64/include/asm/virt.h
+@@ -78,6 +78,7 @@ extern u32 __boot_cpu_mode[2];
+ 
+ void __hyp_set_vectors(phys_addr_t phys_vector_base);
+ void __hyp_reset_vectors(void);
++bool is_kvm_arm_initialised(void);
+ 
+ DECLARE_STATIC_KEY_FALSE(kvm_protected_mode_initialized);
+ 
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 173abca08b53..4e0176b44af3 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -53,11 +53,16 @@ DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+ 
+ DECLARE_KVM_NVHE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
+ 
+-static bool vgic_present;
++static bool vgic_present, kvm_arm_initialised;
+ 
+ static DEFINE_PER_CPU(unsigned char, kvm_arm_hardware_enabled);
+ DEFINE_STATIC_KEY_FALSE(userspace_irqchip_in_use);
+ 
++bool is_kvm_arm_initialised(void)
++{
++	return kvm_arm_initialised;
++}
++
+ int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu)
+ {
+ 	return kvm_vcpu_exiting_guest_mode(vcpu) == IN_GUEST_MODE;
+@@ -2484,6 +2489,8 @@ static __init int kvm_arm_init(void)
+ 	if (err)
+ 		goto out_subs;
+ 
++	kvm_arm_initialised = true;
++
+ 	return 0;
+ 
+ out_subs:
+diff --git a/arch/arm64/kvm/pkvm.c b/arch/arm64/kvm/pkvm.c
+index 994a494703c3..6ff3ec18c925 100644
+--- a/arch/arm64/kvm/pkvm.c
++++ b/arch/arm64/kvm/pkvm.c
+@@ -244,7 +244,7 @@ static int __init finalize_pkvm(void)
+ {
+ 	int ret;
+ 
+-	if (!is_protected_kvm_enabled())
++	if (!is_protected_kvm_enabled() || !is_kvm_arm_initialised())
+ 		return 0;
+ 
+ 	/*
+-- 
+2.41.0
+
