@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E60746A59
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ACB746A5B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbjGDHNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S231230AbjGDHNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjGDHNX (ORCPT
+        with ESMTP id S229804AbjGDHNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:13:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF543130;
-        Tue,  4 Jul 2023 00:13:22 -0700 (PDT)
+        Tue, 4 Jul 2023 03:13:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB01133
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:13:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688454802; x=1719990802;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3R780gSrSJ9nAhXyLdyPKWWj43EVLHOBBiNKAgvxGrU=;
-  b=xPW1IBOORPmY3AuH7XsIYwZRSENfZZUi9dRsE800lejI+z7DiDjMLfx9
-   IUTXAiVKfSHQ+7NV3wMjOhePoG4OlcxXtqhTHytbLsaXWakwQrlkIS3Q4
-   uxYBBAmS/gWYJwZq8DTIMYkuq+NWolEcbTmb8vQIqHqI4ABzAz8aNOBNb
-   sMi04JZHGfR4xram/dOvPB1EP2Ph8yOv8j2zmquNSyYcScqJw5LuX4KsH
-   CMQzSRzfWgiqlR8EJv73wJdKnHhq+Bl79ezYm1l52yuEoVpg5QYXwpuLr
-   BtGicCDG5FUBb1+RNfzDFID7tAmgb7l06I1Zxe8yAu4oKIFouB2LmhwYE
-   g==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688454829; x=1719990829;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=siXw7Hgvg0qvEBA2mPmaJ8uv1VSpnqahj1u53oKb7/s=;
+  b=X+2fwQXpm9G18a95BqYQ88emezuIFoI60Kx/rgCiW4G3Nu9JU1VEqOFD
+   CK7vG6qcqr59DBXTYqYHfmNBiGaoiPNnmLB+sZPdlvXoLreVEwstmU7dg
+   n2nAbHSkLnynm3QN758TSbExfZRtRgovy7tz7K1dxPIrFiQaji+ZebWkv
+   L3APVMIdg0Omk7edRKrMmMi5Q4utLpFQZJt1WOshiJGQQ9eg4WRFg5FHl
+   m3KYY3YndcsxjQUTn/twWtVccAK8yluRDpsMg5nqQpT/A5NrQqauUnlWm
+   mFyjGoqemnW9Xgul1YiuCkAf1q2bYEplOW95jiANO14tPkOB0NDI1Ktuj
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="343390779"
 X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="asc'?scan'208";a="221180429"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jul 2023 00:13:21 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 4 Jul 2023 00:13:21 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 4 Jul 2023 00:13:18 -0700
-Date:   Tue, 4 Jul 2023 08:12:49 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <palmer@dabbelt.com>
-CC:     <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Evan Green <evan@rivosinc.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v3 11/11] RISC-V: provide Kconfig & commandline options
- to control parsing "riscv,isa"
-Message-ID: <20230704-surely-defective-c55f6341127c@wendy>
-References: <20230703-repayment-vocalist-e4f3eeac2b2a@wendy>
- <20230703-greedy-dividable-251fa2b809ac@wendy>
+   d="scan'208";a="343390779"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 00:13:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="788772161"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="788772161"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Jul 2023 00:13:41 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qGaEG-000I45-2L;
+        Tue, 04 Jul 2023 07:13:40 +0000
+Date:   Tue, 4 Jul 2023 15:13:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rahul Rameshbabu <rrameshbabu@nvidia.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jiri Kosina <jkosina@suse.cz>
+Subject: drivers/hid/hid-nvidia-shield.c:59:2: warning: field  within 'struct
+ thunderstrike_hostcmd_resp_report' is less aligned than 'union
+ thunderstrike_hostcmd_resp_report::(anonymous at
+ drivers/hid/hid-nvidia-shield.c:59:2)' and is usually due to 'struct
+ thund...
+Message-ID: <202307041500.6bKn7nCl-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="M4y9ClbXh4dwVo7F"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230703-greedy-dividable-251fa2b809ac@wendy>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,63 +66,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---M4y9ClbXh4dwVo7F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   24be4d0b46bb0c3c1dc7bacd30957d6144a70dfc
+commit: 09308562d4afb1abc66366608fa1cb9de783272f HID: nvidia-shield: Initial driver implementation with Thunderstrike support
+date:   4 weeks ago
+config: arm-randconfig-r014-20230704 (https://download.01.org/0day-ci/archive/20230704/202307041500.6bKn7nCl-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230704/202307041500.6bKn7nCl-lkp@intel.com/reproduce)
 
-On Mon, Jul 03, 2023 at 11:28:03AM +0100, Conor Dooley wrote:
-> As it says on the tin, provide Kconfig option to control parsing the
-> "riscv,isa" devicetree property. If either option is used, the kernel
-> will fall back to parsing "riscv,isa", where "riscv,isa-base" and
-> "riscv,isa-extensions" are not present.
-> The Kconfig options are set up so that the default kernel configuration
-> will enable the fallback path, without needing the commandline option.
->=20
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> Changes in v3:
-> - Invert the Kconfig entry. It's now default y & not hidden by
->   NONPORTABLE, but its entablement will now activate the fallback
-> - Add a commandline option to enable the fallback on kernels that do not
->   enable it in Kconfig, as Drew suggested
-> - Default the global var to the Kconfig option & override it with the
->   commandline one, rather than have checks for IS_ENABLED() and for the
->   commandline option in riscv_fill_hwcap() &
->   riscv_early_of_processor_hartid()
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307041500.6bKn7nCl-lkp@intel.com/
 
-My own bot reports a build failure for nommu, because of section
-mismatches. riscv_early_of_processor_hartid() needs a dose of __init:
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 1acf3679600d..208f1a700121 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -41,7 +41,7 @@ int riscv_of_processor_hartid(struct device_node *node, u=
-nsigned long *hart)
- 	return 0;
- }
-=20
--int riscv_early_of_processor_hartid(struct device_node *node, unsigned lon=
-g *hart)
-+int __init riscv_early_of_processor_hartid(struct device_node *node, unsig=
-ned long *hart)
- {
- 	const char *isa;
-=20
-Good aul nommu build, always the one that catches stuff :)
+>> drivers/hid/hid-nvidia-shield.c:59:2: warning: field  within 'struct thunderstrike_hostcmd_resp_report' is less aligned than 'union thunderstrike_hostcmd_resp_report::(anonymous at drivers/hid/hid-nvidia-shield.c:59:2)' and is usually due to 'struct thunderstrike_hostcmd_resp_report' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   1 warning generated.
 
---M4y9ClbXh4dwVo7F
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +59 drivers/hid/hid-nvidia-shield.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKPGXQAKCRB4tDGHoIJi
-0rg5AP9PY2fBP1Bcb1QnerRLwimjm13N3bl6EFsys6XQFXHKGgEA1IWYAyQyJYZo
-ePxSXe208Sl91eEjos5oE0IwX0ipbgQ=
-=YbUb
------END PGP SIGNATURE-----
+    53	
+    54	struct thunderstrike_hostcmd_resp_report {
+    55		u8 report_id; /* THUNDERSTRIKE_HOSTCMD_RESP_REPORT_ID */
+    56		u8 cmd_id;
+    57		u8 reserved_at_10;
+    58	
+  > 59		union {
+    60			struct thunderstrike_hostcmd_board_info board_info;
+    61			struct thunderstrike_hostcmd_haptics motors;
+    62			__le16 fw_version;
+    63			u8 payload[30];
+    64		};
+    65	} __packed;
+    66	static_assert(sizeof(struct thunderstrike_hostcmd_resp_report) ==
+    67		      THUNDERSTRIKE_HOSTCMD_REPORT_SIZE);
+    68	
 
---M4y9ClbXh4dwVo7F--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
