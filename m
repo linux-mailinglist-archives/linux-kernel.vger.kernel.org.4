@@ -2,197 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555A074795A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A8774795E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 23:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjGDVAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 17:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S231189AbjGDVDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 17:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjGDVAo (ORCPT
+        with ESMTP id S229793AbjGDVDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 17:00:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323AA10C8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 13:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688504395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GI5b35dMc1KdLtRTJt9n7EYcXqIPCpvszX0gw0M88kM=;
-        b=BRz9WfHpJptwM4RUDm0STDUbAlgfACtDIfuWfBrF90uu88q1rPaVdc5FiJ4Y8UdBCNmphB
-        5AD5nuXG8/jJaGeGfY8nIfL45SGdEwAXy37D45AG7Rx0MHldhhPa73X+SEcOEE6YHDZ7bP
-        foCoWeOibk7LZemGq/0PRhsRYU0ln0c=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-198-f0vCLg4VPB2z9qi3jpvikg-1; Tue, 04 Jul 2023 16:59:54 -0400
-X-MC-Unique: f0vCLg4VPB2z9qi3jpvikg-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6340023ffbbso11589976d6.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 13:59:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688504394; x=1691096394;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 4 Jul 2023 17:03:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB74310CB;
+        Tue,  4 Jul 2023 14:03:05 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-263315da33cso1021345a91.0;
+        Tue, 04 Jul 2023 14:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688504585; x=1691096585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GI5b35dMc1KdLtRTJt9n7EYcXqIPCpvszX0gw0M88kM=;
-        b=HQqLCQg+dUOietk4qfy00nPi0i3/o4Pj4R7uv+6/dqSDh9BvsH5qFmEIeNzcIyd+zF
-         ez1wkVBYeYLA4bwPlOUWnzVm8O9xDY3JPOY5K2xZu86Mynjk4ZHpSOTaDLIQZ7qwrg7v
-         Cg6dpSHD1FMyiUG81ON7G81OxH29nprXL0uaGQFWRUZ7d028V8jDapHg1QztU9g2mg7f
-         yt6oW3Tvq2PeUGZ8k5iRXpdgHeJ9yOMF6EPjZ3omzbxUJts1tfRlvD2CPsprQcJH16++
-         RWqGK5SWgLDMhQwcBASmw8l7mD+AzTYO8V3YGqcbwOjoT0OaevTAOYRIc+j0D35z5gQ8
-         vb3Q==
-X-Gm-Message-State: ABy/qLa5sbFBFi5/AkAxmzCiNmbAQgPQjljmLn7Xxfr5nPH0ugelMIsW
-        GTUAwK1NjlCosnWMINsfnBSBDRli97/QV2aVXx18mbbMuMsNhhYxr7xLKtxYSICAIKF3/7XP+rf
-        zor1AHooGoGi3w4nBeITKWMID
-X-Received: by 2002:a05:6214:3018:b0:635:e528:521a with SMTP id ke24-20020a056214301800b00635e528521amr6683195qvb.5.1688504393766;
-        Tue, 04 Jul 2023 13:59:53 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHVt52JWZzoWFGQHmqymAXvJZN3G9/+QeDJK1PcLD/x3FT2CCtjq5RKSQlTptL8VfnXgNioEg==
-X-Received: by 2002:a05:6214:3018:b0:635:e528:521a with SMTP id ke24-20020a056214301800b00635e528521amr6683169qvb.5.1688504393448;
-        Tue, 04 Jul 2023 13:59:53 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id y11-20020ad457cb000000b00631eb444e6esm12777291qvx.51.2023.07.04.13.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 13:59:53 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 16:59:51 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] mm: userfaultfd: support UFFDIO_POISON for
- hugetlbfs
-Message-ID: <ZKSIR4zga2A+fdcv@x1n>
-References: <20230629205040.665834-1-axelrasmussen@google.com>
- <20230629205040.665834-3-axelrasmussen@google.com>
+        bh=f/cTL862NXgXQKBS79CUrLFFpaTPI21CGdAr7foC2LM=;
+        b=lBZsFiQdIVwB6+F2lViydVF01AONClmuY8f+9+R+pAzop4u180aH1XmBrKP5AZ2Rpo
+         iU70i/xM7KdlHpE49VLCJUZkXmTf731lIjevh7RfgJezWCm/ef0uQ3fqijImtZMIKt/G
+         JvLFD74fGCmafnvWLyJVL2BIK6+B7+C1BXZ6oJOP9v6HrH/o/gce+SWlSijsW8BWW+S7
+         NCuRDxJ4x3SX9Uoi+rTVhd4zQR5SsFMI4sMxELo0iJoWZ2fTCgQGVNSyu4RzxckfL/XY
+         yd8jWlE2GeMEP8bPAlIPyfwtw4ygRJJlyNbmxqDJwNpM7K+hb/+bxoDXQoOKnZ6GY4cz
+         RNRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688504585; x=1691096585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f/cTL862NXgXQKBS79CUrLFFpaTPI21CGdAr7foC2LM=;
+        b=LlaeBeGdnr40YvY2HFhPbouXcEy2Qm6Qmix6LDqV5cBCAtADXUesbewV9A4khQ8h5j
+         ulK8hmRGjEx0F1URyeMiusx2vA5s79FZvHEeT4kMSxpCCkTdP9XsEYrGeFCJC+8gq+V9
+         Lr9ElK3u5dHOqrvsF+idFpcL/H9JBVBHev3uqgTJdzAJoTmFMQOG+nKxlye/CEqe1V82
+         T6DWQuUU5EOaQUoCQ6f+6YHgeeaqFJEy1YWESvQy33xct3hQija0hCzcVsvzJOJmQY+9
+         AUelSMG2icOK+Y0GPEgK2auL+5eUTKrxjaeHRFFWo+WbWhN4PymoLsApCCU3eNc4ZiMD
+         jKTA==
+X-Gm-Message-State: AC+VfDz18Jbl0MDVzbsjlFNCQI5e5TQ0c/9/gxa4tpfE+wSH6rZuh0CN
+        PUuA54fUuLsgLEhKsA4L2L2q8ms/D/0U8caDfME=
+X-Google-Smtp-Source: ACHHUZ6dZ5d/8aGkkANJvpKRCk8cDPMPFTOFXBpdZAlL7o1KEqDfh2qr2S07Ar96W3zyrP6zs46GDxCjq4+cOcckZOw=
+X-Received: by 2002:a05:6a20:4413:b0:11b:3e33:d2ce with SMTP id
+ ce19-20020a056a20441300b0011b3e33d2cemr21920702pzb.1.1688504585247; Tue, 04
+ Jul 2023 14:03:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230629205040.665834-3-axelrasmussen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230704150240.2022020-1-hugo@hugovil.com> <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
+ <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com> <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
+ <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
+ <20230704125541.f361cab8de3faacd830418ab@hugovil.com> <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
+ <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com> <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
+In-Reply-To: <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 4 Jul 2023 18:02:53 -0300
+Message-ID: <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Nate Drude <nate.d@variscite.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 01:50:37PM -0700, Axel Rasmussen wrote:
-> The behavior here is the same as it is for anon/shmem. This is done
-> separately because hugetlb pte marker handling is a bit different.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  mm/hugetlb.c     | 33 +++++++++++++++++++++++++++++++--
->  mm/userfaultfd.c |  6 +-----
->  2 files changed, 32 insertions(+), 7 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 38711d49e4db..05abe88986b6 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6090,14 +6090,24 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->  	}
->  
->  	entry = huge_ptep_get(ptep);
-> -	/* PTE markers should be handled the same way as none pte */
-> -	if (huge_pte_none_mostly(entry))
-> +	if (huge_pte_none_mostly(entry)) {
-> +		if (is_pte_marker(entry)) {
-> +			unsigned long marker = pte_marker_get(pte_to_swp_entry(entry));
-> +
-> +			if (marker & PTE_MARKER_UFFD_POISON) {
-> +				ret = VM_FAULT_HWPOISON_LARGE;
-> +				goto out_mutex;
-> +			}
-> +		}
->  		/*
-> +		 * Other PTE markers should be handled the same way as none PTE.
-> +		 *
->  		 * hugetlb_no_page will drop vma lock and hugetlb fault
->  		 * mutex internally, which make us return immediately.
->  		 */
->  		return hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
->  				      entry, flags);
-> +	}
->  
->  	ret = 0;
->  
-> @@ -6253,6 +6263,25 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
->  	int writable;
->  	bool folio_in_pagecache = false;
->  
-> +	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON)) {
-> +		ptl = huge_pte_lock(h, dst_mm, dst_pte);
-> +
-> +		/* Don't overwrite any existing PTEs (even markers) */
-> +		if (!huge_pte_none(huge_ptep_get(dst_pte))) {
-> +			spin_unlock(ptl);
-> +			return -EEXIST;
-> +		}
-> +
-> +		_dst_pte = make_pte_marker(PTE_MARKER_UFFD_POISON);
-> +		set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> +
-> +		/* No need to invalidate - it was non-present before */
-> +		update_mmu_cache(dst_vma, dst_addr, dst_pte);
-> +
-> +		spin_unlock(ptl);
-> +		return 0;
-> +	}
-> +
->  	if (is_continue) {
->  		ret = -EFAULT;
->  		folio = filemap_lock_folio(mapping, idx);
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index 87b62ca1e09e..4436cae1c7a8 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -381,12 +381,8 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->  	 * supported by hugetlb.  A PMD_SIZE huge pages may exist as used
->  	 * by THP.  Since we can not reliably insert a zero page, this
->  	 * feature is not supported.
-> -	 *
-> -	 * PTE marker handling for hugetlb is a bit special, so for now
-> -	 * UFFDIO_POISON is not supported.
->  	 */
-> -	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE) ||
-> -	    uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON)) {
-> +	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
->  		mmap_read_unlock(dst_mm);
->  		return -EINVAL;
+Hi Hugo,
 
-If we have the last patch declaring the feature bits and so on, IIUC we
-don'tt need this change back and forth.  Other than that looks good.
+On Tue, Jul 4, 2023 at 5:41=E2=80=AFPM Hugo Villeneuve <hugo@hugovil.com> w=
+rote:
 
-Thanks,
+> Hi Fabio,
+> with interrupts =3D <11 IRQ_TYPE_LEVEL_LOW>, USB OTG doesn't work.
 
->  	}
-> -- 
-> 2.41.0.255.g8b1d071c50-goog
-> 
+PTN5150 datasheet says:
 
--- 
-Peter Xu
+"Any changes in the attach/detach events or Rp current source changes
+will trigger INTB pin to go LOW."
 
+What about:  interrupts =3D <11 IRQ_TYPE_EDGE_FALLING>; ?
+
+Also, please add a pullup to the GPIO1_11 pad.
+
+Does it work?
