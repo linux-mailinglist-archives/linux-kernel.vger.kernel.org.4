@@ -2,334 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1432974751F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35723747521
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbjGDPSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S231807AbjGDPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjGDPSh (ORCPT
+        with ESMTP id S231230AbjGDPSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:18:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABDF6BD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:18:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D40791570;
-        Tue,  4 Jul 2023 08:19:17 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.31.180])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCF423F73F;
-        Tue,  4 Jul 2023 08:18:33 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 16:18:31 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Nico Pache <npache@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        aquini@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH V2] arm64: properly define SOFT_DIRTY functionality
-Message-ID: <ZKQ4R5x3kRAaXqqP@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230704133633.1918147-1-npache@redhat.com>
- <ZKQnzF2sidMmZRyK@FVFF77S0Q05N.cambridge.arm.com>
- <CAA1CXcBkwr7E=UymXJs911qrXW5dLiZmyMAFpr-kJ-Tz3hoimA@mail.gmail.com>
+        Tue, 4 Jul 2023 11:18:42 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B312BD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:18:41 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688483920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OOvkfol+in6TlFekwc6yFBfYV4hihVZfvdrg+oeWEiY=;
+        b=fuoeTIaHM53J4Bi7m2dpkM3y/mKzgeEGAk93wTuSL4DYZBF3IVUoDBQid1s6kWvHgkdl9Y
+        vWmuCiD+pdV/lpY1ypI/M+BlhfFoSXKrsqD/EcMM/9NWAjwIdVjt1UYbxlUREMGJwkUhEk
+        jTv1zJXMEytp1Q9gpyss6KkThWksLHl7JfHSrus2KGFTzhhtVaw9MZKD5VxE4f/UQVuXS6
+        FVZTjkXdZIpAj4VzYJW8tGSTN5G2Mg6bozCbmolEMspZRI+FOAXjhTsmtjTi/g/QsRMM1I
+        MvWwx6zEqqLmTVL2kAYDpnLyI+wcpMxqQCo00veg5dMeF7Wzr6p3s2aEskrLZQ==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 33B5B240006;
+        Tue,  4 Jul 2023 15:18:38 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 17:18:37 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Linux MTD List <linux-mtd@lists.infradead.org>,
+        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
+        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
+        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
+        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: Re: [PATCH v3 1/5] mtd: rawnand: brcmnand: Fix ECC level field
+ setting for v7.2 controller
+Message-ID: <20230704171837.3db54fb8@xps-13>
+In-Reply-To: <20230627193738.19596-2-william.zhang@broadcom.com>
+References: <20230627193738.19596-1-william.zhang@broadcom.com>
+        <20230627193738.19596-2-william.zhang@broadcom.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAA1CXcBkwr7E=UymXJs911qrXW5dLiZmyMAFpr-kJ-Tz3hoimA@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 10:49:06AM -0400, Nico Pache wrote:
-> Hi Mark,
-> 
-> On Tue, Jul 4, 2023 at 10:19 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Tue, Jul 04, 2023 at 09:36:33AM -0400, Nico Pache wrote:
-> > > ARM64 has a soft-dirty bit (software dirty) but never properly defines
-> > > CONFIG_ARCH_HAS_SOFT_DIRTY or its necessary functions. This patch
-> > > introduces the ability to set/clear the soft dirty bit in a similar
-> > > manner as the other arches that utilize it.
-> >
-> > Anshuman already explained that this is not correct -- to enable
-> > CONFIG_ARCH_HAS_SOFT_DIRTY, you need *another* PTE bit. Please don't send
-> > another version following this approach.
-> >
-> > Despite its name, pte_sw_dirty() has nothing to do with
-> > CONFIG_ARCH_HAS_SOFT_DIRTY. We have pte_hw_dirty() and pte_sw_dirty() because
-> > with Hardware Dirty bit management the HW dirty bit is *also* the write
-> > permission bit, and to have a dirty non-writeable PTE state we have to use a SW
-> > bit, which is what pte_sw_dirty() handles. Both pte_hw_dirty() and
-> > pte_sw_dirty() comprise the regular dirty state.
-> >
-> > That's *very* different from CONFIG_ARCH_HAS_SOFT_DIRTY, which is about having
-> > a *separate* software dirty state that can be used for longer-term dirty
-> > tracking (whether the page was last touched since some management SW
-> > manipulated the page).
-> >
-> > > However, we must be careful... there are cases where the DBM bit is not
-> > > available and the software dirty bit plays a essential role in determining
-> > > whether or not a page is dirty. In these cases we must not allow the
-> > > user to clear the software dirty bit. We can check for these cases by
-> > > utilizing the arch_has_hw_pte_young() function which tests the availability
-> > > of DBM.
-> >
-> > Regardless of the above, this doesn't seem to have been thought through. why
-> > would it be ok for this to work or not work dependent on DBM?
-> It was from my understanding of both reading the code, and the
-> following chart that the PTE_DIRTY bit was only used in the absence of
-> the DBM bit to determine the dirty state of a page.
+Hi William,
 
-The PTE_DIRTY bit is used regardless of DBM, for example, in the case I
-mentioned of a dirty non-writeable page. Without PTE_DIRTY we'd have no way to
-represent a write-protected dirty page.
+william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:34 -0700:
 
-See pte_wrprotect(), which copies moves HW dirty bit into the PTE_DIRTY bit
-when removing write permission:
+> v7.2 controller has different ECC level field size and shift in the acc
+> control register than its predecessor and successor controller. It needs
+> to be set specifically.
+>=20
+> Fixes: decba6d47869 ("mtd: brcmnand: Add v7.2 controller support")
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>=20
+> ---
+>=20
+> Changes in v3: None
+> Changes in v2:
+> - Use driver static data for ECC level shift
+>=20
+>  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 74 +++++++++++++-----------
+>  1 file changed, 41 insertions(+), 33 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
+raw/brcmnand/brcmnand.c
+> index 2e9c2e2d9c9f..69709419516a 100644
+> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> @@ -272,6 +272,7 @@ struct brcmnand_controller {
+>  	const unsigned int	*page_sizes;
+>  	unsigned int		page_size_shift;
+>  	unsigned int		max_oob;
+> +	u32			ecc_level_shift;
+>  	u32			features;
+> =20
+>  	/* for low-power standby/resume only */
+> @@ -596,6 +597,34 @@ enum {
+>  	INTFC_CTLR_READY		=3D BIT(31),
+>  };
+> =20
+> +/***********************************************************************
+> + * NAND ACC CONTROL bitfield
+> + *
+> + * Some bits have remained constant throughout hardware revision, while
+> + * others have shifted around.
+> + ***********************************************************************/
+> +
+> +/* Constant for all versions (where supported) */
+> +enum {
+> +	/* See BRCMNAND_HAS_CACHE_MODE */
+> +	ACC_CONTROL_CACHE_MODE				=3D BIT(22),
+> +
+> +	/* See BRCMNAND_HAS_PREFETCH */
+> +	ACC_CONTROL_PREFETCH				=3D BIT(23),
+> +
+> +	ACC_CONTROL_PAGE_HIT				=3D BIT(24),
+> +	ACC_CONTROL_WR_PREEMPT				=3D BIT(25),
+> +	ACC_CONTROL_PARTIAL_PAGE			=3D BIT(26),
+> +	ACC_CONTROL_RD_ERASED				=3D BIT(27),
+> +	ACC_CONTROL_FAST_PGM_RDIN			=3D BIT(28),
+> +	ACC_CONTROL_WR_ECC				=3D BIT(30),
+> +	ACC_CONTROL_RD_ECC				=3D BIT(31),
+> +
+> +	ACC_CONTROL_ECC_SHIFT				=3D 16,
+> +	/* Only for v7.2 */
+> +	ACC_CONTROL_ECC_EXT_SHIFT			=3D 13,
+> +};
 
-| static inline pte_t pte_wrprotect(pte_t pte) 
-| {
-|         /*   
-|          * If hardware-dirty (PTE_WRITE/DBM bit set and PTE_RDONLY
-|          * clear), set the PTE_DIRTY bit.
-|          */
-|         if (pte_hw_dirty(pte))
-|                 pte = pte_mkdirty(pte);
-| 
-|         pte = clear_pte_bit(pte, __pgprot(PTE_WRITE));
-|         pte = set_pte_bit(pte, __pgprot(PTE_RDONLY));
-|         return pte; 
-| }
+These do not look like they fit the purpose of enums. At least keep
+these two last definitions outside like before (you can rename them, I
+don't mind).
 
-... where pte_mkdirty() is:
+LGTM otherwise.
 
-| static inline pte_t pte_mkdirty(pte_t pte)
-| {
-|         pte = set_pte_bit(pte, __pgprot(PTE_DIRTY));
-| 
-|         if (pte_write(pte))
-|                 pte = clear_pte_bit(pte, __pgprot(PTE_RDONLY));
-| 
-|         return pte;
-| }
+> +
+>  static inline bool brcmnand_non_mmio_ops(struct brcmnand_controller *ctr=
+l)
+>  {
+>  #if IS_ENABLED(CONFIG_MTD_NAND_BRCMNAND_BCMA)
+> @@ -737,6 +766,12 @@ static int brcmnand_revision_init(struct brcmnand_co=
+ntroller *ctrl)
+>  	else if (of_property_read_bool(ctrl->dev->of_node, "brcm,nand-has-wp"))
+>  		ctrl->features |=3D BRCMNAND_HAS_WP;
+> =20
+> +	/* v7.2 has different ecc level shift in the acc register */
+> +	if (ctrl->nand_version =3D=3D 0x0702)
+> +		ctrl->ecc_level_shift =3D ACC_CONTROL_ECC_EXT_SHIFT;
+> +	else
+> +		ctrl->ecc_level_shift =3D ACC_CONTROL_ECC_SHIFT;
+> +
+>  	return 0;
+>  }
+> =20
+> @@ -931,30 +966,6 @@ static inline int brcmnand_cmd_shift(struct brcmnand=
+_controller *ctrl)
+>  	return 0;
+>  }
+> =20
+> -/***********************************************************************
+> - * NAND ACC CONTROL bitfield
+> - *
+> - * Some bits have remained constant throughout hardware revision, while
+> - * others have shifted around.
+> - ***********************************************************************/
+> -
+> -/* Constant for all versions (where supported) */
+> -enum {
+> -	/* See BRCMNAND_HAS_CACHE_MODE */
+> -	ACC_CONTROL_CACHE_MODE				=3D BIT(22),
+> -
+> -	/* See BRCMNAND_HAS_PREFETCH */
+> -	ACC_CONTROL_PREFETCH				=3D BIT(23),
+> -
+> -	ACC_CONTROL_PAGE_HIT				=3D BIT(24),
+> -	ACC_CONTROL_WR_PREEMPT				=3D BIT(25),
+> -	ACC_CONTROL_PARTIAL_PAGE			=3D BIT(26),
+> -	ACC_CONTROL_RD_ERASED				=3D BIT(27),
+> -	ACC_CONTROL_FAST_PGM_RDIN			=3D BIT(28),
+> -	ACC_CONTROL_WR_ECC				=3D BIT(30),
+> -	ACC_CONTROL_RD_ECC				=3D BIT(31),
+> -};
+> -
+>  static inline u32 brcmnand_spare_area_mask(struct brcmnand_controller *c=
+trl)
+>  {
+>  	if (ctrl->nand_version =3D=3D 0x0702)
+> @@ -967,18 +978,15 @@ static inline u32 brcmnand_spare_area_mask(struct b=
+rcmnand_controller *ctrl)
+>  		return GENMASK(4, 0);
+>  }
+> =20
+> -#define NAND_ACC_CONTROL_ECC_SHIFT	16
+> -#define NAND_ACC_CONTROL_ECC_EXT_SHIFT	13
+> -
+>  static inline u32 brcmnand_ecc_level_mask(struct brcmnand_controller *ct=
+rl)
+>  {
+>  	u32 mask =3D (ctrl->nand_version >=3D 0x0600) ? 0x1f : 0x0f;
+> =20
+> -	mask <<=3D NAND_ACC_CONTROL_ECC_SHIFT;
+> +	mask <<=3D ACC_CONTROL_ECC_SHIFT;
+> =20
+>  	/* v7.2 includes additional ECC levels */
+> -	if (ctrl->nand_version >=3D 0x0702)
+> -		mask |=3D 0x7 << NAND_ACC_CONTROL_ECC_EXT_SHIFT;
+> +	if (ctrl->nand_version =3D=3D 0x0702)
+> +		mask |=3D 0x7 << ACC_CONTROL_ECC_EXT_SHIFT;
+> =20
+>  	return mask;
+>  }
+> @@ -992,8 +1000,8 @@ static void brcmnand_set_ecc_enabled(struct brcmnand=
+_host *host, int en)
+> =20
+>  	if (en) {
+>  		acc_control |=3D ecc_flags; /* enable RD/WR ECC */
+> -		acc_control |=3D host->hwcfg.ecc_level
+> -			       << NAND_ACC_CONTROL_ECC_SHIFT;
+> +		acc_control &=3D ~brcmnand_ecc_level_mask(ctrl);
+> +		acc_control |=3D host->hwcfg.ecc_level << ctrl->ecc_level_shift;
+>  	} else {
+>  		acc_control &=3D ~ecc_flags; /* disable RD/WR ECC */
+>  		acc_control &=3D ~brcmnand_ecc_level_mask(ctrl);
+> @@ -2561,7 +2569,7 @@ static int brcmnand_set_cfg(struct brcmnand_host *h=
+ost,
+>  	tmp &=3D ~brcmnand_ecc_level_mask(ctrl);
+>  	tmp &=3D ~brcmnand_spare_area_mask(ctrl);
+>  	if (ctrl->nand_version >=3D 0x0302) {
+> -		tmp |=3D cfg->ecc_level << NAND_ACC_CONTROL_ECC_SHIFT;
+> +		tmp |=3D cfg->ecc_level << ctrl->ecc_level_shift;
+>  		tmp |=3D cfg->spare_area_size;
+>  	}
+>  	nand_writereg(ctrl, acc_control_offs, tmp);
 
-> /*
->  * PTE bits configuration in the presence of hardware Dirty Bit Management
->  * (PTE_WRITE == PTE_DBM):
->  *
->  * Dirty  Writable | PTE_RDONLY  PTE_WRITE  PTE_DIRTY (sw)
->  *   0      0      |   1           0          0
->  *   0      1      |   1           1          0
->  *   1      0      |   1           0          1
->  *   1      1      |   0           1          x
->  *
->  * When hardware DBM is not present, the sofware PTE_DIRTY bit is updated via
->  * the page fault mechanism. Checking the dirty status of a pte becomes:
->  *
->  *   PTE_DIRTY || (PTE_WRITE && !PTE_RDONLY)
->  */
-> 
-> So from my understanding it seems that when DBM is present, it acts as
-> the PTE_WRITE bit, and the AF bit is the HW dirty bit. This gives me
-> the impression that the PTE_DIRTY bit is redundant; however, When DBM
-> is not present PTE_DIRTY becomes crucial in determining the dirty
-> state.
-
-As above, PTE_DIRTY is not redundant; regardless of DBM we need the PTE_DIRTY
-bit for the regular dirty state. It distinguishes the first and third rows in
-that table.
 
 Thanks,
-Mark.
-
-> 
-> -- Nico
-> >
-> > Thanks,
-> > Mark.
-> >
-> > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > Cc: David Hildenbrand <david@redhat.com>
-> > > Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> > > Cc: Liu Shixin <liushixin2@huawei.com>
-> > > Cc: Will Deacon <will@kernel.org>
-> > > Cc: Yu Zhao <yuzhao@google.com>
-> > > Signed-off-by: Nico Pache <npache@redhat.com>
-> > > ---
-> > >  arch/arm64/Kconfig               |   1 +
-> > >  arch/arm64/include/asm/pgtable.h | 104 ++++++++++++++++++++++++++-----
-> > >  2 files changed, 90 insertions(+), 15 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > > index 7856c3a3e35a..6ea73b8148c5 100644
-> > > --- a/arch/arm64/Kconfig
-> > > +++ b/arch/arm64/Kconfig
-> > > @@ -173,6 +173,7 @@ config ARM64
-> > >       select HAVE_ARCH_PREL32_RELOCATIONS
-> > >       select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
-> > >       select HAVE_ARCH_SECCOMP_FILTER
-> > > +     select HAVE_ARCH_SOFT_DIRTY
-> > >       select HAVE_ARCH_STACKLEAK
-> > >       select HAVE_ARCH_THREAD_STRUCT_WHITELIST
-> > >       select HAVE_ARCH_TRACEHOOK
-> > > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> > > index 0bd18de9fd97..c4970c9ed114 100644
-> > > --- a/arch/arm64/include/asm/pgtable.h
-> > > +++ b/arch/arm64/include/asm/pgtable.h
-> > > @@ -51,6 +51,20 @@ static inline bool arch_thp_swp_supported(void)
-> > >  }
-> > >  #define arch_thp_swp_supported arch_thp_swp_supported
-> > >
-> > > +/*
-> > > + * On arm64 without hardware Access Flag, copying from user will fail because
-> > > + * the pte is old and cannot be marked young. So we always end up with zeroed
-> > > + * page after fork() + CoW for pfn mappings. We don't always have a
-> > > + * hardware-managed access flag on arm64.
-> > > + */
-> > > +#define arch_has_hw_pte_young                cpu_has_hw_af
-> > > +
-> > > +/*
-> > > + * Experimentally, it's cheap to set the access flag in hardware and we
-> > > + * benefit from prefaulting mappings as 'old' to start with.
-> > > + */
-> > > +#define arch_wants_old_prefaulted_pte        cpu_has_hw_af
-> > > +
-> > >  /*
-> > >   * Outside of a few very special situations (e.g. hibernation), we always
-> > >   * use broadcast TLB invalidation instructions, therefore a spurious page
-> > > @@ -121,8 +135,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
-> > >  })
-> > >
-> > >  #define pte_hw_dirty(pte)    (pte_write(pte) && !(pte_val(pte) & PTE_RDONLY))
-> > > -#define pte_sw_dirty(pte)    (!!(pte_val(pte) & PTE_DIRTY))
-> > > -#define pte_dirty(pte)               (pte_sw_dirty(pte) || pte_hw_dirty(pte))
-> > > +#define pte_soft_dirty(pte)  (!!(pte_val(pte) & PTE_DIRTY))
-> > > +#define pte_dirty(pte)               (pte_soft_dirty(pte) || pte_hw_dirty(pte))
-> > > +#define pte_swp_soft_dirty(pte)      pte_soft_dirty(pte)
-> > >
-> > >  #define pte_valid(pte)               (!!(pte_val(pte) & PTE_VALID))
-> > >  /*
-> > > @@ -189,7 +204,8 @@ static inline pte_t pte_mkwrite(pte_t pte)
-> > >
-> > >  static inline pte_t pte_mkclean(pte_t pte)
-> > >  {
-> > > -     pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> > > +     if (!arch_has_hw_pte_young())
-> > > +             pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> > >       pte = set_pte_bit(pte, __pgprot(PTE_RDONLY));
-> > >
-> > >       return pte;
-> > > @@ -1077,25 +1093,83 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
-> > >  #define phys_to_ttbr(addr)   (addr)
-> > >  #endif
-> > >
-> > > -/*
-> > > - * On arm64 without hardware Access Flag, copying from user will fail because
-> > > - * the pte is old and cannot be marked young. So we always end up with zeroed
-> > > - * page after fork() + CoW for pfn mappings. We don't always have a
-> > > - * hardware-managed access flag on arm64.
-> > > - */
-> > > -#define arch_has_hw_pte_young                cpu_has_hw_af
-> > > +static inline bool pud_sect_supported(void)
-> > > +{
-> > > +     return PAGE_SIZE == SZ_4K;
-> > > +}
-> > >
-> > > +#ifdef CONFIG_ARM64_HW_AFDBM
-> > >  /*
-> > > - * Experimentally, it's cheap to set the access flag in hardware and we
-> > > - * benefit from prefaulting mappings as 'old' to start with.
-> > > + * if we have the DBM bit we can utilize the software dirty bit as
-> > > + * a mechanism to introduce the soft_dirty functionality; however, without
-> > > + * it this bit is crucial to determining if a entry is dirty and we cannot
-> > > + * clear it via software. DBM can also be disabled or broken on some early
-> > > + * armv8 devices, so check its availability before modifying it.
-> > >   */
-> > > -#define arch_wants_old_prefaulted_pte        cpu_has_hw_af
-> > > +static inline pte_t pte_clear_soft_dirty(pte_t pte)
-> > > +{
-> > > +     if (!arch_has_hw_pte_young())
-> > > +             return pte;
-> > >
-> > > -static inline bool pud_sect_supported(void)
-> > > +     return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> > > +}
-> > > +
-> > > +static inline pte_t pte_mksoft_dirty(pte_t pte)
-> > >  {
-> > > -     return PAGE_SIZE == SZ_4K;
-> > > +     if (!arch_has_hw_pte_young())
-> > > +             return pte;
-> > > +
-> > > +     return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> > > +}
-> > > +
-> > > +static inline pte_t pte_swp_clear_soft_dirty(pte_t pte)
-> > > +{
-> > > +     if (!arch_has_hw_pte_young())
-> > > +             return pte;
-> > > +
-> > > +     return clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-> > > +}
-> > > +
-> > > +static inline pte_t pte_swp_mksoft_dirty(pte_t pte)
-> > > +{
-> > > +     if (!arch_has_hw_pte_young())
-> > > +             return pte;
-> > > +
-> > > +     return set_pte_bit(pte, __pgprot(PTE_DIRTY));
-> > > +}
-> > > +
-> > > +static inline int pmd_soft_dirty(pmd_t pmd)
-> > > +{
-> > > +     return pte_soft_dirty(pmd_pte(pmd));
-> > > +}
-> > > +
-> > > +static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
-> > > +{
-> > > +     return pte_pmd(pte_clear_soft_dirty(pmd_pte(pmd)));
-> > > +}
-> > > +
-> > > +static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
-> > > +{
-> > > +     return pte_pmd(pte_mksoft_dirty(pmd_pte(pmd)));
-> > >  }
-> > >
-> > > +#ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-> > > +static inline int pmd_swp_soft_dirty(pmd_t pmd)
-> > > +{
-> > > +     return pmd_soft_dirty(pmd);
-> > > +}
-> > > +
-> > > +static inline pmd_t pmd_swp_clear_soft_dirty(pmd_t pmd)
-> > > +{
-> > > +     return pmd_clear_soft_dirty(pmd);
-> > > +}
-> > > +
-> > > +static inline pmd_t pmd_swp_mksoft_dirty(pmd_t pmd)
-> > > +{
-> > > +     return pmd_mksoft_dirty(pmd);
-> > > +}
-> > > +#endif /* CONFIG_ARCH_ENABLE_THP_MIGRATION */
-> > > +#endif /* CONFIG_ARM64_HW_AFDBM */
-> > >
-> > >  #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
-> > >  #define ptep_modify_prot_start ptep_modify_prot_start
-> > > --
-> > > 2.41.0
-> > >
-> >
-> 
+Miqu=C3=A8l
