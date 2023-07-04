@@ -2,111 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A187477AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FA07477B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 19:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjGDRVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 13:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S231213AbjGDRV4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 13:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGDRVF (ORCPT
+        with ESMTP id S230326AbjGDRVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 13:21:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DFCE76;
-        Tue,  4 Jul 2023 10:21:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E0261331;
-        Tue,  4 Jul 2023 17:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2ABC433C8;
-        Tue,  4 Jul 2023 17:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688491263;
-        bh=lM8Xkdn8aaUooQ9U6M0gWeIPLb7vnmUFpGt8CELVBQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K3GOFDoKgYu6dtWssVqa+u4kdTAP7Ow5co/aRZdvR4k3UB6p6kTBA4rb5/do2tvSd
-         OrqF5KORgd0vKmInI2SPQ8ByexL1KW5akOaUqsbPoJm8H2NAqn69CcVbFoieCIeeyq
-         W+0QNhhY07HCVbt4+/i746IetbaMSJPe5/DSaJiLZmA/2RYUoukoOCq/aCZ1AwF3Kq
-         x5EjqMNWNZ7EJ53rcR1c2KH2QgW0+vFsWsy3zT53CdBqBtrfLGPe3KktRH6Ti8uMPN
-         pKNOctta8aVuy5jzI/v/ITSmyOAYfXkVzniQdfTkhaFM6TfDNbsh5hXfmBvSMopQDi
-         WryjS0EqrQLIQ==
-Date:   Tue, 4 Jul 2023 18:20:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ajayagarwal@google.com
-Subject: Re: [PATCH] PCI: dwc: Provide deinit callback for i.MX
-Message-ID: <9327c1b0-514a-4985-a04e-2e8535f92578@sirena.org.uk>
-References: <20230703-pci-imx-regulator-cleanup-v1-1-b6c050ae2bad@kernel.org>
- <CAOMZO5AghPUsVqMRdByR9hOatwHmgx90mq1HyZYFGkw1WaAY_Q@mail.gmail.com>
- <9e7d3961-4189-4141-a342-d15a34fefc9d@sirena.org.uk>
- <CAOMZO5AKYo+9FwNMc+s35ockjK2HET4NDAAMYdnZkBs6A1-Wnw@mail.gmail.com>
+        Tue, 4 Jul 2023 13:21:54 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF34E76;
+        Tue,  4 Jul 2023 10:21:53 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b58330576fso19014691fa.1;
+        Tue, 04 Jul 2023 10:21:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688491312; x=1691083312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G4u6eIXf7e98cure07zvGITm6ZjEeaYArMs+Y8ColeM=;
+        b=WCkoqO7bdNSk9uncF+lDxVbpJVlKWfZ5083PSTyANANH52ACxF3EPQFGDh8z5eDh8q
+         XPLZsm/92w2YcTe8hpL+0j/iJj/zCXGMnhItqmLRy2YuBd+aejMsPuzNJSn/iVcbBiPT
+         ZvA699dUVnfmr64iDfwtRksXLLLcncWJSiaGF/zNZs8P0cqMF9SGQezM1jFLd+jblzkI
+         AtwX5gQRFFd+9yu2BSRGWY1W9LPrhYV0yf5Hsi5R8ddSHuc+UL/cK4whBAa2AZTVij3l
+         FjtPgevtC+0Gg/5TJvg8SqXKKJPp+VxdHSmiC/jHe9W0GGBTCRhWZGZcJleYerdsFjOF
+         GUcA==
+X-Gm-Message-State: ABy/qLZ1YxaeCh0LNtKJdxUbpDjusNTkyHsQX9r4fPwgkw+J4+9SdNqd
+        LMzSCcuuBQfIXnPT3VkJ2f6MMxRrEEEnAEicjo4=
+X-Google-Smtp-Source: APBJJlEzVFMq4eEFDvAnGVGxB6cIV+lZaBdnBF+zTrdd1CJZ8L8sBTMbIo2Q2EXSxB/VNYgGZwXg+pY3/OGR8tOISvU=
+X-Received: by 2002:a2e:888e:0:b0:2b6:120a:af65 with SMTP id
+ k14-20020a2e888e000000b002b6120aaf65mr9145539lji.3.1688491311701; Tue, 04 Jul
+ 2023 10:21:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cn2GBMFTSW3ai4wG"
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5AKYo+9FwNMc+s35ockjK2HET4NDAAMYdnZkBs6A1-Wnw@mail.gmail.com>
-X-Cookie: Memory fault - where am I?
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com> <20230703121411.69606-6-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230703121411.69606-6-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Jul 2023 19:21:40 +0200
+Message-ID: <CAJZ5v0hytwzAPBpnPZnvdU7GhK12P0PJbe9aD+eVrVJhkq1ayA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] ACPI: scan: Provide symbol declarations
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Walle <michael@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 3, 2023 at 2:14 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Compiler is not happy about a couple of symbols that, it thinks,
+> are not declared:
+>
+>   warning: symbol 'acpi_device_lock' was not declared. Should it be static?
+>   warning: symbol 'acpi_wakeup_device_list' was not declared. Should it be static?
+>
+> Include "sleep.h" to have them explicitly declared and make
+> the compiler happy.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
---cn2GBMFTSW3ai4wG
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've just applied a patch from Ben Dooks making the exact same change.
 
-On Tue, Jul 04, 2023 at 09:13:09AM -0300, Fabio Estevam wrote:
-> On Tue, Jul 4, 2023 at 8:55=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
-ote:
-
-> > I have no idea about doing this, all the PCI on the board that I care
-> > about seems to work fine (and worked fine even with the failure, I'm not
-> > sure this is being generated by a link that's in use).
-
-> The probe failure when link is not up happens in linux-next due to commit:
-
-> da56a1bfbab5 ("PCI: dwc: Wait for link up only if link is started")
-
-> Prior this commit the PCI driver probed successfully even when the
-> link was down.
-
-Ah, I see.  I don't know what's going on here enough to say if that's
-good or bad but it does at least seem plausible.
-
---cn2GBMFTSW3ai4wG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSkVPgACgkQJNaLcl1U
-h9BPzwgAhAN3PmhN1H3Cy7dnGdGWxMG/UB54huwKLQcuXkuHjPGjWinCEw9Lj5/2
-d36GnaoRVfT6s/mvY8Y2anenPiL7PDuYkTqxzY4u0dH+UvuwlZroOyNHtQ6nPBjR
-7YwDDW1sSpy4mmXakjaiO5vY2vjI4HAdoPRmCyz4fwCVwFkQ3SCI/LqXT02llMAG
-P2DJO9Jza44XB2mJMkanxOamgwSRNq4hxXK68PfC+0yc3dLh7kI/9uIKnS+rtdsF
-iWUAm+ekcBPxbT/rzxyVKSSD5Av2BTQSZe8oZhjYWsQXGx15izCNT6PS65Lhy8oI
-HM1WYviR3NtgHC+gAZ6cYn+gKcVA5A==
-=y7lY
------END PGP SIGNATURE-----
-
---cn2GBMFTSW3ai4wG--
+> ---
+>  drivers/acpi/scan.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index ec1c9bec8bae..5b145f1aaa1b 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/dma-direct.h>
+>
+>  #include "internal.h"
+> +#include "sleep.h"
+>
+>  #define ACPI_BUS_CLASS                 "system_bus"
+>  #define ACPI_BUS_HID                   "LNXSYBUS"
+> --
