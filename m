@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907B174770C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAC374770E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjGDQm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S231893AbjGDQm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 12:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbjGDQmN (ORCPT
+        with ESMTP id S231789AbjGDQmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:42:13 -0400
+        Tue, 4 Jul 2023 12:42:14 -0400
 Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF53210F5;
-        Tue,  4 Jul 2023 09:42:11 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6adef5c22so89906741fa.3;
-        Tue, 04 Jul 2023 09:42:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D277210FD;
+        Tue,  4 Jul 2023 09:42:12 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso93768851fa.0;
+        Tue, 04 Jul 2023 09:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688488929; x=1691080929;
+        d=gmail.com; s=20221208; t=1688488931; x=1691080931;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P1NPQO00RUvISCaGkH2p3FM3CNMfuB7h4Q8LwRfFEJw=;
-        b=lDIAAiA3BLp1hltTyOfOxPdCVmgnDofgCD/aIDcYnz3YoR9RAjvz8AoPHTt7eCJXNq
-         vKW6Xw/JgB8JwFhTdaXZo7Z7Wb1w9rhUhJIDrDOwasqEfFQmOyCWirVscu2m4e0w6UN8
-         MZpGQjnGdmPSEDokfSy3pP1xk3ejDrS7nsdjbqjvRoPDVPSoXbblln0BZUfQkdrpNYCr
-         UWt78eo+QwZR1SyFdmJNhrEjZxdP3aTip6rrpU4/5N+z9TXDL/1A+g1EeRI5a4YtySjU
-         8adGZVROMY0LkGaYb91GfMRqwupA/sFKFiXY/Uy5hRp4IeBuaRZFquJ7nZ3vkLUKEsZ6
-         3h3A==
+        bh=yEUe4ghhfetmw/fCeUTDTMc801j3sRXLiEJrKSWT/UQ=;
+        b=rMMOsB+v0x3Q5r+BEUgXQJOpot1P7bGTCXUAkRfhBsAlL/lzzbWBMKs8v5pkyaEVca
+         +ytyjS4AsaeSOJAgm2pl7Jxx1aPBZSka/4OR2eabj2pm4AJ3TY5CnCCq+bYP81g3cukL
+         5q9Cm+AOClxNirOqrUgbzKC9GojKyStKPsnSrsT9z5rxyVEPkVTDniWD3SUQO9vK0m1P
+         V1FAwApTuThb8K8ArwTd3zz/rlaFH9ugqc/CT9U6tyO8ED3VuA0OCoXXCjpRkFaDyvAb
+         HEHMMi3VeZ8eVb+OFMeWTUi/LFpb2FAOLTWXYErSGdjyiux7ri6yNFR+XYFpq9pHVv2R
+         uVtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688488929; x=1691080929;
+        d=1e100.net; s=20221208; t=1688488931; x=1691080931;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P1NPQO00RUvISCaGkH2p3FM3CNMfuB7h4Q8LwRfFEJw=;
-        b=cCCSILPCuF54Tl6fPnSN3dvsw1opBfvyRHxUnCmH4zZcbI7oM4BxEe/EvBpagkHdfi
-         hIRhKoDb8Gbpb5WjtCgS/r5vXSn/ZxfSlnKWK4GYhDNQPLC9YYD0SkiUqsjWevao9n8z
-         XsMKqjVPHmxJUEZbviFWAOY+ZKYffPTFMIbQ4I5nsiKKW22M7s8iRYXCHfAyTCuOs6vx
-         D9YavLvRbl+GxKX3Vn5uAtq5hHRjlxgyH7W6yT7SVj58Kij22B+WfVBVU6ppGbmeEtjR
-         TfOTDWEKpd3lhxUsm9nLt+fYgbv5dcasbIY5kI3YW6+Z16ZaqrusM9i3K/ZQEkx7tcDm
-         p9Dg==
-X-Gm-Message-State: ABy/qLZKb5BevA03eXQE3Sl8wd3+r5VwX8iTuoiBvqP9ulah+HtHK2+y
-        bdJAB7Dtc+bdMZvwIW9MYpYcLJSPNjvFx7lX
-X-Google-Smtp-Source: APBJJlFURqjBvJzRH1SX5FGs3z/RLlJBfF1I4//xlj5p9fhahlmFRbC5tiQ/0FGwyMMBcMKnBZLDTA==
-X-Received: by 2002:a2e:86d1:0:b0:2b5:7f12:413f with SMTP id n17-20020a2e86d1000000b002b57f12413fmr10162964ljj.7.1688488929396;
-        Tue, 04 Jul 2023 09:42:09 -0700 (PDT)
+        bh=yEUe4ghhfetmw/fCeUTDTMc801j3sRXLiEJrKSWT/UQ=;
+        b=Inez5/+NLBAuKyhT53axlGiAQdSLurU+IZ46ANQqN3EefngHZqPXeHGTiUS3wUKLex
+         dNHmv4Nlk3dbReb3+WaIS2lrpBdWd3ZerMQnApz1aHtAdtDaODm4oSS8FjW3bGULS9Nr
+         bb5eZUHpLf8zhAEaaNwHzsVloLlunpMbRajQuXb+SxW2fvaq6rmzNzeS7PNN03icyNiz
+         xT21tiAvpY+TiYOKP/npdmBpviwkqaoZq8PE/mzNBondU8qAj7wlDCHTffpHBomBp54B
+         021PrEWQymY0l6CaiRV9dxgWas+fl71hyyyD9lKSOiUbicqclpPj4Hsd32PFunipCPFQ
+         V0KA==
+X-Gm-Message-State: ABy/qLYw6wRuHlCbeypQMqV6WRUQu946UvO6qPgTPuk7HRtBc+dDW8SN
+        Dey18ehqbvOQ+bsDxLoxIQw=
+X-Google-Smtp-Source: APBJJlFMtQF7T6uEdmN+jTwHy84oFCpCf7dl6KqwV9Qo6/EPWbp/L0rY4k+TPkM0WjCKfMvDfHaxyQ==
+X-Received: by 2002:a2e:868b:0:b0:2b6:d0af:effd with SMTP id l11-20020a2e868b000000b002b6d0afeffdmr8998391lji.4.1688488930838;
+        Tue, 04 Jul 2023 09:42:10 -0700 (PDT)
 Received: from david-ryuzu.fritz.box ([188.195.169.176])
-        by smtp.googlemail.com with ESMTPSA id u15-20020a2e2e0f000000b002b6eb5db863sm1181920lju.43.2023.07.04.09.42.07
+        by smtp.googlemail.com with ESMTPSA id u15-20020a2e2e0f000000b002b6eb5db863sm1181920lju.43.2023.07.04.09.42.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 09:42:09 -0700 (PDT)
+        Tue, 04 Jul 2023 09:42:10 -0700 (PDT)
 From:   David Wronek <davidwronek@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -63,11 +63,10 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        map220v <map220v300@gmail.com>,
         David Wronek <davidwronek@gmail.com>
-Subject: [PATCH 1/7] dt-bindings: arm: qcom,ids: Add SoC ID for SM7125
-Date:   Tue,  4 Jul 2023 18:31:54 +0200
-Message-ID: <20230704163848.169853-3-davidwronek@gmail.com>
+Subject: [PATCH 2/7] dt-bindings: arm: qcom: Document SM7125 and xiaomi,joyeuse board
+Date:   Tue,  4 Jul 2023 18:31:55 +0200
+Message-ID: <20230704163848.169853-4-davidwronek@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230704163848.169853-2-davidwronek@gmail.com>
 References: <20230704163848.169853-2-davidwronek@gmail.com>
@@ -83,28 +82,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: map220v <map220v300@gmail.com>
+Document the xiaomi,joyeuse board based on the Qualcomm SM7125 SoC.
 
-Add the SoC ID for Qualcomm SM7125.
-
-Signed-off-by: map220v <map220v300@gmail.com>
 Signed-off-by: David Wronek <davidwronek@gmail.com>
 ---
- include/dt-bindings/arm/qcom,ids.h | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
-index bcbe9ee2cdaf..6a8dd2e42b24 100644
---- a/include/dt-bindings/arm/qcom,ids.h
-+++ b/include/dt-bindings/arm/qcom,ids.h
-@@ -215,6 +215,7 @@
- #define QCOM_ID_SDA429W			437
- #define QCOM_ID_SM8350			439
- #define QCOM_ID_QCM2290			441
-+#define QCOM_ID_SM7125			443
- #define QCOM_ID_SM6115			444
- #define QCOM_ID_IPQ5010			446
- #define QCOM_ID_IPQ5018			447
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 450f616774e0..862957f845f6 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -77,6 +77,7 @@ description: |
+         sm6125
+         sm6350
+         sm6375
++        sm7125
+         sm7225
+         sm8150
+         sm8250
+@@ -929,6 +930,11 @@ properties:
+               - sony,pdx225
+           - const: qcom,sm6375
+ 
++      - items:
++          - enum:
++              - xiaomi,joyeuse
++          - const: qcom,sm7125
++
+       - items:
+           - enum:
+               - fairphone,fp4
 -- 
 2.41.0
 
