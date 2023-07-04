@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9F6746BA7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941C5746BAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 10:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjGDIQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 04:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S231409AbjGDIQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 04:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjGDIQL (ORCPT
+        with ESMTP id S230195AbjGDIQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:16:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C2ABE
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:16:09 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1qGbCX-0002xR-Ep; Tue, 04 Jul 2023 10:15:57 +0200
-Message-ID: <b382e51d-2f57-c4ab-7590-2083bd771abd@pengutronix.de>
-Date:   Tue, 4 Jul 2023 10:15:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/2] ARM: dts: imx6: pfla02: Fix SD card reboot problem
-Content-Language: en-US
-To:     Andrej Picej <andrej.picej@norik.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, upstream@phytec.de
-References: <20230704080304.816942-1-andrej.picej@norik.com>
- <20230704080304.816942-3-andrej.picej@norik.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20230704080304.816942-3-andrej.picej@norik.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 04:16:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31756E52
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 01:16:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CF886225A0;
+        Tue,  4 Jul 2023 08:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688458598; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FPBg6p9QylZ6LXwL7TvvMNJ95t3SM1oPEWDK0MHP+qk=;
+        b=rfrgAHLrrecq/cG6+NsHPf0UHlh9zEBr5aPHwvIy5RVe7QWYZmYt3uJV7vHrkVAwYDKc2D
+        qxvX41Lu6qKN1+r1wF+ch8INYqV5N9OVm93FhVvwE64zunlo4HIcqXv8CT/q1UK7qAdLJM
+        0ANUF8usKFTFo9B5SQe1Dpdwq7MEjag=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688458598;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FPBg6p9QylZ6LXwL7TvvMNJ95t3SM1oPEWDK0MHP+qk=;
+        b=zgMUnSPzMkS7ARahdYyIvfy9W954bZlpyFHkl4jpkfzi+iq7L/pp78K/HOnBTc6d6nKcgj
+        mjhfKJjLdJ3UU3DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E3F71346D;
+        Tue,  4 Jul 2023 08:16:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Gae5JWbVo2R8JwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 04 Jul 2023 08:16:38 +0000
+Date:   Tue, 04 Jul 2023 10:16:38 +0200
+Message-ID: <87o7ks2is9.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     oe-kbuild@lists.linux.dev,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>
+Subject: Re: sound/firewire/amdtp-stream.c:1099 process_rx_packets() error: uninitialized symbol 'curr_cycle_time'.
+In-Reply-To: <bacd122c-175c-4fe8-bc6a-66de5820eed0@kadam.mountain>
+References: <bacd122c-175c-4fe8-bc6a-66de5820eed0@kadam.mountain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andrej,
-
-On 04.07.23 10:03, Andrej Picej wrote:
-> If regulator is not marked as always-on the regulator gets disabled on
-> reboot breaking the next boot.
-
-While this is ok as a fix, the real issue is that your system reset doesn't
-restore PMIC rails to a good state. Are you perhaps doing a SoC-internal
-reset only or have the PMIC misconfigured?
-
-Cheers,
-Ahmad
-
+On Mon, 03 Jul 2023 15:00:01 +0200,
+Dan Carpenter wrote:
 > 
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-> ---
->  arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi | 1 +
->  1 file changed, 1 insertion(+)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   b25f62ccb490680a8cee755ac4528909395e0711
+> commit: fef4e61b0b765b6d22badcd5b6575b159e7d510a ALSA: firewire-lib: extend tracepoints event including CYCLE_TIME of 1394 OHCI
+> config: i386-randconfig-m021-20230701 (https://download.01.org/0day-ci/archive/20230701/202307011324.jFJ96dTo-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce: (https://download.01.org/0day-ci/archive/20230701/202307011324.jFJ96dTo-lkp@intel.com/reproduce)
 > 
-> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> index 80adb2a02cc9..25d6a036d5b8 100644
-> --- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> @@ -192,6 +192,7 @@ vdd_3v3_pmic_io_reg: ldo6 {
->  			vdd_sd0_reg: ldo9 {
->  				regulator-min-microvolt = <3300000>;
->  				regulator-max-microvolt = <3300000>;
-> +				regulator-always-on;
->  			};
->  
->  			vdd_sd1_reg: ldo10 {
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> | Closes: https://lore.kernel.org/r/202307011324.jFJ96dTo-lkp@intel.com/
+> 
+> New smatch warnings:
+> sound/firewire/amdtp-stream.c:1099 process_rx_packets() error: uninitialized symbol 'curr_cycle_time'.
+> 
+> Old smatch warnings:
+> sound/firewire/amdtp-stream.c:944 generate_tx_packet_descs() error: uninitialized symbol 'curr_cycle_time'.
+(snip)
+> The curr_cycle_time variable is only going to be used if trace_amdtp_packet_enabled()
+> is true.  We would consider it a false positive if build_it_pkt_header()
+> is inlined but a bug if it's not.  (Technically passing uninitialized
+> data is undefined behavior but if a function is inlined then it's not
+> "passing" anything).
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Yes, this is a false-positive, so no much worry needed.  But it's hard
+for compiler / checker to know it, and I guess that simply
+initializing the variable would be the easiest workaround, after all.
 
+
+thanks,
+
+Takashi
