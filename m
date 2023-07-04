@@ -2,159 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048CD747724
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434CB74772E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 18:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjGDQoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 12:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S231344AbjGDQuM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 12:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjGDQoL (ORCPT
+        with ESMTP id S230385AbjGDQuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 12:44:11 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C8B19B0;
-        Tue,  4 Jul 2023 09:43:45 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8ad356fe4so444175ad.2;
-        Tue, 04 Jul 2023 09:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688489021; x=1691081021;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=QL2M3Cz818dqNrKSbTrYj6OW1NR2RpmjCHPMkuvFkQo=;
-        b=i/gVflRd97a00KEqaLzysrTszK4h5XmJLwrdCSoj2wmmDaMz2EGVzcKKFO+BwRxNAY
-         004uTe3XYEZvQEgvBwnek52d5H7ki8wY+iKCYR2MeD+8rRXUJg6VnnwmTiEcoUe4UIAd
-         Kq4/fJPy/9fjMfCCthMMqzo24rgL4Tu6o+SxswqqNMxyzUkYk4Jshpr1n7B998NOQnXk
-         YlxoWaJAVPgrCaAWUGqdU/kEnkOUJSvzK/DkvMWdgvVqKyjsBLdq3htHrPpCINJEO+12
-         LhO0ZrXn/zn7/VrKwZTHEWt3SsD39QyGUWet47cVKhWxdw1e2263V4whHazjvJDvk90a
-         d27Q==
+        Tue, 4 Jul 2023 12:50:11 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604301AC;
+        Tue,  4 Jul 2023 09:50:10 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-98502b12fd4so159176666b.1;
+        Tue, 04 Jul 2023 09:50:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688489021; x=1691081021;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688489409; x=1691081409;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QL2M3Cz818dqNrKSbTrYj6OW1NR2RpmjCHPMkuvFkQo=;
-        b=akKt9BCGHJ8kDMqID1u3M1eKzskU260WAtmQ4WitP0HsIElZUsSnNdauhOoZla79ng
-         iHGfR6gbjE0DQJJeof8qWhTYiYiNMwNQQxfTAPMWCw4K6Y2ds+rEXtJcUJ1q90rHVRJG
-         600cgbFVgb3UpFBoEyr2jbvzkBeZcbl9EIN9lAmd8muKeffRm8nI8M3dvBeADEzuGFqs
-         bmCf3cajRJBbOaTn6q8YX07ocHvo8gFDDtqY1GXWD1ExlJkVRHnjTiEBHoPGwVTC6XE6
-         rL0GrNwk7MDy29qpSRSEdfU9L2UVsi3cfgQj18GIHjlrKrmJ3BK+IUWZlimZjkySICqu
-         Vjeg==
-X-Gm-Message-State: AC+VfDzfMP5gwcdSgfeZ+dvMf2RbANeWP+4ELt+i6Tfq7i7WhyAIn3wa
-        e6sH4pd6LRKO7K2Lm9J8Jck=
-X-Google-Smtp-Source: ACHHUZ45susAI6nzgRNIJcCOAcFTWE+YzKwOTgOMbgBT/p7uSL3ZwOsL8tgU+6D+hTZ80UJ3FXCmog==
-X-Received: by 2002:a05:6a20:101a:b0:126:eed0:f55e with SMTP id gs26-20020a056a20101a00b00126eed0f55emr11516223pzc.11.1688489021396;
-        Tue, 04 Jul 2023 09:43:41 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id iw21-20020a170903045500b001b8a4a9622dsm1806611plb.113.2023.07.04.09.43.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 09:43:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fd1cab46-0a51-6aab-8fda-f603fd4e0058@roeck-us.net>
-Date:   Tue, 4 Jul 2023 09:43:39 -0700
+        bh=a5cBryZiaNRPz8kx7gh4MVw5Ah9onbshYDFqDwi4BYc=;
+        b=QuKfXXg85bxnGeWmtXXVrxF7M7c3mSLSQF5JDDR95gTJEF/eIj5YzBpiGln/sHjq4x
+         TJO2Ei2E2+yMkCWqiI3HE0TaDMEV26PrG5kKjM+xloRKlwdjPpuoSoIQWX4LzIIw5a+2
+         g+93WCLV/Drsk08H0tLEJ1ArfVyv4hHeXzXKQDz9srfCmviyL5C0qFr1gALEY2vRpu03
+         m6L9Kz9QDfr4DQhgWZUFQiOaFOH59FeDGZ+isxg68Sb/8E9Mf+NFlWdRjAZfkoEXkIJ9
+         NXYoO16ZwD4EVyXGweOJTpMdoERzQDUhd0N/URm8fjEKJxldzOB+r1tHQ39G6ev6qPV+
+         4SqQ==
+X-Gm-Message-State: ABy/qLYsOJbNe8gtYLFEvXqsdczEUdvZmxhDExA07Gf8H8z9b9Ikl7qJ
+        Jcs8BdWTsF9ijWmwEDtP19lwSk3g637ukaUSG+PzlqZ2Y7c=
+X-Google-Smtp-Source: APBJJlF3Lx1P9ewy7I9YMWK02Z5rHswNClZAnOm01hQRnHM1SXbhAKIx8pk40Yyomcs6A1FAabp/EnDsb3ULxve6lhM=
+X-Received: by 2002:a17:907:101d:b0:974:5480:6270 with SMTP id
+ ox29-20020a170907101d00b0097454806270mr9790447ejb.0.1688489408530; Tue, 04
+ Jul 2023 09:50:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors): remove static board variable
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-hwmon@vger.kernel.org, samsagax@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <20230704131715.44454-5-gregkh@linuxfoundation.org>
- <20230704131715.44454-6-gregkh@linuxfoundation.org>
- <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
- <2023070402-festive-rind-9274@gregkh>
- <cb71b00e-0225-ea24-b30e-4d615af026f0@roeck-us.net>
- <2023070425-jujitsu-ladder-195e@gregkh>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <2023070425-jujitsu-ladder-195e@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Jul 2023 18:49:57 +0200
+Message-ID: <CAJZ5v0gDV_rDDs0ur=Ct6=4CcCsFQLoO0yGz9-UrnyO0AKLCjw@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v6.5-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/23 09:14, Greg Kroah-Hartman wrote:
-> On Tue, Jul 04, 2023 at 07:14:54AM -0700, Guenter Roeck wrote:
->> On 7/4/23 06:44, Greg Kroah-Hartman wrote:
->>> On Tue, Jul 04, 2023 at 06:39:07AM -0700, Guenter Roeck wrote:
->>>> On 7/4/23 06:17, Greg Kroah-Hartman wrote:
->>>>> Drivers should not have a single static variable for the type of device
->>>>> they are bound to.  While this driver is really going to only have one
->>>>> device at a time in the system, remove the static variable and instead,
->>>>> look up the device type when needed.
->>>>>
->>>>
->>>> This is expensive. I think it would be much better to just move
->>>> the board type detection into the init code and not instantiate
->>>> the driver in the fist place if the board type is unknown.
->>>
->>> The board type detection is all over the place in the driver, it's not
->>> just for "unknown" types, so how about just saving the board type at
->>> probe time and using it then for all other places?
->>>
->>
->> I must be missing something. The current code detects the board type
->> only once, in the probe function. Otherwise the static variable is used.
->> You are replacing it with repeated calls to get_board_type().
->> The whole point of the static variable is to avoid the cost of repeated
->> calls to dmi_first_match().
-> 
-> Ah, ok, yes, I was refering to the fact that the driver relies on the
-> detection of the device type in lots of different places (and doesn't
-> ever error out from the detection call.)
-> 
+Hi Linus,
 
-I am lost again. Current code:
+Please pull from the tag
 
-         dmi_entry = dmi_first_match(dmi_table);
-         if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-                 return -ENODEV;
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.5-rc1-2
+
+with top-most commit 40c565a429d706951f18fe07ccd9f6fded23a4dc
+
+ Merge branches 'pm-cpufreq' and 'pm-cpuidle'
+
+on top of commit 40e8e98f512fc76891ae2328a63e2e4ffdbe3010
+
+ Merge tag 'pm-6.5-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive more power management updates for 6.5-rc1.
+
+These add support for new hardware (ap807 and AM62A7), fix several issues
+in cpufreq drivers and in the operating performance points (OPP) framework,
+fix up intel_idle after recent changes and add documentation.
+
+Specifics:
+
+ - Add missing __init annotation to one function in the intel_idle
+   driver (Rafael Wysocki).
+
+ - Make intel_pstate use a correct scaling factor when mapping HWP
+   performance levels to frequency values on hybrid-capable systems
+   with disabled E-cores (Srinivas Pandruvada).
+
+ - Fix Kconfig dependencies of the cpufreq-dt-platform driver (Viresh
+   Kumar).
+
+ - Add support to build cpufreq-dt-platdev as a module (Zhipeng Wang).
+
+ - Don't allocate Sparc's cpufreq_driver dynamically (Viresh Kumar).
+
+ - Add support for TI's AM62A7 platform (Vibhore Vardhan).
+
+ - Add support for Armada's ap807 platform (Russell King (Oracle)).
+
+ - Add support for StarFive JH7110 SoC (Mason Huo).
+
+ - Fix voltage selection for Mediatek Socs (Daniel Golle).
+
+ - Fix error handling in Tegra's cpufreq driver (Christophe JAILLET).
+
+ - Document Qualcomm's IPQ8074 in DT bindings (Robert Marko).
+
+ - Don't warn for disabling a non-existing frequency for imx6q cpufreq
+   driver (Christoph Niedermaier).
+
+ - Use dev_err_probe() in Qualcomm's cpufreq driver (Andrew Halaney).
+
+ - Simplify performance state related logic in the OPP core (Viresh
+   Kumar).
+
+ - Fix use-after-free and improve locking around lazy_opp_tables (Viresh
+   Kumar, Stephan Gerhold).
+
+ - Minor cleanups - using dev_err_probe() and rate-limiting debug
+   messages (Andrew Halaney, Adrián Larumbe).
+
+Thanks!
 
 
+---------------
 
->>>> We can handle the static variable separately if it really bothers
->>>> you that much.
->>>
->>> I did this change to make patch 2/3 more "obvious" what is happening
->>> when the in_visible() callback happens, so that you don't have to worry
->>> about the saved value or not.  But this whole patch isn't really needed
->>> if you don't mind the lookup just happening in the in_visible() callback
->>> for the first time.
->>>
->>
->> That would at least be a minimal change, and just add one extra lookup
->> which is only called once (or zero, if it is used to save the board type).
-> 
-> Ok, I'll switch it up, but really, it's just a simple table lookup loop,
-> and none of the detection calls are on a "hot path" that I can
-> determine.  Or am I missing something?
-> 
->> As I said, my solution would be to move the board type detection
->> into the init function and not instantiate the driver in the first
->> place if the probe function would bail out anyway.
-> 
-> That's not the case today, the only way the probe function would fail
-> today is if the registering of the sysfs files fail.  It does not matter
-> if the board detection call passes or not.
-> 
+Adrián Larumbe (1):
+      OPP: rate-limit debug messages when no change in OPP is required
 
-Again,
-         dmi_entry = dmi_first_match(dmi_table);
-         if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-                 return -ENODEV;
-                 ^^^^^^^^^^^^^^^
+Andrew Halaney (3):
+      cpufreq: qcom-cpufreq-hw: Use dev_err_probe() when failing to
+get icc paths
+      OPP: Use dev_err_probe() when failing to get icc_path
+      OPP: Properly propagate error along when failing to get icc_path
 
-What am I missing ?
+Christoph Niedermaier (1):
+      cpufreq: imx6q: don't warn for disabling a non-existing frequency
 
-Guenter
+Christophe JAILLET (1):
+      cpufreq: tegra194: Fix an error handling path in tegra194_cpufreq_probe()
 
+Daniel Golle (1):
+      cpufreq: mediatek: correct voltages for MT7622 and MT7623
+
+Mason Huo (1):
+      cpufreq: dt-platdev: Add JH7110 SOC to the allowlist
+
+Rafael J. Wysocki (1):
+      intel_idle: Add __init annotation to matchup_vm_state_with_baremetal()
+
+Robert Marko (1):
+      dt-bindings: cpufreq: qcom-cpufreq-nvmem: document IPQ8074
+
+Russell King (Oracle) (1):
+      cpufreq: armada-8k: add ap807 support
+
+Srinivas Pandruvada (1):
+      cpufreq: intel_pstate: Fix scaling for hybrid-capable systems
+with disabled E-cores
+
+Stephan Gerhold (1):
+      opp: Fix use-after-free in lazy_opp_tables after probe deferral
+
+Vibhore Vardhan (2):
+      cpufreq: ti-cpufreq: Add support for AM62A7
+      cpufreq: dt-platdev: Blacklist ti,am62a7 SoC
+
+Viresh Kumar (7):
+      cpufreq: sparc: Don't allocate cpufreq_driver dynamically
+      OPP: Staticize `lazy_opp_tables` in of.c
+      OPP: Protect `lazy_opp_tables` list with `opp_table_lock`
+      OPP: don't drop performance constraint on OPP table removal
+      OPP: pstate is only valid for genpd OPP tables
+      OPP: Simplify the over-designed pstate <-> level dance
+      cpufreq: Make CONFIG_CPUFREQ_DT_PLATDEV depend on OF
+
+Zhipeng Wang (1):
+      cpufreq: dt-platdev: Support building as module
+
+---------------
+
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml       |  1 +
+ drivers/cpufreq/Kconfig                            |  3 +-
+ drivers/cpufreq/armada-8k-cpufreq.c                | 16 +++---
+ drivers/cpufreq/cpufreq-dt-platdev.c               |  5 ++
+ drivers/cpufreq/imx6q-cpufreq.c                    | 30 +++++------
+ drivers/cpufreq/intel_pstate.c                     | 58 ++++++++++++++++++----
+ drivers/cpufreq/mediatek-cpufreq.c                 | 13 +++--
+ drivers/cpufreq/qcom-cpufreq-hw.c                  |  2 +-
+ drivers/cpufreq/sparc-us2e-cpufreq.c               | 58 +++++++---------------
+ drivers/cpufreq/sparc-us3-cpufreq.c                | 58 +++++++---------------
+ drivers/cpufreq/tegra194-cpufreq.c                 |  6 ++-
+ drivers/cpufreq/ti-cpufreq.c                       |  1 +
+ drivers/idle/intel_idle.c                          |  2 +-
+ drivers/opp/core.c                                 | 44 +++++++++-------
+ drivers/opp/debugfs.c                              |  1 -
+ drivers/opp/of.c                                   | 40 ++++++++-------
+ drivers/opp/opp.h                                  |  6 +--
+ 17 files changed, 180 insertions(+), 164 deletions(-)
