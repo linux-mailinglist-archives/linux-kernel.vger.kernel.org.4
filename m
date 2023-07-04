@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BBD7467A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 04:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D0D7467A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 04:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjGDCjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jul 2023 22:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
+        id S230375AbjGDClf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jul 2023 22:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjGDCjl (ORCPT
+        with ESMTP id S229591AbjGDCle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jul 2023 22:39:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39C3196;
-        Mon,  3 Jul 2023 19:39:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8933161121;
-        Tue,  4 Jul 2023 02:39:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC85EC433C8;
-        Tue,  4 Jul 2023 02:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688438380;
-        bh=tXZp+ReqzLA3RemNoEBo2LjLWj/e/XELTtoc5i/BBic=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R2EeYhz6t0R+bVU1qrbDTq/R3OYi5EPzXEM/loAnBrwmzojywsmNdLCZvvR9TlQ/e
-         GUaxFkqwhLTMr4sTJ9BcwP0Vfo2z/JnghXvpheQf4upJMJVEqJNUEd16FKaghhoxK2
-         ccVQEtzcm2C9S9hNPV7lNeXbJJGQoLKNX+pM2TDw32b8gTKgMEwB6u1oYcYj6lUDd6
-         EbMWoz+xQmoz5IkMRMwgfP6PuarxSIhvsym7c2XnD3lXy2T0/dyWAcSTW1f5BgHPYt
-         Kt5EB6nO3maJTOD9NSVCQY5hmpZfDykpFNcZ9/HK48r8Ve4KssIPubgSNOz/5uuIQR
-         +xPMoZJ0WZPAg==
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso43712175e9.0;
-        Mon, 03 Jul 2023 19:39:39 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzCFU9nhfz9JYa48p0VfInhJ2UO6Y0r7ObLticmnFWxsipY7JVK
-        lheN6PIspzuubPB7mqhF1yoPnCDtgPPNztDVt28=
-X-Google-Smtp-Source: ACHHUZ7Sgf2kFqoO4n7yD8cxYDyMwazc0GyX/ssIDgmJNp6qshBxWDrkQ8kh6xbzdlEVHkpMho95UtHTksFMkene+rk=
-X-Received: by 2002:a05:600c:ad4:b0:3fb:a506:5626 with SMTP id
- c20-20020a05600c0ad400b003fba5065626mr10492684wmr.1.1688438378265; Mon, 03
- Jul 2023 19:39:38 -0700 (PDT)
+        Mon, 3 Jul 2023 22:41:34 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E4B196
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jul 2023 19:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688438493; x=1719974493;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yzaZaHeFj+MtIkZZG8c9b0aePx4PJL7zZMDi9ZMeGLk=;
+  b=RftMWJyHuRM4HXvqKjUs8GSB2z2xbcJyRx5KD/6IMZRdI/KhY6HIF31U
+   4lDJUUuAbDe2QAVqaD1+wAh9JF/dd+Z6uBc5gffQ/luzJtv29piIhBBAD
+   Da73eG3OwzNsW60FGL+NFu0QSnBqtXkJa7fZHDQhz973T4gBal7KR0H2C
+   d7grwp2mIlndF9DvEHYpjC0JCBZItd+veJqvtOpWVGwGyvX/SZq7wrTgL
+   IG1XkGuTPxlZqt/karWfk0pNfuM1Fa6aOiRcjEA+Vn0mxD7z2Pu8NtZGb
+   Q4wuncksnwIkreEcrNTBJ3NU9dCth8McrsTFK6DMpR68+s/J5tvWexUzh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="347803818"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="347803818"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 19:41:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="832005652"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="832005652"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 03 Jul 2023 19:41:30 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qGVyr-000HoP-31;
+        Tue, 04 Jul 2023 02:41:29 +0000
+Date:   Tue, 4 Jul 2023 10:41:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Nitheesh Sekar <quic_nsekar@quicinc.com>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused
+ variable '_groups'
+Message-ID: <202307041035.xpbEVRNs-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230701171138.1491206-1-chenjiahao16@huawei.com>
- <CAJF2gTSPaBvB_CsmN5m91AVXwXB37j2qvyCP3VqALxHwNcGeTg@mail.gmail.com> <b338a366-2cc3-870e-aee6-d55999ab14b5@huawei.com>
-In-Reply-To: <b338a366-2cc3-870e-aee6-d55999ab14b5@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 4 Jul 2023 10:39:26 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRu8EQR-E1C4_gAj9JFDh2hd3WpprzVssGf+KzTZc5qOw@mail.gmail.com>
-Message-ID: <CAJF2gTRu8EQR-E1C4_gAj9JFDh2hd3WpprzVssGf+KzTZc5qOw@mail.gmail.com>
-Subject: Re: [PATCH -next v6 0/2] support allocating crashkernel above 4G
- explicitly on riscv
-To:     "chenjiahao (C)" <chenjiahao16@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, bjorn@rivosinc.com,
-        alex@ghiti.fr, akpm@linux-foundation.org, atishp@rivosinc.com,
-        bhe@redhat.com, thunder.leizhen@huawei.com, horms@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,122 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 9:07=E2=80=AFPM chenjiahao (C) <chenjiahao16@huawei.=
-com> wrote:
->
->
-> On 2023/7/1 21:45, Guo Ren wrote:
-> > On Sat, Jul 1, 2023 at 5:12=E2=80=AFPM Chen Jiahao <chenjiahao16@huawei=
-.com> wrote:
-> >> On riscv, the current crash kernel allocation logic is trying to
-> >> allocate within 32bit addressible memory region by default, if
-> >> failed, try to allocate without 4G restriction.
-> >>
-> >> In need of saving DMA zone memory while allocating a relatively large
-> >> crash kernel region, allocating the reserved memory top down in
-> >> high memory, without overlapping the DMA zone, is a mature solution.
-> >> Hence this patchset introduces the parameter option crashkernel=3DX,[h=
-igh,low].
-> >>
-> >> One can reserve the crash kernel from high memory above DMA zone range
-> >> by explicitly passing "crashkernel=3DX,high"; or reserve a memory rang=
-e
-> >> below 4G with "crashkernel=3DX,low". Besides, there are few rules need
-> >> to take notice:
-> >> 1. "crashkernel=3DX,[high,low]" will be ignored if "crashkernel=3Dsize=
-"
-> >>     is specified.
-> >> 2. "crashkernel=3DX,low" is valid only when "crashkernel=3DX,high" is =
-passed
-> >>     and there is enough memory to be allocated under 4G.
-> >> 3. When allocating crashkernel above 4G and no "crashkernel=3DX,low" i=
-s
-> >>     specified, a 128M low memory will be allocated automatically for
-> >>     swiotlb bounce buffer.
-> >> See Documentation/admin-guide/kernel-parameters.txt for more informati=
-on.
-> >>
-> >> To verify loading the crashkernel, adapted kexec-tools is attached bel=
-ow:
-> >> https://github.com/chenjh005/kexec-tools/tree/build-test-riscv-v2
-> >>
-> >> Following test cases have been performed as expected:
-> >> 1) crashkernel=3D256M                          //low=3D256M
-> >> 2) crashkernel=3D1G                            //low=3D1G
-> > Have you tried 1GB memory? we found a pud mapping problem on Sv39 of ke=
-xec, See:
-> > https://lore.kernel.org/linux-riscv/20230629082032.3481237-1-guoren@ker=
-nel.org/
->
-> I have tested on QEMU with sv57 mmu, so it seems the synchronization prob=
-lem
-> was not reproduce when reserving 1G memory and loading the capture kernel=
-.
-Yes, the pud of sv57 is not the pgd entries, so you didn't get problem.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   24be4d0b46bb0c3c1dc7bacd30957d6144a70dfc
+commit: 725d1c8916583f9c09e5f05e5a55dd47fdca61c1 pinctrl: qcom: Add IPQ5018 pinctrl driver
+date:   4 weeks ago
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230704/202307041035.xpbEVRNs-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230704/202307041035.xpbEVRNs-lkp@intel.com/reproduce)
 
->
->
-> Thanks,
-> Jiahao
->
-> >
-> >> 3) crashkernel=3D4G                            //high=3D4G, low=3D128M=
-(default)
-> >> 4) crashkernel=3D4G crashkernel=3D256M,high      //high=3D4G, low=3D12=
-8M(default), high is ignored
-> >> 5) crashkernel=3D4G crashkernel=3D256M,low       //high=3D4G, low=3D12=
-8M(default), low is ignored
-> >> 6) crashkernel=3D4G,high                       //high=3D4G, low=3D128M=
-(default)
-> >> 7) crashkernel=3D256M,low                      //low=3D0M, invalid
-> >> 8) crashkernel=3D4G,high crashkernel=3D256M,low  //high=3D4G, low=3D25=
-6M
-> >> 9) crashkernel=3D4G,high crashkernel=3D4G,low    //high=3D0M, low=3D0M=
-, invalid
-> >> 10) crashkernel=3D512M@0xd0000000              //low=3D512M
-> >>
-> >> Changes since [v6]:
-> >> 1. Introduce the "high" flag to mark whether "crashkernel=3DX,high"
-> >>     is passed. Fix the retrying logic between "crashkernel=3DX,high"
-> >>     case and others when the first allocation attempt fails.
-> >>
-> >> Changes since [v5]:
-> >> 1. Update the crashkernel allocation logic when crashkernel=3DX,high
-> >>     is specified. In this case, region above 4G will directly get
-> >>     reserved as crashkernel, rather than trying lower 32bit allocation
-> >>     first.
-> >>
-> >> Changes since [v4]:
-> >> 1. Update some imprecise code comments for cmdline parsing.
-> >>
-> >> Changes since [v3]:
-> >> 1. Update to print warning and return explicitly on failure when
-> >>     crashkernel=3Dsize@offset is specified. Not changing the result
-> >>     in this case but making the logic more straightforward.
-> >> 2. Some minor cleanup.
-> >>
-> >> Changes since [v2]:
-> >> 1. Update the allocation logic to ensure the high crashkernel
-> >>     region is reserved strictly above dma32_phys_limit.
-> >> 2. Clean up some minor format problems.
-> >>
-> >> Chen Jiahao (2):
-> >>    riscv: kdump: Implement crashkernel=3DX,[high,low]
-> >>    docs: kdump: Update the crashkernel description for riscv
-> >>
-> >>   .../admin-guide/kernel-parameters.txt         | 15 ++--
-> >>   arch/riscv/kernel/setup.c                     |  5 ++
-> >>   arch/riscv/mm/init.c                          | 84 +++++++++++++++++=
---
-> >>   3 files changed, 90 insertions(+), 14 deletions(-)
-> >>
-> >> --
-> >> 2.34.1
-> >>
-> >
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307041035.xpbEVRNs-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pinctrl/qcom/pinctrl-ipq5018.c:244:27: warning: unused variable '_groups' [-Wunused-const-variable]
+     244 | static const char * const _groups[] = {
+         |                           ^
+   1 warning generated.
 
 
+vim +/_groups +244 drivers/pinctrl/qcom/pinctrl-ipq5018.c
 
---=20
-Best Regards
- Guo Ren
+   243	
+ > 244	static const char * const _groups[] = {
+   245		"gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6", "gpio7",
+   246		"gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13", "gpio14",
+   247		"gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21",
+   248		"gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27", "gpio28",
+   249		"gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34", "gpio35",
+   250		"gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41", "gpio42",
+   251		"gpio43", "gpio44", "gpio45", "gpio46",
+   252	};
+   253	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
