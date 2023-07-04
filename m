@@ -2,152 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9FC7472D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116F77472DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 15:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjGDNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 09:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
+        id S231643AbjGDNjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 09:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjGDNhz (ORCPT
+        with ESMTP id S231628AbjGDNjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:37:55 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2E5E76
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 06:37:53 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b69923a715so86748841fa.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:37:53 -0700 (PDT)
+        Tue, 4 Jul 2023 09:39:14 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDBEE6E;
+        Tue,  4 Jul 2023 06:39:09 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b7f2239bfdso44440645ad.1;
+        Tue, 04 Jul 2023 06:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688477871; x=1691069871;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EWjiYG4F/kbaY9p70oD/qnrdrEEhJODCTs1UK2rFBxM=;
-        b=bxLpR4ALYRmG+aCvJDksDttDYWMqIrJZDZI2j9l8p4yTFGwl3BbSG1ieqQKQU1dNHe
-         SHm5tr8JdebPTgdbTYIGWgkQNkVGbdANkd80NcmNGobpJD0DCwbyfquiOtFXUGQ1iXQK
-         oUdx7FpiBUFG2N5liNFEXImfUvv7avX5nADcA=
+        d=gmail.com; s=20221208; t=1688477949; x=1691069949;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yT9sQHHYP7xU96OTs/+MxI0u0T/k6DehjCmw2VCeWUA=;
+        b=SPLnW0welDHduvgOWQiqcEDhOsraqfxSyZZNJJNqXkLPfBjbk9PmDINMFmYpvwmFZ1
+         U1c1H58wAyDDRGWrU3SlmWI8tTumf4b8WimMY9MmpnxtIZN18W3c/wlcuFhDw99dvkvO
+         f1LAjpAzZqUWpqoiRgZnSaEyHbqGAUWkXMtD+cmuCS5F0NcIfPUEfEaTYsk0SzUtmrH1
+         fIxtazoOl+jdDV20Fics/D5jqmr43qDeErBgNEwS2w0z45iBiEdb4jSVfT/e6NTX+Quo
+         n3iAjrqrTpAud2HHxFFQpf4ZfBtjKGMrPdUwkkZHBS5OpbUX9TZWXel4m3GwV6Gs0SiG
+         5Xdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688477871; x=1691069871;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EWjiYG4F/kbaY9p70oD/qnrdrEEhJODCTs1UK2rFBxM=;
-        b=Nv1UPhsKHM7jxFpa/lDGhJNlZ1e79qaABM+MhgxuUXe+zY9hLMB7NebnXakVJKpii0
-         4nJHOOO7QNn5ZIpxaudAMjnwworPrcLnw4KpADRrszCWsC2AL5WAw241tdLqg5NMzIDw
-         3NvfYMO9wMZmvcv88eB6FPxTUhhgjVl4RcYAxYMq/47bFZQdeog3dAeqpG2bYd1sZbgp
-         ZEhUvk0gk/1ts80dCORqt7dWiNz9wgnKxaZ3Z9ooXtJMuo3cRK5JQKOdKknxOerKSBRq
-         LNO3O+KVRglVP/Dis3tttj1Gx028kRvR5YVMhVVkqos8XLheIihIOZ/5d1y3dEY/vJPh
-         ukCA==
-X-Gm-Message-State: ABy/qLbFu4e4UVjlRonMhXRb6LIK2NQSq9hdHGvpMUyzMXYI/+xXFmXn
-        NhlYKb057b63nmnmuhBGT0gMKiKhv5sEWQWfDBMlhztL
-X-Google-Smtp-Source: APBJJlGCEqNQ5zNhqZ93g8c1Fy0rtfobXSIy4zcoALFgLKzr0szya7okF8UKA9iZEyIQycYL6Z5kDg==
-X-Received: by 2002:a2e:3c0a:0:b0:2b5:97a3:3ba5 with SMTP id j10-20020a2e3c0a000000b002b597a33ba5mr10343509lja.10.1688477870822;
-        Tue, 04 Jul 2023 06:37:50 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id sb22-20020a170906edd600b00982a92a849asm13378072ejb.91.2023.07.04.06.37.49
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1688477949; x=1691069949;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yT9sQHHYP7xU96OTs/+MxI0u0T/k6DehjCmw2VCeWUA=;
+        b=eJiMfHA17Z+rGhwODBy84oGs2Fc0n2Z7ioMGxoqnLIEYMx0XrNcR4+XsSZ2Q5d2Hl9
+         c7GKaPK90A2PbI6fXyEUQai5DMVj8Ovd8A8vDa71MZzHu9jyjxsLh3uWjJhkIFoI3A5F
+         szKNarwHwldtSDaCubLFqu5ivPXAEwzRs/BoswiT5cWETYa/TCV/cJUKc1/oJAwwCGSl
+         eTekKc8KN3q08sdxuyXB+oCYcN1M/PulK9Wu7C8WIu2NF3Pbwvt+rdvbGGnqsVa2iptQ
+         aL8840ZJNfGj+T5SXiC2BoPPrhnWiBZ9hYgAgWE9PlNyzRBjsgK+la3SaGKLg3VFhwOc
+         yUmQ==
+X-Gm-Message-State: ABy/qLaSGZFAY0R1559xNYsQD/MbRqRZYF/8uipfXnyZPvJ/KxadCl5X
+        nrh1oN3lMroHLbto9UMi0N6Nx/Bu5Qc=
+X-Google-Smtp-Source: APBJJlHQ5d8y62BeUAIaoJQ3bW3zfRoBSIXW7XqpN18X0yjal0yzeN7kLbxBXyG4zTR8MEcgE/9fpQ==
+X-Received: by 2002:a17:902:dac7:b0:1b8:a56b:989d with SMTP id q7-20020a170902dac700b001b8a56b989dmr2472742plx.6.1688477949224;
+        Tue, 04 Jul 2023 06:39:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id iw13-20020a170903044d00b001b801044466sm15087177plb.114.2023.07.04.06.39.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 06:37:49 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-51d9c71fb4bso5376618a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 06:37:49 -0700 (PDT)
-X-Received: by 2002:aa7:c14b:0:b0:51a:265a:8fca with SMTP id
- r11-20020aa7c14b000000b0051a265a8fcamr8535529edp.27.1688477869051; Tue, 04
- Jul 2023 06:37:49 -0700 (PDT)
+        Tue, 04 Jul 2023 06:39:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a9c6c44c-21fb-9d42-9a6d-6685e110015d@roeck-us.net>
+Date:   Tue, 4 Jul 2023 06:39:07 -0700
 MIME-Version: 1.0
-References: <20230704092309.22669-1-vegard.nossum@oracle.com> <20230704100852.23452-1-vegard.nossum@oracle.com>
-In-Reply-To: <20230704100852.23452-1-vegard.nossum@oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jul 2023 06:37:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgy2q9viwq-bAqaq8X_WQHNqDsu1AzfeYXAcDQRZmCoAw@mail.gmail.com>
-Message-ID: <CAHk-=wgy2q9viwq-bAqaq8X_WQHNqDsu1AzfeYXAcDQRZmCoAw@mail.gmail.com>
-Subject: Re: [PATCH] module: always complete idempotent loads
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        George Kennedy <george.kennedy@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com,
-        Johan Hovold <johan@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Rudi Heitbaum <rudi@heitbaum.com>,
-        David Hildenbrand <david@redhat.com>
-Content-Type: multipart/mixed; boundary="00000000000098f0ae05ffa96368"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-hwmon@vger.kernel.org
+Cc:     samsagax@gmail.com, linux-kernel@vger.kernel.org
+References: <20230704131715.44454-5-gregkh@linuxfoundation.org>
+ <20230704131715.44454-6-gregkh@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/3] hwmon: (oxp-sensors): remove static board variable
+In-Reply-To: <20230704131715.44454-6-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000098f0ae05ffa96368
-Content-Type: text/plain; charset="UTF-8"
+On 7/4/23 06:17, Greg Kroah-Hartman wrote:
+> Drivers should not have a single static variable for the type of device
+> they are bound to.  While this driver is really going to only have one
+> device at a time in the system, remove the static variable and instead,
+> look up the device type when needed.
+> 
 
-On Tue, 4 Jul 2023 at 03:09, Vegard Nossum <vegard.nossum@oracle.com> wrote:
->
-> Commit 9b9879fc0327 added a hashtable storing lists of concurrent module
-> loads. However, it didn't fix up all the error paths in
-> init_module_from_file(); this would lead to leaving the function while an
-> on-stack 'struct idempotent' element is still in the hash table, which
-> leads to all sorts of badness as spotted by syzkaller:
+This is expensive. I think it would be much better to just move
+the board type detection into the init code and not instantiate
+the driver in the fist place if the board type is unknown.
 
-You are of course 100% right.
+We can handle the static variable separately if it really bothers
+you that much.
 
-However, I'd rather just use a wrapper function and make this thing
-much clearer. Like I should have done originally.
+> Cc: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>   drivers/hwmon/oxp-sensors.c | 47 ++++++++++++++++++++-----------------
+>   1 file changed, 25 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+> index e1a907cae820..3bcba0c476c4 100644
+> --- a/drivers/hwmon/oxp-sensors.c
+> +++ b/drivers/hwmon/oxp-sensors.c
+> @@ -48,10 +48,9 @@ enum oxp_board {
+>   	oxp_mini_amd,
+>   	oxp_mini_amd_a07,
+>   	oxp_mini_amd_pro,
+> +	UNKNOWN,
+>   };
+>   
+> -static enum oxp_board board;
+> -
+>   /* Fan reading and PWM */
+>   #define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
+>   #define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
+> @@ -136,6 +135,24 @@ static const struct dmi_system_id dmi_table[] = {
+>   	{},
+>   };
+>   
+> +static enum oxp_board get_board_type(void)
+> +{
+> +	const struct dmi_system_id *dmi_entry;
+> +
+> +	/*
+> +	 * Have to check for AMD processor here because DMI strings are the
+> +	 * same between Intel and AMD boards, the only way to tell them apart
+> +	 * is the CPU.
+> +	 * Intel boards seem to have different EC registers and values to
+> +	 * read/write.
+> +	 */
+> +	dmi_entry = dmi_first_match(dmi_table);
+> +	if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+> +		return UNKNOWN;
+> +
+> +	return (enum oxp_board)(unsigned long)dmi_entry->driver_data;
+> +}
+> +
+>   /* Helper functions to handle EC read/write */
+>   static int read_from_ec(u8 reg, int size, long *val)
+>   {
+> @@ -182,7 +199,7 @@ static int tt_toggle_enable(void)
+>   	u8 reg;
+>   	u8 val;
+>   
+> -	switch (board) {
+> +	switch (get_board_type()) {
+>   	case oxp_mini_amd_a07:
+>   		reg = OXP_OLD_TURBO_SWITCH_REG;
+>   		val = OXP_OLD_TURBO_TAKE_VAL;
+> @@ -203,7 +220,7 @@ static int tt_toggle_disable(void)
+>   	u8 reg;
+>   	u8 val;
+>   
+> -	switch (board) {
+> +	switch (get_board_type()) {
+>   	case oxp_mini_amd_a07:
+>   		reg = OXP_OLD_TURBO_SWITCH_REG;
+>   		val = OXP_OLD_TURBO_RETURN_VAL;
+> @@ -249,7 +266,7 @@ static ssize_t tt_toggle_show(struct device *dev,
+>   	u8 reg;
+>   	long val;
+>   
+> -	switch (board) {
+> +	switch (get_board_type()) {
+>   	case oxp_mini_amd_a07:
+>   		reg = OXP_OLD_TURBO_SWITCH_REG;
+>   		break;
+> @@ -315,7 +332,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+>   			ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+>   			if (ret)
+>   				return ret;
+> -			switch (board) {
+> +			switch (get_board_type()) {
+>   			case aya_neo_2:
+>   			case aya_neo_air:
+>   			case aya_neo_air_pro:
+> @@ -357,7 +374,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+>   		case hwmon_pwm_input:
+>   			if (val < 0 || val > 255)
+>   				return -EINVAL;
+> -			switch (board) {
+> +			switch (get_board_type()) {
+>   			case aya_neo_2:
+>   			case aya_neo_air:
+>   			case aya_neo_air_pro:
+> @@ -412,25 +429,11 @@ static const struct hwmon_chip_info oxp_ec_chip_info = {
+>   /* Initialization logic */
+>   static int oxp_platform_probe(struct platform_device *pdev)
+>   {
+> -	const struct dmi_system_id *dmi_entry;
+>   	struct device *dev = &pdev->dev;
+>   	struct device *hwdev;
+>   	int ret;
+>   
+> -	/*
+> -	 * Have to check for AMD processor here because DMI strings are the
+> -	 * same between Intel and AMD boards, the only way to tell them apart
+> -	 * is the CPU.
+> -	 * Intel boards seem to have different EC registers and values to
+> -	 * read/write.
+> -	 */
+> -	dmi_entry = dmi_first_match(dmi_table);
+> -	if (!dmi_entry || boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+> -		return -ENODEV;
+> -
+> -	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
+> -
+> -	switch (board) {
+> +	switch (get_board_type()) {
 
-So I'd be inclined towards a patch like the attached instead. Works for you?
+This now always registers the hwmon device, which really should not happen.
 
-                   Linus
+Guenter
 
---00000000000098f0ae05ffa96368
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljoc43bs0>
-X-Attachment-Id: f_ljoc43bs0
+>   	case aok_zoe_a1:
+>   	case oxp_mini_amd_a07:
+>   	case oxp_mini_amd_pro:
 
-IGtlcm5lbC9tb2R1bGUvbWFpbi5jIHwgMzIgKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0t
-LS0KIDEgZmlsZSBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKCmRp
-ZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxlL21haW4uYyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5jCmlu
-ZGV4IDgzNGRlODZlYmUzNS4uNTAwYTZhM2MyOTg3IDEwMDY0NAotLS0gYS9rZXJuZWwvbW9kdWxl
-L21haW4uYworKysgYi9rZXJuZWwvbW9kdWxlL21haW4uYwpAQCAtMzA5Miw3ICszMDkyLDcgQEAg
-c3RhdGljIGJvb2wgaWRlbXBvdGVudChzdHJ1Y3QgaWRlbXBvdGVudCAqdSwgY29uc3Qgdm9pZCAq
-Y29va2llKQogICogcmVtb3ZlIGV2ZXJ5Ym9keSAtIHdoaWNoIGluY2x1ZGVzIG91cnNlbHZlcyAt
-IGZpbGwgaW4gdGhlIHJldHVybgogICogdmFsdWUsIGFuZCB0aGVuIGNvbXBsZXRlIHRoZSBvcGVy
-YXRpb24uCiAgKi8KLXN0YXRpYyB2b2lkIGlkZW1wb3RlbnRfY29tcGxldGUoc3RydWN0IGlkZW1w
-b3RlbnQgKnUsIGludCByZXQpCitzdGF0aWMgaW50IGlkZW1wb3RlbnRfY29tcGxldGUoc3RydWN0
-IGlkZW1wb3RlbnQgKnUsIGludCByZXQpCiB7CiAJY29uc3Qgdm9pZCAqY29va2llID0gdS0+Y29v
-a2llOwogCWludCBoYXNoID0gaGFzaF9wdHIoY29va2llLCBJREVNX0hBU0hfQklUUyk7CkBAIC0z
-MTA5LDIzICszMTA5LDE4IEBAIHN0YXRpYyB2b2lkIGlkZW1wb3RlbnRfY29tcGxldGUoc3RydWN0
-IGlkZW1wb3RlbnQgKnUsIGludCByZXQpCiAJCWNvbXBsZXRlKCZwb3MtPmNvbXBsZXRlKTsKIAl9
-CiAJc3Bpbl91bmxvY2soJmlkZW1fbG9jayk7CisJcmV0dXJuIHJldDsKIH0KIAogc3RhdGljIGlu
-dCBpbml0X21vZHVsZV9mcm9tX2ZpbGUoc3RydWN0IGZpbGUgKmYsIGNvbnN0IGNoYXIgX191c2Vy
-ICogdWFyZ3MsIGludCBmbGFncykKIHsKLQlzdHJ1Y3QgaWRlbXBvdGVudCBpZGVtOwogCXN0cnVj
-dCBsb2FkX2luZm8gaW5mbyA9IHsgfTsKIAl2b2lkICpidWYgPSBOVUxMOwotCWludCBsZW4sIHJl
-dDsKKwlpbnQgbGVuOwogCiAJaWYgKCFmIHx8ICEoZi0+Zl9tb2RlICYgRk1PREVfUkVBRCkpCiAJ
-CXJldHVybiAtRUJBREY7CiAKLQlpZiAoaWRlbXBvdGVudCgmaWRlbSwgZmlsZV9pbm9kZShmKSkp
-IHsKLQkJd2FpdF9mb3JfY29tcGxldGlvbigmaWRlbS5jb21wbGV0ZSk7Ci0JCXJldHVybiBpZGVt
-LnJldDsKLQl9Ci0KIAlsZW4gPSBrZXJuZWxfcmVhZF9maWxlKGYsIDAsICZidWYsIElOVF9NQVgs
-IE5VTEwsIFJFQURJTkdfTU9EVUxFKTsKIAlpZiAobGVuIDwgMCkgewogCQltb2Rfc3RhdF9pbmMo
-JmZhaWxlZF9rcmVhZHMpOwpAQCAtMzE0Niw5ICszMTQxLDIyIEBAIHN0YXRpYyBpbnQgaW5pdF9t
-b2R1bGVfZnJvbV9maWxlKHN0cnVjdCBmaWxlICpmLCBjb25zdCBjaGFyIF9fdXNlciAqIHVhcmdz
-LCBpbnQKIAkJaW5mby5sZW4gPSBsZW47CiAJfQogCi0JcmV0ID0gbG9hZF9tb2R1bGUoJmluZm8s
-IHVhcmdzLCBmbGFncyk7Ci0JaWRlbXBvdGVudF9jb21wbGV0ZSgmaWRlbSwgcmV0KTsKLQlyZXR1
-cm4gcmV0OworCXJldHVybiBsb2FkX21vZHVsZSgmaW5mbywgdWFyZ3MsIGZsYWdzKTsKK30KKwor
-c3RhdGljIGludCBpZGVtcG90ZW50X2luaXRfbW9kdWxlKHN0cnVjdCBmaWxlICpmLCBjb25zdCBj
-aGFyIF9fdXNlciAqIHVhcmdzLCBpbnQgZmxhZ3MpCit7CisJc3RydWN0IGlkZW1wb3RlbnQgaWRl
-bTsKKworCS8qIFNlZSBpZiBzb21lYm9keSBlbHNlIGlzIGRvaW5nIHRoZSBvcGVyYXRpb24/ICov
-CisJaWYgKGlkZW1wb3RlbnQoJmlkZW0sIGZpbGVfaW5vZGUoZikpKSB7CisJCXdhaXRfZm9yX2Nv
-bXBsZXRpb24oJmlkZW0uY29tcGxldGUpOworCQlyZXR1cm4gaWRlbS5yZXQ7CisJfQorCisJLyog
-T3RoZXJ3aXNlLCB3ZSdsbCBkbyBpdCBhbmQgY29tcGxldGUgb3RoZXJzICovCisJcmV0dXJuIGlk
-ZW1wb3RlbnRfY29tcGxldGUoJmlkZW0sCisJCWluaXRfbW9kdWxlX2Zyb21fZmlsZShmLCB1YXJn
-cywgZmxhZ3MpKTsKIH0KIAogU1lTQ0FMTF9ERUZJTkUzKGZpbml0X21vZHVsZSwgaW50LCBmZCwg
-Y29uc3QgY2hhciBfX3VzZXIgKiwgdWFyZ3MsIGludCwgZmxhZ3MpCkBAIC0zMTY4LDcgKzMxNzYs
-NyBAQCBTWVNDQUxMX0RFRklORTMoZmluaXRfbW9kdWxlLCBpbnQsIGZkLCBjb25zdCBjaGFyIF9f
-dXNlciAqLCB1YXJncywgaW50LCBmbGFncykKIAkJcmV0dXJuIC1FSU5WQUw7CiAKIAlmID0gZmRn
-ZXQoZmQpOwotCWVyciA9IGluaXRfbW9kdWxlX2Zyb21fZmlsZShmLmZpbGUsIHVhcmdzLCBmbGFn
-cyk7CisJZXJyID0gaWRlbXBvdGVudF9pbml0X21vZHVsZShmLmZpbGUsIHVhcmdzLCBmbGFncyk7
-CiAJZmRwdXQoZik7CiAJcmV0dXJuIGVycjsKIH0K
---00000000000098f0ae05ffa96368--
