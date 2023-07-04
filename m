@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6388074755B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BD474755E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjGDPbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S231666AbjGDPb4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jul 2023 11:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjGDPbh (ORCPT
+        with ESMTP id S231610AbjGDPbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:31:37 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C240810EF;
-        Tue,  4 Jul 2023 08:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=aSU/8YfMkAedsJBdoHeDZK33yvVVAM8JcV5bQFqXvjw=; b=IyKETWm9la4KtMOpWcEn4clUw5
-        5kFA5HTuFdnUgZRdhnufpqH2tXR2SVYRvCEzXaUq5jMHiLLnKMV7XpNcA4Cqt11p1U5Sns7ULlKK+
-        9uD5yOblRUvddMgtQVJTtOqvgvn2S77oLkdgez34FZhGLIJ7La4FPApEjaQpj/+MUmZU=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:52252 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qGhzx-0000Bk-LL; Tue, 04 Jul 2023 11:31:26 -0400
-Date:   Tue, 4 Jul 2023 11:31:24 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
-In-Reply-To: <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
-References: <20230704150240.2022020-1-hugo@hugovil.com>
-        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Tue, 4 Jul 2023 11:31:55 -0400
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3581B2;
+        Tue,  4 Jul 2023 08:31:54 -0700 (PDT)
+Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
+        by unicorn.mansr.com (Postfix) with ESMTPS id 0FA9115360;
+        Tue,  4 Jul 2023 16:31:52 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id B9EEA219FC1; Tue,  4 Jul 2023 16:31:51 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] backlight: led_bl: fix initial power state
+References: <20230704140750.25799-1-mans@mansr.com>
+        <20230704150310.GA385243@aspen.lan>
+Date:   Tue, 04 Jul 2023 16:31:51 +0100
+In-Reply-To: <20230704150310.GA385243@aspen.lan> (Daniel Thompson's message of
+        "Tue, 4 Jul 2023 16:03:10 +0100")
+Message-ID: <yw1xo7krzo9k.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 17:08:12 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Daniel Thompson <daniel.thompson@linaro.org> writes:
 
-> On 04/07/2023 17:02, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > USB OTG is currently broken on the Variscite Symphony EVK and imx8mn
-> > nano SOM.
-> > 
-> > Import changes from linux-5.15 branch of  doen't giveto fix it.
-> > 
-> > Link: https://github.com/varigit/linux-imx.git
-> > Fixes: 7358e05bddca ("arm64: dts: imx8mn-var-som-symphony: Add Variscite Symphony board with VAR-SOM-MX8MN")
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  .../dts/freescale/imx8mn-var-som-symphony.dts | 37 ++++++++++++++++++-
-> >  1 file changed, 35 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> > index 406a711486da..aef89198f24c 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dts
-> > @@ -6,6 +6,7 @@
-> >  
-> >  /dts-v1/;
-> >  
-> > +#include <dt-bindings/usb/pd.h>
-> >  #include "imx8mn-var-som.dtsi"
-> >  
-> >  / {
-> > @@ -104,10 +105,29 @@ extcon_usbotg1: typec@3d {
-> >  		compatible = "nxp,ptn5150";
-> >  		reg = <0x3d>;
-> >  		interrupt-parent = <&gpio1>;
-> > -		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-> > +		interrupts = <11 IRQ_TYPE_NONE>;
-> 
-> That's surprising, why?
+> On Tue, Jul 04, 2023 at 03:07:50PM +0100, Mans Rullgard wrote:
+>> The condition for the initial power state based on the default
+>> brightness value is reversed.  Fix it.
+>>
+>> Fixes: ae232e45acf9 ("backlight: add led-backlight driver")
+>> Signed-off-by: Mans Rullgard <mans@mansr.com>
+>> ---
+>>  drivers/video/backlight/led_bl.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/video/backlight/led_bl.c b/drivers/video/backlight/led_bl.c
+>> index 3259292fda76..28e83618a296 100644
+>> --- a/drivers/video/backlight/led_bl.c
+>> +++ b/drivers/video/backlight/led_bl.c
+>> @@ -200,8 +200,8 @@ static int led_bl_probe(struct platform_device *pdev)
+>>  	props.type = BACKLIGHT_RAW;
+>>  	props.max_brightness = priv->max_brightness;
+>>  	props.brightness = priv->default_brightness;
+>> -	props.power = (priv->default_brightness > 0) ? FB_BLANK_POWERDOWN :
+>> -		      FB_BLANK_UNBLANK;
+>> +	props.power = (priv->default_brightness > 0) ? FB_BLANK_UNBLANK :
+>> +		      FB_BLANK_POWERDOWN;
+>
+> The logic was wrong before but I think will still be wrong after the
+> change too (e.g. the bogus logic is probably avoiding backlight flicker
+> in some use cases).
+>
+> The logic here needs to be similar to what pwm_bl.c implements in
+> pwm_backlight_initial_power_state(). Whilst it might be better
+> to implement this in led_bl_get_leds() let me show what I mean
+> in code that fits in the current line:
+>
+> 	/*
+> 	 * Activate the backlight if the LEDs are already lit *or*
+> 	 * there is no phandle link (meaning the backlight power
+> 	 * state cannot be synced with the display state).
+> 	 */
+> 	props.power = (active_at_boot || !dev->node->phandle) ?
+> 			FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
+>
+> Note that active_at_boot is not the same as (priv->default_brightness > 0)
+> since the value read by led_bl_get_leds() can be clobbered when we
+> parse the properties.
 
-Hi,
-the varigit repos log or source code has no information about this
-particular configuration.
+Am I understanding correctly that the code should be using the
+default_brightness value as set by led_bl_get_leds() to determine the
+initial power state, not whatever default value the devicetree provides?
 
-In the schematics, the interrupt output pin of the PTN5150 is connected
-to two different resistors, one of these being connected to GPIO1 pin
-11. But these two resistors are not assembled on any versions of the
-board, so the interrupt pin is currently not used.
-
-Hugo.
+-- 
+Måns Rullgård
