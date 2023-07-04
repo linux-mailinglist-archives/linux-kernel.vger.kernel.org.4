@@ -2,202 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D641746A3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CC3746A40
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 09:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjGDHAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 03:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S230081AbjGDHB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 03:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjGDHAv (ORCPT
+        with ESMTP id S230173AbjGDHBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 03:00:51 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Jul 2023 00:00:45 PDT
-Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82D5E47
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:00:45 -0700 (PDT)
-Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 202307040659418aaa3a3a2f487e16f4
-        for <linux-kernel@vger.kernel.org>;
-        Tue, 04 Jul 2023 08:59:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=michael.haener@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=tFUdaM7fpMZCMiSMA7Y3KWuA2AF40gFd8plul349lJQ=;
- b=ldbvFvOMewpoK47CJdIVC3LDItmhxEq16kzFM9K32tR+k4yNi73CpyPiTwXt3gRHVgvhxY
- ME384voVrIel2nPeS+jVk+NpjyqwBkYMw7SLinqodssS8Mzx8bI0xFjgkq//paFUo0lQRDQk
- cHFFatIK/JdwDOGp9OuvNggIdnZb0=;
-From:   "M. Haener" <michael.haener@siemens.com>
-To:     netdev@vger.kernel.org
-Cc:     Michael Haener <michael.haener@siemens.com>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Subject: [PATCH v2 3/3] net: dsa: mv88e632x: Add SERDES ops
-Date:   Tue,  4 Jul 2023 08:59:06 +0200
-Message-ID: <20230704065916.132486-4-michael.haener@siemens.com>
-In-Reply-To: <20230704065916.132486-1-michael.haener@siemens.com>
-References: <20230704065916.132486-1-michael.haener@siemens.com>
+        Tue, 4 Jul 2023 03:01:24 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2964A1AA
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 00:01:11 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-7919342c456so1251772241.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 00:01:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688454070; x=1691046070;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9pLLIHKvmmk4zC9SwsHcTfPMPfVegexthgZQWT/NwCU=;
+        b=a+pGwLbbwJCReamWGknbZ4TgzzLts/gLAaV9nWXDmYXu0RTVp+HIc+Pa5JAYWjgpdF
+         H3fX/q7DfDx0zMsbAPblAmXluwU/A9dc0AhZezBWT79vpiLO+o1tuCH6sGyzqFChV2dC
+         Uc1eqxPxYnhMHR4q6neEN0OIycj2nx/jme2PN/0FqU44PITVQ/4tg+vyfWar0vJmN1eO
+         fP+xS2MijKwNJc4tHpHwMpSqMHBYMnThA8K7aVAiPcJOekMHvfxGmpnIPr97LeieNmJW
+         SQczBMVI3gEGRq3onvjyWCQhxP0OHv0lDiSOehDBzyPnTlqafLzgjAM6ds8/zcm+lGjV
+         d7vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688454070; x=1691046070;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9pLLIHKvmmk4zC9SwsHcTfPMPfVegexthgZQWT/NwCU=;
+        b=H1okmkMypkL7FlaK+OLL/JS5Z5Q0J8fs5Paz0C3pgOqi6T0WppU0hgMCfXM6SClyp4
+         8uMXN3oiUSJfWpuEUg/Z2CA6Ye3ihZ+S01vexuJC7yGlxTIR/fv75RtpLhnzNkCwjiCP
+         KBGq4RTetZJfl8R5DQmyfLRhU6lAForPjfm6E2vfrsbZd2PerPd/HPjfSE9xcwaA6xtG
+         GcA5wQESgwMZJS3J1PeN5LE3bxuSjliPRguifoCq8yBTP2nGE+NUSsn1RchEIA8vdEM2
+         xoIeicf0vRCm1xywMZKBwlC+KMbY1/P1tQRU/uu9r4/QBtRCNwochOCA8vzs8yn1bMky
+         IQTA==
+X-Gm-Message-State: ABy/qLZj9z6pyFTWelYaoLkfpjWyRyuneWZ55iB5wrBL7NRsIFcgxpoq
+        mdMXwMgVpAl/aLBlviJuw/zYvDf6C2STqu9/t2JFBg==
+X-Google-Smtp-Source: APBJJlHHFru7hehy/Zd70AaP3FWkvc1cUSv1H/u4Os+sP54Zrm6/BsfpbzuKyGRVs/aUbzDELUweyKecQMONkFL4CGM=
+X-Received: by 2002:a67:f413:0:b0:444:c294:afc7 with SMTP id
+ p19-20020a67f413000000b00444c294afc7mr3671389vsn.26.1688454070103; Tue, 04
+ Jul 2023 00:01:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-664519:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230703184518.896751186@linuxfoundation.org>
+In-Reply-To: <20230703184518.896751186@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Jul 2023 12:30:58 +0530
+Message-ID: <CA+G9fYueycAbx7DDR3S57d43UX49SOGnW6igQUZ0voEcapxdYw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/15] 5.15.120-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        Helge Deller <deller@gmx.de>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org, Vishal Bhoj <vishal.bhoj@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Haener <michael.haener@siemens.com>
+On Tue, 4 Jul 2023 at 00:27, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.120 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Jul 2023 18:45:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.120-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The 88e632x family has several SERDES 100/1000 blocks. By adding these
-operations, these functionalities can be used.
+Following build regressions noticed on stable-rc 5.15.
+This build failure started happening from v5.15.119 from date June 28, 2023.
 
-Signed-off-by: Michael Haener <michael.haener@siemens.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c   | 18 ++++++++++++++
- drivers/net/dsa/mv88e6xxx/serdes.c | 39 ++++++++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/serdes.h |  9 +++++++
- 3 files changed, 66 insertions(+)
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 11b98546b938..9802a3608dc6 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -4905,10 +4905,19 @@ static const struct mv88e6xxx_ops mv88e6320_ops = {
- 	.reset = mv88e6352_g1_reset,
- 	.vtu_getnext = mv88e6185_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6185_g1_vtu_loadpurge,
-+	.serdes_get_lane = mv88e6320_serdes_get_lane,
-+	.serdes_read = mv88e6320_serdes_read,
-+	.serdes_write = mv88e6320_serdes_write,
-+	.serdes_irq_mapping = mv88e6352_serdes_irq_mapping,
- 	.gpio_ops = &mv88e6352_gpio_ops,
- 	.avb_ops = &mv88e6352_avb_ops,
- 	.ptp_ops = &mv88e6352_ptp_ops,
- 	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.serdes_get_sset_count = mv88e6352_serdes_get_sset_count,
-+	.serdes_get_strings = mv88e6352_serdes_get_strings,
-+	.serdes_get_stats = mv88e6352_serdes_get_stats,
-+	.serdes_get_regs_len = mv88e6352_serdes_get_regs_len,
-+	.serdes_get_regs = mv88e6352_serdes_get_regs,
- };
- 
- static const struct mv88e6xxx_ops mv88e6321_ops = {
-@@ -4951,10 +4960,19 @@ static const struct mv88e6xxx_ops mv88e6321_ops = {
- 	.reset = mv88e6352_g1_reset,
- 	.vtu_getnext = mv88e6185_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6185_g1_vtu_loadpurge,
-+	.serdes_get_lane = mv88e6320_serdes_get_lane,
-+	.serdes_read = mv88e6320_serdes_read,
-+	.serdes_write = mv88e6320_serdes_write,
-+	.serdes_irq_mapping = mv88e6352_serdes_irq_mapping,
- 	.gpio_ops = &mv88e6352_gpio_ops,
- 	.avb_ops = &mv88e6352_avb_ops,
- 	.ptp_ops = &mv88e6352_ptp_ops,
- 	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.serdes_get_sset_count = mv88e6352_serdes_get_sset_count,
-+	.serdes_get_strings = mv88e6352_serdes_get_strings,
-+	.serdes_get_stats = mv88e6352_serdes_get_stats,
-+	.serdes_get_regs_len = mv88e6352_serdes_get_regs_len,
-+	.serdes_get_regs = mv88e6352_serdes_get_regs,
- };
- 
- static const struct mv88e6xxx_ops mv88e6341_ops = {
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
-index b988d47ecbdd..411fe9ac421a 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -17,6 +17,45 @@
- #include "port.h"
- #include "serdes.h"
- 
-+int mv88e6320_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
-+			  int reg, u16 *val)
-+{
-+	return mv88e6xxx_phy_page_read(chip, lane,
-+				       MV88E6320_SERDES_PAGE_FIBER,
-+				       reg, val);
-+}
-+
-+int mv88e6320_serdes_write(struct mv88e6xxx_chip *chip, int lane, int reg,
-+			   u16 val)
-+{
-+	return mv88e6xxx_phy_page_write(chip, lane,
-+					MV88E6320_SERDES_PAGE_FIBER,
-+					reg, val);
-+}
-+
-+int mv88e6320_serdes_get_lane(struct mv88e6xxx_chip *chip, int port)
-+{
-+	u8 cmode = chip->ports[port].cmode;
-+	int lane = -ENODEV;
-+
-+	switch (port) {
-+	case 0:
-+		if (cmode == MV88E6XXX_PORT_STS_CMODE_100BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_1000BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_SGMII)
-+			lane = MV88E6320_PORT0_LANE;
-+		break;
-+	case 1:
-+		if (cmode == MV88E6XXX_PORT_STS_CMODE_100BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_1000BASEX ||
-+		    cmode == MV88E6XXX_PORT_STS_CMODE_SGMII)
-+			lane = MV88E6320_PORT1_LANE;
-+		break;
-+	}
-+
-+	return lane;
-+}
-+
- int mv88e6352_serdes_read(struct mv88e6xxx_chip *chip, int lane,
- 			  int device, int reg, u16 *val)
- {
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.h b/drivers/net/dsa/mv88e6xxx/serdes.h
-index d3e83c674ef7..9dcc9e581c05 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.h
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.h
-@@ -14,6 +14,10 @@
- 
- struct phylink_link_state;
- 
-+#define MV88E6320_PORT0_LANE		0x0c
-+#define MV88E6320_PORT1_LANE		0x0d
-+#define MV88E6320_SERDES_PAGE_FIBER	0x01
-+
- #define MV88E6352_ADDR_SERDES		0x0f
- #define MV88E6352_SERDES_PAGE_FIBER	0x01
- #define MV88E6352_SERDES_IRQ		0x0b
-@@ -116,14 +120,19 @@ struct phylink_link_state;
- int mv88e6xxx_pcs_decode_state(struct device *dev, u16 bmsr, u16 lpa,
- 			       u16 status, struct phylink_link_state *state);
- 
-+int mv88e6320_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
- int mv88e6341_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
- int mv88e6390_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
- int mv88e6390x_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
- int mv88e6393x_serdes_get_lane(struct mv88e6xxx_chip *chip, int port);
-+int mv88e6320_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
-+			  int reg, u16 *val);
- int mv88e6352_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
- 			  int reg, u16 *val);
- int mv88e6390_serdes_read(struct mv88e6xxx_chip *chip, int lane, int device,
- 			  int reg, u16 *val);
-+int mv88e6320_serdes_write(struct mv88e6xxx_chip *chip, int lane, int reg,
-+			   u16 val);
- int mv88e6352_serdes_write(struct mv88e6xxx_chip *chip, int lane, int reg,
- 			   u16 val);
- unsigned int mv88e6352_serdes_irq_mapping(struct mv88e6xxx_chip *chip,
--- 
-2.41.0
+Regressions found on parisc:
 
+  - build/gcc-11-allnoconfig
+  - build/gcc-11-defconfig
+  - build/gcc-11-tinyconfig
+
+Build errors:
+=============
+arch/parisc/include/asm/assembly.h: Assembler messages:
+arch/parisc/include/asm/assembly.h:75: Error: symbol `sp' is already defined
+arch/parisc/include/asm/assembly.h:77: Error: symbol `ipsw' is already defined
+make[3]: *** [scripts/Makefile.build:391: arch/parisc/kernel/head.o] Error 1
+arch/parisc/include/asm/assembly.h: Assembler messages:
+
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.119-16-g66130849c020/testrun/18074467/suite/build/test/gcc-11-defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.119-16-g66130849c020/testrun/18074467/suite/build/test/gcc-11-defconfig/details/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.119-16-g66130849c020/testrun/18074467/suite/build/test/gcc-11-defconfig/history/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
