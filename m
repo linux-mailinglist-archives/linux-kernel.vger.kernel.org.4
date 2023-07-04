@@ -2,121 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB017474B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8C17474B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jul 2023 17:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjGDPDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 11:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S231532AbjGDPDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 11:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjGDPDP (ORCPT
+        with ESMTP id S230052AbjGDPDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 11:03:15 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF26D10CA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:03:13 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31441bc0092so629528f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 08:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688482992; x=1691074992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EcaXmJ0ZrICymslbk6PHQsJRg8vS8+RojA0LAwyT/zQ=;
-        b=KouPo65iu0hK7fuVBBpGDmUPRt2tU/GtFDp4hNAhFyjGhVMSOnJO3v6UetUjJ/p6pN
-         N8SQknxPbCQOi66PLf7HcR5rUk41b3iuIwxQxNbtNXOqNFljVaaYzrqHRE/72sEhfIPM
-         w5BUNfb19B9J+TNm12rbC8YqvK+khMGgHMxXq+5vjRVdGA7cCtuuyJYHA1UuJuIIAI3M
-         D5Afj5+LBOeCDk2+TNC53DYEYHk3VXgtWQqAM4rcOZgCWGp24zcOk7P9qUgsG7Bq/Cv3
-         xIlgpdiKy+I3gRN7OOKSAThu3oVLP/QMr4VVZrdYJWu7zargCQEIZ25aCQ275/O3Njct
-         wELA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688482992; x=1691074992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EcaXmJ0ZrICymslbk6PHQsJRg8vS8+RojA0LAwyT/zQ=;
-        b=kGDzvXe0y9xwk/DhiTGZokYhkPUzQp1Y+AE5eOV9KUkGcfOkYR/VKNS5o3HEUiqLZY
-         EDPR1pyzCRIOoznAanLG9byYsTupDVekcSxPaJTs5ZPbv35v7DlWEe7MZfYYVpRZ3wjK
-         7VHk4pHoDO6SEivRJHyUVB4sLBaABhILtLGLj/Jq3ryhD9A7foQRzMraDVg0Jo7JuB02
-         JvO0EWEl40wak/VljDVw4bn2wtLsWf9ibgNmBzCULyanF++eZrNvYwjPzdDFtNJu7MzC
-         F0yuEBE0HiofZIlBUCZIX2g5vidsiWlVt8udqgoKDTJ9G9uuMdyGgaNSPgm6m2SGqttb
-         zbzg==
-X-Gm-Message-State: ABy/qLZ8SQqITicxkhBYe3cDIObsBCULbSzckwKwFniAxr8BI+jGyeCt
-        pRVVCk0UszUL2Fdu056tAheRjTQMyi5/LzpqrooH5A==
-X-Google-Smtp-Source: APBJJlFlpjmrGdYueJJZlk/MoDzzq+L7FJYJ5eNl3AHPcCI5YjZgfpfSpd50V3Uqhy3K7ai28M4Z/Q==
-X-Received: by 2002:a5d:6850:0:b0:313:eb4d:6a0e with SMTP id o16-20020a5d6850000000b00313eb4d6a0emr11332569wrw.9.1688482992243;
-        Tue, 04 Jul 2023 08:03:12 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id x2-20020a5d54c2000000b003142439c7bcsm11555831wrv.80.2023.07.04.08.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 08:03:11 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 16:03:10 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Mans Rullgard <mans@mansr.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: led_bl: fix initial power state
-Message-ID: <20230704150310.GA385243@aspen.lan>
-References: <20230704140750.25799-1-mans@mansr.com>
+        Tue, 4 Jul 2023 11:03:41 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ADD10CA
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 08:03:40 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688483018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u8ZiWkw6IBpKG50zIyLyU+jiftpJ82AROu6SkrKwfwg=;
+        b=LWX3IDTrOPsRhKGhQr/GX/zJ9BYGijrfq5Bcu9sImmDOBKiP1LgjkqfkBSLUHrL5wKT/9f
+        kAkEbbvo7+ilIRp0XLlfvpSsIV89TczcafFhWxmgxXPcqV9iER5sS/9LOORpVPMqTR+/Tw
+        oaCnhqbuO4meQoccNvu2XMTFfuYYWsmHyh0yHY8Kq2+s3Cszj6lJ08pYfvMAK31shCura9
+        U3Qm7FdvSX7TRFnG1+rFAFpP5iRxXZKk+wROrHe104zENZHGCKB+QGMOV6D2Im/aq4Fgd2
+        7vf3RcwU/iCIrtxFPDm5a3Alu4Kz2GZZ6N5Xrr1lIEADshzr7Yl59Q93eDGiKw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3B32D1C000A;
+        Tue,  4 Jul 2023 15:03:37 +0000 (UTC)
+Date:   Tue, 4 Jul 2023 17:03:36 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+Subject: Re: [PATCH v3 1/3] mtd: rawnand: rockchip-nand-controller: fix
+ oobfree offset and description
+Message-ID: <20230704170336.7e46911f@xps-13>
+In-Reply-To: <dfb76ad5-b62a-3f1d-494e-cd17d57945ae@gmail.com>
+References: <0047fc52-bc45-a768-8bdd-c0f12cddc17e@gmail.com>
+        <dfb76ad5-b62a-3f1d-494e-cd17d57945ae@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704140750.25799-1-mans@mansr.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 03:07:50PM +0100, Mans Rullgard wrote:
-> The condition for the initial power state based on the default
-> brightness value is reversed.  Fix it.
->
-> Fixes: ae232e45acf9 ("backlight: add led-backlight driver")
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
+Hi Johan,
+
+Would you mind reducing the subjets with
+s/rockchip-nand-controller/rockchip/?
+
+jbx6244@gmail.com wrote on Thu, 15 Jun 2023 19:34:01 +0200:
+
+> The MTD framework reserves 1 or 2 bytes for the bad block marker
+> depending on the bus size. The rockchip-nand-controller driver
+> currently only supports a 8 bit bus, but reserves standard 2 bytes
+> for the BBM in the chip->oob_poi buffer. The first free OOB byte is
+> therefore OOB2 at offset 2.
+
+Again, I don't think it's ever been a single byte. Please drop this
+paragraph, it does not justify anything below. What is important here
+is the PA thing I guess.
+
+> Page Address (PA) bytes are located at the
+
+Maybe you can briefly explain what the PA bytes are above.
+
+> last 4 positions before ECC. The current advertised free OOB area has
+> an offset that starts at OOB6 and a length that overlaps with the space
+
+Let me try to rephrase this:
+
+"
+The currently advertised free OOB area starts at offset 6, like
+if 4 PA bytes were located right after the BBM. This is wrong as the
+PA bytes are located right before the ECC bytes.
+
+Fix the layout by allowing access to all bytes between the BBM and the
+PA bytes instead of reserving 4 bytes right after the BBM.
+
+> reserved for the PA bytes. Writing unrelated data to a reserved space
+> with a specific task can corrupt our boot block page read order.
+
+"our"?
+
+> Fix by changing the free OOB offset to 2.
+>=20
+> This change breaks existing jffs2 users.
+>=20
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+
+Please add a Fixes tag, now that I look at it again, it looks like
+the original author did try to protect these PA bytes, but failed.
+
 > ---
->  drivers/video/backlight/led_bl.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/video/backlight/led_bl.c b/drivers/video/backlight/led_bl.c
-> index 3259292fda76..28e83618a296 100644
-> --- a/drivers/video/backlight/led_bl.c
-> +++ b/drivers/video/backlight/led_bl.c
-> @@ -200,8 +200,8 @@ static int led_bl_probe(struct platform_device *pdev)
->  	props.type = BACKLIGHT_RAW;
->  	props.max_brightness = priv->max_brightness;
->  	props.brightness = priv->default_brightness;
-> -	props.power = (priv->default_brightness > 0) ? FB_BLANK_POWERDOWN :
-> -		      FB_BLANK_UNBLANK;
-> +	props.power = (priv->default_brightness > 0) ? FB_BLANK_UNBLANK :
-> +		      FB_BLANK_POWERDOWN;
+>=20
+> Changed V3:
+>   Change prefixes
+>   Reword
+>   State break existing users.
+>=20
+> ---
+>=20
+> Example:
+>=20
+> Wrong free OOB offset starts at OOB6:
+> oob_region->offset =3D NFC_SYS_DATA_SIZE + 2;
+>                    =3D 4 + 2
+>                    =3D 6
+>=20
+> oob_region->length =3D rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+>                    =3D 32 - 4 - 2
+>                    =3D 26
+>=20
+> Together with this length above it overlaps a reserved space for the
+> boot blocks Page Address(PA)
+>=20
+> chip->oob_poi buffer layout for 8 steps:
+>=20
+> BBM0   BBM1  OOB2  OOB3  | OOB4  OOB5  OOB6  OOB7
+>=20
+> OOB8   OOB9  OOB10 OOB11 | OOB12 OOB13 OOB15 OOB15
+> OOB16  OOB17 OOB18 OOB19 | OOB20 OOB21 OOB22 OOB23
+>=20
+> OOB24  OOB25 OOB26 OOB27 | PA0   PA1   PA2   PA3
+>=20
+> ECC0   ECC1  ECC2  ECC3  | ...   ...   ...   ...
+>=20
+> Fix by new offset at OOB2:
+> oob_region->offset =3D 2;
+>=20
+> The full range of free OOB with 8 steps runs from OOB2
+> till/including OOB27.
+> ---
+>  drivers/mtd/nand/raw/rockchip-nand-controller.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mt=
+d/nand/raw/rockchip-nand-controller.c
+> index 2312e2736..37fc07ba5 100644
+> --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
+> +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+> @@ -562,9 +562,10 @@ static int rk_nfc_write_page_raw(struct nand_chip *c=
+hip, const u8 *buf,
+>  		 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
+>  		 *
+>  		 * The rk_nfc_ooblayout_free() function already has reserved
+> -		 * these 4 bytes with:
+> +		 * these 4 bytes together with 2 bytes for BBM
+> +		 * by reducing it's length:
+>  		 *
+> -		 * oob_region->offset =3D NFC_SYS_DATA_SIZE + 2;
+> +		 * oob_region->length =3D rknand->metadata_size - NFC_SYS_DATA_SIZE - =
+2;
+>  		 */
+>  		if (!i)
+>  			memcpy(rk_nfc_oob_ptr(chip, i),
+> @@ -933,12 +934,8 @@ static int rk_nfc_ooblayout_free(struct mtd_info *mt=
+d, int section,
+>  	if (section)
+>  		return -ERANGE;
+>=20
+> -	/*
+> -	 * The beginning of the OOB area stores the reserved data for the NFC,
+> -	 * the size of the reserved data is NFC_SYS_DATA_SIZE bytes.
+> -	 */
+>  	oob_region->length =3D rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+> -	oob_region->offset =3D NFC_SYS_DATA_SIZE + 2;
+> +	oob_region->offset =3D 2;
+>=20
+>  	return 0;
+>  }
+> --
+> 2.30.2
+>=20
 
-The logic was wrong before but I think will still be wrong after the
-change too (e.g. the bogus logic is probably avoiding backlight flicker
-in some use cases).
 
-The logic here needs to be similar to what pwm_bl.c implements in
-pwm_backlight_initial_power_state(). Whilst it might be better
-to implement this in led_bl_get_leds() let me show what I mean
-in code that fits in the current line:
-
-	/*
-	 * Activate the backlight if the LEDs are already lit *or*
-	 * there is no phandle link (meaning the backlight power
-	 * state cannot be synced with the display state).
-	 */
-	props.power = (active_at_boot || !dev->node->phandle) ?
-			FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
-
-Note that active_at_boot is not the same as (priv->default_brightness > 0)
-since the value read by led_bl_get_leds() can be clobbered when we
-parse the properties.
-
-
-Daniel.
+Thanks,
+Miqu=C3=A8l
