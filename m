@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC1A748DD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B4C748DD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234200AbjGETbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S234204AbjGETcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbjGETa6 (ORCPT
+        with ESMTP id S234145AbjGETcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:30:58 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5895198D;
-        Wed,  5 Jul 2023 12:30:47 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-785ccf19489so333980939f.3;
-        Wed, 05 Jul 2023 12:30:47 -0700 (PDT)
+        Wed, 5 Jul 2023 15:32:12 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4FD183;
+        Wed,  5 Jul 2023 12:32:12 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666eb03457cso29922b3a.1;
+        Wed, 05 Jul 2023 12:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688585531; x=1691177531;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W9x6oxUx9tH7D0x/gLZxVpZVMqHeZPpBOII1XPg86iU=;
+        b=FoOXRLY5GhxSeGLL6PsXfnyH0OylHWW1/RC0w/5E8pmnAGZ/MYfdcpl6So2azqI4Lg
+         +uM8m0BbbTmGlMtlG2z48Vyz0YQ3Q687Pp759DYAm/6FWQUeZQ4MrkCZ3J8DjTMfPiYY
+         vVqmMLk/LTAQlQXu5tTJoVh2UIGNS1zfiYoW26PdqYhJhPPZ5aauW/cmxsJJCfIQLT2P
+         GoVC8cr2iZ2RiMozYGPXmaX3uGiBPnHM6yy07TprABEQ7hf+n/0fGXhsmUdM/i/uTmLx
+         V+Ao+iB3wIwZYa4kcFeing3LCzr7+LtKtqmq7vIWpXPphBc0efyRIqTRvXjWyc0yl5YH
+         EWCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585447; x=1691177447;
+        d=1e100.net; s=20221208; t=1688585531; x=1691177531;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k3mlRz7gktaWpRdrv06g72Yt1MD5uxYRKr++3Evm7ZM=;
-        b=i7UmV1/a+Mxfq79BP/a1bF5FeQgDk5frJiglxmRoVYMcrVPLBMsl2oSDcwb7FgL+T8
-         wzzaVEJ8omfk+djGN8wSjNyy3A4Yiep8NpmPtkuUJK1YF2t6+qBW+3Tn4GUxVkp7L3dF
-         RMfT+eehkAbuuh5Y0vcF+GFGz4RQ2OcEpzA5qxvJ830hJz6ZDN8/d91infQdiWuIKLVa
-         Zmh023khgu3GDdNUKZn/tGZchffyL1CIFSAQP4AGTThfLLb06g8zAn+841oC/M8w5Oi0
-         Np0506ffLj68b8LFb8hXhp8w1mSMB/YhXQnIihhq+qD7QdAFVgl3R7r5sOIkVpc58U8S
-         FKMA==
-X-Gm-Message-State: ABy/qLY0XgFcAqO1py7g8XLW0T38BoiwPYqhgdwuZUDjImpIKxFEoxB+
-        PrJ2Hj6W/aiwBk/emjgBRg==
-X-Google-Smtp-Source: APBJJlEzFhLmGb+irBzIwS0P0x8xQEA1wCS7orNzq6bNP8zuCZeppl8Ds3njMNRfclsij6AuH8FhOQ==
-X-Received: by 2002:a5e:c916:0:b0:783:6526:a1a0 with SMTP id z22-20020a5ec916000000b007836526a1a0mr41501iol.15.1688585446834;
-        Wed, 05 Jul 2023 12:30:46 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t4-20020a02c904000000b004266b4a05afsm7981950jao.39.2023.07.05.12.30.44
+        bh=W9x6oxUx9tH7D0x/gLZxVpZVMqHeZPpBOII1XPg86iU=;
+        b=k5Wpxc7Ir8C0KL8IbR9NnUabz614lw3p5+QN4rBa4kpnXNkLR14AmT7pRulrqZYWqX
+         a2yron8dLFQJFWgnsHNpt2V0xEXTtlQEg17ad9WREuKr4lloKFDU1ITPhx97v/MVFG43
+         EH+HjvqHoRxPnL8i3HNgWB6xcYDiItQQ17g8Q9DVTgRiopTPAmVh5/mCgUtqp8rlD0l+
+         5CVKIqPiheShyOv2xHqxmta4bb7wWWwQLIJJE9vt0zNC702tRjdhZv9ZhfD5CkwOyUhl
+         91lVx+Wrc9uJ7kWFsq4dUKKMjIt1DoObO0MlQKTdbrqDT4NvJAODZMwmjuHamcOnCypN
+         Kaiw==
+X-Gm-Message-State: ABy/qLbFbFmW0WOP6+5x86uXf1ge7kP5oi/ZwGOX1zp49iBSm44SpWO5
+        jMlNOv4jO2aoWn9aUI+IFq/EBvyPL0E=
+X-Google-Smtp-Source: APBJJlEjA5oA16bZdRvKrZsKuVfDXRTEFpiuEQ4EbkeRx1tVVjBk+Q18SvBD3ITwSjc0pP9uOCTwtA==
+X-Received: by 2002:a05:6a00:2346:b0:673:5d1e:6657 with SMTP id j6-20020a056a00234600b006735d1e6657mr17198734pfj.7.1688585531348;
+        Wed, 05 Jul 2023 12:32:11 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:9fac:a99f:7f0a:397])
+        by smtp.gmail.com with ESMTPSA id a17-20020a62e211000000b0066ccb8e8024sm17175313pfi.30.2023.07.05.12.32.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:30:46 -0700 (PDT)
-Received: (nullmailer pid 1702773 invoked by uid 1000);
-        Wed, 05 Jul 2023 19:30:43 -0000
-Date:   Wed, 5 Jul 2023 13:30:43 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jason-ch Chen <jason-ch.chen@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jason-ch chen <Jason-ch.Chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
-        <nfraprado@collabora.com>, Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH 2/3] dt-bindings: arm: mediatek: Add mt8188 pericfg
- compatible
-Message-ID: <168858544290.1702735.16154973553045477437.robh@kernel.org>
-References: <20230705065744.25848-1-jason-ch.chen@mediatek.com>
- <20230705065744.25848-3-jason-ch.chen@mediatek.com>
+        Wed, 05 Jul 2023 12:32:11 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 12:32:08 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andreas Helbech Kleist <andreaskleist@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Input: exc3000 - add ACPI support for EXC80H60
+Message-ID: <ZKXFOPOxIB2+huwS@google.com>
+References: <20230705091817.1300928-1-andreaskleist@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705065744.25848-3-jason-ch.chen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230705091817.1300928-1-andreaskleist@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 05 Jul 2023 14:57:43 +0800, Jason-ch Chen wrote:
-> From: jason-ch chen <Jason-ch.Chen@mediatek.com>
+On Wed, Jul 05, 2023 at 11:18:16AM +0200, Andreas Helbech Kleist wrote:
+> EXC80H60 is used in Ambu aBox2 with ACPI _HID "EGA00001".
 > 
-> Add mt8188 pericfg compatible to binding document.
+> Snippet of from "apcidump -b; iasl ssdt2.dat" on target:
 > 
-> Signed-off-by: jason-ch chen <Jason-ch.Chen@mediatek.com>
-> ---
->  .../devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml       | 1 +
->  1 file changed, 1 insertion(+)
+>         Device (TPL2)
+>         {
+>             Name (HID2, Zero)
+>             Name (_HID, "EGA00001")  // _HID: Hardware ID
+>             Name (_CID, "PNP0C50" /* HID Protocol Device (I2C bus) */)
+> 		// _CID: Compatible ID
+>             Name (_S0W, 0x04)  // _S0W: S0 Device Wake State
+>             Name (SBFB, ResourceTemplate ()
 > 
+> Signed-off-by: Andreas Helbech Kleist <andreaskleist@gmail.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thank you.
 
+-- 
+Dmitry
