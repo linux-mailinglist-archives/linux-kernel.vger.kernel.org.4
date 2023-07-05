@@ -2,172 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF577486BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B7A7486CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjGEOpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S232589AbjGEOtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbjGEOpr (ORCPT
+        with ESMTP id S232214AbjGEOtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:45:47 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FEE1719
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:45:46 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-345fcf8951fso15249895ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688568345; x=1691160345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wIyQfWNYaIauekpeSYzDVVz2eIIvCCocDHmDK74a8j0=;
-        b=Y0E2ucxqwnDFoG1ae0oj9yAH8x5pbwfwKRYJlrsKE2yUxE+qAIcB6+a7Ju6TEKfwGi
-         D1LSIptdrXTz35Z7zoKP+o96dADAJSjyWqv7UrKLVUMeFVnFI1WapZq0T5vSZNtwxyaN
-         MjA/4/nnHngSIQy0lW/u/nrTQ/pe/8fNF7Flg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688568345; x=1691160345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wIyQfWNYaIauekpeSYzDVVz2eIIvCCocDHmDK74a8j0=;
-        b=L208BRPUCVD6Jcpvhgq2i53xJp/JRmv1puyBjf4ta95bD7Imypru+GSfAp1tfdpTxs
-         yBm2a1Uh+0yYKs2Tj/vJmUctmWgw/2rg2wzg4xPzicLARSBC18CuXwwZ+7KMZp+RH0+K
-         cpFj/3HTlJMMcL52+CGSt49MkqKes/f+bhraDjenTlvR1IEd6l+qr2SrrQHG5m8jr1AJ
-         xtU1lGt/6DFs77e2oqN/sTZzj+ap4G3o/YD/16lZJDvgEhO7xeux+FGnCCcWjfoTqONW
-         BOAZO0lmIvv5tTdHrOVMNVoevzzqrbnYTAg10X/vlCRD6lA+rOtaiAD+uUj5X1PeU0Vz
-         JJig==
-X-Gm-Message-State: ABy/qLY/6/48WcHK6TjJ/Kkea/KE0Xq5BymI5rhMMGVZr2/Egp/dDJ/A
-        60kGCS8uF7bI31KipBaI0RT77tw/vhfSH+ECXUU=
-X-Google-Smtp-Source: APBJJlE+Lm2zJGcK0qneoDCLDC8iSCtdDImOTgvYqTF1TCVQhbWKUtcApgHFkTxWbBht3+BoOD9Gqw==
-X-Received: by 2002:a92:c608:0:b0:345:8373:bf68 with SMTP id p8-20020a92c608000000b003458373bf68mr17505268ilm.25.1688568344800;
-        Wed, 05 Jul 2023 07:45:44 -0700 (PDT)
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
-        by smtp.gmail.com with ESMTPSA id v12-20020a92c80c000000b003426356a35asm8255946iln.0.2023.07.05.07.45.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 07:45:44 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7835bad99fbso240241839f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:45:44 -0700 (PDT)
-X-Received: by 2002:a6b:7a02:0:b0:785:d017:c16f with SMTP id
- h2-20020a6b7a02000000b00785d017c16fmr17816152iom.14.1688568343801; Wed, 05
- Jul 2023 07:45:43 -0700 (PDT)
+        Wed, 5 Jul 2023 10:49:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA551700
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:49:30 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365Eh2hO021200;
+        Wed, 5 Jul 2023 14:48:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=WyaIkawPUgvUam9x7fxaH1KDyVHLZ56/mYgS6vFRDvY=;
+ b=rL1KxvECs4gBlAraHVKti+fP17gqaJseIidr7e5WQbIjwqHL+5G5orBz1SUOSLVO3qJi
+ g9NQkA1YVKK3IqZEHDjeJWoK/VrQoLc1wCNjseviI+bDz6pxBhjAys1kBQWXU6YF+m6Y
+ vUrrOICmNwDrYgdLxX4VA8LKmfJtfqF62bZySMU0XA1RbqZF6LrYuWQB+lp4tFlPIscQ
+ 8Yo79+XZuAJ3lOqe0LCRH1pCWnEeZnM1g9zap9DUSNuplR8LfGIzDaddCgIkAPEKRcZT
+ 2QxmBPeEZDdr1CZ/ZkMPc1n3snfnMsRSL82rFOmXwOwkNO9Ewyv5asUOobP14KdoI7hK oA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rna57rxke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 14:48:32 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 365EhM9E024531;
+        Wed, 5 Jul 2023 14:48:29 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rna57rxjt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 14:48:29 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 365CoN9k016498;
+        Wed, 5 Jul 2023 14:48:28 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3rjbs6fdh5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 14:48:28 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 365EmQWt35455680
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jul 2023 14:48:26 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B22A5805A;
+        Wed,  5 Jul 2023 14:48:26 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B182B58051;
+        Wed,  5 Jul 2023 14:48:14 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.47.143])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jul 2023 14:48:14 +0000 (GMT)
+X-Mailer: emacs 29.0.91 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 04/31] mm/pgtable: allow pte_offset_map[_lock]() to fail
+In-Reply-To: <8218ffdc-8be-54e5-0a8-83f5542af283@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <8218ffdc-8be-54e5-0a8-83f5542af283@google.com>
+Date:   Wed, 05 Jul 2023 20:18:12 +0530
+Message-ID: <87y1juxvmb.fsf@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230630144006.1513270-1-pan@semihalf.com>
-In-Reply-To: <20230630144006.1513270-1-pan@semihalf.com>
-From:   Alexandru M Stan <amstan@chromium.org>
-Date:   Wed, 5 Jul 2023 10:45:07 -0400
-X-Gmail-Original-Message-ID: <CAHNYxRx7WsCyZBLTfBTcxYtf1z68YkXgMdYq+8OFMpjq6y9TfA@mail.gmail.com>
-Message-ID: <CAHNYxRx7WsCyZBLTfBTcxYtf1z68YkXgMdYq+8OFMpjq6y9TfA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/3] Google Chameleon v3 video driver
-To:     =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dinguyen@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, mchehab@kernel.org, upstream@semihalf.com,
-        ribalda@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GDmSVGrS8syCV2n7TgQ4YZtWM0lquLyc
+X-Proofpoint-ORIG-GUID: 4X2trLtTkHXz7Z42SusOeEbcViwHSz6O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_06,2023-07-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ clxscore=1011 impostorscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=949 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307050131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:40=E2=80=AFAM Pawe=C5=82 Anikiel <pan@semihalf.c=
-om> wrote:
->
-> The Google Chameleon v3 is a testing device for external displays. It
-> is based on an Arria 10 SoCFPGA. This patch adds a V4L2 driver for the
-> video system. The video system consists of:
->   * Six video interfaces (DMA ping pong buffers) in the FPGA, called
->   "framebuffers".
->   * Two Intel DisplayPort DPRX IP cores in the FPGA, one MST x4, one SST
->   * IT68051 chip, handled by EC firmware
->
-> The driver is implemented as a single device driver, because the video
-> interface devices need to talk to the DisplayPort IP core devices
-> (e.g. to configure the EDID). This has the effect of the DPRX driver
-> being in the chameleonv3 directory even though it's an Intel IP.
->
-> The DPRX code handles all the AUX communication (DPCD, sideband messages,
-> message transfers). There is similarity to what's already present in
-> the DRM subsystem, but I found it hard to reuse that code effectively.
->
-> My main concern is with the overall structure of the driver - how it's
-> divided into parts, the interfaces and APIs used, etc. Any feedback is
-> greately appreciated.
->
-> Pawe=C5=82 Anikiel (3):
->   media: Add 10, 12, and 16 bit RGB formats
->   media: Add Google Chameleon v3 video driver
->   ARM: dts: Add Chameleon v3 video node
->
->  .../socfpga/socfpga_arria10_chameleonv3.dts   |  54 ++
->  drivers/media/platform/Kconfig                |   1 +
->  drivers/media/platform/Makefile               |   1 +
->  drivers/media/platform/google/Kconfig         |   4 +
->  drivers/media/platform/google/Makefile        |   2 +
->  .../media/platform/google/chameleonv3/Kconfig |   9 +
->  .../platform/google/chameleonv3/Makefile      |  15 +
->  .../platform/google/chameleonv3/chv3-core.c   | 292 ++++++++++
->  .../platform/google/chameleonv3/chv3-core.h   |  17 +
->  .../platform/google/chameleonv3/chv3-fb.c     | 539 ++++++++++++++++++
->  .../platform/google/chameleonv3/chv3-fb.h     |  34 ++
->  .../platform/google/chameleonv3/dprx-aux.c    |  77 +++
->  .../platform/google/chameleonv3/dprx-dp.c     |  82 +++
->  .../platform/google/chameleonv3/dprx-dpcd.c   | 424 ++++++++++++++
->  .../platform/google/chameleonv3/dprx-dprx.c   | 262 +++++++++
->  .../platform/google/chameleonv3/dprx-edid.c   |  39 ++
->  .../platform/google/chameleonv3/dprx-i2c.c    |  41 ++
->  .../platform/google/chameleonv3/dprx-mt.c     | 184 ++++++
->  .../platform/google/chameleonv3/dprx-sbmsg.c  | 162 ++++++
->  .../media/platform/google/chameleonv3/dprx.h  | 128 +++++
->  drivers/media/v4l2-core/v4l2-ioctl.c          |   5 +
->  include/uapi/linux/videodev2.h                |   5 +
->  22 files changed, 2377 insertions(+)
->  create mode 100644 drivers/media/platform/google/Kconfig
->  create mode 100644 drivers/media/platform/google/Makefile
->  create mode 100644 drivers/media/platform/google/chameleonv3/Kconfig
->  create mode 100644 drivers/media/platform/google/chameleonv3/Makefile
->  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-core.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-core.h
->  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-fb.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/chv3-fb.h
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-aux.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dp.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dpcd.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dprx.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-edid.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-i2c.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-mt.c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx-sbmsg.=
-c
->  create mode 100644 drivers/media/platform/google/chameleonv3/dprx.h
->
-> --
-> 2.41.0.255.g8b1d071c50-goog
->
 
-Thank you Pawel for sending this.
+Hi Hugh,
 
-To generate more interest in this device/driver I wanted to share that
-the FPGA implementation (the registers/hw this driver talks to) is
-also open source [1]. This is to show that this is not some throw away
-driver for some proprietary thing.
-The previous Chameleon device has been useful for testing drivers
-using the Intel Graphics Test [2] which can exercise a lot of the DRM
-video output kernel drivers on many devices, v3 is also compatible
-with the same RPC protocol.
+Sorry for not checking about this before. I am looking at a kernel
+crash (BUG_ON()) on ppc64 with 4K page size. The reason we hit
+BUG_ON() is beause we have pmd_same calling BUG_ON on 4K with hash
+translation. We don't support THP with 4k page size and hash
+translation.
 
-[1] https://chromium.googlesource.com/chromiumos/platform/chameleon/+/refs/=
-heads/main/v3/fpga/
-[2] https://drm.pages.freedesktop.org/igt-gpu-tools/igt-gpu-tools-Chamelium=
-.html
+Hugh Dickins <hughd@google.com> writes:
 
-Alexandru Stan (amstan)
+....
+
+ +
+> +pte_t *pte_offset_map_nolock(struct mm_struct *mm, pmd_t *pmd,
+> +			     unsigned long addr, spinlock_t **ptlp)
+> +{
+> +	pmd_t pmdval;
+> +	pte_t *pte;
+> +
+> +	pte = __pte_offset_map(pmd, addr, &pmdval);
+> +	if (likely(pte))
+> +		*ptlp = pte_lockptr(mm, &pmdval);
+> +	return pte;
+> +}
+> +
+> +pte_t *__pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
+> +			     unsigned long addr, spinlock_t **ptlp)
+> +{
+> +	spinlock_t *ptl;
+> +	pmd_t pmdval;
+> +	pte_t *pte;
+> +again:
+> +	pte = __pte_offset_map(pmd, addr, &pmdval);
+> +	if (unlikely(!pte))
+> +		return pte;
+> +	ptl = pte_lockptr(mm, &pmdval);
+> +	spin_lock(ptl);
+> +	if (likely(pmd_same(pmdval, pmdp_get_lockless(pmd)))) {
+> +		*ptlp = ptl;
+> +		return pte;
+> +	}
+> +	pte_unmap_unlock(pte, ptl);
+> +	goto again;
+> +}
+
+What is expected by that pmd_same check? We are holding pte lock
+and not pmd lock. So contents of pmd can change.
+
+-aneesh
