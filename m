@@ -2,143 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE88747F97
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0522B747F9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjGEI0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S231991AbjGEI0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjGEI0L (ORCPT
+        with ESMTP id S231768AbjGEI0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:26:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29ECD1709
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:26:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39C7B1682;
-        Wed,  5 Jul 2023 01:26:52 -0700 (PDT)
-Received: from [10.57.28.141] (unknown [10.57.28.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70D7D3F73F;
-        Wed,  5 Jul 2023 01:26:08 -0700 (PDT)
-Message-ID: <4c78c516-8cb6-d865-c64c-0b2443006690@arm.com>
-Date:   Wed, 5 Jul 2023 09:26:02 +0100
+        Wed, 5 Jul 2023 04:26:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060FE184;
+        Wed,  5 Jul 2023 01:26:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98F7D61472;
+        Wed,  5 Jul 2023 08:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E69C433C8;
+        Wed,  5 Jul 2023 08:26:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688545607;
+        bh=vbVB+2RsUlsWIw6dl4Q4bSyMWzFos1EUXHH6bK3/yy4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ACz0NMoLXOYC827FB2f9E8fs7GHHqax4xUJr2SkTX50NGlbcLbFamx+mc5pMJ3G4h
+         nNa153G8FGm0ANZRn7cJv2elOBQ1zqVKnStGP59VRjczwArQAdulm/QyAdXyD1UlJm
+         WUEWBMUkcGr76YKChfhn4RhHFcEIKoeGN4kt1Dqlp8eBA9O39vLFm5Nyw5a+JJAQD/
+         GS1JVdpRy8Gtml2v/sPosrA7MHdRA7XLp8uOishmw77FjVD+fcJJDrFTSC56ufP5OR
+         Zp5fq0sr6MJ5Yx2FMoUTt37B5lAgdl2PFjJhAEjCbav+XjEbOWmL+P7ZnZ09W/Wnvo
+         Bp0YpdDZVEcvA==
+Date:   Wed, 5 Jul 2023 13:56:29 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Mrinmay Sarkar <quic_msarkar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        konrad.dybcio@linaro.org, quic_shazhuss@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_ramkri@quicinc.com,
+        quic_nayiluri@quicinc.com,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH v1 2/6] dt-bindings: phy: qcom,qmp: Add sa8775p QMP PCIe
+ PHY
+Message-ID: <20230705082629.GB11854@thinkpad>
+References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
+ <1688545032-17748-3-git-send-email-quic_msarkar@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] iommu/mediatek: Remove a unnecessary checking for larbid
-To:     =?UTF-8?B?WW9uZyBXdSAo5ZC05YuHKQ==?= <Yong.Wu@mediatek.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     "will@kernel.org" <will@kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <20230704115634.7727-1-yong.wu@mediatek.com>
- <633be7a7-0bb8-1575-535e-2f96302198bd@collabora.com>
- <ca4a06b89442e56df652c4aeba3ad83473f4db58.camel@mediatek.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ca4a06b89442e56df652c4aeba3ad83473f4db58.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1688545032-17748-3-git-send-email-quic_msarkar@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-05 07:49, Yong Wu (吴勇) wrote:
-> On Tue, 2023-07-04 at 14:19 +0200, AngeloGioacchino Del Regno wrote:
->>   	
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>   Il 04/07/23 13:56, Yong Wu ha scritto:
->>> Fix a coverity issue:
->>>
->>>>> assignment: Assigning: larbid = (fwspec->ids[0] >> 5) & 0x1fU.
->>> larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
->>>>> between: At condition larbid >= 32U, the value of larbid must be
->> between
->>>>> 0 and 31.
->>>>> dead_error_condition: The condition larbid >= 32U cannot be true.
->>> if (larbid >= MTK_LARB_NR_MAX)
->>>>> CID 11306470 (#1 of 1): Logically dead code (DEADCODE)
->>>>> dead_error_line: Execution cannot reach this statement:
->>>>> return ERR_PTR(-22L);
->>>           return ERR_PTR(-EINVAL);
->>>
->>> The checking "if (larbid >= MTK_LARB_NR_MAX)" is unnecessary.
->>>
->>
->> I agree with the coverity tool in that after the transformation
->> (going through
->> the definition of MTK_M4U_TO_LARB) the check is pointless, but I
->> think that the
->> right fix here is to check for validity of fwspec->ids[0] instead of
->> simply
->> removing validation.
->>
->> Having no validation after mtk_iommu_probe_device() is fine, but
->> that's
->> because we assume that *this* function performs all validation steps.
+On Wed, Jul 05, 2023 at 01:47:07PM +0530, Mrinmay Sarkar wrote:
+> Add devicetree YAML binding for Qualcomm QMP PCIe PHY
+> for SA8775p platform.
 > 
-> There already is validation code at the point later in this function.
+> Signed-off-by: Mrinmay Sarkar <quic_msarkar@quicinc.com>
+> ---
+>  .../phy/qcom,sc8280xp-qmp-pcie-phy.yaml       | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
 > 
-> "if (!larbdev) return ERR_PTR(-EINVAL);" //if the larbid is invalid.
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
+> index a0407fc79563..9309066bfcee 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
+> @@ -23,6 +23,8 @@ properties:
+>        - qcom,sm8350-qmp-gen3x1-pcie-phy
+>        - qcom,sm8550-qmp-gen3x2-pcie-phy
+>        - qcom,sm8550-qmp-gen4x2-pcie-phy
+> +      - qcom,sa8775p-qmp-gen4x2-pcie-phy
+> +      - qcom,sa8775p-qmp-gen4x4-pcie-phy
+
+Same comment as patch 1.
+
+- Mani
+
+>  
+>    reg:
+>      minItems: 1
+> @@ -30,7 +32,7 @@ properties:
+>  
+>    clocks:
+>      minItems: 5
+> -    maxItems: 6
+> +    maxItems: 7
+>  
+>    clock-names:
+>      minItems: 5
+> @@ -39,6 +41,7 @@ properties:
+>        - const: cfg_ahb
+>        - const: ref
+>        - const: rchng
+> +      - const: phy_aux
+>        - const: pipe
+>        - const: pipediv2
+>  
+> @@ -136,6 +139,20 @@ allOf:
+>          clock-names:
+>            minItems: 6
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sa8775p-qmp-gen4x2-pcie-phy
+> +              - qcom,sa8775p-qmp-gen4x4-pcie-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 7
+> +        clock-names:
+> +          maxItems: 7
+> +
+>    - if:
+>        properties:
+>          compatible:
+> -- 
+> 2.39.2
 > 
-> This patch just removes a deadcode.
 
-Right, if the fwspec value was out of range then the truncated value 
-might happen to map to a valid LARB, but then the fwspec could equally 
-have an in-range value for a valid (but incorrect) LARB; in general a 
-driver can't validate the overall correctness of data from the DT (and 
-if it could, that data wouldn't need to be in the DT anyway).
-
- From the history, the intent of this check doesn't appear to have been 
-anything other than protecting the dereference of the data->larb_imu 
-array, and it's never had any functional effect, so we don't lose 
-anything by removing it. FWIW,
-
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-
-Cheers,
-Robin.
-
-> 
->>
->> Regards,
->> Angelo
->>
->>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
->>> ---
->>> Rebase on v6.4-rc1.
->>> ---
->>>    drivers/iommu/mtk_iommu.c | 3 ---
->>>    1 file changed, 3 deletions(-)
->>>
->>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
->>> index aecc7d154f28..67caa90b481b 100644
->>> --- a/drivers/iommu/mtk_iommu.c
->>> +++ b/drivers/iommu/mtk_iommu.c
->>> @@ -838,9 +838,6 @@ static struct iommu_device
->> *mtk_iommu_probe_device(struct device *dev)
->>>     * All the ports in each a device should be in the same larbs.
->>>     */
->>>    larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
->>> -if (larbid >= MTK_LARB_NR_MAX)
->>> -return ERR_PTR(-EINVAL);
->>> -
->>>    for (i = 1; i < fwspec->num_ids; i++) {
->>>    larbidx = MTK_M4U_TO_LARB(fwspec->ids[i]);
->>>    if (larbid != larbidx) {
->>
->>
+-- 
+மணிவண்ணன் சதாசிவம்
