@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96707485A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C0B7485AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjGEOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
+        id S232471AbjGEOI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjGEOHg (ORCPT
+        with ESMTP id S230385AbjGEOI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:07:36 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2254E57
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:07:35 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3094910b150so7619535f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688566054; x=1691158054;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AU4Y7nxn9moTeBBiKE7ZanFY0pefA4riCcCyZ8JBU98=;
-        b=ZzTLNwtGWeCGnixiUkB+Fh04qBn9O7QW6d9xvz/3NlQEureQD3sqSlyuVuimTv+PSW
-         /51cQhitClXf2IZyEcKowFYfQVRHNXsGpKUVodcsr0Z7ppSF2+wSZPwRRYCTcaGRQzfZ
-         FhIxaBU3LKA6Os+rtZz6v0wFpYDZwfuGLhYRVPtFQPsWRUT3rGldokdVtTUrzkBxRlx3
-         Hjl2Zm9HcwLpKZWtrIqqbLPmBrkp/hTHln1gx0Rj3y950ZXMW4F0XJaBToPWFWeFmxBP
-         nrbROTnQv4jDLj9pyTqZfUgk6XkxGP8f7GZv8HXX04Y/UjJFdKGzIKx3Lz4X1OkFk3XI
-         Yvkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688566054; x=1691158054;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AU4Y7nxn9moTeBBiKE7ZanFY0pefA4riCcCyZ8JBU98=;
-        b=Xq7/Fi+7xYmeSMhW3Uw0Mxb//bNg2E1ndjRTyl1DHcYHEGaoT/DM7TKygwLZqXZ6Qd
-         uliwQYf/vHpoXi1Os4InCKFEzFL+Vl0rXOE8SAswTqxAuVdcKoc29jNg8Is0GuiCpqzO
-         NTye2gdGtHbfSuf8r6U7PxdHTQZnuQU+u1WViB85/zGPVfsamm+P/Fnj/F0jxWpZIR++
-         UnCApmDf0JyaWm8OCcS7jIbKXtGOmXhhMuVE6JqBRgYAUMDyC/9sAX14hqEGB9MnrBbf
-         qGI6cRmkBhAweA/ZjsqXuH7uKkQI1JntW1EJGewd0U3ykpttbEyQFO73SjtnGiC/2cBH
-         2nhw==
-X-Gm-Message-State: ABy/qLZK98f/orNPXfOwq2Q/lQ+EsAkJgEIBdOhb8c+HYmUOlncOlI7B
-        J5lOnTiosJ4XqPqg8yKwapTcrA==
-X-Google-Smtp-Source: APBJJlEnUvR0WUVjYcvCf+AnF9twxW7bci+6wQkHZaaSQhCGbaLChPiymZ+M6m58en6eNR6b0wqW3A==
-X-Received: by 2002:a5d:4241:0:b0:314:824:3788 with SMTP id s1-20020a5d4241000000b0031408243788mr13057703wrr.27.1688566054110;
-        Wed, 05 Jul 2023 07:07:34 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id f13-20020a5d50cd000000b003143b7449ffsm6437811wrt.25.2023.07.05.07.07.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 07:07:33 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 15:07:31 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Mans Rullgard <mans@mansr.com>, linux-fbdev@vger.kernel.org,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: Re: [PATCH] backlight: led_bl: fix initial power state
-Message-ID: <20230705140731.GB6265@aspen.lan>
-References: <20230704140750.25799-1-mans@mansr.com>
- <20230704150310.GA385243@aspen.lan>
- <20230704170731.GB940443@ravnborg.org>
+        Wed, 5 Jul 2023 10:08:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAB6E57
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:07:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688566059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R2sLPj5y08qFr+M1Bva5r6C6XJl5+/tytL41ww+T+U4=;
+        b=ObVnmY0AmTEYjoQ5yBEzkMNHuexBFHiufgLwYsAHQ6QEbQJd8VTaUcXTsY/UDdBITr1wYs
+        D0X0ML0IqvX89meMSCFZjbozgEFYUuAfYyb5vk8TQP4MWu6/wr9q3cc3NKctDTzHPTABUL
+        N9Y4Q9lv1bE/1Ius0iIjP8foHFtCIs8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-88-Mo6YzF_LPKKUxyUHEo39JQ-1; Wed, 05 Jul 2023 10:07:36 -0400
+X-MC-Unique: Mo6YzF_LPKKUxyUHEo39JQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A810E299E74B;
+        Wed,  5 Jul 2023 14:07:35 +0000 (UTC)
+Received: from [10.22.8.133] (unknown [10.22.8.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DDB3A1121314;
+        Wed,  5 Jul 2023 14:07:34 +0000 (UTC)
+Message-ID: <244e207a-95d5-2ff3-d0ec-c974538032af@redhat.com>
+Date:   Wed, 5 Jul 2023 10:07:34 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704170731.GB940443@ravnborg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] sched/core: Use empty mask to reset cpumasks in
+ sched_setaffinity()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, Phil Auld <pauld@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>
+References: <20230628211637.1679348-1-longman@redhat.com>
+ <20230703102604.GC4253@hirez.programming.kicks-ass.net>
+ <5bc41342-5ba6-68e9-8315-9e5cef65d102@redhat.com>
+ <20230705093752.GW4253@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230705093752.GW4253@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 07:07:31PM +0200, Sam Ravnborg wrote:
-> Hi Daniel,
+
+On 7/5/23 05:37, Peter Zijlstra wrote:
+> On Mon, Jul 03, 2023 at 10:55:02AM -0400, Waiman Long wrote:
 >
-> > > @@ -200,8 +200,8 @@ static int led_bl_probe(struct platform_device *pdev)
-> > >  	props.type = BACKLIGHT_RAW;
-> > >  	props.max_brightness = priv->max_brightness;
-> > >  	props.brightness = priv->default_brightness;
-> > > -	props.power = (priv->default_brightness > 0) ? FB_BLANK_POWERDOWN :
-> > > -		      FB_BLANK_UNBLANK;
-> > > +	props.power = (priv->default_brightness > 0) ? FB_BLANK_UNBLANK :
-> > > +		      FB_BLANK_POWERDOWN;
-> >
-> > The logic was wrong before but I think will still be wrong after the
-> > change too (e.g. the bogus logic is probably avoiding backlight flicker
-> > in some use cases).
-> >
-> > The logic here needs to be similar to what pwm_bl.c implements in
-> > pwm_backlight_initial_power_state(). Whilst it might be better
-> > to implement this in led_bl_get_leds() let me show what I mean
-> > in code that fits in the current line:
-> >
-> > 	/*
-> > 	 * Activate the backlight if the LEDs are already lit *or*
-> > 	 * there is no phandle link (meaning the backlight power
-> > 	 * state cannot be synced with the display state).
-> > 	 */
-> > 	props.power = (active_at_boot || !dev->node->phandle) ?
-> > 			FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
-> >
-> The following code does the same using helpers:
+>> Our OpenShift team has actually hit a problem with the recent persistent
+>> user provided cpu affinity change because they are relying on the fact that
+>> moving a task to a different cpuset will reset cpu affinity to the cpuset
+>> default which is no longer true. That is the main reason behind this patch
+>> to provide a way to reset cpu affinity to the cpuset default.
+> Where is the sched_setaffinity() in that story?
 >
-> 	if (active_at_boot || !dev->node->phandle))
-> 		backlight_enable(bd);
-> 	else
-> 		backlight_disable(bd);
->
-> The code needs to execute after backlight_device_register() so maybe not
-> so great an idea?!?
+> So somewhere this thing did a sched_setaffinity() and then starts
+> playing with cpusets. Instead of adding more sched_setaffinity() calls,
+> can't it just remove some?
 
-It would introduce a need for a bunch of new locks since userspace
-could get in between device creation and the call to the helpers.
+I don't know the full picture. From what I understand, there is a master 
+control process that limit its cpu affinity to just a limited set of 
+housekeeping CPUs. It then spawn child processes to be run in different 
+containers. The control process doesn't need to change its cpu affinity.
 
-Additionally, it is even correct for a driver to forcefully set
-fb_blank to powerdown during the probe? All current drivers set
-fb_blank to unblank during the probe.
+In the past, putting the child processes in a different container 
+(cpuset) will reset its affinity to that of the cpuset. That is not true 
+anymore because user_cpus_ptr is inherited in the forked child process. 
+I have thought about 2 ways to address that. Either we introduce a new 
+clone flag to disable the inheritance of users_cpu_ptr or a way to reset 
+the cpu affinity to the default which is what this patch does.
+
+Cheers,
+Longman
 
 
-Daniel.
