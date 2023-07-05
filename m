@@ -2,212 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65C5747B8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 04:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DBE747B94
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 04:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjGEC26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 22:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S230437AbjGECdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 22:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjGEC24 (ORCPT
+        with ESMTP id S229539AbjGECdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 22:28:56 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F7810E2;
-        Tue,  4 Jul 2023 19:28:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qwk9r61kJz4f3kjL;
-        Wed,  5 Jul 2023 10:28:48 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHoZRd1aRkt_btNA--.43111S3;
-        Wed, 05 Jul 2023 10:28:47 +0800 (CST)
-Subject: Re: [PATCH] scsi/sg: don't grab scsi host module reference
-To:     Yu Kuai <yukuai1@huaweicloud.com>,
-        Marc Hartmayer <mhartmay@linux.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com, hch@lst.de,
-        chaitanyak@nvidia.com, shinichiro.kawasaki@wdc.com,
-        dgilbert@interlog.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, axboe@kernel.dk,
-        Benjamin Block <bblock@linux.ibm.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230621160111.1433521-1-yukuai1@huaweicloud.com>
- <87lefv622n.fsf@linux.ibm.com>
- <70432d91-3909-ac3c-9c36-5f7484c1fdf1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1efb3d4d-a05b-2eb2-a140-a76981b662a4@huaweicloud.com>
-Date:   Wed, 5 Jul 2023 10:28:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 4 Jul 2023 22:33:49 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2051.outbound.protection.outlook.com [40.107.7.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EE710E2;
+        Tue,  4 Jul 2023 19:33:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AnbkLbssfX32iluek4wB1BnuEhLTFI7oH7DqpQXi38CiNEwtdFnFeiRDH0oF/aRrouyyPe5BjeY0Wz34s/Upw9fHPtUuSR3gOrsYCA/UUZ30vquAStSAhzzZDmpf0HuVLm8g6rUx1CxYJGc6s4z8ssIU1BtaAAdT3g0TiUDZdDQePXGAIQMjSQNCt2YcsFzQxt/fLQ54ANZc1Hm2zLjluEG2gY1foZ/c4d9r+NuCYBI54g/Ycw6ewAoYRfhEJOrxYdnJuM8KjX3WV8q/BbwJG16AZpY2oSITWYDCUIi6l8OXDFwQ/fdI/D7NEJNXTxzEd8OmqUC6W2i4GVnvVQ8Knw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b9SWHZdE2IlDqtl/lBYGqUJb3upY7oWvZVRey1s6HoA=;
+ b=Fm8hN4u2rnCFeS5v2/AAwHx5MV+4XOwfoD7Ph/G5wVfHvRlCKL5NLh59XIopc+vgVcKjwbZRCCaRNYTDbYpmiYsfzhpXsT8q2wqGEJUnZgMbDExuU1xFUxCQIm4s5lpYcpq1buF/B0cio3iNRIzT+cZBUtJl5nt5L6DlK86N7k9QDH6ySa9A5tUCKrQbFb4+XeZrfSSoki8QZMyaO91IpRp0y00B5Il1VO0WJjYS1zN8F+TiqYQfYPcwbs1cZPyGZ/aTgusgHsp2P/TYpGC68n4FuBNprqB0ZtSmasy2tGdhkI6sSUAMbITOLMN88gCk7GZNypQt4/yAaKAJsL7CIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b9SWHZdE2IlDqtl/lBYGqUJb3upY7oWvZVRey1s6HoA=;
+ b=rJ9aWLTjFpRoiVqjPX7m9lyKHKdraa6oqcpFNr+l3NPjZ4Fev5wJ5x4K/PO1iVuGpiQmaj7GCKKCR6X/jToa9ttCqaOLVgLMnFILHpJYGVX/WVOMyxZ2W5soyeOBobhIEU91tHNT/lBzoS4/WDMq3Wun3pOwSQw33MkYKzykgSM=
+Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
+ by AS4PR04MB9290.eurprd04.prod.outlook.com (2603:10a6:20b:4e5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
+ 2023 02:33:43 +0000
+Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
+ ([fe80::217c:e9d6:8dc3:8f02]) by AS8PR04MB8676.eurprd04.prod.outlook.com
+ ([fe80::217c:e9d6:8dc3:8f02%4]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
+ 02:33:43 +0000
+From:   Hongxing Zhu <hongxing.zhu@nxp.com>
+To:     Xiaolei Wang <xiaolei.wang@windriver.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] PCI: imx6: Add deinit for imx pci
+Thread-Topic: [PATCH] PCI: imx6: Add deinit for imx pci
+Thread-Index: AQHZrt0KjlifXj/F7UuxiycJKXj5Fa+qc+1A
+Date:   Wed, 5 Jul 2023 02:33:42 +0000
+Message-ID: <AS8PR04MB86761A36A9B48081D1D9F4638C2FA@AS8PR04MB8676.eurprd04.prod.outlook.com>
+References: <20230705010624.3912934-1-xiaolei.wang@windriver.com>
+In-Reply-To: <20230705010624.3912934-1-xiaolei.wang@windriver.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR04MB8676:EE_|AS4PR04MB9290:EE_
+x-ms-office365-filtering-correlation-id: d6bd289a-ebde-4a76-f79a-08db7d003ffe
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Vuy4iMXQBFA6AQ8+P2hqt0XqBDO7cex8RQIG3Rck/RFO+nLrukd8LWiXqU/tpl88CzkA3sXCb4kCdzOy+5FrNqKcuVEqv5VrB8jYGD6/diAvhMnj0eN6kgfs1gyrxR5bkv9nGEYOWDgh8yDyDIziRBg+S7fHpyVvQTEnPwOd5oh3yowEgyjgdUNDhHmLGPYJrG8UzlmxZKmJ6Jsi+RDAJ+gtBp/eZkhnxbXNW+a4Wg52hV1oeqa1I4KF6GVZNvyt1wki+G4rmNa1oWJq5xUaizGMO+5Q4hOolqXpe5+Q0RmQVJ563klz9P49LYOrJttoYFBTaE+ZEbPjPbbTs6Pt1faVVUyh/lpESI2XxPxsEizqAyD31xt64dnDuw2MU9hjZ1GirzmQjChDwDurMbpyC8SpMPWsQVCJ2jfgIJHwN54+Y05Beqa6lruiB0FLnl5eNjfO/F/6hQOBGkfL83Bei2RFC2avhWECQPduNR23CizX+Pyd8EzAJ2orBa/DWDjqBsg7vqnCfnj6MlZTmLeQ7yunb5Zp6il0o8rFiknKzkALjgcMXr/8bctxg5NxnPT67CVYgPYH16OBRYiOIVSjS6O2ogMCIJKz2X898vlkm4k=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(136003)(366004)(346002)(451199021)(2906002)(52536014)(7416002)(44832011)(5660300002)(53546011)(86362001)(55016003)(8676002)(66556008)(8936002)(110136005)(6506007)(54906003)(26005)(7696005)(71200400001)(478600001)(186003)(33656002)(966005)(9686003)(45080400002)(38100700002)(122000001)(38070700005)(83380400001)(4326008)(6636002)(64756008)(66446008)(66476007)(66946007)(76116006)(316002)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?QWdZZUkzZzhQT09uZTAyQVlhWFRLVWdKQitEL1RJem51UG1mcVNYVjI0czRa?=
+ =?gb2312?B?azQrY0s3S1dsNzMxQ3FETG1kc1hHS1NxTW1vOUw0YlQ3V0hPYjRNS1FPMXlH?=
+ =?gb2312?B?aVNnUXd2ek1mK2lwYXQwOW1xRUsvNVA2a2hJdngxd2g3enJyNmpweFV1OUNZ?=
+ =?gb2312?B?cFZYT3oySkpSZGYzNTNNQUNwSkFRL0M1blpPbHkxNjFxb0J6dVFyQXBFUVVa?=
+ =?gb2312?B?WlBTa21FQ2VhM29Yd3V1NUpwaitnSFQxU1FIeUNRSFptSGt5REFlclN5WWl1?=
+ =?gb2312?B?N2Y5WG1MZHdRdEs0NTZ0RXQ5MER5bnhKS1NKOXN1U1FHVVNVRGYvSkhleUQw?=
+ =?gb2312?B?QnY4NGxmUFBxV3ZqV296RWt6SHB5RlBkejJ5ZzFCSlI1YjBnZ1c1dVZxTFhl?=
+ =?gb2312?B?R3ZMNGZRblR4UmlpeDdkWVNCb29IV1ZvMHMzcFlLN0NXb1FiQ1lhMTBJY2lH?=
+ =?gb2312?B?UE4yQTd1SklaaXNpcWNWajBJVWY3L2VZUWJjL09CU2VCMktrdHNpWlpaMHlL?=
+ =?gb2312?B?MitiSjNZSUUwUm9wbmdZVDBTN0xYNkFqekFxaktRZC9oTHhxbzV5YW5WQ0s4?=
+ =?gb2312?B?YWV5OC94R1QxQWk0a0EzQXRZc1kzK0FiOXUyK1lyYUZ4b1JORHArbXpFd2xF?=
+ =?gb2312?B?MzU1T2FYU0xNbjVnSVFDeDNYWXI2VWpiZHBRUFI2SFBab0RpYmNpMVVuaE1N?=
+ =?gb2312?B?NjI4YlhaWFhaeG9XRGZMK0wxRzRkd00rcVArblY4RGZHcFdhWHY0YUZZUkx4?=
+ =?gb2312?B?TmZ3L3RxQU9uODdXWVUyU2JZdDg2QjlGN0Z4THdxNkhSSXFjbXViYURzQUhj?=
+ =?gb2312?B?cHpLaGdIcUk3R3BjZkRYTnZLMGVId1laUGQrQjhweitMSkR4aTBIWGdlNi9L?=
+ =?gb2312?B?TW4rUkxmMENoR3d1bFVqZGQyalBTVVUzazhqZlN4YkhHZzVHbVlIODF2dHM4?=
+ =?gb2312?B?N2NBaXQwQ0lCdVl2em9tUW9hWU1oU25XOHNGSDYvcFhHNmR2cUg4ZzJBVEJJ?=
+ =?gb2312?B?Y3UyRWxPbmdXeWpuS3lnN2N4L2xjdm5mcUxJODNMd1d1VHdWcld1YmxQM1Ez?=
+ =?gb2312?B?UjRmTjJqWXZhdmdBd3NxYzh2SnhsQTBGQlBsT2ZGUEZ5ZWI4czFrYXJWWmdU?=
+ =?gb2312?B?dFdXMzVTVWJIcWszemlsNDhnNXBDbGo1QkpmMkZjK3QvVFdsUENhMzdWbmg4?=
+ =?gb2312?B?Q1ovSXM2SFQ5L1VNM2ZoR3hPZHpTSzFNZDRXTHRYL25wckYvWVc0UlF0aHRL?=
+ =?gb2312?B?bDgwVmdrTm5LS3E4eXFneTc2ZW5UUFFIL21LbU1SWTgydVpwVER0YjlEUC91?=
+ =?gb2312?B?S0lNVm4wdEhoR1lIZHcya2FoTHhGengzczBaWVNqQXFZUUx4SWFldGt3TXAv?=
+ =?gb2312?B?Y1BXVDF2MkhJWWF2dFRscVE4QURpdG5UNlBjRUhkZTdxQnp2bnNLRUVYSmFk?=
+ =?gb2312?B?Y0M0MlNDMmtZcXJTTEpmUHpMTFIzVXFPUjFLbWFxNHVzZklvckVnekFhbW52?=
+ =?gb2312?B?OHEwb2pMZ2ZIQ3NSc3dJYlRYaXpqV3ZyenZwN1ZvUGttRnlXNTNOSlJwR1Ix?=
+ =?gb2312?B?R2RHdVd1dEx6ZkV0SlFxVmhxMU80bW9zbG85ZEM5Y2VmSURqaWFGVzlySlJ3?=
+ =?gb2312?B?S1pGZW0vc01WOFVMS1p3WUV6S1JqdCt3WU9FbWRTc3V0STNHeU5DSmxicEJW?=
+ =?gb2312?B?U0Q5QkpQSGlCZGhQbGhpVGVlTkRiaVRmc3pUZHVkbGM4TzJVdldmZmhvN1JO?=
+ =?gb2312?B?azVyQ0RRRlBNNjRLWWo4OHZkcGVpYURzYlVTMmtGbTluK3NTM0c3ZzVFY0ZD?=
+ =?gb2312?B?SWVtVDVrRHpUV0U1ZEJOYXllL3R4QmE1VHZjZkVnN0RMcDBqYXNqcmdLMFA5?=
+ =?gb2312?B?dnNJSFYvOVh6T3pXR3RpT3kwcXZBTVFvcGRGanFqcm1hcTdPcE1VQlM0NDlS?=
+ =?gb2312?B?emxYWG01MjJlNEFHdnJIYnFpSGM2Y2hXOUlVRUtreVJITWQ0UWlSNzJiSG0y?=
+ =?gb2312?B?SDJSMjFGYkJuakh0Y3lEdTlrL1BPZm1oc1F6TkRFTXZlZGlxQU93alhnUTFi?=
+ =?gb2312?B?bmZxUEhTK0FEK01uRnVJOWVmcEFlSkFjMTF1VGpkVE1iTkgzU0x3cWN4RExN?=
+ =?gb2312?Q?viVcyPeFcCMVpNEQoE8zlSELp?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <70432d91-3909-ac3c-9c36-5f7484c1fdf1@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHoZRd1aRkt_btNA--.43111S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF43Cr1ktFy8urWDAr13Arb_yoWruFy5pF
-        WkKa9xCrW8Gr48Gw1jqr1UZFyft3yIv347JF48G3W5uF4xAryjgryDXFy0gF1UArWkWF4U
-        KFn8KF9FvF1UJr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-        04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUouWlDUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6bd289a-ebde-4a76-f79a-08db7d003ffe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2023 02:33:43.0194
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: flNfH+BHXJ0BIJpRNjFnhcAzdSyI78nzv7uN7apI4y+zwtkruyt8bdphZfWa76HWA1OaoBNYpl/5LJFWyBdATw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9290
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/07/05 9:43, Yu Kuai 写道:
-> Hi,
-> 
-> 在 2023/07/05 1:04, Marc Hartmayer 写道:
->> On Thu, Jun 22, 2023 at 12:01 AM +0800, Yu Kuai 
->> <yukuai1@huaweicloud.com> wrote:
->>> From: Yu Kuai <yukuai3@huawei.com>
->>>
->>> In order to prevent request_queue to be freed before cleaning up
->>> blktrace debugfs entries, commit db59133e9279 ("scsi: sg: fix blktrace
->>> debugfs entries leakage") use scsi_device_get(), however,
->>> scsi_device_get() will also grab scsi module reference and scsi module
->>> can't be removed.
->>>
->>> It's reported that blktests can't unload scsi_debug after block/001:
->>>
->>> blktests (master) # ./check block
->>> block/001 (stress device hotplugging) [failed]
->>>       +++ /root/blktests/results/nodev/block/001.out.bad 2023-06-19
->>>        Running block/001
->>>        Stressing sd
->>>       +modprobe: FATAL: Module scsi_debug is in use.
->>>
->>> Fix this problem by grabbing request_queue reference directly, so that
->>> scsi host module can still be unloaded while request_queue will be
->>> pinged by sg device.
->>>
->>> Reported-by: Chaitanya Kulkarni <chaitanyak@nvidia.com>
->>> Link: 
->>> https://lore.kernel.org/all/1760da91-876d-fc9c-ab51-999a6f66ad50@nvidia.com/ 
->>>
->>> Fixes: db59133e9279 ("scsi: sg: fix blktrace debugfs entries leakage")
->>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>> ---
->>>   drivers/scsi/sg.c | 6 +++---
->>>   1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
->>> index 2433eeef042a..dcb73787c29d 100644
->>> --- a/drivers/scsi/sg.c
->>> +++ b/drivers/scsi/sg.c
->>> @@ -1497,7 +1497,7 @@ sg_add_device(struct device *cl_dev)
->>>       int error;
->>>       unsigned long iflags;
->>> -    error = scsi_device_get(scsidp);
->>> +    error = blk_get_queue(scsidp->request_queue);
->>>       if (error)
->>>           return error;
->>> @@ -1558,7 +1558,7 @@ sg_add_device(struct device *cl_dev)
->>>   out:
->>>       if (cdev)
->>>           cdev_del(cdev);
->>> -    scsi_device_put(scsidp);
->>> +    blk_put_queue(scsidp->request_queue);
->>>       return error;
->>>   }
->>> @@ -1575,7 +1575,7 @@ sg_device_destroy(struct kref *kref)
->>>        */
->>>       blk_trace_remove(q);
->>> -    scsi_device_put(sdp->device);
->>> +    blk_put_queue(q);
->>>       write_lock_irqsave(&sg_index_lock, flags);
->>>       idr_remove(&sg_index_idr, sdp->index);
->>> -- 
->>> 2.39.2
->>
->> Hi,
->>
->> This change (bisected) triggers a regression in our KVM on s390x CI. The
->> symptom is that a “scsi_debug device” does not bind to the scsi_generic
->> driver. On s390x you can reproduce the problem as follows (I have not
->> tested on x86):
->>
->> With this patch applied:
->>
->> $ sudo modprobe scsi_debug
->> $ # Get the 'scsi_host,channel,target_number,LUN' tuple for the 
->> scsi_debug device
->> $ lsscsi |grep scsi_debug |awk '{ print $1 }'
->> [0:0:0:0]
->> $ sudo stat /sys/bus/scsi/devices/0:0:0:0/scsi_generic
->> stat: cannot statx '/sys/bus/scsi/devices/0:0:0:0/scsi_generic': No 
->> such file or directory
->>
->>
->> Patch reverted:
->>
-> 
-> I didn't figure out the root cause, howver, have you tried to reviert
-> this patch as well?
-> 
-> db59133e9279 ("scsi: sg: fix blktrace debugfs entries leakage"
-
-Never mind this, root cause is that the checking of return value of
-blk_get_queue() is wrong.
-
-This shoud be fixed by following patch:
-
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 89fa046c7158..0d8afffd1683 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -1497,9 +1497,10 @@ sg_add_device(struct device *cl_dev)
-         int error;
-         unsigned long iflags;
-
--       error = blk_get_queue(scsidp->request_queue);
--       if (error)
--               return error;
-+       if (!blk_get_queue(scsidp->request_queue)) {
-+               pr_warn("%s: get scsi_device queue failed\n", __func__);
-+               return -ENODEV;
-+       }
-
-         error = -ENOMEM;
-         cdev = cdev_alloc();
-
-> 
-> Thanks,
-> Kuai
->> $ sudo modprobe scsi_debug
->> $ lsscsi |grep scsi_debug |awk '{ print $1 }'
->> [0:0:0:0]
->> $ sudo stat /sys/bus/scsi/devices/0:0:0:0/scsi_generic
->>    File: /sys/bus/scsi/devices/0:0:0:0/scsi_generic
->>    Size: 0             Blocks: 0          IO Block: 4096   directory
->> Device: 0,20    Inode: 12155       Links: 3
->> …
->>
->> Any ideas?
->>
->>   Marc
->> .
->>
-> 
-> .
-> 
-
+SGkgWGlhb2xlaToNClRoYW5rcyBmb3IgeW91ciBwYXRjaC4NClRoZSBzaW1pbGFyIGlzc3VlIGhh
+ZCBiZWVuIGZpeGVkIGJ5IGFub3RoZXIgbWFpbC1sb29wLg0KSXNzdWVkIGJ5IE1hcmsgYW5kIEZh
+YmlvLg0KaHR0cHM6Ly9sa21sLm9yZy9sa21sLzIwMjMvNy8zLzgxNg0KaHR0cHM6Ly9wYXRjaHdv
+cmsua2VybmVsLm9yZy9wcm9qZWN0L2xpbnV4LXBjaS9wYXRjaC8yMDIzMDcwNDEyMjYzNS4xMzYy
+MTU2LTEtZmVzdGV2YW1AZ21haWwuY29tLw0KDQpCZXN0IFJlZ2FyZHMNClJpY2hhcmQgWmh1DQoN
+Cj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogWGlhb2xlaSBXYW5nIDx4aWFv
+bGVpLndhbmdAd2luZHJpdmVyLmNvbT4NCj4gU2VudDogMjAyM8TqN9TCNcjVIDk6MDYNCj4gVG86
+IEhvbmd4aW5nIFpodSA8aG9uZ3hpbmcuemh1QG54cC5jb20+OyBsLnN0YWNoQHBlbmd1dHJvbml4
+LmRlOw0KPiBrd0BsaW51eC5jb207IGJoZWxnYWFzQGdvb2dsZS5jb207IHNoYXduZ3VvQGtlcm5l
+bC5vcmc7DQo+IHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU7IGtlcm5lbEBwZW5ndXRyb25peC5kZTsg
+ZmVzdGV2YW1AZ21haWwuY29tOw0KPiBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPg0K
+PiBDYzogbGludXgtcGNpQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5p
+bmZyYWRlYWQub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6
+IFtQQVRDSF0gUENJOiBpbXg2OiBBZGQgZGVpbml0IGZvciBpbXggcGNpDQo+IA0KPiBDb21taXQg
+ZGE1NmExYmZiYWI1KCJQQ0k6IGR3YzogV2FpdCBmb3IgbGluayB1cCBvbmx5IGlmIGxpbmsgaXMg
+c3RhcnRlZCIpIGFkZHMNCj4gdGhlIGp1ZGdtZW50IG9uIHRoZSByZXR1cm4gdmFsdWUgb2YgZHdf
+cGNpZV93YWl0X2Zvcl9saW5rKCkuIFdoZW4gbm8gcGNpDQo+IGRldmljZSBpcyBjb25uZWN0ZWQg
+YW5kIHBjaSBkb2VzIG5vdCBhcHBlYXIgbGluayB1cCwgdGhlIGxpbmsgd2lsbCBiZSBzdG9wcGVk
+IGF0DQo+IHRoaXMgdGltZS4gUnVuIGhvc3RfZGVpbml0LCBzbyBhZGQgaG9zdF9kZWluaXQgY2Fs
+bGJhY2sgZnVuY3Rpb24uDQo+IA0KPiAgIFdBUk5JTkc6IENQVTogMiBQSUQ6IDcwIGF0IGRyaXZl
+cnMvcmVndWxhdG9yL2NvcmUuYzoyMzk4DQo+IF9yZWd1bGF0b3JfcHV0LnBhcnQuMCsweDE3Yy8w
+eDE5NA0KPiAgIE1vZHVsZXMgbGlua2VkIGluOg0KPiAgIENQVTogMiBQSUQ6IDcwIENvbW06IGt3
+b3JrZXIvdTg6NCBOb3QgdGFpbnRlZA0KPiA2LjQuMC1yYzEtMDAwMDEtZ2RhNTZhMWJmYmFiNS1k
+aXJ0eSAjMjINCj4gICBIYXJkd2FyZSBuYW1lOiBOWFAgaS5NWDhNUSBFVksgKERUKQ0KPiAgICAg
+Q2FsbCB0cmFjZToNCj4gICAgIF9yZWd1bGF0b3JfcHV0LnBhcnQuMCsweDE3Yy8weDE5NA0KPiAg
+ICAgcmVndWxhdG9yX3B1dCsweDNjLzB4NTQNCj4gICAgIGRldm1fcmVndWxhdG9yX3JlbGVhc2Ur
+MHgxNC8weDIwDQo+ICAgICByZWxlYXNlX25vZGVzKzB4OGMvMHgxM2MNCj4gICAgIGRldnJlc19y
+ZWxlYXNlX2FsbCsweDhjLzB4MTA4DQo+ICAgICBkZXZpY2VfdW5iaW5kX2NsZWFudXArMHgxOC8w
+eDY4DQo+ICAgICByZWFsbHlfcHJvYmUrMHhlNC8weDI3Yw0KPiAgICAgX19kcml2ZXJfcHJvYmVf
+ZGV2aWNlKzB4NzgvMHgxMmMNCj4gICAgIGRyaXZlcl9wcm9iZV9kZXZpY2UrMHgzYy8weDExOA0K
+PiAgICAgX19kZXZpY2VfYXR0YWNoX2RyaXZlcisweGI4LzB4ZjgNCj4gICAgIGJ1c19mb3JfZWFj
+aF9kcnYrMHg4NC8weGU0DQo+ICAgICBfX2RldmljZV9hdHRhY2hfYXN5bmNfaGVscGVyKzB4YzAv
+MHhlNA0KPiAgICAgYXN5bmNfcnVuX2VudHJ5X2ZuKzB4MzQvMHhlMA0KPiAgICAgcHJvY2Vzc19v
+bmVfd29yaysweDI5MC8weDVjNA0KPiAgICAgd29ya2VyX3RocmVhZCsweDRjLzB4NDA4DQo+ICAg
+ICBrdGhyZWFkKzB4MTI4LzB4MTM0DQo+ICAgICByZXRfZnJvbV9mb3JrKzB4MTAvMHgyMA0KPiAN
+Cj4gU2lnbmVkLW9mZi1ieTogWGlhb2xlaSBXYW5nIDx4aWFvbGVpLndhbmdAd2luZHJpdmVyLmNv
+bT4NCj4gLS0tDQo+ICBkcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5jIHwgMSAr
+DQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4gDQo+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5jDQo+IGIvZHJpdmVycy9wY2kvY29u
+dHJvbGxlci9kd2MvcGNpLWlteDYuYw0KPiBpbmRleCA1MjkwNmY5OTlmMmIuLmU0OTQyYmQyNTk4
+ZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9wY2kvY29udHJvbGxlci9kd2MvcGNpLWlteDYuYw0K
+PiArKysgYi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5jDQo+IEBAIC0xMDM5
+LDYgKzEwMzksNyBAQCBzdGF0aWMgdm9pZCBpbXg2X3BjaWVfaG9zdF9leGl0KHN0cnVjdCBkd19w
+Y2llX3JwDQo+ICpwcCkNCj4gDQo+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGR3X3BjaWVfaG9zdF9v
+cHMgaW14Nl9wY2llX2hvc3Rfb3BzID0gew0KPiAgCS5ob3N0X2luaXQgPSBpbXg2X3BjaWVfaG9z
+dF9pbml0LA0KPiArCS5ob3N0X2RlaW5pdCA9IGlteDZfcGNpZV9ob3N0X2V4aXQsDQo+ICB9Ow0K
+PiANCj4gIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZHdfcGNpZV9vcHMgZHdfcGNpZV9vcHMgPSB7DQo+
+IC0tDQo+IDIuMjUuMQ0KDQo=
