@@ -2,118 +2,415 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1D67490EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 00:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008D37490F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 00:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjGEWVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 18:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S231818AbjGEWYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 18:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjGEWVI (ORCPT
+        with ESMTP id S229532AbjGEWYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 18:21:08 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EF4139
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 15:21:07 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b711c3ad1fso46171a34.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 15:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688595666; x=1691187666;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4t/HHKLfozsv67Y5fojGuZxU83pEeYbU9lCaGZWyjqY=;
-        b=Te4W7od8zDqp8hEuanxEO19H9IYsRKKKTlsuKFVa61Q1VTWbAxI1pKlXkm/ylV9aE1
-         XuNqtjFrnUW+vRwl5Tf6C9JSiHzM/fNbYk3uft864rJstXhk1ciMxX/bQupw9xuWZGtI
-         z2sjU+7IyzKGpCmixvqckwbZVSCiSp8qgmG0k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688595666; x=1691187666;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4t/HHKLfozsv67Y5fojGuZxU83pEeYbU9lCaGZWyjqY=;
-        b=dC7JSAaN2UVvi71Atpw3UXK7Y/rKnxCkIkWCKXUEM5HzUMtOlUTY8P6oDAX+DuSnO+
-         59LGndaCfhArq8rj2knVlzeES/z4+A75AsS8ultdqXXUMqU6qGA5jZY0t+KyLBy73sYM
-         Y5O65XQo1sqlTpSXR3vZEA+SIEsl7kj9jLTo2XA8C2KR8/VkIPu/230nA5+RVV7vaAZP
-         WJjV6jDRWgMMPxp8FGo9/fspZHRQmhk6S+14vCODf13PKBCF6hs+ue/CsN4/lDSmG5Qu
-         ij9iG61e8fuGhzXOud2Dx2Inna+R7iDl9LPGgCtPK6/CpNyrOBSfh43r1LUlJotDyxvo
-         yMgg==
-X-Gm-Message-State: ABy/qLYI3oKWYWOo94xGdLwL/HOf6ZWX6DRjeTFCTkCgw3DgyHn64NK8
-        7uQrHxIkdqEqW+G7C+qgPWKc5Q==
-X-Google-Smtp-Source: APBJJlFsEWM7S7tH8ZFTVSIlif6SLJE4BnrZDceBK0WHyrayzJpK+1U70cJKEvh2+HI4RfMccPZIew==
-X-Received: by 2002:a9d:66c8:0:b0:6b8:67bf:fdf2 with SMTP id t8-20020a9d66c8000000b006b867bffdf2mr296865otm.11.1688595666568;
-        Wed, 05 Jul 2023 15:21:06 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id c8-20020a633508000000b005579c73d209sm56667pga.1.2023.07.05.15.21.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 15:21:05 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 15:21:04 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Kees Cook <kees@kernel.org>,
-        Isaac Manjarres <isaacmanjarres@google.com>,
-        John Stultz <jstultz@google.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        kernel-team@android.com, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
-Subject: Re: [PATCH] pstore/ram: Add support for dynamically allocated
- ramoops memory regions
-Message-ID: <202307051516.AE6080BF@keescook>
-References: <20230622005213.458236-1-isaacmanjarres@google.com>
- <CANDhNCrEhx4LUPaz-FHZZJMG2yX670hk-vGTZs=HxiGR18zm5A@mail.gmail.com>
- <202306212212.5E53607@keescook>
- <ZJSES98P+zzrhBI5@google.com>
- <3A2CFB4D-27D0-4FEB-93B4-2F888305DE5A@kernel.org>
- <a2c9417b-3a50-bea4-dd39-2f021c196fa1@quicinc.com>
- <696269e1-8b97-66ed-c9b0-ce1b8d637d24@quicinc.com>
- <bd531778-a587-e4d0-e360-432208f064ea@kernel.org>
+        Wed, 5 Jul 2023 18:24:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA023A9;
+        Wed,  5 Jul 2023 15:24:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8794C61789;
+        Wed,  5 Jul 2023 22:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65BF7C433C7;
+        Wed,  5 Jul 2023 22:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688595841;
+        bh=7HeBDOa/LX+W3drzDFVFH2u+XTBdq1prz5VSNxFOvwA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O7zynVxe6Eac6BpYL1V1McKGBDINZNGEmPRkwUM8Qdqe6S3t0I81z9Rh4Dt+xQiWr
+         8eDkRvOMprfm9HJ7kyDg8trIwwbKj2aWoTc0+1N9ccYUKnIXXmyxZ9z1u/M7X5b6ut
+         ymMliGEPk4zNTszi/vhyCc5xbb0M55FGrm+qpB9d0Z7C545SoRza5W2SDx9IPy/47B
+         jSgo2X+UHyiShANFhNBdP7fla1hIC5OIZS4tUySBZo67nqB1QXB6Zs1t6svEmeeaqI
+         s/nfTdp2IcR30cXGYF6Xzc6fL5FlBeN62KkB3RTIbEozMEFI2u/yLc4yLsRoSWqycT
+         K4Z14r9HNnGnA==
+Date:   Thu, 6 Jul 2023 00:23:57 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH 11/14] context-tracking: Introduce work deferral
+ infrastructure
+Message-ID: <ZKXtfWZiM66dK5xC@localhost.localdomain>
+References: <20230705181256.3539027-1-vschneid@redhat.com>
+ <20230705181256.3539027-12-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <bd531778-a587-e4d0-e360-432208f064ea@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230705181256.3539027-12-vschneid@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 08:07:09AM +0200, Krzysztof Kozlowski wrote:
-> On 26/06/2023 19:34, Mukesh Ojha wrote:
-> > I have tried multiple attempt already to get this patch in
-> > 
-> > https://lore.kernel.org/lkml/1675330081-15029-2-git-send-email-quic_mojha@quicinc.com/
-> > 
-> > later tried the approach of patch #9 along with minidump series..
-> 
-> For all dynamic reserved-memory-ramoops thingy, I think Rob made clear
-> statement:
-> 
-> "I don't think dynamic ramoops location should be defined in DT."
-> 
-> https://lore.kernel.org/lkml/CAL_JsqKV6EEpsDNdj1BTN6nODb=hsHkzsdkCzzWwnTrygn0K-A@mail.gmail.com/
-> 
-> Please do not send three versions of the same patch hoping one will
-> sneak in.
+Le Wed, Jul 05, 2023 at 07:12:53PM +0100, Valentin Schneider a écrit :
+> +bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
+> +{
+> +	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+> +	unsigned int old_work;
+> +	bool ret = false;
+> +
+> +	preempt_disable();
+> +
+> +	old_work = atomic_read(&ct->work);
+> +	/*
+> +	 * Try setting the work until either
+> +	 * - the target CPU no longer accepts any more deferred work
+> +	 * - the work has been set
+> +	 */
+> +	while (!(old_work & CONTEXT_WORK_DISABLED) && !ret)
 
-If I understand correctly, the driving issue here is that minidump wants
-to be able to find the crash report "externally". Perhaps pstore could
-provide either a known symbol that contains the address that was used,
-or could add something to the kernel crash image (like is done for
-KASLR), so that an external consumer of the kernel crash image could
-find it?
+Isn't there a race here where you may have missed a CPU that just entered in
+user and you eventually disturb it?
 
-And then the RAM backend for pstore could gain an option for "just
-allocate regular RAM" for holding the dump? In other words, the address
-is chosen by pstore, but an external consumer could still locate it.
+> +		ret = atomic_try_cmpxchg(&ct->work, &old_work, old_work | work);
+> +
+> +	preempt_enable();
+> +	return ret;
+> +}
+[...]
+> @@ -100,14 +158,19 @@ static noinstr void ct_kernel_exit_state(int offset)
+>   */
+>  static noinstr void ct_kernel_enter_state(int offset)
+>  {
+> +	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+>  	int seq;
+> +	unsigned int work;
+>  
+> +	work = ct_work_fetch(ct);
 
--Kees
+So this adds another fully ordered operation on user <-> kernel transition.
+How many such IPIs can we expect?
 
+If this is just about a dozen, can we stuff them in the state like in the
+following? We can potentially add more of them especially on 64 bits we could
+afford 30 different works, this is just shrinking the RCU extended quiescent
+state counter space. Worst case that can happen is that RCU misses 65535
+idle/user <-> kernel transitions and delays a grace period...
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 205fd23e0cad..e453e9fb864b 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -851,6 +851,15 @@ config HAVE_CONTEXT_TRACKING_USER_OFFSTACK
+ 	  - No use of instrumentation, unless instrumentation_begin() got
+ 	    called.
+ 
++config HAVE_CONTEXT_TRACKING_WORK
++	bool
++	help
++	  Architecture supports deferring work while not in kernel context.
++	  This is especially useful on setups with isolated CPUs that might
++	  want to avoid being interrupted to perform housekeeping tasks (for
++	  ex. TLB invalidation or icache invalidation). The housekeeping
++	  operations are performed upon re-entering the kernel.
++
+ config HAVE_TIF_NOHZ
+ 	bool
+ 	help
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab123a8ee..490c773105c0 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -197,6 +197,7 @@ config X86
+ 	select HAVE_CMPXCHG_LOCAL
+ 	select HAVE_CONTEXT_TRACKING_USER		if X86_64
+ 	select HAVE_CONTEXT_TRACKING_USER_OFFSTACK	if HAVE_CONTEXT_TRACKING_USER
++	select HAVE_CONTEXT_TRACKING_WORK		if X86_64
+ 	select HAVE_C_RECORDMCOUNT
+ 	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
+ 	select HAVE_OBJTOOL_NOP_MCOUNT		if HAVE_OBJTOOL_MCOUNT
+diff --git a/arch/x86/include/asm/context_tracking_work.h b/arch/x86/include/asm/context_tracking_work.h
+new file mode 100644
+index 000000000000..5bc29e6b2ed3
+--- /dev/null
++++ b/arch/x86/include/asm/context_tracking_work.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_CONTEXT_TRACKING_WORK_H
++#define _ASM_X86_CONTEXT_TRACKING_WORK_H
++
++static __always_inline void arch_context_tracking_work(int work)
++{
++	switch (work) {
++	case CONTEXT_WORK_n:
++		// Do work...
++		break;
++	}
++}
++
++#endif
+diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
+index d3cbb6c16bab..333b26d7cbe5 100644
+--- a/include/linux/context_tracking.h
++++ b/include/linux/context_tracking.h
+@@ -5,6 +5,7 @@
+ #include <linux/sched.h>
+ #include <linux/vtime.h>
+ #include <linux/context_tracking_state.h>
++#include <linux/context_tracking_work.h>
+ #include <linux/instrumentation.h>
+ 
+ #include <asm/ptrace.h>
+@@ -75,7 +76,7 @@ static inline void exception_exit(enum ctx_state prev_ctx)
+ static __always_inline bool context_tracking_guest_enter(void)
+ {
+ 	if (context_tracking_enabled())
+-		__ct_user_enter(CONTEXT_GUEST);
++		__ct_user_enter(CONTEXT_USER);
+ 
+ 	return context_tracking_enabled_this_cpu();
+ }
+@@ -83,7 +84,7 @@ static __always_inline bool context_tracking_guest_enter(void)
+ static __always_inline void context_tracking_guest_exit(void)
+ {
+ 	if (context_tracking_enabled())
+-		__ct_user_exit(CONTEXT_GUEST);
++		__ct_user_exit(CONTEXT_USER);
+ }
+ 
+ #define CT_WARN_ON(cond) WARN_ON(context_tracking_enabled() && (cond))
+@@ -122,6 +123,26 @@ static __always_inline bool rcu_dynticks_curr_cpu_in_eqs(void)
+ 	return !(arch_atomic_read(this_cpu_ptr(&context_tracking.state)) & RCU_DYNTICKS_IDX);
+ }
+ 
++/*
++ * Increment the current CPU's context_tracking structure's ->state field
++ * with ordering and clear the work bits.  Return the new value.
++ */
++static __always_inline unsigned long ct_state_inc_clear_work(int incby)
++{
++	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
++	unsigned long new, old, state;
++
++	state = arch_atomic_read(&ct->state);
++	do {
++		old = state;
++		new = old & ~CONTEXT_WORK_MASK;
++		new += incby;
++		state = arch_atomic_cmpxchg(&ct->state, old, new);
++	} while (old != state);
++
++	return state;
++}
++
+ /*
+  * Increment the current CPU's context_tracking structure's ->state field
+  * with ordering.  Return the new value.
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index fdd537ea513f..ec3d172601c5 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -10,14 +10,19 @@
+ #define DYNTICK_IRQ_NONIDLE	((LONG_MAX / 2) + 1)
+ 
+ enum ctx_state {
++	/* Following are values */
+ 	CONTEXT_DISABLED	= -1,	/* returned by ct_state() if unknown */
+ 	CONTEXT_KERNEL		= 0,
+ 	CONTEXT_IDLE		= 1,
+ 	CONTEXT_USER		= 2,
+-	CONTEXT_GUEST		= 3,
+-	CONTEXT_MAX		= 4,
++	/* Following are bit numbers */
++	CONTEXT_WORK		= 2,
++	CONTEXT_MAX		= 16,
+ };
+ 
++#define CONTEXT_MASK (BIT(CONTEXT_WORK) - 1)
++#define CONTEXT_WORK_MASK ((BIT(CONTEXT_MAX) - 1) & ~(BIT(CONTEXT_WORK) - 1))
++
+ /* Even value for idle, else odd. */
+ #define RCU_DYNTICKS_IDX CONTEXT_MAX
+ 
+diff --git a/include/linux/context_tracking_work.h b/include/linux/context_tracking_work.h
+new file mode 100644
+index 000000000000..fb74db8876dd
+--- /dev/null
++++ b/include/linux/context_tracking_work.h
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_CONTEXT_TRACKING_WORK_H
++#define _LINUX_CONTEXT_TRACKING_WORK_H
++
++#include <linux/bitops.h>
++
++enum {
++	CONTEXT_WORK_n_OFFSET,
++	CONTEXT_WORK_MAX_OFFSET
++};
++
++enum ct_work {
++	CONTEXT_WORK_n        = BIT(CONTEXT_WORK_n_OFFSET),
++	CONTEXT_WORK_MAX      = BIT(CONTEXT_WORK_MAX_OFFSET)
++};
++
++#include <asm/context_tracking_work.h>
++
++#ifdef CONFIG_CONTEXT_TRACKING_WORK
++extern bool ct_set_cpu_work(unsigned int cpu, unsigned int work);
++#else
++static inline bool
++ct_set_cpu_work(unsigned int cpu, unsigned int work) { return false; }
++#endif
++
++#endif
+diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+index a09f1c19336a..732042b9a7b7 100644
+--- a/kernel/context_tracking.c
++++ b/kernel/context_tracking.c
+@@ -72,6 +72,58 @@ static __always_inline void rcu_dynticks_task_trace_exit(void)
+ #endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
+ }
+ 
++#ifdef CONFIG_CONTEXT_TRACKING_WORK
++static noinstr void ct_work_flush(unsigned long seq)
++{
++	unsigned int bit;
++	/*
++	 * arch_context_tracking_work() must be noinstr, non-blocking,
++	 * and NMI safe.
++	 */
++	for_each_set_bit(bit, &seq, CONTEXT_MAX)
++		arch_context_tracking_work(BIT(bit) >> CONTEXT_WORK);
++}
++
++bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
++{
++	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
++	unsigned int old, new, state;
++	bool ret = false;
++
++	preempt_disable();
++
++	work <<= CONTEXT_WORK;
++	state = atomic_read(&ct->state);
++	/*
++	 * Try setting the work until either
++	 * - the target CPU is on the kernel
++	 * - the work has been set
++	 */
++	for (;;) {
++		/* Only set if running in user/guest */
++		old = state;
++		old &= ~CONTEXT_MASK;
++		old |= CONTEXT_USER;
++
++		new = old | work;
++
++		state = atomic_cmpxchg(&ct->state, old, new);
++		if (state & work) {
++			ret = true;
++			break;
++		}
++
++		if ((state & CONTEXT_MASK) != CONTEXT_USER)
++			break;
++	}
++
++	preempt_enable();
++	return ret;
++}
++#else
++static __always_inline void ct_work_flush(unsigned long seq) { }
++#endif
++
+ /*
+  * Record entry into an extended quiescent state.  This is only to be
+  * called when not already in an extended quiescent state, that is,
+@@ -100,14 +152,18 @@ static noinstr void ct_kernel_exit_state(int offset)
+  */
+ static noinstr void ct_kernel_enter_state(int offset)
+ {
+-	int seq;
++	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
++	unsigned long seq;
+ 
+ 	/*
+ 	 * CPUs seeing atomic_add_return() must see prior idle sojourns,
+ 	 * and we also must force ordering with the next RCU read-side
+ 	 * critical section.
+ 	 */
+-	seq = ct_state_inc(offset);
++	seq = ct_state_inc_clear_work(offset);
++	if (seq & CONTEXT_WORK_MASK)
++		ct_work_flush(seq & CONTEXT_WORK_MASK);
++
+ 	// RCU is now watching.  Better not be in an extended quiescent state!
+ 	rcu_dynticks_task_trace_exit();  // After ->dynticks update!
+ 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !(seq & RCU_DYNTICKS_IDX));
+diff --git a/kernel/time/Kconfig b/kernel/time/Kconfig
+index bae8f11070be..fdb266f2d774 100644
+--- a/kernel/time/Kconfig
++++ b/kernel/time/Kconfig
+@@ -181,6 +181,11 @@ config CONTEXT_TRACKING_USER_FORCE
+ 	  Say N otherwise, this option brings an overhead that you
+ 	  don't want in production.
+ 
++config CONTEXT_TRACKING_WORK
++	bool
++	depends on HAVE_CONTEXT_TRACKING_WORK && CONTEXT_TRACKING_USER
++	default y
++
+ config NO_HZ
+ 	bool "Old Idle dynticks config"
+ 	help
 -- 
-Kees Cook
+2.40.1
+
