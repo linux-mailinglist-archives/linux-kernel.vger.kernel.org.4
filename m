@@ -2,147 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F5A747DF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90935747DFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjGEHJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S232148AbjGEHMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjGEHJv (ORCPT
+        with ESMTP id S231598AbjGEHMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:09:51 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C091720
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:09:48 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230705070945epoutp02081ec302a05cd6967db1d484d59940ac~u5xSLH95i1360513605epoutp02E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:09:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230705070945epoutp02081ec302a05cd6967db1d484d59940ac~u5xSLH95i1360513605epoutp02E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1688540985;
-        bh=TzMoaf8vGyU8GATKSoffunm8vsRVuxtDYDCKWXxcjoM=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=VKwUqMyyyvV6HKNGU1YXfdoMuywJRpo2MyYld+2/tX51XjzULbRnSnvXO/KD6LN0U
-         ktrwgbiUjqJOFJVfjb364vu/hFtntLQ/zi+qhof9SYFE+MvVT3fh/uu6Ue9CQnCX8j
-         jJD80WLaa6VlBFkwBKg6mu4n7fkfb3RlSbqIGhw4=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230705070945epcas2p25197107f3bf947b88b044b526a80a257~u5xRziteL0072300723epcas2p2B;
-        Wed,  5 Jul 2023 07:09:45 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.92]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QwrQ05PVJz4x9QM; Wed,  5 Jul
-        2023 07:09:44 +0000 (GMT)
-X-AuditID: b6c32a46-d17dea8000009cc5-dd-64a51738a047
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        86.17.40133.83715A46; Wed,  5 Jul 2023 16:09:44 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v2] f2fs: including waf data in f2fs status information
-Reply-To: beomsu7.kim@samsung.com
-Sender: beomsu kim <beomsu7.kim@samsung.com>
-From:   beomsu kim <beomsu7.kim@samsung.com>
-To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yonggil Song <yonggil.song@samsung.com>,
-        Seokhwan Kim <sukka.kim@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Seonghun Kim <seonghun-sui.kim@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761@epcms2p1>
-Date:   Wed, 05 Jul 2023 16:09:44 +0900
-X-CMS-MailID: 20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMKsWRmVeSWpSXmKPExsWy7bCmua6F+NIUg/atahanp55lslj1INzi
-        yfpZzBaXFrlbXN41h83i9Q85i1Udcxktpp4/wuTA4bFpVSebx+4Fn5k8+rasYvT4vEkugCUq
-        2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6AYlhbLE
-        nFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToF5gV5xYm5xaV66Xl5qiZWhgYGRKVBhQnbG
-        x/lnmAp+81Y0T7zM2MA4n6uLkZNDQsBEYsPa86xdjFwcQgI7GCUOXtjC3sXIwcErICjxd4cw
-        SI2wgLvEhcsLmUFsIQFFib7mDWwgJcICOhJLthiDhNkEtCS6r59hBhkjIjCJWWJDxzcmiPm8
-        EjPan7JA2NIS25dvZYSwNSR+LOtlhrBFJW6ufssOY78/Nh+qRkSi9d5ZqBpBiQc/d0PFJSUm
-        /nwIZedLfP/9kRFksYRAC6PEzp45UA36Etv+zAZbzCvgK7Hy8RE2EJtFQFXi7veVUMe5SPxb
-        /gKsnllAXmL7W5BeDiBbU2L9Ln0QU0JAWeLILRaICj6JjsN/2WHe2jHvCRNEiapENyhE2ME+
-        7DCAKPCQaDl2mAWkQEggUGJdt/oERvlZiICdhWTnLISdCxiZVzGKpRYU56anFhsVGMHjMjk/
-        dxMjOPVpue1gnPL2g94hRiYOxkOMEhzMSiK8K74vThHiTUmsrEotyo8vKs1JLT7EaAr07URm
-        KdHkfGDyzSuJNzSxNDAxMzM0NzI1MFcS573XOjdFSCA9sSQ1OzW1ILUIpo+Jg1OqgUlevljs
-        /3uNk0laF93fvZ5TOXfr+mcGVfOTVYT/HBQ75qZi9X0/wzWmr7Eqzx50XgteEL0m6eFcwSdJ
-        ddtOBke3tvkk6H5crFS58OhfLaMWRW+HxpDiW6d3ulzYtexHSM3R0nliEk6f1Z8cLUhiiD7/
-        3KpAZ85r25VnLt0q/6bR+Yzz2pwyo2bDbw8qP/punD696sgZLnHzr2Fnwv/L8q3cc+X+q8P6
-        /7Jcthz6wLCn6faf2apVpuXs7t66ocs2FP/Sd1lovOdXT/y5Rzvlex+zbKmufr8xfMolFSXe
-        r/dOiTnW3V2rOlvreW/D1pyDL3nKva68ehZhZVDjzj95cqMGy8Jd53//XpW1vHpRPb+kEktx
-        RqKhFnNRcSIA+i9nEQYEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761
-References: <CGME20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761@epcms2p1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Jul 2023 03:12:06 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1989195
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:12:03 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688541122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L7jc5eO5JMencMFX5rVgNG4uz5Hx+04V7kPTSHBHoYk=;
+        b=kb+tLd7fuJE8DgNzgVSRlmgLxcOsOM8NrhodvtvjGnCKwT25KER16HNPwA1bXuvqlcuEsq
+        kY3h/wf8EwjREtY7FbB/C/EsOiS3NqxV7kPGoPrLEs3J2Hksz6Elvn5pSW/I6FVBPLu8YT
+        PzHHSlKxlwfFPAUIdcTCMZ6aGG6FURigxcEPxgFVo98sX7+mpk+Nhir1SZwWRklNVcvTLL
+        hrVOpQpJUXKYjVZ7ZnIFlEhrwtDxaBzU88CDNH3LjUvYJMPMxd9tSYCLKdVg9/ur8MRyKF
+        R9Ct9hfJdNHiNy6laijYXleLgCv6N/LWcyvxxLG1Rt31rlwkcLKm+uafHJo3vg==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6699E2000D;
+        Wed,  5 Jul 2023 07:11:59 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 09:11:58 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Linux MTD List <linux-mtd@lists.infradead.org>,
+        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
+        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
+        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
+        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: Re: [PATCH v3 5/5] mtd: rawnand: brcmnand: Fix mtd oobsize
+Message-ID: <20230705091158.2fe0a271@xps-13>
+In-Reply-To: <c09a72df-c49f-75e9-e95e-4e19fe10a278@broadcom.com>
+References: <20230627193738.19596-1-william.zhang@broadcom.com>
+        <20230627193738.19596-6-william.zhang@broadcom.com>
+        <20230704173047.395e445e@xps-13>
+        <c09a72df-c49f-75e9-e95e-4e19fe10a278@broadcom.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When evaluating in f2fs, it takes much time to obtain waf data.
-This patch helps to obtain waf data without calcluation.
+Hi William,
 
-Signed-off-by: Beomsu Kim <beomsu7.kim@samsung.com>
----
- fs/f2fs/iostat.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+william.zhang@broadcom.com wrote on Tue, 4 Jul 2023 17:50:28 -0700:
 
-diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
-index 3d5bfb1ad585..59720639e8c0 100644
---- a/fs/f2fs/iostat.c
-+++ b/fs/f2fs/iostat.c
-@@ -34,10 +34,23 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
- {
-        struct super_block *sb = seq->private;
-        struct f2fs_sb_info *sbi = F2FS_SB(sb);
-+       int j;
-+       unsigned long long waf = 0;
-+       unsigned long long data_written_by_user;
-+       unsigned long long data_written_to_storage;
- 
-        if (!sbi->iostat_enable)
-                return 0;
- 
-+       data_written_by_user = sbi->iostat_bytes[FS_DATA_IO];
-+
-+       data_written_to_storage = data_written_by_user;
-+       for (j = FS_NODE_IO; j <= FS_CP_META_IO; j++)
-+               data_written_to_storage += sbi->iostat_bytes[j];
-+
-+       if (data_written_by_user > 0)
-+               waf = data_written_to_storage * 100 / data_written_by_user;
-+
-        seq_printf(seq, "time:          %-16llu\n", ktime_get_real_seconds());
-        seq_printf(seq, "\t\t\t%-16s %-16s %-16s\n",
-                                "io_bytes", "count", "avg_bytes");
-@@ -81,6 +94,10 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
-        IOSTAT_INFO_SHOW("fs discard", FS_DISCARD_IO);
-        IOSTAT_INFO_SHOW("fs flush", FS_FLUSH_IO);
- 
-+       /* print waf */
-+       seq_puts(seq, "[WAF]\n");
-+       seq_printf(seq, "fs waf:                %llu.%02llu\n", waf / 100, waf % 100);
-+
-        return 0;
- }
- 
--- 
-2.17.1
+> Hi Miquel,
+>=20
+> On 07/04/2023 08:30 AM, Miquel Raynal wrote:
+> > Hi William,
+> >=20
+> > william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:38 -0700:
+> >  =20
+> >> brcmnand controller can only access the flash spare area up to certain
+> >> bytes based on the ECC level. It can be less than the actual flash spa=
+re
+> >> area size. For example, for many NAND chip supporting ECC BCH-8, it has
+> >> 226 bytes spare area. But controller can only uses 218 bytes. So brcma=
+nd
+> >> driver overrides the mtd oobsize with the controller's accessible spare
+> >> area size. When the nand base driver utilizes the nand_device object, =
+it
+> >> resets the oobsize back to the actual flash spare aprea size from
+> >> nand_memory_organization structure and controller may not able to acce=
+ss
+> >> all the oob area as mtd advises.
+> >>
+> >> This change fixes the issue by overriding the oobsize in the
+> >> nand_memory_organization structure to the controller's accessible spare
+> >> area size. =20
+> >=20
+> > I am clearly not a big fan of this solution. memorg should be and
+> > remain a read only object. Can you please find another solution?
+> >  =20
+> I was debating on this too but I don't see option because there is no oth=
+er hooks after nanddev_init to set the mtd->oobsize as far as I can see and=
+ I see there were similar fixes for other controller drivers after the nand=
+ device object init was committed, for example:
+> Fixes: 629a442cad5f ("mtd: rawnand: Fill memorg during detection")
+
+You are right, that was indeed the first approach, I'll remain on this
+path then. Thanks for the pointer.
+
+>=20
+> I will think through this again but I am open to any suggestion.
+>=20
+> >>
+> >> Fixes: a7ab085d7c16 ("mtd: rawnand: Initialize the nand_device object")
+> >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> >>
+> >> ---
+> >>
+> >> Changes in v3: None
+> >> Changes in v2: None
+> >>
+> >>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 7 +++++--
+> >>   1 file changed, 5 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/na=
+nd/raw/brcmnand/brcmnand.c
+> >> index 407bf79cbaf4..39c7f547db1f 100644
+> >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> >> @@ -2647,6 +2647,8 @@ static int brcmnand_setup_dev(struct brcmnand_ho=
+st *host)
+> >>   	struct nand_chip *chip =3D &host->chip;
+> >>   	const struct nand_ecc_props *requirements =3D
+> >>   		nanddev_get_ecc_requirements(&chip->base);
+> >> +	struct nand_memory_organization *memorg =3D
+> >> +		nanddev_get_memorg(&chip->base);
+> >>   	struct brcmnand_controller *ctrl =3D host->ctrl;
+> >>   	struct brcmnand_cfg *cfg =3D &host->hwcfg;
+> >>   	char msg[128];
+> >> @@ -2668,10 +2670,11 @@ static int brcmnand_setup_dev(struct brcmnand_=
+host *host)
+> >>   	if (cfg->spare_area_size > ctrl->max_oob)
+> >>   		cfg->spare_area_size =3D ctrl->max_oob;
+> >>   	/*
+> >> -	 * Set oobsize to be consistent with controller's spare_area_size, as
+> >> -	 * the rest is inaccessible.
+> >> +	 * Set mtd and memorg oobsize to be consistent with controller's
+> >> +	 * spare_area_size, as the rest is inaccessible.
+> >>   	 */
+> >>   	mtd->oobsize =3D cfg->spare_area_size * (mtd->writesize >> FC_SHIFT=
+);
+> >> +	memorg->oobsize =3D mtd->oobsize; =20
+> >>   >>   	cfg->device_size =3D mtd->size; =20
+> >>   	cfg->block_size =3D mtd->erasesize; =20
+> >=20
+> >=20
+> > Thanks,
+> > Miqu=C3=A8l
+> >  =20
+
+
+Thanks,
+Miqu=C3=A8l
