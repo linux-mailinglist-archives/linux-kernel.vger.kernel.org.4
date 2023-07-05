@@ -2,111 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07DD7487B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3390374878A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjGEPTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
+        id S233143AbjGEPMI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 11:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjGEPTM (ORCPT
+        with ESMTP id S233134AbjGEPMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:19:12 -0400
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682BD170B;
-        Wed,  5 Jul 2023 08:19:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1688570346;
-        bh=2d4C37vHOrdi0OO9Rhqhynwy01/E8ygnR5bhbW9of4c=;
-        h=From:To:Cc:Subject:Date;
-        b=J3bPwYiuTNcKrv9uudBp97Hli+sKQ10EQ2BsQzdwHC6pay5LMfCGvH+6rrP4Yp6ZE
-         SzCOgADoygFJXmf4/RwqqgwbqoqOY4kurzmP1VQFpnU2TEpIarX2Qq4QTjIeJa6QZP
-         cN1FU5JqURzpQI4OzcFSNv8IKBmIYoh4YPC5jYqs=
-Received: from KernelDevBox.byted.org ([180.184.49.4])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id 2AE37A77; Wed, 05 Jul 2023 23:10:46 +0800
-X-QQ-mid: xmsmtpt1688569846t1sorvnm6
-Message-ID: <tencent_D74C0118F55D22E6A6B1767CCB01CCC1E305@qq.com>
-X-QQ-XMAILINFO: NMmJpeSXIGQNty4hmHbo9gpwyyQqd59lGplGiTGUNZ6P7tsjc5H4PcG+vnZ16o
-         XXVuWcXfP9ovPspBmVHpO3C48L2vfODSOXaD3SOhqTzhE6teaCQq1LcbFVVpj6URmrtjKLbfgqmi
-         sZZfHQSsGlYWrTlvuZszL3r+Cfj1/HuwCv7gHvuXrPEAiudIElwgQrGg94ESE1iWTiOYDf8lZ+oi
-         /GXmOxV+xQvZ87O4vJbJNqz7Bj2Bz6yIXA8Jh0XGcEU4rLrrp8yDFaoKf73PqMxhi/18kxW41fv2
-         kUhkTPljwHhfD3tPOvA3flK/2HnzXwUpQl72xS5KCBjjxAplaC2B7pVA2Ef3qeZQmJJ2YGFbnUse
-         RnLCJ5by1aSiFpINk1fG/9OnYO0RgghRUTdFjhazTzq6ckjsinqAWWmsomYQOvMhvNF528sTKA5e
-         F5fYeAmNdWtTb/ico6yF4Rgvx7nkfH+XbqhYBR7gGBxnco/qU2wlKZULBMg1w2vmPq6sYmNkHp5/
-         jy+v66k2WpyNmiiiLnbpoNCmZqSJ8ata6weAY3pZcNrZHu+MW/NDFdJ1qEWf0yVLyeEoII7sBkOa
-         okUcHsB/rdU2UBgO5IB22SME6jUxS3ZEb5WG0NfpI7pMzveiLAzTGNIUtIsTO36TpAsUFdpclxYZ
-         IuSpQK54C0st0wPxsLsc0Nkw6+7cp11rg2Y7jMEbIKpFUPsGluPoKsB0z/O5dsRC8KCcvbP6+JqD
-         t9oF7haTqxQSzUuDbfCTvLnQwxL0c/36zfO71WShmUtEOca87jyxBsJsXXtISXyipwl++Sb5my7s
-         ibMig+SWQ5MeUgS38aKIbUZz3JucedqeyLYAqNMZ+jTq8IxiuCA4mGSL8JeGcprFjMnTttCa0b3j
-         2GA3yoWaHzoJdcefwY3UXC7iN/V/kTBKSCsGlX8yWYMOcI95sJ/5roUYW6IwPsfI7ofw2Cozbxz6
-         2D9QnLhenWOHN3WcTko1YBBN+DuTzvTlHD0PEsg4V+hHrvraA2AOlmrOt3T8gETi1JjIUPoAs=
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     pkshih@realtek.com
-Cc:     kvalo@kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH v3] wifi: rtw89: debug: fix error code in rtw89_debug_priv_send_h2c_set()
-Date:   Wed,  5 Jul 2023 23:10:44 +0800
-X-OQ-MSGID: <20230705151044.1159881-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 5 Jul 2023 11:12:07 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F50E59;
+        Wed,  5 Jul 2023 08:12:06 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-c5e76dfcc36so1807487276.2;
+        Wed, 05 Jul 2023 08:12:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688569925; x=1691161925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=62I6/PnQSulzyBx7w8Sw+H+PkZ97zLVznFWaYHXFZXA=;
+        b=KMOHA+88qszW2ryr5O1Bu8mJ0XcRxbXvJhZDK7DHAceH0Cn0U3EPhcZA+kD00Fa29T
+         EmWDErzwIsE34uqTX+Hct81uQVFJAyUXclfhGB5Gv7SCjKh/K7hkkmDkj7DFcUS6akhP
+         D5pJjpgU7XFvNwrvMqGLmy5bcAgVsSpvA8GE8IyXmWgIqEWrotSB2dm9eKAUj9rwWxIY
+         qSuAHiHf/iK1TOXXzHtns5IX8aFM1BVu9g6tGDSicwwTYklmC685s5EYDUtymN447imj
+         SieDDDYQK4sTwKMxxVZBCwH868Fc1sSIVa84+M22XvPtE/dkCumhp96/NdkoO0n+YFhV
+         JSsQ==
+X-Gm-Message-State: ABy/qLZI6ptVybSgKthuwYJbwFRvHgsMBNoEk7Vx3dbQzWpZTftFBlDt
+        rEg+LOOS9IPvDiaGd1kYmgOGDzU8v+f6Kn2Pu74=
+X-Google-Smtp-Source: APBJJlHswFByTmusWUdM/l0SjUG7DWJilC1GMRQzVWrmauq5TtLMci6+AJiQbVmfFvmWRcbLqtyYe2vByKNC4bXUi9U=
+X-Received: by 2002:a25:154:0:b0:c62:9810:db26 with SMTP id
+ 81-20020a250154000000b00c629810db26mr1976858ybb.26.1688569924873; Wed, 05 Jul
+ 2023 08:12:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230704181516.3293665-1-namhyung@kernel.org> <20230705083833.GE462772@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230705083833.GE462772@hirez.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 5 Jul 2023 08:11:53 -0700
+Message-ID: <CAM9d7cidyAD67Qr_bVW4EEm0+_87qv8O0JVmO9dmr6La9PRLSQ@mail.gmail.com>
+Subject: Re: [PATCH] perf/x86: Fix lockdep warning in for_each_sibling_event()
+ on SPR
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Greg Thelen <gthelen@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is a failure during rtw89_fw_h2c_raw() rtw89_debug_priv_send_h2c
-should return negative error code instead of a positive value count.
-Fix this bug by returning correct error code.
+Hi Peter,
 
-Fixes: e3ec7017f6a2 ("rtw89: add Realtek 802.11ax driver")
+On Wed, Jul 5, 2023 at 1:38 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Jul 04, 2023 at 11:15:15AM -0700, Namhyung Kim wrote:
+> > On SPR, the load latency event needs an auxiliary event in the same
+> > group to work properly.  There's a check in intel_pmu_hw_config()
+> > for this to iterate sibling events and find a mem-loads-aux event.
+> >
+> > The for_each_sibling_event() has a lockdep assert to make sure if it
+> > disabled hardirq or hold leader->ctx->mutex.  This works well if the
+> > given event has a separate leader event since perf_try_init_event()
+> > grabs the leader->ctx->mutex to protect the sibling list.  But it can
+> > cause a problem when the event itself is a leader since the event is
+> > not initialized yet and there's no ctx for the event.
+> >
+> > Actually I got a lockdep warning when I run the below command on SPR,
+> > but I guess it could be a NULL pointer dereference.
+> >
+> >   $ perf record -d -e cpu/mem-loads/uP true
+> >
+> > The code path to the warning is:
+> >
+> >   sys_perf_event_open()
+> >     perf_event_alloc()
+> >       perf_init_event()
+> >         perf_try_init_event()
+> >           x86_pmu_event_init()
+> >             hsw_hw_config()
+> >               intel_pmu_hw_config()
+> >                 for_each_sibling_event()
+> >                   lockdep_assert_event_ctx()
+> >
+> > We don't need for_each_sibling_event() when it's a standalone event.
+> > Let's return the error code directly.
+> >
+> > Fixes: f3c0eba28704 ("perf: Add a few assertions")
+> > Reported-by: Greg Thelen <gthelen@google.com>
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  arch/x86/events/intel/core.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> > index 0d09245aa8df..933fe4894c32 100644
+> > --- a/arch/x86/events/intel/core.c
+> > +++ b/arch/x86/events/intel/core.c
+> > @@ -3983,6 +3983,14 @@ static int intel_pmu_hw_config(struct perf_event *event)
+> >               struct perf_event *leader = event->group_leader;
+> >               struct perf_event *sibling = NULL;
+> >
+> > +             /*
+> > +              * The event is not fully initialized yet and no ctx is set
+> > +              * for the event.  Avoid for_each_sibling_event() since it
+> > +              * has a lockdep assert with leader->ctx->mutex.
+> > +              */
+>
+> If I understand things correctly, your patch is indeed correct, however
+> I don't much like this comment, does something like:
+>
+>                 /*
+>                  * When this memload event is also the first event (no
+>                  * group exists yet), then there is no aux event before
+>                  * it.
+>                  */
+>
+> work for you?
 
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
----
-Changes in v2:
-- fixed compile error
-Changes in v3:
-- Corrected the annotation of this patch
-- Used variable ret instead of err
----
- drivers/net/wireless/realtek/rtw89/debug.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Yep, looks good.  Do you want me to resend?
 
-diff --git a/drivers/net/wireless/realtek/rtw89/debug.c b/drivers/net/wireless/realtek/rtw89/debug.c
-index 1db2d59d33ff..a4bbac916e22 100644
---- a/drivers/net/wireless/realtek/rtw89/debug.c
-+++ b/drivers/net/wireless/realtek/rtw89/debug.c
-@@ -3026,17 +3026,18 @@ static ssize_t rtw89_debug_priv_send_h2c_set(struct file *filp,
- 	struct rtw89_debugfs_priv *debugfs_priv = filp->private_data;
- 	struct rtw89_dev *rtwdev = debugfs_priv->rtwdev;
- 	u8 *h2c;
-+	int ret;
- 	u16 h2c_len = count / 2;
- 
- 	h2c = rtw89_hex2bin_user(rtwdev, user_buf, count);
- 	if (IS_ERR(h2c))
- 		return -EFAULT;
- 
--	rtw89_fw_h2c_raw(rtwdev, h2c, h2c_len);
-+	ret = rtw89_fw_h2c_raw(rtwdev, h2c, h2c_len);
- 
- 	kfree(h2c);
- 
--	return count;
-+	return ret ? ret : count;
- }
- 
- static int
--- 
-2.30.2
+Thanks,
+Namhyung
 
+
+>
+> > +             if (leader == event)
+> > +                     return -ENODATA;
+> > +
+> >               if (!is_mem_loads_aux_event(leader)) {
+> >                       for_each_sibling_event(sibling, leader) {
+> >                               if (is_mem_loads_aux_event(sibling))
+> > --
+> > 2.41.0.255.g8b1d071c50-goog
+> >
