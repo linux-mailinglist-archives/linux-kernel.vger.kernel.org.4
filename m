@@ -2,211 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB2674874B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C77748749
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbjGEPBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S233023AbjGEPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232985AbjGEPBf (ORCPT
+        with ESMTP id S232974AbjGEPBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:01:35 -0400
+        Wed, 5 Jul 2023 11:01:31 -0400
 Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDB31988
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:01:09 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fba74870abso8059655e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 08:01:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F651BDF
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:01:05 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso10616460e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 08:01:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688569262; x=1691161262;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bi/qhL/amVn9cSk1RJ3+DaMnxwYcLBtEtjGGLlZJPEY=;
-        b=mi6VKoRVSfTBWw1WGUne+VgG3biUy/cKs124VyeP6UUihGikb7jpKi+3yckMidxGjD
-         Iy+fBQ0c3ToMOgQJqpQgGaFhCd6bJIOCW4vH5IeTE4yH8n+duBVwKzNmofxRVogQZ0p8
-         JrOaUOfQrW4aJaFz7uVR7PM294y0uvjBU3ncN3xvjFprEsxSNKlamlMUuKBFoCRTfhuS
-         TMWkEWlSonGhrZSoiwS0u34FQyY4bPEgzPL6tsJXJpWbivBHWMM1YaJdOJAJb1IeQVDT
-         8hdnyRoI0sxtDT/sDFm7ZlmIxANUhpqM7ezpRDEtoHvjYLL0xtslo3N83DoibUxxyf1Z
-         ILeg==
+        d=linaro.org; s=google; t=1688569261; x=1691161261;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B0gcDRuQkjpHCUjM+vGdjv7W7sdjFlqZuGfjW7kfd7w=;
+        b=S4bDWswS0FDlLNRhulwidTRmXgTlDL71mqxdvdPcN8XEWA2paOGVOlrr6mtYq9/jAc
+         +2KDKRv4RJDiJWxoqmyQQnGChVtfS3MaryFSIe+CRqtDIBlRMPmIphfJXAGqW/xTEb8y
+         B3sxMGi1wdSPHhndUcPAWKaSOmjM/d0qlPxbRIrFu4u6AE5hwgtd7qI4ne5ND97jTUVY
+         7gf1Y150HmEX+uldjGGVrHIVgS3rbcCxRsnDYDmUbyeNPw6oz+uDxrwN9lr1xyqcdDiX
+         e65Q2FU9+R2zMRzsgxhlhQ7q/6vIjdezYFd8mC5xAE9qhmpIdGIMLaKRGyohk28qSCQS
+         avJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688569262; x=1691161262;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bi/qhL/amVn9cSk1RJ3+DaMnxwYcLBtEtjGGLlZJPEY=;
-        b=lRJnSVdPHiHe1QyXLkGXbMidbefcRrZovnKVc0mgHSgPcinKDiy6oFdy6fET0MOkqt
-         t/H4tcGOZ1Mq8X8qBnsZd3Raq8c/ldTP4JfxmbYMRBKNgCAsWd/uho7oBLBVZM30NX+/
-         51cdGIfxa1iOPN0iWB/NnvA5evwcBESYTJdoxQvmSX1X8YFUSqtxHD4AeHdDnTtfJZOV
-         cjSzasOg9d8yXB+0uUYNmiwReBLPSXNvYYsZJhNLsDNN6h85VUc9AIHwsoY10Ry+Sbxz
-         vfNgHPUt2yyRhC5EqiXTUOOO2EFVAnkDc0d4/Qkn1ncdmfT9wXSqPGVNE79uuwl9dmY6
-         Og2g==
-X-Gm-Message-State: ABy/qLbj5TiuS12gFfZbz1T774LFFLFhSSe9IDpqOfBNEGHZdKFtOToc
-        PMOg/UZ7Zu0Fng+QHCzK4iHXnA==
-X-Google-Smtp-Source: APBJJlENmmJx+kdCcxE661JUH6JxmKZGINFJz7pEGFThSXWfdDoHZb5Cu1BPzOAMhoFYrOd9BojPrA==
-X-Received: by 2002:a05:6512:10c9:b0:4f8:6bca:50d7 with SMTP id k9-20020a05651210c900b004f86bca50d7mr13373059lfg.13.1688569261732;
+        d=1e100.net; s=20221208; t=1688569261; x=1691161261;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B0gcDRuQkjpHCUjM+vGdjv7W7sdjFlqZuGfjW7kfd7w=;
+        b=MlvmDsRNsSZ30WD58pOgzfYpvauhYu0XVe+ptstvuECc4oUTOoZN/aAbqN+7TlriP2
+         ic/4N7YKd0jJ50cLlAGSUryS3t1S4I1zj/y9DDv+0gGIOm0/7Ew980ryUqqY/9R0DxZT
+         yrp3tGxAbJNFi6mX9AUCU4K+yxTieKTzUWfPzKiKmcwCYD+qQsu6j5+dh0V7x2EGH3dx
+         bQTkwPRPfBusSrmecIzJzO2U1pyYzCRBHlNxrYIRw97ZZe10fDTJAoyXJsukVTX3HWBg
+         D1wx0y9SPwl/gCUJKFfwoIFCdbHgbRNulpCNfQ0qJ+1+VOPWJjgY3t/iGhCsrbXC246s
+         3HmQ==
+X-Gm-Message-State: ABy/qLZrTDnUEp6cn+SFpMlW3OFiaNahQuPV39whvUatgWQ8xVboke85
+        mPnDVRC20czi+THoGfDSoEnxLA==
+X-Google-Smtp-Source: APBJJlFt/CvUvOaP9nhesV/5dotDDrJiq/+ibzYweC63Z4Y2rOtPRJzBG18lTXozTRNK0WQrjDGm8g==
+X-Received: by 2002:a05:6512:1112:b0:4f8:7503:2041 with SMTP id l18-20020a056512111200b004f875032041mr14035474lfg.37.1688569261797;
         Wed, 05 Jul 2023 08:01:01 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id bc23-20020a056402205700b0051d9dbf5edfsm11265427edb.55.2023.07.05.08.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id a10-20020a19f80a000000b004fb74dbbd98sm4951623lff.246.2023.07.05.08.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Wed, 05 Jul 2023 08:01:01 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+Message-ID: <12f3e3f1-cd47-c7db-1078-5be92e3b5f91@linaro.org>
+Date:   Wed, 5 Jul 2023 17:00:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] arm64: dts: qcom: add missing space before {
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: microchip: add missing space before {
-Date:   Wed,  5 Jul 2023 17:00:58 +0200
-Message-Id: <20230705150058.293942-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing whitespace between node name/label and opening {.
+On 5.07.2023 16:42, Krzysztof Kozlowski wrote:
+> Add missing whitespace between node name/label and opening {.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/microchip/at91sam9260.dtsi       | 2 +-
- arch/arm/boot/dts/microchip/at91sam9261.dtsi       | 2 +-
- arch/arm/boot/dts/microchip/at91sam9g20ek_2mmc.dts | 2 +-
- arch/arm/boot/dts/microchip/at91sam9g45.dtsi       | 2 +-
- arch/arm/boot/dts/microchip/at91sam9m10g45ek.dts   | 2 +-
- arch/arm/boot/dts/microchip/at91sam9rl.dtsi        | 2 +-
- arch/arm/boot/dts/microchip/at91sam9x5.dtsi        | 2 +-
- arch/arm/boot/dts/microchip/sama5d3.dtsi           | 2 +-
- arch/arm/boot/dts/microchip/sama5d4.dtsi           | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm/boot/dts/microchip/at91sam9260.dtsi b/arch/arm/boot/dts/microchip/at91sam9260.dtsi
-index 35a007365b6a..27b4a21f13c1 100644
---- a/arch/arm/boot/dts/microchip/at91sam9260.dtsi
-+++ b/arch/arm/boot/dts/microchip/at91sam9260.dtsi
-@@ -65,7 +65,7 @@ main_xtal: main_xtal {
- 			clock-frequency = <0>;
- 		};
- 
--		adc_op_clk: adc_op_clk{
-+		adc_op_clk: adc_op_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <5000000>;
-diff --git a/arch/arm/boot/dts/microchip/at91sam9261.dtsi b/arch/arm/boot/dts/microchip/at91sam9261.dtsi
-index 528ffc6f6f96..307b60658014 100644
---- a/arch/arm/boot/dts/microchip/at91sam9261.dtsi
-+++ b/arch/arm/boot/dts/microchip/at91sam9261.dtsi
-@@ -205,7 +205,7 @@ usart1: serial@fffb4000 {
- 				status = "disabled";
- 			};
- 
--			usart2: serial@fffb8000{
-+			usart2: serial@fffb8000 {
- 				compatible = "atmel,at91sam9260-usart";
- 				reg = <0xfffb8000 0x200>;
- 				atmel,usart-mode = <AT91_USART_MODE_SERIAL>;
-diff --git a/arch/arm/boot/dts/microchip/at91sam9g20ek_2mmc.dts b/arch/arm/boot/dts/microchip/at91sam9g20ek_2mmc.dts
-index 2db95e8ffc64..172af6ff4b18 100644
---- a/arch/arm/boot/dts/microchip/at91sam9g20ek_2mmc.dts
-+++ b/arch/arm/boot/dts/microchip/at91sam9g20ek_2mmc.dts
-@@ -12,7 +12,7 @@ / {
- 	compatible = "atmel,at91sam9g20ek_2mmc", "atmel,at91sam9g20", "atmel,at91sam9";
- 
- 	ahb {
--		apb{
-+		apb {
- 			mmc0: mmc@fffa8000 {
- 				/* clk already mux wuth slot0 */
- 				pinctrl-0 = <
-diff --git a/arch/arm/boot/dts/microchip/at91sam9g45.dtsi b/arch/arm/boot/dts/microchip/at91sam9g45.dtsi
-index 7cccc606e36c..325c63a53118 100644
---- a/arch/arm/boot/dts/microchip/at91sam9g45.dtsi
-+++ b/arch/arm/boot/dts/microchip/at91sam9g45.dtsi
-@@ -70,7 +70,7 @@ main_xtal: main_xtal {
- 			clock-frequency = <0>;
- 		};
- 
--		adc_op_clk: adc_op_clk{
-+		adc_op_clk: adc_op_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <300000>;
-diff --git a/arch/arm/boot/dts/microchip/at91sam9m10g45ek.dts b/arch/arm/boot/dts/microchip/at91sam9m10g45ek.dts
-index 7f45e81ca165..071db4f16313 100644
---- a/arch/arm/boot/dts/microchip/at91sam9m10g45ek.dts
-+++ b/arch/arm/boot/dts/microchip/at91sam9m10g45ek.dts
-@@ -164,7 +164,7 @@ pinctrl_pwm_leds: pwm-led {
- 				};
- 			};
- 
--			spi0: spi@fffa4000{
-+			spi0: spi@fffa4000 {
- 				status = "okay";
- 				cs-gpios = <&pioB 3 0>, <0>, <0>, <0>;
- 				flash@0 {
-diff --git a/arch/arm/boot/dts/microchip/at91sam9rl.dtsi b/arch/arm/boot/dts/microchip/at91sam9rl.dtsi
-index 3d089ffbe162..7436b5c862b1 100644
---- a/arch/arm/boot/dts/microchip/at91sam9rl.dtsi
-+++ b/arch/arm/boot/dts/microchip/at91sam9rl.dtsi
-@@ -67,7 +67,7 @@ main_xtal: main_xtal {
- 			clock-frequency = <0>;
- 		};
- 
--		adc_op_clk: adc_op_clk{
-+		adc_op_clk: adc_op_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <1000000>;
-diff --git a/arch/arm/boot/dts/microchip/at91sam9x5.dtsi b/arch/arm/boot/dts/microchip/at91sam9x5.dtsi
-index a1fed912f2ee..a7456c2191fa 100644
---- a/arch/arm/boot/dts/microchip/at91sam9x5.dtsi
-+++ b/arch/arm/boot/dts/microchip/at91sam9x5.dtsi
-@@ -68,7 +68,7 @@ main_xtal: main_xtal {
- 			clock-frequency = <0>;
- 		};
- 
--		adc_op_clk: adc_op_clk{
-+		adc_op_clk: adc_op_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <1000000>;
-diff --git a/arch/arm/boot/dts/microchip/sama5d3.dtsi b/arch/arm/boot/dts/microchip/sama5d3.dtsi
-index d9e66700d1c2..d4fc0c1dfc10 100644
---- a/arch/arm/boot/dts/microchip/sama5d3.dtsi
-+++ b/arch/arm/boot/dts/microchip/sama5d3.dtsi
-@@ -74,7 +74,7 @@ main_xtal: main_xtal {
- 			clock-frequency = <0>;
- 		};
- 
--		adc_op_clk: adc_op_clk{
-+		adc_op_clk: adc_op_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <1000000>;
-diff --git a/arch/arm/boot/dts/microchip/sama5d4.dtsi b/arch/arm/boot/dts/microchip/sama5d4.dtsi
-index 41284e013f53..50650e2f4267 100644
---- a/arch/arm/boot/dts/microchip/sama5d4.dtsi
-+++ b/arch/arm/boot/dts/microchip/sama5d4.dtsi
-@@ -72,7 +72,7 @@ main_xtal: main_xtal {
- 			clock-frequency = <0>;
- 		};
- 
--		adc_op_clk: adc_op_clk{
-+		adc_op_clk: adc_op_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <1000000>;
--- 
-2.34.1
-
+Konrad
+>  arch/arm64/boot/dts/qcom/sc8180x.dtsi                    | 2 +-
+>  arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+> index 3c1314e12d08..fe8534538618 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+> @@ -3429,7 +3429,7 @@ timer@17c20000 {
+>  			#size-cells = <1>;
+>  			ranges = <0 0 0 0x20000000>;
+>  
+> -			frame@17c21000{
+> +			frame@17c21000 {
+>  				reg = <0x17c21000 0x1000>,
+>  				      <0x17c22000 0x1000>;
+>  				frame-number = <0>;
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
+> index b841ea9192ae..85e5cf3dc91e 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
+> @@ -565,7 +565,7 @@ panel_in_0: endpoint {
+>  				};
+>  			};
+>  
+> -			port@1{
+> +			port@1 {
+>  				reg = <1>;
+>  
+>  				panel_in_1: endpoint {
