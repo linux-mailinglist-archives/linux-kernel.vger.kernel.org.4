@@ -2,137 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928827482F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0C17482FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjGELgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S231502AbjGELhS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 07:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjGELgH (ORCPT
+        with ESMTP id S231334AbjGELhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:36:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979311703;
-        Wed,  5 Jul 2023 04:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688556964; x=1720092964;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IcBpGpbg2SWjjirWksL0uymR/Eu/8w4PzybBcluQYJQ=;
-  b=PlO4eekbDYtXQfzZHKX0W9DJ+/qPv8+6WBWgzBMkBhvQ4K3T2V1/mfH7
-   6gymS+txDAWBcRiTifbLrA8hJPtvOsB/lK00KYLSTjhz4D1DAsdhL9Ihq
-   033GRwtavzYVRsxKdFxKLeXWpmwcZfMFL1kT6CZr2u2ydCDIUMTYKhrPK
-   m1+Ep3OV8xfedLU3qNx6ILd3Y/8Fl/mYnSjSqhjlAyws9hUgpbrlpzCfw
-   ov4yIOvXgp3T7lyOInQndys2DfoPChmgdMMMpfHvzeHl5P2bvWHS+9cMg
-   jmuhUOp1fvJKGtC57O2U7RvHZ+T8T3FCgEY+BX648Mg9EdF1yLrJeG2r3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="362186264"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="362186264"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 04:36:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="754333758"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="754333758"
-Received: from banerje2-mobl2.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.58.122])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 04:35:59 -0700
-Message-ID: <f3679761bbf31ff93d45985f67a85f28b0027eac.camel@linux.intel.com>
-Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
- wrappers
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
-Date:   Wed, 05 Jul 2023 04:35:59 -0700
-In-Reply-To: <77c90891-3712-4b3b-a22c-d9ccba36f58e@linaro.org>
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
-         <20230525140135.3589917-6-daniel.lezcano@linaro.org>
-         <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
-         <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
-         <77c90891-3712-4b3b-a22c-d9ccba36f58e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 5 Jul 2023 07:37:17 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1686A198E;
+        Wed,  5 Jul 2023 04:37:08 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bdd069e96b5so7281508276.2;
+        Wed, 05 Jul 2023 04:37:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688557027; x=1691149027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kIVoG4v17dHAi8V71wyhSONdUpfRCtIrSHRM3VwF7JI=;
+        b=DmbdWb9ON38EkXpnF02SCfdiTySYvhgXR74dRlFl42rJtVhs+NAoEhq+0MxtybKmbc
+         0r7AAqb7CGIiHtu68mZk8TC839xHab8LhQ37tCiYrY1T4LIVEqutgaYO3lvkaKoce2JP
+         E25jNM9w+AMQVGUNgrCO8FDXX4Y5QRDHlSgLEy65dhLOF58HSB8M0w/cCD4sYNWCBD5f
+         rBw9YH/0SdLR0y5EU6CJFV3PviiL4T+YUp9ED94rClr/qc1EJOG+04wlbl7QoH3D5bnI
+         Ao46GdQj8zIIzHEiZbA+SZIMKs+fnZgHjbhc9mUYyNAA5BY6q79dNJczbx1znRzM6BNe
+         CE5A==
+X-Gm-Message-State: ABy/qLZofFwwNyVypWV0x2wvvOYNz0wLAakEMtQcxBlcCyylXqe/z5mj
+        PSi7zzkBlF5oW6fOiyhtfRXRmWiCY3Milg==
+X-Google-Smtp-Source: APBJJlGf6Oo6X2P+loC9JZgJVpAlVChmIdYgc1NWcGb3KGPvcsVgLtnrvfEm3JXFmYThz3B91w6K3Q==
+X-Received: by 2002:a05:6902:28c:b0:c37:f855:cff4 with SMTP id v12-20020a056902028c00b00c37f855cff4mr13407380ybh.63.1688557026831;
+        Wed, 05 Jul 2023 04:37:06 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id d13-20020a25e60d000000b00c4eec81ac9esm1743975ybh.11.2023.07.05.04.37.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 04:37:06 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-c50c797c31bso3951432276.0;
+        Wed, 05 Jul 2023 04:37:06 -0700 (PDT)
+X-Received: by 2002:a25:6fc6:0:b0:c16:859a:9633 with SMTP id
+ k189-20020a256fc6000000b00c16859a9633mr14065137ybc.39.1688557025822; Wed, 05
+ Jul 2023 04:37:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+ <20230622113341.657842-4-fabrizio.castro.jz@renesas.com> <CAMuHMdVsYohH5FVv6r4ha0AaHRoHjNF1ErjW1FNF7ZAQR9ntxg@mail.gmail.com>
+ <ZKVE-AVDhvZyrJmj@surfacebook>
+In-Reply-To: <ZKVE-AVDhvZyrJmj@surfacebook>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 5 Jul 2023 13:36:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUzcc0HSyOwbN4mJPRfEKcLXBU3Op=T1CGR=pFbN619Pw@mail.gmail.com>
+Message-ID: <CAMuHMdUzcc0HSyOwbN4mJPRfEKcLXBU3Op=T1CGR=pFbN619Pw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] spi: Add support for Renesas CSI
+To:     andy.shevchenko@gmail.com
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hi Andy,
 
-On Wed, 2023-07-05 at 12:41 +0200, Daniel Lezcano wrote:
-> 
-> Hi Srinivas,
-> 
-> thanks for your answer. What about the patch 6?
-I was not CCed. But checked from LKML, 
-The change looks good.
+On Wed, Jul 5, 2023 at 12:24 PM <andy.shevchenko@gmail.com> wrote:
+> Mon, Jul 03, 2023 at 12:19:26PM +0200, Geert Uytterhoeven kirjoitti:
+> > On Thu, Jun 22, 2023 at 1:34 PM Fabrizio Castro
+> > <fabrizio.castro.jz@renesas.com> wrote:
+> > > +       if (csi->txbuf)
+> > > +               /*
+> > > +                * Leaving a little bit of headroom in the FIFOs makes it very
+> > > +                * hard to raise an overflow error (which is only possible
+> > > +                * when IP transmits and receives at the same time).
+> > > +                */
+> > > +               to_transfer = min_t(int, CSI_FIFO_HALF_SIZE, bytes_remaining);
+> > > +       else
+> > > +               to_transfer = min_t(int, CSI_FIFO_SIZE_BYTES, bytes_remaining);
+> >
+> > Why min_t(int, ...)? Both values are int.
+>
+> min_t() should be used with a great care.
+>
+> > It would be better to make both unsigned, though.
+>
+> I believe you are assuming 3 (three) values and not 2 (two) under "both"
+> (one variable and two definitions).
 
-Thanks,
-Srinivas
+:-)
 
-> 
-> 
-> On 03/07/2023 18:15, srinivas pandruvada wrote:
-> > Hi Daniel,
-> > 
-> > On Mon, 2023-07-03 at 12:49 +0200, Daniel Lezcano wrote:
-> > > 
-> > > Hi Srinivas,
-> > > 
-> > > do you agree with the changes in patches 5 and 6 ?
-> > > 
-> > > Thanks
-> > > 
-> > >     -- Daniel
-> > > 
-> > > 
-> > > On 25/05/2023 16:01, Daniel Lezcano wrote:
-> > > > The driver is accessing the thermal zone device structure but
-> > > > the
-> > > > accessors are already existing and we want to consolidate the
-> > > > thermal
-> > > > core code by preventing accesses to the internals from the
-> > > > drivers.
-> > > > 
-> > > > Let's use these accessors.
-> > > > 
-> > > > On the other side, the code is getting directly the temperature
-> > > > from
-> > > > tz->temperature, but the temperature is a faked on, so we can
-> > > > replace
-> > > > this access by the fake temp and remove the thermal zone device
-> > > > structure access.
-> > > > 
-> > May be something simple description like this will be enough.
-> > 
-> > "
-> > Use thermal core API to access thermal zone "type" field instead of
-> > directly using the structure field.
-> > While here, remove access to temperature field, as this driver is
-> > reporting fake temperature, which can be replaced with
-> > INT3400_FAKE_TEMP. Also replace hardcoded 20C with
-> > INT3400_FAKE_TEMP.
-> > "
-> > 
-> > The change itself looks fine.
-> 
-> 
+I meant "both numerical parametric values of each minimum operation".
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
