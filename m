@@ -2,158 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0AC747DEE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F5A747DF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbjGEHJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S232143AbjGEHJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjGEHJg (ORCPT
+        with ESMTP id S232128AbjGEHJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:09:36 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A94BE72
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:09:34 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688540973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=arY/aOqhycKUtUZKFsYeswU3gpzt6jGjmjUY7iJ7cWw=;
-        b=NXaZQXW9D8gXPIcIeDy4cxkZz2tXlxYlab3MLyguLJqt4GjErwsnZuh6xPOVco95/DgfbT
-        lKNQX+7RgCuoPUJjpU0xDJBGqtSnv64W6gn+UasRrgUx1f/jRU7F06Rh2+bRkNfM270qjj
-        IvavsO4jmpvpqPG9DgjHxkb3RBY6U/vZD451ETnzFVPi25gz3Mj7SyBIXkbQBs8IPfeJ/7
-        gB6nceBUwaXzItP03TXdDSOUryumTb4ed+URP6RfDJY2zJPdAMKQYkSKybcNj6lvAzJ2ZZ
-        8QYYsdJbrGIpvMsPTeY58w0UrVmyzzFgeF7cq/Dxj/c1nxhuRbXvWP9kW6hbtg==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 894C9E0008;
-        Wed,  5 Jul 2023 07:09:31 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 09:09:30 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH v3 3/5] mtd: rawnand: brcmnand: Fix crash during the
- panic_write
-Message-ID: <20230705090930.45d8f1f3@xps-13>
-In-Reply-To: <287ecf48-9a8b-6cca-2888-37f6c71c4b39@broadcom.com>
-References: <20230627193738.19596-1-william.zhang@broadcom.com>
-        <20230627193738.19596-4-william.zhang@broadcom.com>
-        <20230704172604.6924d2af@xps-13>
-        <287ecf48-9a8b-6cca-2888-37f6c71c4b39@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 5 Jul 2023 03:09:51 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C091720
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:09:48 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230705070945epoutp02081ec302a05cd6967db1d484d59940ac~u5xSLH95i1360513605epoutp02E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:09:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230705070945epoutp02081ec302a05cd6967db1d484d59940ac~u5xSLH95i1360513605epoutp02E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1688540985;
+        bh=TzMoaf8vGyU8GATKSoffunm8vsRVuxtDYDCKWXxcjoM=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=VKwUqMyyyvV6HKNGU1YXfdoMuywJRpo2MyYld+2/tX51XjzULbRnSnvXO/KD6LN0U
+         ktrwgbiUjqJOFJVfjb364vu/hFtntLQ/zi+qhof9SYFE+MvVT3fh/uu6Ue9CQnCX8j
+         jJD80WLaa6VlBFkwBKg6mu4n7fkfb3RlSbqIGhw4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230705070945epcas2p25197107f3bf947b88b044b526a80a257~u5xRziteL0072300723epcas2p2B;
+        Wed,  5 Jul 2023 07:09:45 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QwrQ05PVJz4x9QM; Wed,  5 Jul
+        2023 07:09:44 +0000 (GMT)
+X-AuditID: b6c32a46-d17dea8000009cc5-dd-64a51738a047
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        86.17.40133.83715A46; Wed,  5 Jul 2023 16:09:44 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2] f2fs: including waf data in f2fs status information
+Reply-To: beomsu7.kim@samsung.com
+Sender: beomsu kim <beomsu7.kim@samsung.com>
+From:   beomsu kim <beomsu7.kim@samsung.com>
+To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yonggil Song <yonggil.song@samsung.com>,
+        Seokhwan Kim <sukka.kim@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Seonghun Kim <seonghun-sui.kim@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761@epcms2p1>
+Date:   Wed, 05 Jul 2023 16:09:44 +0900
+X-CMS-MailID: 20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMKsWRmVeSWpSXmKPExsWy7bCmua6F+NIUg/atahanp55lslj1INzi
+        yfpZzBaXFrlbXN41h83i9Q85i1Udcxktpp4/wuTA4bFpVSebx+4Fn5k8+rasYvT4vEkugCUq
+        2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6AYlhbLE
+        nFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToF5gV5xYm5xaV66Xl5qiZWhgYGRKVBhQnbG
+        x/lnmAp+81Y0T7zM2MA4n6uLkZNDQsBEYsPa86xdjFwcQgI7GCUOXtjC3sXIwcErICjxd4cw
+        SI2wgLvEhcsLmUFsIQFFib7mDWwgJcICOhJLthiDhNkEtCS6r59hBhkjIjCJWWJDxzcmiPm8
+        EjPan7JA2NIS25dvZYSwNSR+LOtlhrBFJW6ufssOY78/Nh+qRkSi9d5ZqBpBiQc/d0PFJSUm
+        /nwIZedLfP/9kRFksYRAC6PEzp45UA36Etv+zAZbzCvgK7Hy8RE2EJtFQFXi7veVUMe5SPxb
+        /gKsnllAXmL7W5BeDiBbU2L9Ln0QU0JAWeLILRaICj6JjsN/2WHe2jHvCRNEiapENyhE2ME+
+        7DCAKPCQaDl2mAWkQEggUGJdt/oERvlZiICdhWTnLISdCxiZVzGKpRYU56anFhsVGMHjMjk/
+        dxMjOPVpue1gnPL2g94hRiYOxkOMEhzMSiK8K74vThHiTUmsrEotyo8vKs1JLT7EaAr07URm
+        KdHkfGDyzSuJNzSxNDAxMzM0NzI1MFcS573XOjdFSCA9sSQ1OzW1ILUIpo+Jg1OqgUlevljs
+        /3uNk0laF93fvZ5TOXfr+mcGVfOTVYT/HBQ75qZi9X0/wzWmr7Eqzx50XgteEL0m6eFcwSdJ
+        ddtOBke3tvkk6H5crFS58OhfLaMWRW+HxpDiW6d3ulzYtexHSM3R0nliEk6f1Z8cLUhiiD7/
+        3KpAZ85r25VnLt0q/6bR+Yzz2pwyo2bDbw8qP/punD696sgZLnHzr2Fnwv/L8q3cc+X+q8P6
+        /7Jcthz6wLCn6faf2apVpuXs7t66ocs2FP/Sd1lovOdXT/y5Rzvlex+zbKmufr8xfMolFSXe
+        r/dOiTnW3V2rOlvreW/D1pyDL3nKva68ehZhZVDjzj95cqMGy8Jd53//XpW1vHpRPb+kEktx
+        RqKhFnNRcSIA+i9nEQYEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761
+References: <CGME20230705070944epcms2p19fc974208a2a1871e2c84df7d9d95761@epcms2p1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+When evaluating in f2fs, it takes much time to obtain waf data.
+This patch helps to obtain waf data without calcluation.
 
-william.zhang@broadcom.com wrote on Tue, 4 Jul 2023 17:40:03 -0700:
+Signed-off-by: Beomsu Kim <beomsu7.kim@samsung.com>
+---
+ fs/f2fs/iostat.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-> Hi Miquel,
->=20
-> On 07/04/2023 08:26 AM, Miquel Raynal wrote:
-> > Hi William,
-> >=20
-> > william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:36 -0700:
-> >  =20
-> >> During the panic write path to execute another nand command, if
-> >> there is a pending command, we should wait for the command instead of
-> >> calling BUG_ON so we don't crash while crashing.
-> >>
-> >> Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadco=
-m STB NAND controller") =20
-> >=20
-> > The Fixes tag looks wrong.
-> >  =20
-> The brcmnand_send_cmd function and BUG_ON line were added by this commit =
-and the function didn't changed much since then. Not sure why you think it =
-is wrong?
-
-Ok, the title of that commit let me think it was moving code rather
-than adding it. Alright.
-
-> >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> >> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> >> Reviewed-by: Kursad Oney <kursad.oney@broadcom.com>
-> >> Reviewed-by: Kamal Dasu <kamal.dasu@broadcom.com>
-> >> ---
-> >>
-> >> Changes in v3: None
-> >> Changes in v2: None
-> >>
-> >>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 12 +++++++++++-
-> >>   1 file changed, 11 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/na=
-nd/raw/brcmnand/brcmnand.c
-> >> index 37c2c7cfa00e..ea03104692bf 100644
-> >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >> @@ -1608,7 +1608,17 @@ static void brcmnand_send_cmd(struct brcmnand_h=
-ost *host, int cmd) =20
-> >>   >>   	dev_dbg(ctrl->dev, "send native cmd %d addr 0x%llx\n", cmd, cm=
-d_addr);
-> >>   >> -	BUG_ON(ctrl->cmd_pending !=3D 0); =20
-> >> +	/*
-> >> +	 * If we came here through _panic_write and there is a pending
-> >> +	 * command, try to wait for it. If it times out, rather than
-> >> +	 * hitting BUG_ON, just return so we don't crash while crashing.
-> >> +	 */
-> >> +	if (oops_in_progress) {
-> >> +		if (ctrl->cmd_pending &&
-> >> +			bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0))
-> >> +			return;
-> >> +	} else
-> >> +		BUG_ON(ctrl->cmd_pending !=3D 0);
-> >>   	ctrl->cmd_pending =3D cmd; =20
-> >>   >>   	ret =3D bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTR=
-L_RDY, 0); =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l
-> >  =20
-
-
-Thanks,
-Miqu=C3=A8l
+diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+index 3d5bfb1ad585..59720639e8c0 100644
+--- a/fs/f2fs/iostat.c
++++ b/fs/f2fs/iostat.c
+@@ -34,10 +34,23 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
+ {
+        struct super_block *sb = seq->private;
+        struct f2fs_sb_info *sbi = F2FS_SB(sb);
++       int j;
++       unsigned long long waf = 0;
++       unsigned long long data_written_by_user;
++       unsigned long long data_written_to_storage;
+ 
+        if (!sbi->iostat_enable)
+                return 0;
+ 
++       data_written_by_user = sbi->iostat_bytes[FS_DATA_IO];
++
++       data_written_to_storage = data_written_by_user;
++       for (j = FS_NODE_IO; j <= FS_CP_META_IO; j++)
++               data_written_to_storage += sbi->iostat_bytes[j];
++
++       if (data_written_by_user > 0)
++               waf = data_written_to_storage * 100 / data_written_by_user;
++
+        seq_printf(seq, "time:          %-16llu\n", ktime_get_real_seconds());
+        seq_printf(seq, "\t\t\t%-16s %-16s %-16s\n",
+                                "io_bytes", "count", "avg_bytes");
+@@ -81,6 +94,10 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
+        IOSTAT_INFO_SHOW("fs discard", FS_DISCARD_IO);
+        IOSTAT_INFO_SHOW("fs flush", FS_FLUSH_IO);
+ 
++       /* print waf */
++       seq_puts(seq, "[WAF]\n");
++       seq_printf(seq, "fs waf:                %llu.%02llu\n", waf / 100, waf % 100);
++
+        return 0;
+ }
+ 
+-- 
+2.17.1
