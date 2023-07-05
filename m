@@ -2,273 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8F5748A83
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2625748A6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjGERcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S230521AbjGERbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjGERcE (ORCPT
+        with ESMTP id S231785AbjGERbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:32:04 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5431BEF;
-        Wed,  5 Jul 2023 10:31:23 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365ELHiM007736;
-        Wed, 5 Jul 2023 19:29:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=oxvOgEF9cvRzCwfkDelwx7si1C+N2VuboXigLVR2SWA=;
- b=xvOY8m0QodXwBZhsM5T5ELcmsFzBcK0qMv6Qs6hI88hnRwBkFB/ysw0DZwZNS/iobXNl
- I0cYXFRnIZz7I/iEDI3bpcPn+zk0PitWpNNMHMe0z06nqOKI3FuLJP+y5wWrLgSLg7HH
- vfyeYlPA0S1CbOrphhlesXe6Lq0BftoFErxYR1F0L7yKWHqkK4+67PQghl8QfA1lyrIr
- JCnNAxreYxI5KIMus4YvhsJQHutLzJY9o/98Z2fqQyGMNquLhuUjHd2+wU+ouZea00Qi
- 5Cp9uxFBXQMIASgwij832gWHVXXvMJU4x5pqoJyREDktLaQBWkv3VHl/9R9P+8Os4giD mQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rna75h45d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 19:29:48 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4F782100057;
-        Wed,  5 Jul 2023 19:29:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4659024C434;
-        Wed,  5 Jul 2023 19:29:48 +0200 (CEST)
-Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 5 Jul
- 2023 19:29:47 +0200
-From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
-To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
-        <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: [PATCH 08/10] bus: etzpc: introduce ETZPC firewall controller driver
-Date:   Wed, 5 Jul 2023 19:27:57 +0200
-Message-ID: <20230705172759.1610753-9-gatien.chevallier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+        Wed, 5 Jul 2023 13:31:04 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5361BE3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:30:29 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6686708c986so5549302b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688578193; x=1691170193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=21WgRYzk/FRZzyhPurFkJWRpl393yD1S4pYgQXdWIKY=;
+        b=pDhW1muSnAlTyX2Z/SLj6E1+r/W6uepKcIroiGfSIOcT51P/RT7lujWK1VlHHTktOq
+         TQ8oM+fQ6W4ituAQx2s48UNCh0krswk0E9sWzS7F4Ckrk4dJyqBHP6EsNqMpjLf8bf9p
+         lV6/weT2vqENFEOJ2GCRRzqWkcWvId71QuOiyhJYPwfOYdeBQA6WbRdR8OXUFF2GVkXx
+         3DjGYhBMbz7UA25iBepU8Ao+zB70V4gQFxlmGCdLz32FbAo0WXjKl2dTCF3LD/nAXW3r
+         xaa1CmnZuV9vbUEsKfqF8j+n81vFgShCEuZtXpXHC7Ce4MblMnSYFw4TEIl6+maw/RiB
+         J0zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688578193; x=1691170193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=21WgRYzk/FRZzyhPurFkJWRpl393yD1S4pYgQXdWIKY=;
+        b=V/FsRhiDl40ECzi98NPYzVwI+rNjG1tVxSbmy8tFky4PNS1LPbRzBeTyxqaVoe2Hjs
+         vjcdC6laaRxzq44dMq2ZWUWISmmjvYGUv+YetMDy7y1/WHk3VlD2WKEmuHEer7v1QOdZ
+         qRlNoxjEPqPum8eTxOTTxu9MZlbDwVeZy3SCx1HzXYjSq8AKXuaPRnCHfoTOdbSV/sHY
+         SX+8YsCe2ndiwHq208r7amLKwkj+5Tz8DwVjFkroNoHa22H6XIp3w5KZiCFAFhCm3Y37
+         jMtzsq+Oy60VsQF/bVsVt65jfMShrLNVRCLmxsoFXUBA5NAHBhmFTCDzCFxgKzboG5Y8
+         KmIg==
+X-Gm-Message-State: ABy/qLZkM7vDnHCwFRxwyVoL6xNsYtRufz4LJh0KclQRUwR7DXHZZzjH
+        9Xki2ZujMpC60SMzb6hYhG6Ypg==
+X-Google-Smtp-Source: APBJJlE+cUUqf4PZsftRzFUhRQhAQdKZ66CaWMKscoxCnAdrmnh4xbX2rF0IZVJYDMbIvyaf6RKciQ==
+X-Received: by 2002:a05:6a00:1823:b0:67e:18c6:d2c6 with SMTP id y35-20020a056a00182300b0067e18c6d2c6mr22812326pfa.5.1688578192636;
+        Wed, 05 Jul 2023 10:29:52 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id t15-20020a62ea0f000000b0068288aaf23esm5719930pfh.100.2023.07.05.10.29.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 10:29:52 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Evan Green <evan@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v2] RISC-V: Show accurate per-hart isa in /proc/cpuinfo
+Date:   Wed,  5 Jul 2023 10:29:31 -0700
+Message-Id: <20230705172931.1099183-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_09,2023-07-05_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ETZPC is a peripheral and memory firewall controller that filter accesses
-based on Arm TrustZone secure state and Arm CPU privilege execution level.
-It handles MCU isolation as well.
+In /proc/cpuinfo, most of the information we show for each processor is
+specific to that hart: marchid, mvendorid, mimpid, processor, hart,
+compatible, and the mmu size. But the ISA string gets filtered through a
+lowest common denominator mask, so that if one CPU is missing an ISA
+extension, no CPUs will show it.
 
-Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Now that we track the ISA extensions for each hart, let's report ISA
+extension info accurately per-hart in /proc/cpuinfo. We cannot change
+the "isa:" line, as usermode may be relying on that line to show only
+the common set of extensions supported across all harts. Add a new "hart
+isa" line instead, which reports the true set of extensions for that
+hart. This matches what is returned in riscv_hwprobe() when querying a
+given hart.
+
+Signed-off-by: Evan Green <evan@rivosinc.com>
+
 ---
- MAINTAINERS               |   1 +
- drivers/bus/Makefile      |   2 +-
- drivers/bus/stm32_etzpc.c | 137 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 139 insertions(+), 1 deletion(-)
- create mode 100644 drivers/bus/stm32_etzpc.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1ea2f9f60b43..51f5bced7b9b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20126,6 +20126,7 @@ F:	drivers/media/i2c/st-mipid02.c
- ST STM32 FIREWALL
- M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
- S:	Maintained
-+F:	drivers/bus/stm32_etzpc.c
- F:	drivers/bus/stm32_firewall.c
- F:	drivers/bus/stm32_rifsc.c
+Changes in v2:
+ - Added new "hart isa" line rather than altering behavior of existing
+   "isa" line (Conor, Palmer)
+
+
+I based this series on top of Conor's riscv-extensions-strings branch
+from July 3rd, since otherwise this change gets hopelessly entangled
+with that series.
+
+I was unsure if I could snuggle the new "hart isa" line in just below
+"isa". Aesthetically it would be quite pleasing, but it runs the risk of
+breaking brittle usermode parsers that are assuming a specific line
+order. So I put it at the end.
+
+---
+ arch/riscv/kernel/cpu.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index 1acf3679600d..6264b7b94945 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -197,9 +197,8 @@ arch_initcall(riscv_cpuinfo_init);
  
-diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
-index e50d18e1d141..cddd4984d6af 100644
---- a/drivers/bus/Makefile
-+++ b/drivers/bus/Makefile
-@@ -26,7 +26,7 @@ obj-$(CONFIG_OMAP_INTERCONNECT)	+= omap_l3_smx.o omap_l3_noc.o
- obj-$(CONFIG_OMAP_OCP2SCP)	+= omap-ocp2scp.o
- obj-$(CONFIG_QCOM_EBI2)		+= qcom-ebi2.o
- obj-$(CONFIG_QCOM_SSC_BLOCK_BUS)	+= qcom-ssc-block-bus.o
--obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o stm32_rifsc.o
-+obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o stm32_rifsc.o stm32_etzpc.o
- obj-$(CONFIG_SUN50I_DE2_BUS)	+= sun50i-de2.o
- obj-$(CONFIG_SUNXI_RSB)		+= sunxi-rsb.o
- obj-$(CONFIG_OF)		+= simple-pm-bus.o
-diff --git a/drivers/bus/stm32_etzpc.c b/drivers/bus/stm32_etzpc.c
-new file mode 100644
-index 000000000000..2ef5ab738f87
---- /dev/null
-+++ b/drivers/bus/stm32_etzpc.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
-+ */
+ #ifdef CONFIG_PROC_FS
+ 
+-static void print_isa(struct seq_file *f)
++static void print_isa(struct seq_file *f, const unsigned long *isa_bitmap)
+ {
+-	seq_puts(f, "isa\t\t: ");
+ 
+ 	if (IS_ENABLED(CONFIG_32BIT))
+ 		seq_write(f, "rv32", 4);
+@@ -207,7 +206,7 @@ static void print_isa(struct seq_file *f)
+ 		seq_write(f, "rv64", 4);
+ 
+ 	for (int i = 0; i < riscv_isa_ext_count; i++) {
+-		if (!__riscv_isa_extension_available(NULL, riscv_isa_ext[i].id))
++		if (!__riscv_isa_extension_available(isa_bitmap, riscv_isa_ext[i].id))
+ 			continue;
+ 
+ 		/* Only multi-letter extensions are split by underscores */
+@@ -271,7 +270,15 @@ static int c_show(struct seq_file *m, void *v)
+ 
+ 	seq_printf(m, "processor\t: %lu\n", cpu_id);
+ 	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
+-	print_isa(m);
 +
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
++	/*
++	 * For historical raisins, the isa: line is limited to the lowest common
++	 * denominator of extensions supported across all harts. A true list of
++	 * extensions supported on this hart is printed later in the hart_isa:
++	 * line.
++	 */
++	seq_puts(m, "isa\t\t: ");
++	print_isa(m, NULL);
+ 	print_mmu(m);
+ 
+ 	if (acpi_disabled) {
+@@ -287,6 +294,13 @@ static int c_show(struct seq_file *m, void *v)
+ 	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
+ 	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
+ 	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
 +
-+#include "stm32_firewall.h"
-+
-+/*
-+ * ETZPC registers
-+ */
-+#define ETZPC_DECPROT			0x10
-+#define ETZPC_HWCFGR			0x3F0
-+
-+/*
-+ * HWCFGR register
-+ */
-+#define ETZPC_HWCFGR_NUM_TZMA		GENMASK(7, 0)
-+#define ETZPC_HWCFGR_NUM_PER_SEC	GENMASK(15, 8)
-+#define ETZPC_HWCFGR_NUM_AHB_SEC	GENMASK(23, 16)
-+#define ETZPC_HWCFGR_CHUNKS1N4		GENMASK(31, 24)
-+
-+/*
-+ * ETZPC miscellaneous
-+ */
-+#define ETZPC_PROT_MASK			GENMASK(1, 0)
-+#define ETZPC_PROT_A7NS			0x3
-+#define ETZPC_DECPROT_SHIFT		1
-+
-+#define IDS_PER_DECPROT_REGS		16
-+
-+static int stm32_etzpc_grant_access(struct stm32_firewall_controller *ctrl, u32 firewall_id)
-+{
-+	u32 offset, reg_offset, sec_val;
-+
-+	if (firewall_id >= ctrl->max_entries) {
-+		dev_err(ctrl->dev, "Invalid sys bus ID %u", firewall_id);
-+		return -EINVAL;
-+	}
-+
-+	/* Check access configuration, 16 peripherals per register */
-+	reg_offset = ETZPC_DECPROT + 0x4 * (firewall_id / IDS_PER_DECPROT_REGS);
-+	offset = (firewall_id % IDS_PER_DECPROT_REGS) << ETZPC_DECPROT_SHIFT;
-+
-+	/* Verify peripheral is non-secure and attributed to cortex A7 */
-+	sec_val = (readl(ctrl->mmio + reg_offset) >> offset) & ETZPC_PROT_MASK;
-+	if (sec_val != ETZPC_PROT_A7NS) {
-+		dev_dbg(ctrl->dev, "Invalid bus configuration: reg_offset %#x, value %d\n",
-+			reg_offset, sec_val);
-+		return -EACCES;
-+	}
-+
-+	return 0;
-+}
-+
-+static void stm32_etzpc_release_access(struct stm32_firewall_controller *ctrl __maybe_unused,
-+				       u32 firewall_id __maybe_unused)
-+{
-+}
-+
-+static int stm32_etzpc_probe(struct platform_device *pdev)
-+{
-+	struct stm32_firewall_controller *etzpc_controller;
-+	struct device_node *np = pdev->dev.of_node;
-+	u32 nb_per, nb_master;
-+	struct resource *res;
-+	void __iomem *mmio;
-+	int rc;
-+
-+	etzpc_controller = devm_kzalloc(&pdev->dev, sizeof(*etzpc_controller), GFP_KERNEL);
-+	if (!etzpc_controller)
-+		return -ENOMEM;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	mmio = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(mmio))
-+		return PTR_ERR(mmio);
-+
-+	etzpc_controller->dev = &pdev->dev;
-+	etzpc_controller->mmio = mmio;
-+	etzpc_controller->type = STM32_PERIPHERAL_FIREWALL | STM32_MEMORY_FIREWALL;
-+	etzpc_controller->grant_access = stm32_etzpc_grant_access;
-+	etzpc_controller->release_access = stm32_etzpc_release_access;
-+
-+	/* Get number of etzpc entries*/
-+	nb_per = FIELD_GET(ETZPC_HWCFGR_NUM_PER_SEC,
-+			   readl(etzpc_controller->mmio + ETZPC_HWCFGR));
-+	nb_master = FIELD_GET(ETZPC_HWCFGR_NUM_AHB_SEC,
-+			      readl(etzpc_controller->mmio + ETZPC_HWCFGR));
-+	etzpc_controller->max_entries = nb_per + nb_master;
-+
-+	platform_set_drvdata(pdev, etzpc_controller);
-+
-+	rc = stm32_firewall_controller_register(etzpc_controller);
-+	if (rc) {
-+		dev_err(etzpc_controller->dev, "Couldn't register as a firewall controller: %d",
-+			rc);
-+		return rc;
-+	}
-+
-+	stm32_firewall_populate_bus(etzpc_controller);
-+
-+	/* Populate all allowed nodes */
-+	return of_platform_populate(np, NULL, NULL, &pdev->dev);
-+}
-+
-+static const struct of_device_id stm32_etzpc_of_match[] = {
-+	{ .compatible = "st,stm32-etzpc" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, stm32_etzpc_of_match);
-+
-+static struct platform_driver stm32_etzpc_driver = {
-+	.probe  = stm32_etzpc_probe,
-+	.driver = {
-+		.name = "stm32-etzpc",
-+		.of_match_table = stm32_etzpc_of_match,
-+	},
-+};
-+
-+static int __init stm32_etzpc_init(void)
-+{
-+	return platform_driver_register(&stm32_etzpc_driver);
-+}
-+arch_initcall(stm32_etzpc_init);
++	/*
++	 * Print the ISA extensions specific to this hart, which may show
++	 * additional extensions not present across all harts.
++	 */
++	seq_puts(m, "hart isa\t: ");
++	print_isa(m, hart_isa[cpu_id].isa);
+ 	seq_puts(m, "\n");
+ 
+ 	return 0;
 -- 
-2.25.1
+2.34.1
 
