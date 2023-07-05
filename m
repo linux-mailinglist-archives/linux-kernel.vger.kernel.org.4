@@ -2,190 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F057483AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AE07483BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjGEMAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 08:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        id S231688AbjGEMEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 08:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjGEMAq (ORCPT
+        with ESMTP id S230242AbjGEMEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 08:00:46 -0400
-Received: from mail-pj1-f78.google.com (mail-pj1-f78.google.com [209.85.216.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4833E63
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 05:00:45 -0700 (PDT)
-Received: by mail-pj1-f78.google.com with SMTP id 98e67ed59e1d1-260cb94f585so852278a91.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 05:00:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688558445; x=1691150445;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VpenHbvdJzQxgfCS5scbblLnDf+ZQHvl9YuFMax7724=;
-        b=i6EeHZoGyuFeP9u3MdRNehZBoWem4a8btzvNPmsux7GhjaXeh2y8v17iyqp0u0dK8W
-         yndOA5CXQ7y25CqnddxLA3JpMMPHp01jgBPYoPHE9vuCw1tlDQZeaXsmXg6b+zqfdevg
-         GgyFxAlWaeiGkAuXT4K08F5vUNw30kvKEtZNBOiY4tgAhX4rXYtr3t7jvbvxPpixTdzp
-         mI2t0cjAj7M0ZkeIUItZRmBqUCHvje/Ed+TQxteppKd6PYdU2Ol53EesZRm0auBWzXZw
-         tyQyyJfzCnnaiGqVp8Pti91wggA+P8kT4HL3Gcf81M1Oipt+4UDw5v03fLSmUC8BpkRR
-         atZg==
-X-Gm-Message-State: ABy/qLYGC+UAHMGgybhg2svfSq9n0Qw6zqDyGAjxmVnyXak8Q3PuCcCA
-        HUEvteiTJtMxdxAIoBeixyM5VjsMG1yu5Gs32zNbKHdPUwpM
-X-Google-Smtp-Source: APBJJlGjdj3nzwXgF+QJ+/AzUmplUcm6ibES17LCr8wRC1xuyPlyq+LtPIoeSAJgZDtwP5sBFlvzDJmL3lJKwACGvOqu6Hf8N9JW
+        Wed, 5 Jul 2023 08:04:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6061706;
+        Wed,  5 Jul 2023 05:04:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D2261516;
+        Wed,  5 Jul 2023 12:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C41C433C8;
+        Wed,  5 Jul 2023 12:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688558643;
+        bh=zpQHiah5pU5ivi5QnyiHH3I+kbG+Eq4swtcEgTjXUaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZsPAFsMvzkFtlDcZtJDpGIX2qQVVvXrwaEzMc7YGvKZhROXNuKvg722OlAweWXL/Z
+         j/jjr5q2t1u9HoihkQya58R90kZ8PdgAnd8yduFaPMAyXzRdjHcwUMfWJeFXrfIJ3G
+         EjC2RAZc6dMyu2vTUkhLFprfZWTXvfJ96Wi2veiK2ujOoYv4keYHeszKrCwk5uXp9Z
+         fDKdRi4Mtl+hulGM3htJArlZxOiz07hCizRGXwqFm6LXkHSfc7u8w8yTPDRbRer9RX
+         3mpjgitDz4YcBfN48skVFGVMqzApFLpaGUrl/wa9xzf94H/A7MXMOVghnRJEJfUUkP
+         HfXztUJE8FJPA==
+Date:   Wed, 5 Jul 2023 14:04:00 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <dri-devel@lists.freedesktop.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        freedreno <freedreno@lists.freedesktop.org>
+Subject: Re: RFC: DSI host capabilities (was: [PATCH RFC 03/10] drm/panel:
+ Add LGD panel driver for Sony Xperia XZ3)
+Message-ID: <epds77sccy4cc5cdpoc4ir7sfz5sz3biwep6rbks2nuyqncidu@77gb4t2wy6vn>
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
+ <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
+ <brmrqeajbq3oyp3jjwmc6tuhiftz764u6az444xw6g7pwf5fr3@5tlp375qwhed>
+ <617c8f8a-1fc7-c6a0-eaa5-ce75ff2adc1b@linaro.org>
+ <CAA8EJppG=MAVpK1J_8bNnkJ23y9NtgY7a2GVResXJvhEKyNsrw@mail.gmail.com>
+ <739a8bd9-9ff0-5072-fdae-b64efdf86842@collabora.com>
+ <e927cfcd-bf34-5daf-0e24-4dd828106968@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a17:90b:3c51:b0:261:22fb:4462 with SMTP id
- pm17-20020a17090b3c5100b0026122fb4462mr1595800pjb.3.1688558445211; Wed, 05
- Jul 2023 05:00:45 -0700 (PDT)
-Date:   Wed, 05 Jul 2023 05:00:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004f34d705ffbc2604@google.com>
-Subject: [syzbot] [overlayfs?] general protection fault in d_path
-From:   syzbot <syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com>
-To:     amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vjd4hy6ibnmkekav"
+Content-Disposition: inline
+In-Reply-To: <e927cfcd-bf34-5daf-0e24-4dd828106968@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--vjd4hy6ibnmkekav
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    d528014517f2 Revert ".gitignore: ignore *.cover and *.mbx"
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14fad002a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1085b4238c9eb6ba
-dashboard link: https://syzkaller.appspot.com/bug?extid=a67fc5321ffb4b311c98
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+Hi,
 
-Unfortunately, I don't have any reproducer for this issue yet.
+On Tue, May 30, 2023 at 03:36:04PM +0300, Dmitry Baryshkov wrote:
+> On 30/05/2023 15:15, AngeloGioacchino Del Regno wrote:
+> > Il 30/05/23 13:44, Dmitry Baryshkov ha scritto:
+> > > On Tue, 30 May 2023 at 10:24, Neil Armstrong
+> > > <neil.armstrong@linaro.org> wrote:
+> > > >=20
+> > > > Hi Marijn, Dmitry, Caleb, Jessica,
+> > > >=20
+> > > > On 29/05/2023 23:11, Marijn Suijten wrote:
+> > > > > On 2023-05-22 04:16:20, Dmitry Baryshkov wrote:
+> > > > > <snip>
+> > > > > > > +=A0=A0 if (ctx->dsi->dsc) {
+> > > > > >=20
+> > > > > > dsi->dsc is always set, thus this condition can be dropped.
+> > > > >=20
+> > > > > I want to leave room for possibly running the panel without DSC (=
+at a
+> > > > > lower resolution/refresh rate, or at higher power consumption if =
+there
+> > > > > is enough BW) by not assigning the pointer, if we get access to p=
+anel
+> > > > > documentation: probably one of the magic commands sent in this dr=
+iver
+> > > > > controls it but we don't know which.
+> > > >=20
+> > > > I'd like to investigate if DSC should perhaps only be enabled if we
+> > > > run non certain platforms/socs ?
+> > > >=20
+> > > > I mean, we don't know if the controller supports DSC and those
+> > > > particular
+> > > > DSC parameters so we should probably start adding something like :
+> > > >=20
+> > > > static drm_dsc_config dsc_params_qcom =3D {}
+> > > >=20
+> > > > static const struct of_device_id panel_of_dsc_params[] =3D {
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0 { .compatible =3D "qcom,sm8150", , .data =
+=3D &dsc_params_qcom },
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0 { .compatible =3D "qcom,sm8250", , .data =
+=3D &dsc_params_qcom },
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0 { .compatible =3D "qcom,sm8350", , .data =
+=3D &dsc_params_qcom },
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0 { .compatible =3D "qcom,sm8450", , .data =
+=3D &dsc_params_qcom },
+> > > > };
+> > >=20
+> > > I think this would damage the reusability of the drivers. The panel
+> > > driver does not actually care if the SoC is SM8350, sunxi-something or
+> > > RCar.
+> > > Instead it cares about host capabilities.
+> > >=20
+> > > I think instead we should extend mipi_dsi_host:
+> > >=20
+> > > #define MIPI_DSI_HOST_MODE_VIDEO BIT(0)
+> > > #define MIPI_DSI_HOST_MODE_CMD=A0 BIT(1)
+> > > #define MIPI_DSI_HOST_VIDEO_SUPPORTS_COMMANDS BIT(2)
+> > > // FIXME: do we need to provide additional caps here ?
+> > >=20
+> > > #define MIPI_DSI_DSC_1_1 BIT(0)
+> > > #define MIPI_DSI_DSC_1_2 BIT(1)
+> > > #define MIPI_DSI_DSC_NATIVE_422 BIT(2)
+> > > #define MIPI_DSI_DSC_NATIVE_420 BIT(3)
+> > > #define MIPI_DSI_DSC_FRAC_BPP BIT(4)
+> > > // etc.
+> > >=20
+> > > struct mipi_dsi_host {
+> > > =A0 // new fields only
+> > > =A0=A0 unsigned long mode_flags;
+> > > =A0=A0 unsigned long dsc_flags;
+> > > };
+> > >=20
+> > > Then the panel driver can adapt itself to the host capabilities and
+> > > (possibly) select one of the internally supported DSC profiles.
+> > >=20
+> >=20
+> > I completely agree about extending mipi_dsi_host, other SoCs could reuse
+> > that and
+> > support for DSC panels would become a lot cleaner.
+>=20
+> Sounds good. I will wait for one or two more days (to get the possible
+> feedback on fields/flags/etc) and post an RFC patch to dri-devel.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fef94e788067/disk-d5280145.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/576412ea518b/vmlinux-d5280145.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/685a0e4be06b/bzImage-d5280145.xz
+I just came across that discussion, and couldn't find those patches, did
+you ever send them?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
+Either way, I'm not really sure it's a good idea to multiply the
+capabilities flags of the DSI host, and we should just stick to the
+spec. If the spec says that we have to support DSC while video is
+output, then that's what the panels should expect.
 
-general protection fault, probably for non-canonical address 0xdffffc000000000a: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057]
-CPU: 1 PID: 10127 Comm: syz-executor.3 Not tainted 6.4.0-syzkaller-11478-gd528014517f2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5012
-Code: 85 75 18 00 00 83 3d 15 c8 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c de b3 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 b4 51 79 00 48 8b 94 24 80 00 00
-RSP: 0018:ffffc900169be9e0 EFLAGS: 00010006
-RAX: 000000000000000a RBX: 1ffff92002d37d60 RCX: 0000000000000002
-RDX: 0000000000000050 RSI: 0000000000000000 RDI: 0000000000000050
-RBP: ffffc900169beca8 R08: dffffc0000000000 R09: 0000000000000001
-R10: dffffc0000000000 R11: fffffbfff1d2fe76 R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000002 R15: ffff88802091d940
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa22a3fe000 CR3: 000000004b5e1000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5761
- seqcount_lockdep_reader_access+0x139/0x220 include/linux/seqlock.h:102
- get_fs_root_rcu fs/d_path.c:244 [inline]
- d_path+0x2f0/0x6e0 fs/d_path.c:286
- audit_log_d_path+0xd3/0x310 kernel/audit.c:2139
- dump_common_audit_data security/lsm_audit.c:224 [inline]
- common_lsm_audit+0x7cf/0x1a90 security/lsm_audit.c:458
- smack_log+0x421/0x540 security/smack/smack_access.c:383
- smk_tskacc+0x2ff/0x360 security/smack/smack_access.c:253
- smack_inode_getattr+0x203/0x270 security/smack/smack_lsm.c:1202
- security_inode_getattr+0xd3/0x120 security/security.c:2114
- vfs_getattr+0x25/0x70 fs/stat.c:167
- ovl_getattr+0x1b1/0xf70 fs/overlayfs/inode.c:174
- ima_check_last_writer security/integrity/ima/ima_main.c:171 [inline]
- ima_file_free+0x26e/0x4b0 security/integrity/ima/ima_main.c:203
- __fput+0x36a/0x950 fs/file_table.c:378
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x68f/0x2290 kernel/exit.c:874
- do_group_exit+0x206/0x2c0 kernel/exit.c:1024
- get_signal+0x1709/0x17e0 kernel/signal.c:2877
- arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:308
- exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7f3ca8c389
-Code: Unable to access opcode bytes at 0x7f7f3ca8c35f.
-RSP: 002b:00007f7f3d741168 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-RAX: fffffffffffffffb RBX: 00007f7f3cbac050 RCX: 00007f7f3ca8c389
-RDX: 0000000000000000 RSI: 00000000200001c0 RDI: 0000000020000180
-RBP: 00007f7f3cad7493 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff8432555f R14: 00007f7f3d741300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5012
-Code: 85 75 18 00 00 83 3d 15 c8 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c de b3 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 b4 51 79 00 48 8b 94 24 80 00 00
-RSP: 0018:ffffc900169be9e0 EFLAGS: 00010006
-RAX: 000000000000000a RBX: 1ffff92002d37d60 RCX: 0000000000000002
-RDX: 0000000000000050 RSI: 0000000000000000 RDI: 0000000000000050
-RBP: ffffc900169beca8 R08: dffffc0000000000 R09: 0000000000000001
-R10: dffffc0000000000 R11: fffffbfff1d2fe76 R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000002 R15: ffff88802091d940
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa22a3fe000 CR3: 000000004b5e1000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	85 75 18             	test   %esi,0x18(%rbp)
-   3:	00 00                	add    %al,(%rax)
-   5:	83 3d 15 c8 2c 0d 00 	cmpl   $0x0,0xd2cc815(%rip)        # 0xd2cc821
-   c:	48 89 9c 24 10 01 00 	mov    %rbx,0x110(%rsp)
-  13:	00
-  14:	0f 84 f8 0f 00 00    	je     0x1012
-  1a:	83 3d 5c de b3 0b 00 	cmpl   $0x0,0xbb3de5c(%rip)        # 0xbb3de7d
-  21:	74 34                	je     0x57
-  23:	48 89 d0             	mov    %rdx,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 00 00       	cmpb   $0x0,(%rax,%r8,1) <-- trapping instruction
-  2f:	74 1a                	je     0x4b
-  31:	48 89 d7             	mov    %rdx,%rdi
-  34:	e8 b4 51 79 00       	callq  0x7951ed
-  39:	48                   	rex.W
-  3a:	8b                   	.byte 0x8b
-  3b:	94                   	xchg   %eax,%esp
-  3c:	24 80                	and    $0x80,%al
+If a host isn't able to provide that, it's a bug and we should fix the
+controller driver instead of creating a workaround in the core for
+broken drivers.
 
+Another concern I have is that, those broken drivers are usually the
+undocumented ones that already have trouble supporting the most trivial
+setup. Creating more combinations both at the controller and panel level
+will just make it harder for those drivers.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Maxime
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--vjd4hy6ibnmkekav
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+-----BEGIN PGP SIGNATURE-----
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZKVcMAAKCRDj7w1vZxhR
+xeVgAQDMoWfOkJ4iYKGDevKKuJrt/Yox11zWBcNz3kO+JHvKCgEA1xY50FGJLaT2
+cS39fgkgt4dP5e/C3mtQGra1z+NhNgM=
+=LKUp
+-----END PGP SIGNATURE-----
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--vjd4hy6ibnmkekav--
