@@ -2,132 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD9974898C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA4274898D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjGEQyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
+        id S231755AbjGEQyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjGEQyW (ORCPT
+        with ESMTP id S230100AbjGEQy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:54:22 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99FF10EA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:54:20 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id C47353200917;
-        Wed,  5 Jul 2023 12:54:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 05 Jul 2023 12:54:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1688576055; x=1688662455; bh=bIBEWDOiL4fJXFNl0WDMqCyWtIZ42p2EH7N
-        I3yU2aBM=; b=I1GlFKAQoX/Q/3dm7T/b496ijYJbseYeoZ49H8KuWPm3ciwd6iS
-        rskoU9ZyKKIOwoG4ctMy/qOwE559yPN3ENEQ4QCN5sLg6Hec67G8kar73Hk2mJHm
-        pMxFEpWbRzhTMbde09mkC7CY7lo8SZ9rdk9gfhiU48YjpL/WW/Q+yz/rBhJBY70E
-        4mRJ8emWdEUZ8nK7gScZ4WgjjJI6wEmwgqnSbKOsmXW/dhhCF9tjN6EPjfYL9ytx
-        Iqev5Qv0zWP103zVlDPZ11mNnv/Q5eZWNuUrLxj6hq47WevzK2aSNIaoIcJjCCfL
-        VejQhdbYFDFxKli+hRjhP6QCJVE2z27EKNg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688576055; x=
-        1688662455; bh=bIBEWDOiL4fJXFNl0WDMqCyWtIZ42p2EH7NI3yU2aBM=; b=N
-        MS+RVBjZFD3K9G2MKlYq1XzGdgJkQQEMpViM/E5D+4wF6JLhYxOX0cH2DgVf5Jy/
-        5Zg78yDTBiKUeR+7kboFcG3F+YmNZiWlgoViRWKDFF9ov2cOJdu02X42Vfe6tuH6
-        v3msXnD5LL0gijpkuqVSygFwujnYXmcl79kI8zxfFtLMfFm4Ajmq1UuAy2KqOQAs
-        Av0jVVopyIYe3o2JgtTrr3NNv+KIz7k50sknFuhjPSEHQMGQ7r9aAurIMQUtXEUs
-        GU2NE5mcU2o+YtyWuGkHIsvER2zQReWqqkuAeO5RRgbdfnd1VHQvCPvULGC8CaBt
-        mzC/pAEG0SUqrzhQwhwtg==
-X-ME-Sender: <xms:NqClZPtuwUJAiX4EfxD0FxVMMhENtsaRQEfIa_YkZ7NOjo1PXALnXQ>
-    <xme:NqClZAffa3f5M4wKywBGylFaBzez-0DlJtJEY8tysel4344ry9cfzBqoKJheHs491
-    kfH40pDkEMwvCg33ww>
-X-ME-Received: <xmr:NqClZCyYImc1bK8GAGOxySe2h8Sa6602I6jLr9hfhbTioBVKS2Sm66Ekzjhc35cTFF7LjA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudejgdeiudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtkedttddttdejnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhepveettdeuleduveekgfeiudeftdeugfelfeffffek
-    keetieevieeiieeiteetheevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:NqClZOO-5bPHObNAUykF7dhe61pLdbszxoQm-mEbThjH_zhCAThbHw>
-    <xmx:NqClZP_82REIV6A97lvSBY9PqR-0pYDjmCz83EIWrrJoAZcNqEDF_g>
-    <xmx:NqClZOVuGFF3Fhp8Zji3eSe_sQr6qPe0AWeHsaBu9JPmJaCjlxfmkQ>
-    <xmx:N6ClZOUEbCb-Vf_Bsm7fuayXJoSukw6Ef-NwmqvofzkMaZjT33bLqQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Jul 2023 12:54:14 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 67E251095F9; Wed,  5 Jul 2023 19:54:11 +0300 (+03)
-Date:   Wed, 5 Jul 2023 19:54:11 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Yu Ma <yu.ma@intel.com>, akpm@linux-foundation.org,
-        tim.c.chen@intel.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
-        dan.j.williams@intel.com, shakeelb@google.com, pan.deng@intel.com,
-        tianyou.li@intel.com, lipeng.zhu@intel.com,
-        tim.c.chen@linux.intel.com
-Subject: Re: [PATCH] mm/mmap: move vma operations to mm_struct out of the
- critical section of file mapping lock
-Message-ID: <20230705165411.tfqqipcla7exkb7k@box.shutemov.name>
-References: <20230606124939.93561-1-yu.ma@intel.com>
- <20230606192013.viiifjcgb6enyilx@revolver>
+        Wed, 5 Jul 2023 12:54:28 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33DA10C3;
+        Wed,  5 Jul 2023 09:54:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=NaF5ODUhgDcBSbTY5pdKmE/ptdlDITp5mTjsd0ABD2E=; b=OG0Q8LZi7U5ttEb1YIf7uOywzf
+        I+QYRZjLDRvAUSAGp1UxIbnTRn9N7wxtxArmSkuF0+0yTz5fjN1LdpiqgI7p2JaE/WdcScjGxYI4c
+        Fs3tozpzqVPlIjqJLLoSo1gtSWaV1Z4RIi3A3gr9mKjSgwcanoUPmBDofd1KwyMRsu5Wbl+Y8zsDH
+        sqw0RiiRGACtK+puZlwzScOE4qAcEuWW5oTQdIoaIvzUwBEav5xIEKoWhD2zL+bhjC4BO90mNk+YW
+        woQrxtxQCU0doqWG+KclkVvTivM3+JHleVUjT4obVkWvqk1JgwrBzQ4P/avWMi3zQeqx7tZda0j/o
+        524G2Z3w==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qH5ld-0009nC-1W; Wed, 05 Jul 2023 18:54:13 +0200
+Received: from [178.197.249.31] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qH5lc-000Nft-8y; Wed, 05 Jul 2023 18:54:12 +0200
+Subject: Re: [PATCH bpf-next] bpf: Introduce bpf generic log
+To:     Leon Hwang <hffilwlqm@gmail.com>, ast@kernel.org
+Cc:     john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        hawk@kernel.org, tangyeechou@gmail.com, kernel-patches-bot@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230705132058.46194-1-hffilwlqm@gmail.com>
+ <1a205a85-ebf2-6d90-468d-4fd63ce3dd0f@iogearbox.net>
+ <a42c246a-01e1-9e7e-8260-57835c6351ae@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <688cbc7b-b23e-7edd-4603-b5734eaa9bd7@iogearbox.net>
+Date:   Wed, 5 Jul 2023 18:54:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <a42c246a-01e1-9e7e-8260-57835c6351ae@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230606192013.viiifjcgb6enyilx@revolver>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26960/Wed Jul  5 09:29:05 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 03:20:13PM -0400, Liam R. Howlett wrote:
-> * Yu Ma <yu.ma@intel.com> [230606 08:23]:
-> > UnixBench/Execl represents a class of workload where bash scripts are
-> > spawned frequently to do some short jobs. When running multiple parallel
-> > tasks, hot osq_lock is observed from do_mmap and exit_mmap. Both of them
-> > come from load_elf_binary through the call chain
-> > "execl->do_execveat_common->bprm_execve->load_elf_binary". In do_mmap,it will
-> > call mmap_region to create vma node, initialize it and insert it to vma
-> > maintain structure in mm_struct and i_mmap tree of the mapping file, then
-> > increase map_count to record the number of vma nodes used. The hot osq_lock
-> > is to protect operations on file’s i_mmap tree. For the mm_struct member
-> > change like vma insertion and map_count update, they do not affect i_mmap
-> > tree. Move those operations out of the lock's critical section, to reduce
-> > hold time on the lock.
-> > 
-> > With this change, on Intel Sapphire Rapids 112C/224T platform, based on
-> > v6.0-rc6, the 160 parallel score improves by 12%. The patch has no
-> > obvious performance gain on v6.4-rc4 due to regression of this benchmark
-> > from this commit f1a7941243c102a44e8847e3b94ff4ff3ec56f25 (mm: convert 
-> > mm's rss stats into percpu_counter).
+On 7/5/23 6:20 PM, Leon Hwang wrote:
+> On 2023/7/5 22:39, Daniel Borkmann wrote:
+>> On 7/5/23 3:20 PM, Leon Hwang wrote:
+>>> Currently, excluding verifier, users are unable to obtain detailed error
+>>> information when issues occur in BPF syscall.
+>>>
+>>> To overcome this limitation, bpf generic log is introduced to provide
+>>> error details similar to the verifier. This enhancement will enable the
+>>> reporting of error details along with the corresponding errno in BPF
+>>> syscall.
+>>>
+>>> Essentially, bpf generic log functions as a mechanism similar to netlink,
+>>> enabling the transmission of error messages to user space. This
+>>> mechanism greatly enhances the usability of BPF syscall by allowing
+>>> users to access comprehensive error messages instead of relying solely
+>>> on errno.
+>>>
+>>> This patch specifically addresses the error reporting in dev_xdp_attach()
+>>> . With this patch, the error messages will be transferred to user space
+>>> like the netlink approach. Hence, users will be able to check the error
+>>> message along with the errno.
+>>>
+>>> Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
+>>> ---
+>>>   include/linux/bpf.h            | 30 ++++++++++++++++++++++++++++++
+>>>   include/uapi/linux/bpf.h       |  6 ++++++
+>>>   kernel/bpf/log.c               | 33 +++++++++++++++++++++++++++++++++
+>>>   net/core/dev.c                 | 11 ++++++++++-
+>>>   tools/include/uapi/linux/bpf.h |  6 ++++++
+>>>   5 files changed, 85 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>>> index f58895830..fd63f4a76 100644
+>>> --- a/include/linux/bpf.h
+>>> +++ b/include/linux/bpf.h
+>>> @@ -3077,4 +3077,34 @@ static inline gfp_t bpf_memcg_flags(gfp_t flags)
+>>>       return flags;
+>>>   }
+>>>   +#define BPF_GENERIC_TMP_LOG_SIZE    256
+>>> +
+>>> +struct bpf_generic_log {
+>>> +    char        kbuf[BPF_GENERIC_TMP_LOG_SIZE];
+>>> +    char __user    *ubuf;
+>>> +    u32        len_used;
+>>> +    u32        len_total;
+>>> +};
+>>> +
+>>> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
+>>> +            const char *fmt, ...);
+>>> +static inline void bpf_generic_log_init(struct bpf_generic_log *log,
+>>> +            const struct bpf_generic_user_log *ulog)
+>>> +{
+>>> +    log->ubuf = (char __user *) (unsigned long) ulog->log_buf;
+>>> +    log->len_total = ulog->log_size;
+>>> +    log->len_used = 0;
+>>> +}
+>>> +
+>>> +#define BPF_GENERIC_LOG_WRITE(log, ulog, fmt, ...)    do {    \
+>>> +    const char *____fmt = (fmt);                \
+>>> +    bpf_generic_log_init(log, ulog);            \
+>>> +    bpf_generic_log_write(log, ____fmt, ##__VA_ARGS__);    \
+>>> +} while (0)
+>>> +
+>>> +#define BPF_GENERIC_ULOG_WRITE(ulog, fmt, ...)    do {            \
+>>> +    struct bpf_generic_log ____log;                    \
+>>> +    BPF_GENERIC_LOG_WRITE(&____log, ulog, fmt, ##__VA_ARGS__);    \
+>>> +} while (0)
+>>> +
+>>
+>> Could we generalize the bpf_verifier_log infra and reuse bpf_log() helper
+>> instead of adding something new?
 > 
-> I didn't think it was safe to insert a VMA into the VMA tree without
-> holding this write lock?  We now have a window of time where a file
-> mapping doesn't exist for a vma that's in the tree?  Is this always
-> safe?  Does the locking order in mm/rmap.c need to change?
+> 
+> Yes. It's possible to reuse the bpf_verifier_log infra and reuse bpf_log()
+> helper. I'll try this way:
+> 
+> #define BPF_LOG_USER  BPF_LOG_LEVEL1     /* user log flag */
+> 
+> #define BPF_ULOG_WRITE(log_buf, log_size, fmt, ...) do {               \
+>         const char *____fmt = (fmt);                                    \
+>         struct bpf_verifier_log ____vlog;                               \
+>         bpf_vlog_init(&____vlog, BPF_LOG_USER, log_buf, log_size);      \
+>         bpf_log(&____vlog, ____fmt, ##__VA_ARGS__);                         \
+> } while (0)
 
-We hold mmap lock on write here, right? Who can observe the VMA until the
-lock is released?
+Could we hide all of this inside bpf_log() or better create a new bpf_log_once() wrapper,
+passing in attr so we only need to use the latter w/o the extra macros?
 
-It cannot be retrieved from the VMA tree as it requires at least read mmap
-lock. And the VMA doesn't exist anywhere else.
+Essentially what your bpf_xdp_link_log() is doing, just that bpf_log_once(attr, extack._msg)
+would be generic and sufficient.
 
-I believe the change is safe.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Thanks,
+Daniel
