@@ -2,183 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE3C747E41
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BDB747E43
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbjGEHam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S232302AbjGEHbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjGEHak (ORCPT
+        with ESMTP id S229910AbjGEHbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:30:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B641E4F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:30:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGwxk-00074H-2x; Wed, 05 Jul 2023 09:30:08 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGwxd-00CDDv-9E; Wed, 05 Jul 2023 09:30:01 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGwxc-002Nyt-Mr; Wed, 05 Jul 2023 09:30:00 +0200
-Date:   Wed, 5 Jul 2023 09:30:00 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        miquel.raynal@bootlin.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, tglx@linutronix.de,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 1/5] genirq/devres: Add
- devm_request_threaded_irq_emsg()
-Message-ID: <20230705073000.oxlb7e7sdkdxurps@pengutronix.de>
-References: <20230703090455.62101-1-frank.li@vivo.com>
- <20230703090455.62101-2-frank.li@vivo.com>
- <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
- <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
- <11052797-b006-11bb-e4eb-987ddd568b24@kernel.org>
- <20805fef-d6aa-91d8-999e-04b1d6b7a37a@vivo.com>
- <20230704141954.fcmol2yswkpbnpaw@pengutronix.de>
- <20230705101537.000059d2@Huawei.com>
+        Wed, 5 Jul 2023 03:31:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9683E4F;
+        Wed,  5 Jul 2023 00:31:47 -0700 (PDT)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qwrtv20hqzqTV9;
+        Wed,  5 Jul 2023 15:31:19 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 5 Jul 2023 15:31:44 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 0/2] rcu: Don't dump the stalled CPU on where RCU GP kthread last ran twice
+Date:   Wed, 5 Jul 2023 15:30:18 +0800
+Message-ID: <20230705073020.2030-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3w7pvwtu25s3yawr"
-Content-Disposition: inline
-In-Reply-To: <20230705101537.000059d2@Huawei.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The stacks of all stalled CPUs will be dumped. If the CPU on where RCU GP
+kthread last ran is stalled, its stack does not need to be dumped again.
 
---3w7pvwtu25s3yawr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For example: Please search "Sending NMI from CPU 1 to CPUs 0"
+rcu: INFO: rcu_sched self-detected stall on CPU
+rcu:    1-...!: (999 ticks this GP) idle=a1e4/1/0x40000002 softirq=116/116 fqs=0
+rcu:    (t=1000 jiffies g=-875 q=18 ncpus=4)
+rcu: rcu_sched kthread timer wakeup didn't happen for 999 jiffies! g-875 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
+rcu:    Possible timer handling issue on cpu=0 timer-softirq=449
+rcu: rcu_sched kthread starved for 1000 jiffies! g-875 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=0
+rcu:    Unless rcu_sched kthread gets sufficient CPU time, OOM is now expected behavior.
+rcu: RCU grace-period kthread stack dump:
+task:rcu_sched       state:I stack:0     pid:12    ppid:2      flags:0x00000000
+ __schedule from schedule+0x50/0xa4
+ schedule from schedule_timeout+0x1f8/0x328
+ schedule_timeout from rcu_gp_fqs_loop+0x330/0x464
+ rcu_gp_fqs_loop from rcu_gp_kthread+0xb0/0x200
+ rcu_gp_kthread from kthread+0xe8/0x104
+ kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xc0855fb0 to 0xc0855ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+rcu: Stack dump where RCU GP kthread last ran:
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc1+ #2
+Hardware name: ARM-Versatile Express
+PC is at ktime_get+0x4c/0xe8
+LR is at ktime_get+0x4c/0xe8
+pc : [<801a61a4>]    lr : [<801a61a4>]    psr: 60000113
+sp : 80d01e48  ip : 00000002  fp : 0000001a
+r10: 5befcd40  r9 : 431bde82  r8 : d7b634db
+r7 : 00001bb0  r6 : 9ad70c88  r5 : 00000002  r4 : 80db0f40
+r3 : ffffffff  r2 : f8a7b162  r1 : 00000000  r0 : 07584e9d
+Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 6000406a  DAC: 00000051
+ ktime_get from tst_softirq+0x30/0xfc
+ tst_softirq from __do_softirq+0x128/0x334
+ __do_softirq from irq_exit+0x108/0x12c
+ irq_exit from __irq_svc+0x88/0xb0
+Exception stack(0x80d01f18 to 0x80d01f60)
+1f00:                                                       00490d54 00000001
+1f20: 80d07fc0 00000000 80d9d260 80d04cd0 00000001 80d04d18 80c5ec18 00000000
+1f40: 80d9bc35 80d07fc0 80d9cc80 80d01f68 808d6a6c 808d79f8 60000013 ffffffff
+ __irq_svc from default_idle_call+0x4c/0xb4
+ default_idle_call from do_idle+0x1a8/0x288
+ do_idle from cpu_startup_entry+0x18/0x1c
+ cpu_startup_entry from rest_init+0xb4/0xb8
+ rest_init from arch_post_acpi_subsys_init+0x0/0x8
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc1+ #2
+Hardware name: ARM-Versatile Express
+PC is at ktime_get+0x4c/0xe8
+LR is at ktime_get+0x4c/0xe8
+pc : [<801a61a4>]    lr : [<801a61a4>]    psr: 60000113
+sp : 80d01e48  ip : 00000002  fp : 0000001a
+r10: 5befcd40  r9 : 431bde82  r8 : d7b634db
+r7 : 00001bb2  r6 : 9ad70c88  r5 : 00000002  r4 : 80db0f40
+r3 : ffffffff  r2 : f8a78d88  r1 : 00000000  r0 : 07587277
+Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 6000406a  DAC: 00000051
+ ktime_get from tst_softirq+0x30/0xfc
+ tst_softirq from __do_softirq+0x128/0x334
+ __do_softirq from irq_exit+0x108/0x12c
+ irq_exit from __irq_svc+0x88/0xb0
+Exception stack(0x80d01f18 to 0x80d01f60)
+1f00:                                                       00490d54 00000001
+1f20: 80d07fc0 00000000 80d9d260 80d04cd0 00000001 80d04d18 80c5ec18 00000000
+1f40: 80d9bc35 80d07fc0 80d9cc80 80d01f68 808d6a6c 808d79f8 60000013 ffffffff
+ __irq_svc from default_idle_call+0x4c/0xb4
+ default_idle_call from do_idle+0x1a8/0x288
+ do_idle from cpu_startup_entry+0x18/0x1c
+ cpu_startup_entry from rest_init+0xb4/0xb8
+ rest_init from arch_post_acpi_subsys_init+0x0/0x8
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-rc1+ #2
+Hardware name: ARM-Versatile Express
+PC is at default_idle_call+0x4c/0xb4
+LR is at ct_kernel_enter.constprop.5+0x44/0x11c
+pc : [<808d79f8>]    lr : [<808d6a6c>]    psr: 60000013
+sp : c085df98  ip : 80d9cc80  fp : 81126e80
+r10: 80d9bc35  r9 : 00000000  r8 : 80c5ec18
+r7 : 80d04d18  r6 : 00000002  r5 : 80d04cd0  r4 : 80d9d260
+r3 : 00000000  r2 : 81126e80  r1 : 00000001  r0 : 0050a1e4
+Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 6802806a  DAC: 00000051
+ default_idle_call from do_idle+0x1a8/0x288
+ do_idle from cpu_startup_entry+0x18/0x1c
+ cpu_startup_entry from secondary_start_kernel+0x14c/0x150
+ secondary_start_kernel from 0x60101660
+Sending NMI from CPU 1 to CPUs 3:
+NMI backtrace for cpu 3 skipped: idling at default_idle_call+0x4c/0xb4
 
-Hello,
 
-On Wed, Jul 05, 2023 at 10:15:37AM +0800, Jonathan Cameron wrote:
-> On Tue, 4 Jul 2023 16:19:54 +0200
-> Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
->=20
-> > Hello,
-> >=20
-> > On Tue, Jul 04, 2023 at 05:06:12PM +0800, Yangtao Li wrote:
-> > > On 2023/7/4 16:48, Krzysztof Kozlowski wrote:
-> > >  =20
-> > > > [=E4=BD=A0=E9=80=9A=E5=B8=B8=E4=B8=8D=E4=BC=9A=E6=94=B6=E5=88=B0=E6=
-=9D=A5=E8=87=AA krzk@kernel.org =E7=9A=84=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=
-=B6=E3=80=82=E8=AF=B7=E8=AE=BF=E9=97=AE https://aka.ms/LearnAboutSenderIden=
-tification=EF=BC=8C=E4=BB=A5=E4=BA=86=E8=A7=A3=E8=BF=99=E4=B8=80=E7=82=B9=
-=E4=B8=BA=E4=BB=80=E4=B9=88=E5=BE=88=E9=87=8D=E8=A6=81]
-> > > >=20
-> > > > On 03/07/2023 19:43, Uwe Kleine-K=C3=B6nig wrote: =20
-> > > > > Hello Krzysztof,
-> > > > >=20
-> > > > > On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wro=
-te: =20
-> > > > > > On 03/07/2023 11:04, Yangtao Li wrote: =20
-> > > > > > > There are more than 700 calls to the devm_request_threaded_ir=
-q method.
-> > > > > > > Most drivers only request one interrupt resource, and these e=
-rror
-> > > > > > > messages are basically the same. If error messages are printed
-> > > > > > > everywhere, more than 1000 lines of code can be saved by remo=
-ving the
-> > > > > > > msg in the driver. =20
-> > > > > >=20
-> > > > > > ...
-> > > > > >  =20
-> > > > > > > +int devm_request_threaded_irq_emsg(struct device *dev, unsig=
-ned int irq,
-> > > > > > > +                              irq_handler_t handler, irq_han=
-dler_t thread_fn,
-> > > > > > > +                              unsigned long irqflags, const =
-char *devname,
-> > > > > > > +                              void *dev_id, const char *emsg)
-> > > > > > > +{
-> > > > > > > +   int rc;
-> > > > > > > +
-> > > > > > > +   rc =3D devm_request_threaded_irq(dev, irq, handler, NULL,=
- irqflags,
-> > > > > > > +                                  devname, dev_id);
-> > > > > > > +   if (rc && rc !=3D -EPROBE_DEFER) {
-> > > > > > > +           dev_err(dev, "Failed to request %sinterrupt %u %s=
- %s: %pe\n",
-> > > > > > > +                   thread_fn ? "threaded " : "", irq, devnam=
-e ? : dev_name(dev),
-> > > > > > > +                   emsg ? : "", ERR_PTR(rc)); =20
-> > > > > > It is open-coding dev_err_probe(). Just use dev_err_probe inste=
-ad. =20
-> > > > > dev_err_probe is supposed to be only called in probe functions, w=
-hile
-> > > > > devm_request_threaded_irq might be called in other contexts (e.g.=
- when a
-> > > > > device is opened). That's why I asked to not use dev_err_probe() =
-in v2 =20
-> > > > True, but then all the callers of this function will forget to set
-> > > > deferred probe reason. =20
-> >=20
-> > That's another reason for letting the driver issue the error message and
-> > not the request_irq function.
-> > =20
-> > > So let's use dev_err_probe?
-> > >=20
-> > > BTW, any suggestions for names here, keep using
-> > > devm_request_threaded_irq_emsg or change to a new name? =20
-> >=20
-> > I would have called it devm_request_threaded_irq_verbose() which I
-> > consider easier to understand. But maybe  is just my (green)
-> > bikeshed.
->=20
-> If going to use dev_err_probe() internally maybe can just use
-> devm_request_threaded_irq_probe() thus reflecting that and making
-> it different to the devm_request_threaded_irq()?
+Zhen Lei (2):
+  rcu: Delete a redundant check in rcu_check_gp_kthread_starvation()
+  rcu: Don't dump the stalled CPU on where RCU GP kthread last ran twice
 
-I like devm_request_threaded_irq_probe(), thanks for that suggestion
-(even though it's red :-)
+ kernel/rcu/tree_stall.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Best regards
-Uwe
+-- 
+2.25.1
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---3w7pvwtu25s3yawr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSlG/cACgkQj4D7WH0S
-/k7NJAf/W/VmS09wlRNdQ8cSrZRQMlAZTlz/61ILtur39hnGBqdq32Vg8eyL4OLD
-hIkfsr7VsST40mM9u3ar/g4g0upuPF64MagUJ1Xo4H8oSsg7AoEdMRCeQUYmP0ru
-EZnLjykOQRjPbKG1w3qbh6P380EMUUmebcsvq2hftoWNOFN839DtdIwQbbjDyU88
-WAQY4KYps2wtAkIFsdRwc5B2AfPcRvsA2u1eGoTdHO7GMxTW1gHSP0+JdPbCwo+G
-yNja5Eoh59NpRQxNLmHbKDdT2QVmov+o8+UQdmULeTeAIMHJhPasklv4XckQahBg
-MdJl4H/H2ukouHulyntW3si+qNnScg==
-=whBA
------END PGP SIGNATURE-----
-
---3w7pvwtu25s3yawr--
