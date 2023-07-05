@@ -2,275 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E796D748E79
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794AC748E7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbjGET4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S233370AbjGET5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbjGET4j (ORCPT
+        with ESMTP id S233470AbjGET5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:56:39 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18F619A3;
-        Wed,  5 Jul 2023 12:56:35 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-783544a1c90so354107839f.1;
-        Wed, 05 Jul 2023 12:56:35 -0700 (PDT)
+        Wed, 5 Jul 2023 15:57:03 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4584173B;
+        Wed,  5 Jul 2023 12:56:58 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6686a05bc66so44417b3a.1;
+        Wed, 05 Jul 2023 12:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688587018; x=1691179018;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TlXlQ+VQSstFNgJX2WkC6cI55mZqRHLWVinXakjJg1s=;
+        b=UpTCbeiin1FfU7OOgARkTOwjqxlPLBscacN9VOt+W9yiLVV5vhmm1iFDMB1rHtD1kK
+         tnCJFXedvuJSJODlK4vMw3++tGED61qYXYKDoKPLUbwPqM4BhF9Ip0teRKucNebRzwQ9
+         zxlUSjpb8uEVjKZ56XoVCQH908gang1JdDa0J95QJYOIMk6DQfyr2PtXgAmiHR57lJH2
+         hCmo66WwYNNv0YZRumJokqyDSzao9fHyzUrbZSJNEBYEIDt6dIllJOnfgXKaZ/4nhnxK
+         yIyX6vLHFQDhsaYs6RZjOo8gTs5J2Iyu952ih0o0i4Ioi2eW5whMa20LIoAvzM4p2ghJ
+         0uww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688586995; x=1691178995;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPt3Am55EIPQwjaZUFo2OjC5UfPdXakQamq9kZV1DYQ=;
-        b=MeFYnf+WDTVRqFcN8/Uj3c+G5CCcYtrcFvPYK04AgS/+tv9NbkcXexNCJmS/A0cI67
-         GMg3XpLBszOcac+Yl34alDY9Esefad3jhk9b2Ikc2XXDTZa5zTm/fOw/ZkIt4iHgz11s
-         AOSvqizjd+Bow7ial/pfPmv6UqBYmrQczn/kZLr5HmHX6v9qBCVP5K5um4MJRLq3ijnp
-         M0GguYqH5BdyUFOdapYyH2idnDFLBteC+rjRmNy/kinO7eVhSe8g1pQBCr/UAm7w5zJe
-         ReXhHL4poQsy5/7R9KeLOgi6FUfBxw7zjlWySRTJY3zwlYUquAod+QsMkJ+UvJM1sVY5
-         UFPQ==
-X-Gm-Message-State: ABy/qLZ8qVIykdVKTDgXnXe7j3/SZYi+zDuPiw3rK+LCx/R9h88Ab79u
-        4MzRancln9mJI2HnonozSFv6KW9r8A==
-X-Google-Smtp-Source: APBJJlHnNkXGWBvky8XFChw7oHy0bgp6ROaCctZYW1YAOfFB4F4irzCZhnVtBvrPuCl5xHlrMAHEkg==
-X-Received: by 2002:a05:6602:2285:b0:786:7f3a:fb06 with SMTP id d5-20020a056602228500b007867f3afb06mr183361iod.3.1688586994825;
-        Wed, 05 Jul 2023 12:56:34 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id o4-20020a02c6a4000000b0042b426e353dsm2458216jan.127.2023.07.05.12.56.32
+        d=1e100.net; s=20221208; t=1688587018; x=1691179018;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TlXlQ+VQSstFNgJX2WkC6cI55mZqRHLWVinXakjJg1s=;
+        b=NgYaZo6LiHscR1W+g6gtIJ6bLex7yF0jdSFEhNFNTPfmlS936qYN7VaI3Gf3amOM2P
+         zjNKhktKCkt3WApJlJetGAvei9i0CdGZm550nZ/chui08dF144ReEjdWCz3BIIlm9H+A
+         +hsK+x1XqxjVbNKec/Vu1qAujg8fO88vrbJg+Md3FtaY9/nFp21T9RV4BddG57N6/rLn
+         FJXzhqchxkEs9TiSMY8IwliVmgclvnwe8YkwrD4D/Pu3ffE4BlTB0dMjjNMLtNWT3BFf
+         Dq57Zbr1AEdIfpLjJRXqh1gGOwII9UPaL0zFpqvjdsE/k4K2z5UknGWt7w8SUx2QXyno
+         N1Zg==
+X-Gm-Message-State: ABy/qLbAYXGQ+XRTh2wGC4onwUCSylEKzQhftMu+pEr7Y1M2qer3HjgI
+        mYQSryehljU99vSUYqeP2HA=
+X-Google-Smtp-Source: APBJJlF3N73zyO57FioaI2B4aezchVrk01EWrOjfZaHYInWnnMthM22QksStvxiFajwRyuy8NgJwRw==
+X-Received: by 2002:a05:6a00:1a8b:b0:66f:7076:a5b8 with SMTP id e11-20020a056a001a8b00b0066f7076a5b8mr16611045pfv.29.1688587018060;
+        Wed, 05 Jul 2023 12:56:58 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:c628:31be:68ae:86f5:48b9])
+        by smtp.gmail.com with ESMTPSA id 18-20020a056a00071200b0063b96574b8bsm4514794pfl.220.2023.07.05.12.56.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:56:34 -0700 (PDT)
-Received: (nullmailer pid 1737132 invoked by uid 1000);
-        Wed, 05 Jul 2023 19:56:31 -0000
-Date:   Wed, 5 Jul 2023 13:56:31 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] dt-bindings: clock: amlogic: convert
- amlogic,gxbb-aoclkc.txt to dt-schema
-Message-ID: <20230705195631.GA1732680-robh@kernel.org>
-References: <20230705-b4-amlogic-bindings-convert-take2-v2-0-22be915ddc3b@linaro.org>
- <20230705-b4-amlogic-bindings-convert-take2-v2-2-22be915ddc3b@linaro.org>
+        Wed, 05 Jul 2023 12:56:57 -0700 (PDT)
+From:   Anup Sharma <anupnewsmail@gmail.com>
+X-Google-Original-From: Anup Sharma <AnupSharma>
+Date:   Thu, 6 Jul 2023 01:26:50 +0530
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Anup Sharma <anupnewsmail@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/9] scripts: python: Implement parsing of input data in
+ convertPerfScriptProfile
+Message-ID: <ZKXLAqWF29sxCS1B@yoga>
+References: <cover.1687375189.git.anupnewsmail@gmail.com>
+ <3772bce9068962f2a4c57672e919ebdf30edbc5c.1687375189.git.anupnewsmail@gmail.com>
+ <CAM9d7cj1bWWM7j5LCTpDQqLXmn5UH1mkCvZ-k3VEXJb7S2+wxg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230705-b4-amlogic-bindings-convert-take2-v2-2-22be915ddc3b@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7cj1bWWM7j5LCTpDQqLXmn5UH1mkCvZ-k3VEXJb7S2+wxg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 01:41:52PM +0200, Neil Armstrong wrote:
-> Convert the Amlogic Always-On Clock Controller bindings to dt-schema.
+On Fri, Jun 23, 2023 at 05:03:12PM -0700, Namhyung Kim wrote:
+> Hi Anup,
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/clock/amlogic,gxbb-aoclkc.txt         |  64 -------------
->  .../bindings/clock/amlogic,gxbb-aoclkc.yaml        | 101 +++++++++++++++++++++
->  2 files changed, 101 insertions(+), 64 deletions(-)
+> On Wed, Jun 21, 2023 at 12:41 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> >
+> > The lines variable is created by splitting the profile string into individual
+> > lines. It allows for iterating over each line for processing.
+> >
+> > The line is considered the start of a sample. It is matched against a regular
+> > expression pattern to extract relevant information such as before_time_stamp,
+> > time_stamp, threadNamePidAndTidMatch, threadName, pid, and tid.
+> >
+> > The stack frames of the current sample are then parsed in a nested loop.
+> > Each stackFrameLine is matched against a regular expression pattern to
+> > extract rawFunc and mod information.
+> >
+> > Also fixed few checkpatch warnings.
+> >
+> > Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> > ---
+> >  .../scripts/python/firefox-gecko-converter.py | 62 ++++++++++++++++++-
+> >  1 file changed, 60 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > index 0ff70c0349c8..e5bc7a11c3e6 100644
+> > --- a/tools/perf/scripts/python/firefox-gecko-converter.py
+> > +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > @@ -1,4 +1,5 @@
+> >  #!/usr/bin/env python3
+> > +# SPDX-License-Identifier: GPL-2.0
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.txt b/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.txt
-> deleted file mode 100644
-> index c41f0be5d438..000000000000
-> --- a/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.txt
-> +++ /dev/null
-> @@ -1,64 +0,0 @@
-> -* Amlogic GXBB AO Clock and Reset Unit
-> -
-> -The Amlogic GXBB AO clock controller generates and supplies clock to various
-> -controllers within the Always-On part of the SoC.
-> -
-> -Required Properties:
-> -
-> -- compatible: value should be different for each SoC family as :
-> -	- GXBB (S905) : "amlogic,meson-gxbb-aoclkc"
-> -	- GXL (S905X, S905D) : "amlogic,meson-gxl-aoclkc"
-> -	- GXM (S912) : "amlogic,meson-gxm-aoclkc"
-> -	- AXG (A113D, A113X) : "amlogic,meson-axg-aoclkc"
-> -	- G12A (S905X2, S905D2, S905Y2) : "amlogic,meson-g12a-aoclkc"
-> -	followed by the common "amlogic,meson-gx-aoclkc"
-> -- clocks: list of clock phandle, one for each entry clock-names.
-> -- clock-names: should contain the following:
-> -  * "xtal"     : the platform xtal
-> -  * "mpeg-clk" : the main clock controller mother clock (aka clk81)
-> -  * "ext-32k-0"  : external 32kHz reference #0 if any (optional)
-> -  * "ext-32k-1"  : external 32kHz reference #1 if any (optional - gx only)
-> -  * "ext-32k-2"  : external 32kHz reference #2 if any (optional - gx only)
-> -
-> -- #clock-cells: should be 1.
-> -
-> -Each clock is assigned an identifier and client nodes can use this identifier
-> -to specify the clock which they consume. All available clocks are defined as
-> -preprocessor macros in the dt-bindings/clock/gxbb-aoclkc.h header and can be
-> -used in device tree sources.
-> -
-> -- #reset-cells: should be 1.
-> -
-> -Each reset is assigned an identifier and client nodes can use this identifier
-> -to specify the reset which they consume. All available resets are defined as
-> -preprocessor macros in the dt-bindings/reset/gxbb-aoclkc.h header and can be
-> -used in device tree sources.
-> -
-> -Parent node should have the following properties :
-> -- compatible: "amlogic,meson-gx-ao-sysctrl", "syscon", "simple-mfd"
-> -- reg: base address and size of the AO system control register space.
-> -
-> -Example: AO Clock controller node:
-> -
-> -ao_sysctrl: sys-ctrl@0 {
-> -	compatible = "amlogic,meson-gx-ao-sysctrl", "syscon", "simple-mfd";
-> -	reg =  <0x0 0x0 0x0 0x100>;
-> -
-> -	clkc_AO: clock-controller {
-> -		compatible = "amlogic,meson-gxbb-aoclkc", "amlogic,meson-gx-aoclkc";
-> -		#clock-cells = <1>;
-> -		#reset-cells = <1>;
-> -		clocks = <&xtal>, <&clkc CLKID_CLK81>;
-> -		clock-names = "xtal", "mpeg-clk";
-> -	};
-> -
-> -Example: UART controller node that consumes the clock and reset generated
-> -  by the clock controller:
-> -
-> -	uart_AO: serial@4c0 {
-> -		compatible = "amlogic,meson-uart";
-> -		reg = <0x4c0 0x14>;
-> -		interrupts = <0 90 1>;
-> -		clocks = <&clkc_AO CLKID_AO_UART1>;
-> -		resets = <&clkc_AO RESET_AO_UART1>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.yaml
-> new file mode 100644
-> index 000000000000..0adcfbcf5c85
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,gxbb-aoclkc.yaml
-> @@ -0,0 +1,101 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/amlogic,gxbb-aoclkc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Always-On Clock Controller
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - amlogic,meson-gxbb-aoclkc
-> +              - amlogic,meson-gxl-aoclkc
-> +              - amlogic,meson-gxm-aoclkc
-> +              - amlogic,meson-axg-aoclkc
-> +          - const: amlogic,meson-gx-aoclkc
-> +      - enum:
-> +          - amlogic,meson-axg-aoclkc
-> +          - amlogic,meson-g12a-aoclkc
-> +
-> +  clocks:
-> +    minItems: 2
-> +    maxItems: 5
-> +
-> +  clock-names:
-> +    minItems: 2
-> +    maxItems: 5
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +  - '#reset-cells'
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - amlogic,meson-gxbb-aoclkc
-> +
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          minItems: 2
-> +          items:
-> +            - const: xtal 
-> +            - const: mpeg-clk
-> +            - const: ext-32k-0
-> +            - const: ext-32k-1
-> +            - const: ext-32k-2
+> Please put this line in the first commit.
 
-As the names are always the same, move this to top-level and just set 
-the length here (except the constraints are the same as top-level, so 
-you can just drop this if/then).
+Sure, followed in latest version.
 
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - amlogic,meson-g12a-aoclkc
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 3
-> +
-> +        clock-names:
-> +          minItems: 2
-> +          items:
-> +            - const: xtal 
-> +            - const: mpeg-clk
-> +            - const: ext-32k-0
-
-Just 'maxItems: 3'
-
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - amlogic,meson-gxl-aoclkc
-> +            - amlogic,meson-gxm-aoclkc
-> +            - amlogic,meson-axg-aoclkc
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 2
-> +
-> +        clock-names:
-> +          items:
-> +            - const: xtal 
-> +            - const: mpeg-clk
-
-maxItems: 2
-
-> +
-> +additionalProperties: false
+> >  import re
+> >  import sys
+> >  import json
+> > @@ -14,13 +15,13 @@ def isPerfScriptFormat(profile):
+> >      firstLine = profile[:profile.index('\n')]
+> >      return bool(re.match(r'^\S.*?\s+(?:\d+/)?\d+\s+(?:\d+\d+\s+)?[\d.]+:', firstLine))
+> >
+> > -def convertPerfScriptProfile(profile):
+> > +def convertPerfScriptProfile(profile):
 > 
-> -- 
-> 2.34.1
+> You'd better configure your editor to warn or even fix
+> the trailing whitespace automatically.
+
+Thanks, I followed your advice and configured my nvim to handle trailing
+whitespace automatically. It has significantly improved my workflow.
+Here's the updated snippet I added to my vimrc file:
+
+highlight ExtraWhitespace ctermbg=white guibg=white
+match ExtraWhitespace /\s\+$/
+
+> Thanks,
+> Namhyung
 > 
+> 
+> >
+> >          def addSample(threadName, stackArray, time):
+> >              nonlocal name
+> >              if name != threadName:
+> >                  name = threadName
+> > -            # TODO:
+> > +            # TODO:
+> >              # get_or_create_stack will create a new stack if it doesn't exist, or return the existing stack if it does.
+> >              # get_or_create_frame will create a new frame if it doesn't exist, or return the existing frame if it does.
+> >              stack = reduce(lambda prefix, stackFrame: get_or_create_stack(get_or_create_frame(stackFrame), prefix), stackArray, None)
+> > @@ -54,3 +55,60 @@ def convertPerfScriptProfile(profile):
+> >              thread = _createtread(threadName, pid, tid)
+> >              threadMap[tid] = thread
+> >          thread['addSample'](threadName, stack, time_stamp)
+> > +
+> > +    lines = profile.split('\n')
+> > +
+> > +    line_index = 0
+> > +    startTime = 0
+> > +    while line_index < len(lines):
+> > +        line = lines[line_index]
+> > +        line_index += 1
+> > +    # perf script --header outputs header lines beginning with #
+> > +        if line == '' or line.startswith('#'):
+> > +            continue
+> > +
+> > +        sample_start_line = line
+> > +
+> > +        sample_start_match = re.match(r'^(.*)\s+([\d.]+):', sample_start_line)
+> > +        if not sample_start_match:
+> > +            print(f'Could not parse line as the start of a sample in the "perf script" profile format: "{sample_start_line}"')
+> > +            continue
+> > +
+> > +        before_time_stamp = sample_start_match[1]
+> > +        time_stamp = float(sample_start_match[2]) * 1000
+> > +        threadNamePidAndTidMatch = re.match(r'^(.*)\s+(?:(\d+)\/)?(\d+)\b', before_time_stamp)
+> > +
+> > +        if not threadNamePidAndTidMatch:
+> > +            print('Could not parse line as the start of a sample in the "perf script" profile format: "%s"' % sampleStartLine)
+> > +            continue
+> > +        threadName = threadNamePidAndTidMatch[1].strip()
+> > +        pid = int(threadNamePidAndTidMatch[2] or 0)
+> > +        tid = int(threadNamePidAndTidMatch[3] or 0)
+> > +        if startTime == 0:
+> > +            startTime = time_stamp
+> > +        # Parse the stack frames of the current sample in a nested loop.
+> > +        stack = []
+> > +        while line_index < len(lines):
+> > +            stackFrameLine = lines[line_index]
+> > +            line_index += 1
+> > +            if stackFrameLine.strip() == '':
+> > +                # Sample ends.
+> > +                break
+> > +            stackFrameMatch = re.match(r'^\s*(\w+)\s*(.+) \(([^)]*)\)', stackFrameLine)
+> > +            if stackFrameMatch:
+> > +                rawFunc = stackFrameMatch[2]
+> > +                mod = stackFrameMatch[3]
+> > +                rawFunc = re.sub(r'\+0x[\da-f]+$', '', rawFunc)
+> > +
+> > +            if rawFunc.startswith('('):
+> > +                continue # skip process names
+> > +
+> > +            if mod:
+> > +                # If we have a module name, provide it.
+> > +                # The code processing the profile will search for
+> > +                # "functionName (in libraryName)" using a regexp,
+> > +                # and automatically create the library information.
+> > +                rawFunc += f' (in {mod})'
+> > +
+> > +            stack.append(rawFunc)
+> > +
+> > --
+> > 2.34.1
+> >
