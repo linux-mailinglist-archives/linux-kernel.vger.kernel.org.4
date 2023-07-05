@@ -2,562 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1127C747B85
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 04:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5028B747B63
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 04:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjGECX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 22:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S229793AbjGECH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 22:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjGECXv (ORCPT
+        with ESMTP id S229512AbjGECH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 22:23:51 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2A810E3;
-        Tue,  4 Jul 2023 19:23:48 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 566FB1A09B3;
-        Wed,  5 Jul 2023 04:23:47 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id EDB8D1A09D4;
-        Wed,  5 Jul 2023 04:23:46 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 6E2B31820F57;
-        Wed,  5 Jul 2023 10:23:45 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     abelvesa@kernel.org, peng.fan@nxp.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, shengjiu.wang@gmail.com
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] clk: imx: imx8: add audio clock mux driver
-Date:   Wed,  5 Jul 2023 09:50:39 +0800
-Message-Id: <1688521839-3036-4-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1688521839-3036-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1688521839-3036-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 4 Jul 2023 22:07:58 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF6310D9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 19:07:56 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-401f4408955so732631cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 19:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688522876; x=1691114876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O0wAoKec+Pl35+rlh7VOhG01IZuhb1xkdl9OsSICnU4=;
+        b=wAy8sTOX1/jVffTuSno5nLY/g6Nds9KsWTTtt48Hwl5iJXJ4rND6+wb2RtOdTvqHGp
+         wG/qWRcWihcQE7ssyUJUElWA+btPAGilKqV/NqS/hKQVM9M2yyEHQy59r9v/gVNXXMNm
+         nBoNR8MIemlYUjlT6WrURGCdLEKirmzXV4TLbO0mQ0bVShVKbAfYhTyRvdoVN5FR+GFl
+         x5iKLVVzYVZxG6YBzzPpHY0GpOy47RTVF1xPmvx+rGvp3+3FNh5o1hTOzPiZ9XT3P5AG
+         dwRixmPu39Y38zlflxmG6E51X/bsWGxECu33E2SiohKx/JgXLLBnp7o4WUleFn1zuQmM
+         Ergw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688522876; x=1691114876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O0wAoKec+Pl35+rlh7VOhG01IZuhb1xkdl9OsSICnU4=;
+        b=FDj6DlyO2Z4Dj94kEi+4lohUrj+zzhrBSOMg57F5qe2p6+/30qMgjK+K5JN09PNcus
+         gHqg6O5FMwRHGvdrTRCpahDa3gh8XnFb7pGEBAKTXGZJ49gzwQr2UaUE0MSzkhHTZdVI
+         33zFsJfyNyzEP7gaNHLvaDrM2c6Y+Wk5RojWN3m1xel6D1sWw2kYpkEMnCYpFCcUgbno
+         o9dPdau6b3FcTIylZTcE/DOSJUfNeN0ver7FVqH84hm9nP6ZZLJvvwZplWkBZNg8QTP0
+         r/L2KhZWducOGtglOObpksIyjtvg3fvxLgeD0rUCdBvHMHMiMGNHLrVIFzVK6AwnlW/N
+         6z+A==
+X-Gm-Message-State: ABy/qLYDAe0Eio2yjxM783KRfUvWxPkkkiKbTzspbse2p+B9YyeRFvh+
+        unr131CIjB9JOFuy9Bf2N8sfhvBARC7aIh9/fYGmlQ==
+X-Google-Smtp-Source: APBJJlHtHWhqDwvFEDVpZ4G9KknXb3bW+OyzK+jOwsTwjjzc9ueG3UHDyD1AIbujZQYMnl5AcfvVcJcpxUv4tETsKPs=
+X-Received: by 2002:ac8:5fd3:0:b0:3f9:ab2c:88b9 with SMTP id
+ k19-20020ac85fd3000000b003f9ab2c88b9mr13116qta.25.1688522875892; Tue, 04 Jul
+ 2023 19:07:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230703135330.1865927-1-ryan.roberts@arm.com>
+ <20230703135330.1865927-4-ryan.roberts@arm.com> <CAOUHufa_xFJvFFvmw1Tkdc9cXaZ1GPA1dVSauH+J9zGX-sO1UA@mail.gmail.com>
+ <eea2b36d-9c6d-64ca-4e21-57cfd5a93d57@arm.com>
+In-Reply-To: <eea2b36d-9c6d-64ca-4e21-57cfd5a93d57@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 4 Jul 2023 20:07:19 -0600
+Message-ID: <CAOUHufZypv+kLFu3r8iPYbceBh0KSE=gus-_iC1Q35_QVQdnMQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] mm: Default implementation of arch_wants_pte_order()
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Audio Clock Mux (ACM) is a collection of control registers
-and multiplexers that are used to route the audio source clocks
-to the audio peripherals.
+On Tue, Jul 4, 2023 at 7:20=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com> =
+wrote:
+>
+> On 03/07/2023 20:50, Yu Zhao wrote:
+> > On Mon, Jul 3, 2023 at 7:53=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.c=
+om> wrote:
+> >>
+> >> arch_wants_pte_order() can be overridden by the arch to return the
+> >> preferred folio order for pte-mapped memory. This is useful as some
+> >> architectures (e.g. arm64) can coalesce TLB entries when the physical
+> >> memory is suitably contiguous.
+> >>
+> >> The first user for this hint will be FLEXIBLE_THP, which aims to
+> >> allocate large folios for anonymous memory to reduce page faults and
+> >> other per-page operation costs.
+> >>
+> >> Here we add the default implementation of the function, used when the
+> >> architecture does not define it, which returns the order corresponding
+> >> to 64K.
+> >
+> > I don't really mind a non-zero default value. But people would ask why
+> > non-zero and why 64KB. Probably you could argue this is the large size
+> > all known archs support if they have TLB coalescing. For x86, AMD CPUs
+> > would want to override this. I'll leave it to Fengwei to decide
+> > whether Intel wants a different default value.>
+> > Also I don't like the vma parameter because it makes
+> > arch_wants_pte_order() a mix of hw preference and vma policy. From my
+> > POV, the function should be only about the former; the latter should
+> > be decided by arch-independent MM code. However, I can live with it if
+> > ARM MM people think this is really what you want. ATM, I'm skeptical
+> > they do.
+>
+> Here's the big picture for what I'm tryng to achieve:
+>
+>  - In the common case, I'd like all programs to get a performance bump by
+> automatically and transparently using large anon folios - so no explicit
+> requirement on the process to opt-in.
 
-Each audio peripheral has its dedicated audio clock mux
-(which differ based on usage) and control register.
+We all agree on this :)
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- drivers/clk/imx/Makefile       |   2 +-
- drivers/clk/imx/clk-imx8-acm.c | 477 +++++++++++++++++++++++++++++++++
- 2 files changed, 478 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/imx/clk-imx8-acm.c
+>  - On arm64, in the above case, I'd like the preferred folio size to be 6=
+4K;
+> from the (admittedly limitted) testing I've done that's about where the
+> performance knee is and it doesn't appear to increase the memory wastage =
+very
+> much. It also has the benefits that for 4K base pages this is the contpte=
+ size
+> (order-4) so I can take full benefit of contpte mappings transparently to=
+ the
+> process. And for 16K this is the HPA size (order-2).
 
-diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-index ae9d84ef046b..27a96085ad10 100644
---- a/drivers/clk/imx/Makefile
-+++ b/drivers/clk/imx/Makefile
-@@ -35,7 +35,7 @@ obj-$(CONFIG_CLK_IMX93) += clk-imx93.o
- obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
- clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o \
- 				     clk-imx8qxp-rsrc.o clk-imx8qm-rsrc.o \
--				     clk-imx8dxl-rsrc.o
-+				     clk-imx8dxl-rsrc.o clk-imx8-acm.o
- clk-imx-lpcg-scu-$(CONFIG_CLK_IMX8QXP) += clk-lpcg-scu.o clk-imx8qxp-lpcg.o
- 
- obj-$(CONFIG_CLK_IMX8ULP) += clk-imx8ulp.o
-diff --git a/drivers/clk/imx/clk-imx8-acm.c b/drivers/clk/imx/clk-imx8-acm.c
-new file mode 100644
-index 000000000000..70fb068fdf18
---- /dev/null
-+++ b/drivers/clk/imx/clk-imx8-acm.c
-@@ -0,0 +1,477 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+//
-+// Copyright 2018-2023 NXP
-+//
-+
-+#include <dt-bindings/clock/imx8-clock.h>
-+#include <linux/clk-provider.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/slab.h>
-+
-+#include "clk.h"
-+
-+/**
-+ * struct clk_imx_acm_pm_domains: structure for multi power domain
-+ * @pd_dev: power domain device
-+ * @pd_dev_link: power domain device link
-+ * @num_domains: power domain nummber
-+ */
-+struct clk_imx_acm_pm_domains {
-+	struct device **pd_dev;
-+	struct device_link **pd_dev_link;
-+	int    num_domains;
-+};
-+
-+/**
-+ * struct clk_imx8_acm_sel: for clock mux
-+ * @name: clock name
-+ * @clkid: clock id
-+ * @parents: clock parents
-+ * @num_parents: clock parents number
-+ * @reg: register offset
-+ * @shift: bit shift in register
-+ * @width: bits width
-+ */
-+struct clk_imx8_acm_sel {
-+	const char			*name;
-+	int				clkid;
-+	const struct clk_parent_data	*parents;	/* For mux */
-+	int				num_parents;
-+	u32				reg;
-+	u8				shift;
-+	u8				width;
-+};
-+
-+/**
-+ * struct imx8_acm_soc_data: soc specific data
-+ * @sels: pointer to struct clk_imx8_acm_sel
-+ * @num_sels: numbers of items
-+ */
-+struct imx8_acm_soc_data {
-+	struct clk_imx8_acm_sel *sels;
-+	unsigned int num_sels;
-+};
-+
-+/**
-+ * struct imx8_acm_priv: private structure
-+ * @dev_pm: multi power domain
-+ * @soc_data: pointer to soc data
-+ * @reg: base address of registers
-+ * @regs: save registers for suspend
-+ */
-+struct imx8_acm_priv {
-+	struct clk_imx_acm_pm_domains dev_pm;
-+	const struct imx8_acm_soc_data *soc_data;
-+	void __iomem *reg;
-+	u32 regs[IMX_ADMA_ACM_CLK_END];
-+};
-+
-+static const struct clk_parent_data imx8qm_aud_clk_sels[] = {
-+	{.fw_name = "aud_rec_clk0_lpcg_clk", .name = "aud_rec_clk0_lpcg_clk" },
-+	{.fw_name = "aud_rec_clk1_lpcg_clk", .name = "aud_rec_clk1_lpcg_clk" },
-+	{.fw_name = "mlb_clk", .name = "mlb_clk" },
-+	{.fw_name = "hdmi_rx_mclk", .name = "hdmi_rx_mclk" },
-+	{.fw_name = "ext_aud_mclk0", .name = "ext_aud_mclk0" },
-+	{.fw_name = "ext_aud_mclk1", .name = "ext_aud_mclk1" },
-+	{.fw_name = "esai0_rx_clk", .name = "esai0_rx_clk" },
-+	{.fw_name = "esai0_rx_hf_clk", .name = "esai0_rx_hf_clk" },
-+	{.fw_name = "esai0_tx_clk", .name = "esai0_tx_clk" },
-+	{.fw_name = "esai0_tx_hf_clk", .name = "esai0_tx_hf_clk" },
-+	{.fw_name = "esai1_rx_clk", .name = "esai1_rx_clk" },
-+	{.fw_name = "esai1_rx_hf_clk", .name = "esai1_rx_hf_clk" },
-+	{.fw_name = "esai1_tx_clk", .name = "esai1_tx_clk" },
-+	{.fw_name = "esai1_tx_hf_clk", .name = "esai1_tx_hf_clk" },
-+	{.fw_name = "spdif0_rx", .name = "spdif0_rx" },
-+	{.fw_name = "spdif1_rx", .name = "spdif1_rx" },
-+	{.fw_name = "sai0_rx_bclk", .name = "sai0_rx_bclk" },
-+	{.fw_name = "sai0_tx_bclk", .name = "sai0_tx_bclk" },
-+	{.fw_name = "sai1_rx_bclk", .name = "sai1_rx_bclk" },
-+	{.fw_name = "sai1_tx_bclk", .name = "sai1_tx_bclk" },
-+	{.fw_name = "sai2_rx_bclk", .name = "sai2_rx_bclk" },
-+	{.fw_name = "sai3_rx_bclk", .name = "sai3_rx_bclk" },
-+	{.fw_name = "sai4_rx_bclk", .name = "sai4_rx_bclk" },
-+};
-+
-+static const struct clk_parent_data imx8qm_mclk_out_sels[] = {
-+	{.fw_name = "aud_rec_clk0_lpcg_clk", .name = "aud_rec_clk0_lpcg_clk" },
-+	{.fw_name = "aud_rec_clk1_lpcg_clk", .name = "aud_rec_clk1_lpcg_clk" },
-+	{.fw_name = "mlb_clk", .name = "mlb_clk" },
-+	{.fw_name = "hdmi_rx_mclk", .name = "hdmi_rx_mclk" },
-+	{.fw_name = "spdif0_rx", .name = "spdif0_rx" },
-+	{.fw_name = "spdif1_rx", .name = "spdif1_rx" },
-+	{.fw_name = "sai4_rx_bclk", .name = "sai4_rx_bclk" },
-+	{.fw_name = "sai6_rx_bclk", .name = "sai6_rx_bclk" },
-+};
-+
-+static const struct clk_parent_data imx8qm_mclk_sels[] = {
-+	{.fw_name = "aud_pll_div_clk0_lpcg_clk", .name = "aud_pll_div_clk0_lpcg_clk" },
-+	{.fw_name = "aud_pll_div_clk1_lpcg_clk", .name = "aud_pll_div_clk1_lpcg_clk" },
-+	{.fw_name = "acm_aud_clk0_sel", .name = "acm_aud_clk0_sel" },
-+	{.fw_name = "acm_aud_clk1_sel", .name = "acm_aud_clk1_sel" },
-+};
-+
-+static const struct clk_parent_data imx8qm_asrc_mux_clk_sels[] = {
-+	{.fw_name = "sai4_rx_bclk", .name = "sai4_rx_bclk" },
-+	{.fw_name = "sai5_tx_bclk", .name = "sai5_tx_bclk" },
-+	{.name = "dummy" },
-+	{.fw_name = "mlb_clk", .name = "mlb_clk" },
-+
-+};
-+
-+static struct clk_imx8_acm_sel imx8qm_sels[] = {
-+	{"acm_aud_clk0_sel", IMX_ADMA_ACM_AUD_CLK0_SEL, imx8qm_aud_clk_sels, ARRAY_SIZE(imx8qm_aud_clk_sels), 0x000000, 0, 5},
-+	{"acm_aud_clk1_sel", IMX_ADMA_ACM_AUD_CLK1_SEL, imx8qm_aud_clk_sels, ARRAY_SIZE(imx8qm_aud_clk_sels), 0x010000, 0, 5},
-+	{"acm_mclkout0_sel", IMX_ADMA_ACM_MCLKOUT0_SEL, imx8qm_mclk_out_sels, ARRAY_SIZE(imx8qm_mclk_out_sels), 0x020000, 0, 3},
-+	{"acm_mclkout1_sel", IMX_ADMA_ACM_MCLKOUT1_SEL, imx8qm_mclk_out_sels, ARRAY_SIZE(imx8qm_mclk_out_sels), 0x030000, 0, 3},
-+	{"acm_asrc0_mclk_sel", IMX_ADMA_ACM_ASRC0_MUX_CLK_SEL, imx8qm_asrc_mux_clk_sels, ARRAY_SIZE(imx8qm_asrc_mux_clk_sels), 0x040000, 0, 2},
-+	{"acm_esai0_mclk_sel", IMX_ADMA_ACM_ESAI0_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x060000, 0, 2},
-+	{"acm_esai1_mclk_sel", IMX_ADMA_ACM_ESAI1_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x070000, 0, 2},
-+	{"acm_sai0_mclk_sel", IMX_ADMA_ACM_SAI0_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x0E0000, 0, 2},
-+	{"acm_sai1_mclk_sel", IMX_ADMA_ACM_SAI1_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x0F0000, 0, 2},
-+	{"acm_sai2_mclk_sel", IMX_ADMA_ACM_SAI2_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x100000, 0, 2},
-+	{"acm_sai3_mclk_sel", IMX_ADMA_ACM_SAI3_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x110000, 0, 2},
-+	{"acm_sai4_mclk_sel", IMX_ADMA_ACM_SAI4_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x120000, 0, 2},
-+	{"acm_sai5_mclk_sel", IMX_ADMA_ACM_SAI5_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x130000, 0, 2},
-+	{"acm_sai6_mclk_sel", IMX_ADMA_ACM_SAI6_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x140000, 0, 2},
-+	{"acm_sai7_mclk_sel", IMX_ADMA_ACM_SAI7_MCLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x150000, 0, 2},
-+	{"acm_spdif0_mclk_sel", IMX_ADMA_ACM_SPDIF0_TX_CLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x1A0000, 0, 2},
-+	{"acm_spdif1_mclk_sel", IMX_ADMA_ACM_SPDIF1_TX_CLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x1B0000, 0, 2},
-+	{"acm_mqs_mclk_sel", IMX_ADMA_ACM_MQS_TX_CLK_SEL, imx8qm_mclk_sels, ARRAY_SIZE(imx8qm_mclk_sels), 0x1C0000, 0, 2},
-+};
-+
-+static const struct clk_parent_data imx8qxp_aud_clk_sels[] = {
-+	{.fw_name = "aud_rec_clk0_lpcg_clk", .name = "aud_rec_clk0_lpcg_clk" },
-+	{.fw_name = "aud_rec_clk1_lpcg_clk", .name = "aud_rec_clk1_lpcg_clk" },
-+	{.fw_name = "ext_aud_mclk0", .name = "ext_aud_mclk0" },
-+	{.fw_name = "ext_aud_mclk1", .name = "ext_aud_mclk1" },
-+	{.fw_name = "esai0_rx_clk", .name = "esai0_rx_clk" },
-+	{.fw_name = "esai0_rx_hf_clk", .name = "esai0_rx_hf_clk" },
-+	{.fw_name = "esai0_tx_clk", .name = "esai0_tx_clk" },
-+	{.fw_name = "esai0_tx_hf_clk", .name = "esai0_tx_hf_clk" },
-+	{.fw_name = "spdif0_rx", .name = "spdif0_rx" },
-+	{.fw_name = "sai0_rx_bclk", .name = "sai0_rx_bclk" },
-+	{.fw_name = "sai0_tx_bclk", .name = "sai0_tx_bclk" },
-+	{.fw_name = "sai1_rx_bclk", .name = "sai1_rx_bclk" },
-+	{.fw_name = "sai1_tx_bclk", .name = "sai1_tx_bclk" },
-+	{.fw_name = "sai2_rx_bclk", .name = "sai2_rx_bclk" },
-+	{.fw_name = "sai3_rx_bclk", .name = "sai3_rx_bclk" },
-+};
-+
-+static const struct clk_parent_data imx8qxp_mclk_out_sels[] = {
-+	{.fw_name = "aud_rec_clk0_lpcg_clk", .name = "aud_rec_clk0_lpcg_clk" },
-+	{.fw_name = "aud_rec_clk1_lpcg_clk", .name = "aud_rec_clk1_lpcg_clk" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+	{.fw_name = "spdif0_rx", .name = "spdif0_rx" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+	{.fw_name = "sai4_rx_bclk", .name = "sai4_rx_bclk" },
-+};
-+
-+static const struct clk_parent_data imx8qxp_mclk_sels[] = {
-+	{.fw_name = "aud_pll_div_clk0_lpcg_clk", .name = "aud_pll_div_clk0_lpcg_clk" },
-+	{.fw_name = "aud_pll_div_clk1_lpcg_clk", .name = "aud_pll_div_clk1_lpcg_clk" },
-+	{.fw_name = "acm_aud_clk0_sel", .name = "acm_aud_clk0_sel" },
-+	{.fw_name = "acm_aud_clk1_sel", .name = "acm_aud_clk1_sel" },
-+};
-+
-+static struct clk_imx8_acm_sel imx8qxp_sels[] = {
-+	{"acm_aud_clk0_sel", IMX_ADMA_ACM_AUD_CLK0_SEL, imx8qxp_aud_clk_sels, ARRAY_SIZE(imx8qxp_aud_clk_sels), 0x000000, 0, 5},
-+	{"acm_aud_clk1_sel", IMX_ADMA_ACM_AUD_CLK1_SEL, imx8qxp_aud_clk_sels, ARRAY_SIZE(imx8qxp_aud_clk_sels), 0x010000, 0, 5},
-+	{"acm_mclkout0_sel", IMX_ADMA_ACM_MCLKOUT0_SEL, imx8qxp_mclk_out_sels, ARRAY_SIZE(imx8qxp_mclk_out_sels), 0x020000, 0, 3},
-+	{"acm_mclkout1_sel", IMX_ADMA_ACM_MCLKOUT1_SEL, imx8qxp_mclk_out_sels, ARRAY_SIZE(imx8qxp_mclk_out_sels), 0x030000, 0, 3},
-+	{"acm_esai0_mclk_sel", IMX_ADMA_ACM_ESAI0_MCLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x060000, 0, 2},
-+	{"acm_sai0_mclk_sel", IMX_ADMA_ACM_SAI0_MCLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x0E0000, 0, 2},
-+	{"acm_sai1_mclk_sel", IMX_ADMA_ACM_SAI1_MCLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x0F0000, 0, 2},
-+	{"acm_sai2_mclk_sel", IMX_ADMA_ACM_SAI2_MCLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x100000, 0, 2},
-+	{"acm_sai3_mclk_sel", IMX_ADMA_ACM_SAI3_MCLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x110000, 0, 2},
-+	{"acm_sai4_mclk_sel", IMX_ADMA_ACM_SAI4_MCLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x140000, 0, 2},
-+	{"acm_sai5_mclk_sel", IMX_ADMA_ACM_SAI5_MCLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x150000, 0, 2},
-+	{"acm_spdif0_mclk_sel", IMX_ADMA_ACM_SPDIF0_TX_CLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x1A0000, 0, 2},
-+	{"acm_mqs_mclk_sel", IMX_ADMA_ACM_MQS_TX_CLK_SEL, imx8qxp_mclk_sels, ARRAY_SIZE(imx8qxp_mclk_sels), 0x1C0000, 0, 2},
-+};
-+
-+static const struct clk_parent_data imx8dxl_aud_clk_sels[] = {
-+	{.fw_name = "aud_rec_clk0_lpcg_clk", .name = "aud_rec_clk0_lpcg_clk" },
-+	{.fw_name = "aud_rec_clk1_lpcg_clk", .name = "aud_rec_clk1_lpcg_clk" },
-+	{.fw_name = "ext_aud_mclk0", .name = "ext_aud_mclk0" },
-+	{.fw_name = "ext_aud_mclk1", .name = "ext_aud_mclk1" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+
-+	{.fw_name = "spdif0_rx", .name = "spdif0_rx" },
-+	{.fw_name = "sai0_rx_bclk", .name = "sai0_rx_bclk" },
-+	{.fw_name = "sai0_tx_bclk", .name = "sai0_tx_bclk" },
-+	{.fw_name = "sai1_rx_bclk", .name = "sai1_rx_bclk" },
-+	{.fw_name = "sai1_tx_bclk", .name = "sai1_tx_bclk" },
-+	{.fw_name = "sai2_rx_bclk", .name = "sai2_rx_bclk" },
-+	{.fw_name = "sai3_rx_bclk", .name = "sai3_rx_bclk" },
-+};
-+
-+static const struct clk_parent_data imx8dxl_mclk_out_sels[] = {
-+	{.fw_name = "aud_rec_clk0_lpcg_clk", .name = "aud_rec_clk0_lpcg_clk" },
-+	{.fw_name = "aud_rec_clk1_lpcg_clk", .name = "aud_rec_clk1_lpcg_clk" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+	{.fw_name = "spdif0_rx", .name = "spdif0_rx" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+	{.name = "dummy" },
-+};
-+
-+static const struct clk_parent_data imx8dxl_mclk_sels[] = {
-+	{.fw_name = "aud_pll_div_clk0_lpcg_clk", .name = "aud_pll_div_clk0_lpcg_clk" },
-+	{.fw_name = "aud_pll_div_clk1_lpcg_clk", .name = "aud_pll_div_clk1_lpcg_clk" },
-+	{.fw_name = "acm_aud_clk0_sel", .name = "acm_aud_clk0_sel" },
-+	{.fw_name = "acm_aud_clk1_sel", .name = "acm_aud_clk1_sel" },
-+};
-+
-+static struct clk_imx8_acm_sel imx8dxl_sels[] = {
-+	{"acm_aud_clk0_sel", IMX_ADMA_ACM_AUD_CLK0_SEL, imx8dxl_aud_clk_sels, ARRAY_SIZE(imx8dxl_aud_clk_sels), 0x000000, 0, 5},
-+	{"acm_aud_clk1_sel", IMX_ADMA_ACM_AUD_CLK1_SEL, imx8dxl_aud_clk_sels, ARRAY_SIZE(imx8dxl_aud_clk_sels), 0x010000, 0, 5},
-+	{"acm_mclkout0_sel", IMX_ADMA_ACM_MCLKOUT0_SEL, imx8dxl_mclk_out_sels, ARRAY_SIZE(imx8dxl_mclk_out_sels), 0x020000, 0, 3},
-+	{"acm_mclkout1_sel", IMX_ADMA_ACM_MCLKOUT1_SEL, imx8dxl_mclk_out_sels, ARRAY_SIZE(imx8dxl_mclk_out_sels), 0x030000, 0, 3},
-+	{"acm_sai0_mclk_sel", IMX_ADMA_ACM_SAI0_MCLK_SEL, imx8dxl_mclk_sels, ARRAY_SIZE(imx8dxl_mclk_sels), 0x0E0000, 0, 2},
-+	{"acm_sai1_mclk_sel", IMX_ADMA_ACM_SAI1_MCLK_SEL, imx8dxl_mclk_sels, ARRAY_SIZE(imx8dxl_mclk_sels), 0x0F0000, 0, 2},
-+	{"acm_sai2_mclk_sel", IMX_ADMA_ACM_SAI2_MCLK_SEL, imx8dxl_mclk_sels, ARRAY_SIZE(imx8dxl_mclk_sels), 0x100000, 0, 2},
-+	{"acm_sai3_mclk_sel", IMX_ADMA_ACM_SAI3_MCLK_SEL, imx8dxl_mclk_sels, ARRAY_SIZE(imx8dxl_mclk_sels), 0x110000, 0, 2},
-+	{"acm_spdif0_mclk_sel", IMX_ADMA_ACM_SPDIF0_TX_CLK_SEL, imx8dxl_mclk_sels, ARRAY_SIZE(imx8dxl_mclk_sels), 0x1A0000, 0, 2},
-+	{"acm_mqs_mclk_sel", IMX_ADMA_ACM_MQS_TX_CLK_SEL, imx8dxl_mclk_sels, ARRAY_SIZE(imx8dxl_mclk_sels), 0x1C0000, 0, 2},
-+};
-+
-+/**
-+ * clk_imx_acm_attach_pm_domains: attach multi power domains
-+ * @dev: device pointer
-+ * @dev_pm: power domains for device
-+ */
-+static int clk_imx_acm_attach_pm_domains(struct device *dev,
-+					 struct clk_imx_acm_pm_domains *dev_pm)
-+{
-+	int ret;
-+	int i;
-+
-+	dev_pm->num_domains = of_count_phandle_with_args(dev->of_node, "power-domains",
-+							 "#power-domain-cells");
-+	if (dev_pm->num_domains <= 1)
-+		return 0;
-+
-+	dev_pm->pd_dev = devm_kmalloc_array(dev, dev_pm->num_domains,
-+					    sizeof(*dev_pm->pd_dev),
-+					    GFP_KERNEL);
-+	if (!dev_pm->pd_dev)
-+		return -ENOMEM;
-+
-+	dev_pm->pd_dev_link = devm_kmalloc_array(dev,
-+						 dev_pm->num_domains,
-+						 sizeof(*dev_pm->pd_dev_link),
-+						 GFP_KERNEL);
-+	if (!dev_pm->pd_dev_link)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < dev_pm->num_domains; i++) {
-+		dev_pm->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
-+		if (IS_ERR(dev_pm->pd_dev[i]))
-+			return PTR_ERR(dev_pm->pd_dev[i]);
-+
-+		dev_pm->pd_dev_link[i] = device_link_add(dev,
-+							 dev_pm->pd_dev[i],
-+							 DL_FLAG_STATELESS |
-+							 DL_FLAG_PM_RUNTIME |
-+							 DL_FLAG_RPM_ACTIVE);
-+		if (IS_ERR(dev_pm->pd_dev_link[i])) {
-+			dev_pm_domain_detach(dev_pm->pd_dev[i], false);
-+			ret = PTR_ERR(dev_pm->pd_dev_link[i]);
-+			goto detach_pm;
-+		}
-+	}
-+	return 0;
-+
-+detach_pm:
-+	while (--i >= 0) {
-+		device_link_del(dev_pm->pd_dev_link[i]);
-+		dev_pm_domain_detach(dev_pm->pd_dev[i], false);
-+	}
-+	return ret;
-+}
-+
-+/**
-+ * clk_imx_acm_detach_pm_domains: detach multi power domains
-+ * @dev: deivice pointer
-+ * @dev_pm: multi power domain for device
-+ */
-+static int clk_imx_acm_detach_pm_domains(struct device *dev,
-+					 struct clk_imx_acm_pm_domains *dev_pm)
-+{
-+	int i;
-+
-+	if (dev_pm->num_domains <= 1)
-+		return 0;
-+
-+	for (i = 0; i < dev_pm->num_domains; i++) {
-+		device_link_del(dev_pm->pd_dev_link[i]);
-+		dev_pm_domain_detach(dev_pm->pd_dev[i], false);
-+	}
-+
-+	return 0;
-+}
-+
-+static int imx8_acm_clk_probe(struct platform_device *pdev)
-+{
-+	struct clk_hw_onecell_data *clk_hw_data;
-+	struct device *dev = &pdev->dev;
-+	struct clk_imx8_acm_sel *sels;
-+	struct imx8_acm_priv *priv;
-+	struct resource *res;
-+	struct clk_hw **hws;
-+	void __iomem *base;
-+	int ret;
-+	int i;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	base = devm_ioremap(dev, res->start, resource_size(res));
-+	if (!base)
-+		return -ENOMEM;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->reg = base;
-+	priv->soc_data = of_device_get_match_data(dev);
-+	platform_set_drvdata(pdev, priv);
-+
-+	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
-+					  IMX_ADMA_ACM_CLK_END), GFP_KERNEL);
-+
-+	clk_hw_data->num = IMX_ADMA_ACM_CLK_END;
-+	hws = clk_hw_data->hws;
-+
-+	ret = clk_imx_acm_attach_pm_domains(&pdev->dev, &priv->dev_pm);
-+	if (ret)
-+		return ret;
-+
-+	pm_runtime_enable(&pdev->dev);
-+	pm_runtime_get_sync(&pdev->dev);
-+
-+	sels = priv->soc_data->sels;
-+	for (i = 0; i < priv->soc_data->num_sels; i++) {
-+		hws[sels[i].clkid] = devm_clk_hw_register_mux_parent_data_table(dev,
-+										sels[i].name, sels[i].parents,
-+										sels[i].num_parents, 0,
-+										base + sels[i].reg,
-+										sels[i].shift, sels[i].width,
-+										0, NULL, NULL);
-+		if (IS_ERR(hws[sels[i].clkid])) {
-+			pm_runtime_disable(&pdev->dev);
-+			goto err_clk_register;
-+		}
-+	}
-+
-+	imx_check_clk_hws(hws, IMX_ADMA_ACM_CLK_END);
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_hw_data);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to register hws for ACM\n");
-+		pm_runtime_disable(&pdev->dev);
-+	}
-+
-+err_clk_register:
-+
-+	pm_runtime_put_sync(&pdev->dev);
-+
-+	return ret;
-+}
-+
-+static int imx8_acm_clk_remove(struct platform_device *pdev)
-+{
-+	struct imx8_acm_priv *priv = dev_get_drvdata(&pdev->dev);
-+
-+	pm_runtime_disable(&pdev->dev);
-+
-+	clk_imx_acm_detach_pm_domains(&pdev->dev, &priv->dev_pm);
-+
-+	return 0;
-+}
-+
-+static const struct imx8_acm_soc_data imx8qm_acm_data = {
-+	.sels = imx8qm_sels,
-+	.num_sels = ARRAY_SIZE(imx8qm_sels),
-+};
-+
-+static const struct imx8_acm_soc_data imx8qxp_acm_data = {
-+	.sels = imx8qxp_sels,
-+	.num_sels = ARRAY_SIZE(imx8qxp_sels),
-+};
-+
-+static const struct imx8_acm_soc_data imx8dxl_acm_data = {
-+	.sels = imx8dxl_sels,
-+	.num_sels = ARRAY_SIZE(imx8dxl_sels),
-+};
-+
-+static const struct of_device_id imx8_acm_match[] = {
-+	{ .compatible = "nxp,imx8qm-acm", .data = &imx8qm_acm_data },
-+	{ .compatible = "nxp,imx8qxp-acm", .data = &imx8qxp_acm_data },
-+	{ .compatible = "nxp,imx8dxl-acm", .data = &imx8dxl_acm_data },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, imx8_acm_match);
-+
-+static int __maybe_unused imx8_acm_runtime_suspend(struct device *dev)
-+{
-+	struct imx8_acm_priv *priv = dev_get_drvdata(dev);
-+	struct clk_imx8_acm_sel *sels;
-+	int i;
-+
-+	sels = priv->soc_data->sels;
-+
-+	for (i = 0; i < priv->soc_data->num_sels; i++)
-+		priv->regs[i] = readl_relaxed(priv->reg + sels[i].reg);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused imx8_acm_runtime_resume(struct device *dev)
-+{
-+	struct imx8_acm_priv *priv = dev_get_drvdata(dev);
-+	struct clk_imx8_acm_sel *sels;
-+	int i;
-+
-+	sels = priv->soc_data->sels;
-+
-+	for (i = 0; i < priv->soc_data->num_sels; i++)
-+		writel_relaxed(priv->regs[i], priv->reg + sels[i].reg);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops imx8_acm_pm_ops = {
-+	SET_RUNTIME_PM_OPS(imx8_acm_runtime_suspend,
-+			   imx8_acm_runtime_resume, NULL)
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-+				      pm_runtime_force_resume)
-+};
-+
-+static struct platform_driver imx8_acm_clk_driver = {
-+	.driver = {
-+		.name = "imx8-acm",
-+		.of_match_table = imx8_acm_match,
-+		.pm = &imx8_acm_pm_ops,
-+	},
-+	.probe = imx8_acm_clk_probe,
-+	.remove = imx8_acm_clk_remove,
-+};
-+module_platform_driver(imx8_acm_clk_driver);
-+
-+MODULE_AUTHOR("Shengjiu Wang <shengjiu.wang@nxp.com>");
-+MODULE_DESCRIPTION("Freescale i.MX8 Audio Clock Mux driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+My highest priority is to get 16KB proven first because it would
+benefit both client and server devices. So it may be different from
+yours but I don't see any conflict.
 
+>  - On arm64 when the process has marked the VMA for THP (or when
+> transparent_hugepage=3Dalways) but the VMA does not meet the requirements=
+ for a
+> PMD-sized mapping (or we failed to allocate, ...) then I'd like to map us=
+ing
+> contpte. For 4K base pages this is 64K (order-4), for 16K this is 2M (ord=
+er-7)
+> and for 64K this is 2M (order-5). The 64K base page case is very importan=
+t since
+> the PMD size for that base page is 512MB which is almost impossible to al=
+locate
+> in practice.
+
+Which case (server or client) are you focusing on here? For our client
+devices, I can confidently say that 64KB has to be after 16KB, if it
+happens at all. For servers in general, I don't know of any major
+memory-intensive workloads that are not THP-aware, i.e., I don't think
+"VMA does not meet the requirements" is a concern.
