@@ -2,164 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA4274898D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EAF7489C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjGEQyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S232077AbjGEQ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjGEQy2 (ORCPT
+        with ESMTP id S232213AbjGEQ4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:54:28 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33DA10C3;
-        Wed,  5 Jul 2023 09:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=NaF5ODUhgDcBSbTY5pdKmE/ptdlDITp5mTjsd0ABD2E=; b=OG0Q8LZi7U5ttEb1YIf7uOywzf
-        I+QYRZjLDRvAUSAGp1UxIbnTRn9N7wxtxArmSkuF0+0yTz5fjN1LdpiqgI7p2JaE/WdcScjGxYI4c
-        Fs3tozpzqVPlIjqJLLoSo1gtSWaV1Z4RIi3A3gr9mKjSgwcanoUPmBDofd1KwyMRsu5Wbl+Y8zsDH
-        sqw0RiiRGACtK+puZlwzScOE4qAcEuWW5oTQdIoaIvzUwBEav5xIEKoWhD2zL+bhjC4BO90mNk+YW
-        woQrxtxQCU0doqWG+KclkVvTivM3+JHleVUjT4obVkWvqk1JgwrBzQ4P/avWMi3zQeqx7tZda0j/o
-        524G2Z3w==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qH5ld-0009nC-1W; Wed, 05 Jul 2023 18:54:13 +0200
-Received: from [178.197.249.31] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qH5lc-000Nft-8y; Wed, 05 Jul 2023 18:54:12 +0200
-Subject: Re: [PATCH bpf-next] bpf: Introduce bpf generic log
-To:     Leon Hwang <hffilwlqm@gmail.com>, ast@kernel.org
-Cc:     john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        hawk@kernel.org, tangyeechou@gmail.com, kernel-patches-bot@fb.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230705132058.46194-1-hffilwlqm@gmail.com>
- <1a205a85-ebf2-6d90-468d-4fd63ce3dd0f@iogearbox.net>
- <a42c246a-01e1-9e7e-8260-57835c6351ae@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <688cbc7b-b23e-7edd-4603-b5734eaa9bd7@iogearbox.net>
-Date:   Wed, 5 Jul 2023 18:54:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 5 Jul 2023 12:56:46 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9340A10EA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:56:45 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-be49ca27e1fso7618790276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688576205; x=1691168205;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CMIGP0ZZWT5O2QR0z+yr4OGXplF7Y5GzqDYVMwsXf9Y=;
+        b=hZ4mEC8AnHYdUI3jxCd8iY8Q0cslwVz96Rm0UeDZKg3VCgxR3REHc/lEYBkOaWpZ6f
+         yIUjdKfV6FMLp0qkeHQ/tyt51aENNNcjrENlvXCJocrR9bo668nIvHmYutOH/UGIQQ2Q
+         oJjDq1GBvWdUqA5foFxk36/x/gGUbiSpLv6T+XxUae1+fQb82sD7AgA9Zdg03IZcT6Ov
+         tbN/3707QNGPcsC9mv5ZF6+oJd7NmxFUQ1I+lkze5QisAlkeI9uMglSyhZltMHHliclx
+         bRLFFITkiGw2xiK9tC+i+eRauyWDtlVktiYAeONbDIlD7aAViyYC4ClzRCBHgGduxqB3
+         sVAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688576205; x=1691168205;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CMIGP0ZZWT5O2QR0z+yr4OGXplF7Y5GzqDYVMwsXf9Y=;
+        b=Coqq8rV+4palof1R8ByRbCuKNt2vRys2Dood7FFJWnw52hMUOKkXecD00zdf4AvEPi
+         gZhMR1uIWGSqN/vXNB9MSt4/IiNDdTPL881KsEEc8JxiEvkc42HNAr7Gxnr+F288iRfd
+         6LITn+sS3Qtv0THvypYcBsd/6RE/xqOTA7S4hCwKMr41mpE16JQnsHxgfmLc+3VSbXsQ
+         vxiXBfkcIeCoEByGCFazxGR6kk1KNOwCa0FjMAvK4ifsyBuESMO3ee3J6273Chfg6SlI
+         bSWheizyuoUX5nJrfe/zMf7a5r7dHzXvNysrmV3OhEmFFopQncCnXb3hXPZJjf+VWhn6
+         KmAA==
+X-Gm-Message-State: ABy/qLZ5HaYSjgsV1/+uKopOjvToKpPaSIj0fBj9qodOsjYAgbFhAt6S
+        GEkJQEHGdi35k6ky/9k5139TeEIcvU6BzefHU6Q=
+X-Google-Smtp-Source: APBJJlHpVabgTFuOSwRV2brkEJPZ5WP8KD4ugjpm/Lek42eCZr0QjN7mb6LrhfIarpF954yXmyI9qojwUGDV+y7lEf0=
+X-Received: by 2002:a25:8b11:0:b0:c39:50fe:79be with SMTP id
+ i17-20020a258b11000000b00c3950fe79bemr12423668ybl.61.1688576204717; Wed, 05
+ Jul 2023 09:56:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <a42c246a-01e1-9e7e-8260-57835c6351ae@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26960/Wed Jul  5 09:29:05 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Received: by 2002:a05:7000:a502:b0:4d4:6b81:32c8 with HTTP; Wed, 5 Jul 2023
+ 09:56:44 -0700 (PDT)
+Reply-To: cristiinacampbell@hotmail.com
+From:   INFORMATION <barrmercyjohnson2000@gmail.com>
+Date:   Wed, 5 Jul 2023 17:56:44 +0100
+Message-ID: <CAFvLHNw1w6F1if-gzBy13z6emrRbG3KyuAj6tFJ0ZwxeOmO07A@mail.gmail.com>
+Subject: Yritystarjous
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/23 6:20 PM, Leon Hwang wrote:
-> On 2023/7/5 22:39, Daniel Borkmann wrote:
->> On 7/5/23 3:20 PM, Leon Hwang wrote:
->>> Currently, excluding verifier, users are unable to obtain detailed error
->>> information when issues occur in BPF syscall.
->>>
->>> To overcome this limitation, bpf generic log is introduced to provide
->>> error details similar to the verifier. This enhancement will enable the
->>> reporting of error details along with the corresponding errno in BPF
->>> syscall.
->>>
->>> Essentially, bpf generic log functions as a mechanism similar to netlink,
->>> enabling the transmission of error messages to user space. This
->>> mechanism greatly enhances the usability of BPF syscall by allowing
->>> users to access comprehensive error messages instead of relying solely
->>> on errno.
->>>
->>> This patch specifically addresses the error reporting in dev_xdp_attach()
->>> . With this patch, the error messages will be transferred to user space
->>> like the netlink approach. Hence, users will be able to check the error
->>> message along with the errno.
->>>
->>> Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
->>> ---
->>>   include/linux/bpf.h            | 30 ++++++++++++++++++++++++++++++
->>>   include/uapi/linux/bpf.h       |  6 ++++++
->>>   kernel/bpf/log.c               | 33 +++++++++++++++++++++++++++++++++
->>>   net/core/dev.c                 | 11 ++++++++++-
->>>   tools/include/uapi/linux/bpf.h |  6 ++++++
->>>   5 files changed, 85 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->>> index f58895830..fd63f4a76 100644
->>> --- a/include/linux/bpf.h
->>> +++ b/include/linux/bpf.h
->>> @@ -3077,4 +3077,34 @@ static inline gfp_t bpf_memcg_flags(gfp_t flags)
->>>       return flags;
->>>   }
->>>   +#define BPF_GENERIC_TMP_LOG_SIZE    256
->>> +
->>> +struct bpf_generic_log {
->>> +    char        kbuf[BPF_GENERIC_TMP_LOG_SIZE];
->>> +    char __user    *ubuf;
->>> +    u32        len_used;
->>> +    u32        len_total;
->>> +};
->>> +
->>> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
->>> +            const char *fmt, ...);
->>> +static inline void bpf_generic_log_init(struct bpf_generic_log *log,
->>> +            const struct bpf_generic_user_log *ulog)
->>> +{
->>> +    log->ubuf = (char __user *) (unsigned long) ulog->log_buf;
->>> +    log->len_total = ulog->log_size;
->>> +    log->len_used = 0;
->>> +}
->>> +
->>> +#define BPF_GENERIC_LOG_WRITE(log, ulog, fmt, ...)    do {    \
->>> +    const char *____fmt = (fmt);                \
->>> +    bpf_generic_log_init(log, ulog);            \
->>> +    bpf_generic_log_write(log, ____fmt, ##__VA_ARGS__);    \
->>> +} while (0)
->>> +
->>> +#define BPF_GENERIC_ULOG_WRITE(ulog, fmt, ...)    do {            \
->>> +    struct bpf_generic_log ____log;                    \
->>> +    BPF_GENERIC_LOG_WRITE(&____log, ulog, fmt, ##__VA_ARGS__);    \
->>> +} while (0)
->>> +
->>
->> Could we generalize the bpf_verifier_log infra and reuse bpf_log() helper
->> instead of adding something new?
-> 
-> 
-> Yes. It's possible to reuse the bpf_verifier_log infra and reuse bpf_log()
-> helper. I'll try this way:
-> 
-> #define BPF_LOG_USER  BPF_LOG_LEVEL1     /* user log flag */
-> 
-> #define BPF_ULOG_WRITE(log_buf, log_size, fmt, ...) do {               \
->         const char *____fmt = (fmt);                                    \
->         struct bpf_verifier_log ____vlog;                               \
->         bpf_vlog_init(&____vlog, BPF_LOG_USER, log_buf, log_size);      \
->         bpf_log(&____vlog, ____fmt, ##__VA_ARGS__);                         \
-> } while (0)
+Rakas yst=C3=A4v=C3=A4,
 
-Could we hide all of this inside bpf_log() or better create a new bpf_log_once() wrapper,
-passing in attr so we only need to use the latter w/o the extra macros?
+Nimeni on tohtori John Smith; myyntikonsultti Diageo Companyssa
+Lontoossa, Iso-Britanniassa, Diageo Company etsii maastasi luotettavaa
+henkil=C3=B6=C3=A4 edustamaan heid=C3=A4n tuotteitaan ja tuotemerkkej=C3=A4=
+=C3=A4n.
 
-Essentially what your bpf_xdp_link_log() is doing, just that bpf_log_once(attr, extack._msg)
-would be generic and sufficient.
+Yritys tarjoaa sinulle 50 % Advance Upfront -tuotteen, jos he ovat
+vakuuttuneita siit=C3=A4, ett=C3=A4 olet luotettava ja pystyt edustamaan Yh=
+ti=C3=B6n
+etuja ja jakamaan tuotemerkkien tuotteita tehokkaasti maassasi ja sen
+ymp=C3=A4rill=C3=A4 voiton maksimoimiseksi.
 
-Thanks,
-Daniel
+Annan sinulle lis=C3=A4tietoja kuultuani sinusta. Jos olet kiinnostunut
+toimimaan Diageo Companyn jakelijana ja edustajana maassasi, ole hyv=C3=A4
+ja vastaa minulle alla olevaan henkil=C3=B6kohtaiseen s=C3=A4hk=C3=B6postii=
+ni.
+
+Parhain terveisin
+Tohtori John Smith
+S=C3=A4hk=C3=B6posti; johnoffic@hotmail.com
