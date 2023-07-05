@@ -2,100 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD327489F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21765748A00
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbjGERPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
+        id S232342AbjGERRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjGERPi (ORCPT
+        with ESMTP id S232655AbjGERQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:15:38 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCE71990
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:15:31 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-977e0fbd742so816360766b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688577330; x=1691169330;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gVbA+8Izu9ivmJZn/qB70KgKLBZPRbZJf6rvmQg+Ec4=;
-        b=C1zCtkZe0cDfiF5Y3w7+zNdsQeOj8x8Z5PIsWL3IcPb8Iy+oz/p8plvukxsGIIs8+I
-         cQXrNWnTp5T/i/SUzTOlVV/WrXM+5VXjU8IW664Ovk3TNnvSloHZty6gSD5BmhI1y/Nv
-         QOzfGsziV/s7QshFwAwK4iMKLQi1Ttr5SFEhQ=
+        Wed, 5 Jul 2023 13:16:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDE519AB
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688577365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T35piQgq4+7zJ5KZwE9xl6DoVBjgPCYheAfovtVFOD4=;
+        b=itHRMICnkB7pLN9/Pu5vpN+XrSTGcjTYyImdDtP8wVqPSI2aKwSIg53XCcjLLlYN/z4hY1
+        6vMlN7OFW3N9pG93I/UuYjzM539cpOTW0xecg9rtJ/GnL0fP+tbL4jHE996H/CciwxovbT
+        Lmv/H8uZeSWd6c7oOn18RY+rsIxhlqk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-569-0rHPig1HP-ek_gCFNdaqrw-1; Wed, 05 Jul 2023 13:16:04 -0400
+X-MC-Unique: 0rHPig1HP-ek_gCFNdaqrw-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fb8284465aso47298905e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:16:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688577330; x=1691169330;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688577363; x=1691169363;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gVbA+8Izu9ivmJZn/qB70KgKLBZPRbZJf6rvmQg+Ec4=;
-        b=j9MHWcFaYKrXRW7TnQ3r4yBA6ppDbmfcV58HE1HVNafoUh4qRY+eCBtljA8fSTdVZp
-         aMqAIPrDUUvBprutbUlJTQfkxU0+vzOqrcZUDfWMoo0Y9Xs73BAkeOlvfFB6ftOyLQVC
-         A95IqFevQoTYl6eRDaecdtfAdQDGovUYF1x7/pNeBavwxvokMSprwTfHMVm6EIwbLF09
-         kz9Rpk44DR3vJkF/uRAWiigVNURcDRQRDYhfZFMo/NxICbvFIuwGn7SkdfbGJOwmOdDi
-         XvLsqT6Tl1Ptc7jc9xgnMifxQxhedLNgXWapB0cPLry1RPzoN1jDg6VsYM6ze5KGD3ud
-         XAFg==
-X-Gm-Message-State: ABy/qLbOBQCG9TKWXo71mVzLtkamHv4UNgevK/7fRUCqr+cT92OEgGWn
-        9a5NJf8HaHVeKnuTfFITwhvusuPMWmqKSsds0t0jmFoG
-X-Google-Smtp-Source: APBJJlHqWuXaTRqiJxVA/IJTXJIfhSlybrbRjitYp040KjGCiYEzeIEeh9ecfgS1GCDRDev6Ywv5qw==
-X-Received: by 2002:a17:906:72c3:b0:992:ab92:8d6d with SMTP id m3-20020a17090672c300b00992ab928d6dmr14998797ejl.74.1688577329711;
-        Wed, 05 Jul 2023 10:15:29 -0700 (PDT)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id q18-20020a1709060e5200b00993470682e5sm5396527eji.32.2023.07.05.10.15.29
-        for <linux-kernel@vger.kernel.org>
+        bh=T35piQgq4+7zJ5KZwE9xl6DoVBjgPCYheAfovtVFOD4=;
+        b=C/S15fKhuGIWUNI31qF+zg7tiFfJZgKYe5+xuPL/ble0syu4wZcugIRewIKv8o3iMu
+         y8F60CjT3MPH+H6UnN9xbB/0OPG85We2NOkxi5GVlbCd39z3aLomDnOhPV2GK5U57NcR
+         f9jzUZySOLo4nv87kdDU/ZYSAH2i/TfugmdZA8WcAzGDzKnxw+NdUtX4G0EgiCxg2h3U
+         tdHnkfVo7pxlo/tO5sz0VxxKX51QMwkwD7r6U1AqX+O08FyXDH8e7QfH41+0XiBBx8BS
+         bMJ8T2gD0QG3NM2oY2WeFjziAwLS2hYcpaF3QOB1uyXls0CU8GttJODesetGLqASLFip
+         hS9w==
+X-Gm-Message-State: ABy/qLYAwwJts8+n2vtRgOxNbvIZrLR2A8gHVj5f/rUcKr1+x0kB43ZL
+        9QQHX9vJ0l2ies9bJ2R604hbX8EZ77EMXqyDjE+us/MzLncT9qmpMdJtDppIlRX45yAr3rjgKAA
+        qjeGnJ3SB9AOM7OPMqHHIPhrM
+X-Received: by 2002:a5d:55d1:0:b0:314:3b9c:f02f with SMTP id i17-20020a5d55d1000000b003143b9cf02fmr6981115wrw.49.1688577363530;
+        Wed, 05 Jul 2023 10:16:03 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEUfAcMRX29HqJCQ1c1CH56suwm4NfOCQ9BPaxEr09A1xPnlHPvpu8OfU/EAZeHFIGE5k7pgw==
+X-Received: by 2002:a5d:55d1:0:b0:314:3b9c:f02f with SMTP id i17-20020a5d55d1000000b003143b9cf02fmr6981094wrw.49.1688577363129;
+        Wed, 05 Jul 2023 10:16:03 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c71a:1c00:e2b1:fc33:379b:a713? (p200300cbc71a1c00e2b1fc33379ba713.dip0.t-ipconnect.de. [2003:cb:c71a:1c00:e2b1:fc33:379b:a713])
+        by smtp.gmail.com with ESMTPSA id n10-20020a05600c294a00b003fbaade0735sm2682596wmd.19.2023.07.05.10.15.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 10:15:29 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-51dec0b6fecso6893833a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:15:29 -0700 (PDT)
-X-Received: by 2002:aa7:d5c8:0:b0:51e:fb9:7f20 with SMTP id
- d8-20020aa7d5c8000000b0051e0fb97f20mr6131122eds.41.1688577328716; Wed, 05 Jul
- 2023 10:15:28 -0700 (PDT)
+        Wed, 05 Jul 2023 10:16:02 -0700 (PDT)
+Message-ID: <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com>
+Date:   Wed, 5 Jul 2023 19:15:48 +0200
 MIME-Version: 1.0
-References: <202307041023.bcdbbfc0-oliver.sang@intel.com> <CAHk-=wi3Nb4t-JH6BGE5TOynik=-0kXyBGi3bLKTA85rvqHngQ@mail.gmail.com>
- <b57f35f9-53ae-5a99-d8b7-f1915c1cd1d0@nvidia.com> <CAHk-=wgi--892SZiqC8JWvF-vE7C+82X0VPHTCwbUpmbJWT0fw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgi--892SZiqC8JWvF-vE7C+82X0VPHTCwbUpmbJWT0fw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 5 Jul 2023 10:15:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjieeCJd+XYWHs9bR_-Bcw_OJiHDtK8NKGDeA_C_SuBng@mail.gmail.com>
-Message-ID: <CAHk-=wjieeCJd+XYWHs9bR_-Bcw_OJiHDtK8NKGDeA_C_SuBng@mail.gmail.com>
-Subject: Re: [linus:master] [gup] a425ac5365: WARNING:at_mm/gup.c:#__get_user_pages
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     kernel test robot <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     jirislaby@kernel.org, jacobly.alt@gmail.com,
+        holger@applied-asynchrony.com, hdegoede@redhat.com,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230705171213.2843068-1-surenb@google.com>
+ <20230705171213.2843068-3-surenb@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230705171213.2843068-3-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jul 2023 at 08:54, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I'll tighten it up, and switch the WARN_ON_ONCE() to just do a
-> "dump_stack()" so that it won't cause problems with the syzbot tests
-> either.
+On 05.07.23 19:12, Suren Baghdasaryan wrote:
+> A memory corruption was reported in [1] with bisection pointing to the
+> patch [2] enabling per-VMA locks for x86.
+> Disable per-VMA locks config to prevent this issue while the problem is
+> being investigated. This is expected to be a temporary measure.
+> 
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=217624
+> [2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@google.com
+> 
+> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
+> Reported-by: Jacob Young <jacobly.alt@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217624
+> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling first")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>   mm/Kconfig | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 09130434e30d..0abc6c71dd89 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1224,8 +1224,9 @@ config ARCH_SUPPORTS_PER_VMA_LOCK
+>          def_bool n
+>   
+>   config PER_VMA_LOCK
+> -	def_bool y
+> +	bool "Enable per-vma locking during page fault handling."
+>   	depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
+> +	depends on BROKEN
+>   	help
+>   	  Allow per-vma locking during page fault handling.
+>   
+Do we have any testing results (that don't reveal other issues :) ) for 
+patch #1? Not sure if we really want to mark it broken if patch #1 fixes 
+the issue.
 
-I pushed it out. It's based on the thing that Oliver already tested,
-but expanded a bit from that (and with a better calling convention, so
-that when we're done we can just delete the whole helper function and
-replace it with "find_vma()" like it is supposed to just be).
+-- 
+Cheers,
 
-It's lightly tested, but I no longer have any trivial ways to trigger
-the warning, so the testing was literally "now it doesn't say anything
-at all".
+David / dhildenb
 
-It should still trigger the warning by literally doing some direct-IO
-GUP below the stack - but at least the obvious cases of false
-positives hopefully don't trigger.
-
-At least until somebody comes up with another obvious case that I
-didn't think of ;)
-
-               Linus
