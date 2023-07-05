@@ -2,142 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB084747BD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 05:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8061C747BDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 05:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjGEDgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 23:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S231148AbjGEDhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 23:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGEDgR (ORCPT
+        with ESMTP id S229449AbjGEDhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 23:36:17 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE96310D5;
-        Tue,  4 Jul 2023 20:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688528176; x=1720064176;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=41pwSXKy2GbjS/fl5NCKHCzIRlKAfNX3B77kR9+h2ZM=;
-  b=Zc5RwB/kIhmSuxU2Fq6c76IVajhHk0NXndBE5UJpA0uLrYChWsuBUyoj
-   pUxAYNr/Iz+CuUtjbBgQWAtwXxoEn+x4RkXLL8JaTxgmugEWEvVdOUDAn
-   dbztbZI88lArUgGXudrWkz/lmae1/DWVVR3OcKCoPxlLzsOtalHVdi0HO
-   lSsKbRVyxCFPIn0CPfvGdGnZ8yGmxZoWWFMQGREwRMe+UnLQi4wh9Uv5+
-   +7+JaFDIP4ZnoMIrxoxvDRmBn6CRYC1pMXofwhklz5fWLoLDxQry/fxO+
-   GPUuoFava/oiO7254ruI/gH4sRjkw8KNtThsmdR0It9sfoR3GW/Mksmw2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="366723065"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="366723065"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 20:36:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="809098517"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="809098517"
-Received: from scc823097.zsc7.intel.com ([10.148.153.229])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 20:36:15 -0700
-From:   Peter Colberg <peter.colberg@intel.com>
-To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        tianfei.zhang@intel.com, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com, marpagan@redhat.com,
-        lgoncalv@redhat.com, Peter Colberg <peter.colberg@intel.com>
-Subject: [PATCH] fpga: dfl: fme: use SI unit prefix macros
-Date:   Tue,  4 Jul 2023 23:35:48 -0400
-Message-Id: <20230705033548.10737-1-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.28.0
+        Tue, 4 Jul 2023 23:37:50 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2DC1A2;
+        Tue,  4 Jul 2023 20:37:45 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 6E85B24E24B;
+        Wed,  5 Jul 2023 11:37:41 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 11:37:41 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 11:37:40 +0800
+Message-ID: <c5027d42-b9be-090d-bd43-86c9b1448c99@starfivetech.com>
+Date:   Wed, 5 Jul 2023 11:37:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND v1 1/2] dt-binding: spi: constrain minItems of clocks and
+ clock-names
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Linus Walleij <linus.walleij@linaro.org>
+References: <20230704092200.85401-1-william.qiu@starfivetech.com>
+ <20230704092200.85401-2-william.qiu@starfivetech.com>
+ <1b65e8d1-d5e1-0d6b-1248-d9683be44db8@linaro.org>
+Content-Language: en-US
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <1b65e8d1-d5e1-0d6b-1248-d9683be44db8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Substitute SI prefixes MILLI for temperature and MICRO for power, which
-are exported via the hwmon sysfs interface in m°C and ųW, respectively.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/fpga/dfl-fme-main.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-index bcb5d34b3b82..3dcf990bd261 100644
---- a/drivers/fpga/dfl-fme-main.c
-+++ b/drivers/fpga/dfl-fme-main.c
-@@ -19,6 +19,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/uaccess.h>
-+#include <linux/units.h>
- #include <linux/fpga-dfl.h>
- 
- #include "dfl.h"
-@@ -231,19 +232,19 @@ static int thermal_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 	switch (attr) {
- 	case hwmon_temp_input:
- 		v = readq(feature->ioaddr + FME_THERM_RDSENSOR_FMT1);
--		*val = (long)(FIELD_GET(FPGA_TEMPERATURE, v) * 1000);
-+		*val = (long)(FIELD_GET(FPGA_TEMPERATURE, v) * MILLI);
- 		break;
- 	case hwmon_temp_max:
- 		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
--		*val = (long)(FIELD_GET(TEMP_THRESHOLD1, v) * 1000);
-+		*val = (long)(FIELD_GET(TEMP_THRESHOLD1, v) * MILLI);
- 		break;
- 	case hwmon_temp_crit:
- 		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
--		*val = (long)(FIELD_GET(TEMP_THRESHOLD2, v) * 1000);
-+		*val = (long)(FIELD_GET(TEMP_THRESHOLD2, v) * MILLI);
- 		break;
- 	case hwmon_temp_emergency:
- 		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
--		*val = (long)(FIELD_GET(TRIP_THRESHOLD, v) * 1000);
-+		*val = (long)(FIELD_GET(TRIP_THRESHOLD, v) * MILLI);
- 		break;
- 	case hwmon_temp_max_alarm:
- 		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
-@@ -382,15 +383,15 @@ static int power_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 	switch (attr) {
- 	case hwmon_power_input:
- 		v = readq(feature->ioaddr + FME_PWR_STATUS);
--		*val = (long)(FIELD_GET(PWR_CONSUMED, v) * 1000000);
-+		*val = (long)(FIELD_GET(PWR_CONSUMED, v) * MICRO);
- 		break;
- 	case hwmon_power_max:
- 		v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
--		*val = (long)(FIELD_GET(PWR_THRESHOLD1, v) * 1000000);
-+		*val = (long)(FIELD_GET(PWR_THRESHOLD1, v) * MICRO);
- 		break;
- 	case hwmon_power_crit:
- 		v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
--		*val = (long)(FIELD_GET(PWR_THRESHOLD2, v) * 1000000);
-+		*val = (long)(FIELD_GET(PWR_THRESHOLD2, v) * MICRO);
- 		break;
- 	case hwmon_power_max_alarm:
- 		v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-@@ -415,7 +416,7 @@ static int power_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
- 	int ret = 0;
- 	u64 v;
- 
--	val = clamp_val(val / 1000000, 0, PWR_THRESHOLD_MAX);
-+	val = clamp_val(val / MICRO, 0, PWR_THRESHOLD_MAX);
- 
- 	mutex_lock(&pdata->lock);
- 
--- 
-2.28.0
+On 2023/7/4 17:38, Krzysztof Kozlowski wrote:
+> On 04/07/2023 11:21, William Qiu wrote:
+>> The SPI controller only need apb_pclk clock to work properly on JH7110 SoC,
+>> so there add minItems whose value is equal to 1. Other platforms do not
+>> have this constraint.
+>> 
+>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> 
+> I don't get why this is resent, but subject prefix is still wrong. It's
+> dt-bindings.
+> 
+Will update.
+>> ---
+>>  Documentation/devicetree/bindings/spi/spi-pl022.yaml | 11 ++++++++---
+>>  1 file changed, 8 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+>> index 91e540a92faf..42bb34c39971 100644
+>> --- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+>> @@ -11,6 +11,7 @@ maintainers:
+>> 
+>>  allOf:
+>>    - $ref: spi-controller.yaml#
+>> +  - $ref: /schemas/arm/primecell.yaml#
+> 
+> This looks unrelated, so keep it as separate commit with its own rationale.
+> 
+Because "arm,primecell-periphid"  is need in JH7110 SoC, so I added them in
+one commit, so do I need to put them in two commit?
+>> 
+>>  # We need a select here so we don't match all nodes with 'arm,primecell'
+>>  select:
+>> @@ -34,12 +35,16 @@ properties:
+>>      maxItems: 1
+>> 
+>>    clocks:
+>> +    minItems: 1
+>>      maxItems: 2
+>> 
+>>    clock-names:
+>> -    items:
+>> -      - const: sspclk
+>> -      - const: apb_pclk
+>> +    oneOf:
+>> +      - items:
+>> +          - const: apb_pclk
+>> +      - items:
+>> +          - const: sspclk
+>> +          - const: apb_pclk
+> 
+> Are you sure that your clock is APB pclk in such case?
+> 
+Yes, in JH7110 SoC is APB pclk in such case.
 
+Thanks for taking time to review this patch series.
+> Best regards,
+> Krzysztof
+> 
