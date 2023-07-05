@@ -2,167 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87B7747C3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E134747C44
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjGEFEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 01:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S231131AbjGEFMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 01:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGEFEp (ORCPT
+        with ESMTP id S229449AbjGEFMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 01:04:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B92C10FA;
-        Tue,  4 Jul 2023 22:04:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41E9F61423;
-        Wed,  5 Jul 2023 05:04:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8D1C433C9;
-        Wed,  5 Jul 2023 05:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688533482;
-        bh=2i0Ae7rBMhcEAYB+PDsBxsKOdpkbQVHO6Hi3mRd2nXo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f0e4hy6cx7OdhVzd+5ZUFqqpRMtHn/bpzwjv1SbHB9NmOtLk1QD/zQuXLvv7TLR1R
-         tmSGVEdxgsfZp9WzsImiPe6/7nHHM9fzOfJTKW3B7RXw5j8eoqaQALDoFxFU4/ipmy
-         KtWqrJn9Cmhl9MqW845LMjMaQECWyXwLiwtNz4CviuJiaA45FJMWYXFwZP89KTYWDC
-         AX6dgly76sbqqjCGxpgIIzwpWV+ldixpeRGRX8jLeXRscGF91MRRZmQvGExHusFD05
-         4PLLlKKfbl0h1j4ZnmqhoMbg0RecFOAR8QvwLX+RDM0eDTH1Krsq+XNMRVoTTNK4TH
-         YPs+MPprVqXzA==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-56598263d1dso3960041eaf.0;
-        Tue, 04 Jul 2023 22:04:42 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw4HkB/AxjQj9TGvEjOEAf0dyyvMXT+HWss5YcjLMaRbquAWWEh
-        FmTnDLMtLvAoH1v+tw62Dp2MeYguGbfj1e1/H5k=
-X-Google-Smtp-Source: ACHHUZ4hnZqcvzQcojh0JHfNNvc0QV0Z+wEtOYv/w3KKG9gOFLEIliQM9zwO3fxRyh45qx0+0X0GyLue3ME7b3N3njE=
-X-Received: by 2002:a05:6808:189d:b0:3a1:e4d1:878d with SMTP id
- bi29-20020a056808189d00b003a1e4d1878dmr15216554oib.9.1688533481807; Tue, 04
- Jul 2023 22:04:41 -0700 (PDT)
+        Wed, 5 Jul 2023 01:12:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFBE10E3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 22:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688533912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tO3P2mQX6+9ZgDhiDUsWuq97gou5mJ4BQnOKdZt/xjA=;
+        b=jCqPV3KQS84kngkXQg1F4r2aIHd8MT0BR2C8OSdntRzwC04xtdm3pm3vWZiRUErAkpd1N6
+        1+s7NxRBBQaYj3EyCygXaauSW0i6AkhrHz5JfppVAlfU/3ra5o2ASe2eXIrnc8NX4JbN02
+        AG+B2KzFA4Mwv0z6BGuSgfYfL1AAtPw=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-244-HDgFt1CYOqO_D9UIyuisgA-1; Wed, 05 Jul 2023 01:11:51 -0400
+X-MC-Unique: HDgFt1CYOqO_D9UIyuisgA-1
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2b6a2a5f08aso61467301fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 22:11:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688533909; x=1691125909;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tO3P2mQX6+9ZgDhiDUsWuq97gou5mJ4BQnOKdZt/xjA=;
+        b=DPXT8oWgyUJNxNUbThqFLofxdvLdAwLRhEZaEpyevzb78tRyQqOIMOuNUkXqEvIbUc
+         qynNxgfIOaj4Q4coRqj2ZkLvhtTS4PdDi87u56jXrkrtRqRwezvGFcJI75qirAnPI826
+         /O620Niu0wCAUmgfDeO3v8VpMbcM76qmx5nfSLEiPu2UtIog5bdYxii4uZefpE+B4l1b
+         RBvlhpx4TwrVjLVvtOb0iBcEg4rkcSwXnR820XC8eYlyAzw0yzb5Wx+0U7d8scBrwuVW
+         hEv16G6AmvRxxAdMgXsh5sTvR6nDKOVMtMBsllsJKdat6+3sRqAdniFgRXPc24psysHW
+         kqyQ==
+X-Gm-Message-State: ABy/qLYMEBwP4VqAPTxTpFDNO0beTuMTmChVa4lwSPXjL7r+wxri0WFA
+        nWF0tTRVgZ6Q8jbhUnMvTnqCOj6c8JfeBoTadDeVVpZ316YP4YWNAAllGYGrV1s0NveuxQ4CYGp
+        UQ+gC3xlf0lV01kP60b0NKt3GQh0BN+trWlXD5/V8
+X-Received: by 2002:a2e:9104:0:b0:2b6:9c1d:dea3 with SMTP id m4-20020a2e9104000000b002b69c1ddea3mr11475461ljg.2.1688533909764;
+        Tue, 04 Jul 2023 22:11:49 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGu7A2d5AY6kY3vs5pzspcaW+PcHAazZkUtZptPO44mksXuaFuecbTqN1XahcBVBOOfWpRErBWvTYqQ13Rbu38=
+X-Received: by 2002:a2e:9104:0:b0:2b6:9c1d:dea3 with SMTP id
+ m4-20020a2e9104000000b002b69c1ddea3mr11475446ljg.2.1688533909459; Tue, 04 Jul
+ 2023 22:11:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com>
- <ZKTncHqLwgbZbRVl@bergen.fjasle.eu>
-In-Reply-To: <ZKTncHqLwgbZbRVl@bergen.fjasle.eu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 5 Jul 2023 14:04:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARM04vuv7o+GJ082140efWCCN-q7jCaacrA_DT=FuoUWQ@mail.gmail.com>
-Message-ID: <CAK7LNARM04vuv7o+GJ082140efWCCN-q7jCaacrA_DT=FuoUWQ@mail.gmail.com>
-Subject: Re: Overly aggressive .gitignore file?
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230703142514.363256-1-eperezma@redhat.com> <20230703110241-mutt-send-email-mst@kernel.org>
+ <ba5099b8-f72c-f267-41a7-d0ee18680796@oracle.com> <20230704061356-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230704061356-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 5 Jul 2023 13:11:37 +0800
+Message-ID: <CACGkMEtAfiODhHEMFDKkaVFVs1yjfUFsjfy_=p8Jtd6BXAE1xQ@mail.gmail.com>
+Subject: Re: [PATCH] mlx5_vdpa: offer VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Si-Wei Liu <si-wei.liu@oracle.com>,
+        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+        linux-kernel@vger.kernel.org, Dragos Tatulea <dtatulea@nvidia.com>,
+        virtualization@lists.linux-foundation.org, leiyang@redhat.com,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 12:46=E2=80=AFPM Nicolas Schier <nicolas@fjasle.eu> =
+On Tue, Jul 4, 2023 at 6:16=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com> =
 wrote:
 >
-> On Tue 04 Jul 2023 12:49:01 GMT, Linus Torvalds wrote:
-> > So this keeps happening to me - I go to apply a patch I just
-> > downloaded with 'b4', and I do my regular
+> On Mon, Jul 03, 2023 at 05:26:02PM -0700, Si-Wei Liu wrote:
 > >
-> >      git am -s --whitespace 2023<tab>
 > >
-> > and the dang thing doesn't autocomplete.,
+> > On 7/3/2023 8:46 AM, Michael S. Tsirkin wrote:
+> > > On Mon, Jul 03, 2023 at 04:25:14PM +0200, Eugenio P=C3=A9rez wrote:
+> > > > Offer this backend feature as mlx5 is compatible with it. It allows=
+ it
+> > > > to do live migration with CVQ, dynamically switching between passth=
+rough
+> > > > and shadow virtqueue.
+> > > >
+> > > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > > Same comment.
+> > to which?
 > >
-> > The reason it doesn't auto-complete ends up being that my kernel tree
-> > contains some other random stale mbx file from the _previous_ time I
-> > did that, because they effectively get hidden from "git status" etc by
-> > our .gitignore file.
-> >
-> > So then those stale files end up staying around much too long and not
-> > showing up on my radar even though they are just old garbage by the
-> > time I have actually applied them.
-> >
-> > And I always use auto-complete, because those filenames that 'b4'
-> > generate are ridiculously long (for good reason).
-> >
-> > And the auto-complete always fails, because b4 just uses a common
-> > prefix pattern too (again, for a perfectly good reason - I'm not
-> > complaining about b4 here).
-> >
-> > This has been a slight annoyance for a while, but the last time it
-> > happened just a moment ago when I applied David Howells' afs patch
-> > (commit 03275585cabd: "afs: Fix accidental truncation when storing
-> > data" - not that the particular commit matters, I'm just pointing out
-> > how it just happened _again_).
-> >
-> > So I'm really inclined to just revert the commit that added this
-> > pattern: 534066a983df (".gitignore: ignore *.cover and *.mbx"). It's
-> > actively detrimental to my workflow.
-> >
-> > I'm not sure why that pattern was added, though. These are not
-> > auto-generated files from our build.  So before I go off and revert
-> > it, let's ask the people mentioned in that commit.
-> >
-> > I *suspect* the thing that triggered this wasn't that people actually
-> > wanted to ignore these files, but that it was related to the misguided
-> > "let's use .gitignore to build source packages" project.
-> >
-> > But at least for me, it's a real problem when .gitignore contains
-> > other files than the ones we actually generate.
-> >
-> > The only one that actually commonly affects me is the *.mbx file,
-> > although I could certainly see the same being true of the *.cover
-> > thing.
-> >
-> > And there might certainly be other patterns like this that I just
-> > don't react to, because they don't have the same detrimental effects
-> > on how I work.
-> >
-> > Comments?
-> >
-> >                Linus
+> > -Siwei
 >
-> Thanks for sharing some details of your concrete workflow.  I think,
-> having this in mind, it is quite a fair point to criticise the handling
-> (or ignoring, respectively) of files that are are not generated or used
-> during kernel builds.  But in general, I don't find it that easy to
-> draw the line; should we also remove
+> VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK is too narrow a use-case to commit=
+ to it
+> as a kernel/userspace ABI: what if one wants to start rings in some
+> other specific order?
+
+Just enable a queue by writing e.g 1 to queue_enable in a specific order?
+
+> As was discussed on list, a better promise is not to access ring
+> until the 1st kick. vdpa can then do a kick when it wants
+> the device to start accessing rings.
+
+Rethink about the ACCESS_AFTER_KICK, it sounds functional equivalent
+to allow queue_enable after DRIVER_OK, but it seems to have
+distanvages:
+
+A busy polling software device may disable notifications and never
+respond to register to any kick notifiers. ACCESS_AFTER_KICK will
+introduce overhead to those implementations.
+
+Thanks
+
 >
->    *.kdev4
->    *.orig
->    *.patch
->    *~
->    \#*#
->    patches
->    series
+> > >
+> > > > ---
+> > > >   drivers/vdpa/mlx5/net/mlx5_vnet.c | 7 +++++++
+> > > >   1 file changed, 7 insertions(+)
+> > > >
+> > > > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/=
+net/mlx5_vnet.c
+> > > > index 9138ef2fb2c8..5f309a16b9dc 100644
+> > > > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > > @@ -7,6 +7,7 @@
+> > > >   #include <uapi/linux/virtio_net.h>
+> > > >   #include <uapi/linux/virtio_ids.h>
+> > > >   #include <uapi/linux/vdpa.h>
+> > > > +#include <uapi/linux/vhost_types.h>
+> > > >   #include <linux/virtio_config.h>
+> > > >   #include <linux/auxiliary_bus.h>
+> > > >   #include <linux/mlx5/cq.h>
+> > > > @@ -2499,6 +2500,11 @@ static void unregister_link_notifier(struct =
+mlx5_vdpa_net *ndev)
+> > > >                   flush_workqueue(ndev->mvdev.wq);
+> > > >   }
+> > > > +static u64 mlx5_vdpa_get_backend_features(const struct vdpa_device=
+ *vdpa)
+> > > > +{
+> > > > + return BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK);
+> > > > +}
+> > > > +
+> > > >   static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev=
+, u64 features)
+> > > >   {
+> > > >           struct mlx5_vdpa_dev *mvdev =3D to_mvdev(vdev);
+> > > > @@ -3140,6 +3146,7 @@ static const struct vdpa_config_ops mlx5_vdpa=
+_ops =3D {
+> > > >           .get_vq_align =3D mlx5_vdpa_get_vq_align,
+> > > >           .get_vq_group =3D mlx5_vdpa_get_vq_group,
+> > > >           .get_device_features =3D mlx5_vdpa_get_device_features,
+> > > > + .get_backend_features =3D mlx5_vdpa_get_backend_features,
+> > > >           .set_driver_features =3D mlx5_vdpa_set_driver_features,
+> > > >           .get_driver_features =3D mlx5_vdpa_get_driver_features,
+> > > >           .set_config_cb =3D mlx5_vdpa_set_config_cb,
+> > > > --
+> > > > 2.39.3
 >
-> from .gitignore?   I don't think so, even though they (partially) fall
-> into the same category.
->
-> From my point of view, this is a decision of personal preference.
-> I do like the ignoring of *.mbx and *.cover, as I tend to have those
-> files around for some time by intention.  But a revert would not cause
-> any trouble to me and optimisation of your workflow is magnitudes more
-> important, so I am perfectly fine with it, if you want to have the
-> commit reverted.
 
-
-Already reverted.
-(d528014517f2b0531862c02865b9d4c908019dc4)
-
-I also chimed-in too late.
-
-If he wants to hear opinions from people
-who live in different time zones, he can wait
-for 24 hours, but his decision is usually quick.
-
-
-
---=20
-Best Regards
-Masahiro Yamada
