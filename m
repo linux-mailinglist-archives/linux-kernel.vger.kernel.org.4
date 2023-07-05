@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115B37486C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427527486C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232695AbjGEOqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S232681AbjGEOqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjGEOqg (ORCPT
+        with ESMTP id S232244AbjGEOqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jul 2023 10:46:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8F610CF
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEDF10D5
         for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:46:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2090615D5
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB66F615C9
         for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 14:46:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40570C433CC;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D96BC433C8;
         Wed,  5 Jul 2023 14:46:33 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1qH3m4-003Phk-0s;
+        id 1qH3m4-003PiJ-1Y;
         Wed, 05 Jul 2023 10:46:32 -0400
-Message-ID: <20230705144632.086008297@goodmis.org>
+Message-ID: <20230705144632.294731621@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 05 Jul 2023 10:40:33 -0400
+Date:   Wed, 05 Jul 2023 10:40:34 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Donglin Peng <pengdonglin@sangfor.com.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Florent Revest <revest@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [for-linus][PATCH 2/3] arm64: ftrace: fix build error with CONFIG_FUNCTION_GRAPH_TRACER=n
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [for-linus][PATCH 3/3] tracing/boot: Test strscpy() against less than zero for error
 References: <20230705144031.702796304@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,48 +50,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-It appears that a merge conflict ended up hiding a newly added constant
-in some configurations:
+Instead of checking for -E2BIG, it is better to just check for less than
+zero of strscpy() for error. Testing for -E2BIG is not very robust, and
+the calling code does not really care about the error code, just that
+there was an error.
 
-arch/arm64/kernel/entry-ftrace.S: Assembler messages:
-arch/arm64/kernel/entry-ftrace.S:59: Error: undefined symbol FTRACE_OPS_DIRECT_CALL used as an immediate value
+One of the updates to convert strlcpy() to strscpy() had a v2 version
+that changed the test from testing against -E2BIG to less than zero, but I
+took the v1 version that still tested for -E2BIG.
 
-FTRACE_OPS_DIRECT_CALL is still used when CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-is enabled, even if CONFIG_FUNCTION_GRAPH_TRACER is disabled, so change the
-ifdef accordingly.
+Link: https://lore.kernel.org/linux-trace-kernel/20230615180420.400769-1-azeemshaikh38@gmail.com/
+Link: https://lore.kernel.org/linux-trace-kernel/20230704100807.707d1605@rorschach.local.home
 
-Link: https://lkml.kernel.org/r/20230623152204.2216297-1-arnd@kernel.org
-
-Cc: Will Deacon <will@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
-Fixes: 3646970322464 ("arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Florent Revest <revest@chromium.org>
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc: Kees Cook <keescook@chromium.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/arm64/kernel/asm-offsets.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_boot.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index 757d01a68ffd..5ff1942b04fc 100644
---- a/arch/arm64/kernel/asm-offsets.c
-+++ b/arch/arm64/kernel/asm-offsets.c
-@@ -213,9 +213,9 @@ int main(void)
-   DEFINE(FGRET_REGS_X7,			offsetof(struct fgraph_ret_regs, regs[7]));
-   DEFINE(FGRET_REGS_FP,			offsetof(struct fgraph_ret_regs, fp));
-   DEFINE(FGRET_REGS_SIZE,		sizeof(struct fgraph_ret_regs));
-+#endif
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-   DEFINE(FTRACE_OPS_DIRECT_CALL,	offsetof(struct ftrace_ops, direct_call));
--#endif
- #endif
-   return 0;
- }
+diff --git a/kernel/trace/trace_boot.c b/kernel/trace/trace_boot.c
+index 5fe525f1b8cc..7ccc7a8e155b 100644
+--- a/kernel/trace/trace_boot.c
++++ b/kernel/trace/trace_boot.c
+@@ -31,7 +31,7 @@ trace_boot_set_instance_options(struct trace_array *tr, struct xbc_node *node)
+ 
+ 	/* Common ftrace options */
+ 	xbc_node_for_each_array_value(node, "options", anode, p) {
+-		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+ 			pr_err("String is too long: %s\n", p);
+ 			continue;
+ 		}
+@@ -87,7 +87,7 @@ trace_boot_enable_events(struct trace_array *tr, struct xbc_node *node)
+ 	const char *p;
+ 
+ 	xbc_node_for_each_array_value(node, "events", anode, p) {
+-		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+ 			pr_err("String is too long: %s\n", p);
+ 			continue;
+ 		}
+@@ -486,7 +486,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+ 
+ 	p = xbc_node_find_value(enode, "filter", NULL);
+ 	if (p && *p != '\0') {
+-		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+ 			pr_err("filter string is too long: %s\n", p);
+ 		else if (apply_event_filter(file, buf) < 0)
+ 			pr_err("Failed to apply filter: %s\n", buf);
+@@ -494,7 +494,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+ 
+ 	if (IS_ENABLED(CONFIG_HIST_TRIGGERS)) {
+ 		xbc_node_for_each_array_value(enode, "actions", anode, p) {
+-			if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
++			if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+ 				pr_err("action string is too long: %s\n", p);
+ 			else if (trigger_process_regex(file, buf) < 0)
+ 				pr_err("Failed to apply an action: %s\n", p);
 -- 
 2.39.2
