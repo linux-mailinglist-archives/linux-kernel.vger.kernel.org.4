@@ -2,205 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CFF74890E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621FF748911
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjGEQQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S232619AbjGEQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjGEQQJ (ORCPT
+        with ESMTP id S229730AbjGEQQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:16:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5DE1726
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688573726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=41PfzToKq/ZuIyZbmkk75ijXjF0S6iwGioZqQv3YYas=;
-        b=WvPEzUC3lj1tQOlUj9N/wJLicQhC5OzYowVlGfmvsnNbqIXFsF3WjhHi49t9lJkx822mxc
-        QMoC4cYOM0aGYjQJEdO7X6FlywRjNuBQ5c/SnCzNp0TAGqr97T6zU+n6z7A/eD/6g9tU0r
-        eRwJHE22oO0qTwQsQbPEoVehlC/RXP8=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-669-UC_MAGkpMeSHzFWc3uAtWg-1; Wed, 05 Jul 2023 12:15:25 -0400
-X-MC-Unique: UC_MAGkpMeSHzFWc3uAtWg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-401e1fc831fso10145571cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:15:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688573725; x=1691165725;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=41PfzToKq/ZuIyZbmkk75ijXjF0S6iwGioZqQv3YYas=;
-        b=iJD2hRJnmTa3qJBff8vub51XAUkBHfASfdjDT2XHWA4WeuiS63XTrJH6tbdU/CHg6C
-         KBgUblXO+xHUOX+8CaRjMFOHItxlT8AJtJc4wIswPAaG2NCvnfvxKa46lcnlJZRxAIOJ
-         1l6BNEHcR9bFEYOb2ApR8mQveIbK8V3ukw4DcKjj5xoA8CcOnhX8HHltgHQhHgcvitCT
-         bnC6G3pKk11FM5EHput2okohYITwVc/hoTwrGALiikqKhZq0woGh/lZZwCZ3P7h35FjT
-         eQtoBlQwka1PsBnMeeFwtISZsyx+pAQ3/dS7NIA8wPXr42Im3PQV5+ErEuFhMCKmwNsM
-         dOlg==
-X-Gm-Message-State: AC+VfDwI9VyRYXEm38n96PsPgJz4mJJDV1by1zgrh4k6kyKk9y3i/4p9
-        +GGkJC0o9MUxj/36LwjadFZ2R+ZVy/L3PGi+qKZDKLKoTbZw0zyD4Zpuy8vAtaDC0y2vbq3IxTt
-        3ZhMhT4UpyPtPGNKjcV75zNhB/82sNlNx
-X-Received: by 2002:a05:622a:1308:b0:403:28e3:8ab7 with SMTP id v8-20020a05622a130800b0040328e38ab7mr22343565qtk.5.1688573724891;
-        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4yBoNCHR9da42kEmUepXtWH/uy0qhFWUMq3XZYbfp+4KgDzX7xEj2WTC/YgjKg5UtSOPzSvA==
-X-Received: by 2002:a05:622a:1308:b0:403:28e3:8ab7 with SMTP id v8-20020a05622a130800b0040328e38ab7mr22343534qtk.5.1688573724597;
-        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id e16-20020ac80110000000b0040346ce43a5sm6442576qtg.44.2023.07.05.09.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 12:15:22 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
-Message-ID: <ZKWXGnSKcOdnaeJw@x1n>
-References: <20230629205040.665834-1-axelrasmussen@google.com>
- <ZKSDLogLASaZgKCP@x1n>
- <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
+        Wed, 5 Jul 2023 12:16:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9EC1700
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:16:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0195461610
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 16:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C08AEC433C8;
+        Wed,  5 Jul 2023 16:16:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688573799;
+        bh=GeYO4hEs6xDOK/p1n1fFk3HqkeUFQ9DVjoLNHuXTWGQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AwgiDq7611IvY8AjeW2W+C4dKuQWb1y8pGtbXxWXJgopfGLg4YXY6wy/wZZN9q/xu
+         hCI+qDM+72j4PzE4r8kjFyybE96Yek5lzGw5EcXvhEtATVEIAAmrgdzGhYV+jyA9DW
+         48qPHw/xXbaYsHEfZNhjnNaJ8jCJzPHFxhhNKjf6/UV1tUTx0QR4jddZoWbG8WvtCD
+         EPx0TvXxq20B8Z4wBNzgyW4fpAawzi5fI9yHxmDpIkgSywRWs+hEJNVnrntmxLX+j5
+         RmVrOmfnv38XBoQtxH+jcBO7Z/n20H33fCMlzy8d8PFeCjHVs/JLnJoJJ/o1yxNj8b
+         sXEpg/g/6hiBA==
+Date:   Wed, 5 Jul 2023 17:16:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v2 3/3] ASoC: amd: vangogh: Add support for
+ NAU8821/MAX98388 variant
+Message-ID: <a414b971-381b-4695-9ba4-d2c777bff330@sirena.org.uk>
+References: <20230705134341.175889-1-cristian.ciocaltea@collabora.com>
+ <20230705134341.175889-4-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ov8aIt3YF8eAYNFc"
 Content-Disposition: inline
-In-Reply-To: <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230705134341.175889-4-cristian.ciocaltea@collabora.com>
+X-Cookie: Don't feed the bats tonight.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 09:09:19AM -0700, James Houghton wrote:
-> > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> > > index 4c932cb45e0b..8259fee32421 100644
-> > > --- a/include/linux/swapops.h
-> > > +++ b/include/linux/swapops.h
-> > > @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
-> > >
-> > >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
-> > >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
-> > > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
-> > > +#define  PTE_MARKER_UFFD_POISON                      BIT(2)
-> >
-> > One more tab.
-> >
-> > Though I remembered the last time we discussed IIRC we plan to rename
-> > SWAPIN_ERROR and reuse it, could you explain why a new bit is still needed?
-> >
-> > I think I commented this but I'll do it again: IIUC any existing host
-> > swapin errors for guest pages should be reported as MCE too, afaict,
-> > happened in kvm context.
-> 
-> I think swapin errors are treated differently than poison. Swapin
-> errors get VM_FAULT_SIGBUS, and poison gets VM_FAULT_HWPOISON, so
-> UFFDIO_POISON should also get VM_FAULT_HWPOISON (so that's what Axel
-> has implemented). And I think that needs a separate PTE marker.
 
-My question was, should we also make SWAPIN_ERROR return VM_FAULT_HWPOISON
-always?
+--ov8aIt3YF8eAYNFc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Just to recap from what I already commented above - if a guest page got
-error in swapin due to block sector failures, it should be treated as
-VM_FAULT_HWPOISON too, IMHO.  IOW, I think current SWAPIN_ERROR is wrong
-when in kvm context and we should fix it first.
+On Wed, Jul 05, 2023 at 04:43:41PM +0300, Cristian Ciocaltea wrote:
 
-> 
-> >
-> > > +#define  PTE_MARKER_MASK                     (BIT(3) - 1)
-> > >
-> > >  static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
-> > >  {
-> > > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> > > index ac7b0c96d351..ac8c6854097c 100644
-> > > --- a/include/linux/userfaultfd_k.h
-> > > +++ b/include/linux/userfaultfd_k.h
-> > > @@ -46,6 +46,7 @@ enum mfill_atomic_mode {
-> > >       MFILL_ATOMIC_COPY,
-> > >       MFILL_ATOMIC_ZEROPAGE,
-> > >       MFILL_ATOMIC_CONTINUE,
-> > > +     MFILL_ATOMIC_POISON,
-> > >       NR_MFILL_ATOMIC_MODES,
-> > >  };
-> > >
-> > > @@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
-> > >  extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
-> > >                                    unsigned long len, atomic_t *mmap_changing,
-> > >                                    uffd_flags_t flags);
-> > > +extern ssize_t mfill_atomic_poison(struct mm_struct *dst_mm, unsigned long start,
-> > > +                                unsigned long len, atomic_t *mmap_changing,
-> > > +                                uffd_flags_t flags);
-> > >  extern int mwriteprotect_range(struct mm_struct *dst_mm,
-> > >                              unsigned long start, unsigned long len,
-> > >                              bool enable_wp, atomic_t *mmap_changing);
-> > > diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-> > > index 66dd4cd277bd..62151706c5a3 100644
-> > > --- a/include/uapi/linux/userfaultfd.h
-> > > +++ b/include/uapi/linux/userfaultfd.h
-> > > @@ -39,7 +39,8 @@
-> > >                          UFFD_FEATURE_MINOR_SHMEM |           \
-> > >                          UFFD_FEATURE_EXACT_ADDRESS |         \
-> > >                          UFFD_FEATURE_WP_HUGETLBFS_SHMEM |    \
-> > > -                        UFFD_FEATURE_WP_UNPOPULATED)
-> > > +                        UFFD_FEATURE_WP_UNPOPULATED |        \
-> > > +                        UFFD_FEATURE_POISON)
-> > >  #define UFFD_API_IOCTLS                              \
-> > >       ((__u64)1 << _UFFDIO_REGISTER |         \
-> > >        (__u64)1 << _UFFDIO_UNREGISTER |       \
-> > > @@ -49,12 +50,14 @@
-> > >        (__u64)1 << _UFFDIO_COPY |             \
-> > >        (__u64)1 << _UFFDIO_ZEROPAGE |         \
-> > >        (__u64)1 << _UFFDIO_WRITEPROTECT |     \
-> > > -      (__u64)1 << _UFFDIO_CONTINUE)
-> > > +      (__u64)1 << _UFFDIO_CONTINUE |         \
-> > > +      (__u64)1 << _UFFDIO_POISON)
-> > >  #define UFFD_API_RANGE_IOCTLS_BASIC          \
-> > >       ((__u64)1 << _UFFDIO_WAKE |             \
-> > >        (__u64)1 << _UFFDIO_COPY |             \
-> > > +      (__u64)1 << _UFFDIO_WRITEPROTECT |     \
-> > >        (__u64)1 << _UFFDIO_CONTINUE |         \
-> > > -      (__u64)1 << _UFFDIO_WRITEPROTECT)
-> > > +      (__u64)1 << _UFFDIO_POISON)
-> >
-> > May not be a large deal, but it's still better to declare the feature &
-> > ioctls after all things implemented.  Maybe make these few lines
-> > (UFFD_API*, and the new feature bit) as the last patch to enable the
-> > feature?
-> 
-> I agree. Another option would be to have a separate feature for
-> UFFDIO_POISON for hugetlb, but I don't think we should do that. :)
+> +static int acp5x_max98388_hw_params(struct snd_pcm_substream *substream,
+> +				    struct snd_pcm_hw_params *params)
+> +{
+> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+> +	struct snd_soc_dai *dai = snd_soc_card_get_codec_dai(rtd->card,
+> +							     ACP5X_MAX98388_DAI_NAME);
+> +	int ret;
+> +
+> +	ret = snd_soc_dai_set_fmt(dai,
+> +				  SND_SOC_DAIFMT_CBS_CFS | SND_SOC_DAIFMT_I2S |
+> +				  SND_SOC_DAIFMT_NB_NF);
+> +	if (ret < 0)
+> +		dev_err(dai->dev, "Failed to set format: %d\n", ret);
+> +
+> +	return ret;
+> +}
 
-Yeah let's make the features "memory-type-free" if possible. :)
+This never varies, why not just set it up statically in the dai_link?
 
-Thanks,
+--ov8aIt3YF8eAYNFc
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Peter Xu
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSll2EACgkQJNaLcl1U
+h9BLLQf5AXp0pzyXPku8zlANe/5Bg+G+xI8VK0dpRTbhe2rDvtHwHsmTBIcTmLfZ
+XNv2UEuQwYYaegA6aXufWlK43fbE2GR6TyA3APAsPSRaUf6rzGCmxC8tp4fPsvxA
+9UIEY0VlAZAo/nTTfIdChqLiN1lUnZblGX6dLiZTsO52Ab734FEXf4ULlsR9b6bk
+uVErEGnYAh9vbgRb87ztzp0IOlMumX9mgfLojCx8srQkETvrzS2N5yzmBlEJDa7s
+wdtw7152EEwJiR3wIUiZULcfbLDIRiuc/k8BKRt05Ja8gZCxi2TwZ9OvVIJtmLHP
+SwqXo1B1+3QraZpAIYQfdDUwFsV/og==
+=WIYi
+-----END PGP SIGNATURE-----
+
+--ov8aIt3YF8eAYNFc--
