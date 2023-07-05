@@ -2,108 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7171D74890A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CFF74890E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjGEQOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S232519AbjGEQQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbjGEQOO (ORCPT
+        with ESMTP id S230385AbjGEQQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:14:14 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021F4198A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:14:12 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-c4cb4919bb9so4818200276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688573651; x=1691165651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Guo91PWFfnDo+SM4in0LICs86g8qzvQOcFv1DmUQYs=;
-        b=W4sUFM2hhReuUTVmyE/6eTlg++DgmtseZ6DBAULnSwYT+0ChqPAMtuWGsoQoVxetwB
-         2MSdHMbTfrcaNmcUTl6dhwhYnRbs7ySFp0xHXWPSVSXrEw4KafdiHLp0dTd0P+VAIPst
-         F3OF1e+XpdvYaDb0gvsIz3ZFZB48Kwf9Q9x/ihnbhyS2Wj3riVvNkUI1DEaCHmewmanN
-         1LIIhLSuhAIY+6DJ1+rOm3D8XJEugm3n7kCKOA90AlJO6duTLBaW6AL6UcIGpdwyJ/Uc
-         tNK9Pq9YUla2fOjCHfTRyARZbAqC6m66J1W3QL6gfFWiwiCAbAtsypkWijRWP6+a7Lbh
-         caLA==
+        Wed, 5 Jul 2023 12:16:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5DE1726
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688573726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=41PfzToKq/ZuIyZbmkk75ijXjF0S6iwGioZqQv3YYas=;
+        b=WvPEzUC3lj1tQOlUj9N/wJLicQhC5OzYowVlGfmvsnNbqIXFsF3WjhHi49t9lJkx822mxc
+        QMoC4cYOM0aGYjQJEdO7X6FlywRjNuBQ5c/SnCzNp0TAGqr97T6zU+n6z7A/eD/6g9tU0r
+        eRwJHE22oO0qTwQsQbPEoVehlC/RXP8=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-669-UC_MAGkpMeSHzFWc3uAtWg-1; Wed, 05 Jul 2023 12:15:25 -0400
+X-MC-Unique: UC_MAGkpMeSHzFWc3uAtWg-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-401e1fc831fso10145571cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:15:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688573651; x=1691165651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Guo91PWFfnDo+SM4in0LICs86g8qzvQOcFv1DmUQYs=;
-        b=ZV0mRtqjtCReX2D/wUCZFsy6QdbQpdmn1rsD1mJkvOuTs1Pc/3vv8wcQhIjZDATqGv
-         N3pzr5UYXRJWhKANV7VQNTArrThEsSGrniJqCei5lXmb1ejVWQYppagQV8MCAtPvBM68
-         n+wvcuAQ9VcH0ehPElbOUzu6ZySd2Nm4CpMfYWVqeYflF9GxPMUkVCduCIFmwVnijxrV
-         sw2NckaqAby4MiIM2B8quD6janfnLwFlhwuXkvrw0JKXr6mU9Zum4LGnRu3pawhZ2ZfE
-         fr0byhsZBuXvE90qTG3ioWlItWG7ufS8ppVjwo01OmWSiYH1DVV8uDpn/dXPnx2c0J+m
-         gI3g==
-X-Gm-Message-State: ABy/qLZ32lz5mz1PNwYfzuJVP/1fce3ZVlr8saT3/UeWWGLAgjs3tGvL
-        E982n9wfTT4rZGdzQCYhRcpKBdZ+Cdcarx/iykYWDQ==
-X-Google-Smtp-Source: APBJJlGk0KH8+36f2+xyKK2C4ux1o8hhKHK7EH+E5Y+YeWDZp7ujvXuniSIUKmajsgTHknuFdvicRxFQnSIREfIDqZY=
-X-Received: by 2002:a25:ab65:0:b0:c1b:d362:4b4e with SMTP id
- u92-20020a25ab65000000b00c1bd3624b4emr15371940ybi.43.1688573651009; Wed, 05
- Jul 2023 09:14:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688573725; x=1691165725;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=41PfzToKq/ZuIyZbmkk75ijXjF0S6iwGioZqQv3YYas=;
+        b=iJD2hRJnmTa3qJBff8vub51XAUkBHfASfdjDT2XHWA4WeuiS63XTrJH6tbdU/CHg6C
+         KBgUblXO+xHUOX+8CaRjMFOHItxlT8AJtJc4wIswPAaG2NCvnfvxKa46lcnlJZRxAIOJ
+         1l6BNEHcR9bFEYOb2ApR8mQveIbK8V3ukw4DcKjj5xoA8CcOnhX8HHltgHQhHgcvitCT
+         bnC6G3pKk11FM5EHput2okohYITwVc/hoTwrGALiikqKhZq0woGh/lZZwCZ3P7h35FjT
+         eQtoBlQwka1PsBnMeeFwtISZsyx+pAQ3/dS7NIA8wPXr42Im3PQV5+ErEuFhMCKmwNsM
+         dOlg==
+X-Gm-Message-State: AC+VfDwI9VyRYXEm38n96PsPgJz4mJJDV1by1zgrh4k6kyKk9y3i/4p9
+        +GGkJC0o9MUxj/36LwjadFZ2R+ZVy/L3PGi+qKZDKLKoTbZw0zyD4Zpuy8vAtaDC0y2vbq3IxTt
+        3ZhMhT4UpyPtPGNKjcV75zNhB/82sNlNx
+X-Received: by 2002:a05:622a:1308:b0:403:28e3:8ab7 with SMTP id v8-20020a05622a130800b0040328e38ab7mr22343565qtk.5.1688573724891;
+        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4yBoNCHR9da42kEmUepXtWH/uy0qhFWUMq3XZYbfp+4KgDzX7xEj2WTC/YgjKg5UtSOPzSvA==
+X-Received: by 2002:a05:622a:1308:b0:403:28e3:8ab7 with SMTP id v8-20020a05622a130800b0040328e38ab7mr22343534qtk.5.1688573724597;
+        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id e16-20020ac80110000000b0040346ce43a5sm6442576qtg.44.2023.07.05.09.15.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 09:15:24 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 12:15:22 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
+Message-ID: <ZKWXGnSKcOdnaeJw@x1n>
+References: <20230629205040.665834-1-axelrasmussen@google.com>
+ <ZKSDLogLASaZgKCP@x1n>
+ <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
 MIME-Version: 1.0
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info> <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh> <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh> <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
- <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
- <2023070509-undertow-pulverize-5adc@gregkh> <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
- <20230705084906.22eee41e6e72da588fce5a48@linux-foundation.org>
-In-Reply-To: <20230705084906.22eee41e6e72da588fce5a48@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 5 Jul 2023 09:14:00 -0700
-Message-ID: <CAJuCfpGQK+Z0WPoRjBbSgD5m9wXyP7NJpu9fjGALmGu=6AGYaw@mail.gmail.com>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>, Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 8:49=E2=80=AFAM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Wed, 5 Jul 2023 10:51:57 +0200 "Linux regression tracking (Thorsten Le=
-emhuis)" <regressions@leemhuis.info> wrote:
->
-> > >>> I'm in wait-a-few-days-mode on this.  To see if we have a backporta=
-ble
-> > >>> fix rather than disabling the feature in -stable.
+On Wed, Jul 05, 2023 at 09:09:19AM -0700, James Houghton wrote:
+> > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> > > index 4c932cb45e0b..8259fee32421 100644
+> > > --- a/include/linux/swapops.h
+> > > +++ b/include/linux/swapops.h
+> > > @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
+> > >
+> > >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
+> > >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
+> > > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
+> > > +#define  PTE_MARKER_UFFD_POISON                      BIT(2)
 > >
-> > Andrew, how long will you remain in "wait-a-few-days-mode"? Given what
-> > Greg said below and that we already had three reports I know of I'd
-> > prefer if we could fix this rather sooner than later in mainline --
-> > especially as Arch Linux and openSUSE Tumbleweed likely have switched t=
-o
-> > 6.4.y already or will do so soon.
->
-> I'll send today's 2-patch series to Linus today or tomorrow.
+> > One more tab.
+> >
+> > Though I remembered the last time we discussed IIRC we plan to rename
+> > SWAPIN_ERROR and reuse it, could you explain why a new bit is still needed?
+> >
+> > I think I commented this but I'll do it again: IIUC any existing host
+> > swapin errors for guest pages should be reported as MCE too, afaict,
+> > happened in kvm context.
+> 
+> I think swapin errors are treated differently than poison. Swapin
+> errors get VM_FAULT_SIGBUS, and poison gets VM_FAULT_HWPOISON, so
+> UFFDIO_POISON should also get VM_FAULT_HWPOISON (so that's what Axel
+> has implemented). And I think that needs a separate PTE marker.
 
-I need to make a correction to the patch fixing the issue (the first
-one in the series) and will post it within an hour. Thanks!
+My question was, should we also make SWAPIN_ERROR return VM_FAULT_HWPOISON
+always?
+
+Just to recap from what I already commented above - if a guest page got
+error in swapin due to block sector failures, it should be treated as
+VM_FAULT_HWPOISON too, IMHO.  IOW, I think current SWAPIN_ERROR is wrong
+when in kvm context and we should fix it first.
+
+> 
+> >
+> > > +#define  PTE_MARKER_MASK                     (BIT(3) - 1)
+> > >
+> > >  static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+> > >  {
+> > > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> > > index ac7b0c96d351..ac8c6854097c 100644
+> > > --- a/include/linux/userfaultfd_k.h
+> > > +++ b/include/linux/userfaultfd_k.h
+> > > @@ -46,6 +46,7 @@ enum mfill_atomic_mode {
+> > >       MFILL_ATOMIC_COPY,
+> > >       MFILL_ATOMIC_ZEROPAGE,
+> > >       MFILL_ATOMIC_CONTINUE,
+> > > +     MFILL_ATOMIC_POISON,
+> > >       NR_MFILL_ATOMIC_MODES,
+> > >  };
+> > >
+> > > @@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
+> > >  extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
+> > >                                    unsigned long len, atomic_t *mmap_changing,
+> > >                                    uffd_flags_t flags);
+> > > +extern ssize_t mfill_atomic_poison(struct mm_struct *dst_mm, unsigned long start,
+> > > +                                unsigned long len, atomic_t *mmap_changing,
+> > > +                                uffd_flags_t flags);
+> > >  extern int mwriteprotect_range(struct mm_struct *dst_mm,
+> > >                              unsigned long start, unsigned long len,
+> > >                              bool enable_wp, atomic_t *mmap_changing);
+> > > diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+> > > index 66dd4cd277bd..62151706c5a3 100644
+> > > --- a/include/uapi/linux/userfaultfd.h
+> > > +++ b/include/uapi/linux/userfaultfd.h
+> > > @@ -39,7 +39,8 @@
+> > >                          UFFD_FEATURE_MINOR_SHMEM |           \
+> > >                          UFFD_FEATURE_EXACT_ADDRESS |         \
+> > >                          UFFD_FEATURE_WP_HUGETLBFS_SHMEM |    \
+> > > -                        UFFD_FEATURE_WP_UNPOPULATED)
+> > > +                        UFFD_FEATURE_WP_UNPOPULATED |        \
+> > > +                        UFFD_FEATURE_POISON)
+> > >  #define UFFD_API_IOCTLS                              \
+> > >       ((__u64)1 << _UFFDIO_REGISTER |         \
+> > >        (__u64)1 << _UFFDIO_UNREGISTER |       \
+> > > @@ -49,12 +50,14 @@
+> > >        (__u64)1 << _UFFDIO_COPY |             \
+> > >        (__u64)1 << _UFFDIO_ZEROPAGE |         \
+> > >        (__u64)1 << _UFFDIO_WRITEPROTECT |     \
+> > > -      (__u64)1 << _UFFDIO_CONTINUE)
+> > > +      (__u64)1 << _UFFDIO_CONTINUE |         \
+> > > +      (__u64)1 << _UFFDIO_POISON)
+> > >  #define UFFD_API_RANGE_IOCTLS_BASIC          \
+> > >       ((__u64)1 << _UFFDIO_WAKE |             \
+> > >        (__u64)1 << _UFFDIO_COPY |             \
+> > > +      (__u64)1 << _UFFDIO_WRITEPROTECT |     \
+> > >        (__u64)1 << _UFFDIO_CONTINUE |         \
+> > > -      (__u64)1 << _UFFDIO_WRITEPROTECT)
+> > > +      (__u64)1 << _UFFDIO_POISON)
+> >
+> > May not be a large deal, but it's still better to declare the feature &
+> > ioctls after all things implemented.  Maybe make these few lines
+> > (UFFD_API*, and the new feature bit) as the last patch to enable the
+> > feature?
+> 
+> I agree. Another option would be to have a separate feature for
+> UFFDIO_POISON for hugetlb, but I don't think we should do that. :)
+
+Yeah let's make the features "memory-type-free" if possible. :)
+
+Thanks,
+
+-- 
+Peter Xu
+
