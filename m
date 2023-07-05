@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C842674837A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74788748381
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbjGELtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S231739AbjGELwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 07:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjGELtv (ORCPT
+        with ESMTP id S230255AbjGELwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:49:51 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92305A1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 04:49:48 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3144bf65ce9so27511f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 04:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688557787; x=1691149787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lBdhQMjZ1nmdVkf9BPqZOJoWodxWjAZazvM+FwYqquU=;
-        b=lvWaH8FhmcKK4FHYbjSZy+vvVeZPVdi5dzrJra3N8JSUQZLCodRkpRjG/VErV0KaRa
-         XubE1cBmEq6dXiEGMbg/Cnfre0T1PU8u5pet31/BbuxauVeKTSRyfziztq3/2/1VSHV9
-         PIj3Bg4bOoFKwIRXDavIFNVq2V2P6uQ1an0pmoD5jNXDwoapzjZ43JX6/dfu4Frpppyx
-         kIRq6oLhzBHGBI69Vn9AawlNlYpvcRsum/4lxFfZvoFh+poS2asS2t/b/KrLQOKj+0W4
-         p2aabg9IeaRhTp5djHtxxsVutqIH/mj9eWpf/VKLh17Uig8kDxcd3xnK5n0jmXq8dQkD
-         HEDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688557787; x=1691149787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lBdhQMjZ1nmdVkf9BPqZOJoWodxWjAZazvM+FwYqquU=;
-        b=jj55tqcA+wIllDCJvhgmZqSjX5m1aKSQDTYCzyEXpdqhidG4TJ1Z2ciVX502qxwntX
-         eYgkECKf/OWaEpWBEzTxv4OEAB3uh5lu5yd023KMr/pl5lDFxEzcUYRALnz1xM52dVyI
-         GYVtBRFpvSypM6D6a0t1hSnxHYxvo1iEu2t+fY2ZGixnNMXLmEQn5GFT/ZU00mpz619t
-         Ors3D7zL/xxCm3X4JdtzEpd+JFdNIhjpqbqeYTSkzjY7pw1YHzknfFhJhiRU/Y77loRL
-         mqNwwyfhPdhNOEpN8qcMhvmaWiKZj0f/FcK58whjf4LYQAH4x/YRbqexBhQ9G3Zrqpb2
-         /cBw==
-X-Gm-Message-State: ABy/qLadLb1se6joU1uydXna9imZGwAX88Y0WV5Cq1JgdOZLHLh6Gaid
-        RoSOvyMksJmlhYvOo1bxvmwGjA==
-X-Google-Smtp-Source: APBJJlGA54lpF7GkU8VEDpwGTeAGM+Ylm1KCIcUDHKGYR+tvHzBEJzquneg2oziHR1M5iEmZ/0/g/g==
-X-Received: by 2002:a5d:544d:0:b0:313:e146:1816 with SMTP id w13-20020a5d544d000000b00313e1461816mr12558836wrv.24.1688557786918;
-        Wed, 05 Jul 2023 04:49:46 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id c8-20020adfed88000000b0031433443265sm9361029wro.53.2023.07.05.04.49.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 04:49:46 -0700 (PDT)
-Message-ID: <1845ebfb-8b1a-c291-6724-73df3639905b@linaro.org>
-Date:   Wed, 5 Jul 2023 13:49:45 +0200
+        Wed, 5 Jul 2023 07:52:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389FE1706;
+        Wed,  5 Jul 2023 04:52:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C25B661510;
+        Wed,  5 Jul 2023 11:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D22C0C433C8;
+        Wed,  5 Jul 2023 11:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688557930;
+        bh=B0MLw/sxHoIbXTRVaxfjrRiweFfcz3oBF68pY3IxPtU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YeYNhZsYykFlOgVLi4szIeNKiHwswHkxej09OjjKRXeFTB8hHCYxiFFs9V9xCN7f0
+         ew0afQAD0zGy46+/ZOIY9OUNtC2q54pLJegUQPz8IaNvVaCTT5AI4bKR7B2lD2Ik4w
+         MArVNAxJaszFCZlnKLWCc+7qRqk0x45fk4Ret94u+txARBrIN8PnsgKaCF4W4PkXA5
+         oHGinUssGUnPBnvT1//iD7UnNJP4i8h3dCtouadlbxiNXp9LdbfqSbW+v9/5LUrcY+
+         xSGLUZaz8gloM0hKTBK+sp1DLQS6vDc9a0GNqEKYuXxfHTy1Swg13zKKRcvkbjCJbY
+         JzIIzQTmkfubg==
+Date:   Wed, 5 Jul 2023 12:52:04 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     like@awinic.com, lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        liweilei@awinic.com, liangdong@awinic.com, yijiangtao@awinic.com
+Subject: Re: [PATCH V1 1/1] regulator: Add awinic,aw3750x.yaml
+Message-ID: <17ad855b-3a3b-4dba-9a64-a1a683b3b905@sirena.org.uk>
+References: <20230705081942.2608531-1-like@awinic.com>
+ <20230705081942.2608531-2-like@awinic.com>
+ <2923201f-8bf4-a55d-a033-28ae5e569466@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
- wrappers
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
- <20230525140135.3589917-6-daniel.lezcano@linaro.org>
- <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
- <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
- <77c90891-3712-4b3b-a22c-d9ccba36f58e@linaro.org>
- <f3679761bbf31ff93d45985f67a85f28b0027eac.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <f3679761bbf31ff93d45985f67a85f28b0027eac.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="O0KcrTpa93VAbXP/"
+Content-Disposition: inline
+In-Reply-To: <2923201f-8bf4-a55d-a033-28ae5e569466@linaro.org>
+X-Cookie: Don't feed the bats tonight.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 13:35, srinivas pandruvada wrote:
-> Hi Daniel,
-> 
-> On Wed, 2023-07-05 at 12:41 +0200, Daniel Lezcano wrote:
->>
->> Hi Srinivas,
->>
->> thanks for your answer. What about the patch 6?
-> I was not CCed. But checked from LKML,
-> The change looks good.
 
-Actually, you were Cc'ed, the mail may have been lost somehow.
+--O0KcrTpa93VAbXP/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Anyway, thanks for the review. I'll resend with the changelog fixed in 
-patch 5 and your acked-by
+On Wed, Jul 05, 2023 at 11:20:16AM +0200, Krzysztof Kozlowski wrote:
+> On 05/07/2023 10:19, like@awinic.com wrote:
+> > From: Ke Li <like@awinic.com>
 
-   -- Daniel
+> > +properties:
+> > +  compatible:
+> > +    const: awinic,aw3750x_led
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> I don't understand why there is _led suffix. Isn't this regulator? Can
+> it be anything else?
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Boost regulators are almost always used to drive LEDs for things like
+backlights.
 
+--O0KcrTpa93VAbXP/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSlWWMACgkQJNaLcl1U
+h9AMlgf/RdUDoujLpgv1G5u99eZWNCJ4Ystqq8fMJbnuQi+Mw7nqEC9vPvHFzLN+
+yMYnFFFOKcOzEqBKg5Q2cEZoLzw01YVzREz9Ih+U7ilypJonPJObwNinjdynPOj2
+AKR3CNiZgTMgYrs0IoAV0ioOMEEJywiQLX+lDNsX3G2PG2unJCuEJSSwuvebo7uK
+xkUdTCtQQA8Q2ibP/VjuviXZ4lo11+pU+cHjtmIvc0iAhnoKasKEuR63h9/CgOiG
+y33s5fegxQUkjDHjzlZ52cdSLEsYzKoIXEWSKDymD6v37twoibGHQYgHv7d5taxm
+gwzLamSpxPvVTypRLCfvpbsYHX/dhQ==
+=sAT1
+-----END PGP SIGNATURE-----
+
+--O0KcrTpa93VAbXP/--
