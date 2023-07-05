@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519EF747CAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56836747CB6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjGEFtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 01:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S231315AbjGEFwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 01:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjGEFts (ORCPT
+        with ESMTP id S229647AbjGEFwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 01:49:48 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521F110C9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 22:49:40 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bd61dd9a346so7012442276.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 22:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688536179; x=1691128179;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5W58Fzb9Zl7oTLDX7IAWaHheZcu9ErUxDNxhsLQpU2I=;
-        b=sWbZXd9JcMPymfQeV+xlUdkWQqIjrQfCgHWB+bSaWHKy/EOgJp0HOXg9gCg2DH7WLD
-         wYs/Aans8cJIps7j99rPxc0EglgQAbRwzvL9nPw//VC1mozgdmweoXD7U66zSoeGo13Q
-         RN0Et5hyonkj4jE3dfXm2zt1lfBKTdYACw9a604i5O82LpFgny+WpPbNPf8KrpdrxiCc
-         KlgXYB1kVufEqXW9OVnElPk7VUVaQtSQkYCu0Y+rnJlL8WXKmIYko5fczlvyIP1Pbr4e
-         CGz43r1Iht+GnoyK7uPoVIgciGP4lO9Rf08U2RnyWx96nfWuvmaD5T88IL1qWq0wSeFH
-         5UIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688536179; x=1691128179;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5W58Fzb9Zl7oTLDX7IAWaHheZcu9ErUxDNxhsLQpU2I=;
-        b=IFXpd+PI0/0Y0sAyZywN4izp8c3pObTAhlXWoLM7Unr9OTLggpEHk77vlCoVhPk9eY
-         KSM6r+u+JKjbCpskH5gyVaefnef6rdr4nJbPykJeeae3lKNCSLCL7ldwnbzViLQuCZBl
-         4tAc/fjYTr0F4VTZ5gmSU+vPRmLNbDpJwZ//CCg7sZbel5YsdJkj+oo3wx/BLpf4tMe6
-         n6Dz1SPpyCx+33obdRLxl5diprEl+itKc8iTXoxQLBO1OUCf/adv6a45u89YQ1tThKs9
-         fJd4oRsOB6SRiMy35urCcoCE8QxF/shZx49gAQUDoHkcoryJdYMUsPdaW7weeo+VyKe4
-         g5Pg==
-X-Gm-Message-State: ABy/qLbDiFPj+eB4fmqPwJOHdrFrLvqJQ6W18NwhBw0Z2raX9N1m1nrf
-        WNwyMSlhNYKW4MFi8xAKLv1JOcHdLP2W8GtWxdciWA==
-X-Google-Smtp-Source: APBJJlEM6AOC9/Ew+OkPk9MgTVFm1ma9xNbW/8FDcQ1U+aQtiCG+kURvCEd8zQrSZ3EpR2MApxz+U8IXVL9oVp26on8=
-X-Received: by 2002:a25:b911:0:b0:c5c:c18f:c2bf with SMTP id
- x17-20020a25b911000000b00c5cc18fc2bfmr3487414ybj.11.1688536179552; Tue, 04
- Jul 2023 22:49:39 -0700 (PDT)
+        Wed, 5 Jul 2023 01:52:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E463DB2;
+        Tue,  4 Jul 2023 22:52:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7050961425;
+        Wed,  5 Jul 2023 05:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508FCC433C8;
+        Wed,  5 Jul 2023 05:52:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688536362;
+        bh=NQsFB+2RAaeuXH+1ZMfVCmr9PB+efMMQy8Vc7+0uDMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hffdCYLsKUQwJVoGPVqW8rsFnbBu7Hodcjt+MmNfLEkQBxXWhery2IASAx6WRt2Rf
+         mTdJIoQQ33sOKzfXDmDKBXStaz/vH/miTkDJ/RXrI4U5iOzF6q9Dc4qSIM3MzU4qLC
+         m/FyrWrT7DQtsUv5s2asRDu7YMzNOtgH3P7K1bDpWQyOHrvBp+AVqj0mC5jfTO6F2r
+         a+ta5kkGmLev7VHafXNb7TMYzDiikAGfu0xfu77F4CKoJyEB/vrKmbcZIyTyl+xC2U
+         Vj2/DJXD6ghlWgTXLK9aKmx8WP67L1Hm4r3O4Zg9S7CBDJ6z4RmxHLSf/iW3ZYCSfy
+         XYn/KA8sW/LAw==
+Date:   Wed, 5 Jul 2023 08:52:38 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Chengfeng Ye <dg573847474@gmail.com>
+Cc:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] IB/hfi1: Fix potential deadlock on &sde->flushlist_lock
+Message-ID: <20230705055238.GG6455@unreal>
+References: <20230628045925.5261-1-dg573847474@gmail.com>
+ <20230704114849.GA6455@unreal>
+ <CAAo+4rXkMM87OJzim=8dACdV=kWK_1yXeD=W5GZzHoJ2Gz6rtw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230705053914.9759-1-quic_kbajaj@quicinc.com> <20230705053914.9759-2-quic_kbajaj@quicinc.com>
-In-Reply-To: <20230705053914.9759-2-quic_kbajaj@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 5 Jul 2023 08:49:28 +0300
-Message-ID: <CAA8EJpo406gV-5H8+y4SJbbRqnWFRo5wrR6a9KJ2arbN61tS2Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: qdu1000-idp: Update reserved memory region
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAo+4rXkMM87OJzim=8dACdV=kWK_1yXeD=W5GZzHoJ2Gz6rtw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jul 2023 at 08:40, Komal Bajaj <quic_kbajaj@quicinc.com> wrote:
->
-> Add missing reserved regions as described in QDU1000 memory map.
->
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 26 ++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> index 1d22f87fd238..3f5512ec0a90 100644
-> --- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> @@ -448,6 +448,32 @@ &qupv3_id_0 {
->         status = "okay";
->  };
->
-> +&reserved_memory{
-> +       #address-cells = <2>;
-> +       #size-cells = <2>;
-> +       ranges;
-> +
-> +       ecc_meta_data_reserved_mem:ecc_meta_data_reserved_region@e0000000{
+On Wed, Jul 05, 2023 at 01:42:31AM +0800, Chengfeng Ye wrote:
+> > Plus, we already in context where interrupts are stopped.
+> 
+> Indeed they can be called from .ndo_start_xmit callback and
+> the document said it is with bh disabled.
+> 
+> But I found some call chain from the user process that seems could
+> be called from irq disabled context. For sdma_send_txlist(),
+> there is a call chain.
+> 
+> -> hfi1_write_iter()  (.write_iter callback)
+> -> hfi1_user_sdma_process_request()
+> -> user_sdma_send_pkts()
+> -> sdma_send_txlist()
+> 
+> The .write_iter seems not to disable irq by default, as mentioned by
+> https://www.kernel.org/doc/Documentation/filesystems/vfs.txt
+> And I didn't find any explicit disabling or bh or irq along the call path,
+> and also see several  copy_from_usr() which cannot be invoked under
+> irq context.
+> 
+> 
+> For sdma_send_txreq(), there is a call chain.
+> 
+> -> qp_priv_alloc()
+> -> iowait_init() (register _hfi1_do_tid_send() as a work queue)
+> -> _hfi1_do_tid_send() (workqueue)
+> -> hfi1_do_tid_send()
+> -> hfi1_verbs_send()
+> -> sr(qp, ps, 0) (sr could points to hfi1_verbs_send_dm())
+> -> hfi1_verbs_send_dma()
+> -> sdma_send_txreq()
+> 
+> _hfi1_do_tid_send() is a work queue without irq disabled by default,
+> I also check the remaining call path and also found that there is no explicit
+> irq disable, instead the call site of hfi1_verbs_send() is exactly after
+> spin_lock_irq_restore(), seems like a hint that it is probably called withirq
+> enable.
 
-no_underscores_in_node_names. Ever.
+Right, that path is called in process context and can sleep, there is no
+need in irq disabled variant there.
 
-Also, if you have checked other platforms, you'd have seen that other
-platforms use a much more generic node name for 'memory' nodes (which
-you should have used too).
+> 
+> Another hint is that the lock acquisition of
+> spin_lock_irqsave(&sde->tail_lock, flags);
+> just before my patch in the same function also disable irq, seems like another
+> hint that this function could be called with interrupt disable,
 
-> +               no-map;
-> +               reg = <0x0 0xe0000000 0x0 0x20000000>;
-> +       };
-> +
-> +       harq_buffer_mem:harq_buffer_region@800000000{
-> +               no-map;
-> +               reg = <0x8 0x0 0x0 0x80000000>;
-> +       };
-> +
-> +       tenx_sp_buffer_mem:tenx_sp_buffer_region@880000000{
-> +               no-map;
-> +               reg = <0x8 0x80000000 0x0 0x50000000>;
-> +       };
-> +
-> +       fapi_buffer_mem:fapi_buffer_region@8d0000000{
-> +               no-map;
-> +               reg = <0x8 0xd0000000 0x0 0x20000000>;
-> +       };
-> +};
-> +
->  &sdhc {
->         pinctrl-0 = <&sdc_on_state>;
->         pinctrl-1 = <&sdc_off_state>;
-> --
-> 2.40.1
->
+Exactly, we already called to spin_lock_irqsave(), there is no value in
+doing it twice.
+void f() {
+	spin_lock_irqsave(...)
+	spin_lock_irqsave(...)
+	....
+	spin_unlock_irqrestore(...)
+	spin_unlock_irqrestore(...)
+}
 
+is exactly the same as
+void f() {
+	spin_lock_irqsave(...)
+	spin_lock(...)
+	....
+	spin_unlock(...)
+	spin_unlock_irqrestore(...)
+}
 
--- 
-With best wishes
-Dmitry
+Thanks
