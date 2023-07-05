@@ -2,166 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7104D748393
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A8D748391
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjGEL5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S231743AbjGEL4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 07:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbjGEL5F (ORCPT
+        with ESMTP id S230049AbjGEL4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:57:05 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C441723;
-        Wed,  5 Jul 2023 04:57:00 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-47e25709402so1453090e0c.0;
-        Wed, 05 Jul 2023 04:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688558219; x=1691150219;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SYzFOXrpHjMbau6LdBUr//Enq3hi9M8IF1iSIElak94=;
-        b=g6COHjjX6H1jp8F3+hb7jSPsaJqivsIH24rJGOJVcEtbKhzNF5ISzY8ii3ouLDdwcP
-         YlKNvcDTJHCk49YdLyZcOxvHeeP1GYrPIXXrzQSzOqPCWEllvjfGlhZ1eK/7+j1hTBLW
-         eAOtb8dY6Lv70Z4+i6oaKkkTLheyO0o2pBUemkz9wq/RBZ6FSL/l7TjLLYcSnfId9ebn
-         yAHVH3t1kYwr/2R1FfLOO5ZNsKP4yonuPzzw5D6Dybr1CeP5QpPpY6m9zac/uLpWBq7W
-         lDihrjhQ8hF/Qd9ro0sv26veYR8HAuvbB9gk9I+3vX8BuZZmGA4464B3fwy2NXEIK4AU
-         PzCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688558219; x=1691150219;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SYzFOXrpHjMbau6LdBUr//Enq3hi9M8IF1iSIElak94=;
-        b=MisjJZYCb66BMiLxeNKsZOedgB7dUmO6qox/37JBIEFyVcXC5H2JyZK80wMLvgaVzi
-         GPRa9DUCut3VRhnXYFHxUSR9UKlX8BeV15OvFUTkPnolpnfEzrOUpUtxQXSdAE+CIi1d
-         k4zvzxfJ+gOe+o9/mcRYn8UJBcCDf7gXaRWdRHXMdsd5nYsaz3MLP5CqbiICY7CiGFTk
-         yuUso9ihSzMOgUfNUU1TbdN2hBhj0EuWsA2gASCgTM+W/fGYGoNcqKSQCyr39bWvBHbV
-         IFdqlvvD850fwOnYqGdbuUuu+IqL7oybfRsctROn10/sTE8WsXBZPv2gIDx4LB8JNhTd
-         yrow==
-X-Gm-Message-State: ABy/qLa2JphGAgRFzoI8KoyFhqwB7otNoypU72tHdr2ZE9BBEPE7OTnm
-        YruDwa2oZo1mJwRb42g/mVsWz5AV+1KL1EA0V289nu48HaTWZb8q
-X-Google-Smtp-Source: APBJJlFFhOiBBRrEk3tyW0G/UO66q38pjXFSGKhoVHIsv25St86l3kpyWAQnFh8VA2c8QwfNLNINF3KnHnHTkCORxnE=
-X-Received: by 2002:a1f:4ec6:0:b0:47e:3f56:e91e with SMTP id
- c189-20020a1f4ec6000000b0047e3f56e91emr3134115vkb.15.1688558219280; Wed, 05
- Jul 2023 04:56:59 -0700 (PDT)
+        Wed, 5 Jul 2023 07:56:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F719A1;
+        Wed,  5 Jul 2023 04:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688558206; x=1720094206;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ynw6AXf7dszPcSqeI9Ih/R2B7n1Okp1K4vyVoT0Ge+c=;
+  b=bBfxNlnUqua6r44h3B1p15EULn25slf0pHBH4Yzf+/lKIzvly9ip6Tvk
+   fEiwiiei4hSbXnS9ooAZ0QFO94Qwb2djHJ1IHWI/me0R26sVKyM8H2qIt
+   YxtjElhqXZc1BqVbgT/uEK9E8ZY4Cc5h5eF8+dEma6T9T9+oHnGa/P2tg
+   Mr1BLLFpFy9gful7BfrB1Kq/KgEma0xa5jyaGX83dPBXK26MezEU3WQFU
+   gGIG8CNY5VsETpEHT1NEsbyfgg+pXQ3MmTCiylSJAspmGcMkZU+QQF87S
+   v70iLXylCjjRzxSj9/9cIOtEWo9jTFwTrJxTpyc5IjCwx9uYgIdp1MByn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="343651492"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="343651492"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 04:56:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="1049670901"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="1049670901"
+Received: from jialinji-mobl4.ccr.corp.intel.com (HELO localhost) ([10.255.30.200])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 04:56:41 -0700
+Date:   Wed, 5 Jul 2023 19:56:53 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Xu <peterx@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v7 3/8] KVM: Make __kvm_follow_pfn not imply FOLL_GET
+Message-ID: <20230705115653.5whvhvcvmflqmcse@linux.intel.com>
+References: <20230704075054.3344915-1-stevensd@google.com>
+ <20230704075054.3344915-4-stevensd@google.com>
 MIME-Version: 1.0
-References: <20230429020951.082353595@lindbergh.monkeyblade.net>
- <CAAJw_ZueYAHQtM++4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com>
- <ZE0kndhsXNBIb1g7@debian.me> <b9ab37d2-42bf-cc31-a2c0-a9b604e95530@gmail.com>
- <CAAJw_Zug6VCS5ZqTWaFSr9sd85k=tyPm9DEE+mV=AKoECZM+sQ@mail.gmail.com> <7fee3284-b9ba-58f4-8118-fe0b99ae6bf7@leemhuis.info>
-In-Reply-To: <7fee3284-b9ba-58f4-8118-fe0b99ae6bf7@leemhuis.info>
-From:   Jeff Chua <jeff.chua.linux@gmail.com>
-Date:   Wed, 5 Jul 2023 19:56:48 +0800
-Message-ID: <CAAJw_Zu=MPtGPARgCB2fteP+7F793YDFXE9RuzSH8EqYBS-OOw@mail.gmail.com>
-Subject: Re: Linux-6.5 iwlwifi crash
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Wireless <linux-wireless@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704075054.3344915-4-stevensd@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 4:37=E2=80=AFPM Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> Hi! Thanks for your report.
->
-> Side note: is there any relation to the thread[1] you posted this in?
+On Tue, Jul 04, 2023 at 04:50:48PM +0900, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
+> 
+> Make it so that __kvm_follow_pfn does not imply FOLL_GET. This allows
+> callers to resolve a gfn when the associated pfn has a valid struct page
+> that isn't being actively refcounted (e.g. tail pages of non-compound
+> higher order pages). For a caller to safely omit FOLL_GET, all usages of
+> the returned pfn must be guarded by a mmu notifier.
+> 
+> This also adds a is_refcounted_page out parameter to kvm_follow_pfn that
+> is set when the returned pfn has an associated struct page with a valid
+> refcount. Callers that don't pass FOLL_GET should remember this value
+> and use it to avoid places like kvm_is_ad_tracked_page that assume a
+> non-zero refcount.
+> 
+> Signed-off-by: David Stevens <stevensd@chromium.org>
+> ---
+>  include/linux/kvm_host.h | 10 ++++++
+>  virt/kvm/kvm_main.c      | 67 +++++++++++++++++++++-------------------
+>  virt/kvm/pfncache.c      |  2 +-
+>  3 files changed, 47 insertions(+), 32 deletions(-)
+> 
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index ef2763c2b12e..a45308c7d2d9 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1157,6 +1157,9 @@ unsigned long gfn_to_hva_memslot_prot(struct kvm_memory_slot *slot, gfn_t gfn,
+>  void kvm_release_page_clean(struct page *page);
+>  void kvm_release_page_dirty(struct page *page);
+>  
+> +void kvm_set_page_accessed(struct page *page);
+> +void kvm_set_page_dirty(struct page *page);
+> +
+>  struct kvm_follow_pfn {
+>  	const struct kvm_memory_slot *slot;
+>  	gfn_t gfn;
+> @@ -1164,10 +1167,17 @@ struct kvm_follow_pfn {
+>  	bool atomic;
+>  	/* Allow a read fault to create a writeable mapping. */
+>  	bool allow_write_mapping;
+> +	/*
+> +	 * Usage of the returned pfn will be guared by a mmu notifier. Must
+> +	 * be true if FOLL_GET is not set.
+> +	 */
+> +	bool guarded_by_mmu_notifier;
 
-Sorry, I was just posting to the same email list that I had reported
-about a different wifi list earlier. No relation to this, but it's a
-new wifi issue.
+And how? Any place to check the invalidate seq?
 
-> Doesn't look like it from here.
->
-> Side note: discussing multiple unrelated issues in one thread increases
-> the risk a lot that some or all of them are ignored:
-> https://linux-regtracking.leemhuis.info/post/frequent-reasons-why-linux-k=
-ernel-bug-reports-are-ignored/
->
-> [1] https://lore.kernel.org/all/ZE0kndhsXNBIb1g7@debian.me/
->
-> On 05.07.23 09:24, Jeff Chua wrote:
-> > Latest linux-6.4
->
-> What do you mean by that? From later in the mail it sounds like you mean
-> latest mainline -- is that correct?
-
-It's from linux git pull. It's 6.5-rc but I didn't write that way
-becuase Linus's branch is still 6.4 ... that 6.5-rc0 or rc1 should
-have more appropriate.
-
-> > after June 27 crash my whole linux notebook once
-> > iwlwifi is loaded. Anyone seeing this?
->
-> I haven't heard of any such problems, but that doesn't have to mean much.
-
-> > Bisect? Or there's a patch for this?
-> >
-> > # modprobe iwlwifi
-> > ... Whole system frozen!
-> >
-> >
-> > Here's my system before the crash ...
-> >
-> > # dmesg
-> > cfg80211: Loading compiled-in X.509 certificates for regulatory databas=
-e
-> > Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-> > iwlwifi 0000:00:14.3: enabling device (0000 -> 0002)
-> > iwlwifi 0000:00:14.3: api flags index 2 larger than supported by driver
-> > thermal thermal_zone1: failed to read out thermal zone (-61)
-> > iwlwifi 0000:00:14.3: Sorry - debug buffer is only 4096K while you
-> > requested 65536K
-> >
-> > # lspci
-> > 00:14.3 Network controller: Intel Corporation Alder Lake-P PCH CNVi
-> > WiFi (rev 01)
-> >
-> > # linux git log
-> > commit d528014517f2b0531862c02865b9d4c908019dc4 (HEAD -> master,
-> > origin/master, origin/HEAD)
-> > Author: Linus Torvalds <torvalds@linux-foundation.org>
-> > Date:   Tue Jul 4 15:05:12 2023 -0700
-> >
-> > # lsmodModule                  Size  Used by
-> > iwlmvm                397312  0
-> > mac80211              626688  1 iwlmvm
-> > iwlwifi               307200  1 iwlmvm
-> > cfg80211              413696  3 iwlmvm,iwlwifi,mac80211
-> >
-> >
-> > Bisect?
->
-> If none of the others CCed comes up with an idea within the next few
-> hours then yes please!
-
-I will wait for a day, then bisect.
-
-Thank you!
-
-
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
+B.R.
+Yu
