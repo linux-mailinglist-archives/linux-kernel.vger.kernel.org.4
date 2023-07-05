@@ -2,112 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A664748584
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710AE748588
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjGENxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
+        id S232428AbjGENzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbjGENxc (ORCPT
+        with ESMTP id S231384AbjGENzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:53:32 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2122.outbound.protection.outlook.com [40.107.117.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA9BF7;
-        Wed,  5 Jul 2023 06:53:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X/9kNx3mlXFP2z7V+s//vBUH2zkFZjiYVjrBWwba/j8hxRpIM/Q6kA+ufBtkU6DJdgtudBujZ/Io1KjyNY6kSZ++tuF/qeULd9jK1W4KGI62ZU47pvbaOfJxZ4EGoeLFuE6zdI2H+PGu2LTBPTvoEGCIAECr96tpPQVl6lNFWc2Ug2rLlaSInWH6KwoglpZs2JAWHX/ybFN5bxT833QAseTVwNZDWmnC5Q26tJmXZH4FUIsKV0AFhMIAHK/yF/NvYhByOCI0dFjHYRSn8IBb0q0ev0E4YzP9vCoVZXlgKap53df36d/ERBut0g/z/IHcRoXoZtKZrnsqAMNSTRJHvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V9V3E/S7EZrZHFawnqtiHHPJ3MITcasZo4yoCNxbo2Y=;
- b=cf63vqLtZV3KlXJIaL1A/reppQQqRMfOViEqXT2JCIikVCdslGt1YtrgT6NFC5aMXMr5cvDOg4wVibBxundxKqv9r9lV0OK/WaqK5zr7lNsuHh7YHns5eibogmk9VNJdE+jYMLz6Bex6s9unYB6z6Q45kBiEbpQfjfyPS0tGHYVfh2EeqqnHfY7txULOiToZLC+ugkD4VGeD0t9X8bqsext90uic3uEHlLatZII5nwWEeLGQEpdPbU/jjf7xaTr4UAGpsOSWC7RHm/eLWUu3rE6DU2C+prQxQfT6ZC7HlqMCK+7v+VlX7MugPQJxJRUB54VflhK2ya2SWQRHjcpe1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V9V3E/S7EZrZHFawnqtiHHPJ3MITcasZo4yoCNxbo2Y=;
- b=kywE9m0AFIKZ8cB+RlU47gvL4cNsKoXSIUZp5KPVAgyvilLqGHrakcn8a+IG0tH38ffuRnyWQclvl+V7WfgT3Wfjaa/0bLBNZhsisYM1roxniZoEBDp7VNjIzhWXqCCCGvFCS0GR6MmMqlchv3x8FWWDgkW1NwAZ/PuCHTEdxdigh79z86q36IjwCCHGPFBir00DvgFWc/5vQUGXWmD2sceSXtDTkzD6VQT1jq55ysF+UK0D7PgU5o8ienUlOrFZF42qhbWQo6BmoiNy+s3UCKSOCChBQh7wAeCjGc0BuKKOYWF7aALb1ZdrDkR7a/ej+5uEA/L10oI+BiiPMizH/g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PSAPR06MB3991.apcprd06.prod.outlook.com (2603:1096:301:38::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
- 2023 13:52:21 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 13:52:21 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Vladimir Zapolskiy <vz@mleia.com>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11]  i2c: pnx: Use devm_platform_get_and_ioremap_resource()
-Date:   Wed,  5 Jul 2023 21:51:58 +0800
-Message-Id: <20230705135159.33327-11-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230705135159.33327-1-frank.li@vivo.com>
-References: <20230705135159.33327-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCPR01CA0049.jpnprd01.prod.outlook.com
- (2603:1096:405:2::13) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Wed, 5 Jul 2023 09:55:17 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5EA199E;
+        Wed,  5 Jul 2023 06:54:58 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-78f6a9800c9so2302380241.3;
+        Wed, 05 Jul 2023 06:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688565297; x=1691157297;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w1OO/4Uu1I21/AwDxGfADZ/RnwtvdVTDBnkrZdnKuG8=;
+        b=cqN0/oyDTD+aPmM5wm/6WgKlj0FTg5AzwBGwCWVIU3bWwhIWv8fTILNrUMiHFn6xqf
+         qkiyUmWF1OGEZGrOvUD6RIPcQtPAjMQatV/H+ZwvUOSkF1dwRrqsYpL5cZMq26vlDQgP
+         HN4SIYi15ehRmrQacvn6W+axWS0bARaJsGn7fSU2u5d73j4pmXGvLw3NTvaETlzeVb2e
+         c3XNxtDhwpwUHgTOa+1oPZJ6QKWWrtSvn78M2BXNcDI9FFJu3c8s2pzaY4E9YTWQvpg7
+         HHtvNwihfz4r3rtFexf5LPMwjE78grKK6e4pDfE7vxcWcUF5+l52pvCi0SHkKFmBoQRv
+         zOlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688565297; x=1691157297;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w1OO/4Uu1I21/AwDxGfADZ/RnwtvdVTDBnkrZdnKuG8=;
+        b=E2ntG1YbL90bKVkxPTGVlET3XMAzmzf/z80g0rWyYJKmjZXSsvNgArZDa12xeBO7Xs
+         aWmLLxcNr+mOEuHsEEAk0BrOOW/LYPM1hOsKvMWLZZCCdRsj4hit9N24MquTjNoCM3Jv
+         36lASAMrZwNNTi6VGd3Xq1KWogNKh67p+V1jw7Nghv5CseFnz/A2iukwzoSeBxcr/Q5o
+         DCKIIZlAfGgMqv6qcef10SZ4MOk0D53+ooatcTqRxfD7FkbUpyMprOaUBRnEytuoN+un
+         alx7D83SjRIs/BS2VwYfnPsHfKvFZjYrEmBUuVMEcMUOzx0TP9IUZ6G4ZvRQLa4SqTH4
+         8pKQ==
+X-Gm-Message-State: ABy/qLbiJRIlP/RXhGnX3QATCVWV7WUQJWfR6P/MuDgXmjh15jrSMk/N
+        AeNImiYhs1/eqDe32mSnFOhklr+6wqLmND0RPgw=
+X-Google-Smtp-Source: APBJJlGgsFn4RmMHdLsPp12Iekj6EefZkZ5rI4y7HiQp9IwUXHNuiHel7bIEKBGZI+CC7q5f3c3D7Eq2rVrShEZg5WE=
+X-Received: by 2002:a67:fe94:0:b0:445:13e:d8ec with SMTP id
+ b20-20020a67fe94000000b00445013ed8ecmr2241731vsr.3.1688565296806; Wed, 05 Jul
+ 2023 06:54:56 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB3991:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2bba23f5-80a7-4aa1-3f88-08db7d5f0ddd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d7E/Y58kTsU82SytuNDM9TKvTtqee4nNY7cyz5dAaxNAGUhgn5je9nwgTHSsssVpH6TzzkoKamVGXhnvPx6ZCdks5Y+TzECkuqYACDyyrdOd6ZQc+Dc12FuO64CiRW7sRGp7NjBIBUIj1s6Nki68n7aCeZV24Y99u4voBgCGSOSGVH9rAzIurHczMs2kTAp8lVO9XNPMpCDDMokXGvIbv+HIVexTl58p7QfT/yhqEsLq7CjOinHFenNEJLzGabDIE7+MRMre7oONj3T6iyf9393CeRu9t1jqIULirbEConKEMnRXGiJMec2mb3umoNc04IJS9KcRgkWV5FrSqm5MT17Uz6GiyGSnXAKLDAEMV8Nj0gMHb5YmkIH7LnVyNfkWjeT/DdbzhIuip2yNTMRSf5KRIKDO7XyVeBTcsXMqwnJwLJa35cMD8s3MrWzsjEdpX21wlQjuxTlYpMbT3mBGbq8b6vvfDWip+nwQXq3J+jw4i7sW1E0uGAXgmDbQEF+Nlo9Hh472RAWIFECAMGKRnIQMIApboleQWREWQj/2s+AYqwW8S9pMVoiU8baQgGcW6P4LjMhZKMb5wiCfE4DH2NWQJOUMr7Di9f/sLEOS1JzzScQhsoYL14ZMjx0taJ6K
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(136003)(376002)(39860400002)(451199021)(38100700002)(38350700002)(66476007)(66556008)(4326008)(66946007)(2616005)(186003)(86362001)(6486002)(52116002)(6666004)(36756003)(6512007)(26005)(6506007)(478600001)(110136005)(1076003)(8936002)(8676002)(4744005)(5660300002)(316002)(2906002)(41300700001)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ANmr+GGKfJuZtPGhZApUYLYB1YK5rLVAHumcRYcDftu39H81oFyuDvfl477g?=
- =?us-ascii?Q?wJyIpVeft9v6L21gjyifDVY7jZ1SwjgVE0RC1WiXAzwvinso9wBASSgmAR18?=
- =?us-ascii?Q?/5hxAB15nmk/tXGqvcKSrMLhqckPEmpem7J3XwUqVFKrrw2ovj2JAW9xvOwY?=
- =?us-ascii?Q?e/oorYOuQXUnXIbxOQwPBndpTRhEcFSJjiXngN6ZhGtsJpmM+jHjZGQ2ZR/i?=
- =?us-ascii?Q?8yQT1XLj2kwbnf50+7PamXenzSuBZBX/T607xrVcsyVmN6FcmxPzz0MPSwuk?=
- =?us-ascii?Q?SdoEl+fa3/VlAdVqKWaR9Jvjb4Iiijbct5i3Q6ZAsPSRJOFSHHgGQaW0demZ?=
- =?us-ascii?Q?Zd9nwYP12oy7f61bb2C7tb3vX1btNIUsBZy47MzCeZnm0ZRyfrCcTYga5q2u?=
- =?us-ascii?Q?Vh4h4+HekhBMQD2Bv070v3M3+4qKaCBuaRiRdS0cAQvkoahoswgyRypD5VEg?=
- =?us-ascii?Q?ierQzg084KK+nka18hQS8YY59SB/oh5syG/I0NrlQmn01ByPj5R6c1G1rU3W?=
- =?us-ascii?Q?t845QC2ND+TneI/PnqFACcULO4FtuGARp3EfEotXAPjHjr7mQIl+oLIjnOhc?=
- =?us-ascii?Q?E6cYEyN5bbQRkpxkEDC3ffM4vnaQ9ofZUW80YPwgE9rG39Vcc0AAlrl/YudU?=
- =?us-ascii?Q?fuZeYoqv4JmGMT4M/CylNCvYU5yznJKmbJpn3aRNyC4ZUfyE8PN+FOl6ahPK?=
- =?us-ascii?Q?FrKGPqhXhBum8fIx+MUktGThsXp8FVavFHxCTxuGu4U7ZGM/KuDdEhHgSw3Q?=
- =?us-ascii?Q?v51tI1bNkSsV97Yd67nCaUBKf8XaUfWTqxoV1TSwc4wstmEzDPNJCiSb2KEp?=
- =?us-ascii?Q?V7wGF7YGsQleTPP/rL173oHLqkkrbZ2eg1ScsUPQCy3fwMR3Lrleaw/aEf6q?=
- =?us-ascii?Q?PYvSHGDIvAsWkVdujPymQAprai9hNAIuQKnE224NZr9I5PKLtGRrRKFmTp0f?=
- =?us-ascii?Q?jBFs6STRd9afS0nkQ73j+9xnbqyidy357SX1RHE5pCBJI8lnR+bf5O2w5j5n?=
- =?us-ascii?Q?oYaKtAGxkFcFpdhQ84w91RnGrTU3HIQTlkvSI5cP+4fi9HPPHOkQc+dUf0dM?=
- =?us-ascii?Q?tetvWkWX2jQx+NhzwEiCbbNtdPcqEnpj5YmDfzXx5vOXx8AlIegprtryYb+m?=
- =?us-ascii?Q?OaQg9kCljVb9tKoPLgbmfq8mXdl0b3rDFSIuxEDh38K+GY1RE2PhmFrqnlLX?=
- =?us-ascii?Q?n9oI+aRaitE+assiUP9QiSt4dQDzFYNvoK2wfuFVWNP1oGhga5CyYa6Bi9tZ?=
- =?us-ascii?Q?QKHcRy5IstfK23kShzJnDReawGnsZp+fQZGD5AWi9FgNAMhoPavEVUqedJyJ?=
- =?us-ascii?Q?9VqY1nLOcZwek+lAJv6nDuhfcI6cjKT7ZaDUr3fXmjslxahXftICLkpyHun3?=
- =?us-ascii?Q?cnlPg17EGvAFXxCnt7qtk2E4pjJZYHCCzBrEAoW5HDtCc3LxUgfB34np9Orl?=
- =?us-ascii?Q?ZJqPxialiWz6rVZ7uLjIZVIWJc+Qj3X7NImyV8793gSrkbUU9QcwPr4UjXOQ?=
- =?us-ascii?Q?ZC+GBhzOpriRpurs5nyqOjmX7CTA6NuaUSDEnP2dEQFhVT9cU3z+oJ84b7sY?=
- =?us-ascii?Q?bKkfH7boAPH+/IGPPVk0RuSEzZzNqU0h0eFdVmfB?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bba23f5-80a7-4aa1-3f88-08db7d5f0ddd
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 13:52:21.2581
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MfnDQLqK2Afkvlpkc1Py80Qa1cMeo8i9Ha23QHdoZaByx9JJ4oDDg4RzObigG+Des0t6rBGEYc5U4DLSOWwbTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB3991
+References: <0000000000004f34d705ffbc2604@google.com> <20230705-aufgearbeitet-kaffee-44ff4731a7dd@brauner>
+ <f966d10e793a9e8e2edb22cf09c25f097e638df9.camel@kernel.org>
+In-Reply-To: <f966d10e793a9e8e2edb22cf09c25f097e638df9.camel@kernel.org>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 5 Jul 2023 16:54:45 +0300
+Message-ID: <CAOQ4uxgX15F-zAYp0CV2zRLnSx6+m3=ejW2k4q8FdZqri5h8ng@mail.gmail.com>
+Subject: Re: [syzbot] [overlayfs?] general protection fault in d_path
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        syzbot <syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,29 +73,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+On Wed, Jul 5, 2023 at 4:41=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
+te:
+>
+> On Wed, 2023-07-05 at 15:05 +0200, Christian Brauner wrote:
+> > On Wed, Jul 05, 2023 at 05:00:45AM -0700, syzbot wrote:
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    d528014517f2 Revert ".gitignore: ignore *.cover and *=
+.mbx"
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D14fad002a=
+80000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D1085b4238=
+c9eb6ba
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3Da67fc5321ff=
+b4b311c98
+> > > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for=
+ Debian) 2.35.2
+> > >
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > >
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/fef94e788067=
+/disk-d5280145.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/576412ea518b/vm=
+linux-d5280145.xz
+> > > kernel image: https://storage.googleapis.com/syzbot-assets/685a0e4be0=
+6b/bzImage-d5280145.xz
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the =
+commit:
+> > > Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
+> > >
+> > > general protection fault, probably for non-canonical address 0xdffffc=
+000000000a: 0000 [#1] PREEMPT SMP KASAN
+> > > KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057=
+]
+> > > CPU: 1 PID: 10127 Comm: syz-executor.3 Not tainted 6.4.0-syzkaller-11=
+478-gd528014517f2 #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
+OS Google 05/27/2023
+> > > RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5012
+> > > Code: 85 75 18 00 00 83 3d 15 c8 2c 0d 00 48 89 9c 24 10 01 00 00 0f =
+84 f8 0f 00 00 83 3d 5c de b3 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 0=
+0 00 74 1a 48 89 d7 e8 b4 51 79 00 48 8b 94 24 80 00 00
+> > > RSP: 0018:ffffc900169be9e0 EFLAGS: 00010006
+> > > RAX: 000000000000000a RBX: 1ffff92002d37d60 RCX: 0000000000000002
+> > > RDX: 0000000000000050 RSI: 0000000000000000 RDI: 0000000000000050
+> > > RBP: ffffc900169beca8 R08: dffffc0000000000 R09: 0000000000000001
+> > > R10: dffffc0000000000 R11: fffffbfff1d2fe76 R12: 0000000000000000
+> > > R13: 0000000000000001 R14: 0000000000000002 R15: ffff88802091d940
+> > > FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:000000000=
+0000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00007fa22a3fe000 CR3: 000000004b5e1000 CR4: 00000000003506e0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >  <TASK>
+> > >  lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5761
+> > >  seqcount_lockdep_reader_access+0x139/0x220 include/linux/seqlock.h:1=
+02
+> > >  get_fs_root_rcu fs/d_path.c:244 [inline]
+> > >  d_path+0x2f0/0x6e0 fs/d_path.c:286
+> > >  audit_log_d_path+0xd3/0x310 kernel/audit.c:2139
+> > >  dump_common_audit_data security/lsm_audit.c:224 [inline]
+> > >  common_lsm_audit+0x7cf/0x1a90 security/lsm_audit.c:458
+> > >  smack_log+0x421/0x540 security/smack/smack_access.c:383
+> > >  smk_tskacc+0x2ff/0x360 security/smack/smack_access.c:253
+> > >  smack_inode_getattr+0x203/0x270 security/smack/smack_lsm.c:1202
+> > >  security_inode_getattr+0xd3/0x120 security/security.c:2114
+> > >  vfs_getattr+0x25/0x70 fs/stat.c:167
+> > >  ovl_getattr+0x1b1/0xf70 fs/overlayfs/inode.c:174
+> > >  ima_check_last_writer security/integrity/ima/ima_main.c:171 [inline]
+> > >  ima_file_free+0x26e/0x4b0 security/integrity/ima/ima_main.c:203
+> >
+> > Ugh, I think the root of this might all be the call back into
+> > vfs_getattr() that happens on overlayfs:
+> >
+> > __fput()
+> > -> ima_file_free()
+> >    -> mutex_lock()
+> >    -> vfs_getattr_nosec()
+> >       -> i_op->getattr() =3D=3D ovl_getattr()
+> >          -> vfs_getattr()
+> >           -> security_inode_getattr()
+> >    -> mutex_unlock()
+> >
+> > So either overlayfs needs to call vfs_getattr_nosec() when the request
+> > comes from vfs_getattr_nosec() or this needs to use
+> > backing_file_real_path() to operate on the real underlying path.
+> >
+> > Thoughts?
+> >
+>
+> When you say "this needs to use backing_file_real_path()", what do you
+> mean by "this"? IMA?
+>
+> That said, passing some sort of NOSEC flag to vfs_getattr that
+> designates the call as kernel-internal seems like the more correct thing
+> to do here, and might be useful in other weird stacking cases like this.
+>
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/i2c/busses/i2c-pnx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I don't think that NOSEC is the root cause.
 
-diff --git a/drivers/i2c/busses/i2c-pnx.c b/drivers/i2c/busses/i2c-pnx.c
-index 82400057f810..ecbbb60407c3 100644
---- a/drivers/i2c/busses/i2c-pnx.c
-+++ b/drivers/i2c/busses/i2c-pnx.c
-@@ -683,8 +683,7 @@ static int i2c_pnx_probe(struct platform_device *pdev)
- 		 "%s", pdev->name);
- 
- 	/* Register I/O resource */
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	alg_data->ioaddr = devm_ioremap_resource(&pdev->dev, res);
-+	alg_data->ioaddr = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(alg_data->ioaddr))
- 		return PTR_ERR(alg_data->ioaddr);
- 
--- 
-2.39.0
+If you ever noticed file_dentry() sprinkled through fs code,
+it is only there because if that code were to call use helpers
+that rely on file_inode() and d_inode(file->f_path.dentry) being
+the same - bad things will happen and NOSEC will not cover
+all those bad things.
 
+IMA code also has file_dentry() sprinkled.
+But it still accesses file->f_path in a few places and that
+can result in bad things.
+
+Thanks,
+Amir.
