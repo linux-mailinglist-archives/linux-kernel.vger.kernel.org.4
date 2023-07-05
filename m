@@ -2,121 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5549E7489FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628107489FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjGERQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
+        id S232350AbjGERQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjGERQc (ORCPT
+        with ESMTP id S232342AbjGERQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:16:32 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388BD173F;
-        Wed,  5 Jul 2023 10:16:31 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365Fgupx003052;
-        Wed, 5 Jul 2023 19:16:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=gGj1Dt59rSJT83vctVPmKjU0cUWyk4vuQ+qAY3jlC0c=;
- b=Yn4+vjqDron9kSm/b6nn+ZJOvsJCQ9VvAcn5MPryAC9quwIf5e2Pa7FvsSqyj+9X09Em
- wkeVJhoyUl+2BK+/4JNRY91aeCqOWuiAkEOtGxODgYj/+9OUe8w20bpjiLlV22wUMZJL
- YZBklYzrRcD/55tFetLtmWMklboVwTfJacbMvj0EhQoazTs/VxVcMs7HZ9Oh4qupJhQV
- Hyqx7yM2feffQdPpbmfwBc/R0guYM5huN2JAh11O2Rvk3IF5moz7C6rppEQLOBrp6eXu
- 8PU0cRzewng9Ie5t6KTXzcbfDBHaODqGGVrxCuITVdFyZn1MnfpqoK0JFMoGuGqFaczS gA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rn8c9t0kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 19:16:19 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 40A76100060;
-        Wed,  5 Jul 2023 19:16:17 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 263E324B89D;
-        Wed,  5 Jul 2023 19:16:17 +0200 (CEST)
-Received: from [10.201.20.168] (10.201.20.168) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 5 Jul
- 2023 19:16:16 +0200
-Message-ID: <ec4f025e-680f-2145-7ca8-1ee6b38baa43@foss.st.com>
-Date:   Wed, 5 Jul 2023 19:16:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] spi: stm32: disable device mode with st,stm32f4-spi
- compatible
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230627123906.147029-1-valentin.caron@foss.st.com>
- <0815474b-a8fa-f486-fc6e-a85df88ed9b9@linaro.org>
- <c232e3f1-b703-d8d2-7e2d-19ed3f5fc3ad@foss.st.com>
- <79505e19-c5ee-36ee-c8ae-344c15f8b108@linaro.org>
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <79505e19-c5ee-36ee-c8ae-344c15f8b108@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.168]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_08,2023-07-05_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 5 Jul 2023 13:16:40 -0400
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F5E1990
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:16:38 -0700 (PDT)
+Received: by mail-wr1-x449.google.com with SMTP id ffacd0b85a97d-30e3ee8a42eso4014906f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688577397; x=1691169397;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JinL7apUcf1gP8XFQ2zINdZou7Iz++svzqv8hjqcpG4=;
+        b=qhATiPaQGUeviA9TREjpGVzTZx+eTBG89ShqA4kl7lRGvGT2pMGvWUaqt7NNkQzxyq
+         /8PfVlQzl2LO6vi9TG7V/WxWFIjejptKtQ3gE+KS0fttIaQaez4asKtUnqd5AUYlLpuD
+         awhMObsKdv38WIDH0dL6OgfJy5Ni8d4zakklW1EH4W0zfmNzHTBiGO0AhOyjihEADCxH
+         Fg9FGroFeOnM7yzvUcvZ3ud/7en6PdC+nOVuASFjR7k1Q1TKyabCB3ANMsSDPWmGrMd3
+         dsBf2Q/ywjG5B7GVmP2r7lTkTjtFXCkkDKTM8UkQgRORQmnMuSdIO/t0keG1MCfuxilF
+         52pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688577397; x=1691169397;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JinL7apUcf1gP8XFQ2zINdZou7Iz++svzqv8hjqcpG4=;
+        b=greo7zrKYQ2XXQ2sozUSRKwQ8oVhLcpjemorIdUYFM2RHdsTy8k0WNvoqcnoS/52hz
+         Em9x/du4NfC8CT/lf8nXwzMD6/bkicV0n9Zfp5d3xU9tr/WvVX9BdTm3vCEdD/MtKssW
+         knqt8PEtJsDoAgtqm5k/E/UmmlYfEu/cXWpnf8MvoTNtOYaQuPfjCSqvSf+xZmtw9tba
+         O3Mp+czPUtGqxVCKkV7Hdp0SVefPPUoeoMcMapYn7spBGRxXWjUOUvCTzhB6pD3FPzWm
+         OiVbXt/E64k/nfolR/wvX76Rbx+mK+xcBpKVmVyDt6qSqBIAqWQ+JhZqVCuOlgb6lWX0
+         r46A==
+X-Gm-Message-State: ABy/qLZxfdeTSfOsEGqe/6/0hTbRSCP5sxeBvlIew2Mcc1hoSwEgmQgX
+        oo53QwqpUi3UI2Tfrhew2mEPu01ID7r6QQ==
+X-Google-Smtp-Source: APBJJlFkHZZLMEUKPg1ln3ifk7FwbaHB5Cy7w0D302g94jAtmOYJbK1FmiBpCETF2/qG1bslXczmFq8a2EmO8w==
+X-Received: from mostafa.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:333c])
+ (user=smostafa job=sendgmr) by 2002:adf:dd0a:0:b0:313:ff50:2855 with SMTP id
+ a10-20020adfdd0a000000b00313ff502855mr108174wrm.9.1688577396831; Wed, 05 Jul
+ 2023 10:16:36 -0700 (PDT)
+Date:   Wed,  5 Jul 2023 17:16:32 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230705171632.3912123-1-smostafa@google.com>
+Subject: [PATCH] KVM: arm64: Add missing BTI instruction in kvm_host_psci_cpu_entry
+From:   Mostafa Saleh <smostafa@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com, sudeep.holla@arm.com,
+        Mostafa Saleh <smostafa@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Krzysztof
+kvm_host_psci_cpu_entry is called from __kvm_hyp_init_cpu through "br"
+instruction as __kvm_hyp_init_cpu resides in idmap section while
+kvm_host_psci_cpu_entry is in hyp .text so the offset is larger than
+26 bits covered by "b".
+Which means that this function should start with "bti j" instruction.
 
-On 7/1/23 10:09, Krzysztof Kozlowski wrote:
-> On 28/06/2023 18:21, Valentin CARON wrote:
->> Hi,
->>
->> On 6/27/23 15:39, Krzysztof Kozlowski wrote:
->>> On 27/06/2023 14:39, Valentin Caron wrote:
->>>> STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
->>>> Stop probing if this case happens, and print an error with involved
->>>> compatible.
->>>>
->>> ...
->>>
->>>>    
->>>>    static const struct of_device_id stm32_spi_of_match[] = {
->>>> @@ -1798,8 +1802,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
->>>>    	struct device_node *np = pdev->dev.of_node;
->>>>    	bool device_mode;
->>>>    	int ret;
->>>> +	const char *compatible =
->>>> +		of_match_device(pdev->dev.driver->of_match_table, &pdev->dev)->compatible;
->>> The goal was to replace it, so drop it.
->> Is is still needed for dev_err, so I can't
-> Why do you need it for dev_err? Isn't it entirely redundant?
->
-> Best regards,
-> Krzysztof
->
-Only to have a clearer error message. To let know to user that spi 
-device is not available on this device.
+LLVM which is the only compiler supporting BTI for Linux, adds "bti j"
+for jump tables or by when taking the address of the block [1].
+And same behaviour is observed with GCC.
 
-Right now, there is only one compatible where spi device can't be 
-enable. So I could use a static message. But this is not the best if a 
-new compatible is added.
+As kvm_host_psci_cpu_entry is a C function, this must be done in
+assembly.
 
-Regards,
-Valentin
+Another solution is to use X16/X17 with "br", as according to ARM
+ARM DDI0487I.a RLJHCL/IGMGRS, PACIASP has an implicit branch
+target identification instruction that is compatible with
+PSTATE.BTYPE 0b01 which includes "br X16/X17"
+And the kvm_host_psci_cpu_entry has PACIASP as it is an external
+function.
+Although I see that using explicit "bti" makes more clear than relying
+on which register is used.
+
+A third solution is to clear SCTLR_EL2.BT, which would make PACIASP
+compatible PSTATE.BTYPE 0b11 ( "br" to other registers).
+However this deviates from the kernel behaviour (in bti_enable()).
+
+[1] https://reviews.llvm.org/D52867
+
+Fixes: b53d4a272349 ("KVM: arm64: Use BTI for nvhe")
+Signed-off-by: Mostafa Saleh <smostafa@google.com>
+Reported-and-tested-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ arch/arm64/kvm/hyp/nvhe/host.S       | 10 ++++++++++
+ arch/arm64/kvm/hyp/nvhe/psci-relay.c |  2 +-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+index c87c63133e10..9d6e95b32097 100644
+--- a/arch/arm64/kvm/hyp/nvhe/host.S
++++ b/arch/arm64/kvm/hyp/nvhe/host.S
+@@ -297,3 +297,13 @@ SYM_CODE_START(__kvm_hyp_host_forward_smc)
+ 
+ 	ret
+ SYM_CODE_END(__kvm_hyp_host_forward_smc)
++
++/*
++ * kvm_host_psci_cpu_entry is called through br instruction, which requires
++ * BTI J instruction, compilers (gcc and llvm) doesn't insert BTI J for external
++ * functions, but BTI C instead.
++ */
++SYM_CODE_START(kvm_host_psci_cpu_entry)
++       bti j
++       b __kvm_host_psci_cpu_entry
++SYM_CODE_END(kvm_host_psci_cpu_entry)
+diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+index 08508783ec3d..24543d2a3490 100644
+--- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
++++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
+@@ -200,7 +200,7 @@ static int psci_system_suspend(u64 func_id, struct kvm_cpu_context *host_ctxt)
+ 			 __hyp_pa(init_params), 0);
+ }
+ 
+-asmlinkage void __noreturn kvm_host_psci_cpu_entry(bool is_cpu_on)
++asmlinkage void __noreturn __kvm_host_psci_cpu_entry(bool is_cpu_on)
+ {
+ 	struct psci_boot_args *boot_args;
+ 	struct kvm_cpu_context *host_ctxt;
+-- 
+2.41.0.255.g8b1d071c50-goog
+
