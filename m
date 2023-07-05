@@ -2,125 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B1C748781
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DF3748785
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233119AbjGEPKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
+        id S233127AbjGEPLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbjGEPK3 (ORCPT
+        with ESMTP id S232310AbjGEPLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:10:29 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62364FF
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:10:28 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51e29964942so437475a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 08:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688569827; x=1691161827;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ojk3pDsa51gaTaxBdleXM77SdabdORvtbCdzylQ7aXw=;
-        b=VM+h4H/I+ISVvdSZF7+xa0kUZGQpMhrHfPbNPpbll3S69f3ls36LuXEqbCX0sP0mQz
-         rsqXKouAkHWZ7YDP0FPt1gDaXBTwOn0SLGkKb4Om0en+IcJ4jnm0MgH/0gueKRejLFyX
-         fqqtLfH8PuzpHBp4EQr5Y62sVkev00Ydy8dfLH9NrsWhXuBhf/eJZs//zR1yPVKY89xF
-         bL4U5IWxnz3JpOs1RnNuIkpLZ3Rv/likz0OwrlQkyUjHUnbHDpahsW52mZLVGcyjN6Co
-         sR2sgW+7y/x/+5p7tUPcphzffGhazJCPhzZGEcwhY2i0F3UFr/izu5sbrRPL6ad+GuWa
-         mdNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688569827; x=1691161827;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ojk3pDsa51gaTaxBdleXM77SdabdORvtbCdzylQ7aXw=;
-        b=GdZyFrb6S3Mb9Tf3XHei74cfaj4C8chfZQHUlBRdvT1NZwIKV+nzVG7g/TL5KwFZQY
-         x6c655WThP5F7UdIwewfsJ8u4E81LIexc/J4wskPUVI7Hu8I//NGRi5PAsgW6dRF5q1u
-         UmsMjKCkF6kBpwJEC04xKZ8fujUOa4mAwpbLi7ntBY7QtZWdLE7OpjtPEEkk3VYXytPF
-         UZnjgN3Iqx7v1rhg4zDeLzC0VUguxo44by6q+vqqA1+xOVLoZn3G+x3k9jnF3wPyVp5E
-         sqYrA49ghRNgeO+9cYrIxI+1OfuUQ+Qs0o2fZkq8J60iVvAa2iCJWinmT+lVGsnhhBlV
-         U6vA==
-X-Gm-Message-State: ABy/qLZUzQ1i84sygLt54WtWBaC8aPKdMa3qlYXAXXAFsFnDxV2CNxbd
-        1DJz2M6ecyfUeRuywf5EX872FQ==
-X-Google-Smtp-Source: APBJJlHDC2b8tDc58SLetk9Km4GvR9xb6KBbjGGP6NVaYSdVWCr8mOuYLPQpZcF/aAvoavG302aeqA==
-X-Received: by 2002:aa7:c592:0:b0:518:7cf5:7ff8 with SMTP id g18-20020aa7c592000000b005187cf57ff8mr11568239edq.12.1688569826896;
-        Wed, 05 Jul 2023 08:10:26 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g17-20020a056402181100b0051e249f3dc6sm1627164edy.72.2023.07.05.08.10.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 08:10:26 -0700 (PDT)
-Message-ID: <abf11e52-c7ff-a3d3-8886-1c61d04fb599@linaro.org>
-Date:   Wed, 5 Jul 2023 17:10:24 +0200
+        Wed, 5 Jul 2023 11:11:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277D1123
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688569841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0oUPF27DN5scCDEZIBj1Evs/zZhcrQVhVD5HGAd52rM=;
+        b=fFmTF2MxXYvnFZX6tOcjL75rXTX4hQULEEPSIdIBp4gjsYS2JEP1qTPkR2FSlVFJ3R7bPx
+        mgi4b3EL5LBfXwxxmtukYhOWCKqp97qG+OjzeWEKDDr2T+FctiaHf/u2QkpG7tQQd9BeKM
+        nVRJsymxnVscziz4KrphL21m3y6BDcM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-395-kGvdzjCnPnSeuW96lJdd5A-1; Wed, 05 Jul 2023 11:10:38 -0400
+X-MC-Unique: kGvdzjCnPnSeuW96lJdd5A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 661B2882389;
+        Wed,  5 Jul 2023 15:10:37 +0000 (UTC)
+Received: from ovpn-8-34.pek2.redhat.com (ovpn-8-34.pek2.redhat.com [10.72.8.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4125F492B01;
+        Wed,  5 Jul 2023 15:10:32 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 23:10:28 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     chengming.zhou@linux.dev
+Cc:     axboe@kernel.dk, hch@lst.de, tj@kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: Re: [PATCH v2 2/4] blk-flush: count inflight flush_data requests
+Message-ID: <ZKWH5ANh/hq3Eyn0@ovpn-8-34.pek2.redhat.com>
+References: <20230629110359.1111832-1-chengming.zhou@linux.dev>
+ <20230629110359.1111832-3-chengming.zhou@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1] media:Fix repeated initialization
-Content-Language: en-US
-To:     Wang Ming <machel@vivo.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-References: <20230705142142.3526-1-machel@vivo.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230705142142.3526-1-machel@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230629110359.1111832-3-chengming.zhou@linux.dev>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 16:21, Wang Ming wrote:
-> If the first report returns NULL,
-> there is no need to execute the
-> fimc_capture_try_format() function
-> again.
-
-Few nitpicks only, as I don't know the code unfortunately:
-
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
-
+On Thu, Jun 29, 2023 at 07:03:57PM +0800, chengming.zhou@linux.dev wrote:
+> From: Chengming Zhou <zhouchengming@bytedance.com>
 > 
-> Signed-off-by: Wang Ming <machel@vivo.com>
+> The flush state machine use a double list to link all inflight
+> flush_data requests, to avoid issuing separate post-flushes for
+> these flush_data requests which shared PREFLUSH.
+> 
+> So we can't reuse rq->queuelist, this is why we need rq->flush.list
+> 
+> In preparation of the next patch that reuse rq->queuelist for flush
+> state machine, we change the double linked list to unsigned long
+> counter, which count all inflight flush_data requests.
+> 
+> This is ok since we only need to know if there is any inflight
+> flush_data request, so unsigned long counter is good.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 > ---
->  .../media/platform/samsung/exynos4-is/fimc-capture.c   | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+>  block/blk-flush.c | 9 +++++----
+>  block/blk.h       | 5 ++---
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-capture.c b/drivers/media/platform/samsung/exynos4-is/fimc-capture.c
-> index a0d43bf892e6..5ce2f04afa1e 100644
-> --- a/drivers/media/platform/samsung/exynos4-is/fimc-capture.c
-> +++ b/drivers/media/platform/samsung/exynos4-is/fimc-capture.c
-> @@ -825,10 +825,12 @@ static int fimc_pipeline_try_format(struct fimc_ctx *ctx,
->  		tfmt->height = mf->height;
->  		ffmt = fimc_capture_try_format(ctx, &tfmt->width, &tfmt->height,
->  					NULL, &fcc, FIMC_SD_PAD_SINK_CAM);
-> -		ffmt = fimc_capture_try_format(ctx, &tfmt->width, &tfmt->height,
-> -					NULL, &fcc, FIMC_SD_PAD_SOURCE);
-> -		if (ffmt && ffmt->mbus_code)
-> -			mf->code = ffmt->mbus_code;
-> +		if (ffmt) {
-> +			ffmt = fimc_capture_try_format(ctx, &tfmt->width, &tfmt->height,
-> +				NULL, &fcc, FIMC_SD_PAD_SOURCE);
+> diff --git a/block/blk-flush.c b/block/blk-flush.c
+> index dba392cf22be..bb7adfc2a5da 100644
+> --- a/block/blk-flush.c
+> +++ b/block/blk-flush.c
+> @@ -187,7 +187,8 @@ static void blk_flush_complete_seq(struct request *rq,
+>  		break;
+>  
+>  	case REQ_FSEQ_DATA:
+> -		list_move_tail(&rq->flush.list, &fq->flush_data_in_flight);
+> +		list_del_init(&rq->flush.list);
+> +		fq->flush_data_in_flight++;
+>  		spin_lock(&q->requeue_lock);
+>  		list_add_tail(&rq->queuelist, &q->flush_list);
+>  		spin_unlock(&q->requeue_lock);
+> @@ -299,7 +300,7 @@ static void blk_kick_flush(struct request_queue *q, struct blk_flush_queue *fq,
+>  		return;
+>  
+>  	/* C2 and C3 */
+> -	if (!list_empty(&fq->flush_data_in_flight) &&
+> +	if (fq->flush_data_in_flight &&
+>  	    time_before(jiffies,
+>  			fq->flush_pending_since + FLUSH_PENDING_TIMEOUT))
+>  		return;
+> @@ -374,6 +375,7 @@ static enum rq_end_io_ret mq_flush_data_end_io(struct request *rq,
+>  	 * the comment in flush_end_io().
+>  	 */
+>  	spin_lock_irqsave(&fq->mq_flush_lock, flags);
+> +	fq->flush_data_in_flight--;
+>  	blk_flush_complete_seq(rq, fq, REQ_FSEQ_DATA, error);
+>  	spin_unlock_irqrestore(&fq->mq_flush_lock, flags);
+>  
+> @@ -445,7 +447,7 @@ bool blk_insert_flush(struct request *rq)
+>  		blk_rq_init_flush(rq);
+>  		rq->flush.seq |= REQ_FSEQ_POSTFLUSH;
+>  		spin_lock_irq(&fq->mq_flush_lock);
+> -		list_move_tail(&rq->flush.list, &fq->flush_data_in_flight);
+> +		fq->flush_data_in_flight++;
+>  		spin_unlock_irq(&fq->mq_flush_lock);
+>  		return false;
+>  	default:
+> @@ -496,7 +498,6 @@ struct blk_flush_queue *blk_alloc_flush_queue(int node, int cmd_size,
+>  
+>  	INIT_LIST_HEAD(&fq->flush_queue[0]);
+>  	INIT_LIST_HEAD(&fq->flush_queue[1]);
+> -	INIT_LIST_HEAD(&fq->flush_data_in_flight);
+>  
+>  	return fq;
+>  
+> diff --git a/block/blk.h b/block/blk.h
+> index 608c5dcc516b..686712e13835 100644
+> --- a/block/blk.h
+> +++ b/block/blk.h
+> @@ -15,15 +15,14 @@ struct elevator_type;
+>  extern struct dentry *blk_debugfs_root;
+>  
+>  struct blk_flush_queue {
+> +	spinlock_t		mq_flush_lock;
+>  	unsigned int		flush_pending_idx:1;
+>  	unsigned int		flush_running_idx:1;
+>  	blk_status_t 		rq_status;
+>  	unsigned long		flush_pending_since;
+>  	struct list_head	flush_queue[2];
+> -	struct list_head	flush_data_in_flight;
+> +	unsigned long		flush_data_in_flight;
+>  	struct request		*flush_rq;
+> -
+> -	spinlock_t		mq_flush_lock;
 
-This does not look aligned.
+Looks fine,
 
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-
-Best regards,
-Krzysztof
+Thanks,
+Ming
 
