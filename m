@@ -2,221 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD57747FEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506C3747FF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjGEImK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S232007AbjGEImT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjGEImI (ORCPT
+        with ESMTP id S230035AbjGEImN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:42:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E53019A2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:41:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688546479;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RMcHS+HYh08mQ8rBNMcHYRimEbsxb6yaJnh1Kb3mgQ0=;
-        b=FYfxK6T1gDraYjxAZhyiNOOvgs2RLZEKGipfkdDAnExxOG+znph/NzBvWiWzmsg4TEH1Sa
-        5jhKjWt5w6okMC1OSLjPxGgm8Xic84lsWKqbjkWrpZ7Wi/A2fxbRXrf/J9Uw0u/P3XOJCz
-        GVywlv+iRXXtrTiZnIOmXKMUy20Wnxs=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-531-MmUd_ucTPW6wvzJvylW9LA-1; Wed, 05 Jul 2023 04:41:18 -0400
-X-MC-Unique: MmUd_ucTPW6wvzJvylW9LA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-313e65772d8so6611782f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 01:41:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688546477; x=1691138477;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMcHS+HYh08mQ8rBNMcHYRimEbsxb6yaJnh1Kb3mgQ0=;
-        b=IANI4mmk7eWxawpQNy3ZEZdmNsuJ8HIXVtKojnPOtXS2p7c6M0Osbw2C+hQvOkpuND
-         8pV18JQM7nrh59Gn0HA8el7cs0Fj63GxnmxIcsfdphM6x0OravnI44RmKBzeOOx5cL13
-         UrPGTsDKIo7dkDdz5UOsmn8T7cMT6tt5XHJ+YW68fUKBYHxpybLkfRf3fsKdfMZmY+Ab
-         2ewAC7/xHBSjPKX9LvN+jC4j6e+wC2NEu7VmBJGi5wNJf2wpEer9Wbvg3mQXSaSu403O
-         dm8SYrmV/3JVCoRihkSRjxxD/603HxLq7RdZFdztMJHoO1WxwLcC12FxCi0HNeL7DnuP
-         w1/w==
-X-Gm-Message-State: ABy/qLY0PFydxKRDFtLoS5SMVh2CBCc8xbqQqy6QNF/SvcxAeoHb87JS
-        eHfMIfVEvQ19n28jmYq7wGpyS9QddSb04lfe/xuagHuHbHLBNfa2bNTPtj0OOVH5n7Pz0B3LrJf
-        HdehEJa+7vVbNmcW98OQDg9MZjKz+JVho
-X-Received: by 2002:adf:facd:0:b0:311:110d:5573 with SMTP id a13-20020adffacd000000b00311110d5573mr17013460wrs.64.1688546477134;
-        Wed, 05 Jul 2023 01:41:17 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHYhxj8BmOxwM9GKxq6po7y4so3795albr5tzeL1hNw2jElCVSdO5UxrFnmlOXNJqsKErJ/XQ==
-X-Received: by 2002:adf:facd:0:b0:311:110d:5573 with SMTP id a13-20020adffacd000000b00311110d5573mr17013442wrs.64.1688546476766;
-        Wed, 05 Jul 2023 01:41:16 -0700 (PDT)
-Received: from redhat.com ([2.52.13.33])
-        by smtp.gmail.com with ESMTPSA id c13-20020adfe74d000000b0030ae499da59sm15301643wrn.111.2023.07.05.01.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 01:41:16 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 04:41:12 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Eugenio Perez Martin <eperezma@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Subject: Re: [PATCH] vdpa: reject F_ENABLE_AFTER_DRIVER_OK if backend does
- not support it
-Message-ID: <20230705043940-mutt-send-email-mst@kernel.org>
-References: <20230703142218.362549-1-eperezma@redhat.com>
- <20230703105022-mutt-send-email-mst@kernel.org>
- <CAJaqyWf2F_yBLBjj1RiPeJ92_zfq8BSMz8Pak2Vg6QinN8jS1Q@mail.gmail.com>
- <20230704063646-mutt-send-email-mst@kernel.org>
- <CAJaqyWfdPpkD5pY4tfzQdOscLBcrDBhBqzWjMbY_ZKsoyiqGdA@mail.gmail.com>
- <20230704114159-mutt-send-email-mst@kernel.org>
- <CACGkMEtWjOMtsbgQ2sx=e1BkuRSyDmVfXDccCm-QSiSbacQyCA@mail.gmail.com>
-MIME-Version: 1.0
+        Wed, 5 Jul 2023 04:42:13 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2043.outbound.protection.outlook.com [40.107.14.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93A319B;
+        Wed,  5 Jul 2023 01:42:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cZVUufogVVdQsJ/UzYEDlSwjv+SNDZXf2Uj9XPo/1EBgwhnqv0w1WEonf+KFJLM7KrvKLDk5cGWHSBN6CqS6tgaUia9PpIMIAkS4zO7KWlvHv5qVJNfbvxmeD87Up3cFxJgPmMicvbJEG1qIKBlDqxTYSvwLDxbW5swr59zW9D4qUANJDSLlUGZvuWhEq4C0/wx+/rXi6vltdUziYvq1Mz6r8XSVozWWg77cm+houd7Xs2qprjDYHspyCYo03qNwNpsBITnoLXVX7KHbWr36VF/LeJuRP5IlgSU/zol9tVgw55aEik2hP7sLHpFPx/1dcSkHYJSKXF+I7ipHkRiX/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3G0oGEWP5xBzGK1sLBABci+hI4I5xaMrjdu16ttbS2k=;
+ b=LdEWwwahp3My3tZZVKAc67wYgmqdNapPc2lMBSBAcOc95zZtL7kGAtygg5AtpRniYhkUk48UTvzqfAyHAS45M2zthtqKR71Z+jC1cyWBQZNmm7JcPvQUVF07Q30idnbOyGC9C2AEJzYO5VMvrzdQIOR5VoN0t6Drk3+cSQBfysAT4F9d1vCaFx30kDqZh1IM4FWQnu/66G/lXxIKOgQQ31DWu6GXZnsIhNlDpoWLSTBNGcyirUL+Oi6I1cHVi2aYt9TraAj4wZ077QZBdmFEmQ3hizLGDuA4dwjREgdVtUHn5Qh5EjN21rsHQ4FzR6jJAS/yIX5Yt2nxj+1wx8H/Lg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3G0oGEWP5xBzGK1sLBABci+hI4I5xaMrjdu16ttbS2k=;
+ b=iXsxauAzdsThEuxCMfNRX+TGXuu1aQJQGpgh6cwoHSS7t+AppqawtGJ6O+2d0/O9SLfS4gk5mQ/LfLM4NHbA8t+6dTrS1/s8myLffgd75A9N6Hh4ucQPUUWxJHGTQ8arAe7AEsHMHYrQnu1Z0zNssC9lr57N+7TMFCdIiHu6Oc+g/hKoC+b+MkWQuU8KBEqlLezc0/GtmpYop8Q+qQTDuBg/f//+bZIhXHbcd8nq+tFnXmQuIJjD59pIQQ9P70vAXk5Z24UCFIpX6XiGJQhrqCZ1aPHR159af3Krq5aDcdbiR4HgOsVYjztfEN7UA+/HlSMmjV25LF2LM0De3PQiZA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DB8PR04MB7164.eurprd04.prod.outlook.com (2603:10a6:10:129::23)
+ by PAXPR04MB9188.eurprd04.prod.outlook.com (2603:10a6:102:222::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
+ 2023 08:42:04 +0000
+Received: from DB8PR04MB7164.eurprd04.prod.outlook.com
+ ([fe80::637f:a940:d807:34c2]) by DB8PR04MB7164.eurprd04.prod.outlook.com
+ ([fe80::637f:a940:d807:34c2%2]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
+ 08:42:04 +0000
+Date:   Wed, 5 Jul 2023 16:41:48 +0800
+From:   joeyli <jlee@suse.com>
+To:     Weiteng Chen <wchen130@ucr.edu>, Yu Hao <yhao016@ucr.edu>
+Cc:     Yu Hao <yhao016@ucr.edu>, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: How to reproduce the BUG general protection fault in
+ hci_uart_tty_ioctl?
+Message-ID: <20230705084148.GK5866@linux-l9pv.suse>
+References: <20230628150140.GU21539@linux-l9pv.suse>
+ <CA+UBctDPEvHdkHMwD340=n02rh+jNRJNNQ5LBZNA+Wm4Keh2ow@mail.gmail.com>
+ <20230704030131.GY5866@linux-l9pv.suse>
+ <191B9131-6E47-49B6-8089-108E2B12B9DC@ucr.edu>
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEtWjOMtsbgQ2sx=e1BkuRSyDmVfXDccCm-QSiSbacQyCA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <191B9131-6E47-49B6-8089-108E2B12B9DC@ucr.edu>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-ClientProxiedBy: TY2PR06CA0001.apcprd06.prod.outlook.com
+ (2603:1096:404:42::13) To DB8PR04MB7164.eurprd04.prod.outlook.com
+ (2603:10a6:10:129::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7164:EE_|PAXPR04MB9188:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9b49d27-1684-4610-808b-08db7d33b551
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XeI+j3Swz9KPbLu+JAj3zVsh0JDxDbyxtshf7chl+Vn3L5R0Gjko9OvR9LepvmfLHmab6Q6B2gJIo3r+JEHj+DbYjvyv0gP71HaDW3p8v+9tnYTbf44TrB+LNYyJUC/22D0cQdbqYP8tOgZiICnPpDandS3imw99fljA/Axc3MklrD86fxt7dr2Xtea+xJ50zmi0XF5t8oS9u18xEwPulbpWUGHQUqINhs/vBZ+0cOTMAJ0C7tqnk4FFGqcR6MhSuPTUwAA1Wbz0kHK1UxuAfvCYkx/jP4MRfQcF3Qr75kDvFBMnSui0SxSlHRpxgHwnwo9g1AZAIPZv0cZeXEazuNOPllW/cTfel/cGF3IKGfrXSR7k6se1PTva14To7cg3g/qYVoq29wGN44qkjiWI4Bc+dgfBS1QJ743Eu957rbVBiQr4GHxl3Gc5sFaBMn++V1ShgIvyzVbtMUOR1/Y2Luqwsk0M2QqmV8rZTM9psU4R9clweOid2ObfN9xZaCY7JHmfNOO23J90TwWpzFTmip4L8RB/fa9xhTNStU08mzg945thToIVOIZWf9uCPwLB8APRYRiiq8VLbHLISjdJswBR0FLlrjJVeTxVrvwHH9fBUH5XhXFONc7ciVv4dOy0oknYzjTJXBVqqtC0ED557w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7164.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(346002)(39860400002)(366004)(136003)(451199021)(36756003)(110136005)(2906002)(478600001)(26005)(9686003)(41300700001)(33656002)(6666004)(6486002)(86362001)(966005)(8676002)(8936002)(5660300002)(316002)(6512007)(66946007)(66476007)(66556008)(38100700002)(4326008)(53546011)(1076003)(6506007)(186003)(83380400001)(43062005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXY2OWJicWNzN3RYMjR0cUt6cy9lTzljRmZKdERqTnRKUWRjUmVMN0dmZGMy?=
+ =?utf-8?B?b01JKzBrTXZsRXRyaldJZytva1JGT2lBN2M5QXJDL3ArS3hITHJZT010enVs?=
+ =?utf-8?B?eHRYck9kQnd5QncxTU54dWIrUjVvUUppMjF6N3locnhCZ2Q0bTU3ZkV6QlRJ?=
+ =?utf-8?B?aWxHVWk5R3oyLzZtUG0vU1g2MWs0VUJiVktyRzdYemFhUXhZOVdmNGIzNFk1?=
+ =?utf-8?B?bC9EbFdXNk9sZnhFLzBnbWVLaHZMbmx1L2ljR1lobGFmV2dLcWc3OTYvNm9B?=
+ =?utf-8?B?UDI4c25lRE5XSUduMjFTd0p5ZnVKc1V2S0lDUlV5bEczM1UxbTFOMlh0SFFZ?=
+ =?utf-8?B?L0hyR0pudVNORDU5RzZBSmZnd1pxVDEyNkpNMmhzb1VxQlcxaU1IQ3Zucy9G?=
+ =?utf-8?B?Z3FnNkgybG1SQ3hkUlM2TXNSTnZwUGZmaUordzBaQmVmQTZIMGRoMjUrTXZT?=
+ =?utf-8?B?b2F6dFNwWjk1dFlPakZqaDc1OHVRTnc0aGVxdnlQV3lVTDRCSHM2ZnJtZStF?=
+ =?utf-8?B?ME01ZjR4dWpLVXBDaVd4Z3VJK2FIRmZHTW4xUVpaVVJwVlpHY2ZKL21SUHlE?=
+ =?utf-8?B?akJ0VTkrbCtRSEZRYjB6c3dmekNOc3IyZWM4YWlGOFVSUkdGRE9NR3NIYVpS?=
+ =?utf-8?B?OHZDRXZYb08vVi9XQWl0L3JjL3RCOGFtNUxBdEEzTVVlcVJjQVRqWGtFd2U2?=
+ =?utf-8?B?ckprbEtNbHAwTmhDZ2JoVWREZXl4cUR4RkZJV240VGtxanNpNGlOZ0dSZ0VD?=
+ =?utf-8?B?UkxxWjRwQWJPK3dKRjVrNlUvY2hyQkxERFJ3WFdxUENvQjh5MFMwREZrQlZh?=
+ =?utf-8?B?VzdVV3lUbHkyVG0xbk5yRllVckgyL1llM0JrODkveTVDbDFXS291R3U2ZXE0?=
+ =?utf-8?B?ck1lWUY2Y1JPRmJxY3BuZzRSaEF3cXJpZ3RUcVFRM2E0TG1iTEZLL3JucW1M?=
+ =?utf-8?B?TWdNMG9heHlUbzh4OFFSSDUrbmVQRTVhZTY2VEVBdHB0YU90QlRvb1REdXMx?=
+ =?utf-8?B?WVg1OWxzSExQTUZGa0RYR3NIUEFuU1ZBYkJIdnE0NndXQjZqc0NmQVJtUFlW?=
+ =?utf-8?B?bzdqOWdyZU15WXRzbUgzOUpCTnZNVGJWbVNOQ09jcEt5NmhkajhhUU44WSth?=
+ =?utf-8?B?aFp1Y0UvTjIzamNqaitJdU4yNE9VN1NvaW1KMHlLaGRzdzA2Mm15dytNZGRh?=
+ =?utf-8?B?bCtiTDlkb2xXVGdLZ2lnUWdjakdWbFZ3UWhSanJ5aWJ5MHJzU3NGVnVLQmwr?=
+ =?utf-8?B?OEdnanJ4Y2pIOTRPdEJhKzZ0Z1l4WGIvTlBJZzRtcDh1UXcxK1V2ZmxaeWts?=
+ =?utf-8?B?b0lJWllDbWJSN0NTSDk1NURzVjVRTEFCbk9pSkhsNmE4Zllob2lna1Z0TVBl?=
+ =?utf-8?B?Z2UxMDlkN1JtNWpQNzc3WHZWSnM1VzdMRE9kOWVYbXNWb1pwZXJPTFBWenJI?=
+ =?utf-8?B?YWVJY2pBTGQ4Y1JNWW9ha3VsbDlSSW9kTW5DR3JxOWI3WUZ2WkxjcmxEQkR5?=
+ =?utf-8?B?TVMwNmFIQzhTZW5TemtFUHN3NXZidWpYTlRaQk1FZ3lwMktsdHlVYUFxaEQy?=
+ =?utf-8?B?OTZBRlh5MWhZakpGQ09YNlpQMWlPTUY3Tk9rUEtWeGhQcmJZV1oyb3hIMmVN?=
+ =?utf-8?B?VXJUV255c1lBekVtYnlYTW10eXZLVWc2U2JYL3ZiQmtDVCtsUEs1enJSUU1s?=
+ =?utf-8?B?dGk2LzhjNC83SnRnaUNTdXRSTmUzdFlOcGxxOE51eWRSb2dnYkwwUHhzejVC?=
+ =?utf-8?B?NUQ0T21lM1lkT3NGZ2JvdURSV2NBbjdqUU1aYmF2N1lNM0taQ0dTZlBNRlo2?=
+ =?utf-8?B?cTM5WHlqNEFGZjY2c1loWVArSitWejVkbnpScnF3Zmo0anVRaHVBdCt2UHpo?=
+ =?utf-8?B?TVBNaHdyTmhNemdLcEk5YnNpZnR1QXIvWVdtUkcydlRHT3NQMVJBZUdPTXll?=
+ =?utf-8?B?aStRdFcwanRBR0tMWlIxTFpWQzFTRWRoOG85cU5uNnJoUVc5WHF1YXV2VHhM?=
+ =?utf-8?B?Qit5VHJCRy9Tam9TREhYMW5sd3pXZjJGTUg4SnFDNTlhWGp2N0JQc0x2V2Vi?=
+ =?utf-8?B?SWpDMFN5VUJpUU9vaEVtc05FSEMxOXRUWVl3VXlWQzNCdVZxMzhZUXJNNzRM?=
+ =?utf-8?Q?fC3w=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9b49d27-1684-4610-808b-08db7d33b551
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7164.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 08:42:04.3785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NJ3038qA9op3oUUWNjQmx1g5nek9nI+QjLnhkRqDIyzBWJ+tvQC3BfU3/Y0r6ggA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9188
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 03:49:58PM +0800, Jason Wang wrote:
-> On Tue, Jul 4, 2023 at 11:45 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Tue, Jul 04, 2023 at 01:36:11PM +0200, Eugenio Perez Martin wrote:
-> > > On Tue, Jul 4, 2023 at 12:38 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Tue, Jul 04, 2023 at 12:25:32PM +0200, Eugenio Perez Martin wrote:
-> > > > > On Mon, Jul 3, 2023 at 4:52 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > >
-> > > > > > On Mon, Jul 03, 2023 at 04:22:18PM +0200, Eugenio Pérez wrote:
-> > > > > > > With the current code it is accepted as long as userland send it.
-> > > > > > >
-> > > > > > > Although userland should not set a feature flag that has not been
-> > > > > > > offered to it with VHOST_GET_BACKEND_FEATURES, the current code will not
-> > > > > > > complain for it.
-> > > > > > >
-> > > > > > > Since there is no specific reason for any parent to reject that backend
-> > > > > > > feature bit when it has been proposed, let's control it at vdpa frontend
-> > > > > > > level. Future patches may move this control to the parent driver.
-> > > > > > >
-> > > > > > > Fixes: 967800d2d52e ("vdpa: accept VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK backend feature")
-> > > > > > > Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> > > > > >
-> > > > > > Please do send v3. And again, I don't want to send "after driver ok" hack
-> > > > > > upstream at all, I merged it in next just to give it some testing.
-> > > > > > We want RING_ACCESS_AFTER_KICK or some such.
-> > > > > >
-> > > > >
-> > > > > Current devices do not support that semantic.
-> > > >
-> > > > Which devices specifically access the ring after DRIVER_OK but before
-> > > > a kick?
-> > > >
-> > >
-> > > Previous versions of the QEMU LM series did a spurious kick to start
-> > > traffic at the LM destination [1]. When it was proposed, that spurious
-> > > kick was removed from the series because to check for descriptors
-> > > after driver_ok, even without a kick, was considered work of the
-> > > parent driver.
-> > >
-> > > I'm ok to go back to this spurious kick, but I'm not sure if the hw
-> > > will read the ring before the kick actually. I can ask.
-> > >
-> > > Thanks!
-> > >
-> > > [1] https://lists.nongnu.org/archive/html/qemu-devel/2023-01/msg02775.html
-> >
-> > Let's find out. We need to check for ENABLE_AFTER_DRIVER_OK too, no?
+Hi Weiteng Chen, Yu Hao, 
+
+On Mon, Jul 03, 2023 at 09:07:38PM -0700, Weiteng Chen wrote:
+> Hi Joey,
 > 
-> My understanding is [1] assuming ACCESS_AFTER_KICK. This seems
-> sub-optimal than assuming ENABLE_AFTER_DRIVER_OK.
+> Sorry for my late response.
 > 
-> But this reminds me one thing, as the thread is going too long, I
-> wonder if we simply assume ENABLE_AFTER_DRIVER_OK if RING_RESET is
-> supported?
+> https://elixir.bootlin.com/linux/v6.3-rc7/source/drivers/bluetooth/hci_ldisc.c#L764
 > 
-> Thanks
+> switch (cmd) {
+>         case HCIUARTSETPROTO:
+>                 if (!test_and_set_bit(HCI_UART_PROTO_SET, &hu->flags)) {
+>                         printk(“test_and_set_bit…”) // insert a prink to make the race easy to trigger
+>                         err = hci_uart_set_proto(hu, arg);
+>                         if (err)
+>                                 clear_bit(HCI_UART_PROTO_SET, &hu->flags);
+>                 } else
+>                         err = -EBUSY;
+>                 break;
+> 
+>         case HCIUARTGETPROTO:
+>                 if (test_bit(HCI_UART_PROTO_SET, &hu->flags))
+>                         err = hu->proto->id;  ←- null pointer deference
+>                 else
+>                         err = -EUNATCH;
+>                 break;
+> 
+> This is a race condition between HCIUARTSETPROTO and HCIUARTGETPROTO. HCI_UART_PROTO_SET is set before hu->proto is set and thus it may dereference a null pointer.
+> 
+> To easily trigger this bug, I inserted a prink in the source code so that the C producer can easily trigger the bug. Please let me know if you have any questions.
+> 
 
-I don't see what does one have to do with another ...
+Thanks! I can reproduce the issue now. 
 
-I think with RING_RESET we had another solution, enable rings
-mapping them to a zero page, then reset and re-enable later.
+Weiteng, Yu Hao, do you have plan for sending patch to fix this problem?
 
-> >
-> >
-> >
-> > > > > My plan was to convert
-> > > > > it in vp_vdpa if needed, and reuse the current vdpa ops. Sorry if I
-> > > > > was not explicit enough.
-> > > > >
-> > > > > The only solution I can see to that is to trap & emulate in the vdpa
-> > > > > (parent?) driver, as talked in virtio-comment. But that complicates
-> > > > > the architecture:
-> > > > > * Offer VHOST_BACKEND_F_RING_ACCESS_AFTER_KICK
-> > > > > * Store vq enable state separately, at
-> > > > > vdpa->config->set_vq_ready(true), but not transmit that enable to hw
-> > > > > * Store the doorbell state separately, but do not configure it to the
-> > > > > device directly.
-> > > > >
-> > > > > But how to recover if the device cannot configure them at kick time,
-> > > > > for example?
-> > > > >
-> > > > > Maybe we can just fail if the parent driver does not support enabling
-> > > > > the vq after DRIVER_OK? That way no new feature flag is needed.
-> > > > >
-> > > > > Thanks!
-> > > > >
-> > > > > >
-> > > > > > > ---
-> > > > > > > Sent with Fixes: tag pointing to git.kernel.org/pub/scm/linux/kernel/git/mst
-> > > > > > > commit. Please let me know if I should send a v3 of [1] instead.
-> > > > > > >
-> > > > > > > [1] https://lore.kernel.org/lkml/20230609121244-mutt-send-email-mst@kernel.org/T/
-> > > > > > > ---
-> > > > > > >  drivers/vhost/vdpa.c | 7 +++++--
-> > > > > > >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > > > > > > index e1abf29fed5b..a7e554352351 100644
-> > > > > > > --- a/drivers/vhost/vdpa.c
-> > > > > > > +++ b/drivers/vhost/vdpa.c
-> > > > > > > @@ -681,18 +681,21 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-> > > > > > >  {
-> > > > > > >       struct vhost_vdpa *v = filep->private_data;
-> > > > > > >       struct vhost_dev *d = &v->vdev;
-> > > > > > > +     const struct vdpa_config_ops *ops = v->vdpa->config;
-> > > > > > >       void __user *argp = (void __user *)arg;
-> > > > > > >       u64 __user *featurep = argp;
-> > > > > > > -     u64 features;
-> > > > > > > +     u64 features, parent_features = 0;
-> > > > > > >       long r = 0;
-> > > > > > >
-> > > > > > >       if (cmd == VHOST_SET_BACKEND_FEATURES) {
-> > > > > > >               if (copy_from_user(&features, featurep, sizeof(features)))
-> > > > > > >                       return -EFAULT;
-> > > > > > > +             if (ops->get_backend_features)
-> > > > > > > +                     parent_features = ops->get_backend_features(v->vdpa);
-> > > > > > >               if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
-> > > > > > >                                BIT_ULL(VHOST_BACKEND_F_SUSPEND) |
-> > > > > > >                                BIT_ULL(VHOST_BACKEND_F_RESUME) |
-> > > > > > > -                              BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK)))
-> > > > > > > +                              parent_features))
-> > > > > > >                       return -EOPNOTSUPP;
-> > > > > > >               if ((features & BIT_ULL(VHOST_BACKEND_F_SUSPEND)) &&
-> > > > > > >                    !vhost_vdpa_can_suspend(v))
-> > > > > > > --
-> > > > > > > 2.39.3
-> > > > > >
-> > > >
-> >
+Joey Lee
 
+
+> Best,
+> Weiteng Chen
+> 
+> > On Jul 3, 2023, at 8:01 PM, joeyli <jlee@suse.com> wrote:
+> > 
+> > Hi,
+> > 
+> > On Wed, Jun 28, 2023 at 06:57:47PM -0700, Yu Hao wrote:
+> >> Hi Weiteng,
+> >> 
+> >> Could you give more info about the bug, e.g., kernel configuration,
+> >> qemu arguments.
+> >> 
+> > 
+> > Base on kernel code, looks that the HCIUARTSETPROTO and HCIUARTGETPROTO
+> > blocks in hci_uart_tty_ioctl() should use hci_uart->proto_lock. 
+> > 
+> > I have run the C reproducer a couple of days in qemu, but it did not
+> > reproduce issue until now.
+> > 
+> > Does anyone know how to reproduce this issue easily?
+> > 
+> > Thanks
+> > Joey Lee
+> >> 
+> >> On Wed, Jun 28, 2023 at 8:02 AM joeyli <jlee@suse.com> wrote:
+> >>> 
+> >>> Hi Yu Hao,
+> >>> 
+> >>> I am looking at your "BUG: general protection fault in hci_uart_tty_ioctl":
+> >>> 
+> >>> https://lore.kernel.org/all/CA+UBctC3p49aTgzbVgkSZ2+TQcqq4fPDO7yZitFT5uBPDeCO2g@mail.gmail.com/
+> >>> 
+> >>> I am trying the C reproducer in your URL, but it is not success yet:
+> >>> https://gist.github.com/ZHYfeng/a3e3ff2bdfea5ed5de5475f0b54d55cb
+> >>> 
+> >>> I am using v6.2 mainline kernel to run the C reproducer.
+> >>> 
+> >>> Could you please provide suggestions for how to reproduce this issue?
+> >>> And what is your qemu environment for reproducing issue?
+> >>> 
+> >>> Thanks a lot!
+> >>> Joey Lee
