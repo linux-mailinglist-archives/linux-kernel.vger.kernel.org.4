@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8501748030
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28622748035
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbjGEIy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S229776AbjGEIzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjGEIyZ (ORCPT
+        with ESMTP id S231317AbjGEIzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:54:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F15E47;
-        Wed,  5 Jul 2023 01:54:24 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3657UkoF005349;
-        Wed, 5 Jul 2023 08:54:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=YoDoblR7kbON3CTgY71+4Rb/WnyCqKR+rW7kULg6i6o=;
- b=XxvQjaVXkuMj2VdCyXkPeX5yiODteTxShJ5eVF8dMJiT9a3WQdN/ByWuzyH6M0NrIylf
- TlTk5M19yFyvh+mxyyvm5N1gjuOffKJ5IsUv2ngH8Nv89EJ4IiYJTpccSfKR1tGSQKFl
- eqAdM7FztmtOAfzUfpb6C1VbDpWfRgx5Ls/7xGhejBLvpuHhA4q5f7dSa/jdRZeX7+eN
- SQ6zyb011Ip+/XPT9Oto5yrJ1eGRaDpp4FA4eiRC7sIT2N5rGj02880brE4LeH28OalC
- 2Zxvq242eUHRObFMcELz0Y9bcFDoxHB35iMFLaHTniwOFqfbyrhmXTcd+P5zazWEKbkJ pQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rmnw6h9mj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 08:54:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3658sInc007167
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jul 2023 08:54:18 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 5 Jul
- 2023 01:54:14 -0700
-Message-ID: <06506ed7-f861-0bca-8b87-e2da6a6bc789@quicinc.com>
-Date:   Wed, 5 Jul 2023 14:24:10 +0530
+        Wed, 5 Jul 2023 04:55:09 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81381719
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:55:07 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-99364ae9596so368222866b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 01:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688547306; x=1691139306;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hdnXLK7qXLON81pPPrHpzO/9z7s+rm9QJ6FuVbRQdbs=;
+        b=bQVOCTRLHSWl3pJ/aG3YOm3LoqJo7lD7UF8wSJdcUBzA8ywgE0ThA+Qi8SM1g3hvWj
+         hhmd6nSlFhTugGouHtRnBPXyQcVhXkPtdxwGnvo0foz1ctz5ZYrwTeJncUn4iCMC1gV5
+         BdZ4sp8EyYztinmdKrS2ISk7bcr6hh5CvbSmvU26Fves47jjy547Wpj0tUZdLpbTvRpu
+         bl1CSqthUc3FXSifcMk8VMmy+3JmquUL/k58DZB251hag4i0v11hSaeNQtxzwIMcRfmA
+         I8ui84qB/VmIOwh6ZEtRoCB27JUN72/+eT9MKwl00JxnKS+sCmOVm/R8N/5XPp292rRU
+         +NoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688547306; x=1691139306;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hdnXLK7qXLON81pPPrHpzO/9z7s+rm9QJ6FuVbRQdbs=;
+        b=NU9+y/cijNzkwOZA36PYGikxKYmNiOLO0tUciv4mfTnIv6UUSOPgg5ehYXKbkolTJi
+         5Acm3anZCTkhuY5uqUpbNnZ0vAs3IQtL3ud6pdl7A5YU3QpMHXHz3z8uYRUXQP58L/zN
+         tUGN50mOqH18KeOvAJ/q8WTxg13QjEAC9d1oTI74kH7wTmnxxnhqc4lcPtIKqUTZkzF1
+         tFQMgtVdCQAEzewnbC2ezBHItGd2CivF33f+bWXF97vw8rpU7r9nyMyXKzwkaZTpOs+o
+         UxDbccuD4Aa8tVdI5rHQ4m7Ou54RsUOqzlmoxwebQvgOOIA98pbjUMQQBmUJYQG47WQY
+         Kwcw==
+X-Gm-Message-State: ABy/qLbXrALE88VWNMvCarRvnwJD5cx735B0he5RX1heeHdOgYGexD6D
+        sBpIW1FK7grBUqTX/u0C64D3Bw==
+X-Google-Smtp-Source: APBJJlF18nZ62Q03EIuvQIs4j7WBKWQva+whWpxRMq7n8XPt8oxM94B6qxAs5mNE01oHizT5YtFx9g==
+X-Received: by 2002:a17:906:3bd3:b0:982:870f:9e8f with SMTP id v19-20020a1709063bd300b00982870f9e8fmr10500224ejf.62.1688547306173;
+        Wed, 05 Jul 2023 01:55:06 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id j13-20020aa7de8d000000b0051a2c7f5b0fsm13076264edv.88.2023.07.05.01.55.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 01:55:05 -0700 (PDT)
+Message-ID: <e684d1bc-f2bd-3505-3d8d-cf108e2a1586@linaro.org>
+Date:   Wed, 5 Jul 2023 10:55:03 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 02/10] dt-bindings: power: Add rpm power domains for SDX75
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] watchdog: s3c2410: Fix potential deadlock on &wdt->lock
 Content-Language: en-US
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <sboyd@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-References: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
- <1688395346-3126-3-git-send-email-quic_rohiagar@quicinc.com>
- <0d468d08-6410-e424-b4f3-5245cdb0334a@linaro.org>
- <85456057-c4ef-68a6-4fc5-c9fd03b01b71@quicinc.com>
-In-Reply-To: <85456057-c4ef-68a6-4fc5-c9fd03b01b71@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nhIdpD_LGIKz5NV-vTkq9js7nBo1tA30
-X-Proofpoint-ORIG-GUID: nhIdpD_LGIKz5NV-vTkq9js7nBo1tA30
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_16,2023-07-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 impostorscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=620 adultscore=0 suspectscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307050081
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+To:     Chengfeng Ye <dg573847474@gmail.com>
+Cc:     alim.akhtar@samsung.com, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230628164759.67594-1-dg573847474@gmail.com>
+ <b6d3a872-f32e-bfcd-b603-c08339737045@linaro.org>
+ <CAAo+4rUzusAyyffkCvEq+wJQacqfrcTx-SviqXaTzPsqOkjB7w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAAo+4rUzusAyyffkCvEq+wJQacqfrcTx-SviqXaTzPsqOkjB7w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,73 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/07/2023 18:10, Chengfeng Ye wrote:
+> Hi, Krzysztof
+> 
+> Thanks for the reply.
+> 
+>> This interrupt is a threaded interrupt. Therefore the
+>> s3c2410wdt_keepalive() will be called again from process thread. Are you
+>> sure there is deadlock?
+> 
+> Is it really that s3c2410wdt_irq is a threaded interrupt? I could be wrong
+> but I can
+> see that the interrupt is registered via the following code. It is the
+> third argument
+> of devm_request_irq but not devm_request_threaded_irq or
+> request_threaded_irq,
+> as far as I know, it should be an interrupt handler for the interrupt line
+> wdt_irq
+> executed under irq context.
+> 
+> ret = devm_request_irq(dev, wdt_irq, s3c2410wdt_irq, 0, pdev->name, pdev);
 
-On 7/4/2023 11:47 AM, Rohit Agarwal wrote:
->
-> On 7/3/2023 8:29 PM, Konrad Dybcio wrote:
->> On 3.07.2023 16:42, Rohit Agarwal wrote:
->>> Add RPM power domain bindings for the SDX75 SoC.
->>>
->>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->>> ---
->>>   Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
->>>   include/dt-bindings/power/qcom-rpmpd.h                  | 8 ++++++++
->>>   2 files changed, 9 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml 
->>> b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
->>> index afad313..58e1be8 100644
->>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
->>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
->>> @@ -40,6 +40,7 @@ properties:
->>>         - qcom,sdm845-rpmhpd
->>>         - qcom,sdx55-rpmhpd
->>>         - qcom,sdx65-rpmhpd
->>> +      - qcom,sdx75-rpmhpd
->>>         - qcom,sm6115-rpmpd
->>>         - qcom,sm6125-rpmpd
->>>         - qcom,sm6350-rpmhpd
->>> diff --git a/include/dt-bindings/power/qcom-rpmpd.h 
->>> b/include/dt-bindings/power/qcom-rpmpd.h
->>> index 1bf8e87..8092d0d 100644
->>> --- a/include/dt-bindings/power/qcom-rpmpd.h
->>> +++ b/include/dt-bindings/power/qcom-rpmpd.h
->>> @@ -57,6 +57,14 @@
->>>   #define SDX65_CX_AO    4
->>>   #define SDX65_MXC    5
->>>   +/* SDX75 Power Domain Indexes */
->>> +#define SDX75_CX    0
->>> +#define SDX75_CX_AO    1
->>> +#define SDX75_MSS    2
->>> +#define SDX75_MX    3
->>> +#define SDX75_MX_AO    4
->>> +#define SDX75_MXC    5
->> Please instead introduce a set of defines without the SoC prefix
->> (i.e. CX, CX_AO, MX etc.). We've been putting this off for too long
->> and you're the first unlucky guy that submitted new RPMhPD support after
->> we've concluded it'd be the way to go! :D Sadly, we can't replace the
->> existing ones retroactively..
-> Surely No issues. Will update it.
+Yes, you are right.
 
-I have a doubt here. Cant we completely omit the #defines here and 
-directly index this as 0,1,...
-because if the intention of this #defines is to understand the name of 
-the pd then we can get
-it from the .name attribute in rpmhpd as well, right?
+Best regards,
+Krzysztof
 
-The problems with a common set of #define would be, lets say if we 
-define CX_AO as 1 and some platform
-doesn't have CX_AO then wouldnt it leave a null entry in the driver 
-entry of that platform?
-
-Thanks,
-Rohit.
-
->
-> Thanks,
-> Rohit.
->> Konrad
->>> +
->>>   /* SM6350 Power Domain Indexes */
->>>   #define SM6350_CX    0
->>>   #define SM6350_GFX    1
