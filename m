@@ -2,163 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C089D74828F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B7C74829A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjGEKxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 06:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
+        id S232252AbjGEK6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 06:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbjGEKxi (ORCPT
+        with ESMTP id S232296AbjGEK57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 06:53:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DCBCE;
-        Wed,  5 Jul 2023 03:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688554417; x=1720090417;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=IBLKigB688l4z6znm/BvrWmSXP37deMHsQcHbbqjCj4=;
-  b=fqEEnzvajrUI/25RGHs4GC+xvSCiN/DIaqNP9oxCLnXWyDD0U1HKc5Q6
-   aqgxJsDZCrYF2OpmRe2T8kmy0NDuLWqWol8V8UnThK8BtOJT9P/m4A5eG
-   vvQF1z3sfOqeroqxFqfqGpBgTy59k3SmOtiUmvQ8845QhB98X7kIAlq7X
-   bn5zzem3JajPe4cg49sD/tNfyRYG9cWM7AJEM9xmsAyJF/wtLr7pOzoeQ
-   glnvsqxK2Ev8oDiUAvHFSmuzPiRIf4Yj4YH7ettv2g+2JubQi/6vWg5oT
-   EAXcJszx1/rsIYNVEx/1F18fgVpTRG+Ny5eVAprvL6sVNF6NKW4+7YoHC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="394063290"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="394063290"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 03:53:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="809217086"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="809217086"
-Received: from jialinji-mobl4.ccr.corp.intel.com (HELO localhost) ([10.255.30.200])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 03:53:33 -0700
-Date:   Wed, 5 Jul 2023 18:53:43 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v7 2/8] KVM: Introduce __kvm_follow_pfn function
-Message-ID: <20230705105343.iounmlflfued7lco@linux.intel.com>
-References: <20230704075054.3344915-1-stevensd@google.com>
- <20230704075054.3344915-3-stevensd@google.com>
- <20230705031002.xrxk42hli6oavtlt@linux.intel.com>
- <CAD=HUj6-VbznOOtn5WJee7Of_nh33ygg7_ph2G=hgnvNk_Cbsw@mail.gmail.com>
+        Wed, 5 Jul 2023 06:57:59 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F341709;
+        Wed,  5 Jul 2023 03:57:58 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b88e5b3834so15379735ad.3;
+        Wed, 05 Jul 2023 03:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688554678; x=1691146678;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qPTKXl1aJsHmp8owaaSiyX/oNh3UudkopoKZFeZM6UM=;
+        b=bVrHiQCYQpVog/rm4dYppG0XjEg2EjLOua96nws2LuMEalaCPOJAyPH/NgzjP4Xk21
+         gZg2izVWQQL2CpV3uYjH1P6N79vKXLnQ3gZxTkw2xGFm3UKeJGA7dkawVPReiQjxlN4h
+         glJMl0VF92WrllOf/pMyZpRNw4OcgtEBD4POkNqgSAeUTNLZXtqpt2mQdyakhzxmOIC9
+         C5m0gInoyrG5naULtGlgp/+boetGfI3JG0mxO8s92fFoEN/9DeseJMRPYznFPb9wZRQz
+         yvLSJxS9kp64pX8EENbHXPIR5VC9J2KoNFH1up+XLf5HD2JKYAZpWUeKTJjR7HeBShnD
+         wTww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688554678; x=1691146678;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qPTKXl1aJsHmp8owaaSiyX/oNh3UudkopoKZFeZM6UM=;
+        b=JHojaTe3P2Ab5nY6j+JOP0+/CZp5M3rUbU5iUwjs/IUV1iH4WTTfEM06xHMKVJ+Yzt
+         GFXD2ewWk1JUKTSL4d42sEyXjkuoi/b36Xrie+wQQ8rILReyh75J4wjhITD0TE5U/KJx
+         ecynCiRH75DI7HsW+EfaOEWffODem1boE4HMmg3tLCE2gF/UaMpar+Tua42Ifw9Nn4bX
+         4zvRsDubTQTfv9UNMmLQjeVCWqQxh23WIw5n0qng2c3PvmuDWXMYTIvlHLqvBNXniHUT
+         finm8Tg6R5qV4KHI2pQlr1pqWbzSPFKX/vwVxw0uAHOrll3SRSgsM9wVa1Bigopt7Et1
+         wBZg==
+X-Gm-Message-State: ABy/qLY8SzraQhFX9kKTgzcnUyJsdmGHzgaZKnAth2FM7BlskexEmENw
+        FTQUCPEvnNYBbC881NE5HDtlpywWBAU=
+X-Google-Smtp-Source: APBJJlFU1GygyDvdi/ZLn4Vq996QW/+vQb57QqlHGuAc/y+s8w/3XnSkciywi+VC0ifSL0zDn4xwJg==
+X-Received: by 2002:a17:902:c246:b0:1b3:cf98:a20b with SMTP id 6-20020a170902c24600b001b3cf98a20bmr11824056plg.54.1688554677720;
+        Wed, 05 Jul 2023 03:57:57 -0700 (PDT)
+Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709028eca00b001b85bb5fd77sm10455497plo.119.2023.07.05.03.57.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 03:57:57 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 18:57:51 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH] gpiolib: add missing include
+Message-ID: <ZKVMr9yrL2JavqhF@sol>
+References: <20230705074219.8321-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=HUj6-VbznOOtn5WJee7Of_nh33ygg7_ph2G=hgnvNk_Cbsw@mail.gmail.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230705074219.8321-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 06:22:59PM +0900, David Stevens wrote:
-> On Wed, Jul 5, 2023 at 12:10 PM Yu Zhang <yu.c.zhang@linux.intel.com> wrote:
-> >
-> > > @@ -2514,35 +2512,26 @@ static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
-> > >   * The slow path to get the pfn of the specified host virtual address,
-> > >   * 1 indicates success, -errno is returned if error is detected.
-> > >   */
-> > > -static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write_fault,
-> > > -                        bool interruptible, bool *writable, kvm_pfn_t *pfn)
-> > > +static int hva_to_pfn_slow(struct kvm_follow_pfn *foll, kvm_pfn_t *pfn)
-> > >  {
-> > > -     unsigned int flags = FOLL_HWPOISON;
-> > > +     unsigned int flags = FOLL_HWPOISON | FOLL_GET | foll->flags;
-> > >       struct page *page;
-> > >       int npages;
-> > >
-> > >       might_sleep();
-> > >
-> > > -     if (writable)
-> > > -             *writable = write_fault;
-> > > -
-> > > -     if (write_fault)
-> > > -             flags |= FOLL_WRITE;
-> > > -     if (async)
-> > > -             flags |= FOLL_NOWAIT;
-> > > -     if (interruptible)
-> > > -             flags |= FOLL_INTERRUPTIBLE;
-> > > -
-> > > -     npages = get_user_pages_unlocked(addr, 1, &page, flags);
-> > > +     npages = get_user_pages_unlocked(foll->hva, 1, &page, flags);
-> > >       if (npages != 1)
-> > >               return npages;
-> > >
-> > > +     foll->writable = (foll->flags & FOLL_WRITE) && foll->allow_write_mapping;
-> > > +
-> > >       /* map read fault as writable if possible */
-> > > -     if (unlikely(!write_fault) && writable) {
-> > > +     if (unlikely(!foll->writable) && foll->allow_write_mapping) {
-> >
-> > I guess !foll->writable should be !(foll->flags & FOLL_WRITE) here.
+On Wed, Jul 05, 2023 at 09:42:19AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> The two statements are logically equivalent, although I guess using
-> !(foll->flags & FOLL_WRITE) may be a little clearer, if a little more
-> verbose.
-
-Well, as the comment says, we wanna try to map the read fault as writable
-whenever possible. And __gfn_to_pfn_memslot() will only set the FOLL_WRITE
-for write faults. So I guess using !foll->writable will not allow this.
-Did I miss anything?
-
-> > > +kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-> > > +                            bool atomic, bool interruptible, bool *async,
-> > > +                            bool write_fault, bool *writable, hva_t *hva)
-> > > +{
-> > > +     kvm_pfn_t pfn;
-> > > +     struct kvm_follow_pfn foll = {
-> > > +             .slot = slot,
-> > > +             .gfn = gfn,
-> > > +             .flags = 0,
-> > > +             .atomic = atomic,
-> > > +             .allow_write_mapping = !!writable,
-> > > +     };
-> > > +
-> > > +     if (write_fault)
-> > > +             foll.flags |= FOLL_WRITE;
-> > > +     if (async)
-> > > +             foll.flags |= FOLL_NOWAIT;
-> > > +     if (interruptible)
-> > > +             foll.flags |= FOLL_INTERRUPTIBLE;
-> > > +
-> > > +     pfn = __kvm_follow_pfn(&foll);
-> > > +     if (pfn == KVM_PFN_ERR_NEEDS_IO) {
-> >
-> > Could we just use KVM_PFN_ERR_FAULT and foll.flags here? I.e.,
-> >         if (pfn == KVM_PFN_ERR_FAULT && (foll.flags & FOLL_NOWAIT))?
-> > Setting pfn to KVM_PFN_ERR_NEEDS_IO just to indicate an async fault
-> > seems unnecessary.
+> gpiolib.h uses notifiers but doesn't include <linux/notifier.h>.
 > 
-> There are the cases where the fault does not fall within a vma or when
-> the target vma's flags don't support the fault's access permissions.
-> In those cases, continuing to try to resolve the fault won't cause
-> problems per-se, but it's wasteful and a bit confusing. Having
-> hva_to_pfn detect whether or not it may be possible to resolve the
-> fault asynchronously and return KVM_PFN_ERR_NEEDS_IO if so seems like
-> a good idea. It also matches what the existing code does.
 
-Got it. Sounds reasonable. And thanks! :)
+Fair enough.
 
-B.R.
-Yu
+Reviewed-by: Kent Gibson <warthog618@gmail.com>
+
+Same is true for gpiolib-cdev, btw.
+You want to touch that one up as well?
+
+Cheers,
+Kent.
+
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  drivers/gpio/gpiolib.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
+> index cca81375f127..1409d52487c0 100644
+> --- a/drivers/gpio/gpiolib.h
+> +++ b/drivers/gpio/gpiolib.h
+> @@ -14,6 +14,7 @@
+>  #include <linux/err.h>
+>  #include <linux/device.h>
+>  #include <linux/module.h>
+> +#include <linux/notifier.h>
+>  #include <linux/cdev.h>
+>  #include <linux/rwsem.h>
+>  
+> -- 
+> 2.39.2
+> 
