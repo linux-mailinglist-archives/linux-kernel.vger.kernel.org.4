@@ -2,306 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373217489F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3F97489F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjGEROU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        id S232113AbjGERPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjGEROS (ORCPT
+        with ESMTP id S232160AbjGERPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:14:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E2541985
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:14:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE20D175A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:14:53 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5B5003F762
+        Wed, 5 Jul 2023 13:15:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8486173E
         for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:14:11 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 18:14:05 +0100
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     Faiz Abbas <faiz.abbas@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        airlied@gmail.com, daniel@ffwll.ch
-Subject: Re: [PATCH v2] drm/arm/komeda: Remove component framework and add a
- simple encoder
-Message-ID: <ZKWk3YkM7jI304uv@e110455-lin.cambridge.arm.com>
-References: <20230704163454.5138-1-faiz.abbas@arm.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688577251;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a6fxBPBS9mNaQm6LSrIZd4vdKlGZL91VslAI6+By/As=;
+        b=cEpVzpnIqlXaz7GZ9lHcTeVcpcDTTWQeVgiLgEyAzNeCSCQLrEpeYoO7qn6MtuTNsiStGY
+        HhxNiNLpTYk1oxvMKX3/miUP5SFl7Cm3kLC+0xYQ4Jx3Q0MqL2ckxIQnZNpm8wyFjSGfRh
+        1ZFBESZDAX3da8dp64dY29yqmNhFJcI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-339-WBUEz2s0MUWpJbTtcofDjQ-1; Wed, 05 Jul 2023 13:14:10 -0400
+X-MC-Unique: WBUEz2s0MUWpJbTtcofDjQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3fb40d90456so5042635e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:14:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688577248; x=1691169248;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a6fxBPBS9mNaQm6LSrIZd4vdKlGZL91VslAI6+By/As=;
+        b=US+7QnX3bRROnrSTownY5HdjXMmm14E6oqKUU0VOnQbBdprllG/ozRECHy3kxS5OEH
+         69pQq1xLHuBPmT1oQW1nAQi45RKxT3zIp35MAVll8TCDqmIHlzs43qZSdTOwwcdc7Lpa
+         X7GUdaUdlDlgaPM9bMf9N7NENVzuj7pQ5Np8qR7yjZjZtxFldF0XLyW3GUy0+j0KXyy8
+         JNHvw3LOd7VEV5sWvnxvbXMtjmXA//OP25gGoQMDMuymNUgxhTkU/c9CvnDRp97T4cfJ
+         dBIx/DsnrysjVUBaCx9DXf4GGvj8obrZSZICvxQCcJirw+j5CHJ3V/x+w7pN3YN4ocmf
+         WeeQ==
+X-Gm-Message-State: ABy/qLYqdq5cOLsNsHBCTbYv/8AqI6mYuLCRCrR7U9U8Bejse9fjB/Vc
+        by6hr1H+K8rR1h4P/0UznoxZpCwV6Gt/NIJvSlVGLUQd6Q6gbAddZNjkuLKkWq9kAkZ/Woaclcn
+        cnp6H4rJS53CmvCuTA7yOOX+3
+X-Received: by 2002:a1c:790a:0:b0:3fb:af9a:bf30 with SMTP id l10-20020a1c790a000000b003fbaf9abf30mr2843839wme.2.1688577248747;
+        Wed, 05 Jul 2023 10:14:08 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGeCuf/W6MTtkOf7dX+nc3d9EnWYOlr9nA7OJpij/WlD4Ds+urw6/DQsIfBD5eA8hOzT3n4/A==
+X-Received: by 2002:a1c:790a:0:b0:3fb:af9a:bf30 with SMTP id l10-20020a1c790a000000b003fbaf9abf30mr2843806wme.2.1688577248380;
+        Wed, 05 Jul 2023 10:14:08 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c71a:1c00:e2b1:fc33:379b:a713? (p200300cbc71a1c00e2b1fc33379ba713.dip0.t-ipconnect.de. [2003:cb:c71a:1c00:e2b1:fc33:379b:a713])
+        by smtp.gmail.com with ESMTPSA id c8-20020a056000104800b003143ba62cf4sm6547606wrx.86.2023.07.05.10.14.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 10:14:07 -0700 (PDT)
+Message-ID: <10c8fe17-fa9b-bf34-cb88-c758e07c9d72@redhat.com>
+Date:   Wed, 5 Jul 2023 19:14:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/2] fork: lock VMAs of the parent process when forking
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     jirislaby@kernel.org, jacobly.alt@gmail.com,
+        holger@applied-asynchrony.com, hdegoede@redhat.com,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230705171213.2843068-1-surenb@google.com>
+ <20230705171213.2843068-2-surenb@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230705171213.2843068-2-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230704163454.5138-1-faiz.abbas@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Faiz,
-
-On Tue, Jul 04, 2023 at 10:04:54PM +0530, Faiz Abbas wrote:
-> The Komeda driver always expects the remote connector node to initialize
-> an encoder. It uses the component aggregator framework which consists
-> of component->bind() calls used to initialize the remote encoder and attach
-> it to the crtc. This makes it incompatible with connector drivers which
-> implement drm_bridge APIs.
+On 05.07.23 19:12, Suren Baghdasaryan wrote:
+> When forking a child process, parent write-protects an anonymous page
+> and COW-shares it with the child being forked using copy_present_pte().
+> Parent's TLB is flushed right before we drop the parent's mmap_lock in
+> dup_mmap(). If we get a write-fault before that TLB flush in the parent,
+> and we end up replacing that anonymous page in the parent process in
+> do_wp_page() (because, COW-shared with the child), this might lead to
+> some stale writable TLB entries targeting the wrong (old) page.
+> Similar issue happened in the past with userfaultfd (see flush_tlb_page()
+> call inside do_wp_page()).
+> Lock VMAs of the parent process when forking a child, which prevents
+> concurrent page faults during fork operation and avoids this issue.
+> This fix can potentially regress some fork-heavy workloads. Kernel build
+> time did not show noticeable regression on a 56-core machine while a
+> stress test mapping 10000 VMAs and forking 5000 times in a tight loop
+> shows ~5% regression. If such fork time regression is unacceptable,
+> disabling CONFIG_PER_VMA_LOCK should restore its performance. Further
+> optimizations are possible if this regression proves to be problematic.
 > 
-> Remove all component framework calls from the komeda driver and declare and
-> attach an encoder inside komeda_crtc_add().
-> 
-> The remote connector driver has to implement the DRM bridge APIs which
-> can be used to glue the encoder to the remote connector. Since we
-> usually pair this with a component encoder that also implements a
-> drm_bridge, dropping support is not expected to affect users of this
-> driver.
-
-Thanks for updating the commit description, I think it shows the intent better.
-
-When I'm trying to apply your patch to drm-misc next (or any branch that matters)
-it fails because ...
-
-> 
-> Signed-off-by: Faiz Abbas <faiz.abbas@arm.com>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
+> Reported-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+> Closes: https://lore.kernel.org/all/b198d649-f4bf-b971-31d0-e8433ec2a34c@applied-asynchrony.com/
+> Reported-by: Jacob Young <jacobly.alt@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217624
+> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling first")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 > ---
->  .../gpu/drm/arm/display/komeda/komeda_crtc.c  | 23 +++++++-
->  .../gpu/drm/arm/display/komeda/komeda_drv.c   | 57 ++-----------------
->  .../gpu/drm/arm/display/komeda/komeda_kms.c   | 10 +---
->  .../gpu/drm/arm/display/komeda/komeda_kms.h   |  3 +
->  4 files changed, 32 insertions(+), 61 deletions(-)
+>   kernel/fork.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
-> index 4cc07d6bb9d82..e5a8a80b173f4 100644
-> --- a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
-> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
-> @@ -13,6 +13,8 @@
->  #include <drm/drm_crtc_helper.h>
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index b85814e614a5..403bc2b72301 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -658,6 +658,12 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+>   		retval = -EINTR;
+>   		goto fail_uprobe_end;
+>   	}
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +	/* Disallow any page faults before calling flush_cache_dup_mm */
+> +	for_each_vma(old_vmi, mpnt)
+> +		vma_start_write(mpnt);
+> +	vma_iter_init(&old_vmi, oldmm, 0);
+> +#endif
+>   	flush_cache_dup_mm(oldmm);
+>   	uprobe_dup_mmap(oldmm, mm);
+>   	/*
 
-... this line is different in my tree. It looks like your tree is missing
-commit e3b63718827880 ("drm/arm/komeda: Remove unnecessary include
-statements for drm_crtc_helper.h"), which has been applied in early January.
+The old version was most probably fine as well, but this certainly looks 
+even safer.
 
-Best regards,
-Liviu
-
->  #include <drm/drm_print.h>
->  #include <drm/drm_vblank.h>
-> +#include <drm/drm_simple_kms_helper.h>
-> +#include <drm/drm_bridge.h>
->  
->  #include "komeda_dev.h"
->  #include "komeda_kms.h"
-> @@ -613,9 +615,11 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
->  			   struct komeda_crtc *kcrtc)
->  {
->  	struct drm_crtc *crtc = &kcrtc->base;
-> +	struct drm_device *base = &kms->base;
-> +	struct drm_bridge *bridge;
->  	int err;
->  
-> -	err = drm_crtc_init_with_planes(&kms->base, crtc,
-> +	err = drm_crtc_init_with_planes(base, crtc,
->  					get_crtc_primary(kms, kcrtc), NULL,
->  					&komeda_crtc_funcs, NULL);
->  	if (err)
-> @@ -625,6 +629,23 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
->  
->  	crtc->port = kcrtc->master->of_output_port;
->  
-> +
-> +	/* Construct an encoder for each pipeline and attach it to the remote
-> +	 * bridge
-> +	 */
-> +	kcrtc->encoder.possible_crtcs = drm_crtc_mask(crtc);
-> +	err = drm_simple_encoder_init(base, &kcrtc->encoder,
-> +				      DRM_MODE_ENCODER_TMDS);
-> +	if (err)
-> +		return err;
-> +
-> +	bridge = devm_drm_of_get_bridge(base->dev, kcrtc->master->of_node,
-> +					KOMEDA_OF_PORT_OUTPUT, 0);
-> +	if (IS_ERR(bridge))
-> +		return PTR_ERR(bridge);
-> +
-> +	err = drm_bridge_attach(&kcrtc->encoder, bridge, NULL, 0);
-> +
->  	drm_crtc_enable_color_mgmt(crtc, 0, true, KOMEDA_COLOR_LUT_SIZE);
->  
->  	return err;
-> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
-> index 9fce4239d4ad4..98e7ca1ad8fe7 100644
-> --- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
-> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
-> @@ -7,7 +7,6 @@
->  #include <linux/module.h>
->  #include <linux/kernel.h>
->  #include <linux/platform_device.h>
-> -#include <linux/component.h>
->  #include <linux/pm_runtime.h>
->  #include <drm/drm_fb_helper.h>
->  #include <drm/drm_module.h>
-> @@ -27,13 +26,11 @@ struct komeda_dev *dev_to_mdev(struct device *dev)
->  	return mdrv ? mdrv->mdev : NULL;
->  }
->  
-> -static void komeda_unbind(struct device *dev)
-> +static int komeda_platform_remove(struct platform_device *pdev)
->  {
-> +	struct device *dev = &pdev->dev;
->  	struct komeda_drv *mdrv = dev_get_drvdata(dev);
->  
-> -	if (!mdrv)
-> -		return;
-> -
->  	komeda_kms_detach(mdrv->kms);
->  
->  	if (pm_runtime_enabled(dev))
-> @@ -45,10 +42,13 @@ static void komeda_unbind(struct device *dev)
->  
->  	dev_set_drvdata(dev, NULL);
->  	devm_kfree(dev, mdrv);
-> +
-> +	return 0;
->  }
->  
-> -static int komeda_bind(struct device *dev)
-> +static int komeda_platform_probe(struct platform_device *pdev)
->  {
-> +	struct device *dev = &pdev->dev;
->  	struct komeda_drv *mdrv;
->  	int err;
->  
-> @@ -88,52 +88,7 @@ static int komeda_bind(struct device *dev)
->  free_mdrv:
->  	devm_kfree(dev, mdrv);
->  	return err;
-> -}
-> -
-> -static const struct component_master_ops komeda_master_ops = {
-> -	.bind	= komeda_bind,
-> -	.unbind	= komeda_unbind,
-> -};
->  
-> -static void komeda_add_slave(struct device *master,
-> -			     struct component_match **match,
-> -			     struct device_node *np,
-> -			     u32 port, u32 endpoint)
-> -{
-> -	struct device_node *remote;
-> -
-> -	remote = of_graph_get_remote_node(np, port, endpoint);
-> -	if (remote) {
-> -		drm_of_component_match_add(master, match, component_compare_of, remote);
-> -		of_node_put(remote);
-> -	}
-> -}
-> -
-> -static int komeda_platform_probe(struct platform_device *pdev)
-> -{
-> -	struct device *dev = &pdev->dev;
-> -	struct component_match *match = NULL;
-> -	struct device_node *child;
-> -
-> -	if (!dev->of_node)
-> -		return -ENODEV;
-> -
-> -	for_each_available_child_of_node(dev->of_node, child) {
-> -		if (of_node_cmp(child->name, "pipeline") != 0)
-> -			continue;
-> -
-> -		/* add connector */
-> -		komeda_add_slave(dev, &match, child, KOMEDA_OF_PORT_OUTPUT, 0);
-> -		komeda_add_slave(dev, &match, child, KOMEDA_OF_PORT_OUTPUT, 1);
-> -	}
-> -
-> -	return component_master_add_with_match(dev, &komeda_master_ops, match);
-> -}
-> -
-> -static int komeda_platform_remove(struct platform_device *pdev)
-> -{
-> -	component_master_del(&pdev->dev, &komeda_master_ops);
-> -	return 0;
->  }
->  
->  static const struct of_device_id komeda_of_match[] = {
-> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_kms.c b/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
-> index 451746ebbe713..95eb53c284366 100644
-> --- a/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
-> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
-> @@ -4,7 +4,6 @@
->   * Author: James.Qian.Wang <james.qian.wang@arm.com>
->   *
->   */
-> -#include <linux/component.h>
->  #include <linux/interrupt.h>
->  
->  #include <drm/drm_atomic.h>
-> @@ -307,17 +306,13 @@ struct komeda_kms_dev *komeda_kms_attach(struct komeda_dev *mdev)
->  	if (err)
->  		goto cleanup_mode_config;
->  
-> -	err = component_bind_all(mdev->dev, kms);
-> -	if (err)
-> -		goto cleanup_mode_config;
-> -
->  	drm_mode_config_reset(drm);
->  
->  	err = devm_request_irq(drm->dev, mdev->irq,
->  			       komeda_kms_irq_handler, IRQF_SHARED,
->  			       drm->driver->name, drm);
->  	if (err)
-> -		goto free_component_binding;
-> +		goto cleanup_mode_config;
->  
->  	drm_kms_helper_poll_init(drm);
->  
-> @@ -329,8 +324,6 @@ struct komeda_kms_dev *komeda_kms_attach(struct komeda_dev *mdev)
->  
->  free_interrupts:
->  	drm_kms_helper_poll_fini(drm);
-> -free_component_binding:
-> -	component_unbind_all(mdev->dev, drm);
->  cleanup_mode_config:
->  	drm_mode_config_cleanup(drm);
->  	komeda_kms_cleanup_private_objs(kms);
-> @@ -346,7 +339,6 @@ void komeda_kms_detach(struct komeda_kms_dev *kms)
->  	drm_dev_unregister(drm);
->  	drm_kms_helper_poll_fini(drm);
->  	drm_atomic_helper_shutdown(drm);
-> -	component_unbind_all(mdev->dev, drm);
->  	drm_mode_config_cleanup(drm);
->  	komeda_kms_cleanup_private_objs(kms);
->  	drm->dev_private = NULL;
-> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_kms.h b/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
-> index 7339339ef6b87..9b070d504f4ad 100644
-> --- a/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
-> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
-> @@ -85,6 +85,9 @@ struct komeda_crtc {
->  
->  	/** @disable_done: this flip_done is for tracing the disable */
->  	struct completion *disable_done;
-> +
-> +	/** @encoder: encoder at the end of the pipeline */
-> +	struct drm_encoder encoder;
->  };
->  
->  /**
-> -- 
-> 2.25.1
-> 
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+Cheers,
+
+David / dhildenb
+
