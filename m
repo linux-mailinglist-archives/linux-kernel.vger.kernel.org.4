@@ -2,271 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62091747AB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE50F747AB6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjGEA1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 20:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S230504AbjGEAaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 20:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGEA1C (ORCPT
+        with ESMTP id S229512AbjGEAau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 20:27:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40200EA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 17:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=sjszkTCRMDHrDuei2+96voE7mxo0VD4Vs+4yVcUhEKQ=; b=EzINaMjZ4bfHXMDIRWap0wl5g3
-        XBqRhcCB+FI17PqjQbp/qZ8TTisBy4z9dtBgT+10DM4Nz1kqNGNRIXCGnnp4BnJPGA1Vj0a+GTZxO
-        qSH58l3JKIVLME6A3ZxAsnTrfOcAHP0X7lBLP1lXrDk5R4EVfcfbynbBkGWOwmM/nyX2rqMJpySVA
-        mVEbxjYvAa/VfJxnC+xICaPKdRT+euZsztwSOUtnNsRycHFb27lRJD5aF9xSKbavELWALYlMOT9+Q
-        HP01WprfJsqn2T2Ap0uORpwwYiwXolaaEfBbckeqBpIUjEWXiQq9NQbwDTxZIxcTzz4LNEQIbAunZ
-        WrLLs3Xg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qGqMB-00ESUJ-1w;
-        Wed, 05 Jul 2023 00:26:55 +0000
-Message-ID: <3caf4087-9e08-83af-fcca-4534442e7df7@infradead.org>
-Date:   Tue, 4 Jul 2023 17:26:54 -0700
+        Tue, 4 Jul 2023 20:30:50 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2069.outbound.protection.outlook.com [40.107.255.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7597FEA;
+        Tue,  4 Jul 2023 17:30:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QoYVf/XaFLG5CrObQhWHpuh7gsj7VQZpPXfMZgTxoYeXMLzuHT9p17gW9jPKNzWhBoP/2ZiFvLwUREYXr2rleb5yYQxV4gF47bBoV6Wz90tDVq5Cwe84YaNKGTmSjxfjBaUqXivbIss2NuYUC6r3KsQksHHM3uayDC3m0G0hkcD3LITz6YFV8iBQmg7TKXOtI412ACZWaHnebHQr4At6eBTmN5q56Gg1Ll/HQ+Qfu4F9H7scd11JhcvttopTD5RWftX7AUG9BEpVfHPo044UMLjxC1vrB27rayXE61cYf72aDfIflHLKzRro6XcXZgsBnNcuO4iZcYvKNzSP9C+h4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q41OPzPdAQ7mteti7Fr0OUn8FctlTmD4eeQVJJgu3oE=;
+ b=NqK9pIYYFmyJqbm+ubhEUlsVgFNlzVpo/uA+KzB9BptOTZV3utIxMuFcgrE40P4+y9A8zqvdnak9GucDVMNaFSwkCsybDWIV4pUflsLdgD1V1pi5HYFt+cvzNIhotVpmdvMscDH26yxLNg0vnl4GUrDuMLcrFl1oZBK+4edFgSmTCJt3aHhSpty+Sg1A8zbFgcO9evsqukJJlxPIv2Tr43yb9ber0k2CLRvE09ZvvkEhxXaYCeuSWZRJenIi0l3LUTrqzBP6LbSrfdiIBR+9yVXac3E0Q0itHBF4rheZufTwnIV5YzW78T/9FVjmUqgXAMvj/hNHHCucaGQ4PIcR+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q41OPzPdAQ7mteti7Fr0OUn8FctlTmD4eeQVJJgu3oE=;
+ b=dPaNYIjyyb2SLIrPRUHU/fqxpavz3Bpfy09hne0u18+3swg3oNSye8BrSj/kf9DnDNjbDpEH6j5AMTHc3gE71tQpqa7LTNhyJ4rDudWvg3HoDyaMTY345cXJ5FRRaUlOq6zW5aF6C2ar5UcgkvRFxIX1vVB0ELjNuVn2qFOS+ec=
+Received: from TYZPR02MB5595.apcprd02.prod.outlook.com (2603:1096:400:1c5::12)
+ by SEYPR02MB5775.apcprd02.prod.outlook.com (2603:1096:101:5f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
+ 2023 00:30:46 +0000
+Received: from TYZPR02MB5595.apcprd02.prod.outlook.com
+ ([fe80::2e7:47a3:69c4:9e8e]) by TYZPR02MB5595.apcprd02.prod.outlook.com
+ ([fe80::2e7:47a3:69c4:9e8e%3]) with mapi id 15.20.6544.024; Wed, 5 Jul 2023
+ 00:30:46 +0000
+From:   =?utf-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>
+CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>, =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>
+Subject: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIGJsb2NrOiBtcS1kZWFkbGluZTogcmVuYW1lIHNv?=
+ =?utf-8?B?cnRfbGlzdCB0byBzb3J0X3Ji?=
+Thread-Topic: [PATCH] block: mq-deadline: rename sort_list to sort_rb
+Thread-Index: AQHZri0DsaJtii+IQUasqZzqxbUUA6+ppwGAgACquBA=
+Date:   Wed, 5 Jul 2023 00:30:46 +0000
+Message-ID: <TYZPR02MB55955F57A8CCC819054338BFC62FA@TYZPR02MB5595.apcprd02.prod.outlook.com>
+References: <20230704040626.24899-1-lipeifeng@oppo.com>
+ <32dad510-1508-f0dc-ab49-60d56ed2c2d6@acm.org>
+In-Reply-To: <32dad510-1508-f0dc-ab49-60d56ed2c2d6@acm.org>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR02MB5595:EE_|SEYPR02MB5775:EE_
+x-ms-office365-filtering-correlation-id: e93a045a-0cfa-4adc-2573-08db7cef1302
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ke5jBxFjxxw4CbjsK3vWrV8L69LyaJt3WATxcps+5D8uGx8pW3o9bNnrf3n4M+nXx1TDGWHwJdkFFmEdc2HnF3OYroEH7Z3JpxP/hV7JzurTW5WREKvRo7wJjCh4BHZf0WZodQCmbFxCGBgtyeNMhLLDaPzQLs228t2AR0YEkq8Ql/ljyff6ZPG/YYBvvWwsBQavc66fZYNngyBlW4xx0OGVBwgY8G/Fr02ejHM58XQ5EPP8skMaRIVrS4tiY0iQTFyry2tzFP1kK1xA3Kl0L5HryVqJ2GKbF3nRV0hmP/KI5MNvIvnMIVJbfe0ZesptEzHw+NsNxHC8DkB+qVLsNcmApy6pHsz44S6GQwLgjEs2gcUg66sRPiwstAFuK00+BP/1F6js6VUOJ+sko2gisyxIgbixMuo/607EShVwm1tZRb5TAnNAvQJyThJQCAphClziWKRio7SEzVUjuPQ5qIwAnbzOtSluEWAGMuVsDnnZWTWVSJwiSJpAMhrx+8T4nnHvtsZahJQX1Y7o9UAIAD7r96kOdeuCpHPdvsdHji8gaW+k3lVPmPpvmCwZd1Sc4QKiuSXAVsqn/o5h2FrafvNlnv0T/ljp9ZKu6sS7HNQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5595.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(396003)(39860400002)(366004)(451199021)(38070700005)(186003)(122000001)(38100700002)(76116006)(71200400001)(107886003)(9686003)(66946007)(224303003)(7696005)(85182001)(2906002)(86362001)(66476007)(110136005)(54906003)(4326008)(64756008)(316002)(66556008)(66446008)(478600001)(26005)(53546011)(6506007)(55016003)(83380400001)(41300700001)(4744005)(5660300002)(8936002)(33656002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZjVnWkJTT1V0VWVac0tRWVlXNTNFQ1ZvN2ZhKzhXVUxuR1U2NHhBVTd1dmgy?=
+ =?utf-8?B?YW82Zm9UZTFjQkZiK1dLUE9HL2JTem5VdURwczhuZ1UwSlpRMWZLMWxpQ1dj?=
+ =?utf-8?B?bjlCZ041WGFxaUR6c0JpOE1OOEZ1L1J5dHBkcHc5emxNYUN4cGcrcmFzRlhT?=
+ =?utf-8?B?THRyZFY2RWtvY05lVWd1aEFBZWJrUDRzY0RVOHJBaEV6WC9md3JkRVVEZ01B?=
+ =?utf-8?B?NzJxL1BxWkJvc1cxWlI1c0YvTGN3K3gybVFQaEFKS1FBYzJDQUxPSVdJNCtN?=
+ =?utf-8?B?cHR1bExLV3I5Q2lNMW5uclVEanNlREt4SEZ0L3BhWndWeHVqNlhsdHVKQ0ZB?=
+ =?utf-8?B?VmZJVk5KNTJCZVJhUW4vQTA2Tjd5V1JkdVAvbi9FWDlUbmQ2cWtYdTdDQ04v?=
+ =?utf-8?B?VjZ5K3FxN3VHc2dGYkxYVVhEZ2FvaEtNdGtyaUEvKzkrMS9ZTVZKaXp2a3lS?=
+ =?utf-8?B?RWF0eXg1MUVQdFpxdVFUai9sVUIrckpTYndkMkRRSWQyVDhzc2xHRktVY2o1?=
+ =?utf-8?B?cUtxemYvS2J6NG9lRUtVOHlZUEQyN2RwUHA3QmdCZkcyM0FycmkyTGNINHpL?=
+ =?utf-8?B?MStwWEhFTzA2cDZWSDd1S1h3Sjh3VDRWRmJURmNwek95UUg3MnB2U1VuVzZT?=
+ =?utf-8?B?TWNUU2JyQXRsQnpOWHhMK3dPRjd3VWpWUnhUbjZsYy9ZUXFXSHlDQkFUWkps?=
+ =?utf-8?B?R3N4OC9QTFhheitpcWd5SWx2NzJaQXM5MGlhMTJjR0Q1bjdNOTR4UkhCWkxa?=
+ =?utf-8?B?bVozYXdZbW1NdDlmMzMyYkRKc1BQWVRwTVc1RE9Jc1FTUFgyRCsxYmk3YVpM?=
+ =?utf-8?B?a1NENXZsMkJQTDlRVDFreVplZTUyTjEzdUtJZ2xYZzFsalZtbkdNbXZvVXpO?=
+ =?utf-8?B?ZlVPOUg0dVBpRk5MRGxnTndIUWlGRmZDUFdlRk16Q2s1OFFCczBUNU5ZMXcw?=
+ =?utf-8?B?TmZlWU5YSFlnalFjd2ZRRjJPRGdYZTFQMERVQnhhS3Z4UTE5MTJsUm5kSytp?=
+ =?utf-8?B?YlR2S3NSaDJabE5mT0lKM1F1MFVjMHZHVVIvRUE3Wi9Ob3JBV2ZMQnZsd2p1?=
+ =?utf-8?B?L1dNQVh4OTFRdlM2TnVtOGVZNDY4a3RFQlJILzFQUE9nYkNYUWJMTXlOUHdU?=
+ =?utf-8?B?QmdBSTBVUEFHMU9OZXVHd2F1Q0dJczgwSHAvb0VLQjVGZlluL1BPNVp5YWtm?=
+ =?utf-8?B?bkxiT051K2RJaVZ5WUFReWVEajRTODZkOXJTUURGdGJTNW9rMXlNQXdHNllv?=
+ =?utf-8?B?UWQ2ZVhid0FHaWpPd3ZNeVBmWlZkRXE5R08zYllHOHB6SE1TMDMrZ1ZjejJx?=
+ =?utf-8?B?TEhUSUlJMkkwSHZ0WEt6RzJSYVloMTcweU5TaFJ4a2ppV1R5aThvd1RJL25x?=
+ =?utf-8?B?U2owa3hFSUZidWhBVU9HNUJtVjdoVGx0bklWTWNPUlpYWkZ0UnRScm9sWDRE?=
+ =?utf-8?B?cTRMM3dIODFzUlpnWEhUbkUybU5RcExqelNzRytEa0dyOGxKZURJVVJZbEVK?=
+ =?utf-8?B?ZTFIN2drQWR2YWhwQnY4U3Q5b29NUENqQWZJV250ZDhIL1FsVlZoSE1jMkxO?=
+ =?utf-8?B?SnRaNHQ0dmlJK0Yzc3ArcWwxbnAzeGNPU3ppbnZZeFNna3FMeTdndTZxUm1v?=
+ =?utf-8?B?SlFzQ2V1c2FLOUhMT0xmU0FLQkFDaVhkakwybmFxZHUvelVuVE01Qmh2dHd6?=
+ =?utf-8?B?RjQzSzhUV3dIMUN1d1phZVdHTURxcURKZysxZXROcnlydmJmKzlTK3hxeDZQ?=
+ =?utf-8?B?SG5iUHFqKzZrNzB6V2JTMzNnTVRzc1NFalhUZHNvQWFHUWs0ZmQxUlRFYVAw?=
+ =?utf-8?B?NW1pRkJYNVl5bVFIcGpreTNOcVBaK1RKTnMyWG84QjMzbHpEVjJqUzVRMVBw?=
+ =?utf-8?B?R0hRQlpRT09DWFEwdDM5YjVFd3JGMmdnS1lpOGdySjNLemVDYUxFWmhKMlVQ?=
+ =?utf-8?B?Q1NwWEtvUUNPMFd4YitTNldtK29rQ3RRRlRGTWJ0bFlyd3J2VHRDQ3ZiOS9H?=
+ =?utf-8?B?QnFIZmQ5TkQxVjdhTE9acmJ1V1BhNHBuQmRjUFowQmRoUDA5ZlNieVNwWVVt?=
+ =?utf-8?B?cStaSWFBYlZ1aW9qL0VtU1g5QnhKQkVkd1gwamRpWnpvemNGdTdTWFF3dHhz?=
+ =?utf-8?Q?xxWamT9vP0ygeHfurJbA6L5xd?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: drivers/mux/mmio.c:76:20: error: variable has incomplete type
- 'struct reg_field'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Peter Rosin <peda@axentia.se>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-References: <202307030449.fwsrHOMh-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202307030449.fwsrHOMh-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5595.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e93a045a-0cfa-4adc-2573-08db7cef1302
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2023 00:30:46.0715
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Hd0SSBkIN5yJ+Y2eZyTMsGJ82aj4ZRJqmYVsVyMIqAj2c9BFIkcTAOV4Cx9y3ZXpF5qv8luIdv245cGnU/osDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB5775
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/2/23 13:06, kernel test robot wrote:
-> Hi Aswath,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451
-> commit: e4d4371253029528c02bfb43a46c252e1c3d035f phy: phy-can-transceiver: Add support for setting mux
-> date:   1 year, 3 months ago
-> config: s390-randconfig-r026-20230703 (https://download.01.org/0day-ci/archive/20230703/202307030449.fwsrHOMh-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> reproduce: (https://download.01.org/0day-ci/archive/20230703/202307030449.fwsrHOMh-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202307030449.fwsrHOMh-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/mux/mmio.c:16:
->    In file included from include/linux/regmap.h:20:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/s390/include/asm/io.h:75:
->    include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      464 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      477 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
->          |                                                           ^
->    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
->      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->          |                                                      ^
->    In file included from drivers/mux/mmio.c:16:
->    In file included from include/linux/regmap.h:20:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/s390/include/asm/io.h:75:
->    include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      490 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
->          |                                                           ^
->    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
->      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
->          |                                                      ^
->    In file included from drivers/mux/mmio.c:16:
->    In file included from include/linux/regmap.h:20:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/s390/include/asm/io.h:75:
->    include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      501 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      511 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      521 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      609 |         readsb(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      617 |         readsw(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      625 |         readsl(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      634 |         writesb(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      643 |         writesw(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      652 |         writesl(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->>> drivers/mux/mmio.c:76:20: error: variable has incomplete type 'struct reg_field'
->       76 |                 struct reg_field field;
->          |                                  ^
->    drivers/mux/mmio.c:76:10: note: forward declaration of 'struct reg_field'
->       76 |                 struct reg_field field;
->          |                        ^
-
-Fix for above is:
-  https://lore.kernel.org/all/946cea0c-6d7f-c2e3-4412-4967ece40b94@axentia.se/
-
-The rest should be fixed by other patches that are in the mill.
-
-
->>> drivers/mux/mmio.c:102:15: error: call to undeclared function 'devm_regmap_field_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      102 |                 fields[i] = devm_regmap_field_alloc(dev, regmap, field);
->          |                             ^
->    12 warnings and 2 errors generated.
-> 
-> 
-> vim +76 drivers/mux/mmio.c
-> 
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   35  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   36  static int mux_mmio_probe(struct platform_device *pdev)
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   37  {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   38  	struct device *dev = &pdev->dev;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   39  	struct device_node *np = dev->of_node;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   40  	struct regmap_field **fields;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   41  	struct mux_chip *mux_chip;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   42  	struct regmap *regmap;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   43  	int num_fields;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   44  	int ret;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   45  	int i;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   46  
-> 8ecfaca7926f4b drivers/mux/mmio.c     Pankaj Bansal 2019-06-12   47  	if (of_device_is_compatible(np, "mmio-mux"))
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   48  		regmap = syscon_node_to_regmap(np->parent);
-> 8ecfaca7926f4b drivers/mux/mmio.c     Pankaj Bansal 2019-06-12   49  	else
-> 8ecfaca7926f4b drivers/mux/mmio.c     Pankaj Bansal 2019-06-12   50  		regmap = dev_get_regmap(dev->parent, NULL) ?: ERR_PTR(-ENODEV);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   51  	if (IS_ERR(regmap)) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   52  		ret = PTR_ERR(regmap);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   53  		dev_err(dev, "failed to get regmap: %d\n", ret);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   54  		return ret;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   55  	}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   56  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   57  	ret = of_property_count_u32_elems(np, "mux-reg-masks");
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   58  	if (ret == 0 || ret % 2)
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   59  		ret = -EINVAL;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   60  	if (ret < 0) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   61  		dev_err(dev, "mux-reg-masks property missing or invalid: %d\n",
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   62  			ret);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   63  		return ret;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   64  	}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   65  	num_fields = ret / 2;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   66  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   67  	mux_chip = devm_mux_chip_alloc(dev, num_fields, num_fields *
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   68  				       sizeof(*fields));
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   69  	if (IS_ERR(mux_chip))
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   70  		return PTR_ERR(mux_chip);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   71  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   72  	fields = mux_chip_priv(mux_chip);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   73  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   74  	for (i = 0; i < num_fields; i++) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   75  		struct mux_control *mux = &mux_chip->mux[i];
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  @76  		struct reg_field field;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   77  		s32 idle_state = MUX_IDLE_AS_IS;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   78  		u32 reg, mask;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   79  		int bits;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   80  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   81  		ret = of_property_read_u32_index(np, "mux-reg-masks",
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   82  						 2 * i, &reg);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   83  		if (!ret)
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   84  			ret = of_property_read_u32_index(np, "mux-reg-masks",
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   85  							 2 * i + 1, &mask);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   86  		if (ret < 0) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   87  			dev_err(dev, "bitfield %d: failed to read mux-reg-masks property: %d\n",
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   88  				i, ret);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   89  			return ret;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   90  		}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   91  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   92  		field.reg = reg;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   93  		field.msb = fls(mask) - 1;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   94  		field.lsb = ffs(mask) - 1;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   95  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   96  		if (mask != GENMASK(field.msb, field.lsb)) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   97  			dev_err(dev, "bitfield %d: invalid mask 0x%x\n",
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   98  				i, mask);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14   99  			return -EINVAL;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  100  		}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  101  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14 @102  		fields[i] = devm_regmap_field_alloc(dev, regmap, field);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  103  		if (IS_ERR(fields[i])) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  104  			ret = PTR_ERR(fields[i]);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  105  			dev_err(dev, "bitfield %d: failed allocate: %d\n",
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  106  				i, ret);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  107  			return ret;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  108  		}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  109  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  110  		bits = 1 + field.msb - field.lsb;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  111  		mux->states = 1 << bits;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  112  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  113  		of_property_read_u32_index(np, "idle-states", i,
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  114  					   (u32 *)&idle_state);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  115  		if (idle_state != MUX_IDLE_AS_IS) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  116  			if (idle_state < 0 || idle_state >= mux->states) {
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  117  				dev_err(dev, "bitfield: %d: out of range idle state %d\n",
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  118  					i, idle_state);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  119  				return -EINVAL;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  120  			}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  121  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  122  			mux->idle_state = idle_state;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  123  		}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  124  	}
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  125  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  126  	mux_chip->ops = &mux_mmio_ops;
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  127  
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  128  	return devm_mux_chip_register(dev, mux_chip);
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  129  }
-> 73726380a26fa1 drivers/mux/mux-mmio.c Philipp Zabel 2017-05-14  130  
-> 
-> :::::: The code at line 76 was first introduced by commit
-> :::::: 73726380a26fa1ed490f30fccee10ed9da28dc0c mux: mmio-based syscon mux controller
-> 
-> :::::: TO: Philipp Zabel <p.zabel@pengutronix.de>
-> :::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-
--- 
-~Randy
+Pj4gTXEtZGVhZGxpbmUgd291bGQgc3RvcmUgcmVxdWVzdCBpbiBsaXN0OmZpZm9fbGlzdCBhbmQg
+DQo+PiByYl90cmVlOnNvcnRfbGlzdCwgYW5kIHNvcnRfbGlzdCBzaG91bGQgYmUgcmVuYW1lZCB0
+byBzb3J0X3JiIHdoaWNoIGlzIA0KPj4gYmVuZWZpY2lhbCBmb3IgdW5kZXJzdGFuZGluZy4NCg0K
+Pkh1aD8gSSB0aGluayB0aGlzIHBhdGNoIG1ha2VzIHRoZSBjb2RlIGxlc3MgcmVhZGFibGUgaW5z
+dGVhZCBvZiBtb3JlIHJlYWRhYmxlIC4uLg0KDQpIdWg/IE1heWJlIHdlIGhhZCBkaWZmZXJlbnQg
+b3BpbmlvbnMgYWJvdXQgaXQsIEkgdGhpbmtzIHRoZSBlc3NlbmNlIG9mIHRoaXMgd29yZCBpcyAn
+c29ydCcNClNvIHRoYXQgcmVhZGVyIGNhbiBnZXQgdGhlIG1lYW5pbmcgb2YgaXQgZWFzaWx5LiBB
+bmQgaW4gbXkgbWluZCwgKl9yYiBpcyBtb3JlIHJlYXNvbmFibGUNCmZvciByYl9yb290IHJhdGhl
+cnRoYW4gKl9saXN0IGZvciByZWFkZXIuDQoNCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7
+tuS6ujogQmFydCBWYW4gQXNzY2hlIDxidmFuYXNzY2hlQGFjbS5vcmc+IA0K5Y+R6YCB5pe26Ze0
+OiAyMDIz5bm0N+aciDTml6UgMjI6MTMNCuaUtuS7tuS6ujog5p2O5Z+56ZSLKHdpbmspIDxsaXBl
+aWZlbmdAb3Bwby5jb20+OyBheGJvZUBrZXJuZWwuZGsNCuaKhOmAgTogbGludXgtYmxvY2tAdmdl
+ci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyDlvKDor5fmmI4oU2lt
+b24gWmhhbmcpIDx6aGFuZ3NoaW1pbmdAb3Bwby5jb20+OyDpg63lgaUgPGd1b2ppYW5Ab3Bwby5j
+b20+DQrkuLvpopg6IFJlOiBbUEFUQ0hdIGJsb2NrOiBtcS1kZWFkbGluZTogcmVuYW1lIHNvcnRf
+bGlzdCB0byBzb3J0X3JiDQoNCk9uIDcvMy8yMyAyMTowNiwgbGlwZWlmZW5nQG9wcG8uY29tIHdy
+b3RlOg0KPiBNcS1kZWFkbGluZSB3b3VsZCBzdG9yZSByZXF1ZXN0IGluIGxpc3Q6Zmlmb19saXN0
+IGFuZCANCj4gcmJfdHJlZTpzb3J0X2xpc3QsIGFuZCBzb3J0X2xpc3Qgc2hvdWxkIGJlIHJlbmFt
+ZWQgdG8gc29ydF9yYiB3aGljaCBpcyANCj4gYmVuZWZpY2lhbCBmb3IgdW5kZXJzdGFuZGluZy4N
+Cg0KSHVoPyBJIHRoaW5rIHRoaXMgcGF0Y2ggbWFrZXMgdGhlIGNvZGUgbGVzcyByZWFkYWJsZSBp
+bnN0ZWFkIG9mIG1vcmUgcmVhZGFibGUgLi4uDQoNCkJhcnQuDQo=
