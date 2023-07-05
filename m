@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37A37486D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AF77486D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbjGEOul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
+        id S232540AbjGEOvJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 10:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjGEOui (ORCPT
+        with ESMTP id S231676AbjGEOvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:50:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A98CE;
-        Wed,  5 Jul 2023 07:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VYEraWXOTwXpHX08kViCcw6mgtGGGRN9twNakSMbyfw=; b=jt6iNqxvKQ2q+v9qNnQo70qyB9
-        v2RbXHTP2ulOP2uawfD/i3PEhhnOL1/uhgCpCy6DPPudEYrQfbkd7snGg8RgNYZktPxyV276BsxLu
-        EoOiaxGEHQmBMetHd7sfCq6mrGB51Xxv+2tbPwudEZsfu1gfunH9Xw9V7qoNyMJM+cO+BEheCfCme
-        Lk77TyxlBwPoUE52nzqSPZ2gQfzII4W74erfoC//X2hg14e22E52GNJyF3fOCZMBkwXLhqAFgFIRU
-        lcGVLtQXtfqCpvx4g9LoUzk6/GS0hzp56820u+WydJfAWo86PEFVJdi4ENrRrRFbdaDpXhShXxO1R
-        r2ycMHew==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qH3pj-00AAK1-Oi; Wed, 05 Jul 2023 14:50:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2460E300274;
-        Wed,  5 Jul 2023 16:50:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 038C52025BA45; Wed,  5 Jul 2023 16:50:17 +0200 (CEST)
-Date:   Wed, 5 Jul 2023 16:50:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, samitolvanen@google.com, x86@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/retpoline,kprobes: Avoid treating rethunk as an
- indirect jump
-Message-ID: <20230705145017.GC4253@hirez.programming.kicks-ass.net>
-References: <20230705081547.25130-1-petr.pavlu@suse.com>
- <20230705081547.25130-3-petr.pavlu@suse.com>
- <20230705085857.GG462772@hirez.programming.kicks-ass.net>
- <20230705232038.3a6d03e18f7bafb14cdfed42@kernel.org>
+        Wed, 5 Jul 2023 10:51:07 -0400
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88494131;
+        Wed,  5 Jul 2023 07:51:06 -0700 (PDT)
+Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
+        by unicorn.mansr.com (Postfix) with ESMTPS id 639AE15360;
+        Wed,  5 Jul 2023 15:51:05 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id 4E1D1219FC1; Wed,  5 Jul 2023 15:51:05 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] backlight: led_bl: fix initial power state
+References: <20230705142447.15546-1-mans@mansr.com>
+        <20230705143320.GE6265@aspen.lan> <yw1xjzvezapt.fsf@mansr.com>
+        <20230705144406.GA9021@aspen.lan>
+Date:   Wed, 05 Jul 2023 15:51:05 +0100
+In-Reply-To: <20230705144406.GA9021@aspen.lan> (Daniel Thompson's message of
+        "Wed, 5 Jul 2023 15:44:06 +0100")
+Message-ID: <yw1xfs62za1y.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705232038.3a6d03e18f7bafb14cdfed42@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 11:20:38PM +0900, Masami Hiramatsu wrote:
-> On Wed, 5 Jul 2023 10:58:57 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > On Wed, Jul 05, 2023 at 10:15:47AM +0200, Petr Pavlu wrote:
-> > > Functions can_optimize() and insn_is_indirect_jump() consider jumps to
-> > > the range [__indirect_thunk_start, __indirect_thunk_end] as indirect
-> > > jumps and prevent use of optprobes in functions containing them.
-> > 
-> > Why ?!? I mean, doing an opt-probe of an indirect jump/call instruction
-> > itself doesn't really make sense and I can see why you'd want to not do
-> > that. But why disallow an opt-probe if there's one in the function as a
-> > whole, but not the probe target?
-> 
-> Here we need to clarify the reason why functions which have indirect jumps
-> are not allowed to use opt-probe. Since optprobe can replace multiple 
-> instructions with a jump, if any jmp (is used for jump inside same function)
-> jumps to the second and subsequent instructions replaced by optprobe's jump,
-> that target instruction can not be optimized.
-> 
-> The problem of indirect jump (which jumps to the same function) is that
-> we don't know which addresses will be the target of the indirect jump.
-> So, for safety, I disallow optprobe for such function. In that case, normal
-> kprobe is used because it replaces only one instruction.
+Daniel Thompson <daniel.thompson@linaro.org> writes:
 
-Ah, you're worried about jump-tables; you don't want to optimize across
-a jump-table target because then things go *boom*.
+> On Wed, Jul 05, 2023 at 03:36:46PM +0100, Måns Rullgård wrote:
+>> Daniel Thompson <daniel.thompson@linaro.org> writes:
+>>
+>> > On Wed, Jul 05, 2023 at 03:24:14PM +0100, Mans Rullgard wrote:
+>> >> The condition for the initial power state based on the default
+>> >> brightness value is reversed.  Fix it.
+>> >>
+>> >> Furthermore, use the actual state of the LEDs rather than the default
+>> >> brightness specified in the devicetree as the latter should not cause
+>> >> the backlight to be automatically turned on.
+>> >>
+>> >> If the backlight device is not linked to any display, set the initial
+>> >> power to on unconditionally.
+>> >>
+>> >> Fixes: ae232e45acf9 ("backlight: add led-backlight driver")
+>> >> Signed-off-by: Mans Rullgard <mans@mansr.com>
+>> >> ---
+>> >> Changes in v3:
+>> >> - Add comment
+>> >
+>> > This mismatches the subject line ;-) but I can live with that if Lee
+>> > and Jingoo can!
+>>
+>> Does it not fix it?  If you think the subject is misleading, feel free
+>> to change it.
+>
+> The bit that goes into version control is fine!
+>
+> However without '[PATCH v3]' on the subject line for the initial patch
+> there is a risk this thread will get overlooked and not queued[1].
 
-There's two things:
+Oh, I see now I forgot to add the v3 tag.  Sorry about that.
 
- - when X86_KERNEL_IBT=y any indirect jump target should be an ENDBR
-   instruction, so jump-table targets can be easily detected.
-
- - when RETPOLINE=y || X86_KERNEL_IBT=y we have jump-tables disabled,
-   search for -fno-jump-table in arch/x86/Makefile.
-
-At some point in the future we should be able to allow jump-tables for
-RETPOLINE=n && IBT=y builds (provided the compilers behave), but we
-currently don't bother to find out.
-
-Therefore, when either CONFIG option is found, you can assume that any
-indirect jump will be to another function.
-
-> If I understand correctly, all indirect jump will be replaced with JMP_NOSPEC.
-> If you read the insn_jump_into_range, I onlu jecks the jump code, not call.
-> So the functions only have indirect call still allow optprobe.
-
-With the introduction of kCFI JMP_NOSPEC is no longer an equivalent to a
-C indirect jump.
+-- 
+Måns Rullgård
