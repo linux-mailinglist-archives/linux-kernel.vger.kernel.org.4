@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100587480BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 595D87480C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjGEJXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 05:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S230196AbjGEJ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjGEJXN (ORCPT
+        with ESMTP id S230100AbjGEJ1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 05:23:13 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3A5A0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:23:12 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b701e1ca63so1735761fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 02:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688548990; x=1691140990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hevL1MlnabH6U4eIyVNZqX1Q6T1jS/bGfgvHOxnvxFk=;
-        b=UjRgjsVBiY8D2AXveR2isxaEiF6+iOKVwJC0ezqlGCKd5u2QVdG+ntqDaxNfYIhHYh
-         7tH2XGdL93OCAOdZMYBp4jJVQHAKzpFSXh4XiPwkMuh2gMxkUrjGMC/CYge/PDTC6reF
-         FsTwGWH8uIYJu0RFz24ORez/tyH0bQ20ps1Vc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688548990; x=1691140990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hevL1MlnabH6U4eIyVNZqX1Q6T1jS/bGfgvHOxnvxFk=;
-        b=jEqGqn3suoXa30fh8b1EbT2hV68wwQ7yPkmzx63tIge/0GfXguDbALrbNDFqoc1Yim
-         4Ghv0CQPdgFYjb5iT3P3lIO/3Jmht+3/73c/pRxvajpIXaYFTSrXU2cuifqnzX+KyOz/
-         wbHXUD5ZAYVu+biMPG0wauC0snDrtCNC8+5kN+43MMIVG1lKS9jALcj8CXlPBrg2EK7N
-         o5Is1oUoWhtLJJUwb4YwKAXK3pwQNsySk/lN8PEtm8+CzYnxqh16gkG+Z0ZAOquAH7AW
-         cW3qXPnShCjRmE0VYHWIonr/w2GmIHvzCX8eQ2OIXPlLns+fr+GNnzXCTvTnI8QJoqk1
-         OH5g==
-X-Gm-Message-State: ABy/qLZ9Xi2laiK4LjwfP8j8HxexEg4qvWY5Z4ZlN4xHgW7Ra3e9RImm
-        Vz/G9dj//GPAWSHGfadjW1sVbpLtzrITPSIyitSDpA==
-X-Google-Smtp-Source: APBJJlHALNKpgop8uXo+YA22FSE0sRA/ZaoE9VV+TBwKPxNA104VYZCTQrddq5ETUv0WC+BnXxDNFCP/AZDkp5bMkgw=
-X-Received: by 2002:a05:651c:8e:b0:2b6:e283:32cb with SMTP id
- 14-20020a05651c008e00b002b6e28332cbmr6846475ljq.23.1688548990474; Wed, 05 Jul
- 2023 02:23:10 -0700 (PDT)
+        Wed, 5 Jul 2023 05:27:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6A912A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:27:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B862B614AD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB110C433C7;
+        Wed,  5 Jul 2023 09:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688549268;
+        bh=8Fx9fMjO8G9ugWAbuWMet+cg6+Joz5k8QhqzwC12qsY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eoo0Bvrw1UFedSuQIXZXLVU+9eSykKnlLCGNhX6WKDHSjWKzHs45W6Sc5+LEp8Yn2
+         /DNzBXf9tV7vuTj14UGRu+D/lPt07gtCii7fqIBtyh8Z2HAouCMzNmVKrvzTL3yT/s
+         lpXJcXQKTCcazzOuTFZLURKsfcEGQZNtF3QMf8uc=
+Date:   Wed, 5 Jul 2023 10:27:45 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jacob Young <jacobly.alt@gmail.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: Fwd: Memory corruption in multithreaded user space program while
+ calling fork
+Message-ID: <2023070544-porous-prenatal-406a@gregkh>
+References: <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info>
+ <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
+ <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
+ <2023070359-evasive-regroup-f3b8@gregkh>
+ <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
+ <2023070453-plod-swipe-cfbf@gregkh>
+ <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
+ <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
+ <2023070509-undertow-pulverize-5adc@gregkh>
+ <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
 MIME-Version: 1.0
-References: <20230704075054.3344915-1-stevensd@google.com> <20230704075054.3344915-3-stevensd@google.com>
- <20230705031002.xrxk42hli6oavtlt@linux.intel.com>
-In-Reply-To: <20230705031002.xrxk42hli6oavtlt@linux.intel.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Wed, 5 Jul 2023 18:22:59 +0900
-Message-ID: <CAD=HUj6-VbznOOtn5WJee7Of_nh33ygg7_ph2G=hgnvNk_Cbsw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/8] KVM: Introduce __kvm_follow_pfn function
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,109 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 12:10=E2=80=AFPM Yu Zhang <yu.c.zhang@linux.intel.co=
-m> wrote:
->
-> > @@ -2514,35 +2512,26 @@ static bool hva_to_pfn_fast(unsigned long addr,=
- bool write_fault,
-> >   * The slow path to get the pfn of the specified host virtual address,
-> >   * 1 indicates success, -errno is returned if error is detected.
-> >   */
-> > -static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write=
-_fault,
-> > -                        bool interruptible, bool *writable, kvm_pfn_t =
-*pfn)
-> > +static int hva_to_pfn_slow(struct kvm_follow_pfn *foll, kvm_pfn_t *pfn=
-)
-> >  {
-> > -     unsigned int flags =3D FOLL_HWPOISON;
-> > +     unsigned int flags =3D FOLL_HWPOISON | FOLL_GET | foll->flags;
-> >       struct page *page;
-> >       int npages;
-> >
-> >       might_sleep();
-> >
-> > -     if (writable)
-> > -             *writable =3D write_fault;
-> > -
-> > -     if (write_fault)
-> > -             flags |=3D FOLL_WRITE;
-> > -     if (async)
-> > -             flags |=3D FOLL_NOWAIT;
-> > -     if (interruptible)
-> > -             flags |=3D FOLL_INTERRUPTIBLE;
-> > -
-> > -     npages =3D get_user_pages_unlocked(addr, 1, &page, flags);
-> > +     npages =3D get_user_pages_unlocked(foll->hva, 1, &page, flags);
-> >       if (npages !=3D 1)
-> >               return npages;
-> >
-> > +     foll->writable =3D (foll->flags & FOLL_WRITE) && foll->allow_writ=
-e_mapping;
-> > +
-> >       /* map read fault as writable if possible */
-> > -     if (unlikely(!write_fault) && writable) {
-> > +     if (unlikely(!foll->writable) && foll->allow_write_mapping) {
->
-> I guess !foll->writable should be !(foll->flags & FOLL_WRITE) here.
+On Wed, Jul 05, 2023 at 10:51:57AM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 05.07.23 09:08, Greg KH wrote:
+> > On Tue, Jul 04, 2023 at 01:22:54PM -0700, Suren Baghdasaryan wrote:
+> >> On Tue, Jul 4, 2023 at 9:18 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >>> On Tue, 4 Jul 2023 09:00:19 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
+> >>>>>>>> Thanks! I'll investigate this later today. After discussing with
+> >>>>>>>> Andrew, we would like to disable CONFIG_PER_VMA_LOCK by default until
+> >>>>>>>> the issue is fixed. I'll post a patch shortly.
+> >>>>>>>
+> >>>>>>> Posted at: https://lore.kernel.org/all/20230703182150.2193578-1-surenb@google.com/
+> >>>>>>
+> >>>>>> As that change fixes something in 6.4, why not cc: stable on it as well?
+> >>>>>
+> >>>>> Sorry, I thought since per-VMA locks were introduced in 6.4 and this
+> >>>>> patch is fixing 6.4 I didn't need to send it to stable for older
+> >>>>> versions. Did I miss something?
+> >>>>
+> >>>> 6.4.y is a stable kernel tree right now, so yes, it needs to be included
+> >>>> there :)
+> >>>
+> >>> I'm in wait-a-few-days-mode on this.  To see if we have a backportable
+> >>> fix rather than disabling the feature in -stable.
+> 
+> Andrew, how long will you remain in "wait-a-few-days-mode"? Given what
+> Greg said below and that we already had three reports I know of I'd
+> prefer if we could fix this rather sooner than later in mainline --
+> especially as Arch Linux and openSUSE Tumbleweed likely have switched to
+> 6.4.y already or will do so soon.
 
-The two statements are logically equivalent, although I guess using
-!(foll->flags & FOLL_WRITE) may be a little clearer, if a little more
-verbose.
+Ick, yeah, and Fedora should be switching soon too, and I want to drop
+support for 6.3.y "any day now".  Is there just a revert we can do now
+first to resolve the regression and then work on fixing this up "better"
+for 6.6-rc1?
 
-> >               struct page *wpage;
-> >
-> > -             if (get_user_page_fast_only(addr, FOLL_WRITE, &wpage)) {
-> > -                     *writable =3D true;
-> > +             if (get_user_page_fast_only(foll->hva, FOLL_WRITE, &wpage=
-)) {
-> > +                     foll->writable =3D true;
-> >                       put_page(page);
-> >                       page =3D wpage;
-> >               }
-> > @@ -2572,23 +2561,23 @@ static int kvm_try_get_pfn(kvm_pfn_t pfn)
-> >       return get_page_unless_zero(page);
-> >  }
-> >
-> ...
->
-> > +kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn=
-_t gfn,
-> > +                            bool atomic, bool interruptible, bool *asy=
-nc,
-> > +                            bool write_fault, bool *writable, hva_t *h=
-va)
-> > +{
-> > +     kvm_pfn_t pfn;
-> > +     struct kvm_follow_pfn foll =3D {
-> > +             .slot =3D slot,
-> > +             .gfn =3D gfn,
-> > +             .flags =3D 0,
-> > +             .atomic =3D atomic,
-> > +             .allow_write_mapping =3D !!writable,
-> > +     };
-> > +
-> > +     if (write_fault)
-> > +             foll.flags |=3D FOLL_WRITE;
-> > +     if (async)
-> > +             foll.flags |=3D FOLL_NOWAIT;
-> > +     if (interruptible)
-> > +             foll.flags |=3D FOLL_INTERRUPTIBLE;
-> > +
-> > +     pfn =3D __kvm_follow_pfn(&foll);
-> > +     if (pfn =3D=3D KVM_PFN_ERR_NEEDS_IO) {
->
-> Could we just use KVM_PFN_ERR_FAULT and foll.flags here? I.e.,
->         if (pfn =3D=3D KVM_PFN_ERR_FAULT && (foll.flags & FOLL_NOWAIT))?
-> Setting pfn to KVM_PFN_ERR_NEEDS_IO just to indicate an async fault
-> seems unnecessary.
+thanks,
 
-There are the cases where the fault does not fall within a vma or when
-the target vma's flags don't support the fault's access permissions.
-In those cases, continuing to try to resolve the fault won't cause
-problems per-se, but it's wasteful and a bit confusing. Having
-hva_to_pfn detect whether or not it may be possible to resolve the
-fault asynchronously and return KVM_PFN_ERR_NEEDS_IO if so seems like
-a good idea. It also matches what the existing code does.
-
--David
+greg k-h
