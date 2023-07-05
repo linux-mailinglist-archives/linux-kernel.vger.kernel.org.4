@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D477480AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CC47480AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbjGEJS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 05:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S231349AbjGEJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbjGEJSJ (ORCPT
+        with ESMTP id S231561AbjGEJSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jul 2023 05:18:09 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE6CA3;
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04072A0;
         Wed,  5 Jul 2023 02:18:08 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3656rfKs004217;
-        Wed, 5 Jul 2023 09:18:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=6zn7ArBE4475+Ku3zKKxsNF3LY3cQy6G6oxLvWSz2mg=;
- b=YAcpR7Nx9WIYIwOexQWz7KEGdAkFAwOlql8oLblCZfnB0a2aeIctVMgZBUA/jlvyiYy8
- uF4oPa94YICHsQEEH66OpFzGZCZF6riioDMJnJA8hGa7mjxHnudK+BNoE8eesdFWxcGQ
- 9+hRdQU/4/vX+YAUnHU3+3gFZqspA615PNAXG29pEXqBxvJn0tqB3O3CIDDOApQ42xZm
- 8P1njlUr193SG545FFxrfKY9kxvoP7zBHxB0RBozVc/khGcOGeIuPRAiejLjXIiVV/gC
- GcrOe+9PW0JV6byvD+7WgFapVwFb/CeeSMTZ1MV8OKhLQb9YgYkj0rgOIdBXVsxqJsTd iQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rmhf12e95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 09:18:05 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3659I4CB012083
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jul 2023 09:18:04 GMT
-Received: from hu-kbajaj-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.7; Wed, 5 Jul 2023 02:18:01 -0700
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Komal Bajaj <quic_kbajaj@quicinc.com>
-Subject: [PATCH v2 2/2] arm64: dts: qcom: qru1000-idp: Add reserved gpio list
-Date:   Wed, 5 Jul 2023 14:47:30 +0530
-Message-ID: <20230705091730.32087-3-quic_kbajaj@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230705091730.32087-1-quic_kbajaj@quicinc.com>
-References: <20230705091730.32087-1-quic_kbajaj@quicinc.com>
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3fbea14706eso1748415e9.2;
+        Wed, 05 Jul 2023 02:18:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688548686; x=1691140686;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FnniEHM75ybllnlQqbnzdBbhL9bJMHbs9XKrfqFwjY8=;
+        b=fjhWXSyj17Eo/rzZLfQHQHcJqBmmgFFrAlRq6XYUbNJ+sehFeBhnz+DcU5xmA/FRbc
+         2cyLMQAX5hjFFovlWmA4NG5MYzTTVHd+gzsZUbmEDpeLWOxwuCUvMfjTjh2729J1ZrJz
+         C5hNOpDhprPtTwb9EZdF5Ck9Un85r0A1cZ/uD2mu7H6m+1Jbba43GU47IGsQa39l0+59
+         oWcVAXo99YiRbzUoECTknuIXodjjy71ubJtVa15n4NrkAUTdw+63X1murgLjC5+CpSGN
+         eKiQdWBEBHCiiP0q/dzaNJoy7hF9xWiCst+pLPsklD1iM2/ZIZdSU9UnhVxxbdU4HxWY
+         ntQw==
+X-Gm-Message-State: AC+VfDwWLJNbVn3eFkCvKuT3/f88w5crFFK8UaLmGcmjBudUGEhCU61N
+        7pDjKkzDrPPdn1A8GiDds2ns08QN3gwpzg==
+X-Google-Smtp-Source: ACHHUZ6k0t48ll7+BP1YenYCMLiGGWN+aD1YZ1fDBLiQQZ4qSbE0qiUjrjnyHWSz3ascddy0oql3YA==
+X-Received: by 2002:a05:600c:2290:b0:3fb:4165:9deb with SMTP id 16-20020a05600c229000b003fb41659debmr12674492wmf.18.1688548686265;
+        Wed, 05 Jul 2023 02:18:06 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-009.fbsv.net. [2a03:2880:31ff:9::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a21-20020a05600c225500b003fbc681c8d1sm1547389wmm.36.2023.07.05.02.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 02:18:05 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 02:18:03 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, sergey.senozhatsky@gmail.com,
+        pmladek@suse.com, tj@kernel.org,
+        Dave Jones <davej@codemonkey.org.uk>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] netconsole: Append kernel version to message
+Message-ID: <ZKU1Sy7dk8yESm4d@gmail.com>
+References: <20230703154155.3460313-1-leitao@debian.org>
+ <20230703113410.6352411d@hermes.local>
+ <ZKQ3o6byAaJfxHK+@gmail.com>
+ <20230704085800.38f05b56@hermes.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TxsO0vJrHYVxFoU3rnWBnMOf4z5J5rh3
-X-Proofpoint-ORIG-GUID: TxsO0vJrHYVxFoU3rnWBnMOf4z5J5rh3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_16,2023-07-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 adultscore=0
- suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=806 spamscore=0
- bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2307050084
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704085800.38f05b56@hermes.local>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add reserve gpios for QRU1000 IDP platform. These gpios are
-needed for modem subsystem.
+On Tue, Jul 04, 2023 at 08:58:00AM -0700, Stephen Hemminger wrote:
+> > > This should be runtime configured like other netconsole options.
+> > > Not enabled at compile time.  
+> > 
+> > Do you mean I should add a new option to netconsole line? This is the
+> > current line format today:
+> > 
+> > 	[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
+> > 
+> > If that is the case, I suppose I want to add something at the beginning
+> > of format, that specify that uname should be sent. What about something
+> > as?
+> > 
+> > 	[u][+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
+> > 
+> > Thanks!
+> 
+> Keep it as simple as possible.
+> What ever program is reading udp socket knows where it is coming from.
 
-Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
----
- arch/arm64/boot/dts/qcom/qru1000-idp.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+Right, the server knows from where the package is coming, so, the source
+address is known at receive time, and that is good. I want to do the
+same with uname.
 
-diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-index 2cc893ae4d10..80dadd2f30a3 100644
---- a/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-@@ -448,6 +448,10 @@ &qupv3_id_0 {
- 	status = "okay";
- };
+> The uname is really not needed.
 
-+&tlmm {
-+	gpio-reserved-ranges = <28 2>;
-+};
-+
- &uart7 {
- 	status = "okay";
- };
---
-2.40.1
+The uname is useful if the receiver side is looking (grepping) for
+specific messages (warnings, oops, etc) affecting specific kernel
+versions. If the uname is not available, the receiver needs to read boot
+message and keep a map for source IP to kernel version. This is far from
+ideal at a hyperscale level.
 
+Things get worse when you have VMs using different kernels, and both
+host and guests are sending traffic to the same receiver. In this case, you
+have two different kernels versions mapped to the same IP.
+
+Thanks!
