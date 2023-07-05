@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23071747E73
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B5B747E78
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjGEHpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
+        id S232259AbjGEHrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbjGEHpl (ORCPT
+        with ESMTP id S231952AbjGEHrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:45:41 -0400
+        Wed, 5 Jul 2023 03:47:18 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4502FE59
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:44:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4145710C3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688543096;
+        s=mimecast20190719; t=1688543196;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xhqSMESVuEfcbYSiCIUoig5V/WvTsij8RzmIN+JFlXI=;
-        b=LXrqwoyhy4gOGIHJsSQBKCvaCfTgHjAxfHUFAZsUSlVKR/I8qb2gY0JzeI30k5Vsf/Jxt3
-        wh/kVXuCA39pj6a8Gc7Kyjzgizm3dA2J/KC5zCr0pxkkvaxhn5UB3yYfXYBJS/vtfN9ZjR
-        Q3PSndXVpfVpUcxgW+5tdHKN7Pq3//8=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ErZ583UAFFXXktAwUkPKfSDXi8WyYfGqw8H1xV5E3EY=;
+        b=bvtdsMB3TTi+6muykpHIIQ0A3AvT01aPDochyxGzhVwN5XImzQvuvqiWgY30SlBNp9xbR7
+        X+KIFZJfCG/FupP191BtP1KMoFSrsQZI0zvvJZuCwEve2VWRivHkRa3WedCjk6SJq62EmR
+        BsMIezWaYYDX4m2P3zvIoWpVQSUA3SU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-241-64Ltnt_XPnGVNYZhQp2CJQ-1; Wed, 05 Jul 2023 03:44:55 -0400
-X-MC-Unique: 64Ltnt_XPnGVNYZhQp2CJQ-1
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-345fe8d0a30so15168975ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 00:44:55 -0700 (PDT)
+ us-mta-633-5FEoDL9JPmKCbIfan8VNQw-1; Wed, 05 Jul 2023 03:46:35 -0400
+X-MC-Unique: 5FEoDL9JPmKCbIfan8VNQw-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3141325af78so4253815f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 00:46:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688543094; x=1691135094;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xhqSMESVuEfcbYSiCIUoig5V/WvTsij8RzmIN+JFlXI=;
-        b=PTWlaFRwEa4VWgxRl1675i43a3ekboYRXULgXWZX+V3VKUNMkX5aRCWMXy7MBFLDL7
-         Z1wu0BflQrxTA+YwIYGFlBDTR+3h2pEPbhErbsTf8ps8YM35v0/Ec7WFCvHa0nlUSjVE
-         KS/aTvHq7RXVKM5Yhk9r1bzSHM6xXPB4UzOaJslXdqbDk0e5kWNmEhRS49PLjxKsKCF0
-         hgQF4MEsuGmx3bj88SzM2wbr5PknVYjZERx3pNEcxSsoWZ/EBWNBA4fwpSxM03Wj6s5e
-         GeoAuPTQxjYZbEpKtRNGdbeQ+g0TtWIWMEsDClDOEhTFrklGqbZL05OBCCLdWK+f3GHt
-         kPaA==
-X-Gm-Message-State: ABy/qLYTuhzWn1n/PYMBbBQADz+z2e8105ZG8t14LOnJi5ZPAZj2/fFx
-        UupzT0PdooRb8Avh+1IjuMuwl0qk32iRZMTciclH+ilpzUZiRTrp+xhkbeqk8g6gSSOVO43+omy
-        pJkDZvxjgaU4B/fU4T3dYm/xdIxmwVcgnEm5tqXJueSw+sKZq
-X-Received: by 2002:a05:6e02:549:b0:345:baef:842b with SMTP id i9-20020a056e02054900b00345baef842bmr14200080ils.25.1688543094491;
-        Wed, 05 Jul 2023 00:44:54 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGNIYLOK2akZqWKGP7b3X3MwsItf7MK568KWs0SIYlJKsXPb6PqP0sY6tuV5P0aUcze0VULeHSI/Fu9IbiQXo0=
-X-Received: by 2002:a05:6e02:549:b0:345:baef:842b with SMTP id
- i9-20020a056e02054900b00345baef842bmr14200070ils.25.1688543094240; Wed, 05
- Jul 2023 00:44:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688543194; x=1691135194;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ErZ583UAFFXXktAwUkPKfSDXi8WyYfGqw8H1xV5E3EY=;
+        b=Lcgs7/m45j4ZL6RX8B26yJua/WWMXzoY7TFrYDq/92foE5rK7gwGLZ3f8E++g59xJy
+         /9rTsLOPvTDUq3pq92msDXhF33CCOhgXHE2N0YDLONTTwu5EfLvzHwbG2DxuOcwkxWb8
+         EYPBRzkQoom1fvVTLMcUM43R5S/kA4Z3O06jTkgx4Jd6Dsr2CznEJy09NLMIHsr3U7jD
+         Zgi4LFDLkkCeMfohQxdNhUdpnriuFUdCKJys9Zo3gzbV3OmHjHIMRjG4awrWyqJAGC3N
+         D1aAOwNyEGIAAh7NkuI0siutXKnv/4AzvXHD7PSOsDuZRoDFfK2Vrae5G5FIMMtv6Dzz
+         V1yA==
+X-Gm-Message-State: ABy/qLZ5YCHfhOw782bhKS8jkD29cVnFZ4qSp87Id2s/mV+fYNYriqZr
+        DomLidB8NB4K3O4bTwRiXCUeDLK91axwWz0G+A2bbJmZSvI828hbfxp5hL5gM69uce6VUCso8WP
+        Ljfx/3q8mrZg8yFqdiZ+vGuDX
+X-Received: by 2002:adf:e44d:0:b0:314:2732:e81e with SMTP id t13-20020adfe44d000000b003142732e81emr13085718wrm.8.1688543194261;
+        Wed, 05 Jul 2023 00:46:34 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFsu0NXA2DcqaEBs6I3Rg+ekfJ+Y9cFLpHbU/8XeUuuyRyAepiisRLN9BUbx4g3BoqHacYmEg==
+X-Received: by 2002:adf:e44d:0:b0:314:2732:e81e with SMTP id t13-20020adfe44d000000b003142732e81emr13085694wrm.8.1688543193994;
+        Wed, 05 Jul 2023 00:46:33 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id k5-20020a5d6e85000000b003063a92bbf5sm30496891wrz.70.2023.07.05.00.46.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 00:46:33 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
+        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
+Cc:     linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-ia64@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        loongarch@lists.linux.dev, linux-alpha@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 08/12] drivers/firmware: Remove trailing whitespaces
+In-Reply-To: <20230629121952.10559-9-tzimmermann@suse.de>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-9-tzimmermann@suse.de>
+Date:   Wed, 05 Jul 2023 09:46:32 +0200
+Message-ID: <87bkgqssvb.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-References: <20230705070427.92579-1-jefflexu@linux.alibaba.com> <20230705070427.92579-3-jefflexu@linux.alibaba.com>
-In-Reply-To: <20230705070427.92579-3-jefflexu@linux.alibaba.com>
-From:   Alexander Larsson <alexl@redhat.com>
-Date:   Wed, 5 Jul 2023 09:44:43 +0200
-Message-ID: <CAL7ro1GuPZE8ek=uvfHEqGFrbbt=NO1=oO8_B-dVBF9go=StSg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] erofs: boost negative xattr lookup with bloom filter
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>
-Cc:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,103 +86,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 9:04=E2=80=AFAM Jingbo Xu <jefflexu@linux.alibaba.co=
-m> wrote:
+Thomas Zimmermann <tzimmermann@suse.de> writes:
+
+> Fix coding style. No functional changes.
 >
-> The bit value for the bloom filter map has a reverse semantics for
-> compatibility.  That is, the bit value of 0 indicates existence, while
-> the bit value of 1 indicates the absence of corresponding xattr.
->
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 > ---
->  fs/erofs/internal.h |  2 ++
->  fs/erofs/xattr.c    | 12 ++++++++++++
->  2 files changed, 14 insertions(+)
->
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index 36e32fa542f0..7e447b48a46b 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -251,6 +251,7 @@ EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRA=
-GMENTS)
->  EROFS_FEATURE_FUNCS(dedupe, incompat, INCOMPAT_DEDUPE)
->  EROFS_FEATURE_FUNCS(xattr_prefixes, incompat, INCOMPAT_XATTR_PREFIXES)
->  EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
-> +EROFS_FEATURE_FUNCS(xattr_filter, compat, COMPAT_XATTR_FILTER)
->
->  /* atomic flag definitions */
->  #define EROFS_I_EA_INITED_BIT  0
-> @@ -270,6 +271,7 @@ struct erofs_inode {
->         unsigned char inode_isize;
->         unsigned int xattr_isize;
->
-> +       unsigned long xattr_name_filter;
->         unsigned int xattr_shared_count;
->         unsigned int *xattr_shared_xattrs;
->
-> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-> index 40178b6e0688..1137723303d3 100644
-> --- a/fs/erofs/xattr.c
-> +++ b/fs/erofs/xattr.c
-> @@ -5,6 +5,7 @@
->   * Copyright (C) 2021-2022, Alibaba Cloud
->   */
->  #include <linux/security.h>
-> +#include <linux/xxhash.h>
->  #include "xattr.h"
->
->  struct erofs_xattr_iter {
-> @@ -87,6 +88,7 @@ static int erofs_init_inode_xattrs(struct inode *inode)
->         }
->
->         ih =3D it.kaddr + erofs_blkoff(sb, it.pos);
-> +       vi->xattr_name_filter =3D le32_to_cpu(ih->h_name_filter);
->         vi->xattr_shared_count =3D ih->h_shared_count;
->         vi->xattr_shared_xattrs =3D kmalloc_array(vi->xattr_shared_count,
->                                                 sizeof(uint), GFP_KERNEL)=
-;
-> @@ -392,7 +394,10 @@ int erofs_getxattr(struct inode *inode, int index, c=
-onst char *name,
->                    void *buffer, size_t buffer_size)
->  {
->         int ret;
-> +       uint32_t bit;
->         struct erofs_xattr_iter it;
-> +       struct erofs_inode *vi =3D EROFS_I(inode);
-> +       struct erofs_sb_info *sbi =3D EROFS_SB(inode->i_sb);
->
->         if (!name)
->                 return -EINVAL;
-> @@ -401,6 +406,13 @@ int erofs_getxattr(struct inode *inode, int index, c=
-onst char *name,
->         if (ret)
->                 return ret;
->
-> +       if (erofs_sb_has_xattr_filter(sbi)) {
 
-As I said in my other mail. I would really like this to just always do
-the filter check. It should be safe as older fs:es have zero in place
-here, and doing this allows me to create composefs images with the
-bloom filters that also work with older kernels.
-
-> +               bit =3D xxh32(name, strlen(name), EROFS_XATTR_FILTER_SEED=
- + index);
-> +               bit &=3D EROFS_XATTR_FILTER_MASK;
-> +               if (test_bit(bit, &vi->xattr_name_filter))
-> +                       return -ENOATTR;
-> +       }
-> +
->         it.index =3D index;
->         it.name =3D (struct qstr)QSTR_INIT(name, strlen(name));
->         if (it.name.len > EROFS_NAME_LEN)
-> --
-> 2.19.1.6.gb485710b
->
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
 
---=20
-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
--=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D
- Alexander Larsson                                Red Hat, Inc
-       alexl@redhat.com         alexander.larsson@gmail.com
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
