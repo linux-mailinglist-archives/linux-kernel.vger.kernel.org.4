@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894B9748695
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306DC748699
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjGEOmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S232621AbjGEOmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbjGEOmd (ORCPT
+        with ESMTP id S232475AbjGEOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:42:33 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAE310D5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:42:32 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b69923a715so105252361fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688568150; x=1691160150;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LvfxYoatLPY+EEK3fZXAaMdZCVIQwiRsXvqBzlQnUio=;
-        b=zrmknDbWs4pXA2BEO+ZZbVS1/Vg3LDziRqcQZVHwrspolpztZ9aKw8dsbUeyoL8GnA
-         dM0/Dhc5+Q7lRSv/a/VL22dNGx7MwcVPNGkmtpX9SMCOS2pmWiPIsLNnVnIx9WNd7tM0
-         ZR86oIFUmaICXXSTI30wkW7hRNvkywplXSXjhqfjOdvt4yMkWcLpKTjNKon4wGbRS/6l
-         PYYYu19Oa0fWNGbPl7ycT0ssWvXEQxdvQ3reESoP9KryJF8Y67EAQMTVC0ht3rKtBdbN
-         eFAd1WgoiuiHIx9lDFPKfSvJIU8lSLjumJwIX2rlsPWOsve6twEcqwH7z2tODLoNwR8K
-         WIVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688568150; x=1691160150;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LvfxYoatLPY+EEK3fZXAaMdZCVIQwiRsXvqBzlQnUio=;
-        b=kIziAgf3s2cHJOpI+Jqzz9zlG3ps21AZSiZgwYT8jSIFt3pWsEed23S2Jxj/4UUy7d
-         vGI1+WDYWF/UZGpLFFt7qEpkzp7MCQnFfSTR6JYpYWFZm3wAX+XwdxlgDgSeNl9oeMkK
-         SB4OQhYjeb+wodWyXFSGZCdpJ28oeyrP6fKB2+JUU48iG9M/MlzrCv3CQM2IGi2IOb/G
-         KfZPfFw5JzLhYFpIWCuOwka89Xw/hcWn8TlJgRAuxfWOKZnktI0ym784/DU9+62xIr2Z
-         z4w4xRpHUcnWkWjXGYJ6lFaqRxMuK8B/mduU3ioYe2hwlOcFlUJyQJ71+OhKrku5U3/p
-         I9ZA==
-X-Gm-Message-State: ABy/qLaErdSlnZfzGo2VQ1tx8qJ7fklMi/diT2Es4I/7nLqY5ke9ALFw
-        YAYbmqthOD6FBcwpKn6APu2qXw==
-X-Google-Smtp-Source: APBJJlGYhYhict3tVNgScjd7KiEg9N8T63CfQkYGiQDMubJFxYUP7RMS0Z5BovY5eCZ+8GTsDCAgyQ==
-X-Received: by 2002:a2e:8e89:0:b0:2b6:e536:a2a3 with SMTP id z9-20020a2e8e89000000b002b6e536a2a3mr9007351ljk.19.1688568150187;
-        Wed, 05 Jul 2023 07:42:30 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id xa10-20020a170907b9ca00b00988955f7b5esm14727581ejc.157.2023.07.05.07.42.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 07:42:29 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: add missing space before {
-Date:   Wed,  5 Jul 2023 16:42:26 +0200
-Message-Id: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 5 Jul 2023 10:42:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B961B6;
+        Wed,  5 Jul 2023 07:42:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DA4D61578;
+        Wed,  5 Jul 2023 14:42:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E85DC433C7;
+        Wed,  5 Jul 2023 14:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688568156;
+        bh=89PZ/QaDV/f5qPoJLlgOoWPxoC4vw+BEViZ9AyZWsfg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=DfJpQcZ5wYbIRdrAxfvkOEeQ58K5JIHMs2FykL5zAQ2Pv1iLJaDus12bGeMN5OIni
+         /D0lLEsHoJ68qb2bWiEIORQV+3sph/xv9ZxP/oakwPnlxKQYcPeIwNsHH+5uX1f6+j
+         1zQdvnww3UBWVPg1Z2nJ0ILX7uqBx7lb05o0Fe4CQB1S5X9MWiyLXhx4xN3lsIqAWx
+         nzrHbS1MJgvtMYBmpB+zMkSzM8iUMIDrneRNkvqK1ETFJ6vV5glD8ABGTKfKJz56pj
+         oN3ZVXO1IctgMPpWmdDJuGm/+YEdlAeXX2T4iQFNVsFE50XMkGYWqre3TxkZUjXPpt
+         x+hYbs5HsGqQw==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     =?utf-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Emil Renner Berthing <emil.renner.berthing@gmail.com>
+Cc:     Andrew Jones <ajones@ventanamicro.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        rminnich@gmail.com, Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
+        weidong.wd@bytedance.com
+Subject: Re: [External] [PATCH v2 1/3] riscv: obtain ACPI RSDP from FFI.
+In-Reply-To: <50F3BD62-78F1-456E-A44A-0C7D9A2D4113@jrtc27.com>
+References: <20230702095735.860-1-cuiyunhui@bytedance.com>
+ <20230703-71f67eb66a037f5c0fb825c6@orel>
+ <CAEEQ3w=7tBHyG=CvuktPN5cvfpY6ayamnbry6eOYxMDrPN+oZg@mail.gmail.com>
+ <CANBLGcwcvK55dZ1__wvWCtcw=XoKt=qki8g6C_QYo+TBqqJ=TA@mail.gmail.com>
+ <50F3BD62-78F1-456E-A44A-0C7D9A2D4113@jrtc27.com>
+Date:   Wed, 05 Jul 2023 16:42:33 +0200
+Message-ID: <87bkgql8rq.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,40 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing whitespace between node name/label and opening {.
+Jessica Clarke <jrtc27@jrtc27.com> writes:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8180x.dtsi                    | 2 +-
- arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> On 3 Jul 2023, at 19:58, Emil Renner Berthing <emil.renner.berthing@gmail=
+.com> wrote:
+>>=20
+>> On Mon, 3 Jul 2023 at 15:33, =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@byte=
+dance.com> wrote:
+>>>=20
+>>> Hi drew,
+>>>=20
+>>> On Mon, Jul 3, 2023 at 9:01=E2=80=AFPM Andrew Jones <ajones@ventanamicr=
+o.com> wrote:
+>>>>=20
+>>>>=20
+>>>> (This is a reply to a non-existent cover letter.)
+>>>=20
+>>> This has been discussed many times with Ard, Please refer to :
+>>> https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1=
+-cuiyunhui@bytedance.com/
+>>=20
+>> Hi Yunhui,
+>>=20
+>> From that discussion it was mentioned that that arm supports 3 methods
+>> of booting:
+>>  direct + devicetree
+>>  EFI + devicetree
+>>  EFI + ACPI
+>> ..but not
+>>  direct + ACPI
+>>=20
+>> To me it isn't obvious from that or this thread, and since arm seems
+>> to be doing fine without the 4th option I'm curious why that's
+>> necessary on riscv?
+>
+> If anything we should be removing option 1, because that=E2=80=99s not a
+> cross-OS standard (though RISC-V=E2=80=99s SBI direct booting is at least=
+ not
+> tied to the OS). Any application-class platform spec is going to
+> mandate EFI, because, whatever your thoughts of EFI are, that is *the*
+> standard. And if you=E2=80=99re willing to pick up all the complexity of =
+ACPI,
+> what=E2=80=99s a bit of EFI (especially if you only go for a minimal one =
+a la
+> U-Boot)?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-index 3c1314e12d08..fe8534538618 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-@@ -3429,7 +3429,7 @@ timer@17c20000 {
- 			#size-cells = <1>;
- 			ranges = <0 0 0 0x20000000>;
- 
--			frame@17c21000{
-+			frame@17c21000 {
- 				reg = <0x17c21000 0x1000>,
- 				      <0x17c22000 0x1000>;
- 				frame-number = <0>;
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-index b841ea9192ae..85e5cf3dc91e 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-@@ -565,7 +565,7 @@ panel_in_0: endpoint {
- 				};
- 			};
- 
--			port@1{
-+			port@1 {
- 				reg = <1>;
- 
- 				panel_in_1: endpoint {
--- 
-2.34.1
+Well said!
 
+Yunhui, why not simply add a minimal UEFI stub to Coreboot (like Jess
+points out above)?
+
+IMO what U-boot (or
+https://github.com/cloud-hypervisor/rust-hypervisor-firmware if you're
+into Rust ;-)) is doing, and just having a small UEFI shim is the way to
+go.
