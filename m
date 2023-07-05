@@ -2,103 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B536974903E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA4D74903F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbjGEVul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 17:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S232180AbjGEVvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 17:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbjGEVuP (ORCPT
+        with ESMTP id S232168AbjGEVvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:50:15 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113891BD5;
-        Wed,  5 Jul 2023 14:50:12 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365LbXL6019209;
-        Wed, 5 Jul 2023 21:50:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=U7EOkrfqb0vqwODbuTaX2Se2zSb8RsFVvhzRNki9BrI=;
- b=LUZ652ANk7Zk0SVTmgts6jJ36JAykRE+xzKV2RHuiBTpvxYDLXdieB6V7VDw17dhHE2v
- cHOIBITxwv6XMGdGQo1oLvFp4AWHtFnvi4HPMiJuzNwX/njIJp+J9j2U/mGYw22/Y5Az
- lLqj+Ad+XF4BKZRpQHSmLNvsSJYs7GbY6ZIrXa5C676bjfzB8p7w5JFtuZcj9FqMWlmF
- 0ngJqEP6h0HxM3hO025xXH4RVIzoNukpiTaBerF9a7BPHf+1tW5UOvpIj4m15ycJRICH
- E0HON3eCu7MppBPgS6WZevQYnbGLoZs4y0UTrmnqGjS+nzzAJhzy+YQgY7oHFgxfprSX Ow== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnb5a0pnt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 21:50:05 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 365Lo4Bx008323
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jul 2023 21:50:04 GMT
-Received: from [10.110.19.132] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 5 Jul
- 2023 14:50:04 -0700
-Message-ID: <fd62c16f-1735-4389-d547-33eefc56f04e@quicinc.com>
-Date:   Wed, 5 Jul 2023 14:50:01 -0700
+        Wed, 5 Jul 2023 17:51:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AA41BDB
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 14:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688593813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kecYvW5qBPjTikxxxhnn2imQSz133dAm6oAhP4KaMvk=;
+        b=XTjl9cvpUgLXjtyym7aMADyIp94W8eiI62AhIiQy02NmlcsZBQLHojTGtyfEIIMXvGpgRX
+        EUnKRXAJdindHGaGCBshHoDv+VWEc+5u4lQYTgnt0kobf10ipMIMef8Ft9PAmY5dM0g0AP
+        ctSROGp2ctkztqoosKLLbUCIAOiAhaE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-ldIsUjCKNmWA5qj87o74pA-1; Wed, 05 Jul 2023 17:50:10 -0400
+X-MC-Unique: ldIsUjCKNmWA5qj87o74pA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D79C3C108C4;
+        Wed,  5 Jul 2023 21:50:09 +0000 (UTC)
+Received: from localhost (unknown [10.42.28.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5286F207B2DD;
+        Wed,  5 Jul 2023 21:50:09 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 22:50:08 +0100
+From:   "Richard W.M. Jones" <rjones@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Richard Henderson <richard.henderson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        Benjamin Copeland <ben.copeland@linaro.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: qemu-x86_64 booting with 8.0.0 stil see int3: when running LTP
+ tracing testing.
+Message-ID: <20230705215008.GD17440@redhat.com>
+References: <CA+G9fYsETJQm0Ue7hGsb+nbsiMikwycOV3V0DPr6WC2r61KRBQ@mail.gmail.com>
+ <2d7595b1-b655-4425-85d3-423801bce644@app.fastmail.com>
+ <20230621160655.GL2053369@hirez.programming.kicks-ass.net>
+ <20230704074620.GA17440@redhat.com>
+ <20230705162830.GC17440@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/5] drm/msm/dpu: Define names for unnamed sblks
-Content-Language: en-US
-To:     Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Rob Clark <robdclark@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jesszhan@quicinc.com>
-References: <20230622-devcoredump_patch-v2-0-9e90a87d393f@quicinc.com>
- <20230622-devcoredump_patch-v2-3-9e90a87d393f@quicinc.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230622-devcoredump_patch-v2-3-9e90a87d393f@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: yJI34Yltvqwou7JvHHWgN3qEzUG8vXak
-X-Proofpoint-ORIG-GUID: yJI34Yltvqwou7JvHHWgN3qEzUG8vXak
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_11,2023-07-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxscore=0 impostorscore=0 priorityscore=1501 spamscore=0 mlxlogscore=854
- malwarescore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307050197
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705162830.GC17440@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/5/2023 12:30 PM, Ryan McCann wrote:
-> Some sub-blocks in the hw catalog have not been given a name, so when the
-> registers from that block are dumped, there is no name to reference.
-> Define names for relevant sub-blocks to fix this.
+On Wed, Jul 05, 2023 at 05:28:30PM +0100, Richard W.M. Jones wrote:
+> On Tue, Jul 04, 2023 at 08:46:20AM +0100, Richard W.M. Jones wrote:
+> > We have been having the same sort of problem
+> > (https://bugzilla.redhat.com/show_bug.cgi?id=2216496).  It's another
+> > of those bugs that requires hundreds or thousands of boot iterations
+> > before you can see it.  There is a test in comment 27 but it requires
+> > guestfish and some hacking to work.  I'll try to come up with a
+> > cleaner test later.
+> > 
+> > We see stack traces like:
+> > 
+> > [    3.081939] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+> > [    3.082266] clocksource: Switched to clocksource acpi_pm
+> > [    3.090201] NET: Registered PF_INET protocol family
+> > [    3.093098] int3: 0000 [#1] PREEMPT SMP NOPTI
+> > [    3.093098] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.4.0-10173-ga901a3568fd2 #8
+> > [    3.093098] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
+> > [    3.093098] RIP: 0010:__mod_timer+0x1c3/0x370
+> > [    3.093098] Code: 00 00 41 bd ff ff ff ff 31 d2 4c 89 f6 4c 89 ff e8 f2 ef ff ff 41 89 c4 85 c0 75 09 83 e3 01 0f 85 54 ff ff ff 41 8b 4f 20 66 <90> f7 c1 00 00 10 00 0f 84 23 01 00 00 48 c7 c3 40 cc 01 00 65 48
+> > [    3.093098] RSP: 0018:ffffaf1600013e00 EFLAGS: 00000046
+> > [    3.093098] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000280003
+> > [    3.093098] RDX: 0000000000000000 RSI: ffff9aa90fd9dec0 RDI: ffffffff8441e4b8
+> > [    3.093098] RBP: 00000000fffc200d R08: ffffffff8441e4a0 R09: ffffffff8441e4b8
+> > [    3.093098] R10: 0000000000000001 R11: 000000000002e990 R12: 0000000000000000
+> > [    3.093098] R13: 00000000ffffffff R14: ffff9aa90fd9dec0 R15: ffffffff8441e4b8
+> > [    3.093098] FS:  0000000000000000(0000) GS:ffff9aa90fd80000(0000) knlGS:0000000000000000
+> > [    3.093098] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    3.093098] CR2: 0000000000000000 CR3: 000000004e02e000 CR4: 0000000000750ee0
+> > [    3.093098] PKRU: 55555554
+> > [    3.093098] Call Trace:
+> > [    3.093098]  <TASK>
+> > [    3.093098]  ? die+0x31/0x80
+> > [    3.093098]  ? exc_int3+0x10e/0x120
+> > [    3.093098]  ? asm_exc_int3+0x39/0x40
+> > [    3.093098]  ? __mod_timer+0x1c3/0x370
+> > [    3.093098]  ? __mod_timer+0x1c3/0x370
+> > [    3.093098]  queue_delayed_work_on+0x23/0x30
+> > [    3.093098]  neigh_table_init+0x1bb/0x2e0
+> > [    3.093098]  arp_init+0x12/0x50
+> > [    3.093098]  inet_init+0x15b/0x2f0
+> > [    3.093098]  ? __pfx_inet_init+0x10/0x10
+> > [    3.093098]  do_one_initcall+0x58/0x230
+> > [    3.093098]  kernel_init_freeable+0x199/0x2d0
+> > [    3.093098]  ? __pfx_kernel_init+0x10/0x10
+> > [    3.093098]  kernel_init+0x15/0x1b0
+> > [    3.093098]  ret_from_fork+0x2c/0x50
+> > [    3.093098]  </TASK>
+> > [    3.093098] Modules linked in:
+> > [    3.093098] ---[ end trace 0000000000000000 ]---
+> > [    3.093098] RIP: 0010:__mod_timer+0x1c3/0x370
+> > [    3.093098] Code: 00 00 41 bd ff ff ff ff 31 d2 4c 89 f6 4c 89 ff e8 f2 ef ff ff 41 89 c4 85 c0 75 09 83 e3 01 0f 85 54 ff ff ff 41 8b 4f 20 66 <90> f7 c1 00 00 10 00 0f 84 23 01 00 00 48 c7 c3 40 cc 01 00 65 48
+> > [    3.093098] RSP: 0018:ffffaf1600013e00 EFLAGS: 00000046
+> > [    3.093098] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000280003
+> > [    3.093098] RDX: 0000000000000000 RSI: ffff9aa90fd9dec0 RDI: ffffffff8441e4b8
+> > [    3.093098] RBP: 00000000fffc200d R08: ffffffff8441e4a0 R09: ffffffff8441e4b8
+> > [    3.093098] R10: 0000000000000001 R11: 000000000002e990 R12: 0000000000000000
+> > [    3.093098] R13: 00000000ffffffff R14: ffff9aa90fd9dec0 R15: ffffffff8441e4b8
+> > [    3.093098] FS:  0000000000000000(0000) GS:ffff9aa90fd80000(0000) knlGS:0000000000000000
+> > [    3.093098] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    3.093098] CR2: 0000000000000000 CR3: 000000004e02e000 CR4: 0000000000750ee0
+> > [    3.093098] PKRU: 55555554
+> > [    3.093098] Kernel panic - not syncing: Fatal exception in interrupt
+> > 
+> > There are many variations, but the common pattern seems to be
+> > <something in the clock or timer code> -> int3 exception
+> > 
+> > It only happens under qemu TCG (software emulation).
+> > 
+> > It goes away if we recompile qemu without MTTCG support.
+> > 
+> > It only happens with -smp enabled, we are using qemu -smp 4
+> > 
+> > We are using qemu-system-x86_64 full system emulation on x86_64 host
+> > (ie. forcing KVM off).
+> > 
+> > It happens with the latest upstream kernel and qemu, compiled from
+> > source.
 > 
-> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 20 ++++++++++----------
->   1 file changed, 10 insertions(+), 10 deletions(-)
+> I got a bit further on this one.
 > 
+> The bug happens in the code that updates the static branch used for at
+> least these two keys:
+> 
+>   static DEFINE_STATIC_KEY_FALSE(__sched_clock_stable);
+>   DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
+> 
+> There are probably others (it seems a generic problem with how static
+> branches are handled by TCG), but I only see the bug for those two.
+> 
+> When the static branch is updated we end up calling
+> arch/x86/kernel/alternative.c:text_poke_bp_batch().  It's best to read
+> the description of that function to see where int3 is used:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/alternative.c#n2086
+> 
+> I modified the qemu TCG int3 helper so it dumps the code at %rip when
+> the interrupt fires, and I can actually see the changes in the above
+> function happen, first int3 being written, then the end of the nop,
+> then the int3 being overwritten with the first byte of the nop.
+> 
+> Unfortunately the int3 still fires after the code has been completely
+> rewritten to its final (ie nop) value.
+> 
+> This seems to indicate to me that neither the self-write to the kernel
+> text segment, nor sync_core (implemented by a "iret to self" trick)
+> invalidates the qemu TCG translation block containing the old int3
+> helper call.  Thus we (qemu) never "see" the new nop, we keep
+> emulating int3, and that causes the kernel to crash.
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+The following paragraph is wrong:
+
+> I added print statements inside tb_invalidate_phys_page() and this
+> function seems never to be called at all.  It's my understanding that
+> at least the kernel writing to its text segment ought to cause
+> tb_invalidate_phys_page() to be called, but I'm not super-familiar
+> with this qemu code.
+
+tb_invalidate_phys_range_fast() *is* called, and we end up calling
+  tb_invalidate_phys_page_range__locked ->
+    tb_phys_invalidate__locked ->
+      do_tb_phys_invalidate
+
+Nevertheless the old TB (containing the call to the int3 helper) is
+still called after the code has been replaced with a NOP.
+
+Of course there are 4 MTTCG threads so maybe another thread is in the
+middle of executing the same TB when it gets invalidated.
+tb_invalidate_phys_page_range__locked goes to some effort to check if
+the current TB is being invalidated and restart the TB, but as far as
+I can see the test can only work for the current core, and won't
+restart the TB on other cores.
+
+Is there any way to get the current TranslationBlock* from a helper?
+It would be useful for additional debugging, I couldn't see how to do it.
+
+The next thing I'll look at is the kernel sync_core() function and
+whether TCG does the right thing, whatever that would be.
+
+Rich.
+
+-- 
+Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/~rjones
+Read my programming and virtualization blog: http://rwmj.wordpress.com
+nbdkit - Flexible, fast NBD server with plugins
+https://gitlab.com/nbdkit/nbdkit
+
