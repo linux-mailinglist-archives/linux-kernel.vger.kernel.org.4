@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDD2748F89
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCEA748F8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjGEVIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 17:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
+        id S231766AbjGEVJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 17:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjGEVIO (ORCPT
+        with ESMTP id S231694AbjGEVJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:08:14 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4846819A0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 14:08:13 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-263036d54b9so86108a91.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 14:08:13 -0700 (PDT)
+        Wed, 5 Jul 2023 17:09:47 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1C1700
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 14:09:46 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-c581c758ad8so3543159276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 14:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688591293; x=1691183293;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ug73FggPnbwdd1VaI/h85Jqlh9rWzsohKtgG2/gb7Z0=;
-        b=IFNOV4ZEPbH0J7ufVwembvtKuwugzRGT0taaw/ZrLwCiQHr92VrBulxkGJ4TK/gd83
-         zPM5qvFSxmaP/2MudSKJG+aGnlR0QuiW97FKCvzeSmLETNIJJkE65jMJPTuJu/pTJaTE
-         iXAqFJoBzZZrjQbyBFsPvGz7xeSpFZtnBx4ms=
+        d=google.com; s=20221208; t=1688591385; x=1691183385;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NaGMTa0DbN3c8dwMUOQDzcTZPQ/M8amf44bbRz7BEX8=;
+        b=UBG5+DvKOvH7qCjkiEDp6J4u/q3uj4JRG5ekSG6AlIb7zKH+lcIHdZemv8svEgfwsq
+         QL2DFDTL5EYIS1YkvcISRvfWkCeJfhy45+8NBPenPJm7CWNNg3PhBCXFlpcSAn/jOXP4
+         n9Cgp59YaiI8MgDIA6HnTpxQW/ggXhpyp1ohN9+CzWeWadofYwPRIMRlkm1x2Xm1VYG8
+         ghtB9xIab0YgX3DLDz25CKz+nKAH4G6SPV9yDzieTA9YRIkd8nfRLz9mjNvjq60c7lkq
+         rWVGWwiFrQGjFGgjSun32TBndFiuhJWJ1G3rCfc83ykWM1tMVDLHOP7INWALmvvJ6sso
+         Anog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688591293; x=1691183293;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ug73FggPnbwdd1VaI/h85Jqlh9rWzsohKtgG2/gb7Z0=;
-        b=NUg8bcrdhd99cgMkpu1vb2dGOc+8WzAHOjC6lqQaeEdGF9zD8i/ZTsQWmRKtfDT/QZ
-         zWQ+qpGgClwKOJwIQSZGjw4ehcb+gSeg7tqP2t1bnZTz1dUpL/8DoQEN3t4+XVg7XF46
-         bN9PnCFXGvYFFl7nHtdBvbeAiKG5qC++yVNZn3yVYR7Aqmdsu+JlSWQ5DPkK41bOY20S
-         +WZXzyQqN7Egpe63Pj/YiwxpPQ/2Nc/J7JNFY6BhclMkWzzsTrNbtsmielxP21UjXI62
-         kCgEcxXV4bkTpCCdu8CyEFW4wC0Sk0vfNlK0ps08L/w3tRxPQl+96uUcXh8AQ8iYNKcQ
-         0N/w==
-X-Gm-Message-State: ABy/qLYkjDC6hbJkyRVBTuW3mYZ7mkDddBn+XeeYP0a8gXemevbemo73
-        MTPzkrrcKOA0uhYGYuee1sIT9GkL39kg2Kry/ow=
-X-Google-Smtp-Source: APBJJlEaIv/sTfl7OmBOeeEHSIo6/1kWdH6bBSD96cPSluFsMWjo9kBujHQEFtQf0dJEt3j/VamBsA==
-X-Received: by 2002:a17:90a:358:b0:263:e804:3988 with SMTP id 24-20020a17090a035800b00263e8043988mr5089443pjf.1.1688591292720;
-        Wed, 05 Jul 2023 14:08:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id cx3-20020a17090afd8300b00263987a50fcsm1815914pjb.22.2023.07.05.14.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 14:08:11 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 14:08:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <kees@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LLVM <llvm@lists.linux.dev>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: CONFIG_UBSAN_TRAP #UD error message on x86 [was: Re:
- [CRASH][BISECTED] 6.4.1 crash in boot]
-Message-ID: <202307051405.E746464@keescook>
-References: <2b1a4f49-ba18-0246-af09-4e4133814411@alu.unizg.hr>
- <202307022230.6121D6896@keescook>
- <ed3e4315-b149-2f9e-70d4-45d7f83b9922@alu.unizg.hr>
- <202307031149.823F9A3@keescook>
- <202307031606.3FD9D0D@keescook>
- <fbf4103b-6471-1f06-34a8-4aa227f5e091@alu.unizg.hr>
- <3CDD1188-7B2A-4D53-9B8F-C07BC39844E9@kernel.org>
- <19d0e63c-db47-8f02-2f79-0923f675898c@alu.unizg.hr>
- <DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org>
- <CAG48ez0kmSqS_WJ1=neKpxKmMMkPYgNHfBD6ZSif_EWnso84wQ@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1688591385; x=1691183385;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NaGMTa0DbN3c8dwMUOQDzcTZPQ/M8amf44bbRz7BEX8=;
+        b=B/M7M+OUeEpkiw0TzoNHJfsalsXd0Lse40QR9ROxRoGR6ukXon9WBj+65vDyHCoUlL
+         e2dhUjXpeOueplqk8fsbldnZ0/6MEHaG10DrUqktRPsRQzcR1K/BGcZGB09t3HMFb8dX
+         O9V9Nbh9x3fXIEf61zixCFXv9vQG0gyohOh8NmjbeL1tns5CeyX5yc2h6CqbB4lyuGQQ
+         avN+Yq9F306Hfd57e7XLjk5UCoIIf7a8Wy1I+RelhNqrWPW5Ql5xACOf3DYClwd1JKcS
+         kj/pIys7HZRUSQcxAGj4qDv7LOmNxkJPgeVC+IXBrhyh3mHVEI/GtIwxQXXN8pRMnzL+
+         b4Gw==
+X-Gm-Message-State: ABy/qLZ/83P7OE/WaqWWhjy9OxoodUbRTs7dSi6W0QfyLuUexION2I73
+        hveMpYxFNIfKRNlEiMuRBuBIFYBS+mC58+LvhSodgQ==
+X-Google-Smtp-Source: APBJJlEMfph7t7wJWllYEpACDgeAzyYwh2jqlBg6bNRDARLEVdUNgL/soI72nwZ79kZeqNq7mcFxbIQLP+5i5Egiq3M=
+X-Received: by 2002:a25:4ed6:0:b0:c63:5334:9d10 with SMTP id
+ c205-20020a254ed6000000b00c6353349d10mr64531ybb.3.1688591385152; Wed, 05 Jul
+ 2023 14:09:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG48ez0kmSqS_WJ1=neKpxKmMMkPYgNHfBD6ZSif_EWnso84wQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230705171213.2843068-1-surenb@google.com> <20230705171213.2843068-3-surenb@google.com>
+ <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com> <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
+ <ZKXRsQC8ufiebDGu@x1n> <d3245a2a-285b-6dfe-5dd3-05fdeb308e18@redhat.com>
+In-Reply-To: <d3245a2a-285b-6dfe-5dd3-05fdeb308e18@redhat.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 5 Jul 2023 14:09:33 -0700
+Message-ID: <CAJuCfpGuLRzvmNdgYGBa=ZBBG65_kc-7byED8JYXFo0RBHLMZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Peter Xu <peterx@redhat.com>, akpm@linux-foundation.org,
+        jirislaby@kernel.org, jacobly.alt@gmail.com,
+        holger@applied-asynchrony.com, hdegoede@redhat.com,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,49 +87,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 05:16:36PM +0200, Jann Horn wrote:
-> On Wed, Jul 5, 2023 at 4:10 AM Kees Cook <kees@kernel.org> wrote:
-> > On July 4, 2023 4:15:20 PM PDT, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr> wrote:
-> > >On 7/4/23 23:36, Kees Cook wrote:
-> > >> On July 4, 2023 10:20:11 AM PDT, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr> wrote:
-> > >>> all Wayland and X11.org GUI applications fail to start, with errors like this one:
-> > >>>
-> > >>> Jul  4 19:09:07 defiant kernel: [   40.529719] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> > >>
-> > >> Hmm, is CONFIG_UBSAN_TRAP set?
-> > >
-> > >marvin@defiant:~/linux/kernel/linux_torvalds$ grep CONFIG_UBSAN_TRAP .config
-> > >CONFIG_UBSAN_TRAP=y
+On Wed, Jul 5, 2023 at 1:37=E2=80=AFPM David Hildenbrand <david@redhat.com>=
+ wrote:
+>
+> On 05.07.23 22:25, Peter Xu wrote:
+> > On Wed, Jul 05, 2023 at 10:22:27AM -0700, Suren Baghdasaryan wrote:
+> >> On Wed, Jul 5, 2023 at 10:16=E2=80=AFAM David Hildenbrand <david@redha=
+t.com> wrote:
+> >>>
+> >>> On 05.07.23 19:12, Suren Baghdasaryan wrote:
+> >>>> A memory corruption was reported in [1] with bisection pointing to t=
+he
+> >>>> patch [2] enabling per-VMA locks for x86.
+> >>>> Disable per-VMA locks config to prevent this issue while the problem=
+ is
+> >>>> being investigated. This is expected to be a temporary measure.
+> >>>>
+> >>>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+> >>>> [2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@goo=
+gle.com
+> >>>>
+> >>>> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+> >>>> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cd=
+f51b@kernel.org/
+> >>>> Reported-by: Jacob Young <jacobly.alt@gmail.com>
+> >>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+> >>>> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling=
+ first")
+> >>>> Cc: stable@vger.kernel.org
+> >>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> >>>> ---
+> >>>>    mm/Kconfig | 3 ++-
+> >>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/mm/Kconfig b/mm/Kconfig
+> >>>> index 09130434e30d..0abc6c71dd89 100644
+> >>>> --- a/mm/Kconfig
+> >>>> +++ b/mm/Kconfig
+> >>>> @@ -1224,8 +1224,9 @@ config ARCH_SUPPORTS_PER_VMA_LOCK
+> >>>>           def_bool n
+> >>>>
+> >>>>    config PER_VMA_LOCK
+> >>>> -     def_bool y
+> >>>> +     bool "Enable per-vma locking during page fault handling."
+> >>>>        depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
+> >>>> +     depends on BROKEN
+> >>>>        help
+> >>>>          Allow per-vma locking during page fault handling.
+> >>>>
+> >>> Do we have any testing results (that don't reveal other issues :) ) f=
+or
+> >>> patch #1? Not sure if we really want to mark it broken if patch #1 fi=
+xes
+> >>> the issue.
+> >>
+> >> I tested the fix using the only reproducer provided in the reports
+> >> plus kernel compilation and my fork stress test. All looked good and
+> >> stable but I don't know if other reports had the same issue or
+> >> something different.
 > >
-> > Ah-ha! Turn that off please. With it off you will get much more useful reports from USBAN.
-> 
-> It might be useful if the x86 code under handle_invalid_op() at least
-> printed a warning about this when the kernel crashes with #UD on a
-> system with CONFIG_UBSAN_TRAP=y? It seems pretty unintuitive and
-> unhelpful that the kernel just crashes itself with a #UD and no
-> further information in this configuration.
-> 
-> Even just a "WARNING: CONFIG_UBSAN_TRAP active, #UD might be caused by
-> that" on every #UD that does not come from a known BUG() location or
-> such might be better than nothing...
+> > The commit log seems slightly confusing.  It mostly says the bug was st=
+ill
+> > not solved, but I assume patch 1 is the current "fix", it's just not cl=
+ear
+> > whether there's any other potential issues?
+> >
+> > According to the stable tree rules:
+> >
+> >   - It must fix a problem that causes a build error (but not for things
+> >     marked CONFIG_BROKEN), an oops, a hang, data corruption, a real
+> >     security issue, or some "oh, that's not good" issue.  In short, som=
+ething
+> >     critical.
+> >
+> > I think it means vma lock will never be fixed in 6.4, and it can't (bec=
+ause
+> > after this patch it'll be BROKEN, and this patch copies stable, and we
+> > can't fix BROKEN things in stables).
+> >
+> > Totally no problem I see, just to make sure this is what you wanted..
+> >
+> > There'll still try to be a final fix, am I right?  As IIRC allowing pag=
+e
+> > faults during fork() is one of the major goals of vma lock.
+>
+> At least not that I am aware of (and people who care about that should
+> really work on scalable fork() alternatives, like that io_uring fork()
+> thingy).
+>
+> My understanding is that CONFIG_PER_VMA_LOCK wants to speed up page
+> concurrent page faults *after* fork() [or rather, after new process
+> creation], IOW, when we have a lot of mmap() activity going on while
+> some threads of the new process are already active and don't actually
+> touch what's getting newly mmaped.
 
-I've considered it, but usually CONFIG_UBSAN_TRAP isn't accidentally
-set. Also, the crash info is something we can get help from on the
-compiler side, to mark up where the traps are, similar to what we do
-with KCFI, but it hasn't happened yet for x86. For example, arm64
-already encodes the details in the trap instruction itself:
-https://git.kernel.org/linus/25b84002afb9dc9a91a7ea67166879c13ad82422
+Getting as much concurrency as we can is the goal. If we can allow
+some page faults during fork, I would take that too. But for now let's
+deploy the simplest and safest approach.
 
-> And maybe the Kconfig help text could be clearer on this, too.
-> Currently it does say that this turns warnings into "full exceptions
-> that abort the running kernel code" but it does not say that the
-> exception reporting will become pretty unhelpful, so it's probably not
-> really what you'd want for debugging.
-
-Yeah, that's a reasonable change to make. Can you send a patch for this?
-I can carry it.
-
-Thanks!
-
--- 
-Kees Cook
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
