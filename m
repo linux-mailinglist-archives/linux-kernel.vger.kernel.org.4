@@ -2,91 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50DA748E64
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5077C748E6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbjGETyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S232699AbjGETy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjGETyO (ORCPT
+        with ESMTP id S233435AbjGETyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:54:14 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F86D121
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 12:54:12 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so117708531fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 12:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688586850; x=1691178850;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iOuiLENnGJgQP5T14AdW9obiAm8decWJr19hpHUhp5E=;
-        b=VdHMETYkW8xVaKhsxQ+THd1NrfRSQ0baSJNgb32UByQ2RG0yXNQpMpwdxL9KIw5F84
-         LIWgmR6Op06Cn08s/3Tlv5LIkumgVMcsPyvMqKQRd/jarpXPRtGWn95XLQrz5U1kvNIS
-         p33SNFXGHxTekiT35hxBgghdXLQUpJ7uCA6VU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688586850; x=1691178850;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iOuiLENnGJgQP5T14AdW9obiAm8decWJr19hpHUhp5E=;
-        b=EUAFQXkO994Y49jYOmo+JhuZsLRP3IZUpCKn4Bhbwlb5SSdSYbpaKWSVzJysPjXLHH
-         Qmz+gBCGgi5BO0ysNuV41/KoyRjDf+rDxKKxZAA6mM8nETJZJGWjloLX+lzPZ8zDf6TX
-         MVOv4bPKcHmdNmZzKKl1Y78p6qCgy2t6zVDXxzeJF9wGfK5yIITAtsgbu/1ZUHbhCOt9
-         YPJs/bK3H4fACI19FedrQnmSbkrYUsrcsvooPJ5n/RTXkhlbyViSGOnxCXW9qS/mK/PA
-         yFJdFZ8RV8U7wzV45DgeCgVRA8Dkknf8GKAeKqOHDI3DbzE1NE4D/mLWvLUnAi0Jn9G3
-         7gOQ==
-X-Gm-Message-State: ABy/qLbbZbtQR04IaJK6NAXem8MKtpoeitrD1s73SuSFumNOxdKpYiv7
-        53pwjEV2f8Ul/VSzu+TRL8RMAlY2m4fvX6vUXXX3omks
-X-Google-Smtp-Source: APBJJlEXX1C7LXs8LeRpJdjC+PduizVXXgWUsMLweox4Y20tCzK8ddcJe//rIP4I3FyGzrv81s4m8A==
-X-Received: by 2002:a2e:9b04:0:b0:2b6:de6d:9e22 with SMTP id u4-20020a2e9b04000000b002b6de6d9e22mr8147789lji.40.1688586850485;
-        Wed, 05 Jul 2023 12:54:10 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id e1-20020a2e9e01000000b002b47a15a2eesm6438606ljk.45.2023.07.05.12.54.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 12:54:09 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4fbb281eec6so5786677e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 12:54:09 -0700 (PDT)
-X-Received: by 2002:a05:6512:3607:b0:4f6:2317:f387 with SMTP id
- f7-20020a056512360700b004f62317f387mr12679lfs.35.1688586849377; Wed, 05 Jul
- 2023 12:54:09 -0700 (PDT)
+        Wed, 5 Jul 2023 15:54:24 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA041981;
+        Wed,  5 Jul 2023 12:54:21 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 365JruRW029344;
+        Wed, 5 Jul 2023 14:53:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688586836;
+        bh=JYEmsOFHbXgS5MxsHkWI4gJFbQZO7FxeLmm0d1G/I18=;
+        h=From:To:CC:Subject:Date;
+        b=Dtr3GvoLEH1+JV3O3xC2peTbniUUh/ZSq7Q9izsEuwludmzMUCn5n0sEuISQuHuly
+         kwKid9WkcW3YLBQhPcA8BzLhPAD/fTrIxCADe4z4QlOLfmOUqK5nlgEchxFW1eJ3DK
+         /crXLuuEVeUlM4dQqThHW3qsgJc8Ee1dLse8xWh8=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 365Jru2k083979
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 5 Jul 2023 14:53:56 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 5
+ Jul 2023 14:53:56 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 5 Jul 2023 14:53:56 -0500
+Received: from uda0498204.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 365JrueS041658;
+        Wed, 5 Jul 2023 14:53:56 -0500
+From:   Judith Mendez <jm@ti.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH 0/2] Enable multiple MCAN on AM62x
+Date:   Wed, 5 Jul 2023 14:53:54 -0500
+Message-ID: <20230705195356.866774-1-jm@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230705122357.GA14855@www.linux-watchdog.org>
-In-Reply-To: <20230705122357.GA14855@www.linux-watchdog.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 5 Jul 2023 12:53:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
-Message-ID: <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.5 release cycle.
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jul 2023 at 05:24, Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
->
->   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
+On AM62x there are two MCANs in MCU domain. The MCANs in MCU domain
+were not enabled since there is no hardware interrupt routed to A53
+GIC interrupt controller. Therefore A53 Linux cannot be interrupted
+by MCU MCANs.
 
-I think that machine is feeling a bit sick. I just get "Connection refused".
+This solution instantiates a hrtimer with 1 ms polling interval
+for MCAN device when there is no hardware interrupt property in
+DTB MCAN node. The hrtimer generates a recurring software interrupt
+which allows to call the isr. The isr will check if there is pending
+transaction by reading a register and proceed normally if there is.
+MCANs with hardware interrupt routed to A53 Linux will continue to
+use the hardware interrupt as expected.
 
-           Linus
+Timer polling method was tested on both classic CAN and CAN-FD
+at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+switching.
+
+Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+1 MBPS timer polling interval is the better timer polling interval
+since it has comparable latency to hardware interrupt with the worse
+case being 1ms + CAN frame propagation time and CPU load is not
+substantial. Latency can be improved further with less than 1 ms
+polling intervals, howerver it is at the cost of CPU usage since CPU
+load increases at 0.5 ms.
+
+Note that in terms of power, enabling MCU MCANs with timer-polling
+implementation might have negative impact since we will have to wake
+up every 1 ms whether there are CAN packets pending in the RX FIFO or
+not. This might prevent the CPU from entering into deeper idle states
+for extended periods of time.
+
+v8:
+Link: https://lore.kernel.org/linux-can/20230530224820.303619-1-jm@ti.com/T/#t
+
+v7:
+Link: https://lore.kernel.org/linux-can/20230523023749.4526-1-jm@ti.com/T/#t
+
+v6:
+Link: https://lore.kernel.org/linux-can/20230518193613.15185-1-jm@ti.com/T/#t
+
+v5:
+Link: https://lore.kernel.org/linux-can/20230510202952.27111-1-jm@ti.com/T/#t
+
+v4:
+Link: https://lore.kernel.org/linux-can/c3395692-7dbf-19b2-bd3f-31ba86fa4ac9@linaro.org/T/#t
+
+v2:
+Link: https://lore.kernel.org/linux-can/20230424195402.516-1-jm@ti.com/T/#t
+
+V1:
+Link: https://lore.kernel.org/linux-can/19d8ae7f-7b74-a869-a818-93b74d106709@ti.com/T/#t
+
+RFC:
+Link: https://lore.kernel.org/linux-can/52a37e51-4143-9017-42ee-8d17c67028e3@ti.com/T/#t
+
+v9:
+- Change add MS to HRTIMER_POLL_INTERVAL
+- Change syntax from "= 0" to "!"
+
+v8:
+- Cancel hrtimer after interrupts in m_can_stop
+- Move assignment of hrtimer_callback to m_can_class_register()
+- Initialize irq = 0 if polling mode is used
+
+v7:
+- Clean up m_can_platform.c after removing poll-interval
+
+v6:
+- Move hrtimer stop/start function calls to m_can_open and m_can_close to
+support power suspend/resume
+
+v5:
+- Remove poll-interval in bindings
+- Change dev_dbg to dev_info if hardware int exists and polling
+is enabled
+
+v4:
+- Wrong patches sent
+
+v3:
+- Update binding poll-interval description
+- Add oneOf to select either
+interrupts/798d276b39e984345d52b933a900a71fa0815928
+
+v2:
+- Add poll-interval property to bindings and MCAN DTB node
+- Add functionality to check for 'poll-interval' property in MCAN node 
+- Bindings: add an example using poll-interval
+- Add 'polling' flag in driver to check if device is using polling method
+- Check for timer polling and hardware interrupt cases, default to
+hardware interrupt method
+- Change ns_to_ktime() to ms_to_ktime()
+
+Judith Mendez (2):
+  dt-bindings: net: can: Remove interrupt properties for MCAN
+  can: m_can: Add hrtimer to generate software interrupt
+
+ .../bindings/net/can/bosch,m_can.yaml         | 20 ++++++++++--
+ drivers/net/can/m_can/m_can.c                 | 32 ++++++++++++++++++-
+ drivers/net/can/m_can/m_can.h                 |  3 ++
+ drivers/net/can/m_can/m_can_platform.c        | 23 +++++++++++--
+ 4 files changed, 72 insertions(+), 6 deletions(-)
+
+
+base-commit: e1f6a8eaf1c271a0158114a03e3605f4fba059ad
+-- 
+2.34.1
+
