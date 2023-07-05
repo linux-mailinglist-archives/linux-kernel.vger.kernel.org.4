@@ -2,156 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BEC748969
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A590748967
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbjGEQk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S232634AbjGEQkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbjGEQkv (ORCPT
+        with ESMTP id S232624AbjGEQkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:40:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD4719A4;
-        Wed,  5 Jul 2023 09:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688575240; x=1720111240;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OnHnR7sBOISNo6UsoPV0T1BdsFN9+BHptNLTHfPi2RE=;
-  b=TITzjQpTB4L61tK5hfJaurDU/qAJDnmDmTYhk2uIdoCvDRy9uIp1ABel
-   W08Vv/gnNPPJ4xsdYPc0UU0rM1Rm5swqy81zHqbr9lUEXluZrJh9Xpx9Q
-   OkGyRqRjXw2CFivW8puQHB7BJEjvaYXVMBAl5s9/5eP8T3/AqRGeCo0pO
-   GUAeQWeSQT39B5NoKMNRazof15nnafKE/yfwxDDp7Q0BW1pBEDVUAhAp1
-   eyJkZrYDEU/pYj7RkTlQKD8VxPTs28bnQ7VFfwst/zh/iRHwumh2jJVDu
-   ea04+PC7RdoAvaN93YtOZjZ4M5pcAjAr00eQwrwa+ylt5LKhYAzKIf4gP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362258310"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="362258310"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 09:40:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="893241782"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="893241782"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314.ger.corp.intel.com) ([10.237.222.216])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jul 2023 09:40:36 -0700
-From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To:     herbert@gondor.apana.org.au, agk@redhat.com, snitzer@kernel.org
-Cc:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, qat-linux@intel.com,
-        heinzm@redhat.com, meenakshi.aggarwal@nxp.com, ebiggers@kernel.org,
-        horia.geanta@nxp.com, V.Sethi@nxp.com, pankaj.gupta@nxp.com,
-        gaurav.jain@nxp.com, davem@davemloft.net, iuliana.prodan@nxp.com,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>
-Subject: [PATCH 3/3] crypto: qat - remove CRYPTO_ALG_ALLOCATES_MEMORY flag
-Date:   Wed,  5 Jul 2023 17:40:09 +0100
-Message-Id: <20230705164009.58351-4-giovanni.cabiddu@intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
-References: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
+        Wed, 5 Jul 2023 12:40:37 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522011994
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:40:36 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1b0419f758eso577958fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688575235; x=1691167235;
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SnXtS0u7cxVKylA7y1RxoIQ4YN3kdP9jrP9NUBsVEYI=;
+        b=gHKiyHgp+mvsXbR1zsPiWsWG1g1hSf9IhEiLje+5czHuwPsZfGI3JGvaDx8/LfZOx2
+         8WmMeNWm2uwsL4PcxnCPb9kaYwvVmgtnZFLRs5xeT73qsVtBR5aEOHHDrcu6+hVYEXmC
+         Jv16uIcn7JI04mXdk+z12aU6ZfJIAS6qkd5wB3b8TQykDnaTIfs561r45+hXbsW/yL5/
+         pyzteM29/0og6SwQd1RJPPSllmU0i1lKxqVtqc7UgE7UOpYmvtaUJ8eq9jfW4xANMdnf
+         Pz+uoLlELyvufREDhnQLyW1Xjv4D4U7XvfKyxAs3cdKkJQ0ajgGFULbKcAzjNXTEFcbf
+         T2tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688575235; x=1691167235;
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SnXtS0u7cxVKylA7y1RxoIQ4YN3kdP9jrP9NUBsVEYI=;
+        b=ByOFl71VEi3PEuS0RDBGOVjNvanXJjGk23MYVqkQzlxzb8M39fB+H0FNrRiFgc6Sal
+         i48TQ1PTfCkZkQ+Hn2qhlsFLxv9f/4rLbVq2mydwwxATdM4IJ9YteCgHM/wuqoZQqgx5
+         MNguLPF1SB+Xg1XtNjqNK4t3vG2uMkGMfF+LDQ+Zesaa1YZ8lU06hpMofbXpp7+B1q9C
+         H8e+D3PFHkcHxC9NUnQ2gLupXUhvoDCcKIvzjby9yPIQN4+tZYK8WlXxqr7yoL2hRXwQ
+         GG89tH0iWd8UrHrOYumodTo6pfqci0nMyu8zpsOaNb+lbGEqm6g6FHNKnS3Cwd07701b
+         wnEA==
+X-Gm-Message-State: ABy/qLbPo7v95vXrWZmEAtDIBKhxVEyt7JhtfIl0lOlj/OmkaEoIWQmX
+        YTwumTk4uo5dAStDUH2RASpFYg==
+X-Google-Smtp-Source: APBJJlHVEMulR3Unas5/tn8Pqg9sNrGdpx7bs8aiYN3ehYDxqBMbf7wSCcg1IJaq2bFMCYT0aAlJVA==
+X-Received: by 2002:a05:6870:d629:b0:1a6:8911:61a9 with SMTP id a41-20020a056870d62900b001a6891161a9mr1552438oaq.29.1688575235566;
+        Wed, 05 Jul 2023 09:40:35 -0700 (PDT)
+Received: from [192.168.17.16] ([149.19.169.25])
+        by smtp.gmail.com with ESMTPSA id s17-20020a056870611100b001b3b14e2a0bsm3877537oae.19.2023.07.05.09.40.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 09:40:35 -0700 (PDT)
+Message-ID: <325f1046-6003-bd7e-fc0c-251005a1a257@linaro.org>
+Date:   Wed, 5 Jul 2023 10:40:33 -0600
 MIME-Version: 1.0
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 - Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+Subject: Re: [PATCH 6.1 00/13] 6.1.38-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the CRYPTO_ALG_ALLOCATES_MEMORY flag from the aead, skcipher
-and acomp alg structures since the driver does not allocate memory in
-the request processing for scatterlists with 4 or less entries.
+Hello!
 
-This allows the QAT driver to be used by dm-crypt.
+On Tue, 04 Jul 2023 09:48:32 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 6.1.38 release.
+> There are 13 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 06 Jul 2023 08:46:01 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.38-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Reviewed-by: Fiona Trahe <fiona.trahe@intel.com>
----
- drivers/crypto/intel/qat/qat_common/qat_algs.c      | 13 ++++++-------
- drivers/crypto/intel/qat/qat_common/qat_comp_algs.c |  2 +-
- 2 files changed, 7 insertions(+), 8 deletions(-)
+## Build
+* kernel: 6.1.38-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 185484ee4c4f93669a3a7b324d356d643fdbfe35
+* git describe: v6.1.37-14-g185484ee4c4f
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.37-14-g185484ee4c4f
 
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_algs.c b/drivers/crypto/intel/qat/qat_common/qat_algs.c
-index 3c4bba4a8779..a7a6ac33052a 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_algs.c
-+++ b/drivers/crypto/intel/qat/qat_common/qat_algs.c
-@@ -1278,7 +1278,7 @@ static struct aead_alg qat_aeads[] = { {
- 		.cra_name = "authenc(hmac(sha1),cbc(aes))",
- 		.cra_driver_name = "qat_aes_cbc_hmac_sha1",
- 		.cra_priority = 4001,
--		.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_ALLOCATES_MEMORY,
-+		.cra_flags = CRYPTO_ALG_ASYNC,
- 		.cra_blocksize = AES_BLOCK_SIZE,
- 		.cra_ctxsize = sizeof(struct qat_alg_aead_ctx),
- 		.cra_module = THIS_MODULE,
-@@ -1295,7 +1295,7 @@ static struct aead_alg qat_aeads[] = { {
- 		.cra_name = "authenc(hmac(sha256),cbc(aes))",
- 		.cra_driver_name = "qat_aes_cbc_hmac_sha256",
- 		.cra_priority = 4001,
--		.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_ALLOCATES_MEMORY,
-+		.cra_flags = CRYPTO_ALG_ASYNC,
- 		.cra_blocksize = AES_BLOCK_SIZE,
- 		.cra_ctxsize = sizeof(struct qat_alg_aead_ctx),
- 		.cra_module = THIS_MODULE,
-@@ -1312,7 +1312,7 @@ static struct aead_alg qat_aeads[] = { {
- 		.cra_name = "authenc(hmac(sha512),cbc(aes))",
- 		.cra_driver_name = "qat_aes_cbc_hmac_sha512",
- 		.cra_priority = 4001,
--		.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_ALLOCATES_MEMORY,
-+		.cra_flags = CRYPTO_ALG_ASYNC,
- 		.cra_blocksize = AES_BLOCK_SIZE,
- 		.cra_ctxsize = sizeof(struct qat_alg_aead_ctx),
- 		.cra_module = THIS_MODULE,
-@@ -1330,7 +1330,7 @@ static struct skcipher_alg qat_skciphers[] = { {
- 	.base.cra_name = "cbc(aes)",
- 	.base.cra_driver_name = "qat_aes_cbc",
- 	.base.cra_priority = 4001,
--	.base.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_ALLOCATES_MEMORY,
-+	.base.cra_flags = CRYPTO_ALG_ASYNC,
- 	.base.cra_blocksize = AES_BLOCK_SIZE,
- 	.base.cra_ctxsize = sizeof(struct qat_alg_skcipher_ctx),
- 	.base.cra_alignmask = 0,
-@@ -1348,7 +1348,7 @@ static struct skcipher_alg qat_skciphers[] = { {
- 	.base.cra_name = "ctr(aes)",
- 	.base.cra_driver_name = "qat_aes_ctr",
- 	.base.cra_priority = 4001,
--	.base.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_ALLOCATES_MEMORY,
-+	.base.cra_flags = CRYPTO_ALG_ASYNC,
- 	.base.cra_blocksize = 1,
- 	.base.cra_ctxsize = sizeof(struct qat_alg_skcipher_ctx),
- 	.base.cra_alignmask = 0,
-@@ -1366,8 +1366,7 @@ static struct skcipher_alg qat_skciphers[] = { {
- 	.base.cra_name = "xts(aes)",
- 	.base.cra_driver_name = "qat_aes_xts",
- 	.base.cra_priority = 4001,
--	.base.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_NEED_FALLBACK |
--			  CRYPTO_ALG_ALLOCATES_MEMORY,
-+	.base.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_NEED_FALLBACK,
- 	.base.cra_blocksize = AES_BLOCK_SIZE,
- 	.base.cra_ctxsize = sizeof(struct qat_alg_skcipher_ctx),
- 	.base.cra_alignmask = 0,
-diff --git a/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c b/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c
-index b533984906ec..bd1383da1c4a 100644
---- a/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c
-+++ b/drivers/crypto/intel/qat/qat_common/qat_comp_algs.c
-@@ -442,7 +442,7 @@ static struct acomp_alg qat_acomp[] = { {
- 		.cra_name = "deflate",
- 		.cra_driver_name = "qat_deflate",
- 		.cra_priority = 4001,
--		.cra_flags = CRYPTO_ALG_ASYNC | CRYPTO_ALG_ALLOCATES_MEMORY,
-+		.cra_flags = CRYPTO_ALG_ASYNC,
- 		.cra_ctxsize = sizeof(struct qat_compression_ctx),
- 		.cra_module = THIS_MODULE,
- 	},
+## Test Regressions (compared to v6.1.37)
+No test regressions found.
+
+## Metric Regressions (compared to v6.1.37)
+No metric regressions found.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to v6.1.37)
+No test fixes found.
+
+## Metric Fixes (compared to v6.1.37)
+No metric fixes found.
+
+## Test result summary
+total: 171025, pass: 135962, fail: 2579, skip: 32314, xfail: 170
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 147 total, 146 passed, 1 failed
+* arm64: 53 total, 53 passed, 0 failed
+* i386: 37 total, 36 passed, 1 failed
+* mips: 26 total, 26 passed, 0 failed
+* parisc: 3 total, 3 passed, 0 failed
+* powerpc: 34 total, 34 passed, 0 failed
+* riscv: 12 total, 12 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 42 total, 42 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
+
 -- 
-2.40.1
+Linaro LKFT
+https://lkft.linaro.org
 
