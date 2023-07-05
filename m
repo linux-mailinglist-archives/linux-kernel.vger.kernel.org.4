@@ -2,178 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FA2748498
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABC574849C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjGENE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
+        id S231741AbjGENFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjGENEm (ORCPT
+        with ESMTP id S230434AbjGENFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:04:42 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2102.outbound.protection.outlook.com [40.107.215.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013EF170B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:04:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jsWqxWcMtZVe6PHyrijfvJjGhv/9akCtqDmFLuHrRc8zuX2ayJIZ3Rj9ermLztnT8GkGqxq5JbgrEMidkNDJ1L+irP5ftzAUHyllg4LhB/hetsGJbZgEaGffeL4DKb0ACRhJ4DCwBICs5f59EECsS7jFD9WKLitSXvsrItbLtsUEg6+syIeLI1xdNMeJlAkNYmA6A7wPpTOUKV5IOBU5FkV48W1qb/ZujTtKtULxFfKqHzuia0kCpSl81Gw1KBEqtdTNsKwg6VE01nAoMSUKYOXUO1Dt39dU0le4OPm1uBGmB3w8mlX2EMU6l6/LYJXcm7wek5J8vkf6ZIa+ZWHEzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f/FKROkns/aT3W5EmDyW7I75f5H4AFux2NcHTMqTyeg=;
- b=Lk3PZUjjTatXwMvInN15dFRo+cxqQE2rzPo7XGbHfu+6gX5IxNGObi2ezUkYKt0t4QlbHFRL1Cvho23boIbGk6x2XvPCveDrvSvyFb2pFoaOkVWpemfd9PSql3s/69CDtuRUdzIYoqRyjWpdt1+aujK7x9Qnlfw+bzyPhIU7khwr2sW5p+sCnN4k/1T3kGnAK/+o7vvf7HDIpOzKQNyAvg0eabhadMNiC217SXyEK2oRKcCRStbRJFlWh3dN9TmFyMQ/tE8+xSaPxxHi/2d5es1SNz75pUGK8DTFxD4uF3Y/FbTfzDIuia64p649JChrQpwUiWOZONrRTYPF/C4fSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f/FKROkns/aT3W5EmDyW7I75f5H4AFux2NcHTMqTyeg=;
- b=mw5fp5zbUfOqbRbJrDrr9j7E5QuI70wJxeuO5cNpqoppGXIXQQyMY6+qa3cw1e6bZJDQMpkBmnM16sj+92UndRzhjzygPtB9JicrT8WaaQfdK0ptmn5ZIUlssbikN2xh18NrX/8fUcGI5iO+TFIfvIwNhEsVobQ5tlYI/fWo09aW0RvUwABtIda+ohnRwqP/bpGpFRNmSwpCwFDttM5GCmgbrRqFa3qs6lsaYfYaVj0OnKGSegmuxbvchgSmMRqydtVBkyImz/oWqK6Mw8kX3c4XBIPchkNAosP9oxplBPJi0J20xdZFMDckrIsIlp2gM7MGHT14UoO63yEnthbkdg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEYPR06MB5891.apcprd06.prod.outlook.com (2603:1096:101:d4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
- 2023 13:04:38 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 13:04:38 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 6/6] iommu/mediatek: Convert to devm_platform_ioremap_resource() and devm_platform_get_and_ioremap_resource()
-Date:   Wed,  5 Jul 2023 21:04:16 +0800
-Message-Id: <20230705130416.46710-6-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230705130416.46710-1-frank.li@vivo.com>
-References: <20230705130416.46710-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0057.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::10) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Wed, 5 Jul 2023 09:05:54 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DB41721
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:05:36 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3142ee41fd2so4302192f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 06:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688562335; x=1691154335;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=CA54dLzrUoc/7PYdDYtu4eUol1rypI3WEhlD1W/X9Q0=;
+        b=jJTkU8pPVyxow9SduDzddj5wGH2HNtJz+VH/cHmtziG24I3Qf9LYKJjoO9GIWNkV+9
+         9A6ibO+kz8t9Y5hV19tMqTKqmLZXQBBSG6M1976e0Ouw3Q3I8b62ilI4SlXjIz4idQyc
+         hD7VaE5Y4OWh5E6s9PFMsQuDwfeTfrgfam2+CQK0xlsofa5dVcssLlQsS3qobBHHaVvc
+         OJSZiyQ2FDifTfbvgyFqI9BvzFhjAtBSoxshmSRhi4Z5HNng4AbGXi8remdhlWzpqAu4
+         2BTB0D3zTOrTIKgKb3OFZNAG8//668S+fzKQjoW9HkkzOWugohTNDh2jPnwEN3XFbtL+
+         xXzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688562335; x=1691154335;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CA54dLzrUoc/7PYdDYtu4eUol1rypI3WEhlD1W/X9Q0=;
+        b=B9Hybmm6NFVKXcK9XlVBF0SrzjSAgbs+nkaj4ysx6IqKAO1OunMbAoUFzDLYJm0e6d
+         Gc9LfwGM2yhKFoWYRMzCCKQvifWusPR3o1xSBlXwAz1VWAiSnWd9C4wAnqd0svrTas+Q
+         x16jnVCc6pW/rARugs+vtaARbIK7h8LdOztgS1hFeZOaZm6bDqpKSyt1KXa18oOrevSq
+         o/pKjYrkrMnUvXUROPb0dWPdd9m0Rf16wJgUq1F5cdHF8vNUrmwP1iKVdnbzuiT9EV7a
+         hdAo4bPAzL3V4N9pmhZ/+viqv8sm7dyLLgrEPYuZMrMVc6PcorrGQ/IY2tCwg1EBrmgg
+         FBlw==
+X-Gm-Message-State: ABy/qLbW5FiJNRCoPgp+QP9k1SpxZNXnWfRuon95IIZzdBvKK3/Mp+EO
+        dJiuigYJSlrczg0a6zUxaqrweg==
+X-Google-Smtp-Source: APBJJlGJU83ICpcO8IQe64PfKBuOhINm2kolngsASCVWqz4EpB8g6LPTdIMJsusjCxZ7gidF9bcwfg==
+X-Received: by 2002:a5d:61d1:0:b0:314:25d:c8f4 with SMTP id q17-20020a5d61d1000000b00314025dc8f4mr12984929wrv.2.1688562335178;
+        Wed, 05 Jul 2023 06:05:35 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:65eb:d140:2d45:ee85? ([2a01:e0a:982:cbb0:65eb:d140:2d45:ee85])
+        by smtp.gmail.com with ESMTPSA id cx16-20020a056000093000b00301a351a8d6sm31201883wrb.84.2023.07.05.06.05.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 06:05:34 -0700 (PDT)
+Message-ID: <47a5678c-1eb3-dfc2-a9ac-f8e497455d11@linaro.org>
+Date:   Wed, 5 Jul 2023 15:05:33 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB5891:EE_
-X-MS-Office365-Filtering-Correlation-Id: 870f86ab-671e-465f-c37b-08db7d58636e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZR0e7L239CRxNQElPl+JqckKIX6p097PLgV+vXugnQBuJX1bDQqQjpBCozATTrDzwgbi2wK+kEIlbF16yhOGKCO/K8ZZTdRa+3frQkO91M+8CHAHiEsyQtXGj/WK9skicipwu8kQV1xzIbKOeJJw9CkiPzNA2QX1tRfudx9mF86V5l5Qpxg51DMx622a//pvUsTrN91Fr6IejGEO7ss41JrTt1nToXHADbBNYjvyOPwHYyYLND06Dq21qBOOboMWRuJcEvXZLZbsTB0dTbnEPoL211yvQz2c8OtdUIia7tC1GDXP9Q4qDedMawY0OLmUkI4tteKNJT99UAZuhHBdCV1TwupcB7zdNiUd0msMsNIA9MwCt1K0I/rrzaHjLomyN1ZULYmfliBoy2pCVCiLPlJSUxzJpDpbTwi+JxyDWU6JqVI/KuiXtE0R7pdxFHPWZt6sprwCdf0F+1VcPmDLk5fdw/UEi+LIuB078w1IRht7ZqAOWzKpX1xi7irSE1FpPOxQYmk08ATGHMjIvhOkGIUV8/++lm68mUMB4DI9rqcxR2G8oXkZWwi6yiRdE17gwfDsf1zJTAS6SsiC+UEDyt/cNuWL6Ki3nHs5l9tv/SMZCbYM4u7ETcM5JroVt/Ul
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(136003)(39860400002)(376002)(451199021)(478600001)(52116002)(6486002)(6666004)(110136005)(66946007)(186003)(6506007)(1076003)(26005)(6512007)(66556008)(2906002)(41300700001)(4326008)(66476007)(316002)(7416002)(5660300002)(8936002)(8676002)(38100700002)(38350700002)(86362001)(36756003)(83380400001)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?axo3/Hke4orzFWFk8sRczp4LmujEeFQayPyj2gcZpNgBaE3API4mXWWMdC2K?=
- =?us-ascii?Q?BOhXKrRfwmO1zWf0efCwAc8W/9QBR/6jp2/iCuN3fzsEBKuuPg5RmR0BfOi3?=
- =?us-ascii?Q?MfM4bg5pSeuQgENT/0GTmyfNXFVsbONCVY4s96dev5sGwFmTvnbxv1pBktJU?=
- =?us-ascii?Q?C71uHsqOe8kG0wopAmyvabwKz1pVUZdQwUIqZ3yoZUC4P4Ij5WpM4mc1fM2e?=
- =?us-ascii?Q?RLoO0uGKqKXmJNPvStTeyWhYkdHL0NySldf4UtQt4ryW9huWez/8HtftQhaV?=
- =?us-ascii?Q?FknduCdeKWru7SaRP9Oq1NW55iZj5k0+NlnuMkTioNVIqukNMpuMNy+GH/bz?=
- =?us-ascii?Q?Hu5iZFvhxuMiBy/RvAY5xd5RpYRzCcztKUny6XF+B7+1aj3H97YVcGl+QU0A?=
- =?us-ascii?Q?MZn4oscy8KtosRMzt0WvR5uFIDvubTusHFJa2kHTNpr4w5Iz9W6hnI1hoDoz?=
- =?us-ascii?Q?Xu34BX3L26JJQBUXl53YY8+Ao5KDPkr4jnSgvf0W+aQrtJx20+Yuciealr3g?=
- =?us-ascii?Q?8GHRSM1UvZXpxlcDSfAxMgZQqKsi7Gd1F6NMzwBuVKxQZYFmezgjWnA9GMEg?=
- =?us-ascii?Q?V0uYfKz9Lrt7MHwCXtC2zBxpGJfNesa1JY5cSZ9GJH1QV4eeGof4eGM6qEVT?=
- =?us-ascii?Q?MVjgGlyCEzDRP1FAeM1XowdOr6uHCmv9mI1738trAXnVuCmrKHlNkDpDm1GS?=
- =?us-ascii?Q?7pQroP32ZSSvPGJ1smWJ188sBt+r2GZLIQBTBlUomzrmD2daEvQOk7vkUuFe?=
- =?us-ascii?Q?RLOS2eFV97B9Wd8NhDiphUorx2qiyQujPfhjfTzeDFSyYoz6c2ZBW4l2If1F?=
- =?us-ascii?Q?fc/+IVFvpW6BTZ+2K4v2/t/puAIgIIAJz15ptEFKEpU3aSkoi68SUS87eXmd?=
- =?us-ascii?Q?OPwgEFpNdun/e6F0WAlQ8OuUwNXu8DOHrvlP4VaL2DaUTQ5Ru0g1RDbOCfzD?=
- =?us-ascii?Q?+9amZARMcBDAAkkDIHjCkrEQ0RCf5fNJD2s7uYR6UrrrzfgsZMM/x5e2sWsa?=
- =?us-ascii?Q?MSzQL6khgMst4dl2eMkEKhSp5wPhgGXSnFt2qv0o7SvDFtLeHwuwxfaQuSKz?=
- =?us-ascii?Q?HU0zJL7E49co2OErRxqdw3TQy3X9QYfrfzNvDtfMeksOZecA/OIyHy+4a0KI?=
- =?us-ascii?Q?AmUus40MlTw1WHLr4iT+uURYMzHPweRlTZmq9tDweZhml9vquiSrnAV+qvkn?=
- =?us-ascii?Q?9BUjIKUmWYxN5NXHwMPEq1v4F+NO8lj/08kGF0FbHW27xZ/lfpgoeBRjfTk8?=
- =?us-ascii?Q?gbZjqqk99oj7HcNxtP1/DRkGr+ecfvjGy2g15o1KOPEmKoDxof9kX1YM/5ZQ?=
- =?us-ascii?Q?LduyazuhJVQXnlX+ft07C+tPsRpTOUDQ9UYifVYYBYEtqlSh/+QfJlRMTqMb?=
- =?us-ascii?Q?3jFE10Or+GR5gAqlTnmbZXLRbN2hw/H8AHsFOFkgx3ui/LTw8FcKrsoa47ww?=
- =?us-ascii?Q?MPLiJC6D1Yggkapp3QyOqgUMGoV+UYfGaN9OchFazqKs40GMGmSHzhDoQ0Cx?=
- =?us-ascii?Q?Q3sW9E/Xg/KdrgCGUwRiaNCB68uN5DrbBAOiPqtdCzBz97BJ2RhZSeQnbzv0?=
- =?us-ascii?Q?AMv38ThRnksb7mimnVCJ2jDyVf47FRKR/4N6iq7j?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 870f86ab-671e-465f-c37b-08db7d58636e
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 13:04:38.3339
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +GYVDiyTZfgiWfx+6/UQY21V/klpdSu56kE/G8SDsjj9JS6f6j+CRYW7xZsmd6SAhhNKfcQPAsQneRMyKQiG4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5891
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: RFC: DSI host capabilities (was: [PATCH RFC 03/10] drm/panel: Add
+ LGD panel driver for Sony Xperia XZ3)
+Content-Language: en-US
+To:     Maxime Ripard <mripard@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <dri-devel@lists.freedesktop.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        freedreno <freedreno@lists.freedesktop.org>
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
+ <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
+ <brmrqeajbq3oyp3jjwmc6tuhiftz764u6az444xw6g7pwf5fr3@5tlp375qwhed>
+ <617c8f8a-1fc7-c6a0-eaa5-ce75ff2adc1b@linaro.org>
+ <CAA8EJppG=MAVpK1J_8bNnkJ23y9NtgY7a2GVResXJvhEKyNsrw@mail.gmail.com>
+ <739a8bd9-9ff0-5072-fdae-b64efdf86842@collabora.com>
+ <e927cfcd-bf34-5daf-0e24-4dd828106968@linaro.org>
+ <epds77sccy4cc5cdpoc4ir7sfz5sz3biwep6rbks2nuyqncidu@77gb4t2wy6vn>
+Organization: Linaro Developer Services
+In-Reply-To: <epds77sccy4cc5cdpoc4ir7sfz5sz3biwep6rbks2nuyqncidu@77gb4t2wy6vn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_platform_ioremap_resource() and
-devm_platform_get_and_ioremap_resource() to simplify code.
+On 05/07/2023 14:04, Maxime Ripard wrote:
+> Hi,
+> 
+> On Tue, May 30, 2023 at 03:36:04PM +0300, Dmitry Baryshkov wrote:
+>> On 30/05/2023 15:15, AngeloGioacchino Del Regno wrote:
+>>> Il 30/05/23 13:44, Dmitry Baryshkov ha scritto:
+>>>> On Tue, 30 May 2023 at 10:24, Neil Armstrong
+>>>> <neil.armstrong@linaro.org> wrote:
+>>>>>
+>>>>> Hi Marijn, Dmitry, Caleb, Jessica,
+>>>>>
+>>>>> On 29/05/2023 23:11, Marijn Suijten wrote:
+>>>>>> On 2023-05-22 04:16:20, Dmitry Baryshkov wrote:
+>>>>>> <snip>
+>>>>>>>> +   if (ctx->dsi->dsc) {
+>>>>>>>
+>>>>>>> dsi->dsc is always set, thus this condition can be dropped.
+>>>>>>
+>>>>>> I want to leave room for possibly running the panel without DSC (at a
+>>>>>> lower resolution/refresh rate, or at higher power consumption if there
+>>>>>> is enough BW) by not assigning the pointer, if we get access to panel
+>>>>>> documentation: probably one of the magic commands sent in this driver
+>>>>>> controls it but we don't know which.
+>>>>>
+>>>>> I'd like to investigate if DSC should perhaps only be enabled if we
+>>>>> run non certain platforms/socs ?
+>>>>>
+>>>>> I mean, we don't know if the controller supports DSC and those
+>>>>> particular
+>>>>> DSC parameters so we should probably start adding something like :
+>>>>>
+>>>>> static drm_dsc_config dsc_params_qcom = {}
+>>>>>
+>>>>> static const struct of_device_id panel_of_dsc_params[] = {
+>>>>>           { .compatible = "qcom,sm8150", , .data = &dsc_params_qcom },
+>>>>>           { .compatible = "qcom,sm8250", , .data = &dsc_params_qcom },
+>>>>>           { .compatible = "qcom,sm8350", , .data = &dsc_params_qcom },
+>>>>>           { .compatible = "qcom,sm8450", , .data = &dsc_params_qcom },
+>>>>> };
+>>>>
+>>>> I think this would damage the reusability of the drivers. The panel
+>>>> driver does not actually care if the SoC is SM8350, sunxi-something or
+>>>> RCar.
+>>>> Instead it cares about host capabilities.
+>>>>
+>>>> I think instead we should extend mipi_dsi_host:
+>>>>
+>>>> #define MIPI_DSI_HOST_MODE_VIDEO BIT(0)
+>>>> #define MIPI_DSI_HOST_MODE_CMD  BIT(1)
+>>>> #define MIPI_DSI_HOST_VIDEO_SUPPORTS_COMMANDS BIT(2)
+>>>> // FIXME: do we need to provide additional caps here ?
+>>>>
+>>>> #define MIPI_DSI_DSC_1_1 BIT(0)
+>>>> #define MIPI_DSI_DSC_1_2 BIT(1)
+>>>> #define MIPI_DSI_DSC_NATIVE_422 BIT(2)
+>>>> #define MIPI_DSI_DSC_NATIVE_420 BIT(3)
+>>>> #define MIPI_DSI_DSC_FRAC_BPP BIT(4)
+>>>> // etc.
+>>>>
+>>>> struct mipi_dsi_host {
+>>>>    // new fields only
+>>>>     unsigned long mode_flags;
+>>>>     unsigned long dsc_flags;
+>>>> };
+>>>>
+>>>> Then the panel driver can adapt itself to the host capabilities and
+>>>> (possibly) select one of the internally supported DSC profiles.
+>>>>
+>>>
+>>> I completely agree about extending mipi_dsi_host, other SoCs could reuse
+>>> that and
+>>> support for DSC panels would become a lot cleaner.
+>>
+>> Sounds good. I will wait for one or two more days (to get the possible
+>> feedback on fields/flags/etc) and post an RFC patch to dri-devel.
+> 
+> I just came across that discussion, and couldn't find those patches, did
+> you ever send them?
+> 
+> Either way, I'm not really sure it's a good idea to multiply the
+> capabilities flags of the DSI host, and we should just stick to the
+> spec. If the spec says that we have to support DSC while video is
+> output, then that's what the panels should expect.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/iommu/mtk_iommu.c    | 9 +++------
- drivers/iommu/mtk_iommu_v1.c | 4 +---
- 2 files changed, 4 insertions(+), 9 deletions(-)
+Except some panels supports DSC & non-DSC, Video and Command mode, and
+all that is runtime configurable. How do you handle that ?
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index e93906d6e112..6595a25c103d 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -1264,16 +1264,13 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 	}
- 
- 	banks_num = data->plat_data->banks_num;
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -EINVAL;
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
- 	if (resource_size(res) < banks_num * MTK_IOMMU_BANK_SZ) {
- 		dev_err(dev, "banknr %d. res %pR is not enough.\n", banks_num, res);
- 		return -EINVAL;
- 	}
--	base = devm_ioremap_resource(dev, res);
--	if (IS_ERR(base))
--		return PTR_ERR(base);
- 	ioaddr = res->start;
- 
- 	data->bank = devm_kmalloc(dev, banks_num * sizeof(*data->bank), GFP_KERNEL);
-diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index 8a0a5e5d049f..2e116241f80b 100644
---- a/drivers/iommu/mtk_iommu_v1.c
-+++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -610,7 +610,6 @@ static int mtk_iommu_v1_probe(struct platform_device *pdev)
- {
- 	struct device			*dev = &pdev->dev;
- 	struct mtk_iommu_v1_data	*data;
--	struct resource			*res;
- 	struct component_match		*match = NULL;
- 	void				*protect;
- 	int				larb_nr, ret, i;
-@@ -628,8 +627,7 @@ static int mtk_iommu_v1_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	data->protect_base = ALIGN(virt_to_phys(protect), MTK_PROTECT_PA_ALIGN);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	data->base = devm_ioremap_resource(dev, res);
-+	data->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(data->base))
- 		return PTR_ERR(data->base);
- 
--- 
-2.39.0
+> 
+> If a host isn't able to provide that, it's a bug and we should fix the
+> controller driver instead of creating a workaround in the core for
+> broken drivers.
+> 
+> Another concern I have is that, those broken drivers are usually the
+> undocumented ones that already have trouble supporting the most trivial
+> setup. Creating more combinations both at the controller and panel level
+> will just make it harder for those drivers.
+> 
+> Maxime
 
