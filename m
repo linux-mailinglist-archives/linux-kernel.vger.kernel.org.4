@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D181748D88
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180D2748CEE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234192AbjGETLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S233642AbjGETFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234110AbjGETKe (ORCPT
+        with ESMTP id S233626AbjGETEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:10:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EC5420A;
-        Wed,  5 Jul 2023 12:05:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40CB56171C;
-        Wed,  5 Jul 2023 19:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2375C433C7;
-        Wed,  5 Jul 2023 19:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688583948;
-        bh=h+YjMsn4Qu+tNMhA5V9icLWH3DAN1ha4KPOWk0eHFlw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BfI2JsznIuKtZGtFSEhKOPI06bCrFYexEv6QgKLLavNRCiNqPZ2fCXh5YMZ3+qk6z
-         uHYKtQrOAtE1+9yqspAq/SkmWtS8Chv2RrzTpqMZtI+ZfQb6mqfUu4DBh/Uk+kQf6M
-         WTTV67y1Nq1a+vJbkVT6313ICRCjcJlVO3XrdnKVEyNxJNT43Ze1phh/FWKkKqYyrO
-         wWi3b4B2v6gc0Abd122oA7HKFFfpLL/nUvNvcMjcJ14iaudOj2eod8SdimXSUHHX2B
-         6K1v3jCGj/D+qUnYwXWZNpeAVJozPL+dzknN4Hp8nb0PLYA4zgWz1nHWhhNx+p0E2U
-         ERz+czJ3zy1+g==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        selinux@vger.kernel.org
-Subject: [PATCH v2 91/92] selinux: convert to ctime accessor functions
-Date:   Wed,  5 Jul 2023 15:01:56 -0400
-Message-ID: <20230705190309.579783-89-jlayton@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230705190309.579783-1-jlayton@kernel.org>
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
+        Wed, 5 Jul 2023 15:04:00 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8169F1FEA;
+        Wed,  5 Jul 2023 12:03:40 -0700 (PDT)
+Received: from p200300ccff0adc001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0a:dc00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1qH7mh-0017Xc-MG; Wed, 05 Jul 2023 21:03:27 +0200
+Received: from andi by aktux with local (Exim 4.96)
+        (envelope-from <andreas@kemnade.info>)
+        id 1qH7mh-001UQf-09;
+        Wed, 05 Jul 2023 21:03:27 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     bcousson@baylibre.com, tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
+        dmitry.torokhov@gmail.com, andreas@kemnade.info,
+        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH 0/3] ARM: omap4: embt2ws: Add audio support
+Date:   Wed,  5 Jul 2023 21:03:21 +0200
+Message-Id: <20230705190324.355282-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In later patches, we're going to change how the inode's ctime field is
-used. Switch to using accessor functions instead of raw accesses of
-inode->i_ctime.
+Add audio support for Epson Moverio BT-200.
+In the vendor kernel, the MCBSP side is used as master,
+so do it here also that way.
 
-Acked-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- security/selinux/selinuxfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Andreas Kemnade (3):
+  ASoC: ti: omap-mcbsp: Ignore errors for getting fck_src
+  ASoC: tlv320aic3x: use BCLK instead of MCLK if not in master mode
+  ARM: dts: omap4: embt2ws: Add audio support
 
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index bad1f6b685fd..9dafb6ff110d 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -1197,7 +1197,7 @@ static struct inode *sel_make_inode(struct super_block *sb, int mode)
- 
- 	if (ret) {
- 		ret->i_mode = mode;
--		ret->i_atime = ret->i_mtime = ret->i_ctime = current_time(ret);
-+		ret->i_atime = ret->i_mtime = inode_set_ctime_current(ret);
- 	}
- 	return ret;
- }
+ arch/arm/boot/dts/omap4-epson-embt2ws.dts | 21 +++++++++++++++++++++
+ sound/soc/codecs/tlv320aic3x.c            |  4 ++++
+ sound/soc/ti/omap-mcbsp.c                 |  4 ++--
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
 -- 
-2.41.0
+2.39.2
 
