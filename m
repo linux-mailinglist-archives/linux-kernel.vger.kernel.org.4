@@ -2,137 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6A17486FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0DE7486FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjGEO41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S232468AbjGEO4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGEO4Z (ORCPT
+        with ESMTP id S231349AbjGEO4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:56:25 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2122.outbound.protection.outlook.com [40.107.215.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F2C170A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:56:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AtIcWl7CeZFwUkwCKdM168cBkyXhDU7ATVupyf9JxB5M86l0P5DiB+zypyRukvJE+GDqBOyYwg4MbM4l0eSA7GcAT2E0hSV7BhUUgAEv5gw2ve3zKprMktKMwQEYyW7vrdz8uX94P3zYAoYTc868XVNKsqbHs+DI4gSS+EwZopt3DRi6eXklDmqEXEnex8o1MeSFiJP8+n82LXQRVrG608SkREJRKU0rZYFm0ppsArBHBk1hUfnJq9Bi7bZraSpt+d+Btu2faoVR44DPUUtnL/n4JBX0Yhb3cjCayLQSmATzuzMfbwyUmrlHKD06alNYekBQHRI6JxgETB/1s7IUMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bNpj9rxmMueM38RTB/u25xlpE2eVTV9JiOMXsZ2osnk=;
- b=af03WAoxc8G/u2sLUAWK3hd7YiYkaUXzpHZHGzwHADkRUoXgpHem7nPRz/3SS7Rcw7yLx0bJZYGBFKWt1Omix8bxMX+HOWdI9UUdblNBy84m95V7l2yy57Z7xVugXfWLzCUW6XuAIfLy9GC9GhlKA4fxWtw+fjCsENojSZS66hTFECq4bgwZ7nek8jb7dGJwLg7JEY0vw37VCpSRU1e25Px916t1HPTECfPTBKhj4HoGwBsDXtngI0yAFHa+Nk2p4bi3ER5EeRAdz0ArnpfDk9kZTOTrwI7ojDb7CLg1nPLn5vqz8lsnHyInMTDIG/N1FnNGiEqqUHhHFN04EC+qxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bNpj9rxmMueM38RTB/u25xlpE2eVTV9JiOMXsZ2osnk=;
- b=csdmlkV3tRi6XgL2U2ynT6Gexu4UACtb8yhxD2vwqCvehwwnvcI3ub+Sic8heSAqck8nXijABPYS4oCjmuZqlMbpZGuzIb2Cr6Z98YekiHgQwWl5U6xLIzVsBBUH+4PbwIEjTlu7OJSD5PyPht22xgpbuuloDDtGOXklGy80xThY96CBYjzg/Y5W0TVSYz3w6v79I/Bin1qDUmmLtKGv19TsQ53zoGJNM7LYdHu328j2Ew1+b7paTfTJfTl4cINPSHb8tWcArAinOHYRx6pNg9SuQFDM/yt3DbOYyfOnwEHCKGRK29gMCwt8MDRlqYuSXH6Lwf3qRl6HBWB72FPmqg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PS1PR0601MB3737.apcprd06.prod.outlook.com
- (2603:1096:300:78::18) by PSAPR06MB4390.apcprd06.prod.outlook.com
- (2603:1096:301:8f::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
- 2023 14:56:21 +0000
-Received: from PS1PR0601MB3737.apcprd06.prod.outlook.com
- ([fe80::9531:2f07:fc59:94e]) by PS1PR0601MB3737.apcprd06.prod.outlook.com
- ([fe80::9531:2f07:fc59:94e%4]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 14:56:21 +0000
-From:   Wang Ming <machel@vivo.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Wed, 5 Jul 2023 10:56:43 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BF41712;
+        Wed,  5 Jul 2023 07:56:38 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3144bf65ce9so250600f8f.3;
+        Wed, 05 Jul 2023 07:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688568996; x=1691160996;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wyS/AuhXyE6+VyB6NMgbRJz2h3QQq9EfDiqpIcxbQ+o=;
+        b=rJ+YDpHOhYp5fgpmARP1W0xJQQ4S/uwxuqaBWmR9YM3I1EDx/z9vlq63jBoRDq3+x1
+         Y+4rpdDKqWST/oBMWmx/NeoKS2lV27g4VZ2/AjiSFpbdy2nw+LIuf6ESRRcOK+Dq+Hds
+         LUUJzwvojhxKah3DULmQqhEzF8yjjhOzwDoQ0i/U90n13OsGftjEAtrxh/Uo9czvRUuJ
+         fVtMsuOOkFu4UxelAUe8NqkJbh4zJ1B+a0qL9jNyHETVoqb2VtHgsrA/NeG+jzOf18qR
+         mcUnfyumpB2U7fRBI+zsPEJlIQJcHozYnEDxw3XYBeJ+pcMaI7pM6Nxg0cCRPlw99c+Q
+         sNxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688568996; x=1691160996;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wyS/AuhXyE6+VyB6NMgbRJz2h3QQq9EfDiqpIcxbQ+o=;
+        b=I6fa2pzmpiiCPRQZdR2C7swT8ibtmppEHKkFBg56XvUAqFam3810RGwbJd632/OAuF
+         MZYYghvP40I7doNjNMw7h5XGUukzHpi4k4qvGD4KuWRY6xSfD6hRdxVcPFvCTd6ACIVi
+         TuHbRs6Vn4UHEhqNydMhVyie/EFgOPX88EBJqyuJEjY8v5rMWp9zZzMFdCBXLBXutqjN
+         w1ECW24hmORwen7gwJL0RlkK/gl2Etui1EzhjrUTL2T+VZNlBziM9bit81UsHtp5O6So
+         mUTCJnBJu0S9JVSDw3uvCMFqiCD0V84lWvYwo16gpCjzGnzhJgPmBtExrr0qA4Rp2fQG
+         B3xA==
+X-Gm-Message-State: ABy/qLaHmto7DK6RRJfVrKIAq5k1000PSUmzKS+CEBAy+qqMlKFDRzYm
+        EU7LM+sYT+O7eK6w1xFy5Dw=
+X-Google-Smtp-Source: APBJJlHXIoRYHqc9wmgxCHq6TYbxiiDVlKTz0d8gunY6iAJe7ooY5TcVLQfwTVhyVrVwkjrWblNNZw==
+X-Received: by 2002:a5d:4ec7:0:b0:313:f4ea:4d97 with SMTP id s7-20020a5d4ec7000000b00313f4ea4d97mr11738444wrv.23.1688568996289;
+        Wed, 05 Jul 2023 07:56:36 -0700 (PDT)
+Received: from localhost (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id d10-20020adfe2ca000000b0031272fced4dsm31455452wrj.52.2023.07.05.07.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 07:56:35 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com, Wang Ming <machel@vivo.com>
-Subject: [PATCH v1] intel_th:Fix repeated initialization
-Date:   Wed,  5 Jul 2023 22:55:57 +0800
-Message-Id: <20230705145608.4602-1-machel@vivo.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0153.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::33) To PS1PR0601MB3737.apcprd06.prod.outlook.com
- (2603:1096:300:78::18)
+Subject: [GIT PULL] pwm: Changes for v6.5-rc1
+Date:   Wed,  5 Jul 2023 16:56:31 +0200
+Message-ID: <20230705145632.2510377-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PS1PR0601MB3737:EE_|PSAPR06MB4390:EE_
-X-MS-Office365-Filtering-Correlation-Id: 72507412-8254-4ad3-a541-08db7d67fe76
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TpgXtiUzxnuw6VVFVrzme+GHPQSCmVCNbDOaIWNFsAiI6UvH3qHF8fbDhxjhNatzZh3P8f1EHO+cpJC8elocLaFQ8yBfo4CMTs+NWEwC6fKHU4/1MoO4TSOhWZ5DrOKMDiQ9f1E2BkedA3H9VGJce0ELl6aaATqEgdbk9bWaWdad9kR6JFE1gCkJzRLhByn6vOpib8Vw+eZpzFWQopPORBvMApmTjOWGba392fhKqxIW4ScRtfvSzKlj85Jhm249cuuj64pTPyl3LvBFj5CLRpm7Pl+Y2ffvwOO55A15yr+c2RMq/Qy35aci0TPmNIAW1DQI7isKgjSxW4YkSWb5l+xuBeuFXU1JT9AfQ2gqAnX99w97tWsGPHWfd3YhgJU3HXNUpmZpMFtxodA1l3zSyA4JsiZ/2fuwM2wPbWozPDLdHPHpJ2gvvzQ5p0TAQPuXmIJQi8rdGjuSGX3oV5QfxeB8ii3PR5d3y4X2XvBVvoxjBJUzt6FKPorstrUgHFZo0MqE60jx2HBK25v64Mg29DPJtp1kacsYMGkssRmKcXykT4IhVZA7jVeyxaQWXKBqiZANPnOj10wE1lwQ68rtGB4mwctW9tqKIc4zMKC1HF2oE1gUWJKgdjxcGNoJgClN
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR0601MB3737.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(136003)(376002)(39860400002)(451199021)(38100700002)(66556008)(66476007)(66946007)(4326008)(38350700002)(2616005)(186003)(6512007)(86362001)(6486002)(52116002)(36756003)(6666004)(26005)(6506007)(1076003)(478600001)(107886003)(8676002)(8936002)(4744005)(5660300002)(2906002)(41300700001)(316002)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gbIzS2947Pv05Bwx6QTOMmRXsg3a5uIFGztDsU4JFZJwPB2abohr+TLk3stX?=
- =?us-ascii?Q?Nt7J31I0mzj5A4llS+89fb9bhHf+6eeiER7XoZZVCbnHgM88+u3mwmEhYvuZ?=
- =?us-ascii?Q?kIRRiG+dQcMXxgqN7HeWvbVw1va9AdxtgzIqXPaNMla8RFIEVWyCl9sTR6cK?=
- =?us-ascii?Q?/hBLb9FRVm11LH+6ZenS6a8MpGs0h+blw8pnC0yHpqcGQXpRFiVOt8jxBwnT?=
- =?us-ascii?Q?mJFBg4FGu+zyh8el1dGVrn4Xt4eUx/uf1/6CIXY9bZP6ib9mB3W9tdsaJXjK?=
- =?us-ascii?Q?gpvO4BNUCSkzxb3OH8OHDtqPKa5m1qec2lnctosseLlpZnAg+3N9N8MnR8tG?=
- =?us-ascii?Q?3HowyM/MZvrYBstSth1ynQ0kEhUQc7RCN5a7jKuVWY3NiBzP9ZGJpFUPTXCJ?=
- =?us-ascii?Q?tfn/lk5m5Zok4s0Ixeb8g80R4aJUPHlvc6ljw70D1aOLTWF16ie5xaTyjML7?=
- =?us-ascii?Q?OLoC7wJICD8Upgw1wM4MDMWFRoSNavYN1+UurOMVqv6ULC1zCNUAryXh4inm?=
- =?us-ascii?Q?JCD9Z6cl6TvbXlepzuGMdfVoBBpmAS8vZ+bZsTPGvwlUMG3Q14ITFcZodS08?=
- =?us-ascii?Q?b4AMsfUzZNOuc7phLtCQ2LUSUL9qQIHczQwlR2Ozlj7g5HFYBtdA59IsBEUH?=
- =?us-ascii?Q?WzTDoGuX36kYQqU837QQLnVWU4po2OPN7dDPqvWZX4uS+ZS2GSpJpGF8wvf3?=
- =?us-ascii?Q?gcs2Mseg1Umr/tmYBwHvJmRKBFLfHH4KT0S0Rzku64C6T6FrLYvRo0+3k/D9?=
- =?us-ascii?Q?cpDL/Hmjr4Yhwmy75jiDUN3WjOg3nkrublrqwF2VxW2U+/tZaqjEpzECcQoV?=
- =?us-ascii?Q?OPFbHNOF8SOJ+JvHG9FeTVeisrhZ7AZYmAmiiaFG3xcQYfeAXbyskKmRmBMU?=
- =?us-ascii?Q?op+OhOvRpDYH97lVLEqfrtuUkyiy4bMdlQahwFrI+M10mZdV7B9KSlEkULF9?=
- =?us-ascii?Q?AmtJhx6wD9Lc7vNBZhzmMT3n7z8q3kr/ld6n2PfJ1XRXxFAUE6r9T7xxuEm9?=
- =?us-ascii?Q?pWwYvvbS48HjvfG6FLE4W5ygIteDXEDO1d9tyR2CU2c5Ytf5Hq5JCP8wjDVB?=
- =?us-ascii?Q?1fTNt0XJ87sKIQmFpQTy3GlKmsXTfsOdDRtWEw8it0qUAM1YKkCNBkToT/Uf?=
- =?us-ascii?Q?8jUcUYdQx8pZZCbU30OwdNfpQUs5LGscbrAibS68/eaoxl5+vLgxIbVp4+6g?=
- =?us-ascii?Q?RtMBE6yB/LfMhdJDQcgGmNqYQqLMo12CP9riH1ibebQikJknMfUfrCZflPIV?=
- =?us-ascii?Q?p9nAURhWQpUo1HZlPdFpYARhaMqp8aQ1NWg+hMh5woMBltsyjDnWkcUCIkVg?=
- =?us-ascii?Q?HcP5ocxjjkTd7lYc3cS1xilbURqLlsfq7jAwrheussd/0NYtuwbP8fWSYVIa?=
- =?us-ascii?Q?O8DZz/gr7V4w2mHP7zhBRArLEmB6jomclCjo1cctlvX1JuqFPmcdkXYYAEA/?=
- =?us-ascii?Q?itOm+nKXMj5ltMva0I/SbL3Oal4zvVtCQI1MtaOCzzojk1iDP+e65lWqHQql?=
- =?us-ascii?Q?2JgMHgVe9YACVA1fCYpvEYp9EdFVJTR+Eak5JjIM5HUx3xsgTInA/695u5H/?=
- =?us-ascii?Q?xfgUVJOv9IETO5vOvVuREoLq901FoCJ8PObLQiQz?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72507412-8254-4ad3-a541-08db7d67fe76
-X-MS-Exchange-CrossTenant-AuthSource: PS1PR0601MB3737.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 14:56:20.9246
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5pTQZGiMAG18sHx9Hx+gHzSac1PopPdHl/OGtBeH/L6uG5G1e1fF+oSu4KSAvVXB+PGRfUn28Q2MSma3WB9yAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4390
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In intel_th_set_output() function,
-the second assignment to hubdrv is
-meaningless.
+Hi Linus,
 
-Signed-off-by: Wang Ming <machel@vivo.com>
----
- drivers/hwtracing/intel_th/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-diff --git a/drivers/hwtracing/intel_th/core.c b/drivers/hwtracing/intel_th/core.c
-index cc7f879bb175..804c2f27b159 100644
---- a/drivers/hwtracing/intel_th/core.c
-+++ b/drivers/hwtracing/intel_th/core.c
-@@ -1048,7 +1048,7 @@ int intel_th_set_output(struct intel_th_device *thdev,
- 	 * hub is instantiated together with the source device that
- 	 * calls here, so guaranteed to be present.
- 	 */
--	hubdrv = to_intel_th_driver(hub->dev.driver);
-+
- 	if (!hubdrv || !try_module_get(hubdrv->driver.owner))
- 		return -EINVAL;
- 
--- 
-2.25.1
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git tags/pwm/for-6.5-rc1
+
+for you to fetch changes up to 92554cdd428fce212d2a71a06939e7cab90f7c77:
+
+  dt-bindings: pwm: convert pwm-bcm2835 bindings to YAML (2023-06-23 15:49:35 +0200)
+
+Thanks,
+Thierry
+
+----------------------------------------------------------------
+pwm: Changes for v6.5-rc1
+
+There's a little bit of everything in here: we've got various
+improvements and cleanups to drivers, some fixes across the board and a
+bit of new hardware support.
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      dt-bindings: pwm: imx: add i.MX8QXP compatible
+
+Biju Das (1):
+      pwm: Add Renesas RZ/G2L MTU3a PWM driver
+
+Christophe JAILLET (1):
+      pwm: clk: Use the devm_clk_get_prepared() helper function
+
+Conor Dooley (2):
+      pwm: add microchip soft ip corePWM driver
+      MAINTAINERS: add pwm to PolarFire SoC entry
+
+Dan Carpenter (1):
+      pwm: ab8500: Fix error code in probe()
+
+Daniel Golle (2):
+      dt-bindings: pwm: mediatek: Add mediatek,mt7981 compatible
+      pwm: mediatek: Add support for MT7981
+
+Fancy Fang (1):
+      pwm: imx-tpm: force 'real_period' to be zero in suspend
+
+Heiner Kallweit (6):
+      pwm: meson: modify and simplify calculation in meson_pwm_get_state
+      pwm: meson: fix handling of period/duty if greater than UINT_MAX
+      pwm: meson: remove not needed check in meson_pwm_calc
+      pwm: meson: switch to using struct clk_parent_data for mux parents
+      pwm: meson: don't use hdmi/video clock as mux parent
+      pwm: meson: make full use of common clock framework
+
+Krzysztof Kozlowski (1):
+      dt-bindings: pwm: restrict node name suffixes
+
+Marek Vasut (1):
+      pwm: sysfs: Do not apply state to already disabled PWMs
+
+Shuijing Li (1):
+      pwm: mtk_disp: Fix the disable flow of disp_pwm
+
+Stefan Wahren (1):
+      dt-bindings: pwm: convert pwm-bcm2835 bindings to YAML
+
+Uwe Kleine-König (2):
+      pwm: sifive: Simplify using devm_clk_get_prepared()
+      pwm: pca9685: Switch i2c driver back to use .probe()
+
+Wolfram Sang (1):
+      dt-bindings: pwm: Add R-Car V3U device tree bindings
+
+ Documentation/devicetree/bindings/pwm/imx-pwm.yaml |   4 +
+ .../bindings/pwm/mediatek,mt2712-pwm.yaml          |   1 +
+ .../devicetree/bindings/pwm/pwm-bcm2835.txt        |  30 --
+ .../devicetree/bindings/pwm/pwm-bcm2835.yaml       |  43 ++
+ Documentation/devicetree/bindings/pwm/pwm.yaml     |   2 +-
+ .../devicetree/bindings/pwm/renesas,pwm-rcar.yaml  |   1 +
+ MAINTAINERS                                        |   1 +
+ drivers/pwm/Kconfig                                |  21 +
+ drivers/pwm/Makefile                               |   2 +
+ drivers/pwm/pwm-ab8500.c                           |   2 +-
+ drivers/pwm/pwm-clk.c                              |  12 +-
+ drivers/pwm/pwm-imx-tpm.c                          |   7 +
+ drivers/pwm/pwm-mediatek.c                         |  39 +-
+ drivers/pwm/pwm-meson.c                            | 212 ++++----
+ drivers/pwm/pwm-microchip-core.c                   | 507 +++++++++++++++++++
+ drivers/pwm/pwm-mtk-disp.c                         |  13 +-
+ drivers/pwm/pwm-pca9685.c                          |   2 +-
+ drivers/pwm/pwm-rz-mtu3.c                          | 551 +++++++++++++++++++++
+ drivers/pwm/pwm-sifive.c                           |   7 +-
+ drivers/pwm/sysfs.c                                |  17 +
+ 20 files changed, 1302 insertions(+), 172 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-bcm2835.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/pwm-bcm2835.yaml
+ create mode 100644 drivers/pwm/pwm-microchip-core.c
+ create mode 100644 drivers/pwm/pwm-rz-mtu3.c
