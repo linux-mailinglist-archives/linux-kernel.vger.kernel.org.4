@@ -2,205 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC20748A10
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2206748A14
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbjGERZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
+        id S232514AbjGERZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjGERZJ (ORCPT
+        with ESMTP id S232550AbjGERZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:25:09 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74FA188
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:25:07 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-401d1d967beso20881cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:25:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688577907; x=1691169907;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uvJl8XInaVm4n5AR4AD2zyrea1AdB/Yqy4IKMB7L0Iw=;
-        b=DM87sN9etq3pLXS2B0O0x8/s69x8n8NtNg54LKnNdle2WaUIVHRKv2ggFtINDm6Wmq
-         Tqw4LejYbfeB0xcvLh0X5mpLO2lh9LpxapgsVfLpB4qGdv5keyAOHiOqlruV+bBp6iiO
-         a5WlNuHufIBSuqJ2SAN8sH3TvZVGH6x9hwxTX6ugTClo7DgB6YkQzk6WIqj0g+uYRm8y
-         kXIH5o6hAztnIiTFDahGGEEUxi6AN4Z5VtkqouFT1mEOhKAkIyquMjVfHFRZRLPK2Icq
-         7xfArJI7fgL0ZRiqzznqyR1obr7TvIYfcjc+NfAlpM3GDURvTgdjB79Tg0SfJ8vjbbvN
-         odYQ==
+        Wed, 5 Jul 2023 13:25:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCFCE41
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688577896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v27EJolWd9vgnA83/Nkc58pSBSJkYYfnU44c9IwfWFY=;
+        b=W8aOYvbbsar9tqJ7q27C0IrXHlPgR6pdjhHlyPANCSEmeoC6HTZawAW//Ui1HFDOrWNgrA
+        ELDZ3R2tbm4FtVzch9X1a1hsvYsFnW2Cr59WZYEP2b5ctnrGWO0pbLoyRMg9STA1P4ALKa
+        TxO39wSSOnipPXZf65NtjcPg7iAJ8SA=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-605-Qwe8n7yFOoST1_yvnD9PGA-1; Wed, 05 Jul 2023 13:24:55 -0400
+X-MC-Unique: Qwe8n7yFOoST1_yvnD9PGA-1
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4fb89482cd6so6970207e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:24:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688577907; x=1691169907;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uvJl8XInaVm4n5AR4AD2zyrea1AdB/Yqy4IKMB7L0Iw=;
-        b=XsUd20EfKqzVrlhdcU9kht2XYTOsh/VWBoij70zModkO7CtPENzcsRH4PEnYiZO4NX
-         MOAFvnX54tE5dVeVv9NUJRGr4RdtxSI54rK3+sODrCujRkwSRCzQFv6Jbcxa783DianV
-         Q9yVlVXNVJ9IdjRhmvG/H1L23qmNmgHdHe6b9Twm9WUlESlanwK6UP1jZsT1EtZPLxf3
-         23is7O/Rhje940Kd/pbq4bm8yOfH2ewJViHVWU7tyyzhgwx/5tOliNxVwr/SpM66ocqo
-         IRYzh8QlRl7aM/TOvdXWXutnpfK7l4PjcOIBFfexwO8jPOusv/gJV+Mv4VBUwb9PfnO9
-         tMSA==
-X-Gm-Message-State: ABy/qLbgA9jpouE1VKSuRP05Pdb2Li5YkIx9fT0vCsu8+ZrdCgJO5cPi
-        QcXf9gcKAZcAWuSrEa1sdFg21US/FBfVKvC+/TUjdg==
-X-Google-Smtp-Source: APBJJlFvsrxca+yc7W6N+OGa5E4od+AwyUaACPlOJi2RIZLZQoFjwJXpzRBVXAIhOwUbSGzbP0UszSU6QIsPScInIuU=
-X-Received: by 2002:a05:622a:18e:b0:3f8:5b2:aeec with SMTP id
- s14-20020a05622a018e00b003f805b2aeecmr2782qtw.20.1688577906947; Wed, 05 Jul
- 2023 10:25:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688577893; x=1691169893;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v27EJolWd9vgnA83/Nkc58pSBSJkYYfnU44c9IwfWFY=;
+        b=g37GUA3kLfH9UaAi4XvVy1njsCsbEsK9aFwtsIRHcCtHUpp5FF/J7qtqIWVdgqk/Nv
+         Zpuo/2l8QdCI2tciBILUCZkHkMCrXRvMkve7EJxXjiYmOhaJ3whIVFHCOBFIf5dOq8A0
+         A8SfaLx05h+T3QkM3OzATHjoMkUQTwMnx5cH9i7pL55w2ynl1dzs6Im4Cyy5TeLjzE2E
+         oiDYaM9oTyAtfrBLwbtVw48LbQ34fPznmE4oUbDi1zI1kBD2YSL5j7y7rUhUJ6Pm3xnI
+         B/0jwdf8Iy+iBO8gWCfZ2tRSbnoAdx2/4+UkstI/6p5MET1rhCMgubK+hFZbRDA/n243
+         wENw==
+X-Gm-Message-State: ABy/qLaZNbSzENLuvlbaT6jYEaM1TeAyoGfm7f6qKNazqC7e+PlOORbq
+        hG9IV8LZFiUkNH77xujJH36Dc7aTm4HZfwc1IGeWjh3Folyz0E0l6ts2nH7MRUjsNo8YDPa1NWg
+        NT5qNkr081YAZbKypyZgerpdi
+X-Received: by 2002:a05:6512:3bc:b0:4f7:6775:2a66 with SMTP id v28-20020a05651203bc00b004f767752a66mr10546761lfp.53.1688577893205;
+        Wed, 05 Jul 2023 10:24:53 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFwWvdb9CtRtlyPDaCglyB2byse00H+L5+2mWlx0zEDsjYRPwa8pgXijw9uCV1C55NL7pPWSw==
+X-Received: by 2002:a05:6512:3bc:b0:4f7:6775:2a66 with SMTP id v28-20020a05651203bc00b004f767752a66mr10546722lfp.53.1688577892764;
+        Wed, 05 Jul 2023 10:24:52 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c71a:1c00:e2b1:fc33:379b:a713? (p200300cbc71a1c00e2b1fc33379ba713.dip0.t-ipconnect.de. [2003:cb:c71a:1c00:e2b1:fc33:379b:a713])
+        by smtp.gmail.com with ESMTPSA id x16-20020a1c7c10000000b003fbe4cecc3bsm2682371wmc.16.2023.07.05.10.24.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 10:24:51 -0700 (PDT)
+Message-ID: <e4f64aa8-93f5-e731-5d6f-e37ae373c006@redhat.com>
+Date:   Wed, 5 Jul 2023 19:24:49 +0200
 MIME-Version: 1.0
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-4-ryan.roberts@arm.com> <CAOUHufa_xFJvFFvmw1Tkdc9cXaZ1GPA1dVSauH+J9zGX-sO1UA@mail.gmail.com>
- <eea2b36d-9c6d-64ca-4e21-57cfd5a93d57@arm.com> <CAOUHufZypv+kLFu3r8iPYbceBh0KSE=gus-_iC1Q35_QVQdnMQ@mail.gmail.com>
- <9c5f3515-ad39-e416-902e-96e9387a3b60@arm.com>
-In-Reply-To: <9c5f3515-ad39-e416-902e-96e9387a3b60@arm.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 5 Jul 2023 11:24:30 -0600
-Message-ID: <CAOUHufYvRYO=x==+i1aDQHvO=fx_sa6kmi5T4CMvsYiw1wgWqw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] mm: Default implementation of arch_wants_pte_order()
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, jirislaby@kernel.org,
+        jacobly.alt@gmail.com, holger@applied-asynchrony.com,
+        hdegoede@redhat.com, michel@lespinasse.org, jglisse@google.com,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230705171213.2843068-1-surenb@google.com>
+ <20230705171213.2843068-3-surenb@google.com>
+ <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com>
+ <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 3:11=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com> =
-wrote:
->
-> On 05/07/2023 03:07, Yu Zhao wrote:
-> > On Tue, Jul 4, 2023 at 7:20=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.c=
-om> wrote:
-> >>
-> >> On 03/07/2023 20:50, Yu Zhao wrote:
-> >>> On Mon, Jul 3, 2023 at 7:53=E2=80=AFAM Ryan Roberts <ryan.roberts@arm=
-.com> wrote:
-> >>>>
-> >>>> arch_wants_pte_order() can be overridden by the arch to return the
-> >>>> preferred folio order for pte-mapped memory. This is useful as some
-> >>>> architectures (e.g. arm64) can coalesce TLB entries when the physica=
-l
-> >>>> memory is suitably contiguous.
-> >>>>
-> >>>> The first user for this hint will be FLEXIBLE_THP, which aims to
-> >>>> allocate large folios for anonymous memory to reduce page faults and
-> >>>> other per-page operation costs.
-> >>>>
-> >>>> Here we add the default implementation of the function, used when th=
-e
-> >>>> architecture does not define it, which returns the order correspondi=
-ng
-> >>>> to 64K.
-> >>>
-> >>> I don't really mind a non-zero default value. But people would ask wh=
-y
-> >>> non-zero and why 64KB. Probably you could argue this is the large siz=
-e
-> >>> all known archs support if they have TLB coalescing. For x86, AMD CPU=
-s
-> >>> would want to override this. I'll leave it to Fengwei to decide
-> >>> whether Intel wants a different default value.>
-> >>> Also I don't like the vma parameter because it makes
-> >>> arch_wants_pte_order() a mix of hw preference and vma policy. From my
-> >>> POV, the function should be only about the former; the latter should
-> >>> be decided by arch-independent MM code. However, I can live with it i=
-f
-> >>> ARM MM people think this is really what you want. ATM, I'm skeptical
-> >>> they do.
-> >>
-> >> Here's the big picture for what I'm tryng to achieve:
-> >>
-> >>  - In the common case, I'd like all programs to get a performance bump=
- by
-> >> automatically and transparently using large anon folios - so no explic=
-it
-> >> requirement on the process to opt-in.
-> >
-> > We all agree on this :)
-> >
-> >>  - On arm64, in the above case, I'd like the preferred folio size to b=
-e 64K;
-> >> from the (admittedly limitted) testing I've done that's about where th=
-e
-> >> performance knee is and it doesn't appear to increase the memory wasta=
-ge very
-> >> much. It also has the benefits that for 4K base pages this is the cont=
-pte size
-> >> (order-4) so I can take full benefit of contpte mappings transparently=
- to the
-> >> process. And for 16K this is the HPA size (order-2).
-> >
-> > My highest priority is to get 16KB proven first because it would
-> > benefit both client and server devices. So it may be different from
-> > yours but I don't see any conflict.
->
-> Do you mean 16K folios on a 4K base page system
+On 05.07.23 19:22, Suren Baghdasaryan wrote:
+> On Wed, Jul 5, 2023 at 10:16 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 05.07.23 19:12, Suren Baghdasaryan wrote:
+>>> A memory corruption was reported in [1] with bisection pointing to the
+>>> patch [2] enabling per-VMA locks for x86.
+>>> Disable per-VMA locks config to prevent this issue while the problem is
+>>> being investigated. This is expected to be a temporary measure.
+>>>
+>>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=217624
+>>> [2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@google.com
+>>>
+>>> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+>>> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
+>>> Reported-by: Jacob Young <jacobly.alt@gmail.com>
+>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217624
+>>> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling first")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>>> ---
+>>>    mm/Kconfig | 3 ++-
+>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/mm/Kconfig b/mm/Kconfig
+>>> index 09130434e30d..0abc6c71dd89 100644
+>>> --- a/mm/Kconfig
+>>> +++ b/mm/Kconfig
+>>> @@ -1224,8 +1224,9 @@ config ARCH_SUPPORTS_PER_VMA_LOCK
+>>>           def_bool n
+>>>
+>>>    config PER_VMA_LOCK
+>>> -     def_bool y
+>>> +     bool "Enable per-vma locking during page fault handling."
+>>>        depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
+>>> +     depends on BROKEN
+>>>        help
+>>>          Allow per-vma locking during page fault handling.
+>>>
+>> Do we have any testing results (that don't reveal other issues :) ) for
+>> patch #1? Not sure if we really want to mark it broken if patch #1 fixes
+>> the issue.
+> 
+> I tested the fix using the only reproducer provided in the reports
+> plus kernel compilation and my fork stress test. All looked good and
+> stable but I don't know if other reports had the same issue or
+> something different.
 
-Yes.
+Can you point me at the other reports, so I can quickly scan them?
 
-> or large folios on a 16K base
-> page system? I thought your focus was on speeding up 4K base page client =
-systems
-> but this statement has got me wondering?
+-- 
+Cheers,
 
-Sorry, I should have said 4x4KB.
+David / dhildenb
 
-> >>  - On arm64 when the process has marked the VMA for THP (or when
-> >> transparent_hugepage=3Dalways) but the VMA does not meet the requireme=
-nts for a
-> >> PMD-sized mapping (or we failed to allocate, ...) then I'd like to map=
- using
-> >> contpte. For 4K base pages this is 64K (order-4), for 16K this is 2M (=
-order-7)
-> >> and for 64K this is 2M (order-5). The 64K base page case is very impor=
-tant since
-> >> the PMD size for that base page is 512MB which is almost impossible to=
- allocate
-> >> in practice.
-> >
-> > Which case (server or client) are you focusing on here? For our client
-> > devices, I can confidently say that 64KB has to be after 16KB, if it
-> > happens at all. For servers in general, I don't know of any major
-> > memory-intensive workloads that are not THP-aware, i.e., I don't think
-> > "VMA does not meet the requirements" is a concern.
->
-> For the 64K base page case, the focus is server. The problem reported by =
-our
-> partner is that the 512M huge page size is too big to reliably allocate a=
-nd so
-> the fauls always fall back to 64K base pages in practice. I would also sp=
-eculate
-> (happy to be proved wrong) that there are many THP-aware workloads that a=
-ssume
-> the THP size is 2M. In this case, their VMAs may well be too small to fit=
- a 512M
-> huge page when running on 64K base page system.
-
-Interesting. When you have something ready to share, I might be able
-to try it on our ARM servers as well.
-
-> But the TL;DR is that Arm has a partner for which enabling 2M THP on a 64=
-K base
-> page system is a very real requirement. Our intent is that this will be t=
-he
-> mechanism we use to enable it.
-
-Yes, contpte makes more sense for what you described. It'd fit in a
-lot better in the hugetlb case, but I guess your partner uses anon.
