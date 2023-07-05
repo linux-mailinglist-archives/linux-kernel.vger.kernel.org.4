@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F63749211
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9F0749210
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbjGEXuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 19:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S232324AbjGEXu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 19:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbjGEXuY (ORCPT
+        with ESMTP id S232075AbjGEXuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jul 2023 19:50:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE8D172B
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A9710F5
         for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 16:50:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C619617F1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E3B61804
         for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A14C4C433CA;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C4C8C433C7;
         Wed,  5 Jul 2023 23:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1688601022;
-        bh=wF3zf8/MLATQ/c23tboRByapQW7HjjUk1ZCKWbYWn/Y=;
+        bh=dgXQEhdOdm8Y9HQ7BRI3NqcsjIWDbxMCk69RUHbOSWk=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=E/cxeRlcq3fuV4PqYFVqm21m6k06WPkO9pbgs39wagk89mo3QcEqiq/Pm/UnXCszy
-         82mS5ixKGiKI25bcYY8j36ss7wqGDICATLLxUiPRQ3amqx8Qv8ffsAtzWQPKxFj7o5
-         IfHwq/i7TILqtANFYoVKH2qhnGMlg2k21fmd2jX3RbbHak/jQRP1skIlLifGuH2JWr
-         IZS8eM+SMLCIsLRU9iQdYbfCfMAHea7C5UxktYA9NUCFPmkal6PngNkkav4g1vjYSl
-         NrvpF3dL92oX4GH9Hjacw2+DrMGlv6h1FvrRzEVHPSkdA06JWm/GUv47UHx280f+tT
-         TTs/9R2murMDQ==
+        b=dCFDTpVawFPZDWwMeLUlZl3+wm089lS5dcOC5grNJ+72BcuEaOa1oA9e4PpYqF1OC
+         4cGQkMuzHX9Ni11AAaV5Iv9Iu13dfzBMwb1uC2s6/0nySsH0v0r0Dy7C3jdPNM8QtC
+         Lp5AWa/WlE56DlwdZz9v1LDLFaqvuUf6QIU9c4Hz6Gxxm87wrIWGh7F0zosAlXfpTr
+         SoFZRkGmZsbDT2txlI4pFS9tCboA2QScLF2SWbd1if/6ZU/Sv35k+FhF0VEuPldCsy
+         nIzCFOrYbGZjsuMLHN4TrTP1ahTMFP0uN98OjTKwOD4e1tMzHNc/ZoyaxLLmOVeRGW
+         WnAcI/yp+CeOw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7CEBBC0C40E;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 840C5C64459;
         Wed,  5 Jul 2023 23:50:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] riscv: move memblock_allow_resize() after linear mapping
- is ready
+Subject: Re: [PATCH] riscv: Enable ARCH_SUSPEND_POSSIBLE for s2idle
 From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168860102250.23922.10880634323125131800.git-patchwork-notify@kernel.org>
+Message-Id: <168860102253.23922.13316871741173468585.git-patchwork-notify@kernel.org>
 Date:   Wed, 05 Jul 2023 23:50:22 +0000
-References: <tencent_FBB94CE615C5CCE7701CD39C15CCE0EE9706@qq.com>
-In-Reply-To: <tencent_FBB94CE615C5CCE7701CD39C15CCE0EE9706@qq.com>
-To:     Woody Zhang <woodylab@foxmail.com>
+References: <20230529101524.322076-1-songshuaishuai@tinylab.org>
+In-Reply-To: <20230529101524.322076-1-songshuaishuai@tinylab.org>
+To:     Song Shuai <songshuaishuai@tinylab.org>
 Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, alexghiti@rivosinc.com,
-        conor.dooley@microchip.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
+        suagrfillet@gmail.com, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,21 +64,19 @@ Hello:
 This patch was applied to riscv/linux.git (for-next)
 by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Wed, 14 Jun 2023 21:19:07 +0800 you wrote:
-> The initial memblock metadata is accessed from kernel image mapping. The
-> regions arrays need to "reallocated" from memblock and accessed through
-> linear mapping to cover more memblock regions. So the resizing should
-> not be allowed until linear mapping is ready. Note that there are
-> memblock allocations when building linear mapping.
+On Mon, 29 May 2023 18:15:24 +0800 you wrote:
+> With this configuration opened, the basic platform-independent s2idle is
+> provided by the sole "s2idle" string in `/sys/power/mem_sleep`.
 > 
-> This patch is similar to 24cc61d8cb5a ("arm64: memblock: don't permit
-> memblock resizing until linear mapping is up").
+> At the end of s2idle, harts will hit the `wfi` instruction or enter the
+> SUSPENDED state through the sbi_cpuidle driver. The interrupt of possible
+> wakeup devices will be kept to wake the system up.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] riscv: move memblock_allow_resize() after linear mapping is ready
-    https://git.kernel.org/riscv/c/85fadc0d0411
+  - riscv: Enable ARCH_SUSPEND_POSSIBLE for s2idle
+    https://git.kernel.org/riscv/c/c1f048a6bd7d
 
 You are awesome, thank you!
 -- 
