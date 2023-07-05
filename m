@@ -2,160 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755DD748DA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAC0748DB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbjGETWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
+        id S234226AbjGETXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbjGETWI (ORCPT
+        with ESMTP id S234210AbjGETXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:22:08 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEFD46B7
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 12:18:16 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id AA03F5C023D;
-        Wed,  5 Jul 2023 15:06:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 05 Jul 2023 15:06:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1688583966; x=1688670366; bh=FdlxGSSLp6tolBO74VVirW7wUfppCI5xiiK
-        HdFx4B08=; b=fqQ5HCngeeqMUvgN9JYDZ8MpBBrq2mZr1ijbXp14mORAzg7+56Z
-        XjSU07H5y4aV7ZcrCJEUHCUZh1GCim5OqouXGdOjl9ri4hHAnmi5og0WMs+v/j6j
-        XpK9OFe6XRBAxH0f54fQUoDqCdAaXthsYlmuYteQqevk3aXacDJYQjjzU9l041OR
-        6tZNY37pMRQTs5597hhDLWolawstqjQintOH6Re56wfqKyMMYxt6nn9vvtxZKpEk
-        9LREF/rhBwWjxlUvo2E70DX76Bh55CDcU1FURTzMayf04u3Qw9+D0LQcPziaq2sH
-        T07ZXBB1sNCNVCMzP76ccc5+9bY2P3ad06g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688583966; x=
-        1688670366; bh=FdlxGSSLp6tolBO74VVirW7wUfppCI5xiiKHdFx4B08=; b=e
-        jdVqcIoJpVJYBoS+XpO5O2iVG97y6Mhf98eZz+7dYWmOpDH5qms3qAF7nIA/BgDe
-        glzBwYY/z82g52hFhfPbfFThDJ06TUK+FdIcjNwFsqhwWBJ+rUG+E0nZlIuigqcK
-        rS6gIqxsF4YNK9oAzVatxRsVZyO6B9Fly465Ad7r5WRXZ7w6IMTa4g0Oeivhu26c
-        es14adEDT72nfqca7R58n7/xZn7KvhUEAQKQn8aPA6gF4dP+fpfQI8pUjO381CuE
-        pnV27LcnuqKI7lWUGkaGHN35twAAylA48W8IFRL95NWAEcXBLfCgipfcgfaiDt6A
-        D8XUA6m20hv6IGQS6ccBA==
-X-ME-Sender: <xms:Hb-lZAx6qIxIInk2i4HvMtVZj2I3RKJjfV-yrDFKqBzHRkOL2hw_wA>
-    <xme:Hb-lZETbaHRTWOH3v1L8OhCcfbFCw73TZYlOWwAxi1JqOLgV_WiFbltchd8K2H6o4
-    HMviSKT2RYFToiizqo>
-X-ME-Received: <xmr:Hb-lZCXMtNedN7MzsS3vI0cSr-IJWTW-6zPNP8JLhmI6rakqs4OsHaal2Nj8ItUKb9IXIg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudejgdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtkedttddttdejnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhepveettdeuleduveekgfeiudeftdeugfelfeffffek
-    keetieevieeiieeiteetheevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:Hb-lZOiVY9RgKLMmyE2A7OpCpc4VsGyQ5qHYl1hkZu8zEkndtk_eig>
-    <xmx:Hb-lZCAIOYXb7m2Bm0sVq_9OJE_8pFfisDiElyNY5awIRq_InDCv1Q>
-    <xmx:Hb-lZPLR-7QHRWr8mYIXsvFa3N4kCGZI9Hk_gYh0PIeWfjoW7JA0kg>
-    <xmx:Hr-lZDJF0gsLqhTv1tW3JIkhQ4p9I8LagjIDUMO7OEKdqIIQa8ZvBA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Jul 2023 15:06:05 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id E54EE1095F9; Wed,  5 Jul 2023 22:06:01 +0300 (+03)
-Date:   Wed, 5 Jul 2023 22:06:01 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Yu Ma <yu.ma@intel.com>, akpm@linux-foundation.org,
-        tim.c.chen@intel.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
-        dan.j.williams@intel.com, shakeelb@google.com, pan.deng@intel.com,
-        tianyou.li@intel.com, lipeng.zhu@intel.com,
-        tim.c.chen@linux.intel.com
-Subject: Re: [PATCH] mm/mmap: move vma operations to mm_struct out of the
- critical section of file mapping lock
-Message-ID: <20230705190601.4atlxzh2wxc7zlu6@box.shutemov.name>
-References: <20230606124939.93561-1-yu.ma@intel.com>
- <20230606192013.viiifjcgb6enyilx@revolver>
- <20230705165411.tfqqipcla7exkb7k@box.shutemov.name>
- <20230705173348.rxgzxge6ipb4hapy@revolver>
+        Wed, 5 Jul 2023 15:23:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1672136
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 12:20:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B2AA616EC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 19:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F073C433C7;
+        Wed,  5 Jul 2023 19:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688584186;
+        bh=mR64JF1TEVW3OtrKf+1FvPGsR+gSV54GdH+m5bMPqUo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DS36kRO8EwcnW6iL4ZRq+bfTOlRubZ0gbtXs8FMifKP3sBiVX5V9PmVvEoeEQen2r
+         2PMdMNfzmXWughnbKLl94POrKlKVMUMUzWcqAl4CTti8Q9FI27nll1dqRY8ilCzqJl
+         oAM51jSDRIiQeLOgQznSx41kh866X56wVVNeBfYIRutoLwEEMcDqWItYMK+9D12xkS
+         Et722w9qrmNcVayGCpqSqMQrDE3jZJ4tAxzlF7C3QzaBVQZuvmyNdCTyQx5uUIzYOz
+         kWueJVJlp4THAZnyMYIvhvRiB/cyF1ZNLBDA63mewSy45UWTTezZ35sq2Ln434XHsC
+         ZSw27K0oeA9VQ==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
+Subject: [GIT PULL] Networking for v6.5-rc1
+Date:   Wed,  5 Jul 2023 12:09:45 -0700
+Message-ID: <20230705190945.602792-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230705173348.rxgzxge6ipb4hapy@revolver>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 01:33:48PM -0400, Liam R. Howlett wrote:
-> * Kirill A. Shutemov <kirill@shutemov.name> [230705 12:54]:
-> > On Tue, Jun 06, 2023 at 03:20:13PM -0400, Liam R. Howlett wrote:
-> > > * Yu Ma <yu.ma@intel.com> [230606 08:23]:
-> > > > UnixBench/Execl represents a class of workload where bash scripts are
-> > > > spawned frequently to do some short jobs. When running multiple parallel
-> > > > tasks, hot osq_lock is observed from do_mmap and exit_mmap. Both of them
-> > > > come from load_elf_binary through the call chain
-> > > > "execl->do_execveat_common->bprm_execve->load_elf_binary". In do_mmap,it will
-> > > > call mmap_region to create vma node, initialize it and insert it to vma
-> > > > maintain structure in mm_struct and i_mmap tree of the mapping file, then
-> > > > increase map_count to record the number of vma nodes used. The hot osq_lock
-> > > > is to protect operations on file’s i_mmap tree. For the mm_struct member
-> > > > change like vma insertion and map_count update, they do not affect i_mmap
-> > > > tree. Move those operations out of the lock's critical section, to reduce
-> > > > hold time on the lock.
-> > > > 
-> > > > With this change, on Intel Sapphire Rapids 112C/224T platform, based on
-> > > > v6.0-rc6, the 160 parallel score improves by 12%. The patch has no
-> > > > obvious performance gain on v6.4-rc4 due to regression of this benchmark
-> > > > from this commit f1a7941243c102a44e8847e3b94ff4ff3ec56f25 (mm: convert 
-> > > > mm's rss stats into percpu_counter).
-> > > 
-> > > I didn't think it was safe to insert a VMA into the VMA tree without
-> > > holding this write lock?  We now have a window of time where a file
-> > > mapping doesn't exist for a vma that's in the tree?  Is this always
-> > > safe?  Does the locking order in mm/rmap.c need to change?
-> > 
-> > We hold mmap lock on write here, right?
-> 
-> Yes.
-> 
-> >Who can observe the VMA until the
-> > lock is released?
-> 
-> With CONFIG_PER_VMA_LOCK we can have the VMA read under the rcu
-> read lock for page faults from the tree.  I am not sure if the vma is
-> initialized to avoid page fault issues - vma_start_write() should either
-> be taken or initialise the vma as this is the case.
+Hi Linus!
 
-Right, with CONFIG_PER_VMA_LOCK the vma has to be unusable until it is
-fully initialized, effectively providing the same guarantees as mmap write
-lock. If it is not the case, it is CONFIG_PER_VMA_LOCK bug.
+The following changes since commit 3a8a670eeeaa40d87bd38a587438952741980c18:
 
-> There is also a possibility of a driver mapping a VMA and having entry
-> points from other locations.  It isn't accessed through the tree though
-> so I don't think this change will introduce new races?
+  Merge tag 'net-next-6.5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2023-06-28 16:43:10 -0700)
 
-Right.
+are available in the Git repository at:
 
-> > It cannot be retrieved from the VMA tree as it requires at least read mmap
-> > lock. And the VMA doesn't exist anywhere else.
-> > 
-> > I believe the change is safe.
-> 
-> I guess insert_vm_struct(), and vma_link() callers should be checked and
-> updated accordingly?
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.5-rc1
 
-Yep.
+for you to fetch changes up to cc7eab25b1cf3f9594fe61142d3523ce4d14a788:
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+  nfp: clean mc addresses in application firmware when closing port (2023-07-05 10:59:12 -0700)
+
+----------------------------------------------------------------
+Including fixes from bluetooth, bpf and wireguard.
+
+Current release - regressions:
+
+ - nvme-tcp: fix comma-related oops after sendpage changes
+
+Current release - new code bugs:
+
+ - ptp: make max_phase_adjustment sysfs device attribute invisible
+   when not supported
+
+Previous releases - regressions:
+
+ - sctp: fix potential deadlock on &net->sctp.addr_wq_lock
+
+ - mptcp:
+   - ensure subflow is unhashed before cleaning the backlog
+   - do not rely on implicit state check in mptcp_listen()
+
+Previous releases - always broken:
+
+ - net: fix net_dev_start_xmit trace event vs skb_transport_offset()
+
+ - Bluetooth:
+   - fix use-bdaddr-property quirk
+   - L2CAP: fix multiple UaFs
+   - ISO: use hci_sync for setting CIG parameters
+   - hci_event: fix Set CIG Parameters error status handling
+   - hci_event: fix parsing of CIS Established Event
+   - MGMT: fix marking SCAN_RSP as not connectable
+
+ - wireguard: queuing: use saner cpu selection wrapping
+
+ - sched: act_ipt: various bug fixes for iptables <> TC interactions
+
+ - sched: act_pedit: add size check for TCA_PEDIT_PARMS_EX
+
+ - dsa: fixes for receiving PTP packets with 8021q and sja1105 tagging
+
+ - eth: sfc: fix null-deref in devlink port without MAE access
+
+ - eth: ibmvnic: do not reset dql stats on NON_FATAL err
+
+Misc:
+
+ - xsk: honor SO_BINDTODEVICE on bind
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Azeem Shaikh (1):
+      net: Replace strlcpy with strscpy
+
+Chengfeng Ye (1):
+      sctp: fix potential deadlock on &net->sctp.addr_wq_lock
+
+Dan Carpenter (1):
+      mlxsw: spectrum_router: Fix an IS_ERR() vs NULL check
+
+Dan Gora (2):
+      Bluetooth: btrtl: Add missing MODULE_FIRMWARE declarations
+      Bluetooth: btusb: Add device 6655:8771 to device tables
+
+Daniel Díaz (1):
+      selftests/net: Add xt_policy config for xfrm_policy test
+
+David Howells (1):
+      nvme-tcp: Fix comma-related oops
+
+David S. Miller (4):
+      Merge branch 'octeontx2-af-fixes'
+      Merge branch 'wireguard-fixes'
+      Merge branch 'dsa-ll-fixes'
+      Merge branch 'mptcp-fixes'
+
+Davide Tronchin (1):
+      net: usb: cdc_ether: add u-blox 0x1313 composition.
+
+Eric Dumazet (2):
+      net: fix net_dev_start_xmit trace event vs skb_transport_offset()
+      tcp: annotate data races in __tcp_oow_rate_limited()
+
+Florian Westphal (3):
+      net/sched: act_ipt: add sanity checks on table name and hook locations
+      net/sched: act_ipt: add sanity checks on skb before calling target
+      net/sched: act_ipt: zero skb->cb before calling target
+
+Guillaume Nault (1):
+      pptp: Fix fib lookup calls.
+
+Hariprasad Kelam (5):
+      octeontx2-af: cn10kb: fix interrupt csr addresses
+      octeontx2-af: Fix mapping for NIX block from CGX connection
+      octeontx2-af: Add validation before accessing cgx and lmac
+      octeontx2-af: Reset MAC features in FLR
+      octeontx-af: fix hardware timestamp configuration
+
+Ilya Maximets (1):
+      xsk: Honor SO_BINDTODEVICE on bind
+
+Ivan Orlov (1):
+      Bluetooth: hci_sysfs: make bt_class a static const structure
+
+J.J. Martzki (1):
+      samples: pktgen: fix append mode failed issue
+
+Jakub Kicinski (3):
+      Merge branch 'bluetooth-fixes-from-next'
+      docs: netdev: broaden mailbot to all MAINTAINERS
+      Merge tag 'for-netdev' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+
+Jason A. Donenfeld (3):
+      wireguard: queueing: use saner cpu selection wrapping
+      wireguard: netlink: send staged packets when setting initial private key
+      wireguard: timers: move to using timer_delete_sync
+
+Jiapeng Chong (1):
+      Bluetooth: hci_conn: Use kmemdup() to replace kzalloc + memcpy
+
+Johan Hovold (3):
+      Bluetooth: fix invalid-bdaddr quirk for non-persistent setup
+      Bluetooth: fix use-bdaddr-property quirk
+      Bluetooth: hci_bcm: do not mark valid bd_addr as invalid
+
+Lin Ma (1):
+      net/sched: act_pedit: Add size check for TCA_PEDIT_PARMS_EX
+
+Luiz Augusto von Dentz (3):
+      Bluetooth: MGMT: Fix marking SCAN_RSP as not connectable
+      Bluetooth: ISO: Rework sync_interval to be sync_factor
+      Bluetooth: hci_event: Fix parsing of CIS Established Event
+
+Martin Habets (1):
+      sfc: support for devlink port requires MAE access
+
+Matthew Anderson (1):
+      Bluetooth: btusb: Add MT7922 bluetooth ID for the Asus Ally
+
+Matthieu Baerts (7):
+      selftests: mptcp: connect: fail if nft supposed to work
+      selftests: mptcp: sockopt: use 'iptables-legacy' if available
+      selftests: mptcp: sockopt: return error if wrong mark
+      selftests: mptcp: userspace_pm: use correct server port
+      selftests: mptcp: userspace_pm: report errors with 'remove' tests
+      selftests: mptcp: depend on SYN_COOKIES
+      selftests: mptcp: pm_nl_ctl: fix 32-bit support
+
+Min-Hua Chen (1):
+      Bluetooth: btqca: use le32_to_cpu for ver.soc_id
+
+Moritz Fischer (1):
+      net: lan743x: Don't sleep in atomic context
+
+Nick Child (1):
+      ibmvnic: Do not reset dql stats on NON_FATAL err
+
+Paolo Abeni (5):
+      Merge branch 'net-sched-act_ipt-bug-fixes'
+      Merge branch 'fix-ptp-packet-drops-with-ocelot-8021q-dsa-tag-protocol'
+      Merge branch 'fix-ptp-received-on-wrong-port-with-bridged-sja1105-dsa'
+      mptcp: ensure subflow is unhashed before cleaning the backlog
+      mptcp: do not rely on implicit state check in mptcp_listen()
+
+Pauli Virtanen (2):
+      Bluetooth: ISO: use hci_sync for setting CIG parameters
+      Bluetooth: hci_event: fix Set CIG Parameters error status handling
+
+Pawel Dembicki (1):
+      net: dsa: vsc73xx: fix MTU configuration
+
+Rahul Rameshbabu (1):
+      ptp: Make max_phase_adjustment sysfs device attribute invisible when not supported
+
+SeongJae Park (1):
+      bpf, btf: Warn but return no error for NULL btf from __register_btf_kfunc_id_set()
+
+Subash Abhinov Kasiviswanathan (2):
+      docs: networking: Update codeaurora references for rmnet
+      Documentation: ABI: sysfs-class-net-qmi: pass_through contact update
+
+Sungwoo Kim (1):
+      Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_cb
+
+Thorsten Winkler (1):
+      s390/qeth: Fix vipa deletion
+
+Tobias Heider (1):
+      Add MODULE_FIRMWARE() for FIRMWARE_TG357766.
+
+Vladimir Oltean (9):
+      net: mscc: ocelot: don't report that RX timestamping is enabled by default
+      net: mscc: ocelot: don't keep PTP configuration of all ports in single structure
+      net: dsa: felix: don't drop PTP frames with tag_8021q when RX timestamping is disabled
+      net: dsa: sja1105: always enable the INCL_SRCPT option
+      net: dsa: tag_sja1105: always prefer source port information from INCL_SRCPT
+      net: bridge: keep ports without IFF_UNICAST_FLT in BR_PROMISC mode
+      net: dsa: tag_sja1105: fix source port decoding in vlan_filtering=0 bridge mode
+      net: dsa: tag_sja1105: fix MAC DA patching from meta frames
+      net: dsa: sja1105: always enable the send_meta options
+
+Yinjun Zhang (1):
+      nfp: clean mc addresses in application firmware when closing port
+
+Zhengchao Shao (1):
+      mlxsw: minimal: fix potential memory leak in mlxsw_m_linecards_init
+
+Zhengping Jiang (1):
+      Bluetooth: L2CAP: Fix use-after-free
+
+ Documentation/ABI/testing/sysfs-class-net-qmi      |  2 +-
+ Documentation/networking/af_xdp.rst                |  9 +++
+ .../device_drivers/cellular/qualcomm/rmnet.rst     |  7 +-
+ Documentation/process/maintainer-netdev.rst        |  7 +-
+ drivers/bluetooth/btqca.c                          |  2 +-
+ drivers/bluetooth/btrtl.c                          | 18 ++++-
+ drivers/bluetooth/btusb.c                          |  5 ++
+ drivers/bluetooth/hci_bcm.c                        |  3 +-
+ drivers/net/dsa/ocelot/felix.c                     | 12 +++
+ drivers/net/dsa/sja1105/sja1105.h                  |  2 +-
+ drivers/net/dsa/sja1105/sja1105_main.c             | 14 +---
+ drivers/net/dsa/sja1105/sja1105_ptp.c              | 48 +----------
+ drivers/net/dsa/vitesse-vsc73xx-core.c             |  6 +-
+ drivers/net/ethernet/broadcom/tg3.c                |  1 +
+ drivers/net/ethernet/ibm/ibmvnic.c                 |  9 ++-
+ drivers/net/ethernet/marvell/octeontx2/af/cgx.c    | 33 +++++++-
+ drivers/net/ethernet/marvell/octeontx2/af/cgx.h    |  2 +
+ .../ethernet/marvell/octeontx2/af/lmac_common.h    |  3 +
+ drivers/net/ethernet/marvell/octeontx2/af/rpm.c    | 32 +++++++-
+ drivers/net/ethernet/marvell/octeontx2/af/rpm.h    |  5 +-
+ drivers/net/ethernet/marvell/octeontx2/af/rvu.c    |  1 +
+ drivers/net/ethernet/marvell/octeontx2/af/rvu.h    | 12 +++
+ .../net/ethernet/marvell/octeontx2/af/rvu_cgx.c    | 22 +++++-
+ drivers/net/ethernet/mellanox/mlxsw/minimal.c      |  1 +
+ .../net/ethernet/mellanox/mlxsw/spectrum_router.c  |  4 +-
+ drivers/net/ethernet/microchip/lan743x_main.c      | 21 ++++-
+ drivers/net/ethernet/mscc/ocelot.c                 |  1 -
+ drivers/net/ethernet/mscc/ocelot_ptp.c             | 66 ++++++++++------
+ .../net/ethernet/netronome/nfp/nfp_net_common.c    |  5 ++
+ drivers/net/ethernet/sfc/efx_devlink.c             |  3 +
+ drivers/net/ppp/pptp.c                             | 31 +++++---
+ drivers/net/usb/cdc_ether.c                        |  6 ++
+ drivers/net/wireguard/netlink.c                    | 14 ++--
+ drivers/net/wireguard/queueing.c                   |  1 +
+ drivers/net/wireguard/queueing.h                   | 25 +++---
+ drivers/net/wireguard/receive.c                    |  2 +-
+ drivers/net/wireguard/send.c                       |  2 +-
+ drivers/net/wireguard/timers.c                     | 10 +--
+ drivers/nvme/host/tcp.c                            |  2 +-
+ drivers/ptp/ptp_sysfs.c                            |  3 +
+ drivers/s390/net/qeth_l3_sys.c                     |  2 +-
+ include/linux/dsa/sja1105.h                        |  4 -
+ include/net/bluetooth/bluetooth.h                  |  2 +-
+ include/net/bluetooth/mgmt.h                       |  1 +
+ include/soc/mscc/ocelot.h                          | 10 ++-
+ include/trace/events/fib.h                         |  2 +-
+ include/trace/events/fib6.h                        |  2 +-
+ include/trace/events/net.h                         |  3 +-
+ kernel/bpf/btf.c                                   |  6 +-
+ net/bluetooth/hci_conn.c                           | 49 +++++++++---
+ net/bluetooth/hci_event.c                          | 63 +++++++++------
+ net/bluetooth/hci_sync.c                           | 28 +++----
+ net/bluetooth/hci_sysfs.c                          | 14 ++--
+ net/bluetooth/iso.c                                |  4 +-
+ net/bluetooth/l2cap_core.c                         |  5 ++
+ net/bluetooth/l2cap_sock.c                         |  2 +
+ net/bridge/br_if.c                                 |  5 +-
+ net/dsa/tag_sja1105.c                              | 92 ++++++++--------------
+ net/ipv4/tcp_input.c                               | 12 ++-
+ net/mptcp/protocol.c                               |  7 +-
+ net/sched/act_ipt.c                                | 72 +++++++++++++++--
+ net/sched/act_pedit.c                              |  1 +
+ net/sctp/socket.c                                  |  4 +-
+ net/xdp/xsk.c                                      |  5 ++
+ samples/pktgen/functions.sh                        | 13 +--
+ .../pktgen/pktgen_bench_xmit_mode_netif_receive.sh |  4 +
+ .../pktgen/pktgen_bench_xmit_mode_queue_xmit.sh    |  4 +
+ samples/pktgen/pktgen_sample01_simple.sh           |  4 +
+ samples/pktgen/pktgen_sample02_multiqueue.sh       |  3 +
+ .../pktgen/pktgen_sample03_burst_single_flow.sh    |  4 +
+ samples/pktgen/pktgen_sample04_many_flows.sh       |  4 +
+ samples/pktgen/pktgen_sample05_flow_per_thread.sh  |  4 +
+ ...tgen_sample06_numa_awared_queue_irq_affinity.sh |  3 +
+ tools/testing/selftests/net/config                 |  1 +
+ tools/testing/selftests/net/mptcp/config           |  1 +
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |  3 +
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 29 ++++---
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c      | 10 +--
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  |  4 +-
+ tools/testing/selftests/wireguard/netns.sh         | 30 ++++++-
+ 80 files changed, 639 insertions(+), 329 deletions(-)
