@@ -2,190 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C266E747DB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D3B747DA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjGEHAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S231902AbjGEG6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjGEHAE (ORCPT
+        with ESMTP id S230345AbjGEG6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:00:04 -0400
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ECD1709;
-        Wed,  5 Jul 2023 00:00:03 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id CD216100076;
-        Wed,  5 Jul 2023 10:00:01 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru CD216100076
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688540401;
-        bh=Em0Nwj2RjzE3YgcQQ2O+XnCh35XtEE94lU9MJvN+QNE=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-        b=O+Swros1mwi5O+So/BonBqRWu0vdsmsC1IsbQS9s7l/KXWGmTo26aCN4jqvmT0neX
-         WXFHDSyE5D9a5bF/hGJG2oslSsBfbT5Q7FwHDobYOBBnTCFFHPJxikXaNQ+pGA5ZZR
-         OcBxAgoTJVBYwUxOrZj8u1dD5dBgk2xRlt2BMfdaKx/+chDBW1eH1d7Q0CLKiGOSbO
-         cElGBmLoGBXg2CyP63cBr3FRYsnDzihrbs5xmEh5GWOfeBs+rHY+6qcMzR/hi5e1TF
-         yDk0xqnY8vnq/jWlH2FU9nkz4BVTE3I9KsDqRXdoI2bdJMNlt8GPIqqU6oeOhYUUzy
-         Jo8YuFkM49JwA==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Wed,  5 Jul 2023 10:00:01 +0300 (MSK)
-Received: from localhost.localdomain (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+        Wed, 5 Jul 2023 02:58:15 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AF818E;
+        Tue,  4 Jul 2023 23:58:12 -0700 (PDT)
+X-UUID: 4c0360d01b0111ee9cb5633481061a41-20230705
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Lyj+0LQ0tqdGt7aR80mYjOuQ+Ktxr372M5w2LhiWdis=;
+        b=kExva8BwebwVYq/0dxxm1tWCi7BkoVEU5BispojqoQzrGhBRZpjmBSM/iO+gTS0umhT1qiWeqYdFTcPGdH+yOxPHhUp/6n97PY8MN5g0yse06FwCHheNvyRk65zAn7uNcbSKnMyzMVbbhs6Nx2H3EIT0Zf2b0EBAzKxLPpNEK0w=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:b1131f99-75e3-4eac-86e0-e9e900c0aa2b,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:1c49e10d-c22b-45ab-8a43-3004e9216b56,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 4c0360d01b0111ee9cb5633481061a41-20230705
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <jason-ch.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 821709280; Wed, 05 Jul 2023 14:58:07 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 5 Jul 2023 10:00:00 +0300
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
+ 15.2.1118.26; Wed, 5 Jul 2023 14:58:06 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 5 Jul 2023 14:58:06 +0800
+From:   Jason-ch Chen <jason-ch.chen@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v2 2/2] mtd: rawnand: meson: support for 512B ECC step size
-Date:   Wed, 5 Jul 2023 09:54:34 +0300
-Message-ID: <20230705065434.297040-3-AVKrasnov@sberdevices.ru>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20230705065434.297040-1-AVKrasnov@sberdevices.ru>
-References: <20230705065434.297040-1-AVKrasnov@sberdevices.ru>
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        jason-ch chen <Jason-ch.Chen@mediatek.com>
+Subject: [PATCH 0/3] Add basic node support for MediaTek MT8188 SoC
+Date:   Wed, 5 Jul 2023 14:57:41 +0800
+Message-ID: <20230705065744.25848-1-jason-ch.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178437 [Jul 05 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/05 01:35:00 #21564271
-X-KSMG-AntiVirus-Status: Clean, skipped
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Meson NAND supports both 512B and 1024B ECC step size.
+From: jason-ch chen <Jason-ch.Chen@mediatek.com>
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- drivers/mtd/nand/raw/meson_nand.c | 45 +++++++++++++++++++++++--------
- 1 file changed, 34 insertions(+), 11 deletions(-)
+MT8188 is a SoC based on 64bit ARMv8 architecture.
+It contains 6 CA55 and 2 CA78 cores.
+MT8188 share many HW IP with MT65xx series.
 
-diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index 345212e8c691..369e81356240 100644
---- a/drivers/mtd/nand/raw/meson_nand.c
-+++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -135,6 +135,7 @@ struct meson_nfc_nand_chip {
- struct meson_nand_ecc {
- 	u32 bch;
- 	u32 strength;
-+	u32 size;
- };
- 
- struct meson_nfc_data {
-@@ -190,7 +191,8 @@ struct meson_nfc {
- };
- 
- enum {
--	NFC_ECC_BCH8_1K		= 2,
-+	NFC_ECC_BCH8_512	= 1,
-+	NFC_ECC_BCH8_1K,
- 	NFC_ECC_BCH24_1K,
- 	NFC_ECC_BCH30_1K,
- 	NFC_ECC_BCH40_1K,
-@@ -198,15 +200,16 @@ enum {
- 	NFC_ECC_BCH60_1K,
- };
- 
--#define MESON_ECC_DATA(b, s)	{ .bch = (b),	.strength = (s)}
-+#define MESON_ECC_DATA(b, s, sz)	{ .bch = (b), .strength = (s), .size = (sz) }
- 
- static struct meson_nand_ecc meson_ecc[] = {
--	MESON_ECC_DATA(NFC_ECC_BCH8_1K, 8),
--	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24),
--	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30),
--	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40),
--	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50),
--	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60),
-+	MESON_ECC_DATA(NFC_ECC_BCH8_512, 8,  512),
-+	MESON_ECC_DATA(NFC_ECC_BCH8_1K,  8,  1024),
-+	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24, 1024),
-+	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30, 1024),
-+	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40, 1024),
-+	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50, 1024),
-+	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60, 1024),
- };
- 
- static int meson_nand_calc_ecc_bytes(int step_size, int strength)
-@@ -224,8 +227,27 @@ static int meson_nand_calc_ecc_bytes(int step_size, int strength)
- 
- NAND_ECC_CAPS_SINGLE(meson_gxl_ecc_caps,
- 		     meson_nand_calc_ecc_bytes, 1024, 8, 24, 30, 40, 50, 60);
--NAND_ECC_CAPS_SINGLE(meson_axg_ecc_caps,
--		     meson_nand_calc_ecc_bytes, 1024, 8);
-+
-+static const int axg_stepinfo_strengths[] = { 8 };
-+static const struct nand_ecc_step_info axg_stepinfo_1024 = {
-+	.stepsize = 1024,
-+	.strengths = axg_stepinfo_strengths,
-+	.nstrengths = ARRAY_SIZE(axg_stepinfo_strengths)
-+};
-+
-+static const struct nand_ecc_step_info axg_stepinfo_512 = {
-+	.stepsize = 512,
-+	.strengths = axg_stepinfo_strengths,
-+	.nstrengths = ARRAY_SIZE(axg_stepinfo_strengths)
-+};
-+
-+static const struct nand_ecc_step_info axg_stepinfo[] = { axg_stepinfo_1024, axg_stepinfo_512 };
-+
-+static const struct nand_ecc_caps meson_axg_ecc_caps = {
-+	.stepinfos = axg_stepinfo,
-+	.nstepinfos = ARRAY_SIZE(axg_stepinfo),
-+	.calc_ecc_bytes = meson_nand_calc_ecc_bytes,
-+};
- 
- static struct meson_nfc_nand_chip *to_meson_nand(struct nand_chip *nand)
- {
-@@ -1259,7 +1281,8 @@ static int meson_nand_bch_mode(struct nand_chip *nand)
- 		return -EINVAL;
- 
- 	for (i = 0; i < ARRAY_SIZE(meson_ecc); i++) {
--		if (meson_ecc[i].strength == nand->ecc.strength) {
-+		if (meson_ecc[i].strength == nand->ecc.strength &&
-+		    meson_ecc[i].size == nand->ecc.size) {
- 			meson_chip->bch_mode = meson_ecc[i].bch;
- 			return 0;
- 		}
+This patchset was tested on MT8188 evaluation board to shell.
+
+Based on tag: next-20230704, linux-next/master
+
+jason-ch chen (3):
+  dt-bindings: arm: Add compatible for MediaTek MT8188
+  dt-bindings: arm: mediatek: Add mt8188 pericfg compatible
+  arm64: dts: Add MediaTek MT8188 dts and evaluation board and Makefile
+
+ .../devicetree/bindings/arm/mediatek.yaml     |   4 +
+ .../arm/mediatek/mediatek,pericfg.yaml        |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ arch/arm64/boot/dts/mediatek/mt8188-evb.dts   | 402 ++++++++
+ arch/arm64/boot/dts/mediatek/mt8188.dtsi      | 926 ++++++++++++++++++
+ 5 files changed, 1334 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8188-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8188.dtsi
+
 -- 
-2.35.0
+2.18.0
 
