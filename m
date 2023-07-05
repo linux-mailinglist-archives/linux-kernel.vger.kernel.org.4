@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA3B749212
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70F5749213
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbjGEXue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 19:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S232513AbjGEXug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 19:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbjGEXuZ (ORCPT
+        with ESMTP id S232132AbjGEXuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jul 2023 19:50:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20ACD1989
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 16:50:24 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0DF1730
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 16:50:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 675F561812
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5913161807
         for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C2095C433CD;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ADB1EC433CB;
         Wed,  5 Jul 2023 23:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1688601022;
-        bh=9NFWdwJNIstdaH0oAEUO6KbS94hWTIY5zq+U3/Spqro=;
+        bh=QC3N5FVDNiAZMmLVWV062ludq+R2W6w7g38+nOSTnWY=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BmCIKFGq9I5f+C9ruqceN42hW1bwMXVJcwLjzh0Nl4Rr7aq/Mp0ZrWvZjJ188Qagc
-         gweAnMXm+J1v0V7CUXZiwK9tb99CLzbasGFu2XGSVtIv45rdnIh43TrXiuRjrl2hHo
-         2HW2SGYeZb5mtCaH6vTipZCZ5K54CSDHkyuD4qG8B+4Wr5EpeWI00d20bhXpefCuic
-         wQZq7GEtIqUmQwoYydr9zT0vfy3nC64o67vy9fSMG0hdw6r4pJJYhBfo42nZeaVLd9
-         bkFPNc6ubnpDKv3z7LDiH7ydK7spYEbatxuVkQUcVnECRgpz4ua/bDS0Ykoewm0o2M
-         FSXm5wGhLaENw==
+        b=u6KQwRVwHXDmLQPVdu4F1jHwH2h5UfG4IISxdZGmCs5+fDx08aEaH7AqTfY02MBHY
+         fwyD/Eic2PZq11b8OanRW5LdHb/AT+oA3VKDxbILPychrJ+D8MuFwi1dYyfZ7f76Rw
+         pc5270W2z9lsZQwAyS50bNKebX23BBCVLpvqPDpo2EOao2ksv2v4Nr3TJT7PLrBdFG
+         dnTAAAc5/QGbaUw+nGdLCH2OXTzAKRBMYce2I5h5thW4YY6x1PgkEcLMdn+L7hNXVp
+         /SxmEAWiu6Fp+uctMwUBRgsJyq/yiThetzyhF3vYNGIysUzr6hFv7Ur28sk0N/85po
+         fu3zWO3zcsEdA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A44CAC691F1;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8BB2DC561EE;
         Wed,  5 Jul 2023 23:50:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] mm: riscv: fix an unsafe pte read in huge_pte_alloc()
+Subject: Re: [PATCH v4] riscv: Discard vector state on syscalls
 From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168860102266.23922.10126828574164842204.git-patchwork-notify@kernel.org>
+Message-Id: <168860102256.23922.12744250095114433729.git-patchwork-notify@kernel.org>
 Date:   Wed, 05 Jul 2023 23:50:22 +0000
-References: <20230703190044.311730-1-jhubbard@nvidia.com>
-In-Reply-To: <20230703190044.311730-1-jhubbard@nvidia.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     linux-riscv@lists.infradead.org, akpm@linux-foundation.org,
-        aou@eecs.berkeley.edu, alexghiti@rivosinc.com,
-        ajones@ventanamicro.com, hughd@google.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, panqinglin2020@iscas.ac.cn,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        jthoughton@google.com, ryan.roberts@arm.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230629142228.1125715-1-bjorn@kernel.org>
+In-Reply-To: <20230629142228.1125715-1-bjorn@kernel.org>
+To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, andy.chiu@sifive.com,
+        bjorn@rivosinc.com, linux-kernel@vger.kernel.org,
+        linux@rivosinc.com, palmer@rivosinc.com, remi@remlab.net,
+        darius@bluespec.com, conor.dooley@microchip.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,19 +66,21 @@ Hello:
 This patch was applied to riscv/linux.git (for-next)
 by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Mon, 3 Jul 2023 12:00:44 -0700 you wrote:
-> The WARN_ON_ONCE() statement in riscv's huge_pte_alloc() is susceptible
-> to false positives, because the pte is read twice at the C language
-> level, locklessly, within the same conditional statement. Depending on
-> compiler behavior, this can lead to generated machine code that actually
-> reads the pte just once, or twice. Reading twice will expose the code to
-> changing pte values and cause incorrect behavior.
+On Thu, 29 Jun 2023 16:22:28 +0200 you wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
+> 
+> The RISC-V vector specification states:
+>   Executing a system call causes all caller-saved vector registers
+>   (v0-v31, vl, vtype) and vstart to become unspecified.
+> 
+> The vector registers are set to all 1s, vill is set (invalid), and the
+> vector status is set to Dirty.
 > 
 > [...]
 
 Here is the summary with links:
-  - mm: riscv: fix an unsafe pte read in huge_pte_alloc()
-    https://git.kernel.org/riscv/c/62ba41d27612
+  - [v4] riscv: Discard vector state on syscalls
+    https://git.kernel.org/riscv/c/9657e9b7d253
 
 You are awesome, thank you!
 -- 
