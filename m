@@ -2,281 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90564748319
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89ADC74831E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjGELmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S229812AbjGELol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 07:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGELmE (ORCPT
+        with ESMTP id S229752AbjGELok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:42:04 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F051731
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 04:42:03 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4fa16c6a85cso10251926e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 04:42:03 -0700 (PDT)
+        Wed, 5 Jul 2023 07:44:40 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323331706
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 04:44:39 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2633fe9b6c0so439620a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 04:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688557321; x=1691149321;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ztBlDQIHDZqo7V/c8oOFDJdI7xBDmCnELF9YeTbIz60=;
-        b=Q8tXp0mhYJzKf5i1KzTXxvIFYOyLggu5Fu4qg2b33Mimz5fUhOkQ7l6dvMoMDLrn4x
-         mEfiOAI5Hnt0u2KQ2TJFFII2NLMDZp4Ph3qUq6ixyhZ4d17WAwOniuHAEF16AbG9eF7z
-         WkMXWhI68Lt87wd5/MYHFN7S4oltrqjUeKGQvBsfTXdFMh2hMYktd5xqpmYiQTdAvpnn
-         K0R5a8UVR39qGemYegwzZitbIDMAl+75kn6CKzZlUMzL5n5sbhTRHcex2/E661vaIP3i
-         UlfcC9++L16sPmU6PTCYIHau8VHj5FarUEu2CcaiScbOgYbBsKFEIUqF0uaSP3qcglYr
-         1+Hw==
+        d=bytedance.com; s=google; t=1688557478; x=1691149478;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=heYxA+Mau07N/7p/yYCay8/E0q4AKYFHNWyC4Hmd8zw=;
+        b=LCVJo1iC398QqSGBbSt3HMGRz4/6jQ17VocWqxatr+VH8bVDf8rSkxpkL7m2b/QlEt
+         eQ8pti3q69C8zwvPmUiTV8DW+nE3IcQyXVe0YeoX9x2vqVwDmjtDjPqfIl2pyeMnhzik
+         KToCLoPAtvpLYvDLkAWK6X90EERvIcNKunS7pZGI7D/EmJVvpBJah4xbs9FlTLtz/RcN
+         FetDHam8n3J+ilgWlmeRK9W0uLNSN3E0XIP6RA1NH/5q6I1ObXbnt+OYNr+4/rQLiHyP
+         MAZNa7QoBTTaUCTpG6MXQK+S04oTo3bGbjE1ZRU8IWiMvwTTc4AMuD9mhBnrtC5ZkJ3B
+         Unqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688557321; x=1691149321;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ztBlDQIHDZqo7V/c8oOFDJdI7xBDmCnELF9YeTbIz60=;
-        b=az30TTLIb520L1ZjXIzGoG2F5SOTWdRm3kOAuSuaOcMPFsbMmj4DEbn3PzTSCLoFdQ
-         I6WjCXIQYmPtvJvP1dyFgFxXQpw3LdnPye7FEm+OmbP3iopeSK+VYJj9sqE1UxnyGkW0
-         f+QkpsBaIftWsJ2ZNvCr/PP8lrGsVXw4G0JiURXFRbf2w1P+vQhzXDSLUj5OsGFuFH7B
-         4w6/p5lVIN9E56FH+vhQOAk9wwdb1dnjx3PintG3bWbWgF1GPfDLb/T0B3tcIJkWtMjV
-         g4xJgVANzapdlkywOIUhGC7CXJApZtK8OL0EmVVZwW5bC079RKEh+UBCRTyPWfK+Fz0Y
-         vmAw==
-X-Gm-Message-State: ABy/qLax9/GF2Fuya93lOhzqPPRuNSNR/0mzamo81QE4zyQV1h6HZhDz
-        O7aLb9uOLV/PbNc7q7hyKv7rP1v+JobJ2DWvzfmWOtZ1
-X-Google-Smtp-Source: APBJJlFfHWocgLHVuVZbV3+nPaMumekJ4wwZv2jTSVYFQ2xEyMcAxxdjissZ09VM/5ZLW2XbfWQlbg==
-X-Received: by 2002:ac2:4f14:0:b0:4f8:442c:de25 with SMTP id k20-20020ac24f14000000b004f8442cde25mr13134816lfr.5.1688557321290;
-        Wed, 05 Jul 2023 04:42:01 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id 8-20020a05600c028800b003fb416d732csm1916808wmk.6.2023.07.05.04.42.00
+        d=1e100.net; s=20221208; t=1688557478; x=1691149478;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=heYxA+Mau07N/7p/yYCay8/E0q4AKYFHNWyC4Hmd8zw=;
+        b=IWLqtLM88KKhkPbSE12aWQKa68Oawjp9LdgukTVNhDpluB2ptqK2aPSCip8Jp4skAa
+         0Uo6hGZI8NSuCiZmQMoLTEEf6P6LpWqaWT2GX5ARBbduly06r2jk3yo1FL3G2hj+YkiX
+         zVTHxuwSM4HvDYs8Ul3uzMO3a67WiCQSYuNttCxkcJ/q1bAeBJzlSXKriiRIy+vMAfS2
+         nsS90DSCqPR0LEcokX+AHPPr6B9gNI2/Yhht3AFt9AkjIOVJgjFHnV8JhUeJNgYpvugQ
+         RxbY8+yZadZi3N4NEHVweEINWyUY/kX14fDtwkn1PWGR59Wf+CbZipzdKswPB5ZkSNMc
+         ifMA==
+X-Gm-Message-State: ABy/qLbDrHgpZ7H0LTHhB2VErcU4KUXVp1PTP1nyvauHcCUtCuvJwbF0
+        VJsEqnuAB2uw3Kp2Pz+Y7bfNkQ==
+X-Google-Smtp-Source: APBJJlF8iWM4sc1lZLKemHqMLhwUFgL4HgU3QAOE3GBa+o5h14Fsgs8Q290OJZcMEJ30fWvXqRIU8g==
+X-Received: by 2002:a17:90b:3ec5:b0:263:70d1:ba84 with SMTP id rm5-20020a17090b3ec500b0026370d1ba84mr2812548pjb.18.1688557478638;
+        Wed, 05 Jul 2023 04:44:38 -0700 (PDT)
+Received: from PF2E59YH-BKX.inc.bytedance.com ([61.213.176.5])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a194300b00263f6687690sm1177900pjh.18.2023.07.05.04.44.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 04:42:00 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 05 Jul 2023 13:41:53 +0200
-Subject: [PATCH v2 3/3] dt-bindings: soc: amlogic: document System Control
- registers
+        Wed, 05 Jul 2023 04:44:38 -0700 (PDT)
+From:   Yunhui Cui <cuiyunhui@bytedance.com>
+To:     conor@kernel.org, sunilvl@ventanamicro.com, ardb@kernel.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        rminnich@gmail.com, mark.rutland@arm.com, lpieralisi@kernel.org,
+        rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
+        weidong.wd@bytedance.com, cuiyunhui@bytedance.com
+Subject: [PATCH v3 0/4] Obtain SMBIOS and ACPI entry from FFI
+Date:   Wed,  5 Jul 2023 19:42:47 +0800
+Message-Id: <20230705114251.661-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230705-b4-amlogic-bindings-convert-take2-v2-3-22be915ddc3b@linaro.org>
-References: <20230705-b4-amlogic-bindings-convert-take2-v2-0-22be915ddc3b@linaro.org>
-In-Reply-To: <20230705-b4-amlogic-bindings-convert-take2-v2-0-22be915ddc3b@linaro.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5263;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=lo56oO+Etmog3EY8Ab68Gwiv0DuAkQD0UTqVY8iJak8=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkpVcEzTgg38yYhlrcvBrJImMVYRN+3f/3J0kcgWuW
- ZPWGsaSJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZKVXBAAKCRB33NvayMhJ0btUD/
- oDjPeA6DC4ldn8SQo55OJ4RbzqijHA8iJBqsNsf5BF/6fExPobnO3MpbGmbMnhygBi7vQkMqT+ORZ4
- 9FNXdys90CyDsjHIOSpqciM7zmQCgt3TnStENGygchJZQpanFGQBIL2SVVcCxC5ebbccP7P11vq5NK
- 6WC9jxQY7b579pwBUAdObAML7Y6dP0aC3yhlYmdTcEs6mkacmK4iZuGgXfm/IC62pztQSS6upoC/rn
- CJP+xqlF7pfIX4g/FbUuiKHgKmZLGwFq/bUCCMbJLJ3/e6xQXzg9tHk+i+1RKTSfHqonIgZjnPreYV
- +GJzrmBvQek8LE/gcQT3amCl/zgUMCBrvMyb68pfiSEsyeDhT/Sgr8psL5aOxLZ7EkzDVA60iyAt+n
- IMW4W2tnyqpWEZ2PItTRV9U/Hs2Q6tWSv/jg5LC+y4jIR0AhHE57ItVcI3zuK7FdEnfTnLhaC8AH/d
- Ou95md7fxstFAkksCXlXfJ2/jY9lMGchie+ZFZT/voRrQXEI4XUom9vbGDPlwWiLtdGWRcUeKPJUuv
- NWNk70fqkeZ8ekbziosrAn8PeRNRwVXlJ/ylbOEWXdh8KU9O53+8H/vVPWJT1PhoF24EaAoQWAd5Bx
- cwtktKCJBJCnHHZKkcBcfwqjYdvnwZRZ3oeLlOBh5si/5ULMxDbQflgIq0iA==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the System Control registers regions found on all Amlogic
-SoC families and it's clock, power, pinctrl and phy subnodes.
+Here's version 3 of patch series.
 
-The regions has various independent registers tied to other
-hardware devices, thus the syscon compatible.
+V1: The FFI (FDT FIRMWARE INTERFACE) scheme has reached a
+consensus with the Maintainers.
+Please refer to:
+https://patches.linaro.org/project/linux-acpi/patch/20230426034001.16-1-cuiyunhui@bytedance.com/
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml  | 160 +++++++++++++++++++++
- 1 file changed, 160 insertions(+)
+Changes v1->v2:
+Adjusted the code structure, put the ACPI part under the RISC-V architecture,
+and put the general part of obtaining SMBIOS entry through FFI
+under driver/firmware/.
+Please refer to:
+https://lore.kernel.org/lkml/20230703-71f67eb66a037f5c0fb825c6@orel/T/
 
-diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
-new file mode 100644
-index 000000000000..16977e4e4357
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
-@@ -0,0 +1,160 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Amlogic Meson System Control registers
-+
-+maintainers:
-+  - Neil Armstrong <neil.armstrong@linaro.org>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - amlogic,meson-gx-hhi-sysctrl
-+          - amlogic,meson-gx-ao-sysctrl
-+          - amlogic,meson-axg-hhi-sysctrl
-+          - amlogic,meson-axg-ao-sysctrl
-+      - const: simple-mfd
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  clock-controller:
-+    type: object
-+
-+  power-controller:
-+    $ref: /schemas/power/amlogic,meson-ee-pwrc.yaml
-+
-+  pinctrl:
-+    type: object
-+
-+  phy:
-+    type: object
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - amlogic,meson-gx-hhi-sysctrl
-+            - amlogic,meson-axg-hhi-sysctrl
-+    then:
-+      properties:
-+        clock-controller:
-+          $ref: /schemas/clock/amlogic,gxbb-clkc.yaml#
-+
-+      required:
-+        - power-controller
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - amlogic,meson-gx-ao-sysctrl
-+            - amlogic,meson-axg-ao-sysctrl
-+    then:
-+      properties:
-+        clock-controller:
-+          $ref: /schemas/clock/amlogic,gxbb-aoclkc.yaml#
-+
-+        power-controller: false
-+        phy: false
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - amlogic,meson-gx-hhi-sysctrl
-+    then:
-+      properties:
-+        phy: false
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - amlogic,meson-axg-hhi-sysctrl
-+    then:
-+      properties:
-+        phy:
-+          oneOf:
-+            - $ref: /schemas/phy/amlogic,g12a-mipi-dphy-analog.yaml
-+            - $ref: /schemas/phy/amlogic,meson-axg-mipi-pcie-analog.yaml
-+
-+required:
-+  - compatible
-+  - reg
-+  - clock-controller
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    bus@c883c000 {
-+        compatible = "simple-bus";
-+        reg = <0xc883c000 0x2000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges = <0x0 0xc883c000 0x2000>;
-+
-+        sysctrl: system-controller@0 {
-+            compatible = "amlogic,meson-gx-hhi-sysctrl", "simple-mfd", "syscon";
-+            reg = <0 0x400>;
-+
-+            clock-controller {
-+                compatible = "amlogic,gxbb-clkc";
-+                #clock-cells = <1>;
-+                clocks = <&xtal>;
-+                clock-names = "xtal";
-+            };
-+
-+            power-controller {
-+                compatible = "amlogic,meson-gxbb-pwrc";
-+                #power-domain-cells = <1>;
-+                amlogic,ao-sysctrl = <&sysctrl_AO>;
-+
-+                resets = <&reset_viu>,
-+                         <&reset_venc>,
-+                         <&reset_vcbus>,
-+                         <&reset_bt656>,
-+                         <&reset_dvin>,
-+                         <&reset_rdma>,
-+                         <&reset_venci>,
-+                         <&reset_vencp>,
-+                         <&reset_vdac>,
-+                         <&reset_vdi6>,
-+                         <&reset_vencl>,
-+                         <&reset_vid_lock>;
-+                reset-names = "viu", "venc", "vcbus", "bt656", "dvin",
-+                              "rdma", "venci", "vencp", "vdac", "vdi6",
-+                              "vencl", "vid_lock";
-+                clocks = <&clk_vpu>, <&clk_vapb>;
-+                clock-names = "vpu", "vapb";
-+            };
-+        };
-+    };
-+
-+    bus@c8100000 {
-+        compatible = "simple-bus";
-+        reg = <0xc8100000 0x100000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges = <0x0 0xc8100000 0x100000>;
-+
-+        sysctrl_AO: system-controller@0 {
-+            compatible = "amlogic,meson-gx-ao-sysctrl", "simple-mfd", "syscon";
-+            reg = <0 0x100>;
-+
-+            clock-controller {
-+                compatible = "amlogic,meson-gxbb-aoclkc", "amlogic,meson-gx-aoclkc";
-+                #clock-cells = <1>;
-+                #reset-cells = <1>;
-+                clocks = <&xtal>, <&clk81>;
-+                clock-names = "xtal", "mpeg-clk";
-+            };
-+        };
-+    };
+Changes v2->v3: 
+According to the suggestions of maintainers, the code has been modified as follows:
+1. Modified the commit log.
+2. Added description of "ffitbl" subnod in dt-bindings.
+3. Add stub function to the function
+4. arch/riscv/ and driver/firmware/ use CONFIG_FDT_FW_INTERFACE to control
+5. Modified the ffi_smbios_root_pointer() function logic and printing
+etc.
+
+Yunhui Cui (4):
+  riscv: obtain ACPI RSDP from devicetree
+  firmware: introduce FFI for SMBIOS entry
+  riscv: obtain SMBIOS entry from FFI
+  dt-bindings: firmware: Document ffitbl binding
+
+ .../devicetree/bindings/firmware/ffitbl.txt   | 27 ++++++
+ MAINTAINERS                                   | 13 +++
+ arch/riscv/include/asm/acpi.h                 |  9 ++
+ arch/riscv/include/asm/ffi.h                  | 14 +++
+ arch/riscv/kernel/Makefile                    |  1 +
+ arch/riscv/kernel/ffi.c                       | 40 ++++++++
+ arch/riscv/kernel/setup.c                     |  2 +
+ drivers/firmware/Kconfig                      | 11 +++
+ drivers/firmware/Makefile                     |  1 +
+ drivers/firmware/dmi_scan.c                   | 97 +++++++++++--------
+ drivers/firmware/ffi.c                        | 42 ++++++++
+ include/linux/ffi.h                           | 29 ++++++
+ 12 files changed, 246 insertions(+), 40 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/ffitbl.txt
+ create mode 100644 arch/riscv/include/asm/ffi.h
+ create mode 100644 arch/riscv/kernel/ffi.c
+ create mode 100644 drivers/firmware/ffi.c
+ create mode 100644 include/linux/ffi.h
 
 -- 
-2.34.1
+2.20.1
 
