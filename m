@@ -2,246 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA7D748532
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370F7748536
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjGENkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S232304AbjGENlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbjGENkk (ORCPT
+        with ESMTP id S230466AbjGENlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:40:40 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3369F;
-        Wed,  5 Jul 2023 06:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=xCdqLKG1nXaRMoiOUaSkIvb0jJRnoEa7lfZSbBirUUA=; b=YLJRNgZqHYdv4EpcxpHCBXnvAM
-        hP4DnBaBSb1/RzBLDmOj/+uqL4aL9bEpruSLpMrvjkHqji8MOBZXALZasaGFfZwhxXsSqPlJaTXA7
-        kHgTPw3pFlzppmIgSdE28G562FzICthBIK2F7bWydFyVEbtEyQQNMVFSgbC2h2bsTEmc=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:54756 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qH2k4-0003vb-5Y; Wed, 05 Jul 2023 09:40:25 -0400
-Date:   Wed, 5 Jul 2023 09:40:12 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        Wed, 5 Jul 2023 09:41:19 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5439F;
+        Wed,  5 Jul 2023 06:41:18 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5703d12ab9aso82123897b3.2;
+        Wed, 05 Jul 2023 06:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688564477; x=1691156477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uLq8DTcDk4CKexj0TWcSdnBEWdMB2TY0/NlFdshVB0U=;
+        b=OFrHjgg7tLcB2HzfJaZMfT12TH3YQEf3I1Ry0sn5/D/IzPfGhP2E9ECVQo/6sta5kq
+         zyYDiCaO+ekwhHUDuVIV2OFijUPuOb1T5SoJYo/DJFjKM7fV6s+9X5FxJPxT4UMHB79q
+         w7T7QUqAsi8ynbGD37jDGYATjFg6XKyUFKHIJHQNwDDbCLnGPKNdibld/vbCI+FG/npy
+         mTERib+mBqgY6xyOZnyuqOr7UfBlORxCa/OPZwQJm+b39O7KRwp00vaSdBjnpeJtSCIr
+         JOF+/6YpZsTPt/hsRKKpEXhLsESacSS94t7HJQojchblg0Fz3LqoOFSyDo24xq914QnA
+         h3/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688564477; x=1691156477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uLq8DTcDk4CKexj0TWcSdnBEWdMB2TY0/NlFdshVB0U=;
+        b=U4yQfbDFxrgLZMfkEMyT7+z3u+e5+IlwcJ6WxiJxPr4034Lu5jLeXonIcYE47UBn2a
+         5orG1ROyF+vSeBJ0R25cLnbr6KnGTjii1m8cfOaw6yt/nIkPkalTvPszxLSpoW5ItP41
+         o8PAtH6sHCp7qQdU6/P3MbXuMKmL2T12iAbQhEJ2s1i7YhJ3drL5XCIxbBTY3z/i4i7G
+         22DDibAaCkXW52Wv1FzlDKcM2tZub2lBYkC0T5CuUaxYsfnB57br3K7d3VFm9ynRzE0L
+         JdWUUFG23LLL+HxWL+ClFDhFQo9tUiV24SNCKK2u4zJmaNOEa7D98Kah1RET6+Gu8g8D
+         rZDQ==
+X-Gm-Message-State: ABy/qLZYqseNKCRmpdbjKHyQlZfQKXkG49+GxITt8wem3qHpO8M8pHAi
+        hKmw9EDiJvyllDlPpNqhygPM24yTJ5rmZkJN9CHlvQmGeo4hK8rlCcY=
+X-Google-Smtp-Source: APBJJlFnAaqBZr9QUj1wiHcfBt+OU6EzMUbau6TvRYcksbylTyeyO/L1BOWmPBoAH5ANWWOliZe5g1A7JaejZ9+8F44=
+X-Received: by 2002:a25:ad06:0:b0:bc6:91e5:7b4e with SMTP id
+ y6-20020a25ad06000000b00bc691e57b4emr15559089ybi.13.1688564477164; Wed, 05
+ Jul 2023 06:41:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230704163848.169853-2-davidwronek@gmail.com>
+ <20230704163848.169853-6-davidwronek@gmail.com> <9f06d400-be7b-6806-b055-8cc7f11db6ca@quicinc.com>
+In-Reply-To: <9f06d400-be7b-6806-b055-8cc7f11db6ca@quicinc.com>
+From:   ungeskriptet <davidwronek@gmail.com>
+Date:   Wed, 5 Jul 2023 15:41:06 +0200
+Message-ID: <CAEoe_eW-0V6uSVhJGaxJc7V=qujkkpn=chBNc5kjpP9XViFPOg@mail.gmail.com>
+Subject: Re: [PATCH 4/7] clk: qcom: gcc-sc7180: Fix up gcc_sdcc2_apps_clk_src
+To:     Taniya Das <quic_tdas@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230705094012.7e6660dc4669d375911044f1@hugovil.com>
-In-Reply-To: <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <Y8rl452Xm1FrnFfF@mail.local>
-        <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
-        <20230621125945.1f10b66832d0d1c61e21f78d@hugovil.com>
-        <20230621181441cd214f99@mail.local>
-        <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        linux-clk@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, map220v <map220v300@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 14:28:52 -0400
-Hugo Villeneuve <hugo@hugovil.com> wrote:
+On Wed, Jul 5, 2023 at 6:27=E2=80=AFAM Taniya Das <quic_tdas@quicinc.com> w=
+rote:
+>
+>
+>
+> On 7/4/2023 10:01 PM, David Wronek wrote:
+> > From: map220v <map220v300@gmail.com>
+> >
+> > Add the PARENT_ENABLE flag to prevent the clock from getting stuck at
+> > boot.
+> >
+> > Fixes: 17269568f726 ("clk: qcom: Add Global Clock controller (GCC) driv=
+er for SC7180")
+> > Signed-off-by: map220v <map220v300@gmail.com>
+> > Signed-off-by: David Wronek <davidwronek@gmail.com>
+> > ---
+> >   drivers/clk/qcom/gcc-sc7180.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc718=
+0.c
+> > index cef3c77564cf..49f36e1df4fa 100644
+> > --- a/drivers/clk/qcom/gcc-sc7180.c
+> > +++ b/drivers/clk/qcom/gcc-sc7180.c
+> > @@ -651,6 +651,7 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src =3D {
+> >               .name =3D "gcc_sdcc2_apps_clk_src",
+> >               .parent_data =3D gcc_parent_data_5,
+> >               .num_parents =3D ARRAY_SIZE(gcc_parent_data_5),
+> > +             .flags =3D CLK_OPS_PARENT_ENABLE,
+>
+> Could you please share what Stuck warnings are you observing?
+>
+> >               .ops =3D &clk_rcg2_floor_ops,
+> >       },
+> >   };
+>
+> --
+> Thanks & Regards,
+> Taniya Das.
 
-> On Wed, 21 Jun 2023 20:14:41 +0200
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> 
-> > On 21/06/2023 12:59:45-0400, Hugo Villeneuve wrote:
-> > > On Wed, 21 Jun 2023 10:14:29 -0400
-> > > Hugo Villeneuve <hugo@hugovil.com> wrote:
-> > > 
-> > > > On Fri, 20 Jan 2023 20:05:07 +0100
-> > > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > > > 
-> > > > > Hello,
-> > > > > 
-> > > > > I know I've been holding off on the review of this series for a while
-> > > > > and I'm sorry for that.
-> > > > > 
-> > > > > One of the main issue that is remaining is that the driver ends up being
-> > > > > 53% bigger and generaly less efficient for no added functionality for
-> > > > > the existing RTCs.
-> > > > > 
-> > > > > I know performance is not a concern however, having more code in the
-> > > > > set/read time and irq paths means that it is more difficult to set an
-> > > > > get the time precisely.
-> > > > 
-> > > > Hi Alexandre,
-> > > > one way to keep rtc_read_time() as efficient as before, and even more
-> > > > efficient by reading 7 instead of 10 registers, would be to drop reading
-> > > > the CTRL3 register, which is only used to detect and display an info
-> > > > message for the low battery condition. This low battery check could be
-> > > > moved to an ioctl call, like it is done in the PCF8523 driver.
-> > > > 
-> > > > Hugo.
-> > > 
-> > > Hi,
-> > > in fact it is already part of the ioctl, so it is even simpler...
-> > > 
-> > 
-> > Yes, the dev_info can be removed.
-> 
-> Hi,
-> great, I will integrate that patch to improve rtc_read_time()
-> performance, and resubmit V4 soon with the requested changes mentioned
-> during V3 review.
-> 
-> Thank you, Hugo.
+Without this patch I get the following warning:
+[    0.316057] gcc_sdcc2_apps_clk_src: rcg didn't update its configuration.
+[    0.316081] WARNING: CPU: 4 PID: 75 at
+drivers/clk/qcom/clk-rcg2.c:133 update_config+0xcc/0xdc
+[    0.316226] Modules linked in:
+[    0.316265] CPU: 4 PID: 75 Comm: kworker/u16:2 Not tainted
+6.4.0-next-20230704-sm7125 #51
+[    0.316337] Hardware name: Xiaomi Redmi Note 9 Pro (Global) (DT)
+[    0.316394] Workqueue: events_unbound async_run_entry_fn
+[    0.316453] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=
+=3D--)
+[    0.316517] pc : update_config+0xcc/0xdc
+[    0.316560] lr : update_config+0xcc/0xdc
+[    0.316602] sp : ffff80008088b8e0
+[    0.316636] x29: ffff80008088b8e0 x28: 0000000000000000 x27: ffffa9c34c5=
+71d00
+[    0.316708] x26: ffffa9c34c333db0 x25: ffff60d440b5ec10 x24: ffff8000808=
+8bb18
+[    0.316778] x23: ffff60d441704900 x22: 0000000005f5e100 x21: ffffa9c34c5=
+dc548
+[    0.316849] x20: ffffa9c34cc739b8 x19: 0000000000000000 x18: fffffffffff=
+e5f18
+[    0.316918] x17: 0000000000000014 x16: 0000000000000020 x15: 00000000000=
+00048
+[    0.316988] x14: fffffffffffe5f60 x13: ffffa9c34cb5e928 x12: 00000000000=
+003f9
+[    0.317058] x11: 0000000000000153 x10: ffffa9c34cbb88f0 x9 : ffffa9c34cb=
+5e928
+[    0.317128] x8 : 00000000ffffefff x7 : ffffa9c34cbb6928 x6 : 00000000000=
+00153
+[    0.317197] x5 : 0000000000000000 x4 : 40000000fffff153 x3 : 00000000000=
+00000
+[    0.317266] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff60d4402=
+84880
+[    0.317336] Call trace:
+[    0.317365]  update_config+0xcc/0xdc
+[    0.317407]  clk_rcg2_configure+0xb0/0xb8
+[    0.317451]  clk_rcg2_set_floor_rate_and_parent+0x2c/0x44
+[    0.317506]  clk_change_rate+0x7c/0x294
+[    0.317551]  clk_core_set_rate_nolock+0x168/0x274
+[    0.317601]  clk_set_rate+0x38/0x14c
+[    0.317641]  _opp_config_clk_single+0x30/0xa8
+[    0.317687]  _set_opp+0x258/0x468
+[    0.317726]  dev_pm_opp_set_rate+0x180/0x268
+[    0.317770]  sdhci_msm_probe+0x360/0xb4c
+[    0.317815]  platform_probe+0x68/0xc4
+[    0.317859]  really_probe+0x148/0x2b0
+[    0.317900]  __driver_probe_device+0x78/0x12c
+[    0.317947]  driver_probe_device+0x3c/0x15c
+[    0.317994]  __device_attach_driver+0xb8/0x134
+[    0.318040]  bus_for_each_drv+0x84/0xe0
+[    0.318082]  __device_attach_async_helper+0xac/0xd0
+[    0.318132]  async_run_entry_fn+0x34/0xe0
+[    0.318177]  process_one_work+0x1c0/0x334
+[    0.318221]  worker_thread+0x68/0x428
+[    0.318260]  kthread+0x110/0x114
+[    0.318300]  ret_from_fork+0x10/0x20
 
-Hi Alexandre,
-I submitted V4 a few days ago, please let me know if everything is
-in order and all comments properly addressed.
-
-If all is good, any chance we can have that integrated into v6.5?
-
-Thank you, Hugo.
-
-
-> > > > > I guess I'll take it as a merged driver but I took a different decision
-> > > > > for other RTCs.
-> > > > > 
-> > > > > On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
-> > > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > > > 
-> > > > > > Hello,
-> > > > > > this patch series adds the driver for the PCF2131 real-time clock.
-> > > > > > 
-> > > > > > This RTC is very similar in functionality to the PCF2127/29 with the
-> > > > > > following differences:
-> > > > > >   -supports two new control registers at offsets 4 and 5
-> > > > > >   -supports a new reset register
-> > > > > >   -supports 4 tamper detection functions instead of 1
-> > > > > >   -has no nvmem (like the PCF2129)
-> > > > > >   -has two output interrupt pins instead of one
-> > > > > >   -has 1/100th seconds capabilities (not supported in this driver)
-> > > > > >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
-> > > > > >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
-> > > > > >   -watchdog value register cannot be read after being set
-> > > > > > 
-> > > > > > Most of the register addresses are very different, although they still
-> > > > > > follow the same layout. For example, the time/date and tamper registers
-> > > > > > have a different base address, but the offsets are all the same.
-> > > > > > Consequently, the source code of the PCF2127 driver can be easily adapted
-> > > > > > to support this new device.
-> > > > > > 
-> > > > > > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
-> > > > > > and able to support multiple variants, like the PCF2131. This is done
-> > > > > > mostly by using offsets instead of absolute hardcoded register addresses.
-> > > > > > 
-> > > > > > Patch 7 add actual support for the PCF2131.
-> > > > > > 
-> > > > > > Patch 8 configures all interrupt sources to go through the INT A pin.
-> > > > > > 
-> > > > > > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
-> > > > > >       are with the PCF2127/29 (different default values).
-> > > > > > 
-> > > > > > Patch 10 allow to confirm PCF2131 device presence by reading the reset
-> > > > > >       register fixed pattern.
-> > > > > > 
-> > > > > > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
-> > > > > >       CPR bits).
-> > > > > > 
-> > > > > > Patch 12 add support for generic watchdog timing configuration.
-> > > > > > 
-> > > > > > Patch 13 add a new flag to identify if device has read support for reading
-> > > > > >       watchdog register value.
-> > > > > >       Since the watchdog value register cannot be read on the PCF2131 after
-> > > > > >       being set, it seems that we cannot detect if watchdog timer was
-> > > > > >       started by bootloader. I am not sure what is the best way to handle
-> > > > > >       this situation, suggestions are welcomed.
-> > > > > > 
-> > > > > > Patch 14 add the dt-bindings for the PCF2131.
-> > > > > > 
-> > > > > > I have tested the driver using a PCF2131-ARD evaluation board connected to
-> > > > > > an NXP imx8mp evaluation board:
-> > > > > >   - Time get/set ok;
-> > > > > >   - Alarms get/set ok
-> > > > > >   - Timestamp 1 to 4 ok
-> > > > > >   - IRQ alarm ok
-> > > > > >   - Watchdog ok
-> > > > > >   - Also tested successfully with "RTC Driver Test Example" from
-> > > > > >     Documentation/rtc.txt
-> > > > > > 
-> > > > > > I have also tested the driver on a custom PCF2129 adapter board connected to a
-> > > > > > beaglebone black.
-> > > > > > 
-> > > > > > Thank you.
-> > > > > > 
-> > > > > > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
-> > > > > > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
-> > > > > > 
-> > > > > > Changes for V3:
-> > > > > > - Rebased for kernel v6.1
-> > > > > > 
-> > > > > > Changes for V2:
-> > > > > > - In general, fix and improvements after I have tested on real hardware
-> > > > > > - Fix alarm interrupt A/B mask setting for PCF2131:
-> > > > > >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
-> > > > > > - Remove low_reg validation: only check if TS interrupt flag is
-> > > > > >   defined, as low_reg is defined at address 0 for PCF2127/29.
-> > > > > > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
-> > > > > > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
-> > > > > > - Map all interrupt sources to INT A pin
-> > > > > > - Read and validate PCF2131 device presence from RESET register
-> > > > > > - Adapt watchdog configuration for PCF2131
-> > > > > > 
-> > > > > > Hugo Villeneuve (14):
-> > > > > >   rtc: pcf2127: add variant-specific configuration structure
-> > > > > >   rtc: pcf2127: adapt for time/date registers at any offset
-> > > > > >   rtc: pcf2127: adapt for alarm registers at any offset
-> > > > > >   rtc: pcf2127: adapt for WD registers at any offset
-> > > > > >   rtc: pcf2127: adapt for CLKOUT register at any offset
-> > > > > >   rtc: pcf2127: add support for multiple TS functions
-> > > > > >   rtc: pcf2127: add support for PCF2131 RTC
-> > > > > >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
-> > > > > >   rtc: pcf2127: set PWRMNG value for PCF2131
-> > > > > >   rtc: pcf2127: read and validate PCF2131 device signature
-> > > > > >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
-> > > > > >   rtc: pcf2127: support generic watchdog timing configuration
-> > > > > >   rtc: pcf2127: add flag for watchdog register value read support
-> > > > > >   dt-bindings: rtc: pcf2127: add PCF2131
-> > > > > > 
-> > > > > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
-> > > > > >  drivers/rtc/Kconfig                           |   4 +-
-> > > > > >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
-> > > > > >  3 files changed, 752 insertions(+), 195 deletions(-)
-> > > > > > 
-> > > > > > -- 
-> > > > > > 2.30.2
-> > > > > > 
-> > > > > 
-> > > > > -- 
-> > > > > Alexandre Belloni, co-owner and COO, Bootlin
-> > > > > Embedded Linux and Kernel engineering
-> > > > > https://bootlin.com
-> > > > > 
-> > 
-> > -- 
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > 
+Sincerely,
+David
