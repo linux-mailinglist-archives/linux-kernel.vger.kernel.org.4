@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9A27484C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CB57484CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjGENSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S231758AbjGENTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjGENSt (ORCPT
+        with ESMTP id S231766AbjGENTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:18:49 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070771712
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:18:48 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso48325165e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 06:18:47 -0700 (PDT)
+        Wed, 5 Jul 2023 09:19:20 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2891713;
+        Wed,  5 Jul 2023 06:19:20 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b8a8154f9cso5217455ad.1;
+        Wed, 05 Jul 2023 06:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688563126; x=1691155126;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NqzFoVlqZuDwdBeJJ7onmWROcWP+Ot6gtGdl2eC6RO8=;
-        b=gUabt4/ve2Donhp0sXBcgmdz/tHeUFmWmL0Lom+e1nOg5zE4ae1XOMOe0QBwxBO5wI
-         1dIMgLF9R77E5ea6KSF5orZpSJOWqmxWemJTRd/bSY7hryxOMsE9QTYddZhrWPBo87D7
-         Qkdpcf+FxgdEWTGteSrjaRWK78i8ZViWAzFhdmhmgxc8K90Lhl4YjBHHxsPN8/wIOecn
-         gMTsB5Tr2nj9NI0vY/udOBI2380OJuGaWMPfTj+Rx6Y/OSFxx/KxzwRDS/qN/qq3btg7
-         8i40il+M5P8Vbwxk8eds3tIaj3H86465/ckbZlOdD1b2nFUbmxK4YCpfak8UfIYySvg2
-         oN+g==
+        d=gmail.com; s=20221208; t=1688563159; x=1691155159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dHD+gumzoWP+nl3VtSqoKGEKW4lPTUyBTvzSxtXSgic=;
+        b=asQQxGjGoyEoGcp0NIF7Aq/cB3t8GLX4OuYOJWGn/pxr5hkHba1+Vtu62kNUqA3ANS
+         cbt3exB8yJCokdcq3izXIcpAt6HmIxDv7B7EUBfJLMFm6a5y9kLjSMQdA5t7Ud/jGXsM
+         8bNCd8+pnLMgVeuQystG16cJbyHeoNl0grbUkXBgLveBWatIchIPKk0ARqfT4jxJnYXM
+         EfqwIZ59JOWRep7p1bT0wZBk4wQB9T1Xg5XdQbWHg0wztHBylfFnLMMJVPHeRDdlDDiK
+         vxc5RCHbyVuf4onWIeE9whQt2lTa/Cu621QMa5e3sEOW16rXVPIb4VmCPwI1xfB/P7Mm
+         mZVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688563126; x=1691155126;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NqzFoVlqZuDwdBeJJ7onmWROcWP+Ot6gtGdl2eC6RO8=;
-        b=QWlyiEHCM65XFD2Y7efFdeX5PS0Tu7ZT5YWH45eh9QBUZQy4dwN5a7dpd4Yxxf8qiy
-         0dkB5iSVhybtgLUBzphSjkB9ckI7EEFy7ziBK8nxFrmn1EDhj+6Cw9RXhh74YYOOnCpn
-         +YyackiqrMdgs1Ew92Q89kwN85Fc3lqw4toa8N9fne8DwR57QlsHE1TvfeHdm5GrThJW
-         5KpN02B/4PxQZqsRUIob9PgtyAoSC2Qa01NFPbA21yUYfEuWArM01wVlWgsP3OjTHkhb
-         QNjW29Q+H/4rJzwdHPL8LTtaMlISV8P/gInxODqF85EbfPxGjsGJ1BFrcu1n9dFGmPqi
-         w2kA==
-X-Gm-Message-State: ABy/qLY67Q000bBMXFdczicf/zK9bXNLiWvu2xuSETyPHrERKA+d/u8v
-        X90iPPQ/p8wUTBRvJ6+rps5PRg==
-X-Google-Smtp-Source: APBJJlGCd/oXUcfMR2PQ3fB8oIV+msgPR5klhkS/pC3rfwvF4Q+QaZjxFbfcCOSNSN8LYy4lTE1NMg==
-X-Received: by 2002:adf:f282:0:b0:313:eb29:4436 with SMTP id k2-20020adff282000000b00313eb294436mr13789647wro.67.1688563126524;
-        Wed, 05 Jul 2023 06:18:46 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id cx16-20020a056000093000b00301a351a8d6sm31230039wrb.84.2023.07.05.06.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 06:18:45 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH] ASoC: qcom: q6apm: do not close GPR port before closing graph
-Date:   Wed,  5 Jul 2023 14:18:42 +0100
-Message-Id: <20230705131842.41584-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20221208; t=1688563159; x=1691155159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dHD+gumzoWP+nl3VtSqoKGEKW4lPTUyBTvzSxtXSgic=;
+        b=dLZb0DPkmiTJlx/2AvR1aQIYCcykfSESDhLjz994jjOPDNPR+1eKke9Vvo+EGEMq2K
+         Er0HbV8zxhttjP2bzVMcNHLFtc//5Am9BnrUlDtNVzAu0NSFbE96MloLXvBSNuPrU9Hz
+         ULXh8+UFEP6QGMJSoHtA0sZ7R002FqZuvs67vWhtDo7E+rK9GEb21qj52FY+XfpbRLsW
+         wvcR92zaVI56cENLhwQ+cXp9l4UkuVv1w19dlsRC5TPTjz2oz4BOe4qQ/V+iQFD9o1iR
+         t7cbTeoqJm7MJySmAirT7DkMl6GxeqtkfxCZZxxS755o3S7Hj9ZMR67b8y1RvN5fDHqs
+         xOiw==
+X-Gm-Message-State: ABy/qLb2AtSSonTkzXZRnw0dKFc8E25FTvtZpTX+1P2/WjC2LFKm3INE
+        P9K2P7t4WC8X6I2MD1kPtvgZ0PsE8czP7OPwa7o=
+X-Google-Smtp-Source: APBJJlFMxcKhkpFMy8Afh17cwFaJLPJkAfv85FqPfqTqtaMzLuDJiGQDW1AWfQwv+AvoCm9fDTTPpplJMQAZhEYfJF0=
+X-Received: by 2002:a17:903:228d:b0:1b8:8d48:958d with SMTP id
+ b13-20020a170903228d00b001b88d48958dmr3547209plh.1.1688563157269; Wed, 05 Jul
+ 2023 06:19:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <678ac92ab790dba9198f9ca14f405651b97c8502.1688561016.git.andreyknvl@google.com>
+ <CANpmjNO+spktteYZezk7PGLFOyoeuFyziKiU-1GXbpeyKLZLPg@mail.gmail.com>
+In-Reply-To: <CANpmjNO+spktteYZezk7PGLFOyoeuFyziKiU-1GXbpeyKLZLPg@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 5 Jul 2023 15:19:06 +0200
+Message-ID: <CA+fCnZenzRuxS4qjzFiYm05zNxHBSAkTUK7-1zixXXDUQb3g3w@mail.gmail.com>
+Subject: Re: [PATCH] kasan, slub: fix HW_TAGS zeroing with slub_debug
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Feng Tang <feng.tang@intel.com>, stable@vger.kernel.org,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,51 +88,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Closing GPR port before graph close can result in un handled notifications
-from DSP, this results in spam of errors from GPR driver as there is no
-one to handle these notification at that point in time.
+On Wed, Jul 5, 2023 at 2:51=E2=80=AFPM Marco Elver <elver@google.com> wrote=
+:
+>
+> On Wed, 5 Jul 2023 at 14:44, <andrey.konovalov@linux.dev> wrote:
+> >
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > Commit 946fa0dbf2d8 ("mm/slub: extend redzone check to extra allocated
+> > kmalloc space than requested") added precise kmalloc redzone poisoning
+> > to the slub_debug functionality.
+> >
+> > However, this commit didn't account for HW_TAGS KASAN fully initializin=
+g
+> > the object via its built-in memory initialization feature. Even though
+> > HW_TAGS KASAN memory initialization contains special memory initializat=
+ion
+> > handling for when slub_debug is enabled, it does not account for in-obj=
+ect
+> > slub_debug redzones. As a result, HW_TAGS KASAN can overwrite these
+> > redzones and cause false-positive slub_debug reports.
+> >
+> > To fix the issue, avoid HW_TAGS KASAN memory initialization when slub_d=
+ebug
+> > is enabled altogether. Implement this by moving the __slub_debug_enable=
+d
+> > check to slab_post_alloc_hook. Common slab code seems like a more
+> > appropriate place for a slub_debug check anyway.
+> >
+> > Fixes: 946fa0dbf2d8 ("mm/slub: extend redzone check to extra allocated =
+kmalloc space than requested")
+> > Cc: <stable@vger.kernel.org>
+> > Reported-by: Mark Rutland <mark.rutland@arm.com>
+>
+> Is it fixing this issue:
+>
+>   https://lore.kernel.org/all/20230628154714.GB22090@willie-the-truck/
 
-Fix this by closing GPR port after graph close is finished.
+Yes, my bad, messed up the Reported-by tag. The correct one should be:
 
-Fixes: 5477518b8a0e ("ASoC: qdsp6: audioreach: add q6apm support")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/qdsp6/q6apm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Reported-by: Will Deacon <will@kernel.org>
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm.c b/sound/soc/qcom/qdsp6/q6apm.c
-index 7bfac9492ab5..5d44d07acd69 100644
---- a/sound/soc/qcom/qdsp6/q6apm.c
-+++ b/sound/soc/qcom/qdsp6/q6apm.c
-@@ -511,6 +511,8 @@ static int graph_callback(struct gpr_resp_pkt *data, void *priv, int op)
- 
- 	switch (hdr->opcode) {
- 	case DATA_CMD_RSP_WR_SH_MEM_EP_DATA_BUFFER_DONE_V2:
-+		if (!graph->ar_graph)
-+			break;
- 		client_event = APM_CLIENT_EVENT_DATA_WRITE_DONE;
- 		mutex_lock(&graph->lock);
- 		token = hdr->token & APM_WRITE_TOKEN_MASK;
-@@ -544,6 +546,8 @@ static int graph_callback(struct gpr_resp_pkt *data, void *priv, int op)
- 		wake_up(&graph->cmd_wait);
- 		break;
- 	case DATA_CMD_RSP_RD_SH_MEM_EP_DATA_BUFFER_V2:
-+		if (!graph->ar_graph)
-+			break;
- 		client_event = APM_CLIENT_EVENT_DATA_READ_DONE;
- 		mutex_lock(&graph->lock);
- 		rd_done = data->payload;
-@@ -649,8 +653,9 @@ int q6apm_graph_close(struct q6apm_graph *graph)
- {
- 	struct audioreach_graph *ar_graph = graph->ar_graph;
- 
--	gpr_free_port(graph->port);
-+	graph->ar_graph = NULL;
- 	kref_put(&ar_graph->refcount, q6apm_put_audioreach_graph);
-+	gpr_free_port(graph->port);
- 	kfree(graph);
- 
- 	return 0;
--- 
-2.25.1
+> Other than the question above, it looks sane:
+>
+> Acked-by: Marco Elver <elver@google.com>
 
+Thank you, Marco!
