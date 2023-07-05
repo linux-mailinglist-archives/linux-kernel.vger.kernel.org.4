@@ -2,100 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC80B748E8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5A4748E8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbjGEUA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 16:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S232111AbjGEUCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 16:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjGEUAY (ORCPT
+        with ESMTP id S229700AbjGEUBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 16:00:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E091CA9;
-        Wed,  5 Jul 2023 13:00:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D524616F9;
-        Wed,  5 Jul 2023 20:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58CEAC433C8;
-        Wed,  5 Jul 2023 20:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688587222;
-        bh=RgYgbdXhSlYQN8weRZoRBXRzgMTlKKE50pkJaWLiPNA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R+kbhJaftkJQmJpHlFNPOTgXT8LfVU0wL1ZKB38nWPPSUBZctfs16kfrhyHcR/WZq
-         n5pSQORPvikhmOG0EFqme5Lbsf579CVjksMXoM0ckK/RGTC4PBPZId/7YVZCqV9IBd
-         onEyZpkG9UlvMaUewCTB/wly09rUaxLu4SrzM0EeHfW+e5ntAGOYYYAZSM8/0WE2+u
-         uMxezkn50OvQlxUUatfGA9Y6oow7YLbbxKHIXFBLJgVpXonDTNaK8R2OcCT5r6RYmb
-         04T0xMIkhGJ5nAJEGKXztVaGaLoveEx3oBG7IF8Ul3vRr9nnoGtvTXH4mjTe7nyuUf
-         qmmzXze14M7sA==
-Date:   Wed, 5 Jul 2023 21:00:18 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com
-Subject: Re: [RESEND PATCH v3 0/2] RISC-V: mm: Make SV48 the default address
- space
-Message-ID: <20230705-gloater-relation-29a6080ec87d@spud>
-References: <20230705190002.384799-1-charlie@rivosinc.com>
+        Wed, 5 Jul 2023 16:01:53 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11135121;
+        Wed,  5 Jul 2023 13:01:49 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b89600a37fso18385585ad.2;
+        Wed, 05 Jul 2023 13:01:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688587308; x=1691179308;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lr+OJtVyAxS2YZZNpALcE7P9fld+sL5KFJ+QmTRku7k=;
+        b=Zb1FJmd9sQBDTe7gTKyJ3r1Ie574IGzORuw90G/FqGbphJHOMPbAxyYG27GkZxp8BC
+         vtrP+c99e3oJH69vFXwOkOSwCeDNjq8v1+yigmx0G3S2BHFqNKYU+TZJiZ7BfzM9RrQk
+         68t3Z/UjAKdfGzr4e4+3a03lirqD7rUJx44YSJBl5Iuo2BapV88KomZZmc6khG1OsSff
+         9MOXkghbR/dEW6BzFayPCQj3PMFuyBpiIqZNd4OMAztq3RRMS58vy2R1efRYaq467r5M
+         CGDZjKcBx/pTb7k16Ae13Q9d8ThIBoyLRXoLjwYeKa82MK7rlPCzZSfA/O/5/uwkwK7w
+         dRSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688587308; x=1691179308;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lr+OJtVyAxS2YZZNpALcE7P9fld+sL5KFJ+QmTRku7k=;
+        b=awDyfdUffvtkNFPteiaSEZGlgxqSiYBSnGlJKTnIfH3vDPOwJ1fjZuzSzKf7uKBgLE
+         1DUnFRfUh0z+UUeHjebtXbdsymhbkklLMeTrHsmEpvA3O8irVbO+MkbA+rW2T+EWH+tK
+         asdK00YciOPszDGknJFpmC7CEnvLKNdiv8fdGYrfa1yPvziveHLqe8+2LBvaTCMn6ByJ
+         uhlVBY74ZUfsNDYGHfYOt4OlrOs4vjUTb6ckOVyyB/gQGjyop19a8pJgxZfGAhoHo8Fe
+         rVPWhtY9D5SHh3a8zfDDKq40Qyull5ukZHv4T/jb4dXMyRqTeLQps004IKLZSTNwv32l
+         /8Yg==
+X-Gm-Message-State: ABy/qLa3triI4qfhRo5xhcj5y1MSO6I9EtTwFboF+7VLQcHJkuVIRM5M
+        YnxnBvb0pH9BbdZCBd+Ng3U=
+X-Google-Smtp-Source: APBJJlEqY3psRs/rL15v0HFzYAurAcy0x2HC2lCYLhzLAf3rWBW6IQwIyej94TTjT8xpdzej93G9qw==
+X-Received: by 2002:a17:902:da92:b0:1b5:5a5f:369b with SMTP id j18-20020a170902da9200b001b55a5f369bmr16089762plx.65.1688587308312;
+        Wed, 05 Jul 2023 13:01:48 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:c628:31be:68ae:86f5:48b9])
+        by smtp.gmail.com with ESMTPSA id m23-20020a170902bb9700b001b50cbc0b4fsm19351441pls.111.2023.07.05.13.01.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 13:01:47 -0700 (PDT)
+From:   Anup Sharma <anupnewsmail@gmail.com>
+X-Google-Original-From: Anup Sharma <AnupSharma>
+Date:   Thu, 6 Jul 2023 01:31:40 +0530
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Anup Sharma <anupnewsmail@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/9] scripts: python: implement get or create frame
+ function
+Message-ID: <ZKXMJFckLMcGcVkP@yoga>
+References: <cover.1687375189.git.anupnewsmail@gmail.com>
+ <4d0ac80521ebd44322a360ac331ce2443a1f0f26.1687375189.git.anupnewsmail@gmail.com>
+ <CAM9d7cgAfvzrGiU0QiEigTAYKMe+OEP0b3o3Xd-0VhXX5Wkx1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="CH8f+iAqQ0AXuK8P"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230705190002.384799-1-charlie@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7cgAfvzrGiU0QiEigTAYKMe+OEP0b3o3Xd-0VhXX5Wkx1g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 23, 2023 at 05:04:56PM -0700, Namhyung Kim wrote:
+> On Wed, Jun 21, 2023 at 12:45 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> >
+> > The CATEGORIES list and the USER_CATEGORY_INDEX and
+> > KERNEL_CATEGORY_INDEX constants has been introduced.
+> >
+> > The get_or_create_frame function is responsible for retrieving or
+> > creating a frame based on the provided frameString. If the frame
+> > corresponding to the frameString is found in the frameMap, it is
+> > returned. Otherwise, a new frame is created by appending relevant
+> > information to the frameTable's 'data' array and adding the
+> > frameString to the stringTable.
+> >
+> > The index of the newly created frame is added to the frameMap.
+> >
+> > Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> > ---
+> >  .../scripts/python/firefox-gecko-converter.py | 38 +++++++++++++++++++
+> >  1 file changed, 38 insertions(+)
+> >
+> > diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > index 30fc542cfdeb..866751e5d1ce 100644
+> > --- a/tools/perf/scripts/python/firefox-gecko-converter.py
+> > +++ b/tools/perf/scripts/python/firefox-gecko-converter.py
+> > @@ -15,6 +15,13 @@ def isPerfScriptFormat(profile):
+> >      firstLine = profile[:profile.index('\n')]
+> >      return bool(re.match(r'^\S.*?\s+(?:\d+/)?\d+\s+(?:\d+\d+\s+)?[\d.]+:', firstLine))
+> >
+> > +CATEGORIES = [
+> > +{'name': 'User', 'color': 'yellow', 'subcategories': ['Other']},
+> > +{'name': 'Kernel', 'color': 'orange', 'subcategories': ['Other']}
+> > +]
+> > +USER_CATEGORY_INDEX = 0
+> > +KERNEL_CATEGORY_INDEX = 1
+> > +
+> >  def convertPerfScriptProfile(profile):
+> >      def _createtread(name, pid, tid):
+> >          markers = {
+> > @@ -70,6 +77,37 @@ def convertPerfScriptProfile(profile):
+> >                  stackMap[key] = stack
+> >              return stack
+> >
+> > +        frameMap = dict()
+> > +        def get_or_create_frame(frameString):
+> > +            frame = frameMap.get(frameString)
+> > +            if frame is None:
+> > +                frame = len(frameTable['data'])
+> > +                location = len(stringTable)
+> > +                stringTable.append(frameString)
+> > +
+> > +                category = KERNEL_CATEGORY_INDEX if frameString.find('kallsyms') != -1 or frameString.find('/vmlinux') != -1 or frameString.endswith('.ko)') else USER_CATEGORY_INDEX
+> 
+> This line is too long, we usually don't allow long lines
+> over 100 characters.
 
---CH8f+iAqQ0AXuK8P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for your suggestion. I have taken care in latest version.
+Is there any way to add such checks in editor itself ? I used checkpatch.pl
+scripts, however it didnt catch this.
 
-Hey Charlie,
-
-On Wed, Jul 05, 2023 at 11:59:40AM -0700, Charlie Jenkins wrote:
-> Make sv48 the default address space for mmap as some applications
-> currently depend on this assumption. Also enable users to select
-> desired address space using a non-zero hint address to mmap. Previous
-> kernel changes caused Java and other applications to be broken on sv57
-> which this patch fixes.
->=20
-> Documentation is also added to the RISC-V virtual memory section to expla=
-in
-> these changes.
-
-I can't find a changelog in any of these patches, nor an explanation for
-why this is v3 (or a RESEND). All I can find on the list is a v1. Could
-you explain and provide a changelog please?
-
-Cheers,
-Conor.
-
---CH8f+iAqQ0AXuK8P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKXL0QAKCRB4tDGHoIJi
-0mSkAP9isKRIaAMcF9iEh5CS2rWMPBczaNg2fqUkVSbIo2jW4wD/UFz0hRhkMWtF
-RirBLo291AQ15KrXyMt6MRTbQ7dNtA8=
-=YMSS
------END PGP SIGNATURE-----
-
---CH8f+iAqQ0AXuK8P--
+> Thanks,
+> Namhyung
+> 
+> 
+> > +                implementation = None
+> > +                optimizations = None
+> > +                line = None
+> > +                relevantForJS = False
+> > +                subcategory = None
+> > +                innerWindowID = 0
+> > +                column = None
+> > +
+> > +                frameTable['data'].append([
+> > +                    location,
+> > +                    relevantForJS,
+> > +                    innerWindowID,
+> > +                    implementation,
+> > +                    optimizations,
+> > +                    line,
+> > +                    column,
+> > +                    category,
+> > +                    subcategory,
+> > +                ])
+> > +                frameMap[frameString] = frame
+> > +            return frame
+> > +
+> >          def addSample(threadName, stackArray, time):
+> >              nonlocal name
+> >              if name != threadName:
+> > --
+> > 2.34.1
+> >
