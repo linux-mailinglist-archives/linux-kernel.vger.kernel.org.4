@@ -2,75 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F7E747E4F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B66747E4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjGEHci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S232326AbjGEHc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjGEHc3 (ORCPT
+        with ESMTP id S231627AbjGEHcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:32:29 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BD01730
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:32:17 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        Wed, 5 Jul 2023 03:32:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003E310C3;
+        Wed,  5 Jul 2023 00:32:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Qwrvv6xkyz9sV2;
-        Wed,  5 Jul 2023 09:32:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1688542332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AI3DGocrXf4ttby1kzh2+9/oP52TyrsDM0oPFJNnpR0=;
-        b=sgewxDbBdS996EyKm8U6X/8anuMRbQ8VjPnqprCXd4dyVeRJOLG13jnSxMIVnaeAVDsdss
-        VBoCThwuBa64zHroQXzWXF87f5IAG/RsP0CAHvcOad128Pp8MX+BJRipAicFg4Gam5fMzf
-        8FfKGn0nEOj24pu04SdK5MhrZ/zF+ipk+JqMqpkz275mWKv5OqqzfgUokf5m+ABbACNUBu
-        fnczHN/s2/mt9CQTGTqV/YiSftKH74/kJbnwWXBRK21+UkmocQ3ccr08edwmEHkkIwIxbC
-        e3PWVgUxKrdWQKOYXCcUmmmJRYouthQkZ9quoIFHyjIVkBP7szPKRj8b+D26ew==
-Message-ID: <2f993fe4-8e95-4a67-c2f1-6adc2c431834@mailbox.org>
-Date:   Wed, 5 Jul 2023 09:32:07 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91CC461459;
+        Wed,  5 Jul 2023 07:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B20C433C8;
+        Wed,  5 Jul 2023 07:32:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688542334;
+        bh=rrKS9XlbWXtXv9/M+AGV0hoVPd4VwC9NnkejaVVNV/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PebVrMnxOd9dYXNZ9uEZx40XeASe4nHkgzQwy6WsR4jV1HuOvzMR+ZEGb6xxZ1oZT
+         p7el+iseuVSvWgraRwCdSnkns/vJu0mecsLNlmhfiLgIQRvUD7ff/TXoSQa/fQZDSN
+         A5R8NP0hAPxSu6j2HWUy1j/Yv8rOewaCaC0+6IFE5xvEpztYPqCoevRyadmjy3412D
+         7eLTsKKGSYdxhOoyG1UWfLTDRvWuuuEnKd1Ug4xvkxxl73C6E07i5RbiFXUxOsGmAD
+         A5KAdpNxnsrEgPBAFK1zx2ykBOiWT4Z2PtBDamrCcd4s765Or75qhXPRgGg0kjC5bh
+         /2hSsvRTvxPlw==
+Date:   Wed, 5 Jul 2023 13:02:10 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org,
+        Robert Baldyga <r.baldyga@samsung.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Tresidder <rtresidd@electromag.com.au>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: pl330: Return DMA_PAUSED when transaction is
+ paused
+Message-ID: <ZKUceu9iJuAAeYYT@matsya>
+References: <20230526105434.14959-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-To:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>
-Cc:     Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Sebastian Wick <sebastian.wick@redhat.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
- <CA+hFU4z1pc=KUVVqyqfXEceUqMXQgh-qUnuB=1nkPELghvQO7w@mail.gmail.com>
- <CADnq5_MNVdtdcWKSz6dgmsjg+kEu8p5FVE+fkw_5BaXeG3QGow@mail.gmail.com>
- <afab1f5a-e581-3416-e2c2-238ea120655b@mailbox.org>
- <CAAxE2A5C96k5ua+r938VA_+w7gHHNTdF3n8LwDb98W0Bf9wCVA@mail.gmail.com>
- <7c1e6df5-1ad4-be3c-b95d-92dc62a8c537@mailbox.org>
- <CAAxE2A7RGDY4eRC85CsqfszNzyKvMU2MX1wa+3HZ1hgNeAw3cQ@mail.gmail.com>
- <cb0b6b51-3a94-481b-26a1-89ff398d7835@mailbox.org>
- <CAAxE2A7tNCWkL_M2YcE=RN+nqqcokgBR4hcD2sR3fGAY2t4uLg@mail.gmail.com>
-Content-Language: de-CH-frami, en-CA
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <CAAxE2A7tNCWkL_M2YcE=RN+nqqcokgBR4hcD2sR3fGAY2t4uLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: c89kr5mge4ooe33mb7f4cpob9d4ckzwh
-X-MBO-RS-ID: a9c4f1c5cb80503d0a6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230526105434.14959-1-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +60,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/23 08:30, Marek Olšák wrote:
-> On Tue, Jul 4, 2023, 03:55 Michel Dänzer <michel.daenzer@mailbox.org> wrote:
->     On 7/4/23 04:34, Marek Olšák wrote:
->     > On Mon, Jul 3, 2023, 03:12 Michel Dänzer <michel.daenzer@mailbox.org > wrote:
->     >     On 6/30/23 22:32, Marek Olšák wrote:
->     >     > On Fri, Jun 30, 2023 at 11:11 AM Michel Dänzer <michel.daenzer@mailbox.org> wrote:
->     >     >> On 6/30/23 16:59, Alex Deucher wrote:
->     >     >>> On Fri, Jun 30, 2023 at 10:49 AM Sebastian Wick
->     >     >>> <sebastian.wick@redhat.com <mailto:sebastian.wick@redhat.com> wrote:
->     >     >>>> On Tue, Jun 27, 2023 at 3:23 PM André Almeida <andrealmeid@igalia.com> wrote:
->     >     >>>>>
->     >     >>>>> +Robustness
->     >     >>>>> +----------
->     >     >>>>> +
->     >     >>>>> +The only way to try to keep an application working after a reset is if it
->     >     >>>>> +complies with the robustness aspects of the graphical API that it is using.
->     >     >>>>> +
->     >     >>>>> +Graphical APIs provide ways to applications to deal with device resets. However,
->     >     >>>>> +there is no guarantee that the app will use such features correctly, and the
->     >     >>>>> +UMD can implement policies to close the app if it is a repeating offender,
->     >     >>>>> +likely in a broken loop. This is done to ensure that it does not keep blocking
->     >     >>>>> +the user interface from being correctly displayed. This should be done even if
->     >     >>>>> +the app is correct but happens to trigger some bug in the hardware/driver.
->     >     >>>>
->     >     >>>> I still don't think it's good to let the kernel arbitrarily kill
->     >     >>>> processes that it thinks are not well-behaved based on some heuristics
->     >     >>>> and policy.
->     >     >>>>
->     >     >>>> Can't this be outsourced to user space? Expose the information about
->     >     >>>> processes causing a device and let e.g. systemd deal with coming up
->     >     >>>> with a policy and with killing stuff.
->     >     >>>
->     >     >>> I don't think it's the kernel doing the killing, it would be the UMD.
->     >     >>> E.g., if the app is guilty and doesn't support robustness the UMD can
->     >     >>> just call exit().
->     >     >>
->     >     >> It would be safer to just ignore API calls[0], similarly to what is done until the application destroys the context with robustness. Calling exit() likely results in losing any unsaved work, whereas at least some applications might otherwise allow saving the work by other means.
->     >     >
->     >     > That's a terrible idea. Ignoring API calls would be identical to a freeze. You might as well disable GPU recovery because the result would be the same.
->     >
->     >     No GPU recovery would affect everything using the GPU, whereas this affects only non-robust applications.
->     >
->     > which is currently the majority.
+On 26-05-23, 13:54, Ilpo J�rvinen wrote:
+> pl330_pause() does not set anything to indicate paused condition which
+> causes pl330_tx_status() to return DMA_IN_PROGRESS. This breaks 8250
+> DMA flush after the fix in commit 57e9af7831dc ("serial: 8250_dma: Fix
+> DMA Rx rearm race"). The function comment for pl330_pause() claims
+> pause is supported but resume is not which is enough for 8250 DMA flush
+> to work as long as DMA status reports DMA_PAUSED when appropriate.
 > 
->     Not sure where you're going with this. Applications need to use robustness to be able to recover from a GPU hang, and the GPU needs to be reset for that. So disabling GPU reset is not the same as what we're discussing here.
-> 
-> 
->     >     > - non-robust contexts: call exit(1) immediately, which is the best way to recover
->     >
->     >     That's not the UMD's call to make.
->     >
->     > That's absolutely the UMD's call to make because that's mandated by the hw and API design
-> 
->     Can you point us to a spec which mandates that the process must be killed in this case?
-> 
-> 
->     > and only driver devs know this, which this thread is a proof of. The default behavior is to skip all command submission if a non-robust context is lost, which looks like a freeze. That's required to prevent infinite hangs from the same context and can be caused by the side effects of the GPU reset itself, not by the cause of the previous hang. The only way out of that is killing the process.
-> 
->     The UMD killing the process is not the only way out of that, and doing so is overreach on its part. The UMD is but one out of many components in a process, not the main one or a special one. It doesn't get to decide when the process must die, certainly not under circumstances where it must be able to continue while ignoring API calls (that's required for robustness).
-> 
-> 
-> You're mixing things up. Robust apps don't any special action from a UMD. Only non-robust apps need to be killed for proper recovery with the only other alternative being not updating the window/screen,
+> Add PAUSED state for descriptor and mark BUSY descriptors with PAUSED
+> in pl330_pause(). Return DMA_PAUSED from pl330_tx_status() when the
+> descriptor is PAUSED.
 
-I'm saying they don't "need" to be killed, since the UMD must be able to keep going while ignoring API calls (or it couldn't support robustness). It's a choice, one which is not for the UMD to make.
+Have you noticed the comment in the code which reads:
 
+/*
+ * We don't support DMA_RESUME command because of hardware
+ * limitations, so after pausing the channel we cannot restore
+ * it to active state. We have to terminate channel and setup
+ * DMA transfer again. This pause feature was implemented to
+ * allow safely read residue before channel termination.
+ */
 
-> Also it's already used and required by our customers on Android because killing a process returns the user to the desktop screen and can generate a crash dump instead of keeping the app output frozen, and they agree that this is the best user experience given the circumstances.
+So driver just stops when in pause.
 
-Then some appropriate Android component needs to make that call. The UMD is not it.
+Now the commit 57e9af7831dc returns when in progress state, so am not
+sure how returning Paused would help here?
 
-
->     >     >>     [0] Possibly accompanied by a one-time message to stderr along the lines of "GPU reset detected but robustness not enabled in context, ignoring OpenGL API calls".
-
+> 
+> Reported-by: Richard Tresidder <rtresidd@electromag.com.au>
+> Tested-by: Richard Tresidder <rtresidd@electromag.com.au>
+> Fixes: 88987d2c7534 ("dmaengine: pl330: add DMA_PAUSE feature")
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/linux-serial/f8a86ecd-64b1-573f-c2fa-59f541083f1a@electromag.com.au/
+> Signed-off-by: Ilpo J�rvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+> 
+> $ diff -u <(git grep -l -e '\.device_pause' -e '->device_pause') <(git grep -l DMA_PAUSED)
+> 
+> ...tells there might a few other drivers which do not properly return
+> DMA_PAUSED status despite having a pause function.
+> 
+>  drivers/dma/pl330.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
+> index 0d9257fbdfb0..daad25f2c498 100644
+> --- a/drivers/dma/pl330.c
+> +++ b/drivers/dma/pl330.c
+> @@ -403,6 +403,12 @@ enum desc_status {
+>  	 * of a channel can be BUSY at any time.
+>  	 */
+>  	BUSY,
+> +	/*
+> +	 * Pause was called while descriptor was BUSY. Due to hardware
+> +	 * limitations, only termination is possible for descriptors
+> +	 * that have been paused.
+> +	 */
+> +	PAUSED,
+>  	/*
+>  	 * Sitting on the channel work_list but xfer done
+>  	 * by PL330 core
+> @@ -2041,7 +2047,7 @@ static inline void fill_queue(struct dma_pl330_chan *pch)
+>  	list_for_each_entry(desc, &pch->work_list, node) {
+>  
+>  		/* If already submitted */
+> -		if (desc->status == BUSY)
+> +		if (desc->status == BUSY || desc->status == PAUSED)
+>  			continue;
+>  
+>  		ret = pl330_submit_req(pch->thread, desc);
+> @@ -2326,6 +2332,7 @@ static int pl330_pause(struct dma_chan *chan)
+>  {
+>  	struct dma_pl330_chan *pch = to_pchan(chan);
+>  	struct pl330_dmac *pl330 = pch->dmac;
+> +	struct dma_pl330_desc *desc;
+>  	unsigned long flags;
+>  
+>  	pm_runtime_get_sync(pl330->ddma.dev);
+> @@ -2335,6 +2342,10 @@ static int pl330_pause(struct dma_chan *chan)
+>  	_stop(pch->thread);
+>  	spin_unlock(&pl330->lock);
+>  
+> +	list_for_each_entry(desc, &pch->work_list, node) {
+> +		if (desc->status == BUSY)
+> +			desc->status = PAUSED;
+> +	}
+>  	spin_unlock_irqrestore(&pch->lock, flags);
+>  	pm_runtime_mark_last_busy(pl330->ddma.dev);
+>  	pm_runtime_put_autosuspend(pl330->ddma.dev);
+> @@ -2425,7 +2436,7 @@ pl330_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+>  		else if (running && desc == running)
+>  			transferred =
+>  				pl330_get_current_xferred_count(pch, desc);
+> -		else if (desc->status == BUSY)
+> +		else if (desc->status == BUSY || desc->status == PAUSED)
+>  			/*
+>  			 * Busy but not running means either just enqueued,
+>  			 * or finished and not yet marked done
+> @@ -2442,6 +2453,9 @@ pl330_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+>  			case DONE:
+>  				ret = DMA_COMPLETE;
+>  				break;
+> +			case PAUSED:
+> +				ret = DMA_PAUSED;
+> +				break;
+>  			case PREP:
+>  			case BUSY:
+>  				ret = DMA_IN_PROGRESS;
+> -- 
+> 2.30.2
 
 -- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
-
+~Vinod
