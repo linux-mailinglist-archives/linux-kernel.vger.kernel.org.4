@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72427748E10
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF081748E1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbjGETjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S233784AbjGETlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbjGETjr (ORCPT
+        with ESMTP id S232397AbjGETlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:39:47 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3A71732;
-        Wed,  5 Jul 2023 12:39:43 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-77acb04309dso353633939f.2;
-        Wed, 05 Jul 2023 12:39:43 -0700 (PDT)
+        Wed, 5 Jul 2023 15:41:07 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F8F1722;
+        Wed,  5 Jul 2023 12:40:57 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2553663f71eso22971a91.3;
+        Wed, 05 Jul 2023 12:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688586057; x=1691178057;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pObkK+38n3BsjxC8qgyXxaX1CWlHSEh6zRyjSwENwf8=;
+        b=EFyk7sKmdsaEHog1LrxTEJO3pC6Wol+4hWTDuavwR6El39rsDU/yIEUxj1n4ry7aLi
+         dh+IYPOxNsf3GT3Pit8pfAZbnmQD7UYpH13DRubLGwr5YG3dtteA1K4sZ+kSBcS1n2mP
+         pADYHrnyvgM5C14DV/nTO/ZaJl0HxQ+HRmrqfMO+teBJ9Ethj0q4feSI6v/zDa2eo+ox
+         snzPZySgHfK5PPMhKQ7MYHaLMFcv1hbRFQfbwn8ibpWQ6MzaLmlgCRhRUhqObf8v8Eus
+         O2HfeGFEIWMSzgwTHkkqz+m+Fei1ZVHmwkhyINB09nvpx5KYPw9WAFs92yoo46MO21fH
+         ulUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585983; x=1691177983;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OR44xsl8dcDDRHket6JLRoRPh10jvQanfxZD4Qq5o5A=;
-        b=a0CEu5mqjWGo8IGRyJ6e667dY3I/m6XXzpZ51tZxpu8RysCYjJU+tN6Pmka10t+tNL
-         oooNFqm83WP8oryCBd8YKBj9BGnVaA9OJp1YeceXV9c20ivZJK6m0jULeeECNW/v4GG9
-         x8dCy734zSFeG39mJzXskDlPq5eZtaJ+lGTdENV6NPvjk6UoBywYPERS2lDOF5BJFYp3
-         kJ+DjiwGB/OgmAVLJvysrHDOJSw+JkZTes4lHWGKWo/RqD2xbITtUJZHuTLoO01u2VQB
-         IzhWhU7AKfZVJpNIPEp9FzfucL57i3weprBCaPDmCMWC9t7laGKYAoKamyGJQhOZlKRp
-         nh+Q==
-X-Gm-Message-State: ABy/qLbAA2KurpshNzjgaeeDFzqBEK03cTCXm7X3AdjyVDtdNsxFYJrP
-        9baxSsRd22kpom7bJP+cPg==
-X-Google-Smtp-Source: APBJJlFTsATQZZbeDYi05vWkxMhLO+2kIHQFYrmGtwqcASMsu98qNuBpLmP0dT/ZyPLVLU0YF4GwxA==
-X-Received: by 2002:a6b:f208:0:b0:77e:3598:e511 with SMTP id q8-20020a6bf208000000b0077e3598e511mr177308ioh.2.1688585983078;
-        Wed, 05 Jul 2023 12:39:43 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056638220a00b0042b1cd4c096sm3797893jas.74.2023.07.05.12.39.39
+        d=1e100.net; s=20221208; t=1688586057; x=1691178057;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pObkK+38n3BsjxC8qgyXxaX1CWlHSEh6zRyjSwENwf8=;
+        b=CL8qH/avlXH5dGnWlERhNKiON3RiftXUQQneQph6K2ODB+S28AvgREUj1ao1vYECNz
+         e9CxXCzxa/FGk2kgkRzbYa6PoqRhd9xMKx3FTM8XBVI9cAVYKn4raY9i8tHS4Xfnte+R
+         gZtjXEAhBfTZM4UpmXmvTbu6FGlEqENwiafXJNlKkVVQFxswKjk8+envDEyDRNQ5RlyS
+         9MBu3FykZtlr7BuZWexVM4IsMfPUP9wXAZcYyf3ciqYOzPUIvWzNYiTZmBm1CHgetIht
+         82ZHJL1vKlFMN8JV157GcEPnNhc6nm8oFX/vCds+Lq4b6Dl5JcOtQN7W/kRRGqbD/QBT
+         G6/A==
+X-Gm-Message-State: ABy/qLabZOAxfUtKpy4g8hsNg2lbO9Pmh6ZtAB+SRkAqycNfUS3j1tU6
+        am1Fk3FXiDot+co1hrRutv4=
+X-Google-Smtp-Source: APBJJlEbwEg3/RSsJ4VRKfr/j589N7gICgDWfNF2FLF9Ma1g+qL40bsCMOoBc4k6tblFaA+X+uSobg==
+X-Received: by 2002:a17:90a:a4b:b0:262:ec64:f941 with SMTP id o69-20020a17090a0a4b00b00262ec64f941mr13182264pjo.5.1688586057013;
+        Wed, 05 Jul 2023 12:40:57 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:c628:31be:68ae:86f5:48b9])
+        by smtp.gmail.com with ESMTPSA id gb3-20020a17090b060300b00256a4d59bfasm1780042pjb.23.2023.07.05.12.40.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:39:42 -0700 (PDT)
-Received: (nullmailer pid 1714650 invoked by uid 1000);
-        Wed, 05 Jul 2023 19:39:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 05 Jul 2023 12:40:56 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 01:10:47 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anup Sharma <anupnewsmail@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/7] Add support for Firefox's gecko profile format
+Message-ID: <cover.1688585597.git.anupnewsmail@gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     hugues.fruchet@foss.st.com, vkoul@kernel.org,
-        linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-phy@lists.infradead.org, lee@kernel.org,
-        linux-kernel@vger.kernel.org, arnd@kernel.org,
-        linux-serial@vger.kernel.org, mchehab@kernel.org,
-        edumazet@google.com, arnaud.pouliquen@foss.st.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, jic23@kernel.org, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org,
-        olivier.moysan@foss.st.com, fabrice.gasnier@foss.st.com,
-        kuba@kernel.org, andi.shyti@kernel.org,
-        alexandre.torgue@foss.st.com, conor+dt@kernel.org,
-        richardcochran@gmail.com, will@kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mmc@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Oleksii_Moisieiev@epam.com, linux-spi@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        ulf.hansson@linaro.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org
-In-Reply-To: <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-Message-Id: <168858597155.1714560.12250834903693245143.robh@kernel.org>
-Subject: Re: [PATCH 02/10] dt-bindings: bus: add device tree bindings for
- RIFSC
-Date:   Wed, 05 Jul 2023 13:39:32 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series adds support for Firefox's gecko profile format.
+The format is documented here [1].
 
-On Wed, 05 Jul 2023 19:27:51 +0200, Gatien Chevallier wrote:
-> Document RIFSC (RIF security controller). RIFSC is a firewall controller
-> composed of different kinds of hardware resources.
-> 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> ---
->  .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
-> 
+I have addressed few comments from the previous version of the patch
+like using perf script python interface to process the samples. Also
+fixed trailing whitespace and other minor issues.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+[1] https://github.com/firefox-devtools/profiler/blob/main/docs-developer/gecko-profile-format.md
 
-yamllint warnings/errors:
+Anup Sharma (7):
+  scripts: python: Extact necessary information from process event
+  scripts: python: Introduce thread sample processing to create thread
+  scripts: python: create threads with schemas
+  scripts: python: implement get or create stack function
+  scripts: python: implement get or create frame function
+  scripts: python: implement add sample function and return finish
+  scripts: python: Add trace end processing and JSON output
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml: title: 'STM32 Resource isolation framework security controller bindings' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+ .../scripts/python/firefox-gecko-converter.py | 204 ++++++++++++++++++
+ 1 file changed, 204 insertions(+)
+ create mode 100644 tools/perf/scripts/python/firefox-gecko-converter.py
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230705172759.1610753-3-gatien.chevallier@foss.st.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+-- 
+2.34.1
 
