@@ -2,175 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E55748385
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B963074838A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjGELxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        id S231828AbjGELxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 07:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjGELxA (ORCPT
+        with ESMTP id S231769AbjGELxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:53:00 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2096.outbound.protection.outlook.com [40.107.255.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840FFE6E;
-        Wed,  5 Jul 2023 04:52:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jNYwF9nTJpT7fxsgTXAElDEulAEB+dzQQDevaOimhV1MKTM8fH6XE03l95kwc6rb+DgwLygeXpDXSFz3Oe8WZQ5iQZRo6auMsiRLLhdsoocqstJ2Vg/OeeZWjrHsz4ALvpKKftZT0FATMREBudYjkh0WB350ng6u5MuhksS1BZeQOgdUVLKDfvjgx0Y9xyat9N9MaVB82DVdO8ME6yM8D3KNgQlx9Kq63ej5h2SHhrjxmEeT/pkha1vOwtzwYmMXxSSO/7lEnRZLF3mZgHQAJjBgXj2u9whMlBystBz0dPjA4ecoEyoB2NxSeJc8WydXo26M3iMzxVknGwOlU60xpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x9SMUWNoeBnq9DnaDbs36me8Jucx26lo3Sqtlu/pFB0=;
- b=a+WwC1BAHkza0Z0lWa5Gtdfvl311ObVGD0PixVCuaysvjFXRI9docz/0VzJkCHgvRfSiguUBfUN7FiTEem4tc5WkZbg63L3IYeHnBgd64K/vOorkmHBqoc4pQ4NBTnkqUgmC7dmBKnbDj1QyzlRURNAtizXj3YwlchNwHA47YvqLK3vP4olQhdCw2n6GZrvrN/kqWOfKdPt5IShciVjk+G/kri7YHh5lcShJF7C1+L/F0P/Yw+dhTZiNvebGVprQLtyMWNCAEGEMDxJr/zor6nbcUp0PvogB7dtrAqMNT+XCt5jl0LHcJ2zuWbmVDhns/3PvC9B+MF+cLWnmiHG1xA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x9SMUWNoeBnq9DnaDbs36me8Jucx26lo3Sqtlu/pFB0=;
- b=BGOITwABfR6aEZnDbS5Y2Lc8zwb18+CiE/Q47pN0tocpEArrypGiAv2QRLi9arLHowFwB85IfiILAOyXDy+ClTodAjMr0AfbzpnB5a6QKzGXPUPgq05Ak2f3d9qVqkbkoN0HqULwncoEHvKfbDw9ma1lkVCKh2Vfhn/KnkcAcnqbSgHGo0hY3NwE9yKuM4GE5mJzADt8s99MHP0dkzArS7ljX7BdqYoltLIo7AiN1NLaCgovXfdQumWotSzNDzH9ciQLKXiQzO5NI05F3RuAgXCsI/a6b2QHSBLZ9IHntowMNU0IKMBt/dM68EDrRprAyls+/OYj1zOAwkRsagaV9A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
- 2023 11:52:54 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 11:52:53 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwrng: timeriomem - Use devm_platform_get_and_ioremap_resource()
-Date:   Wed,  5 Jul 2023 19:52:42 +0800
-Message-Id: <20230705115242.54285-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
+        Wed, 5 Jul 2023 07:53:48 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06786A1;
+        Wed,  5 Jul 2023 04:53:45 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365Bi7Dj021846;
+        Wed, 5 Jul 2023 11:53:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=RM6BGoxAB5trXh244t7sn6H8ASPW31lkwjgvtqxQAe4=;
+ b=pAqESusDye4cVH05DMf4Kpmp/CC0VTJvxwcjlirvtd31+7M/OodWO7EQofz1CUM1F2pD
+ 46DpcTZx27Hr+ue/c1eA8Rbs+dpZX7CZD1QwhUqNOzePLJWQ1bDl2rMYcWQ8tikYM5Wo
+ xwrNocbA5Cun7n09O3P/jJEut8grM8T1HdNOKfd60XfDHKEmzxyIEzU8viO679v2ffv7
+ ikBiVYigTsP0tkRxq8dbO6jbegGH1nPAVxQbfss73pwj6p10SWnpup9g4yqTYMzTHVUE
+ SJwa5QkL5fnbI/5c9AJVX0b7rnSHhKP9Udjh08vI5xPFOEpRRRjmm4Nsudo0F88tTidn ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rn7w6r74v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 11:53:17 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 365BjFjn026313;
+        Wed, 5 Jul 2023 11:53:16 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rn7w6r74f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 11:53:16 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36596LBW030966;
+        Wed, 5 Jul 2023 11:53:14 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3rjbddsve8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 11:53:14 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 365BrClC42205592
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jul 2023 11:53:12 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1571820043;
+        Wed,  5 Jul 2023 11:53:12 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2CB9720040;
+        Wed,  5 Jul 2023 11:53:11 +0000 (GMT)
+Received: from [9.171.79.178] (unknown [9.171.79.178])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jul 2023 11:53:11 +0000 (GMT)
+Message-ID: <a1276261-353a-f440-bc13-66fd49e08681@linux.ibm.com>
+Date:   Wed, 5 Jul 2023 13:53:10 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v3 0/9] Introduce SMT level and add PowerPC support
+Content-Language: en-US
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc:     "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230629143149.79073-1-ldufour@linux.ibm.com>
+ <44bf8b00c960473e37e35571104b5a1b24673142.camel@intel.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <44bf8b00c960473e37e35571104b5a1b24673142.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N4P2ig7ddIkXcU9iADb77eI_NafRDr1l
+X-Proofpoint-GUID: 2jxNtGr7yfx_aCflspM8uTWG1RSqMSor
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0028.apcprd02.prod.outlook.com
- (2603:1096:4:195::8) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB5140:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e69ba03-892d-4d3a-f8e4-08db7d4e5dbf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n+awc8bJ+enK2InIglxC02E5qN6fUhQaK5Hfv24IcxTjsVWpeu+BQgtMnvIz7HuUrAhJj0sWcXAwp6FwA2UGQgBVe1bj3cMdP5qFwf4hX/1q/UATYuEE7xHMvjtcT5KL4gNU4ArPMkausZGtKz6PhwtnfE/fmFWCr+KzHR3TfAq0cWIKDMN3ajyoW8vM37rkiRNCFv7yKkvmhbH6uQf273yfspW3jUvGCjN2IbDNQhUylXr6n/yhX5dJr0ZOdYASqZuRglJDVBKYeIKEWmFabJ8cUbuiNSysqYAelr4iSVzWiGpAUnYGKpV2gmqpZRu5eRwIftTzxHSzzntV7MJShwacP67X/dYfpSJjPPWmBEFBt62V90Wt7hvzbRHlN9vX1NpA4+2Km/Q7gOW9cdesFTvidB5Uo8OD3Amjwp2guhymPCurxwSlp4/HicWJNQca4yFNKCHazegXjKcXtYnzOYoJ2ZrO8ZwT+FPPcadvJCb3+UpnmytaLUBUnBGuRPLNe4rZLis8/3JDugo5Q1UBe2AdUT4mvMK1kBGhK32FrcDOuieRQ8HwwCJg/Sb3FwZUt/3iO06jR9V2fWyXFGI8AVnhSx+Dp64XTXzFHk6zMbfo7B7DyTQHFz7BRdH9VyC7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(376002)(366004)(346002)(451199021)(38100700002)(83380400001)(8936002)(38350700002)(8676002)(186003)(41300700001)(26005)(1076003)(6506007)(52116002)(2906002)(6486002)(86362001)(6666004)(6512007)(316002)(5660300002)(2616005)(36756003)(110136005)(4326008)(478600001)(66476007)(66946007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KMbulTqzch7IxmVD6LZVBKcYsrLXzqMmMz82oyzAQY2fO6r+qmoey69gC5DQ?=
- =?us-ascii?Q?RCpTZhZLQJM8mM/+FPmvmhCQdJHXmahe6azrdo5lGZ0X27Q9ZFpvx55FIopH?=
- =?us-ascii?Q?CVxOFFf0cNId6UfdwAm9zQBn/2M26otUl3gUVNyMTBIN4SOQ6fZTZ1GOtZ0F?=
- =?us-ascii?Q?CHmoh9mK4HVwK8O68Xhb/SDOS+OoECCFgQaHBBOneWTJxCEuK3hXk95TWmTT?=
- =?us-ascii?Q?3VzKwCbVsylKGlqv0r6iqddHh2nLNheexiLGsUsbkxcy1c2Cj/+Bf1ppEgtk?=
- =?us-ascii?Q?KbpVBxO/IV95xdbc56CKkjXDMuLj9BPcEz1rQpw/FYX/aYEWDq+Af4g0mUzI?=
- =?us-ascii?Q?0hDVR6SmvGPktWhbm1oajd1ce0CN29FEMHKGzK2FzP2Q+B10nq9EqiMsWdL7?=
- =?us-ascii?Q?HcuDA9XXnuntjJQMfDdt7Wqu1lL9/wjSBxAEAJdj6gei3030jZVFypbUxuX8?=
- =?us-ascii?Q?Rr2dox1EqPzgvt3hga4rMyP3c5k0SyUJkmaAsfZ3l6weh/VB6w1X8mVy//Ct?=
- =?us-ascii?Q?39ZXr5Iv2S3v1B3ol66DsLDwigUaOSrH7/ygWux6OCwZjQTqmXeoB9McTP5p?=
- =?us-ascii?Q?gioyCrrKLZFRlXj9RS3F7LdlSXLBfGMr0VLK10YhivmM3RYbpuq/T/TldPcJ?=
- =?us-ascii?Q?JbKKUvJ7DkYWe6jJtjVWxRx/w8EVDKNlbcWsOqcGy6QnlrPjDMyvAwXuM+6o?=
- =?us-ascii?Q?A+/lomkGSe5zyPcw6r3AFDhiU3KtDAYKMDzZ5m8IreMNIkxXB1DNdoKP0U62?=
- =?us-ascii?Q?EAyWgaXzTlVdTt77KKOSOtBw1hXq3oVwsvXUKt3zv3fd7II/O6Zpe2vCJeo3?=
- =?us-ascii?Q?GCMGVoJEQAwifMzNsdErFqaexeSFYbQmiRASGNG5Fw2H7IUTUqgAAJV5n1NU?=
- =?us-ascii?Q?leQoxg46eFD0awCZrElRbbESSHYdx0gf1FPBV8j7S8s1pzOUBtLJX8iSBSPt?=
- =?us-ascii?Q?aAMLQP8E1rfQxBQ2f0yp6RGs1b74Rismm5jykaLDKYo792eG732T3kMXrXlU?=
- =?us-ascii?Q?EeV9bB/U5ViXOXvW844tdZ/3ZYBsWDuh1UqWGS9QQmVqlTZS2KnbzDbHI6dD?=
- =?us-ascii?Q?+zP2eRjsJdDT2s4PR8n8KXIB177HfeG3EwKRXbMdwPcF8cV4iTMlscTYqeXl?=
- =?us-ascii?Q?0Lll3IXW8LSvzxAR75zz/oIK+c2UuSJx6tKP8Z+jWQjrJxQs2DvJmlSjKP0C?=
- =?us-ascii?Q?GzkOKLZEbARVUhdQBZUJEv/zkng68H3GL5mMrmCW9AlAShhvCYMq268769mp?=
- =?us-ascii?Q?iFo7bcMDfeZ+eBJlq3Rc1jITsu60O3Z9NsiDnVJIec3k/7UHWwm1m72u0jQO?=
- =?us-ascii?Q?3rVUViVpd2zg6EVKnKiLOVCDd5fJoGXQprtHzUmpslh6A3zQCFcOs+TKLe/F?=
- =?us-ascii?Q?1wh2FUfGfxAoF3NdmuFx63AjL7wq8NXftyKr4DSPHmlqAz/arxutHAtiqAzs?=
- =?us-ascii?Q?DMujWAGE8VbX7MCvUNrWYPWKm9jrmZE4d4f+e1Kw14aEZEUNNyP2vkgq2Igt?=
- =?us-ascii?Q?dopDtx8uY0oyGoESQ9YInZ2M+YPemFGnBJdPTolenhM6O2VjqB1KeVYjCoim?=
- =?us-ascii?Q?W8wRFHfPWGXNszsOeMysIyRe4vXF1+CwJ7U1IhMM?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e69ba03-892d-4d3a-f8e4-08db7d4e5dbf
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 11:52:53.8558
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QqvAMdTn8Vs/UUXKWkuYWI5i9rfc2TT/eeUDJvSo3DjOlvS93R7IiC+w7TBb9nk1d7CdhOK3cDSeSZSw0XkMCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5140
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_02,2023-07-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 clxscore=1011 mlxscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 adultscore=0 phishscore=0 spamscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307050102
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Le 05/07/2023 à 05:04, Zhang, Rui a écrit :
+> Hi, Laurent,
+> 
+> I want to test this patch set and found that it does not apply on top
+> of latest usptream git, because of some changes in this merge window,
+> so better rebase.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/char/hw_random/timeriomem-rng.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+Hi Rui,
 
-diff --git a/drivers/char/hw_random/timeriomem-rng.c b/drivers/char/hw_random/timeriomem-rng.c
-index 26f322d19a88..3db9d868efb1 100644
---- a/drivers/char/hw_random/timeriomem-rng.c
-+++ b/drivers/char/hw_random/timeriomem-rng.c
-@@ -113,16 +113,6 @@ static int timeriomem_rng_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENXIO;
--
--	if (res->start % 4 != 0 || resource_size(res) < 4) {
--		dev_err(&pdev->dev,
--			"address must be at least four bytes wide and 32-bit aligned\n");
--		return -EINVAL;
--	}
--
- 	/* Allocate memory for the device structure (and zero it) */
- 	priv = devm_kzalloc(&pdev->dev,
- 			sizeof(struct timeriomem_rng_private), GFP_KERNEL);
-@@ -131,6 +121,16 @@ static int timeriomem_rng_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, priv);
- 
-+	priv->io_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(priv->io_base))
-+		return PTR_ERR(priv->io_base);
-+
-+	if (res->start % 4 != 0 || resource_size(res) < 4) {
-+		dev_err(&pdev->dev,
-+			"address must be at least four bytes wide and 32-bit aligned\n");
-+		return -EINVAL;
-+	}
-+
- 	if (pdev->dev.of_node) {
- 		int i;
- 
-@@ -158,11 +158,6 @@ static int timeriomem_rng_probe(struct platform_device *pdev)
- 	priv->rng_ops.name = dev_name(&pdev->dev);
- 	priv->rng_ops.read = timeriomem_rng_read;
- 
--	priv->io_base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(priv->io_base)) {
--		return PTR_ERR(priv->io_base);
--	}
--
- 	/* Assume random data is already available. */
- 	priv->present = 1;
- 	complete(&priv->completion);
--- 
-2.39.0
+Thanks for your interest for this series.
+The latest Thomas's changes came into the PowerPC next branch.
+I'm working on a rebase.
 
+Cheers,
+Laurent.
+
+> thanks,
+> rui
+> 
+> On Thu, 2023-06-29 at 16:31 +0200, Laurent Dufour wrote:
+>> I'm taking over the series Michael sent previously [1] which is
+>> smartly
+>> reviewing the initial series I sent [2].  This series is addressing
+>> the
+>> comments sent by Thomas and me on the Michael's one.
+>>
+>> Here is a short introduction to the issue this series is addressing:
+>>
+>> When a new CPU is added, the kernel is activating all its threads.
+>> This
+>> leads to weird, but functional, result when adding CPU on a SMT 4
+>> system
+>> for instance.
+>>
+>> Here the newly added CPU 1 has 8 threads while the other one has 4
+>> threads
+>> active (system has been booted with the 'smt-enabled=4' kernel
+>> option):
+>>
+>> ltcden3-lp12:~ # ppc64_cpu --info
+>> Core   0:    0*    1*    2*    3*    4     5     6     7
+>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>>
+>> This mixed SMT level may confused end users and/or some applications.
+>>
+>> There is no SMT level recorded in the kernel (common code), neither
+>> in user
+>> space, as far as I know. Such a level is helpful when adding new CPU
+>> or
+>> when optimizing the energy efficiency (when reactivating CPUs).
+>>
+>> When SMP and HOTPLUG_SMT are defined, this series is adding a new SMT
+>> level
+>> (cpu_smt_num_threads) and few callbacks allowing the architecture
+>> code to
+>> fine control this value, setting a max and a "at boot" level, and
+>> controling whether a thread should be onlined or not.
+>>
+>> v3:
+>>    Fix a build error in the patch 6/9
+>> v2:
+>>    As Thomas suggested,
+>>      Reword some commit's description
+>>      Remove topology_smt_supported()
+>>      Remove topology_smt_threads_supported()
+>>      Introduce CONFIG_SMT_NUM_THREADS_DYNAMIC
+>>      Remove switch() in __store_smt_control()
+>>    Update kernel-parameters.txt
+>>
+>> [1]
+>> https://lore.kernel.org/linuxppc-dev/20230524155630.794584-1-mpe@ellerman.id.au/
+>> [2]
+>> https://lore.kernel.org/linuxppc-dev/20230331153905.31698-1-ldufour@linux.ibm.com/
+>>
+>> Laurent Dufour (1):
+>>    cpu/SMT: Remove topology_smt_supported()
+>>
+>> Michael Ellerman (8):
+>>    cpu/SMT: Move SMT prototypes into cpu_smt.h
+>>    cpu/SMT: Move smt/control simple exit cases earlier
+>>    cpu/SMT: Store the current/max number of threads
+>>    cpu/SMT: Create topology_smt_thread_allowed()
+>>    cpu/SMT: Allow enabling partial SMT states via sysfs
+>>    powerpc/pseries: Initialise CPU hotplug callbacks earlier
+>>    powerpc: Add HOTPLUG_SMT support
+>>    powerpc/pseries: Honour current SMT state when DLPAR onlining CPUs
+>>
+>>   .../ABI/testing/sysfs-devices-system-cpu      |   1 +
+>>   .../admin-guide/kernel-parameters.txt         |   4 +-
+>>   arch/Kconfig                                  |   3 +
+>>   arch/powerpc/Kconfig                          |   2 +
+>>   arch/powerpc/include/asm/topology.h           |  15 +++
+>>   arch/powerpc/kernel/smp.c                     |   8 +-
+>>   arch/powerpc/platforms/pseries/hotplug-cpu.c  |  30 +++--
+>>   arch/powerpc/platforms/pseries/pseries.h      |   2 +
+>>   arch/powerpc/platforms/pseries/setup.c        |   2 +
+>>   arch/x86/include/asm/topology.h               |   4 +-
+>>   arch/x86/kernel/cpu/bugs.c                    |   3 +-
+>>   arch/x86/kernel/smpboot.c                     |   8 --
+>>   include/linux/cpu.h                           |  25 +---
+>>   include/linux/cpu_smt.h                       |  33 +++++
+>>   kernel/cpu.c                                  | 118 ++++++++++++++--
+>> --
+>>   15 files changed, 187 insertions(+), 71 deletions(-)
+>>   create mode 100644 include/linux/cpu_smt.h
+>>
+> 
