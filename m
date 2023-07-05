@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E838F748EBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61731748EBE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbjGEUTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 16:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
+        id S233615AbjGEUTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 16:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjGEUTF (ORCPT
+        with ESMTP id S232401AbjGEUTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 16:19:05 -0400
+        Wed, 5 Jul 2023 16:19:35 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AC41985
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 13:19:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6431E1985
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 13:19:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T0XLnvzn5FkOLIw7q3RfBWKmkfDnS0W7AG/lbyZT7fw=; b=Q8nN/eVzqtRFhuNEk4/aZxiwlf
-        b7nmE8lceUwvvkelHvAh5oK6q5zyM86Kco60daX9344Go8jHWsQhYFgnDwjMdBblwWw5YWU5nZ+Lp
-        zBH+5PCKSX65joIEYLlpbOw4UK471N0qDkcUmLnMhR/OyZ5qxj57WWKNkEvf41yxTvfoQrrhM0yc9
-        5F8C+pmqA0h3nHWwswjhLTC29fyoiuUiOBxiewi/YDVrcCSMIBjUFzgtj247FDte95jEFQZAQQVt4
-        oJfH7aftPSAW8CxkGBtSn83CXOLoYpoyoi7WrMECd0vaqo8diyrlZb0LoqVd0aMMf21rHGzI+J/V0
-        b1LwHeTw==;
+        bh=5X1Mo95OcJGk9juiqAgblVpUBRzoZfAwW9LAATZelW0=; b=tfoiTQPDT77LX6QudJB8OS42kP
+        wMr+kawy7eQM8q3KsiRfGfn2KVyDog4sNmVRxc8vD84DWvu8se6RqbknKTjrsF3VScvWOfsS4bNmN
+        D72TDO2IJ3fbLzCMmK2HmhHc25lzo54S4rlXaNJ5NAXMlM2s15EAKgaPf7Sx2VVoETCDXKk7p5C4s
+        mZnUSL83FJF+/oV2kylYAavLt4PDPdWSVYz5JQrcyt/Eq2N+6FlwgsCgzWxgg7Fxzx2gb3BH4U3K2
+        c20GzBq7GBqLzdM3mi/gF5MVQjZr4mO9C5Z2YXIqT8rk6v/3osN4uL4jY3swuEwYVT0Dc+kJYmmRG
+        /gYmC+zA==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qH8xp-00AORJ-Aq; Wed, 05 Jul 2023 20:19:01 +0000
-Date:   Wed, 5 Jul 2023 21:19:01 +0100
+        id 1qH8yK-00AOT6-In; Wed, 05 Jul 2023 20:19:32 +0000
+Date:   Wed, 5 Jul 2023 21:19:32 +0100
 From:   Matthew Wilcox <willy@infradead.org>
 To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         akpm@linux-foundation.org
-Subject: Re: [PATCH v2 4/4] mm/memory: convert do_read_fault() to use folios
-Message-ID: <ZKXQNa7mikRJWO2M@casper.infradead.org>
+Subject: Re: [PATCH v2 3/4] mm/memory: convert do_shared_fault() to folios
+Message-ID: <ZKXQVNHOB2Ddx4hN@casper.infradead.org>
 References: <20230705194335.273790-1-sidhartha.kumar@oracle.com>
- <20230705194335.273790-4-sidhartha.kumar@oracle.com>
+ <20230705194335.273790-3-sidhartha.kumar@oracle.com>
+ <ZKXO0/2sC3/dvLO7@casper.infradead.org>
+ <b6e056d7-5b35-bcfa-4661-ebeb8cffd1c4@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705194335.273790-4-sidhartha.kumar@oracle.com>
+In-Reply-To: <b6e056d7-5b35-bcfa-4661-ebeb8cffd1c4@oracle.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -50,28 +52,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 12:43:35PM -0700, Sidhartha Kumar wrote:
-> Saves one implicit call to compound_head()
+On Wed, Jul 05, 2023 at 01:16:25PM -0700, Sidhartha Kumar wrote:
+> On 7/5/23 1:13 PM, Matthew Wilcox wrote:
+> > On Wed, Jul 05, 2023 at 12:43:34PM -0700, Sidhartha Kumar wrote:
+> > >   	/*
+> > >   	 * Check if the backing address space wants to know that the page is
+> > >   	 * about to become writable
+> > >   	 */
+> > >   	if (vma->vm_ops->page_mkwrite) {
+> > > -		unlock_page(vmf->page);
+> > > +		folio_unlock(folio);
+> > >   		tmp = do_page_mkwrite(vmf);
+> > >   		if (unlikely(!tmp ||
+> > >   				(tmp & (VM_FAULT_ERROR | VM_FAULT_NOPAGE)))) {
+> > > -			put_page(vmf->page);
+> > > +			folio_put(folio);
+> > 
+> > This is _probably_ OK.  However, do_page_mkwrite() calls
+> > vm_ops->page_mkwrite(), and I think it's theoretically possible for the
+> > driver to replace vmf->page with a different one.  The chance of them
+> > actually doing that is pretty low (particularly if they return error or
+> > nopage!), but I'm going to flag it just in case it comes up.
+> > 
+> > Also, should we pass a folio to do_page_mkwrite() instead of having it
+> > extract the folio from vmf->page?
 > 
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> I can take a look at doing this in a follow-up patch.
+> > 
+> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> 
+> Did you mean for this to be reviewed-by?
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-> @@ -4543,10 +4544,12 @@ static vm_fault_t do_read_fault(struct vm_fault *vmf)
->  	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY)))
->  		return ret;
->  
-> +	folio = page_folio(vmf->page);
-
-Why not move this down to after the call to finish_fault()?  The
-compiler should be able to do a better job with that; it may have to
-spill it to the stack to preserve it over the function call.
-
->  	ret |= finish_fault(vmf);
-> -	unlock_page(vmf->page);
-> +	folio_unlock(folio);
->  	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY)))
-> -		put_page(vmf->page);
-> +		folio_put(folio);
->  	return ret;
-
+Uh, yes.  Maybe I need to get more rest ...
