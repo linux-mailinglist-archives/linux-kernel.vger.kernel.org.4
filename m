@@ -2,64 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F51747FAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FD4747FAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjGEI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S231830AbjGEI3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbjGEI2r (ORCPT
+        with ESMTP id S231502AbjGEI3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:28:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8C41716;
-        Wed,  5 Jul 2023 01:28:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97E116149A;
-        Wed,  5 Jul 2023 08:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F8BAC433C7;
-        Wed,  5 Jul 2023 08:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688545723;
-        bh=cHGda5V9pCsTD1y90nW+7+XhO6NjjTFPn6JL/uh9/QQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a9QoCJ6HBYGoU35mzpGaJGjN5PZX4OhgXcW6j125fWzLg/p53rilSADbcEv5wdkoq
-         fpdUd4X+A2pY47BICfAQMEY1MVUtUc9V1SMtzRG8YgOlabaho/q4OE/xM+S2GStRbc
-         KgUH9wfxb9Ymtsl2K1oAou3FoWSjlliCanIflFzbTcpEX8VsWLCb9ftrWzztPd2zx+
-         2Ddy+yDSGZzBWxcUh+oDeAL4EaeL2Eb39e3fHfoSeq8OUhdJjkU+1eQnTLlfxqdKMg
-         hQjSaHHV4+YyYHpzSxhXpCpmYPeXEsraa0ICvfPBn1uJA2gEdBFFqUJNdfyK7KcZDz
-         AZmsRxsKo5QGw==
-Date:   Wed, 5 Jul 2023 13:58:26 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Mrinmay Sarkar <quic_msarkar@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        konrad.dybcio@linaro.org, quic_shazhuss@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_ramkri@quicinc.com,
-        quic_nayiluri@quicinc.com, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH v1 3/6] PCI: qcom: Add support for sa8775p SoC
-Message-ID: <20230705082826.GC11854@thinkpad>
-References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
- <1688545032-17748-4-git-send-email-quic_msarkar@quicinc.com>
+        Wed, 5 Jul 2023 04:29:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291421712
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:29:03 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1qGxsc-0007l4-BO; Wed, 05 Jul 2023 10:28:54 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1qGxsb-00081q-S6; Wed, 05 Jul 2023 10:28:53 +0200
+Date:   Wed, 5 Jul 2023 10:28:53 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, shawnguo@kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, marex@denx.de,
+        frieder.schrempf@kontron.de, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/3] dt-bindings: arm: fsl: fix DEBIX binding
+Message-ID: <20230705082853.26kfb7thnxkb5tz4@pengutronix.de>
+References: <20230704184109.991104-1-m.felsch@pengutronix.de>
+ <6f7586ee-257b-35b5-f986-0d2b370e4035@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1688545032-17748-4-git-send-email-quic_msarkar@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <6f7586ee-257b-35b5-f986-0d2b370e4035@linaro.org>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,37 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 01:47:08PM +0530, Mrinmay Sarkar wrote:
-> Add support for sa8775p SoC reusing the 1.9.0 config.
+Hi Krzysztof,
+
+On 23-07-05, Krzysztof Kozlowski wrote:
+> On 04/07/2023 20:41, Marco Felsch wrote:
+> > The current imx8mp-debix-model-a.dts uses all three compatibles. Fix the
+> > corresponding bindings by adding an own entry for it.
+> > 
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  Documentation/devicetree/bindings/arm/fsl.yaml | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+> > index 15d4110840654..d9e763ef932e5 100644
+> > --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> > @@ -1019,8 +1019,6 @@ properties:
+> >                - dmo,imx8mp-data-modul-edm-sbc # i.MX8MP eDM SBC
+> >                - fsl,imx8mp-evk            # i.MX8MP EVK Board
+> >                - gateworks,imx8mp-gw74xx   # i.MX8MP Gateworks Board
+> > -              - polyhex,imx8mp-debix      # Polyhex Debix boards
+> > -              - polyhex,imx8mp-debix-model-a # Polyhex Debix Model A Board
+> >                - toradex,verdin-imx8mp     # Verdin iMX8M Plus Modules
+> >                - toradex,verdin-imx8mp-nonwifi  # Verdin iMX8M Plus Modules without Wi-Fi / BT
+> >                - toradex,verdin-imx8mp-wifi  # Verdin iMX8M Plus Wi-Fi / BT Modules
+> > @@ -1054,6 +1052,13 @@ properties:
+> >            - const: phytec,imx8mp-phycore-som         # phyCORE-i.MX8MP SoM
+> >            - const: fsl,imx8mp
+> >  
+> > +      - description: Polyhex DEBIX i.MX8MP based SBCs
+> > +        items:
+> > +          - enum:
+> > +              - polyhex,imx8mp-debix-model-a        # Polyhex Debix Model A Board
+> > +          - const: polyhex,imx8mp-debix             # Polyhex Debix boards
 > 
+> Same comments as for patch #2. I think this should be rather deprecated
+> - not a good pattern.
 
-Add information about the controller version, DWC version in commit message.
+How can we deprecate a binding?
 
-> Signed-off-by: Mrinmay Sarkar <quic_msarkar@quicinc.com>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 7a87a47eb7ed..59cc028d3a3e 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1624,6 +1624,7 @@ static const struct of_device_id qcom_pcie_match[] = {
->  	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &cfg_1_9_0 },
->  	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &cfg_1_9_0 },
->  	{ .compatible = "qcom,pcie-sm8550", .data = &cfg_1_9_0 },
-> +	{ .compatible = "qcom,pcie-sa8775p", .data = &cfg_1_9_0},
-
-Same comment as patch 1.
-
-- Mani
-
->  	{ }
->  };
->  
-> -- 
-> 2.39.2
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Regards,
+  Marco
