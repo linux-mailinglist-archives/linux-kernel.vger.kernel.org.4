@@ -2,88 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BCE74881D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE8474881F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233068AbjGEPeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
+        id S233188AbjGEPeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjGEPe3 (ORCPT
+        with ESMTP id S230495AbjGEPec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:34:29 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24237171C
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:34:28 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-102-5.bstnma.fios.verizon.net [173.48.102.5])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 365FY5s4025721
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jul 2023 11:34:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1688571251; bh=PxGfltF6c2E6Vt1/VG/UEQXjz/2rYU3qwRGE/kZ15tA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=R7BeBsCH1h0L32dAtFswGvJD4QioXcZgo9EBmkJn6JkhNgjmsuLJb71GkLoRwFfHI
-         2tm0WOuxakbWjCsSYmWkcNGJ9UZPmndS6lUaCS2FbEnWImLxIxBXOpPtpjCt7APfO0
-         8J8LevpZDepGqdOBp1Ox5sZzjk1nHAVOrHuHcdYssRFnz/2LTCuLXb22mEJh50xHbU
-         4nmggvdsORDckBL6wmhHLlOD6pCMpGP0BEYWN4L7SXLxiO+Zia1biDi9VqVQUycJ7o
-         dIHAYV6CS6bYvRycSDOf4K3YqGJv7fRuM/PmEQ3na5V2KccNshnLHh6CI0B3rF451l
-         7QQwYqRHpyz9w==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 6979C15C0294; Wed,  5 Jul 2023 11:34:05 -0400 (EDT)
-Date:   Wed, 5 Jul 2023 11:34:05 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Overly aggressive .gitignore file?
-Message-ID: <20230705153405.GA1382903@mit.edu>
-References: <CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com>
- <CAK7LNAQas0cK7pgi72tYC3yU=ZkQxnr41YYW1mXd-sWiHtG+UA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNAQas0cK7pgi72tYC3yU=ZkQxnr41YYW1mXd-sWiHtG+UA@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 5 Jul 2023 11:34:32 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEA3170B;
+        Wed,  5 Jul 2023 08:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GOk8wbHC+06z9lkk+bkmvMTVgQXsiajG84uc0axXK8w=; b=LZtRD+xE/EQ0I8L1jJY6mX1w2V
+        fIJB0cGgf8aj+l2DttPr6CuHQ9S8UWIpj4PsMgjbwKuJZJa4fnflxArwMUl3PiKhMsCV+xKyLVEmb
+        hNhBJNgmKhQ9/SsA/Cr95v2AegyYORjw0IspYIZ/6esZLxbXqv2yIfmDWl/VFgjGBU+c=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57162 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qH4WJ-00054T-W9; Wed, 05 Jul 2023 11:34:20 -0400
+Date:   Wed, 5 Jul 2023 11:34:19 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Nate Drude <Nate.D@variscite.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-Id: <20230705113419.183f686f47252abf3532fc9e@hugovil.com>
+In-Reply-To: <CAOMZO5D_p3hf+HVHNAijEevJRpzwmyGPcoHjiapsOx_ddsoksg@mail.gmail.com>
+References: <20230704150240.2022020-1-hugo@hugovil.com>
+        <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
+        <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
+        <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
+        <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
+        <20230704172801.f11422b3f947c625f53af871@hugovil.com>
+        <CAOMZO5CWh0-5eMTBwjvNUrY-yOHE=daj6n-jAAfjWoV-H4rt0Q@mail.gmail.com>
+        <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
+        <20230705093507.7458eada3ae05e0e1740a10e@hugovil.com>
+        <AS2PR08MB88082608DB46EC1287C6E54B852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
+        <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
+        <20230705102502.d8c9fa894bd271a5526d81f7@hugovil.com>
+        <AS2PR08MB88085D6B7338AD6D4D3C9956852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
+        <20230705104837.e620da576f22f28244daacb1@hugovil.com>
+        <CAOMZO5D_p3hf+HVHNAijEevJRpzwmyGPcoHjiapsOx_ddsoksg@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 10:59:28AM +0900, Masahiro Yamada wrote:
-> Perhaps, a slightly similar case is *.patch.
-> (We do ignore *.patch)
+On Wed, 5 Jul 2023 12:22:55 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
+
+> Hi Hugo,
 > 
-> People quite often run 'git format-patch'.
-> And, the generated patches have similar prefixes.
-> (0001-, 0002-, 0003-, ..., for good reasons)
+> On Wed, Jul 5, 2023 at 11:48 AM Hugo Villeneuve <hugo@hugovil.com> wrote:
 > 
-> The autocomplete does not work if 000* files
-> exist from the previous time I ran 'git format-patch'.
-> I repeatedly run 'rm -f 00*' even if 'git status' does not show them.
+> > Fabio: do we need to support both configurations in the Linux kernel
+> > tree, and if yes how do you propose we do it?
+> 
+> I would suggest supporting the new revision only.
 
-Autocomplete "works", in so far that if you type 0<TAB>, it will
-autocomplete up to 000 and then ring the terminal bell, at which point
-I'll type say, 1<TAB>, and then if there are previous *.patch files,
-it will ring the terminal bell again, and then if you type <TAB> a
-second time, it will list the possible autocompletes.
+Ok, no problem.
 
-I will also say that since of "rm -f <pattern includes a '*'>" is too
-easy to accidentally screwup and delete something I would care about,
-my solution is "git format-patch -o /tmp/p ...", since then I can
-clear out the files by typing "rm -r /tmp/p".
+If we go back to my original patch, the changes in it, apart from the
+interrupt, are still required to make USB OTG work (at least in host
+mode, so that we can plug a USB key for example). Also looking at the
+latest varigit changes, I have removed the "typec1_con:
+connector" node (tested ok in host mode). I also added comments in the
+DTS about the particular PTN5150 interrupt pin configurations.
 
-Cheers,
+Let me know if I can resubmit it, and if so can I leave the interrupt
+property type to IRQ_TYPE_NONE?
 
-					- Ted
-
-P.S.  Also note that "git format-patch" will automatically create
-/tmp/p if it doesn't exist, unlike how b4 works with the -o option.
+Thank you,
+Hugo.
