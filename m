@@ -2,108 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595D87480C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70957480CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjGEJ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 05:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
+        id S231422AbjGEJ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjGEJ1u (ORCPT
+        with ESMTP id S231349AbjGEJ2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 05:27:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6A912A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:27:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B862B614AD
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB110C433C7;
-        Wed,  5 Jul 2023 09:27:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688549268;
-        bh=8Fx9fMjO8G9ugWAbuWMet+cg6+Joz5k8QhqzwC12qsY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eoo0Bvrw1UFedSuQIXZXLVU+9eSykKnlLCGNhX6WKDHSjWKzHs45W6Sc5+LEp8Yn2
-         /DNzBXf9tV7vuTj14UGRu+D/lPt07gtCii7fqIBtyh8Z2HAouCMzNmVKrvzTL3yT/s
-         lpXJcXQKTCcazzOuTFZLURKsfcEGQZNtF3QMf8uc=
-Date:   Wed, 5 Jul 2023 10:27:45 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-Message-ID: <2023070544-porous-prenatal-406a@gregkh>
-References: <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info>
- <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh>
- <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh>
- <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
- <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
- <2023070509-undertow-pulverize-5adc@gregkh>
- <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
+        Wed, 5 Jul 2023 05:28:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2C5134
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:28:20 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1qGynx-0007GO-JO; Wed, 05 Jul 2023 11:28:09 +0200
+Message-ID: <61e9e380-dcb0-4dd4-562d-bffea2da5097@pengutronix.de>
+Date:   Wed, 5 Jul 2023 11:28:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7668c45a-70b1-dc2f-d0f5-c0e76ec17145@leemhuis.info>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/3] dt-bindings: arm: fsl: fix DEBIX binding
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marco Felsch <m.felsch@pengutronix.de>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        shawnguo@kernel.org, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, marex@denx.de, frieder.schrempf@kontron.de
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230704184109.991104-1-m.felsch@pengutronix.de>
+ <6f7586ee-257b-35b5-f986-0d2b370e4035@linaro.org>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <6f7586ee-257b-35b5-f986-0d2b370e4035@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 10:51:57AM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
-> On 05.07.23 09:08, Greg KH wrote:
-> > On Tue, Jul 04, 2023 at 01:22:54PM -0700, Suren Baghdasaryan wrote:
-> >> On Tue, Jul 4, 2023 at 9:18 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >>> On Tue, 4 Jul 2023 09:00:19 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
-> >>>>>>>> Thanks! I'll investigate this later today. After discussing with
-> >>>>>>>> Andrew, we would like to disable CONFIG_PER_VMA_LOCK by default until
-> >>>>>>>> the issue is fixed. I'll post a patch shortly.
-> >>>>>>>
-> >>>>>>> Posted at: https://lore.kernel.org/all/20230703182150.2193578-1-surenb@google.com/
-> >>>>>>
-> >>>>>> As that change fixes something in 6.4, why not cc: stable on it as well?
-> >>>>>
-> >>>>> Sorry, I thought since per-VMA locks were introduced in 6.4 and this
-> >>>>> patch is fixing 6.4 I didn't need to send it to stable for older
-> >>>>> versions. Did I miss something?
-> >>>>
-> >>>> 6.4.y is a stable kernel tree right now, so yes, it needs to be included
-> >>>> there :)
-> >>>
-> >>> I'm in wait-a-few-days-mode on this.  To see if we have a backportable
-> >>> fix rather than disabling the feature in -stable.
+On 05.07.23 08:35, Krzysztof Kozlowski wrote:
+> On 04/07/2023 20:41, Marco Felsch wrote:
+>> The current imx8mp-debix-model-a.dts uses all three compatibles. Fix the
+>> corresponding bindings by adding an own entry for it.
+>>
+>> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+>> ---
+>>  Documentation/devicetree/bindings/arm/fsl.yaml | 9 +++++++--
+>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+>> index 15d4110840654..d9e763ef932e5 100644
+>> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+>> @@ -1019,8 +1019,6 @@ properties:
+>>                - dmo,imx8mp-data-modul-edm-sbc # i.MX8MP eDM SBC
+>>                - fsl,imx8mp-evk            # i.MX8MP EVK Board
+>>                - gateworks,imx8mp-gw74xx   # i.MX8MP Gateworks Board
+>> -              - polyhex,imx8mp-debix      # Polyhex Debix boards
+>> -              - polyhex,imx8mp-debix-model-a # Polyhex Debix Model A Board
+>>                - toradex,verdin-imx8mp     # Verdin iMX8M Plus Modules
+>>                - toradex,verdin-imx8mp-nonwifi  # Verdin iMX8M Plus Modules without Wi-Fi / BT
+>>                - toradex,verdin-imx8mp-wifi  # Verdin iMX8M Plus Wi-Fi / BT Modules
+>> @@ -1054,6 +1052,13 @@ properties:
+>>            - const: phytec,imx8mp-phycore-som         # phyCORE-i.MX8MP SoM
+>>            - const: fsl,imx8mp
+>>  
+>> +      - description: Polyhex DEBIX i.MX8MP based SBCs
+>> +        items:
+>> +          - enum:
+>> +              - polyhex,imx8mp-debix-model-a        # Polyhex Debix Model A Board
+>> +          - const: polyhex,imx8mp-debix             # Polyhex Debix boards
 > 
-> Andrew, how long will you remain in "wait-a-few-days-mode"? Given what
-> Greg said below and that we already had three reports I know of I'd
-> prefer if we could fix this rather sooner than later in mainline --
-> especially as Arch Linux and openSUSE Tumbleweed likely have switched to
-> 6.4.y already or will do so soon.
+> Same comments as for patch #2. I think this should be rather deprecated
+> - not a good pattern.
 
-Ick, yeah, and Fedora should be switching soon too, and I want to drop
-support for 6.3.y "any day now".  Is there just a revert we can do now
-first to resolve the regression and then work on fixing this up "better"
-for 6.6-rc1?
+The middle compatible was my suggestion, because there's also the Debix Model
+B Standard and Model B SE, which is the same board, but different SoC variant:
 
-thanks,
+ Model A:          Commercial Temperature Grade
+ Model B Standard: Industrial Temperature Grade
+ Model B SE:       Industrial Temperature Grate, but i.MX8MP Lite
+                   (No Neural/Video/Image accelerators).
 
-greg k-h
+As everything outside the SoC is the same, I wanted a generic board
+compatible that bootloaders can match against. The SoMs should probably
+not reuse it, but I think it should be kept (perhaps renamed?) for the
+SBCs that don't utilize the Debix SoM.
+
+Cheers,
+Ahmad
+
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
