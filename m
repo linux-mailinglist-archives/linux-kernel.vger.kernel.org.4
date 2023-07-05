@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28ACE7484DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DA07484E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjGENWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S231867AbjGEN27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjGENWG (ORCPT
+        with ESMTP id S229645AbjGEN26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:22:06 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A83171C
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:22:04 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 9C47814B;
-        Wed,  5 Jul 2023 15:22:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1688563321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RkmkIlJf0GjA86yR5StuTraBthXgR2TiG3EKV+pp7/8=;
-        b=MIuToiibmRuNOsgyP95Q+/yln7OkbL8XaE0hNyTBLNl0clVQtFTR7u+cZ7iEhn1HnsVs4A
-        ZAq8ptlaI1fphBqH7B4MjBqQjiGX1s3OisvMzmLQVxVzjKeY4lbXB4GtNwAwWYI1rTwHaZ
-        uYLw7B5EEUWOBfR0qkX2Yzk7vX7DhABrMh0f37elMQm9rdkZZTjmVWkrDdDVOWM/HRQtA0
-        S9cUM3ERcMNYV27GmNOLYQo+P4TMl+sxFcdDy6A519A8CzmGSETsCDcdeAz6qe64xj4qWr
-        VQqgBRjAV059rn6TB8GkoQMlHW2SuCkVs+ENs7HWyE5L7GIf3fuJL7vRGbT/4g==
+        Wed, 5 Jul 2023 09:28:58 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ABF1719
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:28:57 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3a1ebb85f99so5327740b6e.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 06:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688563736; x=1691155736;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NpR6o6UngpTjfG4xhlvc/k43Ojwmfmb7RvTInWAKx/A=;
+        b=IzKz48eZVZRf0SSZ42e493A33i8LmM0OVazoCU1gSc2Nc1BiNPA1/iLTfvGrFuuqOn
+         DCdWg6n0WIs4Aoh/bibBMWLGoJwVVQZlwqa9E2fqLHqf/2cFFfjXn9MciAdLtmrRdc+O
+         Rm68J/ItixE4/Y4Npx9Q8A3aYHIvn1ex5DjZY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688563736; x=1691155736;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NpR6o6UngpTjfG4xhlvc/k43Ojwmfmb7RvTInWAKx/A=;
+        b=MPlxr5Ib6FSBg/83j6+1uP/EOhUytizcyEaxAmrlMIAdAXnLYzhrGhuP7H5DFAuIVL
+         +F9DhTUpEZPPw6ZiahJh0sWjYSRICdAkZEBzWTLPN9uEqECNGB6IeCugoVNZeVu1mE2F
+         Ik3eGk/oWarcOV5zx6VHK39Nx7jTBoyAiM2q+TxodFPVTz3ZD4Svf2CqyUG0QaXywY9l
+         Mk7NBQmXOF85ob88owTzr7iUTvP0+9aTZnP5ED9LDi3pVlLkKxw95+1qDpqxnnriMUQV
+         8bYu57DBBdLfMMk4Y0tcWsg3s1Aex5mfyt1BfXczA2/XkbUGbPEqp7ovPJ8m8qGsqiqV
+         J4Zg==
+X-Gm-Message-State: ABy/qLaxKXrHsLFFrichdBvKIV0t29OL3hiQVz2jOr9GtK4k8vYnfvYZ
+        yJNOrdrgLsWk9nVt8jxbr78ZPg==
+X-Google-Smtp-Source: APBJJlEwskeS7PJ5c/IKumSrNExWt3Akj3CfwMxbuBrtNqK+mjNW0fExiV0qWkThqkp2+hfaeG17yA==
+X-Received: by 2002:aca:d07:0:b0:3a3:d7da:cb6f with SMTP id 7-20020aca0d07000000b003a3d7dacb6fmr643096oin.2.1688563736626;
+        Wed, 05 Jul 2023 06:28:56 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id w29-20020a63161d000000b0052871962579sm17664589pgl.63.2023.07.05.06.28.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 06:28:56 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 22:28:52 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCHv2 0/3] zsmalloc: small compaction improvements
+Message-ID: <20230705132852.GE283328@google.com>
+References: <20230624053120.643409-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
-Date:   Wed, 05 Jul 2023 15:22:01 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Mamta Shukla <mamta.shukla@leica-geosystems.com>
-Cc:     tudor.ambarus@linaro.org, pratyush@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bsp-development.geo@leica-geosystems.com,
-        Mamta Shukla <mamta.shukla@leica-geosystems.com>
-Subject: Re: [PATCH] mtd: micron-st: enable lock/unlock for mt25qu512a
-In-Reply-To: <20230705130010.2999839-1-mamta.shukla@leica-geosystems.com>
-References: <20230705130010.2999839-1-mamta.shukla@leica-geosystems.com>
-Message-ID: <419d80f252f12f091b9c555da0965c84@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230624053120.643409-1-senozhatsky@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-07-05 15:00, schrieb Mamta Shukla:
-> mt25qu512a[1] supports locking/unlocking through BP bits in SR.
+On (23/06/24 14:12), Sergey Senozhatsky wrote:
+> Hi,
+> 	A tiny series that can reduce the number of
+> find_alloced_obj() invocations (which perform a linear
+> scan of sub-page) during compaction. Inspired by Alexey
+> Romanov's findings.
 > 
-> Tested using mtd-utils- flash_lock/flash_unlock for MT25QU512ABB8E12.
+> v2:
+> -- picked up a patch from Minchan
 > 
-
-> [1] 
-> https://media-www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25q/die-rev-b/mt25q_qlkt_u_512_abb_0.pdf?rev=b259aadc3bea49ea8210a41c9ad58211
-
-Link: tag please
-
-> Signed-off-by: Mamta Shukla <mamta.shukla@leica-geosystems.com>
-> ---
->  drivers/mtd/spi-nor/micron-st.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Minchan Kim (1):
+>   zsmalloc: remove zs_compact_control
 > 
-> diff --git a/drivers/mtd/spi-nor/micron-st.c 
-> b/drivers/mtd/spi-nor/micron-st.c
-> index 4b919756a205..5d1dc8e0bbba 100644
-> --- a/drivers/mtd/spi-nor/micron-st.c
-> +++ b/drivers/mtd/spi-nor/micron-st.c
-> @@ -218,6 +218,8 @@ static const struct flash_info st_nor_parts[] = {
->  		MFR_FLAGS(USE_FSR)
->  	},
->  	{ "mt25ql512a",  INFO6(0x20ba20, 0x104400, 64 * 1024, 1024)
-> +		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_4BIT_BP |
-> +		      SPI_NOR_BP3_SR_BIT6)
+> Sergey Senozhatsky (2):
+>   zsmalloc: do not scan for allocated objects in empty zspage
+>   zsmalloc: move migration destination zspage inuse check
 
-With the changes above:
+Just for the record,
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+A synthetic zsmalloc fragmentation+compaction test (100% reproducible)
 
-Unrelated to this patch, but could you please dump the SFDP tables,
-see [1].
+           num find_tagged_obj() calls     num iterations in find_tagged_obj()
 
-FWIW, I noticed the difference between MT25QU and MT25QL here. But
-I don't think we can do anything about it. It is just another example,
-that the name is mostly irrelavant/cannot be trusted. Vendors tend to
-reuse the id for different (software compatible probably) parts. Maybe
-we can get rid of it entirely. Tudor, Pratyush?
+base                 545699                              812899
+patch #1             460701                              691821
+patch #2             422372                              651372
 
--michael
+// lower is better
 
-[1] 
-https://lore.kernel.org/all/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
+
+patch #1 is "zsmalloc: do not scan for allocated objects in empty zspage"
+patch #2 is "zsmalloc: move migration destination zspage inuse check"
