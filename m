@@ -2,98 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631CF7490FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 00:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6A9749103
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 00:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjGEW0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 18:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S231754AbjGEWfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 18:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjGEW01 (ORCPT
+        with ESMTP id S231537AbjGEWfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 18:26:27 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A701732
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 15:26:25 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-579d5d89b41so1265767b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 15:26:25 -0700 (PDT)
+        Wed, 5 Jul 2023 18:35:36 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F721732
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 15:35:35 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-56fff21c2ebso1292107b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 15:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688595984; x=1691187984;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NDnLbLcuwE9iQDqKqrCS7qCokL1RGxXvXlYeJ0eQJ30=;
-        b=6CKi5YkaqWX/DZe4AMMnKGlm9x+zYXWWqEFIrjF2CbV+djK2HBa8nIZsU/YUdnOmoB
-         VemKz95l3SrvYuLVN6zF1ce5fk40ps0gEcLJE2HpN36h19GOUaVyEeWQpuJw/+8WNozs
-         ANZmq1YW4CC4njb5cWLXjuny4iksiCVizwZTGMlRQ58IpEPfAt6NuWIWJPtw39soLPO+
-         R6PoAQK6bI2BLH2YkpUT5pjPIcfCcBUhu+Yi1VKb+SzC/yKngcpBkWwS5zWfYgJAdMnl
-         x1RSXOsAiqUJ1X89Immik9GKYJPLQlHmLCCUxvdSGHgxasv9zIuqZxf+suSs87SBgsGD
-         DDmA==
+        d=paul-moore.com; s=google; t=1688596534; x=1691188534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AGcxF4BR9idnjfupGfZyCZ3tDVPU/xSvJaiVs/YzQCI=;
+        b=AhF64Ii2K3KiAB2gOnjbOyZ2KDgXL21Paphcf+V6zGa/QuHpJea1/xzEJLgRT9f7Tz
+         ycFWBUn5vsbvhng7jDBvf2TYWTgw444okXaPCq1iV+JoosRrWCXS599JtHWwSOndp6Tc
+         BaZ6pr5CZDXozxVYXszGuwh2tGdGIzQHWRDHYTiXs4aul+5PVvNagQO+Z5EgLsIHLHhS
+         kOUeZ1+lACxN9vS1dmF1Spc/Qridb+y+YW1hf8pXncsf29xA3THa5GUWVxFUFAKYOPUt
+         zZRX04zIQwUEEGzo0bt08MTS7yiLEmZd02vhwyW6rAlvf3hxvU6uJy5HLM3wJd62Rhug
+         lP5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688595984; x=1691187984;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NDnLbLcuwE9iQDqKqrCS7qCokL1RGxXvXlYeJ0eQJ30=;
-        b=Zh9VOJrGvwQnBD6uPto7V/BSzSNNL14M9p81WlmqYqoda5GWUvTbwMHT54ka7LYiOB
-         cUV1GQ0CYYWOtJ4MMGUcVrD9AV+qvbwqqh6R9ARTSlmuAFdMTUrqtgw9r/rugHdRsy4Z
-         WEyTSW2dgOiEl5HAf/asirOFsLPnJ4vKRW15ZCiGvrEm2XKzjntYdtkEIro8bEMiEHni
-         6Vyl4UEQ343zpchLSsJ8SUXl0kmR4hazWCtlIVW4VArbyjwTf4mfsacarcnG7GM82Xrm
-         ZcEJ5OAvnJYLsoy9KS1HHkInRJ2d0FFaOHRHhLwcEHGaibySAE5p+qs4A0hJW14mTNEj
-         ATUA==
-X-Gm-Message-State: ABy/qLZCtqGtyyqEMeh6YpgIUPjhDPCDToX45wZHsTCaDCUCGsfiJ1Xv
-        oZA6OIXal52tpHO2QJOnqrbG0Q==
-X-Google-Smtp-Source: APBJJlHqGpoZ+nLiN32zt+ZgOuEAR9yG9oiJSFv2dzaPuHS4wUlJAw2cpnmLLKyZe4ZXfSxoqplOEw==
-X-Received: by 2002:a0d:d40d:0:b0:577:2bcf:8f0e with SMTP id w13-20020a0dd40d000000b005772bcf8f0emr186530ywd.51.1688595984607;
-        Wed, 05 Jul 2023 15:26:24 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id x132-20020a81638a000000b00576beffe858sm5718746ywb.97.2023.07.05.15.26.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 15:26:24 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 15:26:13 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 04/31] mm/pgtable: allow pte_offset_map[_lock]() to
- fail
-In-Reply-To: <87y1juxvmb.fsf@linux.ibm.com>
-Message-ID: <1bb35f43-8556-8654-b11d-98ecc1f1dc0@google.com>
-References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <8218ffdc-8be-54e5-0a8-83f5542af283@google.com> <87y1juxvmb.fsf@linux.ibm.com>
+        d=1e100.net; s=20221208; t=1688596534; x=1691188534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AGcxF4BR9idnjfupGfZyCZ3tDVPU/xSvJaiVs/YzQCI=;
+        b=kXuZMwWbWvd1/k8l2EHRghHGpgKlx7xyrZswnPw+0x37K65S8WnvD9ntz24Rf5i7X8
+         SWt9SEQ0jYpQUrlEbpmff2njIXi62wc5kmHG/1qhEW6DCFH7KchM6iJLrkPsyHgvrXos
+         IW+BuAV3g2G7D0lbldVzePSkTmX6Rdh0F1Dp3+4KFtv1eFf0iucObmMNOVIAgDy6J44S
+         vmWWkXguXmaKsljrva2JqElE2y2tTpcV3dMyd4kVJq+iQ1lAf5LRbziTU1So6NkPKxXL
+         R9zhs5/8FFFAbtvIQEu4uBaL95i01NalWOvjdgk+M9Zv9NcAg1fo8wI8djs84x/DeVNK
+         kfUQ==
+X-Gm-Message-State: ABy/qLbxQJe9V/GzZ7n88msclWhWAijwLOeGuxEKY1t39QBtW2u23ws5
+        KOqiFlbv59HNy8IdCHzZwoSw/WAcBXb4wj2bs5S1
+X-Google-Smtp-Source: APBJJlFUIN4oesag3UOXr7IMZjuy9McghVh2XL5utXpAKB8uwjlvAhYonStnTo3EudkZalVMNi0oXRA+5N+I0AAJsss=
+X-Received: by 2002:a0d:da41:0:b0:568:be91:c2b1 with SMTP id
+ c62-20020a0dda41000000b00568be91c2b1mr336115ywe.9.1688596534388; Wed, 05 Jul
+ 2023 15:35:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20230702170857.15603-1-pairmanxlr@gmail.com>
+In-Reply-To: <20230702170857.15603-1-pairmanxlr@gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 5 Jul 2023 18:35:23 -0400
+Message-ID: <CAHC9VhSLNNjXsW74bLbHX60Lco+Hjc6f4hp7Eb5hgC==_afPag@mail.gmail.com>
+Subject: Re: [PATCH] LSM: Fix typo in a comment
+To:     Pairman Guo <pairmanxlr@gmail.com>
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,82 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aneesh,
+On Sun, Jul 2, 2023 at 1:09=E2=80=AFPM Pairman Guo <pairmanxlr@gmail.com> w=
+rote:
+>
+> Hi maintainers,
+>
+> In the description of function definition security_file_lock(),
+> the line "@cmd: fnctl command" has a typo where "fnctl" should be
+> "fcntl". This patch fixes the typo.
+>
+> Please merge if it is the case. Thanks in advance.
+>
+> Signed-off-by: Pairman Guo <pairmanxlr@gmail.com>
+> ---
+>  security/security.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, 5 Jul 2023, Aneesh Kumar K.V wrote:
-> 
-> Hi Hugh,
-> 
-> Sorry for not checking about this before.
+This looks good to me, I'll plan to merge this once the merge window
+closes.  Thanks.
 
-I was about to say "No problem" - but it appears I would be lying!
+> diff --git a/security/security.c b/security/security.c
+> index b720424ca37d..adaa7043c172 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2717,7 +2717,7 @@ int security_file_lock(struct file *file, unsigned =
+int cmd)
+>  /**
+>   * security_file_fcntl() - Check if fcntl() op is allowed
+>   * @file: file
+> - * @cmd: fnctl command
+> + * @cmd: fcntl command
+>   * @arg: command argument
+>   *
+>   * Check permission before allowing the file operation specified by @cmd=
+ from
+> --
+> 2.41.0
 
-> I am looking at a kernel
-> crash (BUG_ON()) on ppc64 with 4K page size. The reason we hit
-> BUG_ON() is beause we have pmd_same calling BUG_ON on 4K with hash
-> translation. We don't support THP with 4k page size and hash
-> translation.
-
-I misunderstood you at first.  I was trying to work out what in that
-context might lead to *pmd changing suddenly, was going to ask for
-stack backtrace (in faulting? or in copying mm? or?), whether you
-have PER_VMA_LOCK enabled, etc. etc.
-
-Then I looked at the source: oh, that is gross, and not something
-I had expected at all.
-
-> > +pte_t *__pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
-> > +			     unsigned long addr, spinlock_t **ptlp)
-> > +{
-> > +	spinlock_t *ptl;
-> > +	pmd_t pmdval;
-> > +	pte_t *pte;
-> > +again:
-> > +	pte = __pte_offset_map(pmd, addr, &pmdval);
-> > +	if (unlikely(!pte))
-> > +		return pte;
-> > +	ptl = pte_lockptr(mm, &pmdval);
-> > +	spin_lock(ptl);
-> > +	if (likely(pmd_same(pmdval, pmdp_get_lockless(pmd)))) {
-> > +		*ptlp = ptl;
-> > +		return pte;
-> > +	}
-> > +	pte_unmap_unlock(pte, ptl);
-> > +	goto again;
-> > +}
-> 
-> What is expected by that pmd_same check? We are holding pte lock
-> and not pmd lock. So contents of pmd can change.
-
-And you don't need me to answer that question: the answer is in the
-"likely".  We do not expect *pmd to change there (though maybe some
-ancillary bits of it, like "accessed"), unless the page table is on
-its way to being freed; and other locking higher up (mmap_lock or
-rmap lock) prevent all possibilities of that at present.  Later, we
-arrange to hold pte lock as well as pmd lock when removing page table.
-
-So the obvious quick fix is:
-
---- a/arch/powerpc/include/asm/book3s/64/hash-4k.h
-+++ b/arch/powerpc/include/asm/book3s/64/hash-4k.h
-@@ -138,8 +138,7 @@ static inline int hash__pmd_trans_huge(p
- 
- static inline int hash__pmd_same(pmd_t pmd_a, pmd_t pmd_b)
- {
--	BUG();
--	return 0;
-+	return 1;
- }
- 
- static inline pmd_t hash__pmd_mkhuge(pmd_t pmd)
-
-But I hope you will reject that as almost as gross, and instead commit
-a patch which makes hash__pmd_same() ... check whether the pmd_ts are the
-same - as in ppc64's other implementations.  That will save having to change
-it again, when/if someone extends the current replace-page-table-by-THP work
-by non-THP work to remove empty page tables without mmap_lock or rmap lock.
-
-Thanks for finding this, Aneesh, and I'm sorry I didn't notice it before,
-and I'm sorry to have given you trouble... but really, that BUG(),
-
-(H)ugh!
+--=20
+paul-moore.com
