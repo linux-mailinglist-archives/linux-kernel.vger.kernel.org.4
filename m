@@ -2,109 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2126748656
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7328F748658
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbjGEO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S231923AbjGEO2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbjGEO0M (ORCPT
+        with ESMTP id S229645AbjGEO2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:26:12 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B88F26A2;
-        Wed,  5 Jul 2023 07:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3VJ8aIfGkOHqsvLUb5T3b+2xeBcR16q5fDKedPtGNf8=; b=oGo7iO2PxicoMKcVcNwN70IzS+
-        9hwfgC4B7nN8aDa19Rj9AmsQTw2bYqRb68P3Iod+1/H2t1hXGJguca8zWvCreceVMbDvOw/Q8EzYR
-        XolzFqTD4FvAYCvMODCjoYIlZDgLqwyGoZOiMZhPbe6r3M5Z48iBDOJ1ojrrDOTyo61E=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57658 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qH3RH-0004MR-Do; Wed, 05 Jul 2023 10:25:03 -0400
-Date:   Wed, 5 Jul 2023 10:25:02 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Nate Drude <Nate.D@variscite.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pierluigi Passaro <pierluigi.p@variscite.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-Id: <20230705102502.d8c9fa894bd271a5526d81f7@hugovil.com>
-In-Reply-To: <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
-References: <20230704150240.2022020-1-hugo@hugovil.com>
-        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
-        <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
-        <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
-        <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
-        <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
-        <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
-        <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
-        <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
-        <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
-        <20230704172801.f11422b3f947c625f53af871@hugovil.com>
-        <CAOMZO5CWh0-5eMTBwjvNUrY-yOHE=daj6n-jAAfjWoV-H4rt0Q@mail.gmail.com>
-        <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
-        <20230705093507.7458eada3ae05e0e1740a10e@hugovil.com>
-        <AS2PR08MB88082608DB46EC1287C6E54B852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
-        <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 5 Jul 2023 10:28:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F80CF;
+        Wed,  5 Jul 2023 07:28:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF4F86159F;
+        Wed,  5 Jul 2023 14:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5545C433C8;
+        Wed,  5 Jul 2023 14:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688567318;
+        bh=TFMultyCiWda4KqG2aspwa/c8KG/qnRXC4jDSPWHiV0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sqnYitwY9oor9zy9dQd4mn6pgHajKayzFd8zuSMZxLafAukkvKo5NwCiTT3xKDTbE
+         fR3tN7mbvFf4TY3QMc98egFELwbAGD2XuE4QgNE/1/KPNtEEukVHJiI19V5SZCH/MD
+         pIYJrBX6iX2vm3qBX7WUKDxuoNGOE4Rj18R+vOq3uNC4jVG7KvtRE8BgsoWDwFS7j9
+         Z6kQbceUYsq2q9zQYTg5KgmyFSt7PXBB7l8FbSNESlEpaUx33xEG0QmyQXw17nMdLy
+         gPXtrJkkzYJ88u1S4r5cHft37ilKk2Kqahs4EFILIsI8NbBoAlgBe5ocPP8xdX2uPo
+         fxhNFvViEUP5w==
+Date:   Wed, 5 Jul 2023 23:28:34 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] tracing/boot: Test strscpy() against less than zero for
+ error
+Message-Id: <20230705232834.f71d8602c3c9d9c56abd0b15@kernel.org>
+In-Reply-To: <20230704100807.707d1605@rorschach.local.home>
+References: <20230704100807.707d1605@rorschach.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jul 2023 10:49:01 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+On Tue, 4 Jul 2023 10:08:07 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> Hi Nate,
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> On Wed, Jul 5, 2023 at 10:42 AM Nate Drude <Nate.D@variscite.com> wrote:
+> Instead of checking for -E2BIG, it is better to just check for less than
+> zero of strscpy() for error. Testing for -E2BIG is not very robust, and
+> the calling code does not really care about the error code, just that
+> there was an error.
 > 
-> > The patch 'drivers: extcon: ptn5150: Add irq-is-id-quirk' referred to by Fabio is required for OTG to work correctly on all versions of the Symphony board.
-> >
-> > I can submit this patch mainline, do you think it will be accepted as is?
-> 
-> I think it is worth submitting it to get some feedback from the
-> ptn5150 and DT maintainers.
-> 
-> Thanks
+> One of the updates to convert strlcpy() to strscpy() had a v2 version
+> that changed the test from testing against -E2BIG to less than zero, but I
+> took the v1 version that still tested for -E2BIG.
 
-Hi,
-if I understand correctly, the irq-is-id-quirk device tree property
-would be required for newer EVK boards, but not for older boards.
+Indeed. This looks good to me.
 
-How can we support both configurations with the current device tree?
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Hugo.
+Thank you,
+
+> 
+> Link: https://lore.kernel.org/linux-trace-kernel/20230615180420.400769-1-azeemshaikh38@gmail.com/
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  kernel/trace/trace_boot.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_boot.c b/kernel/trace/trace_boot.c
+> index 5fe525f1b8cc..7ccc7a8e155b 100644
+> --- a/kernel/trace/trace_boot.c
+> +++ b/kernel/trace/trace_boot.c
+> @@ -31,7 +31,7 @@ trace_boot_set_instance_options(struct trace_array *tr, struct xbc_node *node)
+>  
+>  	/* Common ftrace options */
+>  	xbc_node_for_each_array_value(node, "options", anode, p) {
+> -		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
+> +		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+>  			pr_err("String is too long: %s\n", p);
+>  			continue;
+>  		}
+> @@ -87,7 +87,7 @@ trace_boot_enable_events(struct trace_array *tr, struct xbc_node *node)
+>  	const char *p;
+>  
+>  	xbc_node_for_each_array_value(node, "events", anode, p) {
+> -		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
+> +		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+>  			pr_err("String is too long: %s\n", p);
+>  			continue;
+>  		}
+> @@ -486,7 +486,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+>  
+>  	p = xbc_node_find_value(enode, "filter", NULL);
+>  	if (p && *p != '\0') {
+> -		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
+> +		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+>  			pr_err("filter string is too long: %s\n", p);
+>  		else if (apply_event_filter(file, buf) < 0)
+>  			pr_err("Failed to apply filter: %s\n", buf);
+> @@ -494,7 +494,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+>  
+>  	if (IS_ENABLED(CONFIG_HIST_TRIGGERS)) {
+>  		xbc_node_for_each_array_value(enode, "actions", anode, p) {
+> -			if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
+> +			if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+>  				pr_err("action string is too long: %s\n", p);
+>  			else if (trigger_process_regex(file, buf) < 0)
+>  				pr_err("Failed to apply an action: %s\n", p);
+> -- 
+> 2.39.2
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
