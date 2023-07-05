@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D94747B41
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 03:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EB4747B44
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 03:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjGEBnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 21:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S229871AbjGEBoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 21:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjGEBnR (ORCPT
+        with ESMTP id S229696AbjGEBoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 21:43:17 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C17EDD;
-        Tue,  4 Jul 2023 18:43:12 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Cx5_GuyqRk5i4AAA--.1123S3;
-        Wed, 05 Jul 2023 09:43:10 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ82tyqRkCM4bAA--.17672S3;
-        Wed, 05 Jul 2023 09:43:09 +0800 (CST)
-Message-ID: <dc239a28-4314-1661-f556-670946a0982b@loongson.cn>
-Date:   Wed, 5 Jul 2023 09:43:09 +0800
+        Tue, 4 Jul 2023 21:44:01 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B4310FC;
+        Tue,  4 Jul 2023 18:43:59 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QwjB36JJCz4f3tPQ;
+        Wed,  5 Jul 2023 09:43:55 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3rLDZyqRkooPrNA--.55099S3;
+        Wed, 05 Jul 2023 09:43:55 +0800 (CST)
+Subject: Re: [PATCH] scsi/sg: don't grab scsi host module reference
+To:     Marc Hartmayer <mhartmay@linux.ibm.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com, hch@lst.de,
+        chaitanyak@nvidia.com, shinichiro.kawasaki@wdc.com,
+        dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, axboe@kernel.dk,
+        Benjamin Block <bblock@linux.ibm.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230621160111.1433521-1-yukuai1@huaweicloud.com>
+ <87lefv622n.fsf@linux.ibm.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <70432d91-3909-ac3c-9c36-5f7484c1fdf1@huaweicloud.com>
+Date:   Wed, 5 Jul 2023 09:43:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [11/12] fbdev/core: Protect edid_info with
- CONFIG_ARCH_HAS_EDID_INFO
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
-Cc:     linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        dri-devel@lists.freedesktop.org, loongarch@lists.linux.dev,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230629121952.10559-12-tzimmermann@suse.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <20230629121952.10559-12-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxJ82tyqRkCM4bAA--.17672S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ZF4rtF4rKw1kKFWkJF1fAFc_yoW8Gr1Upr
-        W0qa98trW8tr47W3y8Kws2vFW5X34rGFy29rZ7G3W5Kryqv3y5WFyUJrn0kr93ur4xAr4I
-        yryvqw13CFnruagCm3ZEXasCq-sJn29KB7ZKAUJUUUUk529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUHab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Wrv_ZF1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcV
-        AKI48JM4x0Y40E4IxF1VCIxcxG6Fyj6r4UJwACI402YVCY1x026xAvFcxGjxylc7I2V7IY
-        0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0x
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUymiiDUUUU
+In-Reply-To: <87lefv622n.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3rLDZyqRkooPrNA--.55099S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWFy3KF4xKF1kXw4kuFWUtwb_yoW5uw4DpF
+        W0gayYkrW8trWUC3WjvF4UZF1Sq392v34xJFWjkw15uFyUCry5Kr97tFy8Za1UArZ3WayY
+        kFn8tFyvgrn8A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,47 +72,110 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
+在 2023/07/05 1:04, Marc Hartmayer 写道:
+> On Thu, Jun 22, 2023 at 12:01 AM +0800, Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> In order to prevent request_queue to be freed before cleaning up
+>> blktrace debugfs entries, commit db59133e9279 ("scsi: sg: fix blktrace
+>> debugfs entries leakage") use scsi_device_get(), however,
+>> scsi_device_get() will also grab scsi module reference and scsi module
+>> can't be removed.
+>>
+>> It's reported that blktests can't unload scsi_debug after block/001:
+>>
+>> blktests (master) # ./check block
+>> block/001 (stress device hotplugging) [failed]
+>>       +++ /root/blktests/results/nodev/block/001.out.bad 2023-06-19
+>>        Running block/001
+>>        Stressing sd
+>>       +modprobe: FATAL: Module scsi_debug is in use.
+>>
+>> Fix this problem by grabbing request_queue reference directly, so that
+>> scsi host module can still be unloaded while request_queue will be
+>> pinged by sg device.
+>>
+>> Reported-by: Chaitanya Kulkarni <chaitanyak@nvidia.com>
+>> Link: https://lore.kernel.org/all/1760da91-876d-fc9c-ab51-999a6f66ad50@nvidia.com/
+>> Fixes: db59133e9279 ("scsi: sg: fix blktrace debugfs entries leakage")
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   drivers/scsi/sg.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+>> index 2433eeef042a..dcb73787c29d 100644
+>> --- a/drivers/scsi/sg.c
+>> +++ b/drivers/scsi/sg.c
+>> @@ -1497,7 +1497,7 @@ sg_add_device(struct device *cl_dev)
+>>   	int error;
+>>   	unsigned long iflags;
+>>   
+>> -	error = scsi_device_get(scsidp);
+>> +	error = blk_get_queue(scsidp->request_queue);
+>>   	if (error)
+>>   		return error;
+>>   
+>> @@ -1558,7 +1558,7 @@ sg_add_device(struct device *cl_dev)
+>>   out:
+>>   	if (cdev)
+>>   		cdev_del(cdev);
+>> -	scsi_device_put(scsidp);
+>> +	blk_put_queue(scsidp->request_queue);
+>>   	return error;
+>>   }
+>>   
+>> @@ -1575,7 +1575,7 @@ sg_device_destroy(struct kref *kref)
+>>   	 */
+>>   
+>>   	blk_trace_remove(q);
+>> -	scsi_device_put(sdp->device);
+>> +	blk_put_queue(q);
+>>   
+>>   	write_lock_irqsave(&sg_index_lock, flags);
+>>   	idr_remove(&sg_index_idr, sdp->index);
+>> -- 
+>> 2.39.2
+> 
+> Hi,
+> 
+> This change (bisected) triggers a regression in our KVM on s390x CI. The
+> symptom is that a “scsi_debug device” does not bind to the scsi_generic
+> driver. On s390x you can reproduce the problem as follows (I have not
+> tested on x86):
+> 
+> With this patch applied:
+> 
+> $ sudo modprobe scsi_debug
+> $ # Get the 'scsi_host,channel,target_number,LUN' tuple for the scsi_debug device
+> $ lsscsi |grep scsi_debug |awk '{ print $1 }'
+> [0:0:0:0]
+> $ sudo stat /sys/bus/scsi/devices/0:0:0:0/scsi_generic
+> stat: cannot statx '/sys/bus/scsi/devices/0:0:0:0/scsi_generic': No such file or directory
+> 
+> 
+> Patch reverted:
+> 
 
-On 2023/6/29 19:45, Thomas Zimmermann wrote:
-> Guard usage of edid_info with CONFIG_ARCH_HAS_EDID_INFO instead
-> of CONFIG_X86. No functional changes.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+I didn't figure out the root cause, howver, have you tried to reviert
+this patch as well?
 
+db59133e9279 ("scsi: sg: fix blktrace debugfs entries leakage"
 
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
-
-
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> ---
->   drivers/video/fbdev/core/fbmon.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/core/fbmon.c b/drivers/video/fbdev/core/fbmon.c
-> index 35be4431f649a..9ae063021e431 100644
-> --- a/drivers/video/fbdev/core/fbmon.c
-> +++ b/drivers/video/fbdev/core/fbmon.c
-> @@ -1480,17 +1480,19 @@ int fb_validate_mode(const struct fb_var_screeninfo *var, struct fb_info *info)
->   		-EINVAL : 0;
->   }
->   
-> -#if defined(CONFIG_FIRMWARE_EDID) && defined(CONFIG_X86)
-> +#if defined(CONFIG_FIRMWARE_EDID)
->   const unsigned char *fb_firmware_edid(struct fb_info *info)
->   {
->   	unsigned char *edid = NULL;
->   
-> +#if defined(CONFIG_ARCH_HAS_EDID_INFO)
->   	/*
->   	 * We need to ensure that the EDID block is only
->   	 * returned for the primary graphics adapter.
->   	 */
->   	if (fb_is_primary_device(info))
->   		edid = edid_info.dummy;
-> +#endif
->   
->   	return edid;
->   }
+Thanks,
+Kuai
+> $ sudo modprobe scsi_debug
+> $ lsscsi |grep scsi_debug |awk '{ print $1 }'
+> [0:0:0:0]
+> $ sudo stat /sys/bus/scsi/devices/0:0:0:0/scsi_generic
+>    File: /sys/bus/scsi/devices/0:0:0:0/scsi_generic
+>    Size: 0         	Blocks: 0          IO Block: 4096   directory
+> Device: 0,20	Inode: 12155       Links: 3
+> …
+> 
+> Any ideas?
+> 
+>   Marc
+> .
+> 
 
