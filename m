@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A161747D1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A51747D20
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjGEGdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S231628AbjGEGd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjGEGdF (ORCPT
+        with ESMTP id S231455AbjGEGdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:33:05 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5964710CF
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:33:02 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-992ca792065so665549966b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:33:02 -0700 (PDT)
+        Wed, 5 Jul 2023 02:33:24 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926B41712
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:33:19 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-557790487feso4429653a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:33:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688538781; x=1691130781;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4lCoKmln4WuI/lt9cbFISAsB5RRGuEG6xwKWMEIrA/0=;
-        b=GSTPFRMIiregd8994uXCU/ps7YmgrfBQlkeGkTe5dmR/tL0uslA5HRNx5u0en7yNtx
-         7EBjtv04Yucp+bEQoICW/zO6J7JuBuU0mrAo3SCgWkX9SMoQ7cUPREaHTRsPPLhXASsK
-         ue2U54t5spFp8lQ7ODW5K9dPXIF2/2i31ZkEvLtOso2fpm/C99SuC4DrS2eDn0SfB4Tl
-         nJVUqhJ9MocMsdvsqHINLqARTKkfJ8LuHY0Zn+KnjmJtIh591UAxeRrGj/3cvVM3vK2Y
-         mpatdrd6/51+X74OwKYSKuj60qduSpeMuhu+2zWVpqYZdcE+M/0uqcbgSwcgS/H+KB1o
-         cJpQ==
+        d=chromium.org; s=google; t=1688538799; x=1691130799;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDvL7ekfNs3bVJSGPqpDAjABE5c0UvJWFUFVDP7OcnI=;
+        b=HCLhgdyCq90YfTQMjaZdIjt+ewIGHr1WoJsIV+nau37DwSwAOxCl2fjO89N/8iyvzE
+         H7nphOWHQcnoXDeIAAzONINmvw/9M+OF7ptZ2nYwtk03J6Xr1VIAXJFgzI89yGveGEEn
+         GqQXrdDg26hwQ58jRQ8CVFGH4yq7UNJvF82E0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688538781; x=1691130781;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4lCoKmln4WuI/lt9cbFISAsB5RRGuEG6xwKWMEIrA/0=;
-        b=Tz0JQtR+TiR+24KSZTR3oXzu41BSDl8vvrWU7CtvtzCAFNEcP4RyAotEPqEYeZ3BrE
-         e5VNa3AgRJ24lV1yhVikB6FCz2qqh+C21YoJekx1nAd1/ZuvWNsslAvacmP/E5Rjfh+d
-         IleAgZFTDNH91AarL/j3wVicpoHkSox9ss7K2XiLhcmAiDNiqSKkUZcYkMIUvs6qR+bD
-         I6ryEBhCaE2WgUPwhdahG9I1pu+NoKPoVPw+bs6TZ7tyDVmvTYJHsKtYlatTTl4ti8FL
-         TXtvSLhSIeXUWQfPpV8Xstj9GTcmUwIODAC1M93gM609q4ZzHMypqeXEHvBSDLi67gJc
-         TiwA==
-X-Gm-Message-State: ABy/qLZTUbBzXqRvB8SU7C7qY8ABGoskcvO/0bcXUROUUulXLTWpx2Yi
-        7ph7ercC1/oZMVYsYl0TUKzohg==
-X-Google-Smtp-Source: APBJJlGsadBiPVigTMaE5rljF1uJJTj29+Kym1A+vLFCCYI2BUjNKUKvCrCTBWCD+rZ+TVw+Lxn7WQ==
-X-Received: by 2002:a17:906:b7c7:b0:98c:df38:517b with SMTP id fy7-20020a170906b7c700b0098cdf38517bmr11027580ejb.33.1688538780832;
-        Tue, 04 Jul 2023 23:33:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id l16-20020a1709065a9000b0098884f86e41sm14056844ejq.123.2023.07.04.23.32.59
+        d=1e100.net; s=20221208; t=1688538799; x=1691130799;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LDvL7ekfNs3bVJSGPqpDAjABE5c0UvJWFUFVDP7OcnI=;
+        b=kCE0y56NsLaiPX+t9PtFnNKr5hY+vNhFl+9zLw7bNqm1V/laBJphhayF+GKLRShqyn
+         S+PraWWvNYQwEPqifcl1yCr5DeHmR+aJacGkiwK6DdsKhSi4qNLXW0OhdDvoAx741ea1
+         ng6F31QNQDMuzzDKrhntgEcBtxuwvdCFsLngqk/Ahf5wTWPAODItz/WEZuxb1z3abWCg
+         bYL9PZEdP+Zttfb35B7Lnr71E7rahG/oaRkEmkS1Lq3VEPbczKXu0p8OAPWkeUrexckz
+         FpR2xYQEf3KP10yT/9iJF6saHPYipogxeHbcmMlhseC0wgr5TZts0vv8gkY1vO50dY3v
+         t63g==
+X-Gm-Message-State: ABy/qLZpvYi1FWFdg7a7mhokATVZBG6TV23E6Qv8JR0PFsk4LUcCs40R
+        RmtJkGBjThUbhKT4S5RDUtjGqw==
+X-Google-Smtp-Source: APBJJlFpuOviESDRC+8Eczf993gvvtLCwtBHrHyO+U2M+unQGYqacus88aSVN0CInn963UVCfuJ9qA==
+X-Received: by 2002:a05:6a20:8408:b0:12f:6500:8504 with SMTP id c8-20020a056a20840800b0012f65008504mr3750180pzd.46.1688538799000;
+        Tue, 04 Jul 2023 23:33:19 -0700 (PDT)
+Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with UTF8SMTPSA id u23-20020aa78497000000b0067aa2a70179sm13271590pfn.46.2023.07.04.23.33.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 23:33:00 -0700 (PDT)
-Message-ID: <4adb975e-bbd0-9a53-372a-404ec857a632@linaro.org>
-Date:   Wed, 5 Jul 2023 08:32:58 +0200
+        Tue, 04 Jul 2023 23:33:18 -0700 (PDT)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, asmadeus@codewreck.org, hughd@google.com,
+        jeffxu@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2 0/2] mm/memfd: fix sysctl MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
+Date:   Wed,  5 Jul 2023 06:33:13 +0000
+Message-ID: <20230705063315.3680666-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: leds: Read max-brightness from
- devicetree
-Content-Language: en-US
-To:     Astrid Rost <astrid.rost@axis.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     kernel@axis.com, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230703130313.548519-1-astrid.rost@axis.com>
- <20230703130313.548519-2-astrid.rost@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230703130313.548519-2-astrid.rost@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/07/2023 15:03, Astrid Rost wrote:
-> Normally, the maximum brightness is determined by the hardware, and this
-> property is not required. This property is used to set a software limit.
-> It could happen that an LED is made so bright that it gets damaged or
-> causes damage due to restrictions in a specific system, such as mounting
-> conditions.
-> Note that this flag is mainly used for PWM-LEDs, where it is not possible
-> to map brightness to current. Drivers for other controllers should use
-> led-max-microamp.
-> 
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+From: Jeff Xu <jeffxu@google.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+When sysctl vm.memfd_noexec is 2 (MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED),
+memfd_create(.., MFD_EXEC) should fail.
 
-Best regards,
-Krzysztof
+This complies with how MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED is
+defined - "memfd_create() without MFD_NOEXEC_SEAL will be rejected"
+
+Thanks to Dominique Martinet <asmadeus@codewreck.org> who reported the bug.
+see [1] for context.
+
+[1] https://lore.kernel.org/linux-mm/CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=gZU6WEy5a8MaQY3Jw@mail.gmail.com/T/
+
+History:
+V2: fix build error when CONFIG_SYSCTL is not defined. 
+
+V1: initial version
+https://lore.kernel.org/linux-mm/20230630031721.623955-3-jeffxu@google.com/T/
+
+Jeff Xu (2):
+  mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
+  selftests/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
+
+ mm/memfd.c                                 | 57 +++++++++++++---------
+ tools/testing/selftests/memfd/memfd_test.c |  5 ++
+ 2 files changed, 38 insertions(+), 24 deletions(-)
+
+-- 
+2.41.0.255.g8b1d071c50-goog
 
