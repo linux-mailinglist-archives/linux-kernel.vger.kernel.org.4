@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D97D747B96
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 04:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31C4747B9E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 04:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjGEClX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 22:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S230361AbjGECzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 22:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjGEClW (ORCPT
+        with ESMTP id S229512AbjGECzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 22:41:22 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292F010E2;
-        Tue,  4 Jul 2023 19:41:21 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QwkSF2VrPz4f3rBD;
-        Wed,  5 Jul 2023 10:41:17 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgCH77JM2KRkLaXuNA--.10762S4;
-        Wed, 05 Jul 2023 10:41:17 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     mhartmay@linux.ibm.com, bblock@linux.ibm.com, bvanassche@acm.org,
-        hch@lst.de, axboe@kernel.dk, yukuai3@huawei.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com
-Subject: [PATCH] scsi/sg: fix checking return value of blk_get_queue()
-Date:   Wed,  5 Jul 2023 10:40:01 +0800
-Message-Id: <20230705024001.177585-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 4 Jul 2023 22:55:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B404510F8;
+        Tue,  4 Jul 2023 19:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688525707; x=1720061707;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2AHTM+ZT1V/5A9VtX7Byo3tp0kahwGhX0U+hXQPlMxc=;
+  b=d78MlzQ1AmECWugz7WuuU/JzwvBPuYTAKFgQmkOXEIFFXz8ANpZU8ejW
+   uskKD9aercHq4YNleMJwG99lirY1JtAORwP6hV6uPI+bZ/w3Q+4g1LA07
+   Ny3ntr5NouQdjnRRpyJnYznLpzcAhfIbh1hvoKQ79diRgRRsJtfwa8j/Z
+   Z5mC7DPnRK5IS6buhkmPg9mkFAJT/fhEv5C7tliOkxEGCFtU1oFYyHNks
+   JW+phQ/5uHxdOfWGtSF8YClpgYgJYdi6qJd+NkpEvvzse+RQg+uBuV8Nt
+   pil6iBGJK4LEnt7baY/m8wOBFiPuexgfnq5hwhwP9pOC88OPJaunbQcY5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="343567165"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="343567165"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 19:55:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="754206049"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="754206049"
+Received: from scc823097.zsc7.intel.com ([10.148.153.229])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 19:55:06 -0700
+From:   Peter Colberg <peter.colberg@intel.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        tianfei.zhang@intel.com, russell.h.weight@intel.com,
+        matthew.gerlach@linux.intel.com, marpagan@redhat.com,
+        lgoncalv@redhat.com, Peter Colberg <peter.colberg@intel.com>
+Subject: [PATCH 0/2] fpga: dfl: clean up string formatting for sysfs_emit() and dev_dbg()
+Date:   Tue,  4 Jul 2023 22:54:49 -0400
+Message-Id: <cover.1687301688.git.peter.colberg@intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH77JM2KRkLaXuNA--.10762S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7JryUWryDCF1fWw48Kr4UArb_yoWkuwb_ua
-        yIk347Wr4vgr1IkF15Jr13Za4vva1qgFW09FW0qa4fGr47Wrn3KF40vr15Aw47Ww409ryk
-        Cwn09ws5Ar129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j
-        6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
-        v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,40 +63,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+The first patch in this series substitutes sysfs_emit() for sprintf()
+and scnprintf() to format sysfs values and removes explicit casts in
+favour of using the correct printk() format specifiers. The second patch
+omits unneeded casts of u64 values to unsigned long long for dev_dbg().
 
-Commit fcaa174a9c99 ("scsi/sg: don't grab scsi host module reference")
-make a mess how blk_get_queue() is called, blk_get_queue() returns true
-on success while the caller expects it returns 0 on success.
+These changes are cosmetic only; no functional changes.
 
-Fix this problem and also add a corresponding error message on failure.
+Peter Colberg (2):
+  fpga: dfl: use sysfs_emit() to format sysfs values
+  fpga: dfl: omit unneeded casts of u64 values for dev_dbg()
 
-Fixes: fcaa174a9c99 ("scsi/sg: don't grab scsi host module reference")
-Reported-by: Marc Hartmayer <mhartmay@linux.ibm.com>
-Closes: https://lore.kernel.org/all/87lefv622n.fsf@linux.ibm.com/
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/scsi/sg.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/fpga/dfl-afu-dma-region.c | 14 ++++++--------
+ drivers/fpga/dfl-afu-error.c      |  7 +++----
+ drivers/fpga/dfl-afu-main.c       | 21 +++++++++------------
+ drivers/fpga/dfl-fme-error.c      | 19 ++++++++-----------
+ drivers/fpga/dfl-fme-main.c       | 26 ++++++++++----------------
+ drivers/fpga/dfl-fme-mgr.c        |  5 ++---
+ drivers/fpga/dfl-fme-perf.c       | 16 +++++++---------
+ drivers/fpga/dfl.c                |  4 ++--
+ drivers/fpga/fpga-bridge.c        |  2 +-
+ drivers/fpga/fpga-mgr.c           |  4 ++--
+ drivers/fpga/fpga-region.c        |  5 ++---
+ 11 files changed, 52 insertions(+), 71 deletions(-)
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 89fa046c7158..0d8afffd1683 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -1497,9 +1497,10 @@ sg_add_device(struct device *cl_dev)
- 	int error;
- 	unsigned long iflags;
- 
--	error = blk_get_queue(scsidp->request_queue);
--	if (error)
--		return error;
-+	if (!blk_get_queue(scsidp->request_queue)) {
-+		pr_warn("%s: get scsi_device queue failed\n", __func__);
-+		return -ENODEV;
-+	}
- 
- 	error = -ENOMEM;
- 	cdev = cdev_alloc();
 -- 
-2.39.2
+2.28.0
 
