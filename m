@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C17B74895D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30DC748956
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjGEQjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S231312AbjGEQiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjGEQjs (ORCPT
+        with ESMTP id S229910AbjGEQiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:39:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D96199D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:39:09 -0700 (PDT)
+        Wed, 5 Jul 2023 12:38:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EDA10EA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:38:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688575148;
+        s=mimecast20190719; t=1688575081;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RmsNK8XLQDsmF+tAhWMG5gG33WwKkKwqtnMHwpT0E/g=;
-        b=TLsGnFLobc780v9vfrcFpHLZa1LIW9rOACSGDWqoT3PnZRxE69FmYTRqIhxgwzHCeGLKS2
-        4gcHdKcS3sMdmtA8r0sFIBiXY9ywloBxSDLyzDL7+b5KQe6TYyf9ZZPzJMFKlglOZcoYCG
-        wjGzMV5d0k+ZOyQhAKRoSleP834btCE=
+        bh=f+BIFPuADYbd26Hky4KRHtBDGMxjN7kUaiaPVMFcqU0=;
+        b=SweReg4GXOzVSC6hfRfz8zo/EYy8V8X3SAJmYUaWy19CGmLslN6QaJQzvsnfvtEntDR6OY
+        Zh3lUMP9fwEn/ykxAbxObTTJqJUvprp+twktMf/ZXNVE+1gPCBIrazENjVAm+fAenA9lLd
+        9koOIHU7EMOYNkkpIGpaQX5l1N9JCDo=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-481-cORmneu0P7Kyx30gt4SOIg-1; Wed, 05 Jul 2023 12:35:25 -0400
-X-MC-Unique: cORmneu0P7Kyx30gt4SOIg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-358-pd3MsW3jNJ2ZrOPRGlY5dg-1; Wed, 05 Jul 2023 12:37:58 -0400
+X-MC-Unique: pd3MsW3jNJ2ZrOPRGlY5dg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6F22680269A;
-        Wed,  5 Jul 2023 16:35:24 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9830802666;
+        Wed,  5 Jul 2023 16:37:57 +0000 (UTC)
 Received: from localhost (unknown [10.42.28.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BDB440C2063;
-        Wed,  5 Jul 2023 16:35:24 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 17:35:23 +0100
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B42ED18EB4;
+        Wed,  5 Jul 2023 16:37:57 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 17:37:57 +0100
 From:   "Richard W.M. Jones" <rjones@redhat.com>
 To:     Richard Henderson <richard.henderson@linaro.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -52,7 +52,7 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>
 Subject: Re: qemu-x86_64 booting with 8.0.0 stil see int3: when running LTP
  tracing testing.
-Message-ID: <20230705163523.GJ7636@redhat.com>
+Message-ID: <20230705163757.GK7636@redhat.com>
 References: <CA+G9fYsETJQm0Ue7hGsb+nbsiMikwycOV3V0DPr6WC2r61KRBQ@mail.gmail.com>
  <2d7595b1-b655-4425-85d3-423801bce644@app.fastmail.com>
  <20230621160655.GL2053369@hirez.programming.kicks-ass.net>
@@ -65,7 +65,7 @@ Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <CAFXwXrmbpuFNf5=nQxiTteo8fpCdAbK4pEAN176Cq0yvwZcfFw@mail.gmail.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -81,8 +81,13 @@ On Wed, Jul 05, 2023 at 06:32:30PM +0200, Richard Henderson wrote:
 > https://gitlab.com/qemu-project/qemu/-/commit/
 > 3307e08c6f142bb3d2406cfbc0ee19359748b51a
 
-I've got that patch in my qemu tree.  Do you suspect it's
-wrong and want me to try reverting it?
+FWIW reverting this commit (alone) causes qemu to throw this assertion:
+
+qemu-system-x86_64: ../accel/tcg/tb-maint.c:1096: tb_invalidate_phys_page_range__locked: Assertion `((start ^ last) & ((target_long)-1 << 12)) == 0' failed.
+
+I've seen this bug happen on both very old and very new versions of
+qemu (even back to 6.0), so I don't think the bug is caused by or
+fixed by any recent change.
 
 Rich.
 
