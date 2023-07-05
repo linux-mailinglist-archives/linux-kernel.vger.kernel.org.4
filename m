@@ -2,108 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57AB7483CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311767483D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjGEMJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 08:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S231976AbjGEMLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 08:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjGEMJA (ORCPT
+        with ESMTP id S230100AbjGEMLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 08:09:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0CBCE
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 05:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Cy83JkJmnxLA9dztdWd+Q9yw3dWpEbujYErrO2HQQ3o=; b=p8H82thFSahW225r9+3bsg9+R5
-        khUwiWnFyk2vYVOOTaW0KJfGwFKhQkIjgGcoYqH0MYWj3FUEFP6wWostiKFkLL3KEvGtB7JYad/av
-        h94oZ+uHVAVAGo49iRthhgQbKA6PR8dcvOoc5d2oUr2TOcnyAq1LO6kdWU+n5MvZ5dXy0PUTY8mc3
-        3gDzy7inaTP8oV3LAgZBl0VKKV2EcIQPCdlwF7lyQ/vU82wWLtiGAq8Fe7r6nOjczFL8AgG9C+ymJ
-        GphtZwLoao0kPsDakcWlY9+L9UQCnBYIpHAvdfRpBHPaQx+C72MDReHs8ulba5SmrG5OdgyKeszNW
-        leg0mZ5g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qH1JQ-00A3K5-Hy; Wed, 05 Jul 2023 12:08:48 +0000
-Date:   Wed, 5 Jul 2023 13:08:48 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     "Yin, Fengwei" <fengwei.yin@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 4/5] mm: FLEXIBLE_THP for improved performance
-Message-ID: <ZKVdUDuwNWDUCWc5@casper.infradead.org>
-References: <20230703135330.1865927-1-ryan.roberts@arm.com>
- <20230703135330.1865927-5-ryan.roberts@arm.com>
- <6865a59e-9e40-282d-c434-b7c757388b65@intel.com>
- <f364d9f1-8f7b-f531-ab9e-400c57a60c16@arm.com>
- <ZKSx5Udt3Oh8Kr35@casper.infradead.org>
- <4ee6e325-30ea-f74c-7d73-10a5d1453d01@arm.com>
+        Wed, 5 Jul 2023 08:11:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C87BE;
+        Wed,  5 Jul 2023 05:11:05 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:cbfb:e358:222c:d8c1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 354B266020F5;
+        Wed,  5 Jul 2023 13:11:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688559063;
+        bh=0EkrhqfP9XUDXvCh3iJ2AF/1rs8GBjnfIgfGSYhPJMo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e6SFTrA/Jj+0xACBNA/LjXYY9LHtlF9uNFamKrovQoUdpxcuDIYTWlQSlXqaRrpcZ
+         Dq/N3wsdZeHPIrDsTpHSteNF04Q+7zKvF4sJM6Wv8kZmIw0TME12eRRkqOSUrySuoz
+         IqcVmjQQpgDuHQEZtVa6hhfAClSumhkjq7+Kjs5pWAwt/U/qkATMvIothDaB90hsby
+         wcsNZuJ9PtKJhAiuVkuFd4j3T7F1QxCo9TC5y2utZmibmDhAqxTjpCVGk4CrNbEsN+
+         n+Ouqv0/ZvYpSMoeB3Bp9OLkxm/Aja9VtC4x9ANyRK7exm3NQd4fx4A1m03koZg2Bo
+         z2ZmREQ30ZsHw==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 00/10]  Add DELETE_BUF ioctl
+Date:   Wed,  5 Jul 2023 14:10:46 +0200
+Message-Id: <20230705121056.37017-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4ee6e325-30ea-f74c-7d73-10a5d1453d01@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 10:54:30AM +0100, Ryan Roberts wrote:
-> On 05/07/2023 00:57, Matthew Wilcox wrote:
-> > The confusing thing is that we have counters for the number of THP
-> > allocated (and number of THP mapped), and for those we always use
-> > PMD-size folios.
-> 
-> OK fair point. I really don't have a strong opinion on the name - I changed it
-> from LARGE_ANON_FOLIO because Yu was suggesting it should be tied to THP. So I'm
-> happy to change it back to LARGE_ANON_FOLIO (or something else) if that's the
-> concensus. But I expect I'll end up in a game of ping-pong. So I'm going to keep
-> this name for now and focus on converging the actual implementation to something
-> that is agreeable. Once we are there, we can argue about the name.
+Unlike when resolution change on keyframes, dynamic resolution change
+on inter frames doesn't allow to do a stream off/on sequence because
+it is need to keep all previous references alive to decode inter frames.
+This constraint have two main problems:
+- more memory consumption.
+- more buffers in use.
+To solve these issue this series introduce DELETE_BUFS ioctl and remove
+the 32 buffers limit per queue.
 
-I didn't see Yu arguing for changing the name of the config options,
-just having far fewer of them.
+VP9 conformance tests using fluster give a score of 210/305.
+The 24 resize inter tests (vp90-2-21-resize_inter_* files) are ok
+but require to use postprocessor.
 
-> > If we must have a config option, then this is ANON_LARGE_FOLIOS.
-> > 
-> > But why do we need a config option?  We don't have one for the
-> > page cache, and we're better off for it.  Yes, it depends on
-> > CONFIG_TRANSPARENT_HUGEPAGE today, but that's more of an accidental
-> > heritage, and it'd be great to do away with that dependency eventually.
-> > 
-> > Hardware support isn't needed.  Large folios benefit us from a software
-> > point of view.  if we need a chicken bit, we can edit the source code
-> > to not create anon folios larger than order 0.
-> 
-> >From my PoV it's about managing risk; there are currently parts of the mm that
-> will interact poorly with large pte-mapped folios (madvise, compaction, ...). We
-> want to incrementally fix that stuff, but until it's all fixed, we can't deploy
-> this as always-on. Further down the line when things are more complete and there
-> is more test coverage, we could remove the Kconfig or default it to enabled.
+Kernel branch is available here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/remove_vb2_queue_limit_v4
 
-We have to fix those places with the bad interactions, not merge a
-Kconfig option that lets you turn it on to experiment.  That's how you
-get a bad reputation and advice to disable a config option.  We had that
-for years with CONFIG_TRANSPARENT_HUGEPAGE; people tried it out early on,
-found the performance problems, and all these years later we still have
-articles being published that say to turn it off.
+GStreamer branch to use DELETE_BUF ioctl and testing dynamic resolution
+change is here:
+https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/commits/VP9_drc
 
-By all means, we can have a golden patchset that we all agree is the
-one to use for finding problems, and we can merge the pre-enabling work
-"We don't have large anonymous folios yet, but when we do, this will
-need to iterate over each page in the folio".
+changes in version 4:
+- Stop using Xarray, instead let queues decide about their own maximum
+  number of buffer and allocate bufs array given that value.
+- Rework offset cookie encoding pattern.
+- Change DELETE_BUF to DELETE_BUFS because it now usable for
+  range of buffer to be symetrical of CREATE_BUFS.
+- Add fixes tags on couple of Verisilicon related patches.
+- Be smarter in Verisilicon postprocessor buffers management.
+- Rebase on top of v6.4
+
+changes in version 3:
+- Use Xarray API to store allocated video buffers.
+- No module parameter to limit the number of buffer per queue.
+- Use Xarray inside Verisilicon driver to store postprocessor buffers
+  and remove VB2_MAX_FRAME limit.
+- Allow Versilicon driver to change of resolution while streaming
+- Various fixes the Verisilicon VP9 code to improve fluster score.
+ 
+changes in version 2:
+- Use a dynamic array and not a list to keep trace of allocated buffers.
+  Not use IDR interface because it is marked as deprecated in kernel
+  documentation.
+- Add a module parameter to limit the number of buffer per queue.
+- Add DELETE_BUF ioctl and m2m helpers.
+ 
+Benjamin Gaignard (10):
+  media: videobuf2: Access vb2_queue bufs array through helper functions
+  media: videobuf2: Be more flexible on the number of queue stored
+    buffers
+  media: videobuf2: Rework offset 'cookie' encoding pattern
+  media: verisilicon: Refactor postprocessor to store more buffers
+  media: verisilicon: Store chroma and motion vectors offset
+  media: verisilicon: vp9: Use destination buffer height to compute
+    chroma offset
+  media: verisilicon: postproc: Fix down scale test
+  media: verisilicon: vp9: Allow to change resolution while streaming
+  media: v4l2: Add DELETE_BUFS ioctl
+  media: v4l2: Add mem2mem helpers for DELETE_BUFS ioctl
+
+ .../userspace-api/media/v4l/user-func.rst     |   1 +
+ .../media/v4l/vidioc-delete-bufs.rst          |  73 +++++
+ .../media/common/videobuf2/videobuf2-core.c   | 304 +++++++++++++-----
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  44 ++-
+ drivers/media/platform/amphion/vpu_dbg.c      |  22 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   6 +-
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         |   2 +-
+ drivers/media/platform/st/sti/hva/hva-v4l2.c  |   4 +
+ drivers/media/platform/verisilicon/hantro.h   |   9 +-
+ .../media/platform/verisilicon/hantro_drv.c   |   4 +-
+ .../platform/verisilicon/hantro_g2_vp9_dec.c  |  10 +-
+ .../media/platform/verisilicon/hantro_hw.h    |   2 +-
+ .../platform/verisilicon/hantro_postproc.c    | 105 ++++--
+ .../media/platform/verisilicon/hantro_v4l2.c  |  27 +-
+ drivers/media/test-drivers/vim2m.c            |   1 +
+ drivers/media/test-drivers/visl/visl-dec.c    |  28 +-
+ drivers/media/v4l2-core/v4l2-dev.c            |   1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  17 +
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |  20 ++
+ .../staging/media/atomisp/pci/atomisp_ioctl.c |   2 +-
+ include/media/v4l2-ioctl.h                    |   4 +
+ include/media/v4l2-mem2mem.h                  |  12 +
+ include/media/videobuf2-core.h                |  13 +-
+ include/media/videobuf2-v4l2.h                |  11 +
+ include/uapi/linux/videodev2.h                |  17 +
+ 25 files changed, 592 insertions(+), 147 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/vidioc-delete-bufs.rst
+
+-- 
+2.39.2
+
