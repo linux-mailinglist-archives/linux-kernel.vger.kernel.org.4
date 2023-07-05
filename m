@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122DB748713
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F9B748718
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbjGEO70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S232898AbjGEO7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbjGEO7Y (ORCPT
+        with ESMTP id S232862AbjGEO72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:59:24 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388FC1735
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:59:06 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99384a80af7so249612166b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:59:06 -0700 (PDT)
+        Wed, 5 Jul 2023 10:59:28 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C02E1998
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:59:20 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-98e011f45ffso674251266b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688569144; x=1691161144;
+        d=linaro.org; s=google; t=1688569158; x=1691161158;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0VNzB+MriQ9BG4K4qokulMx9kQTLwPATV3LNvBr25cQ=;
-        b=hjWKurOtmqtWXbr3mSIf/L9OQms/n9RTowc2zhmz9nsfo+HvrErke4NLYsIZiSgjlp
-         o0WsUWqPzdX39GBzx+EemPZvQNYCIoAcMRiqTOv3TV70VX4z9gKe9raszFCXUq47eECZ
-         Pt3YsEOOnMA+hq3XhuVVAFTHwLitjjmoUku30lkfFj/JjYrNsTwMV8MFY/Buc4/iIHIM
-         37GyfNbLC+3PBUWBn8YCdHMqIAiNoAObOeby6VajYz8RGZE4d+qrnjV9JOlX0FwhMih+
-         rwIGB/K+DMOFQKxuj55voB7uq8mzvZIK4LGBCCJ10yYI7wDhZ9AlOazEW1xPH1VMqBM+
-         unrQ==
+        bh=+KmKoQmxevAlDr8GWoC0x/IRg+Abm5jjahWJpZI9534=;
+        b=CahXrZzX5G78sto6/yKaMIx/9seqEqvUG+kVsIwdTjj/VTJKB2eWt1osnlwaDCJXOJ
+         UCRprFp1YLaTIQ9teLiw8qs0UYfdigWrFmTiH2TLkHh+vUaH+wDA9efiHX6RkxF/hnME
+         PheFt8VDZz9UgNusVZvQJetOTczGWBfqza1kU+pbrLCWkuJ5ea+atlr3Eg+DBWhX+egS
+         Rv2ExdRMpo4T3M/Y9T42pufTs0A8FPVAkr/YtGa4wpH95cyavKuIY+LrWOlN4lWu8j8l
+         MsfqIk0MZskP+d9X/VkxuSzyTN9A2q4QhKlj8M/iFw3u6RRe+RW5A3T6C0fYC+lzpuWR
+         hq5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688569144; x=1691161144;
+        d=1e100.net; s=20221208; t=1688569158; x=1691161158;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0VNzB+MriQ9BG4K4qokulMx9kQTLwPATV3LNvBr25cQ=;
-        b=E3CjbvECQlG6lvecupugqFGqfc2WlSCuTnF4VH5Mx1QCQQS9a1gGE+RpVYwOUltaKr
-         uZAxKqY5bochUhdj8dRCdgCRseek/Zd5kB9UkxBKMAprHhmQj6A5iHB+gy+CJbPA5qIL
-         6HWzaxgCpB0BKKurdAOGgzIGIud5f/5yCk0AzFAZYGDAUBFKOGTyvRsglh9JzCi5QQt+
-         eq5cpcfScjaoWLcvkCA/CvCXogUsQC6XfoCCAzGeqy9ZrXjQMpyl1INmCQtWHzGx7wGr
-         w/NXe7+Z5IcNWpYR3WiKUUhs5DVoPF+7THeMWafZQUBrl/wE0sg6g8Z3sC+zAElA5Tlo
-         Y7uw==
-X-Gm-Message-State: ABy/qLYf9BBgrpZtGRpnw6MFk3oLB0a+WpyVXWAFIxoyoHUHtIxm6qC7
-        IsLhNDZPfHI2jRbiXTsM1M2LVw==
-X-Google-Smtp-Source: APBJJlF7I2RU8dWT3drf/l5wsrLFM9ZWN+E3OqVP01I0ERAyLy6TxUsBD/Q2Yf1G9XgUJgJ2kGO81g==
-X-Received: by 2002:a17:906:4e06:b0:98d:9ded:f87f with SMTP id z6-20020a1709064e0600b0098d9dedf87fmr9221656eju.10.1688569144505;
-        Wed, 05 Jul 2023 07:59:04 -0700 (PDT)
+        bh=+KmKoQmxevAlDr8GWoC0x/IRg+Abm5jjahWJpZI9534=;
+        b=eZ43Dwxstu27k+EDQtdy72inFbLl6P50ONk6qPC0KUHmkbcnvG6jQ7gtfs7YQLWH5i
+         vWPBuRLdTU8+vcnT9rQozDLpw74WHRkTQtZIC9hRshtXOftwDQjg3mkkhIoL6lgjMIRG
+         Cb0/LSL8JZPr+Vtu4ZViEhLMCnYeXFh/oL8Zw+A7zR1n6NS9qXVoT/XHqiHY4dTK8Iwa
+         jk8NB5xMH75H8LDLBZQN0rpdRApbeenldvp9s3NOlkt0CxbD7CrlthdFM8qeh7qjJN/B
+         Mt0WF1dmGb7Xv6EMj98AiRt9aMw0YHQ3XPsGw0axdEJ0nVDdrRt+vaSnIG3nDb9LjcmI
+         VzcA==
+X-Gm-Message-State: ABy/qLY8XERHJ+aFa3IuYMhyEegNTOZp1hxwdAV8tLsF5FIT8fmGJyht
+        CxT705XjsXWZZ8QbduOUHjLw8w==
+X-Google-Smtp-Source: APBJJlF2nHsUoLIzfCr8pWpO/KLvyvSWrmgJ8X+J5oE20VFYjBfpdT9MSi0qg/SxxlvR+WAtHIRsxw==
+X-Received: by 2002:a17:906:fa89:b0:988:7d1:f5a5 with SMTP id lt9-20020a170906fa8900b0098807d1f5a5mr11016880ejb.28.1688569158644;
+        Wed, 05 Jul 2023 07:59:18 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id kt19-20020a170906aad300b009894b476310sm14786411ejb.163.2023.07.05.07.59.02
+        by smtp.gmail.com with ESMTPSA id b22-20020a17090636d600b0099293cdbc98sm9419972ejc.145.2023.07.05.07.59.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 07:59:04 -0700 (PDT)
+        Wed, 05 Jul 2023 07:59:18 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: rockchip: add missing space before {
-Date:   Wed,  5 Jul 2023 16:58:59 +0200
-Message-Id: <20230705145859.293260-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] ARM: dts: renesas: add missing space before {
+Date:   Wed,  5 Jul 2023 16:59:11 +0200
+Message-Id: <20230705145912.293315-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,37 +78,22 @@ Add missing whitespace between node name/label and opening {.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts b/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts
-index 4d9ed2a02736..1a60a275ddf9 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts
-@@ -125,19 +125,19 @@ &cpu_l3 {
- 	cpu-supply = <&vdd_cpu_lit_s0>;
+diff --git a/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts b/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts
+index c18bbd7141c4..31cdca3e623c 100644
+--- a/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts
++++ b/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts
+@@ -67,7 +67,7 @@ &mii_conv5 {
+ 	status = "okay";
  };
  
--&cpu_b0{
-+&cpu_b0 {
- 	cpu-supply = <&vdd_cpu_big0_s0>;
- };
- 
--&cpu_b1{
-+&cpu_b1 {
- 	cpu-supply = <&vdd_cpu_big0_s0>;
- };
- 
--&cpu_b2{
-+&cpu_b2 {
- 	cpu-supply = <&vdd_cpu_big1_s0>;
- };
- 
--&cpu_b3{
-+&cpu_b3 {
- 	cpu-supply = <&vdd_cpu_big1_s0>;
- };
- 
+-&pinctrl{
++&pinctrl {
+ 	pins_can0: pins_can0 {
+ 		pinmux = <RZN1_PINMUX(162, RZN1_FUNC_CAN)>,	/* CAN0_TXD */
+ 			 <RZN1_PINMUX(163, RZN1_FUNC_CAN)>;	/* CAN0_RXD */
 -- 
 2.34.1
 
