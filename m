@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E2A748F94
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CDD748F97
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbjGEVLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 17:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S231977AbjGEVNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 17:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjGEVLG (ORCPT
+        with ESMTP id S231267AbjGEVNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:11:06 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C1919A2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 14:11:05 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3a337ddff16so119853b6e.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 14:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688591464; x=1691183464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jQrTNkqXIn8AEtwjMFYzAXuEIG3rdsBzjM8m4Q99lIk=;
-        b=nMasCfUEodGC7sLNWqUQ3rRKqwRy511OtuaoDL5GR5Uq4uqtDwDR7ZIjWLOq0gbvu7
-         uG0I4/cWuJt+o9wVG/A0OnqBVkOCNJx/AlNsRoT0oyGIBA3QzwFef/F9LZhQsXc7K/XW
-         uBRKlTg2NTbbajdmkQUhGABuZvslJXIiapsy8=
+        Wed, 5 Jul 2023 17:13:08 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE1F1700;
+        Wed,  5 Jul 2023 14:13:07 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-262dc1ced40so75203a91.3;
+        Wed, 05 Jul 2023 14:13:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688591464; x=1691183464;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jQrTNkqXIn8AEtwjMFYzAXuEIG3rdsBzjM8m4Q99lIk=;
-        b=jtk5IO/KD2FYj2DK+zxgzNaJJwkb3mW4jQNZ7gV7JjDSr021mc0KQBribsRqz+f3WR
-         dEkC12pmZ67UCJcF9Mrq0cCEloxkqyR/oZIpygh+AAhhpsYhakKqhUXI7NT65ws6iNCe
-         OVWqAIwEgxGgRuPqMY52YsY2V8fExVgKqMm6QJDiKzHlSilepSaaHctXl4CoE3WLbNX0
-         tjC6bbWMoxG47RCUsDKY1oqyjVOWMRlmQO5V989MrWQPqB1xoRlLVxbG9rmtphSPXBzY
-         UDDL3kPg/r7mDeiffRYsGOsCAYNOj3xy5JfTc6UxJhoHdPyhGvc/kWnIQocPi6UR2jnu
-         r2ew==
-X-Gm-Message-State: AC+VfDxXaYWdN1DJquzl5poNtyolm+WkSI2QaJBCiqO9X5DTP+ZiwbaI
-        XPSdCVyAYHfFN+3NY5vT7sbf1w==
-X-Google-Smtp-Source: ACHHUZ7D/Y+nkLim7yg1njmHhll4TA7487jUsc/injzNY8G+JDXXIBUtNWr+V6XQcdUzotEeSXZ7QQ==
-X-Received: by 2002:a05:6808:64b:b0:3a1:e13e:a89e with SMTP id z11-20020a056808064b00b003a1e13ea89emr16673048oih.19.1688591464262;
-        Wed, 05 Jul 2023 14:11:04 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i20-20020a635414000000b0055acfd94c20sm4329pgb.35.2023.07.05.14.11.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 14:11:03 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 14:11:03 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] usb: ch9: Replace bmSublinkSpeedAttr 1-element array
- with flexible array
-Message-ID: <202307051408.E16A95E@keescook>
-References: <20230629190900.never.787-kees@kernel.org>
- <2023062950-landowner-goofiness-d5d2@gregkh>
+        d=1e100.net; s=20221208; t=1688591587; x=1691183587;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+pw9J7tizwVtOdeFR5uDzJEF/Unio+AZUWRgEDGECkI=;
+        b=ReNrVwvp8X3dLGy1a2qsE64Yn1cNybYmoUiWsM/Eah8WyTjm8fkgn20glUy8jG+yDf
+         ImMZwOJ48RDCsAGZoCwdnWE6cYGQ8beM7KyYxEP/jc+7mVWwC/jfC6IpKGIwT4M0Q/Yg
+         Aa7Y3CDbU6WAtKBCyJTD0avz8Uscsqc0CZTCk2AbABp+TYJVV9CZuqJN8lfmIKweliLJ
+         pMLr8vrPJJCuPax+kFfG0a8HZI2wpP+SJsKg0cRCUzg6b5iJ89XYDt5WmYNJK1YezmrU
+         0VY878LjDStSwmBOv9btpkMkwqnX1m0T3sGjn5MjactMbgZv7Qpvhd3/S56LhRIJ0SiX
+         QTyA==
+X-Gm-Message-State: ABy/qLZnqBCWgMssFa8qYfQ5UTVTj7DtIYVS7sbwcNHMJOnBXl8L/PeF
+        Xiz2HhDjtpi/pSIwc3/kW2Y=
+X-Google-Smtp-Source: APBJJlFpXev7Z0GA8KLcHxiqrghB5rDKeEVS9r9/660CkunpnocK6KMT+TGYoY7t89H/HBLV08pq2Q==
+X-Received: by 2002:a17:90a:1602:b0:262:ec7f:af82 with SMTP id n2-20020a17090a160200b00262ec7faf82mr16058710pja.22.1688591586775;
+        Wed, 05 Jul 2023 14:13:06 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:2f70:a1a0:520:4dfc? ([2620:15c:211:201:2f70:a1a0:520:4dfc])
+        by smtp.gmail.com with ESMTPSA id m4-20020a17090a7f8400b0026333ad02c1sm45914pjl.10.2023.07.05.14.13.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 14:13:06 -0700 (PDT)
+Message-ID: <5f172788-f16b-7bb1-6338-24453995f221@acm.org>
+Date:   Wed, 5 Jul 2023 14:13:03 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023062950-landowner-goofiness-d5d2@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND v2] ufs: core: Add support for qTimestamp attribute
+Content-Language: en-US
+To:     Arthur Simchaev <arthur.simchaev@wdc.com>,
+        martin.petersen@oracle.com
+Cc:     avri.altman@wdc.com, Avi.Shchislowski@wdc.com, beanhuo@micron.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230626103320.8737-1-arthur.simchaev@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230626103320.8737-1-arthur.simchaev@wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 09:17:23PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Jun 29, 2023 at 12:09:00PM -0700, Kees Cook wrote:
-> > Since commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3"),
-> > UBSAN_BOUNDS no longer pretends 1-element arrays are unbounded. Walking
-> > bmSublinkSpeedAttr will trigger a warning, so make it a proper flexible
-> > array. Add a union to keep the struct size identical for userspace in
-> > case anything was depending on the old size.
-> > 
-> > False positive warning was:
-> > 
-> > UBSAN: array-index-out-of-bounds in drivers/usb/host/xhci-hub.c:231:31 index 1 is out of range for type '__le32 [1]'
-> > 
-> > for this line of code:
-> > 
-> > 	ssp_cap->bmSublinkSpeedAttr[offset++] = cpu_to_le32(attr);
-> > 
-> > Reported-by: Borislav Petkov <bp@alien8.de>
-> > Closes: https://lore.kernel.org/lkml/2023062945-fencing-pebble-0411@gregkh/
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  include/uapi/linux/usb/ch9.h | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> Thanks for the quick response, I'll queue it up after 6.5-rc1 is out.
+On 6/26/23 03:33, Arthur Simchaev wrote:
+> The new qTimestamp attribute was added to UFS 4.0 spec, in order to
+> synchronize timestamp between device logs and the host.The spec recommend
+> to send this attribute upon device power-on Reset/HW reset or when
+> switching to Active state (using SSU command). Due to this attribute,
+> the attribute's max value was extended to 8 bytes. As a result,
+> the new definition of struct utp_upiu_query_v4_0 was added.
 
-I'm going to send this before -rc1, since we've had another report[1] that
-was fixed by this. Given the verification there and Boris's testing, I
-think this is good to land. I'll toss it in -next now and send it to
-Linus on Friday after making sure there are no more surprises.
 
--Kees
-
-[1] https://lore.kernel.org/lkml/DA3FEB08-DF39-406B-89CC-9076CFCF597A@kernel.org/
-
--- 
-Kees Cook
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
