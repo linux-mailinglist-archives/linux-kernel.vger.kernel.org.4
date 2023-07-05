@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2893748AAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E84748ABA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjGERfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
+        id S232909AbjGERgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjGERfc (ORCPT
+        with ESMTP id S231305AbjGERgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:35:32 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5EB1BDC;
-        Wed,  5 Jul 2023 10:34:59 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E2251EC059E;
-        Wed,  5 Jul 2023 19:34:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1688578461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MEGOnUUJklrhitbV4ruvcKvARnIEQPaD/80tSn75pgY=;
-        b=DfAWS0S8ha7gru/HpM2t1Jhwl9N1jSdZb6qL4M8Poc7Viil3gU0jDY/y4tia9rSI3KGD/7
-        riBZWamT+cCQom+CFOIal5mxycuotfBzcdlnRr81kP8U3QGYXoSUmRZ2aUUQYhm4yWkxFs
-        6VGqFtzoFsoRa1VN6Lbb1aat0GJw/M8=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id O2FxcyoDZwkQ; Wed,  5 Jul 2023 17:34:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1688578456; bh=MEGOnUUJklrhitbV4ruvcKvARnIEQPaD/80tSn75pgY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IC9K9a/L4pfqPiVykF+jA8SdbsCF3hdLrmsA+YP0Ewc94yDOk+O+JWhOijaXDiYY6
-         aT6HVMh8DlOVWXNneGj7PeSxseBFc8t04yE4T629V5ksuEVhksc1twpneKhNpGva6u
-         MBRNmlh+vqnH0lTELQmjfdNbMO+eyXr6Ck7zrJztIpS+BhbYmsjEdUycg3Fm1UB9ZN
-         dcm/9xvTlPF43QDL85v6NDrp/brCYopWXGLtnT+hjD2kLAIlpP/xL0W7a97PmdcPyD
-         dP50292ZFcdkUfngK/8F6cgfYdmsp16noYN81GRK7oVXKkfTLwl70e+GEPWI5PcuRh
-         59GpzilrVN8Qe/CQDuloXstmx9yij9ZJXy/nXD4Jnvcl4jBfQWAZtRYe+wymirWSnT
-         eAMpfKCzFpD2G0mb3vIK9l5H5WUYAYypCrOz2Ox0oXKRXaHmRZnxw6KHl10JR1YVzn
-         buhfzky46506lOt2mrCAHQ9r1xpZovpUxZ2ttYkG9aqCs5jO44rdCK5CfQBv1ze9Nc
-         vCbXsOh5kH4Mal6k9lr8ThYItcO06lFTf6cuYl+L6MSreIwMftWa6AT7MJy8gqPcrn
-         eb+GyIlQg2lGB6krdtNm9uiPwWFY61neTH2OfZYwSgWGpLdQZQlMvl1V7HN9nHvtnT
-         BJudhAcMzqcGAiGg4PnuN24Q=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A7A9040E0191;
-        Wed,  5 Jul 2023 17:34:04 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 19:33:59 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tao Liu <ltao@redhat.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
-        linux-kernel@vger.kernel.org, bhe@redhat.com, dyoung@redhat.com,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org
-Subject: Re: [PATCH v2] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-Message-ID: <20230705173359.GDZKWphyFbNE8id6Jm@fat_crate.local>
-References: <20230601072043.24439-1-ltao@redhat.com>
+        Wed, 5 Jul 2023 13:36:07 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DE91BEB;
+        Wed,  5 Jul 2023 10:35:41 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365FaBp3003086;
+        Wed, 5 Jul 2023 19:35:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=shpntqm9Lb88tQ8tlCGuG2FwYoCeA99QpOjJ1mJ95MI=;
+ b=B9NUeEVnBg8MdHStPnL4TOmJhyuqDrSpAiTXxO/nPPpzy04upCGkWFZloothm1IsdlaP
+ X2dM2UcrLRYot6pDInpUaDfpMw4tRdOgSMjIIUt05sxIHPJTt05NtgJdfiSkjWYJGqQo
+ 5Qf6gvHVZoCkeCGLEsdD07XE10xUn4T3IucwxfOuRptLSABHo82p+XsFpOmpXmiiGV0P
+ XYKMcsbwul2uScBGSCEWMtTWo929/YaPT+Wh3TxrAMZmjHQzF56NlcYYWFxkdKCpyT5u
+ NiyW4MLstguYxELgKwv13IwhUcKcDJWT1p8IlKqjWxQyak83KOQne1tFXm8DXME2V55K Uw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rn8c9t3jy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 19:35:16 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2E6D9100057;
+        Wed,  5 Jul 2023 19:35:15 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2427D24C451;
+        Wed,  5 Jul 2023 19:35:15 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 5 Jul
+ 2023 19:35:12 +0200
+Message-ID: <f8c6e86d-af6a-b61f-c642-c23cb3cfb015@foss.st.com>
+Date:   Wed, 5 Jul 2023 19:35:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230601072043.24439-1-ltao@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/6] Introduce STM32 system bus
+Content-Language: en-US
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_09,2023-07-05_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,123 +86,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 03:20:44PM +0800, Tao Liu wrote:
-> A kexec kernel bootup hang is observed on Intel Atom cpu due to unmapped
+Hello all,
 
-s/cpu/CPU/g
+I'm abandoning this series for:
+https://lore.kernel.org/lkml/20230705172759.1610753
 
-> EFI config table.
+Sorry for the noise.
+
+Best regards,
+Gatien
+
+On 1/27/23 17:40, Gatien Chevallier wrote:
+> Document STM32 System Bus. This bus is intended to control firewall
+> access for the peripherals connected to it.
 > 
-> Currently EFI system table is identity-mapped for the kexec kernel, but EFI
-> config table is not mapped explicitly:
-
-Why does the EFI config table *need* to be mapped explicitly?
-
->     commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
->                           tables to the ident map")
+> For every peripheral, the bus checks the firewall registers to see
+> if the peripheral is configured as non-secure. If the peripheral
+> is configured as secure, the node is marked populated, so the
+> device won't be probed.
 > 
-> Later in the following 2 commits, EFI config table will be accessed when
-> enabling sev at kernel startup.
-
-What does SEV have to do with an Intel problem?
-
-> This may result in a page fault due to EFI
-> config table's unmapped address. Since the page fault occurs at an early
-> stage, it is unrecoverable and kernel hangs.
+> This is useful as a firewall configuration sanity check and avoid
+> platform crashes in case peripherals are incorrectly configured.
 > 
->     commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME features
->                           earlier during boot")
->     commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
->                           detection/setup")
+> The STM32 System Bus implements the feature-domain-controller
+> bindings. It is used by peripherals to reference a domain
+> controller, in this case the firewall feature domain.
+> The bus uses the ID referenced by the feature-domains property to
+> know where to look in the firewall to get the security configuration
+> for the peripheral. This allows a device tree description rather
+> than a hardcoded peripheral table in the bus driver.
 > 
-> In addition, the issue doesn't appear on all systems, because the kexec
-> kernel uses Page Size Extension (PSE) for identity mapping. In most cases,
-> EFI config table can end up to be mapped into due to 1 GB page size.
-> However if nogbpages is set, or cpu doesn't support pdpe1gb feature
-> (e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
-> due to 2 MB page size, thus a page fault hang is more likely to happen.
-
-This doesn't answer my question above.
-
-> This patch will make sure the EFI config table is always mapped.
-
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
-
-Also, do
-
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
-
+> On STM32MP13/15 platforms, the firewall bus is represented by the
+> ETZPC node, which is responsible for the securing / MCU isolating
+> the capable peripherals.
 > 
-> Signed-off-by: Tao Liu <ltao@redhat.com>
-> ---
-> Changes in v2:
-> - Rephrase the change log based on Baoquan's suggestion.
-> - Rename map_efi_sys_cfg_tab() to map_efi_tables().
-> - Link to v1: https://lore.kernel.org/kexec/20230525094914.23420-1-ltao@redhat.com/
-> ---
->  arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
+> STM32MP13/15 device trees are updated in this series to implement
+> the bus. All peripherals that are securable or MCU isolation capable
+> by the ETZPC are connected to the bus.
 > 
-> diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-> index 1a3e2c05a8a5..664aefa6e896 100644
-> --- a/arch/x86/kernel/machine_kexec_64.c
-> +++ b/arch/x86/kernel/machine_kexec_64.c
-> @@ -28,6 +28,7 @@
->  #include <asm/setup.h>
->  #include <asm/set_memory.h>
->  #include <asm/cpu.h>
-> +#include <asm/efi.h>
->  
->  #ifdef CONFIG_ACPI
->  /*
-> @@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
->  #endif
->  
->  static int
-> -map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
-> +map_efi_tables(struct x86_mapping_info *info, pgd_t *level4p)
->  {
->  #ifdef CONFIG_EFI
->  	unsigned long mstart, mend;
-> +	void *kaddr;
-> +	int ret;
->  
->  	if (!efi_enabled(EFI_BOOT))
->  		return 0;
-> @@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
->  	if (!mstart)
->  		return 0;
->  
-> +	ret = kernel_ident_mapping_init(info, level4p, mstart, mend);
-> +	if (ret)
-> +		return ret;
-> +
-> +	kaddr = memremap(mstart, mend - mstart, MEMREMAP_WB);
-> +	if (!kaddr) {
-> +		pr_err("Could not map UEFI system table\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	mstart = efi_config_table;
-
-Yeah, about this, did you see efi_reuse_config() and the comment above
-it especially?
-
-Or is it that the EFI in that box wants the config table mapped 1:1 and
-accesses it during boot/kexec?
-
-In any case, this is all cloudy without a proper root cause.
-
-Also, I'd like for Ard to have a look at this too.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Changes in V2:
+> 	- Corrected YAMLS errors highlighted by Rob's robot
+> 	- Re-ordered Signed-off-by tags in two patches
+> 
+> Changes in V3:
+> 	- Document feature-domains property in YAML documentation for
+> 	concerned periperals under the System Bus
+> 	- Fix STM32 System Bus YAML documentation
+> 	- Remove STM32 System bus bindings that were currently used
+> 	as helpers for device tree
+> 	- Correct few errors in driver
+> 	- Add missing peripherals under the System Bus that were in
+> 	SoC variation device tree files
+> 	- Fix node names
+> 
+> Gatien Chevallier (5):
+>    dt-bindings: treewide: add feature-domains description in binding
+>      files
+>    dt-bindings: bus: add STM32 System Bus
+>    bus: stm32_sys_bus: add support for STM32MP15 and STM32MP13 system bus
+>    ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
+>    ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+> 
+> Oleksii Moisieiev (1):
+>    dt-bindings: Document common device controller bindings
+> 
+>   .../devicetree/bindings/bus/st,sys-bus.yaml   |  127 +
+>   .../bindings/crypto/st,stm32-hash.yaml        |    5 +
+>   .../devicetree/bindings/dma/st,stm32-dma.yaml |    5 +
+>   .../bindings/dma/st,stm32-dmamux.yaml         |    5 +
+>   .../feature-domain-controller.yaml            |   84 +
+>   .../devicetree/bindings/i2c/st,stm32-i2c.yaml |    5 +
+>   .../bindings/iio/adc/st,stm32-adc.yaml        |    5 +
+>   .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |    5 +
+>   .../bindings/iio/dac/st,stm32-dac.yaml        |    5 +
+>   .../bindings/media/st,stm32-cec.yaml          |    5 +
+>   .../bindings/media/st,stm32-dcmi.yaml         |    5 +
+>   .../memory-controllers/st,stm32-fmc2-ebi.yaml |    5 +
+>   .../bindings/mfd/st,stm32-lptimer.yaml        |    5 +
+>   .../bindings/mfd/st,stm32-timers.yaml         |    6 +
+>   .../devicetree/bindings/mmc/arm,pl18x.yaml    |    5 +
+>   .../devicetree/bindings/net/stm32-dwmac.yaml  |    5 +
+>   .../bindings/phy/phy-stm32-usbphyc.yaml       |    5 +
+>   .../bindings/regulator/st,stm32-vrefbuf.yaml  |    5 +
+>   .../devicetree/bindings/rng/st,stm32-rng.yaml |    5 +
+>   .../bindings/serial/st,stm32-uart.yaml        |    5 +
+>   .../bindings/sound/st,stm32-i2s.yaml          |    5 +
+>   .../bindings/sound/st,stm32-sai.yaml          |    5 +
+>   .../bindings/sound/st,stm32-spdifrx.yaml      |    5 +
+>   .../bindings/spi/st,stm32-qspi.yaml           |    5 +
+>   .../devicetree/bindings/spi/st,stm32-spi.yaml |    5 +
+>   .../devicetree/bindings/usb/dwc2.yaml         |    5 +
+>   MAINTAINERS                                   |    6 +
+>   arch/arm/boot/dts/stm32mp131.dtsi             |  407 +--
+>   arch/arm/boot/dts/stm32mp133.dtsi             |   51 +-
+>   arch/arm/boot/dts/stm32mp13xc.dtsi            |   19 +-
+>   arch/arm/boot/dts/stm32mp13xf.dtsi            |   18 +-
+>   arch/arm/boot/dts/stm32mp151.dtsi             | 2722 +++++++++--------
+>   arch/arm/boot/dts/stm32mp153.dtsi             |   52 +-
+>   arch/arm/boot/dts/stm32mp15xc.dtsi            |   19 +-
+>   drivers/bus/Kconfig                           |    9 +
+>   drivers/bus/Makefile                          |    1 +
+>   drivers/bus/stm32_sys_bus.c                   |  168 +
+>   37 files changed, 2208 insertions(+), 1596 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>   create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+>   create mode 100644 drivers/bus/stm32_sys_bus.c
+> 
