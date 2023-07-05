@@ -2,187 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E5C748500
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6547A748505
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbjGENbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S229910AbjGENcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbjGENax (ORCPT
+        with ESMTP id S232291AbjGENcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:30:53 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D766198C;
-        Wed,  5 Jul 2023 06:30:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iDE5ufoOjyZjsz4eF4nqHI+6UgqssT+i94nUMM6vzfuZuyc9HQCHfnoIMIDSzORrgJkHsCdZZ3zIjTjy5dk0a4utc2Z/YbrbYflZlKYaqDC4GH2aA5+LiuMkBwbzaIzsxwPK4tEE91yX2FIDSxVViifYkfyuPF8hpTBgv4vglGN5mP8nyWdbDC4OGJ3YcfJ5FYex6O3YOIzJ2sJO+Bln/S7IyqYd9jx0yrLIcl08TNbU5bgdfn7dVmqvz28IpEviC+DQFdUzUAhkRdINAHzU+4vcD90dJ59FIzIqgWciiV/HgYnoOOv4wkUrsAEM8lBBflo0qqLukc0kAnZg4tao7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DP47c21hf8Z6Kim/DkRZLCyrWk2KwUb1uFORUr+ivJA=;
- b=QkV2C+duE8t7nYrZXGHOdrsxozJ/Gro4kp5PnWIbFTaDK3m0HVCpY4kdNNijMVCaTdHh1VYyGEmTLTmWsl3dkiP+/WMaWhbc1y4DpoBpubUR0QCahWX/HJQn+KI0FNGHFy7GYYP59QoKKMXiMEgHxGUn1JZYR8tpXiEXWCTkWhv5VktVLkSmNHQ9XHxE1NBA7yensJHOya0NAWqE/vA3zTdy0ZyvKqPI/boPDo0L8+XPtUWsVmY75zYJkmCesCCqo+G6OI/Pv26dqQpGRFnMmsTtNlI+y+ZNlTfwOGtlEl8gBCKPRUvjI3+HB1/XJ9ltR8Da5nrrvlvViR5V+q0rhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DP47c21hf8Z6Kim/DkRZLCyrWk2KwUb1uFORUr+ivJA=;
- b=UPe5mUGKM0QA28plh3LexAF15zgx0Edkb5OURZXTdK9C8iisN6Td6spdoKX7mRGY5Dhm65+MeLkLXg8yOdnkqAUdM2TdqeUVB/xuWv+bIfH8F+QTUfJBMa7g9Xo7zHB1znYAI5zYz+WycxA8ji56c6pqBEpZDkVqJ8jDPO2vq2I=
-Received: from BYAPR07CA0058.namprd07.prod.outlook.com (2603:10b6:a03:60::35)
- by SA1PR12MB6726.namprd12.prod.outlook.com (2603:10b6:806:255::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
- 2023 13:30:32 +0000
-Received: from DM6NAM11FT008.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:60:cafe::62) by BYAPR07CA0058.outlook.office365.com
- (2603:10b6:a03:60::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
- Transport; Wed, 5 Jul 2023 13:30:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT008.mail.protection.outlook.com (10.13.172.85) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.44 via Frontend Transport; Wed, 5 Jul 2023 13:30:32 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 5 Jul
- 2023 08:30:31 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        <linus.walleij@linaro.org>
-CC:     <andriy.shevchenko@linux.intel.com>, <npliashechnikov@gmail.com>,
-        <nmschulte@gmail.com>, <friedrich.vock@gmx.de>,
-        <dridri85@gmail.com>, "Hans de Goede" <hdegoede@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list" <linux-gpio@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2 4/4] pinctrl: amd: Unify debounce handling into amd_pinconf_set()
-Date:   Wed, 5 Jul 2023 08:30:05 -0500
-Message-ID: <20230705133005.577-5-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230705133005.577-1-mario.limonciello@amd.com>
-References: <20230705133005.577-1-mario.limonciello@amd.com>
+        Wed, 5 Jul 2023 09:32:45 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8516C1730;
+        Wed,  5 Jul 2023 06:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=QR9LXQoWWr0wScmNywxUjk1GAhGRJT34AFfeE2vbkWE=; b=jgm9sd/Az/t4y8042+LZJpopdO
+        h5l+c6shK5xSM/V0wJ+8w3TPYrQCQLh6t+ovos9jztjIn+uqW5webB5vyVXyqDPvR3iGvFFt7EgAI
+        2Tv2t5XF4L5YTMIcZCbL4oNQMZ10gDDbgC42f+Y8GsVbW0y6MFAyz+TBCpBG/3sNLVZUP6UsGs83V
+        7Wk2hNdAf658oX35i7N/56LP2rgrwxTOCc6X3InihLvr9HCNJJlqkCrs3cE+rkZDG0LyazgNXKcRj
+        XTVUPBOxDLupVFKz5PIZTtxOGv/0qVOGBoc2AiCtTTdLWCrQ2HSa+uioY+TJnwSa0KqspF/qV6eiE
+        CsGAtW8w==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qH2c6-00035C-7F; Wed, 05 Jul 2023 15:32:10 +0200
+Received: from [178.197.249.31] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qH2c5-0008mc-KX; Wed, 05 Jul 2023 15:32:09 +0200
+Subject: Re: [PATCH v1] selftests:bpf:Fix repeated initialization
+To:     Wang Ming <machel@vivo.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com
+References: <20230705123432.1655-1-machel@vivo.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <cfc5f09e-7af1-abb9-aee9-737e3fe09c77@iogearbox.net>
+Date:   Wed, 5 Jul 2023 15:32:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT008:EE_|SA1PR12MB6726:EE_
-X-MS-Office365-Filtering-Correlation-Id: 024fb443-1559-4b13-a7bd-08db7d5c01d8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kAleWZOwzqN6ioWxrgXQN8ch0gbKACEdC+gFCi0BF0MguJ0YUaePx/XUKBuIzQLKsXwffQCPGa6akh4W/SMLWdn7KQa0YhPFdy3k1R1GKmsOVbImvepokHcamfZR/jFdyQtGBLhOzSrMRoek+y+SZDi8dMVYqjz6m66KJ9JqkXiiN5NwjKk6srsdIMLYV9OaAqORh/bhyyaO3mGk7/blvimEAC+2fK3+QfJfYcUojRuL6IA0cSftityb+KJPzJKuWQ2WPadQd2Ab/266h0kE/CuPJQzn2kA3Lq3r+x4j9kOMVCvmCcX9PTY+1ACTOOEKpVJngI5EtdVpTMj6MYhVOyTz0hC3f+xPhegPdIBXjYzoKZ+Re5SdIyS9OSCZZE2u2nOckXbkxtwV0p/UmKPvai7zQiZNtQ8tnMtqu78HC0x28eA8zQUqgA2SqfRl/ux2cisiYbxa2yPeyvR7Sh8ZUgxT4J3jmVdkFM0H6zmtLK6SDMOB/fMGKu1GBl+Fnuc8McYXvNfsEqekcfDzZVbG1m7wRjLsqbMub0hFIP/vkmYvm9qKULiliPqML1plQhuuGxLf17u/FCgStcEn/I7wHA19VAEHQm8geIhQEtKVy5ijDr5bS+BukSsdZwy2/wV0ES/NXKXJUPIa7qIaZMsKMMAHlUYnVYyYUiDBhNoqFAgFboYFSNIXIznsFiWC/aBjfRuv1KHVlCASoUN87HVfq9JhKQUBB3ourDetTulFn6H/TtLiuGky58BZ2FomrcbrWmRH/eqol9dJiQCz13+Y5Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(39860400002)(396003)(451199021)(40470700004)(36840700001)(46966006)(36756003)(86362001)(82310400005)(44832011)(2906002)(5660300002)(40460700003)(40480700001)(47076005)(186003)(16526019)(426003)(336012)(36860700001)(83380400001)(1076003)(26005)(356005)(82740400003)(81166007)(7696005)(54906003)(110136005)(478600001)(70586007)(70206006)(316002)(4326008)(2616005)(6666004)(8936002)(8676002)(41300700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 13:30:32.3747
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 024fb443-1559-4b13-a7bd-08db7d5c01d8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT008.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6726
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230705123432.1655-1-machel@vivo.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26960/Wed Jul  5 09:29:05 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Debounce handling is done in two different entry points in the driver.
-Unify this to make sure that it's always handled the same.
+On 7/5/23 2:33 PM, Wang Ming wrote:
+> In use_missing_map function, value is
+> initialized twice.There is no
+> connection between the two assignment.
+> This patch could fix this bug.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2:
- * Move later in the series
- * Unsigned -> unsigned int
- * s/out/out_unlock/
----
- drivers/pinctrl/pinctrl-amd.c | 21 +++++----------------
- 1 file changed, 5 insertions(+), 16 deletions(-)
+Please never submit patches where you are just speculating and did not even
+bother to run BPF selftests !
 
-diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
-index 44d3193a81f2a..b129d7c76b3e9 100644
---- a/drivers/pinctrl/pinctrl-amd.c
-+++ b/drivers/pinctrl/pinctrl-amd.c
-@@ -115,16 +115,12 @@ static void amd_gpio_set_value(struct gpio_chip *gc, unsigned offset, int value)
- 	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
- }
- 
--static int amd_gpio_set_debounce(struct gpio_chip *gc, unsigned offset,
--		unsigned debounce)
-+static int amd_gpio_set_debounce(struct amd_gpio *gpio_dev, unsigned int offset,
-+				 unsigned int debounce)
- {
- 	u32 time;
- 	u32 pin_reg;
- 	int ret = 0;
--	unsigned long flags;
--	struct amd_gpio *gpio_dev = gpiochip_get_data(gc);
--
--	raw_spin_lock_irqsave(&gpio_dev->lock, flags);
- 
- 	/* Use special handling for Pin0 debounce */
- 	if (offset == 0) {
-@@ -183,7 +179,6 @@ static int amd_gpio_set_debounce(struct gpio_chip *gc, unsigned offset,
- 		pin_reg &= ~(DB_CNTRl_MASK << DB_CNTRL_OFF);
- 	}
- 	writel(pin_reg, gpio_dev->base + offset * 4);
--	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
- 
- 	return ret;
- }
-@@ -782,9 +777,8 @@ static int amd_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 
- 		switch (param) {
- 		case PIN_CONFIG_INPUT_DEBOUNCE:
--			pin_reg &= ~DB_TMR_OUT_MASK;
--			pin_reg |= arg & DB_TMR_OUT_MASK;
--			break;
-+			ret = amd_gpio_set_debounce(gpio_dev, pin, arg);
-+			goto out_unlock;
- 
- 		case PIN_CONFIG_BIAS_PULL_DOWN:
- 			pin_reg &= ~BIT(PULL_DOWN_ENABLE_OFF);
-@@ -811,6 +805,7 @@ static int amd_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 
- 		writel(pin_reg, gpio_dev->base + pin*4);
- 	}
-+out_unlock:
- 	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
- 
- 	return ret;
-@@ -857,12 +852,6 @@ static int amd_gpio_set_config(struct gpio_chip *gc, unsigned int pin,
- {
- 	struct amd_gpio *gpio_dev = gpiochip_get_data(gc);
- 
--	if (pinconf_to_config_param(config) == PIN_CONFIG_INPUT_DEBOUNCE) {
--		u32 debounce = pinconf_to_config_argument(config);
--
--		return amd_gpio_set_debounce(gc, pin, debounce);
--	}
--
- 	return amd_pinconf_set(gpio_dev->pctrl, pin, &config, 1);
- }
- 
--- 
-2.34.1
+Otherwise you would have seen that your change is breaking it :
+
+Error: #126 log_fixup
+Error: #126/5 log_fixup/missing_map
+   Error: #126/5 log_fixup/missing_map
+   missing_map:PASS:skel_open 0 nsec
+   libbpf: prog 'use_missing_map': BPF program load failed: Invalid argument
+   libbpf: prog 'use_missing_map': failed to load: -22
+   libbpf: failed to load object 'test_log_fixup'
+   libbpf: failed to load BPF skeleton 'test_log_fixup': -22
+   missing_map:PASS:load_fail 0 nsec
+   missing_map:PASS:existing_map_autocreate 0 nsec
+   missing_map:PASS:missing_map_autocreate 0 nsec
+   missing_map:FAIL:log_buf unexpected log_buf: '8: <invalid BPF map reference>
+   BPF map 'missing_map' is referenced but wasn't created
+   ' is not a substring of 'reg type unsupported for arg#0 function use_missing_map#20
+   0: R1=ctx(off=0,imm=0) R10=fp0
+   ; int use_missing_map(const void *ctx)
+   0: (b4) w1 = 0                        ; R1_w=0
+   ; int zero = 0;
+   1: (63) *(u32 *)(r10 -4) = r1         ; R1_w=0 R10=fp0 fp-8=0000????
+   2: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
+   ;
+   3: (07) r2 += -4                      ; R2_w=fp-4
+   ; return bpf_map_lookup_elem(&missing_map, &zero) != NULL;
+   4: <invalid BPF map reference>
+   BPF map 'missing_map' is referenced but wasn't created
+   processed 5 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+
+> Signed-off-by: Wang Ming <machel@vivo.com>
+> ---
+>   tools/testing/selftests/bpf/progs/test_log_fixup.c | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/test_log_fixup.c b/tools/testing/selftests/bpf/progs/test_log_fixup.c
+> index 1bd48feaaa42..1c49b2f9be6c 100644
+> --- a/tools/testing/selftests/bpf/progs/test_log_fixup.c
+> +++ b/tools/testing/selftests/bpf/progs/test_log_fixup.c
+> @@ -52,13 +52,9 @@ struct {
+>   SEC("?raw_tp/sys_enter")
+>   int use_missing_map(const void *ctx)
+>   {
+> -	int zero = 0, *value;
+> +	int zero = 0;
+>   
+> -	value = bpf_map_lookup_elem(&existing_map, &zero);
+> -
+> -	value = bpf_map_lookup_elem(&missing_map, &zero);
+> -
+> -	return value != NULL;
+> +	return bpf_map_lookup_elem(&missing_map, &zero) != NULL;
+>   }
+>   
+>   extern int bpf_nonexistent_kfunc(void) __ksym __weak;
+> 
 
