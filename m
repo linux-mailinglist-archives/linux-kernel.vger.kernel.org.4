@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A457491F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7645C7491FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjGEXkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 19:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S232520AbjGEXk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 19:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjGEXkk (ORCPT
+        with ESMTP id S232155AbjGEXkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 19:40:40 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5E9198E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 16:40:39 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1a28de15c8aso188908fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 16:40:39 -0700 (PDT)
+        Wed, 5 Jul 2023 19:40:45 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F35B1989
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 16:40:44 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666eec46206so174393b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 16:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688600438; x=1691192438;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688600444; x=1691192444;
         h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
          :subject:references:in-reply-to:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TjJ1etH05I9YHXWQWBpJ6VH31mJ0fNultV7DPdyve3A=;
-        b=ZPXNMMOCkXFYWq0NCdEakfNA1pdk3CcYZ+6f0WHempotJZB83+E/pwCM+2q8IKUq2H
-         xdRZIDd51TiDL0p0XvTa0tt0N5VLJedaG+bnWx8ReTf79ecuS467LwMpxMqEOAgA/m/F
-         eE0s1hX4puKbZ5vi5TGeKG1II3apVtjHvOv8rdxCf0tyhg6Y4Uf/o8gYUp3Hqm8+oH4R
-         KBo0VOySqTceqIazooKeeN/zdE0sz0EHxIxewCJ6HiDK6g3JEpVJLYCkcuZNjcJvwnFQ
-         wIV1svBag9hTIYBoNrpo5Tz19PCkfIE7rLC3pf4/Pxw3K6exVKCrJfzuXCwoocgMW8Q4
-         r5sA==
+        bh=0lf3uaq5f8gZLbnMSHirHb1QHfBK88CvzowXxr+xlUY=;
+        b=iN2XA1D40K7Rv6za5RLTMq3D/4qMkJNWQc3jJiNY5I7m3zXzITaeu8Zt6b8s0EEj/9
+         Go15cBMYOHjPPSyMk3a18XTnV7UYIBeWc+HkaOomugkZI8wCPPyUtZw/omLjUDx9TBPi
+         /DDBofPDOfWJo7Dt0+bTGU/C7QI7ugCGF7ZWHAnMv8g4eel8+shrX9GDX9ZuOsCbmO/1
+         E+l3V4luTtJDP/P6SpP9LUdNTZTMicLGUJii4SE3au2zfIJYfXtUzDAfjem3fl3AdHwa
+         qkFI7gkA/Z2JGXgTSESIY0YfHW+r4f1+0zQISX/r5eJO2dbcwMWvcre/KHnkT8xlgWXX
+         Q/IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688600438; x=1691192438;
+        d=1e100.net; s=20221208; t=1688600444; x=1691192444;
         h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
          :subject:references:in-reply-to:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TjJ1etH05I9YHXWQWBpJ6VH31mJ0fNultV7DPdyve3A=;
-        b=fY2a5Vz4ZIzphUTyW73JCLFVBa9WjB+9NB7i7MrQjLcGtZsKzzN0FlpAyuQQN6Bsi9
-         O/FHjAUEVQA/1MR6rTcy/wiXfXvkt4DOIN5c+O6Vcdoe5aybt2w/ZYQUai/OIbTWpG+p
-         e3pvI/rwGEVr0u+sE/CThNqVjMWEGwHz9S4//6jibN7yq8AesiErytGVe5iBaR5O36Ck
-         G9iFF5xPqcgGVi0r+0uwELw+W56lXxpNHwfsYEIAmYIs3zdplfuImJBPqRzkTTR8MVF8
-         70yfBoOMA7FEyI7ez8r8/N0/lnaw65lf7kmgyHTDUbdVbTqlY3TMnmuqOaDbtTZ8ytC7
-         Pyww==
-X-Gm-Message-State: ABy/qLaspYNd2+fXHXmLXJQb5LbcbRe5ptv7sg/vjPdYM131U6z7RoVe
-        1LmJo6KPh5swlroytBUYNTbHvA==
-X-Google-Smtp-Source: APBJJlFSrRdK40t5yNfAd2Kq7jIZOavCQCb89hoatgZHX68xsPhoKBzQ0NfIO/eMq0SLzY8xZh16Yw==
-X-Received: by 2002:a05:6870:9a1f:b0:1b0:15ca:479 with SMTP id fo31-20020a0568709a1f00b001b015ca0479mr733323oab.55.1688600438413;
-        Wed, 05 Jul 2023 16:40:38 -0700 (PDT)
+        bh=0lf3uaq5f8gZLbnMSHirHb1QHfBK88CvzowXxr+xlUY=;
+        b=KZf8/59s/6SBm/z+uvDNb6ubLR1l+n36t78NYK7cg/2IjASKrys4gtoGwogPsZ4WjH
+         ol4sZNNZBdcIK0IryvgyaqJ9ig7efPM7XJz9vPsDMCPYydOd0+TJijhAgExUout+I738
+         hDupc/9MqtzktesqwqOXsB/yAer+wqX6R7Evx88bnC7nw7RZpNvaRU0sOCxJ/9JyAUCO
+         iPqyZ6+Zsj+5TPxGHwBrQlXl9cuM0bTi1tzh42dkO4WS1+SaAWC5sEDdyKrrMy9kNXhH
+         h2F6tV+3ruNRz8c+V1ZKfWkfXJtFUMep3mLM+yJ6FNvnqEco0JIFxlc5gVYdZ20tPJ7R
+         jZ0Q==
+X-Gm-Message-State: ABy/qLaACSgHnj3eF/HHZgXAND0V/8p9tE3u0yosZaLlHMDWRL4saFjh
+        kujUeBLfHCMa7spSN84Zmnmc4A==
+X-Google-Smtp-Source: APBJJlFugFhUfL+xhDQ490oTvlE8ZcTbbYqp+QcQ7LR991rHK6hivTUyZ6G/f6GvuH+/tR+4x0sakA==
+X-Received: by 2002:a05:6a20:3219:b0:12c:30f4:bd0b with SMTP id hl25-20020a056a20321900b0012c30f4bd0bmr358767pzc.11.1688600443658;
+        Wed, 05 Jul 2023 16:40:43 -0700 (PDT)
 Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id l12-20020a17090a49cc00b00262e0c91d27sm103433pjm.48.2023.07.05.16.40.37
+        by smtp.gmail.com with ESMTPSA id jh5-20020a170903328500b001b872c17535sm47771plb.13.2023.07.05.16.40.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 16:40:37 -0700 (PDT)
-In-Reply-To: <tencent_FBB94CE615C5CCE7701CD39C15CCE0EE9706@qq.com>
-References: <tencent_FBB94CE615C5CCE7701CD39C15CCE0EE9706@qq.com>
-Subject: Re: [PATCH v3] riscv: move memblock_allow_resize() after linear
- mapping is ready
-Message-Id: <168860030756.22647.2239697649687317403.b4-ty@rivosinc.com>
+        Wed, 05 Jul 2023 16:40:43 -0700 (PDT)
+In-Reply-To: <20230703183126.1567625-1-maz@kernel.org>
+References: <20230703183126.1567625-1-maz@kernel.org>
+Subject: Re: [PATCH] risc-v: Fix order of IPI enablement vs RCU startup
+Message-Id: <168860030768.22647.6698047675033569268.b4-ty@rivosinc.com>
 Date:   Wed, 05 Jul 2023 16:38:27 -0700
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-901c5
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Conor Dooley <conor@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Woody Zhang <woodylab@foxmail.com>
+To:     linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -78,22 +74,22 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 14 Jun 2023 21:19:07 +0800, Woody Zhang wrote:
-> The initial memblock metadata is accessed from kernel image mapping. The
-> regions arrays need to "reallocated" from memblock and accessed through
-> linear mapping to cover more memblock regions. So the resizing should
-> not be allowed until linear mapping is ready. Note that there are
-> memblock allocations when building linear mapping.
+On Mon, 03 Jul 2023 19:31:26 +0100, Marc Zyngier wrote:
+> Conor reports that risc-v tries to enable IPIs before telling the
+> core code to enable RCU. With the introduction of the mapple tree
+> as a backing store for the irq descriptors, this results in
+> a very shouty boot sequence, as RCU is legitimately upset.
 > 
-> This patch is similar to 24cc61d8cb5a ("arm64: memblock: don't permit
-> memblock resizing until linear mapping is up").
+> Restore some sanity by moving the risc_ipi_enable() call after
+> notify_cpu_starting(), which explicitly enables RCU on the calling
+> CPU.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] riscv: move memblock_allow_resize() after linear mapping is ready
-      https://git.kernel.org/palmer/c/85fadc0d0411
+[1/1] risc-v: Fix order of IPI enablement vs RCU startup
+      https://git.kernel.org/palmer/c/6259f3443c6a
 
 Best regards,
 -- 
