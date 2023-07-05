@@ -2,127 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F472748DC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F623748DC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbjGET3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        id S233942AbjGET3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbjGET3X (ORCPT
+        with ESMTP id S233969AbjGET3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:29:23 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B9A10F2;
-        Wed,  5 Jul 2023 12:29:21 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-7656652da3cso602639185a.1;
-        Wed, 05 Jul 2023 12:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688585360; x=1691177360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aX9x7UocICoyKf+7dpuLhA5gusj7thE6eymrovOEi1Y=;
-        b=OS4puIf3aHwVkCom7A3NU/1M+2pAzfOAwkAJqE44r80PeCkfJxdtGXY2zufhkQSBFi
-         Wy0a9gsCbgIKr2OAA1VDZQPAHtbdkRFMqK7nrM/6PKcu7U/Z7lSi+eg0TR/tgdZLmaU+
-         kN/TddZcO3tHKL6tAA5DZi/yW3p60ImHJWV84St9EYJPzeIe5zoF6QsCs1ghcjdDiP4H
-         MMlSynDbfCJFSkxpWHzibsQYud9RqV0j40J0PaSqMQOQzqVEvNVBXXa1BMZHvhD6nBrf
-         uT83kN0b9wf/2vdE2cTGk/b+k3J43cW6FE+XXn+nlLq1N8rwe6x2mGOxQJpLLhGd6er/
-         s1Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585360; x=1691177360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aX9x7UocICoyKf+7dpuLhA5gusj7thE6eymrovOEi1Y=;
-        b=dP2btGJHVqI1fH3MgXmMASVC89bUNWRDHzib6p/Va+6z4VfAlsgLY7HeS6aMNbw8w8
-         yV9xcZJknkM/zE/jQXTdO9nIqliDXEd/tBt6vkwi91R4xtVHagL6bCO0GM3Ub5sDXwtv
-         t9nCu6RMCVVAxsLp2gmti6c2780H3etoYmDQMBC/SN8PiBj+gvzUhoCUlJW4g0dTNxRW
-         vfi1yfnvRHPlAz8ZymBBwnB/nzhh8/wr9sAiFN/oAYx0rgTUcj14W/W2To4ng8meTyXC
-         +7y1I9SRmeNjZQYV7h+sM7r9U5pPJ5KSJlu4ce/fbilpr+kPW/+bN2F7MVtuLwOCsVli
-         S5gQ==
-X-Gm-Message-State: ABy/qLZOTi72s9qePQMgMb9vI7Ytd6whCXohHBgtwKwulRMWLf0gp8p7
-        iBtOUBpyCnxsgFiidr3YhTU=
-X-Google-Smtp-Source: ACHHUZ5CLNg08C/ff8nQYOuus6yDfKhh2rv7ePHk14UbrG5WD2+By7Xt/bnqOYrBoj9b22+UEmDJaQ==
-X-Received: by 2002:a05:620a:17a0:b0:767:1d7e:ec40 with SMTP id ay32-20020a05620a17a000b007671d7eec40mr19716096qkb.1.1688585360166;
-        Wed, 05 Jul 2023 12:29:20 -0700 (PDT)
-Received: from localhost (modemcable065.128-200-24.mc.videotron.ca. [24.200.128.65])
-        by smtp.gmail.com with ESMTPSA id m18-20020ae9e012000000b0075d49ce31c3sm11206136qkk.91.2023.07.05.12.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:29:19 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 15:29:19 -0400
-From:   Benjamin Poirier <benjamin.poirier@gmail.com>
-To:     Wang Ming <machel@vivo.com>
-Cc:     Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH net v2] net:thunderx:Fix resource leaks in
- device_for_each_child_node() loops
-Message-ID: <ZKXEj6p/xkA+1yM4@d3>
-References: <20230705143507.4120-1-machel@vivo.com>
+        Wed, 5 Jul 2023 15:29:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4610F171A;
+        Wed,  5 Jul 2023 12:29:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D55F0616DA;
+        Wed,  5 Jul 2023 19:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C56C433C7;
+        Wed,  5 Jul 2023 19:29:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688585377;
+        bh=58E9A5hdZBNfXmya5PCeY7HXsUfb3Ff8zPeemokngEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V6wbGg/+57CYKEHYV+uixfWNCh/9v+4zU9M8fxtJrep+XywpzBRieTW8SdVm9jWsX
+         8jnjQD9t6n3OZ6QZ9WB+iDJtUxpwv4c4vTBDNFuur048merbY3/wMo+JC/gdG//GRH
+         r99TXiptTgZrvYpA/9uhlHueIHq3uh2J3uw1f2qLVev5pb4hgVIef5bwl/E1njRHS2
+         iJUh76lOuAH4VvAXROqmZWUY9lHdifDf21yCH3pEKbRMUA6D6smgR4NpOJuGnIgqnv
+         7TmA4xrsUSHXI6oRcIUVw0x1Ed4fpu1ZjvuoEI2k2jUowmOlwyxOoTwvTs9I2i3JmU
+         pJEZZt2lDYEVA==
+Date:   Wed, 5 Jul 2023 20:29:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ccce9d4a-90fe-465a-88ae-ea1416770c77@sirena.org.uk>
+References: <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
+ <2a30ac58-d970-45c3-87d2-55396c0a83f9@sirena.org.uk>
+ <0a9ade13b989ea881fd43fabbe5de1d248cf4218.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="itt77taXQv6vqcOz"
 Content-Disposition: inline
-In-Reply-To: <20230705143507.4120-1-machel@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0a9ade13b989ea881fd43fabbe5de1d248cf4218.camel@intel.com>
+X-Cookie: Don't feed the bats tonight.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-07-05 22:34 +0800, Wang Ming wrote:
-> The device_for_each_child_node() loop in
-> bgx_init_of_phy() function should have
-> wnode_handle_put() before break
- ^
- fwnode_handle_put()
 
-> which could avoid resource leaks.
-> This patch could fix this bug.
-> 
-> Signed-off-by: Wang Ming <machel@vivo.com>
-> ---
->  drivers/net/ethernet/cavium/thunder/thunder_bgx.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> index a317feb8decb..dad32d36a015 100644
-> --- a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> +++ b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> @@ -1478,8 +1478,10 @@ static int bgx_init_of_phy(struct bgx *bgx)
->  		 * cannot handle it, so exit the loop.
->  		 */
->  		node = to_of_node(fwn);
-> -		if (!node)
-> +		if (!node) {
-> +			fwnode_handle_put(fwn);
->  			break;
-> +		}
+--itt77taXQv6vqcOz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes: eee326fd8334 ("net: thunderx: bgx: Use standard firmware node infrastructure.")
-?
+On Wed, Jul 05, 2023 at 07:17:25PM +0000, Edgecombe, Rick P wrote:
 
->  
->  		of_get_mac_address(node, bgx->lmac[lmac].mac);
->  
-> @@ -1503,6 +1505,7 @@ static int bgx_init_of_phy(struct bgx *bgx)
->  		lmac++;
->  		if (lmac == bgx->max_lmac) {
->  			of_node_put(node);
-> +			fwnode_handle_put(fwn);
+> Ah, interesting, thanks for the extra info. So which features is glibc
+> planning to use? (probably more of a question for Szabolcs). Are push
+> and pop controllable separately?
 
-\ fwnode_handle_put
-	\ of_fwnode_put
-		of_node_put(to_of_node(fwnode));
+Push and pop are one control, you get both or neither.
 
-With your patch, there are now two references released on 'node' (two
-of_node_put(node) calls).
-One reference is from device_for_each_child_node(), where was the other
-reference taken?
+I'll defer to Szabolcs on glibc plans.
+
+--itt77taXQv6vqcOz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSlxJQACgkQJNaLcl1U
+h9Dl3gf4pyfBTQGKNG7L2/ecpPEphYcpapfkYdEFAnsVKJ2aZlrgdUGX+h5iB+eV
+OIUnTjkuQDFCJ47C3ORYsCtSAbkRe13XbVaYXbOWjB6eJjzgs9LncuKK4aunziJj
+mLuY0uRzDE7JbGH94ds/eFOuFHaFPTsd+ZnDEE7ajHueHolhNxgLJZqN8TJhuQ6u
+8cNXaAu3CGKgwoLKXh/VaYQQ2LOAivBeFXzDoXKCZGSBpAeAIrkWQj2EoxcAu7BN
+pVXE5n3Wq2pwAwPWF0fFaIxHM6FKYcDsPM7u5Sbf0vqDC5MxLxr8kNfzO+7gK9g+
+TuGmuQ73sTVmtQZrEqVpN69B27mf
+=80j0
+-----END PGP SIGNATURE-----
+
+--itt77taXQv6vqcOz--
