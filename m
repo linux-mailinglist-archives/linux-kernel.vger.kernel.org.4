@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08240748B6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41114748B67
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbjGESRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 14:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        id S233392AbjGESRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 14:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbjGESRX (ORCPT
+        with ESMTP id S233353AbjGESRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 14:17:23 -0400
+        Wed, 5 Jul 2023 14:17:20 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4681996
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:16:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D14C19AF
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:16:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688580990;
+        s=mimecast20190719; t=1688580996;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HhCGDFDeE6330wjTb7+eVdOM5sDQ6eAc/Pd0Q124xLM=;
-        b=JXLEHIrXZ8qSc83jvJFjrhnw4PSubmsefZZkcKlG3RA6GBOiwTPvWvGq//pY60d7HUoo3w
-        G/ZWUW56KM5lSQ5VVzp5DoYJ0clhliPBL4yIj86B5w3eLyESLpIJnQgSE/GErxFIpUc6TG
-        4cIjxWoNWix2dhXpSrx0Hf1+nwcfVec=
+        bh=snCuxFAiT0B/bnlHGtaiRqsJwVD+zCZujmUlSZJWpwM=;
+        b=gbFZdI+CtiuzRmPWqKrw9wu3m900gR3Z0Q6ZTozWwRTClBZcjFW7ayEchlbBZ0z4VqxbQZ
+        XjB1zBuO4FZiRDxVEk5RcZiJJR5S7Esde691DFrJCAT7sJ4QxQF0lMycbxKSfmlddbKE17
+        P5LzQabDCMxO6MPvxq9rjln1lRKkk4c=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-9fom_J9fNdKBOQiCT3xrlw-1; Wed, 05 Jul 2023 14:16:26 -0400
-X-MC-Unique: 9fom_J9fNdKBOQiCT3xrlw-1
+ us-mta-668-hNYP9ME2PT2zK_PDEefSuQ-1; Wed, 05 Jul 2023 14:16:33 -0400
+X-MC-Unique: hNYP9ME2PT2zK_PDEefSuQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 930C32808E6D;
-        Wed,  5 Jul 2023 18:16:24 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D8FE3815EF2;
+        Wed,  5 Jul 2023 18:16:31 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.42.28.164])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E602BF5CFB;
-        Wed,  5 Jul 2023 18:15:54 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CDDF218EB4;
+        Wed,  5 Jul 2023 18:16:24 +0000 (UTC)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
@@ -82,9 +82,9 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH 04/14] tracing/filters: Enable filtering the CPU common field by a cpumask
-Date:   Wed,  5 Jul 2023 19:12:46 +0100
-Message-Id: <20230705181256.3539027-5-vschneid@redhat.com>
+Subject: [RFC PATCH 05/14] tracing/filters: Document cpumask filtering
+Date:   Wed,  5 Jul 2023 19:12:47 +0100
+Message-Id: <20230705181256.3539027-6-vschneid@redhat.com>
 In-Reply-To: <20230705181256.3539027-1-vschneid@redhat.com>
 References: <20230705181256.3539027-1-vschneid@redhat.com>
 MIME-Version: 1.0
@@ -101,75 +101,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tracing_cpumask lets us specify which CPUs are traced in a buffer
-instance, but doesn't let us do this on a per-event basis (unless one
-creates an instance per event).
-
-A previous commit added filtering scalar fields by a user-given cpumask,
-make this work with the CPU common field as well.
-
-This enables doing things like
-
-$ trace-cmd record -e 'sched_switch' -f 'CPU & MASK{12-52}' \
-		   -e 'sched_wakeup' -f 'target_cpu & MASK{12-52}'
+Cpumask, scalar and CPU fields can now be filtered by a user-provided
+cpumask, document the syntax.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- kernel/trace/trace_events_filter.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ Documentation/trace/events.rst | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 99e111c237a93..b3d2612d4670a 100644
---- a/kernel/trace/trace_events_filter.c
-+++ b/kernel/trace/trace_events_filter.c
-@@ -68,6 +68,7 @@ enum filter_pred_fn {
- 	FILTER_PRED_FN_PCHAR_USER,
- 	FILTER_PRED_FN_PCHAR,
- 	FILTER_PRED_FN_CPU,
-+	FILTER_PRED_FN_CPU_CPUMASK,
- 	FILTER_PRED_FN_CPUMASK,
- 	FILTER_PRED_FN_FUNCTION,
- 	FILTER_PRED_FN_,
-@@ -933,6 +934,13 @@ static int filter_pred_cpu(struct filter_pred *pred, void *event)
- 	}
- }
+diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
+index f5fcb8e1218f6..e9bc9f23891a0 100644
+--- a/Documentation/trace/events.rst
++++ b/Documentation/trace/events.rst
+@@ -219,6 +219,20 @@ the function "security_prepare_creds" and less than the end of that function.
+ The ".function" postfix can only be attached to values of size long, and can only
+ be compared with "==" or "!=".
  
-+static int filter_pred_cpu_cpumask(struct filter_pred *pred, void *event)
-+{
-+	int cpu = raw_smp_processor_id();
++Cpumask fields or scalar fields that encode a CPU number can be filtered using
++a user-provided cpumask in cpulist format. The format is as follows::
 +
-+	return do_filter_cpumask_scalar(pred->op, cpu, pred->mask);
-+}
++  MASK{$cpulist}
 +
- /* Filter predicate for cpumasks. */
- static int filter_pred_cpumask(struct filter_pred *pred, void *event)
- {
-@@ -1436,6 +1444,8 @@ static int filter_pred_fn_call(struct filter_pred *pred, void *event)
- 		return filter_pred_pchar(pred, event);
- 	case FILTER_PRED_FN_CPU:
- 		return filter_pred_cpu(pred, event);
-+	case FILTER_PRED_FN_CPU_CPUMASK:
-+		return filter_pred_cpu_cpumask(pred, event);
- 	case FILTER_PRED_FN_CPUMASK:
- 		return filter_pred_cpumask(pred, event);
- 	case FILTER_PRED_FN_FUNCTION:
-@@ -1654,6 +1664,7 @@ static int parse_pred(const char *str, void *data,
- 		char *tmp;
++Operators available to cpumask filtering are:
++
++& (intersection), ==, !=
++
++For example, this will filter events that have their .target_cpu field present
++in the given cpumask::
++
++  target_cpu & MASK{17-42}
++
+ 5.2 Setting filters
+ -------------------
  
- 		if (field->filter_type != FILTER_CPUMASK &&
-+		    field->filter_type != FILTER_CPU &&
- 		    field->filter_type != FILTER_OTHER) {
- 			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
- 			goto err_free;
-@@ -1698,6 +1709,8 @@ static int parse_pred(const char *str, void *data,
- 		i++;
- 		if (field->filter_type == FILTER_CPUMASK) {
- 			pred->fn_num = FILTER_PRED_FN_CPUMASK;
-+		} else if (field->filter_type == FILTER_CPU) {
-+			pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
- 		} else {
- 			switch (field->size) {
- 			case 8:
 -- 
 2.31.1
 
