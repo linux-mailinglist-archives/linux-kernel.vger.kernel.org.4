@@ -2,149 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38E17481EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F4A748201
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjGEKT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 06:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S231693AbjGEKWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 06:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGEKT4 (ORCPT
+        with ESMTP id S229776AbjGEKWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 06:19:56 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9B0122
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 03:19:55 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b8ad9eede0so6197525ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 03:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688552395; x=1691144395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3u7+5Xqy66HQP6SQUF7U4sC21GcgKDOqOTXMNFMXNXA=;
-        b=rPJPIfq/R6OfaG/YEW6Yp+yH3ApXrithvu7h+TjIopWJTbDTlq9JiGu/+38Nj3lViT
-         wgn8vySnMiJWgLRaBS69ec3yC24zcrqBWhjMWcBzVcB5cgQhUVMEGNr2cURwoXhMM/uk
-         +W6md+t5FMV0Skctm7On6nGznnQ9WYyj9IClRs09KMKBGU6ZrVvZ5DBz4PSRszHpemqD
-         va5sKn4kbXL/McNsgVQ27pd2wo5osf7Lx0kq7n5m+kVSwku7O5xVcwfJ3HKsrvxdgeqb
-         yi1eDhXE2k4NW9CEBxhMyv8qfP/9yBTxGZNIt9AU8Gk/b9mwAwqolIiCmND6lXXyE54H
-         WVgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688552395; x=1691144395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3u7+5Xqy66HQP6SQUF7U4sC21GcgKDOqOTXMNFMXNXA=;
-        b=Nh6aFjm0uiOWhJ9CRwAGEjONBW0bGG1NKIQV0x2PTzy1tat3aFrs+7HH1sjWJa4dAr
-         lKwoiXR5Nzt3QDDSN8w3fPtC+EA2sSAJ+L0v+KO1qe6wFbTfu3QKgATaRP325OkdYAIV
-         UpKNu8ZRI+Yyf46syvj5qcxC8rNeRaP2WbLbKzmBerJSZLlj7cNjn15J6QH36VUsQLnT
-         UsQWD6CnvcbzVYNPWY8GUvawj/a0XvdDEtf4haoA4a89mSzLgapp8LoOkYS17HoNP+eY
-         eIIjS7UALuKKs4CNUMyKUgSMadFPpKIXsC1BmLn3gu5+sVzWORrEIIjA9v6WEGb3PZ+u
-         dBxw==
-X-Gm-Message-State: ABy/qLY+2hUJs/W9VsCxMnYoGYo8r34GpYNmigv1LhVoGefOO0Tl3tYT
-        6+RjyOG9Bt1aztqTwdXakE8=
-X-Google-Smtp-Source: APBJJlFtq8pH3qACwgrVuzhtaF6Tf1EaeFvnte7cgLrY+EcS1al3gR2FZfJH7jks15BP5NnNrlkZNw==
-X-Received: by 2002:a17:903:1c5:b0:1b5:219a:cbbd with SMTP id e5-20020a17090301c500b001b5219acbbdmr19318373plh.3.1688552394645;
-        Wed, 05 Jul 2023 03:19:54 -0700 (PDT)
-Received: from [0.0.0.0] ([5.180.77.117])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902b20a00b001b872c17535sm8947975plr.13.2023.07.05.03.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 03:19:54 -0700 (PDT)
-Message-ID: <741ac150-5913-7011-31c2-15292df8061c@gmail.com>
-Date:   Wed, 5 Jul 2023 18:19:47 +0800
+        Wed, 5 Jul 2023 06:22:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F705122;
+        Wed,  5 Jul 2023 03:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4Ry2jwT0YbMwWbjx+3d3lF7amM0BUUKmYAyIeJr5PH0=; b=TkLfIfSOKiy03+vFG2OK6XsHNN
+        Iq/mWTSZwNCg6/mZQN71Of8QJbi5+cWYhWfQs7Bg4NO1fX6WIuakygNQYhMZCOyeZBV/fVZJcp4+m
+        JaHFPtOq0506oqa9eJxIq3H1ZQlw/Xgm/Sy6TUK5IRLCoKiLI4pzqvQ93rUo5XLnJbVhPlg7hbmrd
+        +GdtrTHYNPvLalFg8XnTjE3HI89O7Lhkz+M3iW5BX3ZQIYNQfBnDHchympbxWrlXeIEFDnNibnAdw
+        YLit9T+us3bY6+IX/Kpgx/R/E2ggxQ1gpsSUQ/Se+5PiF54l+IifukRhkO7I8VfhslIyaLjqT3SIt
+        oxlzWqyA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qGzdj-009yvy-Tr; Wed, 05 Jul 2023 10:21:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 02A2F30005E;
+        Wed,  5 Jul 2023 12:21:38 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DD7032028F056; Wed,  5 Jul 2023 12:21:37 +0200 (CEST)
+Date:   Wed, 5 Jul 2023 12:21:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
+ #GP
+Message-ID: <20230705102137.GX4253@hirez.programming.kicks-ass.net>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
+ <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
+ <20230628203823.GR38236@hirez.programming.kicks-ass.net>
+ <42e13ccf7f27a68c0dd64640eed378c38ef40967.camel@intel.com>
+ <20230630100659.GF2533791@hirez.programming.kicks-ass.net>
+ <20230630102141.GA2534364@hirez.programming.kicks-ass.net>
+ <20230630120650.GB2534364@hirez.programming.kicks-ass.net>
+ <fdd81fbd2424d8da04f98d156668cad5e73c740b.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] riscv: Start of DRAM should at least be aligned on PMD
- size for the direct mapping
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230704121837.248976-1-alexghiti@rivosinc.com>
- <20230704-emblem-rubble-e4a3a87cb98e@wendy>
- <CAHVXubikF36Tc19vv9osVz3ZvEyKXk-+74YBpPAZQpSt+vFkQw@mail.gmail.com>
-From:   Song Shuai <suagrfillet@gmail.com>
-In-Reply-To: <CAHVXubikF36Tc19vv9osVz3ZvEyKXk-+74YBpPAZQpSt+vFkQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fdd81fbd2424d8da04f98d156668cad5e73c740b.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 03, 2023 at 12:15:13PM +0000, Huang, Kai wrote:
+> 
+> > 
+> > So I think the below deals with everything and unifies __tdx_hypercall()
+> > and __tdx_module_call(), since both sides needs to deal with exactly the
+> > same trainwreck.
+> 
+> Hi Peter,
+> 
+> Just want to make sure I understand you correctly:
+> 
+> You want to make __tdx_module_call() look like __tdx_hypercall(), but not to
+> unify them into one assembly (at least for now), right?
+
+Well, given the horrendous trainwreck this is all turning into, I
+through it prudent to have it all in a single place. The moment you go
+play games with callee-saved registers you're really close to what
+hypercall does so then they might as well be the same.
+
+> I am confused you mentioned VP.VMCALL below, which is handled by
+> __tdx_hypercall().
+
+But why? It really isn't *that* special if you consider the other calls
+that are using callee-saved regs, yes it has the rdi/rsi extra, but meh,
+it really just is tdcall-0.
 
 
-在 2023/7/4 21:16, Alexandre Ghiti 写道:
-> On Tue, Jul 4, 2023 at 2:26 PM Conor Dooley <conor.dooley@microchip.com> wrote:
->>
->> Hey Alex,
->>
->> On Tue, Jul 04, 2023 at 02:18:37PM +0200, Alexandre Ghiti wrote:
->>> So that we do not end up mapping the whole linear mapping using 4K
->>> pages, which is slow at boot time, and also very likely at runtime.
->>>
->>> So make sure we align the start of DRAM on a PMD boundary.
->>>
->>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->>
->> Obviously correct me if I am wrong here, but was this not reported by
->> Song Shuai as a regression?
->> Accordingly, should this not have Reported-by, Closes/Link & Fixes tags?
+> >  *-------------------------------------------------------------------------
+> >  * TDCALL/SEAMCALL ABI:
+> >  *-------------------------------------------------------------------------
+> >  * Input Registers:
+> >  *
+> >  * RAX                 - Leaf number.
+> >  * RCX,RDX,R8-R11      - Leaf specific input registers.
+> >  * RDI,RSI,RBX,R11-R15 - VP.VMCALL VP.ENTER
+> >  *
+> >  * Output Registers:
+> >  *
+> >  * RAX                 - instruction error code.
+> >  * RCX,RDX,R8-R11      - Leaf specific output registers.
+> >  * RDI,RSI,RBX,R12-R15 - VP.VMCALL VP.ENTER
 > 
-> Sure we should add the reported by from Song as he did the proper report :)
-> 
-> Reported-by: Song Shuai <suagrfillet@gmail.com>
-> Closes: https://lore.kernel.org/linux-riscv/20230625140931.1266216-1-songshuaishuai@tinylab.org/
-> 
-> And yes sorry, I thought it was there before, but it was actually when
-> I retrieved the first 2MB that the problem appeared, so:
-> 
-> Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-> 
-> Thanks!
-And you can add my tested-by:
+> As mentioned above, VP.VMCALL is handled by __tdx_hypercall().  Also, VP.ENTER
+> will be handled by KVM's own assembly.  They both are not handled in this
+> TDX_MODULE_CALL assembly.
 
-Tested-by: Song Shuai <suagrfillet@gmail.com>
-> 
->>
->> Cheers,
->> Conor.
->>
->>> ---
->>>   arch/riscv/mm/init.c | 7 ++++++-
->>>   1 file changed, 6 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->>> index 4fa420faa780..4a43ec275c6d 100644
->>> --- a/arch/riscv/mm/init.c
->>> +++ b/arch/riscv/mm/init.c
->>> @@ -214,8 +214,13 @@ static void __init setup_bootmem(void)
->>>        memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
->>>
->>>        phys_ram_end = memblock_end_of_DRAM();
->>> +
->>> +     /*
->>> +      * Make sure we align the start of the memory on a PMD boundary so that
->>> +      * at worst, we map the linear mapping with PMD mappings.
->>> +      */
->>>        if (!IS_ENABLED(CONFIG_XIP_KERNEL))
->>> -             phys_ram_base = memblock_start_of_DRAM();
->>> +             phys_ram_base = memblock_start_of_DRAM() & PMD_MASK;
->>>
->>>        /*
->>>         * In 64-bit, any use of __va/__pa before this point is wrong as we
->>> --
->>> 2.39.2
->>>
+I don't think they should be special, they're really just yet another
+leaf call. Yes, they have a shit calling convention, and yes VP.ENTER is
+terminally broken for unconditionally clobbering BP :-(
 
--- 
-Thanks
-Song Shuai
+That really *must* be fixed.
+
+> > .Lcall:
+> > .if \host
+> > 	seamcall
+> > 	/*
+> > 	 * SEAMCALL instruction is essentially a VMExit from VMX root
+> > 	 * mode to SEAM VMX root mode.  VMfailInvalid (CF=1) indicates
+> > 	 * that the targeted SEAM firmware is not loaded or disabled,
+> > 	 * or P-SEAMLDR is busy with another SEAMCALL. RAX is not
+> > 	 * changed in this case.
+> > 	 */
+> > 	jc	.Lseamfail
+> > 
+> > .if \saved && \ret
+> > 	/*
+> > 	 * VP.ENTER clears RSI on output, use it to restore state.
+> > 	 */
+> > 	popq	%rsi
+> > 	xor	%edi,%edi
+> > 	movq	%rdi, TDX_MODULE_rdi(%rsi)
+> > 	movq	%rdi, TDX_MODULE_rsi(%rsi)
+> > .endif
+> > .else
+> > 	tdcall
+> > 
+> > 	/*
+> > 	 * RAX!=0 indicates a failure, assume no return values.
+> > 	 */
+> > 	testq	%rax, %rax
+> > 	jne	.Lerror
+> 
+> For some SEAMCALL/TDCALL the output registers may contain additional error
+> information.  We need to jump to a location where whether returning those
+> additional regs to 'struct tdx_module_args' depends on \ret.
+
+I suppose we can move this into the below conditional :-( The [DS]I
+register stuff requires a scratch reg to recover, AX being zero provides
+that.
+
+> > .if \saved && \ret
+> > 	/*
+> > 	 * Since RAX==0, it can be used as a scratch register to restore state.
+> > 	 *
+> > 	 * [ assumes \saved implies \ret ]
+> > 	 */
+> > 	popq	%rax
+> > 	movq	%rdi, TDX_MODULE_rdi(%rax)
+> > 	movq	%rsi, TDX_MODULE_rsi(%rax)
+> > 	movq	%rax, %rsi
+> > 	xor	%eax, %eax;
+> > .endif
+> > .endif // \host
+
+So the reason I want this, is that I feel very strongly that if you
+cannot write a single coherent wrapper for all this, its calling
+convention is fundamentally *too* complex / broken.
+
+
