@@ -2,123 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F54748683
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0E3748685
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjGEOiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S232517AbjGEOjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjGEOiR (ORCPT
+        with ESMTP id S231565AbjGEOjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:38:17 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F1EBC;
-        Wed,  5 Jul 2023 07:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688567888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SbGsdRos9lr6JUVyzk1s1zgD1oAk2OBQlPBSuytJBro=;
-        b=KTRK5PGW78Z/Tb/e8WZwyhzwo6R3Q/x6jDcjL0urvHIXutudKjCow8njoz3M49cZsvtCxr
-        /qIkZwj+RKeUvPF8QMzbQZbor9bZsB9v7XZjaEz+m8FlQLYyDDmb71Mo6rsyVhcSxxBFHS
-        hY3ZBl6jTUBFkBjvNdGdaOcWznHXHcw=
-Message-ID: <8e81dd5d9f62139e740ea123aa2087cb1bbcb04b.camel@crapouillou.net>
-Subject: Re: [PATCH 2/3] drm/panel: ld9040: Register a backlight device
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     neil.armstrong@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Date:   Wed, 05 Jul 2023 16:38:05 +0200
-In-Reply-To: <194ac047-b20e-04c1-1d96-67cc483bb4a1@linaro.org>
-References: <20230703214715.623447-1-paul@crapouillou.net>
-         <20230703214715.623447-3-paul@crapouillou.net>
-         <194ac047-b20e-04c1-1d96-67cc483bb4a1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+        Wed, 5 Jul 2023 10:39:43 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7A9113;
+        Wed,  5 Jul 2023 07:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=a3Rf4+roGcyzICjP/y+mzVOY5fi2qEb4QAdDmwYjSrY=; b=aX26S1+S9ndT/vzQo02Vq2zdDI
+        I4us3iH1FQtMqBOG3NELuDdA0BgZ09qftjKvCJGWMrEA9O3B9EXoue6iuiLiUVTGDLaGqWfu2/O4P
+        V5UrbWTffRe0hcrmWUaXEVBesPRuoUmNpSkFqfcymn3vdLfhLzl0KdjbBwW5GqQde8U5EdAQ5mocw
+        gs7C2U3udmVDnzsnVcPsF/0Ku4yB5ZAIsPl+GHDYHJc/luD8Fefdbz+LXLr/0hzWm0n315ly9CNwt
+        S3u8GDF3jlGxuFYXKwBKuU2fP1DLWXBztGs/ABsJ7btY7lA+Kg/v7RFWMVV/1wtOF5tjGHGdnC78T
+        a37xe0Sw==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qH3fD-000Db4-9D; Wed, 05 Jul 2023 16:39:27 +0200
+Received: from [178.197.249.31] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qH3fC-000GRN-EA; Wed, 05 Jul 2023 16:39:26 +0200
+Subject: Re: [PATCH bpf-next] bpf: Introduce bpf generic log
+To:     Leon Hwang <hffilwlqm@gmail.com>, ast@kernel.org
+Cc:     john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        hawk@kernel.org, tangyeechou@gmail.com, kernel-patches-bot@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230705132058.46194-1-hffilwlqm@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1a205a85-ebf2-6d90-468d-4fd63ce3dd0f@iogearbox.net>
+Date:   Wed, 5 Jul 2023 16:39:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230705132058.46194-1-hffilwlqm@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26960/Wed Jul  5 09:29:05 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTmVpbCwKCkxlIG1lcmNyZWRpIDA1IGp1aWxsZXQgMjAyMyDDoCAxNTo1NyArMDIwMCwgTmVp
-bCBBcm1zdHJvbmcgYSDDqWNyaXTCoDoKPiBPbiAwMy8wNy8yMDIzIDIzOjQ3LCBQYXVsIENlcmN1
-ZWlsIHdyb3RlOgo+ID4gUmVnaXN0ZXIgYSBiYWNrbGlnaHQgZGV2aWNlIHRvIGJlIGFibGUgdG8g
-c3dpdGNoIGJldHdlZW4gYWxsIHRoZQo+ID4gZ2FtbWEKPiA+IGxldmVscy4KPiA+IAo+ID4gU2ln
-bmVkLW9mZi1ieTogUGF1bCBDZXJjdWVpbCA8cGF1bEBjcmFwb3VpbGxvdS5uZXQ+Cj4gPiAtLS0K
-PiA+IMKgIGRyaXZlcnMvZ3B1L2RybS9wYW5lbC9wYW5lbC1zYW1zdW5nLWxkOTA0MC5jIHwgNDAK
-PiA+ICsrKysrKysrKysrKysrKysrKysrCj4gPiDCoCAxIGZpbGUgY2hhbmdlZCwgNDAgaW5zZXJ0
-aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3BhbmVsL3BhbmVs
-LXNhbXN1bmctbGQ5MDQwLmMKPiA+IGIvZHJpdmVycy9ncHUvZHJtL3BhbmVsL3BhbmVsLXNhbXN1
-bmctbGQ5MDQwLmMKPiA+IGluZGV4IDdmZDk0NDRiNDJjNS4uYjRmODdkNjI0NGNiIDEwMDY0NAo+
-ID4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3BhbmVsL3BhbmVsLXNhbXN1bmctbGQ5MDQwLmMKPiA+
-ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9wYW5lbC1zYW1zdW5nLWxkOTA0MC5jCj4gPiBA
-QCAtOCw2ICs4LDcgQEAKPiA+IMKgwqAgKiBBbmRyemVqIEhhamRhIDxhLmhhamRhQHNhbXN1bmcu
-Y29tPgo+ID4gwqAgKi8KPiA+IMKgIAo+ID4gKyNpbmNsdWRlIDxsaW51eC9iYWNrbGlnaHQuaD4K
-PiA+IMKgICNpbmNsdWRlIDxsaW51eC9kZWxheS5oPgo+ID4gwqAgI2luY2x1ZGUgPGxpbnV4L2dw
-aW8vY29uc3VtZXIuaD4KPiA+IMKgICNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4KPiA+IEBAIC0z
-MTEsOCArMzEyLDQwIEBAIHN0YXRpYyBpbnQgbGQ5MDQwX3BhcnNlX2R0KHN0cnVjdCBsZDkwNDAg
-KmN0eCkKPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+IMKgIH0KPiA+IMKgIAo+ID4g
-K3N0YXRpYyBpbnQgbGQ5MDQwX2JsX3VwZGF0ZV9zdGF0dXMoc3RydWN0IGJhY2tsaWdodF9kZXZp
-Y2UgKmRldikKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgbGQ5MDQwICpjdHggPSBk
-ZXZfZ2V0X2RydmRhdGEoJmRldi0+ZGV2KTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGN0eC0+
-YnJpZ2h0bmVzcyA9IGRldi0+cHJvcHMuYnJpZ2h0bmVzczsKPiA+ICvCoMKgwqDCoMKgwqDCoGxk
-OTA0MF9icmlnaHRuZXNzX3NldChjdHgpOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJu
-IDA7Cj4gPiArfQo+ID4gKwo+ID4gK3N0YXRpYyBpbnQgbGQ5MDQwX2JsX2dldF9pbnRlbnNpdHko
-c3RydWN0IGJhY2tsaWdodF9kZXZpY2UgKmRldikKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBp
-ZiAoZGV2LT5wcm9wcy5mYl9ibGFuayA9PSBGQl9CTEFOS19VTkJMQU5LICYmCj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRldi0+cHJvcHMucG93ZXIg
-PT0gRkJfQkxBTktfVU5CTEFOSykKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBy
-ZXR1cm4gZGV2LT5wcm9wcy5icmlnaHRuZXNzOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0
-dXJuIDA7Cj4gPiArfQo+IAo+IFlvdSBjYW4gdG90YWxseSBkcm9wIHRoZSBfZ2V0X2JyaWdodG5l
-c3MuCgpUaGUgY3VycmVudCBiZWhhdmlvdXIgaXMgdG8gcmV0dXJuIDAgd2hlbiB0aGUgZnJhbWVi
-dWZmZXIgaXMgYmxhbmtlZC4gQQpmZXcgZHJpdmVycyBkbyB0aGF0IHNvIEkgdGhvdWdodCBpdCB3
-YXMgdGhlIG5vcm07IGFuZCB0aGUgYmFja2xpZ2h0CmNvcmUgZG9lc24ndCBkbyB0aGF0IGJ5IGRl
-ZmF1bHQgKGFuZCBqdXN0IHVzZXMgZGV2LT5wcm9wcy5icmlnaHRuZXNzKS4KCkl0IGlzIG5vdCBj
-bGVhciB0byBtZSBpZiB0aGF0J3MgdGhlIHByZWZlcnJlZCBiZWhhdmlvdXIuIFRoZQoiYmFja2xp
-Z2h0X2dldF9icmlnaHRuZXNzIiBmdW5jdGlvbiBpbiBiYWNrbGlnaHQuaCBzZWVtcyB0byBzdWdn
-ZXN0CnRoYXQgdGhlIGN1cnJlbnQgYmVoYXZpb3VyIGlzIGNvcnJlY3QsIHVubGVzcyBpdCBpcyBu
-b3Qgc3VwcG9zZWQgdG8gYmUKdXNlZCBpbiB0aGUgYmFja2xpZ2h0X29wcy5nZXRfYnJpZ2h0bmVz
-cygpIGNhbGxiYWNrLiBUaGVuIGluIHRoYXQgY2FzZQpzb21lIG90aGVyIGRyaXZlcnMgZ2V0IGl0
-IHdyb25nIHRvby4KCkNoZWVycywKLVBhdWwKCj4gTmVpbAo+IAo+ID4gKwo+ID4gK3N0YXRpYyBj
-b25zdCBzdHJ1Y3QgYmFja2xpZ2h0X29wcyBsZDkwNDBfYmxfb3BzID0gewo+ID4gK8KgwqDCoMKg
-wqDCoMKgLmdldF9icmlnaHRuZXNzID0gbGQ5MDQwX2JsX2dldF9pbnRlbnNpdHksCj4gPiArwqDC
-oMKgwqDCoMKgwqAudXBkYXRlX3N0YXR1c8KgID0gbGQ5MDQwX2JsX3VwZGF0ZV9zdGF0dXMsCj4g
-PiArfTsKPiA+ICsKPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGJhY2tsaWdodF9wcm9wZXJ0aWVz
-IGxkOTA0MF9ibF9wcm9wcyA9IHsKPiA+ICvCoMKgwqDCoMKgwqDCoC50eXBlID0gQkFDS0xJR0hU
-X1JBVywKPiA+ICvCoMKgwqDCoMKgwqDCoC5zY2FsZSA9IEJBQ0tMSUdIVF9TQ0FMRV9OT05fTElO
-RUFSLAo+ID4gK8KgwqDCoMKgwqDCoMKgLm1heF9icmlnaHRuZXNzID0gQVJSQVlfU0laRShsZDkw
-NDBfZ2FtbWFzKSAtIDEsCj4gPiArwqDCoMKgwqDCoMKgwqAuYnJpZ2h0bmVzcyA9IEFSUkFZX1NJ
-WkUobGQ5MDQwX2dhbW1hcykgLSAxLAo+ID4gK307Cj4gPiArCj4gPiDCoCBzdGF0aWMgaW50IGxk
-OTA0MF9wcm9iZShzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpKQo+ID4gwqAgewo+ID4gK8KgwqDCoMKg
-wqDCoMKgc3RydWN0IGJhY2tsaWdodF9kZXZpY2UgKmJsZGV2Owo+ID4gwqDCoMKgwqDCoMKgwqDC
-oHN0cnVjdCBkZXZpY2UgKmRldiA9ICZzcGktPmRldjsKPiA+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1
-Y3QgbGQ5MDQwICpjdHg7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgaW50IHJldDsKPiA+IEBAIC0zNTQs
-NiArMzg3LDEzIEBAIHN0YXRpYyBpbnQgbGQ5MDQwX3Byb2JlKHN0cnVjdCBzcGlfZGV2aWNlCj4g
-PiAqc3BpKQo+ID4gwqDCoMKgwqDCoMKgwqDCoGRybV9wYW5lbF9pbml0KCZjdHgtPnBhbmVsLCBk
-ZXYsICZsZDkwNDBfZHJtX2Z1bmNzLAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgRFJNX01PREVfQ09OTkVDVE9SX0RQSSk7Cj4gPiDCoCAKPiA+ICsKPiA+
-ICvCoMKgwqDCoMKgwqDCoGJsZGV2ID0gZGV2bV9iYWNrbGlnaHRfZGV2aWNlX3JlZ2lzdGVyKGRl
-diwgZGV2X25hbWUoZGV2KSwKPiA+IGRldiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgY3R4LCAmbGQ5MDQwX2JsX29wcywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgJmxkOTA0MF9ibF9wcm9wcyk7Cj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoSVNf
-RVJSKGJsZGV2KSkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gUFRS
-X0VSUihibGRldik7Cj4gPiArCj4gPiDCoMKgwqDCoMKgwqDCoMKgZHJtX3BhbmVsX2FkZCgmY3R4
-LT5wYW5lbCk7Cj4gPiDCoCAKPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiAKCg==
+On 7/5/23 3:20 PM, Leon Hwang wrote:
+> Currently, excluding verifier, users are unable to obtain detailed error
+> information when issues occur in BPF syscall.
+> 
+> To overcome this limitation, bpf generic log is introduced to provide
+> error details similar to the verifier. This enhancement will enable the
+> reporting of error details along with the corresponding errno in BPF
+> syscall.
+> 
+> Essentially, bpf generic log functions as a mechanism similar to netlink,
+> enabling the transmission of error messages to user space. This
+> mechanism greatly enhances the usability of BPF syscall by allowing
+> users to access comprehensive error messages instead of relying solely
+> on errno.
+> 
+> This patch specifically addresses the error reporting in dev_xdp_attach()
+> . With this patch, the error messages will be transferred to user space
+> like the netlink approach. Hence, users will be able to check the error
+> message along with the errno.
+> 
+> Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
+> ---
+>   include/linux/bpf.h            | 30 ++++++++++++++++++++++++++++++
+>   include/uapi/linux/bpf.h       |  6 ++++++
+>   kernel/bpf/log.c               | 33 +++++++++++++++++++++++++++++++++
+>   net/core/dev.c                 | 11 ++++++++++-
+>   tools/include/uapi/linux/bpf.h |  6 ++++++
+>   5 files changed, 85 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index f58895830..fd63f4a76 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3077,4 +3077,34 @@ static inline gfp_t bpf_memcg_flags(gfp_t flags)
+>   	return flags;
+>   }
+>   
+> +#define BPF_GENERIC_TMP_LOG_SIZE	256
+> +
+> +struct bpf_generic_log {
+> +	char		kbuf[BPF_GENERIC_TMP_LOG_SIZE];
+> +	char __user	*ubuf;
+> +	u32		len_used;
+> +	u32		len_total;
+> +};
+> +
+> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
+> +			const char *fmt, ...);
+> +static inline void bpf_generic_log_init(struct bpf_generic_log *log,
+> +			const struct bpf_generic_user_log *ulog)
+> +{
+> +	log->ubuf = (char __user *) (unsigned long) ulog->log_buf;
+> +	log->len_total = ulog->log_size;
+> +	log->len_used = 0;
+> +}
+> +
+> +#define BPF_GENERIC_LOG_WRITE(log, ulog, fmt, ...)	do {	\
+> +	const char *____fmt = (fmt);				\
+> +	bpf_generic_log_init(log, ulog);			\
+> +	bpf_generic_log_write(log, ____fmt, ##__VA_ARGS__);	\
+> +} while (0)
+> +
+> +#define BPF_GENERIC_ULOG_WRITE(ulog, fmt, ...)	do {			\
+> +	struct bpf_generic_log ____log;					\
+> +	BPF_GENERIC_LOG_WRITE(&____log, ulog, fmt, ##__VA_ARGS__);	\
+> +} while (0)
+> +
+
+Could we generalize the bpf_verifier_log infra and reuse bpf_log() helper
+instead of adding something new?
+
+>   #endif /* _LINUX_BPF_H */
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 60a9d59be..34fa33493 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1318,6 +1318,11 @@ struct bpf_stack_build_id {
+>   	};
+>   };
+>   
+> +struct bpf_generic_user_log {
+> +	__aligned_u64	log_buf;    /* user supplied buffer */
+> +	__u32		log_size;   /* size of user buffer */
+> +};
+> +
+>   #define BPF_OBJ_NAME_LEN 16U
+>   
+>   union bpf_attr {
+> @@ -1544,6 +1549,7 @@ union bpf_attr {
+>   		};
+>   		__u32		attach_type;	/* attach type */
+>   		__u32		flags;		/* extra flags */
+> +		struct bpf_generic_user_log log; /* user log */
+
+You cannot add this here, this breaks user space, you would have to
+ad this under a xdp specific section inside the union.
+
+>   		union {
+>   			__u32		target_btf_id;	/* btf_id of target to attach to */
+>   			struct {
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index 850494423..be56b153b 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -325,3 +325,36 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
+>   	va_end(args);
+>   }
+>   EXPORT_SYMBOL_GPL(bpf_log);
+> +
+> +static inline void __bpf_generic_log_write(struct bpf_generic_log *log, const char *fmt,
+> +				      va_list args)
+> +{
+> +	unsigned int n;
+> +
+> +	n = vscnprintf(log->kbuf, BPF_GENERIC_TMP_LOG_SIZE, fmt, args);
+> +
+> +	WARN_ONCE(n >= BPF_GENERIC_TMP_LOG_SIZE - 1,
+> +		  "bpf generic log truncated - local buffer too short\n");
+> +
+> +	n = min(log->len_total - log->len_used - 1, n);
+> +	log->kbuf[n] = '\0';
+> +
+> +	if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
+> +		log->len_used += n;
+> +	else
+> +		log->ubuf = NULL;
+> +}
+> +
+> +__printf(2, 3) void bpf_generic_log_write(struct bpf_generic_log *log,
+> +				     const char *fmt, ...)
+> +{
+> +	va_list args;
+> +
+> +	if (!log->ubuf || !log->len_total)
+> +		return;
+> +
+> +	va_start(args, fmt);
+> +	__bpf_generic_log_write(log, fmt, args);
+> +	va_end(args);
+> +}
+> +EXPORT_SYMBOL_GPL(bpf_generic_log_write);
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 69a3e5446..e933809c0 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -9409,12 +9409,20 @@ static const struct bpf_link_ops bpf_xdp_link_lops = {
+>   	.update_prog = bpf_xdp_link_update,
+>   };
+>   
+> +static inline void bpf_xdp_link_log(const union bpf_attr *attr, struct netlink_ext_ack *extack)
+> +{
+> +	const struct bpf_generic_user_log *ulog = &attr->link_create.log;
+> +
+> +	BPF_GENERIC_ULOG_WRITE(ulog, extack->_msg);
+> +}
+> +
+>   int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>   {
+>   	struct net *net = current->nsproxy->net_ns;
+>   	struct bpf_link_primer link_primer;
+>   	struct bpf_xdp_link *link;
+>   	struct net_device *dev;
+> +	struct netlink_ext_ack extack;
+>   	int err, fd;
+>   
+>   	rtnl_lock();
+> @@ -9440,12 +9448,13 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>   		goto unlock;
+>   	}
+>   
+> -	err = dev_xdp_attach_link(dev, NULL, link);
+> +	err = dev_xdp_attach_link(dev, &extack, link);
+>   	rtnl_unlock();
+>   
+>   	if (err) {
+>   		link->dev = NULL;
+>   		bpf_link_cleanup(&link_primer);
+> +		bpf_xdp_link_log(attr, &extack);
+>   		goto out_put_dev;
+>   	}
+
+Agree that this is a useful facility to have and propagate back here.
+
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 60a9d59be..34fa33493 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -1318,6 +1318,11 @@ struct bpf_stack_build_id {
+>   	};
+>   };
+>   
+> +struct bpf_generic_user_log {
+> +	__aligned_u64	log_buf;    /* user supplied buffer */
+> +	__u32		log_size;   /* size of user buffer */
+> +};
+> +
+>   #define BPF_OBJ_NAME_LEN 16U
+>   
+>   union bpf_attr {
+> @@ -1544,6 +1549,7 @@ union bpf_attr {
+>   		};
+>   		__u32		attach_type;	/* attach type */
+>   		__u32		flags;		/* extra flags */
+> +		struct bpf_generic_user_log log; /* user log */
+>   		union {
+>   			__u32		target_btf_id;	/* btf_id of target to attach to */
+>   			struct {
+> 
 
