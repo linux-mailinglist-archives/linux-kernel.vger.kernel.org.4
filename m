@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F72F748450
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137CC748455
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjGEMi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 08:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
+        id S231776AbjGEMlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 08:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjGEMi6 (ORCPT
+        with ESMTP id S230268AbjGEMlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 08:38:58 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A359129;
-        Wed,  5 Jul 2023 05:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=NGAR6ZIiv7c024DeENENlyWBZsZPUFDDAkTK7aDiRWY=; b=Y9Kty3Q0jfYzDgiSs/NQXlUGnN
-        W+HbPJJjBuYvAII4Pe+UlYF6bvoEno/MpdVEo5qDs/DjgZhw/rkm8krLK7kuGhRPz7dBfOuvRUnXs
-        AjNhpvPHJMNH8tO7Ok988hVTkknYH9BCQceXNy0SsOXmMgczHROb9lm8g04l2fo6/Pxx/Nk/db4/O
-        KdXGkUMDAFCFKCXtQ7OcU/JcFKVzCnsVi8huCofS68rr5QA0szwbG+IMHUgyXNj4HLEnwHYD3jmQQ
-        L8yVo3194TUwCCBDanzRqJFT8sBzo2yMUrMIyT7PKUGRs81fkyZV60f+S0egXzPjjXazzTrof2sAd
-        gjIRxCXQ==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qH1mU-000NUt-UR; Wed, 05 Jul 2023 14:38:50 +0200
-Received: from [178.197.249.31] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qH1mU-000P5n-Cr; Wed, 05 Jul 2023 14:38:50 +0200
-Subject: Re: [PATCH bpf-next 0/2] BPF kselftest cross-build/RISC-V fixes
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20230705113926.751791-1-bjorn@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <9ee053a4-500c-2722-d822-d137648e55e5@iogearbox.net>
-Date:   Wed, 5 Jul 2023 14:38:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 5 Jul 2023 08:41:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD4116;
+        Wed,  5 Jul 2023 05:41:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0129161503;
+        Wed,  5 Jul 2023 12:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0202C433C8;
+        Wed,  5 Jul 2023 12:41:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688560869;
+        bh=Q7lihklVNA978w7esJOsxnmRuuyHw/4jy8/HtRgD23U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KgPbK1R+lK3ukRLbUfyqgffhL5OKUT+r72u8axNjes6sIDlmKKm2yPVKP2jHv5PFM
+         DhZMRnGTiEhynTpthgP+aOO5ltcgFqyhNP5gZ49L4A1LetkOxOxEZ7vDQooDLNGwJQ
+         oqQp2oUBpFYw+plcqxAdQqQ3UuACagbMqHa9SeFaelxsfvhz8JuyUjB094wvyAjYke
+         3npJw1S50ezR6vhdIxSmhuGXYVuQFuydfdjtbY5fIdLAqw5cREcMLvoAbgERooeoxQ
+         3Ah16NmqPBtABEnxoC5oWHep8X0u6dPKZH6bWiGdJKBKiUVOJPnfw3n6wGwH/n2jyc
+         MseidTfhd9Ksw==
+Date:   Wed, 5 Jul 2023 14:41:06 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: Re: [PATCH 0/9] rcu: Support for lazy callbacks on
+ !CONFIG_RCU_NOCB_CPU
+Message-ID: <ZKVk4jUtsPdfgjjJ@localhost.localdomain>
+References: <20230531101736.12981-1-frederic@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230705113926.751791-1-bjorn@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26960/Wed Jul  5 09:29:05 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230531101736.12981-1-frederic@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,22 +60,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/23 1:39 PM, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
+Le Wed, May 31, 2023 at 12:17:27PM +0200, Frederic Weisbecker a �crit :
+> Hi,
 > 
-> This series has two minor fixes, found when cross-compiling for the
-> RISC-V architecture.
-> 
-> Some RISC-V systems do not define HAVE_EFFICIENT_UNALIGNED_ACCESS,
-> which made some of tests bail out. Fix the failing tests by adding
-> F_NEEDS_EFFICIENT_UNALIGNED_ACCESS.
-> 
-> ...and some RISC-V systems *do* define
-> HAVE_EFFICIENT_UNALIGNED_ACCESS. In this case the autoconf.h was not
-> correctly picked up by the build system.
+> Here is a first attempt at providing support for lazy callbacks on
+> non-offloaded CPUs. I have measured interesting results on my machine
+> when it is mostly idle (just an idle ssh connection kept alive) with
+> a gain of +10% idle time. This needs more serious testing though,
+> especially to make sure that no performance regression is introduced.
 
-Looks good, applied thanks! Any plans on working towards integrating riscv
-into upstream BPF CI? Would love to see that happening. :)
+So after refining my measurements, it actually doesn't seem to bring
+much.
 
-Thanks,
-Daniel
+Here's what I measured (it's an average after 100 runs):
+
+* 0.01% more idle time during a "sleep 10"
+* introduce 3% performance regression during an "scp" on the tools directory
+  of the kernel source.
+* Brings less than 1% performance improvement with a "make" on tools/perf
+
+It only brings unconditional improvement when rcu boost is enabled (callbacks
+offloaded to rcuc) but still below 1%.
+
+The reason for the performance penalty is unclear, I initially thought it
+was due to the batch execution delaying other softirqs vectors but it doesn't
+look that way after all.
+
+So for now I'm only going to re-iterate the cleanups in the beginning
+of the patchset and I'll wait for a good reason before ever proceeding with the
+rest.
+
+Thanks.
