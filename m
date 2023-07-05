@@ -2,115 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812D97486B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDCB7486B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbjGEOoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S232738AbjGEOow convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 10:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjGEOo2 (ORCPT
+        with ESMTP id S232676AbjGEOon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:44:28 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30C019A8
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:44:09 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742bso69288795e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688568248; x=1691160248;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YmKtwavW1ZM/DLIGe88sJoG8P4s5K1xjWW1lgqiHqhQ=;
-        b=HkDAkMRTNguX2wXY4lgtObUg9/ZDiVk/Hh0kwMJgW750mtz7FOMz57PUAdEidiL3za
-         ivETv74tTqWsMsLSV5ZRqGo8t8KsVSbpywm4Y/E+ivFyuX1aldL9Bl3Kz3zADntgqP5u
-         5h870+j/MdaEV6PH5hXFshz/8rGc4ESaoGaNkvVpWw0jyoilr4mWSvfJpPjcwR79rByb
-         XlOFmOni5Lh7WIeB9VZygBojFlTM0lDMztRa+8+AqQNznGCxqhiYvUZxgmUq1dIB+7n6
-         gUBti9EXH2uBmK+kHF9ZssGbIZ+C4IOYEXyB4Il7McJkEr7V6qPDoehmmu8t0G4T7+LR
-         qMrg==
+        Wed, 5 Jul 2023 10:44:43 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4376F1732;
+        Wed,  5 Jul 2023 07:44:35 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-579de633419so51264807b3.3;
+        Wed, 05 Jul 2023 07:44:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688568248; x=1691160248;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YmKtwavW1ZM/DLIGe88sJoG8P4s5K1xjWW1lgqiHqhQ=;
-        b=lMLaSS/jWo904B0XkxyOazp/p65Rf0Ug6mKYSd8PPhUVG4OIxtQDSYXrpFtS55+000
-         i3g3sj0hOWdWYyR2NeZV4rd/pYKDv5P2S5c1DPiEuIhib5hxGyGUuMTvwqjbuLtzwcgv
-         sDWOlevh+2Ed5hLV0rU2M3bQAvDUcBVxlVSVY4JD/gyzrvCQh//D3WMhpv0AyJcNX5Jc
-         h5bE29cT5R/5vpUZcdl0YTPClCy4PenJ87tRhDE1HbZ56KQDdHqzJmoMg0De86uM81bo
-         ZqrIdeysOYbKr5g4gGyobdZAWdNo8QsqcQ9z4SeSyN5nHgz+f6QuFd1+4nghgkoly4Qg
-         Ii2g==
-X-Gm-Message-State: ABy/qLbxkz8suK0m402nDMkF+E0QKOT7RtOAgIQ3If5BzXGMO6nFmrNc
-        osyglxi67NMyVZZs35HSp7ZWCg==
-X-Google-Smtp-Source: APBJJlECxIHZ1/nuhSbjtKSOWFbIVTOW/tFGCk0wGrvxbMvkpR32UFyVPy1XTc9iu8ZGmCrUUpXLIA==
-X-Received: by 2002:a05:600c:3785:b0:3fb:dd9c:72d2 with SMTP id o5-20020a05600c378500b003fbdd9c72d2mr5832003wmr.31.1688568248299;
-        Wed, 05 Jul 2023 07:44:08 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bc8cb000000b003fbd04ecdc6sm2370816wml.5.2023.07.05.07.44.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 07:44:07 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 15:44:06 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: led_bl: fix initial power state
-Message-ID: <20230705144406.GA9021@aspen.lan>
-References: <20230705142447.15546-1-mans@mansr.com>
- <20230705143320.GE6265@aspen.lan>
- <yw1xjzvezapt.fsf@mansr.com>
+        d=1e100.net; s=20221208; t=1688568274; x=1691160274;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EWhsoBY4ZccttVe0RJL2prtxvZyGTGD0cE8SvtOHPOE=;
+        b=Aiop42xfOwzW1TkiU9H/ZZ549zoxagLoLSg964c6Qt9vQ9Bd6qohbyf5Ss/+WaDr1f
+         veo+6Mjw15GPoRpt1vTUx/7DxZKfbCSFgu2kvr4Kb3dchdbsgx7ECGil2O6AWYzoE0gU
+         b/VYH6EGOJMx/CodJJAjjTWhmowG0e/GDXUOAiTrsXC44sR1fqum0z14gz++oNBuBWHs
+         s96D+JRI/JP50cs5i7sa8LI9JK9+gO+3lut4vFHkb+oM2aMxI+cJGbBRWSYhsY0mxMAb
+         BffXuYrK5zXqpN0yfEBjUimiliqFDPo2Pz0ISDHFFfBAhD2gBNk8aQJ4OGU+0+1GeIZD
+         b3Lg==
+X-Gm-Message-State: ABy/qLasnkZZ+bI5pexqHMQ9+9ppW8QkIkhRtDdsmklg+AKXLmJPiPms
+        N4WP5pnpHYxsfFql6bCdK7OSJP8wZ2SgZg==
+X-Google-Smtp-Source: APBJJlFNdaLQaBGS9PgCKNmp9q31rMh8+X/votnzZc1EdwBaILtFDsvAQ5SBBtolez8E4/FoEj/82g==
+X-Received: by 2002:a0d:c702:0:b0:55a:574f:327c with SMTP id j2-20020a0dc702000000b0055a574f327cmr17804265ywd.13.1688568274274;
+        Wed, 05 Jul 2023 07:44:34 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id t10-20020a81460a000000b0054bfc94a10dsm6179741ywa.47.2023.07.05.07.44.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 07:44:33 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5774335bb2aso64288467b3.0;
+        Wed, 05 Jul 2023 07:44:33 -0700 (PDT)
+X-Received: by 2002:a25:1644:0:b0:bcc:c347:81de with SMTP id
+ 65-20020a251644000000b00bccc34781demr11995065ybw.36.1688568273531; Wed, 05
+ Jul 2023 07:44:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <yw1xjzvezapt.fsf@mansr.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230705135159.33327-1-frank.li@vivo.com> <20230705135159.33327-8-frank.li@vivo.com>
+In-Reply-To: <20230705135159.33327-8-frank.li@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 5 Jul 2023 16:44:22 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXCibwJ0jBYu3Cr3-hW-GykQ7UANeKo=qjJAbQTtmah3A@mail.gmail.com>
+Message-ID: <CAMuHMdXCibwJ0jBYu3Cr3-hW-GykQ7UANeKo=qjJAbQTtmah3A@mail.gmail.com>
+Subject: Re: [PATCH 08/11] i2c: sh_mobile: Use devm_platform_get_and_ioremap_resource()
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 03:36:46PM +0100, Måns Rullgård wrote:
-> Daniel Thompson <daniel.thompson@linaro.org> writes:
+Hi Yangtao,
+
+On Wed, Jul 5, 2023 at 3:56â€¯PM Yangtao Li <frank.li@vivo.com> wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 >
-> > On Wed, Jul 05, 2023 at 03:24:14PM +0100, Mans Rullgard wrote:
-> >> The condition for the initial power state based on the default
-> >> brightness value is reversed.  Fix it.
-> >>
-> >> Furthermore, use the actual state of the LEDs rather than the default
-> >> brightness specified in the devicetree as the latter should not cause
-> >> the backlight to be automatically turned on.
-> >>
-> >> If the backlight device is not linked to any display, set the initial
-> >> power to on unconditionally.
-> >>
-> >> Fixes: ae232e45acf9 ("backlight: add led-backlight driver")
-> >> Signed-off-by: Mans Rullgard <mans@mansr.com>
-> >> ---
-> >> Changes in v3:
-> >> - Add comment
-> >
-> > This mismatches the subject line ;-) but I can live with that if Lee
-> > and Jingoo can!
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+
+Thanks for your patch!
+
+> --- a/drivers/i2c/busses/i2c-sh_mobile.c
+> +++ b/drivers/i2c/busses/i2c-sh_mobile.c
+> @@ -893,12 +893,10 @@ static int sh_mobile_i2c_probe(struct platform_device *dev)
+>         pd->dev = &dev->dev;
+>         platform_set_drvdata(dev, pd);
 >
-> Does it not fix it?  If you think the subject is misleading, feel free
-> to change it.
+> -       res = platform_get_resource(dev, IORESOURCE_MEM, 0);
+> -
+> -       pd->res = res;
+> -       pd->reg = devm_ioremap_resource(&dev->dev, res);
+> +       pd->reg = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
 
-The bit that goes into version control is fine!
+"pdev" does not exist in this context.
+Please try to at least compile-test your patches before submitting them.
 
-However without '[PATCH v3]' on the subject line for the initial patch
-there is a risk this thread will get overlooked and not queued[1].
+>         if (IS_ERR(pd->reg))
+>                 return PTR_ERR(pd->reg);
+> +       pd->res = res;
 
+While at it, you could get rid of "res", and replace it by "pd->res" in the
+above call to devm_platform_get_and_ioremap_resource().
 
-Daniel.
+>
+>         ret = of_property_read_u32(dev->dev.of_node, "clock-frequency", &bus_speed);
+>         pd->bus_speed = (ret || !bus_speed) ? I2C_MAX_STANDARD_MODE_FREQ : bus_speed;
 
+Gr{oetje,eeting}s,
 
-[1] Just to be clear, Lee J. typically hoovers up the backlight patches
-    and sends the PR. I only queue backlight patches myself as holiday
-    cover...
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
