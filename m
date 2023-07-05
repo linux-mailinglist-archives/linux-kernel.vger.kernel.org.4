@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F8F747D03
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F86747D08
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjGEGZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S231628AbjGEG1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjGEGZr (ORCPT
+        with ESMTP id S229892AbjGEG1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:25:47 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA34410E2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:25:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51bece5d935so8009039a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:25:46 -0700 (PDT)
+        Wed, 5 Jul 2023 02:27:13 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6198E10E2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:27:12 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99384a80af7so185471966b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:27:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688538345; x=1691130345;
+        d=linaro.org; s=google; t=1688538431; x=1691130431;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=F8JPvTbXio/4o2dizd1zh30lCTah/Aako9+AdwCfXso=;
-        b=grPAVe3iZANMCwV2H3vIahp6W4st50YgfOXHsQVgkiFsDNu8h0iv40AWyqdHXNEiQN
-         VZuNFoQ4uHRDiLkfBu13pV5zYVq1FOMQfh99ZU8q9iSNUKJLKNkJ4ahwBybN7lfis1Lt
-         /55FAQJHauoZ2Yrv1wtNM0wTepgsrNkuPGUtRxN+JCA54H8+mQEWJjhSF5kdT/ywXjy8
-         9aAquzDtJ2vhly83FGIA1j13sRX1lT+jig28c/xwDx1/URIZzYRchPtL+wU1eMWoHuWM
-         dBoKg5Ydm5YwKDdBsn2GHjkHwzbSZ536vvQp0wgD3+bu45MlGLYEjnFG3NS1MIAUIOSC
-         Jpjg==
+        bh=GWMLJagL2+zk2i2GBf2yDl1/DHyLFspRTfvbcgg1QfU=;
+        b=utB3kWgihnetwAPSEidxUjsfhoMA0hNBtnsHu8/372Rs3/YJr1wcCawJMdJS4SHkhU
+         PRpSx0P3yVV1PAUCUv3vrvUhKwqJ3KU8b02qD82RIXORc+g8tHt/CqjQ26DupioKpAsD
+         UqaecJoMyJ+vix452drJNpsk/CJPuQ2DkmBiyLW+vLW/jWfxgAck6KsghNMGL48j7a1Y
+         1e7RLWjRfu53hu/2Fu1ryp01SjX1oj8caBoCennZI0RIfQhFxyfO4lL4RDAR+RgWWLU5
+         ix0VA3jQM1hajCQxKk9/imIXnSRSx6xHn8DO573QchLNC4j3o+YCTgWfqp7I3M6RTTNp
+         84pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688538345; x=1691130345;
+        d=1e100.net; s=20221208; t=1688538431; x=1691130431;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F8JPvTbXio/4o2dizd1zh30lCTah/Aako9+AdwCfXso=;
-        b=gG8m2wTn8Ic8ulaJKVGFA9L7Cq5l/HaVQZGQswnMqJ5z67wWVf0ReLvdGga1MjYlCP
-         rrZJw+pQWQK4gBxCrCurnlubtLxR+jQs+JxOY8qU61J8nsoBBehnmtsXMrLbBOe9rYLg
-         JpDbkiHRbOlFC7Ce0rq0kModHeJ3XyrCk+ism0LsI1DNEEeRtld4EC2xaOh+xryKmbTn
-         fm27L+rqk7Jr6HnEcGFa/dZSe2RlOxC7RFUoR2tuWqqZWZanozSP6kjr8PuP3eADFpBT
-         jvfpKMFN0rqqLgD/EFY7faoDIX/I27trHAJfANyqscpWrgIzDEbWY45FR/9K09HIj3hn
-         KTRA==
-X-Gm-Message-State: ABy/qLY4ddI+zJM84ONIa4Pq0hVwQc9rtrOHwe12DYmAhsvCWzYsOJ+5
-        cFKoocYGKESjDiTh+1S6kQxYqg==
-X-Google-Smtp-Source: APBJJlEgEMF9emHGgsHWWQE4/hHEfhifZft4ABIYj7Ght6PTnOoS762iWwOGS1gxr/VjTKbZk0Ciwg==
-X-Received: by 2002:a05:6402:3456:b0:51a:50f2:4e7a with SMTP id l22-20020a056402345600b0051a50f24e7amr10660268edc.13.1688538345105;
-        Tue, 04 Jul 2023 23:25:45 -0700 (PDT)
+        bh=GWMLJagL2+zk2i2GBf2yDl1/DHyLFspRTfvbcgg1QfU=;
+        b=TQtsidaGCh5ZA46vOX5qhAEUllvf12TGpow2WMmc1L7hxGyQW6SatboD2CEia/Gw6o
+         7C2g1dtxVpZEIVAWgDv1mJeo6oQiHiGiGC/JD31Q/4wL/xEp6yPH/yr1J6kcoxE+9ROP
+         CC7dT9Q9A85eVym3QEmD4cP6PoyIng/wMBpoBt1zIm/AxQoUWzwYNxSTfbxwBzud6tIs
+         LVelc55rH686B+6KGToJIaV0zDFEPfRzjGarSBJzJwC5HqgUIRdyOFJtFO00AbgRfXnH
+         MHGYVYVReHuNw/A7uLH+mvr9HaY4BzDAZxnv9MpMqcO9Loln1W/REv7nSGqqaJbW9ONS
+         tmww==
+X-Gm-Message-State: ABy/qLahhq2WdiLdYkjpyjYuVu+uC76s9cb8xDqLqA07a7ztVS/5ISPX
+        oVuBtoP7Xx7LTGAPBmvGbJsGcg==
+X-Google-Smtp-Source: APBJJlFDD3LoaJkWiKAi3c5P1svDd86EsaEHQLS373mb2GLHBrmie9T8qSarWyPJmQHFFxBuwlgwxg==
+X-Received: by 2002:a17:906:5f91:b0:992:1233:9c45 with SMTP id a17-20020a1709065f9100b0099212339c45mr10047072eju.69.1688538430911;
+        Tue, 04 Jul 2023 23:27:10 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id m5-20020aa7d345000000b0051495ce23absm12641162edr.10.2023.07.04.23.25.43
+        by smtp.gmail.com with ESMTPSA id a18-20020a170906191200b009930c80b87csm6119058eje.142.2023.07.04.23.27.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 23:25:44 -0700 (PDT)
-Message-ID: <02bc22e9-393a-6695-f8b0-09e3fe0ff6e9@linaro.org>
-Date:   Wed, 5 Jul 2023 08:25:42 +0200
+        Tue, 04 Jul 2023 23:27:10 -0700 (PDT)
+Message-ID: <913206a5-3ce2-3ce1-774e-3a4a9030b0e2@linaro.org>
+Date:   Wed, 5 Jul 2023 08:27:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/3] clk: imx8: Add audio clock mux related clock
+Subject: Re: [RESEND PATCH v6 0/7] Add PLL clocks driver and syscon for
+ StarFive JH7110 SoC
 Content-Language: en-US
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>, abelvesa@kernel.org,
-        peng.fan@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        shengjiu.wang@gmail.com
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1688521839-3036-1-git-send-email-shengjiu.wang@nxp.com>
- <1688521839-3036-3-git-send-email-shengjiu.wang@nxp.com>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230704064610.292603-1-xingyu.wu@starfivetech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1688521839-3036-3-git-send-email-shengjiu.wang@nxp.com>
+In-Reply-To: <20230704064610.292603-1-xingyu.wu@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 03:50, Shengjiu Wang wrote:
-> Audio Clock Mux is the IP for i.MX8QXP, i.MX8QM, and
-> i.MX8XL platform, Add the clockid for them.
-> 
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
->  include/dt-bindings/clock/imx8-clock.h | 28 ++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
+On 04/07/2023 08:46, Xingyu Wu wrote:
+> [Resending because it has a error about examples in syscon bingdings
+> and has to be fixed.]
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
-
-These are bindings!
+Resending means you sent the same version. If you did not change
+anything, then it will fail, right? If you changed something, it is new
+version.
 
 Best regards,
 Krzysztof
