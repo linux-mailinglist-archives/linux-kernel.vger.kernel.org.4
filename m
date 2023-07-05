@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476027484AD
+	by mail.lfdr.de (Postfix) with ESMTP id 909F47484AE
 	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjGENKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S232081AbjGENK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjGENKx (ORCPT
+        with ESMTP id S230513AbjGENKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jul 2023 09:10:53 -0400
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C4A1709
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:10:52 -0700 (PDT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1b8130aceefso92431075ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 06:10:52 -0700 (PDT)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8E3170B
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:10:53 -0700 (PDT)
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-55be4f03661so371281a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 06:10:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1688562652; x=1691154652;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/Edl0mY6YyjPWYrsLOLDuNK3GsUIsSReZp2qClGfyN8=;
-        b=CpH8ZZvUyMS1zoofDibNuDL71mvy9MGxS6UFxP/q4pIW1JHsWk+qal9w81WHU4MeSo
-         tRbdYCJNre3l53gH3JmSI1LxgN2ytTTq8j6wmeNQuBzE8hUEGWi6wXyQg3y8gFs+vGIm
-         mxOWPj4bvZsizp4YLw7xjhZvuTBmnl76ZqxnU6YpZAke3ojcgqIApJLEPmlzH2PZ+UHf
-         Y3s4DzFSpxuxKGuRcNEsl/PzXb1SjMPN9JpxzH2gddeMCWP9SUB7VpjxI63Hc0Sc8I5u
-         HrTSYKrlxpfB40WUjICN5RtQGLQg78pxwOLV0irQnvnsFC9eQVw2AbHKhNUrAuj9Rzgq
-         tv2Q==
-X-Gm-Message-State: ABy/qLbB43hwFVBg2s+rgXV1IKhrM+k0HDzOyUJ9ilrewaynC8ExpYJn
-        JiG89FSmrp3eNZPPhk0UW9alJsooAThiCA0WYceugXlB9tBYUCM=
-X-Google-Smtp-Source: APBJJlFkcZUZQSm5y3XPDVwbqBxNCYI4xqBTTyF8nVrwu7CIpCKw3MmMCwUFNUTkPxHC3Kr/mxQc8ecVH8K/rAFFoeapq3v4X+tD
+        bh=i9DrXfO3Bx6yoQaOBcaxNx+vYXYpWkO5KRCrfrKUwLo=;
+        b=OCUs0c+tLYrRmrXbQUMKioVMurcUHQFGbesL7yNRYjC4KuZlInGPiikJxr8KctxySm
+         9ifLPXbcNfBAD3VK4Sf4rD5fUKgWNw9k2rs02taWjGZhFXFv/1VpEDuhnOAIq6tBd2Hd
+         1pXpAnpRGDiGKIFIZKGsHxO9Sbn+KT+5L5VQJwyHPIy8b005bHVBFFUA+6MiNAi/Igx0
+         PkPQXLKVJGiwdM8SYhcUWTe+i26q4PFwEb7SyhmSsp4QKIipUTAwAQvv2iaSzCVmZA6e
+         rScbSDudnvxjuOrDQySHkNj6PI+sRHAphKK7FGlJDXnn1ak0nAwUys4SVzPxVydp/VGz
+         7Frg==
+X-Gm-Message-State: ABy/qLaTCkkWQYGo36rvokj05baZKFTOUQfhBWaUbSVl+kJV1pS6HvEh
+        lInUuxRKyPRbeWg2Zl0jOQjAtYimy4kogCzNPwk8EwE/3u/6xkE=
+X-Google-Smtp-Source: APBJJlFgo+Osxw24cRT5M/G7iKhFQXBgrKj1j+8PRbM+GWDKDedumJno+L/5xfbh3Eb/JXk4Pdd6G6B/OKjOQ96ZLOuU1Ve33a9H
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:da92:b0:1b8:184d:1379 with SMTP id
- j18-20020a170902da9200b001b8184d1379mr14536007plx.9.1688562652134; Wed, 05
- Jul 2023 06:10:52 -0700 (PDT)
-Date:   Wed, 05 Jul 2023 06:10:51 -0700
+X-Received: by 2002:a63:fe4f:0:b0:557:7f87:e5fb with SMTP id
+ x15-20020a63fe4f000000b005577f87e5fbmr9531500pgj.8.1688562652531; Wed, 05 Jul
+ 2023 06:10:52 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 06:10:52 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000fc4f605ffbd21df@google.com>
-Subject: [syzbot] Monthly media report (Jul 2023)
-From:   syzbot <syzbot+list7182a36b41ef104de415@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000015d25a05ffbd21d5@google.com>
+Subject: [syzbot] Monthly nfc report (Jul 2023)
+From:   syzbot <syzbot+list9ab3a27a20db62b86eb3@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -54,26 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello media maintainers/developers,
+Hello nfc maintainers/developers,
 
-This is a 31-day syzbot report for the media subsystem.
+This is a 31-day syzbot report for the nfc subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/media
+https://syzkaller.appspot.com/upstream/s/nfc
 
 During the period, 1 new issues were detected and 0 were fixed.
-In total, 18 issues are still open and 83 have been fixed so far.
+In total, 9 issues are still open and 17 have been fixed so far.
 
 Some of the still happening issues:
 
 Ref Crashes Repro Title
-<1> 1317    Yes   WARNING in get_vaddr_frames
-                  https://syzkaller.appspot.com/bug?extid=59a71007ccac79e8bb69
-<2> 171     Yes   general protection fault in ir_raw_event_store_with_filter
-                  https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<3> 46      Yes   KASAN: use-after-free Read in send_packet
-                  https://syzkaller.appspot.com/bug?extid=f1a69784f6efe748c3bf
-<4> 3       Yes   KASAN: use-after-free Read in v4l2_fh_open
-                  https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
+<1> 109     Yes   BUG: corrupted list in nfc_llcp_unregister_device
+                  https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
+<2> 80      Yes   BUG: corrupted list in nfc_llcp_register_device
+                  https://syzkaller.appspot.com/bug?extid=c1d0a03d305972dbbe14
+<3> 69      Yes   INFO: task hung in nfc_rfkill_set_block
+                  https://syzkaller.appspot.com/bug?extid=3e3c2f8ca188e30b1427
+<4> 61      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
+                  https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
+<5> 19      Yes   BUG: corrupted list in nfc_llcp_local_put
+                  https://syzkaller.appspot.com/bug?extid=ecb2ae7b1add2a4120de
 
 ---
 This report is generated by a bot. It may contain errors.
