@@ -2,148 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DC7748978
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3A674897A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjGEQsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S232334AbjGEQsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbjGEQrw (ORCPT
+        with ESMTP id S232230AbjGEQso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:47:52 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2041.outbound.protection.outlook.com [40.107.95.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D90170B;
-        Wed,  5 Jul 2023 09:47:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e+CzJtlLz0VKzoQWRpjC/WluA3yPswmKNzASb+X85g9+y533UREf5EGTNTO+oXa42yFhK3W6CJbPQlYf0MV6K4XtgxHiNhxA6CtIhbb0XVrhCavLxDV6n3bP/ZVUSrprNFfatS/zgSafN9dXtpRQFF5TT53EouaCJFEdkXa0dHunoKZdkI7IX2EWDpP0+sSdijEb6Eoh0I9YiEixBYrbl3aGJHcRFIRXGVW1kyjU/Rw3qHD7hxjLlX5Bdcm+k7hJRcefJBja52s9RURhD4KucRvWkzgdI1/Ikx+brjxVrWAam7fMh/a+k1wx7hxLiUYnS+fjb6tu0YEbToJMTQL+kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EGfkzxfPNU6avRXGK7jgIEDBm4eutux+3IW3nPv8euI=;
- b=iwTPYykyf5EQnlKAwj6M/j5C1vgZonua7OGaLjkUHcykCYB8kyZIEdZ/gb7LckFQhaXxsFoDOCi6/NvayjR1U/EPSMOuLSmdKiTvkjsRJ7oa0H/6EgI13yUL86kPLlTQgvmt7NOE/RlSst6iut2nxkn5sqBwFk1p87qJQgNSa9+1aSgGsB8JH9MLWnRWJ+PGGvI5+IU51yfghrubg3Cm1g4FyQkkqU5OwTII2sP1JCdAy3CcGkmx8mC+HyANHryiwx7zBj3HUSBV8IknhGzFKZuWhcTuohGio+/DOdWlKVIE26uucznRiO4/OCXb8ScWOQ5tlSC19K8V08MtKosK7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vivo.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EGfkzxfPNU6avRXGK7jgIEDBm4eutux+3IW3nPv8euI=;
- b=widd3xUUddXLXi/KBMs1IwsQv28SdbkUS8psErRGgbVSodhcLga015egmUyTawAWU7e4mC6jhbjbXER5fsKOHMoB9S6ZjcaFLB3KLzcUPJGVKGdVSMRCUY8j56U3EGKY0xaZEF9lGrI6QitNWLri5i+BpuTcCGjOPmFn75SptJY=
-Received: from BN9PR03CA0845.namprd03.prod.outlook.com (2603:10b6:408:13d::10)
- by PH7PR12MB6857.namprd12.prod.outlook.com (2603:10b6:510:1af::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
- 2023 16:47:42 +0000
-Received: from BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13d:cafe::ee) by BN9PR03CA0845.outlook.office365.com
- (2603:10b6:408:13d::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
- Transport; Wed, 5 Jul 2023 16:47:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT070.mail.protection.outlook.com (10.13.177.50) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.45 via Frontend Transport; Wed, 5 Jul 2023 16:47:42 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 5 Jul
- 2023 11:47:42 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 5 Jul
- 2023 11:47:42 -0500
-Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
- Transport; Wed, 5 Jul 2023 11:47:41 -0500
-Message-ID: <8b5c6d42-c1a8-81a3-5947-7a720501ef15@amd.com>
-Date:   Wed, 5 Jul 2023 09:47:41 -0700
+        Wed, 5 Jul 2023 12:48:44 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBEF10EA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:48:41 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-262e839647eso5159378a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688575721; x=1691167721;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3hP9DbBA1q7ePE4MjE20bv2ZQsjinvRoBDENG1RHrkc=;
+        b=dN16GTJyFnx0CAdebrX0ihc9B+hOMoFybI8IewfRhaLSmnhpMkKjk+9jMWpnYCH2nO
+         abZ8bieLyGIv/gBw547X4lutvAnIFkaEJOxHjM7sLCugaoYj1sNtX0sQiPttz9zUtEF4
+         CjDCCW4autZVoak/I0EriHUxIgDGxz1avBoIhCt2QwLwUPcWABSd61YiMXFhhv6qgVuH
+         D+mpSlhVmLZCk0iGIjRlFGBxcqXh6KlLn9P2lBSvYVEOl8eP9pFD+/Q/qGMFU78VD25T
+         KzdJYFBbOvoWl+GnGsp0LKG4zRhoiTz1MD9oiijr7Q3Fzoo8Ti3Nj3VgDwxn2lTk7iVy
+         shJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688575721; x=1691167721;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3hP9DbBA1q7ePE4MjE20bv2ZQsjinvRoBDENG1RHrkc=;
+        b=jIPmP6eBvuBVAwr6GU4cNHqRrnJfC0zaFlxJEzB/xVHHyOHLAxBVe56DHkdWxgzecO
+         0zyzdxuOgyF+AZPz65BrlUpiAXz1k9rquPbvai3mi+dzVBPyaFZPdXEIGcZYSQAnfSQA
+         BsUzYT66/8rkTn3vfwpj9ljsvfYjHTOI/+chbhbRp6ySpxYe4pnvaIzgjQI7Qa8xI0E1
+         /gy1rWwibzT1Et+ZtBI/S9GemjOu9XQ8LMvOzFbbfPNXNt39cFcVLi44iQDD17NtPV2U
+         AtIjp+KWYYsxBWLXmQpLDxNwCKygP0KzgMyxpfyyqsa+XVpB6Hdwy1n0EQiP/S055wFD
+         6cxw==
+X-Gm-Message-State: ABy/qLYNu8QcNJTsK1OuAEgIc8FYxUGIJzMY9+OM6ioo67mvyHLXDqHR
+        SNNEO1mLD5VQ8fxetYnvZ1x3Sw==
+X-Google-Smtp-Source: APBJJlG4f3hzZqWilYuZ0BZOZWFUVy3ilbVJW12BSxOtJhU9JDflowuFeO6SvAVOY85YSbOMHbJLJw==
+X-Received: by 2002:a17:90b:156:b0:262:ea30:2cc3 with SMTP id em22-20020a17090b015600b00262ea302cc3mr16732080pjb.2.1688575720894;
+        Wed, 05 Jul 2023 09:48:40 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id f21-20020a17090ace1500b00263f85b6a35sm1311431pju.29.2023.07.05.09.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 09:48:40 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Simon Hosie <shosie@rivosinc.com>,
+        David Laight <David.Laight@aculab.com>,
+        Evan Green <evan@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Yangyu Chen <cyy@cyyself.name>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v2 0/2] RISC-V: Probe for misaligned access speed
+Date:   Wed,  5 Jul 2023 09:48:31 -0700
+Message-Id: <20230705164833.995516-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] drivers: xilinx: Fix Judgment of the return value of
- the devm_ioremap_resource function
-Content-Language: en-US
-To:     Minjie Du <duminjie@vivo.com>, Brian Xu <brian.xu@amd.com>,
-        "Raj Kumar Rampelli" <raj.kumar.rampelli@amd.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michal Simek <michal.simek@amd.com>,
-        "open list:XILINX XDMA DRIVER" <dmaengine@vger.kernel.org>,
-        "moderated list:ARM/ZYNQ ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     <opensource.kernel@vivo.com>
-References: <20230704120458.11125-1-duminjie@vivo.com>
-From:   Lizhi Hou <lizhi.hou@amd.com>
-In-Reply-To: <20230704120458.11125-1-duminjie@vivo.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT070:EE_|PH7PR12MB6857:EE_
-X-MS-Office365-Filtering-Correlation-Id: 62643fde-a727-4b76-4278-08db7d778d28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sB7Ao4byAcUGOMnYXNSlNl/0virgSJ142mBUxZbmmJhktCOEolhnJn066gJRLnxjalmgZbEbGPxOLDXtAnxIzbtQZYzUlGi+OB2BoCrQrF0/OqOB0ZqIxC9KKCQsG3+qUjGQP5Ts2CEIuwYZM4Mw2WBmnwhbFecXDgxeFdUdyuCQcaTyHyi3OUddRkctwVRKSfiVu2Ko+MvaH0Az1xy/5eC5s+fXsZYK4uwktW7XkQJ3fwhqKRPuVfJrIOiLZ/oq8bUbNPOGTnU+o+8VY19TjFoEFXolODEG7+8DGnZh2rBAmghc164psxp8Ljg5ajg6UwGoT7+NEzynPuaYBvDzpLMfdIMvzFbBg8X9jsSF/Om55YyyCcZ/zwW2hQ0+m+h1xX2j/E0wKvmOdezbTp6+meCbpUfNT/QDZcUWmCGYBPSpg/2b4YQxV1uRKIhTzBVCoHjbZUjagf7D16SX01yIoVMJQh/30QmDpdWDBk4WUjgXBjVL9M0g1iTitTg6p504Lyrj34Rj+b1NXol+hx9E6R+m/55OVOurRUEXAO+7AhtLgGeW3OCN2ILuI7b6FsWmi/nLO7IW1eDz+PQvyfbvAsQsvysQnVv/5SvUxwqdqSPHbpVdO6r8UkulZK6GJti+36utTYNOUwe94AEReMOfkHA4KKkDrCxLS4WvBQ05hpTtkTol1czcdgQJokp5KRfjzGmqiH2grtEaStVxZDUrdd3iaxi9BeI1WIky+s0VVol2+yKW9J+M5NahEAeDi6mR1bzsgnBYbw7fbtEzMfHzxx2FOa+LryEEE7xS4dWV6ek=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(136003)(451199021)(36840700001)(40470700004)(46966006)(70206006)(4326008)(356005)(70586007)(82740400003)(2616005)(81166007)(40480700001)(186003)(86362001)(16576012)(36756003)(966005)(31696002)(26005)(110136005)(478600001)(53546011)(82310400005)(40460700003)(36860700001)(8676002)(8936002)(4744005)(44832011)(5660300002)(31686004)(2906002)(47076005)(41300700001)(316002)(83380400001)(426003)(336012)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 16:47:42.5550
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62643fde-a727-4b76-4278-08db7d778d28
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6857
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Minjie,
 
-There was a patch created for this. Please see
+The current setting for the hwprobe bit indicating misaligned access
+speed is controlled by a vendor-specific feature probe function. This is
+essentially a per-SoC table we have to maintain on behalf of each vendor
+going forward. Let's convert that instead to something we detect at
+runtime.
 
-https://lore.kernel.org/all/20230217062652.172480-1-yangyingliang@huawei.com/
+We have two assembly routines at the heart of our probe: one that
+does a bunch of word-sized accesses (without aligning its input buffer),
+and the other that does byte accesses. If we can move a larger number of
+bytes using misaligned word accesses than we can with the same amount of
+time doing byte accesses, then we can declare misaligned accesses as
+"fast".
+
+The tradeoff of reducing this maintenance burden is boot time. We spend
+4-6 jiffies per core doing this measurement (0-2 on jiffie edge
+alignment, and 4 on measurement). The timing loop was based on
+raid6_choose_gen(), which uses (16+1)*N jiffies (where N is the number
+of algorithms). By taking only the fastest iteration out of all
+attempts for use in the comparison, variance between runs is very low.
+On my THead C906, it looks like this:
+
+[    0.047563] cpu0: Ratio of byte access time to unaligned word access is 4.34, unaligned accesses are fast
+
+Several others have chimed in with results on slow machines with the
+older algorithm, which took all runs into account, including noise like
+interrupts. Even with this variation, results indicate that in all cases
+(fast, slow, and emulated) the measured numbers are nowhere near each
+other (always multiple factors away).
 
 
-Thanks,
+Changes in v2:
+ - Explain more in the commit message (Conor)
+ - Use a new algorithm that looks for the fastest run (David)
+ - Clarify documentatin further (David and Conor)
+ - Unify around a single word, "unaligned" (Conor)
+ - Align asm operands, and other misc whitespace changes (Conor)
 
-Lizhi
+Evan Green (2):
+  RISC-V: Probe for unaligned access speed
+  RISC-V: alternative: Remove feature_probe_func
 
-On 7/4/23 05:04, Minjie Du wrote:
-> IS_ERR() fix devm_ioremap_resource function return judge.
-> Could you help check it out?
-> Thank you!
->
-> Signed-off-by: Minjie Du <duminjie@vivo.com>
-> ---
->   drivers/dma/xilinx/xdma.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
-> index 93ee298d5..ad5ff6335 100644
-> --- a/drivers/dma/xilinx/xdma.c
-> +++ b/drivers/dma/xilinx/xdma.c
-> @@ -892,7 +892,7 @@ static int xdma_probe(struct platform_device *pdev)
->   	}
->   
->   	reg_base = devm_ioremap_resource(&pdev->dev, res);
-> -	if (!reg_base) {
-> +	if (IS_ERR(reg_base)) {
->   		xdma_err(xdev, "ioremap failed");
->   		goto failed;
->   	}
+ Documentation/riscv/hwprobe.rst      |  11 ++-
+ arch/riscv/errata/thead/errata.c     |   8 ---
+ arch/riscv/include/asm/alternative.h |   5 --
+ arch/riscv/include/asm/cpufeature.h  |   2 +
+ arch/riscv/kernel/Makefile           |   1 +
+ arch/riscv/kernel/alternative.c      |  19 -----
+ arch/riscv/kernel/copy-unaligned.S   |  71 ++++++++++++++++++
+ arch/riscv/kernel/copy-unaligned.h   |  13 ++++
+ arch/riscv/kernel/cpufeature.c       | 104 +++++++++++++++++++++++++++
+ arch/riscv/kernel/smpboot.c          |   3 +-
+ 10 files changed, 198 insertions(+), 39 deletions(-)
+ create mode 100644 arch/riscv/kernel/copy-unaligned.S
+ create mode 100644 arch/riscv/kernel/copy-unaligned.h
+
+-- 
+2.34.1
+
