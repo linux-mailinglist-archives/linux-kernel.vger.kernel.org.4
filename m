@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D77747E3D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE3C747E41
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbjGEH3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S232295AbjGEHam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjGEH3f (ORCPT
+        with ESMTP id S231913AbjGEHak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:29:35 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9035A10C3
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:29:33 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51e285ac32eso170953a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 00:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688542172; x=1691134172;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=04KsCEQq3BTQ3Hv4slClhCupTLs++iE2IM0zdOeIRKk=;
-        b=O7Q13QLtFiYubIqbr4dB4gWPNSwaF+mr4Cumj7k5dEPGuWLea/jl1B653FTWrAImMI
-         2xnjRF4alacRxam3juvdPamAy/dVG4pEugr4Q1G3xJe4UUm2tHdaH8TQ3SRiX1UD4u7E
-         9WQFZ3LtJjUo+k+93qgYCjQ8iUBct7fH3SDrHOdmNvmym/D5Hjh1EYkj3vSXMRlyi2GN
-         maEw9cPy4pEGSOHj7lBFJ5maICU9aUgwJWDZzh53BR/RSNzgyG2TAHESLVYQBFvdVsKK
-         HB3TPZLaIyvtwpwoRLdU3z0QO38fXG2pz2ujhNwfjUE5hyrnTg2j+VLl9SQQ7SPvmuq/
-         bGVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688542172; x=1691134172;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=04KsCEQq3BTQ3Hv4slClhCupTLs++iE2IM0zdOeIRKk=;
-        b=lryNKIVlZxZf/t42Gwy7wwRuqDOwlr8hppwWZDb+4k7MREKS7tdmh8Lw6qHFYDrC+v
-         sa6L4Th1E8zFy+/XpmWlyiyDUHn9FYv3xmLww8m6fZ6mWIlmosm1YETZGD3knMYJxx9q
-         OQRToDSlOFS2qv+k6bBjJCqo7YHkHCygccgHZUoasoeDjX4TUH3iqr24pzb6xVFTRxko
-         nS4xoC2pHsbqSdEsH2mMsYPWmtzKl6JrPTxk06bRLVVR3uAMpFqe32Y9GpESzrBFcJ3O
-         onPiqO4LutV+9ymjeEOfsSj0DLGUKrBA/YZds6UbQeXztotksdqAc4OkHrDZKzkeuW8R
-         H8lQ==
-X-Gm-Message-State: ABy/qLYT+Gn18y8ZJB/ShvVjY9fQAt0bjesiGIjztAgHmDESJLfFkakQ
-        e9XKqtY43q5/Cvc0QlAkeX4Ujg==
-X-Google-Smtp-Source: APBJJlEt1mvtnReMBJcVFDryVN+XiJidc1ci2kcvMPZAKlMO7aNOrbX9FbwTnLjhGYQCJzEdo/yRiA==
-X-Received: by 2002:a05:6402:b16:b0:51e:2664:e6e7 with SMTP id bm22-20020a0564020b1600b0051e2664e6e7mr900391edb.38.1688542172081;
-        Wed, 05 Jul 2023 00:29:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g19-20020a50ee13000000b0051df5bd1cd8sm6189542eds.65.2023.07.05.00.29.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 00:29:31 -0700 (PDT)
-Message-ID: <4fa4e983-03af-7222-3ffc-96ebe703a4f8@linaro.org>
-Date:   Wed, 5 Jul 2023 09:29:28 +0200
+        Wed, 5 Jul 2023 03:30:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B641E4F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:30:39 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGwxk-00074H-2x; Wed, 05 Jul 2023 09:30:08 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGwxd-00CDDv-9E; Wed, 05 Jul 2023 09:30:01 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGwxc-002Nyt-Mr; Wed, 05 Jul 2023 09:30:00 +0200
+Date:   Wed, 5 Jul 2023 09:30:00 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        miquel.raynal@bootlin.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, tglx@linutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 1/5] genirq/devres: Add
+ devm_request_threaded_irq_emsg()
+Message-ID: <20230705073000.oxlb7e7sdkdxurps@pengutronix.de>
+References: <20230703090455.62101-1-frank.li@vivo.com>
+ <20230703090455.62101-2-frank.li@vivo.com>
+ <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
+ <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
+ <11052797-b006-11bb-e4eb-987ddd568b24@kernel.org>
+ <20805fef-d6aa-91d8-999e-04b1d6b7a37a@vivo.com>
+ <20230704141954.fcmol2yswkpbnpaw@pengutronix.de>
+ <20230705101537.000059d2@Huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: clock: fsl,imx8-acm: Add audio clock
- mux support
-Content-Language: en-US
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>
-Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>, abelvesa@kernel.org,
-        peng.fan@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1688521839-3036-1-git-send-email-shengjiu.wang@nxp.com>
- <1688521839-3036-2-git-send-email-shengjiu.wang@nxp.com>
- <41ee8c5c-7a6f-04b2-9853-67fb6bdb67b3@linaro.org>
- <CAA+D8ANEsQzXEDjz3+SgKbCWz+cqUHbtLVD6fkd2spbNb5uvgw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA+D8ANEsQzXEDjz3+SgKbCWz+cqUHbtLVD6fkd2spbNb5uvgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3w7pvwtu25s3yawr"
+Content-Disposition: inline
+In-Reply-To: <20230705101537.000059d2@Huawei.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,23 +69,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 08:45, Shengjiu Wang wrote:
->> Drop description, it's redundant. I did not ask to add it.
->>
->> Anyway, my comment is unanswered. Don't ignore the emails you receive.
->>
-> Can someone provide rationale for this?
->>
-> 
-> The Audio clock mux is binded with all the audio IP and audio clocks in the
-> subsystem
-> so need to list the power domain of related clocks and IPs. Each clock and
-> IPs has
-> a power domain, so there are so many power domains.
 
-OK, Reference Manual does not mention them but I see your SCU PD driver
-actually registers such power domains.
+--3w7pvwtu25s3yawr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+Hello,
 
+On Wed, Jul 05, 2023 at 10:15:37AM +0800, Jonathan Cameron wrote:
+> On Tue, 4 Jul 2023 16:19:54 +0200
+> Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > Hello,
+> >=20
+> > On Tue, Jul 04, 2023 at 05:06:12PM +0800, Yangtao Li wrote:
+> > > On 2023/7/4 16:48, Krzysztof Kozlowski wrote:
+> > >  =20
+> > > > [=E4=BD=A0=E9=80=9A=E5=B8=B8=E4=B8=8D=E4=BC=9A=E6=94=B6=E5=88=B0=E6=
+=9D=A5=E8=87=AA krzk@kernel.org =E7=9A=84=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=
+=B6=E3=80=82=E8=AF=B7=E8=AE=BF=E9=97=AE https://aka.ms/LearnAboutSenderIden=
+tification=EF=BC=8C=E4=BB=A5=E4=BA=86=E8=A7=A3=E8=BF=99=E4=B8=80=E7=82=B9=
+=E4=B8=BA=E4=BB=80=E4=B9=88=E5=BE=88=E9=87=8D=E8=A6=81]
+> > > >=20
+> > > > On 03/07/2023 19:43, Uwe Kleine-K=C3=B6nig wrote: =20
+> > > > > Hello Krzysztof,
+> > > > >=20
+> > > > > On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wro=
+te: =20
+> > > > > > On 03/07/2023 11:04, Yangtao Li wrote: =20
+> > > > > > > There are more than 700 calls to the devm_request_threaded_ir=
+q method.
+> > > > > > > Most drivers only request one interrupt resource, and these e=
+rror
+> > > > > > > messages are basically the same. If error messages are printed
+> > > > > > > everywhere, more than 1000 lines of code can be saved by remo=
+ving the
+> > > > > > > msg in the driver. =20
+> > > > > >=20
+> > > > > > ...
+> > > > > >  =20
+> > > > > > > +int devm_request_threaded_irq_emsg(struct device *dev, unsig=
+ned int irq,
+> > > > > > > +                              irq_handler_t handler, irq_han=
+dler_t thread_fn,
+> > > > > > > +                              unsigned long irqflags, const =
+char *devname,
+> > > > > > > +                              void *dev_id, const char *emsg)
+> > > > > > > +{
+> > > > > > > +   int rc;
+> > > > > > > +
+> > > > > > > +   rc =3D devm_request_threaded_irq(dev, irq, handler, NULL,=
+ irqflags,
+> > > > > > > +                                  devname, dev_id);
+> > > > > > > +   if (rc && rc !=3D -EPROBE_DEFER) {
+> > > > > > > +           dev_err(dev, "Failed to request %sinterrupt %u %s=
+ %s: %pe\n",
+> > > > > > > +                   thread_fn ? "threaded " : "", irq, devnam=
+e ? : dev_name(dev),
+> > > > > > > +                   emsg ? : "", ERR_PTR(rc)); =20
+> > > > > > It is open-coding dev_err_probe(). Just use dev_err_probe inste=
+ad. =20
+> > > > > dev_err_probe is supposed to be only called in probe functions, w=
+hile
+> > > > > devm_request_threaded_irq might be called in other contexts (e.g.=
+ when a
+> > > > > device is opened). That's why I asked to not use dev_err_probe() =
+in v2 =20
+> > > > True, but then all the callers of this function will forget to set
+> > > > deferred probe reason. =20
+> >=20
+> > That's another reason for letting the driver issue the error message and
+> > not the request_irq function.
+> > =20
+> > > So let's use dev_err_probe?
+> > >=20
+> > > BTW, any suggestions for names here, keep using
+> > > devm_request_threaded_irq_emsg or change to a new name? =20
+> >=20
+> > I would have called it devm_request_threaded_irq_verbose() which I
+> > consider easier to understand. But maybe  is just my (green)
+> > bikeshed.
+>=20
+> If going to use dev_err_probe() internally maybe can just use
+> devm_request_threaded_irq_probe() thus reflecting that and making
+> it different to the devm_request_threaded_irq()?
+
+I like devm_request_threaded_irq_probe(), thanks for that suggestion
+(even though it's red :-)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--3w7pvwtu25s3yawr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSlG/cACgkQj4D7WH0S
+/k7NJAf/W/VmS09wlRNdQ8cSrZRQMlAZTlz/61ILtur39hnGBqdq32Vg8eyL4OLD
+hIkfsr7VsST40mM9u3ar/g4g0upuPF64MagUJ1Xo4H8oSsg7AoEdMRCeQUYmP0ru
+EZnLjykOQRjPbKG1w3qbh6P380EMUUmebcsvq2hftoWNOFN839DtdIwQbbjDyU88
+WAQY4KYps2wtAkIFsdRwc5B2AfPcRvsA2u1eGoTdHO7GMxTW1gHSP0+JdPbCwo+G
+yNja5Eoh59NpRQxNLmHbKDdT2QVmov+o8+UQdmULeTeAIMHJhPasklv4XckQahBg
+MdJl4H/H2ukouHulyntW3si+qNnScg==
+=whBA
+-----END PGP SIGNATURE-----
+
+--3w7pvwtu25s3yawr--
