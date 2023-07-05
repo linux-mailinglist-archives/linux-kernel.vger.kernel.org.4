@@ -2,813 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB55747B48
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 03:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09982747B53
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 03:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjGEBrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 21:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S230219AbjGEB50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 21:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGEBrb (ORCPT
+        with ESMTP id S229469AbjGEB5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 21:47:31 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AB3E6B;
-        Tue,  4 Jul 2023 18:47:29 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id 3f1490d57ef6-bff27026cb0so6853114276.1;
-        Tue, 04 Jul 2023 18:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688521648; x=1691113648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HeTI5CIgCuzpnmKQkmyDNT2MsTKNPd7hIKAG/64uJMo=;
-        b=gzlIekoMzg7JOa19C35HRHyUbSQoFSVInnXVxHRTrxmjKNiXn9Q3el5dtOsGSCRE1X
-         AMhaWWkH5nU+isI9r5Zb9cuIfQsEvWBQPy0RLjibvLN58u1SLp5LPRh/s54QSw95ghzl
-         6RNWZYie6yflRN5IT2SAP7BA8GeoBHwmdEEZZJM0Tzzv0AOQMZ0BYsUFywUZK9B4+a2j
-         kL8hx4LvQLc31ymBYaJ0T7XMa5AGixEy8W0Avq1NRd9mCBU2tgk9DQ7eVkclyCAVKiZj
-         17+R7NVPFTGf0v8lu2JFb8AklUvrbcgICOgiYw0I5qTAqkBVEl5+LJAes935vfhQlp2A
-         BGTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688521648; x=1691113648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HeTI5CIgCuzpnmKQkmyDNT2MsTKNPd7hIKAG/64uJMo=;
-        b=VReieUGTOUxusL+GyTEzGmwiLL187Xk7bXpmJS01HozOGuCEOZ09XMDefPtj/j7L0/
-         /YQc83cRux3VHwLkH6hVq68AXWmojR1ad7zFjkuhum5LOid9XZiyuKj8O5uKzCXdCNru
-         9JWS6U6v4PdqoCSp3BdfciA/CxDAHjR72jqDlTSZmd1yek5BwiCclhdzhJHjEMVadrOF
-         vioz7J14zUjDJB73MiWDav0dRlZApevO7y4cJpdxRAGcfJnWzYROvf2x2iXax7clvVxj
-         oNeZawc8eN5l2c5xrhdthZcKriyiY7BH5vzPPpS9seOdfIShMdycjl5QiIehpuQUyjCA
-         YmmQ==
-X-Gm-Message-State: ABy/qLai6JuNMLMyPaIZe1VCjR9QUcslxuK6bsTZlmS/M6kTDxmRO+vX
-        W/yg5Tv8r41+tcVPpW1bdc2xs26Uy39ttFfg5f8=
-X-Google-Smtp-Source: APBJJlE+FppHHJSrMCSPQcYjoXmRud0eVvdpbLv0QenjdRLMJ4L66B+LGHml9gGqST0TfKNkmOtNrGSzVHQYVZ2H9j8=
-X-Received: by 2002:a0d:c886:0:b0:56c:f0c7:90cf with SMTP id
- k128-20020a0dc886000000b0056cf0c790cfmr15274911ywd.48.1688521648377; Tue, 04
- Jul 2023 18:47:28 -0700 (PDT)
+        Tue, 4 Jul 2023 21:57:24 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2041.outbound.protection.outlook.com [40.107.8.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E89F11F;
+        Tue,  4 Jul 2023 18:57:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e0VBbxMj+1ULJBBbuzbfaKH0bj8fAnKQ46Ti2zLoQtQ0ykviDYfoxB/Q3gefIDbFvRIYwdwMayhblTB3eY32zXkZa8eJZqThtvP1jhSUBaDYGubOqjyVt6s4fA2BrRiflIVGBacQpE5AOg7iSyJJMJQnnFpfQxPHV9f5wxC1HzVCzNCrQmBMTgOnuUzA3oJjm99Lghm/ujV5YKDuDlJNIFJIN0W/qCidJriT8bcwuRVlDN6lISJhwMc8BEVUG9J0R0RXWEP/KBPQQkpw2j/l6cR+W9F/BKv3ceYIAE2RYl6+C7JMkV88ZQc+sdK5gqAG1XQ1kPJP0rPtVnqTqEfO/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FcdVx7gAyEz1LrQATZ8baLIehwlBo8S5APAWjB9xZ0Y=;
+ b=mhkJQqRNjFuB2c31deyzD72gHAbYST51fJBMn0sHbqp6YfwR4LW5V9h207ondoa7l9NFGOrVMgUxksYnsEIkz4KnzTynOjLAai7OeyzVffh3SH8Sy8jk7VSEsrohh40i8QjbdEBLIrZgtiPSkRZVeKp54CYOYaQ5GXff5svzia7TE9zPQSBIhyDBmKNBvnSaEcyjuLSuWLldCeoD7id3gVOb1mAdWhyoZ5wnaMjGeXBCWRei0iTLGJH75CsdJKPxhreu035GJI6G3IhH3vgjVU8yzKkxEiBnoy2gkR1/nxcIb1rIvXWz5Du2UzRtgs6Dkd01dTXfTy6dy0iuTGoDNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FcdVx7gAyEz1LrQATZ8baLIehwlBo8S5APAWjB9xZ0Y=;
+ b=hGzUbwnrcDZmvKl+ytRYO9dmKmdhrfr/SqtJ6RmeSYA1bXjCQQ6zGciKtHn3dSCSlBDNNOADTH5HsBKk+CNi3b0qsUc1z7bJMM1CVeTskkASzS8I7zrqfjDdSmOguoLws9dcjoKySLMp+wZ82NEK7ncJQGnXwrUnIqa92ODZogg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by PAXPR04MB8845.eurprd04.prod.outlook.com (2603:10a6:102:20c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
+ 2023 01:57:20 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::ef9f:1e01:e8a:6a4a]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::ef9f:1e01:e8a:6a4a%3]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
+ 01:57:20 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, shenwei.wang@nxp.com,
+        gregkh@linuxfoundation.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com
+Subject: [PATCH V4 0/3] correct the lpuart compatible for imx8dxl and imx93
+Date:   Wed,  5 Jul 2023 09:55:59 +0800
+Message-Id: <20230705015602.29569-1-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SGBP274CA0012.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::24)
+ To AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
-References: <20230627115319.13128-1-imagedong@tencent.com> <20230627115319.13128-4-imagedong@tencent.com>
-In-Reply-To: <20230627115319.13128-4-imagedong@tencent.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 5 Jul 2023 09:47:16 +0800
-Message-ID: <CADxym3YSgEsmNQNiFFZsi=2F3np-zJFFCc3dHMrR5+JoM2353w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 3/3] selftests/bpf: add testcase for TRACING
- with 6+ arguments
-To:     daniel@iogearbox.net, yhs@meta.com
-Cc:     ast@kernel.org, andrii@kernel.org, alexei.starovoitov@gmail.com,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|PAXPR04MB8845:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6cb6b04-bb2e-4d2c-15e9-08db7cfb2ae3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s3sF/Y7g08DNQUjdt1aR5LQVK0xb8gt/U7V9El909eJKGPCf6UDzWN/6M1Z8RwJlimTeCaM3xxO6bRjhVI7kMC5XzpzNGfuBtGkfBZ+ZCbkeoeavdHSAVx5lHtmE2Q0qZZQW/AeTwmUPoMOvmo4YDFrfVF/fU9Aga/3LxYP8xai+71D8qF+wjpbCBrGpYTtctPGr2KG4Y96aA0Axb6WCPfyj//qiYppJ4FilkzkHavByRmv6ARrRsn5Xi33w6zRMYvpWzJSFobGAoV86Y0OwzjGbOXzetRykz+vASrZXHiEzL2vsank/tBtsZsjHv1egWjQXfHH9EdosRkuGPAsNBo8aQ+h1zloGBhibdG3q2egQScJ1PBZXc3dy9SOhzMmlv8RUl8epKNCcyViDNj8bXDIIDDU5FbeCMpATjG2I/KHBVm+Uwy2k9mHUwbizehZXXCN81EZTxWxh/taDcZKh6EQlojoQMx1qH/PmpBCc0YMDpyFmnKSMLSoz7LNThy7H1C1DYbkBp/IuKLJl6pUXaSPccjDvGgKnLDEmWTbVPzxCIJ+wsrlqFNWa+Rj12wcjSaWYkmPfcZ1wd/5xbYfeKWKYwd2U2TEsWoESIQcV5DkIECzwL+XatzecH9VMT9JhTK+pI+bxOY83ZhJFa4K02C3JXyqMFhoGjBFRuj9K/fq4pzR/neL9lMco2x1x0KWd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(396003)(376002)(39860400002)(451199021)(6512007)(1076003)(6506007)(66476007)(316002)(4326008)(38100700002)(66946007)(38350700002)(66556008)(2616005)(83380400001)(186003)(26005)(478600001)(2906002)(4744005)(8936002)(8676002)(52116002)(44832011)(36756003)(5660300002)(7416002)(86362001)(6486002)(41300700001)(6666004)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SV2dCAORVpgXTm9TJjE1uKXc6iYMX2JhbsoKWAfB/BH0g2Bc99qeDnuaO6HZ?=
+ =?us-ascii?Q?fAR0to7gcqXwUDOYGFymTJhMn20UpSyRxHrFnIJqgrHVSqW9uqA6OQVQrwVn?=
+ =?us-ascii?Q?ZOh8R1pPJK6WAy87ez+5PPUpjgtNZkopkDUJwJWsv3WB2LRMxxoJ/2ne9pxn?=
+ =?us-ascii?Q?CY8IIsxMu6YGYKBHyQlYNWQ1zwBfNp/8fnDmzsWnfUycQK1AJXKC7bCipDjT?=
+ =?us-ascii?Q?rNDvZar/CGb9i7O81/yN0E4O5y2BiS4FT9GXybKQ+7We694x4a9LgqngSACV?=
+ =?us-ascii?Q?FL7SPrbLhpr5ANS4jpApX1HBDwooDtRCDs330AUMYVKjNNvVEw/cCaAsBsaq?=
+ =?us-ascii?Q?v4ZgBZ2FZcOp7GY1ZdGPWOqDPLiMbjrwv3+GosAZ8KMRV2Z1vN8Bqq4ik4+a?=
+ =?us-ascii?Q?3fuxITvqv7tnMAjcU3LMY+VlD6eC1DwE38QRFSR1WGN46u5fnHS4ZeUC8qrZ?=
+ =?us-ascii?Q?tIOAFGFVZClFI2WsGHVXOkTWYfXwz10dUAs7IkUg75GWAhy0+5VZDZt6BTel?=
+ =?us-ascii?Q?9uFPkEE9Z7ZMIgu3CWJc7lRzL5fUQ4pCIm/4f2nHWQEKD5GZu7eZsDm6tRIx?=
+ =?us-ascii?Q?MAX3rpgneXyFyzk3psqXzUbI1oMz97R1tsy6TAriG4NQTk3wHhY/tiw44ZSt?=
+ =?us-ascii?Q?Z70oGsESJ90OEI4X7L8lHcmD7OOqtT6RHef5FnRK4Uzkw0yL0yNT8PPO4vO6?=
+ =?us-ascii?Q?+fCt7lHyaHk1/WfYN/u8NTQqt21h7Gir+VWbITD+kh+MjbOlDe+3ZKVAiEu3?=
+ =?us-ascii?Q?/bsZiejFPU97JXkcU0HQiCAw08engo59vxxq1kBcy+7yYkKPYMqDGopjAuXE?=
+ =?us-ascii?Q?wS/jt29bxy8r7rMrdObVytQq1zBnOkIKyIycD4JMs6kMWI1KwXxSwgQnjURR?=
+ =?us-ascii?Q?wDQCv5tfnrWFFSZG70+oE3DATGjs7btHajEvY0dsybFZ6F8NAGp3MbHJrE2B?=
+ =?us-ascii?Q?oG9s2yJDFOqjK5mlIeTxCfAi6uwD2v063hjBoqbPDHUoJjlINo58An/hLF/F?=
+ =?us-ascii?Q?jQD7epM4Qe+kLjnLhwfm0NU14tuyPeEEicjV5KC4kyx01oApjzP/3m+mQN86?=
+ =?us-ascii?Q?pALoiRetwwt45STVK9AZ5n9heK+Ii6fibNxKxdzkkUIDHZ+3UWNn0n4cZcxo?=
+ =?us-ascii?Q?leOEqLbsBZu5bsVA6/40uy5vOPsmb0muEMVJNVjElm31YrSteRe9rXkKTvBH?=
+ =?us-ascii?Q?yselowAt/6FbhjS8/46Wj9UZN7NhgFKPwPl/xUwDsttV/xtB5zWMUC7EhsDX?=
+ =?us-ascii?Q?tRsZMD2M6fCx0YnzeCsecvOZ6Yw4z439LMxvO+AtP9mxUAvxjKNt3wRDfZYd?=
+ =?us-ascii?Q?Cq7xrRNRvCAzfGTlk9o17BjLvyXIvhdfTILSs10oYIbS8szoJFD/7zqoiLiY?=
+ =?us-ascii?Q?IJtnMvdUST/Q8CozCcHnGlTfgC/Xnn9oxtBT/MOYujnEFTiSPCyTzc3wjNOQ?=
+ =?us-ascii?Q?cm1DwbPgPh2JiZqtHkR9iKQarLuFXF3++ruXs9eU3ncwGxsadvsfbPOInhv6?=
+ =?us-ascii?Q?XotT/C9rlODXNqcJ8eIxuU5bCllO27nMb4KP66j1YBnvkUf+HedRSQ4nWUS4?=
+ =?us-ascii?Q?qnbZjfsnXTjhU1kSEUcPe7lelsBqzKa7Qt7s/a/0?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6cb6b04-bb2e-4d2c-15e9-08db7cfb2ae3
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 01:57:20.4531
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oC/6iEHp66MZN2FLX1W2SKBIcKXAYGSqmwtcIHxZTuXT3s07a2ueI/NmkdQDOIOQtATb622tAU/X7TyPp3KzhQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8845
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 7:54=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> Add fentry_many_args.c and fexit_many_args.c to test the fentry/fexit
-> with 7/11 arguments. As this feature is not supported by arm64 yet, we
-> disable these testcases for arm64 in DENYLIST.aarch64. We can combine
-> them with fentry_test.c/fexit_test.c when arm64 is supported too.
->
-> Correspondingly, add bpf_testmod_fentry_test7() and
-> bpf_testmod_fentry_test11() to bpf_testmod.c
->
-> Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
-> MODIFY_RETURN with 7 arguments.
->
-> Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
-> bpf_testmod.c to test the struct in the arguments.
->
-> And the testcases passed on x86_64:
->
-> ./test_progs -t fexit
-> Summary: 5/14 PASSED, 0 SKIPPED, 0 FAILED
->
-> ./test_progs -t fentry
-> Summary: 3/2 PASSED, 0 SKIPPED, 0 FAILED
->
-> ./test_progs -t modify_return
-> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> ./test_progs -t tracing_struct
-> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> Acked-by: Yonghong Song <yhs@fb.com>
-> ---
-> v7:
-> - split the testcases, and add fentry_many_args/fexit_many_args to
->   DENYLIST.aarch64
-> v6:
-> - add testcases to tracing_struct.c instead of fentry_test.c and
->   fexit_test.c
-> v5:
-> - add testcases for MODIFY_RETURN
-> v4:
-> - use different type for args in bpf_testmod_fentry_test{7,12}
-> - add testcase for grabage values in ctx
-> v3:
-> - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
->   bpf_testmod_fentry_test{7,12} meanwhile
-> - get return value by bpf_get_func_ret() in
->   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast()
->   in this version
-> ---
->  net/bpf/test_run.c                            | 23 ++++++--
->  tools/testing/selftests/bpf/DENYLIST.aarch64  |  2 +
->  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
->  .../selftests/bpf/prog_tests/fentry_test.c    | 43 +++++++++++++--
->  .../selftests/bpf/prog_tests/fexit_test.c     | 43 +++++++++++++--
->  .../selftests/bpf/prog_tests/modify_return.c  | 20 ++++++-
->  .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
->  .../selftests/bpf/progs/fentry_many_args.c    | 39 ++++++++++++++
->  .../selftests/bpf/progs/fexit_many_args.c     | 40 ++++++++++++++
->  .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
->  .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++++
->  11 files changed, 358 insertions(+), 14 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/fentry_many_args.c
->  create mode 100644 tools/testing/selftests/bpf/progs/fexit_many_args.c
->
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 2321bd2f9964..df58e8bf5e07 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -561,6 +561,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, int *b=
-)
->         return a + *b;
->  }
->
-> +__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
-> +                                       void *e, char f, int g)
-> +{
-> +       *b +=3D 1;
-> +       return a + *b + c + d + (long)e + f + g;
-> +}
-> +
->  int noinline bpf_fentry_shadow_test(int a)
->  {
->         return a + 1;
-> @@ -596,9 +603,13 @@ __diag_pop();
->
->  BTF_SET8_START(bpf_test_modify_return_ids)
->  BTF_ID_FLAGS(func, bpf_modify_return_test)
-> +BTF_ID_FLAGS(func, bpf_modify_return_test2)
->  BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
->  BTF_SET8_END(bpf_test_modify_return_ids)
->
-> +BTF_ID_LIST(bpf_modify_return_test_id)
-> +BTF_ID(func, bpf_modify_return_test)
-> +
->  static const struct btf_kfunc_id_set bpf_test_modify_return_set =3D {
->         .owner =3D THIS_MODULE,
->         .set   =3D &bpf_test_modify_return_ids,
-> @@ -661,9 +672,15 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
->                         goto out;
->                 break;
->         case BPF_MODIFY_RETURN:
-> -               ret =3D bpf_modify_return_test(1, &b);
-> -               if (b !=3D 2)
-> -                       side_effect =3D 1;
-> +               if (prog->aux->attach_btf_id =3D=3D *bpf_modify_return_te=
-st_id) {
-> +                       ret =3D bpf_modify_return_test(1, &b);
-> +                       if (b !=3D 2)
-> +                               side_effect =3D 1;
-> +               } else {
-> +                       ret =3D bpf_modify_return_test2(1, &b, 3, 4, (voi=
-d *)5, 6, 7);
-> +                       if (b !=3D 2)
-> +                               side_effect =3D 1;
-> +               }
->                 break;
->         default:
->                 goto out;
-> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing=
-/selftests/bpf/DENYLIST.aarch64
-> index 08adc805878b..3b61e8b35d62 100644
-> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
-> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
-> @@ -10,3 +10,5 @@ kprobe_multi_test/link_api_addrs                 # link=
-_fd unexpected link_fd: a
->  kprobe_multi_test/link_api_syms                  # link_fd unexpected li=
-nk_fd: actual -95 < expected 0
->  kprobe_multi_test/skel_api                       # libbpf: failed to loa=
-d BPF skeleton 'kprobe_multi': -3
->  module_attach                                    # prog 'kprobe_multi': =
-failed to auto-attach: -95
-> +fentry_test/fentry_many_args                     # fentry_many_args:FAIL=
-:fentry_many_args_attach unexpected error: -524
-> +fexit_test/fexit_many_args                       # fexit_many_args:FAIL:=
-fexit_many_args_attach unexpected error: -524
-> diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tool=
-s/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> index aaf6ef1201c7..a6f991b56345 100644
-> --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> @@ -34,6 +34,11 @@ struct bpf_testmod_struct_arg_3 {
->         int b[];
->  };
->
-> +struct bpf_testmod_struct_arg_4 {
-> +       u64 a;
-> +       int b;
-> +};
-> +
->  __diag_push();
->  __diag_ignore_all("-Wmissing-prototypes",
->                   "Global functions as their definitions will be in bpf_t=
-estmod.ko BTF");
-> @@ -75,6 +80,24 @@ bpf_testmod_test_struct_arg_6(struct bpf_testmod_struc=
-t_arg_3 *a) {
->         return bpf_testmod_test_struct_arg_result;
->  }
->
-> +noinline int
-> +bpf_testmod_test_struct_arg_7(u64 a, void *b, short c, int d, void *e,
-> +                             struct bpf_testmod_struct_arg_4 f)
-> +{
-> +       bpf_testmod_test_struct_arg_result =3D a + (long)b + c + d +
-> +               (long)e + f.a + f.b;
-> +       return bpf_testmod_test_struct_arg_result;
-> +}
-> +
-> +noinline int
-> +bpf_testmod_test_struct_arg_8(u64 a, void *b, short c, int d, void *e,
-> +                             struct bpf_testmod_struct_arg_4 f, int g)
-> +{
-> +       bpf_testmod_test_struct_arg_result =3D a + (long)b + c + d +
-> +               (long)e + f.a + f.b + g;
-> +       return bpf_testmod_test_struct_arg_result;
-> +}
-> +
->  __bpf_kfunc void
->  bpf_testmod_test_mod_kfunc(int i)
->  {
-> @@ -191,6 +214,20 @@ noinline int bpf_testmod_fentry_test3(char a, int b,=
- u64 c)
->         return a + b + c;
->  }
->
-> +noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
-> +                                     void *e, char f, int g)
-> +{
-> +       return a + (long)b + c + d + (long)e + f + g;
-> +}
-> +
-> +noinline int bpf_testmod_fentry_test11(u64 a, void *b, short c, int d,
-> +                                      void *e, char f, int g,
-> +                                      unsigned int h, long i, __u64 j,
-> +                                      unsigned long k)
-> +{
-> +       return a + (long)b + c + d + (long)e + f + g + h + i + j + k;
-> +}
-> +
->  int bpf_testmod_fentry_ok;
->
->  noinline ssize_t
-> @@ -206,6 +243,7 @@ bpf_testmod_test_read(struct file *file, struct kobje=
-ct *kobj,
->         struct bpf_testmod_struct_arg_1 struct_arg1 =3D {10};
->         struct bpf_testmod_struct_arg_2 struct_arg2 =3D {2, 3};
->         struct bpf_testmod_struct_arg_3 *struct_arg3;
-> +       struct bpf_testmod_struct_arg_4 struct_arg4 =3D {21, 22};
->         int i =3D 1;
->
->         while (bpf_testmod_return_ptr(i))
-> @@ -216,6 +254,11 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
->         (void)bpf_testmod_test_struct_arg_3(1, 4, struct_arg2);
->         (void)bpf_testmod_test_struct_arg_4(struct_arg1, 1, 2, 3, struct_=
-arg2);
->         (void)bpf_testmod_test_struct_arg_5();
-> +       (void)bpf_testmod_test_struct_arg_7(16, (void *)17, 18, 19,
-> +                                           (void *)20, struct_arg4);
-> +       (void)bpf_testmod_test_struct_arg_8(16, (void *)17, 18, 19,
-> +                                           (void *)20, struct_arg4, 23);
-> +
->
->         struct_arg3 =3D kmalloc((sizeof(struct bpf_testmod_struct_arg_3) =
-+
->                                 sizeof(int)), GFP_KERNEL);
-> @@ -243,7 +286,11 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
->
->         if (bpf_testmod_fentry_test1(1) !=3D 2 ||
->             bpf_testmod_fentry_test2(2, 3) !=3D 5 ||
-> -           bpf_testmod_fentry_test3(4, 5, 6) !=3D 15)
-> +           bpf_testmod_fentry_test3(4, 5, 6) !=3D 15 ||
-> +           bpf_testmod_fentry_test7(16, (void *)17, 18, 19, (void *)20,
-> +                       21, 22) !=3D 133 ||
-> +           bpf_testmod_fentry_test11(16, (void *)17, 18, 19, (void *)20,
-> +                       21, 22, 23, 24, 25, 26) !=3D 231)
->                 goto out;
->
->         bpf_testmod_fentry_ok =3D 1;
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools=
-/testing/selftests/bpf/prog_tests/fentry_test.c
-> index c0d1d61d5f66..aee1bc77a17f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-> @@ -2,8 +2,9 @@
->  /* Copyright (c) 2019 Facebook */
->  #include <test_progs.h>
->  #include "fentry_test.lskel.h"
-> +#include "fentry_many_args.skel.h"
->
-> -static int fentry_test(struct fentry_test_lskel *fentry_skel)
-> +static int fentry_test_common(struct fentry_test_lskel *fentry_skel)
->  {
->         int err, prog_fd, i;
->         int link_fd;
-> @@ -37,7 +38,7 @@ static int fentry_test(struct fentry_test_lskel *fentry=
-_skel)
->         return 0;
->  }
->
-> -void test_fentry_test(void)
-> +static void fentry_test(void)
->  {
->         struct fentry_test_lskel *fentry_skel =3D NULL;
->         int err;
-> @@ -46,13 +47,47 @@ void test_fentry_test(void)
->         if (!ASSERT_OK_PTR(fentry_skel, "fentry_skel_load"))
->                 goto cleanup;
->
-> -       err =3D fentry_test(fentry_skel);
-> +       err =3D fentry_test_common(fentry_skel);
->         if (!ASSERT_OK(err, "fentry_first_attach"))
->                 goto cleanup;
->
-> -       err =3D fentry_test(fentry_skel);
-> +       err =3D fentry_test_common(fentry_skel);
->         ASSERT_OK(err, "fentry_second_attach");
->
->  cleanup:
->         fentry_test_lskel__destroy(fentry_skel);
->  }
-> +
-> +static void fentry_many_args(void)
-> +{
-> +       struct fentry_many_args *fentry_skel =3D NULL;
-> +       int err;
-> +
-> +       fentry_skel =3D fentry_many_args__open_and_load();
-> +       if (!ASSERT_OK_PTR(fentry_skel, "fentry_many_args_skel_load"))
-> +               goto cleanup;
-> +
-> +       err =3D fentry_many_args__attach(fentry_skel);
-> +       if (!ASSERT_OK(err, "fentry_many_args_attach"))
-> +               goto cleanup;
-> +
-> +       ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-> +
-> +       ASSERT_EQ(fentry_skel->bss->test1_result, 1,
-> +                 "fentry_many_args_result1");
-> +       ASSERT_EQ(fentry_skel->bss->test2_result, 1,
-> +                 "fentry_many_args_result2");
-> +       ASSERT_EQ(fentry_skel->bss->test3_result, 1,
-> +                 "fentry_many_args_result3");
-> +
-> +cleanup:
-> +       fentry_many_args__destroy(fentry_skel);
-> +}
-> +
+This patch set corrects the lpuart compatible for imx8dxl and imx93 platforms,
+also correct the corresponding fsl-lpuart dt-binding doc. 
 
-Hello,
+---
+Changes in V4
+1. add Reviewed-by tag for patch#3
 
-Is there anything else that needs to be improved in this series?
-Is it about the ugly function naming of "fentry_many_args"?
+Changes in V3
+1. remove the redundant fsl,imx8ulp-lpuart entry in patch#3
+2. change const to enum for better readability in patch#3
 
-Sorry for the bother, but it has been pending for a while :)
+Changes in V2
+1. drop the imx8ulp dts changes in last version patch set
+2. add both "fsl,imx8ulp-lpuart" and "fsl,imx7ulp-lpuart" for imx93
+3. correct the dt-bindings for imx93 lpuart compatible
+---
 
-Thanks!
-Menglong Dong
+Sherry Sun (3):
+  arm64: dts: imx8dxl: remove "fsl,imx7ulp-lpuart" compatible for
+    imx8dxl
+  arm64: dts: imx93: add "fsl,imx8ulp-lpuart" compatible for imx93
+  dt-bindings: serial: fsl-lpuart: correct imx93-lpuart dt-binding item
 
-> +void test_fentry_test(void)
-> +{
-> +       if (test__start_subtest("fentry"))
-> +               fentry_test();
-> +       if (test__start_subtest("fentry_many_args"))
-> +               fentry_many_args();
-> +}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_test.c b/tools/=
-testing/selftests/bpf/prog_tests/fexit_test.c
-> index 101b7343036b..1c13007e37dd 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-> @@ -2,8 +2,9 @@
->  /* Copyright (c) 2019 Facebook */
->  #include <test_progs.h>
->  #include "fexit_test.lskel.h"
-> +#include "fexit_many_args.skel.h"
->
-> -static int fexit_test(struct fexit_test_lskel *fexit_skel)
-> +static int fexit_test_common(struct fexit_test_lskel *fexit_skel)
->  {
->         int err, prog_fd, i;
->         int link_fd;
-> @@ -37,7 +38,7 @@ static int fexit_test(struct fexit_test_lskel *fexit_sk=
-el)
->         return 0;
->  }
->
-> -void test_fexit_test(void)
-> +static void fexit_test(void)
->  {
->         struct fexit_test_lskel *fexit_skel =3D NULL;
->         int err;
-> @@ -46,13 +47,47 @@ void test_fexit_test(void)
->         if (!ASSERT_OK_PTR(fexit_skel, "fexit_skel_load"))
->                 goto cleanup;
->
-> -       err =3D fexit_test(fexit_skel);
-> +       err =3D fexit_test_common(fexit_skel);
->         if (!ASSERT_OK(err, "fexit_first_attach"))
->                 goto cleanup;
->
-> -       err =3D fexit_test(fexit_skel);
-> +       err =3D fexit_test_common(fexit_skel);
->         ASSERT_OK(err, "fexit_second_attach");
->
->  cleanup:
->         fexit_test_lskel__destroy(fexit_skel);
->  }
-> +
-> +static void fexit_many_args(void)
-> +{
-> +       struct fexit_many_args *fexit_skel =3D NULL;
-> +       int err;
-> +
-> +       fexit_skel =3D fexit_many_args__open_and_load();
-> +       if (!ASSERT_OK_PTR(fexit_skel, "fexit_many_args_skel_load"))
-> +               goto cleanup;
-> +
-> +       err =3D fexit_many_args__attach(fexit_skel);
-> +       if (!ASSERT_OK(err, "fexit_many_args_attach"))
-> +               goto cleanup;
-> +
-> +       ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-> +
-> +       ASSERT_EQ(fexit_skel->bss->test1_result, 1,
-> +                 "fexit_many_args_result1");
-> +       ASSERT_EQ(fexit_skel->bss->test2_result, 1,
-> +                 "fexit_many_args_result2");
-> +       ASSERT_EQ(fexit_skel->bss->test3_result, 1,
-> +                 "fexit_many_args_result3");
-> +
-> +cleanup:
-> +       fexit_many_args__destroy(fexit_skel);
-> +}
-> +
-> +void test_fexit_test(void)
-> +{
-> +       if (test__start_subtest("fexit"))
-> +               fexit_test();
-> +       if (test__start_subtest("fexit_many_args"))
-> +               fexit_many_args();
-> +}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/too=
-ls/testing/selftests/bpf/prog_tests/modify_return.c
-> index 5d9955af6247..93febb6d81ef 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-> @@ -11,7 +11,8 @@
->  #define UPPER(x) ((x) >> 16)
->
->
-> -static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 w=
-ant_ret)
-> +static void run_test(__u32 input_retval, __u16 want_side_effect,
-> +                    __s16 want_ret, __s16 want_ret2)
->  {
->         struct modify_return *skel =3D NULL;
->         int err, prog_fd;
-> @@ -41,6 +42,19 @@ static void run_test(__u32 input_retval, __u16 want_si=
-de_effect, __s16 want_ret)
->         ASSERT_EQ(skel->bss->fexit_result, 1, "modify_return fexit_result=
-");
->         ASSERT_EQ(skel->bss->fmod_ret_result, 1, "modify_return fmod_ret_=
-result");
->
-> +       prog_fd =3D bpf_program__fd(skel->progs.fmod_ret_test2);
-> +       err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-> +       ASSERT_OK(err, "test_run");
-> +
-> +       side_effect =3D UPPER(topts.retval);
-> +       ret =3D LOWER(topts.retval);
-> +
-> +       ASSERT_EQ(ret, want_ret2, "test_run ret2");
-> +       ASSERT_EQ(side_effect, want_side_effect, "modify_return side_effe=
-ct2");
-> +       ASSERT_EQ(skel->bss->fentry_result2, 1, "modify_return fentry_res=
-ult2");
-> +       ASSERT_EQ(skel->bss->fexit_result2, 1, "modify_return fexit_resul=
-t2");
-> +       ASSERT_EQ(skel->bss->fmod_ret_result2, 1, "modify_return fmod_ret=
-_result2");
-> +
->  cleanup:
->         modify_return__destroy(skel);
->  }
-> @@ -50,8 +64,10 @@ void serial_test_modify_return(void)
->  {
->         run_test(0 /* input_retval */,
->                  1 /* want_side_effect */,
-> -                4 /* want_ret */);
-> +                4 /* want_ret */,
-> +                29 /* want_ret */);
->         run_test(-EINVAL /* input_retval */,
->                  0 /* want_side_effect */,
-> +                -EINVAL /* want_ret */,
->                  -EINVAL /* want_ret */);
->  }
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
-ols/testing/selftests/bpf/prog_tests/tracing_struct.c
-> index 1c75a32186d6..fe0fb0c9849a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-> @@ -55,6 +55,25 @@ static void test_fentry(void)
->
->         ASSERT_EQ(skel->bss->t6, 1, "t6 ret");
->
-> +       ASSERT_EQ(skel->bss->t7_a, 16, "t7:a");
-> +       ASSERT_EQ(skel->bss->t7_b, 17, "t7:b");
-> +       ASSERT_EQ(skel->bss->t7_c, 18, "t7:c");
-> +       ASSERT_EQ(skel->bss->t7_d, 19, "t7:d");
-> +       ASSERT_EQ(skel->bss->t7_e, 20, "t7:e");
-> +       ASSERT_EQ(skel->bss->t7_f_a, 21, "t7:f.a");
-> +       ASSERT_EQ(skel->bss->t7_f_b, 22, "t7:f.b");
-> +       ASSERT_EQ(skel->bss->t7_ret, 133, "t7 ret");
-> +
-> +       ASSERT_EQ(skel->bss->t8_a, 16, "t8:a");
-> +       ASSERT_EQ(skel->bss->t8_b, 17, "t8:b");
-> +       ASSERT_EQ(skel->bss->t8_c, 18, "t8:c");
-> +       ASSERT_EQ(skel->bss->t8_d, 19, "t8:d");
-> +       ASSERT_EQ(skel->bss->t8_e, 20, "t8:e");
-> +       ASSERT_EQ(skel->bss->t8_f_a, 21, "t8:f.a");
-> +       ASSERT_EQ(skel->bss->t8_f_b, 22, "t8:f.b");
-> +       ASSERT_EQ(skel->bss->t8_g, 23, "t8:g");
-> +       ASSERT_EQ(skel->bss->t8_ret, 156, "t8 ret");
-> +
->         tracing_struct__detach(skel);
->  destroy_skel:
->         tracing_struct__destroy(skel);
-> diff --git a/tools/testing/selftests/bpf/progs/fentry_many_args.c b/tools=
-/testing/selftests/bpf/progs/fentry_many_args.c
-> new file mode 100644
-> index 000000000000..b61bb92fee2c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/fentry_many_args.c
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Tencent */
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +__u64 test1_result =3D 0;
-> +SEC("fentry/bpf_testmod_fentry_test7")
-> +int BPF_PROG(test1, __u64 a, void *b, short c, int d, void *e, char f,
-> +            int g)
-> +{
-> +       test1_result =3D a =3D=3D 16 && b =3D=3D (void *)17 && c =3D=3D 1=
-8 && d =3D=3D 19 &&
-> +               e =3D=3D (void *)20 && f =3D=3D 21 && g =3D=3D 22;
-> +       return 0;
-> +}
-> +
-> +__u64 test2_result =3D 0;
-> +SEC("fentry/bpf_testmod_fentry_test11")
-> +int BPF_PROG(test2, __u64 a, void *b, short c, int d, void *e, char f,
-> +            int g, unsigned int h, long i, __u64 j, unsigned long k)
-> +{
-> +       test2_result =3D a =3D=3D 16 && b =3D=3D (void *)17 && c =3D=3D 1=
-8 && d =3D=3D 19 &&
-> +               e =3D=3D (void *)20 && f =3D=3D 21 && g =3D=3D 22 && h =
-=3D=3D 23 &&
-> +               i =3D=3D 24 && j =3D=3D 25 && k =3D=3D 26;
-> +       return 0;
-> +}
-> +
-> +__u64 test3_result =3D 0;
-> +SEC("fentry/bpf_testmod_fentry_test11")
-> +int BPF_PROG(test3, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f=
-,
-> +            __u64 g, __u64 h, __u64 i, __u64 j, __u64 k)
-> +{
-> +       test3_result =3D a =3D=3D 16 && b =3D=3D 17 && c =3D=3D 18 && d =
-=3D=3D 19 &&
-> +               e =3D=3D 20 && f =3D=3D 21 && g =3D=3D 22 && h =3D=3D 23 =
-&&
-> +               i =3D=3D 24 && j =3D=3D 25 && k =3D=3D 26;
-> +       return 0;
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/fexit_many_args.c b/tools/=
-testing/selftests/bpf/progs/fexit_many_args.c
-> new file mode 100644
-> index 000000000000..53b335c2dafb
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/fexit_many_args.c
-> @@ -0,0 +1,40 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Tencent */
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +__u64 test1_result =3D 0;
-> +SEC("fexit/bpf_testmod_fentry_test7")
-> +int BPF_PROG(test1, __u64 a, void *b, short c, int d, void *e, char f,
-> +            int g, int ret)
-> +{
-> +       test1_result =3D a =3D=3D 16 && b =3D=3D (void *)17 && c =3D=3D 1=
-8 && d =3D=3D 19 &&
-> +               e =3D=3D (void *)20 && f =3D=3D 21 && g =3D=3D 22 && ret =
-=3D=3D 133;
-> +       return 0;
-> +}
-> +
-> +__u64 test2_result =3D 0;
-> +SEC("fexit/bpf_testmod_fentry_test11")
-> +int BPF_PROG(test2, __u64 a, void *b, short c, int d, void *e, char f,
-> +            int g, unsigned int h, long i, __u64 j, unsigned long k,
-> +            int ret)
-> +{
-> +       test2_result =3D a =3D=3D 16 && b =3D=3D (void *)17 && c =3D=3D 1=
-8 && d =3D=3D 19 &&
-> +               e =3D=3D (void *)20 && f =3D=3D 21 && g =3D=3D 22 && h =
-=3D=3D 23 &&
-> +               i =3D=3D 24 && j =3D=3D 25 && k =3D=3D 26 && ret =3D=3D 2=
-31;
-> +       return 0;
-> +}
-> +
-> +__u64 test3_result =3D 0;
-> +SEC("fexit/bpf_testmod_fentry_test11")
-> +int BPF_PROG(test3, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f=
-,
-> +            __u64 g, __u64 h, __u64 i, __u64 j, __u64 k, __u64 ret)
-> +{
-> +       test3_result =3D a =3D=3D 16 && b =3D=3D 17 && c =3D=3D 18 && d =
-=3D=3D 19 &&
-> +               e =3D=3D 20 && f =3D=3D 21 && g =3D=3D 22 && h =3D=3D 23 =
-&&
-> +               i =3D=3D 24 && j =3D=3D 25 && k =3D=3D 26 && ret =3D=3D 2=
-31;
-> +       return 0;
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/te=
-sting/selftests/bpf/progs/modify_return.c
-> index 8b7466a15c6b..3376d4849f58 100644
-> --- a/tools/testing/selftests/bpf/progs/modify_return.c
-> +++ b/tools/testing/selftests/bpf/progs/modify_return.c
-> @@ -47,3 +47,43 @@ int BPF_PROG(fexit_test, int a, __u64 b, int ret)
->
->         return 0;
->  }
-> +
-> +static int sequence2;
-> +
-> +__u64 fentry_result2 =3D 0;
-> +SEC("fentry/bpf_modify_return_test2")
-> +int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char =
-f,
-> +            int g)
-> +{
-> +       sequence2++;
-> +       fentry_result2 =3D (sequence2 =3D=3D 1);
-> +       return 0;
-> +}
-> +
-> +__u64 fmod_ret_result2 =3D 0;
-> +SEC("fmod_ret/bpf_modify_return_test2")
-> +int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, cha=
-r f,
-> +            int g, int ret)
-> +{
-> +       sequence2++;
-> +       /* This is the first fmod_ret program, the ret passed should be 0=
- */
-> +       fmod_ret_result2 =3D (sequence2 =3D=3D 2 && ret =3D=3D 0);
-> +       return input_retval;
-> +}
-> +
-> +__u64 fexit_result2 =3D 0;
-> +SEC("fexit/bpf_modify_return_test2")
-> +int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f=
-,
-> +            int g, int ret)
-> +{
-> +       sequence2++;
-> +       /* If the input_reval is non-zero a successful modification shoul=
-d have
-> +        * occurred.
-> +        */
-> +       if (input_retval)
-> +               fexit_result2 =3D (sequence2 =3D=3D 3 && ret =3D=3D input=
-_retval);
-> +       else
-> +               fexit_result2 =3D (sequence2 =3D=3D 3 && ret =3D=3D 29);
-> +
-> +       return 0;
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/t=
-esting/selftests/bpf/progs/tracing_struct.c
-> index c435a3a8328a..515daef3c84b 100644
-> --- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-> +++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-> @@ -18,6 +18,11 @@ struct bpf_testmod_struct_arg_3 {
->         int b[];
->  };
->
-> +struct bpf_testmod_struct_arg_4 {
-> +       u64 a;
-> +       int b;
-> +};
-> +
->  long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
->  __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
->  long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
-> @@ -25,6 +30,9 @@ long t3_a, t3_b, t3_c_a, t3_c_b, t3_ret;
->  long t4_a_a, t4_b, t4_c, t4_d, t4_e_a, t4_e_b, t4_ret;
->  long t5_ret;
->  int t6;
-> +long t7_a, t7_b, t7_c, t7_d, t7_e, t7_f_a, t7_f_b, t7_ret;
-> +long t8_a, t8_b, t8_c, t8_d, t8_e, t8_f_a, t8_f_b, t8_g, t8_ret;
-> +
->
->  SEC("fentry/bpf_testmod_test_struct_arg_1")
->  int BPF_PROG2(test_struct_arg_1, struct bpf_testmod_struct_arg_2, a, int=
-, b, int, c)
-> @@ -130,4 +138,50 @@ int BPF_PROG2(test_struct_arg_11, struct bpf_testmod=
-_struct_arg_3 *, a)
->         return 0;
->  }
->
-> +SEC("fentry/bpf_testmod_test_struct_arg_7")
-> +int BPF_PROG2(test_struct_arg_12, __u64, a, void *, b, short, c, int, d,
-> +             void *, e, struct bpf_testmod_struct_arg_4, f)
-> +{
-> +       t7_a =3D a;
-> +       t7_b =3D (long)b;
-> +       t7_c =3D c;
-> +       t7_d =3D d;
-> +       t7_e =3D (long)e;
-> +       t7_f_a =3D f.a;
-> +       t7_f_b =3D f.b;
-> +       return 0;
-> +}
-> +
-> +SEC("fexit/bpf_testmod_test_struct_arg_7")
-> +int BPF_PROG2(test_struct_arg_13, __u64, a, void *, b, short, c, int, d,
-> +             void *, e, struct bpf_testmod_struct_arg_4, f, int, ret)
-> +{
-> +       t7_ret =3D ret;
-> +       return 0;
-> +}
-> +
-> +SEC("fentry/bpf_testmod_test_struct_arg_8")
-> +int BPF_PROG2(test_struct_arg_14, __u64, a, void *, b, short, c, int, d,
-> +             void *, e, struct bpf_testmod_struct_arg_4, f, int, g)
-> +{
-> +       t8_a =3D a;
-> +       t8_b =3D (long)b;
-> +       t8_c =3D c;
-> +       t8_d =3D d;
-> +       t8_e =3D (long)e;
-> +       t8_f_a =3D f.a;
-> +       t8_f_b =3D f.b;
-> +       t8_g =3D g;
-> +       return 0;
-> +}
-> +
-> +SEC("fexit/bpf_testmod_test_struct_arg_8")
-> +int BPF_PROG2(test_struct_arg_15, __u64, a, void *, b, short, c, int, d,
-> +             void *, e, struct bpf_testmod_struct_arg_4, f, int, g,
-> +             int, ret)
-> +{
-> +       t8_ret =3D ret;
-> +       return 0;
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
-> --
-> 2.40.1
->
+ .../devicetree/bindings/serial/fsl-lpuart.yaml   |  6 +++++-
+ .../boot/dts/freescale/imx8dxl-ss-adma.dtsi      |  8 ++++----
+ arch/arm64/boot/dts/freescale/imx93.dtsi         | 16 ++++++++--------
+ 3 files changed, 17 insertions(+), 13 deletions(-)
+
+-- 
+2.17.1
+
