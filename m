@@ -2,113 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F59747D32
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ED0747D36
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjGEGhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S231627AbjGEGlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjGEGhq (ORCPT
+        with ESMTP id S229744AbjGEGlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:37:46 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B33173F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:37:36 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9741caaf9d4so553221266b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688539054; x=1691131054;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cpP88mf+3RwT3RQQZwbh7gS0aJM/McgN4Cq6ljoPHaw=;
-        b=SYqgRkooI2H+SlFPD5UN209G74Y6Eip99V1n+GE/gCO9XiOZRbH2+LFQYV4zK8XgTl
-         9S/CsLWHQTqc1+eMbLG5kvdGpJJ4VvHX6QKLXnMpMuzAAl/xB7RfkRRzfHqCury8hFeZ
-         0mHRuWViiDIdlyMg5xP3ZE8ed3ENZSbRd42QOnZkO/HKu/pqIZe391PPXKal8BWzsK/5
-         3z07nJz13y09AXfugtbdDxOO/UKJ+dr7MPS/srDw4sngeL42LF2+wqgy5RcwUblMdipz
-         RZEO15ePbl7cKJS5tizvb7whyfjLYm/EPWK0Nw/KNP+c7YaPtnbJKjTiaA8Q7zEHqHyt
-         VM0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688539054; x=1691131054;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cpP88mf+3RwT3RQQZwbh7gS0aJM/McgN4Cq6ljoPHaw=;
-        b=kOlsscNi+7b4IHlzlwsWjs7uKf1nW4quU5lZNsCEuFs3lRBWjs7vWbZUzRzjIfzclF
-         sgcxYzw5ioc+Ts4esBh1Zu1nHdOkkRafYQYGb40u/hmPayuSDrZeQTeXdda2MApYr0rf
-         nXADdkLDuVDnjmyHzhBINK6LbEFhqBx15J8G45/s469npaycjsajmGVxiD56CA9jCYuF
-         7o8yejrq2pJr+lsjc4fTlIpaaQ6cFjsEroWmLwU+9g+p0uP0K5SKzuoJYOxUqKpZlwwr
-         c3akEcuREDxs1ml46YGzkXK6SgPjzJgHqFXEY2SaZiAd7kj8or9q07Btl39bWUJ/x30u
-         LKvA==
-X-Gm-Message-State: ABy/qLa5svgLNK8jj3W48vJ7bDdlJdexi+lqEJyTfxxO32CAGfG/zxXR
-        /Lp94KYWt7JZJ3i5mpaAVNfSLg==
-X-Google-Smtp-Source: ACHHUZ73axf5oiNG42bIdXcPUUsxukZp+Ncl16plzTfGlPENelpuGWvLivoUs657INDgvbG+rxISlw==
-X-Received: by 2002:a17:906:3405:b0:982:9b01:a57c with SMTP id c5-20020a170906340500b009829b01a57cmr11049094ejb.12.1688539054522;
-        Tue, 04 Jul 2023 23:37:34 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id i26-20020a1709063c5a00b00991d54db2acsm11702913ejg.44.2023.07.04.23.37.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 23:37:34 -0700 (PDT)
-Message-ID: <0a664d16-22e7-6061-db0e-9669ab40af73@linaro.org>
-Date:   Wed, 5 Jul 2023 08:37:32 +0200
+        Wed, 5 Jul 2023 02:41:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7115B1700;
+        Tue,  4 Jul 2023 23:41:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F08B36144E;
+        Wed,  5 Jul 2023 06:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3662C433C8;
+        Wed,  5 Jul 2023 06:41:00 +0000 (UTC)
+Message-ID: <d0ae9e77-cd3a-6ed1-1f99-104d10de9fba@xs4all.nl>
+Date:   Wed, 5 Jul 2023 08:40:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] arm64: dts: freescale: Add DEBIX SOM A and SOM A I/O
- Board support
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
 Content-Language: en-US
-To:     Marco Felsch <m.felsch@pengutronix.de>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        shawnguo@kernel.org, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, marex@denx.de, frieder.schrempf@kontron.de
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230704184109.991104-1-m.felsch@pengutronix.de>
- <20230704184109.991104-3-m.felsch@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230704184109.991104-3-m.felsch@pengutronix.de>
+To:     Daniel Almeida <daniel.almeida@collabora.com>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230406215615.122099-1-daniel.almeida@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2023 20:41, Marco Felsch wrote:
-> Add support for the Debix SOM A + SOM A I/O board. The commit enables
-> only the basic features like:
->  - 2x UART
->  - 2x Network
->  - eMMC/µSD
->  - CAN
->  - QSPI
+Hi Daniel,
 
-...
+On 06/04/2023 23:56, Daniel Almeida wrote:
+> Hi all, this is my first attempt at adding Rust support to the
+> media subsystem.
+> 
+> It adds just enough support to write a clone of the virtio-camera
+> prototype written by my colleague, Dmitry Osipenko, available at [0].
+> 
+> Basically, there's support for video_device_register,
+> v4l2_device_register and for some ioctls in v4l2_ioctl_ops. There is
+> also some initial vb2 support, alongside some wrappers for some types
+> found in videodev2.h.
+> 
+> I wrote a sample Rust driver just to prove that this probes, and
+> that you get a message on dmesg whenever an ioctl is called.
+> 
+> As there is no actual implementation for any of the ioctls, this module
+> can misbehave with some programs. I can work around this in a future
+> submission.
+> 
+> Note that this is based on the rust branch, as opposed to rust-next. The
+> reasoning is simple: I expect this series to just kickstart some
+> discussion around the subject. Actual upstreaming can come up much
+> later, at which point I can rebase on the rust branch.
+> 
+> Lastly, the origins of this series trace back to a v4l2 virtIO driver I
+> was writing in Rust. As the project was eventually shelved for other
+> reasons, I picked both the virtIO and the v4l2 bindings into their own
+> patches which I am now in the process of submitting. This is to say that
+> I tested this code with said driver and CrosVM in the past, and it
+> worked ok.
+> 
+> Please let me know your thoughts.
 
-> +&i2c1 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	status = "okay";
-> +
-> +	pmic@25 {
-> +		compatible = "nxp,pca9450c";
-> +		reg = <0x25>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_pmic>;
-> +
-> +		interrupt-parent = <&gpio1>;
-> +		interrupts = <3 GPIO_ACTIVE_LOW>;
+Based on our discussions during the Media Summit I am going to mark this
+series as RFC in patchwork.
 
-Wrong flag.
+Once we have a new maintenance process up and running and things have
+stabilized on that front, then this can be revisited, but by that time
+it is better to post a v2, rebased and updated.
 
+Regards,
 
-Best regards,
-Krzysztof
+	Hans
+
+> 
+> [0]: https://gitlab.collabora.com/dmitry.osipenko/linux-kernel-rd/-/commit/055a2c322e931a8b388f864f1db81bbdfd525602
+> 
+> Daniel Almeida (6):
+>   rust: media: add the media module
+>   rust: media: add initial videodev2.h abstractions
+>   rust: sync: introduce FfiMutex
+>   rust: media: videobuf2: add a videobuf2 abstraction
+>   rust: media: add {video|v4l2}_device_register support
+>   rust: media: add v4l2 rust sample
+> 
+>  rust/bindings/bindings_helper.h        |   8 +
+>  rust/kernel/lib.rs                     |   2 +
+>  rust/kernel/media/mod.rs               |   6 +
+>  rust/kernel/media/v4l2/capabilities.rs |  80 ++++
+>  rust/kernel/media/v4l2/dev.rs          | 369 +++++++++++++++
+>  rust/kernel/media/v4l2/device.rs       | 115 +++++
+>  rust/kernel/media/v4l2/enums.rs        | 135 ++++++
+>  rust/kernel/media/v4l2/format.rs       | 178 ++++++++
+>  rust/kernel/media/v4l2/framesize.rs    | 176 +++++++
+>  rust/kernel/media/v4l2/inputs.rs       | 104 +++++
+>  rust/kernel/media/v4l2/ioctls.rs       | 608 +++++++++++++++++++++++++
+>  rust/kernel/media/v4l2/mmap.rs         |  81 ++++
+>  rust/kernel/media/v4l2/mod.rs          |  13 +
+>  rust/kernel/media/videobuf2/core.rs    | 552 ++++++++++++++++++++++
+>  rust/kernel/media/videobuf2/mod.rs     |   5 +
+>  rust/kernel/sync.rs                    |   1 +
+>  rust/kernel/sync/ffi_mutex.rs          |  70 +++
+>  samples/rust/Kconfig                   |  11 +
+>  samples/rust/Makefile                  |   1 +
+>  samples/rust/rust_v4l2.rs              | 403 ++++++++++++++++
+>  20 files changed, 2918 insertions(+)
+>  create mode 100644 rust/kernel/media/mod.rs
+>  create mode 100644 rust/kernel/media/v4l2/capabilities.rs
+>  create mode 100644 rust/kernel/media/v4l2/dev.rs
+>  create mode 100644 rust/kernel/media/v4l2/device.rs
+>  create mode 100644 rust/kernel/media/v4l2/enums.rs
+>  create mode 100644 rust/kernel/media/v4l2/format.rs
+>  create mode 100644 rust/kernel/media/v4l2/framesize.rs
+>  create mode 100644 rust/kernel/media/v4l2/inputs.rs
+>  create mode 100644 rust/kernel/media/v4l2/ioctls.rs
+>  create mode 100644 rust/kernel/media/v4l2/mmap.rs
+>  create mode 100644 rust/kernel/media/v4l2/mod.rs
+>  create mode 100644 rust/kernel/media/videobuf2/core.rs
+>  create mode 100644 rust/kernel/media/videobuf2/mod.rs
+>  create mode 100644 rust/kernel/sync/ffi_mutex.rs
+>  create mode 100644 samples/rust/rust_v4l2.rs
+> 
 
