@@ -2,128 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A6A748B16
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F52D748B1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233267AbjGER4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S233284AbjGER7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjGER4m (ORCPT
+        with ESMTP id S232351AbjGER7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:56:42 -0400
-Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:401::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB76199E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=iBBtnRklVqMQ6mkde8T1v6wMY0Ar5kLbR8KuMGyUvyw=;
-        b=GF90gPCvd8mEOngfUgQ59M+s5yRlPK7b2PnKpmpMnIjBFMszO4/vVi8TdAIN+T4XXNDIBa1cEljQA
-         OaSgSWv9V4iO8aiBOkixFILrXIigudR1NAANlPev2komLg+lvFqYkKOVyw7dU7ciKRpuqOHuixtnCW
-         azZqlkQw7SLDnFd7RdJeupMSRKwpLduu1VjDes2+Uu4ZiuWiF5OVKEMq/tcdLBTBfw+JfSicHqDQRF
-         IYTpvxpmZ4rv107iezXfjqLdQ70qXOdVeeOroTWIh77DcdHy3MseQ9mAmn9v98uk2Ze+Mtd90bG0HJ
-         Rb3zZy+8jWl2H1z2nLf+tQcWtCzHKvg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=iBBtnRklVqMQ6mkde8T1v6wMY0Ar5kLbR8KuMGyUvyw=;
-        b=/U4cLTc4mm2o+4LrKjw/bJrmBsg6NMPgQJ9mg4yrxISURD04T/fLHemun271zeTYH/jq/QmT2Kf1V
-         /gOZs4QCA==
-X-HalOne-ID: 4359365c-1b5d-11ee-87e5-5ba399456a4a
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay2 (Halon) with ESMTPSA
-        id 4359365c-1b5d-11ee-87e5-5ba399456a4a;
-        Wed, 05 Jul 2023 17:56:28 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 19:56:27 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Mans Rullgard <mans@mansr.com>, linux-fbdev@vger.kernel.org,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: Re: [PATCH] backlight: led_bl: fix initial power state
-Message-ID: <20230705175627.GD106478@ravnborg.org>
-References: <20230704140750.25799-1-mans@mansr.com>
- <20230704150310.GA385243@aspen.lan>
- <20230704170731.GB940443@ravnborg.org>
- <20230705140731.GB6265@aspen.lan>
+        Wed, 5 Jul 2023 13:59:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B86BE70
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:58:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1CB3616A4
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 17:58:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E225C433C7;
+        Wed,  5 Jul 2023 17:58:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688579938;
+        bh=/4NJBC7nCuz/v6FRdCQv4Fx4keLpeEtW5UQGOCJt/uY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gzvdw6oUzJvpRCywPVoC3S1KnQktli97BOTkw8QAc6kMbl75cKOi0Sm7KaehaWIfz
+         WyZMP1G8VsZGveeMHpapWIg3t3vTPcE0ASw7z/2T7yJaDz8WZWZA0NT+XMUUkJyb6L
+         BOjRV/DoZy8H9V9Oe7KtWnHUHDxFuoOPuO90/xSh0dcnIc9LhrXny+C3XyO0Esy725
+         2WdNxw0pc2DO/YdXgoJVz9fex0XBIs6HY5sNBtQjyMzuxC4Sblm3hxMlaknjDBh4IT
+         MC8zHYrWXhXG4EjrvHv8Oap2QKUeCubbif//JcTCD7aACi9Jp6G27Gwa0biVUaieHF
+         r8MsWfL9Ed1Gw==
+Message-ID: <d3308334-aa91-f265-2469-8a6fbc727798@kernel.org>
+Date:   Wed, 5 Jul 2023 19:58:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705140731.GB6265@aspen.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 1/2] regulator: dt-bindings: rtq2208: Add Richtek
+ RTQ2208 SubPMIC
+Content-Language: en-US
+To:     alina_yu@richtek.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     cy_huang@richtek.com
+References: <cover.1688569987.git.alina_yu@richtek.com>
+ <341af3996c430549243365bb8204d33a15a482be.1688569987.git.alina_yu@richtek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <341af3996c430549243365bb8204d33a15a482be.1688569987.git.alina_yu@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-On Wed, Jul 05, 2023 at 03:07:31PM +0100, Daniel Thompson wrote:
-> On Tue, Jul 04, 2023 at 07:07:31PM +0200, Sam Ravnborg wrote:
-> > Hi Daniel,
-> >
-> > > > @@ -200,8 +200,8 @@ static int led_bl_probe(struct platform_device *pdev)
-> > > >  	props.type = BACKLIGHT_RAW;
-> > > >  	props.max_brightness = priv->max_brightness;
-> > > >  	props.brightness = priv->default_brightness;
-> > > > -	props.power = (priv->default_brightness > 0) ? FB_BLANK_POWERDOWN :
-> > > > -		      FB_BLANK_UNBLANK;
-> > > > +	props.power = (priv->default_brightness > 0) ? FB_BLANK_UNBLANK :
-> > > > +		      FB_BLANK_POWERDOWN;
-> > >
-> > > The logic was wrong before but I think will still be wrong after the
-> > > change too (e.g. the bogus logic is probably avoiding backlight flicker
-> > > in some use cases).
-> > >
-> > > The logic here needs to be similar to what pwm_bl.c implements in
-> > > pwm_backlight_initial_power_state(). Whilst it might be better
-> > > to implement this in led_bl_get_leds() let me show what I mean
-> > > in code that fits in the current line:
-> > >
-> > > 	/*
-> > > 	 * Activate the backlight if the LEDs are already lit *or*
-> > > 	 * there is no phandle link (meaning the backlight power
-> > > 	 * state cannot be synced with the display state).
-> > > 	 */
-> > > 	props.power = (active_at_boot || !dev->node->phandle) ?
-> > > 			FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
-> > >
-> > The following code does the same using helpers:
-> >
-> > 	if (active_at_boot || !dev->node->phandle))
-> > 		backlight_enable(bd);
-> > 	else
-> > 		backlight_disable(bd);
-> >
-> > The code needs to execute after backlight_device_register() so maybe not
-> > so great an idea?!?
+On 05/07/2023 17:27, alina_yu@richtek.com wrote:
+> From: alinayu <alina_yu@richtek.com>
 > 
-> It would introduce a need for a bunch of new locks since userspace
-> could get in between device creation and the call to the helpers.
-I thought we were safe while in the probe function, but I have been
-fooled by the driver model before.
+> Add bindings for Richtek RTQ2208 IC controlled SubPMIC
+
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
+
+You missed at least DT list (maybe more), so this won't be tested by our
+tools. Performing review on untested code might be a waste of time, thus
+I will skip this patch entirely till you follow the process allowing the
+patch to be tested.
+
+Please kindly resend and include all necessary To/Cc entries.
+
+Limited review follows.
 
 > 
-> Additionally, it is even correct for a driver to forcefully set
-> fb_blank to powerdown during the probe? All current drivers set
-> fb_blank to unblank during the probe.
-fb_blank is more or less unused. I thought that Lee applied the patch set
-to eliminate most users, but I see that this is not the case.
-I need to resend one day.
-Some (at least one) drivers update .power after registering the device, so if this
-is racy then these drivers could use some care.
+> Signed-off-by: alinayu <alina_yu@richtek.com>
+> ---
+>  .../regulator/richtek,rtq2208-regulator.yaml       | 228 +++++++++++++++++++++
+>  1 file changed, 228 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rtq2208-regulator.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rtq2208-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rtq2208-regulator.yaml
+> new file mode 100644
+> index 0000000..2a060ce
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/richtek,rtq2208-regulator.yaml
 
-Anyway, looking at how many drivers access backlight_properties direct is
-is futile to try to avoid it. So the approach you suggest seems the best
-way to do it.
+Filename like compatible.
 
-	Sam
+> @@ -0,0 +1,228 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/richtek,rtq2208-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Richtek RTQ2208 SubPMIC Regulator
+> +
+> +maintainers:
+> +  - Alina Yu <alina_yu@richtek.com>
+> +
+> +description: |
+> +  The RTQ2208 is a highly integrated multi-configurable power converter that
+> +  offers functional safety embedded dual multi-configurable synchronous buck
+> +  converters and two LDOs.
+> +
+> +  Bucks support "regulator-allowed-modes" and "regulator-mode". The former defines the permitted
+> +  swiching operation in normal mode; the latter defines the operation in suspend to RAM mode.
+> +
+> +  No matter the RTQ2208 is configured in normal or suspend to RAM mode, there are two switching
+> +  operation modes for all buck rails, automic power saving mode (Auto mode) and forced continious
+> +  conduction mode (FCCM).
+> +
+> +  The meaning of modes is defined in the datasheet which is avaliabe in below link
+
+You have several typos here and before. Please run spellcheck.
+
+> +  and their meaning is::
+> +    0 - Auto mode for power saving, which reducing the switching frequency at light load condition
+> +    to maintain high frequency.
+> +    1 - FCCM to meet the strict voltage regulation accuracy, which keeping constant switching frequency.
+> +
+> +  Datasheet will be available soon at
+> +  https://www.richtek.com/assets/Products
+> +
+> +  The standard "regulator-mode" property can only be used for bucks that
+> +  changing their mode to suspend to RAM mode. Also, it only takes effect if the
+> +  regulator has been enabled for the given suspend state using "regulator-on-in-suspend".
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - richtek,rtq2208
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    
+> +  richtek,mtp-sel:
+> +    description: |
+> +      Buck and ldo vout selection is based on this value.
+> +      There are two independently programmable voltage settings named as mtp-sel0 and
+> +      mtp-sel1 for RTQ2208 bucks vout voltage. 0 which means this property isn't present
+> +      and 1 which means this property is present corresponds to different adjustable registers.
+> +
+> +      0 - DVS0 registers to adjust buck vout and BUCK_[A-H]_EN_NR_MTP_SEL0 register to en/disable vout.
+> +      1 - DVS1 registers to adjust buck vout and BUCK_[A-H]_EN_NR_MTP_SEL1 register to en/disable vout.
+
+I read it three times and still don't understand. This is bool, not 0/1,
+so are these "0" refer to DVS0 or to presence of the property? Maybe
+Mark will understand it, I don't get it.
+
+> +
+
+No blank line. Just put type before description.
+
+> +    type: boolean
+> +
+> +  regulators:
+> +    type: object
+> +
+> +    patternProperties:
+> +      "^buck_[A-H]$":
+
+No underscores in node names. Lowercase names.
+
+> +        type: object
+> +        $ref: regulator.yaml#
+
+Missing unevaluatedProperties: false
+
+> +        description: |
+> +          regulator description for buck[A-H].
+> +
+> +        properties:
+> +          regulator-compatible:
+> +            pattern: "^BUCK_[A-H]$"
+
+Drop the property.
+
+> +
+> +          regulator-allowed-modes:
+> +            description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +              describe buck permitted modes.
+
+Exactly: describe them
+
+> +
+> +      "^ldo[1-2]$":
+> +        type: object
+> +        $ref: regulator.yaml#
+> +        description: |
+> +          regulator description for ldo[1-2].
+> +
+> +        properties:
+> +          regulator-compatible:
+> +            pattern: "^LDO[1-2]$"
+> +
+> +          richtek,fixed_uV:
+> +            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            enum: [ 900000, 1200000, 1800000, 3300000 ]
+> +            description: |
+> +              the fixed voltage in microvolt which is descided at the factory.
+> +
+> +      regulator-state-(mem):
+
+That's not a pattern.
+
+> +        type: object
+> +        additionalProperties: true
+
+Why?
+
+> +        properties:
+> +          regulator-on-in-suspend: false
+> +          regulator-mode: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - regulators
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      rtq2208@10 {
+
+Node names should be generic. See also explanation and list of examples
+in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +        compatible = "richtek,rtq2208";
+> +        reg = <0x10>;
+> +        interrupts-extended = <&gpio26 0 IRQ_TYPE_LEVEL_LOW>;
+> +        richtek,mtp-sel;
+> +
+> +        regulators {
+> +         BUCK_A:buck_A {
+
+Drop labels.
+
+
+Best regards,
+Krzysztof
+
