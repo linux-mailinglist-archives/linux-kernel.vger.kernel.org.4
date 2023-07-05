@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6970A748963
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3FC748966
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjGEQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S232922AbjGEQkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjGEQkd (ORCPT
+        with ESMTP id S232634AbjGEQkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:40:33 -0400
+        Wed, 5 Jul 2023 12:40:37 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F7E10EA;
-        Wed,  5 Jul 2023 09:40:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF2610EA;
+        Wed,  5 Jul 2023 09:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688575232; x=1720111232;
+  t=1688575236; x=1720111236;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=R0L33/36rdLS6aViuBmvGQXiDgu8r0FRSWMucXF1m6U=;
-  b=CHO5mBKw1YehsCwEQ/r6QMrERVmfYJH89XKeTVt9iTYXQ3/AhTV+zSt8
-   ODtCUua++OjVu3IMq7NXWPld0HoNWIWvGmLfbfm9z1odfyoNeIWhbj3tC
-   GZE55B+EUzlshKTULxJeC/5VrnnmMtYj9aYoi/VLndOz+AX1sdw29m0mv
-   4B0z/P86qkZQkwUrE3hhS21llPT2HPVSh+Iacxs60f/KEMyolNVe5uznO
-   Vw+hIagWXU88IbAqhxv/aEJqZDA7uSOPb/foDO1sflIi9Xh/CBss+60vn
-   Urn+a5C5ivqz1ZcFBDNwZP4vP1ha4mxPG+lm6fWHlJYwbItcCYqVXEO2g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362258259"
+  bh=ORYP0BTPC9UmnZNKGK+aTCKZj4NImzCEscAgvgLWfvs=;
+  b=RXiNreG3+paOmBxsCnkMvf53Q2N0KcC+WPdoNVo6HZ21LY7Bd35VIlQF
+   7E94E5gGmgaZosxHxs56pktULVtSfMu6BGjExBDS8d31H+vL9UeMRe2oH
+   pjQkoKMnSpmr0WC3jkHt6tDpZRAzMw9RbJavyYDq99isXiam1Est0sXCe
+   UkDZb2leYdzBDSDZq3BK3bpzXy/ZtKped0Fx1k2YYRbSkBO9lEhmD9nN2
+   LVFlvIoohd+AB41z2cAQOeAoIz+2ovb97j4ghgQPSEqdvu1fWbJykWuVO
+   cJb0z0h7xABLrWzvaRZ+DNM+75mbJfkNLs6O1AcoSo2nTBJ0HaemSukFP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362258287"
 X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="362258259"
+   d="scan'208";a="362258287"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 09:40:31 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 09:40:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="893241761"
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="893241766"
 X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="893241761"
+   d="scan'208";a="893241766"
 Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314.ger.corp.intel.com) ([10.237.222.216])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jul 2023 09:40:28 -0700
+  by orsmga005.jf.intel.com with ESMTP; 05 Jul 2023 09:40:32 -0700
 From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 To:     herbert@gondor.apana.org.au, agk@redhat.com, snitzer@kernel.org
 Cc:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
@@ -47,10 +47,11 @@ Cc:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
         horia.geanta@nxp.com, V.Sethi@nxp.com, pankaj.gupta@nxp.com,
         gaurav.jain@nxp.com, davem@davemloft.net, iuliana.prodan@nxp.com,
         Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Eric Biggers <ebiggers@google.com>,
         Fiona Trahe <fiona.trahe@intel.com>
-Subject: [PATCH 1/3] dm integrity: do not filter algos with CRYPTO_ALG_ALLOCATES_MEMORY
-Date:   Wed,  5 Jul 2023 17:40:07 +0100
-Message-Id: <20230705164009.58351-2-giovanni.cabiddu@intel.com>
+Subject: [PATCH 2/3] crypto: api - adjust meaning of CRYPTO_ALG_ALLOCATES_MEMORY
+Date:   Wed,  5 Jul 2023 17:40:08 +0100
+Message-Id: <20230705164009.58351-3-giovanni.cabiddu@intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
 References: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
@@ -67,40 +68,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The flag CRYPTO_ALG_ALLOCATES_MEMORY indicates that an algorithm might
-allocate memory in the datapath and therefore sleep.
-Dm-integrity is filtering out implementations of skcipher algorithms
-that have this flag set. However, in the same function it does
-allocations with GFP_KERNEL.
-As dm-integrity is re-entrant and capable of handling sleeps that could
-occur during allocations with GFP_KERNEL, then it is also capable of
-using skcipher algorithm implementations that have
-CRYPTO_ALG_ALLOCATES_MEMORY set.
+The CRYPTO_ALG_ALLOCATES_MEMORY flag doesn't allow to distinguish
+between implementations which don't allocate memory for scatterlists
+with 4 or less entries (the typical case for dm-crypt) and those that
+do.
+The flag's meaning is adjusted based on the ML discussion below.
 
-Remove the filtering of skcipher implementations with the flag
-CRYPTO_ALG_ALLOCATES_MEMORY set.
+This patch removes the need to set the flag if the implementation can
+handle scatterlists up to 4 entries without allocating memory.
+The documentation is updated accordingly, with an extra clarification
+regarding sleeping.
 
 Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
-Link: https://lore.kernel.org/linux-crypto/ZILvtASXQKLG43y9@gondor.apana.org.au/
+Suggested-by: Eric Biggers <ebiggers@google.com>
+Link: https://lore.kernel.org/linux-crypto/20200722072932.GA27544@gondor.apana.org.au/
+Link: https://lore.kernel.org/linux-crypto/20230523165503.GA864814@google.com/
 Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 Reviewed-by: Fiona Trahe <fiona.trahe@intel.com>
 ---
- drivers/md/dm-integrity.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/crypto.h | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
-index 31838b13ea54..a1013eff01b4 100644
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -3785,7 +3785,7 @@ static int create_journal(struct dm_integrity_c *ic, char **error)
- 		struct journal_completion comp;
+diff --git a/include/linux/crypto.h b/include/linux/crypto.h
+index 31f6fee0c36c..15884790a3d0 100644
+--- a/include/linux/crypto.h
++++ b/include/linux/crypto.h
+@@ -87,8 +87,13 @@
  
- 		comp.ic = ic;
--		ic->journal_crypt = crypto_alloc_skcipher(ic->journal_crypt_alg.alg_string, 0, CRYPTO_ALG_ALLOCATES_MEMORY);
-+		ic->journal_crypt = crypto_alloc_skcipher(ic->journal_crypt_alg.alg_string, 0, 0);
- 		if (IS_ERR(ic->journal_crypt)) {
- 			*error = "Invalid journal cipher";
- 			r = PTR_ERR(ic->journal_crypt);
+ /*
+  * The algorithm may allocate memory during request processing, i.e. during
+- * encryption, decryption, or hashing.  Users can request an algorithm with this
+- * flag unset if they can't handle memory allocation failures.
++ * encryption, decryption, or hashing. Algorithms that do not set this flag will
++ * guarantee that memory is not allocated during request processing, except in
++ * the avoidable exception cases described below.
++ *
++ * Users can request an algorithm with this flag unset if they can't handle
++ * memory allocation failures or sleeping during request processing. They should
++ * also follow the constraints below.
+  *
+  * This flag is currently only implemented for algorithms of type "skcipher",
+  * "aead", "ahash", "shash", and "cipher".  Algorithms of other types might not
+@@ -102,6 +107,9 @@
+  *	- If the data were to be divided into chunks of size
+  *	  crypto_skcipher_walksize() (with any remainder going at the end), no
+  *	  chunk can cross a page boundary or a scatterlist element boundary.
++ *	- The input and output scatterlists must have no more than 4 entries.
++ *	  If the scatterlists contain more than 4 entries, the algorithm may
++ *	  allocate memory.
+  *    aead:
+  *	- The IV buffer and all scatterlist elements must be aligned to the
+  *	  algorithm's alignmask.
+@@ -110,10 +118,16 @@
+  *	- If the plaintext/ciphertext were to be divided into chunks of size
+  *	  crypto_aead_walksize() (with the remainder going at the end), no chunk
+  *	  can cross a page boundary or a scatterlist element boundary.
++ *	- The input and output scatterlists must have no more than 4 entries.
++ *	  If the scatterlists contain more than 4 entries, the algorithm may
++ *	  allocate memory.
+  *    ahash:
+  *	- The result buffer must be aligned to the algorithm's alignmask.
+  *	- crypto_ahash_finup() must not be used unless the algorithm implements
+  *	  ->finup() natively.
++ *	- The input and output scatterlists must have no more than 4 entries.
++ *	  If the scatterlists contain more than 4 entries, the algorithm may
++ *	  allocate memory.
+  */
+ #define CRYPTO_ALG_ALLOCATES_MEMORY	0x00010000
+ 
 -- 
 2.40.1
 
