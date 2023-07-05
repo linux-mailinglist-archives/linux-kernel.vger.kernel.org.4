@@ -2,112 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3819747CC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A62E747CC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjGEGFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
+        id S231270AbjGEGGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjGEGFA (ORCPT
+        with ESMTP id S229793AbjGEGF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:05:00 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D0C10C3;
-        Tue,  4 Jul 2023 23:04:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HYpEzq/Fx2R32siNWrWdDl2b0UCWoH1jmdwdHJfVD/E/8OhYaccRKhK8sfYZ8NdhTVXBHKismRMWc8bBJGiUEHUvZY7MJEp7UBVeXS5lfBmd9zmRhtTyblopCjSG8f9Ld4jfR+mHijYTWe+L5LOUy81kIzcaZ5miflCR2a+CRO8yPk0twmKKzKb9fsd+8sxU0wf+AXR5zxvbXStTKsVuzVUhamhZVPf+wgogcawjG1F42I5MBVuxQ6SObsgnypzWQjvMQLfqtKstGJgsmr2ky60Q+x78zbL2JUaK5TBDD4Kr71y7I5VQaXywYhHnEErmx7IIGyMy5LwOdW/xLFJvGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SsD52tFNU1DukOTMc2jN7elxwEEcaYBbelMbU5SPjZA=;
- b=P3C+XZDb9Dg82WUMDAlvCh81MoMsnuqZCwOEpPBTgLA21UuwlgY3U6iV551evuNepe/MoPBvmXZ6o2QgBGmn0rvj0ETzkDnqHlXBRiy3H3TaQO0MKF7I8VxFzPNz9veO0h6o6m6QZxKIfGPc7TWK6RpQkh8G0hoJ3RaNkpo9/stDLm0vMiYvsaC3DTie1tiuQx75GV+gN2vhScL+1f17b1FFTyFGO22AJuorXvy+7ZII2x35wpfbU445u0sjqkGEjwIEaJdBGGzcojRKS7UIhOeq202Hk9qVry08jgZf7P8iyc33lZP3+2R/UlnV+9J563Ah81y3R1XP3yyaeVWhnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SsD52tFNU1DukOTMc2jN7elxwEEcaYBbelMbU5SPjZA=;
- b=dcXTfysS53DY9c2ft7PdXa5yaj5QhXJuW7vXx1EqloGTprSQzazhM90uFgR691zPeo2xW20nmYBU9KAteADNHMyG7qrPPZzOjP/1MUWQIwLVtniI176ruj9AdjbZrsTt/VrEkAdMgPNJfoExF0QTi+6P2cjFUOJEpJ+SkKd6G4bWvZHKPBlzPG+qJ/XtD++dRb+HjL7g30Cvvk8ADLfWxcfRgEuTMlSO/s8f2w6h7iWFW1nfD5B052mg55yrHVQkFpv2CcCOVGhX3r8MKiZCanBwfd4kqaiyMT5qny2yEpHdwVV1WEHGP5owpgNjHsKePpubYnvberHDneRoe/ddnA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB2743.namprd12.prod.outlook.com (2603:10b6:a03:61::28)
- by PH7PR12MB6467.namprd12.prod.outlook.com (2603:10b6:510:1f5::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
- 2023 06:04:50 +0000
-Received: from BYAPR12MB2743.namprd12.prod.outlook.com
- ([fe80::ecb0:2f8e:c4bf:b471]) by BYAPR12MB2743.namprd12.prod.outlook.com
- ([fe80::ecb0:2f8e:c4bf:b471%7]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 06:04:50 +0000
-From:   Rahul Rameshbabu <rrameshbabu@nvidia.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH HID v1] HID: nvidia-shield: Pack inner/related declarations in HOSTCMD reports
-Date:   Tue,  4 Jul 2023 23:04:14 -0700
-Message-Id: <20230705060414.581468-1-rrameshbabu@nvidia.com>
-X-Mailer: git-send-email 2.40.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0167.namprd03.prod.outlook.com
- (2603:10b6:a03:338::22) To BYAPR12MB2743.namprd12.prod.outlook.com
- (2603:10b6:a03:61::28)
+        Wed, 5 Jul 2023 02:05:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E40F10D5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688537108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tustr5gPRpQBeL8WPsDWkUUEop8vUIbOaoAArG+2MxA=;
+        b=VW88D3Q4S+lAXBYsReNm1clUkye6H+qVddNkkGb9Hr+X+70VLwGOE+SV8UGmAs0LOo7hUt
+        JGEG9jWdYIiJvxY1M+IeMidxwcRentMcis2vo1zsf3D7D5b52J2tie1dv8C06PqM/USN7S
+        iONKqm0l2Cpj03wNCJIZKQk5uSQ+vF8=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-460-Znw-pQUfNPCw_wGU1kvwyg-1; Wed, 05 Jul 2023 02:05:07 -0400
+X-MC-Unique: Znw-pQUfNPCw_wGU1kvwyg-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2b6fbef3087so8061591fa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:05:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688537106; x=1691129106;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tustr5gPRpQBeL8WPsDWkUUEop8vUIbOaoAArG+2MxA=;
+        b=ZSxUmdxh8/ejf1WaIBJln3RyXWwXINQmGIadt7qPg7k+t41KHCikp+rJNaCt7gIW2b
+         MVE/JmBRfJJNlLFUkdnzfTuc7m+GtSHu6dIg6j8VukwY0MOsMdK4W8r6aRo1cDvKPCBw
+         rJo9k5HZXPy4I440rZvmUr8i+8dnr7Hlb9rkfPA2QMg3apJpMEMhyCu8StheIy6MjS2v
+         uZ1OYMbR8sc8pNDkk9Y/HCQlguVO4Q6FH8ew0NHP4Cxiq9MBm3slTy1oVQbCBxjTQvcD
+         NTs0yG2fJU4W/jhylkvTJ5XA3/qpC5OQJ5VO+51QhJg0b3Nza+Te0qXV7935SYsz3B8u
+         rlTA==
+X-Gm-Message-State: ABy/qLbqJ9EWt5YkZWFFlT4JwYmvMClVhS1r6OckKThMky+B8BdL4Kj9
+        Tw3q+qExeVzgydGIlVsxXlZj2dVdpD9Hwb8lDV/l07rVw4TBK7u90I0Y7d13WCYxHMJclfiNF/u
+        iE6zvrbyiOssyVYhzj4YtrWAUAYw50Yb3QpyqwVRI
+X-Received: by 2002:a2e:9b97:0:b0:2b6:a19e:5168 with SMTP id z23-20020a2e9b97000000b002b6a19e5168mr10884904lji.39.1688537105877;
+        Tue, 04 Jul 2023 23:05:05 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFnYHyxxdSqJv4AbxQqqnpccMG9QDjCDJOmRNq2VoqJvGaVBrFv6WT2PqUSYFv6GEMSm1IvtGtxYdHjOmYbnOo=
+X-Received: by 2002:a2e:9b97:0:b0:2b6:a19e:5168 with SMTP id
+ z23-20020a2e9b97000000b002b6a19e5168mr10884875lji.39.1688537105355; Tue, 04
+ Jul 2023 23:05:05 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2743:EE_|PH7PR12MB6467:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a4c279d-f35d-4327-4812-08db7d1dbe51
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Kbqi7BH7IUOkSRl7s+i0i3mej9K0aBUDnorCDtR4y3lLkasL59Bo9O27NeZmVWekQw/M9bpxXeAeIz1pr1bczkih1jk0F5V16+hUdSTMR7NPfnl62YZqnPphYVS26qFD/nubi/N+V/Dj38XlqmZqCZcvuWvW05530G5l+btFkmATHjoWGndIa/YGmfx8zgjebur3RVBGsZ6o55qbCsrVFlr5oON78pAKLO9lFJ3vZMEfXAzSd056p/VweTahnSjju29AgF+PV4n6Wppu4XIUjEhYfB8T1GkwyEYWXHb9DbNwUmX8z4YSXFYGhKZ2RJy2S1Zb8guhdfiSnQFiIDXuYR1Gi+xTKVLyCyg5I+pdY2kGTdtmBljbAMrHtVcG/7jkjnZSPkbnSEHNrKS9FDHcEXbg6ckIFMIkCqg2+WwdonfZvfNWygHucgZOm+V96TX+mRu7P8QJbwFvNzxM4/fO5yxvUpWgJY7pdqz6TANRKAZc1NyMPb9hPNa8MPXnrDxGFEMt3VDEWK4qrGfhw7KvEdXlreahXUy7vt7q8hNAKAEXDiK0auTO+lfcfJ4dhBFwgRQrUqKH/3gDpWJh2MTiHmuN9COV4iwbZ9yqG9fwVAnWsyVf/1a0nvODCJYFqQaSUFtsX5JLn4zCHk/z1xYwHw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2743.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(396003)(39860400002)(366004)(451199021)(186003)(478600001)(966005)(6512007)(1076003)(6506007)(26005)(86362001)(2616005)(6666004)(38100700002)(110136005)(66556008)(66476007)(316002)(66946007)(83380400001)(4326008)(54906003)(6486002)(41300700001)(5660300002)(2906002)(36756003)(8936002)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?p+nc/PcVV+MXcs2bi+LroLenWEB79CY57GZHda1nnwDbqxn9n1raD24n//N4?=
- =?us-ascii?Q?nFD9LG24WtbvPWh03ag8f1wXxlrM8C6DGvROdt6wCh/uwAZLJn1kxgwmmlwD?=
- =?us-ascii?Q?k1q8xgPWOM9sd3L1dHOykKXMmgRRY8+MQf3wReq2R724rdC4oiJW1HfVRl2N?=
- =?us-ascii?Q?A2IS9LOgdw35RnuGdJNLIcRJl6u0tXmmgfuWPmIbnsKqDQ9gK3zobRPUOK6f?=
- =?us-ascii?Q?fG4SRYpq9rKq5nkZwrb4FFPr91pyuJPW4BfcwY4l05QaXnIkIYJfbskIiMML?=
- =?us-ascii?Q?0xMaOi104/Lj3GlUnyfKc1Hm9/zOKzyI5Gn2iQjbD9Fr9qdrQRjW/uqodGjG?=
- =?us-ascii?Q?NojQMRxInMN3M5eAFMkz8ozseXvd9LfJTwqmSy1H0quyyVEIXx02VbWrLH9i?=
- =?us-ascii?Q?bG+Ilptc1dtGmnR5uBNsJA8quam4tjJNutR89ONFPXz+rHmoJ4gXMJRKBQz6?=
- =?us-ascii?Q?J3B7G/dOTwKbLIr4ttCrlDzIr/PVM3Ct5ocj1olg93oHYobuH1bM7pmJSd3E?=
- =?us-ascii?Q?XLD1EfgLAPCbv0649sdp7JQAxLC7EQChhsPvBAorqKwse9SaMs3j52APbA9d?=
- =?us-ascii?Q?REafMFY+OF9jFitwE3ipFy5AHiys05ZOlOnBLhhka4rD/9D32WM4CpdT/XLM?=
- =?us-ascii?Q?xno3oAqVTJYiGEzIVyBGdb1FEzdML6i7nYWCCfLuoJm6wZXEDn54rh0qCSxi?=
- =?us-ascii?Q?5Xx7COeO6nGxWB/uZQd50TKpVuulRpPC10uNxkWkgJwuAIJ/xHZcLHi686il?=
- =?us-ascii?Q?xTXm6z6+Q6aTf5CtrBawLZkUglqNg/Xn0zzEbkJg9bNpazQcRf6GVwERsMDE?=
- =?us-ascii?Q?Q3YH6947Ym8f4ELHHulx+6Ac52aElnZ+SlLXfxPgJPTORjD6uHgucAXaMlCm?=
- =?us-ascii?Q?4KUpt/42oD3hv+l/oQjgOSsP6ODBOeULOEI6E8eCczr8LvCcS1jshwsu5sxs?=
- =?us-ascii?Q?IAD25u/T+JEpLq7X6Ty/8LzAyJdil0Co6/lLrBo6bBznJ/5ebuwsaF6WFuUA?=
- =?us-ascii?Q?IhnUXNRw0OgfJHX3f3AAkwLbmV4JvwnydfVi13ffx35TUXKuLrOvGsZunx2Q?=
- =?us-ascii?Q?UlHPvq+WPcvGH4AhBXy5WGQsTsBWBEEXWe2POBmamxiGgq6zFhLprEZF6ZwO?=
- =?us-ascii?Q?GpgIVzxka8tH3B/wXYTZ9OCdr6KEyBuY//YcbOgijMYv7qDsPldDtbUZ3YG9?=
- =?us-ascii?Q?c/e1LfeplC8p89U9ErzA6Bb+/AmcYYoF/MB3VxHv3xGosl+Jg81RTG7FQkFo?=
- =?us-ascii?Q?0L06JsiYtThp191mK7eP5XrfnGToDZE6LtY81W2BHYNaMXMcMCDvGxxmbTsn?=
- =?us-ascii?Q?q/oKywiFIw4NZBb/wkAVdfGBjslzLuVx7AftIw4ZTAkwX6C3F70NXgLt3Jc2?=
- =?us-ascii?Q?c+vmp8QWpUi0P0ZAfbrnSQ+JTBOkrp5hks7gfZ1gjFIkjrhbNa5wqa1fGyFE?=
- =?us-ascii?Q?SDelN/JmX9ADTnDJT6A28z9VjzGAi8trMuTNxlCWAY63T4AI5kLsokb6DK79?=
- =?us-ascii?Q?GL2XJ68YB45B2GiuQtDu2s0uRT44xjlI9FZ+lB9jGd+PGpxrFJxeGZNWnL8n?=
- =?us-ascii?Q?1U3g/Y/uQHpRfl/l2ZOFpHLj5e7twSGX/k6ESBPl?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a4c279d-f35d-4327-4812-08db7d1dbe51
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2743.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 06:04:50.5097
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C+IQbAKJLXuGkUA43V0T52XSvXUh3asXp2A8ESBvdnZHbo9CI129hw9xeGt/VD/JGmISHbeEOND/2cD8nhFcKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6467
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+References: <20230526054621.18371-1-liangchen.linux@gmail.com>
+ <20230526054621.18371-2-liangchen.linux@gmail.com> <20230528021708-mutt-send-email-mst@kernel.org>
+ <CAKhg4tKzW6akbKLvg1UFpey+Lkiic3hBWh87jyg-a8ASchPvMA@mail.gmail.com>
+ <20230529055439-mutt-send-email-mst@kernel.org> <CAKhg4t+64E5oisgwpJvt5zwcAzKpLoNhN-cMutRuiC9D-Z7C5A@mail.gmail.com>
+ <CAKhg4tKpBFgGaEq743dvYJxZFavDSyOdqbvc7mE4+_sqeSpgQQ@mail.gmail.com>
+ <20230607161724-mutt-send-email-mst@kernel.org> <CACGkMEsTuHShqiruqTA9DOHvSg41s1OyqAhpP+uOwTTq61mzTw@mail.gmail.com>
+ <CAKhg4tJ-=R6Us5hqDOLG2evnvjcFmhunVO1aXtFAvEe3qzH+EQ@mail.gmail.com> <CAKhg4tJd=MdXTYD8bdSwOqdEJ=7Ukvv+13PE4kC96wL+m6-ctA@mail.gmail.com>
+In-Reply-To: <CAKhg4tJd=MdXTYD8bdSwOqdEJ=7Ukvv+13PE4kC96wL+m6-ctA@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 5 Jul 2023 14:04:53 +0800
+Message-ID: <CACGkMEtvq6LkJFiV2SdGf0s+_VgDaNePX118_ikXgNDazyLY0A@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/5] virtio_net: Add page_pool support to improve performance
+To:     Liang Chen <liangchen.linux@gmail.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com,
+        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
+        pabeni@redhat.com, alexander.duyck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,71 +85,814 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Match alignment information in composite type declarations used by packed
-HOSTCMD report structures. Compiler packing attribute is not recursive for
-inner declarations. Mismatched alignment information can cause undefined
-behavior in code generated for accessing composite type members. struct
-pointers passed to thunderstrike_parse_board_info_payload and
-thunderstrike_parse_haptics_payload are an example of this being
-potentially problematic since alignment information from the packed HOSTCMD
-report is lost.
+On Wed, Jul 5, 2023 at 1:41=E2=80=AFPM Liang Chen <liangchen.linux@gmail.co=
+m> wrote:
+>
+> On Fri, Jun 9, 2023 at 10:57=E2=80=AFAM Liang Chen <liangchen.linux@gmail=
+.com> wrote:
+> >
+> > On Thu, Jun 8, 2023 at 8:38=E2=80=AFAM Jason Wang <jasowang@redhat.com>=
+ wrote:
+> > >
+> > > On Thu, Jun 8, 2023 at 4:17=E2=80=AFAM Michael S. Tsirkin <mst@redhat=
+.com> wrote:
+> > > >
+> > > > On Wed, Jun 07, 2023 at 05:08:59PM +0800, Liang Chen wrote:
+> > > > > On Tue, May 30, 2023 at 9:19=E2=80=AFAM Liang Chen <liangchen.lin=
+ux@gmail.com> wrote:
+> > > > > >
+> > > > > > On Mon, May 29, 2023 at 5:55=E2=80=AFPM Michael S. Tsirkin <mst=
+@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, May 29, 2023 at 03:27:56PM +0800, Liang Chen wrote:
+> > > > > > > > On Sun, May 28, 2023 at 2:20=E2=80=AFPM Michael S. Tsirkin =
+<mst@redhat.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Fri, May 26, 2023 at 01:46:18PM +0800, Liang Chen wrot=
+e:
+> > > > > > > > > > The implementation at the moment uses one page per pack=
+et in both the
+> > > > > > > > > > normal and XDP path. In addition, introducing a module =
+parameter to enable
+> > > > > > > > > > or disable the usage of page pool (disabled by default)=
+.
+> > > > > > > > > >
+> > > > > > > > > > In single-core vm testing environments, it gives a mode=
+st performance gain
+> > > > > > > > > > in the normal path.
+> > > > > > > > > >   Upstream codebase: 47.5 Gbits/sec
+> > > > > > > > > >   Upstream codebase + page_pool support: 50.2 Gbits/sec
+> > > > > > > > > >
+> > > > > > > > > > In multi-core vm testing environments, The most signifi=
+cant performance
+> > > > > > > > > > gain is observed in XDP cpumap:
+> > > > > > > > > >   Upstream codebase: 1.38 Gbits/sec
+> > > > > > > > > >   Upstream codebase + page_pool support: 9.74 Gbits/sec
+> > > > > > > > > >
+> > > > > > > > > > With this foundation, we can further integrate page poo=
+l fragmentation and
+> > > > > > > > > > DMA map/unmap support.
+> > > > > > > > > >
+> > > > > > > > > > Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
+> > > > > > > > >
+> > > > > > > > > Why off by default?
+> > > > > > > > > I am guessing it sometimes has performance costs too?
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > What happens if we use page pool for big mode too?
+> > > > > > > > > The less modes we have the better...
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > Sure, now I believe it makes sense to enable it by default.=
+ When the
+> > > > > > > > packet size is very small, it reduces the likelihood of skb
+> > > > > > > > coalescing. But such cases are rare.
+> > > > > > >
+> > > > > > > small packets are rare? These workloads are easy to create ac=
+tually.
+> > > > > > > Pls try and include benchmark with small packet size.
+> > > > > > >
+> > > > > >
+> > > > > > Sure, Thanks!
+> > > > >
+> > > > > Before going ahead and posting v2 patch, I would like to hear mor=
+e
+> > > > > advice for the cases of small packets. I have done more performan=
+ce
+> > > > > benchmark with small packets since then. Here is a list of iperf
+> > > > > output,
+> > > > >
+> > > > > With PP and PP fragmenting:
+> > > > > 256K:   [  5] 505.00-510.00 sec  1.34 GBytes  2.31 Gbits/sec    0=
+    144 KBytes
+> > > > > 1K:       [  5]  30.00-35.00  sec  4.63 GBytes  7.95 Gbits/sec   =
+ 0
+> > > > > 223 KBytes
+> > > > > 2K:       [  5]  65.00-70.00  sec  8.33 GBytes  14.3 Gbits/sec   =
+ 0
+> > > > > 324 KBytes
+> > > > > 4K:       [  5]  30.00-35.00  sec  13.3 GBytes  22.8 Gbits/sec   =
+ 0
+> > > > > 1.08 MBytes
+> > > > > 8K:       [  5]  50.00-55.00  sec  18.9 GBytes  32.4 Gbits/sec   =
+ 0
+> > > > > 744 KBytes
+> > > > > 16K:     [  5]  25.00-30.00  sec  24.6 GBytes  42.3 Gbits/sec    =
+0    963 KBytes
+> > > > > 32K:     [  5]  45.00-50.00  sec  29.8 GBytes  51.2 Gbits/sec    =
+0   1.25 MBytes
+> > > > > 64K:     [  5]  35.00-40.00  sec  34.0 GBytes  58.4 Gbits/sec    =
+0   1.70 MBytes
+> > > > > 128K:   [  5]  45.00-50.00  sec  36.7 GBytes  63.1 Gbits/sec    0=
+   4.26 MBytes
+> > > > > 256K:   [  5]  30.00-35.00  sec  40.0 GBytes  68.8 Gbits/sec    0=
+   3.20 MBytes
+> > >
+> > > Note that virtio-net driver is lacking things like BQL and others, so
+> > > it might suffer from buffer bloat for TCP performance. Would you mind
+> > > to measure with e.g using testpmd on the vhost to see the rx PPS?
+> > >
+> >
+> > No problem. Before we proceed to measure with testpmd, could you
+> > please take a look at the PPS measurements we obtained previously and
+> > see if they are sufficient? Though we will only utilize page pool for
+> > xdp on v2.
+> >
+> > netperf -H 192.168.124.197 -p 4444 -t UDP_STREAM -l 0 -- -m $((1))
+> >
+> > with page pool:
+> > 1.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 655092.27      0.35  27508.77      0.03
+> > 0.00      0.00      0.00      0.00
+> > 2.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 654749.87      0.63  27494.42      0.05
+> > 0.00      0.00      0.00      0.00
+> > 3.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 654230.40      0.10  27472.57      0.01
+> > 0.00      0.00      0.00      0.00
+> > 4.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 656661.33      0.15  27574.65      0.01
+> > 0.00      0.00      0.00      0.00
+> >
+> >
+> > without page pool:
+> > 1.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 646515.20      0.47  27148.60      0.04
+> > 0.00      0.00      0.00      0.00
+> > 2.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 653874.13      0.18  27457.61      0.02
+> > 0.00      0.00      0.00      0.00
+> > 3.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 647246.93      0.15  27179.32      0.01
+> > 0.00      0.00      0.00      0.00
+> > 4.
+> > Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s
+> > rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+> > Average:       enp8s0 650625.07      0.27  27321.18      0.02
+> > 0.00      0.00      0.00      0.00
+> >
+> >
+> > (655092+654749+654230+656661)/(646515+653874+647246+650625) =3D
+> > 1.00864886500966031113
+> > On average it gives around 0.8% increase in PPS, and this figure can
+> > be reproduced consistently.
+> >
+> > > > >
+> > > > > Without PP:
+> > > > > 256:     [  5] 680.00-685.00 sec  1.57 GBytes  2.69 Gbits/sec    =
+0    359 KBytes
+> > > > > 1K:      [  5]  75.00-80.00  sec  5.47 GBytes  9.40 Gbits/sec    =
+0    730 KBytes
+> > > > > 2K:      [  5]  65.00-70.00  sec  9.46 GBytes  16.2 Gbits/sec    =
+0   1.99 MBytes
+> > > > > 4K:      [  5]  30.00-35.00  sec  14.5 GBytes  25.0 Gbits/sec    =
+0   1.20 MBytes
+> > > > > 8K:      [  5]  45.00-50.00  sec  19.9 GBytes  34.1 Gbits/sec    =
+0   1.72 MBytes
+> > > > > 16K:    [  5]   5.00-10.00  sec  23.8 GBytes  40.9 Gbits/sec    0=
+   2.90 MBytes
+> > > > > 32K:    [  5]  15.00-20.00  sec  28.0 GBytes  48.1 Gbits/sec    0=
+   3.03 MBytes
+> > > > > 64K:    [  5]  60.00-65.00  sec  31.8 GBytes  54.6 Gbits/sec    0=
+   3.05 MBytes
+> > > > > 128K:  [  5]  45.00-50.00  sec  33.0 GBytes  56.6 Gbits/sec    1 =
+  3.03 MBytes
+> > > > > 256K:  [  5]  25.00-30.00  sec  34.7 GBytes  59.6 Gbits/sec    0 =
+  3.11 MBytes
+> > > > >
+> > > > >
+> > > > > The major factor contributing to the performance drop is the redu=
+ction
+> > > > > of skb coalescing. Additionally, without the page pool, small pac=
+kets
+> > > > > can still benefit from the allocation of 8 continuous pages by
+> > > > > breaking them down into smaller pieces. This effectively reduces =
+the
+> > > > > frequency of page allocation from the buddy system. For instance,=
+ the
+> > > > > arrival of 32 1K packets only triggers one alloc_page call. There=
+fore,
+> > > > > the benefits of using a page pool are limited in such cases.
+> > >
+> > > I wonder if we can improve page pool in this case anyhow.
+> > >
+> >
+> > We would like to make the effort to enhance skb coalecsing to be more
+> > friendly with page pool buffers. But that involves modifications to
+> > some core data structure of mm.
+> >
+> >
+>
+> Just to give an update on the status of v2 progress. We have
+> identified the specific situation where skb coalescing is affected by
+> page pool and small packets. In summary, it was because, in our
+> environment (Fedora 37 default network setup), NetworkManager creates
+> a SOCK_DGRAM socket, which eventually results in skbs being cloned,
+> thus causing the failure of skb coalescing.
+>
+> While it affects small packet performance in our environment, it
+> doesn't necessarily have the same impact for other users.
+> Nevertheless, we are trying to make an optimization to allow skb
+> coalescing in that situation. It may take some time as we are advised
+> to wait for some relevant prior patches to land first.
+> (https://patchwork.kernel.org/project/netdevbpf/patch/20230628121150.4777=
+8-1-liangchen.linux@gmail.com/)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202307041500.6bKn7nCl-lkp@intel.com/
-Link: https://github.com/llvm/llvm-project/issues/55520#issuecomment-1128617570
-Link: https://gcc.gnu.org/onlinedocs/gcc-13.1.0/gcc/Common-Type-Attributes.html#index-packed-type-attribute
-Signed-off-by: Rahul Rameshbabu <rrameshbabu@nvidia.com>
----
- drivers/hid/hid-nvidia-shield.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+If it's not too late, I would like to be copied in the next version of
+this. (Since it seems to be suggested by me).
 
-diff --git a/drivers/hid/hid-nvidia-shield.c b/drivers/hid/hid-nvidia-shield.c
-index 85700cec5eac..a928ad2be62d 100644
---- a/drivers/hid/hid-nvidia-shield.c
-+++ b/drivers/hid/hid-nvidia-shield.c
-@@ -63,12 +63,12 @@ static_assert(sizeof(enum thunderstrike_led_state) == 1);
- struct thunderstrike_hostcmd_board_info {
- 	__le16 revision;
- 	__le16 serial[7];
--};
-+} __packed;
- 
- struct thunderstrike_hostcmd_haptics {
- 	u8 motor_left;
- 	u8 motor_right;
--};
-+} __packed;
- 
- struct thunderstrike_hostcmd_resp_report {
- 	u8 report_id; /* THUNDERSTRIKE_HOSTCMD_RESP_REPORT_ID */
-@@ -81,7 +81,7 @@ struct thunderstrike_hostcmd_resp_report {
- 		__le16 fw_version;
- 		enum thunderstrike_led_state led_state;
- 		u8 payload[30];
--	};
-+	} __packed;
- } __packed;
- static_assert(sizeof(struct thunderstrike_hostcmd_resp_report) ==
- 	      THUNDERSTRIKE_HOSTCMD_REPORT_SIZE);
-@@ -92,15 +92,15 @@ struct thunderstrike_hostcmd_req_report {
- 	u8 reserved_at_10;
- 
- 	union {
--		struct {
-+		struct __packed {
- 			u8 update;
- 			enum thunderstrike_led_state state;
- 		} led;
--		struct {
-+		struct __packed {
- 			u8 update;
- 			struct thunderstrike_hostcmd_haptics motors;
- 		} haptics;
--	};
-+	} __packed;
- 	u8 reserved_at_30[27];
- } __packed;
- static_assert(sizeof(struct thunderstrike_hostcmd_req_report) ==
--- 
-2.40.1
+>
+> In addition, if small packet performance is not dropping anymore,
+> perhaps we can enable page pool for the normal path as well.
+
+It would be simpler if we start from XDP and normal on top. But it's
+your call anyway.
+
+Thanks
+
+>
+>
+> Thanks,
+> Liang
+>
+>
+>
+> > > > In fact,
+> > > > > without page pool fragmenting enabled, it can even hinder perform=
+ance
+> > > > > from this perspective.
+> > > > >
+> > > > > Upon further consideration, I tend to believe making page pool th=
+e
+> > > > > default option may not be appropriate. As you pointed out, we can=
+not
+> > > > > simply ignore the performance impact on small packets. Any commen=
+ts on
+> > > > > this will be much appreciated.
+> > > > >
+> > > > >
+> > > > > Thanks,
+> > > > > Liang
+> > > >
+> > > >
+> > > > So, let's only use page pool for XDP then?
+> > >
+> > > +1
+> > >
+> > > We can start from this.
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > > >
+> > > > > > > > The usage of page pool for big mode is being evaluated now.=
+ Thanks!
+> > > > > > > >
+> > > > > > > > > > ---
+> > > > > > > > > >  drivers/net/virtio_net.c | 188 +++++++++++++++++++++++=
++++++++---------
+> > > > > > > > > >  1 file changed, 146 insertions(+), 42 deletions(-)
+> > > > > > > > > >
+> > > > > > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/vir=
+tio_net.c
+> > > > > > > > > > index c5dca0d92e64..99c0ca0c1781 100644
+> > > > > > > > > > --- a/drivers/net/virtio_net.c
+> > > > > > > > > > +++ b/drivers/net/virtio_net.c
+> > > > > > > > > > @@ -31,6 +31,9 @@ module_param(csum, bool, 0444);
+> > > > > > > > > >  module_param(gso, bool, 0444);
+> > > > > > > > > >  module_param(napi_tx, bool, 0644);
+> > > > > > > > > >
+> > > > > > > > > > +static bool page_pool_enabled;
+> > > > > > > > > > +module_param(page_pool_enabled, bool, 0400);
+> > > > > > > > > > +
+> > > > > > > > > >  /* FIXME: MTU in config. */
+> > > > > > > > > >  #define GOOD_PACKET_LEN (ETH_HLEN + VLAN_HLEN + ETH_DA=
+TA_LEN)
+> > > > > > > > > >  #define GOOD_COPY_LEN        128
+> > > > > > > > > > @@ -159,6 +162,9 @@ struct receive_queue {
+> > > > > > > > > >       /* Chain pages by the private ptr. */
+> > > > > > > > > >       struct page *pages;
+> > > > > > > > > >
+> > > > > > > > > > +     /* Page pool */
+> > > > > > > > > > +     struct page_pool *page_pool;
+> > > > > > > > > > +
+> > > > > > > > > >       /* Average packet length for mergeable receive bu=
+ffers. */
+> > > > > > > > > >       struct ewma_pkt_len mrg_avg_pkt_len;
+> > > > > > > > > >
+> > > > > > > > > > @@ -459,6 +465,14 @@ static struct sk_buff *virtnet_bui=
+ld_skb(void *buf, unsigned int buflen,
+> > > > > > > > > >       return skb;
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > +static void virtnet_put_page(struct receive_queue *rq,=
+ struct page *page)
+> > > > > > > > > > +{
+> > > > > > > > > > +     if (rq->page_pool)
+> > > > > > > > > > +             page_pool_put_full_page(rq->page_pool, pa=
+ge, true);
+> > > > > > > > > > +     else
+> > > > > > > > > > +             put_page(page);
+> > > > > > > > > > +}
+> > > > > > > > > > +
+> > > > > > > > > >  /* Called from bottom half context */
+> > > > > > > > > >  static struct sk_buff *page_to_skb(struct virtnet_info=
+ *vi,
+> > > > > > > > > >                                  struct receive_queue *=
+rq,
+> > > > > > > > > > @@ -555,7 +569,7 @@ static struct sk_buff *page_to_skb(=
+struct virtnet_info *vi,
+> > > > > > > > > >       hdr =3D skb_vnet_hdr(skb);
+> > > > > > > > > >       memcpy(hdr, hdr_p, hdr_len);
+> > > > > > > > > >       if (page_to_free)
+> > > > > > > > > > -             put_page(page_to_free);
+> > > > > > > > > > +             virtnet_put_page(rq, page_to_free);
+> > > > > > > > > >
+> > > > > > > > > >       return skb;
+> > > > > > > > > >  }
+> > > > > > > > > > @@ -802,7 +816,7 @@ static int virtnet_xdp_xmit(struct =
+net_device *dev,
+> > > > > > > > > >       return ret;
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > -static void put_xdp_frags(struct xdp_buff *xdp)
+> > > > > > > > > > +static void put_xdp_frags(struct xdp_buff *xdp, struct=
+ receive_queue *rq)
+> > > > > > > > > >  {
+> > > > > > > > > >       struct skb_shared_info *shinfo;
+> > > > > > > > > >       struct page *xdp_page;
+> > > > > > > > > > @@ -812,7 +826,7 @@ static void put_xdp_frags(struct xd=
+p_buff *xdp)
+> > > > > > > > > >               shinfo =3D xdp_get_shared_info_from_buff(=
+xdp);
+> > > > > > > > > >               for (i =3D 0; i < shinfo->nr_frags; i++) =
+{
+> > > > > > > > > >                       xdp_page =3D skb_frag_page(&shinf=
+o->frags[i]);
+> > > > > > > > > > -                     put_page(xdp_page);
+> > > > > > > > > > +                     virtnet_put_page(rq, xdp_page);
+> > > > > > > > > >               }
+> > > > > > > > > >       }
+> > > > > > > > > >  }
+> > > > > > > > > > @@ -903,7 +917,11 @@ static struct page *xdp_linearize_=
+page(struct receive_queue *rq,
+> > > > > > > > > >       if (page_off + *len + tailroom > PAGE_SIZE)
+> > > > > > > > > >               return NULL;
+> > > > > > > > > >
+> > > > > > > > > > -     page =3D alloc_page(GFP_ATOMIC);
+> > > > > > > > > > +     if (rq->page_pool)
+> > > > > > > > > > +             page =3D page_pool_dev_alloc_pages(rq->pa=
+ge_pool);
+> > > > > > > > > > +     else
+> > > > > > > > > > +             page =3D alloc_page(GFP_ATOMIC);
+> > > > > > > > > > +
+> > > > > > > > > >       if (!page)
+> > > > > > > > > >               return NULL;
+> > > > > > > > > >
+> > > > > > > > > > @@ -926,21 +944,24 @@ static struct page *xdp_linearize=
+_page(struct receive_queue *rq,
+> > > > > > > > > >                * is sending packet larger than the MTU.
+> > > > > > > > > >                */
+> > > > > > > > > >               if ((page_off + buflen + tailroom) > PAGE=
+_SIZE) {
+> > > > > > > > > > -                     put_page(p);
+> > > > > > > > > > +                     virtnet_put_page(rq, p);
+> > > > > > > > > >                       goto err_buf;
+> > > > > > > > > >               }
+> > > > > > > > > >
+> > > > > > > > > >               memcpy(page_address(page) + page_off,
+> > > > > > > > > >                      page_address(p) + off, buflen);
+> > > > > > > > > >               page_off +=3D buflen;
+> > > > > > > > > > -             put_page(p);
+> > > > > > > > > > +             virtnet_put_page(rq, p);
+> > > > > > > > > >       }
+> > > > > > > > > >
+> > > > > > > > > >       /* Headroom does not contribute to packet length =
+*/
+> > > > > > > > > >       *len =3D page_off - VIRTIO_XDP_HEADROOM;
+> > > > > > > > > >       return page;
+> > > > > > > > > >  err_buf:
+> > > > > > > > > > -     __free_pages(page, 0);
+> > > > > > > > > > +     if (rq->page_pool)
+> > > > > > > > > > +             page_pool_put_full_page(rq->page_pool, pa=
+ge, true);
+> > > > > > > > > > +     else
+> > > > > > > > > > +             __free_pages(page, 0);
+> > > > > > > > > >       return NULL;
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > @@ -1144,7 +1165,7 @@ static void mergeable_buf_free(st=
+ruct receive_queue *rq, int num_buf,
+> > > > > > > > > >               }
+> > > > > > > > > >               stats->bytes +=3D len;
+> > > > > > > > > >               page =3D virt_to_head_page(buf);
+> > > > > > > > > > -             put_page(page);
+> > > > > > > > > > +             virtnet_put_page(rq, page);
+> > > > > > > > > >       }
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > @@ -1264,7 +1285,7 @@ static int virtnet_build_xdp_buff=
+_mrg(struct net_device *dev,
+> > > > > > > > > >               cur_frag_size =3D truesize;
+> > > > > > > > > >               xdp_frags_truesz +=3D cur_frag_size;
+> > > > > > > > > >               if (unlikely(len > truesize - room || cur=
+_frag_size > PAGE_SIZE)) {
+> > > > > > > > > > -                     put_page(page);
+> > > > > > > > > > +                     virtnet_put_page(rq, page);
+> > > > > > > > > >                       pr_debug("%s: rx error: len %u ex=
+ceeds truesize %lu\n",
+> > > > > > > > > >                                dev->name, len, (unsigne=
+d long)(truesize - room));
+> > > > > > > > > >                       dev->stats.rx_length_errors++;
+> > > > > > > > > > @@ -1283,7 +1304,7 @@ static int virtnet_build_xdp_buff=
+_mrg(struct net_device *dev,
+> > > > > > > > > >       return 0;
+> > > > > > > > > >
+> > > > > > > > > >  err:
+> > > > > > > > > > -     put_xdp_frags(xdp);
+> > > > > > > > > > +     put_xdp_frags(xdp, rq);
+> > > > > > > > > >       return -EINVAL;
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > @@ -1344,7 +1365,10 @@ static void *mergeable_xdp_get_b=
+uf(struct virtnet_info *vi,
+> > > > > > > > > >               if (*len + xdp_room > PAGE_SIZE)
+> > > > > > > > > >                       return NULL;
+> > > > > > > > > >
+> > > > > > > > > > -             xdp_page =3D alloc_page(GFP_ATOMIC);
+> > > > > > > > > > +             if (rq->page_pool)
+> > > > > > > > > > +                     xdp_page =3D page_pool_dev_alloc_=
+pages(rq->page_pool);
+> > > > > > > > > > +             else
+> > > > > > > > > > +                     xdp_page =3D alloc_page(GFP_ATOMI=
+C);
+> > > > > > > > > >               if (!xdp_page)
+> > > > > > > > > >                       return NULL;
+> > > > > > > > > >
+> > > > > > > > > > @@ -1354,7 +1378,7 @@ static void *mergeable_xdp_get_bu=
+f(struct virtnet_info *vi,
+> > > > > > > > > >
+> > > > > > > > > >       *frame_sz =3D PAGE_SIZE;
+> > > > > > > > > >
+> > > > > > > > > > -     put_page(*page);
+> > > > > > > > > > +     virtnet_put_page(rq, *page);
+> > > > > > > > > >
+> > > > > > > > > >       *page =3D xdp_page;
+> > > > > > > > > >
+> > > > > > > > > > @@ -1400,6 +1424,8 @@ static struct sk_buff *receive_me=
+rgeable_xdp(struct net_device *dev,
+> > > > > > > > > >               head_skb =3D build_skb_from_xdp_buff(dev,=
+ vi, &xdp, xdp_frags_truesz);
+> > > > > > > > > >               if (unlikely(!head_skb))
+> > > > > > > > > >                       break;
+> > > > > > > > > > +             if (rq->page_pool)
+> > > > > > > > > > +                     skb_mark_for_recycle(head_skb);
+> > > > > > > > > >               return head_skb;
+> > > > > > > > > >
+> > > > > > > > > >       case XDP_TX:
+> > > > > > > > > > @@ -1410,10 +1436,10 @@ static struct sk_buff *receive_=
+mergeable_xdp(struct net_device *dev,
+> > > > > > > > > >               break;
+> > > > > > > > > >       }
+> > > > > > > > > >
+> > > > > > > > > > -     put_xdp_frags(&xdp);
+> > > > > > > > > > +     put_xdp_frags(&xdp, rq);
+> > > > > > > > > >
+> > > > > > > > > >  err_xdp:
+> > > > > > > > > > -     put_page(page);
+> > > > > > > > > > +     virtnet_put_page(rq, page);
+> > > > > > > > > >       mergeable_buf_free(rq, num_buf, dev, stats);
+> > > > > > > > > >
+> > > > > > > > > >       stats->xdp_drops++;
+> > > > > > > > > > @@ -1467,6 +1493,9 @@ static struct sk_buff *receive_me=
+rgeable(struct net_device *dev,
+> > > > > > > > > >       head_skb =3D page_to_skb(vi, rq, page, offset, le=
+n, truesize, headroom);
+> > > > > > > > > >       curr_skb =3D head_skb;
+> > > > > > > > > >
+> > > > > > > > > > +     if (rq->page_pool)
+> > > > > > > > > > +             skb_mark_for_recycle(curr_skb);
+> > > > > > > > > > +
+> > > > > > > > > >       if (unlikely(!curr_skb))
+> > > > > > > > > >               goto err_skb;
+> > > > > > > > > >       while (--num_buf) {
+> > > > > > > > > > @@ -1509,6 +1538,8 @@ static struct sk_buff *receive_me=
+rgeable(struct net_device *dev,
+> > > > > > > > > >                       curr_skb =3D nskb;
+> > > > > > > > > >                       head_skb->truesize +=3D nskb->tru=
+esize;
+> > > > > > > > > >                       num_skb_frags =3D 0;
+> > > > > > > > > > +                     if (rq->page_pool)
+> > > > > > > > > > +                             skb_mark_for_recycle(curr=
+_skb);
+> > > > > > > > > >               }
+> > > > > > > > > >               if (curr_skb !=3D head_skb) {
+> > > > > > > > > >                       head_skb->data_len +=3D len;
+> > > > > > > > > > @@ -1517,7 +1548,7 @@ static struct sk_buff *receive_me=
+rgeable(struct net_device *dev,
+> > > > > > > > > >               }
+> > > > > > > > > >               offset =3D buf - page_address(page);
+> > > > > > > > > >               if (skb_can_coalesce(curr_skb, num_skb_fr=
+ags, page, offset)) {
+> > > > > > > > > > -                     put_page(page);
+> > > > > > > > > > +                     virtnet_put_page(rq, page);
+> > > > > > > > > >                       skb_coalesce_rx_frag(curr_skb, nu=
+m_skb_frags - 1,
+> > > > > > > > > >                                            len, truesiz=
+e);
+> > > > > > > > > >               } else {
+> > > > > > > > > > @@ -1530,7 +1561,7 @@ static struct sk_buff *receive_me=
+rgeable(struct net_device *dev,
+> > > > > > > > > >       return head_skb;
+> > > > > > > > > >
+> > > > > > > > > >  err_skb:
+> > > > > > > > > > -     put_page(page);
+> > > > > > > > > > +     virtnet_put_page(rq, page);
+> > > > > > > > > >       mergeable_buf_free(rq, num_buf, dev, stats);
+> > > > > > > > > >
+> > > > > > > > > >  err_buf:
+> > > > > > > > > > @@ -1737,31 +1768,40 @@ static int add_recvbuf_mergeabl=
+e(struct virtnet_info *vi,
+> > > > > > > > > >        * disabled GSO for XDP, it won't be a big issue.
+> > > > > > > > > >        */
+> > > > > > > > > >       len =3D get_mergeable_buf_len(rq, &rq->mrg_avg_pk=
+t_len, room);
+> > > > > > > > > > -     if (unlikely(!skb_page_frag_refill(len + room, al=
+loc_frag, gfp)))
+> > > > > > > > > > -             return -ENOMEM;
+> > > > > > > > > > +     if (rq->page_pool) {
+> > > > > > > > > > +             struct page *page;
+> > > > > > > > > >
+> > > > > > > > > > -     buf =3D (char *)page_address(alloc_frag->page) + =
+alloc_frag->offset;
+> > > > > > > > > > -     buf +=3D headroom; /* advance address leaving hol=
+e at front of pkt */
+> > > > > > > > > > -     get_page(alloc_frag->page);
+> > > > > > > > > > -     alloc_frag->offset +=3D len + room;
+> > > > > > > > > > -     hole =3D alloc_frag->size - alloc_frag->offset;
+> > > > > > > > > > -     if (hole < len + room) {
+> > > > > > > > > > -             /* To avoid internal fragmentation, if th=
+ere is very likely not
+> > > > > > > > > > -              * enough space for another buffer, add t=
+he remaining space to
+> > > > > > > > > > -              * the current buffer.
+> > > > > > > > > > -              * XDP core assumes that frame_size of xd=
+p_buff and the length
+> > > > > > > > > > -              * of the frag are PAGE_SIZE, so we disab=
+le the hole mechanism.
+> > > > > > > > > > -              */
+> > > > > > > > > > -             if (!headroom)
+> > > > > > > > > > -                     len +=3D hole;
+> > > > > > > > > > -             alloc_frag->offset +=3D hole;
+> > > > > > > > > > -     }
+> > > > > > > > > > +             page =3D page_pool_dev_alloc_pages(rq->pa=
+ge_pool);
+> > > > > > > > > > +             if (unlikely(!page))
+> > > > > > > > > > +                     return -ENOMEM;
+> > > > > > > > > > +             buf =3D (char *)page_address(page);
+> > > > > > > > > > +             buf +=3D headroom; /* advance address lea=
+ving hole at front of pkt */
+> > > > > > > > > > +     } else {
+> > > > > > > > > > +             if (unlikely(!skb_page_frag_refill(len + =
+room, alloc_frag, gfp)))
+> > > > > > > > > > +                     return -ENOMEM;
+> > > > > > > > > >
+> > > > > > > > > > +             buf =3D (char *)page_address(alloc_frag->=
+page) + alloc_frag->offset;
+> > > > > > > > > > +             buf +=3D headroom; /* advance address lea=
+ving hole at front of pkt */
+> > > > > > > > > > +             get_page(alloc_frag->page);
+> > > > > > > > > > +             alloc_frag->offset +=3D len + room;
+> > > > > > > > > > +             hole =3D alloc_frag->size - alloc_frag->o=
+ffset;
+> > > > > > > > > > +             if (hole < len + room) {
+> > > > > > > > > > +                     /* To avoid internal fragmentatio=
+n, if there is very likely not
+> > > > > > > > > > +                      * enough space for another buffe=
+r, add the remaining space to
+> > > > > > > > > > +                      * the current buffer.
+> > > > > > > > > > +                      * XDP core assumes that frame_si=
+ze of xdp_buff and the length
+> > > > > > > > > > +                      * of the frag are PAGE_SIZE, so =
+we disable the hole mechanism.
+> > > > > > > > > > +                      */
+> > > > > > > > > > +                     if (!headroom)
+> > > > > > > > > > +                             len +=3D hole;
+> > > > > > > > > > +                     alloc_frag->offset +=3D hole;
+> > > > > > > > > > +             }
+> > > > > > > > > > +     }
+> > > > > > > > > >       sg_init_one(rq->sg, buf, len);
+> > > > > > > > > >       ctx =3D mergeable_len_to_ctx(len + room, headroom=
+);
+> > > > > > > > > >       err =3D virtqueue_add_inbuf_ctx(rq->vq, rq->sg, 1=
+, buf, ctx, gfp);
+> > > > > > > > > >       if (err < 0)
+> > > > > > > > > > -             put_page(virt_to_head_page(buf));
+> > > > > > > > > > +             virtnet_put_page(rq, virt_to_head_page(bu=
+f));
+> > > > > > > > > >
+> > > > > > > > > >       return err;
+> > > > > > > > > >  }
+> > > > > > > > > > @@ -1994,8 +2034,15 @@ static int virtnet_enable_queue_=
+pair(struct virtnet_info *vi, int qp_index)
+> > > > > > > > > >       if (err < 0)
+> > > > > > > > > >               return err;
+> > > > > > > > > >
+> > > > > > > > > > -     err =3D xdp_rxq_info_reg_mem_model(&vi->rq[qp_ind=
+ex].xdp_rxq,
+> > > > > > > > > > -                                      MEM_TYPE_PAGE_SH=
+ARED, NULL);
+> > > > > > > > > > +     if (vi->rq[qp_index].page_pool)
+> > > > > > > > > > +             err =3D xdp_rxq_info_reg_mem_model(&vi->r=
+q[qp_index].xdp_rxq,
+> > > > > > > > > > +                                              MEM_TYPE=
+_PAGE_POOL,
+> > > > > > > > > > +                                              vi->rq[q=
+p_index].page_pool);
+> > > > > > > > > > +     else
+> > > > > > > > > > +             err =3D xdp_rxq_info_reg_mem_model(&vi->r=
+q[qp_index].xdp_rxq,
+> > > > > > > > > > +                                              MEM_TYPE=
+_PAGE_SHARED,
+> > > > > > > > > > +                                              NULL);
+> > > > > > > > > > +
+> > > > > > > > > >       if (err < 0)
+> > > > > > > > > >               goto err_xdp_reg_mem_model;
+> > > > > > > > > >
+> > > > > > > > > > @@ -2951,6 +2998,7 @@ static void virtnet_get_strings(s=
+truct net_device *dev, u32 stringset, u8 *data)
+> > > > > > > > > >                               ethtool_sprintf(&p, "tx_q=
+ueue_%u_%s", i,
+> > > > > > > > > >                                               virtnet_s=
+q_stats_desc[j].desc);
+> > > > > > > > > >               }
+> > > > > > > > > > +             page_pool_ethtool_stats_get_strings(p);
+> > > > > > > > > >               break;
+> > > > > > > > > >       }
+> > > > > > > > > >  }
+> > > > > > > > > > @@ -2962,12 +3010,30 @@ static int virtnet_get_sset_cou=
+nt(struct net_device *dev, int sset)
+> > > > > > > > > >       switch (sset) {
+> > > > > > > > > >       case ETH_SS_STATS:
+> > > > > > > > > >               return vi->curr_queue_pairs * (VIRTNET_RQ=
+_STATS_LEN +
+> > > > > > > > > > -                                            VIRTNET_SQ=
+_STATS_LEN);
+> > > > > > > > > > +                                            VIRTNET_SQ=
+_STATS_LEN +
+> > > > > > > > > > +                                             (page_poo=
+l_enabled && vi->mergeable_rx_bufs ?
+> > > > > > > > > > +                                              page_poo=
+l_ethtool_stats_get_count() : 0));
+> > > > > > > > > >       default:
+> > > > > > > > > >               return -EOPNOTSUPP;
+> > > > > > > > > >       }
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > +static void virtnet_get_page_pool_stats(struct net_dev=
+ice *dev, u64 *data)
+> > > > > > > > > > +{
+> > > > > > > > > > +#ifdef CONFIG_PAGE_POOL_STATS
+> > > > > > > > > > +     struct virtnet_info *vi =3D netdev_priv(dev);
+> > > > > > > > > > +     struct page_pool_stats pp_stats =3D {};
+> > > > > > > > > > +     int i;
+> > > > > > > > > > +
+> > > > > > > > > > +     for (i =3D 0; i < vi->curr_queue_pairs; i++) {
+> > > > > > > > > > +             if (!vi->rq[i].page_pool)
+> > > > > > > > > > +                     continue;
+> > > > > > > > > > +             page_pool_get_stats(vi->rq[i].page_pool, =
+&pp_stats);
+> > > > > > > > > > +     }
+> > > > > > > > > > +     page_pool_ethtool_stats_get(data, &pp_stats);
+> > > > > > > > > > +#endif /* CONFIG_PAGE_POOL_STATS */
+> > > > > > > > > > +}
+> > > > > > > > > > +
+> > > > > > > > > >  static void virtnet_get_ethtool_stats(struct net_devic=
+e *dev,
+> > > > > > > > > >                                     struct ethtool_stat=
+s *stats, u64 *data)
+> > > > > > > > > >  {
+> > > > > > > > > > @@ -3003,6 +3069,8 @@ static void virtnet_get_ethtool_s=
+tats(struct net_device *dev,
+> > > > > > > > > >               } while (u64_stats_fetch_retry(&sq->stats=
+.syncp, start));
+> > > > > > > > > >               idx +=3D VIRTNET_SQ_STATS_LEN;
+> > > > > > > > > >       }
+> > > > > > > > > > +
+> > > > > > > > > > +     virtnet_get_page_pool_stats(dev, &data[idx]);
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > >  static void virtnet_get_channels(struct net_device *de=
+v,
+> > > > > > > > > > @@ -3623,6 +3691,8 @@ static void virtnet_free_queues(s=
+truct virtnet_info *vi)
+> > > > > > > > > >       for (i =3D 0; i < vi->max_queue_pairs; i++) {
+> > > > > > > > > >               __netif_napi_del(&vi->rq[i].napi);
+> > > > > > > > > >               __netif_napi_del(&vi->sq[i].napi);
+> > > > > > > > > > +             if (vi->rq[i].page_pool)
+> > > > > > > > > > +                     page_pool_destroy(vi->rq[i].page_=
+pool);
+> > > > > > > > > >       }
+> > > > > > > > > >
+> > > > > > > > > >       /* We called __netif_napi_del(),
+> > > > > > > > > > @@ -3679,12 +3749,19 @@ static void virtnet_rq_free_unu=
+sed_buf(struct virtqueue *vq, void *buf)
+> > > > > > > > > >       struct virtnet_info *vi =3D vq->vdev->priv;
+> > > > > > > > > >       int i =3D vq2rxq(vq);
+> > > > > > > > > >
+> > > > > > > > > > -     if (vi->mergeable_rx_bufs)
+> > > > > > > > > > -             put_page(virt_to_head_page(buf));
+> > > > > > > > > > -     else if (vi->big_packets)
+> > > > > > > > > > +     if (vi->mergeable_rx_bufs) {
+> > > > > > > > > > +             if (vi->rq[i].page_pool) {
+> > > > > > > > > > +                     page_pool_put_full_page(vi->rq[i]=
+.page_pool,
+> > > > > > > > > > +                                             virt_to_h=
+ead_page(buf),
+> > > > > > > > > > +                                             true);
+> > > > > > > > > > +             } else {
+> > > > > > > > > > +                     put_page(virt_to_head_page(buf));
+> > > > > > > > > > +             }
+> > > > > > > > > > +     } else if (vi->big_packets) {
+> > > > > > > > > >               give_pages(&vi->rq[i], buf);
+> > > > > > > > > > -     else
+> > > > > > > > > > +     } else {
+> > > > > > > > > >               put_page(virt_to_head_page(buf));
+> > > > > > > > > > +     }
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > >  static void free_unused_bufs(struct virtnet_info *vi)
+> > > > > > > > > > @@ -3718,6 +3795,26 @@ static void virtnet_del_vqs(stru=
+ct virtnet_info *vi)
+> > > > > > > > > >       virtnet_free_queues(vi);
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > +static void virtnet_alloc_page_pool(struct receive_que=
+ue *rq)
+> > > > > > > > > > +{
+> > > > > > > > > > +     struct virtio_device *vdev =3D rq->vq->vdev;
+> > > > > > > > > > +
+> > > > > > > > > > +     struct page_pool_params pp_params =3D {
+> > > > > > > > > > +             .order =3D 0,
+> > > > > > > > > > +             .pool_size =3D rq->vq->num_max,
+> > > > > > > > > > +             .nid =3D dev_to_node(vdev->dev.parent),
+> > > > > > > > > > +             .dev =3D vdev->dev.parent,
+> > > > > > > > > > +             .offset =3D 0,
+> > > > > > > > > > +     };
+> > > > > > > > > > +
+> > > > > > > > > > +     rq->page_pool =3D page_pool_create(&pp_params);
+> > > > > > > > > > +     if (IS_ERR(rq->page_pool)) {
+> > > > > > > > > > +             dev_warn(&vdev->dev, "page pool creation =
+failed: %ld\n",
+> > > > > > > > > > +                      PTR_ERR(rq->page_pool));
+> > > > > > > > > > +             rq->page_pool =3D NULL;
+> > > > > > > > > > +     }
+> > > > > > > > > > +}
+> > > > > > > > > > +
+> > > > > > > > > >  /* How large should a single buffer be so a queue full=
+ of these can fit at
+> > > > > > > > > >   * least one full packet?
+> > > > > > > > > >   * Logic below assumes the mergeable buffer header is =
+used.
+> > > > > > > > > > @@ -3801,6 +3898,13 @@ static int virtnet_find_vqs(stru=
+ct virtnet_info *vi)
+> > > > > > > > > >               vi->rq[i].vq =3D vqs[rxq2vq(i)];
+> > > > > > > > > >               vi->rq[i].min_buf_len =3D mergeable_min_b=
+uf_len(vi, vi->rq[i].vq);
+> > > > > > > > > >               vi->sq[i].vq =3D vqs[txq2vq(i)];
+> > > > > > > > > > +
+> > > > > > > > > > +             if (page_pool_enabled && vi->mergeable_rx=
+_bufs)
+> > > > > > > > > > +                     virtnet_alloc_page_pool(&vi->rq[i=
+]);
+> > > > > > > > > > +             else
+> > > > > > > > > > +                     dev_warn(&vi->vdev->dev,
+> > > > > > > > > > +                              "page pool only support =
+mergeable mode\n");
+> > > > > > > > > > +
+> > > > > > > > > >       }
+> > > > > > > > > >
+> > > > > > > > > >       /* run here: ret =3D=3D 0. */
+> > > > > > > > > > --
+> > > > > > > > > > 2.31.1
+> > > > > > > > >
+> > > > > > >
+> > > >
+> > >
+>
 
