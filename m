@@ -2,71 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F31747BF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 05:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906FA747BF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 05:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjGEDzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 23:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S230367AbjGED5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 23:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjGEDzn (ORCPT
+        with ESMTP id S229532AbjGED52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 23:55:43 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834BD10FB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 20:55:38 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so305455e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 20:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688529337; x=1691121337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kaO+Xx+AffiAOFAxmcebERanhAHdbOWTOJWXKAKt4bs=;
-        b=7wUNH7avrpxryyy6C9KEuNHJPJH10Qhk+QmpnP7wvg0Y0CYLwO/jYKY0d7XuXEYIWH
-         HefCN1SsmbswImVyio4B+emgVVu+F4sZTBje3g5jZKjAkvs2cQssqysZEBqlnv+5zbHU
-         QvaL23XspKrJjvyQMdGyvJx5toyYRllgOSVl1dAuyCI0qjg/DybEga/YbmGyYvvhwDHM
-         0vPcb5IupX+UXoebxoCu5iiOS3Z/SpNYO/pEZfrFPAPdo63A1eVBEdNI41qD2zHOCkVo
-         vUbMm2qDdis90mNM5Dz2hIh5Uz+wlnnIcRJgPXBtsdmffqvVxSM22j74kVP+U5hEgxQY
-         ejXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688529337; x=1691121337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kaO+Xx+AffiAOFAxmcebERanhAHdbOWTOJWXKAKt4bs=;
-        b=CbFhLUqzUWoNphWQ0t6tquPbySA6JoVkIxeZ47KU8oSlhRUxxKIMoEuCDfu82Ze7EP
-         xJ0CGUjst+y5dAMxOubaY3EXqXja4EEJ/25y39dIO2/Ur5T0hf3UhjTrDlz+wNPvJecc
-         gruuJSxzDJZwQwZi7dzUVKl6b3iCl0PQcqubzN7hHfzci0L4Cb4rYjuIUAagJq9sg+Bc
-         nfoMTg9ECOLpt1FJ2ijqUU37ih0QradPQ4aQm+87raMmd8QbHWhG4cVmp32V5bJWCE0K
-         Qhp13ikEhWatQ6QAOlOfGmhKSiQiFOOQQXJmnqih3D4cFhFbPRv24cguzgB5rBi6m4Jl
-         wzYw==
-X-Gm-Message-State: ABy/qLYe6wGAPFeXPnWM53lE+jvpQOOpYenjoEkFm3sFLTtWpjeRy0XG
-        7jgbBr30Z/Xffu7lk+ymHp1E6gCT4wHqfi+0lBGtWBOz7m6u+ELX8Qxivg==
-X-Google-Smtp-Source: APBJJlETKlxByGVhbMEQprFacD+SpR4g71GUaaNIA3XyET1zsdvRYMBVqxEVTUUQsM8eboALav5uNE5Nuf6JasdXrXw=
-X-Received: by 2002:a05:600c:3ba3:b0:3f7:e59f:2183 with SMTP id
- n35-20020a05600c3ba300b003f7e59f2183mr17526wms.5.1688529336872; Tue, 04 Jul
- 2023 20:55:36 -0700 (PDT)
+        Tue, 4 Jul 2023 23:57:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510B410FC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 20:57:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TJ83Qml7k4yG3mMaRo34lm6yDG9KsL4k1ZvnIxyVmYpkghO/5OU9TW0CduJA64mIm+ofBYK6o+xlBQhoXnQvYJmZ9OxdanII90Jteh6BpcliUD6uMXkY+Ma0fnbtVYTsfdbrInoT288NNznL6airtW5ofe73zolgCuQliG7Sqwt4P0hv5h+nBu2byG3b2ZRbboCgIo2xUvuZHxzUqDf7WzAlOCLnj/ywoch/lcBjHdJ2WMl6YrxIB1xpLDOTkf2aZ/mZ3lPGUFx0/WqAVTwOqgt/LbXZjss/io+SbGizTiWLi9nLsNn1Tv+z5qFvDlxg1e5LaeNNaTXUvzb14rClbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kkZli4EBpEyvkQQBLbjTqH9Zsc51bxkpX093P85VFP0=;
+ b=PehBW+SjEXLQIgUwF0+B+9VS60HXXJsOzy+7GXOwFSKrl1bBMptWGXHoPAOWEvlqos7oZp9WaM07qWzDz1V/3kCgky9gz7BY4fqNJFtpxRQUQHtD90UQJjMQJnP9+aJGv2z0TAryyF6uWQ2FSOs2lLT/kPEZw31oybp4wY1WC32QQP8NYt/kVKfc/NX8qzCA9Qpa6MtsanokEKUZdIqjuv/IL86g5FuRCu8P2+i//QMNYeQzvRtc9kBiBDcgOI4x4AQCjzxaRFjiIxzyqBs8Iz8JUHSrCUk2TiB5o5PsSt8r2B2D1AHVBOoqzl636rpiqqHYVMSqyi5frplV+Ofz9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kkZli4EBpEyvkQQBLbjTqH9Zsc51bxkpX093P85VFP0=;
+ b=ZTAiXXlcochxWlPC7tivsvauPnFEaxE4UpXpobXDo2ZUU8Oe5o3gwXESMRDMSJb+HuiR722oN0Qr/NW9vrdVxlzm5j31qOEAZMPdGJAQYmpaVS/gNlad8fJenWmrwc8rbn/zvJ8vamqo3bqtbutDbrXOJS5kIl1oATN4qgWfkc0=
+Received: from BN0PR04CA0045.namprd04.prod.outlook.com (2603:10b6:408:e8::20)
+ by DM4PR12MB5327.namprd12.prod.outlook.com (2603:10b6:5:39e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
+ 2023 03:57:24 +0000
+Received: from BN8NAM11FT113.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e8:cafe::dc) by BN0PR04CA0045.outlook.office365.com
+ (2603:10b6:408:e8::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
+ Transport; Wed, 5 Jul 2023 03:57:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT113.mail.protection.outlook.com (10.13.176.163) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.47 via Frontend Transport; Wed, 5 Jul 2023 03:57:24 +0000
+Received: from jenkins-vm-juliazhang.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 4 Jul 2023 22:57:16 -0500
+From:   Julia Zhang <julia.zhang@amd.com>
+To:     Juergen Gross <jgross@suse.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <amd-gfx@lists.freedesktop.org>,
+        <virtualization@lists.linux-foundation.org>
+CC:     Alex Deucher <alexander.deucher@amd.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Xenia Ragiadakou <burzalodowa@gmail.com>,
+        "Erik Faye-Lund" <kusmabite@gmail.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        Honglei Huang <honglei1.huang@amd.com>,
+        Chen Jiqian <Jiqian.Chen@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Julia Zhang <julia.zhang@amd.com>,
+        Julia Zhang <julizhan@amd.com>
+Subject: [PATCH] virtio-gpu: Remove stride and layer_stride check for dGPU prime on VM
+Date:   Wed, 5 Jul 2023 11:56:22 +0800
+Message-ID: <20230705035622.2841499-1-julia.zhang@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <00000000000008d0f405ff98fa21@google.com> <CAL3q7H4uHx14j91qNmXcghk-N-8yTC2mtF+5_9-SSg78jwmDLw@mail.gmail.com>
-In-Reply-To: <CAL3q7H4uHx14j91qNmXcghk-N-8yTC2mtF+5_9-SSg78jwmDLw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 5 Jul 2023 05:55:24 +0200
-Message-ID: <CACT4Y+ZFU3sLjdW5oVLNH4=8BG3GadiQ69f1t1kSKY80xiCw4Q@mail.gmail.com>
-Subject: Re: [syzbot] [btrfs?] kernel BUG in merge_reloc_roots
-To:     Filipe Manana <fdmanana@kernel.org>
-Cc:     syzbot <syzbot+adac949c4246513f0dc6@syzkaller.appspotmail.com>,
-        clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT113:EE_|DM4PR12MB5327:EE_
+X-MS-Office365-Filtering-Correlation-Id: f3525032-3a19-4afa-812b-08db7d0bf0d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gDGF6hZvnsKtUpdiXzyD4a9V6MnJTdnqDHG9/uYwlfEYrlxyy2CHdgSxRHkMvRcxK8k51YMHHxUar6aYKdPMPopA4GIRAKh84fk/UT6liZ2bra7FCgp7sso78p+cvHimbBs8eFezAVXd2kvf+MwHVyeY2GYYRNYfoB1DCDSWGagQMxFC8NFl0ArSEOfi//RSPAnvBbkop04pBr954yMgGFkOq2olBmV2/+cRrblKNFI56zrf/VpygFEJLhsMfRFmzfcmvVRPHMDZrCnVS2uRyhHRT/ipS2w5NC0fHhyxkPtqRIm8cc6qJkiroQu922/bQzmn/NkXcFyOCIrX3wW4W+fOM20OyWBGldP+AVxkAKKBJAWzsGiS2LAOQQU+1xJc9odxQtG+URDS5H92Mpxoc4/+MWf9hXkIsonzcC/xbtRLesgqautWPOKd4aozU+19X+fc72tNtMAhCcAc2DOtBX7+1XneGVd17vxIJ2ajB+RTWDwrK0EBaH9sfbU7WvH7fbVnSDFqAaP6+xYD6vCe/OhISebeT25Ps/HwhVBO8pYIlvDNj+rveZOcf3vyZ2SrAJVoTSO7e2wVSUqKSVmg145i7d/ISqTwI23Wtbi+V5IIIo+7tnwIg3m7oo1riTrh9ixJouchQoV10VbBuopEEAI7w+oh9oKHWSnu1UoiI4V/QyfqtUmj60quhgxLyxIGNL1EPLcBTbL8nqzHpsk97wAdNI7g0k3Lqb34X9YKGiSA+Y9aVnsV/mtPDug9yrofxK+tTTZ41OKpuZzy8DiQEQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(26005)(478600001)(82740400003)(1076003)(6666004)(966005)(86362001)(2616005)(16526019)(186003)(54906003)(4326008)(81166007)(70586007)(36860700001)(426003)(921005)(336012)(356005)(83380400001)(110136005)(70206006)(7696005)(316002)(47076005)(8676002)(44832011)(7416002)(8936002)(40460700003)(41300700001)(2906002)(40480700001)(5660300002)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 03:57:24.1577
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3525032-3a19-4afa-812b-08db7d0bf0d8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT113.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5327
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,173 +121,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 22:30, Filipe Manana <fdmanana@kernel.org> wrote:
->
-> On Mon, Jul 3, 2023 at 7:34=E2=80=AFPM syzbot
-> <syzbot+adac949c4246513f0dc6@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    b19edac5992d Merge tag 'nolibc.2023.06.22a' of git://gi=
-t.k..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D17e0cfe0a80=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D33c8c2baba1=
-cfc7e
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dadac949c42465=
-13f0dc6
-> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for D=
-ebian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1562a47f2=
-80000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/e1a4f239105a/d=
-isk-b19edac5.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/25776c3e9785/vmli=
-nux-b19edac5.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/ca7e959d451d=
-/bzImage-b19edac5.xz
-> > mounted in repro #1: https://storage.googleapis.com/syzbot-assets/2926f=
-e9a4819/mount_0.gz
-> > mounted in repro #2: https://storage.googleapis.com/syzbot-assets/da38c=
-75be578/mount_17.gz
-> >
-> > The issue was bisected to:
-> >
-> > commit 751a27615ddaaf95519565d83bac65b8aafab9e8
-> > Author: Filipe Manana <fdmanana@suse.com>
-> > Date:   Thu Jun 8 10:27:49 2023 +0000
-> >
-> >     btrfs: do not BUG_ON() on tree mod log failures at btrfs_del_ptr()
->
-> If the bisection is correct, then it means before that commit we would
-> hit a BUG_ON(), which is definitely not better...
->
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D15196068=
-a80000
-> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D17196068=
-a80000
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D13196068a80=
-000
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+adac949c4246513f0dc6@syzkaller.appspotmail.com
-> > Fixes: 751a27615dda ("btrfs: do not BUG_ON() on tree mod log failures a=
-t btrfs_del_ptr()")
-> >
-> > assertion failed: 0, in fs/btrfs/relocation.c:2011
-> > ------------[ cut here ]------------
-> > kernel BUG at fs/btrfs/relocation.c:2011!
->
-> I don't see how this can be related to removing the BUG_ON() in
-> del_ptr(), aborting the transaction and propagating the error up the
-> call chain.
->
-> So it seems not hitting the BUG_ON()'s removed by that commit may
-> somehow trigger this assertion failure in an error path of relocation.
->
-> But this assertion is in a path that is able to handle the error:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/f=
-s/btrfs/relocation.c?h=3Dv6.4#n2011
->
-> The ASSERT(0) is there to make sure developers are notified of this
-> unexpected case.
-> Replacing it with a WARN_ON() would prevent the crash when
-> CONFIG_BTRFS_ASSERT=3Dy, but syzbot would still complain about a
-> warning/stack trace, even if it doesn't trigger a crash.
->
-> So I'm not sure if we can keep syzbot always happy all the time for all c=
-ases.
+Remove stride and layer_stride check in virtio-gpu so that virgl can
+send transfer data command with non zero stride to sync up data from
+guest to host for dGPU prime on VM.
 
-Hi Filipe,
+Link: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/23896
 
-If this condition does not mean a kernel bug, then it shouldn't use WARN/BU=
-G.
-It's not about syzbot, it's about any automated and manual testing.
-If it aims at end users, then a readable message with pr_err stating
-what to do and where to report it would be more suitable/useful.
+Signed-off-by: Julia Zhang <julizhan@amd.com>
+---
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-But the current message suggests it's a kernel bug, no?
-Or at least it looks like developers couldn't think of a way how it
-can happen, so the comment can be updated as well now that we know how
-it can happen.
+diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+index 5d05093014ac..4d3f8d36e3c7 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
++++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+@@ -414,11 +414,6 @@ static int virtio_gpu_transfer_from_host_ioctl(struct drm_device *dev,
+ 		goto err_put_free;
+ 	}
+ 
+-	if (!bo->host3d_blob && (args->stride || args->layer_stride)) {
+-		ret = -EINVAL;
+-		goto err_put_free;
+-	}
+-
+ 	ret = virtio_gpu_array_lock_resv(objs);
+ 	if (ret != 0)
+ 		goto err_put_free;
+@@ -473,11 +468,6 @@ static int virtio_gpu_transfer_to_host_ioctl(struct drm_device *dev, void *data,
+ 	} else {
+ 		virtio_gpu_create_context(dev, file);
+ 
+-		if (!bo->host3d_blob && (args->stride || args->layer_stride)) {
+-			ret = -EINVAL;
+-			goto err_put_free;
+-		}
+-
+ 		ret = virtio_gpu_array_lock_resv(objs);
+ 		if (ret != 0)
+ 			goto err_put_free;
+-- 
+2.34.1
 
-/*
-* This is actually impossible without something
-* going really wrong (like weird race condition
-* or cosmic rays).
-*/
-
-
-
-> > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 0 PID: 7243 Comm: syz-executor.3 Not tainted 6.4.0-syzkaller-01312=
--gb19edac5992d #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
- Google 05/27/2023
-> > RIP: 0010:merge_reloc_roots+0x98b/0x9a0 fs/btrfs/relocation.c:2011
-> > Code: cb d1 10 07 0f 0b e8 84 9d ed fd 48 c7 c7 60 45 2b 8b 48 c7 c6 c0=
- 50 2b 8b 48 c7 c2 e0 45 2b 8b b9 db 07 00 00 e8 a5 d1 10 07 <0f> 0b e8 7e =
-12 13 07 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 41
-> > RSP: 0018:ffffc9000656f760 EFLAGS: 00010246
-> > RAX: 0000000000000032 RBX: ffff88806a59a030 RCX: a7b6d3c4bc715b00
-> > RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-> > RBP: ffffc9000656f870 R08: ffffffff816efd9c R09: fffff52000cadea1
-> > R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888079e16558
-> > R13: ffff888079e16000 R14: ffff88806a59a000 R15: dffffc0000000000
-> > FS:  00007f62d8f56700(0000) GS:ffff8880b9800000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f7ba56f1000 CR3: 000000001a7d0000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  relocate_block_group+0xa68/0xcd0 fs/btrfs/relocation.c:3751
-> >  btrfs_relocate_block_group+0x7ab/0xd70 fs/btrfs/relocation.c:4087
-> >  btrfs_relocate_chunk+0x12c/0x3b0 fs/btrfs/volumes.c:3283
-> >  __btrfs_balance+0x1b06/0x2690 fs/btrfs/volumes.c:4018
-> >  btrfs_balance+0xbdb/0x1120 fs/btrfs/volumes.c:4402
-> >  btrfs_ioctl_balance+0x496/0x7c0 fs/btrfs/ioctl.c:3604
-> >  vfs_ioctl fs/ioctl.c:51 [inline]
-> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
-> >  __se_sys_ioctl+0xf8/0x170 fs/ioctl.c:856
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f62d828c389
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89=
- f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 =
-ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f62d8f56168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > RAX: ffffffffffffffda RBX: 00007f62d83abf80 RCX: 00007f62d828c389
-> > RDX: 00000000200003c0 RSI: 00000000c4009420 RDI: 0000000000000006
-> > RBP: 00007f62d82d7493 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007ffedd8614bf R14: 00007f62d8f56300 R15: 0000000000022000
-> >  </TASK>
-> > Modules linked in:
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:merge_reloc_roots+0x98b/0x9a0 fs/btrfs/relocation.c:2011
-> > Code: cb d1 10 07 0f 0b e8 84 9d ed fd 48 c7 c7 60 45 2b 8b 48 c7 c6 c0=
- 50 2b 8b 48 c7 c2 e0 45 2b 8b b9 db 07 00 00 e8 a5 d1 10 07 <0f> 0b e8 7e =
-12 13 07 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 41
-> > RSP: 0018:ffffc9000656f760 EFLAGS: 00010246
-> > RAX: 0000000000000032 RBX: ffff88806a59a030 RCX: a7b6d3c4bc715b00
-> > RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-> > RBP: ffffc9000656f870 R08: ffffffff816efd9c R09: fffff52000cadea1
-> > R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888079e16558
-> > R13: ffff888079e16000 R14: ffff88806a59a000 R15: dffffc0000000000
-> > FS:  00007f62d8f56700(0000) GS:ffff8880b9800000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f83ebdff000 CR3: 000000001a7d0000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
