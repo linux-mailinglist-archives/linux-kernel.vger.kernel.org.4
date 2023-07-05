@@ -2,205 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41C87480D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35177480DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjGEJ2z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 05:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S231521AbjGEJaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjGEJ2u (ORCPT
+        with ESMTP id S229532AbjGEJaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 05:28:50 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748721713;
-        Wed,  5 Jul 2023 02:28:45 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QwvQw6C9Cz67Jb4;
-        Wed,  5 Jul 2023 17:25:44 +0800 (CST)
-Received: from localhost (10.34.206.101) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 5 Jul
- 2023 10:28:39 +0100
-Date:   Wed, 5 Jul 2023 17:28:34 +0800
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "Paller, Kim Seer" <KimSeer.Paller@analog.com>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v8 2/2] iio: adc: max14001: New driver
-Message-ID: <20230705172834.00001853@Huawei.com>
-In-Reply-To: <CAHp75VfGFXtX2UCV+EzSMGaRMc5=WUpUJpRFB_K6NMJO2+iszg@mail.gmail.com>
-References: <20230622143227.30147-1-kimseer.paller@analog.com>
-        <20230622143227.30147-2-kimseer.paller@analog.com>
-        <20230702180315.00003dbe@Huawei.com>
-        <fcf6daf6afec48b096df14d8b5308db0@analog.com>
-        <20230705155530.00002074@Huawei.com>
-        <CAHp75VfGFXtX2UCV+EzSMGaRMc5=WUpUJpRFB_K6NMJO2+iszg@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 5 Jul 2023 05:30:11 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2130.outbound.protection.outlook.com [40.107.117.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DEB12A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:30:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hh2gpgIplHqTOygcQiKg+SK6GjMpvdJkvLaWmOJgXR4rPYmQnC+Z7l4myje9q1KGs26nhtsc3+USdDA0dtVxfs5DslOlNwwF7BN/o2MJrSIQoLgj7rhqFXyzV0qPWTAiYaZZQiR2GMUvy2SW+JeNMRSQDtuD0Usj4t7NMmoYJk/8gPOO//8coeMmffAoZlJ5DBDufM/z4u1kg9fTD+rlt7QyTJJv7eV8pVu2BGE3N8wRqP/nEGnY+1BzIoUinPnebr5sBAdkQDA53OFrl9vInufygbzebRMeP8xuJfaV88jbJoDxkze1zVzXeVBByM07rCrzUZiYDo+3+ZYQCLd3Dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1M8NGNZyeAytfy/Us4OP0BaUwYu24+dwfpezAeOTqrw=;
+ b=PFl6/iZTwQdXkhPgfeqF9NfWQaTC52pHnfVEtZ16yz/+fgh6qFZYygWgXdUIu9Wb/DBvdbHWfNugjkN4kbkqwRu5/K5zGkfrAECEsIuLH9N17vYva4oZIh/uinYRZotI9haYw1iUcJB1qGW2fKAI05LeJaK83YncwXxhFGvOksnJW7nSUsiLo2IlEsCnY7Injo+XSo7Dfy+sV+eJYpi/Au5SeDPX6zhIhJPOmRKaGOkhhSOaiofgFpDW/raV3TdyigbkCqK9HKYT5C1UogEhZN2nZgvbA+XqwDMl9LfUMvkEug8ianeisf+B/7EuZ+GBAIiCVggdsAITpVsc4nS5bA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1M8NGNZyeAytfy/Us4OP0BaUwYu24+dwfpezAeOTqrw=;
+ b=fzTkFGly9HSxJECB5lncSEUhIbFgCohVRD+la3wbaqmFAwpwFANu7bDdizbhKRjxYMQRU7v0DDNhz7WJ/XJEMsqF2AVthAk10eeR7isBMOOKo3V60XqrkZTXucitwSKQ+mzCCYB1RocUBzN/XkqEVYM866rlEPbxbcplJxLiNEAjO3XX+63MPy9jB5MUnabd85eZS4AHxoL1Ij8bCbtxlJp2iFtY+bsz5Wh8jhpWLLIzweDGv5PdgP2BmTXdjMH2RhF38djrSp29uK/6nlZylaHSvWoDPjuS19NMrs+NOhjEUYazX9IdaBblCAsfKvjmhtQ7ttA3fySF48bN3pn5hg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB4416.apcprd06.prod.outlook.com (2603:1096:400:67::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
+ 2023 09:30:07 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
+ 09:30:06 +0000
+Message-ID: <6a1bde36-fbf9-9ddd-e47f-f3c21a3528f7@vivo.com>
+Date:   Wed, 5 Jul 2023 17:30:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 4/4] phy: mediatek: tphy: Convert to
+ devm_platform_ioremap_resource()
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230705090126.26854-1-frank.li@vivo.com>
+ <20230705090126.26854-4-frank.li@vivo.com>
+ <ddc05f70-7075-97ab-1c94-cb3d5839ef2b@collabora.com>
+From:   Yangtao Li <frank.li@vivo.com>
+In-Reply-To: <ddc05f70-7075-97ab-1c94-cb3d5839ef2b@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SGXP274CA0024.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::36)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.34.206.101]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB4416:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19500207-10d3-489a-96fa-08db7d3a6b24
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C/+uSO6qaassbIidA5jU4EvDS9hm5C3XUHdYI1sul37+OKkjXDVY/MRy3OayQlyJoN7Fdd8xYNEE7HCAjYktVXlq5JqMDqVb/n9qkZZ4mKWCSd4sarCBNC1EGjj/8uFg+sUDM8dY7jWzWXvijPm2qsf3iTuMFV8VV0fzxcKG3qE8uqpp7AZGci3t6D+CHeRVlYPcm8wKxuyKifS78dymdp60sZu2evzC+RZLaAABL3x//IGaxCpU+aFInVvE88cBphwJofoy7f78H0F0nOlpqseIWM8V0T4rmChA4mxe4JkB8OjRirn7shKcno5ZlYaluAJuMpDcKShyGp3JxSvOJ0smw9CRp5H1Wm0exqs1bBzL4ZQQedN9mahGN3HzmcNRvF30zTVYuTwf6Myy0iwhhkYxiuUai4ae3inRV+hKTooeBbWei335uzMjHKJCc1yFOpHaVWfmLZLneWFl2uWwo72axgbfeUy79tJzw9d9Bu9Xs87vNDF5PQM432swtsbSv5zCqFQRvNOAUfSAzvBS3fAssPP1ACE4cjNltriUoB9Czrb8zTxZgruWbBADrTuBaIS+i7aPqY6KEw8rxNpoJGvrI1ZLKdbDqCBK9g8e6VraCVJ5Mag7j1EZ8ZeMG77gY7xX7MN6jYfcxrPvuxTuu8IHMMSAVn9D/3qFpRkl+fDFqwO552FfQp4pUHDtZXDB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39850400004)(136003)(376002)(396003)(451199021)(31696002)(41300700001)(86362001)(6486002)(38100700002)(38350700002)(6666004)(52116002)(83380400001)(53546011)(6506007)(2616005)(26005)(6512007)(110136005)(478600001)(316002)(36756003)(66476007)(4326008)(66556008)(66946007)(8676002)(8936002)(186003)(31686004)(2906002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cnB6K0FSUWVJb2xWTjdwL0dkOTVXc0V5ZFR5TWs2cGplT1NOR0hFUW0wRmJN?=
+ =?utf-8?B?WEZlZjlYZ0Z4QVlYOC9zVTk1NUQvVG1hcU9CYjQ1SGJyeldGa3RpVXMreDk1?=
+ =?utf-8?B?TjhESU9pVXpaVXZoTDA4NDlOK1FCbTJVK3FPMUhHVXJ0aTNXQi9vZ3NHbE9Z?=
+ =?utf-8?B?VzRQT25sa3hRaWhzemI3azZ0M3N0azF2UE1uUC9VdEptcU1CTGRmalc2NE96?=
+ =?utf-8?B?NDJhMnA2K3pORDhhd1pvRFh3Q05JTkV1U25GQWpRdXN1Y294YTJWSVpJUHFG?=
+ =?utf-8?B?R1g2RmR2VGIzU2tCbm9ieG1VakZ4ekNVait0NFNvQkVVdHBSdk1yZXBjM1hr?=
+ =?utf-8?B?NGtEQXFIT1BvUG1XUHRXZnFRZlEvMVZ5Zlp5YVpyRkpHeklabjVoblprM1Fp?=
+ =?utf-8?B?Z1pIS1dCT2dBQ2ZwbTZpaVV2amRtWVE4aXYyQUptbTJZdFI2VHl6cXV2bFZp?=
+ =?utf-8?B?L3UvZ0J3MmZSY1dxc1dDVTVZeEp5V1orTGF6ckNWcHNxeE9VTU8reERHRnR1?=
+ =?utf-8?B?bStWOTFEMjBZWE5sZFpUM1IxenZpa1VHN1ZGTUp3QzJmdlpFTXgrS3RYTTdN?=
+ =?utf-8?B?Q3B5UGtOMjJjNUxsTXF1aTdkalYwNkJ5UlZMQXIyeS9Rb2twM2tXc01JSEJm?=
+ =?utf-8?B?cEh2QkF4N2dIMkFSeDVPQkpvQS9jYjNXS3VFUklmMUNGcEpyQWxqb2lOc05s?=
+ =?utf-8?B?cElIbTFkZ0ZyZnJoRDdlbGhiTTZiMTBORmQ5R1ZYYndBbVYzaGFkTldNcmlo?=
+ =?utf-8?B?MVRRbkYyYUJ1L005UjJCamgxbmptMUFCS2hiZ2p5bVVHWk41RllVV2ZldlpQ?=
+ =?utf-8?B?Um83amNCT3pQWUJiaWlHbGNTVWdBTGpFZFJNRHBRT3I2V09xVEpyNDhUaitJ?=
+ =?utf-8?B?Tk1uV3k3N3VYRzJYdnpJdVVleUtrNml0WU91UkkxZVlxRUV6ZGhxNHRzNEgr?=
+ =?utf-8?B?dnV6eElGcWU0Sk5VbEYrWjYwLzlQVGJGYjZERjY1OHdiZGlJak9heXFjMmZr?=
+ =?utf-8?B?QmJVZ0s1YnVINEM1QUdRNTZEUCtjcTJzcTFPV0J1ak9HM3VRQ3NJTllZL1NT?=
+ =?utf-8?B?c0J5UkgwVWFncS9ZMFFmd3Rkc25sL2xhejNpeFFXRkFFRjdFZFNlZ0NlQWhk?=
+ =?utf-8?B?NTV0cVpYTlNlN0txN1dKMEhTNzRSdkFmMnhCMldoUUtuTGIxK0RaVFQ5YlFY?=
+ =?utf-8?B?ZGVkMThCeVFxOE56cy9xVThZc21MbG10ZEtETXJjeUszd0E5b0pMYzlYTUNF?=
+ =?utf-8?B?dllMaTZCZU1mbUVFb2dVNnExTHcwakVlUllBY3IyYW0wQS9HaG8yWlFsVUNm?=
+ =?utf-8?B?R050ZGEySTN3b2dLeG8vZmVtZ2dJeWxpVEhYL2Nad2RKdU91aGsza21kcDF6?=
+ =?utf-8?B?VE9LSFFYeVdwbm5hZ2d3WE1PUktsUTZ0S3R4WmdLY2tIVHBLc3dMeVhiZ1Zx?=
+ =?utf-8?B?NnpaajFFKzdBeU9VSWV0N0s5cmE2aHh0MUs0TWFlNkFzVnJ3VVpMZVpDd2dR?=
+ =?utf-8?B?UmFsSm52aGpCSEY1NmcwVlEwVDFRRlF1R25qeGdsdFMyQjZXYnRKL3lQZCsw?=
+ =?utf-8?B?YWI5OXVMVEVuaXc0WkZNS2pnRjJEbFh0U0hrT2ZVYXFybWdJOW5PNDgvU25Z?=
+ =?utf-8?B?L0R6Y2hmaUZIN09QaWlqSFRoVzA4K29XekhwaDRSUGszV3hlYmc1T2puZ1dp?=
+ =?utf-8?B?NFRIOHVWZXlSamNzc0x2VXVKNjIxbksydFFyRzhnTzV3RHJNV2xPNUxCQk4v?=
+ =?utf-8?B?dDVLQUpiaGZ3bjBUL3MxV1FqRWVxMG1vL0kzRnZ4dE1GaEk2NUFDeTZXZ0Ji?=
+ =?utf-8?B?cVFKOE9uUEZFNktPbVV2OG90bVRNWHc1ZFFyczYyZ1l6RWE1OG5yMjQwaWpM?=
+ =?utf-8?B?aStZcFhBMkZEaFNYMDRNSnd6clowemFEZG1QTmIwSDlaN0ZJSTFhV1F2RXZF?=
+ =?utf-8?B?cmNmMUpYNXNmbTlsOUVENUdjdjVmZlF5N3BZY01YeFB6Y1lZMGYvbnk5cGZ2?=
+ =?utf-8?B?M2V3MWY0eXdEZE1La3RNNVlsQnVoaCs2S3JtNTN6YkJzcW10ZGR5K0luNWc0?=
+ =?utf-8?B?azdxWVNRZFZHQkEybEUzcisyc2V2ZEF5ZU1ScGsrQ3hMUEhGbmw3akZZNEZU?=
+ =?utf-8?Q?iDH1xW8mE/h51qcYYcXTumTxd?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19500207-10d3-489a-96fa-08db7d3a6b24
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 09:30:06.3932
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qt3dpfOcKarp4uxx2THMqJZLrKAnMt+I+nt7DfvMYCzrBtxv9nrtBKrA8PBip+Xb1swHZKaISTbafXhBnYKfBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4416
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jul 2023 11:53:17 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+HI AngeloGioacchino,
 
-> On Wed, Jul 5, 2023 at 10:55 AM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> > > > From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> > > > Sent: Sunday, July 2, 2023 6:04 PM
-> > > > On Thu, 22 Jun 2023 22:32:27 +0800
-> > > > Kim Seer Paller <kimseer.paller@analog.com> wrote:  
-> 
-> ...
-> 
-> > > > > + /*
-> > > > > +  * Convert transmit buffer to big-endian format and reverse transmit
-> > > > > +  * buffer to align with the LSB-first input on SDI port.
-> > > > > +  */
-> > > > > + st->spi_tx_buffer =  
-> > > > cpu_to_be16(bitrev16(FIELD_PREP(MAX14001_ADDR_MASK,  
-> > > > > +                                                         reg_addr)));
-> > > > > +
-> > > > > + ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-> > > > > + if (ret)
-> > > > > +         return ret;
-> > > > > +
-> > > > > + /*
-> > > > > +  * Align received data from the receive buffer, reversing and reordering
-> > > > > +  * it to match the expected MSB-first format.
-> > > > > +  */
-> > > > > + *data = (__force u16)(be16_to_cpu(bitrev16(st->spi_rx_buffer))) &
-> > > > > +  
-> > > >     MAX14001_DATA_MASK;  
-> > > > > +  
-> > > > These sequences still confuse me a lot because I'd expect the values in tx
-> > > > to have the opposite operations applied to those for rx and that's not the
-> > > > case.
-> > > >
-> > > > Let's take a le system.
-> > > > tx = cpu_to_be16(bitrev16(x))
-> > > >    = cpu_to_be16((__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8));
-> > > >    = __bitrev8(x & 0xff) | (__bitrev8(x >> 8) << 8)
-> > > > or swap all the bits in each byte, but don't swap the bytes.
-> > > >
-> > > > rx = cpu_to_be16(bitrev16(x))
-> > > >    = be16_to_cpu(((__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)_
-> > > >    = __bitrev8(x & 0xff) | __bitrev(x >> 8)
-> > > >
-> > > > also swap all the bits in each byte, but don't swap the bytes.
-> > > >
-> > > > So it is the reverse because the bytes swaps unwind themselves somewhat.
-> > > > For a be system cpu_to_be16 etc are noop.
-> > > > tx = (__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)
-> > > > rx = (__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)
-> > > >
-> > > > So in this case swap all 16 bits.
-> > > >
-> > > > Now, given I'd expected them to be reversed for the tx vs rx case.
-> > > > E.g.
-> > > > tx = cpu_to_be16(bitrev16(x))
-> > > > As above.
-> > > > For rx, le host
-> > > > rx = bitrev16(be16_to_cpu(x))
-> > > >    = __bitrev8((x >> 8) & 0xff) << 8) |  __bitrev8((((x & 0xff) << 8) >> 8)
-> > > > same as above (if you swap the two terms I think.
-> > > >
-> > > > For be the be16_to_cpu is a noop again, so it's just bitrev16(x) as expected.
-> > > >
-> > > > Hence if I've understood this correctly you could reverse the terms so that
-> > > > it was 'obvious' you were doing the opposite for the tx term vs the rx one
-> > > > without making the slightest bit of difference....
-> > > >
-> > > > hmm. Might be worth doing simply to avoid questions.  
-> > >
-> > > Thank you for your feedback. I have tested the modifications based on your
-> > > suggestions, taking the le system into account, and it appears that the code is
-> > > functioning correctly. Before sending the new patch version, I would like to
-> > > confirm if this aligns with your comments.  
-> 
-> > Yes. This looks good to me.  
-> 
-> I think the implementation is still incorrect. See below.
-> 
-> > > static int max14001_read(void *context, unsigned int reg_addr, unsigned int *data)
-> > > {
-> > >       struct max14001_state *st = context;
-> > >       int ret;
-> > >
-> > >       struct spi_transfer xfers[] = {
-> > >               {
-> > >                       .tx_buf = &st->spi_tx_buffer,
-> > >                       .len = sizeof(st->spi_tx_buffer),
-> > >                       .cs_change = 1,
-> > >               }, {
-> > >                       .rx_buf = &st->spi_rx_buffer,
-> > >                       .len = sizeof(st->spi_rx_buffer),
-> > >               },
-> > >       };  
-> 
-> > >       st->spi_tx_buffer = cpu_to_be16(bitrev16(FIELD_PREP(MAX14001_ADDR_MASK, reg_addr)));  
-> 
-> Here we got bits in CPU order, reversed them and converted to BE16.
-> 
-> > >       ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-> > >       if (ret)
-> > >               return ret;  
-> 
-> > >       *data = cpu_to_be16(bitrev16(st->spi_rx_buffer));  
-> 
-> Here we take __be16 response, reverse them and convert to BE16?!
-> This is weird. You should have be16_to_cpu() somewhere, not the opposite.
-Good point - though functionally they end up the same (and the bitrev
-is making mess of type markings anyway). It is more logical
-to ensure the direction is reversed as you suggest.
-
-> 
-> > >       return 0;
-> > > }  
-> 
-> Isn't, btw, the reinvented spi_...write_then_read() (or what is it
-> called?) call?
-
-I think the cs_change = 1 prevents using that.
-
-Jonathan
+On 2023/7/5 17:22, AngeloGioacchino Del Regno wrote:
+> Il 05/07/23 11:01, Yangtao Li ha scritto:
+>> Use devm_platform_ioremap_resource() to simplify code.
+>>
+>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>> ---
+>>   drivers/phy/mediatek/phy-mtk-tphy.c | 10 +++-------
+>>   1 file changed, 3 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c 
+>> b/drivers/phy/mediatek/phy-mtk-tphy.c
+>> index 0d110e50bbfd..cb7a4e6ea017 100644
+>> --- a/drivers/phy/mediatek/phy-mtk-tphy.c
+>> +++ b/drivers/phy/mediatek/phy-mtk-tphy.c
+>> @@ -1554,7 +1554,6 @@ static int mtk_tphy_probe(struct 
+>> platform_device *pdev)
+>>       struct device_node *np = dev->of_node;
+>>       struct device_node *child_np;
+>>       struct phy_provider *provider;
+>> -    struct resource *sif_res;
+>>       struct mtk_tphy *tphy;
+>>       struct resource res;
+>>       int port, retval;
+>> @@ -1576,15 +1575,12 @@ static int mtk_tphy_probe(struct 
+>> platform_device *pdev)
+>>       tphy->dev = dev;
+>>       platform_set_drvdata(pdev, tphy);
+>>   -    sif_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>       /* SATA phy of V1 needn't it if not shared with PCIe or USB */
+>> -    if (sif_res && tphy->pdata->version == MTK_PHY_V1) {
+>> +    if (tphy->pdata->version == MTK_PHY_V1) {
+>>           /* get banks shared by multiple phys */
+>> -        tphy->sif_base = devm_ioremap_resource(dev, sif_res);
+>> -        if (IS_ERR(tphy->sif_base)) {
+>> -            dev_err(dev, "failed to remap sif regs\n");
+>> +        tphy->sif_base = devm_platform_ioremap_resource(pdev, 0);
+>> +        if (IS_ERR(tphy->sif_base) && PTR_ERR(tphy->sif_base) != 
+>> -EINVAL)
+>
+> That's wrong. You want to return any error unconditionally, as the V1 
+> PHY *needs*
+> the sif iospace and there's nothing afterwards retrying this.
 
 
-> 
-> > > static int max14001_write(void *context, unsigned int reg_addr, unsigned int data)
-> > > {
-> > >       struct max14001_state *st = context;
-> > >
-> > >       st->spi_tx_buffer = cpu_to_be16(bitrev16(
-> > >                               FIELD_PREP(MAX14001_ADDR_MASK, reg_addr) |
-> > >                               FIELD_PREP(MAX14001_SET_WRITE_BIT, 1) |
-> > >                               FIELD_PREP(MAX14001_DATA_MASK, data)));
-> > >
-> > >       return spi_write(st->spi, &st->spi_tx_buffer, sizeof(st->spi_tx_buffer));
-> > > }  
-> 
+When sif_res is not configured, an IOMEM_ERR_PTR(-EINVAL) error will be 
+returned in __devm_ioremap_resource.
 
+This kind of error is ignored in the newly added code, and the driving 
+probe process will not be interrupted at this time.
+
+What did I miss?
+
+Thx,
+
+Yangtao
+
+
+>
+> Please fix.
+>
+> Regards,
+> Angelo
+>
+>>               return PTR_ERR(tphy->sif_base);
+>> -        }
+>>       }
+>>         if (tphy->pdata->version < MTK_PHY_V3) {
+>
+>
