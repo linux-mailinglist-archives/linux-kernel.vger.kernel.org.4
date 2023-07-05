@@ -2,258 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D54B747C67
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AAE747C6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjGEFZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 01:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S230236AbjGEF3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 01:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjGEFZO (ORCPT
+        with ESMTP id S229449AbjGEF3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 01:25:14 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2127.outbound.protection.outlook.com [40.107.215.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4191BE9;
-        Tue,  4 Jul 2023 22:24:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DXyF+G8knFoXG6iKThUvocFrbOIll35uPdVVyBqYevkclpw1+cJbQA0tluXxYM2+O8wjJPRM1R/INPEG0gZQR4RtcteiZO+GDnwK4FJXlHJ88qxuGNou7DWuH86Qsc8ajvAGWejl3BSVKdxAJBtmKJ59W3JM1EDQLBfseSus03ibuAu1YQHAxmNqyEPXUudAS0TSGL+AA0ulaq0psga0KctrqeKE4WdiJXui5l7Uv/js+UdwNl8Za0sQAU0RzmD5TN9lz/9av60YOGdp23/fxbpVHKn8+8oaLJZ1K7zzW08fe1uayCLVeRM9HCjiwJBnkCD+mwyFDY/Gb553aWxOOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1CxYlipi5yIx32FK1How3ukb3KrSmIrX38LmE45Mwhw=;
- b=YB0G+onFVliuZQVE/oF9uOU9FoR1+6V3apWiTOW3h0QvNf4Zv/LPZMgJOP6ORdEgxSTCB0cjmCwtQ1edNNXTycXeCDgdyyjOAsWR/RbLaSHe8hycV76ttBqmYg0EyDxXbNYWe2zjT1p0VD0AhG/US+4C/UHld0ZiNGIFDHBRW8KiKoUHKxWSOcYPVhI/KNq4JWnePiMBs2N5qSFSteE59GEJfpQC1yy1oPA8niNSYhr4fpxrXXekpXwwB/L94X1CVQ5NxNzSF7btyYUdJWms+0tVe1UTpFdMy5BSQM5cfAQn5QFDtSIYmRkbtZStgaw/IbMJghsgQwT+tv9RD0usJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1CxYlipi5yIx32FK1How3ukb3KrSmIrX38LmE45Mwhw=;
- b=BKYHWHZ2ju6GlkSKVianvoCMKvhh7zvPFjkv2jYNb/BoRMjxx+TuKnZzhHo0RXKX+b+G+ce61aEs8lsB47sRq17eSRaN4U9UJdgwETEoye1ZhtXebo+CEOyVWNiuaKEXTeSl95MB3MGHj9ucj4o+Bf18V2EbfmCrkPj4lxSbbK891eGJHJa/itOlC2NbHcTTr227QVsIAUxLc6Ozi1LgVKPmmCDlq3RLbIpTPO2ckKkQaTj6OcGHqO67fWs5dFYJOjtvX3aw/UM+RfcuJNo7Ec/6JAWxNulrJRYgU+pm8SWor2sS57UDphbtdTH1j1zghgU756u1Kq6m3uOWY4bjKQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PSAPR06MB4069.apcprd06.prod.outlook.com (2603:1096:301:37::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
- 2023 05:24:15 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 05:24:15 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-input@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/10] Input: lpc32xx_ts - Convert to use devm_* api
-Date:   Wed,  5 Jul 2023 13:23:46 +0800
-Message-Id: <20230705052346.39337-10-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230705052346.39337-1-frank.li@vivo.com>
-References: <20230705052346.39337-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0116.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Wed, 5 Jul 2023 01:29:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5C9DE;
+        Tue,  4 Jul 2023 22:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688534987; x=1720070987;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AyKcQrliDllULwiD50FRYbNd0YEXrFU3UGNmWEeCtCQ=;
+  b=nY7iws/+hz8Yfuup6JdnxlCNICEIzI+4s7EufLTcRvWqSNvlkGpkfai8
+   SMfJ8ARlbHeHsrATo+A++GzRK/cOy2ZdugxxC1tKBZijzYhP9jzsD5i2J
+   NQ3xHmp3rZDiBk8519kB9uiHvhZ2hSNl3zCmWuXGfUHFErvfBucKAYcPq
+   sAsP+0kP6BiG9CCSaaeCDydY3B81Y7WXs+71o5RC+pHSXsMGzXOwH4Wgj
+   ++liTfdz2n6GiN3AR1JPEG9gsGTZV/HBj+ps2NWdnNXdL8D6bofEBbk5C
+   JoYqofdHOzF/HastATI6X05TE9ZHGJ7Uwfm4cF3tFpQVVqxOSvq4bMwwN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="365819943"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="365819943"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 22:29:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="719107288"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="719107288"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga002.jf.intel.com with ESMTP; 04 Jul 2023 22:29:39 -0700
+Date:   Wed, 5 Jul 2023 13:29:38 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 13/22] x86/virt/tdx: Designate reserved areas for all
+ TDMRs
+Message-ID: <20230705052938.g5igtdcbklfd7bkp@yy-desk-7060>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <932971243b1b842a59d3fb2b6506823bd732db18.1687784645.git.kai.huang@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB4069:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8226bfc6-1c0f-482a-5dc1-08db7d1812a6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SgYVzOzmI0oD8qk/jgCnyDms3wdaO2xhVpINKSlghL83P6cVTdOQf4hfz8J8bQz+k0nOd8OusVTbSBhAbaHq9yA1sFFdAwdN4cfyucgxXX5g0ZKUdzdABKJYF25NkPn1rkLduIKqWt7GywtXD2tpJIpooQcBSq5X4luye2sPWryoW5ciYXJptydywmdD6byfgSYQoRb9iGWtsHSWRSs0CdxvEkK5hliki5uXZLs4mafMFJWIPU5s7E4BB0T27tWtNfz8CjMTByTCOMFuAyPB9wQBI5KBEfMpdnI96VJPk8U/OLqoRKxYzsE74sm0wD7078eecpFV2Xyrz8BMh9x7OOoMNp9fh5Ty65rQmzWkNr8rMWU7pD0t+o1mhmev7VyMD4IT2LNV4fRO5yOnBJVjIU++nq0D4/VSj1NTIEJ2xor1KVVjJLH5NXTfnqBIe3ooRYsugaop+FbwSYA5iwhceQHu1PlbeZweIgu7OaGivl0TLqfmmOM3xOutnpNMyUJ6aiq92r3nvETPKDhjqFsexMMQ9GqlhkrWvQYKEOh3lxEFVAHn5npCyBnpxu+4zixU+bCbHuEWVPtvBYymi3ZPqmEQiq1Q58N3cT6FeSe2ILwI74ezev6THY1rSlKdK2XL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(396003)(136003)(376002)(346002)(366004)(451199021)(41300700001)(8936002)(8676002)(110136005)(36756003)(6486002)(316002)(5660300002)(2906002)(66476007)(4326008)(66556008)(52116002)(6666004)(478600001)(6512007)(38100700002)(38350700002)(186003)(86362001)(66946007)(2616005)(83380400001)(6506007)(1076003)(26005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?32ixnQGnDY2JkgLPTznB+WU0PI/sLloebq5jQdVasTiWktGtt0Ii2qv4o2F8?=
- =?us-ascii?Q?jgAKESDobfS70q40+nZI4NBH1x4RUot4W09sJveC9QWwLJP/+q7s540zMlWk?=
- =?us-ascii?Q?E018GBIVurzIIycQ7rnTtghnD2R+h40IQEm7xzNTYxrKOKGJ2RN18Zt1k885?=
- =?us-ascii?Q?mjsEt7Ua05c+4N0mCXMy/M8YIaOwsDAl3dPGqIb1/e0e2prlgasze5bUc4Ei?=
- =?us-ascii?Q?ji/gdUbRTUY31crohVfpVuQ6nNVoOmGA/TpFS0MGj5jA3OTLqkKedMDEsBa4?=
- =?us-ascii?Q?S6JhmXFdbVTrsa/rH0ghpAmvc2oYE6T42Cm7+wEkteZ5ez3zd5gf70TbYdGn?=
- =?us-ascii?Q?evUu6Gbkj9vFf9bnljF5wt3SQMaFn0yfidczQR3qR7PhCww3rYnPKv3qmYvA?=
- =?us-ascii?Q?kcxizgolgZCsYKL3lvlEkMJF0EVGXVLfYb0OW5cCbGaBuYsIeyFZfv2N3DRj?=
- =?us-ascii?Q?VdxTg78pX5mEdSlMKEEh+d1qrRZzMTddSTYoqN3rbsWiqiyNvfGV8VdB59RZ?=
- =?us-ascii?Q?Z0cLX8V6jzK7ehysMGNwVHfmLAJcsbbOCbbn0DlurgI/VFufSKqxHVFtsF5O?=
- =?us-ascii?Q?0H+hlvZB9ss4jquJTgKJgbN/BMioJBj09g1spFg8czFZxpwDGlLJZvl8J8F5?=
- =?us-ascii?Q?wYQ/cxMwBMCCu4QwFwqdDU8x0om1lW1VM9cXuv7H7vlf25lGYktiu7NTrhSw?=
- =?us-ascii?Q?TuRcFXXZo2wxr06os7zOfbedrHFRyAnZW2ufuWEtuAD/kiMSu58KPCceytRP?=
- =?us-ascii?Q?iyUBTXAvY6hXGatA6ggRmZFH0BWywRhv6Fz4bPclSziDtAEpsQ8TFiUFhUWB?=
- =?us-ascii?Q?5Ba7qII5elFFlTcpJKCx6tZquMltd+ubTV1g9ND+9mLFzqfrnCbeNI5AI/gG?=
- =?us-ascii?Q?StWFNcYA27uRreGLgCSxD76fQEOvMbR5Gs/7P3ByOTDTgH5PnSjeuRGzirtT?=
- =?us-ascii?Q?q+OOdoQTvjfw4hm1XOH7MQxu93RrbfLLV9JLbqWzqyLQUB/MOrpxdSaKtebJ?=
- =?us-ascii?Q?p5YqSDTR4E7ZQyKjA/5s/dCI2fSXj02dHLMIex/8Rd7EzsU89qqu95oQXCjC?=
- =?us-ascii?Q?dmjtbmRDsa5d79uF2dGmOrrhIm4VJPnsvnsPKjq2D8d9FhFRra7H2eRe2zpG?=
- =?us-ascii?Q?Dt7h040tT6qznk+JBQIWWPvtn+TzHjxFuCZkQOjdx3IIOLMNOPiyc9ldq620?=
- =?us-ascii?Q?R3+9YOgx6DTzGoahXWHWR445Mx5YAiHI1FnFBjPLDttknNt5t/Y4h3XFCmPj?=
- =?us-ascii?Q?SC4wii/jxQ0dMpbFrJhOq7uBn66T1dEaB/NmiHAHuK4aOJzKtJ0t1nuBf/Uf?=
- =?us-ascii?Q?3aGy6mqbjjHcMnL4Wio5WcbFHFHMxvbEqjULqGijZd0qWuu0NIKmg5NyFQsf?=
- =?us-ascii?Q?3oBBH+c8tmPJBdTh87bx/t3Ffw9r3RukqSYCuQYWXPEIegq77O7GgItTAAXi?=
- =?us-ascii?Q?E9uaFREviCmcA3i+XX5X9eWNLfvIe8xSC6gLMABShiq42n9oXXMxL9Jf0v6W?=
- =?us-ascii?Q?cu0alh2cPjalDqsbopoLUHVmu5hQ+rpERm6RO4L7+QMBLQieREXv3ITyMu59?=
- =?us-ascii?Q?s5aT3JEY2TE7PV6VOICfdbQQHENAxV9QrIJcWXKD?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8226bfc6-1c0f-482a-5dc1-08db7d1812a6
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 05:24:15.0213
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UHUydFxrhfKhfAltxvIWmlqn2pBt2SK/UJs4Q9Qv2fDKrBb47QPVoIVL2qtfmTBs9gVM0fsoeAmLSX+1ZlBgMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4069
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <932971243b1b842a59d3fb2b6506823bd732db18.1687784645.git.kai.huang@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_* api to simplify code, this makes it unnecessary to explicitly
-release resources.
+On Tue, Jun 27, 2023 at 02:12:43AM +1200, Kai Huang wrote:
+> As the last step of constructing TDMRs, populate reserved areas for all
+> TDMRs.  For each TDMR, put all memory holes within this TDMR to the
+> reserved areas.  And for all PAMTs which overlap with this TDMR, put
+> all the overlapping parts to reserved areas too.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/input/touchscreen/lpc32xx_ts.c | 75 +++++---------------------
- 1 file changed, 14 insertions(+), 61 deletions(-)
+Reviewed-by: Yuan Yao <yuan.yao@intel.com>
 
-diff --git a/drivers/input/touchscreen/lpc32xx_ts.c b/drivers/input/touchscreen/lpc32xx_ts.c
-index ffdd748a9992..d30ce1380f72 100644
---- a/drivers/input/touchscreen/lpc32xx_ts.c
-+++ b/drivers/input/touchscreen/lpc32xx_ts.c
-@@ -198,54 +198,34 @@ static void lpc32xx_ts_close(struct input_dev *dev)
- 
- static int lpc32xx_ts_probe(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
- 	struct lpc32xx_tsc *tsc;
- 	struct input_dev *input;
--	struct resource *res;
--	resource_size_t size;
- 	int irq;
- 	int error;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "Can't get memory resource\n");
--		return -ENOENT;
--	}
--
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return irq;
- 
--	tsc = kzalloc(sizeof(*tsc), GFP_KERNEL);
--	input = input_allocate_device();
-+	tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
-+	input = devm_input_allocate_device(dev);
- 	if (!tsc || !input) {
- 		dev_err(&pdev->dev, "failed allocating memory\n");
--		error = -ENOMEM;
--		goto err_free_mem;
-+		return -ENOMEM;
- 	}
- 
- 	tsc->dev = input;
- 	tsc->irq = irq;
- 
--	size = resource_size(res);
--
--	if (!request_mem_region(res->start, size, pdev->name)) {
--		dev_err(&pdev->dev, "TSC registers are not free\n");
--		error = -EBUSY;
--		goto err_free_mem;
--	}
--
--	tsc->tsc_base = ioremap(res->start, size);
--	if (!tsc->tsc_base) {
--		dev_err(&pdev->dev, "Can't map memory\n");
--		error = -ENOMEM;
--		goto err_release_mem;
--	}
-+	tsc->tsc_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(tsc->tsc_base))
-+		return PTR_ERR(tsc->tsc_base);
- 
--	tsc->clk = clk_get(&pdev->dev, NULL);
-+	tsc->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(tsc->clk)) {
- 		dev_err(&pdev->dev, "failed getting clock\n");
--		error = PTR_ERR(tsc->clk);
--		goto err_unmap;
-+		return PTR_ERR(tsc->clk);
- 	}
- 
- 	input->name = MOD_NAME;
-@@ -267,58 +247,31 @@ static int lpc32xx_ts_probe(struct platform_device *pdev)
- 
- 	input_set_drvdata(input, tsc);
- 
--	error = request_irq(tsc->irq, lpc32xx_ts_interrupt,
--			    0, pdev->name, tsc);
-+	error = devm_request_irq(dev, tsc->irq, lpc32xx_ts_interrupt,
-+				 0, pdev->name, tsc);
- 	if (error) {
- 		dev_err(&pdev->dev, "failed requesting interrupt\n");
--		goto err_put_clock;
-+		return error;
- 	}
- 
- 	error = input_register_device(input);
- 	if (error) {
- 		dev_err(&pdev->dev, "failed registering input device\n");
--		goto err_free_irq;
-+		return error;
- 	}
- 
- 	platform_set_drvdata(pdev, tsc);
--	device_init_wakeup(&pdev->dev, 1);
-+	device_init_wakeup(&pdev->dev, true);
- 
- 	return 0;
--
--err_free_irq:
--	free_irq(tsc->irq, tsc);
--err_put_clock:
--	clk_put(tsc->clk);
--err_unmap:
--	iounmap(tsc->tsc_base);
--err_release_mem:
--	release_mem_region(res->start, size);
--err_free_mem:
--	input_free_device(input);
--	kfree(tsc);
--
--	return error;
- }
- 
- static int lpc32xx_ts_remove(struct platform_device *pdev)
- {
- 	struct lpc32xx_tsc *tsc = platform_get_drvdata(pdev);
--	struct resource *res;
- 
- 	lpc32xx_stop_tsc(tsc);
- 
--	free_irq(tsc->irq, tsc);
--
--	input_unregister_device(tsc->dev);
--
--	clk_put(tsc->clk);
--
--	iounmap(tsc->tsc_base);
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	release_mem_region(res->start, resource_size(res));
--
--	kfree(tsc);
--
- 	return 0;
- }
- 
--- 
-2.39.0
-
+>
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> ---
+>
+> v11 -> v12:
+>  - Code change due to tdmr_get_pamt() change from returning pfn/npages to
+>    base/size
+>  - Added Kirill's tag
+>
+> v10 -> v11:
+>  - No update
+>
+> v9 -> v10:
+>  - No change.
+>
+> v8 -> v9:
+>  - Added comment around 'tdmr_add_rsvd_area()' to point out it doesn't do
+>    optimization to save reserved areas. (Dave).
+>
+> v7 -> v8: (Dave)
+>  - "set_up" -> "populate" in function name change (Dave).
+>  - Improved comment suggested by Dave.
+>  - Other changes due to 'struct tdmr_info_list'.
+>
+> v6 -> v7:
+>  - No change.
+>
+> v5 -> v6:
+>  - Rebase due to using 'tdx_memblock' instead of memblock.
+>  - Split tdmr_set_up_rsvd_areas() into two functions to handle memory
+>    hole and PAMT respectively.
+>  - Added Isaku's Reviewed-by.
+>
+>
+> ---
+>  arch/x86/virt/vmx/tdx/tdx.c | 217 ++++++++++++++++++++++++++++++++++--
+>  1 file changed, 209 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index fd5417577f26..2bcace5cb25c 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/sizes.h>
+>  #include <linux/pfn.h>
+>  #include <linux/align.h>
+> +#include <linux/sort.h>
+>  #include <asm/msr-index.h>
+>  #include <asm/msr.h>
+>  #include <asm/archrandom.h>
+> @@ -634,6 +635,207 @@ static unsigned long tdmrs_count_pamt_kb(struct tdmr_info_list *tdmr_list)
+>  	return pamt_size / 1024;
+>  }
+>
+> +static int tdmr_add_rsvd_area(struct tdmr_info *tdmr, int *p_idx, u64 addr,
+> +			      u64 size, u16 max_reserved_per_tdmr)
+> +{
+> +	struct tdmr_reserved_area *rsvd_areas = tdmr->reserved_areas;
+> +	int idx = *p_idx;
+> +
+> +	/* Reserved area must be 4K aligned in offset and size */
+> +	if (WARN_ON(addr & ~PAGE_MASK || size & ~PAGE_MASK))
+> +		return -EINVAL;
+> +
+> +	if (idx >= max_reserved_per_tdmr) {
+> +		pr_warn("initialization failed: TDMR [0x%llx, 0x%llx): reserved areas exhausted.\n",
+> +				tdmr->base, tdmr_end(tdmr));
+> +		return -ENOSPC;
+> +	}
+> +
+> +	/*
+> +	 * Consume one reserved area per call.  Make no effort to
+> +	 * optimize or reduce the number of reserved areas which are
+> +	 * consumed by contiguous reserved areas, for instance.
+> +	 */
+> +	rsvd_areas[idx].offset = addr - tdmr->base;
+> +	rsvd_areas[idx].size = size;
+> +
+> +	*p_idx = idx + 1;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Go through @tmb_list to find holes between memory areas.  If any of
+> + * those holes fall within @tdmr, set up a TDMR reserved area to cover
+> + * the hole.
+> + */
+> +static int tdmr_populate_rsvd_holes(struct list_head *tmb_list,
+> +				    struct tdmr_info *tdmr,
+> +				    int *rsvd_idx,
+> +				    u16 max_reserved_per_tdmr)
+> +{
+> +	struct tdx_memblock *tmb;
+> +	u64 prev_end;
+> +	int ret;
+> +
+> +	/*
+> +	 * Start looking for reserved blocks at the
+> +	 * beginning of the TDMR.
+> +	 */
+> +	prev_end = tdmr->base;
+> +	list_for_each_entry(tmb, tmb_list, list) {
+> +		u64 start, end;
+> +
+> +		start = PFN_PHYS(tmb->start_pfn);
+> +		end   = PFN_PHYS(tmb->end_pfn);
+> +
+> +		/* Break if this region is after the TDMR */
+> +		if (start >= tdmr_end(tdmr))
+> +			break;
+> +
+> +		/* Exclude regions before this TDMR */
+> +		if (end < tdmr->base)
+> +			continue;
+> +
+> +		/*
+> +		 * Skip over memory areas that
+> +		 * have already been dealt with.
+> +		 */
+> +		if (start <= prev_end) {
+> +			prev_end = end;
+> +			continue;
+> +		}
+> +
+> +		/* Add the hole before this region */
+> +		ret = tdmr_add_rsvd_area(tdmr, rsvd_idx, prev_end,
+> +				start - prev_end,
+> +				max_reserved_per_tdmr);
+> +		if (ret)
+> +			return ret;
+> +
+> +		prev_end = end;
+> +	}
+> +
+> +	/* Add the hole after the last region if it exists. */
+> +	if (prev_end < tdmr_end(tdmr)) {
+> +		ret = tdmr_add_rsvd_area(tdmr, rsvd_idx, prev_end,
+> +				tdmr_end(tdmr) - prev_end,
+> +				max_reserved_per_tdmr);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Go through @tdmr_list to find all PAMTs.  If any of those PAMTs
+> + * overlaps with @tdmr, set up a TDMR reserved area to cover the
+> + * overlapping part.
+> + */
+> +static int tdmr_populate_rsvd_pamts(struct tdmr_info_list *tdmr_list,
+> +				    struct tdmr_info *tdmr,
+> +				    int *rsvd_idx,
+> +				    u16 max_reserved_per_tdmr)
+> +{
+> +	int i, ret;
+> +
+> +	for (i = 0; i < tdmr_list->nr_consumed_tdmrs; i++) {
+> +		struct tdmr_info *tmp = tdmr_entry(tdmr_list, i);
+> +		unsigned long pamt_base, pamt_size, pamt_end;
+> +
+> +		tdmr_get_pamt(tmp, &pamt_base, &pamt_size);
+> +		/* Each TDMR must already have PAMT allocated */
+> +		WARN_ON_ONCE(!pamt_size|| !pamt_base);
+> +
+> +		pamt_end = pamt_base + pamt_size;
+> +		/* Skip PAMTs outside of the given TDMR */
+> +		if ((pamt_end <= tdmr->base) ||
+> +				(pamt_base >= tdmr_end(tdmr)))
+> +			continue;
+> +
+> +		/* Only mark the part within the TDMR as reserved */
+> +		if (pamt_base < tdmr->base)
+> +			pamt_base = tdmr->base;
+> +		if (pamt_end > tdmr_end(tdmr))
+> +			pamt_end = tdmr_end(tdmr);
+> +
+> +		ret = tdmr_add_rsvd_area(tdmr, rsvd_idx, pamt_base,
+> +				pamt_end - pamt_base,
+> +				max_reserved_per_tdmr);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/* Compare function called by sort() for TDMR reserved areas */
+> +static int rsvd_area_cmp_func(const void *a, const void *b)
+> +{
+> +	struct tdmr_reserved_area *r1 = (struct tdmr_reserved_area *)a;
+> +	struct tdmr_reserved_area *r2 = (struct tdmr_reserved_area *)b;
+> +
+> +	if (r1->offset + r1->size <= r2->offset)
+> +		return -1;
+> +	if (r1->offset >= r2->offset + r2->size)
+> +		return 1;
+> +
+> +	/* Reserved areas cannot overlap.  The caller must guarantee. */
+> +	WARN_ON_ONCE(1);
+> +	return -1;
+> +}
+> +
+> +/*
+> + * Populate reserved areas for the given @tdmr, including memory holes
+> + * (via @tmb_list) and PAMTs (via @tdmr_list).
+> + */
+> +static int tdmr_populate_rsvd_areas(struct tdmr_info *tdmr,
+> +				    struct list_head *tmb_list,
+> +				    struct tdmr_info_list *tdmr_list,
+> +				    u16 max_reserved_per_tdmr)
+> +{
+> +	int ret, rsvd_idx = 0;
+> +
+> +	ret = tdmr_populate_rsvd_holes(tmb_list, tdmr, &rsvd_idx,
+> +			max_reserved_per_tdmr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = tdmr_populate_rsvd_pamts(tdmr_list, tdmr, &rsvd_idx,
+> +			max_reserved_per_tdmr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* TDX requires reserved areas listed in address ascending order */
+> +	sort(tdmr->reserved_areas, rsvd_idx, sizeof(struct tdmr_reserved_area),
+> +			rsvd_area_cmp_func, NULL);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Populate reserved areas for all TDMRs in @tdmr_list, including memory
+> + * holes (via @tmb_list) and PAMTs.
+> + */
+> +static int tdmrs_populate_rsvd_areas_all(struct tdmr_info_list *tdmr_list,
+> +					 struct list_head *tmb_list,
+> +					 u16 max_reserved_per_tdmr)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < tdmr_list->nr_consumed_tdmrs; i++) {
+> +		int ret;
+> +
+> +		ret = tdmr_populate_rsvd_areas(tdmr_entry(tdmr_list, i),
+> +				tmb_list, tdmr_list, max_reserved_per_tdmr);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Construct a list of TDMRs on the preallocated space in @tdmr_list
+>   * to cover all TDX memory regions in @tmb_list based on the TDX module
+> @@ -653,14 +855,13 @@ static int construct_tdmrs(struct list_head *tmb_list,
+>  			sysinfo->pamt_entry_size);
+>  	if (ret)
+>  		return ret;
+> -	/*
+> -	 * TODO:
+> -	 *
+> -	 *  - Designate reserved areas for each TDMR.
+> -	 *
+> -	 * Return -EINVAL until constructing TDMRs is done
+> -	 */
+> -	return -EINVAL;
+> +
+> +	ret = tdmrs_populate_rsvd_areas_all(tdmr_list, tmb_list,
+> +			sysinfo->max_reserved_per_tdmr);
+> +	if (ret)
+> +		tdmrs_free_pamt_all(tdmr_list);
+> +
+> +	return ret;
+>  }
+>
+>  static int init_tdx_module(void)
+> --
+> 2.40.1
+>
