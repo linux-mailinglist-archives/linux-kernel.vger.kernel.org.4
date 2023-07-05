@@ -2,90 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04ED749482
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D92749493
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 06:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbjGFECy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 00:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S232960AbjGFEJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 00:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbjGFECv (ORCPT
+        with ESMTP id S232164AbjGFEJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 00:02:51 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B49419A0;
-        Wed,  5 Jul 2023 21:02:49 -0700 (PDT)
-Received: from pride-poweredge-r740.. ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 36642GKw008403-36642GL1008403
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 6 Jul 2023 12:02:21 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] wifi: ath9k: fix printk specifier
-Date:   Thu,  6 Jul 2023 12:02:14 +0800
-Message-Id: <20230706040214.62324-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jul 2023 00:09:04 -0400
+Received: from server113.hostingvirtuale.com (server113.hostingvirtuale.com [185.31.67.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E8F68F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 21:09:01 -0700 (PDT)
+Received: by server113.hostingvirtuale.com (Postfix, from userid 1501)
+        id E12AB1455D3; Wed,  5 Jul 2023 08:19:02 +0200 (CEST)
+To:     linux-kernel@vger.kernel.org
+Subject: Loan/Investment offer.
+X-PHP-Originating-Script: 1501:mach.php(6) : eval()'d code
+Date:   Wed, 5 Jul 2023 08:19:02 +0200
+From:   Frank Dawson <support@autiliavolpe.it>
+Reply-To: frankjody2@gmail.com
+Message-ID: <6b2a775cde5edb35b0a76027fd1b8cb1@autiliavolpe.it>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_50,DATE_IN_PAST_12_24,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
-
-ath_pci_probe() warn: argument 4 to %lx specifier is cast from pointer
-ath_ahb_probe() warn: argument 4 to %lx specifier is cast from pointer
-
-Fix it by modifying %lx to %p in printk.
-
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v1->v2: modify %px to %p
-
- drivers/net/wireless/ath/ath9k/ahb.c | 4 ++--
- drivers/net/wireless/ath/ath9k/pci.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath9k/ahb.c b/drivers/net/wireless/ath/ath9k/ahb.c
-index 9cd12b20b18d..a683757eecd4 100644
---- a/drivers/net/wireless/ath/ath9k/ahb.c
-+++ b/drivers/net/wireless/ath/ath9k/ahb.c
-@@ -132,8 +132,8 @@ static int ath_ahb_probe(struct platform_device *pdev)
- 
- 	ah = sc->sc_ah;
- 	ath9k_hw_name(ah, hw_name, sizeof(hw_name));
--	wiphy_info(hw->wiphy, "%s mem=0x%lx, irq=%d\n",
--		   hw_name, (unsigned long)mem, irq);
-+	wiphy_info(hw->wiphy, "%s mem=0x%px, irq=%d\n",
-+		   hw_name, mem, irq);
- 
- 	return 0;
- 
-diff --git a/drivers/net/wireless/ath/ath9k/pci.c b/drivers/net/wireless/ath/ath9k/pci.c
-index a09f9d223f3d..12c00c7c1408 100644
---- a/drivers/net/wireless/ath/ath9k/pci.c
-+++ b/drivers/net/wireless/ath/ath9k/pci.c
-@@ -988,8 +988,8 @@ static int ath_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	sc->sc_ah->msi_reg = 0;
- 
- 	ath9k_hw_name(sc->sc_ah, hw_name, sizeof(hw_name));
--	wiphy_info(hw->wiphy, "%s mem=0x%lx, irq=%d\n",
--		   hw_name, (unsigned long)sc->mem, pdev->irq);
-+	wiphy_info(hw->wiphy, "%s mem=0x%px, irq=%d\n",
-+		   hw_name, sc->mem, pdev->irq);
- 
- 	return 0;
- 
--- 
-2.34.1
+Hello.
+I am Frank Jody Dawson, I have investors and they are seeking to invest in any lucrative venture worldwide, like aviation, real estate, agriculture, industrial, medical equipment and renewable energy. My investors are mainly from the Arabian countries who are widely in real estate and oil and gas, but now they want to expand their businesses across the globe in any lucrative business.
+Your profile caught my attention so I decided to message and see if we
+can work together?
+Thank you,
+Frank.
 
