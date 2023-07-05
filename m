@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53DB7488B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6FD7488B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbjGEP7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S233231AbjGEP7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbjGEP67 (ORCPT
+        with ESMTP id S232259AbjGEP7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:58:59 -0400
+        Wed, 5 Jul 2023 11:59:20 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F011BD3;
-        Wed,  5 Jul 2023 08:58:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA801BCD;
+        Wed,  5 Jul 2023 08:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688572704; x=1720108704;
+  t=1688572735; x=1720108735;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=t1UK57w3Izjms+4BsBLN30HqsRfALnaSnOTPF/eAPC8=;
-  b=WFf2R02gZxnZtHFANSumfg8J2PDLjZWHX8Y1V1Xu7RjTZPuQjCvXXVRH
-   CC1YWUHQAdUzMxyf4a3VL+/DfbQTrn/F4l0MYFjCvYqioBtQmcCYGXUM/
-   y1Edn+NvxNXEF9NjuZEhAzdh/pBPXuwSNXyAJKyqnp3nHYH6Xurt91imG
-   WeUVXgKNFCxKQUJdRjTwSWntdGZ9Zask/WnW3fdldzJGZ9sKlISxFSpbH
-   4x/jL06wbnZrDG1qPa/FJ76bVTZZ9p/E8qqQ5i3OjexSHy64hegnvEl7Z
-   KxDHVkQYiFJAlJlCXv8nQAGmulSCB1uaC/Szu9ikD131gsIboCf5/OWx0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="366863581"
+  bh=z7YNTR0ydk9mlfvqRWOxxEghkEcNLyQUUMSH+SFkzeg=;
+  b=Lk6Lg54cB7Zd76+kSu6sbkwLwX96wdiuzOyrbCV+huZEf/xL+Oej40v0
+   2u6UjF9Sakp61ZLANtJ2otqesIdKGq63bDzYOhve4ULPUMs8Ymx4RAUdv
+   v7GDDWD8EUorlywRvyPCEuWjPdjbD7jT3aExxW5DXt7WDN9FbghorCu2v
+   oS8OrPIH0buQlydLZ/ZFr6i11Gw+qVJV6IFdl7jbRZzsRKWhjZG5TMi5G
+   gKfokqHK0yXqh1FbhKoj8qqpTtK4y0KGwcDMwkTM5bmUAqlvCvCDYuE5g
+   DDscwOrvaol8x15AVsWfkHoyFd3XeqkmXgUPFaDyNKMpPMtueiLxg9G5x
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="366863612"
 X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="366863581"
+   d="scan'208";a="366863612"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 08:58:07 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 08:58:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="789205678"
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="789205697"
 X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="789205678"
+   d="scan'208";a="789205697"
 Received: from newjersey.igk.intel.com ([10.102.20.203])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2023 08:58:00 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jul 2023 08:58:04 -0700
 From:   Alexander Lobakin <aleksander.lobakin@intel.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -55,9 +55,9 @@ Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
         intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RFC net-next v4 7/9] libie: add common queue stats
-Date:   Wed,  5 Jul 2023 17:55:49 +0200
-Message-ID: <20230705155551.1317583-8-aleksander.lobakin@intel.com>
+Subject: [PATCH RFC net-next v4 8/9] libie: add per-queue Page Pool stats
+Date:   Wed,  5 Jul 2023 17:55:50 +0200
+Message-ID: <20230705155551.1317583-9-aleksander.lobakin@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230705155551.1317583-1-aleksander.lobakin@intel.com>
 References: <20230705155551.1317583-1-aleksander.lobakin@intel.com>
@@ -73,345 +73,297 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Next stop, per-queue private stats. They have only subtle differences
-from driver to driver and can easily be resolved.
-Define common structures, inline helpers and Ethtool helpers to collect,
-update and export the statistics. Use u64_stats_t right from the start,
-as well as the corresponding helpers to ensure tear-free operations.
-For the NAPI parts of both Rx and Tx, also define small onstack
-containers to update them in polling loops and then sync the actual
-containers once a loop ends.
-The drivers will be switched to use this API later on a per-driver
-basis, along with conversion to PP.
+Expand the libie generic per-queue stats with the generic Page Pool
+stats provided by the API itself, when CONFIG_PAGE_POOL is enabled.
+When it's not, there'll be no such fields in the stats structure, so
+no space wasted.
+They are also a bit special in terms of how they are obtained. One
+&page_pool accumulates statistics until it's destroyed obviously,
+which happens on ifdown. So, in order to not lose any statistics,
+get the stats and store in the queue container before destroying
+a pool. This container survives ifups/downs, so it basically stores
+the statistics accumulated since the very first pool was allocated
+on this queue. When it's needed to export the stats, first get the
+numbers from this container and then add the "live" numbers -- the
+ones that the current active pool returns. The result values will
+always represent the actual device-lifetime* stats.
+There's a cast from &page_pool_stats to `u64 *` in a couple functions,
+but they are guarded with stats asserts to make sure it's safe to do.
+FWIW it saves a lot of object code.
 
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
 Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 ---
- drivers/net/ethernet/intel/libie/Makefile |   1 +
- drivers/net/ethernet/intel/libie/stats.c  | 119 ++++++++++++++
- include/linux/net/intel/libie/stats.h     | 179 ++++++++++++++++++++++
- 3 files changed, 299 insertions(+)
- create mode 100644 drivers/net/ethernet/intel/libie/stats.c
- create mode 100644 include/linux/net/intel/libie/stats.h
+ drivers/net/ethernet/intel/libie/internal.h | 23 +++++++
+ drivers/net/ethernet/intel/libie/rx.c       | 19 ++++++
+ drivers/net/ethernet/intel/libie/stats.c    | 73 ++++++++++++++++++++-
+ include/linux/net/intel/libie/rx.h          |  4 ++
+ include/linux/net/intel/libie/stats.h       | 39 ++++++++++-
+ 5 files changed, 155 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/net/ethernet/intel/libie/internal.h
 
-diff --git a/drivers/net/ethernet/intel/libie/Makefile b/drivers/net/ethernet/intel/libie/Makefile
-index 95e81d09b474..76f32253481b 100644
---- a/drivers/net/ethernet/intel/libie/Makefile
-+++ b/drivers/net/ethernet/intel/libie/Makefile
-@@ -4,3 +4,4 @@
- obj-$(CONFIG_LIBIE)	+= libie.o
- 
- libie-objs		+= rx.o
-+libie-objs		+= stats.o
-diff --git a/drivers/net/ethernet/intel/libie/stats.c b/drivers/net/ethernet/intel/libie/stats.c
+diff --git a/drivers/net/ethernet/intel/libie/internal.h b/drivers/net/ethernet/intel/libie/internal.h
 new file mode 100644
-index 000000000000..61456842a362
+index 000000000000..083398dc37c6
 --- /dev/null
-+++ b/drivers/net/ethernet/intel/libie/stats.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2023 Intel Corporation. */
-+
-+#include <linux/ethtool.h>
-+#include <linux/net/intel/libie/stats.h>
-+
-+/* Rx per-queue stats */
-+
-+static const char * const libie_rq_stats_str[] = {
-+#define act(s)	__stringify(s),
-+	DECLARE_LIBIE_RQ_STATS(act)
-+#undef act
-+};
-+
-+#define LIBIE_RQ_STATS_NUM	ARRAY_SIZE(libie_rq_stats_str)
-+
-+/**
-+ * libie_rq_stats_get_sset_count - get the number of Ethtool RQ stats provided
-+ *
-+ * Returns the number of per-queue Rx stats supported by the library.
-+ */
-+u32 libie_rq_stats_get_sset_count(void)
-+{
-+	return LIBIE_RQ_STATS_NUM;
-+}
-+EXPORT_SYMBOL_NS_GPL(libie_rq_stats_get_sset_count, LIBIE);
-+
-+/**
-+ * libie_rq_stats_get_strings - get the name strings of Ethtool RQ stats
-+ * @data: reference to the cursor pointing to the output buffer
-+ * @qid: RQ number to print in the prefix
-+ */
-+void libie_rq_stats_get_strings(u8 **data, u32 qid)
-+{
-+	for (u32 i = 0; i < LIBIE_RQ_STATS_NUM; i++)
-+		ethtool_sprintf(data, "rq%u_%s", qid, libie_rq_stats_str[i]);
-+}
-+EXPORT_SYMBOL_NS_GPL(libie_rq_stats_get_strings, LIBIE);
-+
-+/**
-+ * libie_rq_stats_get_data - get the RQ stats in Ethtool format
-+ * @data: reference to the cursor pointing to the output array
-+ * @stats: RQ stats container from the queue
-+ */
-+void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats)
-+{
-+	u64 sarr[LIBIE_RQ_STATS_NUM];
-+	u32 start;
-+
-+	do {
-+		start = u64_stats_fetch_begin(&stats->syncp);
-+
-+		for (u32 i = 0; i < LIBIE_RQ_STATS_NUM; i++)
-+			sarr[i] = u64_stats_read(&stats->raw[i]);
-+	} while (u64_stats_fetch_retry(&stats->syncp, start));
-+
-+	for (u32 i = 0; i < LIBIE_RQ_STATS_NUM; i++)
-+		(*data)[i] += sarr[i];
-+
-+	*data += LIBIE_RQ_STATS_NUM;
-+}
-+EXPORT_SYMBOL_NS_GPL(libie_rq_stats_get_data, LIBIE);
-+
-+/* Tx per-queue stats */
-+
-+static const char * const libie_sq_stats_str[] = {
-+#define act(s)	__stringify(s),
-+	DECLARE_LIBIE_SQ_STATS(act)
-+#undef act
-+};
-+
-+#define LIBIE_SQ_STATS_NUM	ARRAY_SIZE(libie_sq_stats_str)
-+
-+/**
-+ * libie_sq_stats_get_sset_count - get the number of Ethtool SQ stats provided
-+ *
-+ * Returns the number of per-queue Tx stats supported by the library.
-+ */
-+u32 libie_sq_stats_get_sset_count(void)
-+{
-+	return LIBIE_SQ_STATS_NUM;
-+}
-+EXPORT_SYMBOL_NS_GPL(libie_sq_stats_get_sset_count, LIBIE);
-+
-+/**
-+ * libie_sq_stats_get_strings - get the name strings of Ethtool SQ stats
-+ * @data: reference to the cursor pointing to the output buffer
-+ * @qid: SQ number to print in the prefix
-+ */
-+void libie_sq_stats_get_strings(u8 **data, u32 qid)
-+{
-+	for (u32 i = 0; i < LIBIE_SQ_STATS_NUM; i++)
-+		ethtool_sprintf(data, "sq%u_%s", qid, libie_sq_stats_str[i]);
-+}
-+EXPORT_SYMBOL_NS_GPL(libie_sq_stats_get_strings, LIBIE);
-+
-+/**
-+ * libie_sq_stats_get_data - get the SQ stats in Ethtool format
-+ * @data: reference to the cursor pointing to the output array
-+ * @stats: SQ stats container from the queue
-+ */
-+void libie_sq_stats_get_data(u64 **data, const struct libie_sq_stats *stats)
-+{
-+	u64 sarr[LIBIE_SQ_STATS_NUM];
-+	u32 start;
-+
-+	do {
-+		start = u64_stats_fetch_begin(&stats->syncp);
-+
-+		for (u32 i = 0; i < LIBIE_SQ_STATS_NUM; i++)
-+			sarr[i] = u64_stats_read(&stats->raw[i]);
-+	} while (u64_stats_fetch_retry(&stats->syncp, start));
-+
-+	for (u32 i = 0; i < LIBIE_SQ_STATS_NUM; i++)
-+		(*data)[i] += sarr[i];
-+
-+	*data += LIBIE_SQ_STATS_NUM;
-+}
-+EXPORT_SYMBOL_NS_GPL(libie_sq_stats_get_data, LIBIE);
-diff --git a/include/linux/net/intel/libie/stats.h b/include/linux/net/intel/libie/stats.h
-new file mode 100644
-index 000000000000..dbbc98bbd3a7
---- /dev/null
-+++ b/include/linux/net/intel/libie/stats.h
-@@ -0,0 +1,179 @@
++++ b/drivers/net/ethernet/intel/libie/internal.h
+@@ -0,0 +1,23 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright(c) 2023 Intel Corporation. */
-+
-+#ifndef __LIBIE_STATS_H
-+#define __LIBIE_STATS_H
-+
-+#include <linux/u64_stats_sync.h>
-+
-+/* Common */
-+
-+/* Use 32-byte alignment to reduce false sharing */
-+#define __libie_stats_aligned	__aligned(4 * sizeof(u64_stats_t))
-+
-+/**
-+ * libie_stats_add - update one structure counter from a local struct
-+ * @qs: queue stats structure to update (&libie_rq_stats or &libie_sq_stats)
-+ * @ss: local/onstack stats structure
-+ * @f: name of the field to update
++/* libie internal declarations not to be used in drivers.
 + *
-+ * If a local/onstack stats structure is used to collect statistics during
-+ * hotpath loops, this macro can be used to shorthand updates, given that
-+ * the fields have the same name.
-+ * Must be guarded with u64_stats_update_{begin,end}().
-+ */
-+#define libie_stats_add(qs, ss, f)			\
-+	u64_stats_add(&(qs)->f, (ss)->f)
-+
-+/**
-+ * __libie_stats_inc_one - safely increment one stats structure counter
-+ * @s: queue stats structure to update (&libie_rq_stats or &libie_sq_stats)
-+ * @f: name of the field to increment
-+ * @n: name of the temporary variable, result of __UNIQUE_ID()
-+ *
-+ * To be used on exception or slow paths -- allocation fails, queue stops etc.
-+ */
-+#define __libie_stats_inc_one(s, f, n) ({		\
-+	typeof(*(s)) *n = (s);				\
-+							\
-+	u64_stats_update_begin(&n->syncp);		\
-+	u64_stats_inc(&n->f);				\
-+	u64_stats_update_end(&n->syncp);		\
-+})
-+#define libie_stats_inc_one(s, f)			\
-+	__libie_stats_inc_one(s, f, __UNIQUE_ID(qs_))
-+
-+/* Rx per-queue stats:
-+ * packets: packets received on this queue
-+ * bytes: bytes received on this queue
-+ * fragments: number of processed descriptors carrying only a fragment
-+ * alloc_page_fail: number of Rx page allocation fails
-+ * build_skb_fail: number of build_skb() fails
++ * Copyright(c) 2023 Intel Corporation.
 + */
 +
-+#define DECLARE_LIBIE_RQ_NAPI_STATS(act)		\
-+	act(packets)					\
-+	act(bytes)					\
-+	act(fragments)
++#ifndef __LIBIE_INTERNAL_H
++#define __LIBIE_INTERNAL_H
 +
-+#define DECLARE_LIBIE_RQ_FAIL_STATS(act)		\
-+	act(alloc_page_fail)				\
-+	act(build_skb_fail)
++struct libie_rq_stats;
++struct page_pool;
 +
-+#define DECLARE_LIBIE_RQ_STATS(act)			\
-+	DECLARE_LIBIE_RQ_NAPI_STATS(act)		\
-+	DECLARE_LIBIE_RQ_FAIL_STATS(act)
-+
-+struct libie_rq_stats {
-+	struct u64_stats_sync	syncp;
-+
-+	union {
-+		struct {
-+#define act(s)	u64_stats_t	s;
-+			DECLARE_LIBIE_RQ_NAPI_STATS(act);
-+			DECLARE_LIBIE_RQ_FAIL_STATS(act);
-+#undef act
-+		};
-+		DECLARE_FLEX_ARRAY(u64_stats_t, raw);
-+	};
-+} __libie_stats_aligned;
-+
-+/* Rx stats being modified frequently during the NAPI polling, to sync them
-+ * with the queue stats once after the loop is finished.
-+ */
-+struct libie_rq_onstack_stats {
-+	union {
-+		struct {
-+#define act(s)	u32		s;
-+			DECLARE_LIBIE_RQ_NAPI_STATS(act);
-+#undef act
-+		};
-+		DECLARE_FLEX_ARRAY(u32, raw);
-+	};
-+};
-+
-+/**
-+ * libie_rq_napi_stats_add - add onstack Rx stats to the queue container
-+ * @qs: Rx queue stats structure to update
-+ * @ss: onstack structure to get the values from, updated during the NAPI loop
-+ */
-+static inline void
-+libie_rq_napi_stats_add(struct libie_rq_stats *qs,
-+			const struct libie_rq_onstack_stats *ss)
++#ifdef CONFIG_PAGE_POOL_STATS
++void libie_rq_stats_sync_pp(struct libie_rq_stats *stats,
++			    struct page_pool *pool);
++#else
++static inline void libie_rq_stats_sync_pp(struct libie_rq_stats *stats,
++					  struct page_pool *pool)
 +{
-+	u64_stats_update_begin(&qs->syncp);
-+	libie_stats_add(qs, ss, packets);
-+	libie_stats_add(qs, ss, bytes);
-+	libie_stats_add(qs, ss, fragments);
-+	u64_stats_update_end(&qs->syncp);
 +}
++#endif
 +
-+u32 libie_rq_stats_get_sset_count(void);
-+void libie_rq_stats_get_strings(u8 **data, u32 qid);
-+void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats);
-+
-+/* Tx per-queue stats:
-+ * packets: packets sent from this queue
-+ * bytes: bytes sent from this queue
-+ * busy: number of xmit failures due to the ring being full
-+ * stops: number times the ring was stopped from the driver
-+ * restarts: number times it was started after being stopped
-+ * linearized: number of skbs linearized due to HW limits
-+ */
-+
-+#define DECLARE_LIBIE_SQ_NAPI_STATS(act)		\
-+	act(packets)					\
-+	act(bytes)
-+
-+#define DECLARE_LIBIE_SQ_XMIT_STATS(act)		\
-+	act(busy)					\
-+	act(stops)					\
-+	act(restarts)					\
-+	act(linearized)
-+
-+#define DECLARE_LIBIE_SQ_STATS(act)			\
-+	DECLARE_LIBIE_SQ_NAPI_STATS(act)		\
-+	DECLARE_LIBIE_SQ_XMIT_STATS(act)
-+
-+struct libie_sq_stats {
-+	struct u64_stats_sync	syncp;
-+
-+	union {
-+		struct {
-+#define act(s)	u64_stats_t	s;
-+			DECLARE_LIBIE_SQ_STATS(act);
-+#undef act
-+		};
-+		DECLARE_FLEX_ARRAY(u64_stats_t, raw);
-+	};
-+} __libie_stats_aligned;
-+
-+struct libie_sq_onstack_stats {
-+#define act(s)	u32		s;
-+	DECLARE_LIBIE_SQ_NAPI_STATS(act);
-+#undef act
-+};
-+
++#endif /* __LIBIE_INTERNAL_H */
+diff --git a/drivers/net/ethernet/intel/libie/rx.c b/drivers/net/ethernet/intel/libie/rx.c
+index c60d7b20ed20..0c26bd066587 100644
+--- a/drivers/net/ethernet/intel/libie/rx.c
++++ b/drivers/net/ethernet/intel/libie/rx.c
+@@ -2,6 +2,7 @@
+ /* Copyright(c) 2023 Intel Corporation. */
+ 
+ #include <linux/net/intel/libie/rx.h>
++#include "internal.h"
+ 
+ /* Rx buffer management */
+ 
+@@ -57,6 +58,24 @@ struct page_pool *libie_rx_page_pool_create(struct napi_struct *napi,
+ }
+ EXPORT_SYMBOL_NS_GPL(libie_rx_page_pool_create, LIBIE);
+ 
 +/**
-+ * libie_sq_napi_stats_add - add onstack Tx stats to the queue container
-+ * @qs: Tx queue stats structure to update
-+ * @ss: onstack structure to get the values from, updated during the NAPI loop
++ * libie_rx_page_pool_destroy - destroy a &page_pool created by libie
++ * @pool: pool to destroy
++ * @stats: RQ stats from the ring (or %NULL to skip updating PP stats)
++ *
++ * As the stats usually has the same lifetime as the device, but PP is usually
++ * created/destroyed on ifup/ifdown, in order to not lose the stats accumulated
++ * during the last ifup, the PP stats need to be added to the driver stats
++ * container. Then the PP gets destroyed.
 + */
-+static inline void
-+libie_sq_napi_stats_add(struct libie_sq_stats *qs,
-+			const struct libie_sq_onstack_stats *ss)
++void libie_rx_page_pool_destroy(struct page_pool *pool,
++				struct libie_rq_stats *stats)
 +{
-+	if (unlikely(!ss->packets))
++	libie_rq_stats_sync_pp(stats, pool);
++	page_pool_destroy(pool);
++}
++EXPORT_SYMBOL_NS_GPL(libie_rx_page_pool_destroy, LIBIE);
++
+ /* O(1) converting i40e/ice/iavf's 8/10-bit hardware packet type to a parsed
+  * bitfield struct.
+  */
+diff --git a/drivers/net/ethernet/intel/libie/stats.c b/drivers/net/ethernet/intel/libie/stats.c
+index 61456842a362..71c7ce14edca 100644
+--- a/drivers/net/ethernet/intel/libie/stats.c
++++ b/drivers/net/ethernet/intel/libie/stats.c
+@@ -3,6 +3,9 @@
+ 
+ #include <linux/ethtool.h>
+ #include <linux/net/intel/libie/stats.h>
++#include <net/page_pool.h>
++
++#include "internal.h"
+ 
+ /* Rx per-queue stats */
+ 
+@@ -14,6 +17,70 @@ static const char * const libie_rq_stats_str[] = {
+ 
+ #define LIBIE_RQ_STATS_NUM	ARRAY_SIZE(libie_rq_stats_str)
+ 
++#ifdef CONFIG_PAGE_POOL_STATS
++/**
++ * libie_rq_stats_get_pp - get the current stats from a &page_pool
++ * @sarr: local array to add stats to
++ * @pool: pool to get the stats from
++ *
++ * Adds the current "live" stats from an online PP to the stats read from
++ * the RQ container, so that the actual totals will be returned.
++ */
++static void libie_rq_stats_get_pp(u64 *sarr, struct page_pool *pool)
++{
++	struct page_pool_stats *pps;
++	/* Used only to calculate pos below */
++	struct libie_rq_stats tmp;
++	u32 pos;
++
++	/* Validate the libie PP stats array can be casted <-> PP struct */
++	static_assert(sizeof(tmp.pp) == sizeof(*pps));
++
++	if (!pool)
 +		return;
 +
-+	u64_stats_update_begin(&qs->syncp);
-+	libie_stats_add(qs, ss, packets);
-+	libie_stats_add(qs, ss, bytes);
-+	u64_stats_update_end(&qs->syncp);
++	/* Position of the first Page Pool stats field */
++	pos = (u64_stats_t *)&tmp.pp - tmp.raw;
++	pps = (typeof(pps))&sarr[pos];
++
++	page_pool_get_stats(pool, pps);
 +}
 +
-+u32 libie_sq_stats_get_sset_count(void);
-+void libie_sq_stats_get_strings(u8 **data, u32 qid);
-+void libie_sq_stats_get_data(u64 **data, const struct libie_sq_stats *stats);
++/**
++ * libie_rq_stats_sync_pp - add the current PP stats to the RQ stats container
++ * @stats: stats structure to update
++ * @pool: pool to read the stats
++ *
++ * Called by libie_rx_page_pool_destroy() to save the stats before destroying
++ * the pool.
++ */
++void libie_rq_stats_sync_pp(struct libie_rq_stats *stats,
++			    struct page_pool *pool)
++{
++	u64_stats_t *qarr = (u64_stats_t *)&stats->pp;
++	struct page_pool_stats pps = { };
++	u64 *sarr = (u64 *)&pps;
 +
-+#endif /* __LIBIE_STATS_H */
++	if (!stats)
++		return;
++
++	page_pool_get_stats(pool, &pps);
++
++	u64_stats_update_begin(&stats->syncp);
++
++	for (u32 i = 0; i < sizeof(pps) / sizeof(*sarr); i++)
++		u64_stats_add(&qarr[i], sarr[i]);
++
++	u64_stats_update_end(&stats->syncp);
++}
++#else
++static void libie_rq_stats_get_pp(u64 *sarr, struct page_pool *pool)
++{
++}
++
++/* static inline void libie_rq_stats_sync_pp() is declared in "internal.h" */
++#endif
++
+ /**
+  * libie_rq_stats_get_sset_count - get the number of Ethtool RQ stats provided
+  *
+@@ -41,8 +108,10 @@ EXPORT_SYMBOL_NS_GPL(libie_rq_stats_get_strings, LIBIE);
+  * libie_rq_stats_get_data - get the RQ stats in Ethtool format
+  * @data: reference to the cursor pointing to the output array
+  * @stats: RQ stats container from the queue
++ * @pool: &page_pool from the queue (%NULL to ignore PP "live" stats)
+  */
+-void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats)
++void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats,
++			     struct page_pool *pool)
+ {
+ 	u64 sarr[LIBIE_RQ_STATS_NUM];
+ 	u32 start;
+@@ -54,6 +123,8 @@ void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats)
+ 			sarr[i] = u64_stats_read(&stats->raw[i]);
+ 	} while (u64_stats_fetch_retry(&stats->syncp, start));
+ 
++	libie_rq_stats_get_pp(sarr, pool);
++
+ 	for (u32 i = 0; i < LIBIE_RQ_STATS_NUM; i++)
+ 		(*data)[i] += sarr[i];
+ 
+diff --git a/include/linux/net/intel/libie/rx.h b/include/linux/net/intel/libie/rx.h
+index 8c0ccdff9a37..c6c85f956f95 100644
+--- a/include/linux/net/intel/libie/rx.h
++++ b/include/linux/net/intel/libie/rx.h
+@@ -62,8 +62,12 @@ struct libie_rx_buffer {
+ 	u32		truesize;
+ };
+ 
++struct libie_rq_stats;
++
+ struct page_pool *libie_rx_page_pool_create(struct napi_struct *napi,
+ 					    u32 size);
++void libie_rx_page_pool_destroy(struct page_pool *pool,
++				struct libie_rq_stats *stats);
+ 
+ /**
+  * libie_rx_alloc - allocate a new Rx buffer
+diff --git a/include/linux/net/intel/libie/stats.h b/include/linux/net/intel/libie/stats.h
+index dbbc98bbd3a7..23ca0079a905 100644
+--- a/include/linux/net/intel/libie/stats.h
++++ b/include/linux/net/intel/libie/stats.h
+@@ -49,6 +49,17 @@
+  * fragments: number of processed descriptors carrying only a fragment
+  * alloc_page_fail: number of Rx page allocation fails
+  * build_skb_fail: number of build_skb() fails
++ * pp_alloc_fast: pages taken from the cache or ring
++ * pp_alloc_slow: actual page allocations
++ * pp_alloc_slow_ho: non-order-0 page allocations
++ * pp_alloc_empty: number of times the pool was empty
++ * pp_alloc_refill: number of cache refills
++ * pp_alloc_waive: NUMA node mismatches during recycling
++ * pp_recycle_cached: direct recyclings into the cache
++ * pp_recycle_cache_full: number of times the cache was full
++ * pp_recycle_ring: recyclings into the ring
++ * pp_recycle_ring_full: number of times the ring was full
++ * pp_recycle_released_ref: pages released due to elevated refcnt
+  */
+ 
+ #define DECLARE_LIBIE_RQ_NAPI_STATS(act)		\
+@@ -60,9 +71,29 @@
+ 	act(alloc_page_fail)				\
+ 	act(build_skb_fail)
+ 
++#ifdef CONFIG_PAGE_POOL_STATS
++#define DECLARE_LIBIE_RQ_PP_STATS(act)			\
++	act(pp_alloc_fast)				\
++	act(pp_alloc_slow)				\
++	act(pp_alloc_slow_ho)				\
++	act(pp_alloc_empty)				\
++	act(pp_alloc_refill)				\
++	act(pp_alloc_waive)				\
++	act(pp_recycle_cached)				\
++	act(pp_recycle_cache_full)			\
++	act(pp_recycle_ring)				\
++	act(pp_recycle_ring_full)			\
++	act(pp_recycle_released_ref)
++#else
++#define DECLARE_LIBIE_RQ_PP_STATS(act)
++#endif
++
+ #define DECLARE_LIBIE_RQ_STATS(act)			\
+ 	DECLARE_LIBIE_RQ_NAPI_STATS(act)		\
+-	DECLARE_LIBIE_RQ_FAIL_STATS(act)
++	DECLARE_LIBIE_RQ_FAIL_STATS(act)		\
++	DECLARE_LIBIE_RQ_PP_STATS(act)
++
++struct page_pool;
+ 
+ struct libie_rq_stats {
+ 	struct u64_stats_sync	syncp;
+@@ -72,6 +103,9 @@ struct libie_rq_stats {
+ #define act(s)	u64_stats_t	s;
+ 			DECLARE_LIBIE_RQ_NAPI_STATS(act);
+ 			DECLARE_LIBIE_RQ_FAIL_STATS(act);
++			struct_group(pp,
++				DECLARE_LIBIE_RQ_PP_STATS(act);
++			);
+ #undef act
+ 		};
+ 		DECLARE_FLEX_ARRAY(u64_stats_t, raw);
+@@ -110,7 +144,8 @@ libie_rq_napi_stats_add(struct libie_rq_stats *qs,
+ 
+ u32 libie_rq_stats_get_sset_count(void);
+ void libie_rq_stats_get_strings(u8 **data, u32 qid);
+-void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats);
++void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats,
++			     struct page_pool *pool);
+ 
+ /* Tx per-queue stats:
+  * packets: packets sent from this queue
 -- 
 2.41.0
 
