@@ -2,51 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895DB747E0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59334747E13
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjGEHQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S231569AbjGEHSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbjGEHQl (ORCPT
+        with ESMTP id S232237AbjGEHR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:16:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BC51AD;
-        Wed,  5 Jul 2023 00:16:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7CEA61457;
-        Wed,  5 Jul 2023 07:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF19C433C7;
-        Wed,  5 Jul 2023 07:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688541399;
-        bh=rgJSmdWf7HZndKl2mOS2c4ZW2ja00reA75bqebA5N5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vH+XQSRQRzQ2GruZofvDvB4wgPWzbq6KDZ60x9IF+TdMAc72KsVQMSdd/J5vlrpLb
-         koKIOuYzR3rCPYvAXnswBrN17pKIOo03fken9BO2EQ/JvLf4X0gRgXQVUSB7GLsU53
-         3ZAZ2uRbwy1sF6S2nG20gedZB0BY9j9JWT2/hYko=
-Date:   Wed, 5 Jul 2023 08:16:37 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yu Hao <yhao016@ucr.edu>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: lan78xx: Fix possible uninit bug
-Message-ID: <2023070522-stubbly-monthly-3fb1@gregkh>
-References: <CA+UBctD1E5ZLnBxkrXh3uxiKiKXphnLKiB=5whYtH73SCTESWw@mail.gmail.com>
+        Wed, 5 Jul 2023 03:17:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D99197;
+        Wed,  5 Jul 2023 00:17:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1688541463; x=1689146263; i=deller@gmx.de;
+ bh=gxCS/qjG4pfAPqlmGcad4sNZR4U6vupp7BLBkYy1BhI=;
+ h=X-UI-Sender-Class:Date:From:To:Subject;
+ b=mQoWP8Xl7bwdayhytli6v/AEI9Tlia1g8T/RmLj0Ino2Wy9r835bCgZAeHSycIk0YPT2hiJ
+ KKnXabvLNmlwa0XNzz/tpN/mbeAEVoe2Btl9uBsxgIjfJEAS+22E3HPjoWkzLvMJWszNuQwDh
+ nO/j49qPmjkkTmIzSso/WNq8+iHYOQ/xylSHSEbkMiJwSjRu7ueKjQLnLMIO+e693ynQp1uZK
+ wBP8AqCu5ki+GaZsaCaJqDG35HiAyMHd8ZcN3TBJgd3eS/Dhz0vxE7E1iE7ZVJYejOxFcig75
+ bM5I84qoYWEoNmz2DUb6Z0oLXP5Stm1wnl+XQXCK+M/GWmDO6jDQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from p100 ([94.134.149.108]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M4s51-1qG7xA1tXr-0021PS; Wed, 05
+ Jul 2023 09:17:43 +0200
+Date:   Wed, 5 Jul 2023 09:17:41 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        John David Anglin <dave.anglin@bell.net>
+Subject: [GIT PULL] more parisc architecture fixes & updates for v6.5-rc1
+Message-ID: <ZKUZFS4CGOHNJR1S@p100>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+UBctD1E5ZLnBxkrXh3uxiKiKXphnLKiB=5whYtH73SCTESWw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Provags-ID: V03:K1:8+PlUoe/Yje2T3Q02Os2q9/eZ7ZzFc26qjtwjNIoFZ/FoDjDubm
+ T1uE4aOyWYJRdZPpMqk+l/32T02PjI24/ailUJbPkfkME10fCrjv3r3V0ARsoCs8Pa6AVo6
+ qUyvRHoSoWcanTob1Xj4A5SYZ6ZbrYBXCkkP79UXAM1brLOOvUF4eCwUoLYc1WORkU2nnLr
+ nAvCKhn0vTtleOAzpGdMw==
+UI-OutboundReport: notjunk:1;M01:P0:41VUbBoAXZ0=;cOp7eIEV118VyI0kls++jxczfYO
+ i7C+5saycdVH/fteL+1WgBOHGhs9KvwUtRaRmB4hS41v2jLwRfk710ZSF/DXZwMXGlN1D0HEs
+ LCb/U81uWZ9xKkcSclXcM/C6Rk10TRIoGtXA5K6ezkFRu2cPX7Fs0GwlPExEI3V8Ow18Z3zRI
+ SI6cQGZ+JUAYaVhbAp0oQAMqiy31eldcmF2/dpsnZ6FIvoELCvlxlmTt1krB9xmUFlSE86Ea5
+ 5RZENHH8btSdK16g7Br+YJ1b7l5xdwqh7lJztCk/MNiWWDH+PlNFIjCCyfnYkCUzSskSO08p4
+ 15uqzDT5e+rF2AwZRF/1Q+uPudtX3Qb0bXMFt9O8KePBU0axUAKkYXugTZZlsOQO5pobSimrT
+ rfOZGV9FHchvWCeQSZL5h64NVmptRXOU1wNEZdA3k1viSzR6lN3jXWlYwtFTH/o7QUS+Ugsmr
+ qx5Sv95XkRt2i4h4etMkjXGZPWxMCtVIw+9STFKtrvpLBuQ6i7rgO6/AwNNyx7SMrpR7SwJ2D
+ BnhCYVKRUqaSGR+3xFo5buUykmvwYKdzGVeW9kHduZndqjfKuNC4TSsug6iqk/erU+AQWNhl5
+ tho9a7Rc44z8IcQW5r/cRTCMbuhlcl8/8yQvZdKzcytgGG4pAg90wxEiAsYfj6Ztz709lVtMB
+ EwhPj2PMOBoP6iC30sMcXrvtR9XA/dfVd5dhvyczjy4l9o5/UQwQmKS5guS4nRyWFThXpVTYw
+ b2BkYj9mTkB1EFyDzmz79DsU4OMQXvXIJhaf4iHZWgjcElRqweaQ43Yct1WmuHbcGKWg1XwPA
+ Xp72LvVA9w17V+XSPP/Jy/hE9ut638cP65WXka9tOUy2ODaM9Zcjvtr/aDxmDHeipTnhmLQtQ
+ 7C25FBeYgQqM/4AwPL+uRVevo71s0+mT15rWYi+gW/soD7wSV1tysvL0274qprWPXAgw2RYPQ
+ 6T2JNltoAIhK+SWHedix9UnucTc=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,59 +68,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 06:15:09PM -0700, Yu Hao wrote:
-> The variable buf should be initialized in the function lan78xx_read_reg.
-> However, there is no return value check, which means the variable buf
-> could still be uninit. But there is a read later.
-> 
-> Signed-off-by: Yu Hao <yhao016@ucr.edu>
-> ---
->  drivers/net/usb/lan78xx.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-> index c458c030fadf..4c9318c92fe6 100644
-> --- a/drivers/net/usb/lan78xx.c
-> +++ b/drivers/net/usb/lan78xx.c
-> @@ -1091,8 +1091,11 @@ static int lan78xx_write_raw_otp(struct
-> lan78xx_net *dev, u32 offset,
->     int i;
->     u32 buf;
->     unsigned long timeout;
-> +   int ret;
-> 
-> -   lan78xx_read_reg(dev, OTP_PWR_DN, &buf);
-> +   ret = lan78xx_read_reg(dev, OTP_PWR_DN, &buf);
-> +   if (ret < 0)
-> +       return ret;
-> 
->     if (buf & OTP_PWR_DN_PWRDN_N_) {
->         /* clear it and wait to be cleared */
-> -- 
-> 2.34.1
+Hi Linus,
 
-Hi,
+please pull a second round of fixes for the parisc architecture for kernel 6.5-rc1.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+This fixes all outstanding compiler warnings when compiled with W=1 in
+the arch/parisc/ and drivers/parisc/ directories.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Thanks!
+Helge
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
+----------------------------------------------------------------
+The following changes since commit a901a3568fd26ca9c4a82d8bc5ed5b3ed844d451:
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+  Merge tag 'iomap-6.5-merge-1' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux (2023-07-02 11:14:54 -0700)
 
-thanks,
+are available in the Git repository at:
 
-greg k-h's patch email bot
+  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/parisc-for-6.5-rc1-2
+
+for you to fetch changes up to f8a473bf5db7a6abaa7cad40303e395dff702819:
+
+  parisc: syscalls: Avoid compiler warnings with W=1 (2023-07-03 18:56:03 +0200)
+
+----------------------------------------------------------------
+parisc architecture fixes and updates for kernel v6.5-rc1 (pt 2):
+
+* Fix all compiler warnings in arch/parisc and drivers/parisc when
+  compiled with W=1
+
+----------------------------------------------------------------
+Helge Deller (6):
+      parisc: pdt: Get prototype for arch_report_meminfo()
+      parisc: smp: Add declaration for start_cpu_itimer()
+      parisc: unwind: Avoid missing prototype warning for handle_interruption()
+      parisc: Raise minimal GCC version to 12.0.0
+      parisc: math-emu: Avoid compiler warnings with W=1
+      parisc: syscalls: Avoid compiler warnings with W=1
+
+ arch/parisc/include/asm/processor.h | 2 ++
+ arch/parisc/kernel/Makefile         | 3 +++
+ arch/parisc/kernel/pdt.c            | 1 +
+ arch/parisc/kernel/smp.c            | 2 --
+ arch/parisc/kernel/unwind.c         | 5 +++--
+ arch/parisc/math-emu/Makefile       | 3 ++-
+ scripts/min-tool-version.sh         | 4 ++--
+ 7 files changed, 13 insertions(+), 7 deletions(-)
