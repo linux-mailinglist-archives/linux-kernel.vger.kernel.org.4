@@ -2,162 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02FE747E24
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A2A747E2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjGEHWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S232261AbjGEHYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjGEHWd (ORCPT
+        with ESMTP id S232259AbjGEHX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:22:33 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2124.outbound.protection.outlook.com [40.107.215.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095E910C9;
-        Wed,  5 Jul 2023 00:22:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EorcQS90tSulGiO9Uc3s4048rkQ3h/gZASoVRwjvsCTB32Ry197r0Pw4IBnAZXvu+iOVtROu7WeECLMs+FQj5VvxZWqnLvgS3B73n771qkOHY55nywXYLfiz6210fl8FtvI9s5m8tmaJSjne8rK2R6UkUTVSzlT/XrvZ9KV2imU5xw7jY9o2vEZ2DOm+l413kS+FtLmSeH/wxR6fIVLTrIlnfJcMihq+CQ9VGTUWcyPdno73uo5DuKydHXN7oQOkFQ4X2MNYJs9Nz0Pi6DmScau2b2c/ANe+R0yPgyple7QehO5YDfMx5NZXvcDRyyHQBdtxQRSbUg7nbvAOr61ucg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IFSVdKGS9Oy5GDAxc2bSOThrkajXBFAGXKxLogs17HU=;
- b=R4qcEHeF5lJ6k0ZH0bN46v89aeqaCl+3UAB0ZdfPbt9eTlECJhvukgRI5oWCS5R48JuztJHF9A/taXStTLn4vvL/YruQP2q561q9NRthUtNYmEggFsbHLM0k8kzx9w0wPT/tJW956eO40eYBNqJAEXF4eOngmUV4Z3f3xovbQpXCt1QtH7deVoPKxlwl+tS2+IaH6i3Hx6va2cuBMH2JHVbey5q2et5EFX8TiHb6ifxgGvtphWp/eSpLNZzcRqmopY8FNBb7iWKTYTpGaERTHDk7cw6lo8iPf7Maxn4k5o+7AVV2ducuGTlaXDq/kR5oSiMgEkDbp1V5yEmfyOov/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IFSVdKGS9Oy5GDAxc2bSOThrkajXBFAGXKxLogs17HU=;
- b=oTUcXWHiMNowaMcjVzkQO33MEM0W8c28xWLDDZpD9QAcA75aoLt3CEjaWBoCuidaW59uMbmbEOAHuD9elx/gKWYOUbzeDUTc/hsBMZnP1C5ENcaMwjJE4I6suzzpjDGf7avH99j4lqM0rg6WKx67e79rrDkgFeHgsXnQMwy24BWcVnz+D3lc0e5e8jkKkt5znaj40yh2u53rF6YgszyqAjFBxN63Fi2y/OChmo5azK0BIHQ7v5JqWIZmXMMmU7Dhv/e72aJyH5uICVP6sHLC8/2t1F/F5wHH9tcRbeYtyGAFKT5B4h7DGt4zvS5xqDGOH03+6FYsJ3wmDkDdgyBC/Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB6058.apcprd06.prod.outlook.com (2603:1096:101:e3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
- 2023 07:22:19 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 07:22:19 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] crypto: atmel-tdes - Use devm_platform_get_and_ioremap_resource()
-Date:   Wed,  5 Jul 2023 15:21:58 +0800
-Message-Id: <20230705072159.77221-5-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230705072159.77221-1-frank.li@vivo.com>
-References: <20230705072159.77221-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0036.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::22) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB6058:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1222c6fd-9574-49ed-764f-08db7d28915a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v2ohh54AFlHy6xDpiNDZzsPbljpWO4LEmNK4uf7lpOCkpTCrSMIZoHWZZKHEfQXGKvTn7jZJWl/EbHszJRm/KDyAG3AnArYt7xOyilqzvqdOR3sWYmmBh89IlNiDgqbsgcgrgsLdvO3MRuf5p1iqYhpvI59/Pe7VnqTuNuXApD2YyRX6f43yUIdltRk4hjsWx9v5+fDzTKgaqk/hujGxKKzoXxehjrwvVk+IulxC+xRBturp1IvOoBcXVI7D6Pq1Xf2owHrlnxXVhXDgwKbxOpaaoBOfJdRl4FcqcNMRHUPf+NQvyKovvUm1fIRViqOqTCwapi/Mxb5S6Gd9OImwjofnZxgLQlPMkfoR7HM9Kjkn/YtsXQbnl+xgErFok4mSXXyIQOy23MTNXu2rmhIu0En2fowsO34z0XaXxv9T3pnXhylw2v2LASEjN5173iNCcFBBza2EsdpIg8G+vtGPNEzcQdLEuA2AchSiQiGO38B9YqzQqPsWlhDXKOykl/r75xwZ3pUJTHUtwYYWwDNtjS8SNEMy6NQSpLZ/u0hN8UfZm9DCJufwskC/K+FDBkynDHTrj69ANjgZPLRr4fT9/UsALWuhYdLWmAGO9fDguSQ/zKfcuBU88CPbvgUF9PBg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(376002)(346002)(39860400002)(451199021)(26005)(66556008)(66946007)(36756003)(66476007)(4326008)(316002)(478600001)(8676002)(8936002)(5660300002)(2906002)(41300700001)(86362001)(6486002)(6512007)(110136005)(38350700002)(52116002)(38100700002)(6666004)(1076003)(186003)(6506007)(83380400001)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2XLDnHYQQeVLkj3QPdItIngiH/yssmvLVRLr3+e8CV7E3sS2QqBY7eQ2nRxV?=
- =?us-ascii?Q?qBQEbpUrcIbHwSZetDMX4cDO/Vs/HmFJ2L7IqrftLfi6n2yVAU43UwXmJ1Ei?=
- =?us-ascii?Q?OcpNGTz2+NlJNfP/C8nAB5bp6skCtBr2KAlWhP8iRxmaO70b1QJ9VxQ2fGKz?=
- =?us-ascii?Q?5jHORJ+2YWq2aoLqKKiOd7owWII81Yz1YeVDDD2aYmgzSKK+MCVz6If5EYDT?=
- =?us-ascii?Q?82i8JX5kXu6dQBCzqtSe3YLJX3W6NUSiMCf1VAx2PRCMqtB7TnDn9PTNMykj?=
- =?us-ascii?Q?5JqT5NWV+ahX+TTLlexgbusFKeX271UpBxBIB0noutst+ll/rd+H5qcG3zGr?=
- =?us-ascii?Q?Tnaxcj8cBv30xzwAqvcPatEkx9jb5fZOOjNLLIRtHfa0veXfclFEyAacZwoB?=
- =?us-ascii?Q?/lhQXLqWLkF2SjJa2MISsG7zHWDbhsrdJd+iJzr5kX7SED5dfzw7nnPtonpm?=
- =?us-ascii?Q?8wWPJCeQ3coZOJgogRFPO5d6fYj6PxByvr7ibpM6o31X6BcE1ZjLvuldMxjD?=
- =?us-ascii?Q?rlRnL7IYZ1YyWtyJl2i5KORAQe9JLAPPUaeWtyM3htEjLz0Q3VJa/qjfkBlC?=
- =?us-ascii?Q?sefMGBfLvP0iNQS2YnZcbpZ69XkhNk7hLevhH+gOsCMqSkQDWHc+GDMT8Rce?=
- =?us-ascii?Q?SJaAbQuXAOWOtHqN3fiHiUHuZq+LSm/VintYwhhswhkBB+vJopcxnLd66apT?=
- =?us-ascii?Q?7FA6onMfAkI17MiHOxM5XSq3sKlyYJlEpPpgMbfblhWIqd7d0bNawz+N/iQI?=
- =?us-ascii?Q?RyvcjNThdpzTW/Un0d/PLJsDd+YC91qWksLw0rWJragspVsloNy412w2W4Q/?=
- =?us-ascii?Q?vA3oUw3UeZ7O0IZlqDPqjGFnhhqsS2PFw94t1tVTu7FbcuqSUy6O/IJSzFDd?=
- =?us-ascii?Q?D7bAwq2AzQACepbkAeJRz+zyT/v6PIM3irKXmPh+6m2GhAkpVj7bxh0d56M2?=
- =?us-ascii?Q?+vL88rzP6Wyb6Wm5N5ksWpK6va18JHPaIRsJgFEhLLPb48xQ6RDqq+IOj8Mg?=
- =?us-ascii?Q?CXaS/JwGrDnhaRDfbGh6jsS0Vi4zy/GgXSYwLrxSUDW3RTHOhoNTwlv4pE7C?=
- =?us-ascii?Q?ibVEZfjVG7LxdfxFUhAD17FkVMALCvS9SUIgam9Dg14CNZHHk8RkNzcHusFU?=
- =?us-ascii?Q?iNRBlqpLr5heCT2yuX2qeFPG0vf5ark78WLi4TiHQ8HCtMgVa1faD3Xy1vnU?=
- =?us-ascii?Q?ZULZb4yiGDuSCcIAg6Z8caqzaoSuGRepm8II0P+xJACS6X4PHNzakRdaWKzg?=
- =?us-ascii?Q?B9Q0cOGbCFWtGD/fwAIpCb+Dxfi+qYEo/OA5l6WtlX62VZNU7r9kjdLjXgts?=
- =?us-ascii?Q?G9lReNjEXU5oBvf7H/CePwcKqCyee30sZHcnmS37bQoFYltzsOQO0pdaxl57?=
- =?us-ascii?Q?qG+KFy6IHiTXDECdzrxVnHMoReOiQrahmL+Ui8B7sGlxZVPh8cHv8gHhLfYF?=
- =?us-ascii?Q?yJ8WQyJNu7+oL5gkULUgHX/feFXo3Uat3VmfIUokRheLD1rT4bFbGQBeoJAO?=
- =?us-ascii?Q?HpVgTXUnRWwTpdnJCX4Yn2oeIV2O3C6FLHJCJgVrxuMHgVaZM2H7ErccfdkU?=
- =?us-ascii?Q?9z3c1EtXfoqfywhE0MqOKSwqQxybzyWoy7c4U573?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1222c6fd-9574-49ed-764f-08db7d28915a
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 07:22:19.5581
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W3YkiKy+NTr5fHo7SmqijDeO82p69ZtxTFRfecS7MFSl+0n1TVePNM+y09/5vIZ/o6xbj3uTUOqCqI5ps7H7Qw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6058
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Jul 2023 03:23:57 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8944510D5;
+        Wed,  5 Jul 2023 00:23:53 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1b06ea7e7beso5935003fac.0;
+        Wed, 05 Jul 2023 00:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688541833; x=1691133833;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UtRultwczflx7AHsIym9/WcCjEB4FHHPYH8wgJ+7ZX8=;
+        b=V7LGiFMGlYLr2yn2Y0Rzccc4dgCcZ4tSHNjP7HzaTPY7G3TuyCEiD6WeJU+gnysCcf
+         NF73WRKgDoZD3cAQOlonlktwqDWlYoeJXwUC5df8A4iB2pUD623LDjHudXB1K+YtCC4Q
+         PkThH5LwdetekBVPTjuQ3pLpfaaayKr1q3XaN7swpKAqoukoQh1GmOoGf2VeMv+N6nM7
+         ySMNNcwehuOmdrG6bBivGTEN4ieYXCbLKQv0PP1S+ibDF1BXj14CcaElwSjMEraQQphw
+         68sabzJuDsW4DXGgWoGDDM76KcpZQUjv5BKJ/ZqU7vi2Mexb7i8IoVbY9G9cwI1ouhGd
+         xPCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688541833; x=1691133833;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UtRultwczflx7AHsIym9/WcCjEB4FHHPYH8wgJ+7ZX8=;
+        b=Cg79wjuVg05AD20vVE+hT6VB8K9Rr0Emx/MSuD9WZBrDdAQDzTT1Za73cAGmJHJy/7
+         5MzSBMgPsTOHtEy4FwxqjPReSYYwn4UOij4e5hbfMao4AJTBhrIL2Ik1mILjPGGGBrTE
+         enjo9vw9CAy/TCbaEE+bkHdlB8MQ9DP1dw4g5E05InGF7UjM3zCIG+8cr0eZqdcIRlwR
+         BTNIBWolwbN9p+W0ptsUJALtE3GFWYApAh/gOrpZrrzKUFOP3oIuRi/uX21HbdHL8qTF
+         sL5bOawvMQ9Mv6iWP1bN3Q7bBEg4mrd2LtgJIAV90dh/ZOpDRJNu6Cm+giYT0ltxZUfm
+         80dg==
+X-Gm-Message-State: ABy/qLakaqYf7SIP7fuynuvWG4vy2ICewEbc18/Sp6oFf/8GokNtwVkX
+        n+FunmVQM1m7fVSeApkINB8=
+X-Google-Smtp-Source: APBJJlGKTDdDczDO9DBJTucbfA58+S106cvsp3S/i5Bqu4Q7tkykGKqJvUQTxUZLj0/YpjVamFiLVg==
+X-Received: by 2002:a05:6871:4f18:b0:1b3:cee4:cac9 with SMTP id zu24-20020a0568714f1800b001b3cee4cac9mr3731186oab.33.1688541832660;
+        Wed, 05 Jul 2023 00:23:52 -0700 (PDT)
+Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
+        by smtp.gmail.com with ESMTPSA id k19-20020a056870d0d300b001b3a5ab6cacsm3781314oaa.16.2023.07.05.00.23.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 00:23:52 -0700 (PDT)
+From:   Chengfeng Ye <dg573847474@gmail.com>
+To:     krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chengfeng Ye <dg573847474@gmail.com>
+Subject: [PATCH v2] watchdog: s3c2410: Fix potential deadlock on &wdt->lock
+Date:   Wed,  5 Jul 2023 07:23:04 +0000
+Message-Id: <20230705072304.37741-1-dg573847474@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+As &wdt->lock is acquired by hard irq s3c2410wdt_irq(), other
+acquisition of the same lock under process context should
+disable irq, otherwise deadlock could happen if the irq preempt
+the execution while the lock is held in process context on the
+same CPU.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
+[Deadlock Scenario]
+s3c2410wdt_suspend()
+    -> s3c2410wdt_stop()
+    -> spin_lock(&wdt->lock)
+        <irq iterrupt>
+        -> s3c2410wdt_irq()
+        -> s3c2410wdt_keepalive()
+        -> spin_lock(&wdt->lock) (deadlock here)
+
+[Deadlock Scenario]
+s3c2410wdt_probe()
+    -> s3c2410wdt_start()
+    -> spin_lock(&wdt->lock)
+        <irq iterrupt>
+        -> s3c2410wdt_irq()
+        -> s3c2410wdt_keepalive()
+        -> spin_lock(&wdt->lock) (deadlock here)
+
+This flaw was found by an experimental static analysis tool I am
+developing for irq-related deadlock, which reported the above
+warning when analyzing the linux kernel 6.4-rc7 release.
+
+The tentative patch fix the potential deadlock by spin_lock_irqsave()
+under process context.
+
+Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
 ---
- drivers/crypto/atmel-tdes.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ drivers/watchdog/s3c2410_wdt.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/crypto/atmel-tdes.c b/drivers/crypto/atmel-tdes.c
-index c9ded8be9c39..ba8981f326cf 100644
---- a/drivers/crypto/atmel-tdes.c
-+++ b/drivers/crypto/atmel-tdes.c
-@@ -1172,11 +1172,9 @@ static int atmel_tdes_probe(struct platform_device *pdev)
+diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+index 95416a9bdd4b..2dfc0d6a3004 100644
+--- a/drivers/watchdog/s3c2410_wdt.c
++++ b/drivers/watchdog/s3c2410_wdt.c
+@@ -399,10 +399,11 @@ static void __s3c2410wdt_stop(struct s3c2410_wdt *wdt)
+ static int s3c2410wdt_stop(struct watchdog_device *wdd)
+ {
+ 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
++	unsigned long flags;
  
- 	crypto_init_queue(&tdes_dd->queue, ATMEL_TDES_QUEUE_LENGTH);
+-	spin_lock(&wdt->lock);
++	spin_lock_irqsave(&wdt->lock, flags);
+ 	__s3c2410wdt_stop(wdt);
+-	spin_unlock(&wdt->lock);
++	spin_unlock_irqrestore(&wdt->lock, flags);
  
--	/* Get the base address */
--	tdes_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!tdes_res) {
--		dev_err(dev, "no MEM resource info\n");
--		err = -ENODEV;
-+	tdes_dd->io_base = devm_platform_get_and_ioremap_resource(pdev, 0, &tdes_res);
-+	if (IS_ERR(tdes_dd->io_base)) {
-+		err = PTR_ERR(tdes_dd->io_base);
- 		goto err_tasklet_kill;
- 	}
- 	tdes_dd->phys_base = tdes_res->start;
-@@ -1203,12 +1201,6 @@ static int atmel_tdes_probe(struct platform_device *pdev)
- 		goto err_tasklet_kill;
- 	}
+ 	return 0;
+ }
+@@ -411,8 +412,9 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
+ {
+ 	unsigned long wtcon;
+ 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
++	unsigned long flags;
  
--	tdes_dd->io_base = devm_ioremap_resource(&pdev->dev, tdes_res);
--	if (IS_ERR(tdes_dd->io_base)) {
--		err = PTR_ERR(tdes_dd->io_base);
--		goto err_tasklet_kill;
--	}
--
- 	err = atmel_tdes_hw_version_init(tdes_dd);
- 	if (err)
- 		goto err_tasklet_kill;
+-	spin_lock(&wdt->lock);
++	spin_lock_irqsave(&wdt->lock, flags);
+ 
+ 	__s3c2410wdt_stop(wdt);
+ 
+@@ -433,7 +435,7 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
+ 	writel(wdt->count, wdt->reg_base + S3C2410_WTDAT);
+ 	writel(wdt->count, wdt->reg_base + S3C2410_WTCNT);
+ 	writel(wtcon, wdt->reg_base + S3C2410_WTCON);
+-	spin_unlock(&wdt->lock);
++	spin_unlock_irqrestore(&wdt->lock, flags);
+ 
+ 	return 0;
+ }
 -- 
-2.39.0
+2.17.1
 
