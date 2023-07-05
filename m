@@ -2,260 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF117480E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCC27480F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjGEJdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 05:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S231604AbjGEJen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjGEJdE (ORCPT
+        with ESMTP id S231152AbjGEJel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 05:33:04 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A42F41711;
-        Wed,  5 Jul 2023 02:33:02 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1099)
-        id C78FA20938BF; Wed,  5 Jul 2023 02:33:01 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C78FA20938BF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1688549581;
-        bh=BujkrTlk1vj49nUHXLGB7avpayiTaU0StVHZua2nrDU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dZbn8jG0HXJvZtpvfVJEzv5QXB7taiwcmYy80l0/6ieruKkBhF405WvURGKK1ND9o
-         ItrfK+Pti4uwRHd+cMe0rvRJ/p2C/f6kNbeAxTZpjBVDgUx0po267lpBLME+okk8Ys
-         wa/NJDCKLXYS8jUfJbCnmi3Bl2oy/OihTLcHBr9Q=
-From:   Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
-        sharmaajay@microsoft.com, leon@kernel.org, cai.huoqing@linux.dev,
-        ssengar@linux.microsoft.com, vkuznets@redhat.com,
-        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     stable@vger.kernel.org, schakrabarti@microsoft.com,
-        Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-Subject: [PATCH net] net: mana: Configure hwc timeout from hardware
-Date:   Wed,  5 Jul 2023 02:32:58 -0700
-Message-Id: <1688549578-12906-1-git-send-email-schakrabarti@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Jul 2023 05:34:41 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61C61721
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:34:39 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so373504a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 02:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688549678; x=1691141678;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rXURleKlaTFNIbTJ9xd745LCWhyovyOc9RZu94UdHB4=;
+        b=CkO7C71oRzFMdTiC7jMnovz3eVbsHlOo7s2oEzA8izZprXZqGtqMf9XLy8R4N2Gxkf
+         55gNLjKQjSPI6Tcj+x69U6GC9ejBrOVmAy0igh/p5oCp+ULSywHl8hYtA9lN3do/LdzZ
+         q6ihosgyqrpiui+dUAPSdh9kgyn6Yac1sD1r5xbvHfM1mZnlVBOtsYPR1WEC2gjlCntu
+         bxSgG7aykjmvPo7WvRDYvbUWFW7jtoSe1uw2r8yLSiZSBrtL3isv4932Mtuf0LsRlu+K
+         W69vVRbAPfR443FSD9Yvw83pJCmWZI4KsO6kr2s0C71U1rIKaiJ6P6G3J0zGypTbsPRV
+         Z5zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688549678; x=1691141678;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rXURleKlaTFNIbTJ9xd745LCWhyovyOc9RZu94UdHB4=;
+        b=PLzH8pS4lRsMD23SfcT5/4CGQ7/usXFs2eNgegNfytdvyqyz+dTwOt9/vyD535lMnn
+         cgqrz84FsEMaHd3Yi6BrT8Cubz8eLClWsa2EO7Fd9vp30Y/XHZyQfxIgUGcH4WWdt0hY
+         95OAJWqUKXZ4RMQBvav+Bozg0mFF0qaLHsbMYIcsykWyZ3gvrqcRtotew4ZUhNOs3WWG
+         UNPTuU4Mh8UnKdsJ0IXv2qA7/HcJeL+AbZuCBAPCDLsE0P8MwQUNIrQXZ8ojyYCFcJQ8
+         0rn0/FzrXCqPOGNDd/uWPqcADLk+udl+DVkAWeptnfGpavFFynMo0pZuD0huwSzOZV48
+         J8IQ==
+X-Gm-Message-State: ABy/qLa9YXAazgRQqIO6hXmT3iVMj69qR+d0u8VbogpabGuColeqWryy
+        Mh7Ayr8gVRiAv6NUMmckb742XHFZWjhOeBzfdAU=
+X-Google-Smtp-Source: APBJJlE7J4ROo3gkQLmcRe/QT38WIvVMq1KDJBWjeV0T+MvtcUyDCQfMzHs5dYSdZyD8tkxfaNJ3aw==
+X-Received: by 2002:a05:6402:7c4:b0:51e:da3:1585 with SMTP id u4-20020a05640207c400b0051e0da31585mr1597166edy.9.1688549678158;
+        Wed, 05 Jul 2023 02:34:38 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id p18-20020aa7d312000000b0051a2d2f82fdsm13044557edq.6.2023.07.05.02.34.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 02:34:37 -0700 (PDT)
+Message-ID: <a0631800-f3d5-ff13-b316-9bc027275a82@linaro.org>
+Date:   Wed, 5 Jul 2023 11:34:35 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH V7 1/2] dt-bindings: firmware: bootstats: Add the dtschema
+Content-Language: en-US
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <cover.1688533340.git.quic_schowdhu@quicinc.com>
+ <b3105990e021a71039f621e6c4e70ab05fb348fa.1688533340.git.quic_schowdhu@quicinc.com>
+ <d339d413-5242-0d5a-96f6-c2f670e5e5dc@linaro.org>
+ <968fb5d3-6cd8-7850-47e7-682e26f9ee5f@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <968fb5d3-6cd8-7850-47e7-682e26f9ee5f@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At present hwc timeout value is a fixed value.
-This patch sets the hwc timeout from the hardware.
+On 05/07/2023 10:33, Souradeep Chowdhury wrote:
+>>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>>> +
+>>> +  abl-time:
+>>> +    description: The property to store the duration of abl in ms.
+>>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>>
+>> I have no clue what this entire binding is about. Nothing can bind to
+>> it, no usage explained. Properties are not used to "store the duration".
+>> This does not look like suitable for DT, drop entire binding.
+> 
+> This binding was created as per the suggestion on version 6 of the patch 
+> by Arnd. The idea was that these 2 devicetree properties will be used to 
+> populate the bootstat values from the bootloader and exposed to the user 
+> via /sys/firmware/devicetree/ directly.
+> 
+> Details in the link below:-
+> 
+> https://lore.kernel.org/lkml/7d397e67-5d56-4975-98af-1ac9746c07f4@app.fastmail.com/T/#mbdc9ad95fcbb5ad7b56c6996a3933899b42d982c
+> 
+> Can you suggest any alternative way to represent this as a binding?
 
-Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
----
- .../net/ethernet/microsoft/mana/gdma_main.c   | 27 +++++++++++++++++++
- .../net/ethernet/microsoft/mana/hw_channel.c  | 25 ++++++++++++++++-
- include/net/mana/gdma.h                       | 20 +++++++++++++-
- include/net/mana/hw_channel.h                 |  5 ++++
- 4 files changed, 75 insertions(+), 2 deletions(-)
+Then you should clearly state in the binding how this is going to be
+used and who is going to populate it. Not only in the binding but also
+in commit msg which currently has 0 rationale and answers to "why". Your
+commit msg explained only "what", which is usually obvious and much less
+important. Your commit should stand on its own and should clearly
+explain why we need this feature at all, what problem it solves.
 
-diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-index 8f3f78b68592..5d30347e0137 100644
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -106,6 +106,30 @@ static int mana_gd_query_max_resources(struct pci_dev *pdev)
- 	return 0;
- }
- 
-+static int mana_gd_query_hwc_timeout(struct pci_dev *pdev, u32 *timeout_val)
-+{
-+	struct gdma_context *gc = pci_get_drvdata(pdev);
-+	struct gdma_query_hwc_timeout_req req = {};
-+	struct gdma_query_hwc_timeout_resp resp = {};
-+	int err;
-+
-+	mana_gd_init_req_hdr(&req.hdr, GDMA_QUERY_HWC_TIMEOUT,
-+			     sizeof(req), sizeof(resp));
-+	req.timeout_ms = *timeout_val;
-+	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
-+	if (err || resp.hdr.status) {
-+		dev_err(gc->dev, "Failed to query timeout: %d, 0x%x\n", err,
-+			resp.hdr.status);
-+		return err ? err : -EPROTO;
-+	}
-+
-+	*timeout_val = resp.timeout_ms;
-+	dev_info(gc->dev, "Successfully changed the timeout value %u\n",
-+		 *timeout_val);
-+
-+	return 0;
-+}
-+
- static int mana_gd_detect_devices(struct pci_dev *pdev)
- {
- 	struct gdma_context *gc = pci_get_drvdata(pdev);
-@@ -879,6 +903,7 @@ int mana_gd_verify_vf_version(struct pci_dev *pdev)
- 	struct gdma_context *gc = pci_get_drvdata(pdev);
- 	struct gdma_verify_ver_resp resp = {};
- 	struct gdma_verify_ver_req req = {};
-+	struct hw_channel_context *hwc = gc->hwc.driver_data;
- 	int err;
- 
- 	mana_gd_init_req_hdr(&req.hdr, GDMA_VERIFY_VF_DRIVER_VERSION,
-@@ -907,6 +932,8 @@ int mana_gd_verify_vf_version(struct pci_dev *pdev)
- 			err, resp.hdr.status);
- 		return err ? err : -EPROTO;
- 	}
-+	if (resp.pf_cap_flags1 & GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG)
-+		mana_gd_query_hwc_timeout(pdev, &hwc->hwc_timeout);
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-index 9d1507eba5b9..f5980c26fd09 100644
---- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
-+++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-@@ -174,7 +174,25 @@ static void mana_hwc_init_event_handler(void *ctx, struct gdma_queue *q_self,
- 		complete(&hwc->hwc_init_eqe_comp);
- 		break;
- 
-+	case GDMA_EQE_HWC_SOC_RECONFIG_DATA:
-+		type_data.as_uint32 = event->details[0];
-+		type = type_data.type;
-+		val = type_data.value;
-+
-+		switch (type) {
-+		case HWC_DATA_CFG_HWC_TIMEOUT:
-+			hwc->hwc_timeout = val;
-+			break;
-+
-+		default:
-+			dev_warn(hwc->dev, "Received unknown reconfig type %u\n", type);
-+			break;
-+		}
-+
-+		break;
-+
- 	default:
-+		dev_warn(hwc->dev, "Received unknown gdma event %u\n", event->type);
- 		/* Ignore unknown events, which should never happen. */
- 		break;
- 	}
-@@ -704,6 +722,7 @@ int mana_hwc_create_channel(struct gdma_context *gc)
- 	gd->pdid = INVALID_PDID;
- 	gd->doorbell = INVALID_DOORBELL;
- 
-+	hwc->hwc_timeout = HW_CHANNEL_WAIT_RESOURCE_TIMEOUT_MS;
- 	/* mana_hwc_init_queues() only creates the required data structures,
- 	 * and doesn't touch the HWC device.
- 	 */
-@@ -770,6 +789,8 @@ void mana_hwc_destroy_channel(struct gdma_context *gc)
- 	hwc->gdma_dev->doorbell = INVALID_DOORBELL;
- 	hwc->gdma_dev->pdid = INVALID_PDID;
- 
-+	hwc->hwc_timeout = 0;
-+
- 	kfree(hwc);
- 	gc->hwc.driver_data = NULL;
- 	gc->hwc.gdma_context = NULL;
-@@ -818,6 +839,7 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
- 		dest_vrq = hwc->pf_dest_vrq_id;
- 		dest_vrcq = hwc->pf_dest_vrcq_id;
- 	}
-+	dev_err(hwc->dev, "HWC: timeout %u ms\n", hwc->hwc_timeout);
- 
- 	err = mana_hwc_post_tx_wqe(txq, tx_wr, dest_vrq, dest_vrcq, false);
- 	if (err) {
-@@ -825,7 +847,8 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
- 		goto out;
- 	}
- 
--	if (!wait_for_completion_timeout(&ctx->comp_event, 30 * HZ)) {
-+	if (!wait_for_completion_timeout(&ctx->comp_event,
-+					 (hwc->hwc_timeout / 1000) * HZ)) {
- 		dev_err(hwc->dev, "HWC: Request timed out!\n");
- 		err = -ETIMEDOUT;
- 		goto out;
-diff --git a/include/net/mana/gdma.h b/include/net/mana/gdma.h
-index 96c120160f15..88b6ef7ce1a6 100644
---- a/include/net/mana/gdma.h
-+++ b/include/net/mana/gdma.h
-@@ -33,6 +33,7 @@ enum gdma_request_type {
- 	GDMA_DESTROY_PD			= 30,
- 	GDMA_CREATE_MR			= 31,
- 	GDMA_DESTROY_MR			= 32,
-+	GDMA_QUERY_HWC_TIMEOUT		= 84, /* 0x54 */
- };
- 
- #define GDMA_RESOURCE_DOORBELL_PAGE	27
-@@ -57,6 +58,8 @@ enum gdma_eqe_type {
- 	GDMA_EQE_HWC_INIT_EQ_ID_DB	= 129,
- 	GDMA_EQE_HWC_INIT_DATA		= 130,
- 	GDMA_EQE_HWC_INIT_DONE		= 131,
-+	GDMA_EQE_HWC_SOC_RECONFIG	= 132,
-+	GDMA_EQE_HWC_SOC_RECONFIG_DATA	= 133,
- };
- 
- enum {
-@@ -531,10 +534,12 @@ enum {
-  * so the driver is able to reliably support features like busy_poll.
-  */
- #define GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX BIT(2)
-+#define GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG BIT(3)
- 
- #define GDMA_DRV_CAP_FLAGS1 \
- 	(GDMA_DRV_CAP_FLAG_1_EQ_SHARING_MULTI_VPORT | \
--	 GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX)
-+	 GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX | \
-+	 GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG)
- 
- #define GDMA_DRV_CAP_FLAGS2 0
- 
-@@ -664,6 +669,19 @@ struct gdma_disable_queue_req {
- 	u32 alloc_res_id_on_creation;
- }; /* HW DATA */
- 
-+/* GDMA_QUERY_HWC_TIMEOUT */
-+struct gdma_query_hwc_timeout_req {
-+	struct gdma_req_hdr hdr;
-+	u32 timeout_ms;
-+	u32 reserved;
-+};
-+
-+struct gdma_query_hwc_timeout_resp {
-+	struct gdma_resp_hdr hdr;
-+	u32 timeout_ms;
-+	u32 reserved;
-+};
-+
- enum atb_page_size {
- 	ATB_PAGE_SIZE_4K,
- 	ATB_PAGE_SIZE_8K,
-diff --git a/include/net/mana/hw_channel.h b/include/net/mana/hw_channel.h
-index 6a757a6e2732..3d3b5c881bc1 100644
---- a/include/net/mana/hw_channel.h
-+++ b/include/net/mana/hw_channel.h
-@@ -23,6 +23,10 @@
- #define HWC_INIT_DATA_PF_DEST_RQ_ID	10
- #define HWC_INIT_DATA_PF_DEST_CQ_ID	11
- 
-+#define HWC_DATA_CFG_HWC_TIMEOUT 1
-+
-+#define HW_CHANNEL_WAIT_RESOURCE_TIMEOUT_MS 30000
-+
- /* Structures labeled with "HW DATA" are exchanged with the hardware. All of
-  * them are naturally aligned and hence don't need __packed.
-  */
-@@ -182,6 +186,7 @@ struct hw_channel_context {
- 
- 	u32 pf_dest_vrq_id;
- 	u32 pf_dest_vrcq_id;
-+	u32 hwc_timeout;
- 
- 	struct hwc_caller_ctx *caller_ctx;
- };
--- 
-2.34.1
+And before you claim that there is some discussion under link or some
+cover letter - these do not matter. Commit and bindings matter.
+
+What's more, I don't think that Arnd's advice is correct here - DT is
+suppose to describe hardware or firmware. These properties are coming
+from firmware but they are not describing any firmware or hardware
+characteristics. Instead they are debugging of current boot status.
+
+I will leave the decision on that for Rob, however anyway binding is
+very vague and incorrect, so I would expect he will come with the same
+concerns regardless whether it is suitable to DT or is not.
+
+
+
+Best regards,
+Krzysztof
 
