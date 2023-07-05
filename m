@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DFB747DA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05DF747DAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjGEG6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S231582AbjGEG60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbjGEG6R (ORCPT
+        with ESMTP id S231962AbjGEG6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:58:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0453F18E;
-        Tue,  4 Jul 2023 23:58:15 -0700 (PDT)
-X-UUID: 4df1c49a1b0111ee9cb5633481061a41-20230705
+        Wed, 5 Jul 2023 02:58:21 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18518E;
+        Tue,  4 Jul 2023 23:58:18 -0700 (PDT)
+X-UUID: 4e97302e1b0111eeb20a276fd37b9834-20230705
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JQ3CY3DSxMPgvage0n7qBERGbm8CdKlLpzRcwX86590=;
-        b=l/sVOOBVkmXwfj6sCtXjLdYnDSivRatpc1aUGVKhssf3muJA1g1KfQFaOweZ2pUJb9RgtzimSBQptk0H3/3PeTxZiH+DqcOHkXXp9xAMw665plCMohVjNN0XWXYzGiaSx4epT0boVe27D7JGkH2ErC5OYptrc7Ak2VbGz8sa2yQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:02c8138f-f0b6-454d-a0a6-4bec9785767a,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:01c9525,CLOUDID:f7bda4da-b4fa-43c8-9c3e-0d3fabd03ec0,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 4df1c49a1b0111ee9cb5633481061a41-20230705
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ZXox+jFYAE4BphrVQEZrO1m4Hit0F7XQhbXgD7y3N+o=;
+        b=mPmi+TiJy68M03CkhgOVk1K1mc/c4+TIBnTwadwSuc80gI3D/iXd2Lu6XEzLH4TjxQB5inLvzx9LX9HJdGpLXm9ixz2Q0e4xslno4v+QITQe+jh0RY34Myd+98+jvwsWm/cp4TDbg8J3un3SIn5crmrozAaqLZDTP5d9P5cmeX0=;
+X-CID-P-RULE: Spam_GS6885AD
+X-CID-O-INFO: VERSION:1.1.27,REQID:d344c661-d975-4284-aae6-c8111e39ab42,IP:0,U
+        RL:0,TC:0,Content:100,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS6885AD,A
+        CTION:quarantine,TS:200
+X-CID-INFO: VERSION:1.1.27,REQID:d344c661-d975-4284-aae6-c8111e39ab42,IP:0,URL
+        :0,TC:0,Content:100,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_HTS54396,ACT
+        ION:quarantine,TS:200
+X-CID-META: VersionHash:01c9525,CLOUDID:f238950d-26a8-467f-b838-f99719a9c083,B
+        ulkID:230705145812U1T1A6Z3,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48|8
+        01,TC:nil,Content:3,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,C
+        OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
+        TF_CID_SPAM_FSD
+X-UUID: 4e97302e1b0111eeb20a276fd37b9834-20230705
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
         (envelope-from <jason-ch.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 731591114; Wed, 05 Jul 2023 14:58:11 +0800
+        with ESMTP id 944498501; Wed, 05 Jul 2023 14:58:12 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ MTKMBS14N2.mediatek.inc (172.21.101.76) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 5 Jul 2023 14:58:09 +0800
+ 15.2.1118.26; Wed, 5 Jul 2023 14:58:10 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 5 Jul 2023 14:58:09 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 5 Jul 2023 14:58:10 +0800
 From:   Jason-ch Chen <jason-ch.chen@mediatek.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -56,9 +61,9 @@ CC:     =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         jason-ch chen <Jason-ch.Chen@mediatek.com>
-Subject: [PATCH 1/3] dt-bindings: arm: Add compatible for MediaTek MT8188
-Date:   Wed, 5 Jul 2023 14:57:42 +0800
-Message-ID: <20230705065744.25848-2-jason-ch.chen@mediatek.com>
+Subject: [PATCH 2/3] dt-bindings: arm: mediatek: Add mt8188 pericfg compatible
+Date:   Wed, 5 Jul 2023 14:57:43 +0800
+Message-ID: <20230705065744.25848-3-jason-ch.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230705065744.25848-1-jason-ch.chen@mediatek.com>
 References: <20230705065744.25848-1-jason-ch.chen@mediatek.com>
@@ -77,29 +82,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: jason-ch chen <Jason-ch.Chen@mediatek.com>
 
-This commit adds dt-binding documentation for the MediaTek MT8188
-reference board.
+Add mt8188 pericfg compatible to binding document.
 
 Signed-off-by: jason-ch chen <Jason-ch.Chen@mediatek.com>
 ---
- Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml       | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-index ae12b1cab9fb..4f4910d7a1e9 100644
---- a/Documentation/devicetree/bindings/arm/mediatek.yaml
-+++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-@@ -163,6 +163,10 @@ properties:
-           - enum:
-               - mediatek,mt8186-evb
-           - const: mediatek,mt8186
-+      - items:
-+          - enum:
-+              - mediatek,mt8188-evb
-+          - const: mediatek,mt8188
-       - items:
-           - enum:
-               - mediatek,mt8192-evb
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+index 26158d0d72f3..33c94c491828 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+@@ -28,6 +28,7 @@ properties:
+               - mediatek,mt8173-pericfg
+               - mediatek,mt8183-pericfg
+               - mediatek,mt8186-pericfg
++              - mediatek,mt8188-pericfg
+               - mediatek,mt8195-pericfg
+               - mediatek,mt8516-pericfg
+           - const: syscon
 -- 
 2.18.0
 
