@@ -2,187 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9143747BED
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 05:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B242747BE8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 05:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjGEDwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 23:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S229903AbjGEDul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 23:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjGEDwV (ORCPT
+        with ESMTP id S229449AbjGEDui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 23:52:21 -0400
-X-Greylist: delayed 317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Jul 2023 20:52:12 PDT
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB583E6E;
-        Tue,  4 Jul 2023 20:52:12 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.98.200]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M1q8m-1qJ6Oi1S6i-002CcA; Wed, 05 Jul 2023 05:46:28 +0200
-Received: from localhost.fjasle.eu (kirkenes.fjasle.eu [10.10.0.5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 9A6FD3E77A;
-        Wed,  5 Jul 2023 05:46:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1688528786; bh=HnkD9VZba8t7ggYP/ui8iR+F9w6/BbeJgf9U4jNoFts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bACWThQ0STjRLlGa7U+gBKRTJWhMqgAmwoqdoekaINqID8B20JgF/YkCRMIIFp4DJ
-         LcQY7l0w3AD1OgJp6jbRZ/a8rNqOT2ArnLR7+74wH+Jh3zsmyZlBVpqvo2+GAmmThg
-         PzELgw3ErXm52hghxWYuMYvvLjLyILNgc8vjT5Dk=
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id F02BF7E6A; Wed,  5 Jul 2023 05:45:52 +0200 (CEST)
-Date:   Wed, 5 Jul 2023 05:45:52 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Overly aggressive .gitignore file?
-Message-ID: <ZKTncHqLwgbZbRVl@bergen.fjasle.eu>
-References: <CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com>
+        Tue, 4 Jul 2023 23:50:38 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2127.outbound.protection.outlook.com [40.107.215.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D51E59;
+        Tue,  4 Jul 2023 20:50:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LfuqiZBhfZhDT8toOYbx+RKyHddX714bo5ACmEl3eBdodGV7KYyiJuMYisc1C2mfvqg+9Hxyzncyo0/+BZoBqUpvbv/vyZ45KwftiFXVUYxK40Zi5hvVtveRMU4xwTL0cUd525G/af5pHyF9E6y89+ooazSm8GP9cjoaCFP/ScsUh5VAXzBg7xnmJehlMSyGW3A5YbYsUEbyGGv460r5WZSuv4WpKkitpDrYWQ/EVSVckB9XkMitktFklJsyJAAsIOoXc3938avt8g/9FkLVz7OspthIZQyyjp3PRtD2f3+U9LgLZnX8joJVvGEKo+yzklFNN/iEO+aX7Jph3Kofnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LjReas9bKiUP11qi0YeyruDsr1ooX6zGtb1k2nvWT0I=;
+ b=Zv+tDkTjCAqMSw96ject4YqnYMyv0HGb4fcG/GqyTSEWQHP02PywQVVZbyHR7Z53hXNKa7GMKn0JktYP+HPRBgx+TE2OEQ3dORjIxmARBb/LkT8o33tZwhYBnAw9FJgDLw3mAPr/8EfJtCfpbF/WIe6MhIktmOdsSUc/aQefghwQqru9iJQCLIKl/s/mGt8KQMO3P1ByjTDBawWa+EYRCpbQqLwf7ypU6QGGYwY086mpZz7Z0G1sPQKT2EKkjNPdp4qny+EbCq0Mew3j0e/oKEfuSApm+mDUMJQ3PAsGwUxjLoOy3t92B0f9SzsEhGFiz1+2InMm5Mrw1HuZ5a3y/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LjReas9bKiUP11qi0YeyruDsr1ooX6zGtb1k2nvWT0I=;
+ b=VGjuWSr/2ujGGxJIwxHmg/ZhOaz5Mce7L1EJkx4Cw1DKFUKQ2ptI93KkEdkzGxxSRxjxe591b580tAIn3/IyUxgJoiQ+WnPUxjNfqw7a8YbgaFt+2FmENyeKypr6iiWBYTvozoyQmfa2+ElbZ+QritZT07DVr4LPEwAXjXN6VPpndx2m7/B7zfE7HQ6HaH0RtCzH9x52S0/0h6vjXOB2fprx40qzdTSNJmrQb/NjuxncSgoPtbo64lTKidlNatU3JPlAPIQTbpXUzFKoODI5MLN4I3r30RatTGfup8SvuEuU2hPjpIeEjW92E4LWbSGMiA6+c29CqzrNfysJK3jcZg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYUPR06MB6272.apcprd06.prod.outlook.com (2603:1096:400:35c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Wed, 5 Jul
+ 2023 03:50:29 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
+ 03:50:29 +0000
+From:   Minjie Du <duminjie@vivo.com>
+To:     Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com (supporter:BROADCOM BNX2FC 10
+        GIGABIT FCOE DRIVER), "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org (open list:BROADCOM BNX2FC 10 GIGABIT FCOE
+        DRIVER), linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>
+Subject: [PATCH v1] deivers: scsi: Remove duplicate assignments
+Date:   Wed,  5 Jul 2023 11:50:17 +0800
+Message-Id: <20230705035017.3262-1-duminjie@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWP286CA0005.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:178::23) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kOBcq0CHJ88AHU5w"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com>
-X-Operating-System: Debian GNU/Linux trixie/sid
-Jabber-ID: nicolas@jabber.no
-X-Provags-ID: V03:K1:pp5kItlLWfUuVEBBrxw4/Cj8PfzSumI1Wv52tVY0+OwNMVQpY0P
- zIVrKPiCWLd1XKNg3xbkcxTZClV5vxqKNv+XoCdIEBagCCsggFhH4TpcaTf4/ItNU+yQ9jG
- p4dPbZ6XYExTqX/0gRgVinshkuU4uy6EKACrY9CRqQRBA/ZX3h9cNzt+zKWedGMsmrG6sU5
- e3FGF+Hz3BBesI8jc90zg==
-UI-OutboundReport: notjunk:1;M01:P0:JJCqAKtmOok=;L67Tq7CyphbVRDX9R06hxzDiipa
- MSE6/ROEPnQ3yNP1b3ZzaCkazmJfOaKP4QGzTreG4VmMo6SSOtXrEo+dHrH3cwvTxcCzT+yLv
- fwE6YGKJQC/6RMNdBq2h7DFvKnbeL8nely/PTaX1w1lyjuY0AKVYDKt9zVJ6wvu0ANdsQnGsB
- fcsLGyREcrFGKtS8Qg+LA40HQnyQoir0bdcjerX3HTRprHw9GKgYypWoy9wnUPLWD8e4WxtY5
- ZJdiitgV44IwkULuI/IYtJ+wRq4WCfwHW4WmkaEBWPrlxFV1Dnpf8PWx1KgJTdqKaV5cohLix
- yubSEfzJ0B+tUcrqXm9knai8WgrEPw609F6bIbeAFTBdsYvC58+Ht5L99r7ereCUCN9aos7S0
- 6+Q3UlG66udl1MMdJRw6E3dXLQu+L2JAvs02jNBiIoqHuMNJv7YyGAM9w16N9wq+3ZRlul5c0
- zf4KNWW0wHLn2bXrEklDs/NsfFFjPTc866uc0iMcPQ+xQcCtfdwtRQ3/JrrTu7pkfiaYZuas0
- f17EIngueX6YCv2d/PXBXkqGXEIbyFjP1woX4Ib/d16hzCtMekIsHbuENCTmcvbP/d0MCo9UE
- bsSZUX8VTh0ANfm3WkAHYsg6FdEdfraVoJemtxO9BH0a2cRvJ9rpGuli1U6IzsXiL5vaSRflk
- M7Oq7LiKSQ8JeeTbFxpS8RpCbeAtgDGlcrnMjYalyA==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYUPR06MB6272:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f8eba92-646e-4fa5-7180-08db7d0af960
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RuBeq7FN090FynBFBImElFC0wD7W3HC8Nzg3dfzO+4z+Rdig68Q1aYDdP4P/sXEjf4Ef6O8bxFEnq2jGJmdIA8kGrpKcaxJgaSbAH0xF2OvJChY7x0aZHFp8kbakodokOrWy5Mm8gXUFbPGBfCe6rfpIq3xxzy2hhUN/UdG1fYbprdFQYe6+pHWtvHY3UGfcRq6E9FRqmkq0XFkYWzTh/ZX4zNkk05zWmPaElhjlOuWwEVxqMQgdzAkCTj/YwBlEKCq95nFTW1qe9J8silCalpKGIpQp5wKuQCHMRraKEvN07822hhTxTSVNTQQttRMfQSVhJ7m5Jla+FjaiHmo76msyWxgWov8Fd7FkNX8rFH3+OBzP903hd8FqqcosR/1yNxtvvZWAu1/xnZQXDjbwecr0eL+z31IxUVHpX5dF/ZyxVuHzA6ukEzsmv7pe9Gz+XOR3qDeU2AYSVT82UCOFjKL2P7t2WiCwtMpOkqCbCO+04KKPQnxzTWfKmKEpxO3EeT6HxKDPXgDzM1oz7x0woUN06na5awT5YeHlYUNzMmRQSVr0C4WY88mhi79qe2qgn+nCs+oIFcvpGHzMtvrkK2ahIjd7u+LRkObfvsSPHJtrfYnu5iAiIXsO5YBrK3/g
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(376002)(346002)(39860400002)(451199021)(66946007)(4326008)(66476007)(2906002)(478600001)(66556008)(316002)(36756003)(8676002)(8936002)(5660300002)(41300700001)(6512007)(86362001)(110136005)(6666004)(38350700002)(38100700002)(6486002)(52116002)(26005)(6506007)(1076003)(186003)(83380400001)(107886003)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jiK+aPK/zX3RqCT9Ctu8PNBhhEn4i/wz6GBYqjpiDAG3Y9SYIeB+oq9lB3nU?=
+ =?us-ascii?Q?weI8bmJqSje5ns7/oPf8J6aMMyebSHQUv8wZ6h4drg1NQuO3VxQzhUyIBm/x?=
+ =?us-ascii?Q?1r9YC2uOaC1oKuuV9WuQ83Ugz6wHb2EN6MU+14u8Z0HXHkMr6kftWPZRK3P5?=
+ =?us-ascii?Q?ay5uHpDZcZiTtIVdoBzfbCDCFlwLEDDKu+ovIM1qNMUDLRSO83uZRb3Z/dG/?=
+ =?us-ascii?Q?NVG+sfjgSTUIYSGuCudF5HXYOV3MbNBi410M3KX2lScXfOM/Ao6kWGqI7QIG?=
+ =?us-ascii?Q?RP/Je9Gpu3OyF+tZSN3tQbdEYBofOShhRoGX9kkwJGpl/2Q+LXs15t+xPG9U?=
+ =?us-ascii?Q?7Y0fVtY5xDGtDlU2RY5WjGxcRG4YuTq7LIkG+c7zPtttIvlLsoftrNOryX/E?=
+ =?us-ascii?Q?Dq30xY+j76CyFDg/dR6Da1AT0jrFgDXjD10whhGsgXF0K/LZJG/EMS5lvg/L?=
+ =?us-ascii?Q?FhreXWOhqOs3PYrAJKrEJGjp9EOoVxbO8GyuTHRA65jt6wCOEO27tQwOoqZa?=
+ =?us-ascii?Q?bwpYdbtOjDZcJvSjowDA8wf3e47DqEsaLRpWX6t2KrxKfvdNpY0D5IwoRAWa?=
+ =?us-ascii?Q?sGY7uv0iRe757bsAYsXkhGU4qj842wkZ9Ph521h/sWTuyRDBS4hQCwY1EPfd?=
+ =?us-ascii?Q?IpMcn3VxXmP19uJzhNP1N3z03G5TqcJ80+FpB3U6ub5Hprn3oG2be2tddsqk?=
+ =?us-ascii?Q?14I7kjt4x5jax7cSgmABtz5sM056lc5oinZ3o+ANJfHrIXeHbJWq7Ty1cNwo?=
+ =?us-ascii?Q?4+dGK4Mpi+L+/E5dY7M2eWM8EBVhW8P4+F5bcWf8t5xlbC50SldTvxczEvxT?=
+ =?us-ascii?Q?viBp0rtFpivmeKmZZIsa8fhE0UQcZ0et/0fbiOemqm8HXICRVXwacR7ag7FY?=
+ =?us-ascii?Q?/qY6uEIGgYOKBn0YdHtae7vxG4qrSDlvaRaLSofIh8ys2XfJ+dJldBNH8fml?=
+ =?us-ascii?Q?9Z2B5PBcz31lsC5yD10j/NxSUO8hHgqJeahGwXuscX6XNnHAN1NhBXHcMrbm?=
+ =?us-ascii?Q?Hj/n6JQXx+0npxtMuaSHiLcuChUU/ebFf8j7wInSzUX++uQysfRHq4dXEMCm?=
+ =?us-ascii?Q?p3fM4/Z0wBgychwnORTpc4SRRewrCTwyViwCkPBptSCvf3P7aAoghavabsAv?=
+ =?us-ascii?Q?7D57qofIj5V65nF5Y3vWVVifErCgm1FsiQBB5aWfqxesKwGapVOdNRryBsxe?=
+ =?us-ascii?Q?ywAJdbtGJgJeVYEXflgC/FG7/TwPiBb2zh8aL9kPnNo+HJKpFn82xxW8I0bf?=
+ =?us-ascii?Q?gDc3B5MVEio61jhxDwB8IqrEVy1TDFMN4Pa4A3kWPdqQt/ZKlAZiO1jjROie?=
+ =?us-ascii?Q?ENYsY5gUwhk6U3yVKM+puvP6OMLWc8hFSw01YS6AdkYehMpiWiQ0M/haWGAG?=
+ =?us-ascii?Q?WuBWYfpor7Zk/Utj5+wvOWBDC76aOmaXx6ifQTDYcCDSYXDFWLLysruzweOO?=
+ =?us-ascii?Q?krKNMaG2bT0AmQjhZHXacXM8GckppoL5CZ2vQ7ySdWi8D7JDJpZzSYmQVW/a?=
+ =?us-ascii?Q?8fI1j3fH06jnJsMBuAN0b4ENW5Ay2OSAtvoJwrSlTHNT4XQwKD1out0fCVc9?=
+ =?us-ascii?Q?GVNIkLXfqFaMzHyIfdIJ12qMCoOa9d2+cJwL0qZ/?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f8eba92-646e-4fa5-7180-08db7d0af960
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 03:50:29.2802
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xkz6BvLSWsoiqGfVLY2pCR51p4YuDZLrHMwwv4xCF69cLulLybokWwZvRvUWnHzRRlRTjaJBTjJyy88LEXN53A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR06MB6272
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+make task->rxwr_txrd.const_ctx.init_flags avoid double assignment.
 
---kOBcq0CHJ88AHU5w
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Minjie Du <duminjie@vivo.com>
+---
+ drivers/scsi/bnx2fc/bnx2fc_hwi.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-On Tue 04 Jul 2023 12:49:01 GMT, Linus Torvalds wrote:
-> So this keeps happening to me - I go to apply a patch I just
-> downloaded with 'b4', and I do my regular
->=20
->      git am -s --whitespace 2023<tab>
->=20
-> and the dang thing doesn't autocomplete.,
->=20
-> The reason it doesn't auto-complete ends up being that my kernel tree
-> contains some other random stale mbx file from the _previous_ time I
-> did that, because they effectively get hidden from "git status" etc by
-> our .gitignore file.
->=20
-> So then those stale files end up staying around much too long and not
-> showing up on my radar even though they are just old garbage by the
-> time I have actually applied them.
->=20
-> And I always use auto-complete, because those filenames that 'b4'
-> generate are ridiculously long (for good reason).
->=20
-> And the auto-complete always fails, because b4 just uses a common
-> prefix pattern too (again, for a perfectly good reason - I'm not
-> complaining about b4 here).
->=20
-> This has been a slight annoyance for a while, but the last time it
-> happened just a moment ago when I applied David Howells' afs patch
-> (commit 03275585cabd: "afs: Fix accidental truncation when storing
-> data" - not that the particular commit matters, I'm just pointing out
-> how it just happened _again_).
->=20
-> So I'm really inclined to just revert the commit that added this
-> pattern: 534066a983df (".gitignore: ignore *.cover and *.mbx"). It's
-> actively detrimental to my workflow.
->=20
-> I'm not sure why that pattern was added, though. These are not
-> auto-generated files from our build.  So before I go off and revert
-> it, let's ask the people mentioned in that commit.
->=20
-> I *suspect* the thing that triggered this wasn't that people actually
-> wanted to ignore these files, but that it was related to the misguided
-> "let's use .gitignore to build source packages" project.
->=20
-> But at least for me, it's a real problem when .gitignore contains
-> other files than the ones we actually generate.
->=20
-> The only one that actually commonly affects me is the *.mbx file,
-> although I could certainly see the same being true of the *.cover
-> thing.
->=20
-> And there might certainly be other patterns like this that I just
-> don't react to, because they don't have the same detrimental effects
-> on how I work.
->=20
-> Comments?
->=20
->                Linus
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+index 776544385..0474fe88a 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+@@ -1521,8 +1521,6 @@ void bnx2fc_init_seq_cleanup_task(struct bnx2fc_cmd *seq_clnp_req,
+ 				FCOE_TCE_TX_WR_RX_RD_CONST_CLASS_TYPE_SHIFT;
+ 	task->rxwr_txrd.const_ctx.init_flags = context_id <<
+ 				FCOE_TCE_RX_WR_TX_RD_CONST_CID_SHIFT;
+-	task->rxwr_txrd.const_ctx.init_flags = context_id <<
+-				FCOE_TCE_RX_WR_TX_RD_CONST_CID_SHIFT;
+ 
+ 	task->txwr_rxrd.union_ctx.cleanup.ctx.cleaned_task_id = orig_xid;
+ 
+@@ -1763,7 +1761,6 @@ void bnx2fc_init_task(struct bnx2fc_cmd *io_req,
+ 				FCOE_TASK_DEV_TYPE_TAPE <<
+ 				FCOE_TCE_TX_WR_RX_RD_CONST_DEV_TYPE_SHIFT;
+ 		io_req->rec_retry = 0;
+-		io_req->rec_retry = 0;
+ 	} else
+ 		task->txwr_rxrd.const_ctx.init_flags |=
+ 				FCOE_TASK_DEV_TYPE_DISK <<
+-- 
+2.39.0
 
-Thanks for sharing some details of your concrete workflow.  I think,=20
-having this in mind, it is quite a fair point to criticise the handling=20
-(or ignoring, respectively) of files that are are not generated or used=20
-during kernel builds.  But in general, I don't find it that easy to=20
-draw the line; should we also remove
-
-   *.kdev4
-   *.orig
-   *.patch
-   *~
-   \#*#
-   patches
-   series
-
-=66rom .gitignore?   I don't think so, even though they (partially) fall=20
-into the same category.
-
-=46rom my point of view, this is a decision of personal preference.
-I do like the ignoring of *.mbx and *.cover, as I tend to have those=20
-files around for some time by intention.  But a revert would not cause=20
-any trouble to me and optimisation of your workflow is magnitudes more=20
-important, so I am perfectly fine with it, if you want to have the=20
-commit reverted.
-
-Kind regards,
-Nicolas
-
---kOBcq0CHJ88AHU5w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmSk52oACgkQB1IKcBYm
-Emn36xAApwKAOGE3Kyrg5laz1NIiZ3UJi2bbR5vBRUdRTv4XiYpNJGuEuFvTugcO
-VcKbHcbVcL5s2Uau1Mau33eTbcxHKPn/mLrcqeOZICLv9XqeOgZbTMVD3nByhVwd
-kJAqpSfJplElzs1O6r7duqaKRr6oXELHMtTxzl7Rn7ZcxqnJWV5MIG/YSjrjRNe6
-rua6akR6k0i8I2Z78C2yN2wFnWMuLoMwJaCzPDkSqNg0H25wzr3Ge4fj63KuGpLm
-IL7X/Eu30FbVMgcR9nev8ud0yb2FrAWenxwBfQDTEkSLiCKa+zLuax5uEFWI70zs
-PCikiUAdhrm5vVzPaLQwQdi0d6EcWa2MgiO5IUWEPqk4iBYpV8G2JNb5JqJF9siV
-650RFrrk9D1P8YH6aFH9byVivN4H/5Ay30by5xEyf2m/LeURPt0cQ4E3n3IMj5y6
-p6xL7Znmd5vpbnVnbetnYQRlbmpa5jb8A3YP7rovMuIzRoWc52oFqdVcy4kxfQnH
-v0B3+oKf4oMef1SQk9M5XGLI+p74IlYbKaFTf1C8DhEKgEPEBNvebD3viheDhPfA
-Ms0odI0SeKQgf0mSy84aio7aO9zmYLS3M/IgRNFOoLoPE+mdJkwfRhCmbY3x6Sz9
-BSJxB0mBb6T/lw3cZBNh+vAVddUkbpUtpkMU6CswWIIgt0BtHYk=
-=Tr0v
------END PGP SIGNATURE-----
-
---kOBcq0CHJ88AHU5w--
