@@ -2,113 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5579874892A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43268748931
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjGEQZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S232580AbjGEQ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjGEQZ3 (ORCPT
+        with ESMTP id S232819AbjGEQ1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EAAA9;
-        Wed,  5 Jul 2023 09:25:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11F0861610;
-        Wed,  5 Jul 2023 16:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA71DC433C7;
-        Wed,  5 Jul 2023 16:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688574326;
-        bh=l65JmUivLY90VE8juzqY+hoZRfzpdY5o0Cbe6TLs4zA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pw5oKXfEFazKk34nO+C4r/CzXjeW1J3yy9JYhiijAOixGeU1m2QXSj+KkAAhKT5kj
-         xYJKPAh2uFHCZNNse/s0iVEX0IxX6OH8tQOrwN4ySJd5TKUANl6QBpWx1re38108gW
-         lTupx/xdnKJ7v0RrUhPOx3xLQCTCCbK8DgOsM7PU=
-Date:   Wed, 5 Jul 2023 17:25:24 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-Subject: Re: [PATCH 6.1 00/13] 6.1.38-rc2 review
-Message-ID: <2023070551-matcher-camping-98f0@gregkh>
-References: <20230704084611.071971014@linuxfoundation.org>
- <824705ec-38ca-1587-573c-595b146ee2e1@roeck-us.net>
- <2023070529-barcode-unpleased-5705@gregkh>
- <2bbf215e-840d-138b-511f-b2602a3eeda8@roeck-us.net>
+        Wed, 5 Jul 2023 12:27:53 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEEF1703
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:27:52 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-40371070eb7so452251cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688574471; x=1691166471;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6+b6HdBO2HTE2Fgq56si0I6hn366dTE1zq4yHg6W9Y0=;
+        b=DyQIomzb0HGOrjSSZzDc25EbIFtjXS02c4XUBPZ89883pZrEXwEqIvAqTPU5izH4tI
+         YzCv1bHM84pr9hrlxKNebT/aMAWEgU3frR2KZs+O82khTXgvFU6GKExm2m8fgSwVZTs4
+         N39yAxRq/LR4kfzHKjQ0el059sAmyDJchQJczSYHkJC8BKElkfESrFOV0WHqSP6P/ugT
+         luZXSTTdIk1EcOK7bzX/Nmoey5akNpKPAGMDet04pI/vuQjxeDl89JFrRizqnnzdAqv+
+         +YJyEP+IyDmcRoyrqFke90XH4sLRTtB/CQJ+g9SKiCkYmIYqjAatKt5PLteziZEuBq5g
+         RNxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688574471; x=1691166471;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6+b6HdBO2HTE2Fgq56si0I6hn366dTE1zq4yHg6W9Y0=;
+        b=M0b0cThM+EchGms4diDwf3Rza2N2XRgDXFTCCQKz+OulSYwqpboDgMghXuwhZka8Yd
+         R/tn5vrv7RjKc8IXQGgEr8ILvJTANZA4Xhjve0prN3R2ACAY3DBqUYdpFmnkPNwE4RVO
+         CjgqpMEh8xti/DqjalHS7MYefBpAlkilwDoiHjtNpr8ZyS7KjwdsRTT6h4uEoTLjYBxy
+         kRtTJlaZ5sNJ/+0yd1wTCSA02/kjW5ZN9txElfCgSSrU5Uhqy2rneu+z2eglDNHegT3Q
+         0WScrSRJcouPXwXbuY6o4BYX4gy2JbM+pM1i85QYQe12IuQvdBbONzWKCR6sivRFeE/N
+         DBIw==
+X-Gm-Message-State: ABy/qLZ8y0Uj9PL6vYDayn5fAnCcw3x3CXhRLrIsMs7P7hEC2NMObAx/
+        XbCCDHis/oQg7jq54nUueib0TtS8ip+Tg6CVRnrslw==
+X-Google-Smtp-Source: APBJJlGP8NPgExSaXIUaVZ5PBn6mZl70QFsmuVh+N8HQEo6jxCLPsG280YnB5ou2hwdGWMkQaNU4v0hovbQymt4kJrw=
+X-Received: by 2002:a05:622a:2d6:b0:3f8:5b2:aef4 with SMTP id
+ a22-20020a05622a02d600b003f805b2aef4mr135081qtx.28.1688574471033; Wed, 05 Jul
+ 2023 09:27:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2bbf215e-840d-138b-511f-b2602a3eeda8@roeck-us.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230629205040.665834-1-axelrasmussen@google.com>
+ <ZKSDLogLASaZgKCP@x1n> <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
+ <ZKWXGnSKcOdnaeJw@x1n>
+In-Reply-To: <ZKWXGnSKcOdnaeJw@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 5 Jul 2023 09:27:15 -0700
+Message-ID: <CADrL8HWO8g2-YdUtyLM6e+f1VJq6YV-b1_rj-beEh2C84kAgEw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 09:13:58AM -0700, Guenter Roeck wrote:
-> On 7/5/23 09:06, Greg Kroah-Hartman wrote:
-> > On Wed, Jul 05, 2023 at 07:23:30AM -0700, Guenter Roeck wrote:
-> > > On 7/4/23 01:48, Greg Kroah-Hartman wrote:
-> > > > This is the start of the stable review cycle for the 6.1.38 release.
-> > > > There are 13 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> > > > 
-> > > > Responses should be made by Thu, 06 Jul 2023 08:46:01 +0000.
-> > > > Anything received after that time might be too late.
-> > > > 
-> > > > The whole patch series can be found in one patch at:
-> > > > 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.38-rc2.gz
-> > > > or in the git tree and branch at:
-> > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > > > and the diffstat can be found below.
-> > > > 
-> > > > thanks,
-> > > > 
-> > > > greg k-h
-> > > > 
-> > > > -------------
-> > > > Pseudo-Shortlog of commits:
-> > > > 
-> > > > Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > >       Linux 6.1.38-rc2
-> > > > 
-> > > > Linus Torvalds <torvalds@linux-foundation.org>
-> > > >       gup: avoid stack expansion warning for known-good case
-> > > > 
-> > > 
-> > > I am a bit puzzled by this patch. It avoids a warning introduced with
-> > > upstream commit a425ac5365f6 ("gup: add warning if some caller would
-> > > seem to want stack expansion"), or at least it says so, but that patch
-> > > is not in v6.1.y. Why is this patch needed here ?
-> > 
-> > It isn't, and was dropped for -rc2, right?
-> > 
-> 
-> The above is from the -rc2 log so, no, it was not dropped. I checked in the
-> repository to be sure. It is also in v6.3.12-rc2 and v6.4.2-rc2, but there
-> it makes sense because a425ac5365f6 was applied/backported to those branches.
+On Wed, Jul 5, 2023 at 9:15=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Wed, Jul 05, 2023 at 09:09:19AM -0700, James Houghton wrote:
+> > > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> > > > index 4c932cb45e0b..8259fee32421 100644
+> > > > --- a/include/linux/swapops.h
+> > > > +++ b/include/linux/swapops.h
+> > > > @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
+> > > >
+> > > >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
+> > > >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
+> > > > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
+> > > > +#define  PTE_MARKER_UFFD_POISON                      BIT(2)
+> > >
+> > > One more tab.
+> > >
+> > > Though I remembered the last time we discussed IIRC we plan to rename
+> > > SWAPIN_ERROR and reuse it, could you explain why a new bit is still n=
+eeded?
+> > >
+> > > I think I commented this but I'll do it again: IIUC any existing host
+> > > swapin errors for guest pages should be reported as MCE too, afaict,
+> > > happened in kvm context.
+> >
+> > I think swapin errors are treated differently than poison. Swapin
+> > errors get VM_FAULT_SIGBUS, and poison gets VM_FAULT_HWPOISON, so
+> > UFFDIO_POISON should also get VM_FAULT_HWPOISON (so that's what Axel
+> > has implemented). And I think that needs a separate PTE marker.
+>
+> My question was, should we also make SWAPIN_ERROR return VM_FAULT_HWPOISO=
+N
+> always?
+>
+> Just to recap from what I already commented above - if a guest page got
+> error in swapin due to block sector failures, it should be treated as
+> VM_FAULT_HWPOISON too, IMHO.  IOW, I think current SWAPIN_ERROR is wrong
+> when in kvm context and we should fix it first.
 
-Ah, I must have dropped it right after the -rc2 announcement, it's been
-a long week already:
-	https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/commit/?id=a5847f7c495fdc9c0a7b63703237f2891a6b6ed1
-
-but be sure, it's gone from all branches now.
-
-thanks,
-
-greg k-h
+Oh! Yes, I agree, though I'm not familiar enough with the users of
+SWAPIN_ERROR to know if we can actually make this change.
