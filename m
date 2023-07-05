@@ -2,59 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC7C748EB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E838F748EBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233565AbjGEUSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 16:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S233591AbjGEUTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 16:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjGEUSP (ORCPT
+        with ESMTP id S232401AbjGEUTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 16:18:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495C21985;
-        Wed,  5 Jul 2023 13:18:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB15A61712;
-        Wed,  5 Jul 2023 20:18:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4630C433C7;
-        Wed,  5 Jul 2023 20:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688588294;
-        bh=Hk4tiWZ1zcoFlQt6mk0hEPk2/GJbldA+/74Zn17a/lE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oDBK+FfBQjWPIa7U+f/t9in5mlec5MkIQVWUHC6FCzoXXcQ7tbgOvt0hX+otqlGhE
-         MZ7WlymKSt9x1A8f0pB2dfZ0XJDWNszJ6wcVoqUB4yJo7zGTz9pvp8/zL7I3WtQwSJ
-         yR5OpFUONzPQAh3KFiAwSrPYDLirY8BVUFVERotL3wg6ZmqBHbXsBgVh+TOfz3DbgQ
-         CntL8V6SbHWVTsi0pyB0/yVW8h38gmvqxr6/kHVPdvydlxlLmJIqdCqKTX+qqH/JUq
-         d2Cd7LgnZ5Jgo2iQcf5orctzjRUsmay294IbvCyX0k/CYgr/KWCYrv5d2hJS4wGLNE
-         X+MAcPxYM64AA==
-Date:   Wed, 5 Jul 2023 13:18:12 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Cc:     herbert@gondor.apana.org.au, agk@redhat.com, snitzer@kernel.org,
-        linux-crypto@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, qat-linux@intel.com,
-        heinzm@redhat.com, meenakshi.aggarwal@nxp.com,
-        horia.geanta@nxp.com, V.Sethi@nxp.com, pankaj.gupta@nxp.com,
-        gaurav.jain@nxp.com, davem@davemloft.net, iuliana.prodan@nxp.com,
-        Fiona Trahe <fiona.trahe@intel.com>
-Subject: Re: [PATCH 2/3] crypto: api - adjust meaning of
- CRYPTO_ALG_ALLOCATES_MEMORY
-Message-ID: <20230705201812.GB866@sol.localdomain>
-References: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
- <20230705164009.58351-3-giovanni.cabiddu@intel.com>
+        Wed, 5 Jul 2023 16:19:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AC41985
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 13:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=T0XLnvzn5FkOLIw7q3RfBWKmkfDnS0W7AG/lbyZT7fw=; b=Q8nN/eVzqtRFhuNEk4/aZxiwlf
+        b7nmE8lceUwvvkelHvAh5oK6q5zyM86Kco60daX9344Go8jHWsQhYFgnDwjMdBblwWw5YWU5nZ+Lp
+        zBH+5PCKSX65joIEYLlpbOw4UK471N0qDkcUmLnMhR/OyZ5qxj57WWKNkEvf41yxTvfoQrrhM0yc9
+        5F8C+pmqA0h3nHWwswjhLTC29fyoiuUiOBxiewi/YDVrcCSMIBjUFzgtj247FDte95jEFQZAQQVt4
+        oJfH7aftPSAW8CxkGBtSn83CXOLoYpoyoi7WrMECd0vaqo8diyrlZb0LoqVd0aMMf21rHGzI+J/V0
+        b1LwHeTw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qH8xp-00AORJ-Aq; Wed, 05 Jul 2023 20:19:01 +0000
+Date:   Wed, 5 Jul 2023 21:19:01 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH v2 4/4] mm/memory: convert do_read_fault() to use folios
+Message-ID: <ZKXQNa7mikRJWO2M@casper.infradead.org>
+References: <20230705194335.273790-1-sidhartha.kumar@oracle.com>
+ <20230705194335.273790-4-sidhartha.kumar@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705164009.58351-3-giovanni.cabiddu@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230705194335.273790-4-sidhartha.kumar@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,36 +50,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 05:40:08PM +0100, Giovanni Cabiddu wrote:
+On Wed, Jul 05, 2023 at 12:43:35PM -0700, Sidhartha Kumar wrote:
+> Saves one implicit call to compound_head()
+> 
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
 
-> Algorithms that do not set this flag will guarantee
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-"will guarantee" => "guarantee"
- 
-> that memory is not allocated during request processing, except in
-> the avoidable exception cases described below.
+> @@ -4543,10 +4544,12 @@ static vm_fault_t do_read_fault(struct vm_fault *vmf)
+>  	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY)))
+>  		return ret;
+>  
+> +	folio = page_folio(vmf->page);
 
-"avoidable exception cases" => "exception cases"
+Why not move this down to after the call to finish_fault()?  The
+compiler should be able to do a better job with that; it may have to
+spill it to the stack to preserve it over the function call.
 
-Whether they are avoidable depends on the user.
+>  	ret |= finish_fault(vmf);
+> -	unlock_page(vmf->page);
+> +	folio_unlock(folio);
+>  	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY)))
+> -		put_page(vmf->page);
+> +		folio_put(folio);
+>  	return ret;
 
-> * Users can request an algorithm with this flag unset if they can't handle
-> * memory allocation failures or sleeping during request processing.
-
-Why add the "sleeping during request processing" part?  Isn't that controlled on
-a per-request basis by CRYPTO_TFM_REQ_MAY_SLEEP which is a separate thing?
-
-> * They should also follow the constraints below.
-
-"should" => "must"
-
-> + *	- The input and output scatterlists must have no more than 4 entries.
-> + *	  If the scatterlists contain more than 4 entries, the algorithm may
-> + *	  allocate memory.
-
-"If the scatterlists contains" => "If either scatterlist contains"
-
-Otherwise it is unclear whether this is talking about the length of each
-scatterlist individually, or the sum of their lengths.
-
-- Eric
