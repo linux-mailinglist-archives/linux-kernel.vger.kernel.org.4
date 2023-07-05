@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F9B748718
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407B4748719
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbjGEO7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S232196AbjGEO7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbjGEO72 (ORCPT
+        with ESMTP id S232876AbjGEO73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:59:28 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C02E1998
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:59:20 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-98e011f45ffso674251266b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:59:20 -0700 (PDT)
+        Wed, 5 Jul 2023 10:59:29 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B9F19A3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:59:21 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9936b3d0286so388771566b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688569158; x=1691161158;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+KmKoQmxevAlDr8GWoC0x/IRg+Abm5jjahWJpZI9534=;
-        b=CahXrZzX5G78sto6/yKaMIx/9seqEqvUG+kVsIwdTjj/VTJKB2eWt1osnlwaDCJXOJ
-         UCRprFp1YLaTIQ9teLiw8qs0UYfdigWrFmTiH2TLkHh+vUaH+wDA9efiHX6RkxF/hnME
-         PheFt8VDZz9UgNusVZvQJetOTczGWBfqza1kU+pbrLCWkuJ5ea+atlr3Eg+DBWhX+egS
-         Rv2ExdRMpo4T3M/Y9T42pufTs0A8FPVAkr/YtGa4wpH95cyavKuIY+LrWOlN4lWu8j8l
-         MsfqIk0MZskP+d9X/VkxuSzyTN9A2q4QhKlj8M/iFw3u6RRe+RW5A3T6C0fYC+lzpuWR
-         hq5w==
+        d=linaro.org; s=google; t=1688569160; x=1691161160;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bzrYblQvo4U+yVZVzZ09uuCNdbfrwwUh58L+13FV0AQ=;
+        b=qkZJ75YwZ7L2XV0SL+Lg/nYTIkK4fztyr9q3E5pbPTUk6NlQ9MScnGtS06IcfRjodJ
+         +uoyixgEGOKjEiK2YwLV63bvvqGhI5m1yHf/w+1nfwO089n0Er024Mc5YYYNqqig/+3g
+         IFGj+GxLRedfy7tgnK4dREL4+WNePCS7mT0BfYJoTutDCA3vo7HoG8Ks7OuJ3EoW5pyc
+         OtFg9qWeOW3bNMq4+l2wasXiPaVt49TJDXiqjz/qyNjqM1oyocgVmXLZCAMUpVHT28qI
+         h5QDk2cw18OcLiOlhNGOtFpzO6RKDzxX+ZXSYT7ivEnIpUaebh43cBesGPKMy1qkt2EA
+         J1nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688569158; x=1691161158;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+KmKoQmxevAlDr8GWoC0x/IRg+Abm5jjahWJpZI9534=;
-        b=eZ43Dwxstu27k+EDQtdy72inFbLl6P50ONk6qPC0KUHmkbcnvG6jQ7gtfs7YQLWH5i
-         vWPBuRLdTU8+vcnT9rQozDLpw74WHRkTQtZIC9hRshtXOftwDQjg3mkkhIoL6lgjMIRG
-         Cb0/LSL8JZPr+Vtu4ZViEhLMCnYeXFh/oL8Zw+A7zR1n6NS9qXVoT/XHqiHY4dTK8Iwa
-         jk8NB5xMH75H8LDLBZQN0rpdRApbeenldvp9s3NOlkt0CxbD7CrlthdFM8qeh7qjJN/B
-         Mt0WF1dmGb7Xv6EMj98AiRt9aMw0YHQ3XPsGw0axdEJ0nVDdrRt+vaSnIG3nDb9LjcmI
-         VzcA==
-X-Gm-Message-State: ABy/qLY8XERHJ+aFa3IuYMhyEegNTOZp1hxwdAV8tLsF5FIT8fmGJyht
-        CxT705XjsXWZZ8QbduOUHjLw8w==
-X-Google-Smtp-Source: APBJJlF2nHsUoLIzfCr8pWpO/KLvyvSWrmgJ8X+J5oE20VFYjBfpdT9MSi0qg/SxxlvR+WAtHIRsxw==
-X-Received: by 2002:a17:906:fa89:b0:988:7d1:f5a5 with SMTP id lt9-20020a170906fa8900b0098807d1f5a5mr11016880ejb.28.1688569158644;
-        Wed, 05 Jul 2023 07:59:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688569160; x=1691161160;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bzrYblQvo4U+yVZVzZ09uuCNdbfrwwUh58L+13FV0AQ=;
+        b=UyTHALsABBl472WbLxYNVD221iWwhKpKcJh8bkVHb331m7p6fsjhWCA5ioOlNIeOAn
+         F1q5sgZLc512KPErSYJWCuS4tZvFm8FIWEEc6OuSya6k+i1LHI3zbwqyTcFxL3wzS8Wi
+         7rKn8BkMUVpNBn89HlxNTt7zLbr8v5A4TXTiek3boPR4cZKHQbMewing8NrSSlh2NB5S
+         eLQ2H8m9sVFLIrEHPuKZu5MOyZl39Et9YsG2qf45TIwUPj7Eg0Y91OfXo+GGEQbQDiFp
+         dS//EajFsaWA0jxaLtiZ8TTMpnLyHvhOicIPuK+dIzCnNxyIcMkxmUMmgw+fGs9YCZti
+         hdDg==
+X-Gm-Message-State: ABy/qLb7ViohIZzpq1Gm7KORRxTVkRrT4PH3NnRNuDwMWB55CDUDAcIy
+        FFkARGVQIC0o1z4KXVuePyuyzg==
+X-Google-Smtp-Source: APBJJlHv8IwEnKqzO57ft2SwkudLUlOLrVOvOeDRtOkN+tVScR84ZnT3TnXinxoLlqpEdFT2rLbvYw==
+X-Received: by 2002:a17:906:4a91:b0:991:d2a8:658a with SMTP id x17-20020a1709064a9100b00991d2a8658amr13784930eju.34.1688569160066;
+        Wed, 05 Jul 2023 07:59:20 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id b22-20020a17090636d600b0099293cdbc98sm9419972ejc.145.2023.07.05.07.59.15
+        by smtp.gmail.com with ESMTPSA id b22-20020a17090636d600b0099293cdbc98sm9419972ejc.145.2023.07.05.07.59.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 07:59:18 -0700 (PDT)
+        Wed, 05 Jul 2023 07:59:19 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>,
@@ -58,10 +59,12 @@ To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] ARM: dts: renesas: add missing space before {
-Date:   Wed,  5 Jul 2023 16:59:11 +0200
-Message-Id: <20230705145912.293315-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] arm64: dts: renesas: add missing space before {
+Date:   Wed,  5 Jul 2023 16:59:12 +0200
+Message-Id: <20230705145912.293315-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230705145912.293315-1-krzysztof.kozlowski@linaro.org>
+References: <20230705145912.293315-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,22 +81,64 @@ Add missing whitespace between node name/label and opening {.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/renesas/gmsl-cameras.dtsi    | 4 ++--
+ arch/arm64/boot/dts/renesas/r8a77970-v3msk.dts   | 2 +-
+ arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts b/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts
-index c18bbd7141c4..31cdca3e623c 100644
---- a/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts
-+++ b/arch/arm/boot/dts/renesas/r9a06g032-rzn1d400-db.dts
-@@ -67,7 +67,7 @@ &mii_conv5 {
+diff --git a/arch/arm64/boot/dts/renesas/gmsl-cameras.dtsi b/arch/arm64/boot/dts/renesas/gmsl-cameras.dtsi
+index d45f072f8cdf..e0930d1ba3aa 100644
+--- a/arch/arm64/boot/dts/renesas/gmsl-cameras.dtsi
++++ b/arch/arm64/boot/dts/renesas/gmsl-cameras.dtsi
+@@ -100,7 +100,7 @@ max9286_in0: endpoint {
+ 
+ #ifdef GMSL_CAMERA_1
+ 		port@1 {
+-			max9286_in1: endpoint{
++			max9286_in1: endpoint {
+ 				remote-endpoint = <&fakra_con1>;
+ 			};
+ 
+@@ -233,7 +233,7 @@ max9286_in4: endpoint {
+ 
+ #ifdef GMSL_CAMERA_5
+ 		port@1 {
+-			max9286_in5: endpoint{
++			max9286_in5: endpoint {
+ 				remote-endpoint = <&fakra_con5>;
+ 			};
+ 
+diff --git a/arch/arm64/boot/dts/renesas/r8a77970-v3msk.dts b/arch/arm64/boot/dts/renesas/r8a77970-v3msk.dts
+index c2b65f8de547..e36999e91af5 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77970-v3msk.dts
++++ b/arch/arm64/boot/dts/renesas/r8a77970-v3msk.dts
+@@ -145,7 +145,7 @@ &i2c0 {
  	status = "okay";
+ 	clock-frequency = <400000>;
+ 
+-	hdmi@39{
++	hdmi@39 {
+ 		compatible = "adi,adv7511w";
+ 		#sound-dai-cells = <0>;
+ 		reg = <0x39>;
+diff --git a/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi b/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi
+index 3962d47b3e59..a7594ba3a998 100644
+--- a/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi
++++ b/arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi
+@@ -78,11 +78,11 @@ vccq_sdhi1: regulator-vccq-sdhi1 {
+ 	};
  };
  
--&pinctrl{
-+&pinctrl {
- 	pins_can0: pins_can0 {
- 		pinmux = <RZN1_PINMUX(162, RZN1_FUNC_CAN)>,	/* CAN0_TXD */
- 			 <RZN1_PINMUX(163, RZN1_FUNC_CAN)>;	/* CAN0_RXD */
+-&audio_clk1{
++&audio_clk1 {
+ 	clock-frequency = <11289600>;
+ };
+ 
+-&audio_clk2{
++&audio_clk2 {
+ 	clock-frequency = <12288000>;
+ };
+ 
 -- 
 2.34.1
 
