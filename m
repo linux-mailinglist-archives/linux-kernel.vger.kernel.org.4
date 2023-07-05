@@ -2,223 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F7C748BBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A6A748BBD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbjGESWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 14:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S233445AbjGESXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 14:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbjGESW1 (ORCPT
+        with ESMTP id S233778AbjGESXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 14:22:27 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A0C2694
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:21:56 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6f9edac8dso31270011fa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 11:21:56 -0700 (PDT)
+        Wed, 5 Jul 2023 14:23:04 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE9E1BD8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:22:33 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-40371070eb7so38271cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 11:22:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688581256; x=1691173256;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w7iqWni3eK8x3dTleEGq98e3HnfEpiof9+EFvCVfJeA=;
-        b=lcHhhZJ6UA3AaQGfvUqt/v6qgzBe4qjRli/ZwMNWbWFNKRJuoYH/PNcBNy64/kkQ77
-         Qm1aUvHQGPebLCfWmTrgGclckRL2j19Cu2XFej0v1AWuWlpg0Si8hgXauI9+QgK0gBQ4
-         2MADHn/a+BIrH8jeGN7OEyfb+N9fAyIYgNd2xBcalXN+8RPMcM2a35wdI0zJXiMPwKMd
-         /kUxQVqpOykM6keZP7tPcp38JOnNiK8oCzYQ6kxbs5u9KFU9m9mOTc+5HAp7T4Nk5P8v
-         4a0fQVoWHivgC2jfuBLVJ6m6YiErJ+3/lvX7+B3NqNSiaUrdb7D6NwEJGuMciykXo8Mj
-         /SlQ==
+        d=google.com; s=20221208; t=1688581324; x=1691173324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=avVYCKbHiJhOupBox2rPu3Kc3oLm07Y5UrCkryiPEfc=;
+        b=ZBle+FGiI/+oKmppf7TF2BlE3mHVYEEHBOSoaMyMq/1IB7NyglPEJeLCEksV/f7bMR
+         v0aTI8mTCu26TlHwJ/px2joHn0PTI2lWl6CPqUsQ0jJL2SUXrYd4QCJkY7MaNQEiICgt
+         +BW2fOuGGwZ27VczohQG+Xa0J3qaNZ9dmGF+s9rMq6mHSGYk31M5EJs9nHSoAI6AMhfr
+         IKx6FY9J+vVFHCGH2NOFBtcH6QYx0ZE1WLlIoaVwiorlQH8RDgR8AISMFunkqpx7TVzG
+         t8+XFq90GU+Nw3fh1h8SRDVE9ahoViZoUISAXbZgltqc1fLiXzyT2PAH7bubi5Mqsmio
+         WteA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688581256; x=1691173256;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w7iqWni3eK8x3dTleEGq98e3HnfEpiof9+EFvCVfJeA=;
-        b=J/wchp5Y9QyoCBB9OO50lFZDfiPTrloGqFnj9eQ7gqWmmyJsoO5krInRrrIlzTaIwZ
-         KVU+p6tJD63/mXz6aPZ8l35UJsntAB+1QJChPWIy9z/FymzbOR2NvQYkW5L1EYknRWxV
-         /elysYGDqqzTjZWQvI5C6B4TTyICNhva4aAAKoh+FcS7m577LVs7qnzBkrfEjiQrX/l9
-         9XDRgPfymyWbmRWD1vu6KbGXTu00gGYt8TobX/JFHqOHDl/oU8fQczKGWdNE2DKh2BwI
-         XcSsNhVeHnjP+EXpMoBY0rUxfzIyl/HM1e0NWz+eHk+XkkHnkzLYsZhK223V9lWvsrBD
-         qDSg==
-X-Gm-Message-State: ABy/qLYoTAz5xwj1wMBtlqpm55e31YuH6s+6seAJ3Q8AEhofPFfLKg9a
-        P8uGlYMdaUwDB0OXns4kwqw=
-X-Google-Smtp-Source: APBJJlGrUgXkEQsV1QF3xFlWaDw9jfN/TvbHLUD9SGHxGFDYPwKfO0V/VHYG98M8lFENx5tsGzAgfg==
-X-Received: by 2002:a19:7418:0:b0:4f9:5d2a:e0f6 with SMTP id v24-20020a197418000000b004f95d2ae0f6mr11255992lfe.14.1688581255815;
-        Wed, 05 Jul 2023 11:20:55 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b009931baa0d44sm6553278ejb.140.2023.07.05.11.20.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 11:20:55 -0700 (PDT)
-Message-ID: <ebb0d719-4fa0-791d-f160-e8ffc75385b1@gmail.com>
-Date:   Wed, 5 Jul 2023 20:20:53 +0200
+        d=1e100.net; s=20221208; t=1688581324; x=1691173324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=avVYCKbHiJhOupBox2rPu3Kc3oLm07Y5UrCkryiPEfc=;
+        b=Ior8oftu5VND7CopYoL2ZmUD2i+OSY/jN94SSJo3Wx027k7Fb1fY9rE0VjPpNWnIoo
+         xnuZPkF6KdaxGxf3TNvCejn0oC+TRvClCt7Wqb2gTKzYagkjc5bto4f7mkcB+C4PeuHs
+         jLMdu3ElVJE9esQW3yh1WhO5BJHfAx9ZXb9F19gRpr2JOlIt7mgSoizExWW2iDzYKVWW
+         XzaPuWCfEz7VdWwvJ4hu9FcUvri7O65W6HB3tQ1oXK7Zf8JltsT8PnvnQKv768hM7pIa
+         tIuYp7GXCkRmMIrgxNcTbhn4+9ytVJ8GX3OM0LZl5U5ojDHFvHZEN0fNNxHtsZLRBUkI
+         FckQ==
+X-Gm-Message-State: ABy/qLaxBth4Brcy7l0C1oriJzpzGwB7ITsVuzmo27NgS195W+tjG4eW
+        MSoSAuEPX4SRwPtPLo7s57MqArf4FvEUshJhsAceww==
+X-Google-Smtp-Source: APBJJlGTHlkEBqKKQUQxAS0nn1n5NO03cH8n26ikVQ910595sciQNU2NHkrkdt17W6roe0R7ewsHN5CFcaRdRu9AAGs=
+X-Received: by 2002:ac8:5ac7:0:b0:3f0:af20:1a37 with SMTP id
+ d7-20020ac85ac7000000b003f0af201a37mr15460qtd.15.1688581323594; Wed, 05 Jul
+ 2023 11:22:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/3] mtd: rawnand: rockchip-nand-controller: copy hwecc
- PA data to oob_poi buffer
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
-References: <0047fc52-bc45-a768-8bdd-c0f12cddc17e@gmail.com>
- <539cfba7-dd6f-015e-b990-a2335cb3aac9@gmail.com>
- <20230704170858.2a64c181@xps-13>
-Content-Language: en-US
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <20230704170858.2a64c181@xps-13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230621175002.2832640-1-rananta@google.com> <20230621175002.2832640-6-rananta@google.com>
+ <9f9906b5-cdae-273c-06a3-5e100fe2ccd8@redhat.com>
+In-Reply-To: <9f9906b5-cdae-273c-06a3-5e100fe2ccd8@redhat.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Wed, 5 Jul 2023 11:21:52 -0700
+Message-ID: <CAJHc60zU3iqf9bse2Hm=ZF2xLY68_Xf30oxYs23PW8fHT09cQQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v5 05/11] arm64: tlb: Refactor the core flush
+ algorithm of __flush_tlb_range
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 4, 2023 at 5:11=E2=80=AFPM Gavin Shan <gshan@redhat.com> wrote:
+>
+> On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
+> > Currently, the core TLB flush functionality of __flush_tlb_range()
+> > hardcodes vae1is (and variants) for the flush operation. In the
+> > upcoming patches, the KVM code reuses this core algorithm with
+> > ipas2e1is for range based TLB invalidations based on the IPA.
+> > Hence, extract the core flush functionality of __flush_tlb_range()
+> > into its own macro that accepts an 'op' argument to pass any
+> > TLBI operation, such that other callers (KVM) can benefit.
+> >
+> > No functional changes intended.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > ---
+> >   arch/arm64/include/asm/tlbflush.h | 108 +++++++++++++++--------------=
+-
+> >   1 file changed, 55 insertions(+), 53 deletions(-)
+> >
+>
+> With the following nits addressed:
+>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+>
+> > diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm=
+/tlbflush.h
+> > index 412a3b9a3c25d..4775378b6da1b 100644
+> > --- a/arch/arm64/include/asm/tlbflush.h
+> > +++ b/arch/arm64/include/asm/tlbflush.h
+> > @@ -278,14 +278,61 @@ static inline void flush_tlb_page(struct vm_area_=
+struct *vma,
+> >    */
+> >   #define MAX_TLBI_OPS        PTRS_PER_PTE
+> >
+> > +/* When the CPU does not support TLB range operations, flush the TLB
+> > + * entries one by one at the granularity of 'stride'. If the TLB
+> > + * range ops are supported, then:
+> > + *
+> > + * 1. If 'pages' is odd, flush the first page through non-range
+> > + *    operations;
+> > + *
+> > + * 2. For remaining pages: the minimum range granularity is decided
+> > + *    by 'scale', so multiple range TLBI operations may be required.
+> > + *    Start from scale =3D 0, flush the corresponding number of pages
+> > + *    ((num+1)*2^(5*scale+1) starting from 'addr'), then increase it
+> > + *    until no pages left.
+> > + *
+> > + * Note that certain ranges can be represented by either num =3D 31 an=
+d
+> > + * scale or num =3D 0 and scale + 1. The loop below favours the latter
+> > + * since num is limited to 30 by the __TLBI_RANGE_NUM() macro.
+> > + */
+> > +#define __flush_tlb_range_op(op, start, pages, stride,                =
+       \
+> > +                             asid, tlb_level, tlbi_user) do {        \
+> > +     int num =3D 0;                                                   =
+ \
+> > +     int scale =3D 0;                                                 =
+ \
+> > +     unsigned long addr;                                             \
+> > +                                                                     \
+> > +     while (pages > 0) {                                             \
+> > +             if (!system_supports_tlb_range() ||                     \
+> > +                 pages % 2 =3D=3D 1) {                                =
+   \
+> > +                     addr =3D __TLBI_VADDR(start, asid);              =
+ \
+> > +                     __tlbi_level(op, addr, tlb_level);              \
+> > +                     if (tlbi_user)                                  \
+> > +                             __tlbi_user_level(op, addr, tlb_level); \
+> > +                     start +=3D stride;                               =
+ \
+> > +                     pages -=3D stride >> PAGE_SHIFT;                 =
+ \
+> > +                     continue;                                       \
+> > +             }                                                       \
+> > +                                                                     \
+> > +             num =3D __TLBI_RANGE_NUM(pages, scale);                  =
+ \
+> > +             if (num >=3D 0) {                                        =
+ \
+> > +                     addr =3D __TLBI_VADDR_RANGE(start, asid, scale,  =
+ \
+> > +                                               num, tlb_level);      \
+> > +                     __tlbi(r##op, addr);                            \
+> > +                     if (tlbi_user)                                  \
+> > +                             __tlbi_user(r##op, addr);               \
+> > +                     start +=3D __TLBI_RANGE_PAGES(num, scale) << PAGE=
+_SHIFT; \
+> > +                     pages -=3D __TLBI_RANGE_PAGES(num, scale);       =
+ \
+> > +             }                                                       \
+> > +             scale++;                                                \
+> > +     }                                                               \
+> > +} while (0)
+> > +
+>
+> There is a warning reported from 'checkpatch.pl'.
+>
+>      WARNING: suspect code indent for conditional statements (32, 8)
+>      #52: FILE: arch/arm64/include/asm/tlbflush.h:299:
+>      +                          asid, tlb_level, tlbi_user) do {        \
+>      [...]
+>      +  unsigned long addr;                                             \
+>
+>      total: 0 errors, 1 warnings, 125 lines checked
+>
+> You probably need to tweak it as below, to avoid the warning.
+>
+>      #define __flush_tlb_range_op(op, start, pages, stride,              =
+  \
+>                                   asid, tlb_level, tlbi_user)            =
+  \
+>      do {                                                                =
+  \
+>
+Thanks for the suggestion, Gavin. I'll fix this.
 
-
-On 7/4/23 17:08, Miquel Raynal wrote:
-> Hi Johan,
-> 
-> jbx6244@gmail.com wrote on Thu, 15 Jun 2023 19:34:13 +0200:
-> 
->> Rockchip boot blocks are written per 4 x 512 byte sectors per page.
->> Each page must have a page address (PA) pointer in OOB to the next page.
-
-> 
-> Only when used as boot device I guess? It's a BootROM limitation.
-
-Yes, required by the BootROM.
-
-> 
->> Pages are written in a pattern depending on the NAND chip ID.
->> This logic used to build a page pattern table is not fully disclosed and
->> is not easy to fit in the MTD framework.
->> The formula in rk_nfc_write_page_hwecc() function is not correct.
->> Make hwecc and raw behavior identical.
-> 
-
-> So this is a fix as well, deserves a tag. Whatever the reason why you
-> need this, the issue you are solving is: write_page_hwecc and
-> write_page_raw are not aligned.
-
-Fixes: 058e0e847d54 ("mtd: rawnand: rockchip: NFC driver for RK3308, RK2928 and others")
-
-> 
->> Generate boot block page address and pattern for hwecc in user space
->> and copy PA data to/from the already reserved last 4 bytes before EEC
-> 
-> ECC
-
-OK
-
-> 
->> in the chip->oob_poi data layout.
->>
->> This patch breaks all existing jffs2 users that have free OOB overlap
->> with the reserved space for PA data.
->>
->> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->> ---
->>
->> Changed V3:
->>   Change prefixes
->>   Reword
->> ---
->>  .../mtd/nand/raw/rockchip-nand-controller.c   | 34 ++++++++++++-------
->>  1 file changed, 21 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mtd/nand/raw/rockchip-nand-controller.c
->> index 37fc07ba5..5a0468034 100644
->> --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
->> +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
->> @@ -598,7 +598,7 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
->>  	int pages_per_blk = mtd->erasesize / mtd->writesize;
->>  	int ret = 0, i, boot_rom_mode = 0;
->>  	dma_addr_t dma_data, dma_oob;
->> -	u32 reg;
->> +	u32 tmp;
->>  	u8 *oob;
->>
->>  	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
->> @@ -625,6 +625,13 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
->>  	 *
->>  	 *   0xFF 0xFF 0xFF 0xFF | BBM OOB1 OOB2 OOB3 | ...
->>  	 *
->> +	 * The code here just swaps the first 4 bytes with the last
->> +	 * 4 bytes without losing any data.
->> +	 *
->> +	 * The chip->oob_poi data layout:
->> +	 *
->> +	 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
->> +	 *
->>  	 * Configure the ECC algorithm supported by the boot ROM.
->>  	 */
->>  	if ((page < (pages_per_blk * rknand->boot_blks)) &&
->> @@ -635,21 +642,17 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
->>  	}
->>
->>  	for (i = 0; i < ecc->steps; i++) {
->> -		if (!i) {
->> -			reg = 0xFFFFFFFF;
->> -		} else {
->> +		if (!i)
->> +			oob = chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
->> +		else
->>  			oob = chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
->> -			reg = oob[0] | oob[1] << 8 | oob[2] << 16 |
->> -			      oob[3] << 24;
->> -		}
->>
->> -		if (!i && boot_rom_mode)
-> 
-
-> So we no longer need boot_rom_mode? Or do we?
-
-boot_rom_mode is still in use for ecc switching.
-
-> 
->> -			reg = (page & (pages_per_blk - 1)) * 4;
->> +		tmp = oob[0] | oob[1] << 8 | oob[2] << 16 | oob[3] << 24;
->>
->>  		if (nfc->cfg->type == NFC_V9)
->> -			nfc->oob_buf[i] = reg;
->> +			nfc->oob_buf[i] = tmp;
->>  		else
->> -			nfc->oob_buf[i * (oob_step / 4)] = reg;
->> +			nfc->oob_buf[i * (oob_step / 4)] = tmp;
->>  	}
->>
->>  	dma_data = dma_map_single(nfc->dev, (void *)nfc->page_buf,
->> @@ -812,12 +815,17 @@ static int rk_nfc_read_page_hwecc(struct nand_chip *chip, u8 *buf, int oob_on,
->>  		goto timeout_err;
->>  	}
->>
->> -	for (i = 1; i < ecc->steps; i++) {
->> -		oob = chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
->> +	for (i = 0; i < ecc->steps; i++) {
->> +		if (!i)
->> +			oob = chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
->> +		else
->> +			oob = chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
->> +
->>  		if (nfc->cfg->type == NFC_V9)
->>  			tmp = nfc->oob_buf[i];
->>  		else
->>  			tmp = nfc->oob_buf[i * (oob_step / 4)];
->> +
->>  		*oob++ = (u8)tmp;
->>  		*oob++ = (u8)(tmp >> 8);
->>  		*oob++ = (u8)(tmp >> 16);
->> --
->> 2.30.2
->>
-> 
-> 
+- Raghavendra
+>
+> >   static inline void __flush_tlb_range(struct vm_area_struct *vma,
+> >                                    unsigned long start, unsigned long e=
+nd,
+> >                                    unsigned long stride, bool last_leve=
+l,
+> >                                    int tlb_level)
+> >   {
+> > -     int num =3D 0;
+> > -     int scale =3D 0;
+> > -     unsigned long asid, addr, pages;
+> > +     unsigned long asid, pages;
+> >
+> >       start =3D round_down(start, stride);
+> >       end =3D round_up(end, stride);
+> > @@ -307,56 +354,11 @@ static inline void __flush_tlb_range(struct vm_ar=
+ea_struct *vma,
+> >       dsb(ishst);
+> >       asid =3D ASID(vma->vm_mm);
+> >
+> > -     /*
+> > -      * When the CPU does not support TLB range operations, flush the =
+TLB
+> > -      * entries one by one at the granularity of 'stride'. If the TLB
+> > -      * range ops are supported, then:
+> > -      *
+> > -      * 1. If 'pages' is odd, flush the first page through non-range
+> > -      *    operations;
+> > -      *
+> > -      * 2. For remaining pages: the minimum range granularity is decid=
+ed
+> > -      *    by 'scale', so multiple range TLBI operations may be requir=
+ed.
+> > -      *    Start from scale =3D 0, flush the corresponding number of p=
+ages
+> > -      *    ((num+1)*2^(5*scale+1) starting from 'addr'), then increase=
+ it
+> > -      *    until no pages left.
+> > -      *
+> > -      * Note that certain ranges can be represented by either num =3D =
+31 and
+> > -      * scale or num =3D 0 and scale + 1. The loop below favours the l=
+atter
+> > -      * since num is limited to 30 by the __TLBI_RANGE_NUM() macro.
+> > -      */
+> > -     while (pages > 0) {
+> > -             if (!system_supports_tlb_range() ||
+> > -                 pages % 2 =3D=3D 1) {
+> > -                     addr =3D __TLBI_VADDR(start, asid);
+> > -                     if (last_level) {
+> > -                             __tlbi_level(vale1is, addr, tlb_level);
+> > -                             __tlbi_user_level(vale1is, addr, tlb_leve=
+l);
+> > -                     } else {
+> > -                             __tlbi_level(vae1is, addr, tlb_level);
+> > -                             __tlbi_user_level(vae1is, addr, tlb_level=
+);
+> > -                     }
+> > -                     start +=3D stride;
+> > -                     pages -=3D stride >> PAGE_SHIFT;
+> > -                     continue;
+> > -             }
+> > -
+> > -             num =3D __TLBI_RANGE_NUM(pages, scale);
+> > -             if (num >=3D 0) {
+> > -                     addr =3D __TLBI_VADDR_RANGE(start, asid, scale,
+> > -                                               num, tlb_level);
+> > -                     if (last_level) {
+> > -                             __tlbi(rvale1is, addr);
+> > -                             __tlbi_user(rvale1is, addr);
+> > -                     } else {
+> > -                             __tlbi(rvae1is, addr);
+> > -                             __tlbi_user(rvae1is, addr);
+> > -                     }
+> > -                     start +=3D __TLBI_RANGE_PAGES(num, scale) << PAGE=
+_SHIFT;
+> > -                     pages -=3D __TLBI_RANGE_PAGES(num, scale);
+> > -             }
+> > -             scale++;
+> > -     }
+> > +     if (last_level)
+> > +             __flush_tlb_range_op(vale1is, start, pages, stride, asid,=
+ tlb_level, true);
+> > +     else
+> > +             __flush_tlb_range_op(vae1is, start, pages, stride, asid, =
+tlb_level, true);
+> > +
+> >       dsb(ish);
+> >   }
+> >
+>
 > Thanks,
-> Miquèl
+> Gavin
+>
