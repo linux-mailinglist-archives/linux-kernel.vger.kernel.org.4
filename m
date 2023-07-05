@@ -2,405 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F29748273
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE88B74827A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbjGEKqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 06:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S231565AbjGEKrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 06:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbjGEKqA (ORCPT
+        with ESMTP id S229892AbjGEKri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 06:46:00 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5F41721
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 03:45:54 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-765a1690003so563632185a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 03:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688553953; x=1691145953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0D89LSkcvAIIcFxHzr4Q4hrd+iA/eWl5uaTIZwxshro=;
-        b=j87jeYkXCzOnpUE7rJuG/F6GfxkuGK+ux9+JdahAUmPI0V6DGYxwhVSHMogPXaLsqR
-         KXzeNz781sWhuDrzSAfc10x8QLjKRKtzYVAHOatUqvoK/jaH2doUF/fqg0pVcZLHpIPR
-         /jxn+/DPKsouBLLtYKy1VoGjbVVPi55+JBBYw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688553953; x=1691145953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0D89LSkcvAIIcFxHzr4Q4hrd+iA/eWl5uaTIZwxshro=;
-        b=FCCkhmDPVwK4x5Iz5mGliDEgsKajQVBgdsICuHNhxOhU9Kr1U4pzHp0K9prxNmYCxN
-         ocEOwCjVjEEVwRiYvPW2eD1BgX2VR3XDgcOZ0jSWt7mQwzfESmmRFono2mT3/AA/uqWD
-         RyKM85iOmLmCzLafj/2bijBKDuM5P2yakumjo/sKlTFuEPS1yapLChTflel92ZrhT+Kl
-         V5x49RfADOCKcEcYiU1TQfnPAhaLl5DO0x9K0WwgVW3YUSJjScdb+qStFWru4Y3zky57
-         mnWuLL/Dt8DKa1gckFw3eSG8NfArqf5eiXnrc8YVRXGGr1zvZ/3kYz9uI1O2HF1vVIek
-         lR4w==
-X-Gm-Message-State: AC+VfDyGQ0cHYdBZbRlYk8tOp7msUHX3lg3Z73tlSi2icRUl0taljj1Q
-        WA/cep4O8GcJ1h2VQVjHf1cd4YICS4Ue9HBmgPxfTg==
-X-Google-Smtp-Source: ACHHUZ5QG6qV8j0K1NMZ4KRshq6wxf2VdRRRWDv0Fcgo12b4rckoETfjcVCX+gZFZ3HiM0tr5Xlidg==
-X-Received: by 2002:a05:620a:3711:b0:765:40da:4444 with SMTP id de17-20020a05620a371100b0076540da4444mr19493818qkb.10.1688553953486;
-        Wed, 05 Jul 2023 03:45:53 -0700 (PDT)
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com. [209.85.219.49])
-        by smtp.gmail.com with ESMTPSA id c24-20020ae9e218000000b0076227222e49sm9267576qkc.6.2023.07.05.03.45.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 03:45:52 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-635e372679bso42533636d6.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 03:45:52 -0700 (PDT)
-X-Received: by 2002:a05:6214:62d:b0:635:e2c1:99e9 with SMTP id
- a13-20020a056214062d00b00635e2c199e9mr11244711qvx.17.1688553952010; Wed, 05
- Jul 2023 03:45:52 -0700 (PDT)
+        Wed, 5 Jul 2023 06:47:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351F1CE;
+        Wed,  5 Jul 2023 03:47:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8999614B5;
+        Wed,  5 Jul 2023 10:47:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA84C433C8;
+        Wed,  5 Jul 2023 10:47:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688554056;
+        bh=tXaDAEFFqwz3MdzV/UCaf19abTnplFxYfyIVI9HClWw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O+/a/TH9sFtTiOWjJ4Jn/673r1B8raG26yzICtJ85aWfDs1A1XBGJ7uIl3rpSZaJl
+         vfc9s/J80ymott0va8GQ6vTMCPy2IuiM+Iizp1XRjrHh+oExEjKT6/Z17IdcBuFF6O
+         g6chK1heLOpjzzP7d5ur7PlghtJT69zzMiONE93OphqY2eDnIq0+tUX9CxaLe16rvG
+         zyEJOFePaGdiYRqY+oA3GkSv6wWmk98Chn7ldWPQ7G9zsCK9zZZjDMiitOdSwIY4Be
+         3F0g5iU3h5q8KvYuWB0ImkANgS8eOqMhMdMLYAh6kv2DoXMiFlPXDunt89QPhqZLFu
+         s1DdEZFza7UrQ==
+Date:   Wed, 5 Jul 2023 13:47:31 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, longli@microsoft.com,
+        sharmaajay@microsoft.com, cai.huoqing@linux.dev,
+        ssengar@linux.microsoft.com, vkuznets@redhat.com,
+        tglx@linutronix.de, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, stable@vger.kernel.org,
+        schakrabarti@microsoft.com
+Subject: Re: [PATCH net] net: mana: Configure hwc timeout from hardware
+Message-ID: <20230705104731.GM6455@unreal>
+References: <1688549578-12906-1-git-send-email-schakrabarti@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20210302004624.31294-1-senozhatsky@chromium.org>
- <20210302004624.31294-9-senozhatsky@chromium.org> <08fa86bf-b4bf-408a-89f6-a0ebc222b253@synaptics.com>
-In-Reply-To: <08fa86bf-b4bf-408a-89f6-a0ebc222b253@synaptics.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Wed, 5 Jul 2023 19:45:41 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5AW8ue4haSn9=yi7gSA6bw2pUtPFVSLpkZXrRu1HFZwsA@mail.gmail.com>
-Message-ID: <CAAFQd5AW8ue4haSn9=yi7gSA6bw2pUtPFVSLpkZXrRu1HFZwsA@mail.gmail.com>
-Subject: Re: [PATCH 8/8] videobuf2: handle non-contiguous DMA allocations
-To:     Hsia-Jun Li <Randy.Li@synaptics.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688549578-12906-1-git-send-email-schakrabarti@linux.microsoft.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 7:51=E2=80=AFPM Hsia-Jun Li <Randy.Li@synaptics.com>=
- wrote:
->
-> Hello Sergey
->
-> I known this patch have been merged for a long time. I am thinking
-> whether we need this flag in the new v4l2_ext_buffer.
->
-> On 3/2/21 08:46, Sergey Senozhatsky wrote:
-> > This adds support for new noncontiguous DMA API, which
-> > requires allocators to have two execution branches: one
-> > for the current API, and one for the new one.
->
-> There is no way we could allocate a coherent buffer in the platform
-> except the x86.
->
+On Wed, Jul 05, 2023 at 02:32:58AM -0700, Souradeep Chakrabarti wrote:
+> At present hwc timeout value is a fixed value.
+> This patch sets the hwc timeout from the hardware.
+> 
+> Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
+> ---
+>  .../net/ethernet/microsoft/mana/gdma_main.c   | 27 +++++++++++++++++++
+>  .../net/ethernet/microsoft/mana/hw_channel.c  | 25 ++++++++++++++++-
+>  include/net/mana/gdma.h                       | 20 +++++++++++++-
+>  include/net/mana/hw_channel.h                 |  5 ++++
+>  4 files changed, 75 insertions(+), 2 deletions(-)
 
-The flag is for requesting the kernel to try allocating *non*-coherent
-buffers if possible. If the flag is not given, it's up to the kernel
-to choose the right mapping type, which for vb2-dma-contig is
-coherent. For compatibility reasons, we need the user space to pass
-the flag to change the allocation behavior to avoid UAPI breakages.
+We are in merge window now, it is not net material.
 
-I don't get what you mean that there is no way to allocate a coherent
-buffer on a platform other than x86. Most of the platforms implement
-dma_alloc_coherent() by remapping the allocated memory in
-uncached/write-combine mode. x86 is an exception because it usually
-has the DMAs coherent with the CPU caches and no special handling is
-necessary, so dma_alloc_coherent() is just a simple pass-through
-allocator.
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 8f3f78b68592..5d30347e0137 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -106,6 +106,30 @@ static int mana_gd_query_max_resources(struct pci_dev *pdev)
+>  	return 0;
+>  }
+>  
+> +static int mana_gd_query_hwc_timeout(struct pci_dev *pdev, u32 *timeout_val)
+> +{
 
-> Should we make this flag a platform compiling time fixed value?
+Callers are not checking return value, so or make this function void or
+check return value.
 
-This is not a platform-specific flag. There are use cases which
-perform better with coherent buffers (i.e. when there is no CPU access
-happening to the buffers or just a linear memcpy) and some perform
-better when the mapping is non-coherent (i.e. non-linear access from
-the CPU, e.g. a software video encoder).
+> +	struct gdma_context *gc = pci_get_drvdata(pdev);
+> +	struct gdma_query_hwc_timeout_req req = {};
+> +	struct gdma_query_hwc_timeout_resp resp = {};
+> +	int err;
+> +
+> +	mana_gd_init_req_hdr(&req.hdr, GDMA_QUERY_HWC_TIMEOUT,
+> +			     sizeof(req), sizeof(resp));
+> +	req.timeout_ms = *timeout_val;
+> +	err = mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp);
+> +	if (err || resp.hdr.status) {
 
->
-> And I didn't see Gstreamer nor FFmpeg uses it, it is obvious that they
-> are running in many(almost all) embedded devices which are ARM.
->
+I see this check almost in all callers to mana_gd_send_request(). It
+will be nice if mana_gd_send_request() would check status internally
+and return error.
 
-It's likely that those generic frameworks don't have any specific
-advanced use cases which would benefit from the performance gains of
-this flag. FWIW, ChromeOS uses it in the camera and video stack
-whenever complex CPU access to the buffers is needed.
-
-Best regards,
-Tomasz
-
-> >
-> > Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > [hch: untested conversion to the ne API]
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > ---
-> >   .../common/videobuf2/videobuf2-dma-contig.c   | 141 +++++++++++++++--=
--
-> >   1 file changed, 117 insertions(+), 24 deletions(-)
-> >
-> > diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/dr=
-ivers/media/common/videobuf2/videobuf2-dma-contig.c
-> > index 1e218bc440c6..d6a9f7b682f3 100644
-> > --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> > +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> > @@ -17,6 +17,7 @@
-> >   #include <linux/sched.h>
-> >   #include <linux/slab.h>
-> >   #include <linux/dma-mapping.h>
-> > +#include <linux/highmem.h>
-> >
-> >   #include <media/videobuf2-v4l2.h>
-> >   #include <media/videobuf2-dma-contig.h>
-> > @@ -42,8 +43,14 @@ struct vb2_dc_buf {
-> >       struct dma_buf_attachment       *db_attach;
-> >
-> >       struct vb2_buffer               *vb;
-> > +     unsigned int                    non_coherent_mem:1;
-> >   };
-> >
-> > +static bool vb2_dc_is_coherent(struct vb2_dc_buf *buf)
-> > +{
-> > +     return !buf->non_coherent_mem;
-> > +}
-> > +
-> >   /*********************************************/
-> >   /*        scatterlist table functions        */
-> >   /*********************************************/
-> > @@ -78,12 +85,21 @@ static void *vb2_dc_cookie(struct vb2_buffer *vb, v=
-oid *buf_priv)
-> >   static void *vb2_dc_vaddr(struct vb2_buffer *vb, void *buf_priv)
-> >   {
-> >       struct vb2_dc_buf *buf =3D buf_priv;
-> > -     struct dma_buf_map map;
-> > -     int ret;
-> >
-> > -     if (!buf->vaddr && buf->db_attach) {
-> > -             ret =3D dma_buf_vmap(buf->db_attach->dmabuf, &map);
-> > -             buf->vaddr =3D ret ? NULL : map.vaddr;
-> > +     if (buf->vaddr)
-> > +             return buf->vaddr;
-> > +
-> > +     if (buf->db_attach) {
-> > +             struct dma_buf_map map;
-> > +
-> > +             if (!dma_buf_vmap(buf->db_attach->dmabuf, &map))
-> > +                     buf->vaddr =3D map.vaddr;
-> > +     }
-> > +
-> > +     if (!vb2_dc_is_coherent(buf)) {
-> > +             buf->vaddr =3D dma_vmap_noncontiguous(buf->dev,
-> > +                                                 buf->size,
-> > +                                                 buf->dma_sgt);
-> >       }
-> >
-> >       return buf->vaddr;
-> > @@ -101,13 +117,26 @@ static void vb2_dc_prepare(void *buf_priv)
-> >       struct vb2_dc_buf *buf =3D buf_priv;
-> >       struct sg_table *sgt =3D buf->dma_sgt;
-> >
-> > +     /* This takes care of DMABUF and user-enforced cache sync hint */
-> >       if (buf->vb->skip_cache_sync_on_prepare)
-> >               return;
-> >
-> > +     /*
-> > +      * Coherent MMAP buffers do not need to be synced, unlike coheren=
-t
-> > +      * USERPTR and non-coherent MMAP buffers.
-> > +      */
-> > +     if (buf->vb->memory =3D=3D V4L2_MEMORY_MMAP && vb2_dc_is_coherent=
-(buf))
-> > +             return;
-> > +
-> >       if (!sgt)
-> >               return;
-> >
-> > +     /* For both USERPTR and non-coherent MMAP */
-> >       dma_sync_sgtable_for_device(buf->dev, sgt, buf->dma_dir);
-> > +
-> > +     /* Non-coherrent MMAP only */
-> > +     if (!vb2_dc_is_coherent(buf) && buf->vaddr)
-> > +             flush_kernel_vmap_range(buf->vaddr, buf->size);
-> >   }
-> >
-> >   static void vb2_dc_finish(void *buf_priv)
-> > @@ -115,19 +144,46 @@ static void vb2_dc_finish(void *buf_priv)
-> >       struct vb2_dc_buf *buf =3D buf_priv;
-> >       struct sg_table *sgt =3D buf->dma_sgt;
-> >
-> > +     /* This takes care of DMABUF and user-enforced cache sync hint */
-> >       if (buf->vb->skip_cache_sync_on_finish)
-> >               return;
-> >
-> > +     /*
-> > +      * Coherent MMAP buffers do not need to be synced, unlike coheren=
-t
-> > +      * USERPTR and non-coherent MMAP buffers.
-> > +      */
-> > +     if (buf->vb->memory =3D=3D V4L2_MEMORY_MMAP && vb2_dc_is_coherent=
-(buf))
-> > +             return;
-> > +
-> >       if (!sgt)
-> >               return;
-> >
-> > +     /* For both USERPTR and non-coherent MMAP */
-> >       dma_sync_sgtable_for_cpu(buf->dev, sgt, buf->dma_dir);
-> > +
-> > +     /* Non-coherrent MMAP only */
-> > +     if (!vb2_dc_is_coherent(buf) && buf->vaddr)
-> > +             invalidate_kernel_vmap_range(buf->vaddr, buf->size);
-> >   }
-> >
-> >   /*********************************************/
-> >   /*        callbacks for MMAP buffers         */
-> >   /*********************************************/
-> >
-> > +static void __vb2_dc_put(struct vb2_dc_buf *buf)
-> > +{
-> > +     if (vb2_dc_is_coherent(buf)) {
-> > +             dma_free_attrs(buf->dev, buf->size, buf->cookie,
-> > +                            buf->dma_addr, buf->attrs);
-> > +             return;
-> > +     }
-> > +
-> > +     if (buf->vaddr)
-> > +             dma_vunmap_noncontiguous(buf->dev, buf->vaddr);
-> > +     dma_free_noncontiguous(buf->dev, buf->size,
-> > +                            buf->dma_sgt, buf->dma_addr);
-> > +}
-> > +
-> >   static void vb2_dc_put(void *buf_priv)
-> >   {
-> >       struct vb2_dc_buf *buf =3D buf_priv;
-> > @@ -139,17 +195,47 @@ static void vb2_dc_put(void *buf_priv)
-> >               sg_free_table(buf->sgt_base);
-> >               kfree(buf->sgt_base);
-> >       }
-> > -     dma_free_attrs(buf->dev, buf->size, buf->cookie, buf->dma_addr,
-> > -                    buf->attrs);
-> > +     __vb2_dc_put(buf);
-> >       put_device(buf->dev);
-> >       kfree(buf);
-> >   }
-> >
-> > +static int vb2_dc_alloc_coherent(struct vb2_dc_buf *buf)
-> > +{
-> > +     struct vb2_queue *q =3D buf->vb->vb2_queue;
-> > +
-> > +     buf->cookie =3D dma_alloc_attrs(buf->dev,
-> > +                                   buf->size,
-> > +                                   &buf->dma_addr,
-> > +                                   GFP_KERNEL | q->gfp_flags,
-> > +                                   buf->attrs);
-> > +     if (!buf->cookie)
-> > +             return -ENOMEM;
-> > +     if ((q->dma_attrs & DMA_ATTR_NO_KERNEL_MAPPING) =3D=3D 0)
-> > +             buf->vaddr =3D buf->cookie;
-> > +     return 0;
-> > +}
-> > +
-> > +static int vb2_dc_alloc_non_coherent(struct vb2_dc_buf *buf)
-> > +{
-> > +     struct vb2_queue *q =3D buf->vb->vb2_queue;
-> > +
-> > +     buf->dma_sgt =3D dma_alloc_noncontiguous(buf->dev,
-> > +                                            buf->size,
-> > +                                            buf->dma_dir,
-> > +                                            GFP_KERNEL | q->gfp_flags,
-> > +                                            buf->attrs);
-> > +     if (!buf->dma_sgt)
-> > +             return -ENOMEM;
-> > +     return 0;
-> > +}
-> > +
-> >   static void *vb2_dc_alloc(struct vb2_buffer *vb,
-> >                         struct device *dev,
-> >                         unsigned long size)
-> >   {
-> >       struct vb2_dc_buf *buf;
-> > +     int ret;
-> >
-> >       if (WARN_ON(!dev))
-> >               return ERR_PTR(-EINVAL);
-> > @@ -159,27 +245,28 @@ static void *vb2_dc_alloc(struct vb2_buffer *vb,
-> >               return ERR_PTR(-ENOMEM);
-> >
-> >       buf->attrs =3D vb->vb2_queue->dma_attrs;
-> > -     buf->cookie =3D dma_alloc_attrs(dev, size, &buf->dma_addr,
-> > -                                   GFP_KERNEL | vb->vb2_queue->gfp_fla=
-gs,
-> > -                                   buf->attrs);
-> > -     if (!buf->cookie) {
-> > -             dev_err(dev, "dma_alloc_coherent of size %ld failed\n", s=
-ize);
-> > -             kfree(buf);
-> > -             return ERR_PTR(-ENOMEM);
-> > -     }
-> > -
-> > -     if ((buf->attrs & DMA_ATTR_NO_KERNEL_MAPPING) =3D=3D 0)
-> > -             buf->vaddr =3D buf->cookie;
-> > +     buf->dma_dir =3D vb->vb2_queue->dma_dir;
-> > +     buf->vb =3D vb;
-> > +     buf->non_coherent_mem =3D vb->vb2_queue->non_coherent_mem;
-> >
-> > +     buf->size =3D size;
-> >       /* Prevent the device from being released while the buffer is use=
-d */
-> >       buf->dev =3D get_device(dev);
-> > -     buf->size =3D size;
-> > -     buf->dma_dir =3D vb->vb2_queue->dma_dir;
-> > +
-> > +     if (vb2_dc_is_coherent(buf))
-> > +             ret =3D vb2_dc_alloc_coherent(buf);
-> > +     else
-> > +             ret =3D vb2_dc_alloc_non_coherent(buf);
-> > +
-> > +     if (ret) {
-> > +             dev_err(dev, "dma alloc of size %ld failed\n", size);
-> > +             kfree(buf);
-> > +             return ERR_PTR(-ENOMEM);
-> > +     }
-> >
-> >       buf->handler.refcount =3D &buf->refcount;
-> >       buf->handler.put =3D vb2_dc_put;
-> >       buf->handler.arg =3D buf;
-> > -     buf->vb =3D vb;
-> >
-> >       refcount_set(&buf->refcount, 1);
-> >
-> > @@ -196,9 +283,12 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_a=
-rea_struct *vma)
-> >               return -EINVAL;
-> >       }
-> >
-> > -     ret =3D dma_mmap_attrs(buf->dev, vma, buf->cookie,
-> > -             buf->dma_addr, buf->size, buf->attrs);
-> > -
-> > +     if (vb2_dc_is_coherent(buf))
-> > +             ret =3D dma_mmap_attrs(buf->dev, vma, buf->cookie, buf->d=
-ma_addr,
-> > +                                  buf->size, buf->attrs);
-> > +     else
-> > +             ret =3D dma_mmap_noncontiguous(buf->dev, vma, buf->size,
-> > +                                          buf->dma_sgt);
-> >       if (ret) {
-> >               pr_err("Remapping memory failed, error: %d\n", ret);
-> >               return ret;
-> > @@ -390,6 +480,9 @@ static struct sg_table *vb2_dc_get_base_sgt(struct =
-vb2_dc_buf *buf)
-> >       int ret;
-> >       struct sg_table *sgt;
-> >
-> > +     if (!vb2_dc_is_coherent(buf))
-> > +             return buf->dma_sgt;
-> > +
-> >       sgt =3D kmalloc(sizeof(*sgt), GFP_KERNEL);
-> >       if (!sgt) {
-> >               dev_err(buf->dev, "failed to alloc sg table\n");
->
-> --
-> Hsia-Jun(Randy) Li
->
+> +		dev_err(gc->dev, "Failed to query timeout: %d, 0x%x\n", err,
+> +			resp.hdr.status);
+> +		return err ? err : -EPROTO;
+> +	}
+> +
+> +	*timeout_val = resp.timeout_ms;
+> +	dev_info(gc->dev, "Successfully changed the timeout value %u\n",
+> +		 *timeout_val);
+> +
+> +	return 0;
+> +}
+> +
+>  static int mana_gd_detect_devices(struct pci_dev *pdev)
+>  {
+>  	struct gdma_context *gc = pci_get_drvdata(pdev);
+> @@ -879,6 +903,7 @@ int mana_gd_verify_vf_version(struct pci_dev *pdev)
+>  	struct gdma_context *gc = pci_get_drvdata(pdev);
+>  	struct gdma_verify_ver_resp resp = {};
+>  	struct gdma_verify_ver_req req = {};
+> +	struct hw_channel_context *hwc = gc->hwc.driver_data;
+>  	int err;
+>  
+>  	mana_gd_init_req_hdr(&req.hdr, GDMA_VERIFY_VF_DRIVER_VERSION,
+> @@ -907,6 +932,8 @@ int mana_gd_verify_vf_version(struct pci_dev *pdev)
+>  			err, resp.hdr.status);
+>  		return err ? err : -EPROTO;
+>  	}
+> +	if (resp.pf_cap_flags1 & GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG)
+> +		mana_gd_query_hwc_timeout(pdev, &hwc->hwc_timeout);
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> index 9d1507eba5b9..f5980c26fd09 100644
+> --- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> +++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
+> @@ -174,7 +174,25 @@ static void mana_hwc_init_event_handler(void *ctx, struct gdma_queue *q_self,
+>  		complete(&hwc->hwc_init_eqe_comp);
+>  		break;
+>  
+> +	case GDMA_EQE_HWC_SOC_RECONFIG_DATA:
+> +		type_data.as_uint32 = event->details[0];
+> +		type = type_data.type;
+> +		val = type_data.value;
+> +
+> +		switch (type) {
+> +		case HWC_DATA_CFG_HWC_TIMEOUT:
+> +			hwc->hwc_timeout = val;
+> +			break;
+> +
+> +		default:
+> +			dev_warn(hwc->dev, "Received unknown reconfig type %u\n", type);
+> +			break;
+> +		}
+> +
+> +		break;
+> +
+>  	default:
+> +		dev_warn(hwc->dev, "Received unknown gdma event %u\n", event->type);
+>  		/* Ignore unknown events, which should never happen. */
+>  		break;
+>  	}
+> @@ -704,6 +722,7 @@ int mana_hwc_create_channel(struct gdma_context *gc)
+>  	gd->pdid = INVALID_PDID;
+>  	gd->doorbell = INVALID_DOORBELL;
+>  
+> +	hwc->hwc_timeout = HW_CHANNEL_WAIT_RESOURCE_TIMEOUT_MS;
+>  	/* mana_hwc_init_queues() only creates the required data structures,
+>  	 * and doesn't touch the HWC device.
+>  	 */
+> @@ -770,6 +789,8 @@ void mana_hwc_destroy_channel(struct gdma_context *gc)
+>  	hwc->gdma_dev->doorbell = INVALID_DOORBELL;
+>  	hwc->gdma_dev->pdid = INVALID_PDID;
+>  
+> +	hwc->hwc_timeout = 0;
+> +
+>  	kfree(hwc);
+>  	gc->hwc.driver_data = NULL;
+>  	gc->hwc.gdma_context = NULL;
+> @@ -818,6 +839,7 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
+>  		dest_vrq = hwc->pf_dest_vrq_id;
+>  		dest_vrcq = hwc->pf_dest_vrcq_id;
+>  	}
+> +	dev_err(hwc->dev, "HWC: timeout %u ms\n", hwc->hwc_timeout);
+>  
+>  	err = mana_hwc_post_tx_wqe(txq, tx_wr, dest_vrq, dest_vrcq, false);
+>  	if (err) {
+> @@ -825,7 +847,8 @@ int mana_hwc_send_request(struct hw_channel_context *hwc, u32 req_len,
+>  		goto out;
+>  	}
+>  
+> -	if (!wait_for_completion_timeout(&ctx->comp_event, 30 * HZ)) {
+> +	if (!wait_for_completion_timeout(&ctx->comp_event,
+> +					 (hwc->hwc_timeout / 1000) * HZ)) {
+>  		dev_err(hwc->dev, "HWC: Request timed out!\n");
+>  		err = -ETIMEDOUT;
+>  		goto out;
+> diff --git a/include/net/mana/gdma.h b/include/net/mana/gdma.h
+> index 96c120160f15..88b6ef7ce1a6 100644
+> --- a/include/net/mana/gdma.h
+> +++ b/include/net/mana/gdma.h
+> @@ -33,6 +33,7 @@ enum gdma_request_type {
+>  	GDMA_DESTROY_PD			= 30,
+>  	GDMA_CREATE_MR			= 31,
+>  	GDMA_DESTROY_MR			= 32,
+> +	GDMA_QUERY_HWC_TIMEOUT		= 84, /* 0x54 */
+>  };
+>  
+>  #define GDMA_RESOURCE_DOORBELL_PAGE	27
+> @@ -57,6 +58,8 @@ enum gdma_eqe_type {
+>  	GDMA_EQE_HWC_INIT_EQ_ID_DB	= 129,
+>  	GDMA_EQE_HWC_INIT_DATA		= 130,
+>  	GDMA_EQE_HWC_INIT_DONE		= 131,
+> +	GDMA_EQE_HWC_SOC_RECONFIG	= 132,
+> +	GDMA_EQE_HWC_SOC_RECONFIG_DATA	= 133,
+>  };
+>  
+>  enum {
+> @@ -531,10 +534,12 @@ enum {
+>   * so the driver is able to reliably support features like busy_poll.
+>   */
+>  #define GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX BIT(2)
+> +#define GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG BIT(3)
+>  
+>  #define GDMA_DRV_CAP_FLAGS1 \
+>  	(GDMA_DRV_CAP_FLAG_1_EQ_SHARING_MULTI_VPORT | \
+> -	 GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX)
+> +	 GDMA_DRV_CAP_FLAG_1_NAPI_WKDONE_FIX | \
+> +	 GDMA_DRV_CAP_FLAG_1_HWC_TIMEOUT_RECONFIG)
+>  
+>  #define GDMA_DRV_CAP_FLAGS2 0
+>  
+> @@ -664,6 +669,19 @@ struct gdma_disable_queue_req {
+>  	u32 alloc_res_id_on_creation;
+>  }; /* HW DATA */
+>  
+> +/* GDMA_QUERY_HWC_TIMEOUT */
+> +struct gdma_query_hwc_timeout_req {
+> +	struct gdma_req_hdr hdr;
+> +	u32 timeout_ms;
+> +	u32 reserved;
+> +};
+> +
+> +struct gdma_query_hwc_timeout_resp {
+> +	struct gdma_resp_hdr hdr;
+> +	u32 timeout_ms;
+> +	u32 reserved;
+> +};
+> +
+>  enum atb_page_size {
+>  	ATB_PAGE_SIZE_4K,
+>  	ATB_PAGE_SIZE_8K,
+> diff --git a/include/net/mana/hw_channel.h b/include/net/mana/hw_channel.h
+> index 6a757a6e2732..3d3b5c881bc1 100644
+> --- a/include/net/mana/hw_channel.h
+> +++ b/include/net/mana/hw_channel.h
+> @@ -23,6 +23,10 @@
+>  #define HWC_INIT_DATA_PF_DEST_RQ_ID	10
+>  #define HWC_INIT_DATA_PF_DEST_CQ_ID	11
+>  
+> +#define HWC_DATA_CFG_HWC_TIMEOUT 1
+> +
+> +#define HW_CHANNEL_WAIT_RESOURCE_TIMEOUT_MS 30000
+> +
+>  /* Structures labeled with "HW DATA" are exchanged with the hardware. All of
+>   * them are naturally aligned and hence don't need __packed.
+>   */
+> @@ -182,6 +186,7 @@ struct hw_channel_context {
+>  
+>  	u32 pf_dest_vrq_id;
+>  	u32 pf_dest_vrcq_id;
+> +	u32 hwc_timeout;
+>  
+>  	struct hwc_caller_ctx *caller_ctx;
+>  };
+> -- 
+> 2.34.1
+> 
