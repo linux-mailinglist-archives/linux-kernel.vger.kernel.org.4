@@ -2,55 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0D2748D99
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0B8748D9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbjGETRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S234246AbjGETRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233973AbjGETRF (ORCPT
+        with ESMTP id S234039AbjGETRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:17:05 -0400
+        Wed, 5 Jul 2023 15:17:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5742448A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 12:11:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C57A7EFA;
+        Wed,  5 Jul 2023 12:12:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FB9A616F0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 19:10:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830E6C433C9;
-        Wed,  5 Jul 2023 19:10:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D0AC616EE;
+        Wed,  5 Jul 2023 19:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF8FC433C7;
+        Wed,  5 Jul 2023 19:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688584233;
-        bh=5v2Jcbu23jOZ3NaXiTSv75lRiQHToTnbx3t9Ier4ieA=;
+        s=k20201202; t=1688584249;
+        bh=fa13Rrp/ewRaXb15ROYQwSY3HRGY9tgXoBGOXCxz7qQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qaRFN7is3IkXgvJVuogihBRu2z0M9hIkMOoVNNKz0aqlLr9bWl0sGVxKe64O/gDmf
-         COB5jjtZ75SrFflvrcpcpOz5laZmr+8IAq8TFsZauo8Qxt7Z+vTsiguElCzwp3lIgR
-         HanYQpRRWpy8UzeRiJmTEDbxBR2xvZxbvl82AMN1bgrz9KDfpW5t86f8dunErGqzIv
-         ANDRrSxrxoUuDv3zvDDByMd3ACbFRRg+zfm7ATTy2aiQPtH2IWh/sYZyeZ6zK2ryP2
-         plqsqzfA/8zk4qdInLZoucroxki4WylAJh6guGCNBePq5eLsEjuHt8YwdLm5ODeSGO
-         v94qReik0nw+w==
-Date:   Wed, 5 Jul 2023 22:10:28 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Wang Ming <machel@vivo.com>
-Cc:     Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH net v2] net:thunderx:Fix resource leaks in
- device_for_each_child_node() loops
-Message-ID: <20230705191028.GP6455@unreal>
-References: <20230705143507.4120-1-machel@vivo.com>
+        b=rArXyDhGF1qeLuF+8vWJDIK/3L3LjaPvhWozvBC873N6pi4MbeTwNwAiwB2VIO8h6
+         H1wZgqBv55CuKdgGKzBaOx1+aTzXj97ktJjjoYNYrnHUNlWeipg0mYZlwowYai1JCY
+         pHd1zhhWKMbNZpkU1QRyUO0UFs24TGHkrcWXFOQO/3qDPNx1lcaErhu3E7ZSaV6zWQ
+         fl80eJEGPWLHhYv4neHzkW7KlYXcejS+pjyFpgeI1wlvZED9d8Zoz1SrIqGuPbWjuF
+         sCKJQYBvh+dsTB8CcTxnWyMgQobRcdSdt6ZzTMoOqxT247MLe8MwfcFtQzucR/H749
+         HI7K1Xf1aqnBA==
+Date:   Wed, 5 Jul 2023 20:10:38 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <2a30ac58-d970-45c3-87d2-55396c0a83f9@sirena.org.uk>
+References: <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Dmr76OeBT4pTBUQM"
 Content-Disposition: inline
-In-Reply-To: <20230705143507.4120-1-machel@vivo.com>
+In-Reply-To: <eda8b2c4b2471529954aadbe04592da1ddae906d.camel@intel.com>
+X-Cookie: Don't feed the bats tonight.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,47 +98,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 10:34:56PM +0800, Wang Ming wrote:
-> The device_for_each_child_node() loop in
-> bgx_init_of_phy() function should have
-> wnode_handle_put() before break
-> which could avoid resource leaks.
-> This patch could fix this bug.
 
-It is very strange typographic. You have ~80 chars per-line, while your
-longest line is 40 chars only.
+--Dmr76OeBT4pTBUQM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> Signed-off-by: Wang Ming <machel@vivo.com>
-> ---
->  drivers/net/ethernet/cavium/thunder/thunder_bgx.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> index a317feb8decb..dad32d36a015 100644
-> --- a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> +++ b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> @@ -1478,8 +1478,10 @@ static int bgx_init_of_phy(struct bgx *bgx)
->  		 * cannot handle it, so exit the loop.
->  		 */
->  		node = to_of_node(fwn);
-> -		if (!node)
-> +		if (!node) {
-> +			fwnode_handle_put(fwn);
->  			break;
-> +		}
->  
->  		of_get_mac_address(node, bgx->lmac[lmac].mac);
->  
-> @@ -1503,6 +1505,7 @@ static int bgx_init_of_phy(struct bgx *bgx)
->  		lmac++;
->  		if (lmac == bgx->max_lmac) {
->  			of_node_put(node);
-> +			fwnode_handle_put(fwn);
->  			break;
->  		}
->  	}
-> -- 
-> 2.25.1
-> 
-> 
+On Wed, Jul 05, 2023 at 06:45:38PM +0000, Edgecombe, Rick P wrote:
+
+> Looking at the docs Mark linked (thanks!), ARM has generic GCS PUSH and
+> POP shadow stack instructions? Can ARM just push a restore token at
+> setjmp time, like I was trying to figure out earlier with a push token
+> arch_prctl? It would be good to understand how ARM is going to
+> implement this with these differences in what is allowed by the HW.
+
+> If there are differences in how locked down/functional the hardware
+> implementations are, and if we want to have some unified set of rules
+> for apps, there will need to some give and take. The x86 approach was
+> mostly to not support all behaviors and ask apps to either change or
+> not enable shadow stacks. We don't want one architecture to have to do
+> a bunch of strange things, but we also don't want one to lose some key
+> end user value.
+
+GCS is all or nothing, either the hardware supports GCS or it doesn't.
+There are finer grained hypervisor traps (see HFGxTR_EL2 in the system
+registers) but they aren't intended to be used to disable partial
+functionality and there's a strong chance we'd just disable the feature
+in the face of such usage.  The kernel does have the option to control
+which functionality is exposed to userspace, in particular we have
+separate controls for use of the GCS, the push/pop instructions and the
+store instructions (similarly to the control x86 has for WRSS).
+Similarly to the handling of WRSS in your series my patches allow
+userspace to choose which of these features are enabled.
+
+--Dmr76OeBT4pTBUQM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSlwC0ACgkQJNaLcl1U
+h9DuvAf+JgrHCBe/TIeWaTXbh1FnwnOIdz2doyUlgUqzu5K5fGjE+AF6nytAvxsw
+HIFAEaZItokV1L7RHKWjunwM1sjA7UmdGfhH1i5KYZF8XpmfgZTK3ZiaHJO8EKsL
+WAN1sgXlNOkCfoE0vggDqr9ksQ5WGjJS3TDgoXnTQna75/J3ggrKWQPdBRZ52/YK
+Swo9HHZ/aUSvO8Xo6iSEetZIyxUjcDvPVGBNrMauABpExP1ww/LA7NeJIUF8O32/
+ZYRWOy09jbfMJA80DH+bfaHVJw/g9ZI65/tBFI364wcp4LXSiymoz6f3yQUyBJV4
+97UBNALINVmtmDPEpmSVX6DM3PbVWA==
+=HVOg
+-----END PGP SIGNATURE-----
+
+--Dmr76OeBT4pTBUQM--
