@@ -2,145 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763E57483A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3673874839B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjGEL5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S231153AbjGEL6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 07:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbjGEL5s (ORCPT
+        with ESMTP id S231267AbjGEL6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:57:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA37C1730;
-        Wed,  5 Jul 2023 04:57:35 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365BgBo4032039;
-        Wed, 5 Jul 2023 11:57:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=9CyLibtCufHi9LQv+5dk80NQ9CpKv/ozyOxKxo25Dcc=;
- b=HakcUKwJTJoq3KAGxVUhWNKZXZlx8wRT3v3aNX0mcejy7of5kuEemJs3/WG1KHkGRvQQ
- 1TcauhoqZwZDdZc5nZEcmSjLyh5J/HYUTQNNJEO3t7Re2bEpX3kzqj1A3u7aDlsKthfz
- iO6ZTdUPkqc4j9mB2otrwLtJyc2JuTjRhmN4EC45ECkNqkP6BcKtSAQcX7qnufmIYbeV
- U0tV8SqzAtoIjLsZ2SbJZ3GIkwQIwosehgEIzQ9bhDTtKYn6dEBxBzq6Mm72h3lTDCxn
- tSr9RCQUliKQk2vOR9aIBcUPPOdZxI0Ub4rwDHmD2u27QgnX8DckYG/7lU4hSif7Gmuy LQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rn7vbrbyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 11:57:12 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 365BgER6032142;
-        Wed, 5 Jul 2023 11:57:11 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rn7vbrbwv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 11:57:11 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 365Bv9T5008757;
-        Wed, 5 Jul 2023 11:57:09 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3rjbs51vqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 11:57:08 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 365Bv6uw24642072
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Jul 2023 11:57:06 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 963872006A;
-        Wed,  5 Jul 2023 11:57:06 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A3FBB20076;
-        Wed,  5 Jul 2023 11:57:05 +0000 (GMT)
-Received: from [9.171.79.178] (unknown [9.171.79.178])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Jul 2023 11:57:05 +0000 (GMT)
-Message-ID: <a7b7df27-d49c-a6a7-46a0-47cc1098e644@linux.ibm.com>
-Date:   Wed, 5 Jul 2023 13:57:05 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v3 6/9] cpu/SMT: Allow enabling partial SMT states via
- sysfs
-Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     lkp <lkp@intel.com>, "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230629143149.79073-1-ldufour@linux.ibm.com>
- <20230629143149.79073-7-ldufour@linux.ibm.com>
- <5801fb9a94c2ce00ca44220be0b1a5bd7f8ff44f.camel@intel.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <5801fb9a94c2ce00ca44220be0b1a5bd7f8ff44f.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zH4FnPdZeoo93uwpvPUep2GzdqYTToTy
-X-Proofpoint-ORIG-GUID: bNFquvUa8_If2Y-1JRD6wtnNlnOwaAPc
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 5 Jul 2023 07:58:03 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87B81989;
+        Wed,  5 Jul 2023 04:57:57 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id 71dfb90a1353d-47e06acce3bso1938358e0c.2;
+        Wed, 05 Jul 2023 04:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688558277; x=1691150277;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JAcI9i2cZxQlI6EuMbQdWc0nRtDRpPblQMafL4coHB4=;
+        b=WF0x/83oDsjWichye2yQHfBvncEPG7sdjJ/uwvD/ItEHEckSOAgNqosa/fJ/XPXp9R
+         hqqdJW9ALV062S+EycufZlPKlTlY76EOkDoa3WW5zY4Qspw80tPmWPeEhHJ+qLuANg6s
+         c3l+vdmYM57OgfmTLSNi+UEsJ/zpmmdikXLDtIhGPU4VcjKtnMBvf8CW6iFE0JD5lNe5
+         /6OJML9iQ33Grt+vqFWqSvylrJLd3HcuS+jlr0Yb1QD/Br/69cFEYeM1u3tt0XuUhSdG
+         AVNANruKjy/y2mIKnTrlvQrDq6R/uHWgtG+F8K3dZyxBsI1mlYEwvR+/Jz/3pqxH9Q+T
+         dtew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688558277; x=1691150277;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JAcI9i2cZxQlI6EuMbQdWc0nRtDRpPblQMafL4coHB4=;
+        b=bpy0knVKYz7G+CfZr3AJjYa7zhgLje/sp5aPO7CnDmganJAMwaSS0o1KH2qqmW5AFs
+         6uFzDKjorjr+EdC4XkgMh9194CtcdXTPnmniJr0kEKpioAyAQea5krvC+H0ZGs6oMUJ9
+         eHbW8zleMB6onWDg9UmtMBsPDa0No2r/T5LyhbgN3HZyS34moTyMcOEvXT9iZ3x/WWk0
+         xunLvbglMvbTDpqeUuzspdmroY12E0DYNbORUw5toqE0X5X08ZYopMH9bymxFPNu4cPo
+         H3zmr/EXlAF58z68OGYL4C3/Ec6gZw8gaGj9lrKduzk6Mocro8LFFCgvLSwrRM0lZmY8
+         55Ow==
+X-Gm-Message-State: ABy/qLbq6FFjw4z1EAyBS8tss9tUAL5shWlrdhuFciUBHRfph6NQX69X
+        Fc3eMDSFco4ofnG/W4RnV4UNt26qoKG9zyOaIo0=
+X-Google-Smtp-Source: APBJJlEWpW2/lDv/3oWUv9u+0XTwFH/XqJMSRJuCOhPcEbsjFvhEgXGLibg1HV3y4eCCDIgooPhCKJrebmZV7eHXscA=
+X-Received: by 2002:a1f:3fcc:0:b0:46d:d5c1:8c2a with SMTP id
+ m195-20020a1f3fcc000000b0046dd5c18c2amr7597217vka.16.1688558276555; Wed, 05
+ Jul 2023 04:57:56 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_02,2023-07-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=887
- mlxscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 impostorscore=0
- bulkscore=0 suspectscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307050102
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230705104824.174396-1-alistair@alistair23.me>
+ <7536d9a3-4738-2bc2-e33e-d93347893865@kernel.org> <20230705114443.GA3555378@rocinante>
+In-Reply-To: <20230705114443.GA3555378@rocinante>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Wed, 5 Jul 2023 21:57:30 +1000
+Message-ID: <CAKmqyKMD99cDwfyY8BJ0_ExB+VXytT3VdeENwuw5ZyqAKq3X0w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: rcar-ep: Include linux/pci-epf.h instead of linux/pci-epc.h
+To:     =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Damien Le Moal <dlemoal@kernel.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        marek.vasut+renesas@gmail.com, yoshihiro.shimoda.uh@renesas.com,
+        linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lpieralisi@kernel.org,
+        robh@kernel.org, bhelgaas@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 5, 2023 at 9:44=E2=80=AFPM Krzysztof Wilczy=C5=84ski <kw@linux.=
+com> wrote:
+>
+> Hello,
+>
+> > > pci-epc.h doesn't define the members of the pci_epf_header struct, so
+> > > trying to access them results in errors like this:
+> > >
+> > >     error: invalid use of undefined type 'struct pci_epf_header'
+> > >       167 |                 val =3D hdr->vendorid;
+> > >
+> > > Instead let's include pci-epf.h which not only defines the
+> > > pci_epf_header but also includes pci-epc.h.
+>
+> [...]
+> > It is odd that the the build bot did not detect this...
+>
+> This is a bit of a surprise to me too, especially since none of the usual
+> bots pick this up, and I can't seem to find such a failure in the nightly
+> CI logs either.
+>
+> Alistair, how did you stumble into this issue?  Also, which version or
+> a tree would that be?
 
+I was building the kernel with this defconfig [1] inside OpenEmbedded.
+It was the 6.4-rc7 kernel, specifically this one [2].
 
-Le 05/07/2023 à 05:14, Zhang, Rui a écrit :
-> On Thu, 2023-06-29 at 16:31 +0200, Laurent Dufour wrote:
->> @@ -2580,6 +2597,17 @@ static ssize_t control_show(struct device
->> *dev,
->>   {
->>          const char *state = smt_states[cpu_smt_control];
->>   
->> +#ifdef CONFIG_HOTPLUG_SMT
->> +       /*
->> +        * If SMT is enabled but not all threads are enabled then
->> show the
->> +        * number of threads. If all threads are enabled show "on".
->> Otherwise
->> +        * show the state name.
->> +        */
->> +       if (cpu_smt_control == CPU_SMT_ENABLED &&
->> +           cpu_smt_num_threads != cpu_smt_max_threads)
->> +               return sysfs_emit(buf, "%d\n", cpu_smt_num_threads);
->> +#endif
->> +
-> 
-> My understanding is that cpu_smt_control is always set to
-> CPU_SMT_NOT_IMPLEMENTED when CONFIG_HOTPLUG_SMT is not set, so this
-> ifdef is not necessary, right?
+1: https://github.com/damien-lemoal/buildroot/blob/rockpro64_ep_v23/board/p=
+ine64/rockpro64_ep/linux.config
+2: https://github.com/damien-lemoal/linux/tree/rockpro64_ep_v23
 
-Hi Rui,
+Alistair
 
-Indeed, cpu_smt_control, cpu_smt_num_threads and cpu_smt_max_threads are 
-only defined when CONFIG_HOTPLUG_SMT is set. This is the reason for this 
-#ifdef block.
-
-This has been reported by the kernel test robot testing v2:
-https://lore.kernel.org/oe-kbuild-all/202306282340.Ihqm0fLA-lkp@intel.com
-
-Cheers,
-Laurent.
+>
+>   Thank you!
+>
+>         Krzysztof
