@@ -2,165 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA7E748B1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A6A748B16
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbjGER5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S233267AbjGER4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbjGER5G (ORCPT
+        with ESMTP id S232371AbjGER4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:57:06 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7250F19B5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:57:01 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so1921838a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:57:01 -0700 (PDT)
+        Wed, 5 Jul 2023 13:56:42 -0400
+Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:401::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB76199E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:56:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688579820; x=1691171820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j1wTgUxJXx3tp0kUBGY4xdI7MU5ro+vhiugocM4n1ss=;
-        b=qzpbmri+UAarope3gQY8JCaH976L2B+n68ws9721gs3jJNB+eNzjn0eF9ZfrEJNMmv
-         8+WaC+vezGnY6DZqbBVhreJI15TtRVagcdiZqkWT+ln6ShhA3zqC3zFFt+N1Y2UASrAy
-         mkn7DAU2ZiscOT4R9jHsDoHNIs2sqmtiptgyZbEg07lqi7M4nbMzRv6PkOSGkx1vZ14W
-         5BF6Aeyx2PjsYG5xUCvhhiSQnc/umzUHMm2GUPnWLyhGNdflfghzdmGXv6yquBA9uf59
-         rNgaUPJjDb4BldD4ttWdUyQVVED83+ru/yq4dlnsF2LWTFXkkpg+UcbCQisk+j4kdPQZ
-         wXnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688579820; x=1691171820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j1wTgUxJXx3tp0kUBGY4xdI7MU5ro+vhiugocM4n1ss=;
-        b=TI2drjdR+leEHfptTJ9M1JS/muzZ9E2P9/B54b4nc7Mri5N483qq7wEc2u+XE6TWPJ
-         8HtcExx69h0qjWBjYlEz9CCBJ3QkChEq9WC9lBThVqvGm0RNN7ciAM3zy1Th+ZdxOnmL
-         bUkesu3bMRJafAnv3aUUur2+KfnEZa3k3uacjtIJwEzTA8xAYYXtqdYrB2uk9BL2Rqvs
-         Mj16ibdu7BzAMOMOS4Bzqr2v3/wh7VTLvfL8OOXtzP5TG5b3f9Xv9Xfels8qfmaSuSzm
-         /M4IP6ZGpdfUQpfFKG1epoJ93OiQ882CgabLc1NIHRlVBADDxv1DkEiVaFukaqI+M75y
-         C8XA==
-X-Gm-Message-State: ABy/qLazbXPGESuiIzJQyGe2gWoIHxRA/enJ/JzRflitXM396SUZQhJc
-        Yjbzd12caqvVrGx0SJMlL+M0bcKztwndfGn8qldU3A==
-X-Google-Smtp-Source: APBJJlGhNDfk+A5cRCar/5QRGBPxgKX45i6W5UnrxH4GqLaWcyJzVDKBTBgap4g7/sAKGatltVc8+OINzu7yY35sZ1o=
-X-Received: by 2002:a17:906:648e:b0:992:6d73:5696 with SMTP id
- e14-20020a170906648e00b009926d735696mr2934926ejm.5.1688579819676; Wed, 05 Jul
- 2023 10:56:59 -0700 (PDT)
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=iBBtnRklVqMQ6mkde8T1v6wMY0Ar5kLbR8KuMGyUvyw=;
+        b=GF90gPCvd8mEOngfUgQ59M+s5yRlPK7b2PnKpmpMnIjBFMszO4/vVi8TdAIN+T4XXNDIBa1cEljQA
+         OaSgSWv9V4iO8aiBOkixFILrXIigudR1NAANlPev2komLg+lvFqYkKOVyw7dU7ciKRpuqOHuixtnCW
+         azZqlkQw7SLDnFd7RdJeupMSRKwpLduu1VjDes2+Uu4ZiuWiF5OVKEMq/tcdLBTBfw+JfSicHqDQRF
+         IYTpvxpmZ4rv107iezXfjqLdQ70qXOdVeeOroTWIh77DcdHy3MseQ9mAmn9v98uk2Ze+Mtd90bG0HJ
+         Rb3zZy+8jWl2H1z2nLf+tQcWtCzHKvg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=iBBtnRklVqMQ6mkde8T1v6wMY0Ar5kLbR8KuMGyUvyw=;
+        b=/U4cLTc4mm2o+4LrKjw/bJrmBsg6NMPgQJ9mg4yrxISURD04T/fLHemun271zeTYH/jq/QmT2Kf1V
+         /gOZs4QCA==
+X-HalOne-ID: 4359365c-1b5d-11ee-87e5-5ba399456a4a
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay2 (Halon) with ESMTPSA
+        id 4359365c-1b5d-11ee-87e5-5ba399456a4a;
+        Wed, 05 Jul 2023 17:56:28 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 19:56:27 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Mans Rullgard <mans@mansr.com>, linux-fbdev@vger.kernel.org,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, Lee Jones <lee@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>
+Subject: Re: [PATCH] backlight: led_bl: fix initial power state
+Message-ID: <20230705175627.GD106478@ravnborg.org>
+References: <20230704140750.25799-1-mans@mansr.com>
+ <20230704150310.GA385243@aspen.lan>
+ <20230704170731.GB940443@ravnborg.org>
+ <20230705140731.GB6265@aspen.lan>
 MIME-Version: 1.0
-References: <20230629205040.665834-1-axelrasmussen@google.com>
- <ZKSDLogLASaZgKCP@x1n> <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
- <ZKWXGnSKcOdnaeJw@x1n> <CADrL8HWO8g2-YdUtyLM6e+f1VJq6YV-b1_rj-beEh2C84kAgEw@mail.gmail.com>
- <ZKWcgD1hFFUxeQHg@x1n>
-In-Reply-To: <ZKWcgD1hFFUxeQHg@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 5 Jul 2023 10:56:23 -0700
-Message-ID: <CAJHvVcjNDazqnopjcqx2LLcmQf_4QUeGBSvSJxwGh40e78uhCg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
-To:     Peter Xu <peterx@redhat.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705140731.GB6265@aspen.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 9:38=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Jul 05, 2023 at 09:27:15AM -0700, James Houghton wrote:
-> > On Wed, Jul 5, 2023 at 9:15=E2=80=AFAM Peter Xu <peterx@redhat.com> wro=
-te:
-> > >
-> > > On Wed, Jul 05, 2023 at 09:09:19AM -0700, James Houghton wrote:
-> > > > > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> > > > > > index 4c932cb45e0b..8259fee32421 100644
-> > > > > > --- a/include/linux/swapops.h
-> > > > > > +++ b/include/linux/swapops.h
-> > > > > > @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
-> > > > > >
-> > > > > >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
-> > > > > >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
-> > > > > > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
-> > > > > > +#define  PTE_MARKER_UFFD_POISON                      BIT(2)
-> > > > >
-> > > > > One more tab.
-> > > > >
-> > > > > Though I remembered the last time we discussed IIRC we plan to re=
-name
-> > > > > SWAPIN_ERROR and reuse it, could you explain why a new bit is sti=
-ll needed?
-> > > > >
-> > > > > I think I commented this but I'll do it again: IIUC any existing =
-host
-> > > > > swapin errors for guest pages should be reported as MCE too, afai=
-ct,
-> > > > > happened in kvm context.
-> > > >
-> > > > I think swapin errors are treated differently than poison. Swapin
-> > > > errors get VM_FAULT_SIGBUS, and poison gets VM_FAULT_HWPOISON, so
-> > > > UFFDIO_POISON should also get VM_FAULT_HWPOISON (so that's what Axe=
-l
-> > > > has implemented). And I think that needs a separate PTE marker.
-> > >
-> > > My question was, should we also make SWAPIN_ERROR return VM_FAULT_HWP=
-OISON
-> > > always?
-> > >
-> > > Just to recap from what I already commented above - if a guest page g=
-ot
-> > > error in swapin due to block sector failures, it should be treated as
-> > > VM_FAULT_HWPOISON too, IMHO.  IOW, I think current SWAPIN_ERROR is wr=
-ong
-> > > when in kvm context and we should fix it first.
+Hi Daniel,
+
+On Wed, Jul 05, 2023 at 03:07:31PM +0100, Daniel Thompson wrote:
+> On Tue, Jul 04, 2023 at 07:07:31PM +0200, Sam Ravnborg wrote:
+> > Hi Daniel,
 > >
-> > Oh! Yes, I agree, though I'm not familiar enough with the users of
-> > SWAPIN_ERROR to know if we can actually make this change.
+> > > > @@ -200,8 +200,8 @@ static int led_bl_probe(struct platform_device *pdev)
+> > > >  	props.type = BACKLIGHT_RAW;
+> > > >  	props.max_brightness = priv->max_brightness;
+> > > >  	props.brightness = priv->default_brightness;
+> > > > -	props.power = (priv->default_brightness > 0) ? FB_BLANK_POWERDOWN :
+> > > > -		      FB_BLANK_UNBLANK;
+> > > > +	props.power = (priv->default_brightness > 0) ? FB_BLANK_UNBLANK :
+> > > > +		      FB_BLANK_POWERDOWN;
+> > >
+> > > The logic was wrong before but I think will still be wrong after the
+> > > change too (e.g. the bogus logic is probably avoiding backlight flicker
+> > > in some use cases).
+> > >
+> > > The logic here needs to be similar to what pwm_bl.c implements in
+> > > pwm_backlight_initial_power_state(). Whilst it might be better
+> > > to implement this in led_bl_get_leds() let me show what I mean
+> > > in code that fits in the current line:
+> > >
+> > > 	/*
+> > > 	 * Activate the backlight if the LEDs are already lit *or*
+> > > 	 * there is no phandle link (meaning the backlight power
+> > > 	 * state cannot be synced with the display state).
+> > > 	 */
+> > > 	props.power = (active_at_boot || !dev->node->phandle) ?
+> > > 			FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
+> > >
+> > The following code does the same using helpers:
+> >
+> > 	if (active_at_boot || !dev->node->phandle))
+> > 		backlight_enable(bd);
+> > 	else
+> > 		backlight_disable(bd);
+> >
+> > The code needs to execute after backlight_device_register() so maybe not
+> > so great an idea?!?
+> 
+> It would introduce a need for a bunch of new locks since userspace
+> could get in between device creation and the call to the helpers.
+I thought we were safe while in the probe function, but I have been
+fooled by the driver model before.
 
-Sorry I missed this, I'll take another pass looking at existing
-SWAPIN_ERROR uses, and see if this can be done.
+> 
+> Additionally, it is even correct for a driver to forcefully set
+> fb_blank to powerdown during the probe? All current drivers set
+> fb_blank to unblank during the probe.
+fb_blank is more or less unused. I thought that Lee applied the patch set
+to eliminate most users, but I see that this is not the case.
+I need to resend one day.
+Some (at least one) drivers update .power after registering the device, so if this
+is racy then these drivers could use some care.
 
-Thanks for the thorough review Peter, I'll address this comment and
-the others in a v3. :)
+Anyway, looking at how many drivers access backlight_properties direct is
+is futile to try to avoid it. So the approach you suggest seems the best
+way to do it.
 
->
-> Miaohe initially proposed this swapin error facility, let's see whether h=
-e
-> can comment; he's already in the cc list.
->
-> AFAICT that's the right thing to do, and it shouldn't affect any existing
-> user of swapin error if there is.
->
-> Or say, VM_FAULT_HWPOISON should be the same as VM_FAULT_SIGBUS when not =
-in
-> kvm context, so shouldn't change a thing in !kvm, while changing that
-> should fix kvm from crashing a guest where we shouldn't need to.
->
-> --
-> Peter Xu
->
+	Sam
