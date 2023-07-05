@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56836747CB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09A0747CB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 07:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjGEFwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 01:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S231349AbjGEF4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 01:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjGEFwp (ORCPT
+        with ESMTP id S229801AbjGEF4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 01:52:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E463DB2;
-        Tue,  4 Jul 2023 22:52:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7050961425;
-        Wed,  5 Jul 2023 05:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508FCC433C8;
-        Wed,  5 Jul 2023 05:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688536362;
-        bh=NQsFB+2RAaeuXH+1ZMfVCmr9PB+efMMQy8Vc7+0uDMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hffdCYLsKUQwJVoGPVqW8rsFnbBu7Hodcjt+MmNfLEkQBxXWhery2IASAx6WRt2Rf
-         mTdJIoQQ33sOKzfXDmDKBXStaz/vH/miTkDJ/RXrI4U5iOzF6q9Dc4qSIM3MzU4qLC
-         m/FyrWrT7DQtsUv5s2asRDu7YMzNOtgH3P7K1bDpWQyOHrvBp+AVqj0mC5jfTO6F2r
-         a+ta5kkGmLev7VHafXNb7TMYzDiikAGfu0xfu77F4CKoJyEB/vrKmbcZIyTyl+xC2U
-         Vj2/DJXD6ghlWgTXLK9aKmx8WP67L1Hm4r3O4Zg9S7CBDJ6z4RmxHLSf/iW3ZYCSfy
-         XYn/KA8sW/LAw==
-Date:   Wed, 5 Jul 2023 08:52:38 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Chengfeng Ye <dg573847474@gmail.com>
-Cc:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] IB/hfi1: Fix potential deadlock on &sde->flushlist_lock
-Message-ID: <20230705055238.GG6455@unreal>
-References: <20230628045925.5261-1-dg573847474@gmail.com>
- <20230704114849.GA6455@unreal>
- <CAAo+4rXkMM87OJzim=8dACdV=kWK_1yXeD=W5GZzHoJ2Gz6rtw@mail.gmail.com>
+        Wed, 5 Jul 2023 01:56:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F70B2;
+        Tue,  4 Jul 2023 22:56:08 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qwpjg0YM2ztQV4;
+        Wed,  5 Jul 2023 13:53:11 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 5 Jul 2023 13:56:02 +0800
+Subject: Re: [PATCH] cgroup/cpuset: simplify the percpu kthreads check in
+ update_tasks_cpumask()
+To:     Waiman Long <longman@redhat.com>
+CC:     <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tj@kernel.org>, <hannes@cmpxchg.org>, <lizefan.x@bytedance.com>
+References: <20230704113049.1019118-1-linmiaohe@huawei.com>
+ <bc8202fd-a31c-2b08-bd01-8b5868aab230@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <33c2bf85-6def-fce9-9ea7-3b3e80db67b7@huawei.com>
+Date:   Wed, 5 Jul 2023 13:56:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAo+4rXkMM87OJzim=8dACdV=kWK_1yXeD=W5GZzHoJ2Gz6rtw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bc8202fd-a31c-2b08-bd01-8b5868aab230@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 01:42:31AM +0800, Chengfeng Ye wrote:
-> > Plus, we already in context where interrupts are stopped.
+On 2023/7/5 11:14, Waiman Long wrote:
+> On 7/4/23 07:30, Miaohe Lin wrote:
+>> kthread_is_per_cpu() can be called directly without checking whether
+>> PF_KTHREAD is set in task->flags. So remove PF_KTHREAD check to make
+>> code more concise.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>   kernel/cgroup/cpuset.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 58e6f18f01c1..601c40da8e03 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -1230,7 +1230,7 @@ static void update_tasks_cpumask(struct cpuset *cs, struct cpumask *new_cpus)
+>>               /*
+>>                * Percpu kthreads in top_cpuset are ignored
+>>                */
+>> -            if ((task->flags & PF_KTHREAD) && kthread_is_per_cpu(task))
+>> +            if (kthread_is_per_cpu(task))
+>>                   continue;
+>>               cpumask_andnot(new_cpus, possible_mask, cs->subparts_cpus);
+>>           } else {
 > 
-> Indeed they can be called from .ndo_start_xmit callback and
-> the document said it is with bh disabled.
-> 
-> But I found some call chain from the user process that seems could
-> be called from irq disabled context. For sdma_send_txlist(),
-> there is a call chain.
-> 
-> -> hfi1_write_iter()  (.write_iter callback)
-> -> hfi1_user_sdma_process_request()
-> -> user_sdma_send_pkts()
-> -> sdma_send_txlist()
-> 
-> The .write_iter seems not to disable irq by default, as mentioned by
-> https://www.kernel.org/doc/Documentation/filesystems/vfs.txt
-> And I didn't find any explicit disabling or bh or irq along the call path,
-> and also see several  copy_from_usr() which cannot be invoked under
-> irq context.
-> 
-> 
-> For sdma_send_txreq(), there is a call chain.
-> 
-> -> qp_priv_alloc()
-> -> iowait_init() (register _hfi1_do_tid_send() as a work queue)
-> -> _hfi1_do_tid_send() (workqueue)
-> -> hfi1_do_tid_send()
-> -> hfi1_verbs_send()
-> -> sr(qp, ps, 0) (sr could points to hfi1_verbs_send_dm())
-> -> hfi1_verbs_send_dma()
-> -> sdma_send_txreq()
-> 
-> _hfi1_do_tid_send() is a work queue without irq disabled by default,
-> I also check the remaining call path and also found that there is no explicit
-> irq disable, instead the call site of hfi1_verbs_send() is exactly after
-> spin_lock_irq_restore(), seems like a hint that it is probably called withirq
-> enable.
+> The initial intention was to ignore only percpu kthreads. The current code likely ignore all the kthreads. Removing the PF_KTHREAD flag, however, may introduce unexpected regression at this point. I would like to hold off for now until more investigation are done.
 
-Right, that path is called in process context and can sleep, there is no
-need in irq disabled variant there.
+IMHO, the current code will ignore only percpu kthreads:
+  1.If PF_KTHREAD is set in task->flags, this patch doesn't make any difference.
+  2.If PF_KTHREAD is not set in task->flags, kthread_is_per_cpu will *always return false*. So this patch doesn't make any functional change.
 
-> 
-> Another hint is that the lock acquisition of
-> spin_lock_irqsave(&sde->tail_lock, flags);
-> just before my patch in the same function also disable irq, seems like another
-> hint that this function could be called with interrupt disable,
+    bool kthread_is_per_cpu(struct task_struct *p)
+    {
+        struct kthread *kthread = __to_kthread(p);
+	if (!kthread)
+		return false;
+        ....
+    }
 
-Exactly, we already called to spin_lock_irqsave(), there is no value in
-doing it twice.
-void f() {
-	spin_lock_irqsave(...)
-	spin_lock_irqsave(...)
-	....
-	spin_unlock_irqrestore(...)
-	spin_unlock_irqrestore(...)
-}
+    static inline struct kthread *__to_kthread(struct task_struct *p)
+    {
+	void *kthread = p->worker_private;
+	if (kthread && !(p->flags & PF_KTHREAD))
+			 ^^^^^^^^^^^^^^^^^^^^^^
+			 PF_KTHREAD is not set, so kthread = NULL.
+		kthread = NULL;
+	return kthread;
+    }
 
-is exactly the same as
-void f() {
-	spin_lock_irqsave(...)
-	spin_lock(...)
-	....
-	spin_unlock(...)
-	spin_unlock_irqrestore(...)
-}
+Or am I miss something? Thanks for comment and review.
 
-Thanks
