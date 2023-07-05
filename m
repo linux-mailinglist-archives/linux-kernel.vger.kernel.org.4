@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55286747C0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 06:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF268747C0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 06:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbjGEE16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 00:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S229951AbjGEE2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 00:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGEE1x (ORCPT
+        with ESMTP id S230504AbjGEE2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 00:27:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DB510F2;
-        Tue,  4 Jul 2023 21:27:51 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36541Olm027002;
-        Wed, 5 Jul 2023 04:27:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=eYUVnt6Wi+jIiqMPQqigPy6gPw+ZrOvBJs+sKNwn0s0=;
- b=onNdyOX0UsACwxtosHgJ0YmEdC56WnQuijX9mPZUZV9RJLA90LKYtHoWM1SnmTlJPrU4
- E3ygCB2XCfCGpADcRmUvS3eoY2VKQhTRyglDvl6XeluwQLaiLyMUAWg6Br21dtIfnSF6
- tZUK3wCO89TA+91NOCfLx1EHld3BZrH9HRs6owe4B5/h4P5AWTcfOF5Dp/+dlUn+K079
- 4gpbYg2REtagoNI5zc8u+x6U3ktGDuAGjI55G0RiAugj1sfblUNFlP7f/8gyNWBCoznq
- UD1p0iqSwF2ruaOLHzff9c8ATrvwFdUVkXSpGiYYVt0XU4GL72RI7qL8AwRR/wU6blxP 5A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rmny98vn6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 04:27:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3654RKQU008607
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jul 2023 04:27:20 GMT
-Received: from [10.217.216.152] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Tue, 4 Jul 2023
- 21:27:15 -0700
-Message-ID: <9f06d400-be7b-6806-b055-8cc7f11db6ca@quicinc.com>
-Date:   Wed, 5 Jul 2023 09:57:12 +0530
+        Wed, 5 Jul 2023 00:28:25 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C3810F2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 21:28:24 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so21932a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 21:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688531303; x=1691123303;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eqCyEfc/meiKmyophP6EkBO/+qYFrUQUQP3N97X+Wd0=;
+        b=U1iQ+YXT9cSqLHloZJJsF4TMP9CkOWX8W3DNAxPBRaNdoKhogb8x3EPmIip6ECZ2HT
+         n/ej7z6hyCoqlCg+TEuL0gwgDoWCmyWGtaiT92vsVB7YJiHTqevNL2F2KkBhsrFV3lCm
+         oQt7Su/KlxYiiuoXp1se/j19qURFYN72oTguyahVNuCpbFsbWBUEMYf9jYIwl3d0qd1/
+         e9IcbSEsfPV9aUCe+KHB0l6wz+qUuRaZ9W0X1HRWHSGkuLQlo+8tgNKWq6lxB5Q9+OA2
+         c1bY1bfWQ/ONJX4hlCwfJyvpdKqCX3vAD2DoQ0YIpOQlkjU2wrEYDL2pT6xWD8Zm/laJ
+         T1XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688531303; x=1691123303;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eqCyEfc/meiKmyophP6EkBO/+qYFrUQUQP3N97X+Wd0=;
+        b=BI3ivX1LMFJV5u0eWbCADRCVrTy6p4pgv4qTBjwdPxoIAfgitM+WnhpyXXd7eJTYax
+         CZ/cf/3BmYz2mVl4Nmuw3noCBHkhQdOmZE24WC2woxMMeZSflEwAEai+kt2ETAKxnZAw
+         RNZKPqyJktEcj5EI27xPz2MEqtbV8NO/QnYxZTJTbtbVWgh+dnbZq31TMXFOhFycv3nr
+         lQUcR32xbh0cYox6tBAQ9C8LFGfJhWaYlkX0PxT6EksiacDhuWsXIn8hSkz77iLvuQLi
+         yWs7vOgGYCWxx93cFnS2YbZHTH0JLUnaH32XApKyS6V5ORSIbXlwb3np6KRzkDt0I0wD
+         ITIQ==
+X-Gm-Message-State: ABy/qLb7IySf6tDuZ2ARLT5tKs795k+jfdV4wnI/NC4UQZ8eli0aSx0T
+        cKFA02+izN4OBptBHql0kW9vYeyDYkCk21IVF+UPEQ==
+X-Google-Smtp-Source: APBJJlFLoW7TH9a7+C5SKe7FDeowfeUljUyL/txyEr6D99OEXF6XGlwhWi/zj6SVQoBFDsINPya6D5QeOcy5wQRjc3o=
+X-Received: by 2002:a50:8e58:0:b0:51e:27ac:8f9a with SMTP id
+ 24-20020a508e58000000b0051e27ac8f9amr10796edx.1.1688531302794; Tue, 04 Jul
+ 2023 21:28:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 4/7] clk: qcom: gcc-sc7180: Fix up gcc_sdcc2_apps_clk_src
-Content-Language: en-US
-To:     David Wronek <davidwronek@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, map220v <map220v300@gmail.com>
-References: <20230704163848.169853-2-davidwronek@gmail.com>
- <20230704163848.169853-6-davidwronek@gmail.com>
-From:   Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <20230704163848.169853-6-davidwronek@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Yss-_JO1LGGMGq4qXZE38ClSYKdjeKti
-X-Proofpoint-ORIG-GUID: Yss-_JO1LGGMGq4qXZE38ClSYKdjeKti
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_16,2023-07-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1011 priorityscore=1501
- spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=992
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307050039
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1688460800.git.pengfei.xu@intel.com> <582ab7050597df7a996c11df048f168995b30747.1688460800.git.pengfei.xu@intel.com>
+In-Reply-To: <582ab7050597df7a996c11df048f168995b30747.1688460800.git.pengfei.xu@intel.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 5 Jul 2023 06:28:10 +0200
+Message-ID: <CACT4Y+aBNX9U7yeH8jz5y82tV46iChCFXufg92gSXrdRubqJsw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] x86/kernel: Increase kcov coverage under
+ arch/x86/kernel folder
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     nogikh@google.com, linux-kernel@vger.kernel.org,
+        Heng Su <heng.su@intel.com>, syzkaller@googlegroups.com,
+        keescook@google.com, Mehta Sohil <sohil.mehta@intel.com>,
+        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 4 Jul 2023 at 10:58, Pengfei Xu <pengfei.xu@intel.com> wrote:
+>
+> Currently kcov instrument is disabled for object files under arch/x86/kernel
+> folder.
+> For object files under arch/x86/kernel, actually just disabling the kcov
+> instrument of files:"head32.o or head64.o and sev.o" could achieve
+> successful booting and provide kcov coverage for object files that do not
+> disable kcov instrument.
+> The additional kcov coverage collected from arch/x86/kernel folder helps
+> kernel fuzzing efforts to find bugs.
+>
+> Link to related improvement discussion is below:
+> https://groups.google.com/g/syzkaller/c/Dsl-RYGCqs8/m/x-tfpTyFBAAJ
+> Related ticket is as follow:
+> https://bugzilla.kernel.org/show_bug.cgi?id=198443
+>
+> Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+
+Reviewed-and-tested-by: Dmitry Vyukov <dvyukov@google.com>
+
+I've run a local syzkaller instance with this and I don't see any
+additional kernel bugs caused by this and I see coverage in
+arch/x86/kernel/* now, in particular, dumpstack.c, perf_regs.c,
+signal.c.
 
 
-On 7/4/2023 10:01 PM, David Wronek wrote:
-> From: map220v <map220v300@gmail.com>
-> 
-> Add the PARENT_ENABLE flag to prevent the clock from getting stuck at
-> boot.
-> 
-> Fixes: 17269568f726 ("clk: qcom: Add Global Clock controller (GCC) driver for SC7180")
-> Signed-off-by: map220v <map220v300@gmail.com>
-> Signed-off-by: David Wronek <davidwronek@gmail.com>
 > ---
->   drivers/clk/qcom/gcc-sc7180.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc7180.c
-> index cef3c77564cf..49f36e1df4fa 100644
-> --- a/drivers/clk/qcom/gcc-sc7180.c
-> +++ b/drivers/clk/qcom/gcc-sc7180.c
-> @@ -651,6 +651,7 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
->   		.name = "gcc_sdcc2_apps_clk_src",
->   		.parent_data = gcc_parent_data_5,
->   		.num_parents = ARRAY_SIZE(gcc_parent_data_5),
-> +		.flags = CLK_OPS_PARENT_ENABLE,
-
-Could you please share what Stuck warnings are you observing?
-
->   		.ops = &clk_rcg2_floor_ops,
->   	},
->   };
-
--- 
-Thanks & Regards,
-Taniya Das.
+>  arch/x86/kernel/Makefile | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+> index 4070a01c11b7..00df34c263cc 100644
+> --- a/arch/x86/kernel/Makefile
+> +++ b/arch/x86/kernel/Makefile
+> @@ -33,11 +33,10 @@ KCSAN_SANITIZE := n
+>  KMSAN_SANITIZE_head$(BITS).o                           := n
+>  KMSAN_SANITIZE_nmi.o                                   := n
+>
+> -# If instrumentation of this dir is enabled, boot hangs during first second.
+> -# Probably could be more selective here, but note that files related to irqs,
+> -# boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
+> -# non-deterministic coverage.
+> -KCOV_INSTRUMENT                := n
+> +# If instrumentation of the following files is enabled, boot hangs during
+> +# first second.
+> +KCOV_INSTRUMENT_head$(BITS).o                          := n
+> +KCOV_INSTRUMENT_sev.o                                  := n
+>
+>  CFLAGS_irq.o := -I $(srctree)/$(src)/../include/asm/trace
+>
+> --
+> 2.31.1
+>
