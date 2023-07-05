@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1F8748006
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8451674800E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjGEIp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S232120AbjGEIq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjGEIpZ (ORCPT
+        with ESMTP id S231549AbjGEIqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:45:25 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A67F1729
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:45:21 -0700 (PDT)
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        Wed, 5 Jul 2023 04:46:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11049133;
+        Wed,  5 Jul 2023 01:46:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 55DA13F10B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:45:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688546720;
-        bh=EhBgbfMMNPfoW5bol7yuNsWA9PiXcWNElnIKvGjgKG4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ItM5uGK4hXfzwpTpqIVcRUE2xsv8Vg9n47Oq6CjRiikvhEsyw+s4xs71qdLKhOjjB
-         Dtlks52vqBZ3u8w/jHXtBAg/+m3sQ6CHzHJj6GGB6zK+Qehgei4mJvjrWiF3cKTTZA
-         N+6fqCZat3XkBAxcEwwk6SnAuALeoZzGGmLhMT2Swth3I0CU6YLmtoubt/w2/FnFcq
-         I07ircVwFRMwV3nzCOfuhbeBjee4kFHa5DbMG9HMgpViikAx2twLUavXOHX5HS9nOd
-         1Rr2c/O3Y6xdAgWg2N8UNQ1xfdMe29AYpqkKvE9gZUutNOmqW/7jVkZgB5nflcZGGd
-         MWCzr6F8x4u8g==
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-666ecb21f16so8578589b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 01:45:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688546714; x=1691138714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EhBgbfMMNPfoW5bol7yuNsWA9PiXcWNElnIKvGjgKG4=;
-        b=e7DoGvKKBVlZjvNf5o0YDkv4PIiYaWdNkkRMcmI6wZyppUJXbQL52pkGb1sCkQR41i
-         /aMBP2dLweB9U1yVjv+9Cpew+VIlieZhxegH+ZFmEpOxUOqvAoq+Pn1iumbJd01W0ubg
-         Hl4OKmXFOqC2z48cyef+3cIVaZ0/UxaRG403lXjq3Q2QdoUD0i/dddA+qpVFa8yWkdmy
-         PFLFCiqnc01fiJdSnxIdNPUWaeMAKHbsObX1db6nuqt0jMAqfB+AyrPNKVLYZNmRNQoH
-         ybq5sXSRakPlZvj1wOBgNZKcC56wzxHBoKTo01EeWYsF9vmokwwDFi+xpTGBhNTU7X98
-         yzqg==
-X-Gm-Message-State: ABy/qLYRzki3TfWmBMvmJ4oDnaD6Z4n36QfgNkS2RnruGhetROykEQO6
-        dzW/OGOUxzlpBNYmxp2m6lsRJOW/W9wFzyt7RRGquUoLeHQEyXbmdHkdmABjIBOAVhW2CxWJP0v
-        ftNCSZPyBQWsVe0T2GnWKET6wm4COmt56XE1jZP5M+8QbZAW755qzhCGQRQ==
-X-Received: by 2002:a62:17d1:0:b0:666:8cbb:6e02 with SMTP id 200-20020a6217d1000000b006668cbb6e02mr16496629pfx.8.1688546713833;
-        Wed, 05 Jul 2023 01:45:13 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGPsN2XwaB28oN7la+m6ycw2aZ7zvlnCnXD23EYRBZizfqasNPWxPXnC+DaWSeSWxpwIbpeArLp0ZNI+pR8rbc=
-X-Received: by 2002:a62:17d1:0:b0:666:8cbb:6e02 with SMTP id
- 200-20020a6217d1000000b006668cbb6e02mr16496613pfx.8.1688546713250; Wed, 05
- Jul 2023 01:45:13 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A32AA6149D;
+        Wed,  5 Jul 2023 08:46:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426B2C433C7;
+        Wed,  5 Jul 2023 08:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688546783;
+        bh=TrDgTUVhADoSsAO2/sNZ+F/3nrvrfuljDS6R5BUFlqw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j0+vVsH3AhB/AXyyE2VaWHL77fjGb9huGVzPLh4BVkJWt2lr2ii/t8H+KuQf0s6CS
+         Zw1KPnwuYyrhImeN1ZhndHzTVMH0KPrJsFYeyYRueACZ5pT1HxChw6uE31eC0DWz+w
+         KmrujmRpC7AEtoFiRnr/xJW3Jr9yVhuJoyPo+dK1bLPJKyysyp6XwGyAeMO8aGWfMy
+         iOJA2JBskgNU9gopvIRbAnp1VeSEpMt174zXetABgZyd1SGFpqw5iiVboRScCdx7cL
+         FbfcnVQrOI464HqZplDCV4Je7snRf5FCOc2hKj+CVucweQHllQypi44FecnC01DU7H
+         O72RoaRKM+oJQ==
+Date:   Wed, 5 Jul 2023 14:16:06 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Mrinmay Sarkar <quic_msarkar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        konrad.dybcio@linaro.org, quic_shazhuss@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_ramkri@quicinc.com,
+        quic_nayiluri@quicinc.com,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for PCIe
+Message-ID: <20230705084606.GF11854@thinkpad>
+References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
 MIME-Version: 1.0
-References: <20230703162509.77828-1-koba.ko@canonical.com> <4ec2b7d2-11a5-6ab6-087a-175ed31faca4@web.de>
- <SJ1PR11MB60839A0FC6B5E79E3E5A7997FC29A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <CAJB-X+UB+eYoYOOVH2bqnnVEJcLrxaj5A7-zyfgBM7hOf4y8zw@mail.gmail.com> <SJ1PR11MB608383A5841E4AE8D3A64B79FC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
-In-Reply-To: <SJ1PR11MB608383A5841E4AE8D3A64B79FC2FA@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Koba Ko <koba.ko@canonical.com>
-Date:   Wed, 5 Jul 2023 16:45:01 +0800
-Message-ID: <CAJB-X+VFYyTiQ7yhX=Z8-Q4QW-GMsGXMuEWxLjuoZ1aDB98qXg@mail.gmail.com>
-Subject: Re: [PATCH v2] EDAC/i10nm: shift exponent is negative
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Markus Elfring <Markus.Elfring@web.de>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 12:08=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wr=
-ote:
->
-> > I shared the whole dmesg through g-drive.
-> > https://drive.google.com/file/d/1epnDZNezGiJsK1eT4UNOi8_igcBSXtiF/view?=
-usp=3Dsharing
->
-> The EDAC driver was OK for MC#0, but then failed for the other memory con=
-trollers.
->
-> Can you send some more information about your system. Output from the
-> following commands:
->
-> # head /proc/cpuinfo
->
-> # dmidecode -t 17
->
-> # lspci
-please check through this url,
-https://drive.google.com/drive/folders/199k3BX6IipNYCDfuMGy8W26ZtYRDIYZr?us=
-p=3Dsharing
->
-> Thanks
->
-> -Tony
+On Wed, Jul 05, 2023 at 01:47:05PM +0530, Mrinmay Sarkar wrote:
+> Update the relavent DT bindings for PCIe, add new config to the phy
+> driver add pcie and phy nodes to the .dtsi file and enable then in 
+> board .dts file for the sa8775p-ride platform.
+> 
+> Mrinmay Sarkar (6):
+>   dt-bindings: PCI: qcom: Add sa8775p compatible
+>   dt-bindings: phy: qcom,qmp: Add sa8775p QMP PCIe PHY
+>   PCI: qcom: Add support for sa8775p SoC
+>   phy: qcom-qmp-pcie: add support for sa8775p
+>   arm64: dts: qcom: sa8775p: Add pcie0 and pcie1 nodes
+>   arm64: dts: qcom: sa8775p-ride: enable pcie nodes
+
+Please note that the dts patches should come before driver patches.
+
+- Mani
+
+> 
+>  .../devicetree/bindings/pci/qcom,pcie.yaml    |  28 ++
+>  .../phy/qcom,sc8280xp-qmp-pcie-phy.yaml       |  19 +-
+>  arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  68 ++++
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 201 ++++++++++-
+>  drivers/pci/controller/dwc/pcie-qcom.c        |   1 +
+>  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 328 ++++++++++++++++++
+>  .../qualcomm/phy-qcom-qmp-pcs-pcie-v5_20.h    |   1 +
+>  .../phy-qcom-qmp-qserdes-txrx-v5_20.h         |   2 +
+>  8 files changed, 645 insertions(+), 3 deletions(-)
+> 
+> -- 
+> 2.39.2
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
