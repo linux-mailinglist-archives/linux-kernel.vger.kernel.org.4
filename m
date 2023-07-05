@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DB0748E9E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D16748EA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbjGEUL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 16:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
+        id S233451AbjGEUML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 16:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjGEULz (ORCPT
+        with ESMTP id S233441AbjGEUMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 16:11:55 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA498173F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 13:11:54 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb7b2e3dacso11221369e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 13:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688587913; x=1691179913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lcVd66LGKDN5EYJvATzXLdn3h1LOEZrZslPujKR9gFU=;
-        b=YXGZIJZ6nachVEuQzc/IZNo9zEXiYi+3qek3qmciqPadXYSqe6tdM6yFyIkxS4finp
-         yToukamMSrKbSnNMEAQNsCT6gDDTZCMCzzSKsFMv94vgr3Cyfn8k1Nf3PpjfJFCsEFvz
-         8gDs0uKyi6Y2zhJogLFuuIQUsq/0k2Hf5F4zCl0XMnA8cgXNwZCpSja16LGLXCkyohjv
-         GCadnX8Ipim7DjQ1rh6aC/TfpA645DjlTEU+Lg61ilNuklhe9l+SF29RMvGTjlqVevou
-         iSCHZ+2vLEWgEW+OhOG0maqMfG+e/eNVQCQb2v2K54ii/WmYrHKEaNZj8SlWyOcZfFLk
-         mX/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688587913; x=1691179913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lcVd66LGKDN5EYJvATzXLdn3h1LOEZrZslPujKR9gFU=;
-        b=dJh+1wSSVbZ+Fb7Iv4RJqXYXFvPHJkyroww8PItePvmYDCMvQTLV/+3t6o0429Fy4r
-         cYIhIprFMK20v15c2n2wNb/3FFKXXUsgSTDvKbAbTuQ6S93zQc8wN9M67enhsqzKx8c0
-         yy52jhnjONgCKAntxjfejkKAxwTCMfEJvJDFEy68VEiXWniS6IGH+0yPbOEKCn7OkJ1R
-         wLZz2pZQC9TWtwv9/NbheOmWZ6DqhKCCbiRq6kwqyIDV7P91efNRTvq1N0Gjzs1sRVja
-         RB2fhndjRbNvwJSDaL5x5hGIUJ3muN+GsY67h9LACKCizWQUEffQIngMzJgOHk5QvHWJ
-         X6lw==
-X-Gm-Message-State: ABy/qLZxz2Jix78mVBktydVjk2mZk9zCI1Qrs3X+66fX4LXryxAkmofp
-        cz54AD9ZoHqZ2NFYLnUyw6p2y8eS4xS6TmGOC+Q=
-X-Google-Smtp-Source: APBJJlGOWtuaZF1gcaIcgphg/Ji6Uk1NoTGrqR5CoDcm174dMUUXiOcCMmFdYb2CR95t/vfYN5Mdew==
-X-Received: by 2002:ac2:4bd4:0:b0:4fb:99f7:da35 with SMTP id o20-20020ac24bd4000000b004fb99f7da35mr65182lfq.15.1688587912764;
-        Wed, 05 Jul 2023 13:11:52 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id z14-20020a19f70e000000b004fa35167729sm5488873lfe.159.2023.07.05.13.11.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 13:11:52 -0700 (PDT)
-Message-ID: <26c7e593-7635-e96c-c21f-5fd2e5285281@linaro.org>
-Date:   Wed, 5 Jul 2023 23:11:51 +0300
+        Wed, 5 Jul 2023 16:12:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA12198D;
+        Wed,  5 Jul 2023 13:12:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BFC661712;
+        Wed,  5 Jul 2023 20:12:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D87C433C7;
+        Wed,  5 Jul 2023 20:12:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688587927;
+        bh=jIA4I8df5zxsszIbcx45LiUK8Pr9FjcE9l5Z8LvDBuM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NObo0wJ79pzqzvtDPzT5Ow4fCqG0mcsaN97AY9nA9/ARMe3vVDZweh/2XXcrlM0EV
+         1ssDySnpoDJsCvl3hwTWfbgj7HTJEnMg2wVTR3n56pKyWw46nGBmsSncWpMtfQdRTQ
+         LkKT1N1iLolQ9vrubB33PjUisiIy24WNWOWpnnDeZIeLMG2FkQKPztaO/8f/iuYAIb
+         UM83EU2n3eDiDmkzTPYWOz/azKGImm8s0jpHAZpCMg38T2fqdRM3MN1u/4Bgp8ChfW
+         zl4TXYLtZGebanG0p4SqGayA13K8hSNEWOxsrC6WypQoiEsnAYkQcijhuWTeoXFkE3
+         11/E2fKzZgABg==
+Date:   Wed, 5 Jul 2023 13:12:05 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Cc:     herbert@gondor.apana.org.au, agk@redhat.com, snitzer@kernel.org,
+        linux-crypto@vger.kernel.org, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, qat-linux@intel.com,
+        heinzm@redhat.com, meenakshi.aggarwal@nxp.com,
+        horia.geanta@nxp.com, V.Sethi@nxp.com, pankaj.gupta@nxp.com,
+        gaurav.jain@nxp.com, davem@davemloft.net, iuliana.prodan@nxp.com,
+        Fiona Trahe <fiona.trahe@intel.com>
+Subject: Re: [PATCH 1/3] dm integrity: do not filter algos with
+ CRYPTO_ALG_ALLOCATES_MEMORY
+Message-ID: <20230705201205.GA866@sol.localdomain>
+References: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
+ <20230705164009.58351-2-giovanni.cabiddu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 4/5] drm/msm/dpu: Remove redundant prefix/suffix in
- name of sub-blocks
-Content-Language: en-GB
-To:     Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, quic_jesszhan@quicinc.com
-References: <20230622-devcoredump_patch-v2-0-9e90a87d393f@quicinc.com>
- <20230622-devcoredump_patch-v2-4-9e90a87d393f@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230622-devcoredump_patch-v2-4-9e90a87d393f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705164009.58351-2-giovanni.cabiddu@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 22:30, Ryan McCann wrote:
-> For a device core dump, the registers of sub-blocks are printed under a
-> title formatted as <mainBlkName_sblkName>. For example, the csc sub-block
-> for an SSPP main block "sspp_0" would be printed "sspp_0_sspp_csc0". The
-> title is clearly redundant due to the duplicate "sspp" and "0" that exist
-> in both the mainBlkName and sblkName. To eliminate this redundancy, remove
-> the secondary "sspp" and "0" that exist in the sub-block name by
-> elimanting the "sspp_" prefix and the concatenation of "num" that results
-> in the redundant "0" suffix. Remove num parameter altogether from relevant
-> macros as a consequence of it no longer being used.
+On Wed, Jul 05, 2023 at 05:40:07PM +0100, Giovanni Cabiddu wrote:
+> The flag CRYPTO_ALG_ALLOCATES_MEMORY indicates that an algorithm might
+> allocate memory in the datapath and therefore sleep.
+> Dm-integrity is filtering out implementations of skcipher algorithms
+> that have this flag set. However, in the same function it does
+> allocations with GFP_KERNEL.
+
+Which function is the above referring to?  The actual encryption/decryption
+happens in crypt_journal(), and I don't see any memory allocations there.
+
+> As dm-integrity is re-entrant and capable of handling sleeps that could
+> occur during allocations with GFP_KERNEL, then it is also capable of
+> using skcipher algorithm implementations that have
+> CRYPTO_ALG_ALLOCATES_MEMORY set.
 > 
-> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 50 +++++++++++++-------------
->   1 file changed, 25 insertions(+), 25 deletions(-)
+> Remove the filtering of skcipher implementations with the flag
+> CRYPTO_ALG_ALLOCATES_MEMORY set.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+What about the use of CRYPTO_ALG_ALLOCATES_MEMORY in get_mac()?
 
--- 
-With best wishes
-Dmitry
+> 
+> Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+> Link: https://lore.kernel.org/linux-crypto/ZILvtASXQKLG43y9@gondor.apana.org.au/
+> Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+> Reviewed-by: Fiona Trahe <fiona.trahe@intel.com>
 
+This needs:
+
+    Fixes: a7a10bce8a04 ("dm integrity: don't use drivers that have CRYPTO_ALG_ALLOCATES_MEMORY")
+    Cc: stable@vger.kernel.org
+
+But, are you 100% sure the explanation in commit a7a10bce8a04 was incorrect?
+
+- Eric
