@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03147483A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C705574839F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbjGEL6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
+        id S231882AbjGEL6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 07:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbjGEL6v (ORCPT
+        with ESMTP id S230504AbjGEL6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:58:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208371732;
-        Wed,  5 Jul 2023 04:58:50 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365Bg82M031939;
-        Wed, 5 Jul 2023 11:58:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=mlqW7T2WWtSe4Qrhml1zXvjURCYlhdIQEK4xvx10nPc=;
- b=oIvsG5159Eku/aDHkLs9Io3OnyUue+XUUI3ZW9pUz8E4IrdA7JaQaozpesTjlJfTITs0
- Py34f5r8uxX+L6zMSTKSWiqpd/3atdpX0IwUL8IIJVfPKCMtRXDOJHAChFbq4V6xDFhf
- lPycNDRKZa+yPNB7CHU1Wi0dI/ZwFuvHat6ELPTxg+LwSceXOCub8nUaIgtnafRkVpKv
- UUMB17sCTbUCr36gMDhwNvTcuGCotyKN/KyH1KG8oE7smz2SnNlqgMIx9bHBC3jdtVPd
- ucGh2I49tJ70Ce+acVE7SgfjoMnEmlDmio9V7Rp0CppduxmfHYEg43fuI5CQ028ysoHB EQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rn7vbrd5y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 11:58:36 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 365Bge3o032706;
-        Wed, 5 Jul 2023 11:58:35 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rn7vbrd54-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 11:58:35 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3658lBvo028370;
-        Wed, 5 Jul 2023 11:58:33 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rjbs4svkm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 11:58:33 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 365BwUmM24445640
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Jul 2023 11:58:30 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9BF3520043;
-        Wed,  5 Jul 2023 11:58:30 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B574E20040;
-        Wed,  5 Jul 2023 11:58:29 +0000 (GMT)
-Received: from [9.171.79.178] (unknown [9.171.79.178])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Jul 2023 11:58:29 +0000 (GMT)
-Message-ID: <b596ffda-01a2-8c88-3977-d85126b329c6@linux.ibm.com>
-Date:   Wed, 5 Jul 2023 13:58:29 +0200
+        Wed, 5 Jul 2023 07:58:42 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14C8E7B
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 04:58:41 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-47e655e9a9aso823533e0c.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 04:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1688558321; x=1691150321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7vuos0B/vOpdnWXlb8ybPgBxuuSZb4XpdiaCCE+1Ktg=;
+        b=5JhAMUNiodKNURkdqi3LsJrTQBkPbyQkQ3q7yJFOdckDElWHYnOPjHpyiAJnExnKoj
+         H49EcsHLSrtaUxHE0Ye3oUJk8H+XGSZ6oLSJEA4XWrWDAqQZmrUs0uuIRaXJeRSwzl8V
+         XPiD/5KOFHfr07XVrFkYL7lbuD0CvEkxEa7zkG6J0xop9NCxKrJNFECfQQO/l+42ijcg
+         NsmaZhYoOJBN4q5R5/DZTruRGYtUB21np1JHwsdsoRW9JKFJi9MBtvvdjbx8PhdfUTws
+         K8SSWmBqaj1rQImWS3ffrwquW6z9WnGXK4cYgDIklpDD4PbsKGLc7gyYhx9jr80TviOT
+         vhCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688558321; x=1691150321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7vuos0B/vOpdnWXlb8ybPgBxuuSZb4XpdiaCCE+1Ktg=;
+        b=T/7CingrcK2xCL1UkbOY04c4FTUUAV4eKhkKZnhEY0ny2nWf06qCr1rDIc5nUJJcyo
+         4zMKxw7FYQClwwv4j7Uw5kV0PKOhrhkK2PkJWCHYq5hcb44BEHuXlRomKg1R1UMOdcIh
+         xlST8ipfTHDi13xslHY0ffTLKUJyvD0IK0aOIM0OIsuPGtl0X3aZBgsLV3J22XRVWLAG
+         0KtbItEYLjEGcyNCEcDcSGTSrOnTh1MZyQStz5B6yr7met0xmmXrThn0lZKeGFO19k3K
+         YDJ9IdqAFhDFePzwmmyMYhwvgwjLD3YbpvTRcnvFNGjfuH6Ao7sUmJcs2fxvkIBStvHj
+         eVLA==
+X-Gm-Message-State: ABy/qLbmbU8KyF1DR4ta8LONmVv9u2g4dq5u82nY+bb6N1AoODDHxHX+
+        z5Y5CXt/CkzZBLmmwgbpVtCLYC0d3avGtzAbT+abhuYttvi1CwIq
+X-Google-Smtp-Source: APBJJlGpUasLS7Rs6wE3CtOzhu1kmi+xa7y0dbvVKS4qLJ9VFoATYB6SpitO3aFn0W0DDRChr+zyQPQ9kOr3wElUMmY=
+X-Received: by 2002:a67:e24f:0:b0:443:874b:7d64 with SMTP id
+ w15-20020a67e24f000000b00443874b7d64mr5676572vse.26.1688558320952; Wed, 05
+ Jul 2023 04:58:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v3 3/9] cpu/SMT: Store the current/max number of threads
-Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230629143149.79073-1-ldufour@linux.ibm.com>
- <20230629143149.79073-4-ldufour@linux.ibm.com>
- <f7f8726fcab00fa7436867c58eba1032159c4af8.camel@intel.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <f7f8726fcab00fa7436867c58eba1032159c4af8.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nMgcbT_ZgRd5DK9uOcan_cIUwDzpLOIq
-X-Proofpoint-ORIG-GUID: Zb6IiVDtBqEXccinMMT474GaV4PT7o6m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_02,2023-07-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=688
- mlxscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 impostorscore=0
- bulkscore=0 suspectscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2307050102
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230705074219.8321-1-brgl@bgdev.pl> <ZKVMr9yrL2JavqhF@sol>
+ <CAMRc=MfVsayqftsBJcxyotP2Lz-EPzcXWofFBdYuBDSsVjho_g@mail.gmail.com> <ZKVOjft+q4FXykwd@sol>
+In-Reply-To: <ZKVOjft+q4FXykwd@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 5 Jul 2023 13:58:30 +0200
+Message-ID: <CAMRc=MeMvTQULCmP4N_0MoHxKVLOTBsxW8zL8=kcC15wAdMpVA@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: add missing include
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 5, 2023 at 1:05=E2=80=AFPM Kent Gibson <warthog618@gmail.com> w=
+rote:
+>
+> On Wed, Jul 05, 2023 at 12:59:19PM +0200, Bartosz Golaszewski wrote:
+> > On Wed, Jul 5, 2023 at 12:57=E2=80=AFPM Kent Gibson <warthog618@gmail.c=
+om> wrote:
+> > >
+> > > On Wed, Jul 05, 2023 at 09:42:19AM +0200, Bartosz Golaszewski wrote:
+> > > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > > >
+> > > > gpiolib.h uses notifiers but doesn't include <linux/notifier.h>.
+> > > >
+> > >
+> > > Fair enough.
+> > >
+> > > Reviewed-by: Kent Gibson <warthog618@gmail.com>
+> > >
+> > > Same is true for gpiolib-cdev, btw.
+> > > You want to touch that one up as well?
+> > >
+> >
+> > No, it already includes gpiolib.h.
+> >
+>
+> Yeah, but that is indirect, and gpiolib-cdev.c uses struct notifier_block
+> directly.  Doesn't that warrant an explicit include?
+>
+> Cheers,
+> Kent.
 
+Then gpiolib.c would need one too. IMO it's fine to just have it in
+gpiolib.h. It's a gpio-local header included by all core .c files.
 
-Le 05/07/2023 à 05:05, Zhang, Rui a écrit :
-> On Thu, 2023-06-29 at 16:31 +0200, Laurent Dufour wrote:
->> From: Michael Ellerman <mpe@ellerman.id.au>
->>
->> Some architectures allows partial SMT states at boot time,
-> 
-> s/allows/allow.
-
-Thanks Rui !
+Bart
