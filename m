@@ -2,256 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E340D74896C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DC7748978
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjGEQl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S231915AbjGEQsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjGEQl5 (ORCPT
+        with ESMTP id S232321AbjGEQrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:41:57 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230171989
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:41:32 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-39cc64e4a44so3709950b6e.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688575291; x=1691167291;
-        h=content-transfer-encoding:content-language:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZItWwLEsX01dfWTwqqKlDnCkQDqzMNjfuZC64H7G12Y=;
-        b=uU9A1U36lqNqVHHTIfrDfQ6g4gIxWcMxDXJL2SfUQP0SHzJy1VKBP6gMJyyC9hbdxp
-         CvXn/+uvHqGhgqsFSS5q/6ipgGxGcmQj2HF2oaY+V71i3sZ/0zgEaFMt1ZkkiEr8V7Xh
-         n7KMYe3oz9TVn5nZ6QxEvrzsKNUA0JfJoTYjK/zzgjnIvfxvGyGyvTdQISzIRHtp7RkF
-         oI12w8f++6FMAcc201HW7vX3hEAW0ZaAIS6o1N7A1/uN4U1/IilVF4yK/pcby2a17pmn
-         vTVBchAU2+y07nQ2fegl9kk/3mttN7zpplL352YpUhSVO0Mfl/CUMoXEh/lcfzhx5Qh0
-         MVXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688575291; x=1691167291;
-        h=content-transfer-encoding:content-language:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZItWwLEsX01dfWTwqqKlDnCkQDqzMNjfuZC64H7G12Y=;
-        b=HDkf/pfgGv/yWiFrKvZQxpK0yTt6xgWFuaku35dFBjaGexeQ3JaBuWHdgoyJAPoo79
-         IB5KqnqFjk27++cQSpCoMHiELkPu6tPRBKsfmXczcstjvjW4MT1g6gVFTysPTNj43pYt
-         hy10EafGbXbkUlkXWj214qZH7TNZfZJA8kEtPcm3OQk19KBal7BGrSL/kmrrZh+5JgXN
-         lT9/PbgoYL5y77ZPyxj4wgFwUswo+vEgVdWGtaOKVKfvz2Ipq4ePFVGB1qAwlvlJtyIi
-         7uO4OccDMcz3M6i7VSZDe6q8j/dXwRuZmToaCH7AaXsoK9z6tvk2mSMCkMS3tjJsByfm
-         /Ckw==
-X-Gm-Message-State: AC+VfDz0O7jDupbzBb8wPUA1KOh237UKprQpbKWWU3ScdWr6D7I7YjJE
-        neKSTXbkx8Ypd+uleqXAue/GmQ==
-X-Google-Smtp-Source: ACHHUZ71xAk9m8ywiInTW6lzaBlBXIDNyFBGKnqraIY4h7JMPzBBtlq8M8vGhu+z8UFMPU0p8L5D1g==
-X-Received: by 2002:a05:6808:2104:b0:3a3:33e9:9a34 with SMTP id r4-20020a056808210400b003a333e99a34mr14319555oiw.55.1688575291106;
-        Wed, 05 Jul 2023 09:41:31 -0700 (PDT)
-Received: from [192.168.17.16] ([149.19.169.25])
-        by smtp.gmail.com with ESMTPSA id t12-20020a0568080b2c00b00396050dca14sm8998756oij.28.2023.07.05.09.41.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 09:41:30 -0700 (PDT)
-Message-ID: <73d24185-35ba-d1ba-ee60-1562bcc99627@linaro.org>
-Date:   Wed, 5 Jul 2023 10:41:28 -0600
+        Wed, 5 Jul 2023 12:47:52 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2041.outbound.protection.outlook.com [40.107.95.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D90170B;
+        Wed,  5 Jul 2023 09:47:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e+CzJtlLz0VKzoQWRpjC/WluA3yPswmKNzASb+X85g9+y533UREf5EGTNTO+oXa42yFhK3W6CJbPQlYf0MV6K4XtgxHiNhxA6CtIhbb0XVrhCavLxDV6n3bP/ZVUSrprNFfatS/zgSafN9dXtpRQFF5TT53EouaCJFEdkXa0dHunoKZdkI7IX2EWDpP0+sSdijEb6Eoh0I9YiEixBYrbl3aGJHcRFIRXGVW1kyjU/Rw3qHD7hxjLlX5Bdcm+k7hJRcefJBja52s9RURhD4KucRvWkzgdI1/Ikx+brjxVrWAam7fMh/a+k1wx7hxLiUYnS+fjb6tu0YEbToJMTQL+kA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EGfkzxfPNU6avRXGK7jgIEDBm4eutux+3IW3nPv8euI=;
+ b=iwTPYykyf5EQnlKAwj6M/j5C1vgZonua7OGaLjkUHcykCYB8kyZIEdZ/gb7LckFQhaXxsFoDOCi6/NvayjR1U/EPSMOuLSmdKiTvkjsRJ7oa0H/6EgI13yUL86kPLlTQgvmt7NOE/RlSst6iut2nxkn5sqBwFk1p87qJQgNSa9+1aSgGsB8JH9MLWnRWJ+PGGvI5+IU51yfghrubg3Cm1g4FyQkkqU5OwTII2sP1JCdAy3CcGkmx8mC+HyANHryiwx7zBj3HUSBV8IknhGzFKZuWhcTuohGio+/DOdWlKVIE26uucznRiO4/OCXb8ScWOQ5tlSC19K8V08MtKosK7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vivo.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EGfkzxfPNU6avRXGK7jgIEDBm4eutux+3IW3nPv8euI=;
+ b=widd3xUUddXLXi/KBMs1IwsQv28SdbkUS8psErRGgbVSodhcLga015egmUyTawAWU7e4mC6jhbjbXER5fsKOHMoB9S6ZjcaFLB3KLzcUPJGVKGdVSMRCUY8j56U3EGKY0xaZEF9lGrI6QitNWLri5i+BpuTcCGjOPmFn75SptJY=
+Received: from BN9PR03CA0845.namprd03.prod.outlook.com (2603:10b6:408:13d::10)
+ by PH7PR12MB6857.namprd12.prod.outlook.com (2603:10b6:510:1af::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
+ 2023 16:47:42 +0000
+Received: from BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13d:cafe::ee) by BN9PR03CA0845.outlook.office365.com
+ (2603:10b6:408:13d::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
+ Transport; Wed, 5 Jul 2023 16:47:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT070.mail.protection.outlook.com (10.13.177.50) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6521.45 via Frontend Transport; Wed, 5 Jul 2023 16:47:42 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 5 Jul
+ 2023 11:47:42 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 5 Jul
+ 2023 11:47:42 -0500
+Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
+ Transport; Wed, 5 Jul 2023 11:47:41 -0500
+Message-ID: <8b5c6d42-c1a8-81a3-5947-7a720501ef15@amd.com>
+Date:   Wed, 5 Jul 2023 09:47:41 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-Subject: Re: [PATCH 5.15 00/17] 5.15.120-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1] drivers: xilinx: Fix Judgment of the return value of
+ the devm_ioremap_resource function
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Minjie Du <duminjie@vivo.com>, Brian Xu <brian.xu@amd.com>,
+        "Raj Kumar Rampelli" <raj.kumar.rampelli@amd.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Michal Simek <michal.simek@amd.com>,
+        "open list:XILINX XDMA DRIVER" <dmaengine@vger.kernel.org>,
+        "moderated list:ARM/ZYNQ ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     <opensource.kernel@vivo.com>
+References: <20230704120458.11125-1-duminjie@vivo.com>
+From:   Lizhi Hou <lizhi.hou@amd.com>
+In-Reply-To: <20230704120458.11125-1-duminjie@vivo.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT070:EE_|PH7PR12MB6857:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62643fde-a727-4b76-4278-08db7d778d28
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sB7Ao4byAcUGOMnYXNSlNl/0virgSJ142mBUxZbmmJhktCOEolhnJn066gJRLnxjalmgZbEbGPxOLDXtAnxIzbtQZYzUlGi+OB2BoCrQrF0/OqOB0ZqIxC9KKCQsG3+qUjGQP5Ts2CEIuwYZM4Mw2WBmnwhbFecXDgxeFdUdyuCQcaTyHyi3OUddRkctwVRKSfiVu2Ko+MvaH0Az1xy/5eC5s+fXsZYK4uwktW7XkQJ3fwhqKRPuVfJrIOiLZ/oq8bUbNPOGTnU+o+8VY19TjFoEFXolODEG7+8DGnZh2rBAmghc164psxp8Ljg5ajg6UwGoT7+NEzynPuaYBvDzpLMfdIMvzFbBg8X9jsSF/Om55YyyCcZ/zwW2hQ0+m+h1xX2j/E0wKvmOdezbTp6+meCbpUfNT/QDZcUWmCGYBPSpg/2b4YQxV1uRKIhTzBVCoHjbZUjagf7D16SX01yIoVMJQh/30QmDpdWDBk4WUjgXBjVL9M0g1iTitTg6p504Lyrj34Rj+b1NXol+hx9E6R+m/55OVOurRUEXAO+7AhtLgGeW3OCN2ILuI7b6FsWmi/nLO7IW1eDz+PQvyfbvAsQsvysQnVv/5SvUxwqdqSPHbpVdO6r8UkulZK6GJti+36utTYNOUwe94AEReMOfkHA4KKkDrCxLS4WvBQ05hpTtkTol1czcdgQJokp5KRfjzGmqiH2grtEaStVxZDUrdd3iaxi9BeI1WIky+s0VVol2+yKW9J+M5NahEAeDi6mR1bzsgnBYbw7fbtEzMfHzxx2FOa+LryEEE7xS4dWV6ek=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(136003)(451199021)(36840700001)(40470700004)(46966006)(70206006)(4326008)(356005)(70586007)(82740400003)(2616005)(81166007)(40480700001)(186003)(86362001)(16576012)(36756003)(966005)(31696002)(26005)(110136005)(478600001)(53546011)(82310400005)(40460700003)(36860700001)(8676002)(8936002)(4744005)(44832011)(5660300002)(31686004)(2906002)(47076005)(41300700001)(316002)(83380400001)(426003)(336012)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 16:47:42.5550
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62643fde-a727-4b76-4278-08db7d778d28
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6857
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hi Minjie,
 
-On Tue, 04 Jul 2023 09:48:47 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.120 release.
-> There are 17 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 06 Jul 2023 08:46:01 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.120-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+There was a patch created for this. Please see
 
-## Build
-* kernel: 5.15.120-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 492521f41846c04df93ee45e8b780dc9478d90df
-* git describe: v5.15.119-18-g492521f41846
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.119-18-g492521f41846
-
-## Test Regressions (compared to v5.15.119)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.119)
-No metric regressions found.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+https://lore.kernel.org/all/20230217062652.172480-1-yangyingliang@huawei.com/
 
 
-## Test Fixes (compared to v5.15.119)
-No test fixes found.
+Thanks,
 
-## Metric Fixes (compared to v5.15.119)
-No metric fixes found.
+Lizhi
 
-## Test result summary
-total: 113091, pass: 88007, fail: 2292, skip: 22703, xfail: 89
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 117 total, 116 passed, 1 failed
-* arm64: 45 total, 43 passed, 2 failed
-* i386: 35 total, 32 passed, 3 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 4 total, 4 passed, 0 failed
-* powerpc: 27 total, 26 passed, 1 failed
-* riscv: 11 total, 11 passed, 0 failed
-* s390: 12 total, 11 passed, 1 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 38 total, 36 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
-
+On 7/4/23 05:04, Minjie Du wrote:
+> IS_ERR() fix devm_ioremap_resource function return judge.
+> Could you help check it out?
+> Thank you!
+>
+> Signed-off-by: Minjie Du <duminjie@vivo.com>
+> ---
+>   drivers/dma/xilinx/xdma.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
+> index 93ee298d5..ad5ff6335 100644
+> --- a/drivers/dma/xilinx/xdma.c
+> +++ b/drivers/dma/xilinx/xdma.c
+> @@ -892,7 +892,7 @@ static int xdma_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	reg_base = devm_ioremap_resource(&pdev->dev, res);
+> -	if (!reg_base) {
+> +	if (IS_ERR(reg_base)) {
+>   		xdma_err(xdev, "ioremap failed");
+>   		goto failed;
+>   	}
