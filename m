@@ -2,391 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B892F748076
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD94748082
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjGEJIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 05:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
+        id S231852AbjGEJKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjGEJId (ORCPT
+        with ESMTP id S230157AbjGEJKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 05:08:33 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24F710FB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:08:30 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6f0508f54so30682411fa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 02:08:30 -0700 (PDT)
+        Wed, 5 Jul 2023 05:10:07 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7AC10D5;
+        Wed,  5 Jul 2023 02:10:06 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1b0249f1322so5311272fac.3;
+        Wed, 05 Jul 2023 02:10:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688548109; x=1691140109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1688548205; x=1691140205;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ds/vxPMjy6e9Qs6QzqIDlAkBYqYxet8Enaf39dNopbw=;
-        b=QD+gfgoGivCvxsG05GAV5MQjfVHMiJVwY2Nf9JAUUyjg+Fxm46GmMchtODlJtRGoLT
-         LPR+bjBag/DV9YWcwbecis9HCFWjL4gFMFFNoX2QW9FgdS2lA7qeV8D0ly0vSQhK/nuy
-         tMQpF+lTy5vE5lsrFPm/vCz8dEKxYm3f6lTWg=
+        bh=KcsOeGLimul89G1ISXwaKkbEQdp5PaXxX2niuxY6rwo=;
+        b=EcXaSlbOlR5e36VZentjv18TglOo4SR5IxwQuC62hO+13KuXYr6w0oJkkcSKXWNTh/
+         xQd1w0d35T/52TOVUJJF+z0xu9D+snC54xOF+YOOrc0xHPBHnS8t1iQ3/rRdBo0Ba7Gy
+         Vyp8gd4RvbUjm7l7+9m8ibGi/vWGfsqfpiaXE+z8gV1BQF6wYFfAwCifZuszxBIJ0M62
+         kyGcXBrt75e9Hh4hyeTpjW0TfG1DsJEeThJw/Ltbqmh5038nXuhNdQbYF6rQnzJ4It8X
+         tYAgt51CzVy3QzJ7mnbbMZucmyCO393GVNRbiWURxK0cah0ppF7CVyfu7y+V7I7ovNp+
+         9BUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688548109; x=1691140109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688548205; x=1691140205;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ds/vxPMjy6e9Qs6QzqIDlAkBYqYxet8Enaf39dNopbw=;
-        b=fWUJBZhmO4oNTm6obzwVs4evkSEtRrU0jVkafxWIZQiD3wZLKdHYohKOaC0IGSN35V
-         n8I8TcRcamBbMOetI/uSMSAgzPIBDeic/NCgz3mzrT3aIG01Xq2Ns3tu5wGgm1/U3TbQ
-         foIt9kmMO+wLV2EbwaiAp8NyKF7wcLcXsV+dPicbryRe1cuPPUXJpXzJ2kZ5IptmxmRS
-         nFwml1RyBdmA1mafhtNEUY02P3mFcOVtaTXjgJfNdzBO42PbWUOe883QKza3VNK0SeqO
-         0EoyIru9QtnELCeYuf2MM3VVSeG8emPiPKoBXLP9jyKmCta2AniuzeTGKttLJExH1K10
-         liLA==
-X-Gm-Message-State: ABy/qLb6Vb3y8Ef/F5KiaZFhou44+R6gD4iIArdZTkRtxwBcuZgv2PrH
-        db4n2b/LQcIAU/R9tSbt5wVrYKPA+4GD/i2npvCUTQ==
-X-Google-Smtp-Source: APBJJlFV2ZTPIEY2LRi5WO7rTUj6kHGucgpa2NKnbGiIkOh5BA0QgALZwvPrrojqf/IeHfMjcigzgWf0UgWOH8V6rFE=
-X-Received: by 2002:a2e:3305:0:b0:2b6:fa92:479e with SMTP id
- d5-20020a2e3305000000b002b6fa92479emr2728526ljc.42.1688548109034; Wed, 05 Jul
- 2023 02:08:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230704075054.3344915-1-stevensd@google.com> <20230704075054.3344915-3-stevensd@google.com>
- <20230705114732.000005c6.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230705114732.000005c6.zhi.wang.linux@gmail.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Wed, 5 Jul 2023 18:08:17 +0900
-Message-ID: <CAD=HUj4+20vtQTKiE69vWV1QVhx1o0uzRqvM+PMGn_=KGpfjHg@mail.gmail.com>
-Subject: Re: [PATCH v7 2/8] KVM: Introduce __kvm_follow_pfn function
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=KcsOeGLimul89G1ISXwaKkbEQdp5PaXxX2niuxY6rwo=;
+        b=AIqC37EyEd9Jvn8etThUpNwdewnFKvnnhG24Tl5grCuIadHJqp+b0ahfBBraSlyJsn
+         85szUBoJrUYHWXrETO+L0OAn91zi3mDTLN7DLdIZwZHiZ4FDJbRBSG06DbxolEYsXDGU
+         JVekJmbkz4IjUNxi2I2QkdE1wkUVkbS3js//il+Gm9cQ1XSMBG4pRcQTTQDI5t5I/kYl
+         AwBu9Oe5kZDJ8Iz2V0tuCP3GCak/ztWUmnuOeAuUK4TQKkNdLYdxCr/TVSArPI8rn3Ba
+         jXlkl/4hBSVBpw8XrZqm4YKhUZCZZlbLGHcxQR5sHDufjhdhEyW+rivc+K1jDZXisXYO
+         gdMQ==
+X-Gm-Message-State: ABy/qLZH4YR09ndTGZU5z+izEvqTrLK5JEGlIlYWheftpud8P7zEH+lC
+        /49kWhF6/CVrOABY5fIPmM0=
+X-Google-Smtp-Source: ACHHUZ4ckVuETojQlbMs5VH38cwbmsi9JDfq/6TswQOECm+hW1eTRWtCjuU7c+baqOXg9aQBxcfdRw==
+X-Received: by 2002:a05:6870:9d05:b0:19f:202b:513c with SMTP id pp5-20020a0568709d0500b0019f202b513cmr14517197oab.29.1688548205257;
+        Wed, 05 Jul 2023 02:10:05 -0700 (PDT)
+Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
+        by smtp.gmail.com with ESMTPSA id f39-20020a056871072700b001a69e7efd13sm15079978oap.5.2023.07.05.02.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 02:10:04 -0700 (PDT)
+From:   Chengfeng Ye <dg573847474@gmail.com>
+To:     krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chengfeng Ye <dg573847474@gmail.com>
+Subject: [PATCH v3] watchdog: s3c2410: Fix potential deadlock on &wdt->lock
+Date:   Wed,  5 Jul 2023 09:09:51 +0000
+Message-Id: <20230705090951.63762-1-dg573847474@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 5:47=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com> =
-wrote:
->
-> On Tue,  4 Jul 2023 16:50:47 +0900
-> David Stevens <stevensd@chromium.org> wrote:
->
-> > From: David Stevens <stevensd@chromium.org>
-> >
-> > Introduce __kvm_follow_pfn, which will replace __gfn_to_pfn_memslot.
-> > __kvm_follow_pfn refactors the old API's arguments into a struct and,
-> > where possible, combines the boolean arguments into a single flags
-> > argument.
-> >
-> > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > ---
-> >  include/linux/kvm_host.h |  16 ++++
-> >  virt/kvm/kvm_main.c      | 171 ++++++++++++++++++++++-----------------
-> >  virt/kvm/kvm_mm.h        |   3 +-
-> >  virt/kvm/pfncache.c      |   8 +-
-> >  4 files changed, 122 insertions(+), 76 deletions(-)
-> >
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 9d3ac7720da9..ef2763c2b12e 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -97,6 +97,7 @@
-> >  #define KVM_PFN_ERR_HWPOISON (KVM_PFN_ERR_MASK + 1)
-> >  #define KVM_PFN_ERR_RO_FAULT (KVM_PFN_ERR_MASK + 2)
-> >  #define KVM_PFN_ERR_SIGPENDING       (KVM_PFN_ERR_MASK + 3)
-> > +#define KVM_PFN_ERR_NEEDS_IO (KVM_PFN_ERR_MASK + 4)
-> >
-> >  /*
-> >   * error pfns indicate that the gfn is in slot but faild to
-> > @@ -1156,6 +1157,21 @@ unsigned long gfn_to_hva_memslot_prot(struct kvm=
-_memory_slot *slot, gfn_t gfn,
-> >  void kvm_release_page_clean(struct page *page);
-> >  void kvm_release_page_dirty(struct page *page);
-> >
-> > +struct kvm_follow_pfn {
-> > +     const struct kvm_memory_slot *slot;
-> > +     gfn_t gfn;
-> > +     unsigned int flags;
-> > +     bool atomic;
-> > +     /* Allow a read fault to create a writeable mapping. */
-> > +     bool allow_write_mapping;
-> > +
-> > +     /* Outputs of __kvm_follow_pfn */
-> > +     hva_t hva;
-> > +     bool writable;
-> > +};
-> > +
-> > +kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll);
-> > +
-> >  kvm_pfn_t gfn_to_pfn(struct kvm *kvm, gfn_t gfn);
-> >  kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault=
-,
-> >                     bool *writable);
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 371bd783ff2b..b13f22861d2f 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -2486,24 +2486,22 @@ static inline int check_user_page_hwpoison(unsi=
-gned long addr)
-> >   * true indicates success, otherwise false is returned.  It's also the
-> >   * only part that runs if we can in atomic context.
-> >   */
-> > -static bool hva_to_pfn_fast(unsigned long addr, bool write_fault,
-> > -                         bool *writable, kvm_pfn_t *pfn)
-> > +static bool hva_to_pfn_fast(struct kvm_follow_pfn *foll, kvm_pfn_t *pf=
-n)
-> >  {
-> >       struct page *page[1];
-> > +     bool write_fault =3D foll->flags & FOLL_WRITE;
-> >
-> >       /*
-> >        * Fast pin a writable pfn only if it is a write fault request
-> >        * or the caller allows to map a writable pfn for a read fault
-> >        * request.
-> >        */
-> > -     if (!(write_fault || writable))
-> > +     if (!(write_fault || foll->allow_write_mapping))
-> >               return false;
-> >
-> > -     if (get_user_page_fast_only(addr, FOLL_WRITE, page)) {
-> > +     if (get_user_page_fast_only(foll->hva, FOLL_WRITE, page)) {
-> >               *pfn =3D page_to_pfn(page[0]);
-> > -
-> > -             if (writable)
-> > -                     *writable =3D true;
-> > +             foll->writable =3D foll->allow_write_mapping;
-> >               return true;
-> >       }
-> >
-> > @@ -2514,35 +2512,26 @@ static bool hva_to_pfn_fast(unsigned long addr,=
- bool write_fault,
-> >   * The slow path to get the pfn of the specified host virtual address,
-> >   * 1 indicates success, -errno is returned if error is detected.
-> >   */
-> > -static int hva_to_pfn_slow(unsigned long addr, bool *async, bool write=
-_fault,
-> > -                        bool interruptible, bool *writable, kvm_pfn_t =
-*pfn)
-> > +static int hva_to_pfn_slow(struct kvm_follow_pfn *foll, kvm_pfn_t *pfn=
-)
-> >  {
-> > -     unsigned int flags =3D FOLL_HWPOISON;
-> > +     unsigned int flags =3D FOLL_HWPOISON | FOLL_GET | foll->flags;
-> >       struct page *page;
-> >       int npages;
-> >
-> >       might_sleep();
-> >
-> > -     if (writable)
-> > -             *writable =3D write_fault;
-> > -
-> > -     if (write_fault)
-> > -             flags |=3D FOLL_WRITE;
-> > -     if (async)
-> > -             flags |=3D FOLL_NOWAIT;
-> > -     if (interruptible)
-> > -             flags |=3D FOLL_INTERRUPTIBLE;
-> > -
-> > -     npages =3D get_user_pages_unlocked(addr, 1, &page, flags);
-> > +     npages =3D get_user_pages_unlocked(foll->hva, 1, &page, flags);
-> >       if (npages !=3D 1)
-> >               return npages;
-> >
-> > +     foll->writable =3D (foll->flags & FOLL_WRITE) && foll->allow_writ=
-e_mapping;
-> > +
-> >       /* map read fault as writable if possible */
-> > -     if (unlikely(!write_fault) && writable) {
-> > +     if (unlikely(!foll->writable) && foll->allow_write_mapping) {
-> >               struct page *wpage;
-> >
-> > -             if (get_user_page_fast_only(addr, FOLL_WRITE, &wpage)) {
-> > -                     *writable =3D true;
-> > +             if (get_user_page_fast_only(foll->hva, FOLL_WRITE, &wpage=
-)) {
-> > +                     foll->writable =3D true;
-> >                       put_page(page);
-> >                       page =3D wpage;
-> >               }
-> > @@ -2572,23 +2561,23 @@ static int kvm_try_get_pfn(kvm_pfn_t pfn)
-> >       return get_page_unless_zero(page);
-> >  }
-> >
-> > -static int hva_to_pfn_remapped(struct vm_area_struct *vma,
-> > -                            unsigned long addr, bool write_fault,
-> > -                            bool *writable, kvm_pfn_t *p_pfn)
-> > +static int hva_to_pfn_remapped(struct vm_area_struct *vma, struct kvm_=
-follow_pfn *foll,
-> > +                            kvm_pfn_t *p_pfn)
-> >  {
-> >       kvm_pfn_t pfn;
-> >       pte_t *ptep;
-> >       spinlock_t *ptl;
-> > +     bool write_fault =3D foll->flags & FOLL_WRITE;
-> >       int r;
-> >
-> > -     r =3D follow_pte(vma->vm_mm, addr, &ptep, &ptl);
-> > +     r =3D follow_pte(vma->vm_mm, foll->hva, &ptep, &ptl);
-> >       if (r) {
-> >               /*
-> >                * get_user_pages fails for VM_IO and VM_PFNMAP vmas and =
-does
-> >                * not call the fault handler, so do it here.
-> >                */
-> >               bool unlocked =3D false;
-> > -             r =3D fixup_user_fault(current->mm, addr,
-> > +             r =3D fixup_user_fault(current->mm, foll->hva,
-> >                                    (write_fault ? FAULT_FLAG_WRITE : 0)=
-,
-> >                                    &unlocked);
-> >               if (unlocked)
-> > @@ -2596,7 +2585,7 @@ static int hva_to_pfn_remapped(struct vm_area_str=
-uct *vma,
-> >               if (r)
-> >                       return r;
-> >
-> > -             r =3D follow_pte(vma->vm_mm, addr, &ptep, &ptl);
-> > +             r =3D follow_pte(vma->vm_mm, foll->hva, &ptep, &ptl);
-> >               if (r)
-> >                       return r;
-> >       }
-> > @@ -2606,8 +2595,7 @@ static int hva_to_pfn_remapped(struct vm_area_str=
-uct *vma,
-> >               goto out;
-> >       }
-> >
-> > -     if (writable)
-> > -             *writable =3D pte_write(*ptep);
-> > +     foll->writable =3D pte_write(*ptep) && foll->allow_write_mapping;
-> >       pfn =3D pte_pfn(*ptep);
-> >
-> >       /*
-> > @@ -2652,24 +2640,22 @@ static int hva_to_pfn_remapped(struct vm_area_s=
-truct *vma,
-> >   * 2): @write_fault =3D false && @writable, @writable will tell the ca=
-ller
-> >   *     whether the mapping is writable.
-> >   */
-> > -kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptib=
-le,
-> > -                  bool *async, bool write_fault, bool *writable)
-> > +kvm_pfn_t hva_to_pfn(struct kvm_follow_pfn *foll)
-> >  {
-> >       struct vm_area_struct *vma;
-> >       kvm_pfn_t pfn;
-> >       int npages, r;
-> >
-> >       /* we can do it either atomically or asynchronously, not both */
-> > -     BUG_ON(atomic && async);
-> > +     BUG_ON(foll->atomic && (foll->flags & FOLL_NOWAIT));
-> >
-> > -     if (hva_to_pfn_fast(addr, write_fault, writable, &pfn))
-> > +     if (hva_to_pfn_fast(foll, &pfn))
-> >               return pfn;
-> >
-> > -     if (atomic)
-> > +     if (foll->atomic)
-> >               return KVM_PFN_ERR_FAULT;
-> >
-> > -     npages =3D hva_to_pfn_slow(addr, async, write_fault, interruptibl=
-e,
-> > -                              writable, &pfn);
-> > +     npages =3D hva_to_pfn_slow(foll, &pfn);
-> >       if (npages =3D=3D 1)
-> >               return pfn;
-> >       if (npages =3D=3D -EINTR)
-> > @@ -2677,83 +2663,122 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool =
-atomic, bool interruptible,
-> >
-> >       mmap_read_lock(current->mm);
-> >       if (npages =3D=3D -EHWPOISON ||
-> > -           (!async && check_user_page_hwpoison(addr))) {
-> > +           (!(foll->flags & FOLL_NOWAIT) && check_user_page_hwpoison(f=
-oll->hva))) {
-> >               pfn =3D KVM_PFN_ERR_HWPOISON;
-> >               goto exit;
-> >       }
-> >
-> >  retry:
-> > -     vma =3D vma_lookup(current->mm, addr);
-> > +     vma =3D vma_lookup(current->mm, foll->hva);
-> >
-> >       if (vma =3D=3D NULL)
-> >               pfn =3D KVM_PFN_ERR_FAULT;
-> >       else if (vma->vm_flags & (VM_IO | VM_PFNMAP)) {
-> > -             r =3D hva_to_pfn_remapped(vma, addr, write_fault, writabl=
-e, &pfn);
-> > +             r =3D hva_to_pfn_remapped(vma, foll, &pfn);
-> >               if (r =3D=3D -EAGAIN)
-> >                       goto retry;
-> >               if (r < 0)
-> >                       pfn =3D KVM_PFN_ERR_FAULT;
-> >       } else {
-> > -             if (async && vma_is_valid(vma, write_fault))
-> > -                     *async =3D true;
-> > -             pfn =3D KVM_PFN_ERR_FAULT;
-> > +             if ((foll->flags & FOLL_NOWAIT) &&
-> > +                 vma_is_valid(vma, foll->flags & FOLL_WRITE))
-> > +                     pfn =3D KVM_PFN_ERR_NEEDS_IO;
-> > +             else
-> > +                     pfn =3D KVM_PFN_ERR_FAULT;
-> >       }
-> >  exit:
-> >       mmap_read_unlock(current->mm);
-> >       return pfn;
-> >  }
-> >
-> > -kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn=
-_t gfn,
-> > -                            bool atomic, bool interruptible, bool *asy=
-nc,
-> > -                            bool write_fault, bool *writable, hva_t *h=
-va)
-> > +kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
-> >  {
-> > -     unsigned long addr =3D __gfn_to_hva_many(slot, gfn, NULL, write_f=
-ault);
-> > -
-> > -     if (hva)
-> > -             *hva =3D addr;
-> > +     foll->hva =3D __gfn_to_hva_many(foll->slot, foll->gfn, NULL,
-> > +                                   foll->flags & FOLL_WRITE);
-> >
-> > -     if (addr =3D=3D KVM_HVA_ERR_RO_BAD) {
-> > -             if (writable)
-> > -                     *writable =3D false;
-> > +     if (foll->hva =3D=3D KVM_HVA_ERR_RO_BAD)
-> >               return KVM_PFN_ERR_RO_FAULT;
-> > -     }
-> >
->
-> Can you explain why updating foll->writable =3D false (previously *writea=
-ble
-> =3D false) is omitted here?
->
-> In the caller where the struct kvm_follow_pfn is initialized, e.g.
-> __gfn_to_pfn_memslot()/gfn_to_pfn_prot(), .writable is not initialized.
-> IIUC, they expect __kvm_follow_pfn() to update it and return .writable to
-> upper caller.
->
-> As the one of the output, it would be better to initalize it either in th=
-e
-> caller or update it in __kvm_follow_pfn(). Or
-> __gfn_to_pfn_memslot()/gfn_to_pfn_prot() will return random data in the
-> stack to the caller via bool *writable. It doesn't sound nice.
+As &wdt->lock is acquired by hard irq s3c2410wdt_irq(),
+other acquisition of the same lock under process context should
+disable irq, otherwise deadlock could happen if the
+irq preempt the execution while the lock is held in process context
+on the same CPU.
 
-Entries omitted from an initializer are initialized to zero, so
-.writable does get initialized in all of the patches in this series
-via designated initializers. Although you're right that explicitly
-setting it to false is a good idea, in case someday someone adds a
-caller that doesn't use an initializer when declaring its
-kvm_follow_pfn.
+[Deadlock Scenario]
+s3c2410wdt_suspend()
+    -> s3c2410wdt_stop()
+    -> spin_lock(&wdt->lock)
+        <irq iterrupt>
+        -> s3c2410wdt_irq()
+        -> s3c2410wdt_keepalive()
+        -> spin_lock(&wdt->lock) (deadlock here)
 
--David
+[Deadlock Scenario]
+s3c2410wdt_probe()
+    -> s3c2410wdt_start()
+    -> spin_lock(&wdt->lock)
+        <irq iterrupt>
+        -> s3c2410wdt_irq()
+        -> s3c2410wdt_keepalive()
+        -> spin_lock(&wdt->lock) (deadlock here)
+
+[Deadlock Scenario]
+s3c2410wdt_keepalive()
+    -> spin_lock(&wdt->lock)
+        <irq iterrupt>
+        -> s3c2410wdt_irq()
+        -> s3c2410wdt_keepalive()
+        -> spin_lock(&wdt->lock) (deadlock here)
+
+This flaw was found by an experimental static analysis tool I am
+developing for irq-related deadlock, which reported the above
+warning when analyzing the linux kernel 6.4-rc7 release.
+
+The tentative patch fix the potential deadlock by spin_lock_irqsave()
+under process context.
+
+Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+---
+ drivers/watchdog/s3c2410_wdt.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+index 95416a9bdd4b..e1dc71ece01e 100644
+--- a/drivers/watchdog/s3c2410_wdt.c
++++ b/drivers/watchdog/s3c2410_wdt.c
+@@ -379,10 +379,11 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+ static int s3c2410wdt_keepalive(struct watchdog_device *wdd)
+ {
+ 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
++	unsigned long flags;
+ 
+-	spin_lock(&wdt->lock);
++	spin_lock_irqsave(&wdt->lock, flags);
+ 	writel(wdt->count, wdt->reg_base + S3C2410_WTCNT);
+-	spin_unlock(&wdt->lock);
++	spin_unlock_irqrestore(&wdt->lock, flags);
+ 
+ 	return 0;
+ }
+@@ -399,10 +400,11 @@ static void __s3c2410wdt_stop(struct s3c2410_wdt *wdt)
+ static int s3c2410wdt_stop(struct watchdog_device *wdd)
+ {
+ 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
++	unsigned long flags;
+ 
+-	spin_lock(&wdt->lock);
++	spin_lock_irqsave(&wdt->lock, flags);
+ 	__s3c2410wdt_stop(wdt);
+-	spin_unlock(&wdt->lock);
++	spin_unlock_irqrestore(&wdt->lock, flags);
+ 
+ 	return 0;
+ }
+@@ -411,8 +413,9 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
+ {
+ 	unsigned long wtcon;
+ 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
++	unsigned long flags;
+ 
+-	spin_lock(&wdt->lock);
++	spin_lock_irqsave(&wdt->lock, flags);
+ 
+ 	__s3c2410wdt_stop(wdt);
+ 
+@@ -433,7 +436,7 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
+ 	writel(wdt->count, wdt->reg_base + S3C2410_WTDAT);
+ 	writel(wdt->count, wdt->reg_base + S3C2410_WTCNT);
+ 	writel(wtcon, wdt->reg_base + S3C2410_WTCON);
+-	spin_unlock(&wdt->lock);
++	spin_unlock_irqrestore(&wdt->lock, flags);
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
+
