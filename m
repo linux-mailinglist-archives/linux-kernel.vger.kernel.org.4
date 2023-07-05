@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DE474846C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBA074846D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjGEMvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 08:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
+        id S231703AbjGEMwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 08:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjGEMvr (ORCPT
+        with ESMTP id S230100AbjGEMwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 08:51:47 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D0110EC;
-        Wed,  5 Jul 2023 05:51:46 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-57722942374so81284317b3.1;
-        Wed, 05 Jul 2023 05:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688561505; x=1691153505;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4TI27rCidWfDrTg//jli+vwhntyHlTcbniPH3pF/oFs=;
-        b=K9XRyruMZJQkMx3rZPrVX8w6LdJkA87VWurC83c6F8gl4iuk87S2F8/uHyd8Fq3tA0
-         3GRLA7GQ1F1+1BhrK5Fq+/zjnTCVBEhD2p7vPkSzj4ii0gyOmJfjbFdfrxVdOBF5/9QQ
-         aJ+h1Rk+K1Mfj3XxU7+wEK4wSyUXFoynxPs+uufPEMM7zynHFTmy3OSLD7QmkS9H92/T
-         X5W4mO9mdpRCOHKO7BPjw+Z6pYEowQWWCSefQ/F9+jsk+d/97G6smeTN4T0boCeYOT8o
-         OaJpMlVh1hE/YeQiuqbYcQ/KROqNHhVwxfdSk+EathWrC6ahbmlkWBNKBzunozOcEtai
-         U3zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688561505; x=1691153505;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4TI27rCidWfDrTg//jli+vwhntyHlTcbniPH3pF/oFs=;
-        b=RbLt90BvG1Kt8Fi8WlldNDTHS+K9/EMt9CmkG6aV95nEatRobMbQkD3FLVoGvd2iJZ
-         KFR9JqteYN4Onhbc4gk1MxP7PhJ1YOCtQ5eTgIVNA/26BMCpWgGY6QH/o18CGwsZ2mKW
-         7on7zruMq2aEQ4RDkf1ruLXrJru8aTclJbmJyv3pIdSZGJZxrFiDzK9yvJksg79rMcuV
-         tZkjXLZOVY+RijMN7Nxd9yfB60oVJf4c4O4Ub0KWy8eeytulIOkeb+jpNr2pQR5/CBXK
-         tM9ymjVuLKOeAilma0oVpKly8fn3gnj3ISHqDVEYVCQG4CGIjvLBixYnt+tJdIneOXvy
-         FuLg==
-X-Gm-Message-State: ABy/qLZHdSeYy1fkXlucxOogx8CmHJopp0OzaDTyDAtTT8doqegB+AAQ
-        35roaiH05VVNgBpiF2ipP1A=
-X-Google-Smtp-Source: APBJJlHnCbIk0q/1dfWa+mjZ7vkiGALafRuPrf4kVThas3u/z9NR4VybXSSpeRW0QabXz9d4nbCQvg==
-X-Received: by 2002:a81:4c8e:0:b0:56c:f68f:d824 with SMTP id z136-20020a814c8e000000b0056cf68fd824mr13630800ywa.45.1688561505495;
-        Wed, 05 Jul 2023 05:51:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x185-20020a814ac2000000b005771bb5a25dsm3795474ywa.61.2023.07.05.05.51.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 05:51:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f7f1ddb5-a4fd-f79c-f870-8fa7410cd0c7@roeck-us.net>
-Date:   Wed, 5 Jul 2023 05:51:41 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] watchdog: s3c2410: Fix potential deadlock on
- &wdt->lock
-Content-Language: en-US
-To:     Chengfeng Ye <dg573847474@gmail.com>,
-        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-        wim@linux-watchdog.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230705090951.63762-1-dg573847474@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230705090951.63762-1-dg573847474@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 5 Jul 2023 08:52:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BEFDA;
+        Wed,  5 Jul 2023 05:52:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F89261512;
+        Wed,  5 Jul 2023 12:52:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815CDC433C7;
+        Wed,  5 Jul 2023 12:52:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688561554;
+        bh=I3mgC95jaUMPNBZSpRVdhaB4W5ZRw3imLS94cfTIN9w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pM+mAx14x75F4hkkJXR6PkXiVnUWsGQC8FbnRxNGNykH2r9VOM3ZvgtyKiSM5NJJe
+         Q344nEKdB6H0KVtlyK2kjrObK2dedKZnRUoThVnRrHN303hr4aWxrsA7Xe5pOmNZ/+
+         rFht9StA4UYUF5TcuJM8l2AV09e1DNcVYuogmKaMxROJFi372o2XogJP8Pz9TLGsYL
+         3XiODM7vHVwGS7h815M9qFNW4nGTVfzG7sikJS1WY5vCPLPlgm7pQyYV7x+/u4+iBe
+         xUtL/KVl4xQt8ySYDtN8eJIELTv3YZQdmB23tT5hEtneSOslXja1NqJS9yPEf08Uss
+         Qy1yay7xQIrZQ==
+Date:   Wed, 5 Jul 2023 21:52:30 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     m.stachyra@samsung.com
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>
+Subject: Re: [PATCH v2] trace: fix null pointer dereference in
+ tracing_err_log_open()
+Message-Id: <20230705215230.9aafc44d8bd764b6416cf655@kernel.org>
+In-Reply-To: <20230704102706eucms1p30d7ecdcc287f46ad67679fc8491b2e0f@eucms1p3>
+References: <CGME20230704102706eucms1p30d7ecdcc287f46ad67679fc8491b2e0f@eucms1p3>
+        <20230704102706eucms1p30d7ecdcc287f46ad67679fc8491b2e0f@eucms1p3>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/23 02:09, Chengfeng Ye wrote:
-> As &wdt->lock is acquired by hard irq s3c2410wdt_irq(),
-> other acquisition of the same lock under process context should
-> disable irq, otherwise deadlock could happen if the
-> irq preempt the execution while the lock is held in process context
-> on the same CPU.
-> 
-> [Deadlock Scenario]
-> s3c2410wdt_suspend()
->      -> s3c2410wdt_stop()
->      -> spin_lock(&wdt->lock)
->          <irq iterrupt>
->          -> s3c2410wdt_irq()
->          -> s3c2410wdt_keepalive()
->          -> spin_lock(&wdt->lock) (deadlock here)
-> 
-> [Deadlock Scenario]
-> s3c2410wdt_probe()
->      -> s3c2410wdt_start()
->      -> spin_lock(&wdt->lock)
->          <irq iterrupt>
->          -> s3c2410wdt_irq()
->          -> s3c2410wdt_keepalive()
->          -> spin_lock(&wdt->lock) (deadlock here)
-> 
-> [Deadlock Scenario]
-> s3c2410wdt_keepalive()
->      -> spin_lock(&wdt->lock)
->          <irq iterrupt>
->          -> s3c2410wdt_irq()
->          -> s3c2410wdt_keepalive()
->          -> spin_lock(&wdt->lock) (deadlock here)
-> 
-> This flaw was found by an experimental static analysis tool I am
-> developing for irq-related deadlock, which reported the above
-> warning when analyzing the linux kernel 6.4-rc7 release.
-> 
-> The tentative patch fix the potential deadlock by spin_lock_irqsave()
-> under process context.
-> 
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+On Tue, 04 Jul 2023 12:27:06 +0200
+Mateusz Stachyra <m.stachyra@samsung.com> wrote:
 
-I am sure you know what you changed in each version of your patches. I don't.
-Please provide change logs when you send new versions of your patches.
+> Fix an issue in function 'tracing_err_log_open'.
+> The function doesn't call 'seq_open' if file is opened only with
+> write permissions, which results in 'file->private_data' being left at null.
+> If we then use 'lseek' on that opened file, 'seq_lseek' dereferences
+> 'file->private_data' in 'mutex_lock(&m->lock)', resulting in a Kernel panic.
+> Writing to this node requires root privilages, therefore this bug
+> has very little security impact.
+> 
+> Tracefs node: /sys/kernel/tracing/error_log
+> 
+> Example Kernel panic:
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000038
+> Call trace:
+>  mutex_lock+0x30/0x110
+>  seq_lseek+0x34/0xb8
+>  __arm64_sys_lseek+0x6c/0xb8
+>  invoke_syscall+0x58/0x13c
+>  el0_svc_common+0xc4/0x10c
+>  do_el0_svc+0x24/0x98
+>  el0_svc+0x24/0x88
+>  el0t_64_sync_handler+0x84/0xe4
+>  el0t_64_sync+0x1b4/0x1b8
+> Code: d503201f aa0803e0 aa1f03e1 aa0103e9 (c8e97d02)
+> ---[ end trace 561d1b49c12cf8a5 ]---
+> Kernel panic - not syncing: Oops: Fatal exception
+> 
 
-Guenter
+Good catch! This looks good to me.
 
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks!
+
+> Signed-off-by: Mateusz Stachyra <m.stachyra@samsung.com>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> ---
+>  kernel/trace/trace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index b04f52e7c..4529e264c 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -8146,7 +8146,7 @@ static const struct file_operations tracing_err_log_fops = {
+>  	.open           = tracing_err_log_open,
+>  	.write		= tracing_err_log_write,
+>  	.read           = seq_read,
+> -	.llseek         = seq_lseek,
+> +	.llseek         = tracing_lseek,
+>  	.release        = tracing_err_log_release,
+>  };
+>  
+> -- 
+> 2.25.1
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
