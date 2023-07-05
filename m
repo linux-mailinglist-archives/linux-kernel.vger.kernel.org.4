@@ -2,196 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1384747CE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF701747CE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjGEGQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S231532AbjGEGRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjGEGQp (ORCPT
+        with ESMTP id S230407AbjGEGRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:16:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C01310E2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688537765;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TBBB6lG9AFcGbGAzMsUXWxOnjBOVl3P6MUCcvBHbSmw=;
-        b=eTPDQsdQ3Ldug73MVD7pORlE106e1B+XhtPzff6HGehM690z5FaRLa4EYcZOPjgDzkVJKK
-        LLpOl+udWzwDsPvibICb2/7wSx8z8y+rrxvsiiVK7rYPS9qrCB9bUj7KJfu06Q/4/9T//H
-        YgQnx+YxOOLFfhrWmER43Cjv/XPf6cs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-656-04lf3DjiNY2YfoA4Ma1HdA-1; Wed, 05 Jul 2023 02:16:04 -0400
-X-MC-Unique: 04lf3DjiNY2YfoA4Ma1HdA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3fa8d203eccso1503665e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:16:04 -0700 (PDT)
+        Wed, 5 Jul 2023 02:17:12 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D426710EC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:17:10 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b69ed7d050so101721671fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688537829; x=1691129829;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=90vFHFNv8Z4EnqFJciqEXi399O0ahUbhYDsrlxPDfUA=;
+        b=ZmcAsyvfEgsv3Kwm+U6DlC5Ix5sl36izoQPtKwWwQXUXXk9e96NWXqqiH/MdmdOQ68
+         6Y+kREJdwA7kgrbS+bngxnH+GlQfk/5CvT4xdIbRB8j0e9JsV5KwoLN4h3w4XeVrPOZ9
+         gyopY24vIoXs2o/zSgUQJO189T7kUPedathiv/f1g4jMjrWmJTTsrwIuoM36YCk4epoK
+         3qtnWlIf12SBeOj7oQ1uxCrRsUkLVuE1VzzGPYF/nditBmMYJ2kca1xN+Xl3xlpwHCJd
+         iF0A6izZqoI/LQL0dwhehqI/cgJnzGT/EjBz3nXouh5WwOSXCIM9ILveifP2hrDqEh7P
+         CbOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688537763; x=1691129763;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1688537829; x=1691129829;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TBBB6lG9AFcGbGAzMsUXWxOnjBOVl3P6MUCcvBHbSmw=;
-        b=TVOS5A43Ri+l4W58qhHQJ6CO073ag1hQ0Ssq8UfEQhgre+jz2rQqkXaEkvOlEqxdU7
-         eKWMzz6IXIO7kseUtTKwaTgpd+C1F00eUf9bt6utM/w3zn56oguCP//eHTlEyRlr3Ad9
-         SxZ3l5lLTwS3eZypGqe9gSNBROOH2x04QwCYFXVuxFoMWTjTx5qASACzYykBIu11Y2JC
-         gsKbMrShrrBGKaX7bqY39iuwH51BjLqWR94vs/LZYwqoROnV0yt375Mx3MSHNqBJk1G5
-         NBtRHtet4C1ZAdqr6YNzNnBd/3uADG6tHIMk7pV31cX8tX7AhPxJVz+IE7RWNMcbzLBK
-         hgsg==
-X-Gm-Message-State: ABy/qLaCKE31mw8GetwvnTuhy99tYFwoNz1wu0bCznF+6WS4U/2/bBoQ
-        quQAyk3NSgmY8qoU3uHSY8nd1ORaGMPtZHnn0xZPTmxEcUPaDpqtUXGhhDF/Na516e4uyleckb/
-        OILPouB2s6wB4tDFXrOu93Jmg
-X-Received: by 2002:a05:600c:519a:b0:3fb:b18a:f32d with SMTP id fa26-20020a05600c519a00b003fbb18af32dmr1182552wmb.17.1688537763304;
-        Tue, 04 Jul 2023 23:16:03 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGRjW7JSmJKn22ARTG8gQSc74SDVkixROnuT/Q+4llMdAdfakRodtDTA7BfzPqsBd3zTp3PHg==
-X-Received: by 2002:a05:600c:519a:b0:3fb:b18a:f32d with SMTP id fa26-20020a05600c519a00b003fbb18af32dmr1182532wmb.17.1688537763037;
-        Tue, 04 Jul 2023 23:16:03 -0700 (PDT)
-Received: from redhat.com ([2a02:14f:1f8:91bf:2a8a:e512:df36:67d3])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05600c251200b003fbcf032c55sm1123833wma.7.2023.07.04.23.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 23:16:02 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 02:15:58 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Si-Wei Liu <si-wei.liu@oracle.com>,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        linux-kernel@vger.kernel.org, Dragos Tatulea <dtatulea@nvidia.com>,
-        virtualization@lists.linux-foundation.org, leiyang@redhat.com,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH] mlx5_vdpa: offer VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK
-Message-ID: <20230705021447-mutt-send-email-mst@kernel.org>
-References: <20230703142514.363256-1-eperezma@redhat.com>
- <20230703110241-mutt-send-email-mst@kernel.org>
- <ba5099b8-f72c-f267-41a7-d0ee18680796@oracle.com>
- <20230704061356-mutt-send-email-mst@kernel.org>
- <CACGkMEtAfiODhHEMFDKkaVFVs1yjfUFsjfy_=p8Jtd6BXAE1xQ@mail.gmail.com>
- <20230705012917-mutt-send-email-mst@kernel.org>
- <CACGkMEtBjTmChSQX_E_n6yvTi9rxH5UrXgfAU5qZsFAF-RZQWw@mail.gmail.com>
+        bh=90vFHFNv8Z4EnqFJciqEXi399O0ahUbhYDsrlxPDfUA=;
+        b=EIrXH2/mNJTK6abjQw+5N4cnX+0FYT0Wy34Q56b2w8xsZAsT27YBG0e+yD0/CUdds4
+         La+pBH+veNEn163Ao+3D4raIrxd1wV5E+9fLpPNURwo/fMamYZA8SWo/rLLCjxAjtkxb
+         LVKGM9z6jkAsm8y7Wmds07CCpFagHNrf4tPVcK1IT+GcYtOp2+4RrcS9djZwqaDpLDd5
+         KN/OtXU9e6As/pZYOOjPYYCKqefylVHF9/0o2A3PMz/saqP0qBlh7DDyxgxbngS7qu79
+         QJy1Uea4+ZOF+UpJQshiF+k0mqD17jXsmNwiVrGJLalgHi3rPbCDK62mBNPH6wtHefM4
+         UB0g==
+X-Gm-Message-State: ABy/qLagIn0pi9xCRLI18Kh3IZcUcBT6GE80dVHdoLGqZfKMNGZtpsj8
+        lIgdg/2xgboe5Xm2XJMhkjJWag==
+X-Google-Smtp-Source: APBJJlFEGjzSwAu/PuXg2rA//CTojQCgKRBCyvzFiOBPJoQUTeMenTuSrLxZqCx2g7wC+7Wnju1qjA==
+X-Received: by 2002:a2e:6a0f:0:b0:2b6:cf18:77e0 with SMTP id f15-20020a2e6a0f000000b002b6cf1877e0mr10155024ljc.48.1688537829112;
+        Tue, 04 Jul 2023 23:17:09 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id r19-20020aa7cfd3000000b0051e06693590sm4552748edy.91.2023.07.04.23.17.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 23:17:08 -0700 (PDT)
+Message-ID: <d339d413-5242-0d5a-96f6-c2f670e5e5dc@linaro.org>
+Date:   Wed, 5 Jul 2023 08:17:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEtBjTmChSQX_E_n6yvTi9rxH5UrXgfAU5qZsFAF-RZQWw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH V7 1/2] dt-bindings: firmware: bootstats: Add the dtschema
+Content-Language: en-US
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <cover.1688533340.git.quic_schowdhu@quicinc.com>
+ <b3105990e021a71039f621e6c4e70ab05fb348fa.1688533340.git.quic_schowdhu@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b3105990e021a71039f621e6c4e70ab05fb348fa.1688533340.git.quic_schowdhu@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 01:47:44PM +0800, Jason Wang wrote:
-> On Wed, Jul 5, 2023 at 1:31 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Wed, Jul 05, 2023 at 01:11:37PM +0800, Jason Wang wrote:
-> > > On Tue, Jul 4, 2023 at 6:16 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Mon, Jul 03, 2023 at 05:26:02PM -0700, Si-Wei Liu wrote:
-> > > > >
-> > > > >
-> > > > > On 7/3/2023 8:46 AM, Michael S. Tsirkin wrote:
-> > > > > > On Mon, Jul 03, 2023 at 04:25:14PM +0200, Eugenio Pérez wrote:
-> > > > > > > Offer this backend feature as mlx5 is compatible with it. It allows it
-> > > > > > > to do live migration with CVQ, dynamically switching between passthrough
-> > > > > > > and shadow virtqueue.
-> > > > > > >
-> > > > > > > Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> > > > > > Same comment.
-> > > > > to which?
-> > > > >
-> > > > > -Siwei
-> > > >
-> > > > VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK is too narrow a use-case to commit to it
-> > > > as a kernel/userspace ABI: what if one wants to start rings in some
-> > > > other specific order?
-> > >
-> > > Just enable a queue by writing e.g 1 to queue_enable in a specific order?
-> >
-> >
-> > But then at driver ok time we don't know how many queues are there.
+On 05/07/2023 07:32, Souradeep Chowdhury wrote:
+> Add the device tree bindings for boot stats. This has 2 properties
+> pre-abl-time and abl-time which records the timestamps for boot
+> stats.
 > 
-> There should be a device specific interface for this, for example,
-> num_queue_paris. So the device knows at most how many queues there
-> are. Or anything I miss?
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> Link: https://lore.kernel.org/linux-arm-kernel/7d397e67-5d56-4975-98af-1ac9746c07f4@app.fastmail.com/
+> ---
+>  .../bindings/firmware/qcom,bootstats.yaml     | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,bootstats.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/qcom,bootstats.yaml b/Documentation/devicetree/bindings/firmware/qcom,bootstats.yaml
+> new file mode 100644
+> index 000000000000..22e697524058
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/qcom,bootstats.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/firmware/qcom,bootstats.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Boot Stats
 
-That's a device limitations. Does not tell the device how much is used.
+This explains nothing...
 
-> >
-> > > > As was discussed on list, a better promise is not to access ring
-> > > > until the 1st kick. vdpa can then do a kick when it wants
-> > > > the device to start accessing rings.
-> > >
-> > > Rethink about the ACCESS_AFTER_KICK, it sounds functional equivalent
-> > > to allow queue_enable after DRIVER_OK, but it seems to have
-> > > distanvages:
-> > >
-> > > A busy polling software device may disable notifications and never
-> > > respond to register to any kick notifiers. ACCESS_AFTER_KICK will
-> > > introduce overhead to those implementations.
-> > >
-> > > Thanks
-> >
-> > It's just the 1st kick, then you can disable. No?
-> 
-> Yes, but:
-> 
-> 1) adding hooks for queue_enable
-> 2) adding new codes to register event notifier and toggle the notifier
-> 
-> 1) seems much easier? Or for most devices, it already behaves like this.
-> 
-> Thanks
+> +
+> +maintainers:
+> +  - Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +
+> +description: |
 
-Well libvhostuser checks enabled queues at DRIVER_OK, does it not?
+Drop |
 
-> >
-> > > >
-> > > > > >
-> > > > > > > ---
-> > > > > > >   drivers/vdpa/mlx5/net/mlx5_vnet.c | 7 +++++++
-> > > > > > >   1 file changed, 7 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > > > > > > index 9138ef2fb2c8..5f309a16b9dc 100644
-> > > > > > > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > > > > > > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > > > > > > @@ -7,6 +7,7 @@
-> > > > > > >   #include <uapi/linux/virtio_net.h>
-> > > > > > >   #include <uapi/linux/virtio_ids.h>
-> > > > > > >   #include <uapi/linux/vdpa.h>
-> > > > > > > +#include <uapi/linux/vhost_types.h>
-> > > > > > >   #include <linux/virtio_config.h>
-> > > > > > >   #include <linux/auxiliary_bus.h>
-> > > > > > >   #include <linux/mlx5/cq.h>
-> > > > > > > @@ -2499,6 +2500,11 @@ static void unregister_link_notifier(struct mlx5_vdpa_net *ndev)
-> > > > > > >                   flush_workqueue(ndev->mvdev.wq);
-> > > > > > >   }
-> > > > > > > +static u64 mlx5_vdpa_get_backend_features(const struct vdpa_device *vdpa)
-> > > > > > > +{
-> > > > > > > + return BIT_ULL(VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >   static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev, u64 features)
-> > > > > > >   {
-> > > > > > >           struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
-> > > > > > > @@ -3140,6 +3146,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
-> > > > > > >           .get_vq_align = mlx5_vdpa_get_vq_align,
-> > > > > > >           .get_vq_group = mlx5_vdpa_get_vq_group,
-> > > > > > >           .get_device_features = mlx5_vdpa_get_device_features,
-> > > > > > > + .get_backend_features = mlx5_vdpa_get_backend_features,
-> > > > > > >           .set_driver_features = mlx5_vdpa_set_driver_features,
-> > > > > > >           .get_driver_features = mlx5_vdpa_get_driver_features,
-> > > > > > >           .set_config_cb = mlx5_vdpa_set_config_cb,
-> > > > > > > --
-> > > > > > > 2.39.3
-> > > >
-> >
+> +    Qualcomm's proprietary Android boot-loaders capture boot time
+
+Wrong indentation.
+
+> +    stats, like the time when the bootloader started execution and
+> +    at what point the bootloader handed over control to the kernel.
+> +    This is captured in the unit of ms in devicetree property.
+> +
+> +properties:
+> +  pre-abl-time:
+> +    description: The property to store the starting point of abl in ms.
+
+String instead of ms? No, this is the craziest idea I saw recently. Use
+-ms suffix.
+
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +
+> +  abl-time:
+> +    description: The property to store the duration of abl in ms.
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+
+I have no clue what this entire binding is about. Nothing can bind to
+it, no usage explained. Properties are not used to "store the duration".
+This does not look like suitable for DT, drop entire binding.
+
+> +
+> +required:
+> +  - pre-abl-time
+> +  - abl-time
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    bootstats {
+> +        pre-abl-time="17627";
+> +        abl-time="26748";
+
+Missing spaces. Open existing DTS and look at existing coding style.
+
+Best regards,
+Krzysztof
 
