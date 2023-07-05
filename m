@@ -2,192 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCEA748F8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FE7748F90
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjGEVJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 17:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S231889AbjGEVKI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 17:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjGEVJr (ORCPT
+        with ESMTP id S231848AbjGEVKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:09:47 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1C1700
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 14:09:46 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-c581c758ad8so3543159276.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 14:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688591385; x=1691183385;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NaGMTa0DbN3c8dwMUOQDzcTZPQ/M8amf44bbRz7BEX8=;
-        b=UBG5+DvKOvH7qCjkiEDp6J4u/q3uj4JRG5ekSG6AlIb7zKH+lcIHdZemv8svEgfwsq
-         QL2DFDTL5EYIS1YkvcISRvfWkCeJfhy45+8NBPenPJm7CWNNg3PhBCXFlpcSAn/jOXP4
-         n9Cgp59YaiI8MgDIA6HnTpxQW/ggXhpyp1ohN9+CzWeWadofYwPRIMRlkm1x2Xm1VYG8
-         ghtB9xIab0YgX3DLDz25CKz+nKAH4G6SPV9yDzieTA9YRIkd8nfRLz9mjNvjq60c7lkq
-         rWVGWwiFrQGjFGgjSun32TBndFiuhJWJ1G3rCfc83ykWM1tMVDLHOP7INWALmvvJ6sso
-         Anog==
+        Wed, 5 Jul 2023 17:10:06 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C911700;
+        Wed,  5 Jul 2023 14:10:04 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-c01e1c0402cso6788017276.0;
+        Wed, 05 Jul 2023 14:10:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688591385; x=1691183385;
+        d=1e100.net; s=20221208; t=1688591404; x=1691183404;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NaGMTa0DbN3c8dwMUOQDzcTZPQ/M8amf44bbRz7BEX8=;
-        b=B/M7M+OUeEpkiw0TzoNHJfsalsXd0Lse40QR9ROxRoGR6ukXon9WBj+65vDyHCoUlL
-         e2dhUjXpeOueplqk8fsbldnZ0/6MEHaG10DrUqktRPsRQzcR1K/BGcZGB09t3HMFb8dX
-         O9V9Nbh9x3fXIEf61zixCFXv9vQG0gyohOh8NmjbeL1tns5CeyX5yc2h6CqbB4lyuGQQ
-         avN+Yq9F306Hfd57e7XLjk5UCoIIf7a8Wy1I+RelhNqrWPW5Ql5xACOf3DYClwd1JKcS
-         kj/pIys7HZRUSQcxAGj4qDv7LOmNxkJPgeVC+IXBrhyh3mHVEI/GtIwxQXXN8pRMnzL+
-         b4Gw==
-X-Gm-Message-State: ABy/qLZ/83P7OE/WaqWWhjy9OxoodUbRTs7dSi6W0QfyLuUexION2I73
-        hveMpYxFNIfKRNlEiMuRBuBIFYBS+mC58+LvhSodgQ==
-X-Google-Smtp-Source: APBJJlEMfph7t7wJWllYEpACDgeAzyYwh2jqlBg6bNRDARLEVdUNgL/soI72nwZ79kZeqNq7mcFxbIQLP+5i5Egiq3M=
-X-Received: by 2002:a25:4ed6:0:b0:c63:5334:9d10 with SMTP id
- c205-20020a254ed6000000b00c6353349d10mr64531ybb.3.1688591385152; Wed, 05 Jul
- 2023 14:09:45 -0700 (PDT)
+        bh=xWtXhDCoK/I7OHGS5PfaOc/0LhSpupgzLxe4u1hFXTA=;
+        b=SIoeopIkFWjI9H9Vvd2khhIsRPMry7pvCGmdE1Ek5o6wj8vBPb0W+MVLRh3nS5kP9N
+         pCj1sd38iTDZNmpRRuRTHhI2riwEdTggu7eRLWFKCc3xxQkHjc3Zt3RSQk0+fscd4eRa
+         fIIQacZwA4JoAb4mrbAWtq/qJi1jLM92qCU0dsKWKy+LitkqnNYBV967U19p1W48+5qG
+         Dyd4fWGtkLIb0Mjuj6lkpHcD3soFxBrcjeVClpsFyve7t8NjgwIQlgsL4bM5V+WnWZOp
+         4s5FyX+r74oGajwYRa0IEWsoJ5sjK9ukfnewbCSPnX5rQyZewFsNsRujl7nCsZruvGGK
+         5Wkw==
+X-Gm-Message-State: ABy/qLYiY1va5BvlzPhJ7EQCKpkpkAYZ2lKxR4YLslvDAFByR3+/FvVH
+        laEdudzgE6QZdpGdjAJBDDbkt1xjJX4cO9TDDe0=
+X-Google-Smtp-Source: APBJJlFbBnIN+wL7GBA4RpZ1/TVSc0T17YSRvriaD3HHreoNPmsWzJOIbegbX0O7Sdj+QCHkCg4zXtqYPJV1q6eXm4U=
+X-Received: by 2002:a25:ac92:0:b0:bc6:8015:1dc8 with SMTP id
+ x18-20020a25ac92000000b00bc680151dc8mr63372ybi.33.1688591403802; Wed, 05 Jul
+ 2023 14:10:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230705171213.2843068-1-surenb@google.com> <20230705171213.2843068-3-surenb@google.com>
- <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com> <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
- <ZKXRsQC8ufiebDGu@x1n> <d3245a2a-285b-6dfe-5dd3-05fdeb308e18@redhat.com>
-In-Reply-To: <d3245a2a-285b-6dfe-5dd3-05fdeb308e18@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 5 Jul 2023 14:09:33 -0700
-Message-ID: <CAJuCfpGuLRzvmNdgYGBa=ZBBG65_kc-7byED8JYXFo0RBHLMZQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>, akpm@linux-foundation.org,
-        jirislaby@kernel.org, jacobly.alt@gmail.com,
-        holger@applied-asynchrony.com, hdegoede@redhat.com,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+References: <20230704074217.240939-1-yangjihong1@huawei.com> <20230704074217.240939-4-yangjihong1@huawei.com>
+In-Reply-To: <20230704074217.240939-4-yangjihong1@huawei.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 5 Jul 2023 14:09:52 -0700
+Message-ID: <CAM9d7cjSTqE+rEJiSkAwmg5+XSxrgFFZC3B94fo4rbA9MH9dQg@mail.gmail.com>
+Subject: Re: [PATCH 3/5] perf record: Tracking side-band events for all CPUs
+ when tracing selected CPUs
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 1:37=E2=80=AFPM David Hildenbrand <david@redhat.com>=
- wrote:
+On Tue, Jul 4, 2023 at 12:44 AM Yang Jihong <yangjihong1@huawei.com> wrote:
 >
-> On 05.07.23 22:25, Peter Xu wrote:
-> > On Wed, Jul 05, 2023 at 10:22:27AM -0700, Suren Baghdasaryan wrote:
-> >> On Wed, Jul 5, 2023 at 10:16=E2=80=AFAM David Hildenbrand <david@redha=
-t.com> wrote:
-> >>>
-> >>> On 05.07.23 19:12, Suren Baghdasaryan wrote:
-> >>>> A memory corruption was reported in [1] with bisection pointing to t=
-he
-> >>>> patch [2] enabling per-VMA locks for x86.
-> >>>> Disable per-VMA locks config to prevent this issue while the problem=
- is
-> >>>> being investigated. This is expected to be a temporary measure.
-> >>>>
-> >>>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
-> >>>> [2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@goo=
-gle.com
-> >>>>
-> >>>> Reported-by: Jiri Slaby <jirislaby@kernel.org>
-> >>>> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cd=
-f51b@kernel.org/
-> >>>> Reported-by: Jacob Young <jacobly.alt@gmail.com>
-> >>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
-> >>>> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling=
- first")
-> >>>> Cc: stable@vger.kernel.org
-> >>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >>>> ---
-> >>>>    mm/Kconfig | 3 ++-
-> >>>>    1 file changed, 2 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/mm/Kconfig b/mm/Kconfig
-> >>>> index 09130434e30d..0abc6c71dd89 100644
-> >>>> --- a/mm/Kconfig
-> >>>> +++ b/mm/Kconfig
-> >>>> @@ -1224,8 +1224,9 @@ config ARCH_SUPPORTS_PER_VMA_LOCK
-> >>>>           def_bool n
-> >>>>
-> >>>>    config PER_VMA_LOCK
-> >>>> -     def_bool y
-> >>>> +     bool "Enable per-vma locking during page fault handling."
-> >>>>        depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
-> >>>> +     depends on BROKEN
-> >>>>        help
-> >>>>          Allow per-vma locking during page fault handling.
-> >>>>
-> >>> Do we have any testing results (that don't reveal other issues :) ) f=
-or
-> >>> patch #1? Not sure if we really want to mark it broken if patch #1 fi=
-xes
-> >>> the issue.
-> >>
-> >> I tested the fix using the only reproducer provided in the reports
-> >> plus kernel compilation and my fork stress test. All looked good and
-> >> stable but I don't know if other reports had the same issue or
-> >> something different.
-> >
-> > The commit log seems slightly confusing.  It mostly says the bug was st=
-ill
-> > not solved, but I assume patch 1 is the current "fix", it's just not cl=
-ear
-> > whether there's any other potential issues?
-> >
-> > According to the stable tree rules:
-> >
-> >   - It must fix a problem that causes a build error (but not for things
-> >     marked CONFIG_BROKEN), an oops, a hang, data corruption, a real
-> >     security issue, or some "oh, that's not good" issue.  In short, som=
-ething
-> >     critical.
-> >
-> > I think it means vma lock will never be fixed in 6.4, and it can't (bec=
-ause
-> > after this patch it'll be BROKEN, and this patch copies stable, and we
-> > can't fix BROKEN things in stables).
-> >
-> > Totally no problem I see, just to make sure this is what you wanted..
-> >
-> > There'll still try to be a final fix, am I right?  As IIRC allowing pag=
-e
-> > faults during fork() is one of the major goals of vma lock.
+> User space tasks can migrate between CPUs, we need to track side-band
+> events for all CPUs.
 >
-> At least not that I am aware of (and people who care about that should
-> really work on scalable fork() alternatives, like that io_uring fork()
-> thingy).
+> The specific scenarios are as follows:
 >
-> My understanding is that CONFIG_PER_VMA_LOCK wants to speed up page
-> concurrent page faults *after* fork() [or rather, after new process
-> creation], IOW, when we have a lot of mmap() activity going on while
-> some threads of the new process are already active and don't actually
-> touch what's getting newly mmaped.
+>          CPU0                                 CPU1
+>   perf record -C 0 start
+>                               taskA starts to be created and executed
+>                                 -> PERF_RECORD_COMM and PERF_RECORD_MMAP
+>                                    events only deliver to CPU1
+>                               ......
+>                                 |
+>                           migrate to CPU0
+>                                 |
+>   Running on CPU0    <----------/
+>   ...
+>
+>   perf record -C 0 stop
 
-Getting as much concurrency as we can is the goal. If we can allow
-some page faults during fork, I would take that too. But for now let's
-deploy the simplest and safest approach.
+But I'm curious why you don't limit the task to run on the
+specified CPUs only (using taskset).
+
+Also, as you may know, you don't need to specify -C if you
+want to profile specific tasks only.  It'll open per-cpu, per-task
+events and they will have all necessary info.
 
 >
+> Now perf samples the PC of taskA. However, perf does not record the
+> PERF_RECORD_COMM and PERF_RECORD_COMM events of taskA.
+
+_COMM and _MMAP right?
+
+Thanks,
+Namhyung
+
+
+> Therefore, the comm and symbols of taskA cannot be parsed.
+>
+> The sys_perf_event_open invoked is as follows:
+>
+>   # perf --debug verbose=3 record -e cpu-clock -C 1 true
+>   <SNIP>
+>   Opening: cpu-clock
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             1
+>     size                             136
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|ID|CPU|PERIOD
+>     read_format                      ID|LOST
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 1  group_fd -1  flags 0x8 = 5
+>   Opening: dummy:HG
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             1
+>     size                             136
+>     config                           0x9
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|ID|CPU|PERIOD
+>     read_format                      ID|LOST
+>     inherit                          1
+>     mmap                             1
+>     comm                             1
+>     freq                             1
+>     task                             1
+>     sample_id_all                    1
+>     mmap2                            1
+>     comm_exec                        1
+>     ksymbol                          1
+>     bpf_event                        1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>   sys_perf_event_open: pid -1  cpu 1  group_fd -1  flags 0x8 = 7
+>   sys_perf_event_open: pid -1  cpu 2  group_fd -1  flags 0x8 = 9
+>   sys_perf_event_open: pid -1  cpu 3  group_fd -1  flags 0x8 = 10
+>   sys_perf_event_open: pid -1  cpu 4  group_fd -1  flags 0x8 = 11
+>   sys_perf_event_open: pid -1  cpu 5  group_fd -1  flags 0x8 = 12
+>   sys_perf_event_open: pid -1  cpu 6  group_fd -1  flags 0x8 = 13
+>   sys_perf_event_open: pid -1  cpu 7  group_fd -1  flags 0x8 = 14
+>   <SNIP>
+>
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>  tools/perf/builtin-record.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 8872cd037f2c..69e0d8c75aab 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -908,6 +908,31 @@ static int record__config_off_cpu(struct record *rec)
+>         return off_cpu_prepare(rec->evlist, &rec->opts.target, &rec->opts);
+>  }
+>
+> +static int record__config_tracking_events(struct record *rec)
+> +{
+> +       struct evsel *evsel;
+> +       struct evlist *evlist = rec->evlist;
+> +       struct record_opts *opts = &rec->opts;
+> +
+> +       /*
+> +        * User space tasks can migrate between CPUs, so when tracing
+> +        * selected CPUs, sideband for all CPUs is still needed.
+> +        */
+> +       if (opts->target.cpu_list) {
+> +               evsel = evlist__findnew_tracking_event(evlist);
+> +               if (!evsel)
+> +                       return -ENOMEM;
+> +
+> +               if (!evsel->core.system_wide) {
+> +                       evsel->core.system_wide = true;
+> +                       evsel__set_sample_bit(evsel, TIME);
+> +                       perf_evlist__propagate_maps(&evlist->core, &evsel->core);
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static bool record__kcore_readable(struct machine *machine)
+>  {
+>         char kcore[PATH_MAX];
+> @@ -4235,6 +4260,12 @@ int cmd_record(int argc, const char **argv)
+>                 goto out;
+>         }
+>
+> +       err = record__config_tracking_events(rec);
+> +       if (err) {
+> +               pr_err("record__config_tracking_events failed, error %d\n", err);
+> +               goto out;
+> +       }
+> +
+>         err = record__init_thread_masks(rec);
+>         if (err) {
+>                 pr_err("Failed to initialize parallel data streaming masks\n");
 > --
-> Cheers,
->
-> David / dhildenb
+> 2.30.GIT
 >
