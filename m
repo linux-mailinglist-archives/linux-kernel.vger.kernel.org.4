@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1471974802B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8501748030
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjGEIx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S232257AbjGEIy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbjGEIx4 (ORCPT
+        with ESMTP id S231317AbjGEIyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:53:56 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206E2E47;
-        Wed,  5 Jul 2023 01:53:55 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51d804c7d14so7306151a12.3;
-        Wed, 05 Jul 2023 01:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688547233; x=1691139233;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sdE8F2uO38nQsHKjX0h4XqPkScCcUMmKFxPRZlkdB6k=;
-        b=QJ8DEfmdrQwqqtb+exV62DRH/3rmSJIEKr/vH9ulSmYVG6BqI69DpipVTLt/Gc7X4U
-         lgM1RMh7RyA3pfs5nO0xDH4kd045bx24gn9wEjVgYpTVVYxCM9en+Yuo73eI3zTH9/Uq
-         J7xac1E4aib9ePEVp0oylp65yjJzFizyRpkY1Gi2qvZ8ysksndyDhilEg3PNqd5TxQmM
-         3OpSpqbDFpUTPBqrgSqUPFFvWqXsp5wYm+hv/W/d1WXm6a1QVGGLmh7sRxaJplub5d6Y
-         anj2JeSNVCTAwRCDe4dElkllipdza3YzAiAVmc/r/HRF1mQqnCVnxVI6IenvkI1l0d/d
-         gsSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688547233; x=1691139233;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sdE8F2uO38nQsHKjX0h4XqPkScCcUMmKFxPRZlkdB6k=;
-        b=Z03Zuhdix2IHXTJgcI9O5vtLuz+pi//3iD1hPPWNMVHHDaSiw0OLG0WbFiRTr6xFXE
-         SXi9CO8GGHjVFz742Dq2oy9qlc44Ml46YGLw5NgUOCRt1rLk+HN6o0DuGYmXFcpwGVDC
-         heVT/OyLI/A4rJJCr9pPc7F4uo6XiGTzFcxC3/p6NODFTssICDPjkdqZj27UlXTv4OuD
-         ufOja+4Z3cv8iMnxHgjnF1Me0vZxfVA50EQxucgC3Y/3xeoKTja+Gu+8GgwWrfVLuwOR
-         LdVA3c4FCgSrjfObrpY5ENZ6/XuH06zMMLsOAeqeWipJPFCH2aWwwl6TqQUDHG32Tdpr
-         Kccg==
-X-Gm-Message-State: ABy/qLYjsbn4F/Vtt8klCxl6qOrp7iUdS2FFnWebmu/4HiabO3d2AQjo
-        1wiMYIlB05oMwF0SYGARzeydE8D+f2c/mHIw4qs=
-X-Google-Smtp-Source: APBJJlHAXbO3ehAkyzPZ0xSMx64aVJhLpOO5LcrJQQSzsY02UtCMV67bG32F3lT5dwi+EIgedhujuaC3R95Rbg4CiRM=
-X-Received: by 2002:aa7:dad2:0:b0:51d:d0fc:9df8 with SMTP id
- x18-20020aa7dad2000000b0051dd0fc9df8mr9259242eds.41.1688547233393; Wed, 05
- Jul 2023 01:53:53 -0700 (PDT)
+        Wed, 5 Jul 2023 04:54:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F15E47;
+        Wed,  5 Jul 2023 01:54:24 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3657UkoF005349;
+        Wed, 5 Jul 2023 08:54:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YoDoblR7kbON3CTgY71+4Rb/WnyCqKR+rW7kULg6i6o=;
+ b=XxvQjaVXkuMj2VdCyXkPeX5yiODteTxShJ5eVF8dMJiT9a3WQdN/ByWuzyH6M0NrIylf
+ TlTk5M19yFyvh+mxyyvm5N1gjuOffKJ5IsUv2ngH8Nv89EJ4IiYJTpccSfKR1tGSQKFl
+ eqAdM7FztmtOAfzUfpb6C1VbDpWfRgx5Ls/7xGhejBLvpuHhA4q5f7dSa/jdRZeX7+eN
+ SQ6zyb011Ip+/XPT9Oto5yrJ1eGRaDpp4FA4eiRC7sIT2N5rGj02880brE4LeH28OalC
+ 2Zxvq242eUHRObFMcELz0Y9bcFDoxHB35iMFLaHTniwOFqfbyrhmXTcd+P5zazWEKbkJ pQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rmnw6h9mj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 08:54:19 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3658sInc007167
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Jul 2023 08:54:18 GMT
+Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 5 Jul
+ 2023 01:54:14 -0700
+Message-ID: <06506ed7-f861-0bca-8b87-e2da6a6bc789@quicinc.com>
+Date:   Wed, 5 Jul 2023 14:24:10 +0530
 MIME-Version: 1.0
-References: <20230622143227.30147-1-kimseer.paller@analog.com>
- <20230622143227.30147-2-kimseer.paller@analog.com> <20230702180315.00003dbe@Huawei.com>
- <fcf6daf6afec48b096df14d8b5308db0@analog.com> <20230705155530.00002074@Huawei.com>
-In-Reply-To: <20230705155530.00002074@Huawei.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 5 Jul 2023 11:53:17 +0300
-Message-ID: <CAHp75VfGFXtX2UCV+EzSMGaRMc5=WUpUJpRFB_K6NMJO2+iszg@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] iio: adc: max14001: New driver
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     "Paller, Kim Seer" <KimSeer.Paller@analog.com>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 02/10] dt-bindings: power: Add rpm power domains for SDX75
+Content-Language: en-US
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <sboyd@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+References: <1688395346-3126-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1688395346-3126-3-git-send-email-quic_rohiagar@quicinc.com>
+ <0d468d08-6410-e424-b4f3-5245cdb0334a@linaro.org>
+ <85456057-c4ef-68a6-4fc5-c9fd03b01b71@quicinc.com>
+In-Reply-To: <85456057-c4ef-68a6-4fc5-c9fd03b01b71@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nhIdpD_LGIKz5NV-vTkq9js7nBo1tA30
+X-Proofpoint-ORIG-GUID: nhIdpD_LGIKz5NV-vTkq9js7nBo1tA30
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-04_16,2023-07-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=620 adultscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307050081
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,150 +86,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 10:55=E2=80=AFAM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
-> > > From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> > > Sent: Sunday, July 2, 2023 6:04 PM
-> > > On Thu, 22 Jun 2023 22:32:27 +0800
-> > > Kim Seer Paller <kimseer.paller@analog.com> wrote:
 
-...
+On 7/4/2023 11:47 AM, Rohit Agarwal wrote:
+>
+> On 7/3/2023 8:29 PM, Konrad Dybcio wrote:
+>> On 3.07.2023 16:42, Rohit Agarwal wrote:
+>>> Add RPM power domain bindings for the SDX75 SoC.
+>>>
+>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
+>>>   include/dt-bindings/power/qcom-rpmpd.h                  | 8 ++++++++
+>>>   2 files changed, 9 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml 
+>>> b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+>>> index afad313..58e1be8 100644
+>>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+>>> @@ -40,6 +40,7 @@ properties:
+>>>         - qcom,sdm845-rpmhpd
+>>>         - qcom,sdx55-rpmhpd
+>>>         - qcom,sdx65-rpmhpd
+>>> +      - qcom,sdx75-rpmhpd
+>>>         - qcom,sm6115-rpmpd
+>>>         - qcom,sm6125-rpmpd
+>>>         - qcom,sm6350-rpmhpd
+>>> diff --git a/include/dt-bindings/power/qcom-rpmpd.h 
+>>> b/include/dt-bindings/power/qcom-rpmpd.h
+>>> index 1bf8e87..8092d0d 100644
+>>> --- a/include/dt-bindings/power/qcom-rpmpd.h
+>>> +++ b/include/dt-bindings/power/qcom-rpmpd.h
+>>> @@ -57,6 +57,14 @@
+>>>   #define SDX65_CX_AO    4
+>>>   #define SDX65_MXC    5
+>>>   +/* SDX75 Power Domain Indexes */
+>>> +#define SDX75_CX    0
+>>> +#define SDX75_CX_AO    1
+>>> +#define SDX75_MSS    2
+>>> +#define SDX75_MX    3
+>>> +#define SDX75_MX_AO    4
+>>> +#define SDX75_MXC    5
+>> Please instead introduce a set of defines without the SoC prefix
+>> (i.e. CX, CX_AO, MX etc.). We've been putting this off for too long
+>> and you're the first unlucky guy that submitted new RPMhPD support after
+>> we've concluded it'd be the way to go! :D Sadly, we can't replace the
+>> existing ones retroactively..
+> Surely No issues. Will update it.
 
-> > > > + /*
-> > > > +  * Convert transmit buffer to big-endian format and reverse trans=
-mit
-> > > > +  * buffer to align with the LSB-first input on SDI port.
-> > > > +  */
-> > > > + st->spi_tx_buffer =3D
-> > > cpu_to_be16(bitrev16(FIELD_PREP(MAX14001_ADDR_MASK,
-> > > > +                                                         reg_addr)=
-));
-> > > > +
-> > > > + ret =3D spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-> > > > + if (ret)
-> > > > +         return ret;
-> > > > +
-> > > > + /*
-> > > > +  * Align received data from the receive buffer, reversing and reo=
-rdering
-> > > > +  * it to match the expected MSB-first format.
-> > > > +  */
-> > > > + *data =3D (__force u16)(be16_to_cpu(bitrev16(st->spi_rx_buffer)))=
- &
-> > > > +
-> > >     MAX14001_DATA_MASK;
-> > > > +
-> > > These sequences still confuse me a lot because I'd expect the values =
-in tx
-> > > to have the opposite operations applied to those for rx and that's no=
-t the
-> > > case.
-> > >
-> > > Let's take a le system.
-> > > tx =3D cpu_to_be16(bitrev16(x))
-> > >    =3D cpu_to_be16((__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8));
-> > >    =3D __bitrev8(x & 0xff) | (__bitrev8(x >> 8) << 8)
-> > > or swap all the bits in each byte, but don't swap the bytes.
-> > >
-> > > rx =3D cpu_to_be16(bitrev16(x))
-> > >    =3D be16_to_cpu(((__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)_
-> > >    =3D __bitrev8(x & 0xff) | __bitrev(x >> 8)
-> > >
-> > > also swap all the bits in each byte, but don't swap the bytes.
-> > >
-> > > So it is the reverse because the bytes swaps unwind themselves somewh=
-at.
-> > > For a be system cpu_to_be16 etc are noop.
-> > > tx =3D (__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)
-> > > rx =3D (__bitrev8(x & 0xff) << 8) | __bitrev8(x >> 8)
-> > >
-> > > So in this case swap all 16 bits.
-> > >
-> > > Now, given I'd expected them to be reversed for the tx vs rx case.
-> > > E.g.
-> > > tx =3D cpu_to_be16(bitrev16(x))
-> > > As above.
-> > > For rx, le host
-> > > rx =3D bitrev16(be16_to_cpu(x))
-> > >    =3D __bitrev8((x >> 8) & 0xff) << 8) |  __bitrev8((((x & 0xff) << =
-8) >> 8)
-> > > same as above (if you swap the two terms I think.
-> > >
-> > > For be the be16_to_cpu is a noop again, so it's just bitrev16(x) as e=
-xpected.
-> > >
-> > > Hence if I've understood this correctly you could reverse the terms s=
-o that
-> > > it was 'obvious' you were doing the opposite for the tx term vs the r=
-x one
-> > > without making the slightest bit of difference....
-> > >
-> > > hmm. Might be worth doing simply to avoid questions.
-> >
-> > Thank you for your feedback. I have tested the modifications based on y=
-our
-> > suggestions, taking the le system into account, and it appears that the=
- code is
-> > functioning correctly. Before sending the new patch version, I would li=
-ke to
-> > confirm if this aligns with your comments.
+I have a doubt here. Cant we completely omit the #defines here and 
+directly index this as 0,1,...
+because if the intention of this #defines is to understand the name of 
+the pd then we can get
+it from the .name attribute in rpmhpd as well, right?
 
-> Yes. This looks good to me.
+The problems with a common set of #define would be, lets say if we 
+define CX_AO as 1 and some platform
+doesn't have CX_AO then wouldnt it leave a null entry in the driver 
+entry of that platform?
 
-I think the implementation is still incorrect. See below.
+Thanks,
+Rohit.
 
-> > static int max14001_read(void *context, unsigned int reg_addr, unsigned=
- int *data)
-> > {
-> >       struct max14001_state *st =3D context;
-> >       int ret;
-> >
-> >       struct spi_transfer xfers[] =3D {
-> >               {
-> >                       .tx_buf =3D &st->spi_tx_buffer,
-> >                       .len =3D sizeof(st->spi_tx_buffer),
-> >                       .cs_change =3D 1,
-> >               }, {
-> >                       .rx_buf =3D &st->spi_rx_buffer,
-> >                       .len =3D sizeof(st->spi_rx_buffer),
-> >               },
-> >       };
-
-> >       st->spi_tx_buffer =3D cpu_to_be16(bitrev16(FIELD_PREP(MAX14001_AD=
-DR_MASK, reg_addr)));
-
-Here we got bits in CPU order, reversed them and converted to BE16.
-
-> >       ret =3D spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-> >       if (ret)
-> >               return ret;
-
-> >       *data =3D cpu_to_be16(bitrev16(st->spi_rx_buffer));
-
-Here we take __be16 response, reverse them and convert to BE16?!
-This is weird. You should have be16_to_cpu() somewhere, not the opposite.
-
-> >       return 0;
-> > }
-
-Isn't, btw, the reinvented spi_...write_then_read() (or what is it
-called?) call?
-
-> > static int max14001_write(void *context, unsigned int reg_addr, unsigne=
-d int data)
-> > {
-> >       struct max14001_state *st =3D context;
-> >
-> >       st->spi_tx_buffer =3D cpu_to_be16(bitrev16(
-> >                               FIELD_PREP(MAX14001_ADDR_MASK, reg_addr) =
-|
-> >                               FIELD_PREP(MAX14001_SET_WRITE_BIT, 1) |
-> >                               FIELD_PREP(MAX14001_DATA_MASK, data)));
-> >
-> >       return spi_write(st->spi, &st->spi_tx_buffer, sizeof(st->spi_tx_b=
-uffer));
-> > }
-
---=20
-With Best Regards,
-Andy Shevchenko
+>
+> Thanks,
+> Rohit.
+>> Konrad
+>>> +
+>>>   /* SM6350 Power Domain Indexes */
+>>>   #define SM6350_CX    0
+>>>   #define SM6350_GFX    1
