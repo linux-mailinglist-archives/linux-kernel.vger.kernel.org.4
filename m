@@ -2,145 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703E1747D17
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A161747D1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjGEGcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        id S231288AbjGEGdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjGEGco (ORCPT
+        with ESMTP id S231270AbjGEGdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:32:44 -0400
-Received: from mail-pf1-f205.google.com (mail-pf1-f205.google.com [209.85.210.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFEE10CF
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:32:43 -0700 (PDT)
-Received: by mail-pf1-f205.google.com with SMTP id d2e1a72fcca58-666e5f0d639so5731759b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:32:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688538763; x=1691130763;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        Wed, 5 Jul 2023 02:33:05 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5964710CF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 23:33:02 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-992ca792065so665549966b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 23:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688538781; x=1691130781;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=K7ajb0ygQowndos5PH/m9iSZCyUqKbxvWb8eFbZualU=;
-        b=Ah7wRP84qpw+ws4dgQaTo22VynzuBfBY2QunthVyYVApDPj0zBy/6P7DSQABzWtD1B
-         8J77Q19L+35gwKg86IIBsv6JkxQVdmEqBq2zszr1hQTg2DYrUt+ZZmEK2XRJ4iY6OG1n
-         rUH1sjS/sOTxT+7SJlobvOCKv4ESTSZiblz3YArT3PoXUbLp8iADF4uCjrXRzGDinYlg
-         9TBOui8X6HbkSYCjSrTv89DMXDGqhsbAAEk5Kk8u7HhzYOEzWX33wC4m9kJsJ2IsgSWb
-         LWGsErjjjxsHSyIxCB5D3Y49EZ320VtmkKJAGI9grxGIg/zGJ1OV+7TLGg6y+AKMAL/w
-         11/Q==
-X-Gm-Message-State: ABy/qLZ81Lo8FaJU4U9M8VICfUDn8TBL1GXhNMiKsJ2ERh5KirBpTj6Q
-        ALTkoi/qhbDw2du9b/CvT93tCPl08NaglLQhl8s3HR9Dgz9a
-X-Google-Smtp-Source: APBJJlEUtDixb+sOtE568PnxlFwyxGM5DafJ+L5kFzRPi8paC2VNe5S/Cety53Dm4TMLO00V79+hwWqXKeySF0qT/Mr/0X751iJw
+        bh=4lCoKmln4WuI/lt9cbFISAsB5RRGuEG6xwKWMEIrA/0=;
+        b=GSTPFRMIiregd8994uXCU/ps7YmgrfBQlkeGkTe5dmR/tL0uslA5HRNx5u0en7yNtx
+         7EBjtv04Yucp+bEQoICW/zO6J7JuBuU0mrAo3SCgWkX9SMoQ7cUPREaHTRsPPLhXASsK
+         ue2U54t5spFp8lQ7ODW5K9dPXIF2/2i31ZkEvLtOso2fpm/C99SuC4DrS2eDn0SfB4Tl
+         nJVUqhJ9MocMsdvsqHINLqARTKkfJ8LuHY0Zn+KnjmJtIh591UAxeRrGj/3cvVM3vK2Y
+         mpatdrd6/51+X74OwKYSKuj60qduSpeMuhu+2zWVpqYZdcE+M/0uqcbgSwcgS/H+KB1o
+         cJpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688538781; x=1691130781;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4lCoKmln4WuI/lt9cbFISAsB5RRGuEG6xwKWMEIrA/0=;
+        b=Tz0JQtR+TiR+24KSZTR3oXzu41BSDl8vvrWU7CtvtzCAFNEcP4RyAotEPqEYeZ3BrE
+         e5VNa3AgRJ24lV1yhVikB6FCz2qqh+C21YoJekx1nAd1/ZuvWNsslAvacmP/E5Rjfh+d
+         IleAgZFTDNH91AarL/j3wVicpoHkSox9ss7K2XiLhcmAiDNiqSKkUZcYkMIUvs6qR+bD
+         I6ryEBhCaE2WgUPwhdahG9I1pu+NoKPoVPw+bs6TZ7tyDVmvTYJHsKtYlatTTl4ti8FL
+         TXtvSLhSIeXUWQfPpV8Xstj9GTcmUwIODAC1M93gM609q4ZzHMypqeXEHvBSDLi67gJc
+         TiwA==
+X-Gm-Message-State: ABy/qLZTUbBzXqRvB8SU7C7qY8ABGoskcvO/0bcXUROUUulXLTWpx2Yi
+        7ph7ercC1/oZMVYsYl0TUKzohg==
+X-Google-Smtp-Source: APBJJlGsadBiPVigTMaE5rljF1uJJTj29+Kym1A+vLFCCYI2BUjNKUKvCrCTBWCD+rZ+TVw+Lxn7WQ==
+X-Received: by 2002:a17:906:b7c7:b0:98c:df38:517b with SMTP id fy7-20020a170906b7c700b0098cdf38517bmr11027580ejb.33.1688538780832;
+        Tue, 04 Jul 2023 23:33:00 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id l16-20020a1709065a9000b0098884f86e41sm14056844ejq.123.2023.07.04.23.32.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 23:33:00 -0700 (PDT)
+Message-ID: <4adb975e-bbd0-9a53-372a-404ec857a632@linaro.org>
+Date:   Wed, 5 Jul 2023 08:32:58 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a62:7b0e:0:b0:668:7377:1fe3 with SMTP id
- w14-20020a627b0e000000b0066873771fe3mr16356826pfc.2.1688538763341; Tue, 04
- Jul 2023 23:32:43 -0700 (PDT)
-Date:   Tue, 04 Jul 2023 23:32:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002db68f05ffb791bc@google.com>
-Subject: [syzbot] [fs?] WARNING in handle_userfault
-From:   syzbot <syzbot+339b02f826caafd5f7a8@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: leds: Read max-brightness from
+ devicetree
+Content-Language: en-US
+To:     Astrid Rost <astrid.rost@axis.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     kernel@axis.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230703130313.548519-1-astrid.rost@axis.com>
+ <20230703130313.548519-2-astrid.rost@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230703130313.548519-2-astrid.rost@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 03/07/2023 15:03, Astrid Rost wrote:
+> Normally, the maximum brightness is determined by the hardware, and this
+> property is not required. This property is used to set a software limit.
+> It could happen that an LED is made so bright that it gets damaged or
+> causes damage due to restrictions in a specific system, such as mounting
+> conditions.
+> Note that this flag is mainly used for PWM-LEDs, where it is not possible
+> to map brightness to current. Drivers for other controllers should use
+> led-max-microamp.
+> 
+> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
 
-syzbot found the following issue on:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-HEAD commit:    e1f6a8eaf1c2 Add linux-next specific files for 20230705
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17ceea78a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=347a3e7e531c1809
-dashboard link: https://syzkaller.appspot.com/bug?extid=339b02f826caafd5f7a8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Best regards,
+Krzysztof
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2d0435d8ff5d/disk-e1f6a8ea.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d28b2df82094/vmlinux-e1f6a8ea.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fb4e5bfa0a0f/bzImage-e1f6a8ea.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+339b02f826caafd5f7a8@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 15927 at include/linux/mmap_lock.h:71 mmap_assert_write_locked include/linux/mmap_lock.h:71 [inline]
-WARNING: CPU: 1 PID: 15927 at include/linux/mmap_lock.h:71 __is_vma_write_locked include/linux/mm.h:712 [inline]
-WARNING: CPU: 1 PID: 15927 at include/linux/mmap_lock.h:71 vma_assert_locked include/linux/mm.h:753 [inline]
-WARNING: CPU: 1 PID: 15927 at include/linux/mmap_lock.h:71 assert_fault_locked include/linux/mm.h:786 [inline]
-WARNING: CPU: 1 PID: 15927 at include/linux/mmap_lock.h:71 handle_userfault+0x149b/0x27a0 fs/userfaultfd.c:440
-Modules linked in:
-CPU: 1 PID: 15927 Comm: syz-executor.1 Not tainted 6.4.0-next-20230705-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:mmap_assert_write_locked include/linux/mmap_lock.h:71 [inline]
-RIP: 0010:__is_vma_write_locked include/linux/mm.h:712 [inline]
-RIP: 0010:vma_assert_locked include/linux/mm.h:753 [inline]
-RIP: 0010:assert_fault_locked include/linux/mm.h:786 [inline]
-RIP: 0010:handle_userfault+0x149b/0x27a0 fs/userfaultfd.c:440
-Code: ff 49 8d bc 24 a0 01 00 00 31 f6 e8 2f b9 23 08 31 ff 41 89 c5 89 c6 e8 c3 a2 87 ff 45 85 ed 0f 85 83 ed ff ff e8 95 a6 87 ff <0f> 0b e9 77 ed ff ff e8 89 a6 87 ff 49 8d bc 24 a0 01 00 00 be ff
-RSP: 0000:ffffc9000316fb68 EFLAGS: 00010212
-RAX: 0000000000000177 RBX: ffffc9000316fd88 RCX: ffffc9000be81000
-RDX: 0000000000040000 RSI: ffffffff81fd6ddb RDI: 0000000000000005
-RBP: 0000000000000200 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffff888023cc8000
-R13: 0000000000000000 R14: ffff88802c77af10 R15: ffff88802c77af00
-FS:  00007fa68c277700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020c067e0 CR3: 0000000045d25000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_anonymous_page mm/memory.c:4151 [inline]
- do_pte_missing mm/memory.c:3671 [inline]
- handle_pte_fault mm/memory.c:4949 [inline]
- __handle_mm_fault+0x35ff/0x3cc0 mm/memory.c:5089
- handle_mm_fault+0x3c2/0xa20 mm/memory.c:5254
- do_user_addr_fault+0x2ed/0x13a0 arch/x86/mm/fault.c:1365
- handle_page_fault arch/x86/mm/fault.c:1509 [inline]
- exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1565
- asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0033:0x7fa68b486dcf
-Code: a4 c3 80 fa 08 73 12 80 fa 04 73 1e 80 fa 01 77 26 72 05 0f b6 0e 88 0f c3 48 8b 4c 16 f8 48 8b 36 48 89 4c 17 f8 48 89 37 c3 <8b> 4c 16 fc 8b 36 89 4c 17 fc 89 37 c3 0f b7 4c 16 fe 0f b7 36 66
-RSP: 002b:00007fa68c277158 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 00007fa68b5ac050 RCX: 0000000000c06620
-RDX: 0000000000000004 RSI: 0000000020c067e0 RDI: 0000000000000000
-RBP: 00007fa68b4d7493 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000000000000 R11: 00000000200001c0 R12: 0000000000000000
-R13: 00007ffc0b167b2f R14: 00007fa68c277300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
