@@ -2,152 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B806274817F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D253C748099
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjGEJyL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 05:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S232322AbjGEJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjGEJyI (ORCPT
+        with ESMTP id S232365AbjGEJQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 05:54:08 -0400
-X-Greylist: delayed 1202 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Jul 2023 02:54:06 PDT
-Received: from mta22.hihonor.com (mta22.hihonor.com [81.70.192.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5D6E41
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:54:06 -0700 (PDT)
-Received: from w012.hihonor.com (unknown [10.68.27.189])
-        by mta22.hihonor.com (SkyGuard) with ESMTPS id 4QwvCS4ycXzYl0V5;
-        Wed,  5 Jul 2023 17:15:48 +0800 (CST)
-Received: from a004.hihonor.com (10.68.27.131) by w012.hihonor.com
- (10.68.27.189) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Wed, 5 Jul
- 2023 17:15:52 +0800
-Received: from a001.hihonor.com (10.68.28.182) by a004.hihonor.com
- (10.68.27.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Wed, 5 Jul
- 2023 17:15:52 +0800
-Received: from a001.hihonor.com ([fe80::d540:a176:80f8:5fcf]) by
- a001.hihonor.com ([fe80::d540:a176:80f8:5fcf%8]) with mapi id 15.02.1118.021;
- Wed, 5 Jul 2023 17:15:52 +0800
-From:   gaoming <gaoming20@hihonor.com>
-To:     Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>
-CC:     "open list:EXFAT FILE SYSTEM" <linux-fsdevel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        fengbaopeng <fengbaopeng@hihonor.com>,
-        gaoxu <gaoxu2@hihonor.com>,
-        wangfei 00014658 <wangfei66@hihonor.com>,
-        "shenchen 00013118" <harry.shen@hihonor.com>
-Subject: [PATCH] exfat: use kvmalloc_array/kvfree instead of
- kmalloc_array/kfree
-Thread-Topic: [PATCH] exfat: use kvmalloc_array/kvfree instead of
- kmalloc_array/kfree
-Thread-Index: AdmvHl4gs76xLNH6Sd+soB17KujxsA==
-Date:   Wed, 5 Jul 2023 09:15:52 +0000
-Message-ID: <4cec63dcd3c0443c928800ffeec9118c@hihonor.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.164.15.53]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 5 Jul 2023 05:16:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21626171D;
+        Wed,  5 Jul 2023 02:16:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9782A614BD;
+        Wed,  5 Jul 2023 09:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0923CC43397;
+        Wed,  5 Jul 2023 09:16:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688548568;
+        bh=YjVGfBCVfaMYbI/Hezmrj961v7fTlegKDxQQz1Cknxw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=p1K06DOMLDpqdxxApDiBpByRoLTpuSE0wl+yuoBx1Dev54/qU7s6CvXIBkRxU8mx0
+         oGXYbwyIP6E9W97swx2hxCRaaJv7ffpW8zgngUV/cLowQ2C/nwGWX8sDjnydy9unVj
+         z1B0M/Hw5ioHcYtph2cTUy8dO6Dp2S7gqISC0b7mYSl7s4KN/0N3tefERtIolZQeUe
+         Bb3YKv/3XnQkb8JkW68j4edP1xwG6XwBP1/A5D51AT7Anf7dDRAgH4d5nHDThvKET6
+         iQlRyUmhvPk7ZdQ4ppsKkQbbXIu6zJTltO8GJhG/vHCtzlms5iqhG7SrWgoPDnBu6q
+         Gxq1zb1cNN95w==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so10035587e87.2;
+        Wed, 05 Jul 2023 02:16:07 -0700 (PDT)
+X-Gm-Message-State: ABy/qLacJkbHMb5bkuByMV63mo4VruwUJlZ/crqb4wv7wK4Xwal3eeSB
+        0JPonHrgh0jpurRY5uQjN1Xxm+XUII8ooIOOPbg=
+X-Google-Smtp-Source: APBJJlH58pMqKmX2Wk6s4rwuJfbfqIFzAMl9W6sabXoiPWt7PZjHTKQ2+QqlYg5wDNbqj7E2LAHguGjgv06c1qklDrg=
+X-Received: by 2002:a05:6512:3e0a:b0:4fb:8bad:1cdf with SMTP id
+ i10-20020a0565123e0a00b004fb8bad1cdfmr13921865lfv.42.1688548565902; Wed, 05
+ Jul 2023 02:16:05 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230629082032.3481237-1-guoren@kernel.org> <2ab8ca7c-a648-f73c-1815-086274af6013@ghiti.fr>
+ <CAJF2gTQdr1YGTAwtrHCxSomjTHXgdzwWSff2VRKxq06S62aJtA@mail.gmail.com> <c63f3587-dfb6-11f2-3be4-903811bcb629@ghiti.fr>
+In-Reply-To: <c63f3587-dfb6-11f2-3be4-903811bcb629@ghiti.fr>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 5 Jul 2023 17:15:54 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSpgpr3irJd3p=1cLSjBh+tTgoLh3rr1p_i+jj6xj50UQ@mail.gmail.com>
+Message-ID: <CAJF2gTSpgpr3irJd3p=1cLSjBh+tTgoLh3rr1p_i+jj6xj50UQ@mail.gmail.com>
+Subject: Re: [PATCH] riscv: pageattr: Fixup synchronization problem between
+ init_mm and active_mm
+To:     Alexandre Ghiti <alex@ghiti.fr>
+Cc:     palmer@rivosinc.com, paul.walmsley@sifive.co, zong.li@sifive.com,
+        atishp@atishpatra.org, jszhang@kernel.org, bjorn@kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The call stack shown below is a scenario in the Linux 4.19 kernel.
-Allocating memory failed where exfat fs use kmalloc_array due 
-to system memory fragmentation, while the u-disk was inserted
-without recognition.
-Devices such as u-disk using the exfat file system are pluggable and may be
-insert into the system at any time.
-However, long-term running systems cannot guarantee the continuity of 
-physical memory. Therefore, it's necessary to address this issue.
+On Wed, Jul 5, 2023 at 3:01=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr> wrot=
+e:
+>
+>
+> On 04/07/2023 04:25, Guo Ren wrote:
+> > On Mon, Jul 3, 2023 at 6:17=E2=80=AFPM Alexandre Ghiti <alex@ghiti.fr> =
+wrote:
+> >> Hi Guo,
+> >>
+> >> On 29/06/2023 10:20, guoren@kernel.org wrote:
+> >>> From: Guo Ren <guoren@linux.alibaba.com>
+> >>>
+> >>> The machine_kexec() uses set_memory_x to add the executable attribute=
+ to the
+> >>> page table entry of control_code_buffer. It only modifies the init_mm=
+ but not
+> >>> the current->active_mm. The current kexec process won't use init_mm d=
+irectly,
+> >>> and it depends on minor_pagefault, which is removed by commit 7d3332b=
+e011e4
+> >>
+> >> Is the removal of minor_pagefault an issue? I'm not sure I understand
+> >> this part of the changelog.
+> > I use two different work-around patches to answer your question:
+> > 1st:
+> > -----
+> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+> > index 705d63a59aec..b8b200c81606 100644
+> > --- a/arch/riscv/mm/fault.c
+> > +++ b/arch/riscv/mm/fault.c
+> > @@ -249,7 +249,7 @@ void handle_page_fault(struct pt_regs *regs)
+> > * only copy the information from the master page table,
+> > * nothing more.
+> > */
+> > - if (unlikely((addr >=3D VMALLOC_START) && (addr < VMALLOC_END))) {
+> > + if (unlikely(addr >=3D 0x8000000000000000UL)) {
+> > vmalloc_fault(regs, code, addr);
+> > return;
+> > }
+> > ------
+> >
+> > 2nd:
+> > ------
+> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> > index 8e65f0a953e5..270f50852886 100644
+> > --- a/arch/riscv/mm/init.c
+> > +++ b/arch/riscv/mm/init.c
+> > @@ -1387,7 +1387,7 @@ static void __init create_linear_mapping_page_tab=
+le(void)
+> > if (end >=3D __pa(PAGE_OFFSET) + memory_limit)
+> > end =3D __pa(PAGE_OFFSET) + memory_limit;
+> >
+> > - create_linear_mapping_range(start, end, 0);
+> > + create_linear_mapping_range(start, end, PMD_SIZE);
+> > }
+> >
+> > #ifdef CONFIG_STRICT_KERNEL_RWX
+> > -----
+> >
+> > The removal of minor_pagefault could be an issue, but in this case
+> > it's the VMALLOC_START/END which prevents the minor_pagefault at
+> > first. I didn't say commit 7d3332be011e4 is the problem.
+>
+>
+> Sorry I still don't understand what you mean here and why you mention
+> the minor pagefault, could you explain again please?
+>
+>
+> >>
+> >>> ("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") of 6=
+4BIT. So,
+> >>> when it met pud mapping on an MMU_SV39 machine, it caused the followi=
+ng:
+> >>>
+> >>>    kexec_core: Starting new kernel
+> >>>    Will call new kernel at 00300000 from hart id 0
+> >>>    FDT image at 747c7000
+> >>>    Bye...
+> >>>    Unable to handle kernel paging request at virtual address ffffffda=
+23b0d000
+> >>>    Oops [#1]
+> >>>    Modules linked in:
+> >>>    CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
+> >>>    Hardware name: Sophgo Mango (DT)
+> >>>    epc : 0xffffffda23b0d000
+> >>>     ra : machine_kexec+0xa6/0xb0
+> >>>    epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
+> >>>     gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
+> >>>     t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
+> >>>     s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
+> >>>     a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
+> >>>     a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
+> >>>     s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
+> >>>     s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
+> >>>     s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
+> >>>     s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
+> >>>     t5 : ffffffff815351b0 t6 : ffffffc80c173b50
+> >>>    status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 00000000=
+0000000c
+> >>>
+> >>> Yes, Using set_memory_x API after boot has the limitation, and at lea=
+st we
+> >>> should synchronize the current->active_mm to fix the problem.
+> >>>
+> >>> Fixes: d3ab332a5021 ("riscv: add ARCH_HAS_SET_MEMORY support")
+> >>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> >>> Signed-off-by: Guo Ren <guoren@kernel.org>
+> >>> ---
+> >>>    arch/riscv/mm/pageattr.c | 7 +++++++
+> >>>    1 file changed, 7 insertions(+)
+> >>>
+> >>> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+> >>> index ea3d61de065b..23d169c4ee81 100644
+> >>> --- a/arch/riscv/mm/pageattr.c
+> >>> +++ b/arch/riscv/mm/pageattr.c
+> >>> @@ -123,6 +123,13 @@ static int __set_memory(unsigned long addr, int =
+numpages, pgprot_t set_mask,
+> >>>                                     &masks);
+> >>>        mmap_write_unlock(&init_mm);
+> >>>
+> >>> +     if (current->active_mm !=3D &init_mm) {
+> >>> +             mmap_write_lock(current->active_mm);
+> >>> +             ret =3D  walk_page_range_novma(current->active_mm, star=
+t, end,
+> >>> +                                          &pageattr_ops, NULL, &mask=
+s);
+> >>> +             mmap_write_unlock(current->active_mm);
+> >>> +     }
+> >>> +
+> >>>        flush_tlb_kernel_range(start, end);
+> >>>
+> >>>        return ret;
+> >>
+> >> I don't understand: any page table inherits the entries of
+> >> swapper_pg_dir (see pgd_alloc()), so any kernel page table entry is
+> >> "automatically" synchronized, so why should we synchronize one 4K entr=
+y
+> >> explicitly? A PGD entry would need to be synced, but not a PTE entry.
+> > The purpose of the second walk_page_range_novma() is for pgd's entries
+> > synchronization. I'm a bit lazy here, I agree, it's unnecessary to
+> > write lower level entries again. So I would use a simple pgd entries
+> > synchronization from vmalloc_fault in the next version of patch, all
+> > right?
+>
+>
+> But vmalloc_fault was removed by commit 7d3332be011e4 for CONFIG_64BIT,
+> so I don't get it: why would we need to synchronize a PGD entry in your
+> case? Where does this new PGD come from? And the trap address is
+> ffffffda23b0d000, which lies in the direct mapping, so why do you
+> mention vmalloc_fault at all?
+The machine_kexec() uses set_memory_x to modify the direct mapping
+attributes from RW to RWX. But set_memory_x only changes the init_mm's
+attributes, not current->active_mm, so when kexec jumps into
+control_buffer, the instruction page fault happens, and there is no
+minor_pagefault for it, then panic.
 
-Binder:2632_6: page allocation failure: order:4,
-mode:0x6040c0(GFP_KERNEL|__GFP_COMP), nodemask=(null)
-Call trace:
-[242178.097582]  dump_backtrace+0x0/0x4
-[242178.097589]  dump_stack+0xf4/0x134
-[242178.097598]  warn_alloc+0xd8/0x144
-[242178.097603]  __alloc_pages_nodemask+0x1364/0x1384
-[242178.097608]  kmalloc_order+0x2c/0x510
-[242178.097612]  kmalloc_order_trace+0x40/0x16c
-[242178.097618]  __kmalloc+0x360/0x408
-[242178.097624]  load_alloc_bitmap+0x160/0x284
-[242178.097628]  exfat_fill_super+0xa3c/0xe7c
-[242178.097635]  mount_bdev+0x2e8/0x3a0
-[242178.097638]  exfat_fs_mount+0x40/0x50
-[242178.097643]  mount_fs+0x138/0x2e8
-[242178.097649]  vfs_kern_mount+0x90/0x270
-[242178.097655]  do_mount+0x798/0x173c
-[242178.097659]  ksys_mount+0x114/0x1ac
-[242178.097665]  __arm64_sys_mount+0x24/0x34
-[242178.097671]  el0_svc_common+0xb8/0x1b8
-[242178.097676]  el0_svc_handler+0x74/0x90
-[242178.097681]  el0_svc+0x8/0x340
+I found the bug on an MMU_sv39 machine, and the direct mapping used a
+1GB PUD, the pgd entries. This patch could solve the problem by
+synchronizing a PGD entry between init_mm and current->active_mm.
 
-By analyzing the exfat code,we found that continuous physical memory is
-not required here,so kvmalloc_array is used can solve this problem.
+>
+> Sorry if I'm missing something, hope you can clarify things!
+>
+> Thanks,
+>
+> Alex
+>
+>
+> >
+> >
+> > --
+> > Best Regards
+> >   Guo Ren
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Signed-off-by: gaoming <gaoming20@hihonor.com>
----
- fs/exfat/balloc.c | 4 ++--
- fs/exfat/dir.c    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/exfat/balloc.c b/fs/exfat/balloc.c
-index 9f42f25fab92..a183558cb7a0 100644
---- a/fs/exfat/balloc.c
-+++ b/fs/exfat/balloc.c
-@@ -69,7 +69,7 @@ static int exfat_allocate_bitmap(struct super_block *sb,
- 	}
- 	sbi->map_sectors = ((need_map_size - 1) >>
- 			(sb->s_blocksize_bits)) + 1;
--	sbi->vol_amap = kmalloc_array(sbi->map_sectors,
-+	sbi->vol_amap = kvmalloc_array(sbi->map_sectors,
- 				sizeof(struct buffer_head *), GFP_KERNEL);
- 	if (!sbi->vol_amap)
- 		return -ENOMEM;
-@@ -84,7 +84,7 @@ static int exfat_allocate_bitmap(struct super_block *sb,
- 			while (j < i)
- 				brelse(sbi->vol_amap[j++]);
- 
--			kfree(sbi->vol_amap);
-+			kvfree(sbi->vol_amap);
- 			sbi->vol_amap = NULL;
- 			return -EIO;
- 		}
-diff --git a/fs/exfat/dir.c b/fs/exfat/dir.c
-index 957574180a5e..5cbb78d0a2a2 100644
---- a/fs/exfat/dir.c
-+++ b/fs/exfat/dir.c
-@@ -649,7 +649,7 @@ int exfat_put_dentry_set(struct exfat_entry_set_cache *es, int sync)
- 			brelse(es->bh[i]);
- 
- 	if (IS_DYNAMIC_ES(es))
--		kfree(es->bh);
-+		kvfree(es->bh);
- 
- 	return err;
- }
-@@ -888,7 +888,7 @@ int exfat_get_dentry_set(struct exfat_entry_set_cache *es,
- 
- 	num_bh = EXFAT_B_TO_BLK_ROUND_UP(off + num_entries * DENTRY_SIZE, sb);
- 	if (num_bh > ARRAY_SIZE(es->__bh)) {
--		es->bh = kmalloc_array(num_bh, sizeof(*es->bh), GFP_KERNEL);
-+		es->bh = kvmalloc_array(num_bh, sizeof(*es->bh), GFP_KERNEL);
- 		if (!es->bh) {
- 			brelse(bh);
- 			return -ENOMEM;
--- 
-2.17.1
 
+--=20
+Best Regards
+ Guo Ren
