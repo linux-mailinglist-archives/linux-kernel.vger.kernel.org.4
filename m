@@ -2,83 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B5B747E78
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDD3747E7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbjGEHrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S231521AbjGEHsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbjGEHrS (ORCPT
+        with ESMTP id S232295AbjGEHr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:47:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4145710C3
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688543196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ErZ583UAFFXXktAwUkPKfSDXi8WyYfGqw8H1xV5E3EY=;
-        b=bvtdsMB3TTi+6muykpHIIQ0A3AvT01aPDochyxGzhVwN5XImzQvuvqiWgY30SlBNp9xbR7
-        X+KIFZJfCG/FupP191BtP1KMoFSrsQZI0zvvJZuCwEve2VWRivHkRa3WedCjk6SJq62EmR
-        BsMIezWaYYDX4m2P3zvIoWpVQSUA3SU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-633-5FEoDL9JPmKCbIfan8VNQw-1; Wed, 05 Jul 2023 03:46:35 -0400
-X-MC-Unique: 5FEoDL9JPmKCbIfan8VNQw-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3141325af78so4253815f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 00:46:35 -0700 (PDT)
+        Wed, 5 Jul 2023 03:47:58 -0400
+Received: from mail-pj1-f80.google.com (mail-pj1-f80.google.com [209.85.216.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB3E10F2
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:47:56 -0700 (PDT)
+Received: by mail-pj1-f80.google.com with SMTP id 98e67ed59e1d1-26304c2e178so8813728a91.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 00:47:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688543194; x=1691135194;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ErZ583UAFFXXktAwUkPKfSDXi8WyYfGqw8H1xV5E3EY=;
-        b=Lcgs7/m45j4ZL6RX8B26yJua/WWMXzoY7TFrYDq/92foE5rK7gwGLZ3f8E++g59xJy
-         /9rTsLOPvTDUq3pq92msDXhF33CCOhgXHE2N0YDLONTTwu5EfLvzHwbG2DxuOcwkxWb8
-         EYPBRzkQoom1fvVTLMcUM43R5S/kA4Z3O06jTkgx4Jd6Dsr2CznEJy09NLMIHsr3U7jD
-         Zgi4LFDLkkCeMfohQxdNhUdpnriuFUdCKJys9Zo3gzbV3OmHjHIMRjG4awrWyqJAGC3N
-         D1aAOwNyEGIAAh7NkuI0siutXKnv/4AzvXHD7PSOsDuZRoDFfK2Vrae5G5FIMMtv6Dzz
-         V1yA==
-X-Gm-Message-State: ABy/qLZ5YCHfhOw782bhKS8jkD29cVnFZ4qSp87Id2s/mV+fYNYriqZr
-        DomLidB8NB4K3O4bTwRiXCUeDLK91axwWz0G+A2bbJmZSvI828hbfxp5hL5gM69uce6VUCso8WP
-        Ljfx/3q8mrZg8yFqdiZ+vGuDX
-X-Received: by 2002:adf:e44d:0:b0:314:2732:e81e with SMTP id t13-20020adfe44d000000b003142732e81emr13085718wrm.8.1688543194261;
-        Wed, 05 Jul 2023 00:46:34 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFsu0NXA2DcqaEBs6I3Rg+ekfJ+Y9cFLpHbU/8XeUuuyRyAepiisRLN9BUbx4g3BoqHacYmEg==
-X-Received: by 2002:adf:e44d:0:b0:314:2732:e81e with SMTP id t13-20020adfe44d000000b003142732e81emr13085694wrm.8.1688543193994;
-        Wed, 05 Jul 2023 00:46:33 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id k5-20020a5d6e85000000b003063a92bbf5sm30496891wrz.70.2023.07.05.00.46.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 00:46:33 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
-Cc:     linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-ia64@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        loongarch@lists.linux.dev, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 08/12] drivers/firmware: Remove trailing whitespaces
-In-Reply-To: <20230629121952.10559-9-tzimmermann@suse.de>
-References: <20230629121952.10559-1-tzimmermann@suse.de>
- <20230629121952.10559-9-tzimmermann@suse.de>
-Date:   Wed, 05 Jul 2023 09:46:32 +0200
-Message-ID: <87bkgqssvb.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1688543276; x=1691135276;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ksxuF98/9I1+2GaTPM9459hTAjCKV1tw7C+LZwLkD6s=;
+        b=X99vXRmGbUYWjaeQy4aOUGugBiUOKjqW89/20FeV09SkXlObXWAPqHg54Snt8j3vTR
+         BzxqYv/hGCGW9mTrv3TL1fre3VuYOMSjck92bOmvSJSjuqLsMPtag8dvUsUU23hr1qqt
+         +5kw9Zq+ETtXu+By1J8lkVa2qvqRzUSjvYLLkKYzYt+n61L5RSO2W1cJeDPR1l5/hmy5
+         FCjD03jvi63CXJx9iSPoOM35Tu+iwF0HobVigvmktq+LM+Ja9H9dC9jGOXb6x+ifW33h
+         F+X7ygw87nZ93TV9J/tyOb9fzwvuW2olpAP1VGI79DL0k91ATqflRLwG5VXuzQ+lJ+yR
+         vHig==
+X-Gm-Message-State: ABy/qLaFYvDloqOZFJJLinM1P9M3Ibb759E7O34078BTzFr03TmlI/jM
+        e1g3a5xqdEaVaASsP3cK8lLoK5u1bCSZz5D+0tYTRUVuKLWq
+X-Google-Smtp-Source: APBJJlHLWerl9bexKU9f+tdHq6hOYsbpgUIpuf91rK1Yrg7yKTLvXOSTrP3eAnFMJ6YLNsiYOhQakHZ7fePYjespkbxjywOZfDTJ
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a17:90a:fe15:b0:262:ffae:56cf with SMTP id
+ ck21-20020a17090afe1500b00262ffae56cfmr11920115pjb.8.1688543276038; Wed, 05
+ Jul 2023 00:47:56 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 00:47:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000027fff505ffb89e4d@google.com>
+Subject: [syzbot] [btrfs?] inconsistent lock state in btrfs_add_delayed_iput
+From:   syzbot <syzbot+9786684f27757c60b3cc@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,20 +56,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Zimmermann <tzimmermann@suse.de> writes:
+Hello,
 
-> Fix coding style. No functional changes.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
+syzbot found the following issue on:
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+HEAD commit:    a507db1d8fdc Merge tag '6.5-rc-smb3-client-fixes-part1' of..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10a12fcb280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3f27fb02fc20d955
+dashboard link: https://syzkaller.appspot.com/bug?extid=9786684f27757c60b3cc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-a507db1d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e3b240f6b5a8/vmlinux-a507db1d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b78f45d88875/bzImage-a507db1d.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9786684f27757c60b3cc@syzkaller.appspotmail.com
+
+WARNING: inconsistent lock state
+6.4.0-syzkaller-09904-ga507db1d8fdc #0 Not tainted
+--------------------------------
+inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
+ksoftirqd/3/32 [HC0[0]:SC1[1]:HE1:SE0] takes:
+ffff888025dd0d20 (&fs_info->delayed_iput_lock){+.?.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ffff888025dd0d20 (&fs_info->delayed_iput_lock){+.?.}-{2:2}, at: btrfs_add_delayed_iput+0x128/0x390 fs/btrfs/inode.c:3490
+{SOFTIRQ-ON-W} state was registered at:
+  lock_acquire kernel/locking/lockdep.c:5761 [inline]
+  lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
+  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+  _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+  spin_lock include/linux/spinlock.h:350 [inline]
+  btrfs_run_delayed_iputs+0x28/0xe0 fs/btrfs/inode.c:3523
+  close_ctree+0x217/0xf70 fs/btrfs/disk-io.c:4315
+  generic_shutdown_super+0x158/0x480 fs/super.c:499
+  kill_anon_super+0x3a/0x60 fs/super.c:1110
+  btrfs_kill_super+0x3c/0x50 fs/btrfs/super.c:2138
+  deactivate_locked_super+0x98/0x160 fs/super.c:330
+  deactivate_super+0xb1/0xd0 fs/super.c:361
+  cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1254
+  task_work_run+0x16f/0x270 kernel/task_work.c:179
+  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+  exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
+  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+irq event stamp: 215394
+hardirqs last  enabled at (215394): [<ffffffff81d5ebc4>] __do_kmem_cache_free mm/slab.c:3558 [inline]
+hardirqs last  enabled at (215394): [<ffffffff81d5ebc4>] kmem_cache_free mm/slab.c:3582 [inline]
+hardirqs last  enabled at (215394): [<ffffffff81d5ebc4>] kmem_cache_free+0x244/0x370 mm/slab.c:3575
+hardirqs last disabled at (215393): [<ffffffff81d5eb5e>] __do_kmem_cache_free mm/slab.c:3553 [inline]
+hardirqs last disabled at (215393): [<ffffffff81d5eb5e>] kmem_cache_free mm/slab.c:3582 [inline]
+hardirqs last disabled at (215393): [<ffffffff81d5eb5e>] kmem_cache_free+0x1de/0x370 mm/slab.c:3575
+softirqs last  enabled at (215364): [<ffffffff814d1a81>] run_ksoftirqd kernel/softirq.c:921 [inline]
+softirqs last  enabled at (215364): [<ffffffff814d1a81>] run_ksoftirqd+0x31/0x60 kernel/softirq.c:913
+softirqs last disabled at (215369): [<ffffffff814d1a81>] run_ksoftirqd kernel/softirq.c:921 [inline]
+softirqs last disabled at (215369): [<ffffffff814d1a81>] run_ksoftirqd+0x31/0x60 kernel/softirq.c:913
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&fs_info->delayed_iput_lock);
+  <Interrupt>
+    lock(&fs_info->delayed_iput_lock);
+
+ *** DEADLOCK ***
+
+no locks held by ksoftirqd/3/32.
+
+stack backtrace:
+CPU: 3 PID: 32 Comm: ksoftirqd/3 Not tainted 6.4.0-syzkaller-09904-ga507db1d8fdc #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_usage_bug kernel/locking/lockdep.c:3978 [inline]
+ valid_state kernel/locking/lockdep.c:4020 [inline]
+ mark_lock_irq kernel/locking/lockdep.c:4223 [inline]
+ mark_lock.part.0+0x1102/0x1960 kernel/locking/lockdep.c:4685
+ mark_lock kernel/locking/lockdep.c:4649 [inline]
+ mark_usage kernel/locking/lockdep.c:4574 [inline]
+ __lock_acquire+0x1231/0x5e20 kernel/locking/lockdep.c:5098
+ lock_acquire kernel/locking/lockdep.c:5761 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ btrfs_add_delayed_iput+0x128/0x390 fs/btrfs/inode.c:3490
+ btrfs_put_ordered_extent fs/btrfs/ordered-data.c:559 [inline]
+ btrfs_put_ordered_extent+0x2f6/0x610 fs/btrfs/ordered-data.c:547
+ __btrfs_bio_end_io fs/btrfs/bio.c:118 [inline]
+ __btrfs_bio_end_io+0x136/0x180 fs/btrfs/bio.c:112
+ btrfs_orig_bbio_end_io+0x86/0x2b0 fs/btrfs/bio.c:163
+ btrfs_simple_end_io+0x105/0x380 fs/btrfs/bio.c:378
+ bio_endio+0x589/0x690 block/bio.c:1617
+ req_bio_endio block/blk-mq.c:766 [inline]
+ blk_update_request+0x5c5/0x1620 block/blk-mq.c:911
+ blk_mq_end_request+0x59/0x680 block/blk-mq.c:1032
+ lo_complete_rq+0x1c6/0x280 drivers/block/loop.c:370
+ blk_complete_reqs+0xb3/0xf0 block/blk-mq.c:1110
+ __do_softirq+0x1d4/0x905 kernel/softirq.c:553
+ run_ksoftirqd kernel/softirq.c:921 [inline]
+ run_ksoftirqd+0x31/0x60 kernel/softirq.c:913
+ smpboot_thread_fn+0x659/0x9e0 kernel/smpboot.c:164
+ kthread+0x344/0x440 kernel/kthread.c:389
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
--- 
-Best regards,
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
