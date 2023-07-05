@@ -2,87 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B97748AFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DAF748AFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbjGERvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S233015AbjGERvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGERvN (ORCPT
+        with ESMTP id S233033AbjGERvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:51:13 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D959EE3
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:51:11 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-99342a599e9so518856666b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688579470; x=1691171470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aEI4v+2KKn+EkDZzdrBmikEj6qMvmv1XLjDpHecmTZc=;
-        b=f5HN0rW/zmfb6pFzjhlVkLATVIc8CO9MM9qNTqXTMEchOXn4fIxtcz3Bx9eyCqCr2Z
-         M5Z0iUelv4vCsc15ld58d/0zM9UUJWAwN+XIleuO4uVXGFuUytLSMFn2mcLd7qm+OYZ1
-         txF0HDVGO4e0+Hr8h5AqLUey2XXij6T+Mts2sUaS2d97sVSzm9XURFST97gRUCjUd6ZN
-         +Knu2ZIlBqLLoX3vOXvgJPO7sE0U6CsNwW92Su3zO87HD6GAacOyAX02RaADnRwZ3+j2
-         m4p1oaf9lM/wlHWC1mrl0h9YdVrFcv8uLiTLvIrPNPSZf2hUt7l/wo4cEKxx+wobVv0G
-         MoXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688579470; x=1691171470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aEI4v+2KKn+EkDZzdrBmikEj6qMvmv1XLjDpHecmTZc=;
-        b=CDiVifV68rdTdbP8tmVlq1govyIsvW8SODybnZ7qvX/AsusgDskToCc2dohbHsHAI9
-         yfx7IAMX+Wl+oS7OtU/Zv0vtMhFh7kmAGdpqzQ4auWOa0IJe2URU0Yq5FWdYZSs1fdfo
-         osDYZ5VNfpDTP/BZDyvg+87kLmEYXs/9R+rIDQQkUBT5N7NbjNaCpRWiFD8VMplQifyj
-         NeShTXpfXhonNU8bp5Q856iJl9ihk6TvhZEGNi7Jt2o1yCMyjmVFXOVvNYRumhVrAtas
-         PsUaBdP3COIV2r7rgK70zThVukXhWJRU7NNhlGnKXa++7w0Z609+xxaSkJTjR93M/oAR
-         X84w==
-X-Gm-Message-State: AC+VfDyqrPclskNGgdoyPXc/1vEPqzeQZXokNT/vWSTGb6qeIgbN8oWD
-        T86nyvAtWztqyvY3q3plqeFF4PdUnkXOm6e5/wtsKQ==
-X-Google-Smtp-Source: APBJJlFTojzQ/aPODd2ghbLHceO/hDIk0cF+cNlCPev56yuRvsdr91pXNO6nCvO7/y6BChiKczWX+RHhutgcASJd0c4=
-X-Received: by 2002:a17:906:f1d3:b0:978:6a95:512d with SMTP id
- gx19-20020a170906f1d300b009786a95512dmr11603991ejb.11.1688579470177; Wed, 05
- Jul 2023 10:51:10 -0700 (PDT)
+        Wed, 5 Jul 2023 13:51:33 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EAEE57;
+        Wed,  5 Jul 2023 10:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688579491; x=1720115491;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=TaPcWpI5SA14pOBAfZQ2y2OtnaPLA1rfNr5xuK8yJbc=;
+  b=jZEAh6nZ92Mo2rZGrUGs2KNsKbDwkrft9EGOw/xMSpKiM4Mh6HaZq4FQ
+   EB40R/96dbcQvztgqY+mHy0jMa1bdKAl7ZURnzxD6yklqsMy9eT020x2x
+   ubVO6LXQu6vFQP9ZOESR8XoRt8fXm8n17xYUDHla4vGV0hNPeRpCWqCr2
+   sYdBCNHztVBNqxDbyGEG5/dpa/u0d3+/JjLE1W6Wfq/j3rICsNi+c04N1
+   caY6wdxSmoMkD7KgLjomeR2SaCWUy4VUWqJOPHUCcLMoZEjrXphLO5VGh
+   HIlR/cJs1u65dWfF/BgyZpAKAHyXMWHPPJzw/jux7clT+kU1zLhAgQv+5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="363436069"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="363436069"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 10:51:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="696538824"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="696538824"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga006.jf.intel.com with ESMTP; 05 Jul 2023 10:51:29 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 5 Jul 2023 10:51:29 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 5 Jul 2023 10:51:29 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 5 Jul 2023 10:51:29 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.105)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 5 Jul 2023 10:51:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kv9OeGBuBAh+7/XuMw6sMob9R/KUXMbfhzqyB7k2LjcyWccCkcneyzefF3SR12wR5GbIox4qQ9uD41cC34sDS0jrNS6VTppwe96MI7NQK/gEOSLna6E2xRGcw3cgl4BeHPMoiB5+57Z8j9ciBURQR7ssdluXYNaB4CXvrbANv/UHYjciGXX8OKQEzpuIgLygQTfsFk9+B464C7sabH8l9QkpBTiQK/SBJrwhFvjNDFUlDpNVgWqs9vbBtxOCSwvAa8JnGP8TtNMA2NyWIMjnAxJdEepaEZciNunQgVafEBEZ5pC3MbrBXfimvWt8Z2D+fHasj93W6sRD4TdZsno8wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WWZJdfRuKLjA6QD70QqYhziyCwsttA88Mv1CL2o+iQc=;
+ b=bRl3PZFd8YZkxvQLx/NdoQcb3zI9BZUvhmqRwZiwqL3fMJnwS+uJA07lumQCmZX4KdSJpTp491nR6xLZXEOc4RnmDlTb562y4CjxZNn6PmRDSV7VUfsmQOTdFqijbcdWiwz2Wf6FOMIkQ7gIjo7Lk0jo+Qyu22icomTfUnjOUXh+3kqhnr03XMmUCw2ISetdWEh/+V4wLMctTT688EYpYUcMtcPxpAFf9VI2yr7JENhvUejYj/CgcjlkGXecKGaSB2VXqhLx4WXxx5tlDklcxd5z/d8hnWI5sIxcyVm+QPE3916pGvFnX5FmdV2TEgn5e+jufgRt51e3lWIzcmmHFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6366.namprd11.prod.outlook.com (2603:10b6:930:3a::8)
+ by MN2PR11MB4632.namprd11.prod.outlook.com (2603:10b6:208:24f::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
+ 2023 17:51:21 +0000
+Received: from CY5PR11MB6366.namprd11.prod.outlook.com
+ ([fe80::955a:2397:1402:c329]) by CY5PR11MB6366.namprd11.prod.outlook.com
+ ([fe80::955a:2397:1402:c329%3]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
+ 17:51:21 +0000
+Date:   Wed, 5 Jul 2023 18:51:05 +0100
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        "lucas.segarra.fernandez@intel.com" 
+        <lucas.segarra.fernandez@intel.com>
+Subject: Re: [PATCH 0/5] Remove CRYPTO_ALG_ALLOCATES_MEMORY flag
+Message-ID: <ZKWtiRcyUP8OQNSa@gcabiddu-mobl1.ger.corp.intel.com>
+References: <20230523153421.1528359-1-meenakshi.aggarwal@nxp.com>
+ <20230523165503.GA864814@google.com>
+ <ZHh0DF4meU2ze+g7@gondor.apana.org.au>
+ <ZHh/zqNu7XzwJTl5@gcabiddu-mobl1.ger.corp.intel.com>
+ <ZILvtASXQKLG43y9@gondor.apana.org.au>
+ <ZIQ3OKYyOcwRIOLR@gcabiddu-mobl1.ger.corp.intel.com>
+ <ZImNC6KUNHquVAnZ@gondor.apana.org.au>
+ <PAXPR04MB957111A43069E2658BCA818F8E2EA@PAXPR04MB9571.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <PAXPR04MB957111A43069E2658BCA818F8E2EA@PAXPR04MB9571.eurprd04.prod.outlook.com>
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
+ Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+X-ClientProxiedBy: FR3P281CA0015.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1d::13) To CY5PR11MB6366.namprd11.prod.outlook.com
+ (2603:10b6:930:3a::8)
 MIME-Version: 1.0
-References: <20230629205040.665834-1-axelrasmussen@google.com>
- <20230629205040.665834-4-axelrasmussen@google.com> <ZKSJNB3BbCiPxcdD@x1n>
-In-Reply-To: <ZKSJNB3BbCiPxcdD@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 5 Jul 2023 10:50:34 -0700
-Message-ID: <CAJHvVcjfrOU5PoSoh4n1O0tmr-2bsPzinHDW5OwhCh=egk=-uQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] selftests/mm: refactor uffd_poll_thread to allow
- custom fault handlers
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6366:EE_|MN2PR11MB4632:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb4dd43e-1c40-4901-ba36-08db7d8070f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YZ3HNtjqJPEldR+hmy5SjB14kcV9gxTU0JJ79aBnKZotxmZJ2kxhy1vgpmWNn9iRdSzOJDeUgrwsoN4EFc2kCtyNCoPmAGVrFfMrVQJMDuocKcKAR8NUvGSSv18yFY9Y9Er+GPqsZXeBVpchdnZLV0SJ8P5QgqxQ9hl1IAVJl8GJ2vEDnzEY+gOLGYy2r2CQCMJOqetzutCO1gfU8cyi4/Vc1wFfNov11CBw8r457Ie5clfuemmeYXpcHuK8wVNEEN6cKEyIUDIwSWwJsHKY5XdkF4tfiI6hDj2xDkQ8O+NKYr/IM63AgZIlMS90pZLvu6UrAs3iFsARa0xUBm+E4zAKxWnD6Z9y94EdLn2vMrFDPFO6T8ZGgdHLla4I+NCONYFS9X0WC5cFC1cA3YQNZ7/nO9ojVh0UuVMsEpOtnuVvnlvPZgnVjPARbf0T5LfjsyWNLPucVgoYneo04sPm4bIvVhm2cib9cg4EBuLD2ckCHfHbtcyeGj4Y7Ef4geclzpKtasRK+WF8/hopuzTMbHUAgJ3XNLXvWu7u2sHobRU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6366.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(346002)(376002)(366004)(39860400002)(451199021)(8936002)(2906002)(8676002)(5660300002)(53546011)(6506007)(44832011)(26005)(186003)(7416002)(41300700001)(6486002)(6666004)(82960400001)(66556008)(4326008)(66946007)(66476007)(6916009)(83380400001)(316002)(107886003)(54906003)(6512007)(478600001)(966005)(38100700002)(86362001)(36916002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6T9yrWWOS8utDEpjb++f0VqRyYUS8KxvwQWhdFBHCUW3lSKQV0hitipWxOkA?=
+ =?us-ascii?Q?omwHCKhVJmJ/h59T7fQLxGJ1aXw0bCYCz0fmdhdgnuFtfR/X3YFmEflYdXHC?=
+ =?us-ascii?Q?VBOQtduSlr5kq5/XkjNj4+69jvcj7wcM66tI+/vYuOJ6fWf3a9+kmQKfTGCF?=
+ =?us-ascii?Q?9+gc9IXSrPTjaiMXoSGn3fHuudHshNUBn5JXhVIBGwADR8DsdUJt46HmFYOX?=
+ =?us-ascii?Q?F1yyvDpDIRr0eXFMsRklpV9F3nh6r7W/YOkm/Imi8bciqMNrZiKRZL1K9gdp?=
+ =?us-ascii?Q?xSX9oSYHPDinF8lsSbZckqcmCHDKEdZ+hh4SV2LFsGihPvwHrqEswdjKnBBS?=
+ =?us-ascii?Q?rgd56ZsHSRqoCtaQL2tKtMqYPXwCMY7oYnUmnPVSTsZLqgLjcSwBf4G2qpNo?=
+ =?us-ascii?Q?ALUeehMv27CfHvYhhWOZUXNleF0nO37IFzUbDsB6qJ7B0ZVQKYVBIypU8tJM?=
+ =?us-ascii?Q?Nb0VpGIRkP5mDBXvxrJmRurKnZy37yh/r8MwSbiuNsdFV/6vVI1myEEkNY9x?=
+ =?us-ascii?Q?3Mj3PVuR9GBZ+T2GwTVRXkNy3TRrA5pTEia0sLefZJkGQlIX8pDUMlf+TzFr?=
+ =?us-ascii?Q?cyD7PVkz8OvNnYSTQXeC2wT98b8rje5ILuSb1ZVMbNXieboGZtPSBRRblPlQ?=
+ =?us-ascii?Q?7gMS4Dm0yh+JwNd+9FqSSZNGePS/ss7SjYp74ox2mkYyKMpWtsIVGjdf21NX?=
+ =?us-ascii?Q?0aVjD+GnY/axkXXTqMAXiJP9dd93EeI0QqVvCYFTP03nOPiyDXgVw6uaZbRt?=
+ =?us-ascii?Q?7Kaj1n88nhw7RcDJcY43sWwhFpcaZO4wl3G+u3jzVhLufjyl2R2EPw/q1gzf?=
+ =?us-ascii?Q?8WxowCTdR4OL8JPx0crA0qHR5ZiNit97f0ha9cGywa/8TxC1P3tRTtSQf3x/?=
+ =?us-ascii?Q?ihZGuOuIaijCh0HvtefS2k7f7wAZYwWt27+vC4CG0/gkLl8xjlP/0RZKOePi?=
+ =?us-ascii?Q?gydCdSFt5uXfwXYjVOajykTITmOZQOhHjT8Rbhc6FyB8ccDfN+pD4TcOXP4B?=
+ =?us-ascii?Q?AvDo+0JQ3IF4JiNDf979i9yCJQYMoj9GV4Rixd+TA42evU5mG8LS88EV8HJK?=
+ =?us-ascii?Q?nsU1aTszqIbloY+1ByhzwBBOy6K8MJVY1/GyjC2zhShFX2LzLu9ZF0hXEGKI?=
+ =?us-ascii?Q?J62Lxgp5FmWMgkUoLW6BxG1HLqUKmVoEvZvmPSxdaq4sG1y7dgRRingUluax?=
+ =?us-ascii?Q?oOZXpIjcL/uD3dgHGKEJ/TlKHS6dWbzyax/TydPbFIDOHtHzhiH7mA+pciPu?=
+ =?us-ascii?Q?nmKocjLDcaOuOGGmN6q8F6OfY0/qrqOaksjkrr9OeFilJXACK4B5Hhgx6utQ?=
+ =?us-ascii?Q?PsGZ2fN44tx7Gw/K4MBrZEbDnz4t/OTcc0jjbf512JYdAfmYidTjPcik9GlH?=
+ =?us-ascii?Q?nIzd/A8TnyArMAOZc639eN1hTGtHOij/ED9sKldQgCrLqhnfrtUwN5vZ6qlA?=
+ =?us-ascii?Q?yX6DKPGDGza/sLlFsPhXKGFonXeetxOeBAIfZ6AijuUL+E5uscsBgYS9UeYQ?=
+ =?us-ascii?Q?OXgQMDC3WtDY8Tm5b00IqShkNdDI+xx3AhrZtogVeARvC62etd3J8rLVsd1o?=
+ =?us-ascii?Q?QfVqFxmC9b61iCb4QlDlbx3ImvcKg29cyJeYwr275AvDMRGQxjEFzxJpR98s?=
+ =?us-ascii?Q?Tg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb4dd43e-1c40-4901-ba36-08db7d8070f2
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6366.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 17:51:21.0019
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +gL5c8T7gJZkr5iwWKmeE8W78xGHsJ/VBDHpd2YERnhXDwz8VrilbY9jZO6auXMMsjDbPav1mZUGj15QLj90qAelHOtwjCQXuAsFEnmV7dU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4632
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,127 +168,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 4, 2023 at 2:03=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> On Thu, Jun 29, 2023 at 01:50:38PM -0700, Axel Rasmussen wrote:
-> > Previously, we had "one fault handler to rule them all", which used
-> > several branches to deal with all of the scenarios required by all of
-> > the various tests.
-> >
-> > In upcoming patches, I plan to add a new test, which has its own
-> > slightly different fault handling logic. Instead of continuing to add
-> > cruft to the existing fault handler, let's allow tests to define custom
-> > ones, separate from other tests.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >  tools/testing/selftests/mm/uffd-common.c |  5 ++++-
-> >  tools/testing/selftests/mm/uffd-common.h |  3 +++
-> >  tools/testing/selftests/mm/uffd-stress.c | 12 +++++++-----
-> >  3 files changed, 14 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/s=
-elftests/mm/uffd-common.c
-> > index ba20d7504022..02b89860e193 100644
-> > --- a/tools/testing/selftests/mm/uffd-common.c
-> > +++ b/tools/testing/selftests/mm/uffd-common.c
-> > @@ -499,6 +499,9 @@ void *uffd_poll_thread(void *arg)
-> >       int ret;
-> >       char tmp_chr;
-> >
-> > +     if (!args->handle_fault)
-> > +             args->handle_fault =3D uffd_handle_page_fault;
-> > +
-> >       pollfd[0].fd =3D uffd;
-> >       pollfd[0].events =3D POLLIN;
-> >       pollfd[1].fd =3D pipefd[cpu*2];
-> > @@ -527,7 +530,7 @@ void *uffd_poll_thread(void *arg)
-> >                       err("unexpected msg event %u\n", msg.event);
-> >                       break;
-> >               case UFFD_EVENT_PAGEFAULT:
-> > -                     uffd_handle_page_fault(&msg, args);
-> > +                     args->handle_fault(&msg, args);
-> >                       break;
-> >               case UFFD_EVENT_FORK:
-> >                       close(uffd);
-> > diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/s=
-elftests/mm/uffd-common.h
-> > index 197f5262fe0d..7c4fa964c3b0 100644
-> > --- a/tools/testing/selftests/mm/uffd-common.h
-> > +++ b/tools/testing/selftests/mm/uffd-common.h
-> > @@ -77,6 +77,9 @@ struct uffd_args {
-> >       unsigned long missing_faults;
-> >       unsigned long wp_faults;
-> >       unsigned long minor_faults;
-> > +
-> > +     /* A custom fault handler; defaults to uffd_handle_page_fault. */
-> > +     void (*handle_fault)(struct uffd_msg *msg, struct uffd_args *args=
-);
-> >  };
-> >
-> >  struct uffd_test_ops {
-> > diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/s=
-elftests/mm/uffd-stress.c
-> > index 995ff13e74c7..50b1224d72c7 100644
-> > --- a/tools/testing/selftests/mm/uffd-stress.c
-> > +++ b/tools/testing/selftests/mm/uffd-stress.c
-> > @@ -189,10 +189,8 @@ static int stress(struct uffd_args *args)
-> >                                  locking_thread, (void *)cpu))
-> >                       return 1;
-> >               if (bounces & BOUNCE_POLL) {
-> > -                     if (pthread_create(&uffd_threads[cpu], &attr,
-> > -                                        uffd_poll_thread,
-> > -                                        (void *)&args[cpu]))
-> > -                             return 1;
-> > +                     if (pthread_create(&uffd_threads[cpu], &attr, uff=
-d_poll_thread, &args[cpu]))
-> > +                             err("uffd_poll_thread create");
->
-> irrelevant change?
+On Tue, Jul 04, 2023 at 09:19:28AM +0000, Meenakshi Aggarwal wrote:
+> When are you planning to send the patches?
+Done today.
+https://patchwork.kernel.org/project/linux-crypto/list/?series=762772
 
-Right, I'll revert this. In an earlier version I had a more
-substantial change here, and just didn't fully revert it.
+Regards,
 
->
-> >               } else {
-> >                       if (pthread_create(&uffd_threads[cpu], &attr,
-> >                                          uffd_read_thread,
-> > @@ -247,9 +245,13 @@ static int userfaultfd_stress(void)
-> >  {
-> >       void *area;
-> >       unsigned long nr;
-> > -     struct uffd_args args[nr_cpus];
-> > +     struct uffd_args *args;
-> >       uint64_t mem_size =3D nr_pages * page_size;
-> >
-> > +     args =3D calloc(nr_cpus, sizeof(struct uffd_args));
-> > +     if (!args)
-> > +             err("allocating args array failed");
-> > +
->
-> It's leaked?
->
-> Isn't "args[] =3D { 0 }" already working?
+-- 
+Giovanni
 
-That works, but GCC can warn in this case (-Wmissing-braces) depending
-on the definition of struct uffd_args. I liked switching to calloc
-because it avoids any possibility of that even as we add/remove things
-to struct uffd_args in the future.
-
-Since it's a selftest and this function is only called exactly once,
-it didn't seem worth the code making certain we free it, instead just
-leaving it to be cleaned up when the process exits.
-
->
+> 
 > Thanks,
->
-> >       if (uffd_test_ctx_init(UFFD_FEATURE_WP_UNPOPULATED, NULL))
-> >               err("context init failed");
+> Meenakshi
+> 
+> > -----Original Message-----
+> > From: Herbert Xu <herbert@gondor.apana.org.au>
+> > Sent: Wednesday, June 14, 2023 3:19 PM
+> > To: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+> > Cc: Eric Biggers <ebiggers@kernel.org>; Meenakshi Aggarwal
+> > <meenakshi.aggarwal@nxp.com>; Horia Geanta <horia.geanta@nxp.com>;
+> > Varun Sethi <V.Sethi@nxp.com>; Pankaj Gupta <pankaj.gupta@nxp.com>;
+> > Gaurav Jain <gaurav.jain@nxp.com>; davem@davemloft.net; linux-
+> > crypto@vger.kernel.org; linux-kernel@vger.kernel.org; Iuliana Prodan
+> > <iuliana.prodan@nxp.com>; lucas.segarra.fernandez@intel.com
+> > Subject: Re: [PATCH 0/5] Remove CRYPTO_ALG_ALLOCATES_MEMORY flag
 > >
+> > On Sat, Jun 10, 2023 at 09:41:28AM +0100, Giovanni Cabiddu wrote:
+> > >
+> > > If you all agree, I can send a patch to remove
+> > > CRYPTO_ALG_ALLOCATES_MEMORY from dm-integrity and update the
+> > documentation in crypto.h.
+> >
+> > Yes please.
+> >
+> > Cheers,
 > > --
-> > 2.41.0.255.g8b1d071c50-goog
-> >
->
-> --
-> Peter Xu
->
+> > Email: Herbert Xu <herbert@gondor.apana.org.au> Home Page:
+> > http://gondor.ap/
+> > ana.org.au%2F~herbert%2F&data=05%7C01%7Cmeenakshi.aggarwal%40nxp.co
+> > m%7C6af00291047c46f2325e08db6cbca189%7C686ea1d3bc2b4c6fa92cd99c5c
+> > 301635%7C0%7C0%7C638223329655306217%7CUnknown%7CTWFpbGZsb3d8e
+> > yJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
+> > C3000%7C%7C%7C&sdata=Nrj0YEjJrFUNWY25h0iy5sF7tUnHSDun8KhHxnhUhh0
+> > %3D&reserved=0
+> > PGP Key:
+> > http://gondor.ap/
+> > ana.org.au%2F~herbert%2Fpubkey.txt&data=05%7C01%7Cmeenakshi.aggarwal
+> > %40nxp.com%7C6af00291047c46f2325e08db6cbca189%7C686ea1d3bc2b4c6fa
+> > 92cd99c5c301635%7C0%7C0%7C638223329655306217%7CUnknown%7CTWFp
+> > bGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6
+> > Mn0%3D%7C3000%7C%7C%7C&sdata=lBaQiOM%2BXaax2lMroHtqbtBbjXBlkkKj
+> > ms8mgBnou%2BU%3D&reserved=0
