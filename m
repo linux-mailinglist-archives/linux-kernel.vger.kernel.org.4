@@ -2,111 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE8474881F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EB274882F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjGEPeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
+        id S232356AbjGEPjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjGEPec (ORCPT
+        with ESMTP id S231675AbjGEPjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:34:32 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEA3170B;
-        Wed,  5 Jul 2023 08:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=GOk8wbHC+06z9lkk+bkmvMTVgQXsiajG84uc0axXK8w=; b=LZtRD+xE/EQ0I8L1jJY6mX1w2V
-        fIJB0cGgf8aj+l2DttPr6CuHQ9S8UWIpj4PsMgjbwKuJZJa4fnflxArwMUl3PiKhMsCV+xKyLVEmb
-        hNhBJNgmKhQ9/SsA/Cr95v2AegyYORjw0IspYIZ/6esZLxbXqv2yIfmDWl/VFgjGBU+c=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57162 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qH4WJ-00054T-W9; Wed, 05 Jul 2023 11:34:20 -0400
-Date:   Wed, 5 Jul 2023 11:34:19 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Nate Drude <Nate.D@variscite.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pierluigi Passaro <pierluigi.p@variscite.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-Id: <20230705113419.183f686f47252abf3532fc9e@hugovil.com>
-In-Reply-To: <CAOMZO5D_p3hf+HVHNAijEevJRpzwmyGPcoHjiapsOx_ddsoksg@mail.gmail.com>
-References: <20230704150240.2022020-1-hugo@hugovil.com>
-        <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
-        <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
-        <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
-        <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
-        <20230704172801.f11422b3f947c625f53af871@hugovil.com>
-        <CAOMZO5CWh0-5eMTBwjvNUrY-yOHE=daj6n-jAAfjWoV-H4rt0Q@mail.gmail.com>
-        <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
-        <20230705093507.7458eada3ae05e0e1740a10e@hugovil.com>
-        <AS2PR08MB88082608DB46EC1287C6E54B852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
-        <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
-        <20230705102502.d8c9fa894bd271a5526d81f7@hugovil.com>
-        <AS2PR08MB88085D6B7338AD6D4D3C9956852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
-        <20230705104837.e620da576f22f28244daacb1@hugovil.com>
-        <CAOMZO5D_p3hf+HVHNAijEevJRpzwmyGPcoHjiapsOx_ddsoksg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Wed, 5 Jul 2023 11:39:09 -0400
+Received: from mail-pf1-f207.google.com (mail-pf1-f207.google.com [209.85.210.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE48110F7
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:39:07 -0700 (PDT)
+Received: by mail-pf1-f207.google.com with SMTP id d2e1a72fcca58-666ee6aeddbso6813684b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 08:39:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688571547; x=1691163547;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AnlTnizGjQwa9uDAi28x6y7rFFNwIM+SsAIVOeqMxGE=;
+        b=bB7KEHDn2X0dAjvKa0Fz9eRnlKoLXMnUtnSivDJg2Q7C+O8RUeSVm44MzXN+3qsxqp
+         6vYa5gmvkweIHqT9AsbU6oMORvPJeSnzZjuzc/cW3Wz8YR9EHifDE0a6TcDXYpz9h6XS
+         h20BE3YD0h1V7Bur9yS/wFXrdQWT5kF90n/wTXi0bEnfG1BX0yCSkB3ycNxJoKjFrl/P
+         gKsMXZXZnby+89gNA/1LsmWoM5e7SWJas7xKWB3h5RXo/p+3hBTXpJe/gxzHKUOwCB4l
+         PC/q2gRaXgeA0VTnOJVlQU8i1L+h3HwOv6+Rm0TRpErqR4RRuYCNMnjL6HcDOalmef6c
+         bp/g==
+X-Gm-Message-State: ABy/qLYQI3yAPxUAGh+OdRSYgZhf7MCUtKUgBip/gzZTB+jr1zCrlL3x
+        Y7DCYybuDsMC991hNCFXdiKsTpGGqsNR46AUyGfzkDiTZHAx
+X-Google-Smtp-Source: APBJJlHGGZ93My9g1gDTGDHXg2YW/iw8fyFkj2dS3FNQL8+aqjt1kP2mYJQXSZGu7Lxnpq5biML4Ap6t8OjY6z0ws/Q4ZAZ8PZEx
+MIME-Version: 1.0
+X-Received: by 2002:a05:6a00:1783:b0:668:69fa:f795 with SMTP id
+ s3-20020a056a00178300b0066869faf795mr21021295pfg.2.1688571547278; Wed, 05 Jul
+ 2023 08:39:07 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 08:39:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000040e14205ffbf333f@google.com>
+Subject: [syzbot] [ntfs3?] WARNING in wnd_add_free_ext (2)
+From:   syzbot <syzbot+5b2f934f08ab03d473ff@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jul 2023 12:22:55 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+Hello,
 
-> Hi Hugo,
-> 
-> On Wed, Jul 5, 2023 at 11:48 AM Hugo Villeneuve <hugo@hugovil.com> wrote:
-> 
-> > Fabio: do we need to support both configurations in the Linux kernel
-> > tree, and if yes how do you propose we do it?
-> 
-> I would suggest supporting the new revision only.
+syzbot found the following issue on:
 
-Ok, no problem.
+HEAD commit:    d528014517f2 Revert ".gitignore: ignore *.cover and *.mbx"
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1785ad94a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d576750da57ebbb5
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b2f934f08ab03d473ff
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-If we go back to my original patch, the changes in it, apart from the
-interrupt, are still required to make USB OTG work (at least in host
-mode, so that we can plug a USB key for example). Also looking at the
-latest varigit changes, I have removed the "typec1_con:
-connector" node (tested ok in host mode). I also added comments in the
-DTS about the particular PTN5150 interrupt pin configurations.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Let me know if I can resubmit it, and if so can I leave the interrupt
-property type to IRQ_TYPE_NONE?
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-d5280145.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/84fcf20c8c27/vmlinux-d5280145.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1ab1ac572337/bzImage-d5280145.xz
 
-Thank you,
-Hugo.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5b2f934f08ab03d473ff@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 1577 at fs/ntfs3/bitmap.c:216 rb_insert_start fs/ntfs3/bitmap.c:216 [inline]
+WARNING: CPU: 3 PID: 1577 at fs/ntfs3/bitmap.c:216 wnd_add_free_ext+0xd29/0x10e0 fs/ntfs3/bitmap.c:351
+Modules linked in:
+CPU: 3 PID: 1577 Comm: syz-executor.1 Not tainted 6.4.0-syzkaller-11478-gd528014517f2 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:rb_insert_start fs/ntfs3/bitmap.c:216 [inline]
+RIP: 0010:wnd_add_free_ext+0xd29/0x10e0 fs/ntfs3/bitmap.c:351
+Code: c1 ea 03 80 3c 02 00 0f 85 3b 02 00 00 49 8d 85 e0 00 00 00 4d 89 b5 00 01 00 00 48 89 44 24 10 e9 b9 f9 ff ff e8 87 1a cf fe <0f> 0b e9 40 fd ff ff e8 7b 1a cf fe 48 8b 7c 24 10 e8 31 19 5b 07
+RSP: 0018:ffffc900079bec10 EFLAGS: 00010216
+RAX: 000000000003c404 RBX: 0000000000000000 RCX: ffffc90028037000
+RDX: 0000000000040000 RSI: ffffffff82b5c4e9 RDI: 0000000000000006
+RBP: ffff888029643ba0 R08: 0000000000000006 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff88804a80e1f0 R14: dffffc0000000000 R15: ffff888029643360
+FS:  0000000000000000(0000) GS:ffff88802c900000(0063) knlGS:00000000f7f36b40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00000000edbfe800 CR3: 0000000074033000 CR4: 0000000000352ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ wnd_zone_set+0x159/0x1b0 fs/ntfs3/bitmap.c:1419
+ ntfs_look_for_free_space+0x479/0x740 fs/ntfs3/fsntfs.c:421
+ attr_allocate_clusters+0x3ee/0x6e0 fs/ntfs3/attrib.c:159
+ attr_set_size+0x1452/0x2ac0 fs/ntfs3/attrib.c:572
+ ntfs_extend_mft+0x296/0x430 fs/ntfs3/fsntfs.c:526
+ ntfs_look_free_mft+0x548/0xe60 fs/ntfs3/fsntfs.c:589
+ ni_create_attr_list+0xbdd/0x12c0 fs/ntfs3/frecord.c:873
+ ni_ins_attr_ext+0x3ca/0xba0 fs/ntfs3/frecord.c:968
+ ni_insert_attr+0x3ea/0x850 fs/ntfs3/frecord.c:1135
+ ni_insert_resident+0xd9/0x3a0 fs/ntfs3/frecord.c:1519
+ ntfs_set_ea+0xa3b/0x1380 fs/ntfs3/xattr.c:433
+ ntfs_save_wsl_perm+0x12b/0x3d0 fs/ntfs3/xattr.c:944
+ ntfs3_setattr+0xa2b/0xc30 fs/ntfs3/file.c:708
+ notify_change+0xb2c/0x1180 fs/attr.c:483
+ chown_common+0x57f/0x650 fs/open.c:768
+ do_fchownat+0x12a/0x1e0 fs/open.c:799
+ ksys_lchown include/linux/syscalls.h:1342 [inline]
+ __do_sys_lchown16 kernel/uid16.c:30 [inline]
+ __se_sys_lchown16 kernel/uid16.c:28 [inline]
+ __ia32_sys_lchown16+0xe3/0x110 kernel/uid16.c:28
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7f3b579
+Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000f7f365cc EFLAGS: 00000296 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000020000140 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000282 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+----------------
+Code disassembly (best guess), 2 bytes skipped:
+   0:	10 06                	adc    %al,(%rsi)
+   2:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+   6:	10 07                	adc    %al,(%rdi)
+   8:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+   c:	10 08                	adc    %cl,(%rax)
+   e:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1e:	00 51 52             	add    %dl,0x52(%rcx)
+  21:	55                   	push   %rbp
+  22:	89 e5                	mov    %esp,%ebp
+  24:	0f 34                	sysenter
+  26:	cd 80                	int    $0x80
+* 28:	5d                   	pop    %rbp <-- trapping instruction
+  29:	5a                   	pop    %rdx
+  2a:	59                   	pop    %rcx
+  2b:	c3                   	retq
+  2c:	90                   	nop
+  2d:	90                   	nop
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  37:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
