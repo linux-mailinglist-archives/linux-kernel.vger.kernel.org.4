@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB3D747CDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CF2747CDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjGEGO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S230383AbjGEGP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjGEGOZ (ORCPT
+        with ESMTP id S229610AbjGEGPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:14:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B8310CF;
-        Tue,  4 Jul 2023 23:14:24 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3655qDAs016498;
-        Wed, 5 Jul 2023 06:13:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : content-type :
- mime-version; s=pp1; bh=Ad7UrwTYbQdO4Is7msQLhnBCGOQD9eY6ijBTkR4U0sY=;
- b=qHy4h6xhHiwmJZJwkoWOZvZzJie/Fo1GWtkMix2CSYB9fa8hx/izfM2N+zYM91UrAhoA
- iF1lYFT0E28ICe99Dex8GHnNLfUN29VtPNqkyE/HzKP0Ait9d9yStC2N/IzXFcBejDFd
- HBJBFDjHFJL8OcsCGnqiXLFaSJ5CF2j974JYORpdaheYDzOaXKO85aVw5wTW83iYyoKT
- Bu5a8/+Bb/utiCj0l2ZueEHk7OdGC/umUyGFYOpJEm5ED1YH8LxBRdIc7QYdTPP0ApIo
- QFGZwjE1q95nnIaqT729aW6t+UXwBETs3I0m7S2t9TEMMhecb7roSyBh7lhJRa/KsB8v 5g== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rn2rbrftw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 06:13:53 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3653nOtE022962;
-        Wed, 5 Jul 2023 06:13:50 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rjbs4ss4c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 06:13:50 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3656DmHE24707650
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Jul 2023 06:13:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E3012004B;
-        Wed,  5 Jul 2023 06:13:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9EB5020043;
-        Wed,  5 Jul 2023 06:13:47 +0000 (GMT)
-Received: from li-1de7cd4c-3205-11b2-a85c-d27f97db1fe1.ibm.com (unknown [9.171.32.210])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed,  5 Jul 2023 06:13:47 +0000 (GMT)
-From:   "Marc Hartmayer" <mhartmay@linux.ibm.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>, bblock@linux.ibm.com,
-        bvanassche@acm.org, hch@lst.de, axboe@kernel.dk, yukuai3@huawei.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com
-Subject: Re: [PATCH] scsi/sg: fix checking return value of blk_get_queue()
-In-Reply-To: <20230705024001.177585-1-yukuai1@huaweicloud.com>
-References: <20230705024001.177585-1-yukuai1@huaweicloud.com>
-Date:   Wed, 05 Jul 2023 08:13:46 +0200
-Message-ID: <878rbukhr9.fsf@linux.ibm.com>
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KsdSwAChGT3cewy1mBZTdUSoZMB0h3W8
-X-Proofpoint-GUID: KsdSwAChGT3cewy1mBZTdUSoZMB0h3W8
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 5 Jul 2023 02:15:24 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950C410EA;
+        Tue,  4 Jul 2023 23:15:19 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688537718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FmOxAXQHkYLKF9gR92m1Yb4f5iEOyGKpTqWF2Mnxsow=;
+        b=o/GO2j7TXqz0LLpqHY7sjQqSXdSYbWBe8gE+bnCU572ADqIc1ADXgFXlqq/m+GRrXzIyZ2
+        fZ3DZ6vRArHlyWddk+QrtUqOQQTbcdGgJT11jiIhpru3UjH4yTQYNcW+94HflugMjWTXT7
+        my0V6M/jxCDc6410NpoKrZ+sHwB1pHXvQGE81P/9aGCp2FfqX+yPouGy8BVX32m789kICM
+        36tOGd25iRmjS+NBPzlO11byVOYTAOqz4mLUg/HTwlquidUUA+8sjM3MBMOMm1zViLlrQB
+        y5TNnQmMb/rsCedqswiMBbxcZ+uJ2Z7GOV8r07Pp99N+eDQIf0xWAcYm3Ua9/w==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 11C681C0005;
+        Wed,  5 Jul 2023 06:15:16 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 08:15:16 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Yu Hao <yhao016@ucr.edu>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: lan78xx: Fix possible uninit bug
+Message-ID: <20230705081516.67d0e26e@bootlin.com>
+In-Reply-To: <CA+UBctD1E5ZLnBxkrXh3uxiKiKXphnLKiB=5whYtH73SCTESWw@mail.gmail.com>
+References: <CA+UBctD1E5ZLnBxkrXh3uxiKiKXphnLKiB=5whYtH73SCTESWw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_16,2023-07-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 clxscore=1011 phishscore=0 bulkscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307050054
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 10:40 AM +0800, Yu Kuai <yukuai1@huaweicloud.com> wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> Commit fcaa174a9c99 ("scsi/sg: don't grab scsi host module reference")
-> make a mess how blk_get_queue() is called, blk_get_queue() returns true
-> on success while the caller expects it returns 0 on success.
->
-> Fix this problem and also add a corresponding error message on failure.
->
-> Fixes: fcaa174a9c99 ("scsi/sg: don't grab scsi host module reference")
-> Reported-by: Marc Hartmayer <mhartmay@linux.ibm.com>
-> Closes: https://lore.kernel.org/all/87lefv622n.fsf@linux.ibm.com/
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+On Tue, 4 Jul 2023 18:15:09 -0700
+Yu Hao <yhao016@ucr.edu> wrote:
+
+> The variable buf should be initialized in the function lan78xx_read_reg.
+> However, there is no return value check, which means the variable buf
+> could still be uninit. But there is a read later.
+> 
+> Signed-off-by: Yu Hao <yhao016@ucr.edu>
 > ---
->  drivers/scsi/sg.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-> index 89fa046c7158..0d8afffd1683 100644
-> --- a/drivers/scsi/sg.c
-> +++ b/drivers/scsi/sg.c
-> @@ -1497,9 +1497,10 @@ sg_add_device(struct device *cl_dev)
->  	int error;
->  	unsigned long iflags;
->  
-> -	error = blk_get_queue(scsidp->request_queue);
-> -	if (error)
-> -		return error;
-> +	if (!blk_get_queue(scsidp->request_queue)) {
-> +		pr_warn("%s: get scsi_device queue failed\n", __func__);
-> +		return -ENODEV;
-> +	}
->  
->  	error = -ENOMEM;
->  	cdev = cdev_alloc();
-> -- 
-> 2.39.2
+>  drivers/net/usb/lan78xx.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+> index c458c030fadf..4c9318c92fe6 100644
+> --- a/drivers/net/usb/lan78xx.c
+> +++ b/drivers/net/usb/lan78xx.c
+> @@ -1091,8 +1091,11 @@ static int lan78xx_write_raw_otp(struct
+> lan78xx_net *dev, u32 offset,
+>     int i;
+>     u32 buf;
+>     unsigned long timeout;
+> +   int ret;
+> 
+> -   lan78xx_read_reg(dev, OTP_PWR_DN, &buf);
+> +   ret = lan78xx_read_reg(dev, OTP_PWR_DN, &buf);
+> +   if (ret < 0)
+> +       return ret;
+> 
+>     if (buf & OTP_PWR_DN_PWRDN_N_) {
+>         /* clear it and wait to be cleared */
 
-Thanks.
+Reviewed-by: Herve Codina <herve.codina@bootlin.com>
 
-Tested-by: Marc Hartmayer <mhartmay@linux.ibm.com>
+Best regards,
+Hervé
+
+-- 
+Hervé Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
