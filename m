@@ -2,125 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE99C74903A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B536974903E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjGEVuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 17:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S232163AbjGEVul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 17:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbjGEVt2 (ORCPT
+        with ESMTP id S232291AbjGEVuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:49:28 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891081BD0;
-        Wed,  5 Jul 2023 14:49:25 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b852785a65so151485ad.0;
-        Wed, 05 Jul 2023 14:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688593765; x=1691185765;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JlA7Omc66rXMNTH6X1ydcJJyDlSBvcJI/ger0lg7xWk=;
-        b=l/5lrwFm5S27bh4okIpLe8W9g6TnfrmD1hDoFUP4abPVME+Ose3bNs1mtZu//oMoGx
-         Us1VUD1Oa4+QAEDOl/FzgagEbhT4xkFJw/WOg/tmKtVUYovVKA9LtaVgLJVzXIsjID/X
-         iI8+jQ35Sm+dLdbO2EtVjfuOpwJS9RHZesZJdXb2CgQ0/JDJjV0KYCXxHGw4+CttLq8A
-         fOqoD+c0bT1fwV75DK6LuTwwXgFhHol8ONfy7Ai+SaxID89n58Sd118zXK7UjVXarm83
-         vrzARZoooAdW2+SopGdlqtAfDX/VCdOManSfphUqpxakZi2Mi+o67/VpDvwGxOKLAUQI
-         PLBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688593765; x=1691185765;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JlA7Omc66rXMNTH6X1ydcJJyDlSBvcJI/ger0lg7xWk=;
-        b=gB7uV8kGnnLNbO3IkergJRPCTsZWKuftcUmA12UfvzGt6Mmr/gaCbQBffN37tXgDGK
-         OPAqwh0EDWRDtaGS7WbsJu5glRX5FRBQWXHGs2IG5ZvHGEdxKAvgjiZ+JlxXUmUhgMPu
-         45WgH9E9qM5jGzEB44fAUNaK+6ja1K9UXXQydSDmqDy7SxkNs3eh0mySG7jH2fqMxyBK
-         dh5CtgWqnfBT3N3U/4UXYZf09xtzIa3tj0iRKeWbnnyWCwZ1OqNjSGDDBZ796e/Y7dUQ
-         kaEXmEmSocxItiIqYKXckDHuUj9iePJgkvFgAN6hs886HQvnTa/+aJaTHfnYEnwgytmF
-         QCxw==
-X-Gm-Message-State: ABy/qLZOAOApkFuhvgQF12UBxEVetRzwPUVDqSnl6tF4krwU49pG+5A2
-        j4n99UJtgfTifdNZLxArTRQ=
-X-Google-Smtp-Source: APBJJlEPLpeBpRKLD+37mMaaabZCQQ3DaaVqaA+uW4TAiRKZXbYJOk1GzZrrd/fAet6CUy09hUwL8A==
-X-Received: by 2002:a17:902:e78a:b0:1b8:7613:594d with SMTP id cp10-20020a170902e78a00b001b87613594dmr4383059plb.24.1688593764637;
-        Wed, 05 Jul 2023 14:49:24 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9fac:a99f:7f0a:397])
-        by smtp.gmail.com with ESMTPSA id bh1-20020a170902a98100b001b3f039f8a8sm13129482plb.61.2023.07.05.14.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 14:49:24 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 14:49:21 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] Input: exc3000 - Support power supply regulators
-Message-ID: <ZKXlYbsk+6MPfeWy@google.com>
-References: <20230703084536.8429-1-mike.looijmans@topic.nl>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.12499438-d166-465a-8847-b25e1baa3dad@emailsignatures365.codetwo.com>
- <20230703084536.8429-2-mike.looijmans@topic.nl>
+        Wed, 5 Jul 2023 17:50:15 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113891BD5;
+        Wed,  5 Jul 2023 14:50:12 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365LbXL6019209;
+        Wed, 5 Jul 2023 21:50:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=U7EOkrfqb0vqwODbuTaX2Se2zSb8RsFVvhzRNki9BrI=;
+ b=LUZ652ANk7Zk0SVTmgts6jJ36JAykRE+xzKV2RHuiBTpvxYDLXdieB6V7VDw17dhHE2v
+ cHOIBITxwv6XMGdGQo1oLvFp4AWHtFnvi4HPMiJuzNwX/njIJp+J9j2U/mGYw22/Y5Az
+ lLqj+Ad+XF4BKZRpQHSmLNvsSJYs7GbY6ZIrXa5C676bjfzB8p7w5JFtuZcj9FqMWlmF
+ 0ngJqEP6h0HxM3hO025xXH4RVIzoNukpiTaBerF9a7BPHf+1tW5UOvpIj4m15ycJRICH
+ E0HON3eCu7MppBPgS6WZevQYnbGLoZs4y0UTrmnqGjS+nzzAJhzy+YQgY7oHFgxfprSX Ow== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rnb5a0pnt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 21:50:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 365Lo4Bx008323
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Jul 2023 21:50:04 GMT
+Received: from [10.110.19.132] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 5 Jul
+ 2023 14:50:04 -0700
+Message-ID: <fd62c16f-1735-4389-d547-33eefc56f04e@quicinc.com>
+Date:   Wed, 5 Jul 2023 14:50:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703084536.8429-2-mike.looijmans@topic.nl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/5] drm/msm/dpu: Define names for unnamed sblks
+Content-Language: en-US
+To:     Ryan McCann <quic_rmccann@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     Rob Clark <robdclark@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <quic_jesszhan@quicinc.com>
+References: <20230622-devcoredump_patch-v2-0-9e90a87d393f@quicinc.com>
+ <20230622-devcoredump_patch-v2-3-9e90a87d393f@quicinc.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230622-devcoredump_patch-v2-3-9e90a87d393f@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: yJI34Yltvqwou7JvHHWgN3qEzUG8vXak
+X-Proofpoint-ORIG-GUID: yJI34Yltvqwou7JvHHWgN3qEzUG8vXak
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_11,2023-07-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 spamscore=0 mlxlogscore=854
+ malwarescore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307050197
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
 
-On Mon, Jul 03, 2023 at 10:45:36AM +0200, Mike Looijmans wrote:
-> Add power supply regulator support to the exc3000 devices.
+
+On 7/5/2023 12:30 PM, Ryan McCann wrote:
+> Some sub-blocks in the hw catalog have not been given a name, so when the
+> registers from that block are dumped, there is no name to reference.
+> Define names for relevant sub-blocks to fix this.
 > 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-> 
+> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
 > ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 20 ++++++++++----------
+>   1 file changed, 10 insertions(+), 10 deletions(-)
 > 
->  drivers/input/touchscreen/exc3000.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/input/touchscreen/exc3000.c b/drivers/input/touchscreen/exc3000.c
-> index 4af4c1e5d0da..3e50af8a4a2d 100644
-> --- a/drivers/input/touchscreen/exc3000.c
-> +++ b/drivers/input/touchscreen/exc3000.c
-> @@ -18,6 +18,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/sizes.h>
->  #include <linux/timer.h>
->  #include <asm/unaligned.h>
-> @@ -360,6 +361,12 @@ static int exc3000_probe(struct i2c_client *client)
->  	if (IS_ERR(data->reset))
->  		return PTR_ERR(data->reset);
->  
-> +	/* For proper reset sequence, enable power while reset asserted */
-> +	error = devm_regulator_get_enable_optional(&client->dev, "vdd");
-> +	if (error && error != -ENODEV)
-> +		dev_err_probe(&client->dev, error,
-> +			      "failed to request vdd regulator\n");
 
-
-If there is a regulator described in the firmware we should not continue
-with initializing the device if we fail to grab/enable it. Think about
-what happens if you get -EPROBE_DEFER here. You should return here.
-
-Also, why are you using the _optional() variant? VDD is not an optional
-for the controller. regulator_get_optional() is needed when you need to
-alter the behavior of the device/driver depending on the presence of an
-optional supply, whereas here it should work fine with a sub supply that
-will be created if you simply call devm_regulator_get_enable() and there
-is not regulator mentioned in DT/ACPI for the board.
-
-Thanks.
-
--- 
-Dmitry
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
