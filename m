@@ -2,466 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF23C748B9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E4D748BEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbjGESTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 14:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S232985AbjGESdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 14:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjGESTY (ORCPT
+        with ESMTP id S232005AbjGEScl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 14:19:24 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8011713
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:18:31 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5701e8f2b79so83125957b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 11:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688581088; x=1691173088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dXjTLxu2B7e4dyW+lN0huxaA/BFi7Q1RInvMd8D9U8Q=;
-        b=Y4uvDUUmj1tqpQpeoS4VBbISmEjEEw2FeJkvjMnffeRwwFotLZhRWBkR20BrCW5vOD
-         6RBRuOTR+D1TCyzCIxfsJ9CjMyetH+qamjiLPgzNyH1dDCY8MX87o9HKytyVT77KG9g/
-         mN/zm8jZ3RDshUWsYdZxWDpxg2uX4P2A7we5ECVgpUs0XGGFxcu/S80zxLkq5/ddk6+N
-         3knTatCdseF/ArrI64EZqrjdUu5U8zfGljeTaJiL4jYrFEqjK7iAd6P54XwXcw47pC9/
-         tmmRJADmlMxYxQPUCZq8KWRustM5fmAN5NwJE08OYmMXOMS28qfqUqytwrTzExcFGxhL
-         LTSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688581088; x=1691173088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dXjTLxu2B7e4dyW+lN0huxaA/BFi7Q1RInvMd8D9U8Q=;
-        b=B1cxY3oqGLPNKmiqHdYUblnesKSpHROr/mvNlbQOeTbmuMaZlViam8wVtAWPrKI2Ts
-         8qhpLFW4io4Oxb71zAO3bJc/MM/WfpVVtPU9Fh87qxzqfW+Hk8C9Vz6v+sZl7IVByYtk
-         wflNZkQuFEynYkEBibfEmI5VW+8FI8iN1HtyarED+FTLU7AHEXmkrADHzWJA9Tnx/PuX
-         CXxjaEzhN0C5Kg5v6ujnrTEiwEsB9lsqcz5W4eswBoN2rYoPfJ2A+nm8FuftH+xanD12
-         W6u2pQ64X9d7E4OXpHVzCcuVnJzhF/Sjws1qoNgcGX0ldgsi/Rzt0v3y55toms4JIRTy
-         y6pg==
-X-Gm-Message-State: ABy/qLawFrIjxzRyh9Kl1knPnOOH4eRDKQqzzwwPxqHMEQtRU6UhElEm
-        IyR4lwfoCFark7/dF1kNQ+wlxok0IcNPgppAs0JhzQ==
-X-Google-Smtp-Source: APBJJlE8o8ok+HyhEdL07SV3x+bVUYGTUYlszF16zjpm0S88a76rzm58d9Xx8etlC6+6THbE+sA902RQXva03earTRQ=
-X-Received: by 2002:a0d:d595:0:b0:577:189b:121f with SMTP id
- x143-20020a0dd595000000b00577189b121fmr15572848ywd.40.1688581088499; Wed, 05
- Jul 2023 11:18:08 -0700 (PDT)
+        Wed, 5 Jul 2023 14:32:41 -0400
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C52A133;
+        Wed,  5 Jul 2023 11:32:40 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id C0EBC12006D;
+        Wed,  5 Jul 2023 21:18:41 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru C0EBC12006D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688581121;
+        bh=3czK2XZcVhnxWQ4LxP6D2tqOHdgOkwBZ2FrUJZvSVhU=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=aCBQsMuE53VtU6GUf47xiQKpt/QInrkHBmzHeXyxvDHIG7l7o9RAAHLsimb4G4X2F
+         yJaRMB/uYZfb16RhFVAdKMLVTTJz90Gl/qUk2FC0W/FiCF8EfiXkKvUGy6hB/3g4J8
+         eedHep8Td6AythOkK5oP8ryJQqM8DkyAX/TSuWgny5lSl4Ujsiy8/arxYJ9PnWUaep
+         sgiDK2co6JrMxTplEJkBQNeHtOMYcaSsmJrRJ97jZgsTWu2AmzPJ8B9SVcLCduVLTg
+         md7smJVLIeDshrChS7XQjwEnKwahCi7efN29ry/Hu1dn/inRxtSVzzqqbKqj3CORuo
+         vikqkpMDUVWIA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed,  5 Jul 2023 21:18:41 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 5 Jul 2023 21:18:39 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <jirislaby@kernel.org>, <khilman@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>
+CC:     <kelvin.zhang@amlogic.com>, <xianwei.zhao@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v2 0/7] tty: serial: meson: support ttyS devname
+Date:   Wed, 5 Jul 2023 21:18:26 +0300
+Message-ID: <20230705181833.16137-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20230629205040.665834-1-axelrasmussen@google.com>
-In-Reply-To: <20230629205040.665834-1-axelrasmussen@google.com>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Wed, 5 Jul 2023 11:17:57 -0700
-Message-ID: <CACw3F53p8szcxv7PSOSqN6ps3hHmRD4VQor3pLd0Cqrn-p2Ajw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178461 [Jul 05 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 520 520 ccb018a655251011855942a2571029252d3d69a2, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, libera.irclog.whitequark.org:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;lore.kernel.org:7.1.1;sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/05 16:50:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/05 16:49:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/05 14:57:00 #21566867
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 1:50=E2=80=AFPM Axel Rasmussen <axelrasmussen@googl=
-e.com> wrote:
->
-> The basic idea here is to "simulate" memory poisoning for VMs. A VM
-> running on some host might encounter a memory error, after which some
-> page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
-> once poisoned, pages can never become "un-poisoned". So, when we live
-> migrate the VM, we need to preserve the poisoned status of these pages.
->
-> When live migrating, we try to get the guest running on its new host as
-> quickly as possible. So, we start it running before all memory has been
-> copied, and before we're certain which pages should be poisoned or not.
->
-> So the basic way to use this new feature is:
->
-> - On the new host, the guest's memory is registered with userfaultfd, in
->   either MISSING or MINOR mode (doesn't really matter for this purpose).
-> - On any first access, we get a userfaultfd event. At this point we can
->   communicate with the old host to find out if the page was poisoned.
-> - If so, we can respond with a UFFDIO_POISON - this places a swap marker
->   so any future accesses will SIGBUS. Because the pte is now "present",
->   future accesses won't generate more userfaultfd events, they'll just
->   SIGBUS directly.
->
-> UFFDIO_POISON does not handle unmapping previously-present PTEs. This
+During a IRC discussion with Neil, as reported in reference [1], an idea
+emerged to provide support for a standard devname 'ttyS' in new SoCs
+such as A1, S4, T7, C3 and others. The current devname 'ttyAML' is not
+widely known and has caused several issues with both low and high-level
+software, without any apparent justification for its implementation.
+Consequently, it has been deemed necessary to introduce the 'ttyS'
+devname for all new 'compatible' entries, while still retaining backward
+compatibility with the old 'ttyAML' devname by supporting it in parallel
+with the new approach. This patch series therefore aims to implement
+these changes.
 
-A minor suggestion, would UFFDIO_HWPOISON be better? so that readers
-won't be confused with CONFIG_PAGE_POISONING (a feature to fill the
-pages with poison patterns after free).
+Changes v2 since v1 at [2]:
+    - as suggested by Conor, relocate modifications with the new
+      uart_data structures of S4 and A1 SoC from the main meson_uart
+      patchset to a separate patchsets
+    - ensure that the uart_driver is not unregistered if there is at
+      least one active port
+    - per Neil's suggestion declare separate uart_driver and console
+      objects for both tty devnames (ttyAML and ttyS) to enable the use
+      of multiple uart objects with different compatibility strings
 
-> isn't needed, because during live migration we want to intercept
-> all accesses with userfaultfd (not just writes, so WP mode isn't useful
-> for this). So whether minor or missing mode is being used (or both), the
-> PTE won't be present in any case, so handling that case isn't needed.
->
-> Why return VM_FAULT_HWPOISON instead of VM_FAULT_SIGBUS when one of
-> these markers is encountered? For "normal" userspace programs there
-> isn't a big difference, both yield a SIGBUS. The difference for KVM is
-> key though: VM_FAULT_HWPOISON will result in an MCE being injected into
-> the guest (which is the behavior we want). With VM_FAULT_SIGBUS, the
-> hypervisor would need to catch the SIGBUS and deal with the MCE
-> injection itself.
->
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  fs/userfaultfd.c                 | 63 ++++++++++++++++++++++++++++++++
->  include/linux/swapops.h          |  3 +-
->  include/linux/userfaultfd_k.h    |  4 ++
->  include/uapi/linux/userfaultfd.h | 25 +++++++++++--
->  mm/memory.c                      |  4 ++
->  mm/userfaultfd.c                 | 62 ++++++++++++++++++++++++++++++-
->  6 files changed, 156 insertions(+), 5 deletions(-)
->
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 7cecd49e078b..c26a883399c9 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -1965,6 +1965,66 @@ static int userfaultfd_continue(struct userfaultfd=
-_ctx *ctx, unsigned long arg)
->         return ret;
->  }
->
-> +static inline int userfaultfd_poison(struct userfaultfd_ctx *ctx, unsign=
-ed long arg)
-> +{
-> +       __s64 ret;
-> +       struct uffdio_poison uffdio_poison;
-> +       struct uffdio_poison __user *user_uffdio_poison;
-> +       struct userfaultfd_wake_range range;
-> +
-> +       user_uffdio_poison =3D (struct uffdio_poison __user *)arg;
-> +
-> +       ret =3D -EAGAIN;
-> +       if (atomic_read(&ctx->mmap_changing))
-> +               goto out;
-> +
-> +       ret =3D -EFAULT;
-> +       if (copy_from_user(&uffdio_poison, user_uffdio_poison,
-> +                          /* don't copy the output fields */
-> +                          sizeof(uffdio_poison) - (sizeof(__s64))))
-> +               goto out;
-> +
-> +       ret =3D validate_range(ctx->mm, uffdio_poison.range.start,
-> +                            uffdio_poison.range.len);
-> +       if (ret)
-> +               goto out;
-> +
-> +       ret =3D -EINVAL;
-> +       /* double check for wraparound just in case. */
-> +       if (uffdio_poison.range.start + uffdio_poison.range.len <=3D
-> +           uffdio_poison.range.start) {
-> +               goto out;
-> +       }
-> +       if (uffdio_poison.mode & ~UFFDIO_POISON_MODE_DONTWAKE)
-> +               goto out;
-> +
-> +       if (mmget_not_zero(ctx->mm)) {
-> +               ret =3D mfill_atomic_poison(ctx->mm, uffdio_poison.range.=
-start,
-> +                                         uffdio_poison.range.len,
-> +                                         &ctx->mmap_changing, 0);
-> +               mmput(ctx->mm);
-> +       } else {
-> +               return -ESRCH;
-> +       }
-> +
-> +       if (unlikely(put_user(ret, &user_uffdio_poison->updated)))
-> +               return -EFAULT;
-> +       if (ret < 0)
-> +               goto out;
-> +
-> +       /* len =3D=3D 0 would wake all */
-> +       BUG_ON(!ret);
-> +       range.len =3D ret;
-> +       if (!(uffdio_poison.mode & UFFDIO_POISON_MODE_DONTWAKE)) {
-> +               range.start =3D uffdio_poison.range.start;
-> +               wake_userfault(ctx, &range);
-> +       }
-> +       ret =3D range.len =3D=3D uffdio_poison.range.len ? 0 : -EAGAIN;
-> +
-> +out:
-> +       return ret;
-> +}
-> +
->  static inline unsigned int uffd_ctx_features(__u64 user_features)
->  {
->         /*
-> @@ -2066,6 +2126,9 @@ static long userfaultfd_ioctl(struct file *file, un=
-signed cmd,
->         case UFFDIO_CONTINUE:
->                 ret =3D userfaultfd_continue(ctx, arg);
->                 break;
-> +       case UFFDIO_POISON:
-> +               ret =3D userfaultfd_poison(ctx, arg);
-> +               break;
->         }
->         return ret;
->  }
-> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> index 4c932cb45e0b..8259fee32421 100644
-> --- a/include/linux/swapops.h
-> +++ b/include/linux/swapops.h
-> @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
->
->  #define  PTE_MARKER_UFFD_WP                    BIT(0)
->  #define  PTE_MARKER_SWAPIN_ERROR               BIT(1)
-> -#define  PTE_MARKER_MASK                       (BIT(2) - 1)
-> +#define  PTE_MARKER_UFFD_POISON                        BIT(2)
-> +#define  PTE_MARKER_MASK                       (BIT(3) - 1)
->
->  static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
->  {
-> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.=
-h
-> index ac7b0c96d351..ac8c6854097c 100644
-> --- a/include/linux/userfaultfd_k.h
-> +++ b/include/linux/userfaultfd_k.h
-> @@ -46,6 +46,7 @@ enum mfill_atomic_mode {
->         MFILL_ATOMIC_COPY,
->         MFILL_ATOMIC_ZEROPAGE,
->         MFILL_ATOMIC_CONTINUE,
-> +       MFILL_ATOMIC_POISON,
->         NR_MFILL_ATOMIC_MODES,
->  };
->
-> @@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *=
-dst_mm,
->  extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned =
-long dst_start,
->                                      unsigned long len, atomic_t *mmap_ch=
-anging,
->                                      uffd_flags_t flags);
-> +extern ssize_t mfill_atomic_poison(struct mm_struct *dst_mm, unsigned lo=
-ng start,
-> +                                  unsigned long len, atomic_t *mmap_chan=
-ging,
-> +                                  uffd_flags_t flags);
->  extern int mwriteprotect_range(struct mm_struct *dst_mm,
->                                unsigned long start, unsigned long len,
->                                bool enable_wp, atomic_t *mmap_changing);
-> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfa=
-ultfd.h
-> index 66dd4cd277bd..62151706c5a3 100644
-> --- a/include/uapi/linux/userfaultfd.h
-> +++ b/include/uapi/linux/userfaultfd.h
-> @@ -39,7 +39,8 @@
->                            UFFD_FEATURE_MINOR_SHMEM |           \
->                            UFFD_FEATURE_EXACT_ADDRESS |         \
->                            UFFD_FEATURE_WP_HUGETLBFS_SHMEM |    \
-> -                          UFFD_FEATURE_WP_UNPOPULATED)
-> +                          UFFD_FEATURE_WP_UNPOPULATED |        \
-> +                          UFFD_FEATURE_POISON)
->  #define UFFD_API_IOCTLS                                \
->         ((__u64)1 << _UFFDIO_REGISTER |         \
->          (__u64)1 << _UFFDIO_UNREGISTER |       \
-> @@ -49,12 +50,14 @@
->          (__u64)1 << _UFFDIO_COPY |             \
->          (__u64)1 << _UFFDIO_ZEROPAGE |         \
->          (__u64)1 << _UFFDIO_WRITEPROTECT |     \
-> -        (__u64)1 << _UFFDIO_CONTINUE)
-> +        (__u64)1 << _UFFDIO_CONTINUE |         \
-> +        (__u64)1 << _UFFDIO_POISON)
->  #define UFFD_API_RANGE_IOCTLS_BASIC            \
->         ((__u64)1 << _UFFDIO_WAKE |             \
->          (__u64)1 << _UFFDIO_COPY |             \
-> +        (__u64)1 << _UFFDIO_WRITEPROTECT |     \
->          (__u64)1 << _UFFDIO_CONTINUE |         \
-> -        (__u64)1 << _UFFDIO_WRITEPROTECT)
-> +        (__u64)1 << _UFFDIO_POISON)
->
->  /*
->   * Valid ioctl command number range with this API is from 0x00 to
-> @@ -71,6 +74,7 @@
->  #define _UFFDIO_ZEROPAGE               (0x04)
->  #define _UFFDIO_WRITEPROTECT           (0x06)
->  #define _UFFDIO_CONTINUE               (0x07)
-> +#define _UFFDIO_POISON                 (0x08)
->  #define _UFFDIO_API                    (0x3F)
->
->  /* userfaultfd ioctl ids */
-> @@ -91,6 +95,8 @@
->                                       struct uffdio_writeprotect)
->  #define UFFDIO_CONTINUE                _IOWR(UFFDIO, _UFFDIO_CONTINUE, \
->                                       struct uffdio_continue)
-> +#define UFFDIO_POISON          _IOWR(UFFDIO, _UFFDIO_POISON, \
-> +                                     struct uffdio_poison)
->
->  /* read() structure */
->  struct uffd_msg {
-> @@ -225,6 +231,7 @@ struct uffdio_api {
->  #define UFFD_FEATURE_EXACT_ADDRESS             (1<<11)
->  #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM                (1<<12)
->  #define UFFD_FEATURE_WP_UNPOPULATED            (1<<13)
-> +#define UFFD_FEATURE_POISON                    (1<<14)
->         __u64 features;
->
->         __u64 ioctls;
-> @@ -321,6 +328,18 @@ struct uffdio_continue {
->         __s64 mapped;
->  };
->
-> +struct uffdio_poison {
-> +       struct uffdio_range range;
-> +#define UFFDIO_POISON_MODE_DONTWAKE            ((__u64)1<<0)
-> +       __u64 mode;
-> +
-> +       /*
-> +        * Fields below here are written by the ioctl and must be at the =
-end:
-> +        * the copy_from_user will not read past here.
-> +        */
-> +       __s64 updated;
-> +};
-> +
->  /*
->   * Flags for the userfaultfd(2) system call itself.
->   */
-> diff --git a/mm/memory.c b/mm/memory.c
-> index d8a9a770b1f1..7fbda39e060d 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3692,6 +3692,10 @@ static vm_fault_t handle_pte_marker(struct vm_faul=
-t *vmf)
->         if (WARN_ON_ONCE(!marker))
->                 return VM_FAULT_SIGBUS;
->
-> +       /* Poison emulation explicitly requested for this PTE. */
-> +       if (marker & PTE_MARKER_UFFD_POISON)
-> +               return VM_FAULT_HWPOISON;
-> +
->         /* Higher priority than uffd-wp when data corrupted */
->         if (marker & PTE_MARKER_SWAPIN_ERROR)
->                 return VM_FAULT_SIGBUS;
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index a2bf37ee276d..87b62ca1e09e 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -286,6 +286,51 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
->         goto out;
->  }
->
-> +/* Handles UFFDIO_POISON for all non-hugetlb VMAs. */
-> +static int mfill_atomic_pte_poison(pmd_t *dst_pmd,
-> +                                  struct vm_area_struct *dst_vma,
-> +                                  unsigned long dst_addr,
-> +                                  uffd_flags_t flags)
-> +{
-> +       int ret;
-> +       struct mm_struct *dst_mm =3D dst_vma->vm_mm;
-> +       pte_t _dst_pte, *dst_pte;
-> +       spinlock_t *ptl;
-> +
-> +       _dst_pte =3D make_pte_marker(PTE_MARKER_UFFD_POISON);
-> +       dst_pte =3D pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
-> +
-> +       if (vma_is_shmem(dst_vma)) {
-> +               struct inode *inode;
-> +               pgoff_t offset, max_off;
-> +
-> +               /* serialize against truncate with the page table lock */
-> +               inode =3D dst_vma->vm_file->f_inode;
-> +               offset =3D linear_page_index(dst_vma, dst_addr);
-> +               max_off =3D DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-> +               ret =3D -EFAULT;
-> +               if (unlikely(offset >=3D max_off))
-> +                       goto out_unlock;
-> +       }
-> +
-> +       ret =3D -EEXIST;
-> +       /*
-> +        * For now, we don't handle unmapping pages, so only support fill=
-ing in
-> +        * none PTEs, or replacing PTE markers.
-> +        */
-> +       if (!pte_none_mostly(*dst_pte))
-> +               goto out_unlock;
-> +
-> +       set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> +
-> +       /* No need to invalidate - it was non-present before */
-> +       update_mmu_cache(dst_vma, dst_addr, dst_pte);
-> +       ret =3D 0;
-> +out_unlock:
-> +       pte_unmap_unlock(dst_pte, ptl);
-> +       return ret;
-> +}
-> +
->  static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
->  {
->         pgd_t *pgd;
-> @@ -336,8 +381,12 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->          * supported by hugetlb.  A PMD_SIZE huge pages may exist as used
->          * by THP.  Since we can not reliably insert a zero page, this
->          * feature is not supported.
-> +        *
-> +        * PTE marker handling for hugetlb is a bit special, so for now
-> +        * UFFDIO_POISON is not supported.
->          */
-> -       if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
-> +       if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE) ||
-> +           uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON)) {
->                 mmap_read_unlock(dst_mm);
->                 return -EINVAL;
->         }
-> @@ -481,6 +530,9 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t=
- *dst_pmd,
->         if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE)) {
->                 return mfill_atomic_pte_continue(dst_pmd, dst_vma,
->                                                  dst_addr, flags);
-> +       } else if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON)) {
-> +               return mfill_atomic_pte_poison(dst_pmd, dst_vma,
-> +                                              dst_addr, flags);
->         }
->
->         /*
-> @@ -702,6 +754,14 @@ ssize_t mfill_atomic_continue(struct mm_struct *dst_=
-mm, unsigned long start,
->                             uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTI=
-NUE));
->  }
->
-> +ssize_t mfill_atomic_poison(struct mm_struct *dst_mm, unsigned long star=
-t,
-> +                           unsigned long len, atomic_t *mmap_changing,
-> +                           uffd_flags_t flags)
-> +{
-> +       return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
-> +                           uffd_flags_set_mode(flags, MFILL_ATOMIC_POISO=
-N));
-> +}
-> +
->  long uffd_wp_range(struct vm_area_struct *dst_vma,
->                    unsigned long start, unsigned long len, bool enable_wp=
-)
->  {
-> --
-> 2.41.0.255.g8b1d071c50-goog
->
+Links:
+    [1]: https://libera.irclog.whitequark.org/linux-amlogic/2023-07-03
+    [2]: https://lore.kernel.org/linux-amlogic/20230704135936.14697-1-ddrokosov@sberdevices.ru/
+
+Dmitry Rokosov (7):
+  tty: serial: meson: use dev_err_probe
+  tty: serial: meson: redesign the module to platform_driver
+  tty: serial: meson: apply ttyS devname instead of ttyAML for new SoCs
+  tty: serial: meson: introduce separate uart_data for S4 SoC family
+  tty: serial: meson: add independent uart_data for A1 SoC family
+  dt-bindings: serial: amlogic,meson-uart: support Amlogic A1
+  arm64: dts: meson: a1: change uart compatible string
+
+ .../bindings/serial/amlogic,meson-uart.yaml   |   2 +
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi     |   4 +-
+ drivers/tty/serial/meson_uart.c               | 145 ++++++++++--------
+ 3 files changed, 88 insertions(+), 63 deletions(-)
+
+-- 
+2.36.0
+
