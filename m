@@ -2,125 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16C0747FB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C43747FB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjGEIbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S232125AbjGEIbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGEIbC (ORCPT
+        with ESMTP id S231989AbjGEIbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:31:02 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC341A2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:31:01 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1qGxuX-0008CU-Mg; Wed, 05 Jul 2023 10:30:53 +0200
-Message-ID: <14cd16df-ef47-05b3-5266-ffff109a8326@pengutronix.de>
-Date:   Wed, 5 Jul 2023 10:30:51 +0200
+        Wed, 5 Jul 2023 04:31:21 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433E0CA;
+        Wed,  5 Jul 2023 01:31:19 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 11D7424E1F2;
+        Wed,  5 Jul 2023 16:31:07 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 16:31:07 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 16:31:06 +0800
+Message-ID: <5e9ef080-085e-9135-a53c-9f9490f08ebe@starfivetech.com>
+Date:   Wed, 5 Jul 2023 16:31:05 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/2] ARM: dts: imx6: pfla02: Fix SD card reboot problem
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 2/3] spi: cadence-quadspi: Add clock configuration for
+ StarFive JH7110 QSPI
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+References: <20230704090453.83980-1-william.qiu@starfivetech.com>
+ <20230704090453.83980-3-william.qiu@starfivetech.com>
+ <808dac44-a72c-4675-1e4a-0ed96190efb4@linaro.org>
+ <90b55926-1d0c-b9c0-3020-5837e2028809@starfivetech.com>
+ <175d03f6-122f-bbd2-5d38-61fe4022c5cd@linaro.org>
 Content-Language: en-US
-To:     Andrej Picej <andrej.picej@norik.com>,
-        Marco Felsch <m.felsch@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, conor+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
-        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, linux-imx@nxp.com, kernel@pengutronix.de,
-        shawnguo@kernel.org, linux-arm-kernel@lists.infradead.org,
-        upstream@phytec.de
-References: <20230704080304.816942-1-andrej.picej@norik.com>
- <20230704080304.816942-3-andrej.picej@norik.com>
- <20230704081712.7dyj2mspj2m25rp7@pengutronix.de>
- <7ed6fde0-37a4-a667-2629-0a6b8a202a69@norik.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <7ed6fde0-37a4-a667-2629-0a6b8a202a69@norik.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <175d03f6-122f-bbd2-5d38-61fe4022c5cd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.07.23 10:28, Andrej Picej wrote:
-> Hi Marco,
-> 
-> On 4. 07. 23 10:17, Marco Felsch wrote:
->> On 23-07-04, Andrej Picej wrote:
->>> If regulator is not marked as always-on the regulator gets disabled on
->>> reboot breaking the next boot.
->>>
->>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
->>> ---
->>>   arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
->>> index 80adb2a02cc9..25d6a036d5b8 100644
->>> --- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
->>> +++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
->>> @@ -192,6 +192,7 @@ vdd_3v3_pmic_io_reg: ldo6 {
->>>               vdd_sd0_reg: ldo9 {
->>>                   regulator-min-microvolt = <3300000>;
->>>                   regulator-max-microvolt = <3300000>;
->>> +                regulator-always-on;
->>
->> I think this is the supply for the sd-card, so you can make use of
->> 'vmmc-supply'.
-> 
-> This is already the case:
-> 
->> &usdhc3 {
->>     pinctrl-names = "default";
->>     pinctrl-0 = <&pinctrl_usdhc3
->>              &pinctrl_usdhc3_cdwp>;
->>     cd-gpios = <&gpio1 27 GPIO_ACTIVE_LOW>;
->>     wp-gpios = <&gpio1 29 GPIO_ACTIVE_HIGH>;
->>     vmmc-supply = <&vdd_sd0_reg>;
->>     status = "disabled";
->> };
-> 
-> I think the main reason for a failed boot is that the PMIC doesn't get reset and that the bootloader doesn't specifically enable the SD card regulator.
-> 
-> Could this patch still be applied or should we put the fix in reset routine/bootloader?
 
-Is SD-Card not main boot medium? From your description, I thought BootROM
-will fail to boot before bootloader has a chance to do anything about it.
 
+On 2023/7/5 15:23, Krzysztof Kozlowski wrote:
+> On 05/07/2023 09:04, William Qiu wrote:
+>> 
+>> 
+>> On 2023/7/5 14:21, Krzysztof Kozlowski wrote:
+>>> On 04/07/2023 11:04, William Qiu wrote:
+>>>> Add QSPI clock operation in device probe.
+>>>>
+>>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>>>> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>> Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@intel.com/
+>>>> Reported-by: Julia Lawall <julia.lawall@inria.fr>
+>>>> Closes: https://lore.kernel.org/r/202306040644.6ZHs55x4-lkp@intel.com/
+>>>
+>>>
+>>>>  
+>>>> @@ -1840,6 +1858,8 @@ static int cqspi_resume(struct device *dev)
+>>>>  	struct spi_master *master = dev_get_drvdata(dev);
+>>>>  
+>>>>  	clk_prepare_enable(cqspi->clk);
+>>>> +	if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
+>>>
+>>> Don't add compatible checks inside the code. It does not scale. We
+>>> expect compatibles to be listed only in one place - of_device_id - and
+>>> customize driver with match data / quirks / flags.
+>>>
+>>> Comment applies to all your diff hunks.
+>>>
+>> I'll use "of_device_get_match_data" to replace it. But the way I added
+>> reset before is also by compatible checks. Should I change this place to 
+>> "of_device_get_match_data" as well?
 > 
+> I don't know what's there, but in general driver should be written in a
+> consistent style.
+>It's in line 1719, inside the "cqspi_probe", but this part of the code is
+already merged in the main line. Should I keep it in a consistent style?
+
+Best regards,
+William
 > Best regards,
-> Andrej
+> Krzysztof
 > 
->>
->> Regards,
->>    Marco
->>
->>>               };
->>>                 vdd_sd1_reg: ldo10 {
->>> -- 
->>> 2.25.1
->>>
->>>
->>>
-> 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
