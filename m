@@ -2,276 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90586748B96
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07290748B4A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbjGESTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 14:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S233329AbjGESPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 14:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233400AbjGESSn (ORCPT
+        with ESMTP id S232650AbjGESPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 14:18:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9BD1728
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688581045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4KAtt5Wg9gvWlallwwTPlSO2JwaIw83isELp5cjnhmg=;
-        b=FiDx++petWFoVlFU4wdVWFNOAZEWd3qrJ4nbsyTuguUgGFpVzqx6Lf4Y+U/+1RyGYDUWZX
-        PSfSZmAfOl+H3L1c9jAQEbK6hsmo0uyS/YFeBvHGUSruThn5ifPkeJHzlqUqqoLKzfWAQU
-        AyARbK+dPRqZtvLyxxvABIq+q+b9PkI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-376-XnGbn6mUOsqBjFOroOxxLg-1; Wed, 05 Jul 2023 14:17:22 -0400
-X-MC-Unique: XnGbn6mUOsqBjFOroOxxLg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48B262808E60;
-        Wed,  5 Jul 2023 18:17:20 +0000 (UTC)
-Received: from vschneid.remote.csb (unknown [10.42.28.164])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7229918EB4;
-        Wed,  5 Jul 2023 18:17:15 +0000 (UTC)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH 14/14] x86/mm, mm/vmalloc: Defer flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
-Date:   Wed,  5 Jul 2023 19:12:56 +0100
-Message-Id: <20230705181256.3539027-15-vschneid@redhat.com>
-In-Reply-To: <20230705181256.3539027-1-vschneid@redhat.com>
-References: <20230705181256.3539027-1-vschneid@redhat.com>
+        Wed, 5 Jul 2023 14:15:04 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0AC173F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:15:03 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-c15a5ed884dso7973043276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 11:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688580902; x=1691172902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mN+8m1ObowZ74/MLZ++4zNOVgKxyk4abeoHHzPL0ezY=;
+        b=4TFMCjMv9iG+yqvy1BZCXvPVHaAAiUMgSlESlQ24abzZb75mpvo4noUD94rWEbxSwN
+         2Dlz8AWTMjrSG4gawG4Uh6ULXX+zF17/kLnPeMF1MCgbYmbB6+zq2cO418wb9Xi7Ffjt
+         vvBykSdfuu+sRbQU5SCWpWrlzrjNPXjxI5avEpX3nxHQGa6Wmh4i0wG2pi4KEdqW1qNS
+         tta+EW2l09KXS+jEIZFzV3NaW7CAg7cSqRBw768qp7KoyC+dUhLwH3L8IHjR9Q4vU0Wh
+         PoK+i/B5EHpcdwlqwH5hK4aAvpfmUemy0RRP54JpB8jaV/4bwUnwBUXTw42Axmxfy0ed
+         Gdiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688580902; x=1691172902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mN+8m1ObowZ74/MLZ++4zNOVgKxyk4abeoHHzPL0ezY=;
+        b=D1t7diYx1XXLJgk+p3Ya+1tb5ZEou7cIJ+VpgLEtWNhGaZOLjLWhm/K7lZQfm4v3wl
+         SwebI5m+2Ay4/8goAXyiOWxD31QGv3pqkE7PyUdMyNgfksw8uVS1mpdZwwNgNqNcDP0C
+         xBr7ltF1m+bwpz3JuFUlrLVINGEv0oKij/crh9khRQr1ldHtcTdOGhsGf31bpIgkr9Oz
+         j47CrEIo92MrIZARIfStNirhdyyHg1SIjKRUDshkxiemNWhSbHoaDSsBTONiTLi3CmNR
+         iipJVOdb77z4xVNSRN0YIO0ILE8sC5yBwj7A7k7DfWL8D63hgItdKEPMxGLhazlLf+Dh
+         GVvA==
+X-Gm-Message-State: ABy/qLalcBV/yea6zfMqWlHuUlSBBoYN6SML077R3kr7Zf9f933AX6jx
+        AmlIpmNIXQUBsiNPoCCwFq0AQ8qIoY5aDUqD2nCfCg==
+X-Google-Smtp-Source: APBJJlEmDjvoEme69I8YCn0M78cljJMU1hQs/lP0iWGg79WAt9uupvyQmLpjOx+Bgg5NHy46qtYnpkRlzLRzoRRjbnU=
+X-Received: by 2002:a25:cfd3:0:b0:c4e:48eb:b8d4 with SMTP id
+ f202-20020a25cfd3000000b00c4e48ebb8d4mr10899950ybg.27.1688580902461; Wed, 05
+ Jul 2023 11:15:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230705171213.2843068-1-surenb@google.com> <20230705171213.2843068-3-surenb@google.com>
+ <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com> <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
+ <e4f64aa8-93f5-e731-5d6f-e37ae373c006@redhat.com> <CAJuCfpGSt-P6NzTDa8HG6tBKac4Y4Rhkiwcz+80x6aTmVCNS1Q@mail.gmail.com>
+In-Reply-To: <CAJuCfpGSt-P6NzTDa8HG6tBKac4Y4Rhkiwcz+80x6aTmVCNS1Q@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 5 Jul 2023 11:14:51 -0700
+Message-ID: <CAJuCfpHdw0rMfuYhAEAp_LC3sMUsBDmaKD_NU9hX8z5TH-CBxw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
+To:     David Hildenbrand <david@redhat.com>
+Cc:     akpm@linux-foundation.org, jirislaby@kernel.org,
+        jacobly.alt@gmail.com, holger@applied-asynchrony.com,
+        hdegoede@redhat.com, michel@lespinasse.org, jglisse@google.com,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vunmap()'s issued from housekeeping CPUs are a relatively common source of
-interference for isolated NOHZ_FULL CPUs, as they are hit by the
-flush_tlb_kernel_range() IPIs.
+On Wed, Jul 5, 2023 at 11:09=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Wed, Jul 5, 2023 at 10:24=E2=80=AFAM David Hildenbrand <david@redhat.c=
+om> wrote:
+> >
+> > On 05.07.23 19:22, Suren Baghdasaryan wrote:
+> > > On Wed, Jul 5, 2023 at 10:16=E2=80=AFAM David Hildenbrand <david@redh=
+at.com> wrote:
+> > >>
+> > >> On 05.07.23 19:12, Suren Baghdasaryan wrote:
+> > >>> A memory corruption was reported in [1] with bisection pointing to =
+the
+> > >>> patch [2] enabling per-VMA locks for x86.
+> > >>> Disable per-VMA locks config to prevent this issue while the proble=
+m is
+> > >>> being investigated. This is expected to be a temporary measure.
+> > >>>
+> > >>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+> > >>> [2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@go=
+ogle.com
+> > >>>
+> > >>> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+> > >>> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3c=
+df51b@kernel.org/
+> > >>> Reported-by: Jacob Young <jacobly.alt@gmail.com>
+> > >>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+> > >>> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handlin=
+g first")
+> > >>> Cc: stable@vger.kernel.org
+> > >>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > >>> ---
+> > >>>    mm/Kconfig | 3 ++-
+> > >>>    1 file changed, 2 insertions(+), 1 deletion(-)
+> > >>>
+> > >>> diff --git a/mm/Kconfig b/mm/Kconfig
+> > >>> index 09130434e30d..0abc6c71dd89 100644
+> > >>> --- a/mm/Kconfig
+> > >>> +++ b/mm/Kconfig
+> > >>> @@ -1224,8 +1224,9 @@ config ARCH_SUPPORTS_PER_VMA_LOCK
+> > >>>           def_bool n
+> > >>>
+> > >>>    config PER_VMA_LOCK
+> > >>> -     def_bool y
+> > >>> +     bool "Enable per-vma locking during page fault handling."
+> > >>>        depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
+> > >>> +     depends on BROKEN
+> > >>>        help
+> > >>>          Allow per-vma locking during page fault handling.
+> > >>>
+> > >> Do we have any testing results (that don't reveal other issues :) ) =
+for
+> > >> patch #1? Not sure if we really want to mark it broken if patch #1 f=
+ixes
+> > >> the issue.
+> > >
+> > > I tested the fix using the only reproducer provided in the reports
+> > > plus kernel compilation and my fork stress test. All looked good and
+> > > stable but I don't know if other reports had the same issue or
+> > > something different.
+> >
+> > Can you point me at the other reports, so I can quickly scan them?
+>
+> by Jacob Young: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+> by Jiri Slaby: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3=
+cdf51b@kernel.org/
 
-Given that CPUs executing in userspace do not access data in the vmalloc
-range, these IPIs could be deferred until their next kernel entry.
+From strace in https://lore.kernel.org/all/f7ad7a42-13c8-a486-d0b7-01d5acf0=
+1e13@kernel.org/
+looks like clone3() was involved, so this seems quite likely to be the
+same issue I think.
 
-This does require a guarantee that nothing in the vmalloc range can be
-accessed in early entry code. vmalloc'd kernel stacks (VMAP_STACK) are
-AFAICT a safe exception, as a task running in userspace needs to enter
-kernelspace to execute do_exit() before its stack can be vfree'd.
-
-XXX: Validation that nothing in the vmalloc range is accessed in .noinstr or
-  somesuch?
-
-Blindly deferring any and all flush of the kernel mappings is a risky move,
-so introduce a variant of flush_tlb_kernel_range() that explicitly allows
-deferral. Use it for vunmap flushes.
-
-Note that while flush_tlb_kernel_range() may end up issuing a full
-flush (including user mappings), this only happens when reaching a
-invalidation range threshold where it is cheaper to do a full flush than to
-individually invalidate each page in the range via INVLPG. IOW, it doesn't
-*require* invalidating user mappings, and thus remains safe to defer until
-a later kernel entry.
-
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- arch/x86/include/asm/tlbflush.h |  1 +
- arch/x86/mm/tlb.c               | 23 ++++++++++++++++++++---
- mm/vmalloc.c                    | 15 ++++++++++-----
- 3 files changed, 31 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 9064aa0027d05..2b3605c09649c 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -255,6 +255,7 @@ extern void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
- 				unsigned long end, unsigned int stride_shift,
- 				bool freed_tables);
- extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
-+extern void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end);
- 
- static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
- {
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 631df9189ded4..bb18b35e61b4a 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -10,6 +10,7 @@
- #include <linux/debugfs.h>
- #include <linux/sched/smt.h>
- #include <linux/task_work.h>
-+#include <linux/context_tracking.h>
- 
- #include <asm/tlbflush.h>
- #include <asm/mmu_context.h>
-@@ -1045,6 +1046,11 @@ static void do_flush_tlb_all(void *info)
- 	__flush_tlb_all();
- }
- 
-+static bool do_kernel_flush_defer_cond(int cpu, void *info)
-+{
-+	return !ct_set_cpu_work(cpu, CONTEXT_WORK_TLBI);
-+}
-+
- void flush_tlb_all(void)
- {
- 	count_vm_tlb_event(NR_TLB_REMOTE_FLUSH);
-@@ -1061,12 +1067,13 @@ static void do_kernel_range_flush(void *info)
- 		flush_tlb_one_kernel(addr);
- }
- 
--void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-+static inline void
-+__flush_tlb_kernel_range(smp_cond_func_t cond_func, unsigned long start, unsigned long end)
- {
- 	/* Balance as user space task's flush, a bit conservative */
- 	if (end == TLB_FLUSH_ALL ||
- 	    (end - start) > tlb_single_page_flush_ceiling << PAGE_SHIFT) {
--		on_each_cpu(do_flush_tlb_all, NULL, 1);
-+		on_each_cpu_cond(cond_func, do_flush_tlb_all, NULL, 1);
- 	} else {
- 		struct flush_tlb_info *info;
- 
-@@ -1074,13 +1081,23 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
- 		info = get_flush_tlb_info(NULL, start, end, 0, false,
- 					  TLB_GENERATION_INVALID);
- 
--		on_each_cpu(do_kernel_range_flush, info, 1);
-+		on_each_cpu_cond(cond_func, do_kernel_range_flush, info, 1);
- 
- 		put_flush_tlb_info();
- 		preempt_enable();
- 	}
- }
- 
-+void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-+{
-+	__flush_tlb_kernel_range(NULL, start, end);
-+}
-+
-+void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end)
-+{
-+	__flush_tlb_kernel_range(do_kernel_flush_defer_cond, start, end);
-+}
-+
- /*
-  * This can be used from process context to figure out what the value of
-  * CR3 is without needing to do a (slow) __read_cr3().
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 1d13d71687d73..10f99224e12e0 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -439,6 +439,11 @@ void vunmap_range_noflush(unsigned long start, unsigned long end)
- 	__vunmap_range_noflush(start, end);
- }
- 
-+#ifndef flush_tlb_kernel_range_deferrable
-+#define flush_tlb_kernel_range_deferrable(start, end) \
-+	flush_tlb_kernel_range(start, end)
-+#endif
-+
- /**
-  * vunmap_range - unmap kernel virtual addresses
-  * @addr: start of the VM area to unmap
-@@ -452,7 +457,7 @@ void vunmap_range(unsigned long addr, unsigned long end)
- {
- 	flush_cache_vunmap(addr, end);
- 	vunmap_range_noflush(addr, end);
--	flush_tlb_kernel_range(addr, end);
-+	flush_tlb_kernel_range_deferrable(addr, end);
- }
- 
- static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
-@@ -1747,7 +1752,7 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
- 		list_last_entry(&local_purge_list,
- 			struct vmap_area, list)->va_end);
- 
--	flush_tlb_kernel_range(start, end);
-+	flush_tlb_kernel_range_deferrable(start, end);
- 	resched_threshold = lazy_max_pages() << 1;
- 
- 	spin_lock(&free_vmap_area_lock);
-@@ -1849,7 +1854,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
- 	flush_cache_vunmap(va->va_start, va->va_end);
- 	vunmap_range_noflush(va->va_start, va->va_end);
- 	if (debug_pagealloc_enabled_static())
--		flush_tlb_kernel_range(va->va_start, va->va_end);
-+		flush_tlb_kernel_range_deferrable(va->va_start, va->va_end);
- 
- 	free_vmap_area_noflush(va);
- }
-@@ -2207,7 +2212,7 @@ static void vb_free(unsigned long addr, unsigned long size)
- 	vunmap_range_noflush(addr, addr + size);
- 
- 	if (debug_pagealloc_enabled_static())
--		flush_tlb_kernel_range(addr, addr + size);
-+		flush_tlb_kernel_range_deferrable(addr, addr + size);
- 
- 	spin_lock(&vb->lock);
- 
-@@ -2260,7 +2265,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
- 	mutex_lock(&vmap_purge_lock);
- 	purge_fragmented_blocks_allcpus();
- 	if (!__purge_vmap_area_lazy(start, end) && flush)
--		flush_tlb_kernel_range(start, end);
-+		flush_tlb_kernel_range_deferrable(start, end);
- 	mutex_unlock(&vmap_purge_lock);
- }
- 
--- 
-2.31.1
-
+> by Holger Hoffst=C3=A4tte:
+> https://lore.kernel.org/all/b198d649-f4bf-b971-31d0-e8433ec2a34c@applied-=
+asynchrony.com/
+> only saying that Firefox started crashing after upgrading to 6.4.1
+>
+> >
+> > --
+> > Cheers,
+> >
+> > David / dhildenb
+> >
