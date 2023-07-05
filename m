@@ -2,495 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0DC747AF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 03:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4987A747AF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 03:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjGEBW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 21:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S229696AbjGEBXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 21:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGEBW1 (ORCPT
+        with ESMTP id S229469AbjGEBXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 21:22:27 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCC3410CF;
-        Tue,  4 Jul 2023 18:22:21 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxNvHMxaRkUy0AAA--.1021S3;
-        Wed, 05 Jul 2023 09:22:20 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxniO1xaRktcgbAA--.44376S3;
-        Wed, 05 Jul 2023 09:21:58 +0800 (CST)
-Message-ID: <02a6f36c-521f-4ff0-a0bf-1f8781c853e3@loongson.cn>
-Date:   Wed, 5 Jul 2023 09:21:07 +0800
+        Tue, 4 Jul 2023 21:23:48 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D729310EA
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 18:23:46 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-4036bd4fff1so369931cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 18:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688520226; x=1691112226;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DGyaiEDlH5+qf+loyv/rZwlYAmAsv+G0CG8spxUkzDQ=;
+        b=uqNrqz6Vv2wjZCol0sjq+mWtVDbfqXml4SA1b4Itt5Ta6cQ8q0tAnkBPb7Y9L3pyFn
+         SlFijflhkZQ9ZER2c8p3pk3GtGkr8oEqVzYvqH//TmGW3wXGJCvMFkCLRcndoZyoUTr8
+         IN7FlqeYM0v7FuwXuh5WGBTfg3nKpGvfQ66xVIdp6e5NjDhnd1LKL48/LhAbrGZf8XKE
+         T63skeDPUB/fXrwAtBHssqGnfiAJpxDb4Exsgpdi4vQYVJriEA8r4KUqPL6wSx3pqFBm
+         h3SOTtsYnqxEEZHQ2cdy78N6Fws5E0j6Tbit3ERhw7v70qrSSFachbbYQYMHWR2IY+3A
+         5A2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688520226; x=1691112226;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DGyaiEDlH5+qf+loyv/rZwlYAmAsv+G0CG8spxUkzDQ=;
+        b=hKEdYjgdpcESQR5cY9qoSDVYGjDXYdtWchAl1ZFZP/bM2kN19C+EViiWKhjtCnFABY
+         q91Erlu+kNzH+WnXWnu/Sm+phgQV7zPmT+XH/0AOBfYVb2PSwTWrxADkPRTvjhPWR1mB
+         mj1R525o6V0bLnee7hk9bPr4IsDXqCcRw1HxsKvZN19HqbYzHRo3pLhg4S5iVq0HGVCs
+         WGUuDg+Z1eF8S5FHfqCDhrtId75Kkf9hPzTCLKPYDDG7INIRaJS75sw27mZMumBT+N6w
+         txYcmNZxhoXVf9YHsvObA5fjHmSKIZe92DrxZUg/DPcN7lXD9JefYrySb8j9VEjA5XAP
+         5MQg==
+X-Gm-Message-State: ABy/qLZgonvTZ9Fr1+efH3bqbHOx7nMjqKYGxnTYvTxUA+Ijj+DzIYtz
+        fkuSSOm4115pzWeIaN9TjW/coJnZUpO2p9utP5ukvw==
+X-Google-Smtp-Source: APBJJlGS78CxeK7LA351EB5LlgyG8jCyzMm0kHKbXF8qhmD/ps/zRVZKSlybWZXu7XrOr3nB/KH+BbW3XCpYEtlFswU=
+X-Received: by 2002:a05:622a:1310:b0:3f8:175a:4970 with SMTP id
+ v16-20020a05622a131000b003f8175a4970mr29582qtk.18.1688520225804; Tue, 04 Jul
+ 2023 18:23:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [06/12] arch: Declare screen_info in <asm/screen_info.h>
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
-Cc:     linux-hyperv@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-ia64@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-sh@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Rich Felker <dalias@libc.org>, Guo Ren <guoren@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
+References: <20230703135330.1865927-1-ryan.roberts@arm.com>
+ <20230703135330.1865927-4-ryan.roberts@arm.com> <ac6802f6-01a2-6b39-38c7-2fe3cea75dde@intel.com>
+ <CAOUHufbmv0pZ1h9AxBj-SD7OqRZYudHMtXzQxcwD4ky-sFd8kg@mail.gmail.com>
+ <CAOUHufbpCU_Z7g1QPJ0+HzE9sdNpSh=Mzi0EByLPu5TE4S_UcQ@mail.gmail.com> <6d389825-1fc0-5c16-7858-2290fd632682@arm.com>
+In-Reply-To: <6d389825-1fc0-5c16-7858-2290fd632682@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 4 Jul 2023 19:23:09 -0600
+Message-ID: <CAOUHufZY-zN8jjQz+iMzwmqMb2VCh7=N+YxfXobgF7i1zUmTNA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] mm: Default implementation of arch_wants_pte_order()
+To:     Ryan Roberts <ryan.roberts@arm.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-hexagon@vger.kernel.org, linux-staging@lists.linux.dev,
-        Russell King <linux@armlinux.org.uk>,
-        linux-csky@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        loongarch@lists.linux.dev,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Zi Yan <ziy@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Brian Cain <bcain@quicinc.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-kernel@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        linux-alpha@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>, x86@kernel.org
-References: <20230629121952.10559-7-tzimmermann@suse.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <20230629121952.10559-7-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxniO1xaRktcgbAA--.44376S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9fXoWfGFWfXw4kAw4UGw48Xw4fJFc_yoW8XF1rJo
-        WUK3Wjvr4rArW0gr4fGrn5GFW5Jryjkrs5ZFWIgwnrXF1ayF45tay5Ka4jy3y3try8Krn8
-        GFWa9FZxJay8Grn5l-sFpf9Il3svdjkaLaAFLSUrUUUUvb8apTn2vfkv8UJUUUU8wcxFpf
-        9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-        UjIYCTnIWjp_UUUOf7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI
-        8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-        Y2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-        v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr0_Gr1UM2kKe7AKxVWrXVW3AwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
-        XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwACI402YVCY1x026xAvFcxGjxylc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AK
-        xVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267
-        AKxVWrXVW3AwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar
-        1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
-        JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x07bU73kUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: multipart/mixed; boundary="00000000000041d5db05ffb340fc"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
+--00000000000041d5db05ffb340fc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-I love your patch, yet after applied your patch, the linux kernel fail 
-to compile on my LoongArch machine.
-
-
-```
-
-   CC      arch/loongarch/kernel/efi.o
-arch/loongarch/kernel/efi.c: In function ‘init_screen_info’:
-arch/loongarch/kernel/efi.c:77:54: error: invalid application of 
-‘sizeof’ to incomplete type ‘struct screen_info’
-    77 |         si = early_memremap(screen_info_table, sizeof(*si));
-       |                                                      ^
-arch/loongarch/kernel/efi.c:82:9: error: ‘screen_info’ undeclared (first 
-use in this function)
-    82 |         screen_info = *si;
-       |         ^~~~~~~~~~~
-arch/loongarch/kernel/efi.c:82:9: note: each undeclared identifier is 
-reported only once for each function it appears in
-arch/loongarch/kernel/efi.c:82:23: error: invalid use of undefined type 
-‘struct screen_info’
-    82 |         screen_info = *si;
-       |                       ^
-arch/loongarch/kernel/efi.c:83:29: error: invalid application of 
-‘sizeof’ to incomplete type ‘struct screen_info’
-    83 |         memset(si, 0, sizeof(*si));
-       |                             ^
-arch/loongarch/kernel/efi.c:84:34: error: invalid application of 
-‘sizeof’ to incomplete type ‘struct screen_info’
-    84 |         early_memunmap(si, sizeof(*si));
-       |                                  ^
-make[3]: *** [scripts/Makefile.build:252: arch/loongarch/kernel/efi.o] 
-Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [scripts/Makefile.build:494: arch/loongarch/kernel] Error 2
-make[1]: *** [scripts/Makefile.build:494: arch/loongarch] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:2026: .] Error 2
-
-```
-
-On 2023/6/29 19:45, Thomas Zimmermann wrote:
-> The variable screen_info does not exist on all architectures. Declare
-> it in <asm-generic/screen_info.h>. All architectures that do declare it
-> will provide it via <asm/screen_info.h>.
+On Tue, Jul 4, 2023 at 6:36=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com> =
+wrote:
 >
-> Add the Kconfig token ARCH_HAS_SCREEN_INFO to guard against access on
-> architectures that don't provide screen_info.
+> On 04/07/2023 04:59, Yu Zhao wrote:
+> > On Mon, Jul 3, 2023 at 9:02=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrot=
+e:
+> >>
+> >> On Mon, Jul 3, 2023 at 8:23=E2=80=AFPM Yin, Fengwei <fengwei.yin@intel=
+.com> wrote:
+> >>>
+> >>>
+> >>>
+> >>> On 7/3/2023 9:53 PM, Ryan Roberts wrote:
+> >>>> arch_wants_pte_order() can be overridden by the arch to return the
+> >>>> preferred folio order for pte-mapped memory. This is useful as some
+> >>>> architectures (e.g. arm64) can coalesce TLB entries when the physica=
+l
+> >>>> memory is suitably contiguous.
+> >>>>
+> >>>> The first user for this hint will be FLEXIBLE_THP, which aims to
+> >>>> allocate large folios for anonymous memory to reduce page faults and
+> >>>> other per-page operation costs.
+> >>>>
+> >>>> Here we add the default implementation of the function, used when th=
+e
+> >>>> architecture does not define it, which returns the order correspondi=
+ng
+> >>>> to 64K.
+> >>>>
+> >>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> >>>> ---
+> >>>>  include/linux/pgtable.h | 13 +++++++++++++
+> >>>>  1 file changed, 13 insertions(+)
+> >>>>
+> >>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> >>>> index a661a17173fa..f7e38598f20b 100644
+> >>>> --- a/include/linux/pgtable.h
+> >>>> +++ b/include/linux/pgtable.h
+> >>>> @@ -13,6 +13,7 @@
+> >>>>  #include <linux/errno.h>
+> >>>>  #include <asm-generic/pgtable_uffd.h>
+> >>>>  #include <linux/page_table_check.h>
+> >>>> +#include <linux/sizes.h>
+> >>>>
+> >>>>  #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_F=
+OLDED) - \
+> >>>>       defined(__PAGETABLE_PMD_FOLDED) !=3D CONFIG_PGTABLE_LEVELS
+> >>>> @@ -336,6 +337,18 @@ static inline bool arch_has_hw_pte_young(void)
+> >>>>  }
+> >>>>  #endif
+> >>>>
+> >>>> +#ifndef arch_wants_pte_order
+> >>>> +/*
+> >>>> + * Returns preferred folio order for pte-mapped memory. Must be in =
+range [0,
+> >>>> + * PMD_SHIFT-PAGE_SHIFT) and must not be order-1 since THP requires=
+ large folios
+> >>>> + * to be at least order-2.
+> >>>> + */
+> >>>> +static inline int arch_wants_pte_order(struct vm_area_struct *vma)
+> >>>> +{
+> >>>> +     return ilog2(SZ_64K >> PAGE_SHIFT);
+> >>> Default value which is not related with any silicon may be: PAGE_ALLO=
+C_COSTLY_ORDER?
+> >>>
+> >>> Also, current pcp list support cache page with order 0...PAGE_ALLOC_C=
+OSTLY_ORDER, 9.
+> >>> If the pcp could cover the page, the pressure to zone lock will be re=
+duced by pcp.
+> >>
+> >> The value of PAGE_ALLOC_COSTLY_ORDER is reasonable but again it's a
+> >> s/w policy not a h/w preference. Besides, I don't think we can include
+> >> mmzone.h in pgtable.h.
+> >
+> > I think we can make a compromise:
+> > 1. change the default implementation of arch_has_hw_pte_young() to retu=
+rn 0, and
+> > 2. in memory.c, we can try PAGE_ALLOC_COSTLY_ORDER for archs that
+> > don't override arch_has_hw_pte_young(), or if its return value is too
+> > large to fit.
+> > This should also take care of the regression, right?
 >
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Richard Henderson <richard.henderson@linaro.org>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Brian Cain <bcain@quicinc.com>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: WANG Xuerui <kernel@xen0n.name>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Juerg Haefliger <juerg.haefliger@canonical.com>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-> Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Acked-by: WANG Xuerui <git@xen0n.name> # loongarch
-> ---
->   arch/Kconfig                      |  6 ++++++
->   arch/alpha/Kconfig                |  1 +
->   arch/arm/Kconfig                  |  1 +
->   arch/arm64/Kconfig                |  1 +
->   arch/csky/Kconfig                 |  1 +
->   arch/hexagon/Kconfig              |  1 +
->   arch/ia64/Kconfig                 |  1 +
->   arch/loongarch/Kconfig            |  1 +
->   arch/mips/Kconfig                 |  1 +
->   arch/nios2/Kconfig                |  1 +
->   arch/powerpc/Kconfig              |  1 +
->   arch/riscv/Kconfig                |  1 +
->   arch/sh/Kconfig                   |  1 +
->   arch/sparc/Kconfig                |  1 +
->   arch/x86/Kconfig                  |  1 +
->   arch/xtensa/Kconfig               |  1 +
->   drivers/video/Kconfig             |  3 +++
->   include/asm-generic/Kbuild        |  1 +
->   include/asm-generic/screen_info.h | 12 ++++++++++++
->   include/linux/screen_info.h       |  2 +-
->   20 files changed, 38 insertions(+), 1 deletion(-)
->   create mode 100644 include/asm-generic/screen_info.h
+> I think you are suggesting that we use 0 as a sentinel which we then tran=
+slate
+> to PAGE_ALLOC_COSTLY_ORDER? I already have a max_anon_folio_order() funct=
+ion in
+> memory.c (actually it is currently a macro defined as arch_wants_pte_orde=
+r()).
 >
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 205fd23e0cada..2f58293fd7bcb 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -1466,6 +1466,12 @@ config ARCH_HAS_NONLEAF_PMD_YOUNG
->   	  address translations. Page table walkers that clear the accessed bit
->   	  may use this capability to reduce their search space.
->   
-> +config ARCH_HAS_SCREEN_INFO
-> +	bool
-> +	help
-> +	  Selected by architectures that provide a global instance of
-> +	  screen_info.
-> +
->   source "kernel/gcov/Kconfig"
->   
->   source "scripts/gcc-plugins/Kconfig"
-> diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-> index a5c2b1aa46b02..d749011d88b14 100644
-> --- a/arch/alpha/Kconfig
-> +++ b/arch/alpha/Kconfig
-> @@ -4,6 +4,7 @@ config ALPHA
->   	default y
->   	select ARCH_32BIT_USTAT_F_TINODE
->   	select ARCH_HAS_CURRENT_STACK_POINTER
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_MIGHT_HAVE_PC_PARPORT
->   	select ARCH_MIGHT_HAVE_PC_SERIO
->   	select ARCH_NO_PREEMPT
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 0fb4b218f6658..a9d01ee67a90e 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -15,6 +15,7 @@ config ARM
->   	select ARCH_HAS_MEMBARRIER_SYNC_CORE
->   	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->   	select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SETUP_DMA_OPS
->   	select ARCH_HAS_SET_MEMORY
->   	select ARCH_STACKWALK
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 343e1e1cae10a..21addc4715bb3 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -36,6 +36,7 @@ config ARM64
->   	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->   	select ARCH_HAS_PTE_DEVMAP
->   	select ARCH_HAS_PTE_SPECIAL
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SETUP_DMA_OPS
->   	select ARCH_HAS_SET_DIRECT_MAP
->   	select ARCH_HAS_SET_MEMORY
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 4df1f8c9d170b..28444e581fc1f 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -10,6 +10,7 @@ config CSKY
->   	select ARCH_USE_QUEUED_RWLOCKS
->   	select ARCH_USE_QUEUED_SPINLOCKS
->   	select ARCH_HAS_CURRENT_STACK_POINTER
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
->   	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
->   	select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
-> diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
-> index 54eadf2651786..cc683c0a43d34 100644
-> --- a/arch/hexagon/Kconfig
-> +++ b/arch/hexagon/Kconfig
-> @@ -5,6 +5,7 @@ comment "Linux Kernel Configuration for Hexagon"
->   config HEXAGON
->   	def_bool y
->   	select ARCH_32BIT_OFF_T
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->   	select ARCH_NO_PREEMPT
->   	select DMA_GLOBAL_POOL
-> diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-> index e79f15e32a451..8b1e785e6d53d 100644
-> --- a/arch/ia64/Kconfig
-> +++ b/arch/ia64/Kconfig
-> @@ -10,6 +10,7 @@ config IA64
->   	bool
->   	select ARCH_BINFMT_ELF_EXTRA_PHDRS
->   	select ARCH_HAS_DMA_MARK_CLEAN
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_STRNCPY_FROM_USER
->   	select ARCH_HAS_STRNLEN_USER
->   	select ARCH_MIGHT_HAVE_PC_PARPORT
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index d38b066fc931b..6aab2fb7753da 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -13,6 +13,7 @@ config LOONGARCH
->   	select ARCH_HAS_FORTIFY_SOURCE
->   	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
->   	select ARCH_HAS_PTE_SPECIAL
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
->   	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 675a8660cb85a..c0ae09789cb6d 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -10,6 +10,7 @@ config MIPS
->   	select ARCH_HAS_KCOV
->   	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
->   	select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_STRNCPY_FROM_USER
->   	select ARCH_HAS_STRNLEN_USER
->   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
-> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-> index e5936417d3cd3..7183eea282212 100644
-> --- a/arch/nios2/Kconfig
-> +++ b/arch/nios2/Kconfig
-> @@ -3,6 +3,7 @@ config NIOS2
->   	def_bool y
->   	select ARCH_32BIT_OFF_T
->   	select ARCH_HAS_DMA_PREP_COHERENT
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SYNC_DMA_FOR_CPU
->   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->   	select ARCH_HAS_DMA_SET_UNCACHED
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index bff5820b7cda1..b1acad3076180 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -148,6 +148,7 @@ config PPC
->   	select ARCH_HAS_PTE_DEVMAP		if PPC_BOOK3S_64
->   	select ARCH_HAS_PTE_SPECIAL
->   	select ARCH_HAS_SCALED_CPUTIME		if VIRT_CPU_ACCOUNTING_NATIVE && PPC_BOOK3S_64
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SET_MEMORY
->   	select ARCH_HAS_STRICT_KERNEL_RWX	if (PPC_BOOK3S || PPC_8xx || 40x) && !HIBERNATION
->   	select ARCH_HAS_STRICT_KERNEL_RWX	if PPC_85xx && !HIBERNATION && !RANDOMIZE_BASE
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 5966ad97c30c3..b5a48f8424af9 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -29,6 +29,7 @@ config RISCV
->   	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->   	select ARCH_HAS_PMEM_API
->   	select ARCH_HAS_PTE_SPECIAL
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SET_DIRECT_MAP if MMU
->   	select ARCH_HAS_SET_MEMORY if MMU
->   	select ARCH_HAS_STRICT_KERNEL_RWX if MMU && !XIP_KERNEL
-> diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-> index 04b9550cf0070..001f5149952b4 100644
-> --- a/arch/sh/Kconfig
-> +++ b/arch/sh/Kconfig
-> @@ -10,6 +10,7 @@ config SUPERH
->   	select ARCH_HAS_GIGANTIC_PAGE
->   	select ARCH_HAS_GCOV_PROFILE_ALL
->   	select ARCH_HAS_PTE_SPECIAL
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->   	select ARCH_HIBERNATION_POSSIBLE if MMU
->   	select ARCH_MIGHT_HAVE_PC_PARPORT
-> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-> index 8535e19062f65..e4bfb80b48cfe 100644
-> --- a/arch/sparc/Kconfig
-> +++ b/arch/sparc/Kconfig
-> @@ -13,6 +13,7 @@ config 64BIT
->   config SPARC
->   	bool
->   	default y
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
->   	select ARCH_MIGHT_HAVE_PC_SERIO
->   	select DMA_OPS
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 53bab123a8ee4..d7c2bf4ee403d 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -91,6 +91,7 @@ config X86
->   	select ARCH_HAS_NONLEAF_PMD_YOUNG	if PGTABLE_LEVELS > 2
->   	select ARCH_HAS_UACCESS_FLUSHCACHE	if X86_64
->   	select ARCH_HAS_COPY_MC			if X86_64
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SET_MEMORY
->   	select ARCH_HAS_SET_DIRECT_MAP
->   	select ARCH_HAS_STRICT_KERNEL_RWX
-> diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-> index 3c6e5471f025b..c6cbd7459939c 100644
-> --- a/arch/xtensa/Kconfig
-> +++ b/arch/xtensa/Kconfig
-> @@ -8,6 +8,7 @@ config XTENSA
->   	select ARCH_HAS_DMA_PREP_COHERENT if MMU
->   	select ARCH_HAS_GCOV_PROFILE_ALL
->   	select ARCH_HAS_KCOV
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_SYNC_DMA_FOR_CPU if MMU
->   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if MMU
->   	select ARCH_HAS_DMA_SET_UNCACHED if MMU
-> diff --git a/drivers/video/Kconfig b/drivers/video/Kconfig
-> index 8b2b9ac37c3df..d4a72bea56be0 100644
-> --- a/drivers/video/Kconfig
-> +++ b/drivers/video/Kconfig
-> @@ -21,6 +21,9 @@ config STI_CORE
->   config VIDEO_CMDLINE
->   	bool
->   
-> +config ARCH_HAS_SCREEN_INFO
-> +	bool
-> +
->   config VIDEO_NOMODESET
->   	bool
->   	default n
-> diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-> index 941be574bbe00..5e5d4158a4b4b 100644
-> --- a/include/asm-generic/Kbuild
-> +++ b/include/asm-generic/Kbuild
-> @@ -47,6 +47,7 @@ mandatory-y += percpu.h
->   mandatory-y += pgalloc.h
->   mandatory-y += preempt.h
->   mandatory-y += rwonce.h
-> +mandatory-y += screen_info.h
->   mandatory-y += sections.h
->   mandatory-y += serial.h
->   mandatory-y += shmparam.h
-> diff --git a/include/asm-generic/screen_info.h b/include/asm-generic/screen_info.h
-> new file mode 100644
-> index 0000000000000..6fd0e50fabfcd
-> --- /dev/null
-> +++ b/include/asm-generic/screen_info.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _ASM_GENERIC_SCREEN_INFO_H
-> +#define _ASM_GENERIC_SCREEN_INFO_H
-> +
-> +#include <uapi/linux/screen_info.h>
-> +
-> +#if defined(CONFIG_ARCH_HAS_SCREEN_INFO)
-> +extern struct screen_info screen_info;
-> +#endif
-> +
-> +#endif /* _ASM_GENERIC_SCREEN_INFO_H */
-> diff --git a/include/linux/screen_info.h b/include/linux/screen_info.h
-> index eab7081392d50..c764b9a51c24b 100644
-> --- a/include/linux/screen_info.h
-> +++ b/include/linux/screen_info.h
-> @@ -4,6 +4,6 @@
->   
->   #include <uapi/linux/screen_info.h>
->   
-> -extern struct screen_info screen_info;
-> +#include <asm/screen_info.h>
->   
->   #endif /* _SCREEN_INFO_H */
+> So it would become (I'll talk about the vma concern separately in the thr=
+ead
+> where you raised it):
+>
+> static inline int max_anon_folio_order(struct vm_area_struct *vma)
+> {
+>         int order =3D arch_wants_pte_order(vma);
+>
+>         return order ? order : PAGE_ALLOC_COSTLY_ORDER;
+> }
+>
+> Correct?
+>
+> I don't see how it fixes the regression (assume you're talking about
+> Speedometer) though? On arm64 arch_wants_pte_order() will still be return=
+ing
+> order-4.
 
+Here is what I was actually suggesting -- I think the problem was
+because contpte is a bit too large for that benchmark and for the page
+allocator too, unfortunately. The following allows one retry (32KB)
+before fallback to order 0 when using contpte (64KB). There is no
+retry for HPA (16KB) and other archs.
+
++       int preferred =3D arch_wants_pte_order(vma) ? : PAGE_ALLOC_COSTLY_O=
+RDER;
++       int orders[] =3D {
++               preferred,
++               preferred > PAGE_ALLOC_COSTLY_ORDER ?
+PAGE_ALLOC_COSTLY_ORDER : 0,
++               0,
++       };
+
+I'm attaching a patch which fills in the two helpers I left empty here [1].
+
+Would the above work for Intel, Fengwei?
+
+(AMD wouldn't need to override arch_wants_pte_order() since PTE
+coalescing on Zen is also PAGE_ALLOC_COSTLY_ORDER.)
+
+[1] https://lore.kernel.org/linux-mm/CAOUHufaK82K8Sa35T7z3=3Dgkm4GB0cWD3aqe=
+ZF6mYx82v7cOTeA@mail.gmail.com/2-anon_folios.patch
+
+--00000000000041d5db05ffb340fc
+Content-Type: application/octet-stream; name="fallback.patch"
+Content-Disposition: attachment; filename="fallback.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ljp18mlu0>
+X-Attachment-Id: f_ljp18mlu0
+
+ZGlmZiAtLWdpdCBhL21tL21lbW9yeS5jIGIvbW0vbWVtb3J5LmMKaW5kZXggZjY5ZmJjMjUxMTk4
+Li5jMTljYmJhNjBkMDQgMTAwNjQ0Ci0tLSBhL21tL21lbW9yeS5jCisrKyBiL21tL21lbW9yeS5j
+CkBAIC00MDIzLDYgKzQwMjMsNzUgQEAgdm1fZmF1bHRfdCBkb19zd2FwX3BhZ2Uoc3RydWN0IHZt
+X2ZhdWx0ICp2bWYpCiAJcmV0dXJuIHJldDsKIH0KIAorc3RhdGljIGJvb2wgdm1mX3B0ZV9yYW5n
+ZV9jaGFuZ2VkKHN0cnVjdCB2bV9mYXVsdCAqdm1mLCBpbnQgbnJfcGFnZXMpCit7CisJaW50IGk7
+CisKKwlpZiAobnJfcGFnZXMgPT0gMSkKKwkJcmV0dXJuIHZtZl9wdGVfY2hhbmdlZCh2bWYpOwor
+CisJZm9yIChpID0gMDsgaSA8IG5yX3BhZ2VzOyBpKyspIHsKKwkJaWYgKCFwdGVfbm9uZShwdGVw
+X2dldF9sb2NrbGVzcyh2bWYtPnB0ZSArIGkpKSkKKwkJCXJldHVybiB0cnVlOworCX0KKworCXJl
+dHVybiBmYWxzZTsKK30KKworI2lmZGVmIENPTkZJR19GTEVYSUJMRV9USFAKK3N0YXRpYyBzdHJ1
+Y3QgZm9saW8gKmFsbG9jX2Fub25fZm9saW8oc3RydWN0IHZtX2ZhdWx0ICp2bWYpCit7CisJaW50
+IGk7CisJdW5zaWduZWQgbG9uZyBhZGRyOworCXN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hID0g
+dm1mLT52bWE7CisJaW50IHByZWZlcnJlZCA9IGFyY2hfd2FudHNfcHRlX29yZGVyKHZtYSkgPyA6
+IFBBR0VfQUxMT0NfQ09TVExZX09SREVSOworCWludCBvcmRlcnNbXSA9IHsKKwkJcHJlZmVycmVk
+LAorCQlwcmVmZXJyZWQgPiBQQUdFX0FMTE9DX0NPU1RMWV9PUkRFUiA/IFBBR0VfQUxMT0NfQ09T
+VExZX09SREVSIDogMCwKKwkJMCwKKwl9OworCisJaWYgKHZtZl9vcmlnX3B0ZV91ZmZkX3dwKHZt
+ZikpCisJCWdvdG8gZmFsbGJhY2s7CisKKwlmb3IgKGkgPSAwOyBvcmRlcnNbaV07IGkrKykgewor
+CQlhZGRyID0gQUxJR05fRE9XTih2bWYtPmFkZHJlc3MsIFBBR0VfU0laRSA8PCBvcmRlcnNbaV0p
+OworCQlpZiAoYWRkciA+PSB2bWEtPnZtX3N0YXJ0ICYmIGFkZHIgKyAoUEFHRV9TSVpFIDw8IG9y
+ZGVyc1tpXSkgPD0gdm1hLT52bV9lbmQpCisJCQlicmVhazsKKwl9CisKKwlpZiAoIW9yZGVyc1tp
+XSkKKwkJZ290byBmYWxsYmFjazsKKworCXZtZi0+cHRlID0gcHRlX29mZnNldF9tYXAodm1mLT5w
+bWQsIGFkZHIpOworCisJZm9yICg7IG9yZGVyc1tpXTsgaSsrKSB7CisJCWlmICghdm1mX3B0ZV9y
+YW5nZV9jaGFuZ2VkKHZtZiwgMSA8PCBvcmRlcnNbaV0pKQorCQkJYnJlYWs7CisJfQorCisJcHRl
+X3VubWFwKHZtZi0+cHRlKTsKKwl2bWYtPnB0ZSA9IE5VTEw7CisKKwlmb3IgKDsgb3JkZXJzW2ld
+OyBpKyspIHsKKwkJc3RydWN0IGZvbGlvICpmb2xpbworCQlnZnBfdCBnZnAgPSB2bWFfdGhwX2dm
+cF9tYXNrKHZtYSk7CisKKwkJYWRkciA9IEFMSUdOX0RPV04odm1mLT5hZGRyZXNzLCBQQUdFX1NJ
+WkUgPDwgb3JkZXJzW2ldKTsKKwkJZm9saW8gPSB2bWFfYWxsb2NfZm9saW8oZ2ZwLCBvcmRlcnNb
+aV0sIHZtYSwgYWRkciwgdHJ1ZSk7CisJCWlmIChmb2xpbykgeworCQkJY2xlYXJfaHVnZV9wYWdl
+KCZmb2xpby0+cGFnZSwgYWRkciwgMSA8PCBvcmRlcnNbaV0pOworCQkJdm1mLT5hZGRyZXNzID0g
+YWRkcjsKKwkJCXJldHVybiBmb2xpbzsKKwkJfQorCX0KK2ZhbGxiYWNrOgorCXJldHVybiB2bWFf
+YWxsb2NfemVyb2VkX21vdmFibGVfZm9saW8odm1hLCB2bWYtPmFkZHJlc3MpOworfQorI2Vsc2UK
+KyNkZWZpbmUgYWxsb2NfYW5vbl9mb2xpbyh2bWYpIHZtYV9hbGxvY196ZXJvZWRfbW92YWJsZV9m
+b2xpbygodm1mKS0+dm1hLCAodm1mKS0+YWRkcmVzcykKKyNlbmRpZgorCiAvKgogICogV2UgZW50
+ZXIgd2l0aCBub24tZXhjbHVzaXZlIG1tYXBfbG9jayAodG8gZXhjbHVkZSB2bWEgY2hhbmdlcywK
+ICAqIGJ1dCBhbGxvdyBjb25jdXJyZW50IGZhdWx0cyksIGFuZCBwdGUgbWFwcGVkIGJ1dCBub3Qg
+eWV0IGxvY2tlZC4K
+--00000000000041d5db05ffb340fc--
