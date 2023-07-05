@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6A9749103
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 00:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5C5749105
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 00:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjGEWfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 18:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        id S231909AbjGEWiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 18:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjGEWfg (ORCPT
+        with ESMTP id S231537AbjGEWiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 18:35:36 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F721732
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 15:35:35 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-56fff21c2ebso1292107b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 15:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1688596534; x=1691188534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AGcxF4BR9idnjfupGfZyCZ3tDVPU/xSvJaiVs/YzQCI=;
-        b=AhF64Ii2K3KiAB2gOnjbOyZ2KDgXL21Paphcf+V6zGa/QuHpJea1/xzEJLgRT9f7Tz
-         ycFWBUn5vsbvhng7jDBvf2TYWTgw444okXaPCq1iV+JoosRrWCXS599JtHWwSOndp6Tc
-         BaZ6pr5CZDXozxVYXszGuwh2tGdGIzQHWRDHYTiXs4aul+5PVvNagQO+Z5EgLsIHLHhS
-         kOUeZ1+lACxN9vS1dmF1Spc/Qridb+y+YW1hf8pXncsf29xA3THa5GUWVxFUFAKYOPUt
-         zZRX04zIQwUEEGzo0bt08MTS7yiLEmZd02vhwyW6rAlvf3hxvU6uJy5HLM3wJd62Rhug
-         lP5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688596534; x=1691188534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AGcxF4BR9idnjfupGfZyCZ3tDVPU/xSvJaiVs/YzQCI=;
-        b=kXuZMwWbWvd1/k8l2EHRghHGpgKlx7xyrZswnPw+0x37K65S8WnvD9ntz24Rf5i7X8
-         SWt9SEQ0jYpQUrlEbpmff2njIXi62wc5kmHG/1qhEW6DCFH7KchM6iJLrkPsyHgvrXos
-         IW+BuAV3g2G7D0lbldVzePSkTmX6Rdh0F1Dp3+4KFtv1eFf0iucObmMNOVIAgDy6J44S
-         vmWWkXguXmaKsljrva2JqElE2y2tTpcV3dMyd4kVJq+iQ1lAf5LRbziTU1So6NkPKxXL
-         R9zhs5/8FFFAbtvIQEu4uBaL95i01NalWOvjdgk+M9Zv9NcAg1fo8wI8djs84x/DeVNK
-         kfUQ==
-X-Gm-Message-State: ABy/qLbxQJe9V/GzZ7n88msclWhWAijwLOeGuxEKY1t39QBtW2u23ws5
-        KOqiFlbv59HNy8IdCHzZwoSw/WAcBXb4wj2bs5S1
-X-Google-Smtp-Source: APBJJlFUIN4oesag3UOXr7IMZjuy9McghVh2XL5utXpAKB8uwjlvAhYonStnTo3EudkZalVMNi0oXRA+5N+I0AAJsss=
-X-Received: by 2002:a0d:da41:0:b0:568:be91:c2b1 with SMTP id
- c62-20020a0dda41000000b00568be91c2b1mr336115ywe.9.1688596534388; Wed, 05 Jul
- 2023 15:35:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230702170857.15603-1-pairmanxlr@gmail.com>
-In-Reply-To: <20230702170857.15603-1-pairmanxlr@gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 5 Jul 2023 18:35:23 -0400
-Message-ID: <CAHC9VhSLNNjXsW74bLbHX60Lco+Hjc6f4hp7Eb5hgC==_afPag@mail.gmail.com>
-Subject: Re: [PATCH] LSM: Fix typo in a comment
-To:     Pairman Guo <pairmanxlr@gmail.com>
-Cc:     jmorris@namei.org, serge@hallyn.com,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Wed, 5 Jul 2023 18:38:10 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E4B1737
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 15:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688596689; x=1720132689;
+  h=date:from:to:cc:subject:message-id;
+  bh=CIsgsL0/hJjrrJ2Yua+MH3i9GBe5Xut3f1UNTXC9k4Y=;
+  b=NRWiolfJNciYFjV6nJWuoG/BbujM5aOpmNmNMiVxpuzPLWRhFgrodPbo
+   aK3SYkAMaITO3DJ/SEYopGXeyQsU7RLmdU5E9KbKMxbI8H87nR/6P5cxm
+   oW7jAaT4DTX//ic4OGM51UB4cdBZrvHsNE0tl5UYwGE4EocVND3fu7mhN
+   MqFcMKaHm4U4wPhhWimyayDq2j/5zMHYg1xAkizB2dpxWLtes0WiMbyDU
+   F1cLYZRKBnZu8fnjwAHsPQpS8JdSTdbtKRC9akM1RIIkATKiuy+hHPXVQ
+   9UNBz2RGYOUWciwIstouza/SFQyJB4xqfQ/IFk9YrC6iAPjLDbI4LCIR6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="427139641"
+X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
+   d="scan'208";a="427139641"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 15:38:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="863883437"
+X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
+   d="scan'208";a="863883437"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Jul 2023 15:38:07 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qHB8Q-0000rO-2g;
+        Wed, 05 Jul 2023 22:38:06 +0000
+Date:   Thu, 06 Jul 2023 06:37:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ fe3e0a13e597c1c8617814bf9b42ab732db5c26e
+Message-ID: <202307060626.FTV3vOGG-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +60,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 2, 2023 at 1:09=E2=80=AFPM Pairman Guo <pairmanxlr@gmail.com> w=
-rote:
->
-> Hi maintainers,
->
-> In the description of function definition security_file_lock(),
-> the line "@cmd: fnctl command" has a typo where "fnctl" should be
-> "fcntl". This patch fixes the typo.
->
-> Please merge if it is the case. Thanks in advance.
->
-> Signed-off-by: Pairman Guo <pairmanxlr@gmail.com>
-> ---
->  security/security.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: fe3e0a13e597c1c8617814bf9b42ab732db5c26e  x86/xen: Fix secondary processors' FPU initialization
 
-This looks good to me, I'll plan to merge this once the merge window
-closes.  Thanks.
+elapsed time: 721m
 
-> diff --git a/security/security.c b/security/security.c
-> index b720424ca37d..adaa7043c172 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -2717,7 +2717,7 @@ int security_file_lock(struct file *file, unsigned =
-int cmd)
->  /**
->   * security_file_fcntl() - Check if fcntl() op is allowed
->   * @file: file
-> - * @cmd: fnctl command
-> + * @cmd: fcntl command
->   * @arg: command argument
->   *
->   * Check permission before allowing the file operation specified by @cmd=
- from
-> --
-> 2.41.0
+configs tested: 65
+configs skipped: 91
 
---=20
-paul-moore.com
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+arc                     nsimosci_hs_defconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                          collie_defconfig   clang
+arm                                 defconfig   clang
+arm                       imx_v4_v5_defconfig   clang
+arm                   milbeaut_m10v_defconfig   clang
+arm                         mv78xx0_defconfig   clang
+arm                         s5pv210_defconfig   clang
+arm                           sama7_defconfig   clang
+arm                         socfpga_defconfig   clang
+arm                    vt8500_v6_v7_defconfig   clang
+i386                             alldefconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230705   gcc  
+i386         buildonly-randconfig-r005-20230705   gcc  
+i386         buildonly-randconfig-r006-20230705   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230705   gcc  
+i386                 randconfig-i002-20230705   gcc  
+i386                 randconfig-i003-20230705   gcc  
+i386                 randconfig-i004-20230705   gcc  
+i386                 randconfig-i005-20230705   gcc  
+i386                 randconfig-i006-20230705   gcc  
+i386                 randconfig-i011-20230705   clang
+i386                 randconfig-i012-20230705   clang
+i386                 randconfig-i013-20230705   clang
+i386                 randconfig-i014-20230705   clang
+i386                 randconfig-i015-20230705   clang
+i386                 randconfig-i016-20230705   clang
+m68k                        m5272c3_defconfig   gcc  
+m68k                          multi_defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+mips                     cu1000-neo_defconfig   clang
+mips                          malta_defconfig   clang
+powerpc                          g5_defconfig   clang
+powerpc                   lite5200b_defconfig   clang
+powerpc                      ppc44x_defconfig   clang
+powerpc                      ppc64e_defconfig   clang
+powerpc                 xes_mpc85xx_defconfig   clang
+riscv                    nommu_virt_defconfig   clang
+s390                             allmodconfig   gcc  
+sh                  sh7785lcr_32bit_defconfig   gcc  
+sparc                       sparc32_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230705   gcc  
+x86_64       buildonly-randconfig-r002-20230705   gcc  
+x86_64       buildonly-randconfig-r003-20230705   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r024-20230705   clang
+x86_64               randconfig-x001-20230705   clang
+x86_64               randconfig-x002-20230705   clang
+x86_64               randconfig-x003-20230705   clang
+x86_64               randconfig-x004-20230705   clang
+x86_64               randconfig-x005-20230705   clang
+x86_64               randconfig-x006-20230705   clang
+x86_64               randconfig-x011-20230705   gcc  
+x86_64               randconfig-x012-20230705   gcc  
+x86_64               randconfig-x013-20230705   gcc  
+x86_64               randconfig-x014-20230705   gcc  
+x86_64               randconfig-x015-20230705   gcc  
+x86_64               randconfig-x016-20230705   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
