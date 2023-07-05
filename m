@@ -2,281 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548487480B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4027480BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 11:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjGEJUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 05:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
+        id S230446AbjGEJWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 05:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbjGEJU1 (ORCPT
+        with ESMTP id S230100AbjGEJW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 05:20:27 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC71DD
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 02:20:20 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-991fe70f21bso753649466b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 02:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688548819; x=1691140819;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BklEsHObd9lavchnm/4o+Pr3bOXNI+WG9VrYnDlfX7o=;
-        b=EQeZouLRROqNhu91gJoDc7GAUq2uokA65yYUzgJNMk7xsGU/qBnXfF5M9jhB4Q1M4Y
-         Mbh0jto9tJqsCxHAr/CxCiD/nRQCRpB2LppPA/aizWlfVr5/oWsDWhAkPF+qTXhQaWYe
-         1vcQz8I07zXB0h49fw8VjjGeWkiD/Iq9vHpUPuYOdML/Ek1L9o7/myTN2MmV7l24NWvJ
-         /yZ7RmYgmzxpCyvh4bG32p/T3Zj/HS2N1nDYmUCCaBv+yiMGaKiKQrRcmVobaGkrPIms
-         k9CtXajXnQmlWZsKmVRBkwC3Ep2UaeOXIXNZv4dGgpNEWNAyvevLGGHcAUUOX7fv3Kd2
-         /hGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688548819; x=1691140819;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BklEsHObd9lavchnm/4o+Pr3bOXNI+WG9VrYnDlfX7o=;
-        b=WgBOSve/8v+2aRPv0cHHkAck66f0yO0vSpZRADDY22OJJIxncLSHN870NPn1litgCS
-         m8Nm5AwJvDpLJXkPowLIA2K0/Ujh2cyFzAE7PTwaBnHKN6vx7bFjiM0JBt2+IvLv1Oo4
-         GB6ZRBkNwYgm8MOyWymnBQlxhuhKo+NE6QE4m9r/soTW5HAiBxFDH+ezoe/cPp/zkOgv
-         N46NWNw6PMhGmI70hYllCbf6iv38oysqZSKOi8rqa2zaryiPjN30oBdM+ehFChzeon1B
-         wwh2b9aJn/TWHMqoP9I6MAZBVfYHd6mi9x7BLTgg+9AlcnIDmTE5oJ4Dumnffg3sh8F7
-         aSdg==
-X-Gm-Message-State: ABy/qLYP/N21n/6uzPlozpU7uxS+6SpLWjr4bityvg6H9DfXtK0/Pu/Z
-        yYOCezPV46j5bCj6lkVkr+LUexiinDaD9pg/vgY=
-X-Google-Smtp-Source: APBJJlGUR6tdUIBs1Ggtp7BC+0WhkW9OOgzEC1K0guvcFh3QVyRQqIOjQG5pDHe0ySWPCgMprM+v+Q==
-X-Received: by 2002:a17:907:2ce6:b0:965:6075:d0e1 with SMTP id hz6-20020a1709072ce600b009656075d0e1mr13807518ejc.72.1688548818868;
-        Wed, 05 Jul 2023 02:20:18 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id e21-20020a170906c01500b009929ab17bdfsm8735573ejz.168.2023.07.05.02.20.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 02:20:18 -0700 (PDT)
-Message-ID: <2923201f-8bf4-a55d-a033-28ae5e569466@linaro.org>
-Date:   Wed, 5 Jul 2023 11:20:16 +0200
+        Wed, 5 Jul 2023 05:22:29 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8553AA0;
+        Wed,  5 Jul 2023 02:22:16 -0700 (PDT)
+Received: from unicom145.biz-email.net
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id BIC00109;
+        Wed, 05 Jul 2023 17:22:09 +0800
+Received: from jtjnmail201606.home.langchao.com (10.100.2.6) by
+ jtjnmail201604.home.langchao.com (10.100.2.4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 5 Jul 2023 17:22:08 +0800
+Received: from jtjnmail201606.home.langchao.com ([fe80::8583:33f:807a:3430])
+ by jtjnmail201606.home.langchao.com ([fe80::8583:33f:807a:3430%6]) with mapi
+ id 15.01.2507.027; Wed, 5 Jul 2023 17:22:08 +0800
+From:   =?gb2312?B?Um9jayBMaSjA7rrqzrAp?= <lihongweizz@inspur.com>
+To:     "leon@kernel.org" <leon@kernel.org>
+CC:     "sagi@grimberg.me" <sagi@grimberg.me>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] IB/iser: Protect tasks cleanup in case iser connection
+ was stopped
+Thread-Topic: [PATCH] IB/iser: Protect tasks cleanup in case iser connection
+ was stopped
+Thread-Index: AdmvGU9ORds3IdmXc0qwN4zLTm0C0g==
+Date:   Wed, 5 Jul 2023 09:22:08 +0000
+Message-ID: <45c68d6835964dcbae8fbd983696064b@inspur.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.180.207.169]
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
+        micalg=SHA1; boundary="----=_NextPart_000_016E_01D9AF65.38AB7A20"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V1 1/1] regulator: Add awinic,aw3750x.yaml
-Content-Language: en-US
-To:     like@awinic.com, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     liweilei@awinic.com, liangdong@awinic.com, yijiangtao@awinic.com
-References: <20230705081942.2608531-1-like@awinic.com>
- <20230705081942.2608531-2-like@awinic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230705081942.2608531-2-like@awinic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+tUid:   20237051722090abb66891f1b1e2eabce6c7294234d58
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 10:19, like@awinic.com wrote:
-> From: Ke Li <like@awinic.com>
+------=_NextPart_000_016E_01D9AF65.38AB7A20
+Content-Type: text/plain;
+	charset="gb2312"
+Content-Transfer-Encoding: 7bit
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
+> > On Tue, Jul 04, 2023 at 08:51:44AM +0800, lihongweizz wrote:
+> > From: Rock Li <lihongweizz@inspur.com>
+> >
+> > We met a crash issue as below:
+> > ...
+> >  #7 [ff61b991f6f63d10] page_fault at ffffffffab80111e
+> >     [exception RIP: iscsi_iser_cleanup_task+13]
+> >     RIP: ffffffffc046c04d RSP: ff61b991f6f63dc0 RFLAGS: 00010246
+> >     RAX: 0000000000000000 RBX: ff4bd0aalf7a5610 RCX: ff61b991f6f63dc8
+> >     RDX: ff61b991f6f63d68 RSI: ff61b991f6f63d58 RDI: ff4bd0aalf6cdc00
+> >     RBP: 0000000000000005 R8: 0000000000000073 R9:
+> 0000000000000005
+> >     R10: 0000000000000000 R11: 00000ccde3e0f5c0 R12:
+> ff4bd08c0e0631f8
+> >     R13: ff4bd0a95ffd3c78 R14: ff4bd0a95ffd3c78 R15: ff4bd0aalf6cdc00
+> >     ORIG_RAX: ffffffffffffffff CS: 0010 SS: 0018
+> >  #8 [ff616991f6f63dc0] __iscsi_put_task at ffffffffc0bd3652 [libiscsi]
+> >  #9 [ff61b991f6f63e00] iscsi_put_task at ffffffffc0bd36e9 [libiscsi]
+> > ...
+> >
+> > After analysing the vmcore, we find that the iser connection was
+> > already stopped before abort handler running. The iser_conn is already
+> > unbindded and released. So we add iser connection validation check
+> > inside cleanup task to fix this corner case.
+> >
+> > Signed-off-by: Rock Li <lihongweizz@inspur.com>
+> > ---
+> >  drivers/infiniband/ulp/iser/iscsi_iser.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c
+> > b/drivers/infiniband/ulp/iser/iscsi_iser.c
+> > index bb9aaff92ca3..35dfbf41fc40 100644
+> > --- a/drivers/infiniband/ulp/iser/iscsi_iser.c
+> > +++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
+> > @@ -366,7 +366,12 @@ static void iscsi_iser_cleanup_task(struct
+iscsi_task
+> *task)
+> >  	struct iscsi_iser_task *iser_task = task->dd_data;
+> >  	struct iser_tx_desc *tx_desc = &iser_task->desc;
+> >  	struct iser_conn *iser_conn = task->conn->dd_data;
+> > -	struct iser_device *device = iser_conn->ib_conn.device;
+> > +	struct iser_device *device;
+> > +
+> > +	/* stop connection might happens before iser cleanup work */
+> > +	if (!iser_conn)
+> > +		return;
+> 
+> And what prevents from iser_conn being not valid here?
+> For example, in the flow:
+> 1. Start iscsi_iser_cleanup_task
+> 2. Get valid task->conn->dd_data
+> 3. Pass this if (..) check
+> 4. Context switch and release connection 5. iser_conn now points to
+released
+> memory.
+> 
+> Thanks
 
-Missing commit msg.
+Hi Leon,
+Thanks for your reply:) In case iscsi_stop_conn was executed cocurrently or
+after iscsi_iser_cleanup_task, above issue would happen.
+I've confirmed the values in iscsi_cls_conn and iscsi_conn instances from
+vmcore:
+
+iscsi_stop_conn
+  ...
+  WRITE_ONCE(conn->state, ISCSI_CONN_FAILED);      --- confirmed
+  ...
+  conn->transport->stop_conn => iscsi_iser_conn_stop
+    iscsi_conn_stop
+      ...
+      conn->c_stage = ISCSI_CONN_STOPPED;          --- confirmed
+    conn->dd_data = NULL;                          --- confirmed
+
+The crash scene tells us that iscsi_stop_conn was executed before
+iscsi_iser_cleanup_task start, the iser_conn instance was already released. 
 
 > 
-> Signed-off-by: Ke Li <like@awinic.com>
-> ---
->  .../bindings/regulator/awinic,aw3750x.yaml    | 151 ++++++++++++++++++
->  1 file changed, 151 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/awinic,aw3750x.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/awinic,aw3750x.yaml b/Documentation/devicetree/bindings/regulator/awinic,aw3750x.yaml
-> new file mode 100644
-> index 000000000000..cdb3d9dbf88f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/awinic,aw3750x.yaml
-> @@ -0,0 +1,151 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
+> > +	device = iser_conn->ib_conn.device;
+> >
+> >  	/* DEVICE_REMOVAL event might have already released the device */
+> >  	if (!device)
+> > --
+> > 2.27.0
+> >
 
-Dual license.
+------=_NextPart_000_016E_01D9AF65.38AB7A20
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
 
-Please run scripts/checkpatch.pl and fix reported warnings. Some
-warnings can be ignored, but the code here looks like it needs a fix.
-Feel free to get in touch if the warning is not clear.
+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
+BggqhkiG9w0DAgICAIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMB0GA1Ud
+DgQWBBRaBc9d7NDesVRKJOjt1innorCQlzAfBgNVHSMEGDAWgBReWQOmtExYYJFO9h61pTmmMsE1
+ajCCAQ8GA1UdHwSCAQYwggECMIH/oIH8oIH5hoG6bGRhcDovLy9DTj1JTlNQVVItQ0EsQ049SlRD
+QTIwMTIsQ049Q0RQLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNv
+bmZpZ3VyYXRpb24sREM9aG9tZSxEQz1sYW5nY2hhbyxEQz1jb20/Y2VydGlmaWNhdGVSZXZvY2F0
+aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50hjpodHRwOi8vSlRD
+QTIwMTIuaG9tZS5sYW5nY2hhby5jb20vQ2VydEVucm9sbC9JTlNQVVItQ0EuY3JsMIIBKQYIKwYB
+BQUHAQEEggEbMIIBFzCBsQYIKwYBBQUHMAKGgaRsZGFwOi8vL0NOPUlOU1BVUi1DQSxDTj1BSUEs
+Q049UHVibGljJTIwS2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixE
+Qz1ob21lLERDPWxhbmdjaGFvLERDPWNvbT9jQUNlcnRpZmljYXRlP2Jhc2U/b2JqZWN0Q2xhc3M9
+Y2VydGlmaWNhdGlvbkF1dGhvcml0eTBhBggrBgEFBQcwAoZVaHR0cDovL0pUQ0EyMDEyLmhvbWUu
+bGFuZ2NoYW8uY29tL0NlcnRFbnJvbGwvSlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb21fSU5TUFVS
+LUNBLmNydDBJBgNVHREEQjBAoCYGCisGAQQBgjcUAgOgGAwWbGlob25nd2VpenpAaW5zcHVyLmNv
+bYEWbGlob25nd2VpenpAaW5zcHVyLmNvbTANBgkqhkiG9w0BAQsFAAOCAQEAbgg5pyExgLZRaa7t
+7XYfCwnVeO7Fzb2IyHLpR6UJw3tMeftOi+j+eM1PjvDxixho7R8lDhCGkoIwXdtJfXMMEfGTnXmh
++oY9PrWfhlgCn6ZeU633jtV5kDi8JFa/g7JP0SgZvOCsxbHJXM78HKy8gUUsLrXJ8yKHzt/uEgUK
+ekHEjh1eWmxvCXuLyCd15SVIgDuVvXipcygfdbc52JrhLab4IgDUq+4SKC7X9s6iUdbyxq8T0aA6
+2C0AmIIbJyG6cLAMmSSOMzM31hiflRiGmJOqpcjFsd1+1GTy1KM+jvmTJFiadG1bx5AhuWoXKyst
+fQgatmAtt6XCB7rmbjOapDGCA5MwggOPAgEBMHAwWTETMBEGCgmSJomT8ixkARkWA2NvbTEYMBYG
+CgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9tZTESMBAGA1UEAxMJSU5T
+UFVSLUNBAhN+AADCsSyiGj7nnfwAAAAAAMKxMAkGBSsOAwIaBQCgggH4MBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcwNTA5MjIwNlowIwYJKoZIhvcNAQkEMRYE
+FOXW4Sz/NiwgUtK1iIdOACFoalTvMH8GCSsGAQQBgjcQBDFyMHAwWTETMBEGCgmSJomT8ixkARkW
+A2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9tZTESMBAG
+A1UEAxMJSU5TUFVSLUNBAhN+AADCsSyiGj7nnfwAAAAAAMKxMIGBBgsqhkiG9w0BCRACCzFyoHAw
+WTETMBEGCgmSJomT8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZIm
+iZPyLGQBGRYEaG9tZTESMBAGA1UEAxMJSU5TUFVSLUNBAhN+AADCsSyiGj7nnfwAAAAAAMKxMIGT
+BgkqhkiG9w0BCQ8xgYUwgYIwCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjAKBggqhkiG9w0DBzAL
+BglghkgBZQMEAQIwDgYIKoZIhvcNAwICAgCAMA0GCCqGSIb3DQMCAgFAMAcGBSsOAwIaMAsGCWCG
+SAFlAwQCAzALBglghkgBZQMEAgIwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAGmPA1PP
+GyegA96azdOx2Wwku9Y1oSk13yfu4y12D9gp03iB8HtHI+3zA2JSu9xs2/4UbLimsy+kPT08MKOq
+5o97vwyn4/lyYfQxKAjrh4S6BBeoTZnlAqK6kCsODYQNWOa/WFNgHuLkoT2+23rm7ONLilTXSpDl
+b7W7SWU2nLRDa/IfxDj156QerpRKR87GZXUPqSGbHj2I6eEcP/icXV0hU6flWp6IHhgt8Qe3cEm7
+1q0iF/rfzZ4K9XbIHX5ha8/zqBXWnwYgO7r7jhyVZuuF9e+TfQOfAUXgFsMBM2xZzkiV8TEP51dx
+Ak4ZEDyz7dQuNoudbLxRZFg5JN5N0uUAAAAAAAA=
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/awinic,aw3750x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Awinic AW3750X Power Management IC
-> +
-> +maintainers:
-> +  - Weidong Wang <wangweidong.a@awinic.com>
-> +  - Ke Li <like@awinic.com>
-> +
-> +description: |
-> +  AW3750X is designed to generate both positive and negative bias voltages for.
-> +  TFT-LCD panels or other general dual-supply applications. It consists a highly
-> +  integrated synchronous boost converter with input voltage from 2.7V to 5.5V.
-> +
-> +properties:
-> +  compatible:
-> +    const: awinic,aw3750x_led
-
-I don't understand why there is _led suffix. Isn't this regulator? Can
-it be anything else?
-
-Also, x looks like a wildcard, which is not allowed in compatibles.
-
-> +
-> +  enp:
-> +    type: object
-> +    $ref: regulator.yaml#
-> +    description:
-> +      Properties for single LDO regulator.
-> +
-> +    properties:
-> +      regulator-name: true
-
-Drop
-
-> +
-> +    required:
-> +      - regulator-name
-
-Is it really required?
-
-> +
-> +    unevaluatedProperties: false
-> +
-> +  enn:
-> +    type: object
-> +    $ref: regulator.yaml#
-> +    description:
-> +      Properties for single BOOST regulator.
-> +
-> +    properties:
-> +      regulator-name: true
-> +
-> +    required:
-> +      - regulator-name
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - enp
-> +  - enn
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/pinctrl/mt8186-pinfunc.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    pio: pinctrl@10005000 {
-> +      aw_enn_default: aw_enn_default {
-> +        pins_cmd_dat {
-> +          pinmux = <PINMUX_GPIO7__FUNC_GPIO7>;
-> +          slew-rate = <1>;
-> +          output-low;
-> +        };
-> +      };
-> +
-> +      aw_enn_output_high: aw_enn_output_high {
-> +        pins_cmd_dat {
-> +          pinmux = <PINMUX_GPIO7__FUNC_GPIO7>;
-> +          slew-rate = <1>;
-> +          output-high;
-> +        };
-> +      };
-> +
-> +      aw_enn_output_low: aw_enn_output_low {
-> +        pins_cmd_dat {
-> +          pinmux = <PINMUX_GPIO7__FUNC_GPIO7>;
-> +          slew-rate = <1>;
-> +          output-low;
-> +        };
-> +      };
-> +
-> +      aw_enp_default: aw_enp_default {
-> +        pins_cmd_dat {
-> +          pinmux = <PINMUX_GPIO1__FUNC_GPIO1>;
-> +          slew-rate = <1>;
-> +          output-low;
-> +        };
-> +      };
-
-All this is incorrect and unrelated. Drop it.
-
-> +
-> +      aw_enp_output_high: aw_enp_output_high {
-> +        pins_cmd_dat {
-> +          pinmux = <PINMUX_GPIO1__FUNC_GPIO1>;
-> +          slew-rate = <1>;
-> +          output-high;
-> +        };
-> +      };
-> +
-> +      aw_enp_output_low: aw_enp_output_low {
-> +        pins_cmd_dat {
-> +          pinmux = <PINMUX_GPIO1__FUNC_GPIO1>;
-> +          slew-rate = <1>;
-> +          output-low;
-> +        };
-> +      };
-> +
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        aw3750x@3e {
-
-Node names should be generic. See also explanation and list of examples
-in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-> +            compatible = "awinic,aw3750x_led";
-> +            aw3750x_gpio_ctrl = <0>;
-> +            reg = <0x3e>;
-> +            outp = <0x0E>;
-> +            outn = <0x0E>;
-> +            enn-gpio = <&pio 7 0>;
-> +            enp-gpio = <&pio 1 0>;
-
-It does not look like you tested the bindings, at least after quick
-look. Please run `make dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Maybe you need to update your dtschema and yamllint.
-
-> +            pinctrl-names = "aw_enn_default", "aw_enn_output_high",
-> +                            "aw_enn_output_low", "aw_enp_default",
-> +                            "aw_enp_output_high", "aw_enp_output_low";
-> +            pinctrl-0 = <&aw_enn_default>;
-> +            pinctrl-1 = <&aw_enn_output_high>;
-> +            pinctrl-2 = <&aw_enn_output_low>;
-> +            pinctrl-3 = <&aw_enp_default>;
-> +            pinctrl-4 = <&aw_enp_output_high>;
-> +            pinctrl-5 = <&aw_enp_output_low>;
-> +
-> +            aw_lcdb_outp_vreg: enp {
-> +              label = "outp";
-
-Really?
-
-
-Best regards,
-Krzysztof
-
+------=_NextPart_000_016E_01D9AF65.38AB7A20--
