@@ -2,146 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D5A749033
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE99C74903A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbjGEVtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 17:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S230079AbjGEVuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 17:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbjGEVtF (ORCPT
+        with ESMTP id S233022AbjGEVt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:49:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A7B1FFF;
-        Wed,  5 Jul 2023 14:48:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1195661751;
-        Wed,  5 Jul 2023 21:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E78C433C7;
-        Wed,  5 Jul 2023 21:48:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688593709;
-        bh=h+2Oiqv58gv2R2xrLYaAfuDcnFGFQp3vjxbTRcCD3nk=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uYAsWrZnNsKm67NabNfCqqsuoiplt1RFIzeyfmhi0CvjEy6szK1kzcAX+caCXIi8D
-         tNphEy2+4+DidH4f/7zTuli+zcD49lSAm/CWpM7DonP9xVehceVSmlMpr5LSmGdc+j
-         0j51Y+kCp2oPaBo/nXxuZpw7E5cU7obblDZHnCzybDgS3/1r4RC9VF74bIuGMqqFac
-         DVM24/jWLK0Ph/Wb8nr806CrVy7zYksfunXO6TmumEGAY6X2kp9rSvgWeD978JsqvW
-         1PIiS0in5CtMZ+FuYP+L7A2HY/4iaFsY98NRfuB18Q4FAyB5f4tIDlHZZNersY7hI4
-         tlc2tZtwXWdDQ==
-Message-ID: <9711e5f19dd2c040b4105147129a8db0aaf94b53.camel@kernel.org>
-Subject: Re: [PATCH 7/9] gfs2: update ctime when quota is updated
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
-Date:   Wed, 05 Jul 2023 17:48:24 -0400
-In-Reply-To: <CAHc6FU54Gh+5hovqXZZSADqym=VCMis-EH9sKhAjgjXD6MUtqw@mail.gmail.com>
-References: <20230609125023.399942-1-jlayton@kernel.org>
-         <20230609125023.399942-8-jlayton@kernel.org>
-         <CAHc6FU4wyfQT7T75j2Sd9WNp=ag7hpDZGYkR=m73h2nOaH+AqQ@mail.gmail.com>
-         <a1f7a725186082d933aff702d1d50c6456da6f20.camel@kernel.org>
-         <CAHc6FU54Gh+5hovqXZZSADqym=VCMis-EH9sKhAjgjXD6MUtqw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Wed, 5 Jul 2023 17:49:28 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891081BD0;
+        Wed,  5 Jul 2023 14:49:25 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b852785a65so151485ad.0;
+        Wed, 05 Jul 2023 14:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688593765; x=1691185765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlA7Omc66rXMNTH6X1ydcJJyDlSBvcJI/ger0lg7xWk=;
+        b=l/5lrwFm5S27bh4okIpLe8W9g6TnfrmD1hDoFUP4abPVME+Ose3bNs1mtZu//oMoGx
+         Us1VUD1Oa4+QAEDOl/FzgagEbhT4xkFJw/WOg/tmKtVUYovVKA9LtaVgLJVzXIsjID/X
+         iI8+jQ35Sm+dLdbO2EtVjfuOpwJS9RHZesZJdXb2CgQ0/JDJjV0KYCXxHGw4+CttLq8A
+         fOqoD+c0bT1fwV75DK6LuTwwXgFhHol8ONfy7Ai+SaxID89n58Sd118zXK7UjVXarm83
+         vrzARZoooAdW2+SopGdlqtAfDX/VCdOManSfphUqpxakZi2Mi+o67/VpDvwGxOKLAUQI
+         PLBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688593765; x=1691185765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JlA7Omc66rXMNTH6X1ydcJJyDlSBvcJI/ger0lg7xWk=;
+        b=gB7uV8kGnnLNbO3IkergJRPCTsZWKuftcUmA12UfvzGt6Mmr/gaCbQBffN37tXgDGK
+         OPAqwh0EDWRDtaGS7WbsJu5glRX5FRBQWXHGs2IG5ZvHGEdxKAvgjiZ+JlxXUmUhgMPu
+         45WgH9E9qM5jGzEB44fAUNaK+6ja1K9UXXQydSDmqDy7SxkNs3eh0mySG7jH2fqMxyBK
+         dh5CtgWqnfBT3N3U/4UXYZf09xtzIa3tj0iRKeWbnnyWCwZ1OqNjSGDDBZ796e/Y7dUQ
+         kaEXmEmSocxItiIqYKXckDHuUj9iePJgkvFgAN6hs886HQvnTa/+aJaTHfnYEnwgytmF
+         QCxw==
+X-Gm-Message-State: ABy/qLZOAOApkFuhvgQF12UBxEVetRzwPUVDqSnl6tF4krwU49pG+5A2
+        j4n99UJtgfTifdNZLxArTRQ=
+X-Google-Smtp-Source: APBJJlEPLpeBpRKLD+37mMaaabZCQQ3DaaVqaA+uW4TAiRKZXbYJOk1GzZrrd/fAet6CUy09hUwL8A==
+X-Received: by 2002:a17:902:e78a:b0:1b8:7613:594d with SMTP id cp10-20020a170902e78a00b001b87613594dmr4383059plb.24.1688593764637;
+        Wed, 05 Jul 2023 14:49:24 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:9fac:a99f:7f0a:397])
+        by smtp.gmail.com with ESMTPSA id bh1-20020a170902a98100b001b3f039f8a8sm13129482plb.61.2023.07.05.14.49.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 14:49:24 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 14:49:21 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] Input: exc3000 - Support power supply regulators
+Message-ID: <ZKXlYbsk+6MPfeWy@google.com>
+References: <20230703084536.8429-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.12499438-d166-465a-8847-b25e1baa3dad@emailsignatures365.codetwo.com>
+ <20230703084536.8429-2-mike.looijmans@topic.nl>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230703084536.8429-2-mike.looijmans@topic.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-07-05 at 22:25 +0200, Andreas Gruenbacher wrote:
-> On Mon, Jun 12, 2023 at 12:36=E2=80=AFPM Jeff Layton <jlayton@kernel.org>=
- wrote:
-> > On Fri, 2023-06-09 at 18:44 +0200, Andreas Gruenbacher wrote:
-> > > Jeff,
-> > >=20
-> > > On Fri, Jun 9, 2023 at 2:50=E2=80=AFPM Jeff Layton <jlayton@kernel.or=
-g> wrote:
-> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > ---
-> > > >  fs/gfs2/quota.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
-> > > > index 1ed17226d9ed..6d283e071b90 100644
-> > > > --- a/fs/gfs2/quota.c
-> > > > +++ b/fs/gfs2/quota.c
-> > > > @@ -869,7 +869,7 @@ static int gfs2_adjust_quota(struct gfs2_inode =
-*ip, loff_t loc,
-> > > >                 size =3D loc + sizeof(struct gfs2_quota);
-> > > >                 if (size > inode->i_size)
-> > > >                         i_size_write(inode, size);
-> > > > -               inode->i_mtime =3D inode->i_atime =3D current_time(=
-inode);
-> > > > +               inode->i_mtime =3D inode->i_atime =3D inode->i_ctim=
-e =3D current_time(inode);
-> > >=20
-> > > I don't think we need to worry about the ctime of the quota inode as
-> > > that inode is internal to the filesystem only.
-> > >=20
-> >=20
-> > Thanks Andreas.  I'll plan to drop this patch from the series for now.
-> >=20
-> > Does updating the mtime and atime here serve any purpose, or should
-> > those also be removed? If you plan to keep the a/mtime updates then I'd
-> > still suggest updating the ctime for consistency's sake. It shouldn't
-> > cost anything extra to do so since you're dirtying the inode below
-> > anyway.
->=20
-> Yes, good point actually, we should keep things consistent for simplicity=
-.
->=20
-> Would you add this back in if you do another posting?
->=20
+Hi Mike,
 
-I just re-posted the other patches in this as part of the ctime accessor
-conversion. If I post again though, I can resurrect the gfs2 patch.=C2=A0If
-not, we can do a follow-on fix later.
+On Mon, Jul 03, 2023 at 10:45:36AM +0200, Mike Looijmans wrote:
+> Add power supply regulator support to the exc3000 devices.
+> 
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> 
+> ---
+> 
+>  drivers/input/touchscreen/exc3000.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/input/touchscreen/exc3000.c b/drivers/input/touchscreen/exc3000.c
+> index 4af4c1e5d0da..3e50af8a4a2d 100644
+> --- a/drivers/input/touchscreen/exc3000.c
+> +++ b/drivers/input/touchscreen/exc3000.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/sizes.h>
+>  #include <linux/timer.h>
+>  #include <asm/unaligned.h>
+> @@ -360,6 +361,12 @@ static int exc3000_probe(struct i2c_client *client)
+>  	if (IS_ERR(data->reset))
+>  		return PTR_ERR(data->reset);
+>  
+> +	/* For proper reset sequence, enable power while reset asserted */
+> +	error = devm_regulator_get_enable_optional(&client->dev, "vdd");
+> +	if (error && error != -ENODEV)
+> +		dev_err_probe(&client->dev, error,
+> +			      "failed to request vdd regulator\n");
 
-Since we're discussing it, it may be more correct to remove the atime
-update there. gfs2_adjust_quota sounds like a "modify" operation, not a
-"read", so I don't see a reason to update the atime.
 
-In general, the only time you only want to set the atime, ctime and
-mtime in lockstep is when the inode is brand new.
---=20
-Jeff Layton <jlayton@kernel.org>
+If there is a regulator described in the firmware we should not continue
+with initializing the device if we fail to grab/enable it. Think about
+what happens if you get -EPROBE_DEFER here. You should return here.
+
+Also, why are you using the _optional() variant? VDD is not an optional
+for the controller. regulator_get_optional() is needed when you need to
+alter the behavior of the device/driver depending on the presence of an
+optional supply, whereas here it should work fine with a sub supply that
+will be created if you simply call devm_regulator_get_enable() and there
+is not regulator mentioned in DT/ACPI for the board.
+
+Thanks.
+
+-- 
+Dmitry
