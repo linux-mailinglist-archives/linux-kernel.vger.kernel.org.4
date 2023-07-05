@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327C3748896
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0D774889B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbjGEP4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S233081AbjGEP5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbjGEP4n (ORCPT
+        with ESMTP id S232650AbjGEP5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:56:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3C12A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:56:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F0056160D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 15:56:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55A8C433C8;
-        Wed,  5 Jul 2023 15:56:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688572602;
-        bh=JzLAQUPDOXJPxLfN84dScm6T9CeT0pD+A8KgrxBtYWE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BZqL5P9bNRDmIWANHdbs0Y80b9MbKC+yrTFdMVebedm/pm20PL9CZ0LwKXIm4fgBE
-         Y69ejPy7KVgr1RLJxDYhOZDldjmykVJcgcjjAqfr2VLew7UMacivRBrCUXBAVuRJ37
-         6By6OmYAMPL0fZne9bH2lz1javnh60vvV/zDfBmxU8M3PEKW1FR4veo3J2b+3fHeRl
-         NmBL4LnqbYUrXt1LOnj4GMoRJnqS+xI1b7aR2jkaIBN5SVJVRK95YxV5p9kzkojR4v
-         gvRMvfZLO/9i7txdy04s7yMreyCPgpD+rsZny60Kmci6MUZLFAUjL3VWWbHDJH2fco
-         iGxb/KzQB8JEg==
-Date:   Wed, 5 Jul 2023 08:56:40 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, sergey.senozhatsky@gmail.com,
-        pmladek@suse.com, tj@kernel.or,
-        Dave Jones <davej@codemonkey.org.uk>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] netconsole: Append kernel version to message
-Message-ID: <20230705085640.46ad5c2e@kernel.org>
-In-Reply-To: <ZKQ/C7z2RMG5a4XN@gmail.com>
-References: <20230703154155.3460313-1-leitao@debian.org>
-        <20230703124427.228f7a9e@kernel.org>
-        <ZKQ/C7z2RMG5a4XN@gmail.com>
-MIME-Version: 1.0
+        Wed, 5 Jul 2023 11:57:35 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0DB12A;
+        Wed,  5 Jul 2023 08:57:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=+tOjqvgYJNwlm6nq1waFWdOB29jJE7UIgZxS5xd47T0=; b=qZBJaOAKLcRXzvs3BA1NWHeR5+
+        jcDihT+COymIsLyZaLeuXJP5RmCHimVzZB78PPB9ckzLLDtxXxv8vKxbW0GZNAIgYqygoMKjQY+k1
+        VR7YCfx6Wa/NtGGDupvm/KYi/4RIayzUuiwsdErm/hKkr2nkkBKeVM9JqszQKPV2DA0s=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:48064 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qH4sa-0005PX-QW; Wed, 05 Jul 2023 11:57:21 -0400
+Date:   Wed, 5 Jul 2023 11:57:20 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Nate Drude <Nate.D@variscite.com>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-Id: <20230705115720.036340a2ea3bf23f1fac0815@hugovil.com>
+In-Reply-To: <9dc5738b-2170-a010-4685-ef8cc4bd3fa0@linaro.org>
+References: <20230704150240.2022020-1-hugo@hugovil.com>
+        <20230704172801.f11422b3f947c625f53af871@hugovil.com>
+        <CAOMZO5CWh0-5eMTBwjvNUrY-yOHE=daj6n-jAAfjWoV-H4rt0Q@mail.gmail.com>
+        <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
+        <20230705093507.7458eada3ae05e0e1740a10e@hugovil.com>
+        <AS2PR08MB88082608DB46EC1287C6E54B852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
+        <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
+        <20230705102502.d8c9fa894bd271a5526d81f7@hugovil.com>
+        <AS2PR08MB88085D6B7338AD6D4D3C9956852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
+        <20230705104837.e620da576f22f28244daacb1@hugovil.com>
+        <CAOMZO5D_p3hf+HVHNAijEevJRpzwmyGPcoHjiapsOx_ddsoksg@mail.gmail.com>
+        <20230705113419.183f686f47252abf3532fc9e@hugovil.com>
+        <45545984-ef00-f653-91db-cb6c1cb0a3a4@linaro.org>
+        <20230705115106.a4c314e8e177f6516bebda13@hugovil.com>
+        <9dc5738b-2170-a010-4685-ef8cc4bd3fa0@linaro.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 08:47:23 -0700 Breno Leitao wrote:
-> This is the code that does it. How does it sound?
+On Wed, 5 Jul 2023 17:54:05 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-More or less :)
+> On 05/07/2023 17:51, Hugo Villeneuve wrote:
+> >> As I wrote, interrupt type cannot be none. What does it even mean "none"
+> >> for your case?
+> > 
+> > Hi,
+> > I have no idea why Variscite are using this IRQ type of NONE.
+> 
+> Because it worked :)
 
-> diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-> index 4f4f79532c6c..d26bd3b785c4 100644
-> --- a/drivers/net/netconsole.c
-> +++ b/drivers/net/netconsole.c
-> @@ -36,6 +36,7 @@
->  #include <linux/inet.h>
->  #include <linux/configfs.h>
->  #include <linux/etherdevice.h>
-> +#include <linux/utsname.h>
->  
->  MODULE_AUTHOR("Maintainer: Matt Mackall <mpm@selenic.com>");
->  MODULE_DESCRIPTION("Console driver for network interfaces");
-> @@ -772,8 +773,10 @@ static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
->  	const char *header, *body;
->  	int offset = 0;
->  	int header_len, body_len;
-> +	int uname_len = 0;
+lol
 
-I'd calculate the uname_len here if the option was set.
+> > 
+> > I can put IRQ_TYPE_EDGE_FALLING since I tested it and it works.
+> 
+> Seems reasonable because on schematics this looked pulled up.
 
-> -	if (msg_len <= MAX_PRINT_CHUNK) {
-> +	if (msg_len <= MAX_PRINT_CHUNK &&
-> +	    !IS_ENABLED(CONFIG_NETCONSOLE_UNAME)) {
+Ok, I will resubmit a V2 of the patch then with this.
 
-And then try to fold the path with uname into this. So that we don't
-have to separate exit points for the "message is short enough".
-
->  		netpoll_send_udp(&nt->np, msg, msg_len);
->  		return;
->  	}
-> @@ -788,14 +791,31 @@ static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
->  	body_len = msg_len - header_len - 1;
->  	body++;
->  
-> +	if (IS_ENABLED(CONFIG_NETCONSOLE_UNAME)) {
-> +		/* Add uname at the beginning of buffer */
-> +		char *uname = init_utsname()->release;
-
-nit: const
-
-> +		/* uname_len contains the length of uname + ',' */
-> +		uname_len = strlen(uname) + 1;
-> +
-> +		if (uname_len + msg_len < MAX_PRINT_CHUNK) {
-> +			/* No fragmentation needed */
-> +			scnprintf(buf, MAX_PRINT_CHUNK, "%s,%s", uname, msg);
-> +			netpoll_send_udp(&nt->np, buf, uname_len + msg_len);
-> +			return;
-> +		}
-> +
-> +		/* The data will be fragment, prepending uname */
-> +		scnprintf(buf, MAX_PRINT_CHUNK, "%s,", uname);
-> +	}
-> +
->  	/*
->  	 * Transfer multiple chunks with the following extra header.
->  	 * "ncfrag=<byte-offset>/<total-bytes>"
->  	 */
-> -	memcpy(buf, header, header_len);
-> +	memcpy(buf + uname_len, header, header_len);
-
-And once done prepping I'd add uname_len to header_len
-
->  	while (offset < body_len) {
-> -		int this_header = header_len;
-> +		int this_header = header_len + uname_len;
-
-Last but not least, I do agree with Stephen that this can be
-configurable with sysfs at runtime, no need to make it a Kconfig.
+Thank you,
+Hugo.
