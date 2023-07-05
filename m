@@ -2,46 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FBE747CEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E118747CEE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjGEGUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S231562AbjGEGUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjGEGT7 (ORCPT
+        with ESMTP id S229753AbjGEGUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 02:19:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2A810EA;
-        Tue,  4 Jul 2023 23:19:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED01612A8;
-        Wed,  5 Jul 2023 06:19:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8C4C433C8;
-        Wed,  5 Jul 2023 06:19:55 +0000 (UTC)
-Message-ID: <1c74c932-83a1-6b9a-c799-347b25c1979b@xs4all.nl>
-Date:   Wed, 5 Jul 2023 08:19:53 +0200
+        Wed, 5 Jul 2023 02:20:31 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062B410CF;
+        Tue,  4 Jul 2023 23:20:28 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DB84424E257;
+        Wed,  5 Jul 2023 14:20:15 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 14:20:15 +0800
+Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 5 Jul
+ 2023 14:20:14 +0800
+Message-ID: <3cbff4f7-b113-7f37-83d7-c147260343b5@starfivetech.com>
+Date:   Wed, 5 Jul 2023 14:20:14 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1] drivers: usb: remove duplicate logical judgments in if
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND v1 1/2] dt-binding: spi: constrain minItems of clocks and
+ clock-names
 Content-Language: en-US
-To:     Minjie Du <duminjie@vivo.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:GO7007 MPEG CODEC" <linux-media@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     opensource.kernel@vivo.com
-References: <20230704104017.9535-1-duminjie@vivo.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230704104017.9535-1-duminjie@vivo.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Linus Walleij <linus.walleij@linaro.org>
+References: <20230704092200.85401-1-william.qiu@starfivetech.com>
+ <20230704092200.85401-2-william.qiu@starfivetech.com>
+ <1b65e8d1-d5e1-0d6b-1248-d9683be44db8@linaro.org>
+ <c5027d42-b9be-090d-bd43-86c9b1448c99@starfivetech.com>
+ <afcf67e3-a017-b747-a0cf-284a87a8d24a@linaro.org>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <afcf67e3-a017-b747-a0cf-284a87a8d24a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,42 +64,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Minjie,
 
-On 04/07/2023 12:40, Minjie Du wrote:
-> Fix: delate duplicate judgments
-> Does the judgment content of this if
-> mean requesting confirmation twice?
-> I'm not sure, Could you help check it out?
-> Thank you!
 
-From what I can tell it tries to send the reset request a
-second time if the first attempt fails. Fair enough.
-
-So let's leave this as-is.
-
-Regards,
-
-	Hans
-
+On 2023/7/5 14:00, Krzysztof Kozlowski wrote:
+> On 05/07/2023 05:37, William Qiu wrote:
+>>>> ---
+>>>>  Documentation/devicetree/bindings/spi/spi-pl022.yaml | 11 ++++++++---
+>>>>  1 file changed, 8 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+>>>> index 91e540a92faf..42bb34c39971 100644
+>>>> --- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+>>>> +++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+>>>> @@ -11,6 +11,7 @@ maintainers:
+>>>>
+>>>>  allOf:
+>>>>    - $ref: spi-controller.yaml#
+>>>> +  - $ref: /schemas/arm/primecell.yaml#
+>>>
+>>> This looks unrelated, so keep it as separate commit with its own rationale.
+>>>
+>> Because "arm,primecell-periphid"  is need in JH7110 SoC, so I added them in
+>> one commit, so do I need to put them in two commit?
 > 
-> Signed-off-by: Minjie Du <duminjie@vivo.com>
-> ---
->  drivers/media/usb/go7007/go7007-usb.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> You need to provide rationale why this is needed. I would assume this is
+> needed for every primecell, not only JH7110, right?
 > 
-> diff --git a/drivers/media/usb/go7007/go7007-usb.c b/drivers/media/usb/go7007/go7007-usb.c
-> index eeb85981e..c85e48e16 100644
-> --- a/drivers/media/usb/go7007/go7007-usb.c
-> +++ b/drivers/media/usb/go7007/go7007-usb.c
-> @@ -653,8 +653,7 @@ static int go7007_usb_interface_reset(struct go7007 *go)
->  	if (usb->board->flags & GO7007_USB_EZUSB) {
->  		/* Reset buffer in EZ-USB */
->  		pr_debug("resetting EZ-USB buffers\n");
-> -		if (go7007_usb_vendor_request(go, 0x10, 0, 0, NULL, 0, 0) < 0 ||
-> -		    go7007_usb_vendor_request(go, 0x10, 0, 0, NULL, 0, 0) < 0)
-> +		if (go7007_usb_vendor_request(go, 0x10, 0, 0, NULL, 0, 0) < 0)
->  			return -1;
->  
->  		/* Reset encoder again */
-
+> 
+All right, I'll keep it as separate commit.
+> 
+> Best regards,
+> Krzysztof
+> 
