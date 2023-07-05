@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28622748035
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB9B748037
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjGEIzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S231877AbjGEIzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjGEIzJ (ORCPT
+        with ESMTP id S229903AbjGEIzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:55:09 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81381719
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:55:07 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-99364ae9596so368222866b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 01:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688547306; x=1691139306;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hdnXLK7qXLON81pPPrHpzO/9z7s+rm9QJ6FuVbRQdbs=;
-        b=bQVOCTRLHSWl3pJ/aG3YOm3LoqJo7lD7UF8wSJdcUBzA8ywgE0ThA+Qi8SM1g3hvWj
-         hhmd6nSlFhTugGouHtRnBPXyQcVhXkPtdxwGnvo0foz1ctz5ZYrwTeJncUn4iCMC1gV5
-         BdZ4sp8EyYztinmdKrS2ISk7bcr6hh5CvbSmvU26Fves47jjy547Wpj0tUZdLpbTvRpu
-         bl1CSqthUc3FXSifcMk8VMmy+3JmquUL/k58DZB251hag4i0v11hSaeNQtxzwIMcRfmA
-         I8ui84qB/VmIOwh6ZEtRoCB27JUN72/+eT9MKwl00JxnKS+sCmOVm/R8N/5XPp292rRU
-         +NoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688547306; x=1691139306;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hdnXLK7qXLON81pPPrHpzO/9z7s+rm9QJ6FuVbRQdbs=;
-        b=NU9+y/cijNzkwOZA36PYGikxKYmNiOLO0tUciv4mfTnIv6UUSOPgg5ehYXKbkolTJi
-         5Acm3anZCTkhuY5uqUpbNnZ0vAs3IQtL3ud6pdl7A5YU3QpMHXHz3z8uYRUXQP58L/zN
-         tUGN50mOqH18KeOvAJ/q8WTxg13QjEAC9d1oTI74kH7wTmnxxnhqc4lcPtIKqUTZkzF1
-         tFQMgtVdCQAEzewnbC2ezBHItGd2CivF33f+bWXF97vw8rpU7r9nyMyXKzwkaZTpOs+o
-         UxDbccuD4Aa8tVdI5rHQ4m7Ou54RsUOqzlmoxwebQvgOOIA98pbjUMQQBmUJYQG47WQY
-         Kwcw==
-X-Gm-Message-State: ABy/qLbXrALE88VWNMvCarRvnwJD5cx735B0he5RX1heeHdOgYGexD6D
-        sBpIW1FK7grBUqTX/u0C64D3Bw==
-X-Google-Smtp-Source: APBJJlF18nZ62Q03EIuvQIs4j7WBKWQva+whWpxRMq7n8XPt8oxM94B6qxAs5mNE01oHizT5YtFx9g==
-X-Received: by 2002:a17:906:3bd3:b0:982:870f:9e8f with SMTP id v19-20020a1709063bd300b00982870f9e8fmr10500224ejf.62.1688547306173;
-        Wed, 05 Jul 2023 01:55:06 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id j13-20020aa7de8d000000b0051a2c7f5b0fsm13076264edv.88.2023.07.05.01.55.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 01:55:05 -0700 (PDT)
-Message-ID: <e684d1bc-f2bd-3505-3d8d-cf108e2a1586@linaro.org>
-Date:   Wed, 5 Jul 2023 10:55:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] watchdog: s3c2410: Fix potential deadlock on &wdt->lock
-Content-Language: en-US
-To:     Chengfeng Ye <dg573847474@gmail.com>
-Cc:     alim.akhtar@samsung.com, wim@linux-watchdog.org,
-        linux@roeck-us.net, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230628164759.67594-1-dg573847474@gmail.com>
- <b6d3a872-f32e-bfcd-b603-c08339737045@linaro.org>
- <CAAo+4rUzusAyyffkCvEq+wJQacqfrcTx-SviqXaTzPsqOkjB7w@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAAo+4rUzusAyyffkCvEq+wJQacqfrcTx-SviqXaTzPsqOkjB7w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Jul 2023 04:55:39 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DB81713
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:55:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AE0DD1F890;
+        Wed,  5 Jul 2023 08:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688547337; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eOmyEHyr0iiLqxM6ByyiTsEOHbd3rdaDe+tLZlMSH6U=;
+        b=pHWlUw1nB4HYwtHIKr0PUn2rqxsjFSE0f3F8ydhxzB1QeKnkTRzRDN7sANSCxHOVYJ7cux
+        Qwt8MaBUPXiDd4Y3FWMdRJQaluoLXy23zatuvkrzMdQ/Us+6O4j4aVdRQGUwtZgZ906LNd
+        JpuQAuvakBrf6yH6Q0HTHtHfN1IckM4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688547337;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eOmyEHyr0iiLqxM6ByyiTsEOHbd3rdaDe+tLZlMSH6U=;
+        b=DmtXsj4z6R79cwOUnGi7y4vW3e0vTePbBmW0KSucdooEi3NIrfGlfEYw9Tls9ie7/NKO0d
+        obFcaQK0WXRn2MCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78692134F3;
+        Wed,  5 Jul 2023 08:55:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WsN6HAkwpWRAXAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 05 Jul 2023 08:55:37 +0000
+Date:   Wed, 05 Jul 2023 10:55:37 +0200
+Message-ID: <87a5waohyu.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Minjie Du <duminjie@vivo.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list),
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH v1] sound: seq: check struct system assignment problem
+In-Reply-To: <20230705085022.13078-1-duminjie@vivo.com>
+References: <20230705085022.13078-1-duminjie@vivo.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2023 18:10, Chengfeng Ye wrote:
-> Hi, Krzysztof
+On Wed, 05 Jul 2023 10:50:22 +0200,
+Minjie Du wrote:
 > 
-> Thanks for the reply.
-> 
->> This interrupt is a threaded interrupt. Therefore the
->> s3c2410wdt_keepalive() will be called again from process thread. Are you
->> sure there is deadlock?
-> 
-> Is it really that s3c2410wdt_irq is a threaded interrupt? I could be wrong
-> but I can
-> see that the interrupt is registered via the following code. It is the
-> third argument
-> of devm_request_irq but not devm_request_threaded_irq or
-> request_threaded_irq,
-> as far as I know, it should be an interrupt handler for the interrupt line
-> wdt_irq
-> executed under irq context.
-> 
-> ret = devm_request_irq(dev, wdt_irq, s3c2410wdt_irq, 0, pdev->name, pdev);
+> make data->system.parm1 avoid double assignment.
+> but note writes "RT message with two parameters to UMP"
+> is one of assignment is for system.parm2?
 
-Yes, you are right.
+Yes, that should be rather parm2.
+Could you resubmit with that typo fix instead?
 
-Best regards,
-Krzysztof
 
+Thanks!
+
+Takashi
+
+> I'm not sure, Could you help check it out?
+> Thank you!
+> 
+> 
+> Signed-off-by: Minjie Du <duminjie@vivo.com>
+> ---
+>  sound/core/seq/seq_ump_convert.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/sound/core/seq/seq_ump_convert.c b/sound/core/seq/seq_ump_convert.c
+> index eb1d86ff6..60e637149 100644
+> --- a/sound/core/seq/seq_ump_convert.c
+> +++ b/sound/core/seq/seq_ump_convert.c
+> @@ -713,7 +713,6 @@ static int system_2p_ev_to_ump_midi1(const struct snd_seq_event *event,
+>  				     unsigned char status)
+>  {
+>  	data->system.status = status;
+> -	data->system.parm1 = (event->data.control.value >> 7) & 0x7f;
+>  	data->system.parm1 = event->data.control.value & 0x7f;
+>  	return 1;
+>  }
+> -- 
+> 2.39.0
+> 
