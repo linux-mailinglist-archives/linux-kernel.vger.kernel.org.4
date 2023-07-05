@@ -2,103 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABDA748AEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B97748AFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbjGERqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S232931AbjGERvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbjGERqM (ORCPT
+        with ESMTP id S229645AbjGERvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:46:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC91173F;
-        Wed,  5 Jul 2023 10:46:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CA7461631;
-        Wed,  5 Jul 2023 17:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D66C433C8;
-        Wed,  5 Jul 2023 17:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688579170;
-        bh=G3kTeTX8laaFf0hfRRCZcXhWR2amOKlU73GvQ4qcxb4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t7XZYnxGaHQrTEoa3uUWqI6cfBF5z93iJcs6rr3+teBc40jn6VlNfjSCu8r1wHPde
-         ibHC4IVqgi2LAPpncEkOlcYqpsFopEVi6Cap+Lc0RmUUPCBNLEjUWhUiSPWKNMia/B
-         zsmZVQdHjg0vFdlyOLIop1dTx7F7uzs7/NtB/+Og/nNbkHeFUxxw0HsqGjYFjshwho
-         rZ1QiDZOTKuHVdayMZxKpb7Wa6xNePF2DevIlUCV+fECgG2JknmF6ZN9Y6ea/ys7wy
-         2t6yuE9MPit18brQOiJH+J17m1cEdgi3AnTvT+IV4XkvHY6OgCFa8aoOQocvZGY56E
-         Ijt6YtTVjPzEQ==
-Date:   Wed, 5 Jul 2023 10:49:52 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8180x: Fix cluster PSCI suspend param
-Message-ID: <4rc27noldhojif23o3wtl622skdwwntaklua6gk3u3jkphclgf@5g4ujstyc6mh>
-References: <20230705-topic-8180_sleep-v1-1-c5dce117364e@linaro.org>
+        Wed, 5 Jul 2023 13:51:13 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D959EE3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:51:11 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-99342a599e9so518856666b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688579470; x=1691171470;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aEI4v+2KKn+EkDZzdrBmikEj6qMvmv1XLjDpHecmTZc=;
+        b=f5HN0rW/zmfb6pFzjhlVkLATVIc8CO9MM9qNTqXTMEchOXn4fIxtcz3Bx9eyCqCr2Z
+         M5Z0iUelv4vCsc15ld58d/0zM9UUJWAwN+XIleuO4uVXGFuUytLSMFn2mcLd7qm+OYZ1
+         txF0HDVGO4e0+Hr8h5AqLUey2XXij6T+Mts2sUaS2d97sVSzm9XURFST97gRUCjUd6ZN
+         +Knu2ZIlBqLLoX3vOXvgJPO7sE0U6CsNwW92Su3zO87HD6GAacOyAX02RaADnRwZ3+j2
+         m4p1oaf9lM/wlHWC1mrl0h9YdVrFcv8uLiTLvIrPNPSZf2hUt7l/wo4cEKxx+wobVv0G
+         MoXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688579470; x=1691171470;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aEI4v+2KKn+EkDZzdrBmikEj6qMvmv1XLjDpHecmTZc=;
+        b=CDiVifV68rdTdbP8tmVlq1govyIsvW8SODybnZ7qvX/AsusgDskToCc2dohbHsHAI9
+         yfx7IAMX+Wl+oS7OtU/Zv0vtMhFh7kmAGdpqzQ4auWOa0IJe2URU0Yq5FWdYZSs1fdfo
+         osDYZ5VNfpDTP/BZDyvg+87kLmEYXs/9R+rIDQQkUBT5N7NbjNaCpRWiFD8VMplQifyj
+         NeShTXpfXhonNU8bp5Q856iJl9ihk6TvhZEGNi7Jt2o1yCMyjmVFXOVvNYRumhVrAtas
+         PsUaBdP3COIV2r7rgK70zThVukXhWJRU7NNhlGnKXa++7w0Z609+xxaSkJTjR93M/oAR
+         X84w==
+X-Gm-Message-State: AC+VfDyqrPclskNGgdoyPXc/1vEPqzeQZXokNT/vWSTGb6qeIgbN8oWD
+        T86nyvAtWztqyvY3q3plqeFF4PdUnkXOm6e5/wtsKQ==
+X-Google-Smtp-Source: APBJJlFTojzQ/aPODd2ghbLHceO/hDIk0cF+cNlCPev56yuRvsdr91pXNO6nCvO7/y6BChiKczWX+RHhutgcASJd0c4=
+X-Received: by 2002:a17:906:f1d3:b0:978:6a95:512d with SMTP id
+ gx19-20020a170906f1d300b009786a95512dmr11603991ejb.11.1688579470177; Wed, 05
+ Jul 2023 10:51:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705-topic-8180_sleep-v1-1-c5dce117364e@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230629205040.665834-1-axelrasmussen@google.com>
+ <20230629205040.665834-4-axelrasmussen@google.com> <ZKSJNB3BbCiPxcdD@x1n>
+In-Reply-To: <ZKSJNB3BbCiPxcdD@x1n>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Wed, 5 Jul 2023 10:50:34 -0700
+Message-ID: <CAJHvVcjfrOU5PoSoh4n1O0tmr-2bsPzinHDW5OwhCh=egk=-uQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] selftests/mm: refactor uffd_poll_thread to allow
+ custom fault handlers
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 05:00:05PM +0200, Konrad Dybcio wrote:
-> The value was copypasted from 8150, but 8180 expects a different one.
-> Confirmed with both downstream device tree and Windows DSDT, not tested
-> on hardware (sorry, I don't have any).
-> 
-> Fix it.
-> 
-> Fixes: 8575f197b077 ("arm64: dts: qcom: Introduce the SC8180x platform")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Tue, Jul 4, 2023 at 2:03=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Thu, Jun 29, 2023 at 01:50:38PM -0700, Axel Rasmussen wrote:
+> > Previously, we had "one fault handler to rule them all", which used
+> > several branches to deal with all of the scenarios required by all of
+> > the various tests.
+> >
+> > In upcoming patches, I plan to add a new test, which has its own
+> > slightly different fault handling logic. Instead of continuing to add
+> > cruft to the existing fault handler, let's allow tests to define custom
+> > ones, separate from other tests.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >  tools/testing/selftests/mm/uffd-common.c |  5 ++++-
+> >  tools/testing/selftests/mm/uffd-common.h |  3 +++
+> >  tools/testing/selftests/mm/uffd-stress.c | 12 +++++++-----
+> >  3 files changed, 14 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/s=
+elftests/mm/uffd-common.c
+> > index ba20d7504022..02b89860e193 100644
+> > --- a/tools/testing/selftests/mm/uffd-common.c
+> > +++ b/tools/testing/selftests/mm/uffd-common.c
+> > @@ -499,6 +499,9 @@ void *uffd_poll_thread(void *arg)
+> >       int ret;
+> >       char tmp_chr;
+> >
+> > +     if (!args->handle_fault)
+> > +             args->handle_fault =3D uffd_handle_page_fault;
+> > +
+> >       pollfd[0].fd =3D uffd;
+> >       pollfd[0].events =3D POLLIN;
+> >       pollfd[1].fd =3D pipefd[cpu*2];
+> > @@ -527,7 +530,7 @@ void *uffd_poll_thread(void *arg)
+> >                       err("unexpected msg event %u\n", msg.event);
+> >                       break;
+> >               case UFFD_EVENT_PAGEFAULT:
+> > -                     uffd_handle_page_fault(&msg, args);
+> > +                     args->handle_fault(&msg, args);
+> >                       break;
+> >               case UFFD_EVENT_FORK:
+> >                       close(uffd);
+> > diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/s=
+elftests/mm/uffd-common.h
+> > index 197f5262fe0d..7c4fa964c3b0 100644
+> > --- a/tools/testing/selftests/mm/uffd-common.h
+> > +++ b/tools/testing/selftests/mm/uffd-common.h
+> > @@ -77,6 +77,9 @@ struct uffd_args {
+> >       unsigned long missing_faults;
+> >       unsigned long wp_faults;
+> >       unsigned long minor_faults;
+> > +
+> > +     /* A custom fault handler; defaults to uffd_handle_page_fault. */
+> > +     void (*handle_fault)(struct uffd_msg *msg, struct uffd_args *args=
+);
+> >  };
+> >
+> >  struct uffd_test_ops {
+> > diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/s=
+elftests/mm/uffd-stress.c
+> > index 995ff13e74c7..50b1224d72c7 100644
+> > --- a/tools/testing/selftests/mm/uffd-stress.c
+> > +++ b/tools/testing/selftests/mm/uffd-stress.c
+> > @@ -189,10 +189,8 @@ static int stress(struct uffd_args *args)
+> >                                  locking_thread, (void *)cpu))
+> >                       return 1;
+> >               if (bounces & BOUNCE_POLL) {
+> > -                     if (pthread_create(&uffd_threads[cpu], &attr,
+> > -                                        uffd_poll_thread,
+> > -                                        (void *)&args[cpu]))
+> > -                             return 1;
+> > +                     if (pthread_create(&uffd_threads[cpu], &attr, uff=
+d_poll_thread, &args[cpu]))
+> > +                             err("uffd_poll_thread create");
+>
+> irrelevant change?
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Right, I'll revert this. In an earlier version I had a more
+substantial change here, and just didn't fully revert it.
 
-Regards,
-Bjorn
+>
+> >               } else {
+> >                       if (pthread_create(&uffd_threads[cpu], &attr,
+> >                                          uffd_read_thread,
+> > @@ -247,9 +245,13 @@ static int userfaultfd_stress(void)
+> >  {
+> >       void *area;
+> >       unsigned long nr;
+> > -     struct uffd_args args[nr_cpus];
+> > +     struct uffd_args *args;
+> >       uint64_t mem_size =3D nr_pages * page_size;
+> >
+> > +     args =3D calloc(nr_cpus, sizeof(struct uffd_args));
+> > +     if (!args)
+> > +             err("allocating args array failed");
+> > +
+>
+> It's leaked?
+>
+> Isn't "args[] =3D { 0 }" already working?
 
+That works, but GCC can warn in this case (-Wmissing-braces) depending
+on the definition of struct uffd_args. I liked switching to calloc
+because it avoids any possibility of that even as we add/remove things
+to struct uffd_args in the future.
 
-> ---
->  arch/arm64/boot/dts/qcom/sc8180x.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> index be78a933d8eb..e58f931c2e45 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> @@ -298,7 +298,7 @@ BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
->  		domain-idle-states {
->  			CLUSTER_SLEEP_0: cluster-sleep-0 {
->  				compatible = "domain-idle-state";
-> -				arm,psci-suspend-param = <0x4100c244>;
-> +				arm,psci-suspend-param = <0x4100a344>;
->  				entry-latency-us = <3263>;
->  				exit-latency-us = <6562>;
->  				min-residency-us = <9987>;
-> 
-> ---
-> base-commit: e1f6a8eaf1c271a0158114a03e3605f4fba059ad
-> change-id: 20230705-topic-8180_sleep-e40beb42250a
-> 
-> Best regards,
-> -- 
-> Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
+Since it's a selftest and this function is only called exactly once,
+it didn't seem worth the code making certain we free it, instead just
+leaving it to be cleaned up when the process exits.
+
+>
+> Thanks,
+>
+> >       if (uffd_test_ctx_init(UFFD_FEATURE_WP_UNPOPULATED, NULL))
+> >               err("context init failed");
+> >
+> > --
+> > 2.41.0.255.g8b1d071c50-goog
+> >
+>
+> --
+> Peter Xu
+>
