@@ -2,91 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB3374915C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B6974915F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 01:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjGEXKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 19:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S232307AbjGEXLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 19:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjGEXKi (ORCPT
+        with ESMTP id S232248AbjGEXLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 19:10:38 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBD5171B;
-        Wed,  5 Jul 2023 16:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1688598628;
-        bh=YVkuJPiWwtlS7KO/QL4Gwb8sXKsudGfh4JXCqcwYuto=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NwsJ/fzJ7xs4RjczsP5GqR8reJMzegIwOQnb5bs4u9VCc4lmeAeNn58tH43ktXglY
-         Gpr3Ze6SFWSK3oTDUpSnTfHYFF1l+cg3ZDPN2TUzYok+kKvs0Cgs6hPxE4QKt1Y3DL
-         y4uNwr+ZGf2xGxQ1aj7NuiaLetBt91dNXeMcxfcRX7MUGSNBRA/Mjn6lp93d5NF71d
-         0ORmehjY7tZReqofRQYgqKuS9gP1LJcODlkPs8F4W4+xVSh6jT2VNKYG9lgTkeNP+R
-         Y9oP92PQbsqcATUggSqZs6G1lEDzb+pVytQpBSFKeWFiWGcuDTHI+0cM+UjWtwxgt+
-         gjguWgAXO3cBg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 5 Jul 2023 19:11:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD5F19A0
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 16:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688598626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ke5tgQfioUkSfs2lxW1LmyHZfufsO0C+IRL4oW7y/KI=;
+        b=fsKo7vEYh9pCCiOKt0js5JCk2jzRT9ETIuNzixvrrFnH1gmM+rSeiec9VbqcWaPt84+jkz
+        qBNCBxQma1Xg+SVO/RX/D0qtfRxIqlz6mCgktAiZhOkEXgVLdvAKuV2o+/tsDAF6PK2LiI
+        qOP7nfMnX3fQmlaj3hr8P/1qt9//5Sc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-281-tgZJihUGPjyXphJ8M6gE0Q-1; Wed, 05 Jul 2023 19:10:23 -0400
+X-MC-Unique: tgZJihUGPjyXphJ8M6gE0Q-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QxFkX1XPbz4wZw;
-        Thu,  6 Jul 2023 09:10:27 +1000 (AEST)
-Date:   Thu, 6 Jul 2023 09:10:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Valentin David <valentin.david@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the bluetooth tree
-Message-ID: <20230706091017.0bb8b233@canb.auug.org.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 376998022EF;
+        Wed,  5 Jul 2023 23:10:23 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 59C84492B02;
+        Wed,  5 Jul 2023 23:10:22 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <ZKXoBM7EQfbKKVjG@gondor.apana.org.au>
+References: <ZKXoBM7EQfbKKVjG@gondor.apana.org.au> <0000000000003f2db705ffc133d2@google.com>
+To:     syzbot <syzbot+f2c120b449b209d89efa@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        davem@davemloft.net, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [crypto?] WARNING in extract_iter_to_sg
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IFAn7M_HVqwehm4tJqfeSXW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1869586.1688598621.1@warthog.procyon.org.uk>
+Date:   Thu, 06 Jul 2023 00:10:21 +0100
+Message-ID: <1869587.1688598621@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/IFAn7M_HVqwehm4tJqfeSXW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+#syz fix: iov_iter: Kill ITER_PIPE
 
-Hi all,
-
-Commit
-
-  10912d85b17a ("Bluetooth: btusb: Add device 0489:e0f5 as MT7922 device")
-
-is missing a Signed-off-by from its author.
-
-Also, please separate the commit message tags from the rest of the
-commit message with a blank line.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IFAn7M_HVqwehm4tJqfeSXW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSl+FoACgkQAVBC80lX
-0Gy3vgf/XOYgBSQRRKuXz17jG5283vqsZwNr3xLozryrr1L0QaDoq/R8MIxf+KsW
-NMmR0u14ecxWwrxNTnWH2spjgNfmycnABC7oLB40lq3pACvm1boFN/Lk4Zkb/JYg
-dUbObgiGi0IN2XcACKXT8NKYPw5o2BW6X2XzCEFeoIyk4ezQLfnoM+ANcbVX/Fpv
-EqX5v5+3A3UOF2U0/a4IAghJJfdo+VZuHWSW8rISQA7QJWDLq1FLsxRBVJHcFLeW
-RGtJjReAeLCBL4VJRujTCjIcHaqSh5fN4y4RljLGFMXC2LB/AnxAM1LRS/YRQrsV
-uxgdoxKXfb/7PvCCZ2pnbCj6mjO6iQ==
-=icJG
------END PGP SIGNATURE-----
-
---Sig_/IFAn7M_HVqwehm4tJqfeSXW--
