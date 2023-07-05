@@ -2,215 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE9A74888B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652E8748886
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbjGEPyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
+        id S232883AbjGEPyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbjGEPyq (ORCPT
+        with ESMTP id S232344AbjGEPyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:54:46 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F9D173E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:54:34 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc77e76abso69336485e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 08:54:34 -0700 (PDT)
+        Wed, 5 Jul 2023 11:54:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FF6173E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:54:10 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-99342a599e9so505466666b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 08:54:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688572473; x=1691164473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6CZyzkzUMz1fXOQ881Ov7Y8cjX9OK+wAcM/N2Fl/7tk=;
-        b=kpM+idAhMrvaBCu3Jtyd7+ErrWLoeJDtMOQaFwhQp23JjMJSxNpiF1Lbk3Jc8/DtTW
-         O59rBXU+xgMzhOLHzH+i0EDlbz+zcEhI5mOAZxNq2en000xXCuE2yf9FHZtanNCKmja1
-         TOwJftcnxSCl446i40J3UYq369wwjI1xX2uzErTlNzA8fV4DHRr2HHPoyU1UiTjz4545
-         8EiwXG0XfUersmCjwJVPo8zr/L9gW3Y4yzphuldGbLw3PWc6FGrUSdH77t0PrziVNkla
-         YaoXri8GlT17+Ql6BNF9VUritkFICJUFa5yZpj0ZanK40JTZQPRvIDt+xe+OgRGsetZi
-         7FMQ==
+        d=linaro.org; s=google; t=1688572449; x=1691164449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh7Ahy6ORpQalqYiGXJ6P2PYQ7ck7O1uYvZEPdnfmvE=;
+        b=Dy0WTC1XGDZlk8NOu+Am7t1fFifoT5sruMjvAFxYKg84I990vbNeEyN1JREJ4mPNEL
+         53FmnZEia/O3KpwgEy30dFusX0Mky1TBMzPVTk8DYluD+npdINoroXxN6FaiA4ZtUdc6
+         dkb26I6QVd8UR81LWzGZz9SEa0g27RA/pXVFwI2qO3qDBOeXQkq4jaM4AjHO6RKlxbPe
+         KGe0XUkSqxSBL2R6nrrFj1NFFLPJDNQo0XSoYLIQ0R4zzrCf09LPca6mgw/zIUOvlwbp
+         Iy6FP7huKkHG9/cQ5ILBX6TbgHPyB+g+46bW+00EPPJf7q9w6cmKuxCTMUY8y5cT9mjc
+         P6vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688572473; x=1691164473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6CZyzkzUMz1fXOQ881Ov7Y8cjX9OK+wAcM/N2Fl/7tk=;
-        b=cUbg9khguDbdjSr98jFi0wHHHacBGUH7bTb3epgNbbO9oh3sJa3e4Fd/qjtyfyj1rE
-         cBoA0z6Ju6xtOTe5HsvCZbpT0DifEk8iPVubWZB30KD9EKTLduOTLMHcCJiH0qeDUxkK
-         GECuy8nQlI0YF+PzRhvK+oq6q5Roa9pG6spRSmAIpNT5vIMjV8bUT3vAbokwVhPZgrRv
-         tQAC1fLQ0UuyRgZNunI/Jpn3hNRuPitMQCms2z2ozWMkLEX4h9ve28NzCf1fJhCwTfZX
-         /O2giOY6plOl2hN158RDkkubi9dS2MhrcjZX/KoB9NSpeZJuOSXYXfL7dTGa3ZWv3QZz
-         C6+A==
-X-Gm-Message-State: AC+VfDzeU/72lRc0eHYfo4GcCyv3JSWVpVI+O37EwbdXtZ5yrihVQfnb
-        1DuOAFqbj2GfmsNaFPEuD8J78bir5BRWzGP6RPA=
-X-Google-Smtp-Source: ACHHUZ51AikI0ltda0xwrPKgoViozpgiEIbk+gOp/vo8TXgdd+WFbbHp/gUy/0NYhbIg0aXGMaMdMNMvUMACRwo68Mc=
-X-Received: by 2002:a05:600c:24d:b0:3f7:f884:7be3 with SMTP id
- 13-20020a05600c024d00b003f7f8847be3mr13750491wmj.4.1688572472427; Wed, 05 Jul
- 2023 08:54:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688572449; x=1691164449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh7Ahy6ORpQalqYiGXJ6P2PYQ7ck7O1uYvZEPdnfmvE=;
+        b=TA5IbRD5s/qka99mmRurIAVeK8x3qEoAaV29IkhM/yzQLvhEmGWrmQX6zZT1avKeux
+         sWx23vN52jlja86ku2KJ5zO2T+ft2a5DHOvkCEozrfJvQnB9wkrzbexOA2qzjdA3W0am
+         qDEb3CnywVVRv5xtqPQg5plX9trnKZSONnPeeu+344CusWGyO9et/hfB8AtxWSUgvb6c
+         X0208AlH0pL9wcrGjagn3MpUcbaV3uAo28orDfyrqW61C4xB4ynRz5J546CS40WqXCT3
+         LERjpib/In2YeHGyD9AmvbYhj98ZusJWb/45Wu5bx3fvuP7v4omn6DwnDp3PBaghKumn
+         Tavg==
+X-Gm-Message-State: ABy/qLbtG1t9HZDAUbj4iGEguu5L4uJ5DWGv4Cxxrj5Q6EzSw5r+n1Hm
+        3B46fOw7kC3hxCblzu4pjvBobw==
+X-Google-Smtp-Source: APBJJlEz1prR8ooq74/QZIpUvVZQG3+zszMxccKMR2EU9mgjTG+aNd53wLSXMg8pc3kw0FhjJfbNiA==
+X-Received: by 2002:a17:907:76ab:b0:96f:a891:36cb with SMTP id jw11-20020a17090776ab00b0096fa89136cbmr14178070ejc.0.1688572449094;
+        Wed, 05 Jul 2023 08:54:09 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id jt24-20020a170906dfd800b00982cfe1fe5dsm14671309ejc.65.2023.07.05.08.54.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 08:54:08 -0700 (PDT)
+Message-ID: <9dc5738b-2170-a010-4685-ef8cc4bd3fa0@linaro.org>
+Date:   Wed, 5 Jul 2023 17:54:05 +0200
 MIME-Version: 1.0
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
- <CA+hFU4z1pc=KUVVqyqfXEceUqMXQgh-qUnuB=1nkPELghvQO7w@mail.gmail.com>
- <CADnq5_MNVdtdcWKSz6dgmsjg+kEu8p5FVE+fkw_5BaXeG3QGow@mail.gmail.com>
- <afab1f5a-e581-3416-e2c2-238ea120655b@mailbox.org> <CAAxE2A5C96k5ua+r938VA_+w7gHHNTdF3n8LwDb98W0Bf9wCVA@mail.gmail.com>
- <7c1e6df5-1ad4-be3c-b95d-92dc62a8c537@mailbox.org> <CAAxE2A7RGDY4eRC85CsqfszNzyKvMU2MX1wa+3HZ1hgNeAw3cQ@mail.gmail.com>
- <cb0b6b51-3a94-481b-26a1-89ff398d7835@mailbox.org> <CAAxE2A7tNCWkL_M2YcE=RN+nqqcokgBR4hcD2sR3fGAY2t4uLg@mail.gmail.com>
- <2f993fe4-8e95-4a67-c2f1-6adc2c431834@mailbox.org>
-In-Reply-To: <2f993fe4-8e95-4a67-c2f1-6adc2c431834@mailbox.org>
-From:   =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>
-Date:   Wed, 5 Jul 2023 11:53:56 -0400
-Message-ID: <CAAxE2A7s2ANMGkFizMJda4nzQO1Wi+oxkST0xZ2KgBM6wYXA5w@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-To:     =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>
-Cc:     Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Sebastian Wick <sebastian.wick@redhat.com>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        =?UTF-8?Q?Timur_Krist=C3=B3f?= <timur.kristof@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+Content-Language: en-US
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Nate Drude <Nate.D@variscite.com>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230704150240.2022020-1-hugo@hugovil.com>
+ <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
+ <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
+ <20230704172801.f11422b3f947c625f53af871@hugovil.com>
+ <CAOMZO5CWh0-5eMTBwjvNUrY-yOHE=daj6n-jAAfjWoV-H4rt0Q@mail.gmail.com>
+ <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
+ <20230705093507.7458eada3ae05e0e1740a10e@hugovil.com>
+ <AS2PR08MB88082608DB46EC1287C6E54B852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
+ <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
+ <20230705102502.d8c9fa894bd271a5526d81f7@hugovil.com>
+ <AS2PR08MB88085D6B7338AD6D4D3C9956852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
+ <20230705104837.e620da576f22f28244daacb1@hugovil.com>
+ <CAOMZO5D_p3hf+HVHNAijEevJRpzwmyGPcoHjiapsOx_ddsoksg@mail.gmail.com>
+ <20230705113419.183f686f47252abf3532fc9e@hugovil.com>
+ <45545984-ef00-f653-91db-cb6c1cb0a3a4@linaro.org>
+ <20230705115106.a4c314e8e177f6516bebda13@hugovil.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230705115106.a4c314e8e177f6516bebda13@hugovil.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 3:32=E2=80=AFAM Michel D=C3=A4nzer <michel.daenzer@m=
-ailbox.org> wrote:
->
-> On 7/5/23 08:30, Marek Ol=C5=A1=C3=A1k wrote:
-> > On Tue, Jul 4, 2023, 03:55 Michel D=C3=A4nzer <michel.daenzer@mailbox.o=
-rg> wrote:
-> >     On 7/4/23 04:34, Marek Ol=C5=A1=C3=A1k wrote:
-> >     > On Mon, Jul 3, 2023, 03:12 Michel D=C3=A4nzer <michel.daenzer@mai=
-lbox.org > wrote:
-> >     >     On 6/30/23 22:32, Marek Ol=C5=A1=C3=A1k wrote:
-> >     >     > On Fri, Jun 30, 2023 at 11:11=E2=80=AFAM Michel D=C3=A4nzer=
- <michel.daenzer@mailbox.org> wrote:
-> >     >     >> On 6/30/23 16:59, Alex Deucher wrote:
-> >     >     >>> On Fri, Jun 30, 2023 at 10:49=E2=80=AFAM Sebastian Wick
-> >     >     >>> <sebastian.wick@redhat.com <mailto:sebastian.wick@redhat.=
-com> wrote:
-> >     >     >>>> On Tue, Jun 27, 2023 at 3:23=E2=80=AFPM Andr=C3=A9 Almei=
-da <andrealmeid@igalia.com> wrote:
-> >     >     >>>>>
-> >     >     >>>>> +Robustness
-> >     >     >>>>> +----------
-> >     >     >>>>> +
-> >     >     >>>>> +The only way to try to keep an application working aft=
-er a reset is if it
-> >     >     >>>>> +complies with the robustness aspects of the graphical =
-API that it is using.
-> >     >     >>>>> +
-> >     >     >>>>> +Graphical APIs provide ways to applications to deal wi=
-th device resets. However,
-> >     >     >>>>> +there is no guarantee that the app will use such featu=
-res correctly, and the
-> >     >     >>>>> +UMD can implement policies to close the app if it is a=
- repeating offender,
-> >     >     >>>>> +likely in a broken loop. This is done to ensure that i=
-t does not keep blocking
-> >     >     >>>>> +the user interface from being correctly displayed. Thi=
-s should be done even if
-> >     >     >>>>> +the app is correct but happens to trigger some bug in =
-the hardware/driver.
-> >     >     >>>>
-> >     >     >>>> I still don't think it's good to let the kernel arbitrar=
-ily kill
-> >     >     >>>> processes that it thinks are not well-behaved based on s=
-ome heuristics
-> >     >     >>>> and policy.
-> >     >     >>>>
-> >     >     >>>> Can't this be outsourced to user space? Expose the infor=
-mation about
-> >     >     >>>> processes causing a device and let e.g. systemd deal wit=
-h coming up
-> >     >     >>>> with a policy and with killing stuff.
-> >     >     >>>
-> >     >     >>> I don't think it's the kernel doing the killing, it would=
- be the UMD.
-> >     >     >>> E.g., if the app is guilty and doesn't support robustness=
- the UMD can
-> >     >     >>> just call exit().
-> >     >     >>
-> >     >     >> It would be safer to just ignore API calls[0], similarly t=
-o what is done until the application destroys the context with robustness. =
-Calling exit() likely results in losing any unsaved work, whereas at least =
-some applications might otherwise allow saving the work by other means.
-> >     >     >
-> >     >     > That's a terrible idea. Ignoring API calls would be identic=
-al to a freeze. You might as well disable GPU recovery because the result w=
-ould be the same.
-> >     >
-> >     >     No GPU recovery would affect everything using the GPU, wherea=
-s this affects only non-robust applications.
-> >     >
-> >     > which is currently the majority.
-> >
-> >     Not sure where you're going with this. Applications need to use rob=
-ustness to be able to recover from a GPU hang, and the GPU needs to be rese=
-t for that. So disabling GPU reset is not the same as what we're discussing=
- here.
-> >
-> >
-> >     >     > - non-robust contexts: call exit(1) immediately, which is t=
-he best way to recover
-> >     >
-> >     >     That's not the UMD's call to make.
-> >     >
-> >     > That's absolutely the UMD's call to make because that's mandated =
-by the hw and API design
-> >
-> >     Can you point us to a spec which mandates that the process must be =
-killed in this case?
-> >
-> >
-> >     > and only driver devs know this, which this thread is a proof of. =
-The default behavior is to skip all command submission if a non-robust cont=
-ext is lost, which looks like a freeze. That's required to prevent infinite=
- hangs from the same context and can be caused by the side effects of the G=
-PU reset itself, not by the cause of the previous hang. The only way out of=
- that is killing the process.
-> >
-> >     The UMD killing the process is not the only way out of that, and do=
-ing so is overreach on its part. The UMD is but one out of many components =
-in a process, not the main one or a special one. It doesn't get to decide w=
-hen the process must die, certainly not under circumstances where it must b=
-e able to continue while ignoring API calls (that's required for robustness=
-).
-> >
-> >
-> > You're mixing things up. Robust apps don't any special action from a UM=
-D. Only non-robust apps need to be killed for proper recovery with the only=
- other alternative being not updating the window/screen,
->
-> I'm saying they don't "need" to be killed, since the UMD must be able to =
-keep going while ignoring API calls (or it couldn't support robustness). It=
-'s a choice, one which is not for the UMD to make.
->
->
-> > Also it's already used and required by our customers on Android because=
- killing a process returns the user to the desktop screen and can generate =
-a crash dump instead of keeping the app output frozen, and they agree that =
-this is the best user experience given the circumstances.
->
-> Then some appropriate Android component needs to make that call. The UMD =
-is not it.
+On 05/07/2023 17:51, Hugo Villeneuve wrote:
+>> As I wrote, interrupt type cannot be none. What does it even mean "none"
+>> for your case?
+> 
+> Hi,
+> I have no idea why Variscite are using this IRQ type of NONE.
 
-We can change it once Android and Linux have a better way to handle
-non-robust apps. Until then, generating a core dump after a GPU crash
-produces the best outcome for users and developers.
+Because it worked :)
 
-Marek
+> 
+> I can put IRQ_TYPE_EDGE_FALLING since I tested it and it works.
+
+Seems reasonable because on schematics this looked pulled up.
+
+Best regards,
+Krzysztof
+
