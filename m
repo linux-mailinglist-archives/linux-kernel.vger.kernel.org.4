@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30DC748956
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D65574895B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjGEQiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S231953AbjGEQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjGEQiv (ORCPT
+        with ESMTP id S231741AbjGEQjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:38:51 -0400
+        Wed, 5 Jul 2023 12:39:11 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EDA10EA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:38:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFE71703
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:38:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688575081;
+        s=mimecast20190719; t=1688575108;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f+BIFPuADYbd26Hky4KRHtBDGMxjN7kUaiaPVMFcqU0=;
-        b=SweReg4GXOzVSC6hfRfz8zo/EYy8V8X3SAJmYUaWy19CGmLslN6QaJQzvsnfvtEntDR6OY
-        Zh3lUMP9fwEn/ykxAbxObTTJqJUvprp+twktMf/ZXNVE+1gPCBIrazENjVAm+fAenA9lLd
-        9koOIHU7EMOYNkkpIGpaQX5l1N9JCDo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-358-pd3MsW3jNJ2ZrOPRGlY5dg-1; Wed, 05 Jul 2023 12:37:58 -0400
-X-MC-Unique: pd3MsW3jNJ2ZrOPRGlY5dg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9830802666;
-        Wed,  5 Jul 2023 16:37:57 +0000 (UTC)
-Received: from localhost (unknown [10.42.28.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B42ED18EB4;
-        Wed,  5 Jul 2023 16:37:57 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 17:37:57 +0100
-From:   "Richard W.M. Jones" <rjones@redhat.com>
-To:     Richard Henderson <richard.henderson@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-        Benjamin Copeland <ben.copeland@linaro.org>,
-        lkml - Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: qemu-x86_64 booting with 8.0.0 stil see int3: when running LTP
- tracing testing.
-Message-ID: <20230705163757.GK7636@redhat.com>
-References: <CA+G9fYsETJQm0Ue7hGsb+nbsiMikwycOV3V0DPr6WC2r61KRBQ@mail.gmail.com>
- <2d7595b1-b655-4425-85d3-423801bce644@app.fastmail.com>
- <20230621160655.GL2053369@hirez.programming.kicks-ass.net>
- <20230704074620.GA17440@redhat.com>
- <20230705162830.GC17440@redhat.com>
- <CAFXwXrmbpuFNf5=nQxiTteo8fpCdAbK4pEAN176Cq0yvwZcfFw@mail.gmail.com>
+        bh=qtdlmeuUvVV5AoG6i2ieA0Vy+QvgXsh2syFJ86sdKyc=;
+        b=Y0e6AiZ/c+MsCLGcSjlJStGzpWQyzBAHbpTcihLAussMioXbDB7KsFi5ATHvGtRsr0sF6I
+        VP4TSDDgxMY9JHHK4UZZhGsmq+JLp5eM/3wSYqH4WUICsJarPQhN6ZFcdK5TEag5hRNVQD
+        mFfOM0flpB5AlJBJiq7ijK9tvdNZFsw=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-36-WZAI8yadMZ2a0BN9C7zZgw-1; Wed, 05 Jul 2023 12:38:27 -0400
+X-MC-Unique: WZAI8yadMZ2a0BN9C7zZgw-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-403838e9f4dso707821cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 09:38:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688575107; x=1691167107;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtdlmeuUvVV5AoG6i2ieA0Vy+QvgXsh2syFJ86sdKyc=;
+        b=IOLKMIQ5vXPGPnFHptEjsWnrex/UOIu+GqQwjMPK3jxqJqJBADqTyEBEafPEea64jv
+         2bbODsy4PdSZosOJIcDIxcI9dG4z8onoyxdnhAO8CrJfh5h5MDaWC03vr4nUUOVEZ8fq
+         eo5yiwfNPdJxF9Y4be2HOCKGzhAQ/NpDOV86YdIJ5s0YyIcWGXYc/JuyMer4zeZ624yM
+         5GLBMhEP5KHEqJdD7cB1zAwP3jlgK/+6YY4+dp+Dxd8ymLIQLV2WMff45uNkm6YdPbdm
+         uN7kLrQslTp8OFwVkPwWP1HB4m0UWWAWPVdH99fIt8CVUFUBq6DREGDfgE6MykM8KRRU
+         JsZg==
+X-Gm-Message-State: AC+VfDyAHvsLcPghD2w9dWW3Bw0TM6N6LA58sG5q6etiWYceDxmTVQI9
+        ecFb+p8F+onONBy6a7sqNNYCw9K9WpV+rYThcYDS9P7eJi874yLnGlmwdHoVXScEQwOjoUeR+JZ
+        PoI3Q78AwhuvFy9CKEfDjZKlP
+X-Received: by 2002:a05:622a:1649:b0:3fd:e953:74ee with SMTP id y9-20020a05622a164900b003fde95374eemr23330967qtj.2.1688575106973;
+        Wed, 05 Jul 2023 09:38:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7ihy+ZtuZ+x6vBvXVoM3TZ2NbZyY/aD/dUpJ9fV+DBZTHo+GqAbnJh/h9W5pIXBTG6F2oj7A==
+X-Received: by 2002:a05:622a:1649:b0:3fd:e953:74ee with SMTP id y9-20020a05622a164900b003fde95374eemr23330935qtj.2.1688575106709;
+        Wed, 05 Jul 2023 09:38:26 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id ew5-20020a05622a514500b00400a760cbfdsm12611511qtb.17.2023.07.05.09.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 09:38:26 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 12:38:24 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] mm: userfaultfd: add new UFFDIO_POISON ioctl
+Message-ID: <ZKWcgD1hFFUxeQHg@x1n>
+References: <20230629205040.665834-1-axelrasmussen@google.com>
+ <ZKSDLogLASaZgKCP@x1n>
+ <CADrL8HXp-P44VxTXdJMkzSgPC8r_b0T21_cuPCTNy6Ub2PFBKA@mail.gmail.com>
+ <ZKWXGnSKcOdnaeJw@x1n>
+ <CADrL8HWO8g2-YdUtyLM6e+f1VJq6YV-b1_rj-beEh2C84kAgEw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFXwXrmbpuFNf5=nQxiTteo8fpCdAbK4pEAN176Cq0yvwZcfFw@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+In-Reply-To: <CADrL8HWO8g2-YdUtyLM6e+f1VJq6YV-b1_rj-beEh2C84kAgEw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,177 +102,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 06:32:30PM +0200, Richard Henderson wrote:
-> https://gitlab.com/qemu-project/qemu/-/commit/
-> 3307e08c6f142bb3d2406cfbc0ee19359748b51a
+On Wed, Jul 05, 2023 at 09:27:15AM -0700, James Houghton wrote:
+> On Wed, Jul 5, 2023 at 9:15â€¯AM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > On Wed, Jul 05, 2023 at 09:09:19AM -0700, James Houghton wrote:
+> > > > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> > > > > index 4c932cb45e0b..8259fee32421 100644
+> > > > > --- a/include/linux/swapops.h
+> > > > > +++ b/include/linux/swapops.h
+> > > > > @@ -394,7 +394,8 @@ typedef unsigned long pte_marker;
+> > > > >
+> > > > >  #define  PTE_MARKER_UFFD_WP                  BIT(0)
+> > > > >  #define  PTE_MARKER_SWAPIN_ERROR             BIT(1)
+> > > > > -#define  PTE_MARKER_MASK                     (BIT(2) - 1)
+> > > > > +#define  PTE_MARKER_UFFD_POISON                      BIT(2)
+> > > >
+> > > > One more tab.
+> > > >
+> > > > Though I remembered the last time we discussed IIRC we plan to rename
+> > > > SWAPIN_ERROR and reuse it, could you explain why a new bit is still needed?
+> > > >
+> > > > I think I commented this but I'll do it again: IIUC any existing host
+> > > > swapin errors for guest pages should be reported as MCE too, afaict,
+> > > > happened in kvm context.
+> > >
+> > > I think swapin errors are treated differently than poison. Swapin
+> > > errors get VM_FAULT_SIGBUS, and poison gets VM_FAULT_HWPOISON, so
+> > > UFFDIO_POISON should also get VM_FAULT_HWPOISON (so that's what Axel
+> > > has implemented). And I think that needs a separate PTE marker.
+> >
+> > My question was, should we also make SWAPIN_ERROR return VM_FAULT_HWPOISON
+> > always?
+> >
+> > Just to recap from what I already commented above - if a guest page got
+> > error in swapin due to block sector failures, it should be treated as
+> > VM_FAULT_HWPOISON too, IMHO.  IOW, I think current SWAPIN_ERROR is wrong
+> > when in kvm context and we should fix it first.
+> 
+> Oh! Yes, I agree, though I'm not familiar enough with the users of
+> SWAPIN_ERROR to know if we can actually make this change.
 
-FWIW reverting this commit (alone) causes qemu to throw this assertion:
+Miaohe initially proposed this swapin error facility, let's see whether he
+can comment; he's already in the cc list.
 
-qemu-system-x86_64: ../accel/tcg/tb-maint.c:1096: tb_invalidate_phys_page_range__locked: Assertion `((start ^ last) & ((target_long)-1 << 12)) == 0' failed.
+AFAICT that's the right thing to do, and it shouldn't affect any existing
+user of swapin error if there is.
 
-I've seen this bug happen on both very old and very new versions of
-qemu (even back to 6.0), so I don't think the bug is caused by or
-fixed by any recent change.
-
-Rich.
-
-> r~
-> 
-> On Wed, 5 July 2023, 18:28 Richard W.M. Jones, <rjones@redhat.com> wrote:
-> 
->     On Tue, Jul 04, 2023 at 08:46:20AM +0100, Richard W.M. Jones wrote:
->     > We have been having the same sort of problem
->     > (https://bugzilla.redhat.com/show_bug.cgi?id=2216496).  It's another
->     > of those bugs that requires hundreds or thousands of boot iterations
->     > before you can see it.  There is a test in comment 27 but it requires
->     > guestfish and some hacking to work.  I'll try to come up with a
->     > cleaner test later.
->     >
->     > We see stack traces like:
->     >
->     > [    3.081939] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff,
->     max_idle_ns: 2085701024 ns
->     > [    3.082266] clocksource: Switched to clocksource acpi_pm
->     > [    3.090201] NET: Registered PF_INET protocol family
->     > [    3.093098] int3: 0000 [#1] PREEMPT SMP NOPTI
->     > [    3.093098] CPU: 3 PID: 1 Comm: swapper/0 Not tainted
->     6.4.0-10173-ga901a3568fd2 #8
->     > [    3.093098] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
->     rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
->     > [    3.093098] RIP: 0010:__mod_timer+0x1c3/0x370
->     > [    3.093098] Code: 00 00 41 bd ff ff ff ff 31 d2 4c 89 f6 4c 89 ff e8
->     f2 ef ff ff 41 89 c4 85 c0 75 09 83 e3 01 0f 85 54 ff ff ff 41 8b 4f 20 66
->     <90> f7 c1 00 00 10 00 0f 84 23 01 00 00 48 c7 c3 40 cc 01 00 65 48
->     > [    3.093098] RSP: 0018:ffffaf1600013e00 EFLAGS: 00000046
->     > [    3.093098] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
->     0000000000280003
->     > [    3.093098] RDX: 0000000000000000 RSI: ffff9aa90fd9dec0 RDI:
->     ffffffff8441e4b8
->     > [    3.093098] RBP: 00000000fffc200d R08: ffffffff8441e4a0 R09:
->     ffffffff8441e4b8
->     > [    3.093098] R10: 0000000000000001 R11: 000000000002e990 R12:
->     0000000000000000
->     > [    3.093098] R13: 00000000ffffffff R14: ffff9aa90fd9dec0 R15:
->     ffffffff8441e4b8
->     > [    3.093098] FS:  0000000000000000(0000) GS:ffff9aa90fd80000(0000)
->     knlGS:0000000000000000
->     > [    3.093098] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->     > [    3.093098] CR2: 0000000000000000 CR3: 000000004e02e000 CR4:
->     0000000000750ee0
->     > [    3.093098] PKRU: 55555554
->     > [    3.093098] Call Trace:
->     > [    3.093098]  <TASK>
->     > [    3.093098]  ? die+0x31/0x80
->     > [    3.093098]  ? exc_int3+0x10e/0x120
->     > [    3.093098]  ? asm_exc_int3+0x39/0x40
->     > [    3.093098]  ? __mod_timer+0x1c3/0x370
->     > [    3.093098]  ? __mod_timer+0x1c3/0x370
->     > [    3.093098]  queue_delayed_work_on+0x23/0x30
->     > [    3.093098]  neigh_table_init+0x1bb/0x2e0
->     > [    3.093098]  arp_init+0x12/0x50
->     > [    3.093098]  inet_init+0x15b/0x2f0
->     > [    3.093098]  ? __pfx_inet_init+0x10/0x10
->     > [    3.093098]  do_one_initcall+0x58/0x230
->     > [    3.093098]  kernel_init_freeable+0x199/0x2d0
->     > [    3.093098]  ? __pfx_kernel_init+0x10/0x10
->     > [    3.093098]  kernel_init+0x15/0x1b0
->     > [    3.093098]  ret_from_fork+0x2c/0x50
->     > [    3.093098]  </TASK>
->     > [    3.093098] Modules linked in:
->     > [    3.093098] ---[ end trace 0000000000000000 ]---
->     > [    3.093098] RIP: 0010:__mod_timer+0x1c3/0x370
->     > [    3.093098] Code: 00 00 41 bd ff ff ff ff 31 d2 4c 89 f6 4c 89 ff e8
->     f2 ef ff ff 41 89 c4 85 c0 75 09 83 e3 01 0f 85 54 ff ff ff 41 8b 4f 20 66
->     <90> f7 c1 00 00 10 00 0f 84 23 01 00 00 48 c7 c3 40 cc 01 00 65 48
->     > [    3.093098] RSP: 0018:ffffaf1600013e00 EFLAGS: 00000046
->     > [    3.093098] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
->     0000000000280003
->     > [    3.093098] RDX: 0000000000000000 RSI: ffff9aa90fd9dec0 RDI:
->     ffffffff8441e4b8
->     > [    3.093098] RBP: 00000000fffc200d R08: ffffffff8441e4a0 R09:
->     ffffffff8441e4b8
->     > [    3.093098] R10: 0000000000000001 R11: 000000000002e990 R12:
->     0000000000000000
->     > [    3.093098] R13: 00000000ffffffff R14: ffff9aa90fd9dec0 R15:
->     ffffffff8441e4b8
->     > [    3.093098] FS:  0000000000000000(0000) GS:ffff9aa90fd80000(0000)
->     knlGS:0000000000000000
->     > [    3.093098] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->     > [    3.093098] CR2: 0000000000000000 CR3: 000000004e02e000 CR4:
->     0000000000750ee0
->     > [    3.093098] PKRU: 55555554
->     > [    3.093098] Kernel panic - not syncing: Fatal exception in interrupt
->     >
->     > There are many variations, but the common pattern seems to be
->     > <something in the clock or timer code> -> int3 exception
->     >
->     > It only happens under qemu TCG (software emulation).
->     >
->     > It goes away if we recompile qemu without MTTCG support.
->     >
->     > It only happens with -smp enabled, we are using qemu -smp 4
->     >
->     > We are using qemu-system-x86_64 full system emulation on x86_64 host
->     > (ie. forcing KVM off).
->     >
->     > It happens with the latest upstream kernel and qemu, compiled from
->     > source.
-> 
->     I got a bit further on this one.
-> 
->     The bug happens in the code that updates the static branch used for at
->     least these two keys:
-> 
->       static DEFINE_STATIC_KEY_FALSE(__sched_clock_stable);
->       DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
-> 
->     There are probably others (it seems a generic problem with how static
->     branches are handled by TCG), but I only see the bug for those two.
-> 
->     When the static branch is updated we end up calling
->     arch/x86/kernel/alternative.c:text_poke_bp_batch().  It's best to read
->     the description of that function to see where int3 is used:
-> 
->       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/
->     arch/x86/kernel/alternative.c#n2086
-> 
->     I modified the qemu TCG int3 helper so it dumps the code at %rip when
->     the interrupt fires, and I can actually see the changes in the above
->     function happen, first int3 being written, then the end of the nop,
->     then the int3 being overwritten with the first byte of the nop.
-> 
->     Unfortunately the int3 still fires after the code has been completely
->     rewritten to its final (ie nop) value.
-> 
->     This seems to indicate to me that neither the self-write to the kernel
->     text segment, nor sync_core (implemented by a "iret to self" trick)
->     invalidates the qemu TCG translation block containing the old int3
->     helper call.  Thus we (qemu) never "see" the new nop, we keep
->     emulating int3, and that causes the kernel to crash.
-> 
->     I added print statements inside tb_invalidate_phys_page() and this
->     function seems never to be called at all.  It's my understanding that
->     at least the kernel writing to its text segment ought to cause
->     tb_invalidate_phys_page() to be called, but I'm not super-familiar
->     with this qemu code.
-> 
->     Richard Henderson - do you have any suggestions?
-> 
->     Rich.
-> 
->     --
->     Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/
->     ~rjones
->     Read my programming and virtualization blog: http://rwmj.wordpress.com
->     libguestfs lets you edit virtual machines.  Supports shell scripting,
->     bindings from many languages.  http://libguestfs.org
-> 
-> 
+Or say, VM_FAULT_HWPOISON should be the same as VM_FAULT_SIGBUS when not in
+kvm context, so shouldn't change a thing in !kvm, while changing that
+should fix kvm from crashing a guest where we shouldn't need to.
 
 -- 
-Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/~rjones
-Read my programming and virtualization blog: http://rwmj.wordpress.com
-virt-top is 'top' for virtual machines.  Tiny program with many
-powerful monitoring features, net stats, disk stats, logging, etc.
-http://people.redhat.com/~rjones/virt-top
+Peter Xu
 
