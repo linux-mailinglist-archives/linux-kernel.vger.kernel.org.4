@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F05F747AA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD303747AA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjGEALF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 20:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S230285AbjGEAMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 20:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjGEALE (ORCPT
+        with ESMTP id S229645AbjGEAMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 20:11:04 -0400
-Received: from mx-lax3-3.ucr.edu (mx.ucr.edu [169.235.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E71410DA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 17:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1688515863; x=1720051863;
-  h=mime-version:from:date:message-id:subject:to;
-  bh=qJGV4Ihn5aLv2rzCYISjNoN3t4WUUgPb+u7XyG6brjg=;
-  b=jr9Xp6MCBvnZBTLdYav3MNQwJu6fKZyWKyyzK8ivCVv8l/anQD2VpHZZ
-   ulC0vKTKluhpbo1EkkbOzSNpZB8fg/SDYzX0R8aKUm1NIXBd1Ed3e24z1
-   cWMD5Ih6w7BEEWgL2lGveTlRLMKayKuhFaKkN4pIViuwErgOCYyo2Uqdo
-   gh8ncpXyoH3HseUEdQmHJ41rsVKxWrZCy5gE9Zf1M9YlO4owwKYUFd6pJ
-   V4vXWW5qDJGf9RgPegwnOfvcE0Z5JYN62hB7/HRQOLi/Mvjgw7JduklLp
-   FmCzakErnLoZ03+sH6brwOWuKbeOJGTk4oCAjmvFyGymRWGpQdv3xa8hW
-   A==;
-Received: from mail-wr1-f71.google.com ([209.85.221.71])
-  by smtp-lax3-3.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Jul 2023 17:11:02 -0700
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-31437f02985so1649832f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 17:11:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail; t=1688515861; x=1691107861;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3Cx88c8TooVAgvxbbV7gir3Kl8V3dsEGMmFOU/R0Gkc=;
-        b=eqOVJ+ZIOAlOzUY3CyGT14tTXLweY+Fl2hm4x/JqtOQOq58R88a+ORK0eiYgletc2t
-         iiw4xghVq4+6/tZGjuCUGm1so6PDuoYsGBVAKNDw3EXuZnHBTSklAJx5ZsJGC4m07/+E
-         pfelACY5IEEN71veledD0Z3U17h3Oh6KbgpXg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688515861; x=1691107861;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3Cx88c8TooVAgvxbbV7gir3Kl8V3dsEGMmFOU/R0Gkc=;
-        b=ipld2U0iQzB7b3pqSuZksxV5DDqu1CHaWU1nlouO0U1qAfHIKy2lGhzqDOIcFyivpO
-         HdBVk9dR+yPpq5hQ3+5LPIJG1Cq5eaFoO/gcJ1kEWtVb1O2wfbo0/50wo82hBUVCfyTk
-         nBedo3vY4LJVQxFNmpyZ9x13LK7w9C9z7trKM6mbv5CbiUzQjAExC4c40Sn4khYUdnyG
-         ZcVftVBYGVV5PLTAyCCIzD1t4Wc2OpaQmbTdoZXsfDb307glKtRdzX0lkmLkamVIiF0t
-         hC5P7zcUwJBQN6zRmZKNe1abVOYCICAIn2g/IOChHLqxy9q0xR4axvdczeZODaNfTzsv
-         nrmw==
-X-Gm-Message-State: ABy/qLZPrpeuJVdTVH8PiCUqYN4qJFSO5FnMagkLBcvU9Rh27MAaPPtS
-        oBzIKKJ2hHfM85m2S1eWAa1Dcz1+YFX9eYsG19uPzGLyNNZ67exkaEbP7HYXSDx2Y7tjLoEhadp
-        oZV9o/IA4CDYop9rcUtbCK0i/90AlyHyKX9lnNDEKGA==
-X-Received: by 2002:adf:f504:0:b0:314:f18:bc58 with SMTP id q4-20020adff504000000b003140f18bc58mr13506730wro.58.1688515860985;
-        Tue, 04 Jul 2023 17:11:00 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFqjXkpHddsxxifSXjJ5i+5FdCHTLPsSKeVVQZ6XLfHIVa778JXLVbCsBJ2trBYzxWgtJBg0GkROtqXVmUc5wA=
-X-Received: by 2002:adf:f504:0:b0:314:f18:bc58 with SMTP id
- q4-20020adff504000000b003140f18bc58mr13506718wro.58.1688515860688; Tue, 04
- Jul 2023 17:11:00 -0700 (PDT)
+        Tue, 4 Jul 2023 20:12:15 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C2CDD;
+        Tue,  4 Jul 2023 17:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688515930; x=1720051930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QKyagUPboxcpQf0rlrW9d6i0lm4pdk3WkpwbACGjPms=;
+  b=Bj00pZLtpJYVQglaedktltJ7wqAe90ExwceH26AmXUccwhnqpvIPzB+V
+   bLqD+VDGVJiR5jhWYC7noKTMt+RZVo3p+T473OQnr0wIw7b8Z3RrlZpd4
+   2H8IDKWtmUCxs2NZBN9ML83eiuG4lJUsnawowt10hAMFJNN8aBPgccg1u
+   jD0XscW5i1ks/rUu+1wcgNKPlzUennmYzgK6f0X1sVHSXOIvt/SpwvEfc
+   YuppWYhj2qJNnx59XVmPKWHnUfhdbgiiymCEpcT6rrLEqBQVPHRB03vmp
+   nYHIBjn9tKTTk01GVv0k100dDQ6MSWUvA2rcygYk07SrolKlU1nGiBdOW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="362077347"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="362077347"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 17:12:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="696283513"
+X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
+   d="scan'208";a="696283513"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Jul 2023 17:12:06 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qGq7p-000Iep-2Q;
+        Wed, 05 Jul 2023 00:12:05 +0000
+Date:   Wed, 5 Jul 2023 08:11:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andreas Hindborg <nmi@metaspace.dk>, Ming Lei <ming.lei@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>, gost.dev@samsung.com,
+        linux-block@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: Re: [PATCH v5 5/5] ublk: enable zoned storage support
+Message-ID: <202307050741.XbpaKP7i-lkp@intel.com>
+References: <20230704165209.514591-6-nmi@metaspace.dk>
 MIME-Version: 1.0
-From:   Yu Hao <yhao016@ucr.edu>
-Date:   Tue, 4 Jul 2023 17:10:48 -0700
-Message-ID: <CA+UBctC57Lx=8Eh6P51cVz+cyb02GE_B-dWnYhffWoc-nm7v6Q@mail.gmail.com>
-Subject: [PATCH] ethernet: e1000e: Fix possible uninit bug
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704165209.514591-6-nmi@metaspace.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable phy_data should be initialized in function e1e_rphy.
-However, there is not return value check, which means there is a
-possible uninit read later for the variable.
+Hi Andreas,
 
-Signed-off-by: Yu Hao <yhao016@ucr.edu>
----
- drivers/net/ethernet/intel/e1000e/netdev.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c
-b/drivers/net/ethernet/intel/e1000e/netdev.c
-index 771a3c909c45..455af5e55cc6 100644
---- a/drivers/net/ethernet/intel/e1000e/netdev.c
-+++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -6910,8 +6910,11 @@ static int __e1000_resume(struct pci_dev *pdev)
-    /* report the system wakeup cause from S3/S4 */
-    if (adapter->flags2 & FLAG2_HAS_PHY_WAKEUP) {
-        u16 phy_data;
-+       s32 ret_val;
+[auto build test ERROR on 3261ea42710e9665c9151006049411bd23b5411f]
 
--       e1e_rphy(&adapter->hw, BM_WUS, &phy_data);
-+       ret_val = e1e_rphy(&adapter->hw, BM_WUS, &phy_data);
-+       if (ret_val)
-+           return ret_val;
-        if (phy_data) {
-            e_info("PHY Wakeup cause - %s\n",
-                   phy_data & E1000_WUS_EX ? "Unicast Packet" :
+url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Hindborg/ublk-add-opcode-offsets-for-DRV_IN-DRV_OUT/20230705-005338
+base:   3261ea42710e9665c9151006049411bd23b5411f
+patch link:    https://lore.kernel.org/r/20230704165209.514591-6-nmi%40metaspace.dk
+patch subject: [PATCH v5 5/5] ublk: enable zoned storage support
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230705/202307050741.XbpaKP7i-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230705/202307050741.XbpaKP7i-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307050741.XbpaKP7i-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/mips/kernel/head.o: in function `_stext':
+   (.text+0x0): relocation truncated to fit: R_MIPS_26 against `kernel_entry'
+   arch/mips/kernel/head.o: in function `smp_bootstrap':
+   (.ref.text+0xd8): relocation truncated to fit: R_MIPS_26 against `start_secondary'
+   init/main.o: in function `set_reset_devices':
+   main.c:(.init.text+0x20): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0x30): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `debug_kernel':
+   main.c:(.init.text+0xa4): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0xb4): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `quiet_kernel':
+   main.c:(.init.text+0x128): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0x138): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `warn_bootconfig':
+   main.c:(.init.text+0x1ac): relocation truncated to fit: R_MIPS_26 against `_mcount'
+   main.c:(.init.text+0x1bc): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
+   init/main.o: in function `init_setup':
+   main.c:(.init.text+0x230): additional relocation overflows omitted from the output
+   mips-linux-ld: drivers/block/ublk-zoned.o: in function `ublk_set_nr_zones':
+>> ublk-zoned.c:(.text.ublk_set_nr_zones+0x17c): undefined reference to `__udivdi3'
+   mips-linux-ld: drivers/block/ublk-zoned.o: in function `ublk_dev_param_zoned_validate':
+>> ublk-zoned.c:(.text.ublk_dev_param_zoned_validate+0x258): undefined reference to `__udivdi3'
+
 -- 
-2.34.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
