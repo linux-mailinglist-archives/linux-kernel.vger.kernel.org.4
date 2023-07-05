@@ -2,256 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8577C748706
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF85574870E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbjGEO56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S232881AbjGEO6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbjGEO54 (ORCPT
+        with ESMTP id S232869AbjGEO6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:57:56 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FDA1988
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:57:49 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51d8fa4dbf9so7790066a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688569068; x=1691161068;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VEPj9MNRtJknVYwMtm8K9KHPmosJrfBiNj5dYN7jj4s=;
-        b=URubkmlEbTg6P1Fe1S7d1HFf5IG1PybcKWIV8h3wl4VtsD1CWKW583PCB1F8rNlpNA
-         iU54+0BJau+XNqARNBdeCBUSOvVcucL0cSoUH3/gGx8rriYjhx8PwaBtVOZWTrdvMd8M
-         uPXXJ/jKbn2hN5GXAUXCpW8elYP5P6eiiO16JMqj4o5dHPcDe00RQJuY6jjUByOyO/57
-         +dfI25XfOQtjYFwxIY+hExf2EquYbVdvKvAz0UK2Wzp8IWqUqqjugI1IvZEQl3EOVrVn
-         Nne/Mha8kE+8GkwlP66Li93rldqBSFVbRJZA5DXL08jlR2XkYnA31C724agOC23RFmtL
-         AivA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688569068; x=1691161068;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VEPj9MNRtJknVYwMtm8K9KHPmosJrfBiNj5dYN7jj4s=;
-        b=HdYf/rRKS5Y3AXdg3xTagtdVJoy1mlLwIAwGOF6q0/lHLFyDypGM/5x0f4HcSql+Kp
-         dw5j653hhy3ClTKXwjY6MsUrrLqAhoOP7W/dF3J9Bum/Vh4qSP47+83kYjFoDSqgQklP
-         r7oq7e2aYFAn3hFPVw+c4/Qol6wSLaHYse40EQEsAJJYd8lsR7zNZE+oXbEkBmOmNo7l
-         NY/BQbRUnkpE1rNOvBH2/FtKwDYabgC4g6H9BWlIof7kJvYkvZvfjMgN9hEhx7lAbhiP
-         IWRwJchr9vJUF35pUf74EwtqV7lhcFkbJtrplkWCkUwfpfqjAEPdLVTPkH9Lbf6EhhdJ
-         NyBg==
-X-Gm-Message-State: ABy/qLabR6ngd5SdNQ6AKWF/eyJ2FsxprHrPyaFSGckDMMZJW7bPHGWW
-        xZy8PH09TlncKSE/muh9M5EjrQ==
-X-Google-Smtp-Source: APBJJlG6vsOX8k1cNJ3Gt/TYjk/rLFTMAwz7DghyTLEbVq4DCsOgN3iLG2kBiKyjXRn8cJ67PK8zBA==
-X-Received: by 2002:aa7:de1a:0:b0:51d:ec25:ce38 with SMTP id h26-20020aa7de1a000000b0051dec25ce38mr12241724edv.10.1688569068018;
-        Wed, 05 Jul 2023 07:57:48 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g25-20020aa7c859000000b0050cc4461fc5sm13044558edt.92.2023.07.05.07.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 07:57:47 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] powerpc: dts: add missing space before {
-Date:   Wed,  5 Jul 2023 16:57:43 +0200
-Message-Id: <20230705145743.292855-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 5 Jul 2023 10:58:24 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982BC1988;
+        Wed,  5 Jul 2023 07:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=K66hg10RS0xPL3sDSP6x+hgXXU7ubwcqX1w5rGjcqkQ=; b=Zh3WsjW1vqCcD+OuqBPmuZIecy
+        PcdciMOT+MVMVIXVmHMPi4CulMbU/oCKAEmlanfajsmL4tOrr5jrRUOYkDWzpuwbttVmRvdQqyrkQ
+        g6WDuev8lr3jltNE5qb/+XsnL0WZ8S4eyEzzPy5dV3tWmtBH3idKZO1H2Jd7PeTVQfa80M+t8bf85
+        ndJTbXlsu3gj60UERjKdpI3Df/bgmYJqQDBq27r5mWzBjnerUzgYN7pW6DLyOAHzJo4+k5+UEEvj6
+        3YsiG0Timevwn32rycrD0ZU8ZyitIF0AWWk5bkwZcu1DoembCkV4k4ghbd70J+//Cwq8q+g5JjmWF
+        PcxuOZkQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qH3x2-00CBot-2S;
+        Wed, 05 Jul 2023 14:57:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 188B93001E7;
+        Wed,  5 Jul 2023 16:57:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 025E72025BA45; Wed,  5 Jul 2023 16:57:50 +0200 (CEST)
+Date:   Wed, 5 Jul 2023 16:57:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Message-ID: <20230705145750.GD4253@hirez.programming.kicks-ass.net>
+References: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+ <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
+ <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net>
+ <20230630190514.GH3436214@ls.amr.corp.intel.com>
+ <ZJ9IKALhz1Q6ogu1@google.com>
+ <20230704165836.GB462772@hirez.programming.kicks-ass.net>
+ <1a8099e2-da28-6b2a-7b5a-1d6346b7f95d@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a8099e2-da28-6b2a-7b5a-1d6346b7f95d@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing whitespace between node name/label and opening {.
+On Wed, Jul 05, 2023 at 07:34:06AM -0700, Dave Hansen wrote:
+> On 7/4/23 09:58, Peter Zijlstra wrote:
+> > If we have concerns about allocating the PAMT array, can't we use CMA
+> > for this? Allocate the whole thing at boot as CMA such that when not
+> > used for TDX it can be used for regular things like userspace and
+> > filecache pages?
+> 
+> I never thought of CMA as being super reliable.  Maybe it's improved
+> over the years.
+> 
+> KVM also has a rather nasty habit of pinning pages, like for device
+> passthrough.  I suspect that means that we'll have one of two scenarios:
+> 
+>  1. CMA works great, but the TDX/CMA area is unusable for KVM because
+>     it's pinning all its pages and they just get moved out of the CMA
+>     area immediately.  The CMA area is effectively wasted.
+>  2. CMA sucks, and users get sporadic TDX failures when they wait a long
+>     time to run a TDX guest after boot.  Users just work around the CMA
+>     support by starting up TDX guests at boot or demanding a module
+>     parameter be set.  Hacking in CMA support was a waste.
+> 
+> Am I just too much of a pessimist?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/powerpc/boot/dts/fsl/c293si-post.dtsi  | 12 ++++++------
- arch/powerpc/boot/dts/fsl/p1022rdk.dts      | 10 +++++-----
- arch/powerpc/boot/dts/fsl/p1022si-post.dtsi |  2 +-
- arch/powerpc/boot/dts/fsl/p3041ds.dts       |  4 ++--
- arch/powerpc/boot/dts/fsl/p5040ds.dts       |  2 +-
- arch/powerpc/boot/dts/fsl/t4240qds.dts      |  2 +-
- arch/powerpc/boot/dts/mpc5121.dtsi          |  2 +-
- arch/powerpc/boot/dts/mpc5125twr.dts        |  2 +-
- 8 files changed, 18 insertions(+), 18 deletions(-)
+Well, if CMA still sucks, then that needs fixing. If CMA works, but we
+have a circular fail in that KVM needs to long-term pin the PAMT pages
+but long-term pin is evicted from CMA (the whole point of long-term pin,
+after all), then surely we can break that cycle somehow, since in this
+case the purpose of the CMA is being able to grab that memory chunk when
+we needs it.
 
-diff --git a/arch/powerpc/boot/dts/fsl/c293si-post.dtsi b/arch/powerpc/boot/dts/fsl/c293si-post.dtsi
-index bec0fc36849d..f208fb8f64b3 100644
---- a/arch/powerpc/boot/dts/fsl/c293si-post.dtsi
-+++ b/arch/powerpc/boot/dts/fsl/c293si-post.dtsi
-@@ -124,10 +124,10 @@ crypto@80000 {
- 		reg = <0x80000 0x20000>;
- 		ranges = <0x0 0x80000 0x20000>;
- 
--		jr@1000{
-+		jr@1000 {
- 			interrupts = <45 2 0 0>;
- 		};
--		jr@2000{
-+		jr@2000 {
- 			interrupts = <57 2 0 0>;
- 		};
- 	};
-@@ -140,10 +140,10 @@ crypto@a0000 {
- 		reg = <0xa0000 0x20000>;
- 		ranges = <0x0 0xa0000 0x20000>;
- 
--		jr@1000{
-+		jr@1000 {
- 			interrupts = <49 2 0 0>;
- 		};
--		jr@2000{
-+		jr@2000 {
- 			interrupts = <50 2 0 0>;
- 		};
- 	};
-@@ -156,10 +156,10 @@ crypto@c0000 {
- 		reg = <0xc0000 0x20000>;
- 		ranges = <0x0 0xc0000 0x20000>;
- 
--		jr@1000{
-+		jr@1000 {
- 			interrupts = <55 2 0 0>;
- 		};
--		jr@2000{
-+		jr@2000 {
- 			interrupts = <56 2 0 0>;
- 		};
- 	};
-diff --git a/arch/powerpc/boot/dts/fsl/p1022rdk.dts b/arch/powerpc/boot/dts/fsl/p1022rdk.dts
-index 29e8af1e3711..4261c2f7e4b3 100644
---- a/arch/powerpc/boot/dts/fsl/p1022rdk.dts
-+++ b/arch/powerpc/boot/dts/fsl/p1022rdk.dts
-@@ -60,23 +60,23 @@ rtc@68 {
- 				compatible = "st,m41t62";
- 				reg = <0x68>;
- 			};
--			adt7461@4c{
-+			adt7461@4c {
- 				compatible = "adi,adt7461";
- 				reg = <0x4c>;
- 			};
--			zl6100@21{
-+			zl6100@21 {
- 				compatible = "isil,zl6100";
- 				reg = <0x21>;
- 			};
--			zl6100@24{
-+			zl6100@24 {
- 				compatible = "isil,zl6100";
- 				reg = <0x24>;
- 			};
--			zl6100@26{
-+			zl6100@26 {
- 				compatible = "isil,zl6100";
- 				reg = <0x26>;
- 			};
--			zl6100@29{
-+			zl6100@29 {
- 				compatible = "isil,zl6100";
- 				reg = <0x29>;
- 			};
-diff --git a/arch/powerpc/boot/dts/fsl/p1022si-post.dtsi b/arch/powerpc/boot/dts/fsl/p1022si-post.dtsi
-index 5f51b7bfc064..093e4e3ed368 100644
---- a/arch/powerpc/boot/dts/fsl/p1022si-post.dtsi
-+++ b/arch/powerpc/boot/dts/fsl/p1022si-post.dtsi
-@@ -238,7 +238,7 @@ global-utilities@e0000 {
- 		fsl,has-rstcr;
- 	};
- 
--	power@e0070{
-+	power@e0070 {
- 		compatible = "fsl,mpc8536-pmc", "fsl,mpc8548-pmc";
- 		reg = <0xe0070 0x20>;
- 	};
-diff --git a/arch/powerpc/boot/dts/fsl/p3041ds.dts b/arch/powerpc/boot/dts/fsl/p3041ds.dts
-index 6f5f7283c533..ca0e0272ac62 100644
---- a/arch/powerpc/boot/dts/fsl/p3041ds.dts
-+++ b/arch/powerpc/boot/dts/fsl/p3041ds.dts
-@@ -41,7 +41,7 @@ / {
- 	#size-cells = <2>;
- 	interrupt-parent = <&mpic>;
- 
--	aliases{
-+	aliases {
- 		phy_rgmii_0 = &phy_rgmii_0;
- 		phy_rgmii_1 = &phy_rgmii_1;
- 		phy_sgmii_1c = &phy_sgmii_1c;
-@@ -165,7 +165,7 @@ adt7461@4c {
- 			};
- 		};
- 
--		fman@400000{
-+		fman@400000 {
- 			ethernet@e0000 {
- 				phy-handle = <&phy_sgmii_1c>;
- 				phy-connection-type = "sgmii";
-diff --git a/arch/powerpc/boot/dts/fsl/p5040ds.dts b/arch/powerpc/boot/dts/fsl/p5040ds.dts
-index 30850b3228e0..5cfc689ee474 100644
---- a/arch/powerpc/boot/dts/fsl/p5040ds.dts
-+++ b/arch/powerpc/boot/dts/fsl/p5040ds.dts
-@@ -41,7 +41,7 @@ / {
- 	#size-cells = <2>;
- 	interrupt-parent = <&mpic>;
- 
--	aliases{
-+	aliases {
- 		phy_sgmii_slot2_1c = &phy_sgmii_slot2_1c;
- 		phy_sgmii_slot2_1d = &phy_sgmii_slot2_1d;
- 		phy_sgmii_slot2_1e = &phy_sgmii_slot2_1e;
-diff --git a/arch/powerpc/boot/dts/fsl/t4240qds.dts b/arch/powerpc/boot/dts/fsl/t4240qds.dts
-index c0913ac5aaad..128b5798bb97 100644
---- a/arch/powerpc/boot/dts/fsl/t4240qds.dts
-+++ b/arch/powerpc/boot/dts/fsl/t4240qds.dts
-@@ -41,7 +41,7 @@ / {
- 	#size-cells = <2>;
- 	interrupt-parent = <&mpic>;
- 
--	aliases{
-+	aliases {
- 		phy_rgmii1 = &phyrgmii1;
- 		phy_rgmii2 = &phyrgmii2;
- 		phy_sgmii3 = &phy3;
-diff --git a/arch/powerpc/boot/dts/mpc5121.dtsi b/arch/powerpc/boot/dts/mpc5121.dtsi
-index 3f66b91a8e3c..d3fc8062fbcd 100644
---- a/arch/powerpc/boot/dts/mpc5121.dtsi
-+++ b/arch/powerpc/boot/dts/mpc5121.dtsi
-@@ -140,7 +140,7 @@ clks: clock@f00 {
- 		};
- 
- 		/* Power Management Controller */
--		pmc@1000{
-+		pmc@1000 {
- 			compatible = "fsl,mpc5121-pmc";
- 			reg = <0x1000 0x100>;
- 			interrupts = <83 0x8>;
-diff --git a/arch/powerpc/boot/dts/mpc5125twr.dts b/arch/powerpc/boot/dts/mpc5125twr.dts
-index 0bd2acc0401d..ee090709aa3a 100644
---- a/arch/powerpc/boot/dts/mpc5125twr.dts
-+++ b/arch/powerpc/boot/dts/mpc5125twr.dts
-@@ -104,7 +104,7 @@ clks: clock@f00 {	// Clock control
- 			clock-names = "osc";
- 		};
- 
--		pmc@1000{  // Power Management Controller
-+		pmc@1000 {  // Power Management Controller
- 			compatible = "fsl,mpc5121-pmc";
- 			reg = <0x1000 0x100>;
- 			interrupts = <83 0x2>;
--- 
-2.34.1
-
+That is, either way around is just a matter of a little code, no?
