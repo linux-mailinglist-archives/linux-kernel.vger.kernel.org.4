@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1183747DEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0477B747DF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjGEHJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S232141AbjGEHKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjGEHJC (ORCPT
+        with ESMTP id S232135AbjGEHKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:09:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1CC195
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:09:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43AEF6143A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:09:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57875C433C7;
-        Wed,  5 Jul 2023 07:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688540940;
-        bh=KNHJu+0CLU4ZCQdLgEFri5D+Z9BwIrdluwuvuUeNttE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tKdIALsR0dMkHa9DJuKzvIPN6d8h9dFfEniOOt9bWgEKNcQIdf7any+sOkoPLEKea
-         +95s2KQ452fHNF4mzK3LiP0iF8hrCJ186zokGs38t/pxGUAu4cT3Fhxu8f4UEm1j6P
-         LCmtLDw3WijgFusqsM7zA87m4MVC7ID+D/hmFgPI=
-Date:   Wed, 5 Jul 2023 08:08:58 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jacob Young <jacobly.alt@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: Fwd: Memory corruption in multithreaded user space program while
- calling fork
-Message-ID: <2023070509-undertow-pulverize-5adc@gregkh>
-References: <facbfec3-837a-51ed-85fa-31021c17d6ef@gmail.com>
- <5c7455db-4ed8-b54f-e2d5-d2811908123d@leemhuis.info>
- <CAJuCfpH7BOBYGEG=op09bZrh1x3WA8HMcGBXXRhe6M5RJaen5A@mail.gmail.com>
- <CAJuCfpH7t7gCV2FkctzG2eWTUVTFZD7CtD14-WuHqBqOYBo1jA@mail.gmail.com>
- <2023070359-evasive-regroup-f3b8@gregkh>
- <CAJuCfpF=XPpPYqp2Y1Vu-GUL=RBj4fyhXoXzjBY4EKtBnYE_eQ@mail.gmail.com>
- <2023070453-plod-swipe-cfbf@gregkh>
- <20230704091808.aa2ed3c11a5351d9bf217ac9@linux-foundation.org>
- <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
+        Wed, 5 Jul 2023 03:10:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1604197;
+        Wed,  5 Jul 2023 00:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688541010; x=1720077010;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ConKYiJXIY8Jw4Sc7qTfwuyKjyDkGUkguUDNtmuu4Zk=;
+  b=N9QxTD0855nGKBaqoA/NItrwF6P8L5ZxFIzvjzRlBVGtb2CTeU8dHPhI
+   DCribEZTrnVh6P37BBX8VW9UynPJFEChp7xrZVJh7Iit5tZUBqr+qwo4o
+   yckVK8RU5cBnEhvhRirWVjcIenWrkbSsaeNstA0063BktKv9/Wo/YjfQ1
+   1DZXfs60Rgs8/xedf3pJSGH73EA8j/YES0mUmiFsI86Og1InX1pTzMBQJ
+   FzhqUP3rZavXHAtDKmqwAg9GypuZwGI254fbiQ6BdS47FWwQISVszWo6Y
+   V1PXpzVW/Vx0IUDTuIsdFvx/Y8o4P7l+mUsK+7YPNGqUezUrLu7ot/l08
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="asc'?scan'208";a="218951171"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2023 00:10:09 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 5 Jul 2023 00:09:53 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 5 Jul 2023 00:09:50 -0700
+Date:   Wed, 5 Jul 2023 08:09:21 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <conor@kernel.org>
+Subject: Re: [PATCH 6.3 00/13] 6.3.12-rc1 review
+Message-ID: <20230705-anyplace-clutter-42bd80a39c68@wendy>
+References: <20230703184519.206275653@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dN8mUbTyqj3Pmp0M"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpE_WjRQoDT1XnvBghCH-kpqk+pfcBJGyDnK7DZLMVG5Mw@mail.gmail.com>
+In-Reply-To: <20230703184519.206275653@linuxfoundation.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 01:22:54PM -0700, Suren Baghdasaryan wrote:
-> On Tue, Jul 4, 2023 at 9:18 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue, 4 Jul 2023 09:00:19 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > > > > > > Thanks! I'll investigate this later today. After discussing with
-> > > > > > > Andrew, we would like to disable CONFIG_PER_VMA_LOCK by default until
-> > > > > > > the issue is fixed. I'll post a patch shortly.
-> > > > > >
-> > > > > > Posted at: https://lore.kernel.org/all/20230703182150.2193578-1-surenb@google.com/
-> > > > >
-> > > > > As that change fixes something in 6.4, why not cc: stable on it as well?
-> > > >
-> > > > Sorry, I thought since per-VMA locks were introduced in 6.4 and this
-> > > > patch is fixing 6.4 I didn't need to send it to stable for older
-> > > > versions. Did I miss something?
-> > >
-> > > 6.4.y is a stable kernel tree right now, so yes, it needs to be included
-> > > there :)
-> >
-> > I'm in wait-a-few-days-mode on this.  To see if we have a backportable
-> > fix rather than disabling the feature in -stable.
-> 
-> Ok, I think we have a fix posted at [2]  and it's cleanly applies to
-> 6.4.y stable branch as well. However fork() performance might slightly
-> regress, therefore disabling per-VMA locks by default for now seems to
-> be preferable even with this fix (see discussion at
-> https://lore.kernel.org/all/54cd9ffb-8f4b-003f-c2d6-3b6b0d2cb7d9@google.com/).
-> IOW, both [1] and [2] should be applied to 6.4.y stable. Both apply
-> cleanly and I CC'ed stable on [2]. Greg, should I send [1] separately
-> to stable@vger?
+--dN8mUbTyqj3Pmp0M
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-We can't do anything for stable until it lands in Linus's tree, so if
-you didn't happen to have the stable@ tag in the patch, just email us
-the git SHA1 and I can pick it up that way.
+On Mon, Jul 03, 2023 at 08:54:10PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.12 release.
+> There are 13 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-thanks,
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-greg k-h
+Cheers,
+Conor.
+
+--dN8mUbTyqj3Pmp0M
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKUXIAAKCRB4tDGHoIJi
+0vFOAP9Bfnks3OPNhwIpLnAo0xr09+RySOHcNuQb0Z3PEXElDgEAiHO+IooplcDK
+yNbdHmsxbhmaGZ59pWiMsXCMz0zCGwY=
+=rNmL
+-----END PGP SIGNATURE-----
+
+--dN8mUbTyqj3Pmp0M--
