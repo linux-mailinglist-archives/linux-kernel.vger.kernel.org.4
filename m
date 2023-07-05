@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDCB7486B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54E47486BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjGEOow convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 10:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S232682AbjGEOpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbjGEOon (ORCPT
+        with ESMTP id S232663AbjGEOpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:44:43 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4376F1732;
-        Wed,  5 Jul 2023 07:44:35 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-579de633419so51264807b3.3;
-        Wed, 05 Jul 2023 07:44:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688568274; x=1691160274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EWhsoBY4ZccttVe0RJL2prtxvZyGTGD0cE8SvtOHPOE=;
-        b=Aiop42xfOwzW1TkiU9H/ZZ549zoxagLoLSg964c6Qt9vQ9Bd6qohbyf5Ss/+WaDr1f
-         veo+6Mjw15GPoRpt1vTUx/7DxZKfbCSFgu2kvr4Kb3dchdbsgx7ECGil2O6AWYzoE0gU
-         b/VYH6EGOJMx/CodJJAjjTWhmowG0e/GDXUOAiTrsXC44sR1fqum0z14gz++oNBuBWHs
-         s96D+JRI/JP50cs5i7sa8LI9JK9+gO+3lut4vFHkb+oM2aMxI+cJGbBRWSYhsY0mxMAb
-         BffXuYrK5zXqpN0yfEBjUimiliqFDPo2Pz0ISDHFFfBAhD2gBNk8aQJ4OGU+0+1GeIZD
-         b3Lg==
-X-Gm-Message-State: ABy/qLasnkZZ+bI5pexqHMQ9+9ppW8QkIkhRtDdsmklg+AKXLmJPiPms
-        N4WP5pnpHYxsfFql6bCdK7OSJP8wZ2SgZg==
-X-Google-Smtp-Source: APBJJlFNdaLQaBGS9PgCKNmp9q31rMh8+X/votnzZc1EdwBaILtFDsvAQ5SBBtolez8E4/FoEj/82g==
-X-Received: by 2002:a0d:c702:0:b0:55a:574f:327c with SMTP id j2-20020a0dc702000000b0055a574f327cmr17804265ywd.13.1688568274274;
-        Wed, 05 Jul 2023 07:44:34 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id t10-20020a81460a000000b0054bfc94a10dsm6179741ywa.47.2023.07.05.07.44.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 07:44:33 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5774335bb2aso64288467b3.0;
-        Wed, 05 Jul 2023 07:44:33 -0700 (PDT)
-X-Received: by 2002:a25:1644:0:b0:bcc:c347:81de with SMTP id
- 65-20020a251644000000b00bccc34781demr11995065ybw.36.1688568273531; Wed, 05
- Jul 2023 07:44:33 -0700 (PDT)
+        Wed, 5 Jul 2023 10:45:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A871BDF;
+        Wed,  5 Jul 2023 07:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688568301; x=1720104301;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=s0GWJM5gFoud1+XZjR2N78Pc/ZDBarybll1Oke7Rovs=;
+  b=kXRzAr1DMUkOspd90Mgaw5wg5aYYmRZ3NCAEXjxc2yJ1oWF8db5hmXJq
+   i1jfWVI357igoyL7ew5GZ+wdtfPZ+Z5n8THbkfkCANl5uxuvfHHeku2PB
+   O3GfkwK3QbKbqwyrFqKwXza1X03wbNt8Kt9BrtsMr/+MvbkWQSuuUYa8o
+   b3wi41MohGnHsfDjJE2CP/qzHWq9cY1uD2bgVhCSB0KyU3UdgWgGPL2nD
+   spAuYjLoIJZHYixzwo5LCWngzkn9YcznCYNXcb0JtXPLy4ErymORtKpwE
+   WaOXvaDyZchgXy5ACtFBqkiEfrx+Ufs3q8NBLRrFakWcWd0pRuWcTwe6a
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362226707"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="362226707"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 07:45:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="722430589"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="722430589"
+Received: from meggieha-mobl.ger.corp.intel.com (HELO [10.252.48.235]) ([10.252.48.235])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 07:44:57 -0700
+Message-ID: <14395e2a-db0b-8f26-3356-741945478eb0@linux.intel.com>
+Date:   Wed, 5 Jul 2023 16:44:55 +0200
 MIME-Version: 1.0
-References: <20230705135159.33327-1-frank.li@vivo.com> <20230705135159.33327-8-frank.li@vivo.com>
-In-Reply-To: <20230705135159.33327-8-frank.li@vivo.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Jul 2023 16:44:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXCibwJ0jBYu3Cr3-hW-GykQ7UANeKo=qjJAbQTtmah3A@mail.gmail.com>
-Message-ID: <CAMuHMdXCibwJ0jBYu3Cr3-hW-GykQ7UANeKo=qjJAbQTtmah3A@mail.gmail.com>
-Subject: Re: [PATCH 08/11] i2c: sh_mobile: Use devm_platform_get_and_ioremap_resource()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 1/8] soundwire: fix enumeration completion
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Rander Wang <rander.wang@linux.intel.com>
+References: <20230705123018.30903-1-johan+linaro@kernel.org>
+ <20230705123018.30903-2-johan+linaro@kernel.org>
+ <907ad7a3-3384-c0c4-90a9-5beab4cc45e0@linux.intel.com>
+ <ZKV-oXAWzRXnjXus@hovoldconsulting.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <ZKV-oXAWzRXnjXus@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
 
-On Wed, Jul 5, 2023 at 3:56 PM Yangtao Li <frank.li@vivo.com> wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Thanks for your patch!
+On 7/5/23 16:30, Johan Hovold wrote:
+> On Wed, Jul 05, 2023 at 02:53:17PM +0200, Pierre-Louis Bossart wrote:
+>> On 7/5/23 14:30, Johan Hovold wrote:
+>>> The soundwire subsystem uses two completion structures that allow
+>>> drivers to wait for soundwire device to become enumerated on the bus and
+>>> initialised by their drivers, respectively.
+>>>
+>>> The code implementing the signalling is currently broken as it does not
+>>> signal all current and future waiters and also uses the wrong
+>>> reinitialisation function, which can potentially lead to memory
+>>> corruption if there are still waiters on the queue.
+>>
+>> That change sounds good, but I am not following the two paragraphs below.
+>>
+>>> Not signalling future waiters specifically breaks sound card probe
+>>> deferrals as codec drivers can not tell that the soundwire device is
+>>> already attached when being reprobed. 
+>>
+>> What makes you say that? There is a test in the probe and the codec
+>> driver will absolutely be notified, see bus_type.c
+>>
+>> 	if (drv->ops && drv->ops->update_status) {
+>> 		ret = drv->ops->update_status(slave, slave->status);
+>> 		if (ret < 0)
+>> 			dev_warn(dev, "%s: update_status failed with status %d\n", __func__,
+>> ret);
+>> 	}
+> 
+> I'm talking about signalling the codec driver using the soundwire device
+> via the completion structs. Unless the underling device is detached and
+> reattached, trying to wait for completion a second time will currently
+> timeout instead of returning immediately.
+> 
+> This affects codecs like rt5682, which wait for completion in component
+> probe (see rt5682_probe()).
+> 
+>>> Some codec runtime PM
+>>> implementations suffer from similar problems as waiting for enumeration
+>>> during resume can also timeout despite the device already having been
+>>> enumerated.
+>>
+>> I am not following this either. Are you saying the wait_for_completion()
+>> times out because of the init_completion/reinit_completion confusion, or
+>> something else.
+> 
+> It times out because the completion counter is not saturated unless you
+> use complete_all().
+> 
+> Drivers that wait unconditionally in resume, will time out the second
+> time they are runtime resumed unless the underlying device has been
+> detached and reattached in the meantime (e.g. wsa881x_runtime_resume()).
 
-> --- a/drivers/i2c/busses/i2c-sh_mobile.c
-> +++ b/drivers/i2c/busses/i2c-sh_mobile.c
-> @@ -893,12 +893,10 @@ static int sh_mobile_i2c_probe(struct platform_device *dev)
->         pd->dev = &dev->dev;
->         platform_set_drvdata(dev, pd);
->
-> -       res = platform_get_resource(dev, IORESOURCE_MEM, 0);
-> -
-> -       pd->res = res;
-> -       pd->reg = devm_ioremap_resource(&dev->dev, res);
-> +       pd->reg = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+Makes sense. The default on Intel platforms is to reset the bus in all
+resume cases, that forces the attachment so we never saw the issue.
 
-"pdev" does not exist in this context.
-Please try to at least compile-test your patches before submitting them.
+For this patch:
 
->         if (IS_ERR(pd->reg))
->                 return PTR_ERR(pd->reg);
-> +       pd->res = res;
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-While at it, you could get rid of "res", and replace it by "pd->res" in the
-above call to devm_platform_get_and_ioremap_resource().
 
->
->         ret = of_property_read_u32(dev->dev.of_node, "clock-frequency", &bus_speed);
->         pd->bus_speed = (ret || !bus_speed) ? I2C_MAX_STANDARD_MODE_FREQ : bus_speed;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
