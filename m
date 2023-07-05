@@ -2,107 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5D2748251
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0E2748254
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjGEKka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 06:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S231286AbjGEKlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 06:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbjGEKk1 (ORCPT
+        with ESMTP id S230057AbjGEKlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 06:40:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32921727;
-        Wed,  5 Jul 2023 03:40:23 -0700 (PDT)
-Date:   Wed, 05 Jul 2023 10:40:20 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688553621;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ovbrxVE68OGB4mGLejvxcJ2FvxKGgQrffrokf0loOvg=;
-        b=gPrz+4dqnyKKr2R0NPP3gMhHrZru3Vds5QvAa4JaSZkEA1dkz75NB5phvOW0qnEO6v/uLq
-        5ncinBiN6nb60GEdsip6PKomQNzSs1VE/GBXtYqonRkN3WvcbDMx2pODTAHCuj616rqkv3
-        ovffTXqFzBpV1d89UiZ9AT/6KN/B2IS9d59PgHWFZzb5EvN89bPkGRp3FqAk/w8lJj/xL9
-        zFZIvEHp10+SIu8WdSTHM5XYlUewceg1/WZjNvmlls/NuiMPZztMh4/OsdL+c/aLovnomd
-        E0BHkO8ITvs+4nxVvXuz9l9k/shgMfySPTDEteOiGLYUs3iwvSzQe/lvL2xlxQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688553621;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ovbrxVE68OGB4mGLejvxcJ2FvxKGgQrffrokf0loOvg=;
-        b=0z1JVdtQRAzeEex7Dc1N0LbN1eEMgj74EaiG0BOSt3aHS1rc2A9rwZyEsVwg2IXdFpKjj9
-        es44xo8UWweqprDA==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/xen: Fix secondary processors' FPU initialization
-Cc:     Juergen Gross <jgross@suse.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230703130032.22916-1-jgross@suse.com>
-References: <20230703130032.22916-1-jgross@suse.com>
+        Wed, 5 Jul 2023 06:41:14 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80324E63
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 03:41:13 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3143493728dso3796937f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 03:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688553672; x=1691145672;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=88goqqosTuFo/x96Kg4wKBh8UXMAznfyTlC2iZi5QZg=;
+        b=VWkK2Ls2GShcm8rjv2v4WGq3q+Yhov40dgVPs4iOOhOnljFDm7SmgcHcSAka0mLq6h
+         p3wmGmMd0SHzs19gR2JqgfVjUxu7X2keQXIO5NW2EXOZztzo2zoa8H3r0cd/HywQ22JS
+         OqlHzCzuzmFNUS6KQwIpDLU0NqMtGvPWy6kIYGPmkC4KDQHaWREDZ8a+oytBqWj8JyNx
+         jJdCfGV56ycJEtHOZRncxijPLU4+gDRuKqSGawmMkk/W9Pr8yYl1U/n91rsXgZEuSAw9
+         vDCbgXqMTVouFfXXMarLmrK3W/p7+ASjMRb6rHssrqCWhBBGDQHn9YDquveE1QMbPfPV
+         aHcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688553672; x=1691145672;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=88goqqosTuFo/x96Kg4wKBh8UXMAznfyTlC2iZi5QZg=;
+        b=iOabCiJcNi2yVAMBxi/mstTQp7rtwloCwmM1ATAPfqoADvsde5mKHxEzPUvP1wjNzA
+         S/y0gRz70ITW6m1Ldv8XB5AXiEnEHFtY9YiheTf4MNKVKbqHIUdkVPcIbPO/Ce+qs/YD
+         XvLc1+0uVEaYOFpVOX/lU2ar8BbbS6QFBZAERCi1t1cZQxYMsZHNdwwTq0hBKMnEHSgi
+         JAhpH4ZVD6ro1BhFZrjxJerMNeNczE92lh4AUobJsOgUGkF8KGXP5N8aM3YxTaEYFfgD
+         D+bzz7g0Zd+IHWDMKwUs/zVx1MmFhrymAt8Q7MUO33cyXUZzq9Z31RKTUjSkoSR/4uVi
+         m63A==
+X-Gm-Message-State: ABy/qLauVpqw5s6A1Uxtt49hwFipGmTTstQAYNUHxi7uv0uYyTP1qqKr
+        Se3v7noW6owTmxiZEAnbX1FMhQ==
+X-Google-Smtp-Source: APBJJlF76X3ficyDs1/4Q++zss6/LXS7miOrOFC/V/Zbqi6qGsAVh719iwSI3BQ0uT/myXy+ikVTcA==
+X-Received: by 2002:a5d:4a47:0:b0:314:1096:ed2f with SMTP id v7-20020a5d4a47000000b003141096ed2fmr14313429wrs.35.1688553671880;
+        Wed, 05 Jul 2023 03:41:11 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id l12-20020a5d668c000000b003143ac73fd0sm6364914wru.1.2023.07.05.03.41.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 03:41:11 -0700 (PDT)
+Message-ID: <77c90891-3712-4b3b-a22c-d9ccba36f58e@linaro.org>
+Date:   Wed, 5 Jul 2023 12:41:10 +0200
 MIME-Version: 1.0
-Message-ID: <168855362058.404.7316702697493690909.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
+ wrappers
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+ <20230525140135.3589917-6-daniel.lezcano@linaro.org>
+ <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
+ <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     fe3e0a13e597c1c8617814bf9b42ab732db5c26e
-Gitweb:        https://git.kernel.org/tip/fe3e0a13e597c1c8617814bf9b42ab732db5c26e
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Mon, 03 Jul 2023 15:00:32 +02:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 05 Jul 2023 11:44:16 +02:00
+Hi Srinivas,
 
-x86/xen: Fix secondary processors' FPU initialization
+thanks for your answer. What about the patch 6?
 
-Moving the call of fpu__init_cpu() from cpu_init() to start_secondary()
-broke Xen PV guests, as those don't call start_secondary() for APs.
 
-Call fpu__init_cpu() in Xen's cpu_bringup(), which is the Xen PV
-replacement of start_secondary().
+On 03/07/2023 18:15, srinivas pandruvada wrote:
+> Hi Daniel,
+> 
+> On Mon, 2023-07-03 at 12:49 +0200, Daniel Lezcano wrote:
+>>
+>> Hi Srinivas,
+>>
+>> do you agree with the changes in patches 5 and 6 ?
+>>
+>> Thanks
+>>
+>>     -- Daniel
+>>
+>>
+>> On 25/05/2023 16:01, Daniel Lezcano wrote:
+>>> The driver is accessing the thermal zone device structure but the
+>>> accessors are already existing and we want to consolidate the
+>>> thermal
+>>> core code by preventing accesses to the internals from the drivers.
+>>>
+>>> Let's use these accessors.
+>>>
+>>> On the other side, the code is getting directly the temperature
+>>> from
+>>> tz->temperature, but the temperature is a faked on, so we can
+>>> replace
+>>> this access by the fake temp and remove the thermal zone device
+>>> structure access.
+>>>
+> May be something simple description like this will be enough.
+> 
+> "
+> Use thermal core API to access thermal zone "type" field instead of
+> directly using the structure field.
+> While here, remove access to temperature field, as this driver is
+> reporting fake temperature, which can be replaced with
+> INT3400_FAKE_TEMP. Also replace hardcoded 20C with INT3400_FAKE_TEMP.
+> "
+> 
+> The change itself looks fine.
 
-Fixes: b81fac906a8f ("x86/fpu: Move FPU initialization into arch_cpu_finalize_init()")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230703130032.22916-1-jgross@suse.com
----
- arch/x86/xen/smp_pv.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
-index a9cf8c8..0b6efc4 100644
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -63,6 +63,7 @@ static void cpu_bringup(void)
- 
- 	cr4_init();
- 	cpu_init();
-+	fpu__init_cpu();
- 	touch_softlockup_watchdog();
- 
- 	/* PVH runs in ring 0 and allows us to do native syscalls. Yay! */
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
