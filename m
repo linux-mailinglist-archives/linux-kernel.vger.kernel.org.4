@@ -2,143 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0E2748254
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182FD748257
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjGEKlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 06:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S231742AbjGEKln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 06:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbjGEKlO (ORCPT
+        with ESMTP id S231308AbjGEKll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 06:41:14 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80324E63
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 03:41:13 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3143493728dso3796937f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 03:41:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688553672; x=1691145672;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=88goqqosTuFo/x96Kg4wKBh8UXMAznfyTlC2iZi5QZg=;
-        b=VWkK2Ls2GShcm8rjv2v4WGq3q+Yhov40dgVPs4iOOhOnljFDm7SmgcHcSAka0mLq6h
-         p3wmGmMd0SHzs19gR2JqgfVjUxu7X2keQXIO5NW2EXOZztzo2zoa8H3r0cd/HywQ22JS
-         OqlHzCzuzmFNUS6KQwIpDLU0NqMtGvPWy6kIYGPmkC4KDQHaWREDZ8a+oytBqWj8JyNx
-         jJdCfGV56ycJEtHOZRncxijPLU4+gDRuKqSGawmMkk/W9Pr8yYl1U/n91rsXgZEuSAw9
-         vDCbgXqMTVouFfXXMarLmrK3W/p7+ASjMRb6rHssrqCWhBBGDQHn9YDquveE1QMbPfPV
-         aHcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688553672; x=1691145672;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=88goqqosTuFo/x96Kg4wKBh8UXMAznfyTlC2iZi5QZg=;
-        b=iOabCiJcNi2yVAMBxi/mstTQp7rtwloCwmM1ATAPfqoADvsde5mKHxEzPUvP1wjNzA
-         S/y0gRz70ITW6m1Ldv8XB5AXiEnEHFtY9YiheTf4MNKVKbqHIUdkVPcIbPO/Ce+qs/YD
-         XvLc1+0uVEaYOFpVOX/lU2ar8BbbS6QFBZAERCi1t1cZQxYMsZHNdwwTq0hBKMnEHSgi
-         JAhpH4ZVD6ro1BhFZrjxJerMNeNczE92lh4AUobJsOgUGkF8KGXP5N8aM3YxTaEYFfgD
-         D+bzz7g0Zd+IHWDMKwUs/zVx1MmFhrymAt8Q7MUO33cyXUZzq9Z31RKTUjSkoSR/4uVi
-         m63A==
-X-Gm-Message-State: ABy/qLauVpqw5s6A1Uxtt49hwFipGmTTstQAYNUHxi7uv0uYyTP1qqKr
-        Se3v7noW6owTmxiZEAnbX1FMhQ==
-X-Google-Smtp-Source: APBJJlF76X3ficyDs1/4Q++zss6/LXS7miOrOFC/V/Zbqi6qGsAVh719iwSI3BQ0uT/myXy+ikVTcA==
-X-Received: by 2002:a5d:4a47:0:b0:314:1096:ed2f with SMTP id v7-20020a5d4a47000000b003141096ed2fmr14313429wrs.35.1688553671880;
-        Wed, 05 Jul 2023 03:41:11 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l12-20020a5d668c000000b003143ac73fd0sm6364914wru.1.2023.07.05.03.41.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 03:41:11 -0700 (PDT)
-Message-ID: <77c90891-3712-4b3b-a22c-d9ccba36f58e@linaro.org>
-Date:   Wed, 5 Jul 2023 12:41:10 +0200
+        Wed, 5 Jul 2023 06:41:41 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D0C123
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 03:41:40 -0700 (PDT)
+Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 84d40c27-1b20-11ee-abf4-005056bdd08f;
+        Wed, 05 Jul 2023 13:41:38 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Wed, 5 Jul 2023 13:41:37 +0300
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+Subject: Re: [PATCH v2 3/5] spi: Add support for Renesas CSI
+Message-ID: <ZKVI4XPbPXfzQa9J@surfacebook>
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+ <20230622113341.657842-4-fabrizio.castro.jz@renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
- wrappers
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
- <20230525140135.3589917-6-daniel.lezcano@linaro.org>
- <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
- <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622113341.657842-4-fabrizio.castro.jz@renesas.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Srinivas,
-
-thanks for your answer. What about the patch 6?
-
-
-On 03/07/2023 18:15, srinivas pandruvada wrote:
-> Hi Daniel,
+Thu, Jun 22, 2023 at 12:33:39PM +0100, Fabrizio Castro kirjoitti:
+> The RZ/V2M SoC comes with the Clocked Serial Interface (CSI)
+> IP, which is a master/slave SPI controller.
 > 
-> On Mon, 2023-07-03 at 12:49 +0200, Daniel Lezcano wrote:
->>
->> Hi Srinivas,
->>
->> do you agree with the changes in patches 5 and 6 ?
->>
->> Thanks
->>
->>     -- Daniel
->>
->>
->> On 25/05/2023 16:01, Daniel Lezcano wrote:
->>> The driver is accessing the thermal zone device structure but the
->>> accessors are already existing and we want to consolidate the
->>> thermal
->>> core code by preventing accesses to the internals from the drivers.
->>>
->>> Let's use these accessors.
->>>
->>> On the other side, the code is getting directly the temperature
->>> from
->>> tz->temperature, but the temperature is a faked on, so we can
->>> replace
->>> this access by the fake temp and remove the thermal zone device
->>> structure access.
->>>
-> May be something simple description like this will be enough.
-> 
-> "
-> Use thermal core API to access thermal zone "type" field instead of
-> directly using the structure field.
-> While here, remove access to temperature field, as this driver is
-> reporting fake temperature, which can be replaced with
-> INT3400_FAKE_TEMP. Also replace hardcoded 20C with INT3400_FAKE_TEMP.
-> "
-> 
-> The change itself looks fine.
+> This commit adds a driver to support CSI master mode.
 
+Submitting Patches recommends to use imperative voice.
+
+...
+
++ bits.h
+
+> +#include <linux/clk.h>
+> +#include <linux/count_zeros.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/spi/spi.h>
+
+...
+
+> +#define CSI_CKS_MAX		0x3FFF
+
+If it's limited by number of bits, i would explicitly use that information as
+(BIT(14) - 1).
+
+...
+
+> +#define CSI_MAX_SPI_SCKO	8000000
+
+Units?
+Also, HZ_PER_MHZ?
+
+...
+
+> +static const unsigned char x_trg[] = {
+> +	0, 1, 1, 2, 2, 2, 2, 3,
+> +	3, 3, 3, 3, 3, 3, 3, 4,
+> +	4, 4, 4, 4, 4, 4, 4, 4,
+> +	4, 4, 4, 4, 4, 4, 4, 5
+> +};
+> +
+> +static const unsigned char x_trg_words[] = {
+> +	1,  2,  2,  4,  4,  4,  4,  8,
+> +	8,  8,  8,  8,  8,  8,  8,  16,
+> +	16, 16, 16, 16, 16, 16, 16, 16,
+> +	16, 16, 16, 16, 16, 16, 16, 32
+> +};
+
+Why do you need tables? At the first glance these values can be easily
+calculated from indexes.
+
+...
+
+> +	rzv2m_csi_reg_write_bit(csi, CSI_CNT, CSI_CNT_CSIRST, assert);
+> +
+> +	if (assert) {
+
+	If (!assert)
+		return 0;
+
+> +		return readl_poll_timeout(csi->base + CSI_MODE, reg,
+> +					  !(reg & CSI_MODE_CSOT), 0,
+> +					  CSI_EN_DIS_TIMEOUT_US);
+> +	}
+> +
+> +	return 0;
+
+...
+
+> +	rzv2m_csi_reg_write_bit(csi, CSI_MODE, CSI_MODE_CSIE, enable);
+> +
+> +	if (!enable && wait)
+
+In the similar way.
+
+> +		return readl_poll_timeout(csi->base + CSI_MODE, reg,
+> +					  !(reg & CSI_MODE_CSOT), 0,
+> +					  CSI_EN_DIS_TIMEOUT_US);
+> +
+> +	return 0;
+
+...
+
+> +		for (i = 0; i < csi->words_to_transfer; i++)
+> +			writel(buf[i], csi->base + CSI_OFIFO);
+
+writesl()?
+
+...
+
+> +		for (i = 0; i < csi->words_to_transfer; i++)
+> +			buf[i] = (u16)readl(csi->base + CSI_IFIFO);
+
+readsl()?
+
+...
+
+> +		for (i = 0; i < csi->words_to_transfer; i++)
+> +			buf[i] = (u8)readl(csi->base + CSI_IFIFO);
+
+readsl()?
+
+...
+
+Yes, in read cases you would need carefully handle the buffer data.
+Or drop the idea if it looks too monsterous.
+
+...
+
+> +	ret = rzv2m_csi_wait_for_interrupt(csi, CSI_INT_TREND, CSI_CNT_TREND_E);
+
+> +
+
+Unneeded blank line.
+
+> +	if (ret == -ETIMEDOUT)
+> +		csi->errors |= TX_TIMEOUT_ERROR;
+
+...
+
+> +	struct rzv2m_csi_priv *csi = (struct rzv2m_csi_priv *)data;
+
+From/to void * does not need an explicit casting in C.
+
+...
+
+> +	/* Setup clock polarity and phase timing */
+> +	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_CKP,
+> +				!(spi->mode & SPI_CPOL));
+> +	rzv2m_csi_reg_write_bit(csi, CSI_CLKSEL, CSI_CLKSEL_DAP,
+> +				!(spi->mode & SPI_CPHA));
+
+Is it a must to do in a sequential writes?
+
+...
+
+> +	bool tx_completed = csi->txbuf ? false : true;
+> +	bool rx_completed = csi->rxbuf ? false : true;
+
+Ternaries are redundant in the above.
+
+...
+
+> +	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
+
+SPI_MODE_X_MASK
+
+...
+
+> +	controller->dev.of_node = pdev->dev.of_node;
+
+device_set_node();
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+With Best Regards,
+Andy Shevchenko
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
