@@ -2,293 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E6674896A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6970A748963
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 18:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbjGEQlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 12:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S232335AbjGEQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 12:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjGEQlL (ORCPT
+        with ESMTP id S230513AbjGEQkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 12:41:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0457173F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 09:40:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688575213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zZbr3x0tXn1WJ2cAiiuPGB/lwCAmZgQokTncTHV0Knw=;
-        b=a15Tfmi7NGNgAIYBnfNyfagRTQ6lm4/HoETce8RVjRSuIocB9cZ4/SfOP6+jlLOWk8Kth7
-        IbUz2sfuW9GHWuiV5TQOv+fI4PKf5/hA9UtVXcj7xDYH/XbX803jRzXvs+PhglW0OWWaLo
-        yQQAODWpJ1PmCYoHP2F2U6udMet/YRA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-360-VTdR3BhzMb-xIEfZ8R4lrg-1; Wed, 05 Jul 2023 12:40:07 -0400
-X-MC-Unique: VTdR3BhzMb-xIEfZ8R4lrg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C908185A78B;
-        Wed,  5 Jul 2023 16:40:07 +0000 (UTC)
-Received: from localhost (unknown [10.42.28.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A934492C13;
-        Wed,  5 Jul 2023 16:40:07 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 17:40:06 +0100
-From:   "Richard W.M. Jones" <rjones@redhat.com>
-To:     Richard Henderson <richard.henderson@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-        Benjamin Copeland <ben.copeland@linaro.org>,
-        lkml - Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: qemu-x86_64 booting with 8.0.0 stil see int3: when running LTP
- tracing testing.
-Message-ID: <20230705164006.GL7636@redhat.com>
-References: <CA+G9fYsETJQm0Ue7hGsb+nbsiMikwycOV3V0DPr6WC2r61KRBQ@mail.gmail.com>
- <2d7595b1-b655-4425-85d3-423801bce644@app.fastmail.com>
- <20230621160655.GL2053369@hirez.programming.kicks-ass.net>
- <20230704074620.GA17440@redhat.com>
- <20230705162830.GC17440@redhat.com>
- <CAFXwXrmbpuFNf5=nQxiTteo8fpCdAbK4pEAN176Cq0yvwZcfFw@mail.gmail.com>
- <20230705163523.GJ7636@redhat.com>
- <CAFXwXrk1FEZPUO-zqNVJZ6YCHKUkgNehwmyDYuOr5fx8ff0OCA@mail.gmail.com>
+        Wed, 5 Jul 2023 12:40:33 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F7E10EA;
+        Wed,  5 Jul 2023 09:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688575232; x=1720111232;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=R0L33/36rdLS6aViuBmvGQXiDgu8r0FRSWMucXF1m6U=;
+  b=CHO5mBKw1YehsCwEQ/r6QMrERVmfYJH89XKeTVt9iTYXQ3/AhTV+zSt8
+   ODtCUua++OjVu3IMq7NXWPld0HoNWIWvGmLfbfm9z1odfyoNeIWhbj3tC
+   GZE55B+EUzlshKTULxJeC/5VrnnmMtYj9aYoi/VLndOz+AX1sdw29m0mv
+   4B0z/P86qkZQkwUrE3hhS21llPT2HPVSh+Iacxs60f/KEMyolNVe5uznO
+   Vw+hIagWXU88IbAqhxv/aEJqZDA7uSOPb/foDO1sflIi9Xh/CBss+60vn
+   Urn+a5C5ivqz1ZcFBDNwZP4vP1ha4mxPG+lm6fWHlJYwbItcCYqVXEO2g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362258259"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="362258259"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 09:40:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="893241761"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="893241761"
+Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314.ger.corp.intel.com) ([10.237.222.216])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jul 2023 09:40:28 -0700
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     herbert@gondor.apana.org.au, agk@redhat.com, snitzer@kernel.org
+Cc:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, qat-linux@intel.com,
+        heinzm@redhat.com, meenakshi.aggarwal@nxp.com, ebiggers@kernel.org,
+        horia.geanta@nxp.com, V.Sethi@nxp.com, pankaj.gupta@nxp.com,
+        gaurav.jain@nxp.com, davem@davemloft.net, iuliana.prodan@nxp.com,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Fiona Trahe <fiona.trahe@intel.com>
+Subject: [PATCH 1/3] dm integrity: do not filter algos with CRYPTO_ALG_ALLOCATES_MEMORY
+Date:   Wed,  5 Jul 2023 17:40:07 +0100
+Message-Id: <20230705164009.58351-2-giovanni.cabiddu@intel.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
+References: <20230705164009.58351-1-giovanni.cabiddu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 - Collinstown Industrial Park, Leixlip, County Kildare - Ireland
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFXwXrk1FEZPUO-zqNVJZ6YCHKUkgNehwmyDYuOr5fx8ff0OCA@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 06:36:43PM +0200, Richard Henderson wrote:
-> No, I thought it would be the fix for 8.0.0.
+The flag CRYPTO_ALG_ALLOCATES_MEMORY indicates that an algorithm might
+allocate memory in the datapath and therefore sleep.
+Dm-integrity is filtering out implementations of skcipher algorithms
+that have this flag set. However, in the same function it does
+allocations with GFP_KERNEL.
+As dm-integrity is re-entrant and capable of handling sleeps that could
+occur during allocations with GFP_KERNEL, then it is also capable of
+using skcipher algorithm implementations that have
+CRYPTO_ALG_ALLOCATES_MEMORY set.
 
-Thanks for the suggestion anyway.
+Remove the filtering of skcipher implementations with the flag
+CRYPTO_ALG_ALLOCATES_MEMORY set.
 
-Am I right in thinking that tb_invalidate_phys_page() ought to be
-called when the kernel self-modifies its text segment?  If there's
-some function that we expect to be called in this case then I can
-instrument it.
+Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+Link: https://lore.kernel.org/linux-crypto/ZILvtASXQKLG43y9@gondor.apana.org.au/
+Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Reviewed-by: Fiona Trahe <fiona.trahe@intel.com>
+---
+ drivers/md/dm-integrity.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Rich.
-
-> r~
-> 
-> On Wed, 5 July 2023, 18:35 Richard W.M. Jones, <rjones@redhat.com> wrote:
-> 
->     On Wed, Jul 05, 2023 at 06:32:30PM +0200, Richard Henderson wrote:
->     > https://gitlab.com/qemu-project/qemu/-/commit/
->     > 3307e08c6f142bb3d2406cfbc0ee19359748b51a
-> 
->     I've got that patch in my qemu tree.  Do you suspect it's
->     wrong and want me to try reverting it?
-> 
->     Rich.
-> 
->     > r~
->     >
->     > On Wed, 5 July 2023, 18:28 Richard W.M. Jones, <rjones@redhat.com> wrote:
->     >
->     >     On Tue, Jul 04, 2023 at 08:46:20AM +0100, Richard W.M. Jones wrote:
->     >     > We have been having the same sort of problem
->     >     > (https://bugzilla.redhat.com/show_bug.cgi?id=2216496).  It's
->     another
->     >     > of those bugs that requires hundreds or thousands of boot
->     iterations
->     >     > before you can see it.  There is a test in comment 27 but it
->     requires
->     >     > guestfish and some hacking to work.  I'll try to come up with a
->     >     > cleaner test later.
->     >     >
->     >     > We see stack traces like:
->     >     >
->     >     > [    3.081939] clocksource: acpi_pm: mask: 0xffffff max_cycles:
->     0xffffff,
->     >     max_idle_ns: 2085701024 ns
->     >     > [    3.082266] clocksource: Switched to clocksource acpi_pm
->     >     > [    3.090201] NET: Registered PF_INET protocol family
->     >     > [    3.093098] int3: 0000 [#1] PREEMPT SMP NOPTI
->     >     > [    3.093098] CPU: 3 PID: 1 Comm: swapper/0 Not tainted
->     >     6.4.0-10173-ga901a3568fd2 #8
->     >     > [    3.093098] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
->     BIOS
->     >     rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
->     >     > [    3.093098] RIP: 0010:__mod_timer+0x1c3/0x370
->     >     > [    3.093098] Code: 00 00 41 bd ff ff ff ff 31 d2 4c 89 f6 4c 89
->     ff e8
->     >     f2 ef ff ff 41 89 c4 85 c0 75 09 83 e3 01 0f 85 54 ff ff ff 41 8b 4f
->     20 66
->     >     <90> f7 c1 00 00 10 00 0f 84 23 01 00 00 48 c7 c3 40 cc 01 00 65 48
->     >     > [    3.093098] RSP: 0018:ffffaf1600013e00 EFLAGS: 00000046
->     >     > [    3.093098] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
->     >     0000000000280003
->     >     > [    3.093098] RDX: 0000000000000000 RSI: ffff9aa90fd9dec0 RDI:
->     >     ffffffff8441e4b8
->     >     > [    3.093098] RBP: 00000000fffc200d R08: ffffffff8441e4a0 R09:
->     >     ffffffff8441e4b8
->     >     > [    3.093098] R10: 0000000000000001 R11: 000000000002e990 R12:
->     >     0000000000000000
->     >     > [    3.093098] R13: 00000000ffffffff R14: ffff9aa90fd9dec0 R15:
->     >     ffffffff8441e4b8
->     >     > [    3.093098] FS:  0000000000000000(0000) GS:ffff9aa90fd80000
->     (0000)
->     >     knlGS:0000000000000000
->     >     > [    3.093098] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->     >     > [    3.093098] CR2: 0000000000000000 CR3: 000000004e02e000 CR4:
->     >     0000000000750ee0
->     >     > [    3.093098] PKRU: 55555554
->     >     > [    3.093098] Call Trace:
->     >     > [    3.093098]  <TASK>
->     >     > [    3.093098]  ? die+0x31/0x80
->     >     > [    3.093098]  ? exc_int3+0x10e/0x120
->     >     > [    3.093098]  ? asm_exc_int3+0x39/0x40
->     >     > [    3.093098]  ? __mod_timer+0x1c3/0x370
->     >     > [    3.093098]  ? __mod_timer+0x1c3/0x370
->     >     > [    3.093098]  queue_delayed_work_on+0x23/0x30
->     >     > [    3.093098]  neigh_table_init+0x1bb/0x2e0
->     >     > [    3.093098]  arp_init+0x12/0x50
->     >     > [    3.093098]  inet_init+0x15b/0x2f0
->     >     > [    3.093098]  ? __pfx_inet_init+0x10/0x10
->     >     > [    3.093098]  do_one_initcall+0x58/0x230
->     >     > [    3.093098]  kernel_init_freeable+0x199/0x2d0
->     >     > [    3.093098]  ? __pfx_kernel_init+0x10/0x10
->     >     > [    3.093098]  kernel_init+0x15/0x1b0
->     >     > [    3.093098]  ret_from_fork+0x2c/0x50
->     >     > [    3.093098]  </TASK>
->     >     > [    3.093098] Modules linked in:
->     >     > [    3.093098] ---[ end trace 0000000000000000 ]---
->     >     > [    3.093098] RIP: 0010:__mod_timer+0x1c3/0x370
->     >     > [    3.093098] Code: 00 00 41 bd ff ff ff ff 31 d2 4c 89 f6 4c 89
->     ff e8
->     >     f2 ef ff ff 41 89 c4 85 c0 75 09 83 e3 01 0f 85 54 ff ff ff 41 8b 4f
->     20 66
->     >     <90> f7 c1 00 00 10 00 0f 84 23 01 00 00 48 c7 c3 40 cc 01 00 65 48
->     >     > [    3.093098] RSP: 0018:ffffaf1600013e00 EFLAGS: 00000046
->     >     > [    3.093098] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
->     >     0000000000280003
->     >     > [    3.093098] RDX: 0000000000000000 RSI: ffff9aa90fd9dec0 RDI:
->     >     ffffffff8441e4b8
->     >     > [    3.093098] RBP: 00000000fffc200d R08: ffffffff8441e4a0 R09:
->     >     ffffffff8441e4b8
->     >     > [    3.093098] R10: 0000000000000001 R11: 000000000002e990 R12:
->     >     0000000000000000
->     >     > [    3.093098] R13: 00000000ffffffff R14: ffff9aa90fd9dec0 R15:
->     >     ffffffff8441e4b8
->     >     > [    3.093098] FS:  0000000000000000(0000) GS:ffff9aa90fd80000
->     (0000)
->     >     knlGS:0000000000000000
->     >     > [    3.093098] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->     >     > [    3.093098] CR2: 0000000000000000 CR3: 000000004e02e000 CR4:
->     >     0000000000750ee0
->     >     > [    3.093098] PKRU: 55555554
->     >     > [    3.093098] Kernel panic - not syncing: Fatal exception in
->     interrupt
->     >     >
->     >     > There are many variations, but the common pattern seems to be
->     >     > <something in the clock or timer code> -> int3 exception
->     >     >
->     >     > It only happens under qemu TCG (software emulation).
->     >     >
->     >     > It goes away if we recompile qemu without MTTCG support.
->     >     >
->     >     > It only happens with -smp enabled, we are using qemu -smp 4
->     >     >
->     >     > We are using qemu-system-x86_64 full system emulation on x86_64
->     host
->     >     > (ie. forcing KVM off).
->     >     >
->     >     > It happens with the latest upstream kernel and qemu, compiled from
->     >     > source.
->     >
->     >     I got a bit further on this one.
->     >
->     >     The bug happens in the code that updates the static branch used for
->     at
->     >     least these two keys:
->     >
->     >       static DEFINE_STATIC_KEY_FALSE(__sched_clock_stable);
->     >       DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
->     >
->     >     There are probably others (it seems a generic problem with how static
->     >     branches are handled by TCG), but I only see the bug for those two.
->     >
->     >     When the static branch is updated we end up calling
->     >     arch/x86/kernel/alternative.c:text_poke_bp_batch().  It's best to
->     read
->     >     the description of that function to see where int3 is used:
->     >
->     >       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
->     tree/
->     >     arch/x86/kernel/alternative.c#n2086
->     >
->     >     I modified the qemu TCG int3 helper so it dumps the code at %rip when
->     >     the interrupt fires, and I can actually see the changes in the above
->     >     function happen, first int3 being written, then the end of the nop,
->     >     then the int3 being overwritten with the first byte of the nop.
->     >
->     >     Unfortunately the int3 still fires after the code has been completely
->     >     rewritten to its final (ie nop) value.
->     >
->     >     This seems to indicate to me that neither the self-write to the
->     kernel
->     >     text segment, nor sync_core (implemented by a "iret to self" trick)
->     >     invalidates the qemu TCG translation block containing the old int3
->     >     helper call.  Thus we (qemu) never "see" the new nop, we keep
->     >     emulating int3, and that causes the kernel to crash.
->     >
->     >     I added print statements inside tb_invalidate_phys_page() and this
->     >     function seems never to be called at all.  It's my understanding that
->     >     at least the kernel writing to its text segment ought to cause
->     >     tb_invalidate_phys_page() to be called, but I'm not super-familiar
->     >     with this qemu code.
->     >
->     >     Richard Henderson - do you have any suggestions?
->     >
->     >     Rich.
->     >
->     >     --
->     >     Richard Jones, Virtualization Group, Red Hat http://people.redhat.com
->     /
->     >     ~rjones
->     >     Read my programming and virtualization blog: http://
->     rwmj.wordpress.com
->     >     libguestfs lets you edit virtual machines.  Supports shell scripting,
->     >     bindings from many languages.  http://libguestfs.org
->     >
->     >
-> 
->     --
->     Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/
->     ~rjones
->     Read my programming and virtualization blog: http://rwmj.wordpress.com
->     virt-top is 'top' for virtual machines.  Tiny program with many
->     powerful monitoring features, net stats, disk stats, logging, etc.
->     http://people.redhat.com/~rjones/virt-top
-> 
-> 
-
+diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
+index 31838b13ea54..a1013eff01b4 100644
+--- a/drivers/md/dm-integrity.c
++++ b/drivers/md/dm-integrity.c
+@@ -3785,7 +3785,7 @@ static int create_journal(struct dm_integrity_c *ic, char **error)
+ 		struct journal_completion comp;
+ 
+ 		comp.ic = ic;
+-		ic->journal_crypt = crypto_alloc_skcipher(ic->journal_crypt_alg.alg_string, 0, CRYPTO_ALG_ALLOCATES_MEMORY);
++		ic->journal_crypt = crypto_alloc_skcipher(ic->journal_crypt_alg.alg_string, 0, 0);
+ 		if (IS_ERR(ic->journal_crypt)) {
+ 			*error = "Invalid journal cipher";
+ 			r = PTR_ERR(ic->journal_crypt);
 -- 
-Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/~rjones
-Read my programming and virtualization blog: http://rwmj.wordpress.com
-virt-builder quickly builds VMs from scratch
-http://libguestfs.org/virt-builder.1.html
+2.40.1
 
