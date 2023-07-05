@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C67C748046
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE63D748047
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjGEI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S231152AbjGEI7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbjGEI7S (ORCPT
+        with ESMTP id S232007AbjGEI72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:59:18 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A8510E2;
-        Wed,  5 Jul 2023 01:59:15 -0700 (PDT)
-X-UUID: 34d824de1b1211ee9cb5633481061a41-20230705
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=vepb8sQgZ1ddPhURr2IJj8dJ6RrdgtEMpT1it/FOgsE=;
-        b=guQAvCmvZTHcNsnjaFWvCYu214Rw+EOYun2WKKp0zGndtRTNPXBGAJVR29I2OSVsKfrNdkscxgO/Kbuwy3yGNLh5fvLMlVw/JHbm/9dTCEwrTqMtXYiLNsQ72NmFnlq3N0ACMgSVkdN7u6nhYv2LvFboYSkB369hubgA/ouWTT8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:016ed7f0-6679-4371-b73b-b98c374880ab,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.27,REQID:016ed7f0-6679-4371-b73b-b98c374880ab,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:01c9525,CLOUDID:5cc5e20d-c22b-45ab-8a43-3004e9216b56,B
-        ulkID:230705163748ZVIUNA4A,BulkQuantity:1,Recheck:0,SF:19|48|38|29|28|17,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,
-        OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
-X-UUID: 34d824de1b1211ee9cb5633481061a41-20230705
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
-        (envelope-from <chung-kai.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 739156038; Wed, 05 Jul 2023 16:59:10 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 5 Jul 2023 16:59:09 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 5 Jul 2023 16:59:09 +0800
-From:   Chungkai Yang <Chung-kai.Yang@mediatek.com>
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Chung-kai.Yang@mediatek.com>, <ccj.yeh@mediatek.com>
-Subject: [PATCH v3] PM: QoS: Restore support for default value on frequency QoS
-Date:   Wed, 5 Jul 2023 16:59:07 +0800
-Message-ID: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 5 Jul 2023 04:59:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3808F10E3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 01:59:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688547563;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hf4glG5RrjzsZDHEwCTkoyrZ5ilmAB1pGZBJhpzC2Ts=;
+        b=E2tkiAQP8nJBMn1PkgdEZ69sQ2IlnvWWTH85RSq6aBRgUxQ8D7EPMNlv1NPOaOK8tPq9uM
+        Vb7PNvXF/RH+Cne8w8ZXUUdEr4mvq/AtNGXWSclItV1Q67rt3N67l9a9h4B5BQc/sCplKI
+        Ti4fkDAb9sWazTqTsoA1f8k7TjuY5y24Tb9eDS2Y58xE/nlSnssvI3XxGfw8KbnAlfhXU0
+        Oi5daN0zBbBTb45zKy9c/nURvGDq5WQGrkRfKT7YCdVG+0+C5NCFjRimZG4xXw1N71lfaS
+        k5gNIpjqhlrwjM0SIdFRtUUKWtR/7E2aaM8p/h2T3gHx8BUvoChj90oihUtkVg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688547563;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hf4glG5RrjzsZDHEwCTkoyrZ5ilmAB1pGZBJhpzC2Ts=;
+        b=WXuFSKXOCh1bWDYSwOVlOTwwgaxNSLNZrIvGR6iUs0KHjqUewYG+1ALcpaqMWc2qLLu8J1
+        r2WKhuAza3mrCBDw==
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     arjan@linux.intel.com, ashok.raj@intel.com,
+        ashok.raj@linux.intel.com, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
+        thomas.lendacky@amd.com, tony.luck@intel.com,
+        tonyb@cybernetics.com, x86@kernel.org,
+        yangerkun <yangerkun@huawei.com>, Baoquan He <bhe@redhat.com>,
+        kexec@lists.infradead.org
+Subject: Re: [BUG REPORT] Triggering a panic in an x86 virtual machine does
+ not wait
+In-Reply-To: <71578392-63ed-02a9-24da-2adf8cce38c7@huawei.com>
+References: <20230615193330.608657211@linutronix.de>
+ <71578392-63ed-02a9-24da-2adf8cce38c7@huawei.com>
+Date:   Wed, 05 Jul 2023 10:59:23 +0200
+Message-ID: <87ttui91jo.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,65 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PM_QOS_DEFAULT_VALUE case is not covered.
+On Mon, Jul 03 2023 at 11:44, Baokun Li wrote:
 
-Commit 8d36694245f2 ("PM: QoS: Add check to make sure CPU freq is
-non-negative") makes sure CPU freq is non-negative to avoid negative
-value converting to unsigned data type. However, when the value is
-PM_QOS_DEFAULT_VALUE, pm_qos_update_target specifically uses
-c->default_value which is set to FREQ_QOS_MIN/MAX_DEFAULT_VALUE when
-cpufreq_policy_alloc is executed, for this case handling.
+> When I manually trigger panic in a qume x86 VM with
+>
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 `echo c > /proc/sysrq-trigger`,
+>
+>  =C2=A0I find that the VM will probably reboot directly, but the=20
+> PANIC_TIMEOUT is 0.
+> This prevents us from exporting the vmcore via panic, and even if we succ=
+eed
+> in panic exporting the vmcore, the processes in the vmcore are mostly
+> stop_this_cpu(). By dichotomizing we found the patch that introduced the
+> behavior change
+>
+>  =C2=A0=C2=A0 45e34c8af58f ("x86/smp: Put CPUs into INIT on shutdown if p=
+ossible"),
 
-Adding check for PM_QOS_DEFAULT_VALUE to let default setting work will
-fix this problem.
+Bah, I missed that this is used by crash too. So if this happens to be
+invoked on an AP, i.e. not on CPU 0, then the INIT will reset the
+machine. Fix below.
 
-Signed-off-by: Chungkai Yang <Chung-kai.Yang@mediatek.com>
+Thanks,
 
+        tglx
 ---
-V2 -> V3: Added helper function to avoid duplicating the value check.
-V1 -> V2: Checked both freq_qos_add/update_request.
-
-Link: https://lore.kernel.org/lkml/20230626035144.19717-1-Chung-kai.Yang@mediatek.com/
-Link: https://lore.kernel.org/lkml/20230627071727.16646-1-Chung-kai.Yang@mediatek.com/
-Link: https://lore.kernel.org/lkml/CAJZ5v0gxNOWhC58PHeUhW_tgf6d1fGJVZ1x91zkDdht11yUv-A@mail.gmail.com/
----
- kernel/power/qos.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index af51ed6d45ef..782d3b41c1f3 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -426,6 +426,11 @@ late_initcall(cpu_latency_qos_init);
- 
- /* Definitions related to the frequency QoS below. */
- 
-+static inline bool freq_qos_value_invalid(s32 value)
-+{
-+	return value < 0 && value != PM_QOS_DEFAULT_VALUE;
-+}
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index ed2d51960a7d..e1aa2cd7734b 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1348,6 +1348,14 @@ bool smp_park_other_cpus_in_init(void)
+ 	if (apic->wakeup_secondary_cpu_64 || apic->wakeup_secondary_cpu)
+ 		return false;
+=20
++	/*
++	 * If this is a crash stop which does not execute on the boot CPU,
++	 * then this cannot use the INIT mechanism because INIT to the boot
++	 * CPU will reset the machine.
++	 */
++	if (this_cpu)
++		return false;
 +
- /**
-  * freq_constraints_init - Initialize frequency QoS constraints.
-  * @qos: Frequency QoS constraints to initialize.
-@@ -531,7 +536,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
- {
- 	int ret;
- 
--	if (IS_ERR_OR_NULL(qos) || !req || value < 0)
-+	if (IS_ERR_OR_NULL(qos) || !req || freq_qos_value_invalid(value))
- 		return -EINVAL;
- 
- 	if (WARN(freq_qos_request_active(req),
-@@ -563,7 +568,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
-  */
- int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
- {
--	if (!req || new_value < 0)
-+	if (!req || freq_qos_value_invalid(new_value))
- 		return -EINVAL;
- 
- 	if (WARN(!freq_qos_request_active(req),
--- 
-2.18.0
-
+ 	for_each_present_cpu(cpu) {
+ 		if (cpu =3D=3D this_cpu)
+ 			continue;
