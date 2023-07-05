@@ -2,56 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C04747E00
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D02A747E04
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjGEHMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S232166AbjGEHPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbjGEHMM (ORCPT
+        with ESMTP id S229700AbjGEHPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:12:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF02E4F;
-        Wed,  5 Jul 2023 00:12:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 5 Jul 2023 03:15:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18410195;
+        Wed,  5 Jul 2023 00:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EyW9XZN4w1C6P0MPRsEcqqMNHBYbEDNEAhyPTiwy2lQ=; b=kRH0KTcuJPnGqXJJIpV8CAvcvR
+        7sGU5dzETN0Kpb4qVrjCA8NEuHmhNfAkW3SI+JGJUn0H99e8EWj2U6mK8510cx6IUX+LmorMiZhAE
+        x1iw/5XhgpaGnDZmWQCS3fkR646mAeHrW4GBLVjWLebCqaL1/Tylp5XyIuZunabQ28Iueb39afHvN
+        EFAJmbsa4112IrSxNgAyybSaVkGk2+Jt+sa3l9/J17J2PIBXsdb73vZdOhfbeHzEol8AO/eu6TXKW
+        oG9h1h6bguhZNSP0d9wOD/eRAg4fDGJlw2tx9ovAR9BGUTSCADeVBDBK1o9x0ay2icc6GvIEV/ECH
+        L2UZ+mdw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qGwim-009qlL-SN; Wed, 05 Jul 2023 07:14:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9F8E61459;
-        Wed,  5 Jul 2023 07:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4ACCC433BA;
-        Wed,  5 Jul 2023 07:12:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688541130;
-        bh=hirsQoR0Ki1y4mUH7a+brxAKQyn2XVL41lANxF68XXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KUfKg1UqyRX9KE7Re4I4c3G2u+cmO8A2NedgsQYbQqtlMvnrl20jh78pWv62ny8GU
-         iDae4fymiqJ/37M+HowWbxSE/bnWyt21S9qRppfUKHtCUt4gJU0WDeMzz/qaraNNqW
-         wU5fDyB3IK23YGlXL7P9jSRB5IQ86R6WSUnE1cfITZ7VqBNtDOAUX+NpBnNIJJP0Rd
-         fozo9tWFHVf7Dx+wz/pCrtQ4TZ1CxImX8G6JNLwyVS+mvo1IFw+0lJENGkp96GjG71
-         eesLQ3ud6fjZvpwsPC/QzJBRtKGQc/HXNIK1VQ87+JGwYC8oG72ZFcby6OfaeZBA2H
-         HQxJwonT/DKHg==
-Date:   Wed, 5 Jul 2023 10:12:05 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Junxian Huang <huangjunxian6@hisilicon.com>
-Cc:     jgg@nvidia.com, linux-rdma@vger.kernel.org, linuxarm@huawei.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 for-next] RDMA/core: Get IB width and speed from netdev
-Message-ID: <20230705071205.GH6455@unreal>
-References: <20230603063833.541682-1-huangjunxian6@hisilicon.com>
- <20230611174605.GG12152@unreal>
- <1b11b9e9-a729-0d61-52e3-6bcf132ca356@hisilicon.com>
- <20230628050019.GC23952@unreal>
- <53e8025d-803d-f6c5-b853-8352163d9a2e@hisilicon.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 236DA300023;
+        Wed,  5 Jul 2023 09:14:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 066E82028F056; Wed,  5 Jul 2023 09:14:39 +0200 (CEST)
+Date:   Wed, 5 Jul 2023 09:14:38 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Message-ID: <20230705071438.GC462772@hirez.programming.kicks-ass.net>
+References: <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net>
+ <20230630190514.GH3436214@ls.amr.corp.intel.com>
+ <ZJ9IKALhz1Q6ogu1@google.com>
+ <20230703104942.GG4253@hirez.programming.kicks-ass.net>
+ <eb83e722-0379-1451-9c9c-9b9de33cb4cb@intel.com>
+ <20230703150330.GA83892@hirez.programming.kicks-ass.net>
+ <20230703175556.nn5xozz7dzxjocqm@box.shutemov.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <53e8025d-803d-f6c5-b853-8352163d9a2e@hisilicon.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230703175556.nn5xozz7dzxjocqm@box.shutemov.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,81 +94,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 11:05:50AM +0800, Junxian Huang wrote:
+On Mon, Jul 03, 2023 at 08:55:56PM +0300, kirill.shutemov@linux.intel.com wrote:
+> On Mon, Jul 03, 2023 at 05:03:30PM +0200, Peter Zijlstra wrote:
+> > On Mon, Jul 03, 2023 at 07:40:55AM -0700, Dave Hansen wrote:
+> > > On 7/3/23 03:49, Peter Zijlstra wrote:
+> > > >> There are also latency and noisy neighbor concerns, e.g. we *really* don't want
+> > > >> to end up in a situation where creating a TDX guest for a customer can observe
+> > > >> arbitrary latency *and* potentially be disruptive to VMs already running on the
+> > > >> host.
+> > > > Well, that's a quality of implementation issue with the whole TDX
+> > > > crapola. Sounds like we want to impose latency constraints on the
+> > > > various TDX calls. Allowing it to consume arbitrary amounts of CPU time
+> > > > is unacceptable in any case.
+> > > 
+> > > For what it's worth, everybody knew that calling into the TDX module was
+> > > going to be a black hole and that consuming large amounts of CPU at
+> > > random times would drive people bat guano crazy.
+> > > 
+> > > The TDX Module ABI spec does have "Leaf Function Latency" warnings for
+> > > some of the module calls.  But, it's basically a binary thing.  A call
+> > > is either normal or "longer than most".
+> > > 
+> > > The majority of the "longer than most" cases are for initialization.
+> > > The _most_ obscene runtime ones are chunked up and can return partial
+> > > progress to limit latency spikes.  But I don't think folks tried as hard
+> > > on the initialization calls since they're only called once which
+> > > actually seems pretty reasonable to me.
+> > > 
+> > > Maybe we need three classes of "Leaf Function Latency":
+> > > 1. Sane
+> > > 2. "Longer than most"
+> > > 3. Better turn the NMI watchdog off before calling this. :)
+> > > 
+> > > Would that help?
+> > 
+> > I'm thikning we want something along the lines of the Xen preemptible
+> > hypercalls, except less crazy. Where the caller does:
+> > 
+> > 	for (;;) {
+> > 		ret = tdcall(fn, args);
+> > 		if (ret == -EAGAIN) {
+> > 			cond_resched();
+> > 			continue;
+> > 		}
+> > 		break;
+> > 	}
+> > 
+> > And then the TDX black box provides a guarantee that any one tdcall (or
+> > seamcall or whatever) never takes more than X ns (possibly even
+> > configurable) and we get to raise a bug report if we can prove it
+> > actually takes longer.
 > 
+> TDG.VP.VMCALL TDCALL can take arbitrary amount of time as it handles over
+> control to the host/VMM.
 > 
-> On 2023/6/28 13:00, Leon Romanovsky wrote:
-> > On Mon, Jun 19, 2023 at 02:20:54PM +0800, Junxian Huang wrote:
-> >>
-> >>
-> >> On 2023/6/12 1:46, Leon Romanovsky wrote:
-> >>> On Sat, Jun 03, 2023 at 02:38:33PM +0800, Junxian Huang wrote:
-> >>>> From: Haoyue Xu <xuhaoyue1@hisilicon.com>
-> >>>>
-> >>>> Previously, there was no way to query the number of lanes for a network
-> >>>> card, so the same netdev_speed would result in a fixed pair of width and
-> >>>> speed. As network card specifications become more diverse, such fixed
-> >>>> mode is no longer suitable, so a method is needed to obtain the correct
-> >>>> width and speed based on the number of lanes.
-> >>>
-> >>> I'm sorry but I didn't understand the problem statement. Can you please
-> >>> provide an example of configuration that will give different results 
-> >>> before this patch and after?
-> >>>
-> >>
-> >> I'll give examples with 20G and 200G netdevs respectively.
-> >>
-> >> 20G:
-> >> Before this patch, regardless of the actual number of lanes, the width and
-> >> speed displayed in ibv_devinfo would be always fixed:
-> >> 	active_width: 4X
-> >> 	active_speed: 5 Gbps
-> >> After this patch, there will be different combinations of width and speed
-> >> according to the number of lanes. For example, for a 20G netdev whose number
-> >> of lanes is 2, the width and speed displayed in ibv_devinfo will be:
-> >> 	active_width: 2X
-> >> 	active_speed: 10 Gbps
-> >>
-> >> 200G:
-> >> Before this patch, netdevs with netdev_speed more than 40G cannot get a right
-> >> width and speed in ibv_devinfo. Only the default result would be displayed:
-> >> 	active_width: 4X
-> >> 	active_speed: 25 Gbps
-> >> After this patch, taking an example with 4 lanes, the displayed results will be:
-> >> 	active_width: 4X
-> >> 	active_speed: 50 Gbps
-> >>
-> > 
-> > <...>
-> > 
-> >>>> +	cap_link_lanes_supported = netdev->ethtool_ops->cap_link_lanes_supported;
-> >>>>  	rtnl_unlock();
-> >>>>  
-> >>>>  	dev_put(netdev);
-> >>>>  
-> >>>>  	if (!rc && lksettings.base.speed != (u32)SPEED_UNKNOWN) {
-> >>>>  		netdev_speed = lksettings.base.speed;
-> >>>> +		if (cap_link_lanes_supported && lksettings.lanes) {
-> >>>
-> >>> According to the documentation cap_link_lanes_supported defines if
-> >>> number of lanes can be supplied by user and I would expect from
-> >>> __ethtool_get_link_ksettings() to get right numbers after it was
-> >>> changed.
-> > 
-> > No, I'm saying that cap_link_lanes_supported is variable which only says
-> > if number of lanes can be changed and __ethtool_get_link_ksettings()
-> > will return right number of lanes every time it is called without need
-> > to call to ib_get_width_and_speed() again.
-> > 
-> > Thanks
-> > 
-> 
-> These two functions have different purposes.
-> 
-> The number of lanes is indeed obtained from __ethtool_get_link_ksettings(),
-> and ib_get_width_and_speed() converts the number of lanes into ib_width and
-> ib_speed, which are the output of ib_get_eth_speed().
+> But I'm not quite follow how it is different from the host stopping
+> scheduling vCPU on a random instruction. It can happen at any point and
+> TDCALL is not special from this PoV.
 
-Great, so why do you need to rely on cap_link_lanes_supported in ib_get_width_and_speed()?
+A guest will exit on timer/interrupt and then the host can reschedule;
+AFAIU this doesn't actually happen with these TDX calls, if control is
+in that SEAM thing, it stays there until it's done.
 
-Thanks
