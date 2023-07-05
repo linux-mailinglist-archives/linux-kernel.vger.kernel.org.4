@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60D7748DC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F472748DC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbjGET24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
+        id S233762AbjGET3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjGET2y (ORCPT
+        with ESMTP id S232185AbjGET3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:28:54 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D4A10F;
-        Wed,  5 Jul 2023 12:28:53 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666e97fcc60so23884b3a.3;
-        Wed, 05 Jul 2023 12:28:53 -0700 (PDT)
+        Wed, 5 Jul 2023 15:29:23 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B9A10F2;
+        Wed,  5 Jul 2023 12:29:21 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-7656652da3cso602639185a.1;
+        Wed, 05 Jul 2023 12:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688585333; x=1691177333;
+        d=gmail.com; s=20221208; t=1688585360; x=1691177360;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5TBB3lA3219LHYvO7O8r0trL8ZFv8X/mAnxkxOqj7IU=;
-        b=D4HgX8p1dsAjSTSuUpPw7eJzRpQlgXgDnNzA+16nqrjL0N8EAm35oPzpWOlXhKnc98
-         3y7MTGth2VRvMXujfnC6+U6Uv/7jUGGKOSrQMCOVraZ9xsSOOH3qyMpWOzumV5INHeMo
-         qfSMh1RelkiplWKsSHQOWoIv3hJvwc1Ow1tWMKJb1kpMxDGp39Nsrp9k4Zfp0mINbnGv
-         kwktloYdBkGs9HKMX3t5XEL91vkHuhkBf13z5mrU7hc9cs6NIyToiH89xJ8EB2PdglhK
-         Nlg2LZnyIp9WxPAR+M6RV9kHR3cYuJIC+7iEEfJh1Mtb1OJRKUE977SdM5nmWFxiytrc
-         MmgA==
+        bh=aX9x7UocICoyKf+7dpuLhA5gusj7thE6eymrovOEi1Y=;
+        b=OS4puIf3aHwVkCom7A3NU/1M+2pAzfOAwkAJqE44r80PeCkfJxdtGXY2zufhkQSBFi
+         Wy0a9gsCbgIKr2OAA1VDZQPAHtbdkRFMqK7nrM/6PKcu7U/Z7lSi+eg0TR/tgdZLmaU+
+         kN/TddZcO3tHKL6tAA5DZi/yW3p60ImHJWV84St9EYJPzeIe5zoF6QsCs1ghcjdDiP4H
+         MMlSynDbfCJFSkxpWHzibsQYud9RqV0j40J0PaSqMQOQzqVEvNVBXXa1BMZHvhD6nBrf
+         uT83kN0b9wf/2vdE2cTGk/b+k3J43cW6FE+XXn+nlLq1N8rwe6x2mGOxQJpLLhGd6er/
+         s1Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585333; x=1691177333;
+        d=1e100.net; s=20221208; t=1688585360; x=1691177360;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5TBB3lA3219LHYvO7O8r0trL8ZFv8X/mAnxkxOqj7IU=;
-        b=gi4m/zYNtep8kefrv8hYebjsCViazAQLhphN9ptiWxJcwZcp4TI8Lo974y3zofsTzI
-         4tUZoOkX/3l+v+kbSLl/ni5eKV309luZLVacp3741KMJiqFVO0yhpQ/gSkoA00m1QV4+
-         5yflBG9iwe3puw0peVppUMnRBVQDbyTViakFp4ZOLGYPHdvWYLdFYw3u7cv52374r1ZI
-         cnXFAgzrJlhfBUA1NeyCdkOYnHC0i4yWYt1JbqyVojqAv/60nhGm9Ci/uuLCxHy3QfyZ
-         5ndfUQb20pm/Xz70+k4du98KMDhQLUEwERXBVr6dZBGBiMcmBGgsfJwvPqOhAQPwC8lN
-         ECZA==
-X-Gm-Message-State: AC+VfDx+Ns48vb3HojSRm5ESTXBsRCNPXrtu4s1CzyjIfOemxmCgOyFx
-        llmGP1QT5C+SsmG6E7rrs6tAuRnJYrU=
-X-Google-Smtp-Source: ACHHUZ4AIOheQA4xlTJnOr83/5E/dTQaqiCrhFN98TmyBgMB+ONKUzbrg7FpEsnizg+x6GZMv2g66A==
-X-Received: by 2002:a05:6a20:3ca1:b0:123:b57:a3de with SMTP id b33-20020a056a203ca100b001230b57a3demr12810543pzj.46.1688585332898;
-        Wed, 05 Jul 2023 12:28:52 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9fac:a99f:7f0a:397])
-        by smtp.gmail.com with ESMTPSA id u23-20020aa78497000000b0067aa2a70179sm14310213pfn.46.2023.07.05.12.28.52
+        bh=aX9x7UocICoyKf+7dpuLhA5gusj7thE6eymrovOEi1Y=;
+        b=dP2btGJHVqI1fH3MgXmMASVC89bUNWRDHzib6p/Va+6z4VfAlsgLY7HeS6aMNbw8w8
+         yV9xcZJknkM/zE/jQXTdO9nIqliDXEd/tBt6vkwi91R4xtVHagL6bCO0GM3Ub5sDXwtv
+         t9nCu6RMCVVAxsLp2gmti6c2780H3etoYmDQMBC/SN8PiBj+gvzUhoCUlJW4g0dTNxRW
+         vfi1yfnvRHPlAz8ZymBBwnB/nzhh8/wr9sAiFN/oAYx0rgTUcj14W/W2To4ng8meTyXC
+         +7y1I9SRmeNjZQYV7h+sM7r9U5pPJ5KSJlu4ce/fbilpr+kPW/+bN2F7MVtuLwOCsVli
+         S5gQ==
+X-Gm-Message-State: ABy/qLZOTi72s9qePQMgMb9vI7Ytd6whCXohHBgtwKwulRMWLf0gp8p7
+        iBtOUBpyCnxsgFiidr3YhTU=
+X-Google-Smtp-Source: ACHHUZ5CLNg08C/ff8nQYOuus6yDfKhh2rv7ePHk14UbrG5WD2+By7Xt/bnqOYrBoj9b22+UEmDJaQ==
+X-Received: by 2002:a05:620a:17a0:b0:767:1d7e:ec40 with SMTP id ay32-20020a05620a17a000b007671d7eec40mr19716096qkb.1.1688585360166;
+        Wed, 05 Jul 2023 12:29:20 -0700 (PDT)
+Received: from localhost (modemcable065.128-200-24.mc.videotron.ca. [24.200.128.65])
+        by smtp.gmail.com with ESMTPSA id m18-20020ae9e012000000b0075d49ce31c3sm11206136qkk.91.2023.07.05.12.29.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:28:52 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 12:28:50 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH RESEND] input: cpcap-pwrbutton: remove initial kernel-doc
- notation
-Message-ID: <ZKXEcr+43Qkj8Y4m@google.com>
-References: <20230703230005.14877-1-rdunlap@infradead.org>
- <20230704000821.z3tx4chw7x6pn6nq@mercury.elektranox.org>
+        Wed, 05 Jul 2023 12:29:19 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 15:29:19 -0400
+From:   Benjamin Poirier <benjamin.poirier@gmail.com>
+To:     Wang Ming <machel@vivo.com>
+Cc:     Sunil Goutham <sgoutham@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
+Subject: Re: [PATCH net v2] net:thunderx:Fix resource leaks in
+ device_for_each_child_node() loops
+Message-ID: <ZKXEj6p/xkA+1yM4@d3>
+References: <20230705143507.4120-1-machel@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230704000821.z3tx4chw7x6pn6nq@mercury.elektranox.org>
+In-Reply-To: <20230705143507.4120-1-machel@vivo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,31 +77,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 02:08:21AM +0200, Sebastian Reichel wrote:
-> Hi,
+On 2023-07-05 22:34 +0800, Wang Ming wrote:
+> The device_for_each_child_node() loop in
+> bgx_init_of_phy() function should have
+> wnode_handle_put() before break
+ ^
+ fwnode_handle_put()
+
+> which could avoid resource leaks.
+> This patch could fix this bug.
 > 
-> On Mon, Jul 03, 2023 at 04:00:05PM -0700, Randy Dunlap wrote:
-> > Change the beginning "/**" in the file to "/*" since it is not a
-> > kernel-doc comment. This prevents a kernel-doc warning:
-> > 
-> > drivers/input/misc/cpcap-pwrbutton.c:2: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> >  * CPCAP Power Button Input Driver
-> > 
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Sebastian Reichel <sre@kernel.org>
-> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Cc: linux-input@vger.kernel.org
-> > ---
+> Signed-off-by: Wang Ming <machel@vivo.com>
+> ---
+>  drivers/net/ethernet/cavium/thunder/thunder_bgx.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> diff --git a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
+> index a317feb8decb..dad32d36a015 100644
+> --- a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
+> +++ b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
+> @@ -1478,8 +1478,10 @@ static int bgx_init_of_phy(struct bgx *bgx)
+>  		 * cannot handle it, so exit the loop.
+>  		 */
+>  		node = to_of_node(fwn);
+> -		if (!node)
+> +		if (!node) {
+> +			fwnode_handle_put(fwn);
+>  			break;
+> +		}
 
-Applied, thank you.
+Fixes: eee326fd8334 ("net: thunderx: bgx: Use standard firmware node infrastructure.")
+?
 
-BTW, the driver is missing SPDX annotation, Sebastian I wonder if you
-could send a patch addressing this (given you are the author it is
-better coming from you).
+>  
+>  		of_get_mac_address(node, bgx->lmac[lmac].mac);
+>  
+> @@ -1503,6 +1505,7 @@ static int bgx_init_of_phy(struct bgx *bgx)
+>  		lmac++;
+>  		if (lmac == bgx->max_lmac) {
+>  			of_node_put(node);
+> +			fwnode_handle_put(fwn);
 
-Thanks!
+\ fwnode_handle_put
+	\ of_fwnode_put
+		of_node_put(to_of_node(fwnode));
 
--- 
-Dmitry
+With your patch, there are now two references released on 'node' (two
+of_node_put(node) calls).
+One reference is from device_for_each_child_node(), where was the other
+reference taken?
