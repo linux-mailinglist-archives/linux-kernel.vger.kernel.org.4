@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4481748A0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD31748A0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjGERXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S232515AbjGERYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjGERXq (ORCPT
+        with ESMTP id S232461AbjGERYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:23:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB31188
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688577825; x=1720113825;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BLPKbcIBH5PVkiqNNns0cBZ+/8DZ7Qmt6A7EBSFuMTA=;
-  b=YVTm7Mb9bv1VfHjK0Gf36gy+xzsuGJr7VV+cPPlLPwuIlCm7vUMriI+s
-   xaJXAci0j161mFi3nSo3PNhkUhaGZqiJ/H/ugCB+d3XLjgLxoGRpiSJVS
-   /kzbzIJoKxD1Fca0Zkepn4sLC7LzpFP6tm0ezfSCZPrHx7Sfgj5bfqAw5
-   HVwQlOtXLg+ziJEkGVJk8oTo26QryzkCr8wAmB7T2GEsWaylfEcrXqkap
-   jk6cCYIafyEum3l+PWdRc2rdWD7SspsZEvsfF/kz3CxHpcWdyfYFxi9+c
-   XkHMORhWh7RSN7hsDHbSy7gTgWAAwdm09z0JgYfnSwDs8L7qU6ZwMYTJY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="449764739"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="449764739"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 10:23:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="784628556"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="784628556"
-Received: from yjie-desk1.jf.intel.com (HELO [10.24.96.120]) ([10.24.96.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 10:23:44 -0700
-Message-ID: <19e61b7e-022e-b384-1f37-7354b7ee889d@linux.intel.com>
-Date:   Wed, 5 Jul 2023 10:23:44 -0700
+        Wed, 5 Jul 2023 13:24:08 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C02188
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:24:04 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57916e0badcso61367427b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688577844; x=1691169844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sHjvoo64g8hqR4hb9CfrVJyaF2fuw5Igy5Tcp1DXgn0=;
+        b=UxvRl93OuANxiyXqhyXqCmP3i8b5MiWAFlpa+NkGqyp7Idba76W8Zi+pYaDuYc8QQF
+         tpXpBKOQWeP4Jj2xp63wGWrjOd4zyUlRPhTbHr2unVBgGIU/ruEwEiVucvDbTdW6MrvD
+         KjtcaaJSZWTFmn9jrVitGbjRJwCfra5ctoo1050hawVosrwe51cJAqB5NuG6QQob/d5P
+         bnD/AS6wPoTYkovC1lf3GjAXyZ5Xi+kc0m1epLh3aUHr6BJMy+xZs79S5v2Q0hMgLSP5
+         dNx/+zAc0HrJG9uD1lfdHtoyZquD1XibsyHsndmcWiqPSC8JvH2WG4E6M7jWRR9Tcj7X
+         CgvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688577844; x=1691169844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sHjvoo64g8hqR4hb9CfrVJyaF2fuw5Igy5Tcp1DXgn0=;
+        b=DURK/YHpNbVvftWEZ6GTlMyT/zePHMPMFBgZNAIdRhewKnB9iqEPYOVyJr6k965lB2
+         vZbyMXdxutqTfyGnY+8uWpsL+zMf8bwkG9LwRSyWmr2/NFp7F04QjqboPhWPz9wqAmls
+         D8N+ABxPRv4E5zNSnqeNvTl3gpp7FqlZNADsexaLhBwyb57lBmu+jYzx43OhMXOaSTvE
+         kdL7NPxsWxZXPqTzl+vUa5cgOl3OOaphTKJdD41zJbfgiOmHXcDjq71jtTEoS/FOk8dD
+         dabhb17kdmO8Yw3kueeMTNWxq2fSsCScu++zidpMrBwuPBgfJihB7ZOYgrJVixXWXNa4
+         91cA==
+X-Gm-Message-State: ABy/qLaz7OdDMuBP1zhz3c4Fpgj4aaKBY/9vcw+knM0/o64GQKtqiTy9
+        m3U4K4z2mefI/bTUG/siyNHt2ks5+DM8sKJsJVfijg==
+X-Google-Smtp-Source: APBJJlEXr+7nJr1kglpTbDNE3cb0nSLMWuqSOLSYsZv8wiWSxoU7q9OpLPF0oSmE8g15pgbllX4DkKQIua5s0UK9uiQ=
+X-Received: by 2002:a25:69cd:0:b0:c4e:c503:d5f6 with SMTP id
+ e196-20020a2569cd000000b00c4ec503d5f6mr9299399ybc.64.1688577843719; Wed, 05
+ Jul 2023 10:24:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] x86/aperfmperf: Fix the fallback condition in
- arch_freq_get_on_cpu()
-To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yair Podemsky <ypodemsk@redhat.com>
-References: <20230626193601.9169-1-yang.jie@linux.intel.com>
- <878rc1yvp3.ffs@tglx>
-Content-Language: en-US
-From:   Keyon Jie <yang.jie@linux.intel.com>
-In-Reply-To: <878rc1yvp3.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230705171213.2843068-1-surenb@google.com> <20230705171213.2843068-2-surenb@google.com>
+ <10c8fe17-fa9b-bf34-cb88-c758e07c9d72@redhat.com>
+In-Reply-To: <10c8fe17-fa9b-bf34-cb88-c758e07c9d72@redhat.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 5 Jul 2023 10:23:52 -0700
+Message-ID: <CAJuCfpFBh647trAjgPfr0Wcd=7V2gbHUnBe8mR4Pgdmrzh6Hxg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] fork: lock VMAs of the parent process when forking
+To:     David Hildenbrand <david@redhat.com>
+Cc:     akpm@linux-foundation.org, jirislaby@kernel.org,
+        jacobly.alt@gmail.com, holger@applied-asynchrony.com,
+        hdegoede@redhat.com, michel@lespinasse.org, jglisse@google.com,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,105 +86,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 5, 2023 at 10:14=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> On 05.07.23 19:12, Suren Baghdasaryan wrote:
+> > When forking a child process, parent write-protects an anonymous page
+> > and COW-shares it with the child being forked using copy_present_pte().
+> > Parent's TLB is flushed right before we drop the parent's mmap_lock in
+> > dup_mmap(). If we get a write-fault before that TLB flush in the parent=
+,
+> > and we end up replacing that anonymous page in the parent process in
+> > do_wp_page() (because, COW-shared with the child), this might lead to
+> > some stale writable TLB entries targeting the wrong (old) page.
+> > Similar issue happened in the past with userfaultfd (see flush_tlb_page=
+()
+> > call inside do_wp_page()).
+> > Lock VMAs of the parent process when forking a child, which prevents
+> > concurrent page faults during fork operation and avoids this issue.
+> > This fix can potentially regress some fork-heavy workloads. Kernel buil=
+d
+> > time did not show noticeable regression on a 56-core machine while a
+> > stress test mapping 10000 VMAs and forking 5000 times in a tight loop
+> > shows ~5% regression. If such fork time regression is unacceptable,
+> > disabling CONFIG_PER_VMA_LOCK should restore its performance. Further
+> > optimizations are possible if this regression proves to be problematic.
+> >
+> > Suggested-by: David Hildenbrand <david@redhat.com>
+> > Reported-by: Jiri Slaby <jirislaby@kernel.org>
+> > Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51=
+b@kernel.org/
+> > Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+> > Closes: https://lore.kernel.org/all/b198d649-f4bf-b971-31d0-e8433ec2a34=
+c@applied-asynchrony.com/
+> > Reported-by: Jacob Young <jacobly.alt@gmail.com>
+> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
+> > Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling fi=
+rst")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >   kernel/fork.c | 6 ++++++
+> >   1 file changed, 6 insertions(+)
+> >
+> > diff --git a/kernel/fork.c b/kernel/fork.c
+> > index b85814e614a5..403bc2b72301 100644
+> > --- a/kernel/fork.c
+> > +++ b/kernel/fork.c
+> > @@ -658,6 +658,12 @@ static __latent_entropy int dup_mmap(struct mm_str=
+uct *mm,
+> >               retval =3D -EINTR;
+> >               goto fail_uprobe_end;
+> >       }
+> > +#ifdef CONFIG_PER_VMA_LOCK
+> > +     /* Disallow any page faults before calling flush_cache_dup_mm */
+> > +     for_each_vma(old_vmi, mpnt)
+> > +             vma_start_write(mpnt);
+> > +     vma_iter_init(&old_vmi, oldmm, 0);
+> > +#endif
+> >       flush_cache_dup_mm(oldmm);
+> >       uprobe_dup_mmap(oldmm, mm);
+> >       /*
+>
+> The old version was most probably fine as well, but this certainly looks
+> even safer.
+>
+> Acked-by: David Hildenbrand <david@redhat.com>
 
+Thanks!
 
-On 6/30/23 05:35, Thomas Gleixner wrote:
-> On Mon, Jun 26 2023 at 12:36, Keyon Jie wrote:
->> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
->> index fdbb5f07448f..24e24e137226 100644
->> --- a/arch/x86/kernel/cpu/aperfmperf.c
->> +++ b/arch/x86/kernel/cpu/aperfmperf.c
->> @@ -432,7 +432,7 @@ unsigned int arch_freq_get_on_cpu(int cpu)
->>   	 * Bail on invalid count and when the last update was too long ago,
->>   	 * which covers idle and NOHZ full CPUs.
->>   	 */
->> -	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
->> +	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE * cpu_khz)
-> 
-> What?
-> 
-> #define MAX_SAMPLE_AGE  ((unsigned long)HZ / 50)
-> 
-> HZ is the number of ticks (jiffies) per second. 20ms is 1/50 of a
-> second.
-> 
-> As the sample age is measured in jiffies and the maximum is defined to
-> be 20ms, the existing code is correct.
-> 
-> With your change the condition resolves to:
-> 
->       delta > MAX_SAMPLE_AGE * cpu_khz
-> 
-> cpu_khz = Nominal CPU frequency / 1000
-> 
-> Ergo:
-> 
->       delta > (HZ / 50) * (cpufreq / 1000)
-> 
->                  HZ * cpufreq
-> -->  delta > ------------------
->                    50000
-> 
-> Let's describe cpufreq in GHz:
-> 
->                  HZ * G * 1e9
-> -->  delta > ------------------
->                    50000
-> 
-> -->  delta > HZ * G * 20000
-> 
-> delta is calculated in jiffies, i.e. the number of ticks since the last
-> invocation. Because HZ is ticks per second, the resulting timeout
-> measured in seconds is:
-> 
->           HZ * G * 20000 / HZ
-> 
-> -->      G * 20000 seconds
-> 
-> 20000 seconds for a 1GHz CPU, 40000 seconds for a 4GHz CPU independent
-> of the actual HZ value.
-> 
-> jiffies are incremented once per tick, i.e. at tick frequency. The
-> number of ticks required to reach 20ms depends obviously on the tick
-> frequency, aka HZ.
-> 
-> HZ         ticks per second     tick period     Number of ticks which
->                                                  are equivalent to 20ms
->   100        100                 10ms             2
->   250        250                  4ms             5
-> 1000       1000                  1ms            10
-> 
-> And that's what the code does correctly:
-> 
-> #define MAX_SAMPLE_AGE  ((unsigned long)HZ / 50)
-> 
-> No?
-> 
->>  From the commit f3eca381bd49 on, the fallback condition about the 'the
->> last update was too long' have been comparing ticks and milliseconds by
->> mistake, which leads to that the condition is met and the fallback
->> method is used frequently.
-> 
-> The comparison is comparing a tick delta with a maximum number of ticks
-> and that's not a mistake. It's simply correct.
-> 
->> The change to compare ticks here corrects that and fixes related issues
->> have been seen on x86 platforms since 5.18 kernel.
-> 
-> I have no idea what you are trying to "fix" here, but that's moot as
-> there is nothing to fix.
-
-Hi Thomas and Dave,
-
-Thank you for educating on this, I think you are totally right. So the 
-original issue described in the bugzilla is not caused by what I 
-mentioned here. Please ignore this patch, we need to figure out another 
-fix for the issue, sorry for the confusion.
-
-Thanks,
-~Keyon
-
-> 
-> Thanks,
-> 
->          tglx
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
