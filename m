@@ -2,106 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAD3748FFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962A874900E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 23:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjGEVk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 17:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S231482AbjGEVoI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jul 2023 17:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjGEVky (ORCPT
+        with ESMTP id S229697AbjGEVoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:40:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923261998;
-        Wed,  5 Jul 2023 14:40:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FB68615C5;
-        Wed,  5 Jul 2023 21:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A80EC433C7;
-        Wed,  5 Jul 2023 21:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688593252;
-        bh=43KgAy9/42rhJ/qdDtut0U8IYVof/FSFApFtVi0NS7w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=arRjBgE+Eu/fqU6RjT62qDCwUNGBrAdxDi6g7Qz7Q70iMYrm2Oor4Pix6c1Wm8aGI
-         wa4j+B3zFeZvQ9AJdNFHxa49DSlUVybqGi1ypsooLc4OWuGjaprJyXtFhWuFYBREWY
-         Ij8hY7mR7AxoE0A0a8ywbys314zG+kF97d+ZdxxMZx1eKlz3Z1sVSmIAv92TPb3Rft
-         KD0NdY9SSAU9Fqvgx3K5V38aT71w9ZHgCE7GFVT2yE9uHkmiFOteXXAaRYcaZwW10Q
-         BdOLGeRa0ypMSK8nRU1qaZKOD2MqKLRBoWeq2j//1+klx1a+b5fFcXCcL6rlGQ8tfi
-         +xFlZ9O2pVFbg==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b70224ec56so15416501fa.3;
-        Wed, 05 Jul 2023 14:40:52 -0700 (PDT)
-X-Gm-Message-State: ABy/qLb4/BUBQoZGacEfVpogSC9MrKg8lzRStWg2T6TxkkG7I8xBfgOp
-        If15nzcDhoPz3gCL5cc7JSQqhLfVna7Reck4+A==
-X-Google-Smtp-Source: APBJJlFoq5cIOIjbR+234mv24z/4earTsTW24z8akNDSm6Vi1gZP0JHzxc4vEmZtR5+/51uG0JXrLKV1JtatdjeeqoM=
-X-Received: by 2002:a2e:a164:0:b0:2b6:fc60:776f with SMTP id
- u4-20020a2ea164000000b002b6fc60776fmr3445500ljl.30.1688593250544; Wed, 05 Jul
- 2023 14:40:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230630185602.2175559-1-robh@kernel.org> <0aa7227d-264f-a87d-bef1-9f5d1c43a184@arm.com>
-In-Reply-To: <0aa7227d-264f-a87d-bef1-9f5d1c43a184@arm.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 5 Jul 2023 15:40:38 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+T_8JNAQ1Ca8kNH0LCkiytJuSZPZeC_pvyOOG6xvQh+g@mail.gmail.com>
-Message-ID: <CAL_Jsq+T_8JNAQ1Ca8kNH0LCkiytJuSZPZeC_pvyOOG6xvQh+g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: pmu: Add Cortex-A520, Cortex-A715,
- and Cortex-A720
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 5 Jul 2023 17:44:07 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1121997;
+        Wed,  5 Jul 2023 14:44:03 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1qHAHp-0002CM-9g; Wed, 05 Jul 2023 23:43:45 +0200
+Received: from p5b13aeb4.dip0.t-ipconnect.de ([91.19.174.180] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1qHAHp-001d9k-26; Wed, 05 Jul 2023 23:43:45 +0200
+Message-ID: <9a6b730fc6c8e70ff034e2e3665478ec31858c29.camel@physik.fu-berlin.de>
+Subject: [GIT PULL] sh updates for v6.5
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-sh@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Wed, 05 Jul 2023 23:43:44 +0200
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.3 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.174.180
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 1:40=E2=80=AFPM Robin Murphy <robin.murphy@arm.com> =
-wrote:
->
-> On 2023-06-30 19:56, Rob Herring wrote:
-> > Add compatible strings for the Arm Cortex-A520, Cortex-A715, and
-> > Cortex-A720 CPU PMUs.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   Documentation/devicetree/bindings/arm/pmu.yaml | 3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/pmu.yaml b/Documenta=
-tion/devicetree/bindings/arm/pmu.yaml
-> > index e14358bf0b9c..0cc468d6c372 100644
-> > --- a/Documentation/devicetree/bindings/arm/pmu.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/pmu.yaml
-> > @@ -49,7 +49,10 @@ properties:
-> >             - arm,cortex-a77-pmu
-> >             - arm,cortex-a78-pmu
-> >             - arm,cortex-a510-pmu
-> > +          - arm,cortex-a520-pmu
-> >             - arm,cortex-a710-pmu
-> > +          - arm,cortex-a715-pmu
-> > +          - arm,cortex-a720-pmu
-> >             - arm,cortex-x1-pmu
-> >             - arm,cortex-x2-pmu
->
-> Should we catch up on Cortex-X (3 and 4 now) while we're at it?
+Hi Linus!
 
-Yes. I'll add those.
+I am being a little late this merge window since it took me a little longer
+to thoroughly review the changes which address important issues in the DMA
+and IRQ code in arch/sh.
 
-Looking a bit further at this, it seems a bunch of platforms
-(including a Cortex-X3 based one) are just using "arm,armv8-pmuv3".
-That's supposed to be just for s/w models, but it's not enforceable.
+The pull request includes a patch by me to fix a compiler warning in the J2
+probing code and a fix by Sergey Shtylyov to avoid using IRQ0 on SH3 and SH4
+targets. Masahiro Yamada made some clean-up in the build system to address
+reports by the 0day bot.
 
-Rob
+The most notable changes come from Artur Rojek who addressed a number of issues
+in the DMA code, in particular a fix for the DMA channel offset calculation that
+was introduced in in 7f47c7189b3e ("sh: dma: More legacy cpu dma chainsawing.")
+in 2012! Together with another change to correct the number of DMA channels for
+each SuperH SoC according to specification, Artur's series unbreaks the kernel
+on the SH7709 SoC allowing Linux to boot on the HP Jornada 680 handheld again.
+
+Last but not least, Guenter Roeck sent in a patch to fix a build regression that
+was recently introduced in 99b619b37ae1 ("mips: provide unxlate_dev_mem_ptr() in
+asm/io.h").
+
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/glaubitz/sh-linux.git tags/sh-for-v6.5-tag1
+
+for you to fetch changes up to 7497840d462c8f54c4888c22ab3726a8cde4b9a2:
+
+  sh: Provide unxlate_dev_mem_ptr() in asm/io.h (2023-07-05 19:04:51 +0200)
+
+Thanks for pulling!
+
+Adrian
+
+----------------------------------------------------------------
+sh updates for v6.5
+
+- sh: Provide unxlate_dev_mem_ptr() in asm/io.h
+- sh: dma: Correct the number of DMA channels for SH7709
+- sh: dma: Drop incorrect SH_DMAC_BASE1 definition for SH4
+- sh: dma: Fix DMA channel offset calculation
+- sh: Remove compiler flag duplication
+- sh: Refactor header include path addition
+- sh: Move build rule for cchips/hd6446x/ to arch/sh/Kbuild
+- sh: Fix -Wmissing-include-dirs warnings for various platforms
+- sh: Avoid using IRQ0 on SH3 and SH4
+- sh: j2: Use ioremap() to translate device tree address into kernel memory
+
+----------------------------------------------------------------
+Artur Rojek (3):
+      sh: dma: Fix DMA channel offset calculation
+      sh: dma: Drop incorrect SH_DMAC_BASE1 definition for SH4
+      sh: dma: Correct the number of DMA channels for SH7709
+
+Guenter Roeck (1):
+      sh: Provide unxlate_dev_mem_ptr() in asm/io.h
+
+John Paul Adrian Glaubitz (1):
+      sh: j2: Use ioremap() to translate device tree address into kernel memory
+
+Masahiro Yamada (4):
+      sh: Fix -Wmissing-include-dirs warnings for various platforms
+      sh: Move build rule for cchips/hd6446x/ to arch/sh/Kbuild
+      sh: Refactor header include path addition
+      sh: Remove compiler flag duplication
+
+Sergey Shtylyov (1):
+      sh: Avoid using IRQ0 on SH3 and SH4
+
+ arch/sh/Kbuild                                |  2 ++
+ arch/sh/Makefile                              | 26 ++-----------------
+ arch/sh/boards/Makefile                       | 19 ++++++++++++++
+ arch/sh/drivers/dma/Kconfig                   | 14 +++++-----
+ arch/sh/drivers/dma/dma-sh.c                  | 37 +++++++++++++++++----------
+ arch/sh/include/asm/io.h                      |  1 +
+ arch/sh/include/cpu-sh4/cpu/dma.h             |  1 -
+ arch/sh/include/mach-common/mach/highlander.h |  2 +-
+ arch/sh/include/mach-common/mach/r2d.h        |  2 +-
+ arch/sh/include/mach-dreamcast/mach/sysasic.h |  2 +-
+ arch/sh/include/mach-se/mach/se7724.h         |  2 +-
+ arch/sh/kernel/cpu/sh2/probe.c                |  2 +-
+ arch/sh/kernel/cpu/sh3/entry.S                |  4 +--
+ include/linux/sh_intc.h                       |  6 ++---
+ 14 files changed, 66 insertions(+), 54 deletions(-)
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
