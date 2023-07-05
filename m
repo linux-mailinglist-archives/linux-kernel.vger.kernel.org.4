@@ -2,219 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79437748698
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894B9748695
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjGEOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S232177AbjGEOmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbjGEOmi (ORCPT
+        with ESMTP id S232475AbjGEOmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:42:38 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BDA1709;
-        Wed,  5 Jul 2023 07:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688568157; x=1720104157;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aeyGmCu6oRADhuKpnzSobnSs+iMboZlfPGYBg0HUc98=;
-  b=EIbY4XZAnrZnCf/58vOssTPmKdT9L+AFrObali3YUZcDgeDZvMgSv7BR
-   X2yFRzxYkSuyGJpThCFOWqF6LBwBJ7/bqIfaDolzvJeXuD8H1PruEs1kB
-   yCos0/lpxVQ+ofGjjlbqz4dR8xBLJ/eqg3pz+SRJXC/TaHFeJWRVgnbWc
-   MqRh6Fu/ibH0ML4/FCtAzcyyrVbqseEBftsFTfwtrI1AzE94EWsDzA0a7
-   aOlUa2iFUh6E0b3wct/1/mBBD0snsyd3rJUcWRNUtHnplfFiQdnGK2KtM
-   oTM9ODHxSKXfJP7ymVqriZFufrWywalF9DbwOZZeoZz7XCbK4I91AgdJt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="365928623"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="365928623"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 07:42:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="719259853"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="719259853"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jul 2023 07:42:35 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 5 Jul 2023 07:42:35 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 5 Jul 2023 07:42:34 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 5 Jul 2023 07:42:34 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 5 Jul 2023 07:42:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BypMbRWeCXzzdEhLYc5R0a7lWzj4iYStVwhckhgGqVgi/MKmYAHrMyquDaVgKOj40K0aFq7AJBrGWqjrGjHUsUlHJDtNf0s7etP4n7csf6kx7lVE7xrnfwIL95y2STMQyk0RF24NUq84hGsXosI/XRka8MMV17y3lwO7RHhxrJkoT1KfaD8P0wpAWk/hBN7RpJzz4L8+bgrPxNFR55XDYE6pQpJ4GcMF0viCa1EgYmmMnMZqLbkipHTDuvrg22mrIP/RjC6qdQWqBer7xcgcpjZcKvxdQW3XvDLNEAemq+53f/4u/BzMtZPud8ZJMCkMl6KW3kfT4kryAee2iTUobg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sil9xiPwYgg8KcIM/8JQn25tc12MWLox8h56F2pWFNs=;
- b=eihN6ys/HGFrRNZeAaJEIZd+loohSkef1OA7DpMkbbx57QyWOi5XJ0WevOdHSwkvWGRN/gbiRDK8bywNLoVjx21/3B2O/wCuYHuva2CE95PUq4uVUmi3QZY0rtZl2g7VfyOLcCozYIlfeY0RJ5EBFtaOPcdp2gKzpdIbsKC/E227zTFhzLXE56dOnlOB0SqKF3EDX4AL4IbGjXp1LmyVeYI1AW26AJ4nwW7dPARx7/9qAANa9CuJl9VEM3uc9R9rgqyMtUtcJFH9hShkHHTHtYEFSOicWayIc+GZWum2mGQu8wRMI+IK+tfvU24N13Da7Lt//HbEr941hcwyJrsYwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by MW4PR11MB6618.namprd11.prod.outlook.com (2603:10b6:303:1ec::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
- 2023 14:42:32 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::1ecd:561c:902a:7130]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::1ecd:561c:902a:7130%4]) with mapi id 15.20.6565.016; Wed, 5 Jul 2023
- 14:42:32 +0000
-Message-ID: <24583594-4ccc-48aa-d468-9325c97df9a4@intel.com>
-Date:   Wed, 5 Jul 2023 16:41:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH RFC net-next 2/4] net: page_pool: avoid calling no-op
- externals when possible
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230629152305.905962-1-aleksander.lobakin@intel.com>
- <20230629152305.905962-3-aleksander.lobakin@intel.com>
- <69e827e239dab9fd7986ee43cef599d024c8535f.camel@gmail.com>
- <ac4a8761-410e-e8cc-d6b2-d56b820a7888@intel.com>
- <CAKgT0UfZCGnWgOH96E4GV3ZP6LLbROHM7SHE8NKwq+exX+Gk_Q@mail.gmail.com>
- <413e3e21-e941-46d0-bc36-fd9715a55fc4@intel.com>
- <20230703133207.4f0c54ce@kernel.org>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <20230703133207.4f0c54ce@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0112.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a8::11) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+        Wed, 5 Jul 2023 10:42:33 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAE310D5
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:42:32 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b69923a715so105252361fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688568150; x=1691160150;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LvfxYoatLPY+EEK3fZXAaMdZCVIQwiRsXvqBzlQnUio=;
+        b=zrmknDbWs4pXA2BEO+ZZbVS1/Vg3LDziRqcQZVHwrspolpztZ9aKw8dsbUeyoL8GnA
+         dM0/Dhc5+Q7lRSv/a/VL22dNGx7MwcVPNGkmtpX9SMCOS2pmWiPIsLNnVnIx9WNd7tM0
+         ZR86oIFUmaICXXSTI30wkW7hRNvkywplXSXjhqfjOdvt4yMkWcLpKTjNKon4wGbRS/6l
+         PYYYu19Oa0fWNGbPl7ycT0ssWvXEQxdvQ3reESoP9KryJF8Y67EAQMTVC0ht3rKtBdbN
+         eFAd1WgoiuiHIx9lDFPKfSvJIU8lSLjumJwIX2rlsPWOsve6twEcqwH7z2tODLoNwR8K
+         WIVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688568150; x=1691160150;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LvfxYoatLPY+EEK3fZXAaMdZCVIQwiRsXvqBzlQnUio=;
+        b=kIziAgf3s2cHJOpI+Jqzz9zlG3ps21AZSiZgwYT8jSIFt3pWsEed23S2Jxj/4UUy7d
+         vGI1+WDYWF/UZGpLFFt7qEpkzp7MCQnFfSTR6JYpYWFZm3wAX+XwdxlgDgSeNl9oeMkK
+         SB4OQhYjeb+wodWyXFSGZCdpJ28oeyrP6fKB2+JUU48iG9M/MlzrCv3CQM2IGi2IOb/G
+         KfZPfFw5JzLhYFpIWCuOwka89Xw/hcWn8TlJgRAuxfWOKZnktI0ym784/DU9+62xIr2Z
+         z4w4xRpHUcnWkWjXGYJ6lFaqRxMuK8B/mduU3ioYe2hwlOcFlUJyQJ71+OhKrku5U3/p
+         I9ZA==
+X-Gm-Message-State: ABy/qLaErdSlnZfzGo2VQ1tx8qJ7fklMi/diT2Es4I/7nLqY5ke9ALFw
+        YAYbmqthOD6FBcwpKn6APu2qXw==
+X-Google-Smtp-Source: APBJJlGYhYhict3tVNgScjd7KiEg9N8T63CfQkYGiQDMubJFxYUP7RMS0Z5BovY5eCZ+8GTsDCAgyQ==
+X-Received: by 2002:a2e:8e89:0:b0:2b6:e536:a2a3 with SMTP id z9-20020a2e8e89000000b002b6e536a2a3mr9007351ljk.19.1688568150187;
+        Wed, 05 Jul 2023 07:42:30 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id xa10-20020a170907b9ca00b00988955f7b5esm14727581ejc.157.2023.07.05.07.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 07:42:29 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: add missing space before {
+Date:   Wed,  5 Jul 2023 16:42:26 +0200
+Message-Id: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|MW4PR11MB6618:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ccb7fca-8f3a-4dd4-2008-08db7d661055
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N5Nia9zgUCdo/yAYSpGFuvBZH9iPCS4RvSl95hxwlYGqlDr2CtnBSHwZU3cgh9J/zE/5TdnzlVNwxL0bQO9f4+xHG0jhnW1cAOvOYLrCJ9lq7mKjQ6C3pMM1pZCfCmAdPKnv786yjgRUdTmITiAfzzI+4j76xNdUVR1MA9bprn29CMRYDKpqKVy34jbkDkGIHg9eQ+EJ8ByErPJbVtLGGBPOf8DjjJQniR3fngAlIViL9mybJp0Z4S2igLFXKb1P2zFibHdUu6reAyo+by1w5uMy7OezaD0jV9PU+d3Avp6eBqOEqmwtFYlvJpXBeib0OTbyLuSXfs1amX+ciD+25QZTVjwPefE3BwmLcBtgvW9ylk0j3GJLgojlYNf0Id45O+pNIBoL8fb5qV0Mb9TaEq1ZBhgEtzThWDnWvkAkkE0Arago0L9uywmMNlbKj98M0GGHCYWvhJGEDner8mLlrfQgNNFsH3qIp8Me/2htsWXln+l0dlBdBJxGUqHhAePd9wFb3EwS1d3jNqKzPtTLHjcnBbC0Ve0NvYMyYBYCFAwDyDSanoQ00sXUOCEKtFKp+sllq8y4ytAaLNoUjNnDG+LpYozjEWxR+PJIKG2uneJgQaeijx2kvyr3NSgs+O08IRAqoMiJ8keoNt5j+FPyWg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(186003)(82960400001)(478600001)(6512007)(6506007)(26005)(31686004)(86362001)(2616005)(6666004)(316002)(54906003)(38100700002)(6486002)(66556008)(6916009)(66946007)(4326008)(66476007)(7416002)(5660300002)(8676002)(8936002)(2906002)(41300700001)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3pvL0xsVHFWWmhtNStrNWc0QnpDckZWVFM4aDlPc0w0TEd4aWxxUkRrRUh1?=
- =?utf-8?B?SWFaMzlYR1o0S1IrS3NNMzZlWjNwekFiVUplRUZFZ3FtRHlGZGFmU20ya1NL?=
- =?utf-8?B?RUkzSmlLNlB1RStiazVHWk82bGhEMDFXamliYlZxSUpTNlRzSGg5dExGemE0?=
- =?utf-8?B?TFRTTXN4Vkk5YXdtbmREQS9NUVdVRWV2L3pYS3RqSC9DTzk3ZXFxWUphaGR1?=
- =?utf-8?B?Zk9SUzhHbTBSMDdFbCtYTVdqTElUZXJ5b2hjZE5DWTA5VnlMSEMxSkh4b2FQ?=
- =?utf-8?B?UnpHVjBKenk5NDBBekVwSStXa1pyYkZFdThzMFFOb2k1WDUwc3IvcWhlZ0JE?=
- =?utf-8?B?UDhsU0ZQRkhTVS9LZTVUM0tJQ08ybW15cDgxQzJiUW13NDliSWxrVTVCalBU?=
- =?utf-8?B?VStZLytpYnBIZ2hpVzJHME5MNjhlQUxnYnM2dlJWaTBIMzEwWGxPbE40aTFH?=
- =?utf-8?B?dUtwSVdxRkhKMHBkTUtZb0RHRTVRQUhpYXJpUHRXejJiaXRiUEJpRnJ5RkNL?=
- =?utf-8?B?eWd5Vk40d0xQNWlzclY1eDR1UmhyZmlQdm1BUU4zd0RSOENyejlLQWl6UEpt?=
- =?utf-8?B?N1NVQjU3ZExxc3dITDJHNkRadFhrYW5Gd0ZpdS9UckFlNzRna3h2ZDdxNm05?=
- =?utf-8?B?SjBDZ0FpeXBnc1NsMzBaMGhJV09kTHhsenduajNWYm9MYUp5ZEdrbUZFR2c3?=
- =?utf-8?B?NkpMZ2Y1RnB5N1l0MGFXSFhlQ1p3bklrY1Facy84RHFQWTdkaTl5WVVoR3hW?=
- =?utf-8?B?c3ZyMVFHSWZZWlFvQVNkZ1VFem1nNmMybkxRK2hxaVhLUmZXNTAvZ0NPaE5F?=
- =?utf-8?B?TDVla1dvMUFqYWVibit6UnlXcnF6V1VNakozelhmbllBcUZNUytKRC9jQ2ll?=
- =?utf-8?B?SDUvL201UWxHYTkzVk5ISkduVUJSY013bjNYYVBzZHEvZEtLMmtBcHZkZVV5?=
- =?utf-8?B?M1p1WEQrZE9IVkltckRKSU1IQmpJRi80VVAvWHMzY1MxbnNKekJzSFF6eXNa?=
- =?utf-8?B?S1p2UkdsSzFSWTFzSVROalVVS2pKU01IYVRXZENCT1c3cFljaXlwREkzUGZ3?=
- =?utf-8?B?UGRXaHAvcWlFenVkSC80ZytUVmtOSko1UG9MNDM2VDhlV1ZNbXBEaU16ZklX?=
- =?utf-8?B?ZU9TWVRlM0hNYXhNV1BpZlhhQXZkL3FNZ1hCbjNPZEs0OThDank5TXFUSWVR?=
- =?utf-8?B?bDh2K054bko4L2s3d2lxUEFHS0sxbXBFSGJFaFRhWVRhTi8xQ0tud0NpcjlH?=
- =?utf-8?B?b29oM2JIZGZyZlY4SHJsQkh1Z3R1bjljc25vbHVYMFhGRE9Ec21ZUVRJNXRh?=
- =?utf-8?B?Q3IzeXlpLzZ3VEd5aURsTXozS2E3anRuMjUrSW1JZitPT2pMb1B6ZkYzRFZ5?=
- =?utf-8?B?S21QOEdxY2I0WTl4QU0wd0dEVW1vSkZzRFFzMHdXVTdGWEFUYnNDOXEyY0x3?=
- =?utf-8?B?SmRveVpqUk5XQ0M5NUJXUDFYTS9PaDI4RUNRNGpvblRkU2V6QjdBYWQ4Y0l6?=
- =?utf-8?B?clk5d0VFWDRnR2pOMGtURFpFdnlrdUhXcmtaZ1dEMEp6Y2NZeVlYdG01VGlo?=
- =?utf-8?B?UGc4V1BDMDJ1Z05heDR4QXF1VGoveUpBYWE1WkUrTkdIYWNHVVJHaklOU0wz?=
- =?utf-8?B?Umdtbi9WNGdoNHNXZzhndFhZakZxV0dOeFJKOERQUmZMV2FiRTFFc3Y2YW15?=
- =?utf-8?B?UVpqZnJmK3cwaGVMTXVZSDNlNXc4YVl5YXhiYWdSang4dWtpQVhXdXNxMTJa?=
- =?utf-8?B?bG9qTkJHR3E1emtqeGIvR3d6TXhONThJWm9FY2hSVXcyNDhoWDlxakFDSHFU?=
- =?utf-8?B?cko5dHF3WFUwZGx6eGpXNGdySzlIV3FzWEdBamZtMzQ5cjBZMFFRMEU5aEt5?=
- =?utf-8?B?QVI5Vlo0clJieGZxKzMvL3B3N1pCNGdJNGY1TlZzenBDVUp4Q0gwNmxvb0FB?=
- =?utf-8?B?SC84OWcxOFRrb2UyMU1DODRpREczTkhFOFpXbjdCSVI1eVZZNzFiTTU5Mnov?=
- =?utf-8?B?QXBDbmYvOTdtcEQ3RHJIRW94ckhKUDFjQzJzTkxLa3pJZkxnSEh3ekJHUzIr?=
- =?utf-8?B?UXJCS0h3WW9JOUlhTVNuSnRDbWVrenV3bDNKSmNjQjFxU0xSS0R3QUFDZlRQ?=
- =?utf-8?B?ME16WVhHYmVtMDRJUnA1bmdyeUJyN0ZCdlhmMVFtcEZ6U1FmcUE5QnNGWmsw?=
- =?utf-8?B?L3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ccb7fca-8f3a-4dd4-2008-08db7d661055
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 14:42:32.0052
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZhNKqdgyKtXLdHIRl/cELFl/DtmsHJ5/N8e5VTGuSuAUgsrDvBPZaUgfPwCREr+YRXOrhHoF4Iiz1ugTxb3DRU4yTzqjTUqkIkKqG7XAvW8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6618
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
-Date: Mon, 3 Jul 2023 13:32:07 -0700
+Add missing whitespace between node name/label and opening {.
 
-> On Fri, 30 Jun 2023 17:34:02 +0200 Alexander Lobakin wrote:
->>> I am not a fan of having the page pool force the syncing either. Last
->>> I knew I thought the PP_FLAG_DMA_SYNC_DEV was meant to be set by the  
->>
->> Please follow the logics of the patch.
->>
->> 1. The driver sets DMA_SYNC_DEV.
->> 2. PP tries to shortcut and replaces it with MAYBE_SYNC.
->> 3. If dma_need_sync() returns true for some page, it gets replaced back
->>    to DMA_SYNC_DEV, no further dma_need_sync() calls for that pool.
->>
->> OR
->>
->> 1. The driver doesn't set DMA_SYNC_DEV.
->> 2. PP doesn't turn on MAYBE_SYNC.
->> 3. No dma_need_sync() tests.
->>
->> Where does PP force syncs for drivers which don't need them?
-> 
-> I think both Alex and I got confused about what's going on here.
-> 
-> Could you reshuffle the code somehow to make it more obvious?
-> Rename the flag, perhaps put it in a different field than 
-> the driver-set PP flags?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi                    | 2 +-
+ arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-PP currently doesn't have a field for internal flags or so, so I reused
-the existing one :s But you're probably right, that would make it more
-obvious.
+diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+index 3c1314e12d08..fe8534538618 100644
+--- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+@@ -3429,7 +3429,7 @@ timer@17c20000 {
+ 			#size-cells = <1>;
+ 			ranges = <0 0 0 0x20000000>;
+ 
+-			frame@17c21000{
++			frame@17c21000 {
+ 				reg = <0x17c21000 0x1000>,
+ 				      <0x17c22000 0x1000>;
+ 				frame-number = <0>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
+index b841ea9192ae..85e5cf3dc91e 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
+@@ -565,7 +565,7 @@ panel_in_0: endpoint {
+ 				};
+ 			};
+ 
+-			port@1{
++			port@1 {
+ 				reg = <1>;
+ 
+ 				panel_in_1: endpoint {
+-- 
+2.34.1
 
-1. Driver sets PP_SYNC_DEV.
-2. PP doesn't set its internal one until dma_need_sync() returns false.
-3. PP-sync-for-dev checks for the internal flag.
-
-Although needs more lines to be changed :D
-
-Thanks,
-Olek
