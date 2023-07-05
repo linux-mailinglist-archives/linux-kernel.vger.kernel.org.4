@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C5F748DBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60D7748DC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbjGETZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S232712AbjGET24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbjGETZ3 (ORCPT
+        with ESMTP id S229929AbjGET2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51804C03;
-        Wed,  5 Jul 2023 12:23:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1460C616CC;
-        Wed,  5 Jul 2023 19:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3813CC433C7;
-        Wed,  5 Jul 2023 19:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688584990;
-        bh=XkVpsUMAas5eIwMCK29P6mupS9x7AHoqzqeWqww4zek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eNl7MYi731YwNgsgM/VwIqWPCoZUNk0bnt3+OStb36lZZCm+6qhcnoPIgV5j+ziht
-         hVr94DU8Jay65as+NyTdkTyby1mDqoTxh1IjK1SHgJSbHhCGbwi5pNEGv8sMiOByOh
-         GKDQZHyNXX+mpxM2tpRqOn4YfMtGFVhZ4qrLn9OBxraO1IZwBGCiSBuzuJTbnkYGXI
-         lqnMqho2MgW3jb/iSaYQTBHqlsR2P1tvYKXreKn4uenMO9QoTIT6MRg3nkvq+27Jds
-         24ZU6wAVtUcid427JvedRqKRIxbIuzDoaI7Nvy33/HD/uvStyPDZaQfCx/8pW2Rzwx
-         +IGEg0bKCFjDw==
-Date:   Wed, 5 Jul 2023 20:23:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     bcousson@baylibre.com, tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        peter.ujfalusi@gmail.com, jarkko.nikula@bitmer.com,
-        dmitry.torokhov@gmail.com, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 3/3] ARM: dts: omap4: embt2ws: Add audio support
-Message-ID: <9014a59b-5972-484e-ac70-c013e049b140@sirena.org.uk>
-References: <20230705190324.355282-1-andreas@kemnade.info>
- <20230705190324.355282-4-andreas@kemnade.info>
+        Wed, 5 Jul 2023 15:28:54 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D4A10F;
+        Wed,  5 Jul 2023 12:28:53 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666e97fcc60so23884b3a.3;
+        Wed, 05 Jul 2023 12:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688585333; x=1691177333;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5TBB3lA3219LHYvO7O8r0trL8ZFv8X/mAnxkxOqj7IU=;
+        b=D4HgX8p1dsAjSTSuUpPw7eJzRpQlgXgDnNzA+16nqrjL0N8EAm35oPzpWOlXhKnc98
+         3y7MTGth2VRvMXujfnC6+U6Uv/7jUGGKOSrQMCOVraZ9xsSOOH3qyMpWOzumV5INHeMo
+         qfSMh1RelkiplWKsSHQOWoIv3hJvwc1Ow1tWMKJb1kpMxDGp39Nsrp9k4Zfp0mINbnGv
+         kwktloYdBkGs9HKMX3t5XEL91vkHuhkBf13z5mrU7hc9cs6NIyToiH89xJ8EB2PdglhK
+         Nlg2LZnyIp9WxPAR+M6RV9kHR3cYuJIC+7iEEfJh1Mtb1OJRKUE977SdM5nmWFxiytrc
+         MmgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688585333; x=1691177333;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5TBB3lA3219LHYvO7O8r0trL8ZFv8X/mAnxkxOqj7IU=;
+        b=gi4m/zYNtep8kefrv8hYebjsCViazAQLhphN9ptiWxJcwZcp4TI8Lo974y3zofsTzI
+         4tUZoOkX/3l+v+kbSLl/ni5eKV309luZLVacp3741KMJiqFVO0yhpQ/gSkoA00m1QV4+
+         5yflBG9iwe3puw0peVppUMnRBVQDbyTViakFp4ZOLGYPHdvWYLdFYw3u7cv52374r1ZI
+         cnXFAgzrJlhfBUA1NeyCdkOYnHC0i4yWYt1JbqyVojqAv/60nhGm9Ci/uuLCxHy3QfyZ
+         5ndfUQb20pm/Xz70+k4du98KMDhQLUEwERXBVr6dZBGBiMcmBGgsfJwvPqOhAQPwC8lN
+         ECZA==
+X-Gm-Message-State: AC+VfDx+Ns48vb3HojSRm5ESTXBsRCNPXrtu4s1CzyjIfOemxmCgOyFx
+        llmGP1QT5C+SsmG6E7rrs6tAuRnJYrU=
+X-Google-Smtp-Source: ACHHUZ4AIOheQA4xlTJnOr83/5E/dTQaqiCrhFN98TmyBgMB+ONKUzbrg7FpEsnizg+x6GZMv2g66A==
+X-Received: by 2002:a05:6a20:3ca1:b0:123:b57:a3de with SMTP id b33-20020a056a203ca100b001230b57a3demr12810543pzj.46.1688585332898;
+        Wed, 05 Jul 2023 12:28:52 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:9fac:a99f:7f0a:397])
+        by smtp.gmail.com with ESMTPSA id u23-20020aa78497000000b0067aa2a70179sm14310213pfn.46.2023.07.05.12.28.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 12:28:52 -0700 (PDT)
+Date:   Wed, 5 Jul 2023 12:28:50 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH RESEND] input: cpcap-pwrbutton: remove initial kernel-doc
+ notation
+Message-ID: <ZKXEcr+43Qkj8Y4m@google.com>
+References: <20230703230005.14877-1-rdunlap@infradead.org>
+ <20230704000821.z3tx4chw7x6pn6nq@mercury.elektranox.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pcNKJC6KNSizl/+7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705190324.355282-4-andreas@kemnade.info>
-X-Cookie: Don't feed the bats tonight.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230704000821.z3tx4chw7x6pn6nq@mercury.elektranox.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 04, 2023 at 02:08:21AM +0200, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Mon, Jul 03, 2023 at 04:00:05PM -0700, Randy Dunlap wrote:
+> > Change the beginning "/**" in the file to "/*" since it is not a
+> > kernel-doc comment. This prevents a kernel-doc warning:
+> > 
+> > drivers/input/misc/cpcap-pwrbutton.c:2: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> >  * CPCAP Power Button Input Driver
+> > 
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: Sebastian Reichel <sre@kernel.org>
+> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > Cc: linux-input@vger.kernel.org
+> > ---
+> 
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
---pcNKJC6KNSizl/+7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied, thank you.
 
-On Wed, Jul 05, 2023 at 09:03:24PM +0200, Andreas Kemnade wrote:
+BTW, the driver is missing SPDX annotation, Sebastian I wonder if you
+could send a patch addressing this (given you are the author it is
+better coming from you).
 
-> +	sound {
-> +		compatible = "simple-audio-card";
+Thanks!
 
-For new usage audio-graph-card2 is preferred, it's a superset of the
-functionality and much more flexible.
-
-> +		simple-audio-card,codec {
-> +			sound-dai = <&tlv320aic3x>;
-> +			system-clock-frequency = <24000000>;
-> +		};
-> +	};
-
-Are you *sure* the BCLK always comes out at this rate?
-
---pcNKJC6KNSizl/+7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSlwxcACgkQJNaLcl1U
-h9AxHQf/dak+OKZYRo/pero4Ava2YorLLQDCh8ADYq1T+GPQnaWaBTdq0golyC18
-AlqjHoluidxXdpB3UWSe9x0dlvNCpGCuVXnlWOTXDEG8DSK3S0PPbbNEEslMQh8c
-SBLHqRGCn2PQkurZiWVJYHRmkM79+HlVSC58kHit3ErbDsesSCrdyPSAl8UspAo7
-/jtUhvbU7+NmPj9DQ7JDwdJrQouIel015F1YmjLPHBzlMecQ0kernj55wb0l0K/N
-ytyuHhQyyadBVaGh0x9EoctC3/Nbk1ETR45Xlg9eIlSGwUTnyDzF/PhmlT9CVj6s
-ZrL++EXT411pHGrqVeBIgUE9Ht9fpg==
-=QPu1
------END PGP SIGNATURE-----
-
---pcNKJC6KNSizl/+7--
+-- 
+Dmitry
