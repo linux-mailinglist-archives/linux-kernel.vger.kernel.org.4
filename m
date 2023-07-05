@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F38D748513
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F4174851A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjGENfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
+        id S232135AbjGENgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbjGENfo (ORCPT
+        with ESMTP id S231539AbjGENgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:35:44 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2971171C;
-        Wed,  5 Jul 2023 06:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=KOA/sIxRntn8PaEzfqns3GWcNQXCCvRxyb1RRiU0AGM=; b=jhJu04dlhrYmX4GEJ8FnBBBn5o
-        6mTt88FsdEYBXcXqc44N+c9RmgA3SDYSjiq0pAAwFdVYLCuOgiV/IqfDfJrKhXdNEOGFxSUt9xH/M
-        r3iznEHBtqPqwe3mGkEu6CI/QWrclH6+GafYiPPk2hy4mZbmvXBmIR6mw4zpceS6T6R8=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:52996 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qH2ey-0003qj-R7; Wed, 05 Jul 2023 09:35:16 -0400
-Date:   Wed, 5 Jul 2023 09:35:07 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pierluigi Passaro <pierluigi.p@variscite.com>,
-        Nate Drude <nate.d@variscite.com>,
+        Wed, 5 Jul 2023 09:36:33 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E01B1713
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 06:36:32 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b69ed7d050so109245541fa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 06:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688564190; x=1691156190;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IaHS4pAL4i4Q+Ss6wpXIG3Dh4assAf7OupeBhJe3n5Y=;
+        b=rgkxp1dJ+DKMn1Mm4vWOD0A7JPB5Dtv/GWfrcAmELDUBjZGMFzhFAfiinkQfbXvRpc
+         VHXfNVNRoahlTrABBdkxFSQ1/Z8NUBvKem2zRllOeygnGgUO/vHjQ1BwJ9Cp44Kl6u2V
+         qjfR07Th7j6OnAABY+g83aqC6iK/feOnxm9ALsnuguQ3OsTg8NjqDSfmPFgSUVUlEVdp
+         et+OIfD6Jr9J87KGF+InfJX1sQhiUDAHW/QoFUAsWjFkhUzLbQT+pyijTHNvWckgHIsg
+         jEvimtZWVz6azlnDLlzOJlaxuNGxX/vZ3I1bpUzcxUsFNi4KdRrWSAUAYZJ5sj6f4qQX
+         bpXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688564190; x=1691156190;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IaHS4pAL4i4Q+Ss6wpXIG3Dh4assAf7OupeBhJe3n5Y=;
+        b=DuHRs+HbYcmNH2E7QfaOVzzs4/7pJutLDq/pKKpuRmzA02WVnoaTzdjzH+63JBWiEM
+         4d1Ce2plVG1dewJUiI5yV3KZCLJhlGspe0PJZls2juq+paRcH01n3LYHCeXsbWKRiGX8
+         udFkK3Q5hsX84MHEtymOo07BtYie5FGdFSjKBKmQqA93LnSdpPYl41K31nPjf4+Ijaqk
+         /NDQUq4V/PGIbDjzCBeTE+ROJ4JhjWAkbDPRLxue5WMEbDB0am39873T3HmbMHvVAAQQ
+         zDlYlCKUmpYsJdLWdP0/eWky/34j2r+sRSjxyA65AoKBUtvVnLlmekxgCftrTuI8wwuc
+         XQIg==
+X-Gm-Message-State: ABy/qLYv6xQu85mrbn6BeNhiPV1xZuKeai+BnCDn1u77w4URP++oqslg
+        +IrUOwV2tU1OXub24/9srwvFFg==
+X-Google-Smtp-Source: APBJJlGktfmCYuE9mW67slJaeQAqfa6eE+OZTcefqagvTw1cTnO1F2en7ldD7NdTdDC5iJC1RblsdA==
+X-Received: by 2002:a2e:9144:0:b0:2b5:80c9:9806 with SMTP id q4-20020a2e9144000000b002b580c99806mr11461321ljg.6.1688564190142;
+        Wed, 05 Jul 2023 06:36:30 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id z16-20020a2e7e10000000b002b700952298sm246803ljc.33.2023.07.05.06.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 06:36:29 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/3] SM8350 CPU-adjacent fixes
+Date:   Wed, 05 Jul 2023 15:36:20 +0200
+Message-Id: <20230705-topic-sm8350_fixes-v1-0-0f69f70ccb6a@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANRxpWQC/x2L0QrCMAwAf2Xk2UDaUpz+ioh0NXWB2Y1GZTD27
+ ws+3nG3gXITVrh2GzT+icpcDdypgzym+mKUpzF48oHOFPEzL5JR332I9CiysqIvlxhy6J2jAjY
+ OSRmHlmoeba3faTK5NP7XZm73fT8Aac5Js3kAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20230705093507.7458eada3ae05e0e1740a10e@hugovil.com>
-In-Reply-To: <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
-References: <20230704150240.2022020-1-hugo@hugovil.com>
-        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
-        <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
-        <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
-        <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
-        <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
-        <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
-        <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
-        <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
-        <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
-        <20230704172801.f11422b3f947c625f53af871@hugovil.com>
-        <CAOMZO5CWh0-5eMTBwjvNUrY-yOHE=daj6n-jAAfjWoV-H4rt0Q@mail.gmail.com>
-        <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688564188; l=695;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=uWHj8batm98rBqvJvajF8eoh7pTgjLLAYAzVRZDb8+g=;
+ b=UQcKK3vyi5b5ft9cY8Mr5DNzB7gdEvwcJ9duuxDuveC39gr7G0FO23gXdKV7T9Y04cpViDkGP
+ SsrxPl9mBZiBzL40ZVcF41BzAShze4XwHbhzwL1kV+utsF1F02KR3YQ
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jul 2023 20:00:13 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+I noticed there are some holes in the cpuidle and cpufreq on SM8350.
+This series attempts to fix that.
 
-> On Tue, Jul 4, 2023 at 6:50 PM Fabio Estevam <festevam@gmail.com> wrote:
-> >
-> > On Tue, Jul 4, 2023 at 6:28 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
-> >
-> > > Hi Fabio,
-> > > it is important to remember that on this board, like I explained
-> > > before, the INTB pin is not connected to anything.
-> > >
-> > > It is only the ID pin (9) that is connected to the GPIO1_11 pin.
-> >
-> > Now I looked at the schematics and you are right.
-> >
-> > In this case, GPIO1_11 should not be represented as irq then.
-> 
-> Variscite added an "irq-is-id-quirk"  property on their tree to handle this:
-> 
-> https://github.com/varigit/linux-imx/commit/fbe6aa2a9c014fdb10b29a715a1be695dac60828
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (3):
+      arm64: dts: qcom: sm8350: Add missing cluster sleep state
+      arm64: dts: qcom: sm8350: Fix CPU idle state residency times
+      arm64: dts: qcom: sm8350: Add missing LMH interrupts to cpufreq
 
-Hi Fabio,
-what do you think of Variscite's patch, is it something
-worth doing?
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
+---
+base-commit: e1f6a8eaf1c271a0158114a03e3605f4fba059ad
+change-id: 20230705-topic-sm8350_fixes-2f953c38110f
 
-At least the comment is interesting about the different EVK board
-versions: mine is v1.6, which confirms the connection of the ID pin to
-the GPIO1_11 pin. This also means that old boards have a connection from
-the IRQ pin to GPIO1_11, and for these older boards the DTS is probably
-Ok as it is?
-
-How can we support both configurations?
-
-Hugo.
-
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
