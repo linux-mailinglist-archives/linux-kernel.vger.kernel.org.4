@@ -2,190 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E7674852E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA7D748532
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232292AbjGENjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S231888AbjGENkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 09:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjGENjY (ORCPT
+        with ESMTP id S230466AbjGENkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:39:24 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2003BA;
-        Wed,  5 Jul 2023 06:39:22 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id ada2fe7eead31-445046c7f12so413173137.0;
-        Wed, 05 Jul 2023 06:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688564362; x=1691156362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ykccF1p4HFFtQC8JWpMl/kD+lzV51nuPgYjt2y0juQg=;
-        b=ska9EAjpu10VzQuM8n30GfNjcOoDCsExcwjkSgE5SgmrzrTPSLrQnZC7zBqknoeQES
-         dQaDsgTyi1pCgecOtNP2Q0LGpCVcCgZEapUYg1RFEGiJBETRXElOamkT52YFBomvnWXQ
-         qQPO46taQQdwFQlqTXWN6FIg6A9gGkT9lpFaH7iXJbvlvi8X16Mho9lxtcCE+aiKZ2ho
-         kH/w8xHQSIFo4c2M+vchHXqO8diplALxnA8C7w0exllWLQ86glkZ/O2/xYSPzUMq7CtK
-         ILgQ6qvBbu3gVPTm0zLO2jhsE2JM7JdB7H4tYS24jQVQezeyrQE5EcNQjx6s/G9nFEND
-         1QfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688564362; x=1691156362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ykccF1p4HFFtQC8JWpMl/kD+lzV51nuPgYjt2y0juQg=;
-        b=G2IKoQH9Qnlvu+BCz4Z2YCXyY2XGbuqdPmCzDaZj3fUIHZDrIzprgnebTJk9AJM6s7
-         yCfRV1lqPrUAcnZqIq5ZSFphiQ17rEmSB0T0/lw37TWY6xi2f84zT1wYRGvhAqTOSAAs
-         2QVI1ysqfuajEm+zmmGxgrumyrnuo3l7F/ev7kyPaNG7eg2JkPszgJmJi6U0+fm4S4/8
-         2fkVl/25YPB0wk3/hEttPmx/M/Se+aHjeykcy+4keMdDvxuazdvuSGognZBxOh1XU0hd
-         x3egP5RByvHaf4Wth72B38mEdTPI1Qc1rFLfx9U7b+ukbxRopHmWdBQ2EsHBeWMSEs96
-         srWQ==
-X-Gm-Message-State: ABy/qLZeCDLrZn+EjahYFs7tCopENyVM6U4RYwbXf5zSsHvePviRE9U2
-        txUD2PuTTIGsJ5DTVlIi9bNwslJ3NJNT/dYTeRE=
-X-Google-Smtp-Source: APBJJlGxDJ3T8gUTM1C/SI34dPMB/Hh47FuszbvTJVOgIelYkTVQ6V/mUiUFAOgmncahGcpWX0KnLjXQ+X39Lq72X9Y=
-X-Received: by 2002:a67:e3ba:0:b0:444:c36:1b24 with SMTP id
- j26-20020a67e3ba000000b004440c361b24mr5020350vsm.11.1688564361984; Wed, 05
- Jul 2023 06:39:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000004f34d705ffbc2604@google.com> <20230705-aufgearbeitet-kaffee-44ff4731a7dd@brauner>
-In-Reply-To: <20230705-aufgearbeitet-kaffee-44ff4731a7dd@brauner>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 5 Jul 2023 16:39:10 +0300
-Message-ID: <CAOQ4uxgjnYyeQL-LbS5kQ7+C0d6sjzKqMDWAtZW8cAkPaed6=Q@mail.gmail.com>
-Subject: Re: [syzbot] [overlayfs?] general protection fault in d_path
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     syzbot <syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
-        syzkaller-bugs@googlegroups.com, Mimi Zohar <zohar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Jul 2023 09:40:40 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3369F;
+        Wed,  5 Jul 2023 06:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=xCdqLKG1nXaRMoiOUaSkIvb0jJRnoEa7lfZSbBirUUA=; b=YLJRNgZqHYdv4EpcxpHCBXnvAM
+        hP4DnBaBSb1/RzBLDmOj/+uqL4aL9bEpruSLpMrvjkHqji8MOBZXALZasaGFfZwhxXsSqPlJaTXA7
+        kHgTPw3pFlzppmIgSdE28G562FzICthBIK2F7bWydFyVEbtEyQQNMVFSgbC2h2bsTEmc=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:54756 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qH2k4-0003vb-5Y; Wed, 05 Jul 2023 09:40:25 -0400
+Date:   Wed, 5 Jul 2023 09:40:12 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230705094012.7e6660dc4669d375911044f1@hugovil.com>
+In-Reply-To: <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <Y8rl452Xm1FrnFfF@mail.local>
+        <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
+        <20230621125945.1f10b66832d0d1c61e21f78d@hugovil.com>
+        <20230621181441cd214f99@mail.local>
+        <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 4:06=E2=80=AFPM Christian Brauner <brauner@kernel.or=
-g> wrote:
->
-> On Wed, Jul 05, 2023 at 05:00:45AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    d528014517f2 Revert ".gitignore: ignore *.cover and *.m=
-bx"
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D14fad002a80=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D1085b4238c9=
-eb6ba
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Da67fc5321ffb4=
-b311c98
-> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for D=
-ebian) 2.35.2
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/fef94e788067/d=
-isk-d5280145.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/576412ea518b/vmli=
-nux-d5280145.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/685a0e4be06b=
-/bzImage-d5280145.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
-> >
-> > general protection fault, probably for non-canonical address 0xdffffc00=
-0000000a: 0000 [#1] PREEMPT SMP KASAN
-> > KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057]
-> > CPU: 1 PID: 10127 Comm: syz-executor.3 Not tainted 6.4.0-syzkaller-1147=
-8-gd528014517f2 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
- Google 05/27/2023
-> > RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5012
-> > Code: 85 75 18 00 00 83 3d 15 c8 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84=
- f8 0f 00 00 83 3d 5c de b3 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 =
-00 74 1a 48 89 d7 e8 b4 51 79 00 48 8b 94 24 80 00 00
-> > RSP: 0018:ffffc900169be9e0 EFLAGS: 00010006
-> > RAX: 000000000000000a RBX: 1ffff92002d37d60 RCX: 0000000000000002
-> > RDX: 0000000000000050 RSI: 0000000000000000 RDI: 0000000000000050
-> > RBP: ffffc900169beca8 R08: dffffc0000000000 R09: 0000000000000001
-> > R10: dffffc0000000000 R11: fffffbfff1d2fe76 R12: 0000000000000000
-> > R13: 0000000000000001 R14: 0000000000000002 R15: ffff88802091d940
-> > FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fa22a3fe000 CR3: 000000004b5e1000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5761
-> >  seqcount_lockdep_reader_access+0x139/0x220 include/linux/seqlock.h:102
-> >  get_fs_root_rcu fs/d_path.c:244 [inline]
-> >  d_path+0x2f0/0x6e0 fs/d_path.c:286
-> >  audit_log_d_path+0xd3/0x310 kernel/audit.c:2139
-> >  dump_common_audit_data security/lsm_audit.c:224 [inline]
-> >  common_lsm_audit+0x7cf/0x1a90 security/lsm_audit.c:458
-> >  smack_log+0x421/0x540 security/smack/smack_access.c:383
-> >  smk_tskacc+0x2ff/0x360 security/smack/smack_access.c:253
-> >  smack_inode_getattr+0x203/0x270 security/smack/smack_lsm.c:1202
-> >  security_inode_getattr+0xd3/0x120 security/security.c:2114
-> >  vfs_getattr+0x25/0x70 fs/stat.c:167
-> >  ovl_getattr+0x1b1/0xf70 fs/overlayfs/inode.c:174
-> >  ima_check_last_writer security/integrity/ima/ima_main.c:171 [inline]
-> >  ima_file_free+0x26e/0x4b0 security/integrity/ima/ima_main.c:203
->
-> Ugh, I think the root of this might all be the call back into
-> vfs_getattr() that happens on overlayfs:
->
-> __fput()
-> -> ima_file_free()
->    -> mutex_lock()
->    -> vfs_getattr_nosec()
->       -> i_op->getattr() =3D=3D ovl_getattr()
->          -> vfs_getattr()
->             -> security_inode_getattr()
->    -> mutex_unlock()
->
-> So either overlayfs needs to call vfs_getattr_nosec() when the request
-> comes from vfs_getattr_nosec() or this needs to use
-> backing_file_real_path() to operate on the real underlying path.
->
-> Thoughts?
+On Wed, 21 Jun 2023 14:28:52 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-The latter.
+> On Wed, 21 Jun 2023 20:14:41 +0200
+> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> 
+> > On 21/06/2023 12:59:45-0400, Hugo Villeneuve wrote:
+> > > On Wed, 21 Jun 2023 10:14:29 -0400
+> > > Hugo Villeneuve <hugo@hugovil.com> wrote:
+> > > 
+> > > > On Fri, 20 Jan 2023 20:05:07 +0100
+> > > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > > > 
+> > > > > Hello,
+> > > > > 
+> > > > > I know I've been holding off on the review of this series for a while
+> > > > > and I'm sorry for that.
+> > > > > 
+> > > > > One of the main issue that is remaining is that the driver ends up being
+> > > > > 53% bigger and generaly less efficient for no added functionality for
+> > > > > the existing RTCs.
+> > > > > 
+> > > > > I know performance is not a concern however, having more code in the
+> > > > > set/read time and irq paths means that it is more difficult to set an
+> > > > > get the time precisely.
+> > > > 
+> > > > Hi Alexandre,
+> > > > one way to keep rtc_read_time() as efficient as before, and even more
+> > > > efficient by reading 7 instead of 10 registers, would be to drop reading
+> > > > the CTRL3 register, which is only used to detect and display an info
+> > > > message for the low battery condition. This low battery check could be
+> > > > moved to an ioctl call, like it is done in the PCF8523 driver.
+> > > > 
+> > > > Hugo.
+> > > 
+> > > Hi,
+> > > in fact it is already part of the ioctl, so it is even simpler...
+> > > 
+> > 
+> > Yes, the dev_info can be removed.
+> 
+> Hi,
+> great, I will integrate that patch to improve rtc_read_time()
+> performance, and resubmit V4 soon with the requested changes mentioned
+> during V3 review.
+> 
+> Thank you, Hugo.
 
-IMA code cannot operate on a mixture of real inode (file_inode())
-real dentry (file_dentry()) and ovl path, especially for reading
-stat.change_cookie which is not really well defined in ovl.
+Hi Alexandre,
+I submitted V4 a few days ago, please let me know if everything is
+in order and all comments properly addressed.
 
-At least those direct f_path references need to be fixed:
+If all is good, any chance we can have that integrated into v6.5?
 
-security/integrity/ima/ima_main.c:
-vfs_getattr_nosec(&file->f_path, &stat,
-security/integrity/ima/ima_api.c:       result =3D
-vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
-security/integrity/ima/ima_crypto.c:            f =3D
-dentry_open(&file->f_path, flags, file->f_cred);
+Thank you, Hugo.
 
-and then all the places that format full path for audit logs:
-security/integrity/ima/ima_main.c:      *pathname =3D
-ima_d_path(&file->f_path, pathbuf, filename);
 
-Need to decide if it is prefered to log the full ovl path or the
-relative real path (relative to the private mount clone of the ovl layer).
-
-Thanks,
-Amir.
+> > > > > I guess I'll take it as a merged driver but I took a different decision
+> > > > > for other RTCs.
+> > > > > 
+> > > > > On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
+> > > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > > > 
+> > > > > > Hello,
+> > > > > > this patch series adds the driver for the PCF2131 real-time clock.
+> > > > > > 
+> > > > > > This RTC is very similar in functionality to the PCF2127/29 with the
+> > > > > > following differences:
+> > > > > >   -supports two new control registers at offsets 4 and 5
+> > > > > >   -supports a new reset register
+> > > > > >   -supports 4 tamper detection functions instead of 1
+> > > > > >   -has no nvmem (like the PCF2129)
+> > > > > >   -has two output interrupt pins instead of one
+> > > > > >   -has 1/100th seconds capabilities (not supported in this driver)
+> > > > > >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
+> > > > > >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
+> > > > > >   -watchdog value register cannot be read after being set
+> > > > > > 
+> > > > > > Most of the register addresses are very different, although they still
+> > > > > > follow the same layout. For example, the time/date and tamper registers
+> > > > > > have a different base address, but the offsets are all the same.
+> > > > > > Consequently, the source code of the PCF2127 driver can be easily adapted
+> > > > > > to support this new device.
+> > > > > > 
+> > > > > > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
+> > > > > > and able to support multiple variants, like the PCF2131. This is done
+> > > > > > mostly by using offsets instead of absolute hardcoded register addresses.
+> > > > > > 
+> > > > > > Patch 7 add actual support for the PCF2131.
+> > > > > > 
+> > > > > > Patch 8 configures all interrupt sources to go through the INT A pin.
+> > > > > > 
+> > > > > > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
+> > > > > >       are with the PCF2127/29 (different default values).
+> > > > > > 
+> > > > > > Patch 10 allow to confirm PCF2131 device presence by reading the reset
+> > > > > >       register fixed pattern.
+> > > > > > 
+> > > > > > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
+> > > > > >       CPR bits).
+> > > > > > 
+> > > > > > Patch 12 add support for generic watchdog timing configuration.
+> > > > > > 
+> > > > > > Patch 13 add a new flag to identify if device has read support for reading
+> > > > > >       watchdog register value.
+> > > > > >       Since the watchdog value register cannot be read on the PCF2131 after
+> > > > > >       being set, it seems that we cannot detect if watchdog timer was
+> > > > > >       started by bootloader. I am not sure what is the best way to handle
+> > > > > >       this situation, suggestions are welcomed.
+> > > > > > 
+> > > > > > Patch 14 add the dt-bindings for the PCF2131.
+> > > > > > 
+> > > > > > I have tested the driver using a PCF2131-ARD evaluation board connected to
+> > > > > > an NXP imx8mp evaluation board:
+> > > > > >   - Time get/set ok;
+> > > > > >   - Alarms get/set ok
+> > > > > >   - Timestamp 1 to 4 ok
+> > > > > >   - IRQ alarm ok
+> > > > > >   - Watchdog ok
+> > > > > >   - Also tested successfully with "RTC Driver Test Example" from
+> > > > > >     Documentation/rtc.txt
+> > > > > > 
+> > > > > > I have also tested the driver on a custom PCF2129 adapter board connected to a
+> > > > > > beaglebone black.
+> > > > > > 
+> > > > > > Thank you.
+> > > > > > 
+> > > > > > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
+> > > > > > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
+> > > > > > 
+> > > > > > Changes for V3:
+> > > > > > - Rebased for kernel v6.1
+> > > > > > 
+> > > > > > Changes for V2:
+> > > > > > - In general, fix and improvements after I have tested on real hardware
+> > > > > > - Fix alarm interrupt A/B mask setting for PCF2131:
+> > > > > >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
+> > > > > > - Remove low_reg validation: only check if TS interrupt flag is
+> > > > > >   defined, as low_reg is defined at address 0 for PCF2127/29.
+> > > > > > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
+> > > > > > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
+> > > > > > - Map all interrupt sources to INT A pin
+> > > > > > - Read and validate PCF2131 device presence from RESET register
+> > > > > > - Adapt watchdog configuration for PCF2131
+> > > > > > 
+> > > > > > Hugo Villeneuve (14):
+> > > > > >   rtc: pcf2127: add variant-specific configuration structure
+> > > > > >   rtc: pcf2127: adapt for time/date registers at any offset
+> > > > > >   rtc: pcf2127: adapt for alarm registers at any offset
+> > > > > >   rtc: pcf2127: adapt for WD registers at any offset
+> > > > > >   rtc: pcf2127: adapt for CLKOUT register at any offset
+> > > > > >   rtc: pcf2127: add support for multiple TS functions
+> > > > > >   rtc: pcf2127: add support for PCF2131 RTC
+> > > > > >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
+> > > > > >   rtc: pcf2127: set PWRMNG value for PCF2131
+> > > > > >   rtc: pcf2127: read and validate PCF2131 device signature
+> > > > > >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+> > > > > >   rtc: pcf2127: support generic watchdog timing configuration
+> > > > > >   rtc: pcf2127: add flag for watchdog register value read support
+> > > > > >   dt-bindings: rtc: pcf2127: add PCF2131
+> > > > > > 
+> > > > > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
+> > > > > >  drivers/rtc/Kconfig                           |   4 +-
+> > > > > >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
+> > > > > >  3 files changed, 752 insertions(+), 195 deletions(-)
+> > > > > > 
+> > > > > > -- 
+> > > > > > 2.30.2
+> > > > > > 
+> > > > > 
+> > > > > -- 
+> > > > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > > > Embedded Linux and Kernel engineering
+> > > > > https://bootlin.com
+> > > > > 
+> > 
+> > -- 
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> > 
