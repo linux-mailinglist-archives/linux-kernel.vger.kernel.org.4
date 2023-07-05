@@ -2,125 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173EB7483AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F057483AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbjGEMBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 08:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S231691AbjGEMAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 08:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjGEMBM (ORCPT
+        with ESMTP id S229892AbjGEMAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 08:01:12 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3F0173E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 05:01:08 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 619303200998;
-        Wed,  5 Jul 2023 08:01:05 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Wed, 05 Jul 2023 08:01:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688558464; x=1688644864; bh=gs
-        8pUAUyk3tjY2m3dpAZbW9EqQL6qlhOTo+TnwZTPQ4=; b=VSL62ROuvrT+2oOifs
-        L+p5t/MsHe1Rw6ptTINyhHIhEZoNuAsablhuuh12RBJKKWhTAl7OfjX2UWG4NdgW
-        qXMrl2LatmGcpy4ZpMi8uQOD8X9ycnWmwqSq+6VyNRz1nrvR4E/Ob5ytZ2orkep+
-        OryZZMztMkO2AZtX/UVvp7LzSNJQZMRy+0kE4IgRNApUONAi22lacQKrA7ro8Y/2
-        7o+sVX9J4498S/h97Qb6/BJsDWoyeXrsXn1q4B+SfYlRbUbAP9SRHFbUn2qXabOw
-        IimLetmnVzGaj6aA5ig3+qEo4lvzt/0jgQx1Utl5Z6h4aI/JNteh5Q7Bz/voiGI3
-        CT1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688558464; x=1688644864; bh=gs8pUAUyk3tjY
-        2m3dpAZbW9EqQL6qlhOTo+TnwZTPQ4=; b=H3ZVOjqrRcnI1izVZJr9eW1ONxcoM
-        q4zIqk4ORW6zVNQwsmceONZeTTUiMt8cMH44dtRF6niV9KTrbdDc+h2y32UH+5iH
-        aUjAx/Mik4FAjJLo3o8npxnvn9uKgv+/KAjpS6Gf5B4PIe0pIiPmVHmiKKeLbLvz
-        lZ/TX06bZ9D+wmBeN88/MY91De/e3WDLw8sYm2c2b6YuJhOBfYxBQwf9jDLI2dLA
-        gePfjsI3C4++HSWrYCJJiNfbwQUiASMEZ4dKM41nqP1lH0/he05dLJHgynXH8EBM
-        ef/eWun+87E00UhO5d6j/fbQdc0nuSqB/HffYwlQvudTAQbztK7xHpnsQ==
-X-ME-Sender: <xms:gFulZI7V78e3JClewMRQMBQYWTQNiPADvmf4DFc6XKqJGhUdfjhZ2Q>
-    <xme:gFulZJ6d2eUa-oFmNFH9XqutwTwK9HX5zSIyrRoL0rWMBdPZbe_GWkxExkT2MGP9v
-    LGqMdbNYIG8VQKljg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudejgddtvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
-    grthhtvghrnhepkedvkeejkefgjeduffetteegjeekteetudevtdfftdeluddthfehveef
-    teekieetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnughrvgifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:gFulZHdoTKpnsklmTAJPbJwrl9ePIS1i8BNTDNBi49sTwvwc28HrKA>
-    <xmx:gFulZNLQ-uwkNnVZo7QBKPTkhV9Hi5RRDLI_VBKm3uExqmXYXgY7sA>
-    <xmx:gFulZMJZQxjJjE1Nib3EMkG9LHOI1SI5EWrOBcCVl2GVKsEgeQYmpg>
-    <xmx:gFulZGhkuAurMhawnITDdgsT0SRFWz7HtVMDIlxVMPskwm056IukXA>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4788817000A4; Wed,  5 Jul 2023 08:01:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-527-gee7b8d90aa-fm-20230629.001-gee7b8d90
-Mime-Version: 1.0
-Message-Id: <34c75a2f-2daa-49be-bdca-a3fff5ed5a4a@app.fastmail.com>
-In-Reply-To: <ZKQsY3DXXDbxy0om@mail.minyard.net>
-References: <20230627152449.36093-1-dg573847474@gmail.com>
- <ZJwd0UDKYcK9AvSf@mail.minyard.net>
- <9691d898-22a9-4902-871d-73f5dafabf86@app.fastmail.com>
- <ZKQsY3DXXDbxy0om@mail.minyard.net>
-Date:   Wed, 05 Jul 2023 21:30:38 +0930
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Corey Minyard" <minyard@acm.org>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        "Chengfeng Ye" <dg573847474@gmail.com>
-Subject: Re: [PATCH] ipmi: fix potential deadlock on &kcs_bmc->lock
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 5 Jul 2023 08:00:46 -0400
+Received: from mail-pj1-f78.google.com (mail-pj1-f78.google.com [209.85.216.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4833E63
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 05:00:45 -0700 (PDT)
+Received: by mail-pj1-f78.google.com with SMTP id 98e67ed59e1d1-260cb94f585so852278a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 05:00:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688558445; x=1691150445;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VpenHbvdJzQxgfCS5scbblLnDf+ZQHvl9YuFMax7724=;
+        b=i6EeHZoGyuFeP9u3MdRNehZBoWem4a8btzvNPmsux7GhjaXeh2y8v17iyqp0u0dK8W
+         yndOA5CXQ7y25CqnddxLA3JpMMPHp01jgBPYoPHE9vuCw1tlDQZeaXsmXg6b+zqfdevg
+         GgyFxAlWaeiGkAuXT4K08F5vUNw30kvKEtZNBOiY4tgAhX4rXYtr3t7jvbvxPpixTdzp
+         mI2t0cjAj7M0ZkeIUItZRmBqUCHvje/Ed+TQxteppKd6PYdU2Ol53EesZRm0auBWzXZw
+         tyQyyJfzCnnaiGqVp8Pti91wggA+P8kT4HL3Gcf81M1Oipt+4UDw5v03fLSmUC8BpkRR
+         atZg==
+X-Gm-Message-State: ABy/qLYGC+UAHMGgybhg2svfSq9n0Qw6zqDyGAjxmVnyXak8Q3PuCcCA
+        HUEvteiTJtMxdxAIoBeixyM5VjsMG1yu5Gs32zNbKHdPUwpM
+X-Google-Smtp-Source: APBJJlGjdj3nzwXgF+QJ+/AzUmplUcm6ibES17LCr8wRC1xuyPlyq+LtPIoeSAJgZDtwP5sBFlvzDJmL3lJKwACGvOqu6Hf8N9JW
+MIME-Version: 1.0
+X-Received: by 2002:a17:90b:3c51:b0:261:22fb:4462 with SMTP id
+ pm17-20020a17090b3c5100b0026122fb4462mr1595800pjb.3.1688558445211; Wed, 05
+ Jul 2023 05:00:45 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 05:00:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004f34d705ffbc2604@google.com>
+Subject: [syzbot] [overlayfs?] general protection fault in d_path
+From:   syzbot <syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    d528014517f2 Revert ".gitignore: ignore *.cover and *.mbx"
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14fad002a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1085b4238c9eb6ba
+dashboard link: https://syzkaller.appspot.com/bug?extid=a67fc5321ffb4b311c98
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fef94e788067/disk-d5280145.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/576412ea518b/vmlinux-d5280145.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/685a0e4be06b/bzImage-d5280145.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc000000000a: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057]
+CPU: 1 PID: 10127 Comm: syz-executor.3 Not tainted 6.4.0-syzkaller-11478-gd528014517f2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5012
+Code: 85 75 18 00 00 83 3d 15 c8 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c de b3 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 b4 51 79 00 48 8b 94 24 80 00 00
+RSP: 0018:ffffc900169be9e0 EFLAGS: 00010006
+RAX: 000000000000000a RBX: 1ffff92002d37d60 RCX: 0000000000000002
+RDX: 0000000000000050 RSI: 0000000000000000 RDI: 0000000000000050
+RBP: ffffc900169beca8 R08: dffffc0000000000 R09: 0000000000000001
+R10: dffffc0000000000 R11: fffffbfff1d2fe76 R12: 0000000000000000
+R13: 0000000000000001 R14: 0000000000000002 R15: ffff88802091d940
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa22a3fe000 CR3: 000000004b5e1000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5761
+ seqcount_lockdep_reader_access+0x139/0x220 include/linux/seqlock.h:102
+ get_fs_root_rcu fs/d_path.c:244 [inline]
+ d_path+0x2f0/0x6e0 fs/d_path.c:286
+ audit_log_d_path+0xd3/0x310 kernel/audit.c:2139
+ dump_common_audit_data security/lsm_audit.c:224 [inline]
+ common_lsm_audit+0x7cf/0x1a90 security/lsm_audit.c:458
+ smack_log+0x421/0x540 security/smack/smack_access.c:383
+ smk_tskacc+0x2ff/0x360 security/smack/smack_access.c:253
+ smack_inode_getattr+0x203/0x270 security/smack/smack_lsm.c:1202
+ security_inode_getattr+0xd3/0x120 security/security.c:2114
+ vfs_getattr+0x25/0x70 fs/stat.c:167
+ ovl_getattr+0x1b1/0xf70 fs/overlayfs/inode.c:174
+ ima_check_last_writer security/integrity/ima/ima_main.c:171 [inline]
+ ima_file_free+0x26e/0x4b0 security/integrity/ima/ima_main.c:203
+ __fput+0x36a/0x950 fs/file_table.c:378
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x68f/0x2290 kernel/exit.c:874
+ do_group_exit+0x206/0x2c0 kernel/exit.c:1024
+ get_signal+0x1709/0x17e0 kernel/signal.c:2877
+ arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:308
+ exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7f3ca8c389
+Code: Unable to access opcode bytes at 0x7f7f3ca8c35f.
+RSP: 002b:00007f7f3d741168 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+RAX: fffffffffffffffb RBX: 00007f7f3cbac050 RCX: 00007f7f3ca8c389
+RDX: 0000000000000000 RSI: 00000000200001c0 RDI: 0000000020000180
+RBP: 00007f7f3cad7493 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff8432555f R14: 00007f7f3d741300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__lock_acquire+0x10d/0x7f70 kernel/locking/lockdep.c:5012
+Code: 85 75 18 00 00 83 3d 15 c8 2c 0d 00 48 89 9c 24 10 01 00 00 0f 84 f8 0f 00 00 83 3d 5c de b3 0b 00 74 34 48 89 d0 48 c1 e8 03 <42> 80 3c 00 00 74 1a 48 89 d7 e8 b4 51 79 00 48 8b 94 24 80 00 00
+RSP: 0018:ffffc900169be9e0 EFLAGS: 00010006
+RAX: 000000000000000a RBX: 1ffff92002d37d60 RCX: 0000000000000002
+RDX: 0000000000000050 RSI: 0000000000000000 RDI: 0000000000000050
+RBP: ffffc900169beca8 R08: dffffc0000000000 R09: 0000000000000001
+R10: dffffc0000000000 R11: fffffbfff1d2fe76 R12: 0000000000000000
+R13: 0000000000000001 R14: 0000000000000002 R15: ffff88802091d940
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa22a3fe000 CR3: 000000004b5e1000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	85 75 18             	test   %esi,0x18(%rbp)
+   3:	00 00                	add    %al,(%rax)
+   5:	83 3d 15 c8 2c 0d 00 	cmpl   $0x0,0xd2cc815(%rip)        # 0xd2cc821
+   c:	48 89 9c 24 10 01 00 	mov    %rbx,0x110(%rsp)
+  13:	00
+  14:	0f 84 f8 0f 00 00    	je     0x1012
+  1a:	83 3d 5c de b3 0b 00 	cmpl   $0x0,0xbb3de5c(%rip)        # 0xbb3de7d
+  21:	74 34                	je     0x57
+  23:	48 89 d0             	mov    %rdx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 00 00       	cmpb   $0x0,(%rax,%r8,1) <-- trapping instruction
+  2f:	74 1a                	je     0x4b
+  31:	48 89 d7             	mov    %rdx,%rdi
+  34:	e8 b4 51 79 00       	callq  0x7951ed
+  39:	48                   	rex.W
+  3a:	8b                   	.byte 0x8b
+  3b:	94                   	xchg   %eax,%esp
+  3c:	24 80                	and    $0x80,%al
 
 
-On Tue, 4 Jul 2023, at 23:57, Corey Minyard wrote:
-> On Fri, Jun 30, 2023 at 10:31:02AM +0930, Andrew Jeffery wrote:
->> Hi Corey, Chengfeng,
->> 
->> On Wed, 28 Jun 2023, at 21:17, Corey Minyard wrote:
->> > Indeed, this looks like an issue.
->> >
->> > Andrew, any opinions on this?  The attached patch will work, the other
->> > option would be to disable interrupts when calling
->> > kcs_bmc_handle_event() in the timer handler.  But then you have to worry
->> > about RT.
->> 
->> Right, I think we'd do best to not over-complicate things.
->> spin_lock_irq{save,restore}() are the intuitive choice to me.
->> 
->> I'll follow up with R-b/T-b tags once I've booted the patch
->> and done some testing.
->
-> Thanks.  This is in my for-next tree, I'd like to get this in the merge
-> window, which I believe ends this Sunday.
->
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I've successfully booted an IBM Rainier machine with this patch 
-applied. Rainier is a Power10-based platform managed by an AST2600 BMC. 
-The boot process makes heavy use of one of the KCS devices as part of 
-an MCTP transport binding implementation between the BMC and host 
-firmware.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-Tested-by: Andrew Jeffery <andrew@aj.id.au>
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Thanks,
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Andrew
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
