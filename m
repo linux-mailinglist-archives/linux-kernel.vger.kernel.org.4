@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F95747D56
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A35A747D5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 08:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjGEGr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 02:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
+        id S231722AbjGEGrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 02:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjGEGrr (ORCPT
+        with ESMTP id S231661AbjGEGrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jul 2023 02:47:47 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68C11703;
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE791700;
         Tue,  4 Jul 2023 23:47:45 -0700 (PDT)
-Received: from kwepemi500019.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QwqsG2MhhztR6Q;
-        Wed,  5 Jul 2023 14:44:50 +0800 (CST)
+Received: from kwepemi500019.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qwqrr5468zMqB8;
+        Wed,  5 Jul 2023 14:44:28 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.174.174) by
  kwepemi500019.china.huawei.com (7.221.188.117) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -33,9 +33,9 @@ CC:     <gregkh@linuxfoundation.org>, <mhiramat@kernel.org>,
         <weiyongjun1@huawei.com>, <gustavoars@kernel.org>,
         <namit@vmware.com>, <laijs@linux.alibaba.com>,
         <clang-built-linux@googlegroups.com>, <lihuafei1@huawei.com>
-Subject: [PATCH 5.10 3/9] x86/kprobes: Retrieve correct opcode for group instruction
-Date:   Wed, 5 Jul 2023 14:46:47 +0800
-Message-ID: <20230705064653.226811-4-lihuafei1@huawei.com>
+Subject: [PATCH 5.10 4/9] x86/kprobes: Identify far indirect JMP correctly
+Date:   Wed, 5 Jul 2023 14:46:48 +0800
+Message-ID: <20230705064653.226811-5-lihuafei1@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230705064653.226811-1-lihuafei1@huawei.com>
 References: <20230705064653.226811-1-lihuafei1@huawei.com>
@@ -56,41 +56,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit d60ad3d46f1d04a282c56159f1deb675c12733fd ]
+[ Upstream commit a194acd316f93f3435a64de3b37dca2b5a77b338 ]
 
-Since the opcodes start from 0xff are group5 instruction group which is
-not 2 bytes opcode but the extended opcode determined by the MOD/RM byte.
+Since Grp5 far indirect JMP is FF "mod 101 r/m", it should be
+(modrm & 0x38) == 0x28, and near indirect JMP is also 0x38 == 0x20.
+So we can mask modrm with 0x30 and check 0x20.
+This is actually what the original code does, it also doesn't care
+the last bit. So the result code is same.
 
-The commit abd82e533d88 ("x86/kprobes: Do not decode opcode in resume_execution()")
-used insn->opcode.bytes[1], but that is not correct. We have to refer
-the insn->modrm.bytes[1] instead.
+Thus, I think this is just a cosmetic cleanup.
 
-Fixes: abd82e533d88 ("x86/kprobes: Do not decode opcode in resume_execution()")
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/161469872400.49483.18214724458034233166.stgit@devnote2
+Link: https://lkml.kernel.org/r/161469873475.49483.13257083019966335137.stgit@devnote2
 Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 ---
- arch/x86/kernel/kprobes/core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/x86/kernel/kprobes/core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 19ca5164be4d..40d5c603ce8e 100644
+index 40d5c603ce8e..d03baf1f4024 100644
 --- a/arch/x86/kernel/kprobes/core.c
 +++ b/arch/x86/kernel/kprobes/core.c
-@@ -464,7 +464,11 @@ static void set_resume_flags(struct kprobe *p, struct insn *insn)
- 		break;
- #endif
- 	case 0xff:
--		opcode = insn->opcode.bytes[1];
-+		/*
-+		 * Since the 0xff is an extended group opcode, the instruction
-+		 * is determined by the MOD/RM byte.
-+		 */
-+		opcode = insn->modrm.bytes[0];
- 		if ((opcode & 0x30) == 0x10) {
+@@ -478,8 +478,7 @@ static void set_resume_flags(struct kprobe *p, struct insn *insn)
+ 			p->ainsn.is_call = 1;
+ 			p->ainsn.is_abs_ip = 1;
+ 			break;
+-		} else if (((opcode & 0x31) == 0x20) ||
+-			   ((opcode & 0x31) == 0x21)) {
++		} else if ((opcode & 0x30) == 0x20) {
  			/*
- 			 * call absolute, indirect
+ 			 * jmp near and far, absolute indirect
+ 			 * ip is correct.
 -- 
 2.17.1
 
