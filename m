@@ -2,170 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16AB748652
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2126748656
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbjGEOZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S232564AbjGEO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbjGEOZl (ORCPT
+        with ESMTP id S232715AbjGEO0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:25:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D75171B;
-        Wed,  5 Jul 2023 07:24:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19BE2615AA;
-        Wed,  5 Jul 2023 14:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4061C433C8;
-        Wed,  5 Jul 2023 14:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688567092;
-        bh=b4T3vn8kUIesSYDyBrDxM+Xd4flNAla2ptcHctnOz3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kL3h2m+KfHxmeb+EDxQeM6WzEklBm9lA8n9NV/hKmczejEZaDq0P3LKU+3/vLI15P
-         9OHzCa9VxKsubz4dd/Y0C89/upnfVqBNV7H5l8qZ0HnKlLe/kerspdmAwVCG0x917q
-         lAirmN5Tzao7sBNDfiC4mOkOGL5d1ZI5j/rr1SBqyF+wlPDn2YmDD9NBRqtOt7CwVG
-         4/Pp7pU2vlaYx6ljtM+5w3p6YrPzTgyEBE5kU92VVaJilSYJyuVGRGscwb/uTVo2S6
-         KiTMTasEY5z+GnI+xJ73tTLgBJPH8WQVVSUiXE6su5JEN0Xs67sEUXN0HTLyZVz4yP
-         +sX8rmG6eStig==
-Date:   Wed, 5 Jul 2023 16:24:49 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <dri-devel@lists.freedesktop.org>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Wed, 5 Jul 2023 10:26:12 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B88F26A2;
+        Wed,  5 Jul 2023 07:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=3VJ8aIfGkOHqsvLUb5T3b+2xeBcR16q5fDKedPtGNf8=; b=oGo7iO2PxicoMKcVcNwN70IzS+
+        9hwfgC4B7nN8aDa19Rj9AmsQTw2bYqRb68P3Iod+1/H2t1hXGJguca8zWvCreceVMbDvOw/Q8EzYR
+        XolzFqTD4FvAYCvMODCjoYIlZDgLqwyGoZOiMZhPbe6r3M5Z48iBDOJ1ojrrDOTyo61E=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57658 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qH3RH-0004MR-Do; Wed, 05 Jul 2023 10:25:03 -0400
+Date:   Wed, 5 Jul 2023 10:25:02 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Nate Drude <Nate.D@variscite.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Subject: Re: RFC: DSI host capabilities (was: [PATCH RFC 03/10] drm/panel:
- Add LGD panel driver for Sony Xperia XZ3)
-Message-ID: <lidknise4copce3vb2wth4z3fl2p4npsc4u6ajqb6zsp6lnpca@rp6wxcmy2aa4>
-References: <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
- <brmrqeajbq3oyp3jjwmc6tuhiftz764u6az444xw6g7pwf5fr3@5tlp375qwhed>
- <617c8f8a-1fc7-c6a0-eaa5-ce75ff2adc1b@linaro.org>
- <CAA8EJppG=MAVpK1J_8bNnkJ23y9NtgY7a2GVResXJvhEKyNsrw@mail.gmail.com>
- <739a8bd9-9ff0-5072-fdae-b64efdf86842@collabora.com>
- <e927cfcd-bf34-5daf-0e24-4dd828106968@linaro.org>
- <epds77sccy4cc5cdpoc4ir7sfz5sz3biwep6rbks2nuyqncidu@77gb4t2wy6vn>
- <47a5678c-1eb3-dfc2-a9ac-f8e497455d11@linaro.org>
- <unsithzszj7awvsmxwr7reshso5ju7u4nssil5tty6pocictf5@gwoltpgeecer>
- <6e070141-8c0e-59ed-8a08-58c3fadb17df@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ee54vq7zgkfrit3g"
-Content-Disposition: inline
-In-Reply-To: <6e070141-8c0e-59ed-8a08-58c3fadb17df@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-Id: <20230705102502.d8c9fa894bd271a5526d81f7@hugovil.com>
+In-Reply-To: <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
+References: <20230704150240.2022020-1-hugo@hugovil.com>
+        <1341ba38-35c1-1657-aed4-a3c11f584367@linaro.org>
+        <20230704113124.f2830afe1d9df252afe5abdc@hugovil.com>
+        <834a0679-7e0c-150f-68be-c75d7dac0bc8@linaro.org>
+        <CAOMZO5CX8WzaNeHmE8ohT2_6F-ehRRNWGnF7Dji=uLGphY4q2A@mail.gmail.com>
+        <20230704125541.f361cab8de3faacd830418ab@hugovil.com>
+        <20230704130204.7ac64cbd76b3440fc351c373@hugovil.com>
+        <CAOMZO5Dsp7YZfmpkBNsQgE4d3Ag-v2fpBAU=aZ9NGqGYoaOMWQ@mail.gmail.com>
+        <20230704164140.824f6890dae5c87fc92531b4@hugovil.com>
+        <CAOMZO5BNaQVMKbxU9rc5zOBwv9c+HayLnkjqrSgPKgMGzQ585A@mail.gmail.com>
+        <20230704172801.f11422b3f947c625f53af871@hugovil.com>
+        <CAOMZO5CWh0-5eMTBwjvNUrY-yOHE=daj6n-jAAfjWoV-H4rt0Q@mail.gmail.com>
+        <CAOMZO5AZiuEAh6nJB8Oub83At6bsvLhzOhsT_yOniZSucrAUMQ@mail.gmail.com>
+        <20230705093507.7458eada3ae05e0e1740a10e@hugovil.com>
+        <AS2PR08MB88082608DB46EC1287C6E54B852FA@AS2PR08MB8808.eurprd08.prod.outlook.com>
+        <CAOMZO5D-a4sUEqqsppjpgkCRFfeetY32+QP0CvrGw6v5q=J+KA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] arm64: dts: imx8mn-var-som-symphony: fix USB OTG
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 5 Jul 2023 10:49:01 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
---ee54vq7zgkfrit3g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hi Nate,
+> 
+> On Wed, Jul 5, 2023 at 10:42 AM Nate Drude <Nate.D@variscite.com> wrote:
+> 
+> > The patch 'drivers: extcon: ptn5150: Add irq-is-id-quirk' referred to by Fabio is required for OTG to work correctly on all versions of the Symphony board.
+> >
+> > I can submit this patch mainline, do you think it will be accepted as is?
+> 
+> I think it is worth submitting it to get some feedback from the
+> ptn5150 and DT maintainers.
+> 
+> Thanks
 
-On Wed, Jul 05, 2023 at 04:37:57PM +0300, Dmitry Baryshkov wrote:
-> > > >
-> > > > Either way, I'm not really sure it's a good idea to multiply the
-> > > > capabilities flags of the DSI host, and we should just stick to the
-> > > > spec. If the spec says that we have to support DSC while video is
-> > > > output, then that's what the panels should expect.
-> > >=20
-> > > Except some panels supports DSC & non-DSC, Video and Command mode, and
-> > > all that is runtime configurable. How do you handle that ?
-> >=20
-> > In this case, most of the constraints are going to be on the encoder
-> > still so it should be the one driving it. The panel will only care about
-> > which mode has been selected, but it shouldn't be the one driving it,
-> > and thus we still don't really need to expose the host capabilities.
->=20
-> This is an interesting perspective. This means that we can and actually h=
-ave
-> to extend the drm_display_mode with the DSI data and compression
-> information.
+Hi,
+if I understand correctly, the irq-is-id-quirk device tree property
+would be required for newer EVK boards, but not for older boards.
 
-I wouldn't extend drm_display_mode, but extending one of the state
-structures definitely.
+How can we support both configurations with the current device tree?
 
-We already have some extra variables in drm_connector_state for HDMI,
-I don't think it would be a big deal to add a few for MIPI-DSI.
-
-We also floated the idea for a while to create bus-specific states, with
-helpers to match. Maybe it would be a good occasion to start doing it?
-
-> For example, the panel that supports all four types for the 1080p should
-> export several modes:
->=20
-> 1920x1080-command
-> 1920x1080-command-DSC
-> 1920x1080-video
-> 1920x1080-video-DSC
->
-> where video/command and DSC are some kinds of flags and/or information in
-> the drm_display_mode? Ideally DSC also has several sub-flags, which denote
-> what kind of configuration is supported by the DSC sink (e.g. bpp, yuv,
-> etc).
-
-So we have two things to do, right? We need to expose what the panel can
-take (ie, EDID for HDMI), and then we need to tell it what we picked
-(infoframes).
-
-We already express the former in mipi_dsi_device, so we could extend the
-flags stored there.
-
-And then, we need to tie what the DSI host chose to a given atomic state
-so the panel knows what was picked and how it should set everything up.
-
-> Another option would be to get this handled via the bus format negotiatio=
-n,
-> but that sounds like worse idea to me.
-
-Yeah, I'm not really fond of the format negociation stuff either.
-
-Maxime
-
---ee54vq7zgkfrit3g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZKV9MQAKCRDj7w1vZxhR
-xSs7AQCC8eWrt4gxYNxVJGe1FnjK6alg2IQI4jyWNyUnc7bBNgD+PJHSXUPBnb+n
-+z33D23kQsS5sBnGpgFWmyznIOmGJA0=
-=evV5
------END PGP SIGNATURE-----
-
---ee54vq7zgkfrit3g--
+Hugo.
