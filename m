@@ -2,120 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD303747AA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA9D747AA9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjGEAMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 20:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S230305AbjGEARF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 20:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGEAMP (ORCPT
+        with ESMTP id S229545AbjGEARC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 20:12:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C2CDD;
-        Tue,  4 Jul 2023 17:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688515930; x=1720051930;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QKyagUPboxcpQf0rlrW9d6i0lm4pdk3WkpwbACGjPms=;
-  b=Bj00pZLtpJYVQglaedktltJ7wqAe90ExwceH26AmXUccwhnqpvIPzB+V
-   bLqD+VDGVJiR5jhWYC7noKTMt+RZVo3p+T473OQnr0wIw7b8Z3RrlZpd4
-   2H8IDKWtmUCxs2NZBN9ML83eiuG4lJUsnawowt10hAMFJNN8aBPgccg1u
-   jD0XscW5i1ks/rUu+1wcgNKPlzUennmYzgK6f0X1sVHSXOIvt/SpwvEfc
-   YuppWYhj2qJNnx59XVmPKWHnUfhdbgiiymCEpcT6rrLEqBQVPHRB03vmp
-   nYHIBjn9tKTTk01GVv0k100dDQ6MSWUvA2rcygYk07SrolKlU1nGiBdOW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="362077347"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="362077347"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 17:12:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="696283513"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="696283513"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jul 2023 17:12:06 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qGq7p-000Iep-2Q;
-        Wed, 05 Jul 2023 00:12:05 +0000
-Date:   Wed, 5 Jul 2023 08:11:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andreas Hindborg <nmi@metaspace.dk>, Ming Lei <ming.lei@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Minwoo Im <minwoo.im.dev@gmail.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>, gost.dev@samsung.com,
-        linux-block@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v5 5/5] ublk: enable zoned storage support
-Message-ID: <202307050741.XbpaKP7i-lkp@intel.com>
-References: <20230704165209.514591-6-nmi@metaspace.dk>
+        Tue, 4 Jul 2023 20:17:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9073B1B6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 17:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688516180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SkAZyyid+TuVBgM2gukzJung09m0x/Qh1dXoAlys9U8=;
+        b=XOjacn/xgwU6yHXyP8PITvL6QDjo/vEgm6+jI0no9KeU7INzhzGfWs/WN8d8Yw0ExP0Grl
+        MbBOPieLta3wxRy1WWVUBZIKbwt735QjlBZlvus02bwpfHxUSdlARjyU3G3kRxoJpBhT42
+        Lr2lH/9jp3IKEfYdrvc9ZbagmHVPV+Y=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-53-KtlonYHaMSG0_gp5WhaYbA-1; Tue, 04 Jul 2023 20:16:19 -0400
+X-MC-Unique: KtlonYHaMSG0_gp5WhaYbA-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1b895fa8929so26873805ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 17:16:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688516178; x=1691108178;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SkAZyyid+TuVBgM2gukzJung09m0x/Qh1dXoAlys9U8=;
+        b=gB0Mp34cLaxev36eWzCvKz12h65O5pmdditYTcuz2EKoweLI4gy3KG8DeA/BMzMQVw
+         mnfIYhJeA07Pn0vlPeqaWM/Ocl6xFeMOdUgCKFDQpJOZYqPlKC2n1etuxAbfciI/zLj9
+         d+4mUc6myPsWIDgcbIncNU5Wj6dj1uxX25/al+Qb/3FXwQGzZLOc58LM0G9WhQvGSoGD
+         FsrF0BGCQF4DTpv+M35ERedKOq0xF7tP6uBm8YPXSEwXqvVUM+l+pqzBlaZj/4Z52EHv
+         uBb7EBScqjV2g1diJn4xFH2AAthYGR+SlkqdqcsxqxbRcnzzsUgAjmwYSKqJM0NeBngG
+         DAEg==
+X-Gm-Message-State: ABy/qLZqtYsdfv3KfMwjRK14iMQQ+ve96JJEdCwXwL0/VsSQRj9Ne1aN
+        Z/aj0fTaEyK4sMT1oS56JuJEWTQrBSU7xe+UoEMJHk1DY6RPMz4ZYiCgZte2Rr5g1a+/J/NFYkJ
+        435cP7bomEeZ6VQuW/yT5gul4
+X-Received: by 2002:a17:902:c246:b0:1b2:4df5:c00e with SMTP id 6-20020a170902c24600b001b24df5c00emr8586357plg.35.1688516178353;
+        Tue, 04 Jul 2023 17:16:18 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGxsbyRmK1tUjQahKVu906wMoMLPOgJpr3TZVMF26AFyBgnJ9Dxug0OgWJAOZMZgIu565qNEA==
+X-Received: by 2002:a17:902:c246:b0:1b2:4df5:c00e with SMTP id 6-20020a170902c24600b001b24df5c00emr8586333plg.35.1688516178049;
+        Tue, 04 Jul 2023 17:16:18 -0700 (PDT)
+Received: from ?IPV6:2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5? ([2001:8003:e5b0:9f00:dbbc:1945:6e65:ec5])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170902e80f00b001b876d5b23esm7537227plg.144.2023.07.04.17.16.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 17:16:17 -0700 (PDT)
+Message-ID: <ca6146e0-2f76-c72e-ce8a-11bf9bd3f353@redhat.com>
+Date:   Wed, 5 Jul 2023 10:16:08 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230704165209.514591-6-nmi@metaspace.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND PATCH v5 06/11] KVM: arm64: Implement
+ __kvm_tlb_flush_vmid_range()
+Content-Language: en-US
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20230621175002.2832640-1-rananta@google.com>
+ <20230621175002.2832640-7-rananta@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+In-Reply-To: <20230621175002.2832640-7-rananta@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andreas,
+On 6/22/23 03:49, Raghavendra Rao Ananta wrote:
+> Define  __kvm_tlb_flush_vmid_range() (for VHE and nVHE)
+> to flush a range of stage-2 page-tables using IPA in one go.
+> If the system supports FEAT_TLBIRANGE, the following patches
+> would conviniently replace global TLBI such as vmalls12e1is
+         ^^^^^^^^^^^^
+         conveniently
+> in the map, unmap, and dirty-logging paths with ripas2e1is
+> instead.
+> 
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>   arch/arm64/include/asm/kvm_asm.h   |  3 +++
+>   arch/arm64/kvm/hyp/nvhe/hyp-main.c | 11 +++++++++++
+>   arch/arm64/kvm/hyp/nvhe/tlb.c      | 30 ++++++++++++++++++++++++++++++
+>   arch/arm64/kvm/hyp/vhe/tlb.c       | 28 ++++++++++++++++++++++++++++
+>   4 files changed, 72 insertions(+)
+> 
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-[auto build test ERROR on 3261ea42710e9665c9151006049411bd23b5411f]
+> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> index 43c3bc0f9544d..60ed0880cc9d6 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -69,6 +69,7 @@ enum __kvm_host_smccc_func {
+>   	__KVM_HOST_SMCCC_FUNC___kvm_flush_vm_context,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_ipa,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid,
+> +	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_range,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_flush_cpu_context,
+>   	__KVM_HOST_SMCCC_FUNC___kvm_timer_set_cntvoff,
+>   	__KVM_HOST_SMCCC_FUNC___vgic_v3_read_vmcr,
+> @@ -225,6 +226,8 @@ extern void __kvm_flush_vm_context(void);
+>   extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
+>   extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr_t ipa,
+>   				     int level);
+> +extern void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +					phys_addr_t start, unsigned long pages);
+>   extern void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu);
+>   
+>   extern void __kvm_timer_set_cntvoff(u64 cntvoff);
+> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> index 728e01d4536b0..a19a9299c8362 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> @@ -125,6 +125,16 @@ static void handle___kvm_tlb_flush_vmid_ipa(struct kvm_cpu_context *host_ctxt)
+>   	__kvm_tlb_flush_vmid_ipa(kern_hyp_va(mmu), ipa, level);
+>   }
+>   
+> +static void
+> +handle___kvm_tlb_flush_vmid_range(struct kvm_cpu_context *host_ctxt)
+> +{
+> +	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> +	DECLARE_REG(phys_addr_t, start, host_ctxt, 2);
+> +	DECLARE_REG(unsigned long, pages, host_ctxt, 3);
+> +
+> +	__kvm_tlb_flush_vmid_range(kern_hyp_va(mmu), start, pages);
+> +}
+> +
+>   static void handle___kvm_tlb_flush_vmid(struct kvm_cpu_context *host_ctxt)
+>   {
+>   	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> @@ -316,6 +326,7 @@ static const hcall_t host_hcall[] = {
+>   	HANDLE_FUNC(__kvm_flush_vm_context),
+>   	HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa),
+>   	HANDLE_FUNC(__kvm_tlb_flush_vmid),
+> +	HANDLE_FUNC(__kvm_tlb_flush_vmid_range),
+>   	HANDLE_FUNC(__kvm_flush_cpu_context),
+>   	HANDLE_FUNC(__kvm_timer_set_cntvoff),
+>   	HANDLE_FUNC(__vgic_v3_read_vmcr),
+> diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> index 978179133f4b9..213b11952f641 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> @@ -130,6 +130,36 @@ void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu,
+>   	__tlb_switch_to_host(&cxt);
+>   }
+>   
+> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +				phys_addr_t start, unsigned long pages)
+> +{
+> +	struct tlb_inv_context cxt;
+> +	unsigned long stride;
+> +
+> +	/*
+> +	 * Since the range of addresses may not be mapped at
+> +	 * the same level, assume the worst case as PAGE_SIZE
+> +	 */
+> +	stride = PAGE_SIZE;
+> +	start = round_down(start, stride);
+> +
+> +	/* Switch to requested VMID */
+> +	__tlb_switch_to_guest(mmu, &cxt, false);
+> +
+> +	__flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, false);
+> +
+> +	dsb(ish);
+> +	__tlbi(vmalle1is);
+> +	dsb(ish);
+> +	isb();
+> +
+> +	/* See the comment below in __kvm_tlb_flush_vmid_ipa() */
+> +	if (icache_is_vpipt())
+> +		icache_inval_all_pou();
+> +
+> +	__tlb_switch_to_host(&cxt);
+> +}
+> +
+>   void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu)
+>   {
+>   	struct tlb_inv_context cxt;
+> diff --git a/arch/arm64/kvm/hyp/vhe/tlb.c b/arch/arm64/kvm/hyp/vhe/tlb.c
+> index 24cef9b87f9e9..3ca3d38b7eb23 100644
+> --- a/arch/arm64/kvm/hyp/vhe/tlb.c
+> +++ b/arch/arm64/kvm/hyp/vhe/tlb.c
+> @@ -111,6 +111,34 @@ void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu,
+>   	__tlb_switch_to_host(&cxt);
+>   }
+>   
+> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +				phys_addr_t start, unsigned long pages)
+> +{
+> +	struct tlb_inv_context cxt;
+> +	unsigned long stride;
+> +
+> +	/*
+> +	 * Since the range of addresses may not be mapped at
+> +	 * the same level, assume the worst case as PAGE_SIZE
+> +	 */
+> +	stride = PAGE_SIZE;
+> +	start = round_down(start, stride);
+> +
+> +	dsb(ishst);
+> +
+> +	/* Switch to requested VMID */
+> +	__tlb_switch_to_guest(mmu, &cxt);
+> +
+> +	__flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, false);
+> +
+> +	dsb(ish);
+> +	__tlbi(vmalle1is);
+> +	dsb(ish);
+> +	isb();
+> +
+> +	__tlb_switch_to_host(&cxt);
+> +}
+> +
+>   void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu)
+>   {
+>   	struct tlb_inv_context cxt;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Hindborg/ublk-add-opcode-offsets-for-DRV_IN-DRV_OUT/20230705-005338
-base:   3261ea42710e9665c9151006049411bd23b5411f
-patch link:    https://lore.kernel.org/r/20230704165209.514591-6-nmi%40metaspace.dk
-patch subject: [PATCH v5 5/5] ublk: enable zoned storage support
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230705/202307050741.XbpaKP7i-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230705/202307050741.XbpaKP7i-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307050741.XbpaKP7i-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/mips/kernel/head.o: in function `_stext':
-   (.text+0x0): relocation truncated to fit: R_MIPS_26 against `kernel_entry'
-   arch/mips/kernel/head.o: in function `smp_bootstrap':
-   (.ref.text+0xd8): relocation truncated to fit: R_MIPS_26 against `start_secondary'
-   init/main.o: in function `set_reset_devices':
-   main.c:(.init.text+0x20): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x30): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `debug_kernel':
-   main.c:(.init.text+0xa4): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0xb4): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `quiet_kernel':
-   main.c:(.init.text+0x128): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x138): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `warn_bootconfig':
-   main.c:(.init.text+0x1ac): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x1bc): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `init_setup':
-   main.c:(.init.text+0x230): additional relocation overflows omitted from the output
-   mips-linux-ld: drivers/block/ublk-zoned.o: in function `ublk_set_nr_zones':
->> ublk-zoned.c:(.text.ublk_set_nr_zones+0x17c): undefined reference to `__udivdi3'
-   mips-linux-ld: drivers/block/ublk-zoned.o: in function `ublk_dev_param_zoned_validate':
->> ublk-zoned.c:(.text.ublk_dev_param_zoned_validate+0x258): undefined reference to `__udivdi3'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
