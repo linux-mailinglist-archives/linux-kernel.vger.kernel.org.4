@@ -2,182 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90935747DFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C04747E00
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 09:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjGEHMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 03:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S232169AbjGEHMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 03:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbjGEHMG (ORCPT
+        with ESMTP id S231598AbjGEHMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:12:06 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1989195
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 00:12:03 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688541122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L7jc5eO5JMencMFX5rVgNG4uz5Hx+04V7kPTSHBHoYk=;
-        b=kb+tLd7fuJE8DgNzgVSRlmgLxcOsOM8NrhodvtvjGnCKwT25KER16HNPwA1bXuvqlcuEsq
-        kY3h/wf8EwjREtY7FbB/C/EsOiS3NqxV7kPGoPrLEs3J2Hksz6Elvn5pSW/I6FVBPLu8YT
-        PzHHSlKxlwfFPAUIdcTCMZ6aGG6FURigxcEPxgFVo98sX7+mpk+Nhir1SZwWRklNVcvTLL
-        hrVOpQpJUXKYjVZ7ZnIFlEhrwtDxaBzU88CDNH3LjUvYJMPMxd9tSYCLKdVg9/ur8MRyKF
-        R9Ct9hfJdNHiNy6laijYXleLgCv6N/LWcyvxxLG1Rt31rlwkcLKm+uafHJo3vg==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6699E2000D;
-        Wed,  5 Jul 2023 07:11:59 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 09:11:58 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH v3 5/5] mtd: rawnand: brcmnand: Fix mtd oobsize
-Message-ID: <20230705091158.2fe0a271@xps-13>
-In-Reply-To: <c09a72df-c49f-75e9-e95e-4e19fe10a278@broadcom.com>
-References: <20230627193738.19596-1-william.zhang@broadcom.com>
-        <20230627193738.19596-6-william.zhang@broadcom.com>
-        <20230704173047.395e445e@xps-13>
-        <c09a72df-c49f-75e9-e95e-4e19fe10a278@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 5 Jul 2023 03:12:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF02E4F;
+        Wed,  5 Jul 2023 00:12:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9F8E61459;
+        Wed,  5 Jul 2023 07:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4ACCC433BA;
+        Wed,  5 Jul 2023 07:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688541130;
+        bh=hirsQoR0Ki1y4mUH7a+brxAKQyn2XVL41lANxF68XXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KUfKg1UqyRX9KE7Re4I4c3G2u+cmO8A2NedgsQYbQqtlMvnrl20jh78pWv62ny8GU
+         iDae4fymiqJ/37M+HowWbxSE/bnWyt21S9qRppfUKHtCUt4gJU0WDeMzz/qaraNNqW
+         wU5fDyB3IK23YGlXL7P9jSRB5IQ86R6WSUnE1cfITZ7VqBNtDOAUX+NpBnNIJJP0Rd
+         fozo9tWFHVf7Dx+wz/pCrtQ4TZ1CxImX8G6JNLwyVS+mvo1IFw+0lJENGkp96GjG71
+         eesLQ3ud6fjZvpwsPC/QzJBRtKGQc/HXNIK1VQ87+JGwYC8oG72ZFcby6OfaeZBA2H
+         HQxJwonT/DKHg==
+Date:   Wed, 5 Jul 2023 10:12:05 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Junxian Huang <huangjunxian6@hisilicon.com>
+Cc:     jgg@nvidia.com, linux-rdma@vger.kernel.org, linuxarm@huawei.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 for-next] RDMA/core: Get IB width and speed from netdev
+Message-ID: <20230705071205.GH6455@unreal>
+References: <20230603063833.541682-1-huangjunxian6@hisilicon.com>
+ <20230611174605.GG12152@unreal>
+ <1b11b9e9-a729-0d61-52e3-6bcf132ca356@hisilicon.com>
+ <20230628050019.GC23952@unreal>
+ <53e8025d-803d-f6c5-b853-8352163d9a2e@hisilicon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53e8025d-803d-f6c5-b853-8352163d9a2e@hisilicon.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
-
-william.zhang@broadcom.com wrote on Tue, 4 Jul 2023 17:50:28 -0700:
-
-> Hi Miquel,
->=20
-> On 07/04/2023 08:30 AM, Miquel Raynal wrote:
-> > Hi William,
-> >=20
-> > william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:38 -0700:
-> >  =20
-> >> brcmnand controller can only access the flash spare area up to certain
-> >> bytes based on the ECC level. It can be less than the actual flash spa=
-re
-> >> area size. For example, for many NAND chip supporting ECC BCH-8, it has
-> >> 226 bytes spare area. But controller can only uses 218 bytes. So brcma=
-nd
-> >> driver overrides the mtd oobsize with the controller's accessible spare
-> >> area size. When the nand base driver utilizes the nand_device object, =
-it
-> >> resets the oobsize back to the actual flash spare aprea size from
-> >> nand_memory_organization structure and controller may not able to acce=
-ss
-> >> all the oob area as mtd advises.
+On Wed, Jul 05, 2023 at 11:05:50AM +0800, Junxian Huang wrote:
+> 
+> 
+> On 2023/6/28 13:00, Leon Romanovsky wrote:
+> > On Mon, Jun 19, 2023 at 02:20:54PM +0800, Junxian Huang wrote:
 > >>
-> >> This change fixes the issue by overriding the oobsize in the
-> >> nand_memory_organization structure to the controller's accessible spare
-> >> area size. =20
-> >=20
-> > I am clearly not a big fan of this solution. memorg should be and
-> > remain a read only object. Can you please find another solution?
-> >  =20
-> I was debating on this too but I don't see option because there is no oth=
-er hooks after nanddev_init to set the mtd->oobsize as far as I can see and=
- I see there were similar fixes for other controller drivers after the nand=
- device object init was committed, for example:
-> Fixes: 629a442cad5f ("mtd: rawnand: Fill memorg during detection")
+> >>
+> >> On 2023/6/12 1:46, Leon Romanovsky wrote:
+> >>> On Sat, Jun 03, 2023 at 02:38:33PM +0800, Junxian Huang wrote:
+> >>>> From: Haoyue Xu <xuhaoyue1@hisilicon.com>
+> >>>>
+> >>>> Previously, there was no way to query the number of lanes for a network
+> >>>> card, so the same netdev_speed would result in a fixed pair of width and
+> >>>> speed. As network card specifications become more diverse, such fixed
+> >>>> mode is no longer suitable, so a method is needed to obtain the correct
+> >>>> width and speed based on the number of lanes.
+> >>>
+> >>> I'm sorry but I didn't understand the problem statement. Can you please
+> >>> provide an example of configuration that will give different results 
+> >>> before this patch and after?
+> >>>
+> >>
+> >> I'll give examples with 20G and 200G netdevs respectively.
+> >>
+> >> 20G:
+> >> Before this patch, regardless of the actual number of lanes, the width and
+> >> speed displayed in ibv_devinfo would be always fixed:
+> >> 	active_width: 4X
+> >> 	active_speed: 5 Gbps
+> >> After this patch, there will be different combinations of width and speed
+> >> according to the number of lanes. For example, for a 20G netdev whose number
+> >> of lanes is 2, the width and speed displayed in ibv_devinfo will be:
+> >> 	active_width: 2X
+> >> 	active_speed: 10 Gbps
+> >>
+> >> 200G:
+> >> Before this patch, netdevs with netdev_speed more than 40G cannot get a right
+> >> width and speed in ibv_devinfo. Only the default result would be displayed:
+> >> 	active_width: 4X
+> >> 	active_speed: 25 Gbps
+> >> After this patch, taking an example with 4 lanes, the displayed results will be:
+> >> 	active_width: 4X
+> >> 	active_speed: 50 Gbps
+> >>
+> > 
+> > <...>
+> > 
+> >>>> +	cap_link_lanes_supported = netdev->ethtool_ops->cap_link_lanes_supported;
+> >>>>  	rtnl_unlock();
+> >>>>  
+> >>>>  	dev_put(netdev);
+> >>>>  
+> >>>>  	if (!rc && lksettings.base.speed != (u32)SPEED_UNKNOWN) {
+> >>>>  		netdev_speed = lksettings.base.speed;
+> >>>> +		if (cap_link_lanes_supported && lksettings.lanes) {
+> >>>
+> >>> According to the documentation cap_link_lanes_supported defines if
+> >>> number of lanes can be supplied by user and I would expect from
+> >>> __ethtool_get_link_ksettings() to get right numbers after it was
+> >>> changed.
+> > 
+> > No, I'm saying that cap_link_lanes_supported is variable which only says
+> > if number of lanes can be changed and __ethtool_get_link_ksettings()
+> > will return right number of lanes every time it is called without need
+> > to call to ib_get_width_and_speed() again.
+> > 
+> > Thanks
+> > 
+> 
+> These two functions have different purposes.
+> 
+> The number of lanes is indeed obtained from __ethtool_get_link_ksettings(),
+> and ib_get_width_and_speed() converts the number of lanes into ib_width and
+> ib_speed, which are the output of ib_get_eth_speed().
 
-You are right, that was indeed the first approach, I'll remain on this
-path then. Thanks for the pointer.
+Great, so why do you need to rely on cap_link_lanes_supported in ib_get_width_and_speed()?
 
->=20
-> I will think through this again but I am open to any suggestion.
->=20
-> >>
-> >> Fixes: a7ab085d7c16 ("mtd: rawnand: Initialize the nand_device object")
-> >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> >>
-> >> ---
-> >>
-> >> Changes in v3: None
-> >> Changes in v2: None
-> >>
-> >>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 7 +++++--
-> >>   1 file changed, 5 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/na=
-nd/raw/brcmnand/brcmnand.c
-> >> index 407bf79cbaf4..39c7f547db1f 100644
-> >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >> @@ -2647,6 +2647,8 @@ static int brcmnand_setup_dev(struct brcmnand_ho=
-st *host)
-> >>   	struct nand_chip *chip =3D &host->chip;
-> >>   	const struct nand_ecc_props *requirements =3D
-> >>   		nanddev_get_ecc_requirements(&chip->base);
-> >> +	struct nand_memory_organization *memorg =3D
-> >> +		nanddev_get_memorg(&chip->base);
-> >>   	struct brcmnand_controller *ctrl =3D host->ctrl;
-> >>   	struct brcmnand_cfg *cfg =3D &host->hwcfg;
-> >>   	char msg[128];
-> >> @@ -2668,10 +2670,11 @@ static int brcmnand_setup_dev(struct brcmnand_=
-host *host)
-> >>   	if (cfg->spare_area_size > ctrl->max_oob)
-> >>   		cfg->spare_area_size =3D ctrl->max_oob;
-> >>   	/*
-> >> -	 * Set oobsize to be consistent with controller's spare_area_size, as
-> >> -	 * the rest is inaccessible.
-> >> +	 * Set mtd and memorg oobsize to be consistent with controller's
-> >> +	 * spare_area_size, as the rest is inaccessible.
-> >>   	 */
-> >>   	mtd->oobsize =3D cfg->spare_area_size * (mtd->writesize >> FC_SHIFT=
-);
-> >> +	memorg->oobsize =3D mtd->oobsize; =20
-> >>   >>   	cfg->device_size =3D mtd->size; =20
-> >>   	cfg->block_size =3D mtd->erasesize; =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l
-> >  =20
-
-
-Thanks,
-Miqu=C3=A8l
+Thanks
