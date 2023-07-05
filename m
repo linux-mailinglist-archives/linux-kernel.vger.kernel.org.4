@@ -2,154 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA35748591
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 15:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB99748473
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 14:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbjGEN6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 09:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S231693AbjGEMx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 08:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbjGEN5z (ORCPT
+        with ESMTP id S231154AbjGEMxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 09:57:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FD611B;
-        Wed,  5 Jul 2023 06:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688565474; x=1720101474;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PdRHsWcUvKlFxrNHtPGxrZat7W9p+9tZkkMZRNnSzjQ=;
-  b=G+qVJWgANbUBDr5M8wITIOro4rbNtyh4umU9dukluk26fuCIzssdgjKd
-   bmoJ7Cs5RjKp3njt6wLbQH8jEYsuVut8a45JjWkQP59vOVwZ7DZvofqqx
-   X8BthI+16KQR/9zJk/A/71sKBbflUwsKsd6GBL6DhxMbOno42GK29vzEb
-   4lDszr9Wx4eHDPneRI4k9CecuSbbNX4G4SXmRWD2RGjPq3/JylBu0uM+g
-   9nBUnJPSEGdbhCP4YacjtTTTQXRO+f0ZuA/A3JxDIabnnThLwYN2ZsK7v
-   9ucTJDH8MInGiqJaByjBKCVPB+C77d554kjkEK9iVnPPTrOI/F2COhSUL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="342934605"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="342934605"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 06:57:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="965835533"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="965835533"
-Received: from meggieha-mobl.ger.corp.intel.com (HELO [10.252.48.235]) ([10.252.48.235])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 06:57:49 -0700
-Message-ID: <907ad7a3-3384-c0c4-90a9-5beab4cc45e0@linux.intel.com>
-Date:   Wed, 5 Jul 2023 14:53:17 +0200
+        Wed, 5 Jul 2023 08:53:55 -0400
+Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA6CDA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 05:53:54 -0700 (PDT)
+Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b8a4e947a1so8966065ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 05:53:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688561634; x=1691153634;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Iq+8TpxEHiTomBKOeW+5QxZuXjnYw6FM69rru1Is8Mw=;
+        b=SGgKMDPJcUJ52LhqbMpeBP72NYNuNM7LADk0IxndO9ZJIMUl1E+LE9j6dJjyGSSMQ8
+         RJr3LCbgz90Gx4n4BEsLAoSTjaw7HK05RdPlMW2t8xWBCNzD89QbYLNeZh6d0UzeHhVS
+         X4vapUKRFLLmjhv0VnOxR4tIKL6pa8VYTSzP8pS1DxKhnAu+b+l2aaTHrVioAnZnkoLM
+         lbjQT4xWAbVkZbFnObycpa70Ot3Tj4v/321i68JZIFvnyaV/l6QJchgg4RZqEYNF77S1
+         vaALFJwIFJWoDc/Pg8H8i2UR7Z/yjrO/I8WnKTt6soLUIvDDq6EP1LBoYHNaPEC3kzrm
+         uWGA==
+X-Gm-Message-State: ABy/qLbU9rEfDUc/BmzJ8geVVSjLLk/B6Qq1XFqFRVhHtoaxr+12ATaN
+        LdjHMpD9hWMeMZy2KlHSOfVUAAaXC5cXKzjoJgbVhHFRSAW/
+X-Google-Smtp-Source: APBJJlGe7KI03KEPVhWSwq2PoQUmcREB9w7Iy7ebAYt94qwy+CK/WLF8stcYUP8kEGM3yaGUu3VPoHMwmvEdR8SBUxjFqrPK+4m/
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 1/8] soundwire: fix enumeration completion
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Rander Wang <rander.wang@linux.intel.com>
-References: <20230705123018.30903-1-johan+linaro@kernel.org>
- <20230705123018.30903-2-johan+linaro@kernel.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230705123018.30903-2-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:903:2149:b0:1b6:a2e4:c8f8 with SMTP id
+ s9-20020a170903214900b001b6a2e4c8f8mr1311886ple.2.1688561634307; Wed, 05 Jul
+ 2023 05:53:54 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 05:53:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000064f39a05ffbce427@google.com>
+Subject: [syzbot] [usb?] KMSAN: uninit-value in smsc95xx_eeprom_confirm_not_busy
+From:   syzbot <syzbot+2c97a98a5ba9ea9c23bd@syzkaller.appspotmail.com>
+To:     UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        edumazet@google.com, glider@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        steve.glendinning@shawell.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    257152fe29be string: use __builtin_memcpy() in strlcpy/str..
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=156aa484a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d16a560a6e6eb097
+dashboard link: https://syzkaller.appspot.com/bug?extid=2c97a98a5ba9ea9c23bd
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15433d14a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12528ac8a80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8e2711366405/disk-257152fe.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cec15df7e485/vmlinux-257152fe.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f212903d5649/bzImage-257152fe.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2c97a98a5ba9ea9c23bd@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in smsc95xx_eeprom_confirm_not_busy+0x1eb/0x360 drivers/net/usb/smsc95xx.c:348
+ smsc95xx_eeprom_confirm_not_busy+0x1eb/0x360 drivers/net/usb/smsc95xx.c:348
+ smsc95xx_read_eeprom+0x59/0x670 drivers/net/usb/smsc95xx.c:367
+ smsc95xx_init_mac_address drivers/net/usb/smsc95xx.c:816 [inline]
+ smsc95xx_bind+0x6d8/0x22e0 drivers/net/usb/smsc95xx.c:1128
+ usbnet_probe+0x1011/0x3f20 drivers/net/usb/usbnet.c:1750
+ usb_probe_interface+0xc75/0x1210 drivers/usb/core/driver.c:396
+ really_probe+0x506/0xf40 drivers/base/dd.c:658
+ __driver_probe_device+0x2a7/0x5d0 drivers/base/dd.c:800
+ driver_probe_device+0x72/0x7b0 drivers/base/dd.c:830
+ __device_attach_driver+0x55a/0x8f0 drivers/base/dd.c:958
+ bus_for_each_drv+0x3ff/0x620 drivers/base/bus.c:457
+ __device_attach+0x3bd/0x640 drivers/base/dd.c:1030
+ device_initial_probe+0x32/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3d8/0x5a0 drivers/base/bus.c:532
+ device_add+0x1b6a/0x24b0 drivers/base/core.c:3625
+ usb_set_configuration+0x31c9/0x38c0 drivers/usb/core/message.c:2211
+ usb_generic_driver_probe+0x109/0x2a0 drivers/usb/core/generic.c:238
+ usb_probe_device+0x290/0x4a0 drivers/usb/core/driver.c:293
+ really_probe+0x506/0xf40 drivers/base/dd.c:658
+ __driver_probe_device+0x2a7/0x5d0 drivers/base/dd.c:800
+ driver_probe_device+0x72/0x7b0 drivers/base/dd.c:830
+ __device_attach_driver+0x55a/0x8f0 drivers/base/dd.c:958
+ bus_for_each_drv+0x3ff/0x620 drivers/base/bus.c:457
+ __device_attach+0x3bd/0x640 drivers/base/dd.c:1030
+ device_initial_probe+0x32/0x40 drivers/base/dd.c:1079
+ bus_probe_device+0x3d8/0x5a0 drivers/base/bus.c:532
+ device_add+0x1b6a/0x24b0 drivers/base/core.c:3625
+ usb_new_device+0x15f6/0x22f0 drivers/usb/core/hub.c:2575
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ port_event drivers/usb/core/hub.c:5711 [inline]
+ hub_event+0x577b/0x78a0 drivers/usb/core/hub.c:5793
+ process_one_work+0xb0d/0x1410 kernel/workqueue.c:2408
+ worker_thread+0x107e/0x1d60 kernel/workqueue.c:2555
+ kthread+0x3e8/0x540 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+Local variable buf.i created at:
+ smsc95xx_read_reg drivers/net/usb/smsc95xx.c:90 [inline]
+ smsc95xx_eeprom_confirm_not_busy+0x92/0x360 drivers/net/usb/smsc95xx.c:342
+ smsc95xx_read_eeprom+0x59/0x670 drivers/net/usb/smsc95xx.c:367
+
+CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.4.0-syzkaller-g257152fe29be #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Workqueue: usb_hub_wq hub_event
+=====================================================
 
 
-On 7/5/23 14:30, Johan Hovold wrote:
-> The soundwire subsystem uses two completion structures that allow
-> drivers to wait for soundwire device to become enumerated on the bus and
-> initialised by their drivers, respectively.
-> 
-> The code implementing the signalling is currently broken as it does not
-> signal all current and future waiters and also uses the wrong
-> reinitialisation function, which can potentially lead to memory
-> corruption if there are still waiters on the queue.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-That change sounds good, but I am not following the two paragraphs below.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-> Not signalling future waiters specifically breaks sound card probe
-> deferrals as codec drivers can not tell that the soundwire device is
-> already attached when being reprobed. 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-What makes you say that? There is a test in the probe and the codec
-driver will absolutely be notified, see bus_type.c
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-	if (drv->ops && drv->ops->update_status) {
-		ret = drv->ops->update_status(slave, slave->status);
-		if (ret < 0)
-			dev_warn(dev, "%s: update_status failed with status %d\n", __func__,
-ret);
-	}
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-> Some codec runtime PM
-> implementations suffer from similar problems as waiting for enumeration
-> during resume can also timeout despite the device already having been
-> enumerated.
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-I am not following this either. Are you saying the wait_for_completion()
-times out because of the init_completion/reinit_completion confusion, or
-something else.
-
-> Fixes: fb9469e54fa7 ("soundwire: bus: fix race condition with enumeration_complete signaling")
-> Fixes: a90def068127 ("soundwire: bus: fix race condition with initialization_complete signaling")
-> Cc: stable@vger.kernel.org      # 5.7
-> Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Cc: Rander Wang <rander.wang@linux.intel.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/soundwire/bus.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-> index 1ea6a64f8c4a..66e5dba919fa 100644
-> --- a/drivers/soundwire/bus.c
-> +++ b/drivers/soundwire/bus.c
-> @@ -908,8 +908,8 @@ static void sdw_modify_slave_status(struct sdw_slave *slave,
->  			"initializing enumeration and init completion for Slave %d\n",
->  			slave->dev_num);
->  
-> -		init_completion(&slave->enumeration_complete);
-> -		init_completion(&slave->initialization_complete);
-> +		reinit_completion(&slave->enumeration_complete);
-> +		reinit_completion(&slave->initialization_complete);
->  
->  	} else if ((status == SDW_SLAVE_ATTACHED) &&
->  		   (slave->status == SDW_SLAVE_UNATTACHED)) {
-> @@ -917,7 +917,7 @@ static void sdw_modify_slave_status(struct sdw_slave *slave,
->  			"signaling enumeration completion for Slave %d\n",
->  			slave->dev_num);
->  
-> -		complete(&slave->enumeration_complete);
-> +		complete_all(&slave->enumeration_complete);
->  	}
->  	slave->status = status;
->  	mutex_unlock(&bus->bus_lock);
-> @@ -1941,7 +1941,7 @@ int sdw_handle_slave_status(struct sdw_bus *bus,
->  				"signaling initialization completion for Slave %d\n",
->  				slave->dev_num);
->  
-> -			complete(&slave->initialization_complete);
-> +			complete_all(&slave->initialization_complete);
->  
->  			/*
->  			 * If the manager became pm_runtime active, the peripherals will be
+If you want to undo deduplication, reply with:
+#syz undup
