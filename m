@@ -2,119 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C77748749
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A4974877A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 17:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbjGEPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 11:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S233090AbjGEPIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 11:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbjGEPBb (ORCPT
+        with ESMTP id S232367AbjGEPIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 11:01:31 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F651BDF
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:01:05 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso10616460e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 08:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688569261; x=1691161261;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B0gcDRuQkjpHCUjM+vGdjv7W7sdjFlqZuGfjW7kfd7w=;
-        b=S4bDWswS0FDlLNRhulwidTRmXgTlDL71mqxdvdPcN8XEWA2paOGVOlrr6mtYq9/jAc
-         +2KDKRv4RJDiJWxoqmyQQnGChVtfS3MaryFSIe+CRqtDIBlRMPmIphfJXAGqW/xTEb8y
-         B3sxMGi1wdSPHhndUcPAWKaSOmjM/d0qlPxbRIrFu4u6AE5hwgtd7qI4ne5ND97jTUVY
-         7gf1Y150HmEX+uldjGGVrHIVgS3rbcCxRsnDYDmUbyeNPw6oz+uDxrwN9lr1xyqcdDiX
-         e65Q2FU9+R2zMRzsgxhlhQ7q/6vIjdezYFd8mC5xAE9qhmpIdGIMLaKRGyohk28qSCQS
-         avJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688569261; x=1691161261;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B0gcDRuQkjpHCUjM+vGdjv7W7sdjFlqZuGfjW7kfd7w=;
-        b=MlvmDsRNsSZ30WD58pOgzfYpvauhYu0XVe+ptstvuECc4oUTOoZN/aAbqN+7TlriP2
-         ic/4N7YKd0jJ50cLlAGSUryS3t1S4I1zj/y9DDv+0gGIOm0/7Ew980ryUqqY/9R0DxZT
-         yrp3tGxAbJNFi6mX9AUCU4K+yxTieKTzUWfPzKiKmcwCYD+qQsu6j5+dh0V7x2EGH3dx
-         bQTkwPRPfBusSrmecIzJzO2U1pyYzCRBHlNxrYIRw97ZZe10fDTJAoyXJsukVTX3HWBg
-         D1wx0y9SPwl/gCUJKFfwoIFCdbHgbRNulpCNfQ0qJ+1+VOPWJjgY3t/iGhCsrbXC246s
-         3HmQ==
-X-Gm-Message-State: ABy/qLZrTDnUEp6cn+SFpMlW3OFiaNahQuPV39whvUatgWQ8xVboke85
-        mPnDVRC20czi+THoGfDSoEnxLA==
-X-Google-Smtp-Source: APBJJlFt/CvUvOaP9nhesV/5dotDDrJiq/+ibzYweC63Z4Y2rOtPRJzBG18lTXozTRNK0WQrjDGm8g==
-X-Received: by 2002:a05:6512:1112:b0:4f8:7503:2041 with SMTP id l18-20020a056512111200b004f875032041mr14035474lfg.37.1688569261797;
-        Wed, 05 Jul 2023 08:01:01 -0700 (PDT)
-Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id a10-20020a19f80a000000b004fb74dbbd98sm4951623lff.246.2023.07.05.08.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 08:01:01 -0700 (PDT)
-Message-ID: <12f3e3f1-cd47-c7db-1078-5be92e3b5f91@linaro.org>
-Date:   Wed, 5 Jul 2023 17:00:59 +0200
+        Wed, 5 Jul 2023 11:08:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF095170B
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 08:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688569680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CYB3cvLDnc3P98VVJYn8G9DoZ+oTFJfoiNpil4CwPA0=;
+        b=WmPZsUzAVwfG3YCVQ3nojq/+4GUob8zHYqyeX12uOm1iDGsJ8pL3wvxU9LOKIHiJOW02bJ
+        N8eac0f4rYYwUbqo5v/lFux3AsFqCCCMyNgtL/EKh6gZ/URX/G19QzW4oWC8dM5rOM8fBs
+        GRdbWSHWzsQoSTv0xhH2qPkOEp8XDC4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-221-qCzxabckPx2me5_7gFTaHQ-1; Wed, 05 Jul 2023 11:01:25 -0400
+X-MC-Unique: qCzxabckPx2me5_7gFTaHQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 01A3B185A7BA;
+        Wed,  5 Jul 2023 15:01:12 +0000 (UTC)
+Received: from ovpn-8-34.pek2.redhat.com (ovpn-8-34.pek2.redhat.com [10.72.8.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7CF0DC51488;
+        Wed,  5 Jul 2023 15:01:07 +0000 (UTC)
+Date:   Wed, 5 Jul 2023 23:01:02 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     chengming.zhou@linux.dev
+Cc:     axboe@kernel.dk, hch@lst.de, tj@kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: Re: [PATCH v2 1/4] blk-mq: use percpu csd to remote complete instead
+ of per-rq csd
+Message-ID: <ZKWFrirq9Eemm788@ovpn-8-34.pek2.redhat.com>
+References: <20230629110359.1111832-1-chengming.zhou@linux.dev>
+ <20230629110359.1111832-2-chengming.zhou@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] arm64: dts: qcom: add missing space before {
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230705144226.280490-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230629110359.1111832-2-chengming.zhou@linux.dev>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5.07.2023 16:42, Krzysztof Kozlowski wrote:
-> Add missing whitespace between node name/label and opening {.
+On Thu, Jun 29, 2023 at 07:03:56PM +0800, chengming.zhou@linux.dev wrote:
+> From: Chengming Zhou <zhouchengming@bytedance.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> If request need to be completed remotely, we insert it into percpu llist,
+> and smp_call_function_single_async() if llist is empty previously.
+> 
+> We don't need to use per-rq csd, percpu csd is enough. And the size of
+> struct request is decreased by 24 bytes.
+> 
+> This way is cleaner, and looks correct, given block softirq is guaranteed to be
+> scheduled to consume the list if one new request is added to this percpu list,
+> either smp_call_function_single_async() returns -EBUSY or 0.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> v2:
+>  - Change to use call_single_data_t, which avoid to use 2 cache lines
+>    for 1 csd, as suggested by Ming Lei.
+>  - Improve the commit log, the explanation is copied from Ming Lei.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sc8180x.dtsi                    | 2 +-
->  arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> index 3c1314e12d08..fe8534538618 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-> @@ -3429,7 +3429,7 @@ timer@17c20000 {
->  			#size-cells = <1>;
->  			ranges = <0 0 0 0x20000000>;
->  
-> -			frame@17c21000{
-> +			frame@17c21000 {
->  				reg = <0x17c21000 0x1000>,
->  				      <0x17c22000 0x1000>;
->  				frame-number = <0>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-> index b841ea9192ae..85e5cf3dc91e 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-> @@ -565,7 +565,7 @@ panel_in_0: endpoint {
->  				};
->  			};
->  
-> -			port@1{
-> +			port@1 {
->  				reg = <1>;
->  
->  				panel_in_1: endpoint {
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+
+Thanks,
+Ming
+
