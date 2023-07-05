@@ -2,228 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EFF748C10
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2DA748C1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 20:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbjGESjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 14:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S232919AbjGESnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 14:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjGESje (ORCPT
+        with ESMTP id S230178AbjGESnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 14:39:34 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D2C170B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 11:39:32 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-39ecf031271so5458052b6e.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 11:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688582371; x=1691174371;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gvoAfH46ozWPM/+XuG3GB1n0yU4PyVD6tOel9blObwA=;
-        b=ISOjIOPaJJm4/UJA7iyu6DBCtd4SKtahfvAWjsyYoXvjzympIDw5Px7LRrJF9rDSUz
-         tC5sG/dW4VrfNmM/xFo7sRGPNKnwH+8De6F2vfWDHTriE01PZlFJzVGynj6zPvV1kywc
-         DMUp3ZNa8XX5pdePeMqoyqsedrn6333BiZx730UJzTvARaIsBwhq8xS2hownrLjYpTYO
-         uH52wjLtdGwkEqEhpFq/hQUnNMAVx9CiQflz7MD3+fW8XIL6Xx2+N5//cQJk0dbDR2pg
-         h6+nOPxH0RqSzl4GKoOKYR/HCjS+7C3LE0O1cjcVUTAFmNXtR4Pg0EzLeRDwTKyfdEIN
-         lxTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688582371; x=1691174371;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gvoAfH46ozWPM/+XuG3GB1n0yU4PyVD6tOel9blObwA=;
-        b=kdIpbV0Jcgfx+dWU/6SPeJwpxRAAhoMvisYissdlkkoA6VeWkLcobryYLUbj8fbqdp
-         U5zXaFzd1RC31NbFfiZgmNQ4Ld18oDkHJxayAlLIpecnu7xE6e3Ygh8AkRXIqQDvoa0G
-         m81Vq3Fq3+HPIV/xxyhD6wuasa/bJaJjx6sRyB0H7cetzYoS88zw/R40XiUG7K9TwjlL
-         37MFv76uN5DgoNgM2FF/AsmGm2O5SLSIW53GTrG818LX6forkSK+pspqXxfPDPH2jGRC
-         3fKZU0qNlEYqwrqtsT0EegjRe4jLIJUTeHjCk8+YHs8ptNOCR6CUNq1QFkcrX6nkTXKA
-         kOmg==
-X-Gm-Message-State: AC+VfDxBUrCZj50IlpUwjIIicMzN0vliRasULAxTBk3lV0lL23xaz6YF
-        I46QV0Z/FAfUN69aanQSBq4=
-X-Google-Smtp-Source: ACHHUZ7NjqcdefXJO80KRaddKrWxRiCyTgWxDffA3L/uSgOHzwZBaE/MF1TXFqcFhDNlFqVWzUJ6DQ==
-X-Received: by 2002:a05:6808:18aa:b0:3a1:d8cb:17d4 with SMTP id bi42-20020a05680818aa00b003a1d8cb17d4mr18429678oib.35.1688582371422;
-        Wed, 05 Jul 2023 11:39:31 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:9cde])
-        by smtp.gmail.com with ESMTPSA id j7-20020aa783c7000000b006687b41c4dasm627602pfn.110.2023.07.05.11.39.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 11:39:30 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 5 Jul 2023 08:39:27 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     Sandeep Dhavale <dhavale@google.com>, jiangshanlai@gmail.com,
-        torvalds@linux-foundation.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        joshdon@google.com, brho@google.com, briannorris@chromium.org,
-        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
-        void@manifault.com, kernel-team@android.com
-Subject: Re: [PATCH 14/24] workqueue: Generalize unbound CPU pods
-Message-ID: <ZKW4374Xc6YrRrEW@slm.duckdns.org>
-References: <20230519001709.2563-1-tj@kernel.org>
- <20230519001709.2563-15-tj@kernel.org>
- <CAB=BE-S=cxewXu7nqJY1DC5w9Bapar_C0cTjpZOQ-Qd5GGwYyw@mail.gmail.com>
- <c307ba94-0d8c-3cbf-19da-44ee31751428@amd.com>
- <ZIEBB-A1arYKSK2P@slm.duckdns.org>
- <fb3461cd-3fc2-189a-a86b-c638816a2440@amd.com>
- <ZIJbMQOu_k07jkFf@slm.duckdns.org>
- <d686347e-f76c-7f9c-3f1a-f4326f5167ca@amd.com>
+        Wed, 5 Jul 2023 14:43:50 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3D0139;
+        Wed,  5 Jul 2023 11:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688582629; x=1720118629;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=fu3W6uJw15Ja1eqA+ymukZGMbFq0TuyXrz6gOBjUhU0=;
+  b=hUW2/FHmleNmQoA39x5bY8L0HEaCeVBUWgr1+ULwsG85PHzmmcUB9GQh
+   Mm8n1bpH7uYJVP+qqdsx89nFHMJFRD2JjrCcsOR+DD37Il74bxm9kWz4u
+   5ySXH3OtJMC4fbf3LYV1E2A4Vra/9h9NdqAwZZCFOO5lP3KN3VZLjjfPx
+   edOgY/9BQAjtGtZK9lKkfsFqhlYPvfPm4lSuc2wGEzsHBdevN8hijae8a
+   xEeJC4S5SASGIjaqQ5FsHCEw6bwZpRWAjEVZ2azWSBtcL2UKe3LIb+0CA
+   Br5YOARHoxWCdtypdqyIySWlEYGyuYFky46VBybFOG67eoLJPz+aZ0w05
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="394169571"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="394169571"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 11:43:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="863820194"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="863820194"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Jul 2023 11:43:48 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 5 Jul 2023 11:43:47 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 5 Jul 2023 11:43:47 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 5 Jul 2023 11:43:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dgiCEBAmPosNVYnBBGOmLwqfdvNNOXht6A2ibwoCcEqfYSQQEkAhEd7KoXsrsb2u2kz27im5gzp7iockrXQaYvvguM5q7IzZE1q0urBQqm5wSJy0UiXf90ynp4ogTvAB1f3HeaCcPXMQAtUxzIHU6HbjuOcc4VaqUKGTPHTC9nZcg4zi0dwd/xr89aIwD7oWu32GSzdUUiupiPivkZMqiolHLqZVBCZkqKec72y+vSnME10DBbg8l/q0TrB87tIN34XnMlM4t+I7yvG6qm0kRO1yH9cgzq1zXBmFP9hX93LIDjITCsxkMFKTBuEior2PFBzdy0p1JhEY3fU8bBMKdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A3Db2m439tGMGxm/EpA/J8nhTZ3MYwGt+e+43p46KWU=;
+ b=hVrlx0UV76KFeVXRK9Fb94w1f21nCZSeRx4FeSUV0/t1jGftcGb3ZoeoRjFzPsTbYJqsplDsMe8dG6nkJErqaS1J0+c7ZfTV4KlhZVGoT3MDzIloBomNd7V9y6S1N2eRGYIrIrEx2ncbgxOOd98wHer9HtvCBQH09tcmkiAyW69TWfffVBsbdURlmN4h0qTBH04H5q55FjsSeUMkUEYwOlmN5jisSaXFOrINGDI7SqYb0eBCNEYY2mc4zF760Si7c3DNIvdmZPr0YCbSUGGQ2XfVejutQFGpx/T2B2xt0aSu64EtBmMNE7htpcQrT+AfyoUdOicNCjvhMRmdIH9bHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB5984.namprd11.prod.outlook.com (2603:10b6:510:1e3::15)
+ by DM4PR11MB5502.namprd11.prod.outlook.com (2603:10b6:5:39e::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Wed, 5 Jul
+ 2023 18:43:45 +0000
+Received: from PH7PR11MB5984.namprd11.prod.outlook.com
+ ([fe80::ef38:9181:fb78:b528]) by PH7PR11MB5984.namprd11.prod.outlook.com
+ ([fe80::ef38:9181:fb78:b528%7]) with mapi id 15.20.6544.024; Wed, 5 Jul 2023
+ 18:43:45 +0000
+Message-ID: <4ba1aeba-d744-4296-811f-71140e9c66d9@intel.com>
+Date:   Wed, 5 Jul 2023 11:43:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Betterbird/102.12.0
+Subject: Re: [PATCH] ACPI: NFIT: add helper to_nfit_mem() to take device to
+ nfit_mem
+To:     Ben Dooks <ben.dooks@codethink.co.uk>, <nvdimm@lists.linux.dev>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lenb@kernel.org>
+References: <20230703131729.1009861-1-ben.dooks@codethink.co.uk>
+Content-Language: en-US
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230703131729.1009861-1-ben.dooks@codethink.co.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR21CA0013.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::23) To PH7PR11MB5984.namprd11.prod.outlook.com
+ (2603:10b6:510:1e3::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d686347e-f76c-7f9c-3f1a-f4326f5167ca@amd.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR11MB5984:EE_|DM4PR11MB5502:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6240286e-f585-4919-3fc4-08db7d87c339
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n93kAm0bFgA3Thgk8xv8QVFZXV/61BlWaYb7Gcwsw8YYOZwPtMn/3RnhGNjYPCHhW00uxKHuUHB2heDBOqMDjH9KnZvzMbx02MwYBSkMBriDzJDx0TnxnCY0vmu95daf5GEea/j/8fREAb/wYd1fMwTrWVHZMLTjNDsEbQofvWcEvSBgAi+1Pt01nvk6NXM1zDZFhifQqtFM8eARcv+EfQf51O5ICOa1fmIGuUPLSj5KYnXPmJLpeQvA/7CXJCh83sJFQ56SDCeywQjK6/9JefNFheZrlD96eCaI7P+cepoXk1u1sYz72Hq1+KJ5TKpk+OSNtFNgKK82O7HXbArZEZac3x6hRmpZuUXQ8E2END9GB/mHuvkC2ofL/TU7BxzFnYvs05sznU7DBq3Znp4s3v0rNnP3hhd60QwfVz2zJj6AwSwjM/JvRJB1yAqt/CrArL9iT+3ghlQaYpb75Upz9whHf5y9/GtkB+ut7xxF98LHuaZmkgQCl3MmZv5PnxfttLdwsFmM9VbBifU0DHiaKWxmCXvCYuhuCsW1tjdqyL7FdBzxxZL/Tww6+NbhV/b6Oc7ozCLohEFyRTW4l/Hc0oT9XlwbzWmnYaXOgxrGv8XU51cYzUe4uqHHYbGmSaTpQh7ws6cUWZLsxgAFld5hrg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB5984.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(346002)(39860400002)(396003)(366004)(451199021)(66946007)(66556008)(8676002)(2616005)(2906002)(8936002)(5660300002)(6506007)(53546011)(44832011)(26005)(31686004)(186003)(41300700001)(6666004)(82960400001)(6486002)(4326008)(66476007)(36756003)(83380400001)(316002)(478600001)(6512007)(38100700002)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmRodkEyV2dtblVaTDFlQkNhdUN6dkE5dFVkbUpQb2JoUStjYUZlUEtYRWI3?=
+ =?utf-8?B?ZjhaOVJMY1RwVXIyaHV4b1JTdzk0SFZyWWxUTGpBMUhLRGJzMUlhWGcvZEZC?=
+ =?utf-8?B?OHR4aitGQWRXemFFWloyMjZ3SGJSUEZDcnl6STgxU1NlbGZML3VwMjNsNDVv?=
+ =?utf-8?B?TFlHKzlqODhQQi9ISFJPOGMyL2k3MTlpYkhsN1V0eW9VbEJydDJjcEpKMXJ2?=
+ =?utf-8?B?ZjZWY0NCMlpWVXQvM09QekV5S1RVVFR6bk1za2xXaXhtQWJacy9xQ2c2eTBp?=
+ =?utf-8?B?eUgzYWZuT242eStUWW5GWFFORUtpellvMmdpdHkycS9kaUNuem93SmpZc3lW?=
+ =?utf-8?B?Mkc0OXgvaW9zQ0NCekVkRXpJZmlJQVp0ejgyWm5qYVltNkM5cmFuN3V5RFl0?=
+ =?utf-8?B?UWYxNCt0T3hhb3FjTEFoNkdERHNpUGlJTzZjOFQ5ZVljRXl2dEhTdDFWVGxG?=
+ =?utf-8?B?RlgrcTIzU0R2ei9kcjIyejZrM2VBMTV0VkYxNHc0L1RNYUY4RVgvTEhkdlVV?=
+ =?utf-8?B?RWJsN1dYNUZNV2xaWXN5bVhjaGJTMnhLNzJqRitkR3RLSU81SXBPOW9RWjcz?=
+ =?utf-8?B?WkFGaUVHVjFCMVRpT2Z5N1JXdE5xTjQ5OXUwN1pCa2w4Tlc1MDhYQmYrQlZl?=
+ =?utf-8?B?ZjJ0Njk5RER0QW1zQitDQmNaTEYwaEdVOW16YkJPKzFoWWlrRGo1V2wvbkVT?=
+ =?utf-8?B?eGdzcWVaTVI4dEtieG40bkdWeHVjOE5VRGk5K0s5R25wYVpVTDdlcStVOTRs?=
+ =?utf-8?B?Y291VEdiYWF2RTdRN1l6VUlLSmd2amlVamNNSTN1V3ZJZlgwTEpwalQzMmVz?=
+ =?utf-8?B?QjF3aFVVQmRlRERYNGZodU1ySDVmYUwwbE5VNVJ5MnpMek84dXZ3OHJhOTFC?=
+ =?utf-8?B?MEUxWWlwb0tneFVBTXJQL0JGcVhiNGxFUTRyVXBrT04zVnNuZFRuZTcwTjhi?=
+ =?utf-8?B?TVhidnVnMFF3cHIzSm1LdnorcFpzcnVpZlZRblBIQis4eGVRK2d1SmZwY1Zi?=
+ =?utf-8?B?SFp0akg3eTFIbVdKN01UMHZ4dk5ad3psS2s4bkNlcVdGT1NOM3dGTWd1ZGlk?=
+ =?utf-8?B?cWFmMUhzSUJ1NXBpRVp0eXBsOWdnWlFMV3ZFelRzSHZBSGhPeHlpR2JpdVZn?=
+ =?utf-8?B?b1kvQUNDOE1sellaM214UDFvaXA4b0xBTmFsazA5QmVXRG8rRU9VTlp1YTg4?=
+ =?utf-8?B?L2hhKzdDaUF5dE5PQUVwSE4yWVQ2aGlyVzRxVFlhckUxWjZKTmZrUE5YSHVW?=
+ =?utf-8?B?YWRVNW1RaEZLTVl2QUNXTmtUWTNCSWlXWWkrbS9YdnBTS0xyTXZ3VG1HR2tr?=
+ =?utf-8?B?dkVjcWhZb2w1Wm96N1hUWUFrMmR6STdkb2c3cmJBemtCaWxNcHozMGg4d2RV?=
+ =?utf-8?B?ZlpDVDMzb2pHbVQ4cXhVZGhsYTg4NFFXdEtFV3lVZEhjQ3pOS3k3ZElkRXNo?=
+ =?utf-8?B?b0RTZTNwL2NLNHVRMFZLbFdmWG5Fc3RUUzVWRkVwQ2VkaFduWURhWEVaQy9y?=
+ =?utf-8?B?VlFvRGZDWVVhMjZVQTJyaXhzZVhIbmhndkw0Nk9vZGNlc1ZBQnZXNWxXYlJF?=
+ =?utf-8?B?NThrSFB4RE5semQrNmNLT016c2wvZHY1dGJza0JaUHpyelFTK3gwUy9RdWZR?=
+ =?utf-8?B?eTRJVmVPdkFlREJWSElWS1lVbUY1NjdpeHRUSHlZakZwQWtqSVhBOWNIR3BN?=
+ =?utf-8?B?VlQvNm9IQnh3V0xQQjBLOW5zNVcwVi92cHRTaG5STk9jQWRLMTRuUzBzNllI?=
+ =?utf-8?B?VU9vd3VDT3hYZVFodUllSEQ1QzdhbEdaVG0rN0xlUFhnSXhSZis5TXZRZUtW?=
+ =?utf-8?B?TUNJZW5mcUUwTUtKVW15OG5EUVBldnNBQndWWTZPYUFZUzdMeU1QSVFYOUpS?=
+ =?utf-8?B?UWJucDVqeURCVEpWMVpWbFd4YVpmVkw3RnVRcTZiQ2krellIVTJuTzlySmtz?=
+ =?utf-8?B?NmtQdG5RRm5nMGUxeklqcklMOFZIaVJ3d3YwbjZhZk9WM1FzNUpKM2ZWYjdI?=
+ =?utf-8?B?czJ0ZHFTQ3U3c3BEdlV0VnhON3N4WWZSTThrRiswZFVDQUNDVGQxY3NJc1Ar?=
+ =?utf-8?B?ZktTVDVxRSt4NElTbTZrUUlsZ1VYdXZnMklVUituWlJMRFFLUFArQTNBaVAy?=
+ =?utf-8?B?alNvMUZVOUUyNk8xK0lzbzBaS0g0cjhpU2xCejRmWHZkQ1dOVzlSTEJhTzRv?=
+ =?utf-8?B?bkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6240286e-f585-4919-3fc4-08db7d87c339
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB5984.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2023 18:43:45.3665
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HaTsaTF21W9+83HkC47jGGxgla6h5VvPuMCuI/WbgZrr+3675LnbqsSQ4ZGLuolrIWUEoaeXbO0f/OCoENg+9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5502
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Wed, Jul 05, 2023 at 12:34:48PM +0530, K Prateek Nayak wrote:
-> - Apart from tbench and netperf, the rest of the benchmarks show no
->   difference out of the box.
 
-Just looking at the data, it's a bit difficult for me to judge. I suppose
-most of differences are due to run-to-run variances? It'd be really useful
-if the data contains standard deviation (whether historical or directly from
-multiple runs).
+On 7/3/23 06:17, Ben Dooks wrote:
+> Add a quick helper to just do struct device to the struct nfit_mem
+> field it should be referencing. This reduces the number of code
+> lines in some of the followgn code as it removes the intermediate
 
-> - SPECjbb2015 Multi-jVM sees small uplift to max-jOPS with certain
->   affinity scopes.
-> 
-> - tbench and netperf seem to be unhappy throughout. None of the affinity
->   scopes seem to bring back the performance. I'll dig more into this.
+s/followgn/following/
 
-Yeah, that seems pretty consistent.
+> struct nvdimm.
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 
-> ~~~~~~~~~~
-> ~ stream ~
-> ~~~~~~~~~~
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> ---
+>   drivers/acpi/nfit/core.c | 27 +++++++++++++--------------
+>   1 file changed, 13 insertions(+), 14 deletions(-)
 > 
-> o NPS1
-> 
-> - 10 Runs:
-> 
-> Test:		base		   affinity_scopes
->  Copy:	 245676.59 (0.00 pct)	 333646.71 (35.80 pct)
-> Scale:	 206545.41 (0.00 pct)	 205706.04 (-0.40 pct)
->   Add:	 213506.82 (0.00 pct)	 236739.07 (10.88 pct)
-> Triad:	 217679.43 (0.00 pct)	 249263.46 (14.50 pct)
-> 
-> - 100 Runs:
-> 
-> Test:		base		   affinity_scopes
->  Copy:	 318060.91 (0.00 pct)	 326025.89 (2.50 pct)
-> Scale:	 213943.40 (0.00 pct)	 207647.37 (-2.94 pct)
->   Add:	 237892.53 (0.00 pct)	 232164.59 (-2.40 pct)
-> Triad:	 245672.84 (0.00 pct)	 246333.21 (0.26 pct)
-> 
-> o NPS2
-> 
-> - 10 Runs:
-> 
-> Test:		base		   affinity_scopes
->  Copy:	 296632.20 (0.00 pct)	 291153.63 (-1.84 pct)
-> Scale:	 206193.90 (0.00 pct)	 216368.42 (4.93 pct)
->   Add:	 240363.50 (0.00 pct)	 245954.23 (2.32 pct)
-> Triad:	 242748.60 (0.00 pct)	 238606.20 (-1.70 pct)
-> 
-> - 100 Runs:
-> 
-> Test:		base		   affinity_scopes
->  Copy:	 322535.79 (0.00 pct)	 315020.03 (-2.33 pct)
-> Scale:	 217723.56 (0.00 pct)	 220172.32 (1.12 pct)
->   Add:	 248117.72 (0.00 pct)	 250557.17 (0.98 pct)
-> Triad:	 257768.66 (0.00 pct)	 248264.00 (-3.68 pct)
-> 
-> o NPS4
-> 
-> - 10 Runs:
-> 
-> Test:		base		   affinity_scopes
->  Copy:	 274067.54 (0.00 pct)	 302804.77 (10.48 pct)
-> Scale:	 224944.53 (0.00 pct)	 230112.39 (2.29 pct)
->   Add:	 229318.09 (0.00 pct)	 241939.54 (5.50 pct)
-> Triad:	 230175.89 (0.00 pct)	 253613.85 (10.18 pct)
-> 
-> - 100 Runs:
-> 
-> Test:		base		   affinity_scopes
->  Copy:	 338922.96 (0.00 pct)	 348183.65 (2.73 pct)
-> Scale:	 240262.45 (0.00 pct)	 245939.67 (2.36 pct)
->   Add:	 256968.24 (0.00 pct)	 260657.01 (1.43 pct)
-> Triad:	 262644.16 (0.00 pct)	 262286.46 (-0.13 pct)
-
-The differences seem more consistent and pronounced for this benchmark too.
-Is this just expected variance for this benchmark?
-
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ~ Benchmarks run with multiple affinity scope ~
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> o NPS1
-> 
-> - tbench
-> 
-> Clients:     base                     cpu                    cache                   numa                    system
->     1    450.40 (0.00 pct)       459.44 (2.00 pct)       457.12 (1.49 pct)       456.36 (1.32 pct)       456.75 (1.40 pct)
->     2    872.50 (0.00 pct)       869.68 (-0.32 pct)      890.59 (2.07 pct)       878.87 (0.73 pct)       890.14 (2.02 pct)
->     4    1630.13 (0.00 pct)      1621.24 (-0.54 pct)     1634.74 (0.28 pct)      1628.62 (-0.09 pct)     1646.57 (1.00 pct)
->     8    3139.90 (0.00 pct)      3044.58 (-3.03 pct)     3099.49 (-1.28 pct)     3081.43 (-1.86 pct)     3151.16 (0.35 pct)
->    16    6113.51 (0.00 pct)      5555.17 (-9.13 pct)     5465.09 (-10.60 pct)    5661.31 (-7.39 pct)     5742.58 (-6.06 pct)
->    32    11024.64 (0.00 pct)     9574.62 (-13.15 pct)    9282.62 (-15.80 pct)    9542.00 (-13.44 pct)    9916.66 (-10.05 pct)
->    64    19081.96 (0.00 pct)     15656.53 (-17.95 pct)   15176.12 (-20.46 pct)   16527.77 (-13.38 pct)   15097.97 (-20.87 pct)
->   128    30956.07 (0.00 pct)     28277.80 (-8.65 pct)    27662.76 (-10.63 pct)   27817.94 (-10.13 pct)   28925.78 (-6.55 pct)
->   256    42829.46 (0.00 pct)     38646.48 (-9.76 pct)    38355.27 (-10.44 pct)   37073.24 (-13.43 pct)   34391.01 (-19.70 pct)
->   512    42395.69 (0.00 pct)     36931.34 (-12.88 pct)   39259.49 (-7.39 pct)    36571.62 (-13.73 pct)   36245.55 (-14.50 pct)
->  1024    41973.51 (0.00 pct)     38817.07 (-7.52 pct)    38733.15 (-7.72 pct)    38864.45 (-7.40 pct)    35728.70 (-14.87 pct)
-> 
-> - netperf
-> 
->                         base                    cpu                     cache                   numa                    system
->  1-clients:      100910.82 (0.00 pct)    103440.72 (2.50 pct)    102592.36 (1.66 pct)    103199.49 (2.26 pct)    103561.90 (2.62 pct)
->  2-clients:      99777.76 (0.00 pct)     100414.00 (0.63 pct)    100305.89 (0.52 pct)    99890.90 (0.11 pct)     101512.46 (1.73 pct)
->  4-clients:      97676.17 (0.00 pct)     96624.28 (-1.07 pct)    95966.77 (-1.75 pct)    97105.22 (-0.58 pct)    97972.11 (0.30 pct)
->  8-clients:      95413.11 (0.00 pct)     89926.72 (-5.75 pct)    89977.14 (-5.69 pct)    91020.10 (-4.60 pct)    92458.94 (-3.09 pct)
-> 16-clients:      88961.66 (0.00 pct)     81295.02 (-8.61 pct)    79144.83 (-11.03 pct)   80216.42 (-9.83 pct)    85439.68 (-3.95 pct)
-> 32-clients:      82199.83 (0.00 pct)     77914.00 (-5.21 pct)    75055.66 (-8.69 pct)    76813.94 (-6.55 pct)    80768.87 (-1.74 pct)
-> 64-clients:      66094.87 (0.00 pct)     64419.91 (-2.53 pct)    63718.37 (-3.59 pct)    60370.40 (-8.66 pct)    66179.58 (0.12 pct)
-> 128-clients:     43833.63 (0.00 pct)     42936.08 (-2.04 pct)    44554.69 (1.64 pct)     42666.82 (-2.66 pct)    45543.69 (3.90 pct)
-> 256-clients:     38917.58 (0.00 pct)     24807.28 (-36.25 pct)   20517.01 (-47.28 pct)   21651.40 (-44.36 pct)   23778.87 (-38.89 pct)
-> 
-> - SPECjbb2015 Mutli-JVM
-> 
-> 	       max-jOPS	     critical-jOPS
-> base:		 0.00%		 0.00%
-> smt:            -1.11%		-1.84%
-> cpu:             2.86%		-1.35%
-> cache:           2.86%		-1.66%
-> numa:            1.43%		-1.49%
-> system:          0.08%		-0.41%
-> 
-> 
-> I'll go dig deeper into the tbench and netperf regressions. I'm not sure
-> why the regression is observed for all the affinity scopes. I'll look
-> into IBS profile and see if something obvious pops up. Meanwhile if there
-> is any specific data you would like me to collect or benchmark you would
-> like me to test, let me know.
-
-Yeah, that's a bit surprising given that in terms of affinity behavior
-"numa" should be identical to base. The only meaningful differences that I
-can think of is when the work item is assigned to its worker and maybe how
-pwq max_active limit is applied. Hmm... can you monitor the number of
-kworker kthreads while running the benchmark? No need to do the whole
-matrix, just comparing base against numa should be enough.
-
-Thanks.
-
--- 
-tejun
+> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+> index 0fcc247fdfac..9213b426b125 100644
+> --- a/drivers/acpi/nfit/core.c
+> +++ b/drivers/acpi/nfit/core.c
+> @@ -1361,18 +1361,22 @@ static const struct attribute_group *acpi_nfit_attribute_groups[] = {
+>   	NULL,
+>   };
+>   
+> -static struct acpi_nfit_memory_map *to_nfit_memdev(struct device *dev)
+> +static struct nfit_mem *to_nfit_mem(struct device *dev)
+>   {
+>   	struct nvdimm *nvdimm = to_nvdimm(dev);
+> -	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
+> +	return  nvdimm_provider_data(nvdimm);
+> +}
+> +
+> +static struct acpi_nfit_memory_map *to_nfit_memdev(struct device *dev)
+> +{
+> +	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
+>   
+>   	return __to_nfit_memdev(nfit_mem);
+>   }
+>   
+>   static struct acpi_nfit_control_region *to_nfit_dcr(struct device *dev)
+>   {
+> -	struct nvdimm *nvdimm = to_nvdimm(dev);
+> -	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
+> +	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
+>   
+>   	return nfit_mem->dcr;
+>   }
+> @@ -1531,8 +1535,7 @@ static DEVICE_ATTR_RO(serial);
+>   static ssize_t family_show(struct device *dev,
+>   		struct device_attribute *attr, char *buf)
+>   {
+> -	struct nvdimm *nvdimm = to_nvdimm(dev);
+> -	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
+> +	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
+>   
+>   	if (nfit_mem->family < 0)
+>   		return -ENXIO;
+> @@ -1543,8 +1546,7 @@ static DEVICE_ATTR_RO(family);
+>   static ssize_t dsm_mask_show(struct device *dev,
+>   		struct device_attribute *attr, char *buf)
+>   {
+> -	struct nvdimm *nvdimm = to_nvdimm(dev);
+> -	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
+> +	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
+>   
+>   	if (nfit_mem->family < 0)
+>   		return -ENXIO;
+> @@ -1555,8 +1557,7 @@ static DEVICE_ATTR_RO(dsm_mask);
+>   static ssize_t flags_show(struct device *dev,
+>   		struct device_attribute *attr, char *buf)
+>   {
+> -	struct nvdimm *nvdimm = to_nvdimm(dev);
+> -	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
+> +	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
+>   	u16 flags = __to_nfit_memdev(nfit_mem)->flags;
+>   
+>   	if (test_bit(NFIT_MEM_DIRTY, &nfit_mem->flags))
+> @@ -1576,8 +1577,7 @@ static DEVICE_ATTR_RO(flags);
+>   static ssize_t id_show(struct device *dev,
+>   		struct device_attribute *attr, char *buf)
+>   {
+> -	struct nvdimm *nvdimm = to_nvdimm(dev);
+> -	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
+> +	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
+>   
+>   	return sprintf(buf, "%s\n", nfit_mem->id);
+>   }
+> @@ -1586,8 +1586,7 @@ static DEVICE_ATTR_RO(id);
+>   static ssize_t dirty_shutdown_show(struct device *dev,
+>   		struct device_attribute *attr, char *buf)
+>   {
+> -	struct nvdimm *nvdimm = to_nvdimm(dev);
+> -	struct nfit_mem *nfit_mem = nvdimm_provider_data(nvdimm);
+> +	struct nfit_mem *nfit_mem = to_nfit_mem(dev);
+>   
+>   	return sprintf(buf, "%d\n", nfit_mem->dirty_shutdown);
+>   }
