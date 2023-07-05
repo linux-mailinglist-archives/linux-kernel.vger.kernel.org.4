@@ -2,251 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B49748F1F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C13748F1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 22:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjGEUn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 16:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S233470AbjGEUma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 16:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbjGEUn1 (ORCPT
+        with ESMTP id S233439AbjGEUm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 16:43:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C363A19B;
-        Wed,  5 Jul 2023 13:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2uvD9mYwUyQ82PXrNwiJR0+WRJM0PQCF8y2F5N/cONE=; b=djk8cOqXqggfU6Ml1I4iR48Y7x
-        K1cf8UXkaxjEDlwcadptEwEIaddtNIkZ0QgDE05z3bHQsFK/T5BZk/A8EptDgFhNmtZxPrwNXlvJV
-        XqR9O+Eu8jaR3tznarXclGqLXhttQm8PKIkMB2RlU+j6j7xs3SRhCNvr1dqBVjy/o/qjV7pqiuzx2
-        dq1/AwZbWVkovVvjc8c9ypAE/fOd7iZIGqbxgefCqqqOg7/4r8r9OHqD5LuscwVdfRwKLVQhf60Zi
-        Es6WF26h4jXaLqFM+2HbZbyO0rrMU+w7jsQZkzWgNUV3/3f7udrqYKcc3yQc5ERx5e65xwVlGsfrz
-        w+G8Gp6w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qH9Jr-00CFZa-24;
-        Wed, 05 Jul 2023 20:41:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 32F36300023;
-        Wed,  5 Jul 2023 22:41:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0F151200E5E98; Wed,  5 Jul 2023 22:41:43 +0200 (CEST)
-Date:   Wed, 5 Jul 2023 22:41:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH 08/14] BROKEN: context_tracking: Make
- context_tracking_key __ro_after_init
-Message-ID: <20230705204142.GB2813335@hirez.programming.kicks-ass.net>
-References: <20230705181256.3539027-1-vschneid@redhat.com>
- <20230705181256.3539027-9-vschneid@redhat.com>
+        Wed, 5 Jul 2023 16:42:29 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487D419B
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 13:42:27 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-635dbfa710dso815296d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 13:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688589746; x=1691181746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k9IOBh2dErzq5pc0UHadZ7sAXf6kWe3n0/dn9RfHGYo=;
+        b=dh4WoR3tlKTcrXQJem35j9FNYUIenpsZPsRsu3o2yL/euzR3wgpNzFqRsyPvjtniX9
+         BGsTSgz5HwMiKXmztwf6HK4vEMBgpB3lkyj2Cz211Vf4iA518z0wdqt9dCU0H2kDwDO7
+         0tDgNaFk3pNdxVbcagamldZztzPyJDuioE1zv9d4+rARk5gQ3SJC+ChUBasjRWHRlwe3
+         D126qlNKwo+q/dkpU41pQ2FTa+o3P/2ij5eqp4c71aNUxifzhGntBeO1zSGWy1Je06Kx
+         1FuuX3Tky8IM1L5vLiI/e3mB66822aXFocZSTtzWT5cFoQ9Pq3Nn0sUAB/1QwATZD6N+
+         M+eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688589746; x=1691181746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k9IOBh2dErzq5pc0UHadZ7sAXf6kWe3n0/dn9RfHGYo=;
+        b=cFSEhaqQj3OKtExBOMxlFjhipg9qIk87tc6X1k/i1QGTyrVYYC4KuFDPN/Hu46Xo/D
+         LwkvZjtHjpm4f9nJnzkQUvezepr+lg8CniMidWcbad2YiyACF8IEmF3GFll4lmxjazBk
+         XlOTmK7feW9NsmRePbNUQpnyxAl4ke0NWw/mHNNMR511mNVX6KYbqxjeBGpWEyKdKzoO
+         CDoPyYH517uJoE+hsZPuJHFiiL/nDv5y5BCTBEDcGgN03Ccnpowvj8Qe2xTiv38E6zfc
+         HEGrPEhj6iIiR+z6ZbsZCmp2OkR4ka8PRQa6VXPgGVYMUw7fCM5WXABpK8zx+jnXIKpb
+         /SyA==
+X-Gm-Message-State: ABy/qLb/3VrrneKvnuln1zCUXCW/YJVF/pODHCaWd5jXf1MJpfIR5djQ
+        8vtQE6jEuAxlhCwI9lL06AwHj0u7Q2b1iabi9fKYrg==
+X-Google-Smtp-Source: APBJJlGWRpwfhA4itLA+4UG2F5/nsuTLfZv6whI8ChgzNcaYXQwv2I0wbKEv2ceM7nlvKMw4nMyhYlyjVDw07pw7s9E=
+X-Received: by 2002:a05:6214:b6c:b0:636:cc82:8cb4 with SMTP id
+ ey12-20020a0562140b6c00b00636cc828cb4mr12099439qvb.33.1688589746277; Wed, 05
+ Jul 2023 13:42:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705181256.3539027-9-vschneid@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230629234244.1752366-8-samitolvanen@google.com> <20230630-phrasing-strung-12e53988ad81@spud>
+In-Reply-To: <20230630-phrasing-strung-12e53988ad81@spud>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Wed, 5 Jul 2023 13:41:49 -0700
+Message-ID: <CABCJKue+4E7mbzkZqsUYzwUf9VY4+nY6+5E1aF_XyQito_399g@mail.gmail.com>
+Subject: Re: [PATCH 0/6] riscv: KCFI support
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 07:12:50PM +0100, Valentin Schneider wrote:
+Hi Conor,
 
-> BROKEN: the struct static_key lives in a read-only mapping after
-> mark_rodata_ro(), which falls apart when the KVM module is loaded after
-> init and a write to the struct happens due to e.g. guest_state_exit_irqoff()
-> relying on the static key:
+On Fri, Jun 30, 2023 at 11:48=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> Hey Sami,
+>
+> On Thu, Jun 29, 2023 at 11:42:45PM +0000, Sami Tolvanen wrote:
+> > This series adds KCFI support for RISC-V. KCFI is a fine-grained
+> > forward-edge control-flow integrity scheme supported in Clang >=3D16,
+> > which ensures indirect calls in instrumented code can only branch to
+> > functions whose type matches the function pointer type, thus making
+> > code reuse attacks more difficult.
+>
+> > base-commit: c6b0271053e7a5ae57511363213777f706b60489
+>
+> Could you please rebase this on top of v6.5-rc1 when that comes out?
+> This base-commit is some random commit from Linus' tree, that because we
+> are currently in the merge window has is not in the RISC-V trees yet,
+> and means the series wasn't applied by our CI stuff.
 
-Right.. so whoever added the whole ro_after_init jump_label support did
-a very poor job of it.
+Sure, I'll send v2 rebased on top of -rc1 once it's out. The random
+commit was the ToT at the time this series was sent out.
 
-That said; I think it is fixable. Since the key cannot be changed, we
-don't actually need to track the entries list and can thus avoid the key
-update.
-
-Something like the completely untested below...
-
----
-Subject: jump_label: Seal __ro_after_init keys
-
-When a static_key is marked ro_after_init, its state will never change
-(after init), therefore jump_label_update() will never need to iterate
-the entries, and thus module load won't actually need to track this --
-avoiding the static_key::next write.
-
-Therefore, mark these keys such that jump_label_add_module() might
-recognise them and avoid the modification.
-
-Use the special state: 'static_key_linked(key) && !static_key_mod(key)'
-to denote such keys.
-
-*UNTESTED*
-
-NOT-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/asm-generic/sections.h |  5 +++++
- include/linux/jump_label.h     |  1 +
- init/main.c                    |  1 +
- kernel/jump_label.c            | 44 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+)
-
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index db13bb620f52..c768de6f19a9 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -180,6 +180,11 @@ static inline bool is_kernel_rodata(unsigned long addr)
- 	       addr < (unsigned long)__end_rodata;
- }
- 
-+static inline bool is_kernel_ro_after_init(unsigned long addr)
-+{
-+	return addr >= (unsigned long)__start_ro_after_init &&
-+	       addr < (unsigned long)__end_ro_after_init;
-+}
- /**
-  * is_kernel_inittext - checks if the pointer address is located in the
-  *                      .init.text section
-diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
-index f0a949b7c973..88ef9e776af8 100644
---- a/include/linux/jump_label.h
-+++ b/include/linux/jump_label.h
-@@ -216,6 +216,7 @@ extern struct jump_entry __start___jump_table[];
- extern struct jump_entry __stop___jump_table[];
- 
- extern void jump_label_init(void);
-+extern void jump_label_ro(void);
- extern void jump_label_lock(void);
- extern void jump_label_unlock(void);
- extern void arch_jump_label_transform(struct jump_entry *entry,
-diff --git a/init/main.c b/init/main.c
-index ad920fac325c..cb5304ca18f4 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1403,6 +1403,7 @@ static void mark_readonly(void)
- 		 * insecure pages which are W+X.
- 		 */
- 		rcu_barrier();
-+		jump_label_ro();
- 		mark_rodata_ro();
- 		rodata_test();
- 	} else
-diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-index d9c822bbffb8..40fb72d79d7a 100644
---- a/kernel/jump_label.c
-+++ b/kernel/jump_label.c
-@@ -530,6 +530,46 @@ void __init jump_label_init(void)
- 	cpus_read_unlock();
- }
- 
-+static inline bool static_key_sealed(struct static_key *key)
-+{
-+	return (key->type & JUMP_TYPE_LINKED) && !(key->type & ~JUMP_TYPE_MASK);
-+}
-+
-+static inline void static_key_seal(struct static_key *key)
-+{
-+	unsigned long type = key->type & JUMP_TYPE_TRUE;
-+	key->type = JUMP_TYPE_LINKED | type;
-+}
-+
-+void jump_label_ro(void)
-+{
-+	struct jump_entry *iter_start = __start___jump_table;
-+	struct jump_entry *iter_stop = __stop___jump_table;
-+	struct static_key *key = NULL;
-+	struct jump_entry *iter;
-+
-+	if (WARN_ON_ONCE(!static_key_initialized))
-+		return;
-+
-+	cpus_read_lock();
-+	jump_label_lock();
-+
-+	for (iter = iter_start; iter < iter_stop; iter++) {
-+		struct static_key *iterk = jump_entry_key(iter);
-+
-+		if (!is_kernel_ro_after_init(iterk))
-+			continue;
-+
-+		if (static_key_sealed(iterk))
-+			continue;
-+
-+		static_key_seal(iterk);
-+	}
-+
-+	jump_label_unlock();
-+	cpus_read_unlock();
-+}
-+
- #ifdef CONFIG_MODULES
- 
- enum jump_label_type jump_label_init_type(struct jump_entry *entry)
-@@ -650,6 +690,9 @@ static int jump_label_add_module(struct module *mod)
- 			static_key_set_entries(key, iter);
- 			continue;
- 		}
-+		if (static_key_sealed(key))
-+			goto do_poke;
-+
- 		jlm = kzalloc(sizeof(struct static_key_mod), GFP_KERNEL);
- 		if (!jlm)
- 			return -ENOMEM;
-@@ -675,6 +718,7 @@ static int jump_label_add_module(struct module *mod)
- 		static_key_set_linked(key);
- 
- 		/* Only update if we've changed from our initial state */
-+do_poke:
- 		if (jump_label_type(iter) != jump_label_init_type(iter))
- 			__jump_label_update(key, iter, iter_stop, true);
- 	}
+Sami
