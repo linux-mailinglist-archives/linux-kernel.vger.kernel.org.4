@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCC7748322
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B1374832D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 13:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjGELov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 07:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
+        id S231731AbjGELqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 07:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjGELos (ORCPT
+        with ESMTP id S231514AbjGELqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 07:44:48 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183D11737;
-        Wed,  5 Jul 2023 04:44:46 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6b5f362f4beso5587548a34.2;
-        Wed, 05 Jul 2023 04:44:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688557486; x=1691149486;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aGmgNZpQ92H8RtcLdnvOqptQIs6xEPnLECzACgHGwvo=;
-        b=HiowYq3lg9oMHzy++NIwbhtmksQpbsNvzlMeq3JrLquCFaCtFT8LdoPXc9ikxzMER4
-         n4j37derF4/DnzHAGit+UIBBcmVUg5jEY+fzkQdPilJTeogLW7UA1ospn5ZPeXh8n03F
-         ZfTeHJ32PbGgRBSX/b0IoaLxrx8zS56lmXLoeDnUs6qvIPK0pyh//Qlb8lV/k5xeMkQp
-         ZZbfffu0yIhS1+E1ZxhN8ou1OlSWxHe/aS8gFsXXcRbokJPIxv4eAYi/BFB1G+RsgEMx
-         eWa+DNZlvaWO9Ts59JVB5dVhtuMzGJdQeh/v5FhheEGehjoIVo+f4qYjBgXRohy1/1zq
-         mMjg==
-X-Gm-Message-State: ABy/qLZbOP3cgjEkGNVYbpVzGcm7l/+6CVzlayo7gZyyhykd5RW0cnxK
-        oagq8tukqCQDGmc/mkhIGEtuYwKiKrd9PDoL
-X-Google-Smtp-Source: APBJJlE29szK4gZbcjRGLGDhf4x+ZEWEI7JwaN0ovkUsopslhaFgGeEKb2mbAqRj8q+ENlQbRP+q/g==
-X-Received: by 2002:a05:6358:cb2f:b0:134:e413:4d3 with SMTP id gr47-20020a056358cb2f00b00134e41304d3mr11341085rwb.16.1688557485856;
-        Wed, 05 Jul 2023 04:44:45 -0700 (PDT)
-Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id n9-20020a635c49000000b00543e9e17207sm17920311pgm.30.2023.07.05.04.44.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 04:44:44 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 20:44:43 +0900
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        marek.vasut+renesas@gmail.com, yoshihiro.shimoda.uh@renesas.com,
-        linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lpieralisi@kernel.org,
-        robh@kernel.org, bhelgaas@google.com, alistair23@gmail.com
-Subject: Re: [PATCH] PCI: rcar-ep: Include linux/pci-epf.h instead of
- linux/pci-epc.h
-Message-ID: <20230705114443.GA3555378@rocinante>
-References: <20230705104824.174396-1-alistair@alistair23.me>
- <7536d9a3-4738-2bc2-e33e-d93347893865@kernel.org>
+        Wed, 5 Jul 2023 07:46:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57461736
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 04:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688557511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qsSjD1XIc1/jKyhDNjcqV8yyQFT6uszClHQCkBLneM8=;
+        b=BnF9ZFzbevN1mqHtczbQePgHRQW/McbuzdvHyCP/vnx3WNOj3WLi1PFXWkNOr/VOvA1u0A
+        l+vv76ORV0Z+gUXly7Bf2YDykrhIoRdWQ9wyTISyebldFqD9oOGtRhBsVlWaW0fBNnAHu7
+        XyUrzhKj3iSdadT0HfyrEB8Cs/f2Xv0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-_b8qkYa1MdyJVekOnvtR3A-1; Wed, 05 Jul 2023 07:45:10 -0400
+X-MC-Unique: _b8qkYa1MdyJVekOnvtR3A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA7BE1C08DAA;
+        Wed,  5 Jul 2023 11:45:09 +0000 (UTC)
+Received: from max-t490s.redhat.com (unknown [10.39.208.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BA6E140C6CCD;
+        Wed,  5 Jul 2023 11:45:07 +0000 (UTC)
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
+        david.marchand@redhat.com, lulu@redhat.com
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
+        Maxime Coquelin <maxime.coquelin@redhat.com>
+Subject: [PATCH] vduse: Use proper spinlock for IRQ injection
+Date:   Wed,  5 Jul 2023 13:45:05 +0200
+Message-ID: <20230705114505.63274-1-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7536d9a3-4738-2bc2-e33e-d93347893865@kernel.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The IRQ injection work used spin_lock_irq() to protect the
+scheduling of the softirq, but spin_lock_bh() should be
+used.
 
-> > pci-epc.h doesn't define the members of the pci_epf_header struct, so
-> > trying to access them results in errors like this:
-> > 
-> >     error: invalid use of undefined type 'struct pci_epf_header'
-> >       167 |                 val = hdr->vendorid;
-> > 
-> > Instead let's include pci-epf.h which not only defines the
-> > pci_epf_header but also includes pci-epc.h.
+With spin_lock_irq(), we noticed delay of more than 6
+seconds between the time a NAPI polling work is scheduled
+and the time it is executed.
 
-[...]
-> It is odd that the the build bot did not detect this...
+Fixes: c8a6153b6c59 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
+Cc: xieyongji@bytedance.com
 
-This is a bit of a surprise to me too, especially since none of the usual
-bots pick this up, and I can't seem to find such a failure in the nightly
-CI logs either.
+Suggested-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
+---
+ drivers/vdpa/vdpa_user/vduse_dev.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Alistair, how did you stumble into this issue?  Also, which version or
-a tree would that be?
-  
-  Thank you!
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index dc38ed21319d..df7869537ef1 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -935,10 +935,10 @@ static void vduse_dev_irq_inject(struct work_struct *work)
+ {
+ 	struct vduse_dev *dev = container_of(work, struct vduse_dev, inject);
+ 
+-	spin_lock_irq(&dev->irq_lock);
++	spin_lock_bh(&dev->irq_lock);
+ 	if (dev->config_cb.callback)
+ 		dev->config_cb.callback(dev->config_cb.private);
+-	spin_unlock_irq(&dev->irq_lock);
++	spin_unlock_bh(&dev->irq_lock);
+ }
+ 
+ static void vduse_vq_irq_inject(struct work_struct *work)
+@@ -946,10 +946,10 @@ static void vduse_vq_irq_inject(struct work_struct *work)
+ 	struct vduse_virtqueue *vq = container_of(work,
+ 					struct vduse_virtqueue, inject);
+ 
+-	spin_lock_irq(&vq->irq_lock);
++	spin_lock_bh(&vq->irq_lock);
+ 	if (vq->ready && vq->cb.callback)
+ 		vq->cb.callback(vq->cb.private);
+-	spin_unlock_irq(&vq->irq_lock);
++	spin_unlock_bh(&vq->irq_lock);
+ }
+ 
+ static bool vduse_vq_signal_irqfd(struct vduse_virtqueue *vq)
+-- 
+2.41.0
 
-	Krzysztof
