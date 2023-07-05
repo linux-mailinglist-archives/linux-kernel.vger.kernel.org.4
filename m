@@ -2,156 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2344F748E3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFEE748E5B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 21:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbjGETuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 15:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S234083AbjGETwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 15:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbjGETuD (ORCPT
+        with ESMTP id S233278AbjGETwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:50:03 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC119172B;
-        Wed,  5 Jul 2023 12:50:02 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53fa455cd94so3383720a12.2;
-        Wed, 05 Jul 2023 12:50:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688586602; x=1691178602;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tyoCCM37OnwHyJMTXYnRXAELsPqSydQwA/qPcmdHVo=;
-        b=FVviDHXA0yGiBRWeFvNZ6ueAyefkaEwuzhg5cADlfy3G2sIIFHnJrjmzsiHQS2lyYT
-         0KqXT8Vb+xu6y95CHbTY6nKr3FsYAuzrPYr4BmCWwbmwNFE7NzI3F4WNNSazySAVmHv3
-         7HeFEDq5zqiiL8RqNI0CtepU3kCaQ9km/DMbVvgANAiVfs1GlvapnjwAXFmzqxvx/E2V
-         HgudjYIwo4P/VQHRCs+UwEws4eRKtGEONVO7liz8qMbzXuhs1PzmKH/eVrHl66Iddefx
-         EvbZI0137mSGCzUk2YQ+CZdgts2QMzDPaHcZbwEbycqelsikp7tHrKkiKNNPrBULyA/4
-         H/GQ==
+        Wed, 5 Jul 2023 15:52:42 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5083A1BC8;
+        Wed,  5 Jul 2023 12:52:11 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-783698a37beso355521139f.0;
+        Wed, 05 Jul 2023 12:52:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688586602; x=1691178602;
+        d=1e100.net; s=20221208; t=1688586717; x=1691178717;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8tyoCCM37OnwHyJMTXYnRXAELsPqSydQwA/qPcmdHVo=;
-        b=M4XIA8ywtR1qT6+FuNZaMnlgj0kVOPFim4/C7h8XsciTFxLIojRpzF+G8v9labAXwb
-         h/GO0n6dXgd4vDwrsYu0OaHC68jBQP40TMy1lWF3QRzzQ8W2H0S1glNRLm4kIJ8DOe7Z
-         6Zw1ktwh0zjsifRpo8Emm4HK9PAGP1ZtmtIa8iEjguu6POcFmkQEGyc5JhjVqF6/u7ec
-         w7usTA3k6dmiaJLzAIlNiIGsBUvHvCM4gtP7qEKllzmAOfDCe+PwOMepK/taqMHYVYPs
-         OpqVlVmnts9dboiAShBF9YuXsrq9y8of9MKXTkSDj0vaSuM+H2+mEts+g39XmxDv7m2T
-         eKsg==
-X-Gm-Message-State: ABy/qLbJW9Zi2AFJ/owGwoZ9mK4OVYQbS+ixJGKVbODWa5t0/OdVvfxL
-        q93fjDkdYf4AoXV438T27d8=
-X-Google-Smtp-Source: APBJJlHeLo3E50/tqH2jihcjnkuXjQBe9KohXjXTPE+lSDxOcA1T+QQDhm5ScmIESeySqsUaB2K7Aw==
-X-Received: by 2002:a05:6a20:2583:b0:12e:4496:c063 with SMTP id k3-20020a056a20258300b0012e4496c063mr11786012pzd.2.1688586602055;
-        Wed, 05 Jul 2023 12:50:02 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:c628:31be:68ae:86f5:48b9])
-        by smtp.gmail.com with ESMTPSA id u15-20020a17090341cf00b001b8a85489a3sm3275110ple.262.2023.07.05.12.49.57
+        bh=OgxCgI0UhXaalrd8FtZ3lKHjbHQYR+CHqoq8oQgcBj8=;
+        b=X3pVCOmJpBbfhdZcDChPxYRTG0mCFQZt8+ukhvnQO3NhFvLkORBDgf3sjcjqkuiqD4
+         amg9a+jR8VFrCeWiLt42DJ3jsdXBvNPi37tbB3DyFEL1DHJ86PgVwnuHUxNTq1cJbrBC
+         9zFUraBoag4A+IJSmyYJDIMdK5G2XO96jjlrfriv7urOV/j8Ryo7Ym0D+PpZKHiaN3n/
+         OtgSihTll7aGI5tSINq5j07NxsNaZwG6BZ+hLXqV9/mcr4NOUFPQcXWQHFVIjexw5zjP
+         nDwLBebILpX9576jAZUotFTjdZF36D0b3saB8FCvMNVtJlPeaCHKAGTQbiwzTGu6zhAQ
+         FWaA==
+X-Gm-Message-State: ABy/qLYRAwDzRWznqsLkTlFwPJKXLZNs1esCgkAEzgmkokEPhPWQgFPT
+        zewTzFqlW2YifnWhcB57kw==
+X-Google-Smtp-Source: APBJJlFfE26pMmnc4X7bL1ZeGdt2/p9FLN9uM6KgYidS2YWs2WUaDK7eEf0pVgwqz52ouAz0T6SvXg==
+X-Received: by 2002:a5e:891a:0:b0:785:ff35:f340 with SMTP id k26-20020a5e891a000000b00785ff35f340mr118432ioj.14.1688586717448;
+        Wed, 05 Jul 2023 12:51:57 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id h2-20020a02c4c2000000b00411bdcdc488sm7729558jaj.173.2023.07.05.12.51.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:50:01 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 01:19:54 +0530
-From:   Anup Sharma <anupnewsmail@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anup Sharma <anupnewsmail@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] scripts: python: Add trace end processing and JSON
- output
-Message-ID: <d225862cdbc84cf5aba365f29886cb39b041cabc.1688585597.git.anupnewsmail@gmail.com>
-References: <cover.1688585597.git.anupnewsmail@gmail.com>
+        Wed, 05 Jul 2023 12:51:56 -0700 (PDT)
+Received: (nullmailer pid 1730881 invoked by uid 1000);
+        Wed, 05 Jul 2023 19:51:54 -0000
+Date:   Wed, 5 Jul 2023 13:51:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: mtd: Add SEAMA partition bindings
+Message-ID: <20230705195154.GA1702900-robh@kernel.org>
+References: <20230705-seama-partitions-v2-0-9d349f0d5ab7@linaro.org>
+ <20230705-seama-partitions-v2-1-9d349f0d5ab7@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1688585597.git.anupnewsmail@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230705-seama-partitions-v2-1-9d349f0d5ab7@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inside the trace end function the final output will be dumped
-to standard output in JSON gecko format. Additionally, constants
-such as USER_CATEGORY_INDEX, KERNEL_CATEGORY_INDEX, CATEGORIES, and
-PRODUCT are defined to provide contextual information.
-Also added _addThreadSample call which was missing.
+On Wed, Jul 05, 2023 at 12:17:46PM +0200, Linus Walleij wrote:
+> This types of NAND partitions appear in OpenWrt and
+> U-Boot.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - Fix up the binding to be childless
+> ---
+>  .../bindings/mtd/partitions/partitions.yaml        |  1 +
+>  .../devicetree/bindings/mtd/partitions/seama.yaml  | 50 ++++++++++++++++++++++
+>  2 files changed, 51 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/partitions/partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/partitions.yaml
+> index 2edc65e0e361..9bd0a8d800da 100644
+> --- a/Documentation/devicetree/bindings/mtd/partitions/partitions.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/partitions/partitions.yaml
+> @@ -21,6 +21,7 @@ oneOf:
+>    - $ref: linksys,ns-partitions.yaml
+>    - $ref: qcom,smem-part.yaml
+>    - $ref: redboot-fis.yaml
+> +  - $ref: seama.yaml
 
-Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
----
- .../scripts/python/firefox-gecko-converter.py | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
+I think this is in the wrong place. These should be device level 
+partitioning schemas, not an individual partition type. (Though nesting 
+is possible)
 
-diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
-index 910e598c743f..6a2a4d816799 100644
---- a/tools/perf/scripts/python/firefox-gecko-converter.py
-+++ b/tools/perf/scripts/python/firefox-gecko-converter.py
-@@ -18,9 +18,47 @@ sys.path.append(os.environ['PERF_EXEC_PATH'] + \
- from perf_trace_context import *
- from Core import *
- 
-+USER_CATEGORY_INDEX = 0
-+KERNEL_CATEGORY_INDEX = 1
- thread_map = {}
- start_time = None
- 
-+CATEGORIES = [
-+    {'name': 'User', 'color': 'yellow', 'subcategories': ['Other']},
-+    {'name': 'Kernel', 'color': 'orange', 'subcategories': ['Other']}
-+]
-+
-+PRODUCT = os.popen('uname -op').read().strip()
-+
-+def trace_end():
-+    thread_array = list(map(lambda thread: thread['finish'](), thread_map.values()))
-+    for thread in thread_array:
-+        key = thread['samples']['schema']['time']
-+        thread['samples']['data'].sort(key=lambda data : float(data[key]))
-+
-+    result = {
-+        'meta': {
-+            'interval': 1,
-+            'processType': 0,
-+            'product': PRODUCT,
-+            'stackwalk': 1,
-+            'debug': 0,
-+            'gcpoison': 0,
-+            'asyncstack': 1,
-+            'startTime': start_time,
-+            'shutdownTime': None,
-+            'version': 24,
-+            'presymbolicated': True,
-+            'categories': CATEGORIES,
-+            'markerSchema': []
-+            },
-+        'libs': [],
-+        'threads': thread_array,
-+        'processes': [],
-+        'pausedRanges': []
-+    }
-+    json.dump(result, sys.stdout, indent=2)
-+
- def process_event(param_dict):
- 	global start_time
- 	global thread_map
-@@ -159,6 +197,8 @@ def process_event(param_dict):
- 			stack.append(call['sym']['name'] + f' (in {call["dso"]})')
- 		if len(stack) != 0:
- 			stack = stack[::-1]
-+			_addThreadSample(pid, tid, thread_name, time_stamp, stack)
- 	else:
- 		mod = param_dict['symbol'] if 'symbol' in param_dict else '[unknown]'
- 		dso = param_dict['dso'] if 'dso' in param_dict else '[unknown]'
-+		_addThreadSample(pid, tid, thread_name, time_stamp, [mod + f' (in {dso})'])
--- 
-2.34.1
+>  
+>  properties:
+>    compatible: true
+> diff --git a/Documentation/devicetree/bindings/mtd/partitions/seama.yaml b/Documentation/devicetree/bindings/mtd/partitions/seama.yaml
+> new file mode 100644
+> index 000000000000..5ed7764bba69
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/partitions/seama.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/partitions/seama.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Seattle Image Partitions
+> +
+> +description: The SEAttle iMAge (SEAMA) partition is a type of partition
+> +  used for NAND flash devices. This type of flash image is found in some
+> +  D-Link routers such as DIR-645, DIR-842, DIR-859, DIR-860L, DIR-885L,
+> +  DIR890L and DCH-M225, as well as in WD and NEC routers on the ath79
+> +  (MIPS), Broadcom BCM53xx, and RAMIPS platforms. This partition type
+> +  does not have children defined in the device tree, they need to be
+> +  detected by software.
+> +
+> +allOf:
+> +  - $ref: partition.yaml#
+> +
+> +maintainers:
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +
+> +select: false
 
+Remove this and your example will fail. You need unevaluatedProperties.
+
+There's a problem in partitions.yaml. It never gets applied, so this 
+schema never gets applied. The default 'select' is generated based on 
+$nodename or compatible, but it has neither. This needs some more 
+thought on how to fix given the variable way partitions can be combined. 
+Probably at a minimum, all the 'select: false' need to be removed. 
+
+> +
+> +properties:
+> +  compatible:
+> +    const: seama
+> +
+> +  '#address-cells': false
+> +
+> +  '#size-cells': false
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    partitions {
+> +        compatible = "fixed-partitions";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        partition@0 {
+> +            compatible = "seama";
+> +            reg = <0x0 0x800000>;
+> +            label = "firmware";
+> +        };
+> +    };
+> 
+> -- 
+> 2.34.1
+> 
