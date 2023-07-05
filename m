@@ -2,144 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21765748A00
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5549E7489FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbjGERRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
+        id S232298AbjGERQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbjGERQ6 (ORCPT
+        with ESMTP id S230268AbjGERQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:16:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDE519AB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688577365;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T35piQgq4+7zJ5KZwE9xl6DoVBjgPCYheAfovtVFOD4=;
-        b=itHRMICnkB7pLN9/Pu5vpN+XrSTGcjTYyImdDtP8wVqPSI2aKwSIg53XCcjLLlYN/z4hY1
-        6vMlN7OFW3N9pG93I/UuYjzM539cpOTW0xecg9rtJ/GnL0fP+tbL4jHE996H/CciwxovbT
-        Lmv/H8uZeSWd6c7oOn18RY+rsIxhlqk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-569-0rHPig1HP-ek_gCFNdaqrw-1; Wed, 05 Jul 2023 13:16:04 -0400
-X-MC-Unique: 0rHPig1HP-ek_gCFNdaqrw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fb8284465aso47298905e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:16:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688577363; x=1691169363;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T35piQgq4+7zJ5KZwE9xl6DoVBjgPCYheAfovtVFOD4=;
-        b=C/S15fKhuGIWUNI31qF+zg7tiFfJZgKYe5+xuPL/ble0syu4wZcugIRewIKv8o3iMu
-         y8F60CjT3MPH+H6UnN9xbB/0OPG85We2NOkxi5GVlbCd39z3aLomDnOhPV2GK5U57NcR
-         f9jzUZySOLo4nv87kdDU/ZYSAH2i/TfugmdZA8WcAzGDzKnxw+NdUtX4G0EgiCxg2h3U
-         tdHnkfVo7pxlo/tO5sz0VxxKX51QMwkwD7r6U1AqX+O08FyXDH8e7QfH41+0XiBBx8BS
-         bMJ8T2gD0QG3NM2oY2WeFjziAwLS2hYcpaF3QOB1uyXls0CU8GttJODesetGLqASLFip
-         hS9w==
-X-Gm-Message-State: ABy/qLYAwwJts8+n2vtRgOxNbvIZrLR2A8gHVj5f/rUcKr1+x0kB43ZL
-        9QQHX9vJ0l2ies9bJ2R604hbX8EZ77EMXqyDjE+us/MzLncT9qmpMdJtDppIlRX45yAr3rjgKAA
-        qjeGnJ3SB9AOM7OPMqHHIPhrM
-X-Received: by 2002:a5d:55d1:0:b0:314:3b9c:f02f with SMTP id i17-20020a5d55d1000000b003143b9cf02fmr6981115wrw.49.1688577363530;
-        Wed, 05 Jul 2023 10:16:03 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEUfAcMRX29HqJCQ1c1CH56suwm4NfOCQ9BPaxEr09A1xPnlHPvpu8OfU/EAZeHFIGE5k7pgw==
-X-Received: by 2002:a5d:55d1:0:b0:314:3b9c:f02f with SMTP id i17-20020a5d55d1000000b003143b9cf02fmr6981094wrw.49.1688577363129;
-        Wed, 05 Jul 2023 10:16:03 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c71a:1c00:e2b1:fc33:379b:a713? (p200300cbc71a1c00e2b1fc33379ba713.dip0.t-ipconnect.de. [2003:cb:c71a:1c00:e2b1:fc33:379b:a713])
-        by smtp.gmail.com with ESMTPSA id n10-20020a05600c294a00b003fbaade0735sm2682596wmd.19.2023.07.05.10.15.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 10:16:02 -0700 (PDT)
-Message-ID: <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com>
-Date:   Wed, 5 Jul 2023 19:15:48 +0200
+        Wed, 5 Jul 2023 13:16:32 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388BD173F;
+        Wed,  5 Jul 2023 10:16:31 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365Fgupx003052;
+        Wed, 5 Jul 2023 19:16:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=gGj1Dt59rSJT83vctVPmKjU0cUWyk4vuQ+qAY3jlC0c=;
+ b=Yn4+vjqDron9kSm/b6nn+ZJOvsJCQ9VvAcn5MPryAC9quwIf5e2Pa7FvsSqyj+9X09Em
+ wkeVJhoyUl+2BK+/4JNRY91aeCqOWuiAkEOtGxODgYj/+9OUe8w20bpjiLlV22wUMZJL
+ YZBklYzrRcD/55tFetLtmWMklboVwTfJacbMvj0EhQoazTs/VxVcMs7HZ9Oh4qupJhQV
+ Hyqx7yM2feffQdPpbmfwBc/R0guYM5huN2JAh11O2Rvk3IF5moz7C6rppEQLOBrp6eXu
+ 8PU0cRzewng9Ie5t6KTXzcbfDBHaODqGGVrxCuITVdFyZn1MnfpqoK0JFMoGuGqFaczS gA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rn8c9t0kn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 19:16:19 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 40A76100060;
+        Wed,  5 Jul 2023 19:16:17 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 263E324B89D;
+        Wed,  5 Jul 2023 19:16:17 +0200 (CEST)
+Received: from [10.201.20.168] (10.201.20.168) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 5 Jul
+ 2023 19:16:16 +0200
+Message-ID: <ec4f025e-680f-2145-7ca8-1ee6b38baa43@foss.st.com>
+Date:   Wed, 5 Jul 2023 19:16:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] spi: stm32: disable device mode with st,stm32f4-spi
+ compatible
 Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     jirislaby@kernel.org, jacobly.alt@gmail.com,
-        holger@applied-asynchrony.com, hdegoede@redhat.com,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230705171213.2843068-1-surenb@google.com>
- <20230705171213.2843068-3-surenb@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230705171213.2843068-3-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230627123906.147029-1-valentin.caron@foss.st.com>
+ <0815474b-a8fa-f486-fc6e-a85df88ed9b9@linaro.org>
+ <c232e3f1-b703-d8d2-7e2d-19ed3f5fc3ad@foss.st.com>
+ <79505e19-c5ee-36ee-c8ae-344c15f8b108@linaro.org>
+From:   Valentin CARON <valentin.caron@foss.st.com>
+In-Reply-To: <79505e19-c5ee-36ee-c8ae-344c15f8b108@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.201.20.168]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_08,2023-07-05_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.07.23 19:12, Suren Baghdasaryan wrote:
-> A memory corruption was reported in [1] with bisection pointing to the
-> patch [2] enabling per-VMA locks for x86.
-> Disable per-VMA locks config to prevent this issue while the problem is
-> being investigated. This is expected to be a temporary measure.
-> 
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=217624
-> [2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@google.com
-> 
-> Reported-by: Jiri Slaby <jirislaby@kernel.org>
-> Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org/
-> Reported-by: Jacob Young <jacobly.alt@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217624
-> Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling first")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->   mm/Kconfig | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index 09130434e30d..0abc6c71dd89 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -1224,8 +1224,9 @@ config ARCH_SUPPORTS_PER_VMA_LOCK
->          def_bool n
->   
->   config PER_VMA_LOCK
-> -	def_bool y
-> +	bool "Enable per-vma locking during page fault handling."
->   	depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
-> +	depends on BROKEN
->   	help
->   	  Allow per-vma locking during page fault handling.
->   
-Do we have any testing results (that don't reveal other issues :) ) for 
-patch #1? Not sure if we really want to mark it broken if patch #1 fixes 
-the issue.
+Hi, Krzysztof
 
--- 
-Cheers,
+On 7/1/23 10:09, Krzysztof Kozlowski wrote:
+> On 28/06/2023 18:21, Valentin CARON wrote:
+>> Hi,
+>>
+>> On 6/27/23 15:39, Krzysztof Kozlowski wrote:
+>>> On 27/06/2023 14:39, Valentin Caron wrote:
+>>>> STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
+>>>> Stop probing if this case happens, and print an error with involved
+>>>> compatible.
+>>>>
+>>> ...
+>>>
+>>>>    
+>>>>    static const struct of_device_id stm32_spi_of_match[] = {
+>>>> @@ -1798,8 +1802,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
+>>>>    	struct device_node *np = pdev->dev.of_node;
+>>>>    	bool device_mode;
+>>>>    	int ret;
+>>>> +	const char *compatible =
+>>>> +		of_match_device(pdev->dev.driver->of_match_table, &pdev->dev)->compatible;
+>>> The goal was to replace it, so drop it.
+>> Is is still needed for dev_err, so I can't
+> Why do you need it for dev_err? Isn't it entirely redundant?
+>
+> Best regards,
+> Krzysztof
+>
+Only to have a clearer error message. To let know to user that spi 
+device is not available on this device.
 
-David / dhildenb
+Right now, there is only one compatible where spi device can't be 
+enable. So I could use a static message. But this is not the best if a 
+new compatible is added.
 
+Regards,
+Valentin
