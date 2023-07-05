@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E0F7481CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85AD7481D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 12:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjGEKOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 06:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S231561AbjGEKQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 06:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjGEKOl (ORCPT
+        with ESMTP id S229772AbjGEKQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 06:14:41 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1328FE57;
-        Wed,  5 Jul 2023 03:14:39 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso46211685e9.0;
-        Wed, 05 Jul 2023 03:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688552077; x=1691144077;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dlDTGxKAa9u+MMfrqxFnjprJCty9LTNk5K6Uo9s9JGE=;
-        b=FMqifX2a0syOcCH/4H/HWrk26qkao7Gk6vgpVmIKL9hFDe6xc/jtngBFhuXHVaXQRD
-         q2xMVdrHmZe+W54XWO8cNQ3oqjreEPSNFlAoM372QI5DNvShq1arjPSmF0XxSzhTw6Lg
-         uc5/iDik2rXx7xs9oB9jfA2tRHNU6/+ane5lw6nwIvfvmOb0I6ZR1RW5QhBcGRkOWCik
-         2zxB5DEVfkNdcl+Pt/hlcKSS3257cvANVWdJONC06ylqTx5yKLTpLR9mbVpWB68YIhA+
-         BoE17WuaJIaHYpy6QVvk++zohLl5stBmZPcFX97v6uPbBA42ogccTDc1PKSvtLNnlkW4
-         hCIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688552077; x=1691144077;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dlDTGxKAa9u+MMfrqxFnjprJCty9LTNk5K6Uo9s9JGE=;
-        b=VkOfdmvCSaP7KAIw8m1sK5A/zv/s3nLxkQiI6o+nHQlIpL8wAu9CAw20uCAp142ffV
-         2aVXnFhnhiWM7eF4oLvC5rBQA9OoJIlp1tGZ/v+as+yyDup2l+sm+V84Rs81fXNvC70A
-         c8Kwwm6DlL3iIlLEAC+LPjcbVObg0jxFtfcHaoO0k3B6Qg8Md3GrErkcSIUkfLRVOKLE
-         H7tUooNHGAwF0BCGQwksUd1S68zRz7rEGVVseg5ng3TJNAg+8gh4AphG2AX1VEWtVmIU
-         wVmEoEeoJG6/83rKbwPVQxwEUG5ffIg7yjw7XluGVd1ExenfmH2raHkcydqcJVRiVdZm
-         rNpA==
-X-Gm-Message-State: AC+VfDxXhuF5NHiNL+G/jigLFWvn9AL9/xJDeXW3ijfjBige8nkfVwpc
-        ySxH+4ELJ45TEtz3GGql9Lo=
-X-Google-Smtp-Source: ACHHUZ7K5EfFMNSC4PLTQGysSNBsmGFHkS+8k8ibS7sZA5Nzf+ZclnTrpg63X8YXOsKfj2XY0LGojA==
-X-Received: by 2002:a05:600c:2201:b0:3fa:91d2:55b6 with SMTP id z1-20020a05600c220100b003fa91d255b6mr13704823wml.9.1688552077291;
-        Wed, 05 Jul 2023 03:14:37 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id i5-20020a05600c290500b003fbab76165asm1672277wmd.48.2023.07.05.03.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 03:14:36 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests: Fix spelling mistake "regesters" -> "registers"
-Date:   Wed,  5 Jul 2023 11:14:35 +0100
-Message-Id: <20230705101435.1995171-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 5 Jul 2023 06:16:06 -0400
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DD0180;
+        Wed,  5 Jul 2023 03:16:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1688552153; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=TO6CBiZM6rIvspbbCHpYwuYx131U55KHTzl6zYjuIem9eFoOzWBUVmKAPJH4O/iqJNGJl53ZeNoC5N5WT5O8Fy8rrJy5lNMbKn91eNarLyPqunG+9amng/ZoRRNkvPDAoo9c7gNiRU6ZTBI3W1neYjr8uV1QDZ4QEiRzz07iMjQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1688552153; h=Content-Type:Content-Transfer-Encoding:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=ORF7Ovs8ZIRMgtit0KQW/qwrGTpNeUvZ6qy0scFOmfo=; 
+        b=mjNfPRgzKZmDKXtyngbIboAw1fS0KTcsbNUirmwgDH4cp36IRJDZWyumEHLuoXOvSuK/qOCOEI+n8mmUdHUlp7hE1vJ4j1lQ33sf2RhYUcKOjjrk3jJaH+rhg8IDk3N4xn207h04gpAroFSo7zCAAnVDHrRBHYCKozeBokm6HSI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1688552153;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:From:From:To:To:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+        bh=ORF7Ovs8ZIRMgtit0KQW/qwrGTpNeUvZ6qy0scFOmfo=;
+        b=J43UCRVChYV0ylWPgjjT5A8Q5uURtmGig7XxWGNT+lFnNerL80vbJdn+VFCJzoJO
+        x4ZK2a79saV7P/Uu8+19I1RoAShwMkq1zGUKXTAfPZqb5w8Og9ytwxA7KpxrIr2t+Fj
+        yVABDip1QuKTqvQk3hMXi/wKoUxbo/vT07S8XD1c=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 16885521516611005.9087764533741; Wed, 5 Jul 2023 03:15:51 -0700 (PDT)
+Date:   Wed, 05 Jul 2023 18:15:51 +0800
+From:   Li Chen <me@linux.beauty>
+To:     "Tom Joseph" <tjoseph@cadence.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
+        "Rob Herring" <robh@kernel.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "linux-pci" <linux-pci@vger.kernel.org>
+Message-ID: <189258d19e1.1132188131010980.7371471641115980549@linux.beauty>
+In-Reply-To: 
+Subject: [PATCH] PCI: cadence: remove unused cdns_plat_pcie->is_rc
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are spelling mistakes in ksft_test_result_fail messages. Fix them.
+We already have cdns_plat_pcie_of_data->is_rc.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Li Chen <lchen@ambarella.com>
 ---
- tools/testing/selftests/riscv/vector/v_initval_nolibc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pci/controller/cadence/pcie-cadence-plat.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/vector/v_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
-index 66764edb0d52..62d8884a1a0d 100644
---- a/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
-+++ b/tools/testing/selftests/riscv/vector/v_initval_nolibc.c
-@@ -49,14 +49,14 @@ int main(void)
- 	ksft_print_msg("vl = %lu\n", vl);
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+index bac0541317c1..e091fef9c919 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+@@ -18,12 +18,9 @@
+ /**
+  * struct cdns_plat_pcie - private data for this PCIe platform driver
+  * @pcie: Cadence PCIe controller
+- * @is_rc: Set to 1 indicates the PCIe controller mode is Root Complex,
+- *         if 0 it is in Endpoint mode.
+  */
+ struct cdns_plat_pcie {
+ 	struct cdns_pcie        *pcie;
+-	bool is_rc;
+ };
  
- 	if (datap[0] != 0x00 && datap[0] != 0xff) {
--		ksft_test_result_fail("v-regesters are not properly initialized\n");
-+		ksft_test_result_fail("v-registers are not properly initialized\n");
- 		dump(datap, vl * 4);
- 		exit(-1);
- 	}
+ struct cdns_plat_pcie_of_data {
+@@ -77,7 +74,6 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+ 		rc->pcie.dev = dev;
+ 		rc->pcie.ops = &cdns_plat_ops;
+ 		cdns_plat_pcie->pcie = &rc->pcie;
+-		cdns_plat_pcie->is_rc = is_rc;
  
- 	for (i = 1; i < vl * 4; i++) {
- 		if (datap[i] != datap[0]) {
--			ksft_test_result_fail("detect stale values on v-regesters\n");
-+			ksft_test_result_fail("detect stale values on v-registers\n");
- 			dump(datap, vl * 4);
- 			exit(-2);
- 		}
+ 		ret = cdns_pcie_init_phy(dev, cdns_plat_pcie->pcie);
+ 		if (ret) {
+@@ -105,7 +101,6 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+ 		ep->pcie.dev = dev;
+ 		ep->pcie.ops = &cdns_plat_ops;
+ 		cdns_plat_pcie->pcie = &ep->pcie;
+-		cdns_plat_pcie->is_rc = is_rc;
+ 
+ 		ret = cdns_pcie_init_phy(dev, cdns_plat_pcie->pcie);
+ 		if (ret) {
 -- 
-2.39.2
+2.25.1
+
 
