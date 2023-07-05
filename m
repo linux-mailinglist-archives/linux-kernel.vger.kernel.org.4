@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F96747AC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD93747ACC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 02:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjGEAnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jul 2023 20:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S231363AbjGEAug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jul 2023 20:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjGEAnR (ORCPT
+        with ESMTP id S229512AbjGEAud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jul 2023 20:43:17 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3171B6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 17:43:16 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-7659924cd9bso654895785a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 17:43:16 -0700 (PDT)
+        Tue, 4 Jul 2023 20:50:33 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9822910D5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jul 2023 17:50:32 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-c4e4c258ba9so3859620276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jul 2023 17:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688517795; x=1691109795;
+        d=broadcom.com; s=google; t=1688518232; x=1691110232;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpbowxm69YZmMWoNEGdziSl10Dw58zu3jSN67Mk4rqA=;
-        b=H54g4VSAzsncwOgxqrzEhDIdDH9OyjI+0hOg7aTvnVSR1PPxit4B715IkgvT1CP0gL
-         VWf0jqVBQtIWXfNm4zgG5j0u6SD6p1WhAyiL9Rfr2ClqVolB616AAK28nRfdBt5UZPB7
-         7EJ57/9zfyIa/82KpgC/w1UrmnVWJ/6gWVnRQ=
+        bh=+v9IDPZWjJ4VWAyg2+HlN6MMs3iQJ76LtXDfbdbC71E=;
+        b=NvrSbUooMBSpU0XfJ9pxDJm6K1EBEMCcvAcHN4onIria85k7lwhSmBompycBo4NZ+A
+         hJtf0DQZ2OgyUhSKD3XtYl6f/3PUtcumCkV1Zt4PqlzRtCbKC5zVfkUJjZO6CcrT1usT
+         LTVxkAELqHAWy1jBhvvb52JFpbiW1/48gpDvk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688517795; x=1691109795;
+        d=1e100.net; s=20221208; t=1688518232; x=1691110232;
         h=in-reply-to:mime-version:user-agent:date:message-id:from:references
          :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kpbowxm69YZmMWoNEGdziSl10Dw58zu3jSN67Mk4rqA=;
-        b=J9+1L47nSP7FjZbwuHBQzQWLgXtR5G0Oy/BfM27bGS6DzQ4EvF1c7Y52qSJev/Vkp8
-         18nq9p9uituOkR7guSXOhytoHAIWwNkYz4t6aXl6QmTKJ7gkCkqYwBo7B2XlyuKn3oBv
-         gAdVbSzJKdq2UuwzRmnmLYGLGBKR9dcSitUXKYMPCIPiCoQPkxEESr41v8tntvxtdq9f
-         v5LAn5Pxjw78jgOQOnK8lIFQ4oyhYwbq+kQBE8I4xmvSkcEDcKKp0iYu2lRLxHmASgNL
-         XfurXrAXfaTQMvB8AOsIqbAuFGdlJNvl5385XPdOS+poc1h3/hRfEJ6XEpGblyCnin+q
-         3HXA==
-X-Gm-Message-State: ABy/qLbRouuzC+l9KLy1O9IBZSXbXR8uEq4FyjSCeRJrV3rRV/qme22W
-        l2Wx9CsTwkG0+TUrZfZHKT0t0Q==
-X-Google-Smtp-Source: APBJJlHZTW0H2cLXy+eKDFNVHJOzGgR9TQkQkWOHFPZif7aB6cpYVmSzbXitGbvwKb3cz00loTrUbg==
-X-Received: by 2002:a05:620a:2989:b0:765:4e03:b136 with SMTP id r9-20020a05620a298900b007654e03b136mr19263552qkp.53.1688517795322;
-        Tue, 04 Jul 2023 17:43:15 -0700 (PDT)
+        bh=+v9IDPZWjJ4VWAyg2+HlN6MMs3iQJ76LtXDfbdbC71E=;
+        b=LPInCy0DIDJ+7Hk6Mho7iGyz3/ccTfR1qWLWD45nFImtlGEZc3Q+vk/caxaVlEoi5b
+         jt4Ay1Md9es2d2Jcv0iWG3m0jfGy1fhw7G9s2FiW9NOUEvd3LpfmfnqHKt7uvr6qYJbS
+         8TFg3Fzs6Uxt9rkuxDUdXWTSkN91uCa0SjhaCYkksVMjmqJJGCpFyAkMDf+N9jDQ1nD7
+         nroRPkmGwGCT9GvU6sy8rLOjJ7foIOW5PYnJrdXRouL4YkaUHRDALYO0C8hx4U4w3EJG
+         NFDlBe3l8jAXsIx88wlI4cPo/UiMsv18i+DDfxZ8cvQeFPZTf/ax71esV+bIZ+FzKv1u
+         YsSw==
+X-Gm-Message-State: ABy/qLYWoDmFu91jIglHFRn3nayAtQNUs7sLJ7/3NBe3e31ba3gNHcNn
+        RRnav55yHs2qy1es5X6IINRr4w==
+X-Google-Smtp-Source: APBJJlGAc60/2YEs/wXzZRs6nCS/lBtVnqS5iKEir74yVGwdsJUOt8Z6sDCnz1eou+jBwNCC3IMoeQ==
+X-Received: by 2002:a05:6902:28c:b0:c37:f855:cff4 with SMTP id v12-20020a056902028c00b00c37f855cff4mr12465761ybh.63.1688518231690;
+        Tue, 04 Jul 2023 17:50:31 -0700 (PDT)
 Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id l24-20020a62be18000000b006829ef1e179sm2666320pff.99.2023.07.04.17.43.12
+        by smtp.gmail.com with ESMTPSA id et11-20020a056214176b00b0063596878aaasm12235385qvb.18.2023.07.04.17.50.28
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jul 2023 17:43:13 -0700 (PDT)
-Subject: Re: [PATCH v3 4/5] mtd: rawnand: brcmnand: Fix potential
- out-of-bounds access in oob write
+        Tue, 04 Jul 2023 17:50:30 -0700 (PDT)
+Subject: Re: [PATCH v3 5/5] mtd: rawnand: brcmnand: Fix mtd oobsize
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         Linux MTD List <linux-mtd@lists.infradead.org>,
@@ -55,23 +54,24 @@ Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         joel.peshkin@broadcom.com, computersforpeace@gmail.com,
         anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
         tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
         linux-kernel@vger.kernel.org,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Richard Weinberger <richard@nod.at>,
+        Boris Brezillon <bbrezillon@kernel.org>,
         Kamal Dasu <kdasu.kdev@gmail.com>
 References: <20230627193738.19596-1-william.zhang@broadcom.com>
- <20230627193738.19596-5-william.zhang@broadcom.com>
- <20230704172817.02e4cdb8@xps-13>
+ <20230627193738.19596-6-william.zhang@broadcom.com>
+ <20230704173047.395e445e@xps-13>
 From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <5aa6cb07-eec9-d448-95d7-3a5591874d02@broadcom.com>
-Date:   Tue, 4 Jul 2023 17:43:12 -0700
+Message-ID: <c09a72df-c49f-75e9-e95e-4e19fe10a278@broadcom.com>
+Date:   Tue, 4 Jul 2023 17:50:28 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.4.0
 MIME-Version: 1.0
-In-Reply-To: <20230704172817.02e4cdb8@xps-13>
+In-Reply-To: <20230704173047.395e445e@xps-13>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000006793cd05ffb2afbe"
+        boundary="0000000000006b22c905ffb2c913"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
@@ -82,100 +82,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000006793cd05ffb2afbe
+--0000000000006b22c905ffb2c913
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 
 Hi Miquel,
 
-On 07/04/2023 08:28 AM, Miquel Raynal wrote:
+On 07/04/2023 08:30 AM, Miquel Raynal wrote:
 > Hi William,
 > 
-> william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:37 -0700:
+> william.zhang@broadcom.com wrote on Tue, 27 Jun 2023 12:37:38 -0700:
 > 
->> When the oob buffer length is not in multiple of words, the oob write
->> function does out-of-bounds read on the oob source buffer at the last
->> iteration. Fix that by always checking length limit on the oob buffer
->> read and fill with 0xff when reaching the end of the buffer to the oob
->> registers.
+>> brcmnand controller can only access the flash spare area up to certain
+>> bytes based on the ECC level. It can be less than the actual flash spare
+>> area size. For example, for many NAND chip supporting ECC BCH-8, it has
+>> 226 bytes spare area. But controller can only uses 218 bytes. So brcmand
+>> driver overrides the mtd oobsize with the controller's accessible spare
+>> area size. When the nand base driver utilizes the nand_device object, it
+>> resets the oobsize back to the actual flash spare aprea size from
+>> nand_memory_organization structure and controller may not able to access
+>> all the oob area as mtd advises.
 >>
->> Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
+>> This change fixes the issue by overriding the oobsize in the
+>> nand_memory_organization structure to the controller's accessible spare
+>> area size.
 > 
-> Wrong Fixes.
-Same here.  The function write_oob_to_regs was added by this commit and 
-no change since then.
+> I am clearly not a big fan of this solution. memorg should be and
+> remain a read only object. Can you please find another solution?
+> 
+I was debating on this too but I don't see option because there is no 
+other hooks after nanddev_init to set the mtd->oobsize as far as I can 
+see and I see there were similar fixes for other controller drivers 
+after the nand device object init was committed, for example:
+Fixes: 629a442cad5f ("mtd: rawnand: Fill memorg during detection")
 
+I will think through this again but I am open to any suggestion.
 
-> 
-> Missing Cc stable.
-Will add
-> 
+>>
+>> Fixes: a7ab085d7c16 ("mtd: rawnand: Initialize the nand_device object")
 >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 >>
 >> ---
 >>
->> Changes in v3:
->> - Fix kernel test robot sparse warning:
->>     drivers/mtd/nand/raw/brcmnand/brcmnand.c:1500:54: sparse: expected unsigned int [usertype] data
->>     drivers/mtd/nand/raw/brcmnand/brcmnand.c:1500:54: sparse: got restricted __be32 [usertype]
+>> Changes in v3: None
+>> Changes in v2: None
 >>
->> Changes in v2:
->> - Handle the remaining unaligned oob data after the oob data write loop
->>
->>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 13 +++++++++++--
->>   1 file changed, 11 insertions(+), 2 deletions(-)
+>>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
 >>
 >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->> index ea03104692bf..407bf79cbaf4 100644
+>> index 407bf79cbaf4..39c7f547db1f 100644
 >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
 >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->> @@ -1477,19 +1477,28 @@ static int write_oob_to_regs(struct brcmnand_controller *ctrl, int i,
->>   			     const u8 *oob, int sas, int sector_1k)
->>   {
->>   	int tbytes = sas << sector_1k;
->> -	int j;
->> +	int j, k = 0;
->> +	u32 last = 0xffffffff;
->> +	u8 *plast = (u8 *)&last;
+>> @@ -2647,6 +2647,8 @@ static int brcmnand_setup_dev(struct brcmnand_host *host)
+>>   	struct nand_chip *chip = &host->chip;
+>>   	const struct nand_ecc_props *requirements =
+>>   		nanddev_get_ecc_requirements(&chip->base);
+>> +	struct nand_memory_organization *memorg =
+>> +		nanddev_get_memorg(&chip->base);
+>>   	struct brcmnand_controller *ctrl = host->ctrl;
+>>   	struct brcmnand_cfg *cfg = &host->hwcfg;
+>>   	char msg[128];
+>> @@ -2668,10 +2670,11 @@ static int brcmnand_setup_dev(struct brcmnand_host *host)
+>>   	if (cfg->spare_area_size > ctrl->max_oob)
+>>   		cfg->spare_area_size = ctrl->max_oob;
+>>   	/*
+>> -	 * Set oobsize to be consistent with controller's spare_area_size, as
+>> -	 * the rest is inaccessible.
+>> +	 * Set mtd and memorg oobsize to be consistent with controller's
+>> +	 * spare_area_size, as the rest is inaccessible.
+>>   	 */
+>>   	mtd->oobsize = cfg->spare_area_size * (mtd->writesize >> FC_SHIFT);
+>> +	memorg->oobsize = mtd->oobsize;
 >>   
->>   	/* Adjust OOB values for 1K sector size */
->>   	if (sector_1k && (i & 0x01))
->>   		tbytes = max(0, tbytes - (int)ctrl->max_oob);
->>   	tbytes = min_t(int, tbytes, ctrl->max_oob);
->>   
->> -	for (j = 0; j < tbytes; j += 4)
->> +	for (j = 0; (j + 3) < tbytes; j += 4)
-> 
-> Maybe a comment here as well to mention that you stop at the last
-> iteration? Otherwise, just reading the line does not make you choice
-> obvious.
-> 
-Will add comment.
-
->>   		oob_reg_write(ctrl, j,
->>   				(oob[j + 0] << 24) |
->>   				(oob[j + 1] << 16) |
->>   				(oob[j + 2] <<  8) |
->>   				(oob[j + 3] <<  0));
->> +
->> +	while (j < tbytes)
->> +		plast[k++] = oob[j++];
->> +
->> +	if (tbytes & 0x3)
->> +		oob_reg_write(ctrl, (tbytes & ~0x3), (__force u32)cpu_to_be32(last));
->> +
->>   	return tbytes;
->>   }
->>   
+>>   	cfg->device_size = mtd->size;
+>>   	cfg->block_size = mtd->erasesize;
 > 
 > 
 > Thanks,
 > Miquèl
 > 
 
---0000000000006793cd05ffb2afbe
+--0000000000006b22c905ffb2c913
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -246,13 +235,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIGZ8kIypyAAGpfv7013kBGmIZZ1C
-+Y/KIT6CuI10W9tAMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDcwNTAwNDMxNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIG+qrrktL4FJ2PMSZq9CDI/E0HJM
+vY2omOg1CZDy6jmVMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDcwNTAwNTAzMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCyXdwLRLWS6b+zbSq8Vnn/hxRIi++67qwNQt3m7xuECLkw
-qigS2o0xfWHKMO5hDIoeccsjTWt5DjEb7eZOnaZBqrIjpz++qDIoD4CrQammyS/Lbz029x0y4Glr
-qpxdl6LRAZ2WbYniLdt/RTfnPiFy3+18/IqCNGpouuw1cc/W7GBg7b/upI14MwxOVSfg8yeterIb
-lQ4WE+iAnDBOJTyQq4NOjfzm6P28fFIRP+nHs5IlJBlh6AZiwTq1VVfGjU4yFd8Ql7+54PSIayNf
-SwhLSb6Q2DkgOkKqDzEzxYPu8uA77QoQKp0h8Rbm9b7SfvVNBNUFX1Wq8SoNWEWBUFfu
---0000000000006793cd05ffb2afbe--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBCRjFlpA0b4QD6Z31cikJvWfh4LaNJ0e1iPRjmCDlA4uUy
+dgvfgfzkpNJ8spXUGurCE8HNncWT8re91XkVUmm+V8aWFOdxIAGyYkW1IFIb9GTHVhecBMiNdfcA
+WYtBhXGm+UXhmUe6t+AXS22XeCQFD5Vl8w73mIskQkuoQDUxP617zd60hhWsSyMm0/sG7ehrZc8Y
+ny9E3+ysWNlgsMibP+tI2eMtcuPKB/0H5rUCFsSkVpntyirratb7B0AilzE5CPdiFXtE6Yvee0Xs
+dgmoMGiEUxajbljp+UINsfSW8UvsgTbeztRtgrMetTicqDFvK61r/LXI6OC0hbgP9F84
+--0000000000006b22c905ffb2c913--
