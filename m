@@ -2,97 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDE374866A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2713B748672
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 16:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjGEOd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 10:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S232412AbjGEOfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 10:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjGEOdZ (ORCPT
+        with ESMTP id S231540AbjGEOfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:33:25 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7B71703
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 07:33:24 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fba8e2aa52so80951185e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 07:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688567603; x=1691159603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQUXAkyiQApMq+ZE6mPnwyJ3KTToGXwRWpzxeS6gtoU=;
-        b=TP49Ly4bRH4lLTT35h8wVfAwVxrJgc8Hm8iAUo+nhTxeYBA+AKk1HSKDGzn94tP3jJ
-         /UIxJ4/uo8yuFDr/vJUsJmog42GwssD1cqtABp7hqCH8wmX3QJ92ttJqCTg2dGDN2OGm
-         rDcsmLUR7aL3zpWnpNRYgW7Pe6E6+onYViN1i5ZyhJq+in7lkAX5KFaZr8Oiq/8tPWzz
-         o0gw3qO+o6bNrEqL6giVppiT7lA/FpOF5OYwCN2/Ze7DwE+48Pb/gJXVuNiID9PkG3LS
-         4RinTWPpx4VsGESZDsQ1rXLnLtquh+aKBRLdw9D+xY1KGPufXXcKZwLrW5hr6u3akx8S
-         UgJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688567603; x=1691159603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mQUXAkyiQApMq+ZE6mPnwyJ3KTToGXwRWpzxeS6gtoU=;
-        b=ekLL6T81Cxe1GJm0f1gJSimDpvGNnduj4biah2Z747/fwrPpNzlDJ6J2nlwV2tMTzU
-         3uDjcwt2aVwrutqtKUeFdgKNaCPaL2ffKPppQh76UaX6xJHo/bt3ImzMUijmUbPeG8tb
-         ylk2NqcmA2RvwuZHt/WTZuzyxi6xmRrNyEZFaGqZnz7TXxfzvbowecL5BjQrNCVMA8+M
-         S4Oc8SK1rJW5xI+yC/j0Tnh4KpIO3bN+YdHbINSh9ra83Tru0tXTqN6tPNEv7lwaTCkf
-         LEbe944Cy+Qjk+H0AR+peK4GPDXhfMuWzvvtTXsaoca9K2tYDMNXMBzeoiIKLD/Qvkpz
-         4vPA==
-X-Gm-Message-State: ABy/qLbEz004NV7kYHe3CnuiAbZYXzI+KMqBDAY4SEW6iqxPewD4DCRg
-        KpIIaLt81kKA5nAhcWqXndGuUNP99kPZdcqjFblMAw==
-X-Google-Smtp-Source: APBJJlEcP9KsqrX0torxAaick855DXdlm/LSXir4ylL4od030uqLUgvwXNO/rx9wm36ZF/1GfIK8cQ==
-X-Received: by 2002:a1c:f713:0:b0:3fb:d72b:b2a0 with SMTP id v19-20020a1cf713000000b003fbd72bb2a0mr9242635wmh.6.1688567602750;
-        Wed, 05 Jul 2023 07:33:22 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id f15-20020a7bcd0f000000b003fbda7d2d41sm2280190wmj.48.2023.07.05.07.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 07:33:22 -0700 (PDT)
-Date:   Wed, 5 Jul 2023 15:33:20 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Mans Rullgard <mans@mansr.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] backlight: led_bl: fix initial power state
-Message-ID: <20230705143320.GE6265@aspen.lan>
-References: <20230705142447.15546-1-mans@mansr.com>
+        Wed, 5 Jul 2023 10:35:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A074712A;
+        Wed,  5 Jul 2023 07:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688567722; x=1720103722;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WQapOgHKiFYlx2YNIHI1rc9qJxC2isYNrPhJNnI3h7Y=;
+  b=HS9Q9q3+4Gv4VVR+IuriLTVR0Il6r4qzpvboPHY/+kA6EC/Sm7jW3a/w
+   3cyOLVLsRE6qhwb0QiytHoX94AlEaGRnjF4UEShupvX32fu/vl4DqOGzF
+   gs9rbz3Vo6n+slJKiZsAPE1uZbxfk1AheIoauzztTfiWG1Czv7HYLIGs2
+   +Xu3HuNPJrbgRSOSWrAgnR+3rtn5ryJfNQousd3OpIulfKvx/ot+JEDdM
+   By0SrSPbkKCBTbF9OXpowqYUHOXXCiOiq3QO15c096mJ7zRZ+wcWTZfwD
+   yots5AKWIYPtIA2MqHaSHxm+ygndUGZkVaR1HvVLUZQ2czsquwnVYtzQD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="427040562"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="427040562"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 07:34:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="713217660"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="713217660"
+Received: from subrator-mobl1.amr.corp.intel.com (HELO [10.209.29.125]) ([10.209.29.125])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 07:34:06 -0700
+Message-ID: <1a8099e2-da28-6b2a-7b5a-1d6346b7f95d@intel.com>
+Date:   Wed, 5 Jul 2023 07:34:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705142447.15546-1-mans@mansr.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+ <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
+ <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net>
+ <20230630190514.GH3436214@ls.amr.corp.intel.com>
+ <ZJ9IKALhz1Q6ogu1@google.com>
+ <20230704165836.GB462772@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230704165836.GB462772@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 03:24:14PM +0100, Mans Rullgard wrote:
-> The condition for the initial power state based on the default
-> brightness value is reversed.  Fix it.
->
-> Furthermore, use the actual state of the LEDs rather than the default
-> brightness specified in the devicetree as the latter should not cause
-> the backlight to be automatically turned on.
->
-> If the backlight device is not linked to any display, set the initial
-> power to on unconditionally.
->
-> Fixes: ae232e45acf9 ("backlight: add led-backlight driver")
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
-> ---
-> Changes in v3:
-> - Add comment
+On 7/4/23 09:58, Peter Zijlstra wrote:
+> If we have concerns about allocating the PAMT array, can't we use CMA
+> for this? Allocate the whole thing at boot as CMA such that when not
+> used for TDX it can be used for regular things like userspace and
+> filecache pages?
 
-This mismatches the subject line ;-) but I can live with that if Lee
-and Jingoo can!
+I never thought of CMA as being super reliable.  Maybe it's improved
+over the years.
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+KVM also has a rather nasty habit of pinning pages, like for device
+passthrough.  I suspect that means that we'll have one of two scenarios:
 
+ 1. CMA works great, but the TDX/CMA area is unusable for KVM because
+    it's pinning all its pages and they just get moved out of the CMA
+    area immediately.  The CMA area is effectively wasted.
+ 2. CMA sucks, and users get sporadic TDX failures when they wait a long
+    time to run a TDX guest after boot.  Users just work around the CMA
+    support by starting up TDX guests at boot or demanding a module
+    parameter be set.  Hacking in CMA support was a waste.
 
-Daniel.
+Am I just too much of a pessimist?
