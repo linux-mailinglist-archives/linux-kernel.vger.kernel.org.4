@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B6C747F06
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE5B747F0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 10:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbjGEIHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 04:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S231140AbjGEIIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 04:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjGEIHJ (ORCPT
+        with ESMTP id S231992AbjGEIH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 04:07:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE64C123;
-        Wed,  5 Jul 2023 01:07:04 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A4E66606FAB;
-        Wed,  5 Jul 2023 09:07:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688544423;
-        bh=HzEPqtQdkHcMDXqsi87KYzHjHJ+6zKcJherW9BF/ljQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=h7A4QOraU/u5oUyt9/KFqEDOQBWIHvzhlh75jpyLxh9/Vxx2oeSMH8KqZPzURStzp
-         PoNlr8LOVYyKpja7XnbMl26bExT1Y3m//cCTZH/u03oF6MeuFA2GtQI7JeFZaJfrdV
-         U+8HvjrLdifCqPL1qM3iRW1crIG57JuKAq4yjHs+kFjRoGq3bqNwz7TKIldsBPuEQN
-         ib4lJNVROtbDV1ySUBeQ3PNKJofN7//K9xjAAdpr8m0gCppMI8Tmo6V8r5Sqia2Y8L
-         8oDRNTLtIANAj1uOfduNsjgkrzckQ1R5SqmqwPfjO1ojgRVPQrE1pAeWq7JNwkDwsa
-         QeQNzSRX6wsdA==
-Message-ID: <2742ada7-b7ad-b51f-0de6-bf0ba37d51e4@collabora.com>
-Date:   Wed, 5 Jul 2023 10:07:00 +0200
+        Wed, 5 Jul 2023 04:07:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598AB123;
+        Wed,  5 Jul 2023 01:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688544475; x=1720080475;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cn1WBv4JrMsrgoasE/lasO/n0SnRwlADo/SoWnSzf8M=;
+  b=H6nAxTJNgv7Mug2MwINb9R7fJ+dUEjWUth49iW5C0tbqncwQrpLMWCqc
+   kpa0T6eDc+GGGurircEYjoCQGIOQITwifUSsb+ExHcgIWscSsF+7Bzw/G
+   S+y1/mFEHNvQ7pYv63Zm/5AQeXeh8QuCh0TsmJ7V8B6tHb2GNpKk3srbw
+   eLy+al/5TYiavWE+8KQgRcTSw5DcnizUmpz7JuNyaEcqV/QZIDa+LiGFz
+   0lRCmO2ZGwn4IrcCfvKx3A5z0tJEuPWKUkeWy6hYZY3MPSNTmAOKIsJPE
+   C7MdVRw03s1BiIw69w/nSmHgeOxuJjOQ6tuQEOGMUOeGA7EpaJ1S7dG9J
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="343610815"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="343610815"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 01:07:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="669323671"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="669323671"
+Received: from jialinji-mobl4.ccr.corp.intel.com (HELO localhost) ([10.255.30.200])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 01:07:50 -0700
+Date:   Wed, 5 Jul 2023 16:07:56 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Xu <peterx@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v7 4/8] KVM: x86/mmu: Migrate to __kvm_follow_pfn
+Message-ID: <20230705080756.xv7fm3jxewipunvn@linux.intel.com>
+References: <20230704075054.3344915-1-stevensd@google.com>
+ <20230704075054.3344915-5-stevensd@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/3] dt-bindings: arm: Add compatible for MediaTek MT8188
-Content-Language: en-US
-To:     Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230705065744.25848-1-jason-ch.chen@mediatek.com>
- <20230705065744.25848-2-jason-ch.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230705065744.25848-2-jason-ch.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704075054.3344915-5-stevensd@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +68,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 05/07/23 08:57, Jason-ch Chen ha scritto:
-> From: jason-ch chen <Jason-ch.Chen@mediatek.com>
+On Tue, Jul 04, 2023 at 04:50:49PM +0900, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
 > 
-> This commit adds dt-binding documentation for the MediaTek MT8188
-> reference board.
+> Migrate from __gfn_to_pfn_memslot to __kvm_follow_pfn.
 > 
-> Signed-off-by: jason-ch chen <Jason-ch.Chen@mediatek.com>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+> Signed-off-by: David Stevens <stevensd@chromium.org>
 > ---
->   Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
->   1 file changed, 4 insertions(+)
+>  arch/x86/kvm/mmu/mmu.c | 35 +++++++++++++++++++++++++----------
+>  1 file changed, 25 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> index ae12b1cab9fb..4f4910d7a1e9 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> @@ -163,6 +163,10 @@ properties:
->             - enum:
->                 - mediatek,mt8186-evb
->             - const: mediatek,mt8186
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8188-evb
-> +          - const: mediatek,mt8188
->         - items:
->             - enum:
->                 - mediatek,mt8192-evb
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index ec169f5c7dce..e44ab512c3a1 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4296,7 +4296,12 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
+>  static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  {
+>  	struct kvm_memory_slot *slot = fault->slot;
+> -	bool async;
+> +	struct kvm_follow_pfn foll = {
+> +		.slot = slot,
+> +		.gfn = fault->gfn,
+> +		.flags = FOLL_GET | (fault->write ? FOLL_WRITE : 0),
+> +		.allow_write_mapping = true,
+> +	};
+>  
+>  	/*
+>  	 * Retry the page fault if the gfn hit a memslot that is being deleted
+> @@ -4325,12 +4330,14 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  			return RET_PF_EMULATE;
+>  	}
+>  
+> -	async = false;
+> -	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, false, &async,
+> -					  fault->write, &fault->map_writable,
+> -					  &fault->hva);
+> -	if (!async)
+> -		return RET_PF_CONTINUE; /* *pfn has correct page already */
+> +	foll.flags |= FOLL_NOWAIT;
+> +	fault->pfn = __kvm_follow_pfn(&foll);
+> +
+> +	if (!is_error_noslot_pfn(fault->pfn))
+> +		goto success;
+> +
+> +	if (fault->pfn != KVM_PFN_ERR_NEEDS_IO)
+> +		return RET_PF_CONTINUE;
 
+IIUC, FOLL_NOWAIT is set only when we wanna an async fault. So
+KVM_PFN_ERR_NEEDS_IO may not be necessary? 
+
+B.R.
+Yu
