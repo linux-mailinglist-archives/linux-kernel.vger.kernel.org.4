@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB88F748A0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4481748A0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jul 2023 19:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbjGERWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jul 2023 13:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S232439AbjGERXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jul 2023 13:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjGERWk (ORCPT
+        with ESMTP id S229812AbjGERXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jul 2023 13:22:40 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFFE183
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:22:39 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-c49777d6e7aso5846892276.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 10:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688577758; x=1691169758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P6Tk2ql2z3k8hI6gx082bWriam5zLDXexsywXgjVlB4=;
-        b=Vwr0HKppn8I7Y48ogyG7iPT2wYGMyZgOMj2odgQD6TWHNk+4wNp0qzgiv4/AM1diks
-         Ctnd+ZWxUYwa8Fy7wrhYYZq15ti771Mtd5owNQnjOutUFhf92TzjYyCc7oi8xbJcJiuv
-         bAzvuvn66zIm+FCZ+7FU20Sdymyv0HtTX9gdnYqKpCnSe8IUw/0GK6AQQ+9gs3KW3xku
-         XRdo9cbI5ljud3WQ6ITvbubiQVIeSL7BmyJ0sWrfPr9/rgFIXTiiUb1U2OfaaegxgXxV
-         gnLyWSpPhIkKagpxNXBPQQobtrj3nqaZjDAQ/X8zPK0zqtWTxOvXZ+yqBbKHcGmbrV6u
-         SGig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688577758; x=1691169758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P6Tk2ql2z3k8hI6gx082bWriam5zLDXexsywXgjVlB4=;
-        b=DhpKeZGAHloYi5ihVinxmRcZND52Hvi+m0dfPHN1/05/D6kVJTnClQMrNDzphtY15l
-         Y53DlrG8FiLgUMcmnII3r8TV80gu8bOZIpN+lZQmIGB8D6KNXTIMLvegZOuR1qtgDTa9
-         OuMxVYKIHAmI9mXHmV6ft5be9/5JLsMOX7Hc95Eao5eA60CoDgnjnguv2ibG/ojnLeyk
-         l1Xp4oo1IunPVfXLhZhYNSVnbUiqbjC04Vzl5dYBNTi3Id0ZYXoWZ200JIBrkc+mgKHg
-         K+LVR2Y4nUuzQnlGlzdwgQDjJJC56L8HOCR31PZ7Kb8pUEBYtiuU46aaPK6V2zrLYEy2
-         WMIw==
-X-Gm-Message-State: ABy/qLbQPhgfMViCu+V+XWyvF2RTN4oUtO5jYv1BzQbD9wm3MO/W72qx
-        yvw93vSjsBNzapzbQQYpZe2kW8UscfKRgRApehvw4w==
-X-Google-Smtp-Source: APBJJlEzexLn8Gnsj86NrWI8WO/vdjL9jBS1mJI+nuZ2OzXLXobm03US7gnI6v9c7ePfC7tBcWU3w5mlyqIWysOpxiw=
-X-Received: by 2002:a25:d488:0:b0:c4c:dbee:4915 with SMTP id
- m130-20020a25d488000000b00c4cdbee4915mr13592561ybf.9.1688577758189; Wed, 05
- Jul 2023 10:22:38 -0700 (PDT)
+        Wed, 5 Jul 2023 13:23:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB31188
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 10:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688577825; x=1720113825;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BLPKbcIBH5PVkiqNNns0cBZ+/8DZ7Qmt6A7EBSFuMTA=;
+  b=YVTm7Mb9bv1VfHjK0Gf36gy+xzsuGJr7VV+cPPlLPwuIlCm7vUMriI+s
+   xaJXAci0j161mFi3nSo3PNhkUhaGZqiJ/H/ugCB+d3XLjgLxoGRpiSJVS
+   /kzbzIJoKxD1Fca0Zkepn4sLC7LzpFP6tm0ezfSCZPrHx7Sfgj5bfqAw5
+   HVwQlOtXLg+ziJEkGVJk8oTo26QryzkCr8wAmB7T2GEsWaylfEcrXqkap
+   jk6cCYIafyEum3l+PWdRc2rdWD7SspsZEvsfF/kz3CxHpcWdyfYFxi9+c
+   XkHMORhWh7RSN7hsDHbSy7gTgWAAwdm09z0JgYfnSwDs8L7qU6ZwMYTJY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="449764739"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="449764739"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 10:23:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="784628556"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="784628556"
+Received: from yjie-desk1.jf.intel.com (HELO [10.24.96.120]) ([10.24.96.120])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 10:23:44 -0700
+Message-ID: <19e61b7e-022e-b384-1f37-7354b7ee889d@linux.intel.com>
+Date:   Wed, 5 Jul 2023 10:23:44 -0700
 MIME-Version: 1.0
-References: <20230705171213.2843068-1-surenb@google.com> <20230705171213.2843068-3-surenb@google.com>
- <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com>
-In-Reply-To: <3cdaa7d4-1293-3806-05ce-6b7fc4382458@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 5 Jul 2023 10:22:27 -0700
-Message-ID: <CAJuCfpGTNF9BWBxZoqYKSDrtq=iJoN1n8oTc=Yu0pPzW8cs8rQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] mm: disable CONFIG_PER_VMA_LOCK until its fixed
-To:     David Hildenbrand <david@redhat.com>
-Cc:     akpm@linux-foundation.org, jirislaby@kernel.org,
-        jacobly.alt@gmail.com, holger@applied-asynchrony.com,
-        hdegoede@redhat.com, michel@lespinasse.org, jglisse@google.com,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] x86/aperfmperf: Fix the fallback condition in
+ arch_freq_get_on_cpu()
+To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yair Podemsky <ypodemsk@redhat.com>
+References: <20230626193601.9169-1-yang.jie@linux.intel.com>
+ <878rc1yvp3.ffs@tglx>
+Content-Language: en-US
+From:   Keyon Jie <yang.jie@linux.intel.com>
+In-Reply-To: <878rc1yvp3.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,62 +70,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 10:16=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 05.07.23 19:12, Suren Baghdasaryan wrote:
-> > A memory corruption was reported in [1] with bisection pointing to the
-> > patch [2] enabling per-VMA locks for x86.
-> > Disable per-VMA locks config to prevent this issue while the problem is
-> > being investigated. This is expected to be a temporary measure.
-> >
-> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
-> > [2] https://lore.kernel.org/all/20230227173632.3292573-30-surenb@google=
-.com
-> >
-> > Reported-by: Jiri Slaby <jirislaby@kernel.org>
-> > Closes: https://lore.kernel.org/all/dbdef34c-3a07-5951-e1ae-e9c6e3cdf51=
-b@kernel.org/
-> > Reported-by: Jacob Young <jacobly.alt@gmail.com>
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217624
-> > Fixes: 0bff0aaea03e ("x86/mm: try VMA lock-based page fault handling fi=
-rst")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >   mm/Kconfig | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/Kconfig b/mm/Kconfig
-> > index 09130434e30d..0abc6c71dd89 100644
-> > --- a/mm/Kconfig
-> > +++ b/mm/Kconfig
-> > @@ -1224,8 +1224,9 @@ config ARCH_SUPPORTS_PER_VMA_LOCK
-> >          def_bool n
-> >
-> >   config PER_VMA_LOCK
-> > -     def_bool y
-> > +     bool "Enable per-vma locking during page fault handling."
-> >       depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
-> > +     depends on BROKEN
-> >       help
-> >         Allow per-vma locking during page fault handling.
-> >
-> Do we have any testing results (that don't reveal other issues :) ) for
-> patch #1? Not sure if we really want to mark it broken if patch #1 fixes
-> the issue.
 
-I tested the fix using the only reproducer provided in the reports
-plus kernel compilation and my fork stress test. All looked good and
-stable but I don't know if other reports had the same issue or
-something different.
-I think the urgency to disable the feature stems from the timeline
-being very close to when distributions will start using the 6.4 stable
-kernel version.
 
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+On 6/30/23 05:35, Thomas Gleixner wrote:
+> On Mon, Jun 26 2023 at 12:36, Keyon Jie wrote:
+>> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
+>> index fdbb5f07448f..24e24e137226 100644
+>> --- a/arch/x86/kernel/cpu/aperfmperf.c
+>> +++ b/arch/x86/kernel/cpu/aperfmperf.c
+>> @@ -432,7 +432,7 @@ unsigned int arch_freq_get_on_cpu(int cpu)
+>>   	 * Bail on invalid count and when the last update was too long ago,
+>>   	 * which covers idle and NOHZ full CPUs.
+>>   	 */
+>> -	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
+>> +	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE * cpu_khz)
+> 
+> What?
+> 
+> #define MAX_SAMPLE_AGE  ((unsigned long)HZ / 50)
+> 
+> HZ is the number of ticks (jiffies) per second. 20ms is 1/50 of a
+> second.
+> 
+> As the sample age is measured in jiffies and the maximum is defined to
+> be 20ms, the existing code is correct.
+> 
+> With your change the condition resolves to:
+> 
+>       delta > MAX_SAMPLE_AGE * cpu_khz
+> 
+> cpu_khz = Nominal CPU frequency / 1000
+> 
+> Ergo:
+> 
+>       delta > (HZ / 50) * (cpufreq / 1000)
+> 
+>                  HZ * cpufreq
+> -->  delta > ------------------
+>                    50000
+> 
+> Let's describe cpufreq in GHz:
+> 
+>                  HZ * G * 1e9
+> -->  delta > ------------------
+>                    50000
+> 
+> -->  delta > HZ * G * 20000
+> 
+> delta is calculated in jiffies, i.e. the number of ticks since the last
+> invocation. Because HZ is ticks per second, the resulting timeout
+> measured in seconds is:
+> 
+>           HZ * G * 20000 / HZ
+> 
+> -->      G * 20000 seconds
+> 
+> 20000 seconds for a 1GHz CPU, 40000 seconds for a 4GHz CPU independent
+> of the actual HZ value.
+> 
+> jiffies are incremented once per tick, i.e. at tick frequency. The
+> number of ticks required to reach 20ms depends obviously on the tick
+> frequency, aka HZ.
+> 
+> HZ         ticks per second     tick period     Number of ticks which
+>                                                  are equivalent to 20ms
+>   100        100                 10ms             2
+>   250        250                  4ms             5
+> 1000       1000                  1ms            10
+> 
+> And that's what the code does correctly:
+> 
+> #define MAX_SAMPLE_AGE  ((unsigned long)HZ / 50)
+> 
+> No?
+> 
+>>  From the commit f3eca381bd49 on, the fallback condition about the 'the
+>> last update was too long' have been comparing ticks and milliseconds by
+>> mistake, which leads to that the condition is met and the fallback
+>> method is used frequently.
+> 
+> The comparison is comparing a tick delta with a maximum number of ticks
+> and that's not a mistake. It's simply correct.
+> 
+>> The change to compare ticks here corrects that and fixes related issues
+>> have been seen on x86 platforms since 5.18 kernel.
+> 
+> I have no idea what you are trying to "fix" here, but that's moot as
+> there is nothing to fix.
+
+Hi Thomas and Dave,
+
+Thank you for educating on this, I think you are totally right. So the 
+original issue described in the bugzilla is not caused by what I 
+mentioned here. Please ignore this patch, we need to figure out another 
+fix for the issue, sorry for the confusion.
+
+Thanks,
+~Keyon
+
+> 
+> Thanks,
+> 
+>          tglx
