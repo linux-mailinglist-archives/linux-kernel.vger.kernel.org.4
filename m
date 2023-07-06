@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F83749C51
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F35749C54
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjGFMqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 08:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S232033AbjGFMqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjGFMqZ (ORCPT
+        with ESMTP id S232108AbjGFMq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:46:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77301BE3;
-        Thu,  6 Jul 2023 05:45:54 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366BnXLk022020;
-        Thu, 6 Jul 2023 12:45:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/eTRKvEprj4j5mhYYTy9ajJZ7xy0mmVqOmJ9KqT9W2o=;
- b=fd7tltda+naNyCbaAzc7N9DGJBZ39pL02ZkCjr005CX4UcZChaWl43wNkBTVd/Dy1p2x
- 2G61ILVKRj9fM1j9l3Zav5G2UxMlR2fO6KgMHQzwCwjbbtICWcpCYN8ahQr1GkyxUUHN
- 44z9Syx0vxTV2tz6jSIUWam64/glM5UIhrpkru4G+V1/PHAGbSxrQQ+sNFDMRW2kBYzI
- iYQFvYgz+LV6Z88uZir0zAq50AYAu26rvA0x2jU63jZ6lGSwl2eYJBPGVyRk1ylYE0M6
- FHurDK33Zfhgn4ZL/AGZxjxcx0HifMuboKJzJjFYORIf3vR5vVEd7bRCtv3bDXwWrR7g 3A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rntctrd9f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 12:45:17 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366CjGnB026709
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 12:45:16 GMT
-Received: from [10.216.12.242] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 6 Jul
- 2023 05:45:12 -0700
-Message-ID: <0dbd4776-deeb-d62c-e640-c931eb0dd675@quicinc.com>
-Date:   Thu, 6 Jul 2023 18:15:07 +0530
+        Thu, 6 Jul 2023 08:46:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784581BF9;
+        Thu,  6 Jul 2023 05:45:58 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FEFB6606FDC;
+        Thu,  6 Jul 2023 13:45:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688647520;
+        bh=wWn6TJpPGJwpnJEW5eOYnGJj8SEgi8uRCntKKcZ2N54=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=feAJ7w3kphSYGpfQQAUINeYeVSxE9Ngfvmhl9z/y7dfTFoy1768rrwezjNtkr3apO
+         O5uf9ofWRFJXIsZohnA/QqIfZ0qdZNdSHmdKTg2NqYflCnzvst2VG3lJchF9d5cQpw
+         jfe/cWyyPn+kA9H3l8pSY/Krta7xx4tyZYgIlWYv46ZqGpSSVBXjk8LknPV0F6Lfub
+         keCmq1z9CDF3vckMRKaJZoF0tApfmyYlAQKnt5nNyCFhrO83tJ1zFM4jLArLukt+mb
+         eJqn8yggvHs+uaNc0/ITUSwng2g/teb5HMY+Y+GR2UKnyUEbdPMVwRYC1GNnMu/vFK
+         E4kpJEhSsLscQ==
+Message-ID: <152b6912-ce2f-5580-1e2a-550a6fd7e6ed@collabora.com>
+Date:   Thu, 6 Jul 2023 14:45:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 1/2] arm64: dts: qcom: qdu1000-idp: Update reserved
- memory region
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] pwm: mtk_disp: fix disp_pwm coverity issue
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Shuijing Li <shuijing.li@mediatek.com>,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        matthias.bgg@gmail.com
+Cc:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jitao.shi@mediatek.com
+References: <20230706100454.28998-1-shuijing.li@mediatek.com>
+ <55c3a448-e6c6-5e04-2cee-b2a18f0033e3@baylibre.com>
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230705110620.7687-1-quic_kbajaj@quicinc.com>
- <20230705110620.7687-2-quic_kbajaj@quicinc.com>
- <8bd8ffbe-f50d-6e4a-2fdf-3983a76fb5ad@linaro.org>
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-In-Reply-To: <8bd8ffbe-f50d-6e4a-2fdf-3983a76fb5ad@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sobp9K-3SxWSl3pyMkesWLsUugGXyhde
-X-Proofpoint-ORIG-GUID: sobp9K-3SxWSl3pyMkesWLsUugGXyhde
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_09,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=630 priorityscore=1501 adultscore=0 spamscore=0 phishscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060114
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <55c3a448-e6c6-5e04-2cee-b2a18f0033e3@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/5/2023 7:51 PM, Krzysztof Kozlowski wrote:
-> On 05/07/2023 13:06, Komal Bajaj wrote:
->> Add missing reserved regions as described in QDU1000 memory map.
+Il 06/07/23 14:29, Alexandre Mergnat ha scritto:
+> 
+> 
+> On 06/07/2023 12:04, Shuijing Li wrote:
+>> There is a coverity issue in the original mtk_disp_pwm_get_state()
+>> function. In function call DIV64_U64_ROUND_UP, division by expression
+>> Which may be zero has undefined behavior.
+>> Fix this accordingly.
 >>
->> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+>> Signed-off-by: Shuijing Li <shuijing.li@mediatek.com>
 >> ---
->>   arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 22 ++++++++++++++++++++++
->>   1 file changed, 22 insertions(+)
+>>   drivers/pwm/pwm-mtk-disp.c | 9 ++++++++-
+>>   1 file changed, 8 insertions(+), 1 deletion(-)
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> index 1d22f87fd238..47e5e31dde23 100644
->> --- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->> @@ -448,6 +448,28 @@ &qupv3_id_0 {
->>   	status = "okay";
->>   };
->>
->> +&reserved_memory{
->> +	ecc_meta_data_mem: memory@e0000000{
-> Missing spaces before '{'. I was correcting this already:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=66b14154e278807811d67de9fb0d5cc76638d07b
-> so it seems I need to keep doing the same.
->
-> Anyway, the names should follow purpose, not "memory". See link from Konrad.
+>> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+>> index 79e321e96f56..ca00058a6ef4 100644
+>> --- a/drivers/pwm/pwm-mtk-disp.c
+>> +++ b/drivers/pwm/pwm-mtk-disp.c
+>> @@ -196,6 +196,14 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+>>           return err;
+>>       }
+>> +    rate = clk_get_rate(mdp->clk_main);
+>> +    if (rate <= 0) {
+>> +        dev_err(chip->dev, "Can't get rate: %pe\n", ERR_PTR(rate));
+>> +        clk_disable_unprepare(mdp->clk_mm);
+>> +        clk_disable_unprepare(mdp->clk_main);
+>> +        return err;
+>> +    }
+>> +
+>>       /*
+>>        * Apply DISP_PWM_DEBUG settings to choose whether to enable or disable
+>>        * registers double buffer and manual commit to working register before
+>> @@ -206,7 +214,6 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+>>                        mdp->data->bls_debug_mask,
+>>                        mdp->data->bls_debug_mask);
+>> -    rate = clk_get_rate(mdp->clk_main);
+>>       con0 = readl(mdp->base + mdp->data->con0);
+>>       con1 = readl(mdp->base + mdp->data->con1);
+>>       pwm_en = readl(mdp->base + DISP_PWM_EN);
+> 
+> IMHO, it should be done int the function `mtk_disp_pwm_apply` too.
+> Do you agree ?
+> 
 
-Sure, will correct it in the next patch set.
+I think that realistically this will never happen.
 
->
->
-> Best regards,
-> Krzysztof
->
+We're getting the clk_main clock's handle at probe time (or fail and get out),
+then the PWM clock never has the CLK_GET_RATE_NOCACHE flag, as there wouldn't
+be any reason to not cache the rates for this clock.
+But even if we had the CLK_GET_RATE_NOCACHE flag, it wouldn't change much, as
+our validation actually happens at probe time...
 
+This means that our call to clk_get_rate is guaranteed to have a not NULL
+pointer to this clock's `struct clk_core` and, unless the declaration of
+this clock in the clock controller driver was wrong, for it, or for its
+parent, the branch...
+
+	if (!core->num_parents || core->parent)
+		return core->rate;
+
+...is always satisfied, so, in the end, this instance of clk_get_rate() can't
+really return zero.
+If you got such an issue, I suggest to check what the problem is, as it is
+likely to be outside of this driver.
+
+
+...that, besides the fact that the proposed code is incorrect, as clk_get_rate()
+returns an `unsigned long`, so `rate` can never be less than zero, anyway.
+
+
+Cheers,
+Angelo
