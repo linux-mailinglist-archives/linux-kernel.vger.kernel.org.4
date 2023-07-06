@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81486749BAE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A66F749BB1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 14:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbjGFM2g convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 08:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
+        id S231706AbjGFM3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 08:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjGFM2e (ORCPT
+        with ESMTP id S230445AbjGFM3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 08:28:34 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C425171A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:28:32 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-c17534f4c63so657138276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:28:32 -0700 (PDT)
+        Thu, 6 Jul 2023 08:29:16 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C900E171A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 05:29:14 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742bso6840045e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688646553; x=1691238553;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QrwyGG22yUz0pXaaxwTuGI5EuvBFjwW6o/zgDSSwkOQ=;
+        b=Lgf1cOi+4+QGjJ6vTEGvJWc7DzjQzfv4w5BKVmRE40HSst27WRxPaOwU150CLSXJ4j
+         BO+HNRiJ1qXMampj7+/nE6mFbHRSRf0vi+7jG1/JddtB6urUwJiinZj33ugaWTSzNx3q
+         A4c2ryH1s9an3latetN75IwkfRPlx+fk842mO63qnWoz5ADaoP1OmvMep52wcA+K3mcU
+         HOZGbBB1RR9daw2jLO6jKBkgYgxjCY0S8W/Pgwgrnybzzyh1Dvqv6138oMRL+ikpYh9g
+         /NWnaO7yQrhKl1UcQTelDCmA6+H7SEthcRmzLsGS4kvwV+ZJ2Foy2cLZYpr3ZSiUsKyT
+         5TUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688646511; x=1691238511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aF033wdSvhE6en0dVjojudzrpib3grbe9zdW84Y321c=;
-        b=KuP34YnlXfduurVj8nUrGxX0o4aPYJ5RSOReXoVn3qfwViEbvyqelQqB3srs7bJzL+
-         rvuV47+vnMcCbZXDHi+jNMv5OmwiNAU22PbpB6it3Bk7sgs3xcwkoxqq/hOG/GYFCNoq
-         Cw+CxDAcEBFYuFuMlKjfqse3fzmavVmYpYiVdAtqqAbYHsjHIqnS1nXlIH3JWjyeMRoI
-         rhKMzCpARTz8FOB9Otm0fixmDm2DWEQL/1tNh/I0CNOULtYXQ8mYmzpkQ1882RQczVEJ
-         R6+mXD52rr9HyKuD+aqzO4qKXnpIW5yjHcBdVu8pz21GicppLVphmDn8vh/twyOxqGZo
-         AF5Q==
-X-Gm-Message-State: ABy/qLaAJcfyt1mdP/hRPsATbJ0KApCU5pN4hUSWkph+9QeQd0iep9wP
-        kbhdCWF9ktJFWPWwU/UbrHBn0Gn7sFd8NQ==
-X-Google-Smtp-Source: APBJJlGF5rKR5WmNaDg5UNQIh14I1/c7oV6oWdKN2OCOgSt/c8/dKwZmjBhA+5Qo23Bq8DrpLJMgHw==
-X-Received: by 2002:a25:a564:0:b0:c5d:cce7:bc9b with SMTP id h91-20020a25a564000000b00c5dcce7bc9bmr1665289ybi.34.1688646511087;
-        Thu, 06 Jul 2023 05:28:31 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id w17-20020a05690202d100b00bf44703efd3sm288597ybh.6.2023.07.06.05.28.30
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1688646553; x=1691238553;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QrwyGG22yUz0pXaaxwTuGI5EuvBFjwW6o/zgDSSwkOQ=;
+        b=f1xh6yKYDcMiXLQuGwlo2UbbDY6EYzXGp7W9ktjcC4rIRA+tJkE2tdjVI9rg29Sptl
+         hglWnfhLAvfCJmLt2o8ESk+TaveqUobviUENGRb95IR2OEJtzeMo5Ar+3evn5Z5SUm47
+         AV7bY0kcxmslBuUUcjD00rvDaOTO4c7FqadXCpJQ6L+r7BC/Ys4tuZB5CwyCV90nRvOZ
+         b2FVugHT0wEjZVPMfGHcFXKwpvgC+zyP/MNzNnmpi8ikaugL1PXhpATmjcH1d98JnvmQ
+         jGhWStwxaqrSRcDFJqEMbXu3ullHmXgmIolL/grDqUcvtQpCE4CnA+wnkvq6MkmJFjJt
+         NM5w==
+X-Gm-Message-State: ABy/qLbB/NyYkMx9EYMwVhxYHQ+PnwBp41I7ED6+oa6FbnRm51+RN9vi
+        QX2xlyi62IDTZuy0RmgHMJXsWg==
+X-Google-Smtp-Source: APBJJlENtsBPpzfe/86erIipmcvmcmpI0mPj2K7COvY/9J7rNN04Fa6U7vYjLisS/xtXgMELnlW8qQ==
+X-Received: by 2002:a7b:c5d4:0:b0:3fa:9e61:19ed with SMTP id n20-20020a7bc5d4000000b003fa9e6119edmr1221201wmk.23.1688646553292;
+        Thu, 06 Jul 2023 05:29:13 -0700 (PDT)
+Received: from [192.168.1.172] ([93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id f14-20020adff44e000000b003142ea7a661sm1799342wrp.21.2023.07.06.05.29.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 05:28:30 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-c17534f4c63so657125276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 05:28:30 -0700 (PDT)
-X-Received: by 2002:a25:a564:0:b0:c5d:cce7:bc9b with SMTP id
- h91-20020a25a564000000b00c5dcce7bc9bmr1665282ybi.34.1688646510743; Thu, 06
- Jul 2023 05:28:30 -0700 (PDT)
+        Thu, 06 Jul 2023 05:29:12 -0700 (PDT)
+Message-ID: <55c3a448-e6c6-5e04-2cee-b2a18f0033e3@baylibre.com>
+Date:   Thu, 6 Jul 2023 14:29:11 +0200
 MIME-Version: 1.0
-References: <cover.1688643442.git.geert@linux-m68k.org> <7519324a34015e1c046227269409fef688889f4f.1688643442.git.geert@linux-m68k.org>
- <18425cc3-9a4c-4269-aec0-3f821697bfd6@sirena.org.uk>
-In-Reply-To: <18425cc3-9a4c-4269-aec0-3f821697bfd6@sirena.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 6 Jul 2023 14:28:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUo-3C7AQKAstEyYsnqULQVqRsjsZye_f1aB7aLLkjciA@mail.gmail.com>
-Message-ID: <CAMuHMdUo-3C7AQKAstEyYsnqULQVqRsjsZye_f1aB7aLLkjciA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] regmap: REGMAP_SLIMBUS should select REGMAP
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Benjamin Gray <bgray@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] pwm: mtk_disp: fix disp_pwm coverity issue
+Content-Language: en-US
+To:     Shuijing Li <shuijing.li@mediatek.com>, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com
+Cc:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jitao.shi@mediatek.com
+References: <20230706100454.28998-1-shuijing.li@mediatek.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230706100454.28998-1-shuijing.li@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
 
-On Thu, Jul 6, 2023 at 2:18 PM Mark Brown <broonie@kernel.org> wrote:
-> On Thu, Jul 06, 2023 at 01:42:03PM +0200, Geert Uytterhoeven wrote:
->
-> > Fix this by making REGMAP_SLIMBUS select REGMAP.
->
-> Why is this being done as a separate patch?
 
-Because this is a new select, which was not handled through the
-"default y" before.  [PATCH 1/3] converted only the existing ones.
+On 06/07/2023 12:04, Shuijing Li wrote:
+> There is a coverity issue in the original mtk_disp_pwm_get_state()
+> function. In function call DIV64_U64_ROUND_UP, division by expression
+> Which may be zero has undefined behavior.
+> Fix this accordingly.
+> 
+> Signed-off-by: Shuijing Li <shuijing.li@mediatek.com>
+> ---
+>   drivers/pwm/pwm-mtk-disp.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+> index 79e321e96f56..ca00058a6ef4 100644
+> --- a/drivers/pwm/pwm-mtk-disp.c
+> +++ b/drivers/pwm/pwm-mtk-disp.c
+> @@ -196,6 +196,14 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+>   		return err;
+>   	}
+>   
+> +	rate = clk_get_rate(mdp->clk_main);
+> +	if (rate <= 0) {
+> +		dev_err(chip->dev, "Can't get rate: %pe\n", ERR_PTR(rate));
+> +		clk_disable_unprepare(mdp->clk_mm);
+> +		clk_disable_unprepare(mdp->clk_main);
+> +		return err;
+> +	}
+> +
+>   	/*
+>   	 * Apply DISP_PWM_DEBUG settings to choose whether to enable or disable
+>   	 * registers double buffer and manual commit to working register before
+> @@ -206,7 +214,6 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+>   					 mdp->data->bls_debug_mask,
+>   					 mdp->data->bls_debug_mask);
+>   
+> -	rate = clk_get_rate(mdp->clk_main);
+>   	con0 = readl(mdp->base + mdp->data->con0);
+>   	con1 = readl(mdp->base + mdp->data->con1);
+>   	pwm_en = readl(mdp->base + DISP_PWM_EN);
 
-> > Drop the selection of REGMAP by MFD_WCD934X, as this is not needed
-> > (now both REGMAP_SLIMBUS and REGMAP_IRQ select REGMAP).
->
-> This has always been redudnant, why is it mixed into this patch?
+IMHO, it should be done int the function `mtk_disp_pwm_apply` too.
+Do you agree ?
 
-Because it is related to REGMAP_SLIMBUS selecting REGMAP.
-I agree it was redundant before, as REGMAP_IRQ already selected REGMAP.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Regards,
+Alexandre
