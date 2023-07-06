@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C932C74A118
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD61874A120
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbjGFPfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S232421AbjGFPgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjGFPfR (ORCPT
+        with ESMTP id S232229AbjGFPgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:35:17 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D112AA;
-        Thu,  6 Jul 2023 08:35:14 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-99342a599e9so107150066b.3;
-        Thu, 06 Jul 2023 08:35:14 -0700 (PDT)
+        Thu, 6 Jul 2023 11:36:48 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC317AA;
+        Thu,  6 Jul 2023 08:36:46 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-579de633419so11323627b3.3;
+        Thu, 06 Jul 2023 08:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688657713; x=1691249713;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=M/uitRjGuRmzMmSyM4ApavrZukW5U7OcNDtPTc/YVXQ=;
-        b=RG65KIIJdMd1VGNtOBPcC1YQsiHPdYkjsacGTz1KP8+bNQ//MY0NPTbgpd/BxU/FLe
-         aMePLDxBnVOuyjCss+cx0h6kTvC0R0aE7+Y+fmH+AJpCu2nYqTKD3DsP57vvhItwERTW
-         gwcC6oN5x8JLtZQM+2DALPQDhck+ehO4lYm8TXZ++wnLp2FJcGbFol2X3GaBc97mPg1V
-         14hGYKYgjIgvm2CS3tEU0nGjE3x7Cw3CsWFkoOtsGoepxT5W9zTJrL4fHWxC957XbXpx
-         36gsiKoBEBclZQHB69iUZgSXQXO9UdISjdn1jo0JL+/rGzpzk+oB9lYkooI66SLUj1Kt
-         V83w==
+        d=gmail.com; s=20221208; t=1688657806; x=1691249806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OD1pT2LGhjLDtjR1TYr+/gV9UU0KDGw+1r6piH1rLt4=;
+        b=sRDHFcfIk5uvmBBUIU8pj2FTtO1yZffAaaLgGQiSmJ1Ka9ycBQNSQksE7Shwk7Dn4m
+         OhhMBQo8hrE+MM1hhy6/ioKyIkv0kjDjCxqenBCKCwNu9gFuYRTavVw9EfjawYBNbk2x
+         kg8kQcRC09au8nf/mbuwPJP8kjttWphv5yRr6LeoD+/3t39JY9dkVh39oc450Tz/XsWM
+         1OuZVfYXXbdIccqfKuHNt/IUkTG8LmgnIJJmvB5gzP+Zb4efa7EyblHRiXQi5AdgWquW
+         zpxEZst5r0/xTPJgZ7MsbNLqxamCrWBifWejdWepItwwiS0lnsKe+7QwoWxE3lWQIEFj
+         C/dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688657713; x=1691249713;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M/uitRjGuRmzMmSyM4ApavrZukW5U7OcNDtPTc/YVXQ=;
-        b=ct1AkE8cG4Q0eAGXES37rWckNK0d6R8qBIidR871uSe48vHkmyATSlcfF+P49KseO9
-         hBppxMHtDya6e8jbebb4JcawoojMGlr5vtx2VWpNNIu2aRMVzqfMDN5nyfAl2jROtNyO
-         TiXjwlE8eyOOGsma2ovl+UiHvF32H5p9eHb+zEGNSPJtldVMmMEW4t3uBxkeoRlTRP+f
-         XSQxtq+zJIf2z90O++oSjI0jGQ48diGPNpmsYcGTXaZ6LTDlebwSwywWIqmlnc4iM427
-         B1ZtG8sS3YI8IYyNQ22ZyCL6PhpfWH2/WRGs5uOjq1GgRaPniFz3SGfU9GvGCRHUbJMa
-         IwNQ==
-X-Gm-Message-State: ABy/qLblaF7+yIGgESeuZk0UcJhn4t1EEI1Pz5sn3DucdS/o+/SCWxAO
-        JB3q8fPwo2H1ym3MbzW0ZfU=
-X-Google-Smtp-Source: APBJJlEepcIxqRzevyC7/Pyw+Ik5jZAAdVE0xCERlU/fWyzM0CRmPaRXMW5KGqHpEwtyECqx92qWQg==
-X-Received: by 2002:a17:906:74d7:b0:987:59b6:c9fa with SMTP id z23-20020a17090674d700b0098759b6c9famr2023590ejl.19.1688657712758;
-        Thu, 06 Jul 2023 08:35:12 -0700 (PDT)
-Received: from [10.0.0.98] (snat-11.cgn.sat-an.net. [176.222.226.11])
-        by smtp.gmail.com with ESMTPSA id gz2-20020a170906f2c200b0098d2d219649sm964147ejb.174.2023.07.06.08.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 08:35:12 -0700 (PDT)
-Message-ID: <d4576e776d49498dcc1f82ddf2b81b415e0c6e4b.camel@gmail.com>
-Subject: Re: [PATCH] usb: dwc3: Disable AutoRetry controller feature for
- dwc_usb3 v2.00a
-From:   Jakub =?iso-8859-2?Q?Van=ECk?= <linuxtardis@gmail.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Mauro Ribeiro <mauro.ribeiro@hardkernel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date:   Thu, 06 Jul 2023 17:35:11 +0200
-In-Reply-To: <20230705224754.zmffebz2geg3bclh@synopsys.com>
-References: <20230630223638.2250-1-linuxtardis@gmail.com>
-         <20230705224754.zmffebz2geg3bclh@synopsys.com>
+        d=1e100.net; s=20221208; t=1688657806; x=1691249806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OD1pT2LGhjLDtjR1TYr+/gV9UU0KDGw+1r6piH1rLt4=;
+        b=WkDCSjf2LZVxbpkNaGXVKi+uqLQT+OnH0ZYMmM6vkT4zh09aUkpypY3AchxTtwvG+u
+         3/9PTlBjLCYOFdUY/A9t5aRtS+k5OERQlPWRhVntwRFeM89ar0Iw3VublurV1JuOoP4f
+         Nw8bqYdvt+QEcCzjTzJGksNFOqeaRI4NdG3mqVMp6MYtDqtDD/jSkGFlZQZ54YYSfiMB
+         x44BDI9RTDBY23TK5AIZhPJdH9XPe8okM6yZ+pWMA8Cj4DZuqAUlzWy5kiZc6mp4ELfq
+         iSft3oEp6xJZtIUfXRod0P5NcUAn75isxekJxVjLSajPoF4lBmaPZKjtvOpOM8Ssez8m
+         jNEg==
+X-Gm-Message-State: ABy/qLbnB5eFSHj40FXC8nMZ4qqA7pd/YsFKtopyO81Rg0kTz+AMIFbg
+        fUlHp1S0NgA5SHf7MFQ6nUfU1JQ8pG2GJLPW70c=
+X-Google-Smtp-Source: APBJJlHvkEtjlriVCUDGdbO0DZvjhc6QLEJUwDcVH9ySARGsNXDg8RwUaQouFdZRI0SujDbXeWC3+WZyWSL4w/toEgA=
+X-Received: by 2002:a25:1306:0:b0:c61:488c:464 with SMTP id
+ 6-20020a251306000000b00c61488c0464mr1752174ybt.27.1688657805956; Thu, 06 Jul
+ 2023 08:36:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230706124339.134272-1-davidwronek@gmail.com>
+ <20230706124339.134272-7-davidwronek@gmail.com> <021ad5b4-772d-f2f6-f9ec-bca06db04dd8@linaro.org>
+In-Reply-To: <021ad5b4-772d-f2f6-f9ec-bca06db04dd8@linaro.org>
+From:   David Wronek <davidwronek@gmail.com>
+Date:   Thu, 6 Jul 2023 17:36:35 +0200
+Message-ID: <CAEoe_eVAeNZVUHgpj64Redx5vg7wfzU4wjgH33TZ7ieoDifH-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] arm64: dts: qcom: Add SM7125 device tree
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
-MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,118 +79,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-07-05 at 22:47 +0000, Thinh Nguyen wrote:
-> Hi,
->=20
-> On Sat, Jul 01, 2023, Jakub Vanek wrote:
-> > AutoRetry has been found to cause issues in this controller revision.
-> > This feature allows the controller to send non-terminating/burst retry
-> > ACKs (Retry=3D1 and Nump!=3D0) as opposed to terminating retry ACKs
-> > (Retry=3D1 and Nump=3D0) to devices when a transaction error occurs.
-> >=20
-> > Unfortunately, some USB devices do not retry transfers when
-> > the controller sends them a non-terminating retry ACK. After the transf=
-er
-> > times out, the xHCI driver tries to resume normal operation of the
-> > controller by sending a Stop Endpoint command to it. However, this
-> > revision of the controller fails to respond to that command in this
-> > state and the xHCI driver therefore gives up. This is reported via dmes=
-g:
-> >=20
-> > [sda] tag#29 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN
-> > [sda] tag#29 CDB: opcode=3D0x28 28 00 00 69 42 80 00 00 48 00
-> > xhci-hcd: xHCI host not responding to stop endpoint command
-> > xhci-hcd: xHCI host controller not responding, assume dead
-> > xhci-hcd: HC died; cleaning up
-> >=20
-> > This problem has been observed on Odroid HC2. This board has
-> > an integrated JMS578 USB3-to-SATA bridge. The above problem could be
-> > triggered by starting a read-heavy workload on an attached SSD.
-> > After a while, the host controller would die and the SSD would disappea=
-r
-> > from the system.
-> >=20
-> > Reverting b138e23d3dff ("usb: dwc3: core: Enable AutoRetry feature in
-> > the controller") stopped the issue from occurring on Odroid HC2.
-> > As this problem hasn't been reported on other devices, disable
-> > AutoRetry just for the dwc_usb3 revision v2.00a that the board SoC
-> > (Exynos 5422) uses.
-> >=20
-> > Fixes: b138e23d3dff ("usb: dwc3: core: Enable AutoRetry feature in the =
-controller")
-> > Link: https://urldefense.com/v3/__https://lore.kernel.org/r/a21f34c0463=
-2d250cd0a78c7c6f4a1c9c7a43142.camel@gmail.com/__;!!A4F2R9G_pg!YWgF6oqfuVY6x=
-stZmroukjlrwAFEYEQE8uj_iUu4fd10mnJxEPG345k75dMLLdNFP8rT1leok-aPNkz_FuAJ1zxn=
-mw$=C2=A0
-> > Link: https://urldefense.com/v3/__https://forum.odroid.com/viewtopic.ph=
-p?t=3D42630__;!!A4F2R9G_pg!YWgF6oqfuVY6xstZmroukjlrwAFEYEQE8uj_iUu4fd10mnJx=
-EPG345k75dMLLdNFP8rT1leok-aPNkz_FuCzOGIVPA$=C2=A0
-> > Cc: stable@vger.kernel.org
-> > Cc: Mauro Ribeiro <mauro.ribeiro@hardkernel.com>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > Signed-off-by: Jakub Vanek <linuxtardis@gmail.com>
+On Thu, Jul 6, 2023 at 5:25=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro.=
+org> wrote:
+> On 6.07.2023 14:40, David Wronek wrote:
+> > The Snapdragon 720G (sm7125) is software-wise very similar to the
+> > Snapdragon 7c with minor differences in clock speeds and as added here,
+> > it uses the Kryo 465 instead of Kryo 468.
+> >
+> > Signed-off-by: David Wronek <davidwronek@gmail.com>
 > > ---
-> > =C2=A0drivers/usb/dwc3/core.c | 10 ++++++++--
-> > =C2=A01 file changed, 8 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index d68958e151a7..d742fc882d7e 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -1218,9 +1218,15 @@ static int dwc3_core_init(struct dwc3 *dwc)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Host mode on seeing transaction errors(CRC er=
-rors or internal
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 * overrun scenerios) on IN transfers to reply t=
-o the device
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 * with a non-terminating retry ACK (i.e, an ACK=
- transcation
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * packet with Retry=3D1 & Nump !=3D 0)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * packet with Retry=3D1 & Nump !=3D 0).
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 *
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * Do not enable this for DWC_usb3 v2.00a. This contro=
-ller
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * revision stops responding to Stop Endpoint commands=
- if
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * a USB device does not retry after a non-terminating=
- retry
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * ACK is sent to it.
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0reg |=3D DWC3_GUCTL_HSTINAUTORETRY;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (!DWC3_VER_IS(DWC3, 200A))
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg |=
-=3D DWC3_GUCTL_HSTINAUTORETRY;
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > --=20
-> > 2.25.1
-> >=20
->=20
-> I brought up this inquiry internally. Please wait as I need to review
-> this further. The handling for this may be different depending on the
-> team's feedback.
->=20
+> Can you please paste the output of `dmesg | grep "secondary processor"`?
+>
+> That would let us determine the unique identifier of the cores.
+>
+> Konrad
+I get this output with the command:
+[    0.005884] CPU1: Booted secondary processor 0x0000000100 [0x51df805e]
+[    0.007191] CPU2: Booted secondary processor 0x0000000200 [0x51df805e]
+[    0.008559] CPU3: Booted secondary processor 0x0000000300 [0x51df805e]
+[    0.010046] CPU4: Booted secondary processor 0x0000000400 [0x51df805e]
+[    0.011639] CPU5: Booted secondary processor 0x0000000500 [0x51df805e]
+[    0.014424] CPU6: Booted secondary processor 0x0000000600 [0x51ff804f]
+[    0.016421] CPU7: Booted secondary processor 0x0000000700 [0x51ff804f]
 
-OK; feel free to contact me if I could be of any help.
-
-> Thanks,
-> Thinh
-
-Thank you,
-Jakub
+Sincerely,
+David
+> >  arch/arm64/boot/dts/qcom/sm7125.dtsi | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sm7125.dtsi
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm7125.dtsi b/arch/arm64/boot/dts=
+/qcom/sm7125.dtsi
+> > new file mode 100644
+> > index 000000000000..12dd72859a43
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sm7125.dtsi
+> > @@ -0,0 +1,16 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> > + */
+> > +
+> > +#include "sc7180.dtsi"
+> > +
+> > +/* SM7125 uses Kryo 465 instead of Kryo 468 */
+> > +&CPU0 { compatible =3D "qcom,kryo465"; };
+> > +&CPU1 { compatible =3D "qcom,kryo465"; };
+> > +&CPU2 { compatible =3D "qcom,kryo465"; };
+> > +&CPU3 { compatible =3D "qcom,kryo465"; };
+> > +&CPU4 { compatible =3D "qcom,kryo465"; };
+> > +&CPU5 { compatible =3D "qcom,kryo465"; };
+> > +&CPU6 { compatible =3D "qcom,kryo465"; };
+> > +&CPU7 { compatible =3D "qcom,kryo465"; };
