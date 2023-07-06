@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2666C74A157
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1345B74A159
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbjGFPqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
+        id S232108AbjGFPrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjGFPqw (ORCPT
+        with ESMTP id S229996AbjGFPrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:46:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3C819A7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:46:04 -0700 (PDT)
+        Thu, 6 Jul 2023 11:47:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE7C19B2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688658363;
+        s=mimecast20190719; t=1688658375;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pQumlSibFcTmcmpj3o91A5K5Zwuz/UGXp5mnVQ2pvKA=;
-        b=fpXlYj5ZHPP/E4JamhDvSdyC6ON0dj86/WGxFcnSHYYEw0rL0/3jcaZr7xomEH9AnTOiMS
-        +qTF55Iwu5E4caW8BgxSSVMCpLubPvpVV8AqasR5W5EnLST9uJaQd6/VVyGBKiKJjcCIzo
-        TxIo8gKiHgreEUwoybSIwceB6xP1Gtg=
+        bh=X3bCqAOghUMsrFt01sdBss+0xjEFSAaHuAsd0sFdmyw=;
+        b=IF8fGozyH5BdhjFxzK679BBw/9Vjxcr92sKiIfGmtl0lb1z2ND3p3nw7u8zP60y/6b6t5H
+        XF0ZR+nPuKwVR9NCJWzEsB7Am+lui6QbiJ5o9YuxeI5FVi7cAFLi76ZEwbj0kBcv+mYPaE
+        v8i8fgkSGS04+aGinf+iFgKFYO2tXuQ=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-pVjnAUWyOpa14DMQOD0ttQ-1; Thu, 06 Jul 2023 11:46:02 -0400
-X-MC-Unique: pVjnAUWyOpa14DMQOD0ttQ-1
+ us-mta-556-7eAVe7wZPSC4sGD6Lhz-8w-1; Thu, 06 Jul 2023 11:46:10 -0400
+X-MC-Unique: 7eAVe7wZPSC4sGD6Lhz-8w-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55F7B101A528;
-        Thu,  6 Jul 2023 15:46:00 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC4E6185A792;
+        Thu,  6 Jul 2023 15:46:08 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 22C8FF5CF0;
-        Thu,  6 Jul 2023 15:45:50 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D76AF5CF0;
+        Thu,  6 Jul 2023 15:46:00 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org, arnd@arndb.de,
@@ -46,12 +46,10 @@ Cc:     akpm@linux-foundation.org, linux-mm@kvack.org, arnd@arndb.de,
         wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
         shorne@gmail.com, David.Laight@ACULAB.COM, deller@gmx.de,
         nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-        Baoquan He <bhe@redhat.com>, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: [PATCH v8 03/19] openrisc: mm: remove unneeded early ioremap code
-Date:   Thu,  6 Jul 2023 23:45:04 +0800
-Message-Id: <20230706154520.11257-4-bhe@redhat.com>
+        Baoquan He <bhe@redhat.com>
+Subject: [PATCH v8 04/19] mm/ioremap: Define generic_ioremap_prot() and generic_iounmap()
+Date:   Thu,  6 Jul 2023 23:45:05 +0800
+Message-Id: <20230706154520.11257-5-bhe@redhat.com>
 In-Reply-To: <20230706154520.11257-1-bhe@redhat.com>
 References: <20230706154520.11257-1-bhe@redhat.com>
 MIME-Version: 1.0
@@ -68,98 +66,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under arch/openrisc, there isn't any place where ioremap() is called.
-It means that there isn't early ioremap handling needed in openrisc,
-So the early ioremap handling code in ioremap() of
-arch/openrisc/mm/ioremap.c is unnecessary and can be removed.
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-And also remove the special handling in iounmap() since no page
-is got from fixmap pool along with early ioremap code removing
-in ioremap().
+Define a generic version of ioremap_prot() and iounmap() that
+architectures can call after they have performed the necessary
+alteration to parameters and/or necessary verifications.
 
-Link: https://lore.kernel.org/linux-mm/YwxfxKrTUtAuejKQ@oscomms1/
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Baoquan He <bhe@redhat.com>
-Acked-by: Stafford Horne <shorne@gmail.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Cc: Jonas Bonn <jonas@southpole.se>
-Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Cc: Stafford Horne <shorne@gmail.com>
-Cc: openrisc@lists.librecores.org
 ---
- arch/openrisc/mm/ioremap.c | 43 +++++---------------------------------
- 1 file changed, 5 insertions(+), 38 deletions(-)
+ include/asm-generic/io.h |  4 ++++
+ mm/ioremap.c             | 22 ++++++++++++++++------
+ 2 files changed, 20 insertions(+), 6 deletions(-)
 
-diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-index 8ec0dafecf25..cdbcc7e73684 100644
---- a/arch/openrisc/mm/ioremap.c
-+++ b/arch/openrisc/mm/ioremap.c
-@@ -22,8 +22,6 @@
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index 587e7e9b9a37..a7ca2099ba19 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -1073,9 +1073,13 @@ static inline bool iounmap_allowed(void *addr)
+ }
+ #endif
  
- extern int mem_init_done;
++void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
++				   pgprot_t prot);
++
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+ 			   unsigned long prot);
+ void iounmap(volatile void __iomem *addr);
++void generic_iounmap(volatile void __iomem *addr);
  
--static unsigned int fixmaps_used __initdata;
--
- /*
-  * Remap an arbitrary physical address space into the kernel virtual
-  * address space. Needed when the kernel wants to access high addresses
-@@ -52,24 +50,14 @@ void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
- 	p = addr & PAGE_MASK;
- 	size = PAGE_ALIGN(last_addr + 1) - p;
+ static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
+ {
+diff --git a/mm/ioremap.c b/mm/ioremap.c
+index 8652426282cc..db6234b9db59 100644
+--- a/mm/ioremap.c
++++ b/mm/ioremap.c
+@@ -11,8 +11,8 @@
+ #include <linux/io.h>
+ #include <linux/export.h>
  
--	if (likely(mem_init_done)) {
--		area = get_vm_area(size, VM_IOREMAP);
--		if (!area)
--			return NULL;
--		v = (unsigned long)area->addr;
--	} else {
--		if ((fixmaps_used + (size >> PAGE_SHIFT)) > FIX_N_IOREMAPS)
--			return NULL;
--		v = fix_to_virt(FIX_IOREMAP_BEGIN + fixmaps_used);
--		fixmaps_used += (size >> PAGE_SHIFT);
--	}
-+	area = get_vm_area(size, VM_IOREMAP);
-+	if (!area)
-+		return NULL;
-+	v = (unsigned long)area->addr;
+-void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot)
++void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
++				   pgprot_t prot)
+ {
+ 	unsigned long offset, vaddr;
+ 	phys_addr_t last_addr;
+@@ -28,7 +28,7 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+ 	phys_addr -= offset;
+ 	size = PAGE_ALIGN(size + offset);
  
- 	if (ioremap_page_range(v, v + size, p,
- 			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
--		if (likely(mem_init_done))
--			vfree(area->addr);
--		else
--			fixmaps_used -= (size >> PAGE_SHIFT);
-+		vfree(area->addr);
+-	if (!ioremap_allowed(phys_addr, size, prot))
++	if (!ioremap_allowed(phys_addr, size, pgprot_val(prot)))
+ 		return NULL;
+ 
+ 	area = get_vm_area_caller(size, VM_IOREMAP,
+@@ -38,17 +38,22 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+ 	vaddr = (unsigned long)area->addr;
+ 	area->phys_addr = phys_addr;
+ 
+-	if (ioremap_page_range(vaddr, vaddr + size, phys_addr,
+-			       __pgprot(prot))) {
++	if (ioremap_page_range(vaddr, vaddr + size, phys_addr, prot)) {
+ 		free_vm_area(area);
  		return NULL;
  	}
  
-@@ -79,27 +67,6 @@ EXPORT_SYMBOL(ioremap);
- 
- void iounmap(volatile void __iomem *addr)
- {
--	/* If the page is from the fixmap pool then we just clear out
--	 * the fixmap mapping.
--	 */
--	if (unlikely((unsigned long)addr > FIXADDR_START)) {
--		/* This is a bit broken... we don't really know
--		 * how big the area is so it's difficult to know
--		 * how many fixed pages to invalidate...
--		 * just flush tlb and hope for the best...
--		 * consider this a FIXME
--		 *
--		 * Really we should be clearing out one or more page
--		 * table entries for these virtual addresses so that
--		 * future references cause a page fault... for now, we
--		 * rely on two things:
--		 *   i)  this code never gets called on known boards
--		 *   ii) invalid accesses to the freed areas aren't made
--		 */
--		flush_tlb_all();
--		return;
--	}
--
- 	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
+ 	return (void __iomem *)(vaddr + offset);
  }
++
++void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
++			   unsigned long prot)
++{
++	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
++}
+ EXPORT_SYMBOL(ioremap_prot);
+ 
+-void iounmap(volatile void __iomem *addr)
++void generic_iounmap(volatile void __iomem *addr)
+ {
+ 	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
+ 
+@@ -58,4 +63,9 @@ void iounmap(volatile void __iomem *addr)
+ 	if (is_vmalloc_addr(vaddr))
+ 		vunmap(vaddr);
+ }
++
++void iounmap(volatile void __iomem *addr)
++{
++	generic_iounmap(addr);
++}
  EXPORT_SYMBOL(iounmap);
 -- 
 2.34.1
