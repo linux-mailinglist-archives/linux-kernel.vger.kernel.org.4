@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B044E74A3CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C203874A3C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 20:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjGFS3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 14:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        id S232370AbjGFS3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 14:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjGFS3h (ORCPT
+        with ESMTP id S232304AbjGFS3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 14:29:37 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27A31BFC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:29:36 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-666e3b15370so690112b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:29:36 -0700 (PDT)
+        Thu, 6 Jul 2023 14:29:40 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DD41BF6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 11:29:39 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3a04e5baffcso987861b6e.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 11:29:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688668176; x=1691260176;
+        d=broadcom.com; s=google; t=1688668178; x=1691260178;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0cu2lwsj8lZsvKlL7iIsn2njGLUHuLcymfkJT5BpYk=;
-        b=YbNtEpUANR2TRTbcsFQ7k0zPPS9nd8WrCAYB1M6s13r0Go1H2SayophwDMv+oew+1Y
-         ps5o7ePa6db7TtfhyMgimps8sjiL0xyNbFCU0EFi0ef+8tCol95GGFi4Ym2hUcgaJtMS
-         b5mTLBKpOAuaLoda+kMmuifxBnoelM/HlUPss=
+        bh=aa+nUjBlOMfq0WnrVZHm27tMCu9V72ZfvnaM6ufPeMI=;
+        b=A4I/K3KxZWmdzXHAwOpSMH18KTEhGc0FP9H3kZras3W48OCVW7WljY3ZuQC02NG6H0
+         KcwDdTe6OTtSUDqF3RmBNOpeie5CtvX0wKlngIvZp9iczJGEhHzHW0f1sY27iWeDMVQw
+         yrdDufSuIaP8hJFkmFmRTYYUOe4xKALemiIPA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688668176; x=1691260176;
+        d=1e100.net; s=20221208; t=1688668178; x=1691260178;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0cu2lwsj8lZsvKlL7iIsn2njGLUHuLcymfkJT5BpYk=;
-        b=NbNxPvri25JhoL8WMKhIxNx7GJiGZZ0wdyyJN/fPf49CfbQZRYjmpK9fVJ5kJ3VDsP
-         +siDbNakcqyI/x5S6We/BRyXseobBakd53hIQwxNL3BaNPTYPpBIOEo/7P5Yu1ttQH/Q
-         LZI0FgGQp7pok4ILf9wPUKTWafR3akY4gJs/mkRH+nuUZtxlmfpkkzJihlVAhQJtCr+r
-         tIk08cugTZQ9DoImr5BH+YnY7guNespsn1O/ds/6taNUxFxRjlxgS6EllF2j/pnPNvB4
-         2E+tdMqS0GJYwN3lOg/yIHpU1Q1jM+lgT3fk4/gnXmef6Joe1h/Vvqq02rSqDjMeKWZ2
-         ITXw==
-X-Gm-Message-State: ABy/qLbJlzgGv7JNNbLPB6SP+w07OFCG0TOsJ587avdf9gy1Pjp3gk3r
-        09zWx5p/wIEhVzfTrKIBiw173g==
-X-Google-Smtp-Source: APBJJlHeySiuxxq2R6Ai3jVV/fwkfMpSWlkHFx80dOBaKpwk/a+GxXItO74MPBe9ET2kvwqH5Kk/EA==
-X-Received: by 2002:a05:6a00:139b:b0:679:bc89:e5b with SMTP id t27-20020a056a00139b00b00679bc890e5bmr2741416pfg.19.1688668176150;
-        Thu, 06 Jul 2023 11:29:36 -0700 (PDT)
+        bh=aa+nUjBlOMfq0WnrVZHm27tMCu9V72ZfvnaM6ufPeMI=;
+        b=iVdFa+0mpgc1gpeKQWwK7y3zL+kfJDV+aqA7XJUCwZlHlb+6S6LtOlDa4ckKqsL3VX
+         NpLTtq8vtLPOMfHgV13zVJrum7/J1vw+8bJzKSh1hcyiX2vt+HJDvrtGJmaf23It2lgC
+         x+vJsQJRNH5NQ5TB2ZAT3lLVaGBgmqULWMTu2uO5eLKKP2eWYUyYFtRati282u/jkOuz
+         lK7LmkBbEbeA6CIJhSGDV2TfBY9dP81INZ/Hu8LWTMx0pbMpN5XSslCx6jj7WlZ8SQp9
+         a4qrcl6e4Xm7YjUY/Mfe+WkyR981/tURKiACoFnUjnerCUfS/YknqWblbR7jn+lI91ft
+         uG6g==
+X-Gm-Message-State: ABy/qLaorha8IR1Rqrgg3nk9r16DBCcC7JOSsdahD4QW1r0VS5VkLpYw
+        ofCn5FkaJ4eqore3EyCRxaIdJg==
+X-Google-Smtp-Source: APBJJlEu0/6nKgzQiBWWDRInj7WeP9oxg2N8PE6bo/mL9hT1ezoSartBcIyivOSTDc2c9REEA70JWw==
+X-Received: by 2002:a05:6808:1789:b0:3a3:7228:8c98 with SMTP id bg9-20020a056808178900b003a372288c98mr4043821oib.2.1688668178327;
+        Thu, 06 Jul 2023 11:29:38 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id y13-20020aa7804d000000b006826c9e4397sm1580871pfm.48.2023.07.06.11.29.34
+        by smtp.gmail.com with ESMTPSA id y13-20020aa7804d000000b006826c9e4397sm1580871pfm.48.2023.07.06.11.29.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 11:29:35 -0700 (PDT)
+        Thu, 06 Jul 2023 11:29:37 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         Linux MTD List <linux-mtd@lists.infradead.org>
@@ -59,15 +59,15 @@ Cc:     f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Richard Weinberger <richard@nod.at>,
         Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: [PATCH v4 3/5] mtd: rawnand: brcmnand: Fix crash during the panic_write
-Date:   Thu,  6 Jul 2023 11:29:07 -0700
-Message-Id: <20230706182909.79151-4-william.zhang@broadcom.com>
+Subject: [PATCH v4 4/5] mtd: rawnand: brcmnand: Fix potential out-of-bounds access in oob write
+Date:   Thu,  6 Jul 2023 11:29:08 -0700
+Message-Id: <20230706182909.79151-5-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230706182909.79151-1-william.zhang@broadcom.com>
 References: <20230706182909.79151-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cd8c6c05ffd5b21f"
+        boundary="000000000000edf29205ffd5b252"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,60 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000cd8c6c05ffd5b21f
+--000000000000edf29205ffd5b252
 Content-Transfer-Encoding: 8bit
 
-When executing a NAND command within the panic write path, wait for any
-pending command instead of calling BUG_ON to avoid crashing while
-already crashing.
+When the oob buffer length is not in multiple of words, the oob write
+function does out-of-bounds read on the oob source buffer at the last
+iteration. Fix that by always checking length limit on the oob buffer
+read and fill with 0xff when reaching the end of the buffer to the oob
+registers.
 
 Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
 Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Reviewed-by: Kursad Oney <kursad.oney@broadcom.com>
-Reviewed-by: Kamal Dasu <kamal.dasu@broadcom.com>
 Cc: stable@vger.kernel.org
 
 ---
 
 Changes in v4:
-- Update commit message
+- Add comments in the write_oob_to_regs function
 - Add cc stable tag
 
-Changes in v3: None
-Changes in v2: None
+Changes in v3:
+- Fix kernel test robot sparse warning:
+   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1500:54: sparse: expected unsigned int [usertype] data
+   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1500:54: sparse: got restricted __be32 [usertype]
 
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Changes in v2:
+- Handle the remaining unaligned oob data after the oob data write loop
+
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-index 9a373a10304d..b2c6396060db 100644
+index b2c6396060db..71d0ba652bee 100644
 --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
 +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-@@ -1608,7 +1608,17 @@ static void brcmnand_send_cmd(struct brcmnand_host *host, int cmd)
+@@ -1477,19 +1477,33 @@ static int write_oob_to_regs(struct brcmnand_controller *ctrl, int i,
+ 			     const u8 *oob, int sas, int sector_1k)
+ {
+ 	int tbytes = sas << sector_1k;
+-	int j;
++	int j, k = 0;
++	u32 last = 0xffffffff;
++	u8 *plast = (u8 *)&last;
  
- 	dev_dbg(ctrl->dev, "send native cmd %d addr 0x%llx\n", cmd, cmd_addr);
+ 	/* Adjust OOB values for 1K sector size */
+ 	if (sector_1k && (i & 0x01))
+ 		tbytes = max(0, tbytes - (int)ctrl->max_oob);
+ 	tbytes = min_t(int, tbytes, ctrl->max_oob);
  
--	BUG_ON(ctrl->cmd_pending != 0);
+-	for (j = 0; j < tbytes; j += 4)
 +	/*
-+	 * If we came here through _panic_write and there is a pending
-+	 * command, try to wait for it. If it times out, rather than
-+	 * hitting BUG_ON, just return so we don't crash while crashing.
++	 * tbytes may not be multiple of words. Make sure we don't read out of
++	 * the boundary and stop at last word.
 +	 */
-+	if (oops_in_progress) {
-+		if (ctrl->cmd_pending &&
-+			bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0))
-+			return;
-+	} else
-+		BUG_ON(ctrl->cmd_pending != 0);
- 	ctrl->cmd_pending = cmd;
++	for (j = 0; (j + 3) < tbytes; j += 4)
+ 		oob_reg_write(ctrl, j,
+ 				(oob[j + 0] << 24) |
+ 				(oob[j + 1] << 16) |
+ 				(oob[j + 2] <<  8) |
+ 				(oob[j + 3] <<  0));
++
++	/* handle the remaing bytes */
++	while (j < tbytes)
++		plast[k++] = oob[j++];
++
++	if (tbytes & 0x3)
++		oob_reg_write(ctrl, (tbytes & ~0x3), (__force u32)cpu_to_be32(last));
++
+ 	return tbytes;
+ }
  
- 	ret = bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0);
 -- 
 2.37.3
 
 
---000000000000cd8c6c05ffd5b21f
+--000000000000edf29205ffd5b252
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -202,13 +224,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIChHeKDCnH9+qUjW45aIyaXs53Yk
-0mOWstzrupNse8axMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDcwNjE4MjkzNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPdB+05OkFsnrExkEgiAro51uAAj
+sKAl5sUEfub5VKuKMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDcwNjE4MjkzOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCcMCElsTKTpj0tDQBkoDaMpkQD8rDWAQ9x+gGb1udnd1+c
-dYXOVCst69zScFzC17X/87/mBJz4UIF639hJBB6AMgh8h2plsSIblNDyxLEG1lgODB4sw4kgqWby
-+1bldeQfzZmAFUTdZYpuytJnGJ6m/HjXY9tGrv4Hp7vT3732KF+KOW5dWOsmkgT8e8OCnWKmg5G2
-P4lGAKe8rwqIkOhD01pvQI5qvLGgkAZa608XlFWkDTueD8dlxiT3fLfehD+2BKEcqVPwFoJ6DwJz
-ZWX70gEQXGOnsNJ7Aa6o9d1kZJPCKI1cn+dD2JFVKpbJWeZQYaxdTN/nFsm/Rc+Ft8X3
---000000000000cd8c6c05ffd5b21f--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAXQTRyW4sD7PPG6bTIa33WB8yM3A25qFuXhELaD6/MMzUN
+m1KXZDwdLq1r+E26eAYkMXr0fyHyA84UZS5eTefjTp5mB00HE0CZvd13yep3FPXnsVWpu9V4HsiB
+HnKQKKJd1PZ/cM/mQqcHgkrtsypneQkgpZhMEwGMyey+SF5DxdAIR+oQQhMfBg89rXGELcC3M0sG
+k5Wiv3WOUJ378gyzKStV5OsjpuZVuJf3/IErds0ky25+LrtQQP0aNGBmiklBTwn+SthjMmuXb9rC
+K8wW2UPlj6JYN1RzO6tRhSVxq9Mx8IX6I8Fm3UGV5PbvtEF9KVJm0Wf2g6iNWQ/FAcrb
+--000000000000edf29205ffd5b252--
