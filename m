@@ -2,88 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125227494E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC5974950B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 07:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbjGFFMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 01:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        id S232916AbjGFFmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 01:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjGFFMr (ORCPT
+        with ESMTP id S231950AbjGFFmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 01:12:47 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D661BE4
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 22:12:40 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-4036bd4fff1so200891cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 22:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688620359; x=1691212359;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ytLtdURE8ci1p8O07WRCYTemM1Z6XZ6vCUH5E5BlFNk=;
-        b=wdriVbGjW43OPJ6t+uBLbF8yBP9zVmCjpkWDsp/8C07ojo5tvNbeU/8KpY2peE3R6o
-         gBZEL4+YIWkd8t2MnPcVTjjG0AczP2KJJdTxb0zvlmq231NtE5mGgF4uk1EmmvQdpAIw
-         Z+NTkULhjtgZqkS8m67oOdCNmHmQyyVHrqY9aArYaxqChB2kxgL8G86RBofUUIIbQLMx
-         MoHvoFYv1p9GtPVVac0eCDahj/qrbdIgsrcUmyrLF6BPNNiyVn9MN2W2OaT7RKLVxNeM
-         JKPdTl5gQXzEbQ59r4B2fjFl9akz8KR5IjfQZAMNPiSnN79XU3NpA9rQ8fvMXjonXet4
-         dUXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688620359; x=1691212359;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ytLtdURE8ci1p8O07WRCYTemM1Z6XZ6vCUH5E5BlFNk=;
-        b=aUhE3pQ7cr02qyo5/9g8j587IIv9TmyfKOReND+NwKX6egSv8wpVcbbk+yYwptaVoi
-         4uKKO6z5hNJeQ/SKpQJV254mqnAtQWD9W028PuGX48t/6RaNP4qdwDccaHLoS+e8Nm9X
-         PaD6Wk91Vw2WbVG9Qi2x9ReqQLNkR/15Aj8/pF+dPbJfWSoKQLMaB3tlVcIzYWg7hkd4
-         +KX3gFhsijCkCt840p+EifFKqC4tM91TnQT70vdbD/eN+qFdvylwD0a+/hzuSC+wZvTA
-         VjJlgBlfxf5Pbagi3VQEkKqzIa8s+zJpYIdsWBrqYuSu6JypTb0vOnjq6u9mC6p4XyKc
-         XgDQ==
-X-Gm-Message-State: ABy/qLadvlam21g/NJCrRQU/ubIAqjaq6GS0QMg3JeHRbgTxAQUaln7p
-        UT1vAXYmxWV1uR1nGL5gLV1wf+MKvC4vpmNy9DWW
-X-Google-Smtp-Source: APBJJlFC39UupwXY44uw6HCPSzb8ZZHacNRKC5iAYB0XEXyIDerGoosbNVBvV/EMY0jseiKcB596jxl2p048/OWEhPs=
-X-Received: by 2002:ac8:7d0a:0:b0:3ef:404a:b291 with SMTP id
- g10-20020ac87d0a000000b003ef404ab291mr41859qtb.7.1688620359494; Wed, 05 Jul
- 2023 22:12:39 -0700 (PDT)
+        Thu, 6 Jul 2023 01:42:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14B819B7;
+        Wed,  5 Jul 2023 22:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688622153; x=1720158153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fhO+nRl8dQCGf5/sU9bXTh4CEf27dyW1SWH8GIwBd0g=;
+  b=N/vc52KbRQQypIL00pIZJd7DKMY4oQuFkcavTMknxWJwikmrffLiXhg2
+   EfJov0fKfcxlFrkJuD8XEQJt7Fe/oWxsvUeLYqLSShhUA/oWFoMwJiJOG
+   dVBIIw7vybvc+eURgtyW+nFEhmyZ9DH07egqsllc0wV+X2xO9LlSDf2Jx
+   1yk8wZa5Pw3yYA0RZgeoiW50fZFpfq9TzwqGtF9OakGdKq5SAXrO3KBsw
+   dAe9plm85NSN75QLqPI9iFAiMdZUSjbWuUuhuq5K3fexq9Ng4JnW1LU+f
+   wYrMBEwAUZrrXLS3i8f04VHLCTB2lwe7tdHlPjBqZSHdT1dC3n2j7rfDk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="362381887"
+X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
+   d="scan'208";a="362381887"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 22:42:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="696728942"
+X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
+   d="scan'208";a="696728942"
+Received: from unknown (HELO fred..) ([172.25.112.68])
+  by orsmga006.jf.intel.com with ESMTP; 05 Jul 2023 22:42:24 -0700
+From:   Xin Li <xin3.li@intel.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, xin3.li@intel.com
+Subject: [PATCH] x86/trapnr: Add event type macros to <asm/trapnr.h>
+Date:   Wed,  5 Jul 2023 22:14:43 -0700
+Message-Id: <20230706051443.2054-1-xin3.li@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230704052405.5089-1-rdunlap@infradead.org> <20230704052405.5089-3-rdunlap@infradead.org>
-In-Reply-To: <20230704052405.5089-3-rdunlap@infradead.org>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 5 Jul 2023 22:12:28 -0700
-Message-ID: <CANDhNCpVznR-6-cf6dLYF30MPK3ktj4=DjDjku3OWU6p2hyzaw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] time: add kernel-doc in time.c
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 10:24=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
-> Add kernel-doc for all APIs that do not already have it.
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: John Stultz <jstultz@google.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
+Intel VT-x classifies events into eight different types, which is
+inherited by FRED for event identification. As such, event type
+becomes a common x86 concept, and should be defined in a common x86
+header.
 
-Acked-by: John Stultz <jstultz@google.com>
+Add event type macros to <asm/trapnr.h>, and use it in <asm/vmx.h>.
 
-Thanks again!
--john
+Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: Xin Li <xin3.li@intel.com>
+---
+ arch/x86/include/asm/trapnr.h | 18 ++++++++++++++++++
+ arch/x86/include/asm/vmx.h    | 17 +++++++++--------
+ 2 files changed, 27 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/include/asm/trapnr.h b/arch/x86/include/asm/trapnr.h
+index f5d2325aa0b7..356af7ceab4d 100644
+--- a/arch/x86/include/asm/trapnr.h
++++ b/arch/x86/include/asm/trapnr.h
+@@ -2,6 +2,24 @@
+ #ifndef _ASM_X86_TRAPNR_H
+ #define _ASM_X86_TRAPNR_H
+ 
++/*
++ * Event type codes used by both Intel VT-x and FRED
++ */
++/* Maskable external interrupt */
++#define EVENT_TYPE_HWINT	0
++#define EVENT_TYPE_RESERVED	1
++#define EVENT_TYPE_NMI		2
++/* Hardware exceptions (e.g., page fault) */
++#define EVENT_TYPE_HWFAULT	3
++/* Software interrupt (INT n) */
++#define EVENT_TYPE_SWINT	4
++/* INT1 (ICEBP) */
++#define EVENT_TYPE_PRIVSW	5
++/* Software exception (INT3 or INTO) */
++#define EVENT_TYPE_SWFAULT	6
++/* VT-x MTF or FRED SYSCALL/SYSENTER */
++#define EVENT_TYPE_OTHER	7
++
+ /* Interrupts/Exceptions */
+ 
+ #define X86_TRAP_DE		 0	/* Divide-by-zero */
+diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+index 0d02c4aafa6f..15a096fceb1d 100644
+--- a/arch/x86/include/asm/vmx.h
++++ b/arch/x86/include/asm/vmx.h
+@@ -17,6 +17,7 @@
+ #include <linux/types.h>
+ 
+ #include <uapi/asm/vmx.h>
++#include <asm/trapnr.h>
+ #include <asm/vmxfeatures.h>
+ 
+ #define VMCS_CONTROL_BIT(x)	BIT(VMX_FEATURE_##x & 0x1f)
+@@ -374,14 +375,14 @@ enum vmcs_field {
+ #define VECTORING_INFO_DELIVER_CODE_MASK    	INTR_INFO_DELIVER_CODE_MASK
+ #define VECTORING_INFO_VALID_MASK       	INTR_INFO_VALID_MASK
+ 
+-#define INTR_TYPE_EXT_INTR              (0 << 8) /* external interrupt */
+-#define INTR_TYPE_RESERVED              (1 << 8) /* reserved */
+-#define INTR_TYPE_NMI_INTR		(2 << 8) /* NMI */
+-#define INTR_TYPE_HARD_EXCEPTION	(3 << 8) /* processor exception */
+-#define INTR_TYPE_SOFT_INTR             (4 << 8) /* software interrupt */
+-#define INTR_TYPE_PRIV_SW_EXCEPTION	(5 << 8) /* ICE breakpoint - undocumented */
+-#define INTR_TYPE_SOFT_EXCEPTION	(6 << 8) /* software exception */
+-#define INTR_TYPE_OTHER_EVENT           (7 << 8) /* other event */
++#define INTR_TYPE_EXT_INTR		(EVENT_TYPE_HWINT << 8)		/* external interrupt */
++#define INTR_TYPE_RESERVED		(EVENT_TYPE_RESERVED << 8)	/* reserved */
++#define INTR_TYPE_NMI_INTR		(EVENT_TYPE_NMI << 8)		/* NMI */
++#define INTR_TYPE_HARD_EXCEPTION	(EVENT_TYPE_HWFAULT << 8)	/* processor exception */
++#define INTR_TYPE_SOFT_INTR		(EVENT_TYPE_SWINT << 8)		/* software interrupt */
++#define INTR_TYPE_PRIV_SW_EXCEPTION	(EVENT_TYPE_PRIVSW << 8)	/* ICE breakpoint - undocumented */
++#define INTR_TYPE_SOFT_EXCEPTION	(EVENT_TYPE_SWFAULT << 8)	/* software exception */
++#define INTR_TYPE_OTHER_EVENT		(EVENT_TYPE_OTHER << 8)		/* other event */
+ 
+ /* GUEST_INTERRUPTIBILITY_INFO flags. */
+ #define GUEST_INTR_STATE_STI		0x00000001
+-- 
+2.34.1
+
