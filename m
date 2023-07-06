@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C1A74A69C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F5974A6A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jul 2023 00:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjGFWND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 18:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
+        id S231756AbjGFWQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 18:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGFWNC (ORCPT
+        with ESMTP id S229452AbjGFWQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 18:13:02 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323951B6;
-        Thu,  6 Jul 2023 15:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AOUdoCKv7lMKEBDeJuW8QLGANU11vjlDtc+UqVr1zFk=; b=oejr2bmq1uN3b7HrJx+ElPbSw5
-        we3jUSGkXPajsm1VTvHviFC3GwS/NaHsz1QsPFRkvaUq7r+rBdyS2errjC3EY1PRnVjcDpGUlgYvK
-        /1soI8bcSeGMJWZholjAS8+Qt+OwFn3a0aWHzps1cm/yKVnv/q2YxMXWdR874NBXlbeB4wr+Skl2c
-        nM3+qFNFe9U/hWkDh9MMQME0URBrMEUda85VjmrM7Gu5M5Eh2LxPzWYWt/Fbt8l1kSRtIAT4twoVr
-        jwlsg1lVsmOlMQlJWr5vCfx9rhtl9TtKl2S6xbuCXnbXSHWru+tXgvWDWT4P1WhYRdUGV2SMVYxDS
-        1rK8eJQg==;
-Received: from jlbec by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHXDb-0035IK-0N;
-        Thu, 06 Jul 2023 22:12:55 +0000
-Date:   Thu, 6 Jul 2023 15:12:51 -0700
-From:   Joel Becker <jlbec@evilplan.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 32/92] configfs: convert to ctime accessor functions
-Message-ID: <ZKc8Y8IB4DShCPZf@google.com>
-Mail-Followup-To: Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230705185755.579053-1-jlayton@kernel.org>
- <20230705190309.579783-1-jlayton@kernel.org>
- <20230705190309.579783-30-jlayton@kernel.org>
- <20230706105446.r32oft4i3cj5bk3y@quack3>
+        Thu, 6 Jul 2023 18:16:27 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE2A1B6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 15:16:26 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7227F5C00C1;
+        Thu,  6 Jul 2023 18:16:24 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 06 Jul 2023 18:16:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1688681784; x=1688768184; bh=mZa85bjJH2f5cdL4Fdfp9uPj+HoFpYkkuG6
+        bMzMcTdQ=; b=KEmUd9mwOIc5og5O+4gcFwNYEKiX++l2j3hfeH4OZAjWc5ZOrbl
+        jo8drgUhxvSWcnPUy93cY9VBRWrhtcJxcxUL4HHPAoCgF9GNpAzjPUu8DHKv4xYi
+        s3MsHQy9p1OQ3oImwm/LaRNyIoLgvpWIpsW98oTRFgYtHhnf5w5H2cz89fqh+Tp2
+        juQLFHAkIVs1Ey08xOfNnE5FWn9KYDQdo8KypyAgTA212NIXe8IlTGE2LeEK/5LN
+        a9Wv7b3+88Dq8jRzaUxgfdxzrzwO/+bMIHvK55xqIQwy1YaQxlD9LOYQTB72Q6lc
+        pxYaBXnsaR0f9FeiR+ELxFDSXJdzO8tIy0A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1688681784; x=1688768184; bh=mZa85bjJH2f5cdL4Fdfp9uPj+HoFpYkkuG6
+        bMzMcTdQ=; b=o9EYYWELh+x81CkEnS47NL0uThwveb5exxfkYq4uMmYTRa8ymJZ
+        o6CnlzmC5U6FnqwcpQpWLFOQfJZKzUagM+60GH1eANvJWb4SXxLLID3Ntw4Q94Sy
+        No2ENZnagp2hgjGwAoBE3qTwJxXKbDOOkg3LiOmzr/nvGVp+OKVy/VvsXntDsGT0
+        qHZfOuWuwyQbcaf5HsjwK4gKfP9YpH8Upxv4wZ7S6diD0k1tXyvYqeybw1i7kNcB
+        QlDj5jMAbaxyDoaRWztbtNteDgXi2BoCFWffEJ6igJIui/5KL7TkRdcQZA9+FSUZ
+        ExlFs2IXXWaqHzOvWHK2gLxtxWfOuc8lXpQ==
+X-ME-Sender: <xms:Nz2nZOlV9eRIZqEX3Dch4kMCUKmULja2qQ5URWRFYFtf9WL8mgf5Eg>
+    <xme:Nz2nZF0GZ3C4-oJyhWftXv3CMwdlx5HJt_0lNEdB2zs54cWgZhtCDvZ0OT7yiFIWF
+    Fs-QFNstMymMFykutg>
+X-ME-Received: <xmr:Nz2nZMqbseah6x9fXub-SILH3JHrqDHRA8-goBaO98rHoamMmf0To3G2nJgP-fTrnjhbHA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvddtgddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkuffhvfevffgjfhgtgfgfggesthhqredttderjeenucfhrhhomhepnfhukhgv
+    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
+    epkeefffeujeevueejueegleelhedtgedvledukedttdffhfeifeelvdduheefjeeinecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvse
+    hljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:Nz2nZCk9stqxnWW5rQU0J28GUmM7ZG0WKfRi6Yx4Sde-HLv-LPObow>
+    <xmx:Nz2nZM2k5mwbSrAyWhOctBouBrDpQibQsqsIGPcU3dZiQniq3bgJ3w>
+    <xmx:Nz2nZJv1JsqTa6d1k4qxLCwVuunp4XswCwnsxy-6KWdfWVit9ouEwA>
+    <xmx:OD2nZNnhwgxdcyH96L4yPj1eJPQNv90sL-jK8YhPuHk-SBrYjiJ6mw>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Jul 2023 18:16:20 -0400 (EDT)
+Message-ID: <b1843d246fb02cd5f7590e9440124a080852d106.camel@ljones.dev>
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for ASUS ROG GZ301V
+From:   Luke Jones <luke@ljones.dev>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     tiwai@suse.com, perex@perex.cz, sbinding@opensource.cirrus.com,
+        andy.chi@canonical.com, tangmeng@uniontech.com, p.jungkamp@gmx.net,
+        kasper93@gmail.com, yangyuchi66@gmail.com,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 07 Jul 2023 10:16:15 +1200
+In-Reply-To: <87v8exml0e.wl-tiwai@suse.de>
+References: <20230706091447.17025-1-luke@ljones.dev>
+         <87v8exml0e.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706105446.r32oft4i3cj5bk3y@quack3>
-X-Burt-Line: Trees are cool.
-X-Red-Smith: Ninety feet between bases is perhaps as close as man has ever
- come to perfection.
-Sender: Joel Becker <jlbec@ftp.linux.org.uk>
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 12:54:46PM +0200, Jan Kara wrote:
-> On Wed 05-07-23 15:00:57, Jeff Layton wrote:
-> > In later patches, we're going to change how the inode's ctime field is
-> > used. Switch to using accessor functions instead of raw accesses of
-> > inode->i_ctime.
-> > 
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> 
-> Looks good. Feel free to add:
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
+On Thu, 2023-07-06 at 11:45 +0200, Takashi Iwai wrote:
+> On Thu, 06 Jul 2023 11:14:47 +0200,
+> Luke D. Jones wrote:
+> > diff --git a/Makefile b/Makefile
+> > index 12579666581f..e2cae6cc7574 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -2,7 +2,7 @@
+> > =C2=A0VERSION =3D 6
+> > =C2=A0PATCHLEVEL =3D 4
+> > =C2=A0SUBLEVEL =3D 0
+> > -EXTRAVERSION =3D
+> > +EXTRAVERSION =3D .rog
+> > =C2=A0NAME =3D Hurr durr I'ma ninja sloth
+> > =C2=A0
+> > =C2=A0# *DOCUMENTATION*
+>=20
+> Obviously this is wrong for upstreaming.
+> Please take a look at the patch before the submission at the next
+> time :)
 
-Agreed.
-
-Acked-by: Joel Becker <jlbec@evilplan.org>
-
-> 
-> 								Honza
-> 
-> > ---
-> >  fs/configfs/inode.c | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/fs/configfs/inode.c b/fs/configfs/inode.c
-> > index 1c15edbe70ff..fbdcb3582926 100644
-> > --- a/fs/configfs/inode.c
-> > +++ b/fs/configfs/inode.c
-> > @@ -88,8 +88,7 @@ int configfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
-> >  static inline void set_default_inode_attr(struct inode * inode, umode_t mode)
-> >  {
-> >  	inode->i_mode = mode;
-> > -	inode->i_atime = inode->i_mtime =
-> > -		inode->i_ctime = current_time(inode);
-> > +	inode->i_atime = inode->i_mtime = inode_set_ctime_current(inode);
-> >  }
-> >  
-> >  static inline void set_inode_attr(struct inode * inode, struct iattr * iattr)
-> > @@ -99,7 +98,7 @@ static inline void set_inode_attr(struct inode * inode, struct iattr * iattr)
-> >  	inode->i_gid = iattr->ia_gid;
-> >  	inode->i_atime = iattr->ia_atime;
-> >  	inode->i_mtime = iattr->ia_mtime;
-> > -	inode->i_ctime = iattr->ia_ctime;
-> > +	inode_set_ctime_to_ts(inode, iattr->ia_ctime);
-> >  }
-> >  
-> >  struct inode *configfs_new_inode(umode_t mode, struct configfs_dirent *sd,
-> > @@ -172,7 +171,7 @@ struct inode *configfs_create(struct dentry *dentry, umode_t mode)
-> >  		return ERR_PTR(-ENOMEM);
-> >  
-> >  	p_inode = d_inode(dentry->d_parent);
-> > -	p_inode->i_mtime = p_inode->i_ctime = current_time(p_inode);
-> > +	p_inode->i_mtime = inode_set_ctime_current(p_inode);
-> >  	configfs_set_inode_lock_class(sd, inode);
-> >  	return inode;
-> >  }
-> > -- 
-> > 2.41.0
-> > 
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
-
--- 
-
-Life's Little Instruction Book #237
-
-	"Seek out the good in people."
-
-			http://www.jlbec.org/
-			jlbec@evilplan.org
+Oh, sorry mate. It's been a very tough week. :(
