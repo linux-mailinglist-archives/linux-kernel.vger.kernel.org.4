@@ -2,150 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7C374A2C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58CB74A2C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbjGFRET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S232211AbjGFRF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 13:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbjGFRER (ORCPT
+        with ESMTP id S231169AbjGFRF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:04:17 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82412171D;
-        Thu,  6 Jul 2023 10:04:16 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-c581c758ad8so992274276.1;
-        Thu, 06 Jul 2023 10:04:16 -0700 (PDT)
+        Thu, 6 Jul 2023 13:05:57 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF88F1BE8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 10:05:55 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3a3373211a1so856790b6e.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 10:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688663055; x=1691255055;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OyVK+HWFyHpDagzJPlL/j2QN2G1znQeN5v1WZlWzVvg=;
-        b=Z7qoNlsSOsWG4m1MYqTqgktbR3t6YnplSRjSNkqD054KQ3Pxi1xjbE7FtSVf51L+C5
-         rLvW629zKPt+oDCZQeXyaqOO4xIaeirSVbvv7uhFwvGERU5ENL3hG4JErF6WCIhEMMEx
-         /7Yi6TEXYwREnrZbnasmZf3yZF+Oh/iozdJkdhm4TzbU6seadZqgzPN3YvzwHQqqlrKs
-         M7TTRKiwKSVL7v8kemqz2s8YMnL5x5jff0WivxYOfGpYTlnt5jhT/C7CHrv6UMo8FxxZ
-         DcKzWvA8Qr27ezMlVknpLxLbSHDUQ6oO5t+qjo4+DCrkigB/kwkWwmc1+ONfS86G71MD
-         zzlw==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1688663155; x=1691255155;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DbYorBSGNgBnNiqoshTpZfEFQccGjhuwwnRL/44SoP0=;
+        b=i4T0nNOBYy25Tum7t/4GwKsh3/lK7Uikcmkb4kOyw4gG9SEUDys1g5J3pJUji2g/jJ
+         LPaszbqCG0hhdxw9/hcWYxo+RYH1ml6lnNIyZhbERDGwRvHc2ctOj7XJ44sxi7yENjUw
+         ISHeOYxF9bfqqQgSJQFLfwKIWcXdzga6nV9hUibEpf/kvOAbkrIbqaSJYSVMFCC5fXPg
+         NqTooUkkAax89B8soY2d4ySMk4P3KloKJZNOjV7UtnbJUPzBK/u/RQMv8olff4elOxxD
+         8bPApwuR0J8ZY0C0moK+z9bNXqPu0MEPf38pn/4p0aoolZvo2R1Y15goKKKXtRMx59w7
+         uAOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688663055; x=1691255055;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyVK+HWFyHpDagzJPlL/j2QN2G1znQeN5v1WZlWzVvg=;
-        b=EOML57RDeBL5Li7v3HdTmM55XI0ESxs33DQGk2algfWok08Qw8WRNtxvKPFgQCwnL6
-         0vl1O3BLyknVirHD7qwWYvQCPtTFtyWpacK6xEZGifTiUhK7qnur3zuwav9ixvla+Y5M
-         TdGX5diAOtNHTuhBAGKD2ZdHWukE7FEAyitCdJ2ZATvHSFWOlD46WomekPkAGySWq6tm
-         FdRSHtYPYnrfJHBj7Qvlsq55wZ0FdYTUrjRKHkVVbmE7EYyiaXGjx1uk1M+hmZ3w1F+k
-         AAWjRgiAP2LQYTB3xZNa1iKghxmJ43zS5YRTebIAri/RtLYeJkS2SXAMQIcxadDU7qmW
-         Np2Q==
-X-Gm-Message-State: ABy/qLY5lgoHfaemUttrYGCfobGXp/BTGSPkA9WKxAp6VuTtlFZFCPfW
-        zI+aeuUoA+A21ply/xST+w3RHvSRy6s=
-X-Google-Smtp-Source: APBJJlGEGvpI+T34xGTcgc7yjlZ4W3KEV7jG9db5Aj3Cmq9+/eRPLD5kpBZqRQ2ImbEgEgWOK6F0Jg==
-X-Received: by 2002:a5b:c85:0:b0:c61:e44d:c08e with SMTP id i5-20020a5b0c85000000b00c61e44dc08emr2267273ybq.19.1688663055550;
-        Thu, 06 Jul 2023 10:04:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 132-20020a25048a000000b00bef51467958sm434274ybe.38.2023.07.06.10.04.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 10:04:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c63b387a-e670-fed1-86df-83bff46789a1@roeck-us.net>
-Date:   Thu, 6 Jul 2023 10:04:13 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <fbfea3ad-d327-4ad5-ac9c-648c7ca3fe1f@roeck-us.net>
- <CAMuHMdUfXdCf_CQuWXpP72MzKFYvXg3Ud1VN_3Bd0RHxfLhVeQ@mail.gmail.com>
- <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] sh: Avoid using IRQ0 on SH3 and SH4
-In-Reply-To: <7b2c0d812280afaefee0c70a9aea00a0fcf84e3a.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688663155; x=1691255155;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DbYorBSGNgBnNiqoshTpZfEFQccGjhuwwnRL/44SoP0=;
+        b=HR3Iy26Dpyb80Bdz/h2f2CklNJCPtjR+wJEx8IoMNikIn9AgTLWeqwhQf+fgH5Y9na
+         +zh13JnYj+S3AU+rRo2o0fnNPjCCoZrAq5+xoSDxfF0bCLwIAB7JkFR57VRkKBJw/RHK
+         6zVLAqLZ3y+C3uEM/NJp41DvPXaCkdz2qMXQurmY8r3NRiH7j6yvTQ/l/xUiTE0DyVyO
+         vrySWMYc6bcOa8Thaz/iCcLa+Orq+qZRbpuFCGNvi5AnsP17gM0jpF1yf92E9XSmgS5b
+         k0GyH0f0iu36kENksyMev49YOsKLQWklqialntPij8RMg59sog1vjRYSbMwtXz4PX2mL
+         F09A==
+X-Gm-Message-State: ABy/qLZih4zIj6eoQvPZMhhteJB6mS35mHP19TfacYlp2Wvn/mowxPM9
+        8naMt4WxziMjK97NIoBE80BX3A==
+X-Google-Smtp-Source: APBJJlHVjAgGUeOK5ZObTBmnmtOv0vpCjPIptZy244A4rKJYcvX5zFmOq+/846tjHtfgDBgeTsJodw==
+X-Received: by 2002:a05:6808:2784:b0:3a2:1b3b:494b with SMTP id es4-20020a056808278400b003a21b3b494bmr2067218oib.45.1688663154961;
+        Thu, 06 Jul 2023 10:05:54 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a030300b0026390b2d136sm46808pje.18.2023.07.06.10.05.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 10:05:54 -0700 (PDT)
+Date:   Thu, 06 Jul 2023 10:05:54 -0700 (PDT)
+X-Google-Original-Date: Thu, 06 Jul 2023 10:05:06 PDT (-0700)
+Subject:     Re: [PATCH] riscv: Start of DRAM should at least be aligned on PMD size for the direct mapping
+In-Reply-To: <20230704121837.248976-1-alexghiti@rivosinc.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        suagrfillet@gmail.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, alexghiti@rivosinc.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alexghiti@rivosinc.com
+Message-ID: <mhng-c5a71036-061e-4704-bcdf-2b23cab36908@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/23 09:38, John Paul Adrian Glaubitz wrote:
-> Hi Geert!
-> 
-> On Thu, 2023-07-06 at 17:39 +0200, Geert Uytterhoeven wrote:
->> Which sh4 platforms in particular?
->>
->> I booted a kernel with this patch on rts7751r2d (QEMU) and landisk
->> (physical) two days ago.
-> 
-> I gave it a try with the command line Guenter suggested and indeed the kernel locks
-> up right here with the patch applied and boots fine without it:
-> 
-> Creating 4 MTD partitions on "physmap-flash":
-> 0x000000000000-0x000000040000 : "U-Boot"
-> 0x000000040000-0x000000080000 : "Environment"
-> 0x000000080000-0x000000240000 : "Kernel"
-> 0x000000240000-0x000001000000 : "Flash_FS"
-> 8139too: 8139too Fast Ethernet driver 0.9.28
-> 8139too 0000:00:01.0: This (id 10ec:8139 rev 20) is an enhanced 8139C+ chip, use 8139cp
-> sm501-usb sm501-usb: SM501 OHCI
-> sm501-usb sm501-usb: new USB bus registered, assigned bus number 1
-> sm501-usb sm501-usb: irq 116, io mem 0x13e40000
-> usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.04
-> usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-> usb usb1: Product: SM501 OHCI
-> usb usb1: Manufacturer: Linux 6.4.0-12069-gc17414a273b8 ohci_hcd
-> usb usb1: SerialNumber: sm501-usb
-> hub 1-0:1.0: USB hub found
-> hub 1-0:1.0: 2 ports detected
-> usbcore: registered new interface driver usb-storage
-> rtc-r9701 spi0.0: cannot read RTC register
-> usbcore: registered new interface driver usbhid
-> usbhid: USB HID core driver
-> NET: Registered PF_PACKET protocol family
-> heartbeat: version 0.1.2 loaded
-> ata1: found unknown device (class 0)
-> (stops here)
-> 
-> Using rts7751r2dplus_defconfig and the following command line:
-> 
-> qemu-system-sh4 -M r2d -kernel vmlinuz-6.5-rc1 -hda debian_sid_sh4_standard.qcow2 -no-reboot -device rtl8139,netdev=net0 -netdev user,id=net0 -append "root=/dev/sda1 console=ttySC1,115200
-> earlycon=scif,mmio16,0xffe80000 noiotrap" -serial null -serial stdio -nographic -monitor null
-> 
-> And using this old qcow2 image:
-> 
->> https://people.debian.org/~aurel32/qemu/sh4/debian_sid_sh4_standard.qcow2
-> 
-> Maybe it's a configuration issue if it works for you?
-> 
+On Tue, 04 Jul 2023 05:18:37 PDT (-0700), alexghiti@rivosinc.com wrote:
+> So that we do not end up mapping the whole linear mapping using 4K
+> pages, which is slow at boot time, and also very likely at runtime.
+>
+> So make sure we align the start of DRAM on a PMD boundary.
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/mm/init.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 4fa420faa780..4a43ec275c6d 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -214,8 +214,13 @@ static void __init setup_bootmem(void)
+>  	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
+>
+>  	phys_ram_end = memblock_end_of_DRAM();
+> +
+> +	/*
+> +	 * Make sure we align the start of the memory on a PMD boundary so that
+> +	 * at worst, we map the linear mapping with PMD mappings.
+> +	 */
+>  	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
+> -		phys_ram_base = memblock_start_of_DRAM();
+> +		phys_ram_base = memblock_start_of_DRAM() & PMD_MASK;
 
-I tried rts7751r2dplus_defconfig with no modifications and the following minimized
-qemu command line.
+This rounds down, which IIUC will result in mappings outside what 
+memblock detected as the start af DRAM.  I'd expect that to cause bad 
+behavior somewhere.
 
-qemu-system-sh4 -M r2d -kernel arch/sh/boot/zImage -serial null -serial stdio -nographic -monitor null
+Shouldn't we be rounding up?
 
-This hangs after "heartbeat: version 0.1.2 loaded", so it doesn't
-even get to the point where it would try to load a root file system.
-After reverting this patch, I get
----[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
-as expected.
-
-I tried with qemu version 6.2, 7.1, 7.2, and 8.0.
-
-Guenter
-
-
-
+>
+>  	/*
+>  	 * In 64-bit, any use of __va/__pa before this point is wrong as we
