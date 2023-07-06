@@ -2,190 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9589B74A255
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A4774A260
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbjGFQja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 12:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S231149AbjGFQlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 12:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbjGFQjV (ORCPT
+        with ESMTP id S231492AbjGFQlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:39:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB71BD4;
-        Thu,  6 Jul 2023 09:39:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 817B660F4F;
-        Thu,  6 Jul 2023 16:39:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD5B4C433C8;
-        Thu,  6 Jul 2023 16:39:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688661556;
-        bh=h0OgFh+n1mPvFs2BQeBGKqCup9+gz5oIEYrZdP/kZ1I=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=R0xErIoJDEDCPvtj6yutBpmBjH5+sNN2DTcaezc0n9WR9TmEy1Nr2SEjJS8AccSd3
-         25C6dIotYWq8C5oJ9XdKjIpstBZeJWrrI9E27qO7jpwLOi76bYLKoIyXlH2wfstEMQ
-         tPDpcvtxi4PytZqu0bwUna2NlsoyPW4LBUJOY/NsN0hai4AjwHDjPZzylD8bgAPtdb
-         Cwl4u1kw+cVOCyrTxYlUiTtFJt//p8FjGirDXyUgy4nS8jwMLqoMNQN/rB22Oc6zG4
-         gH6et2pDl9nnxtn2MeaAt2F24E81hxy8q8zy8E74z/IjrpOLVV0NQ5YhU+0Jter5Dd
-         vcGyaW6m9hrYA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6BCE5CE3BFC; Thu,  6 Jul 2023 09:39:16 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 09:39:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH 11/14] context-tracking: Introduce work deferral
- infrastructure
-Message-ID: <4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230705181256.3539027-1-vschneid@redhat.com>
- <20230705181256.3539027-12-vschneid@redhat.com>
- <ZKXtfWZiM66dK5xC@localhost.localdomain>
- <xhsmhttuhuvix.mognet@vschneid.remote.csb>
- <ZKaoHrm0Fejb7kAl@lothringen>
+        Thu, 6 Jul 2023 12:41:17 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072181BD4
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 09:40:58 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso1074947276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 09:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20221208.gappssmtp.com; s=20221208; t=1688661657; x=1691253657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9GE3hSd67E8eCq4M6r1SzwMp8TikzZJ0WrTWmk8JY8=;
+        b=C56pyVvHUKnRboK4oYfSTmfvZcM3eRzvJgDafsdBsYX/TaPSUgYxT8itXzyr1fyaQo
+         jqoRAKjee5LWrfiJogxPRMiohgSxpDFrYlip5kDFnrEvb7EgzPpXohZy9EUKYan5fKVp
+         +xtyuh6uKi2SggAxKjAuiQnKgPDqC+TZGwcworQnERC+Mi+vbjkMFb9g6xGzypfZ6sPs
+         Fk9R38bF5FepOSRgS4+0Zhg/8Thzr7zOAQ0LO1UDIGRin+ZYSvxJABHV+jczl1Y5zKnd
+         UdW/Ez8kF6mAUiE+RtvjfWtW7jAVfxwmhpeAlmW+Tgh4B7rhlwtjPk01bn8uJ5k2Nlrc
+         lzKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688661657; x=1691253657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H9GE3hSd67E8eCq4M6r1SzwMp8TikzZJ0WrTWmk8JY8=;
+        b=Do5TXr2EGtFPvKXtYcHSKMQjBJgEDsqv7vpyrxYMF+RWg687M2nYa1er3pcCWmy9oZ
+         Qn/TfPKTW88o/WeKs5qE1W0HZnumTHNu2dmwYEHg5yL/ifPUUqhQSbpKoK2Zqp9x4GPl
+         ZXWmQk8Z7Xjw6wi0uAQtz0o8up515JpmROOGUA4q2x2df+Nw7JWhO3lP5OHL0AuZOp64
+         5k5QFtQnd6R9me3h8styDtmvfnCqO747DPFivkWZFdqxIbIA1SDyDINT/7jctokbbEfX
+         O2PPqef4qSJPlHebyDdtVfkrKkDP3ALDPKHcT50tjyv1zSFGAkKU+fI0qUDTI72SLRuM
+         W69Q==
+X-Gm-Message-State: ABy/qLYRSZcRTelhWl3JWEhKzOrt56ieR9Wtiu5gYaN1PiUFJ+TME49m
+        HHwljl14Px8nYCg09FT8Tjya5g==
+X-Google-Smtp-Source: APBJJlFjJUZiCn5H4tSF9ULQzki4mS6ibQnMRCsPD1OEN2sycygBgn5CV067fR8xSFFAsBCyHoswLA==
+X-Received: by 2002:a25:ac2:0:b0:c60:5fa5:c0b0 with SMTP id 185-20020a250ac2000000b00c605fa5c0b0mr3262678ybk.19.1688661656888;
+        Thu, 06 Jul 2023 09:40:56 -0700 (PDT)
+Received: from localhost (cpe-76-182-20-124.nc.res.rr.com. [76.182.20.124])
+        by smtp.gmail.com with ESMTPSA id b8-20020a5b0088000000b00c6135ffd2fcsm410897ybp.15.2023.07.06.09.40.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 09:40:56 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 12:40:55 -0400
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        djwong@kernel.org, dchinner@redhat.com, sandeen@redhat.com,
+        willy@infradead.org, tytso@mit.edu, bfoster@redhat.com,
+        jack@suse.cz, andreas.gruenbacher@gmail.com, brauner@kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        dhowells@redhat.com
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230706164055.GA2306489@perftesting>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <20230706155602.mnhsylo3pnief2of@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZKaoHrm0Fejb7kAl@lothringen>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230706155602.mnhsylo3pnief2of@moria.home.lan>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 01:40:14PM +0200, Frederic Weisbecker wrote:
-> On Thu, Jul 06, 2023 at 12:30:46PM +0100, Valentin Schneider wrote:
-> > >> +		ret = atomic_try_cmpxchg(&ct->work, &old_work, old_work | work);
-> > >> +
-> > >> +	preempt_enable();
-> > >> +	return ret;
-> > >> +}
-> > > [...]
-> > >> @@ -100,14 +158,19 @@ static noinstr void ct_kernel_exit_state(int offset)
-> > >>   */
-> > >>  static noinstr void ct_kernel_enter_state(int offset)
-> > >>  {
-> > >> +	struct context_tracking *ct = this_cpu_ptr(&context_tracking);
-> > >>      int seq;
-> > >> +	unsigned int work;
-> > >>
-> > >> +	work = ct_work_fetch(ct);
-> > >
-> > > So this adds another fully ordered operation on user <-> kernel transition.
-> > > How many such IPIs can we expect?
-> > >
+On Thu, Jul 06, 2023 at 11:56:02AM -0400, Kent Overstreet wrote:
+> On Mon, Jun 26, 2023 at 05:47:01PM -0400, Kent Overstreet wrote:
+> > Hi Linus,
 > > 
-> > Despite having spent quite a lot of time on that question, I think I still
-> > only have a hunch.
+> > Here it is, the bcachefs pull request. For brevity the list of patches
+> > below is only the initial part of the series, the non-bcachefs prep
+> > patches and the first bcachefs patch, but the diffstat is for the entire
+> > series.
 > > 
-> > Poking around RHEL systems, I'd say 99% of the problematic IPIs are
-> > instruction patching and TLB flushes.
+> > Six locks has all the changes you suggested, text size went down
+> > significantly. If you'd still like this to see more review from the
+> > locking people, I'm not against them living in fs/bcachefs/ as an
+> > interim; perhaps Dave could move them back to kernel/locking when he
+> > starts using them or when locking people have had time to look at them -
+> > I'm just hoping for this to not block the merge.
 > > 
-> > Staring at the code, there's quite a lot of smp_calls for which it's hard
-> > to say whether the target CPUs can actually be isolated or not (e.g. the
-> > CPU comes from a cpumask shoved in a struct that was built using data from
-> > another struct of uncertain origins), but then again some of them don't
-> > need to hook into context_tracking.
+> > Recently some people have expressed concerns about "not wanting a repeat
+> > of ntfs3" - from what I understand the issue there was just severe
+> > buggyness, so perhaps showing the bcachefs automated test results will
+> > help with that:
 > > 
-> > Long story short: I /think/ we can consider that number to be fairly small,
-> > but there could be more lurking in the shadows.
+> >   https://evilpiepirate.org/~testdashboard/ci
+> > 
+> > The main bcachefs branch runs fstests and my own test suite in several
+> > varations, including lockdep+kasan, preempt, and gcov (we're at 82% line
+> > coverage); I'm not currently seeing any lockdep or kasan splats (or
+> > panics/oopses, for that matter).
+> > 
+> > (Worth noting the bug causing the most test failures by a wide margin is
+> > actually an io_uring bug that causes random umount failures in shutdown
+> > tests. Would be great to get that looked at, it doesn't just affect
+> > bcachefs).
+> > 
+> > Regarding feature status - most features are considered stable and ready
+> > for use, snapshots and erasure coding are both nearly there. But a
+> > filesystem on this scale is a massive project, adequately conveying the
+> > status of every feature would take at least a page or two.
+> > 
+> > We may want to mark it as EXPERIMENTAL for a few releases, I haven't
+> > done that as yet. (I wouldn't consider single device without snapshots
+> > to be experimental, but - given that the number of users and bug reports
+> > is about to shoot up, perhaps I should...).
 > 
-> I guess it will still be time to reconsider the design if we ever reach such size.
+> Restarting the discussion after the holiday weekend, hoping to get
+> something more substantive going:
 > 
-> > > If this is just about a dozen, can we stuff them in the state like in the
-> > > following? We can potentially add more of them especially on 64 bits we could
-> > > afford 30 different works, this is just shrinking the RCU extended quiescent
-> > > state counter space. Worst case that can happen is that RCU misses 65535
-> > > idle/user <-> kernel transitions and delays a grace period...
-> > >
-> > 
-> > I'm trying to grok how this impacts RCU, IIUC most of RCU mostly cares about the
-> > even/odd-ness of the thing, and rcu_gp_fqs() cares about the actual value
-> > but only to check if it has changed over time (rcu_dynticks_in_eqs_since()
-> > only does a !=).
-> > 
-> > I'm rephrasing here to make sure I get it - is it then that the worst case
-> > here is 2^(dynticks_counter_size) transitions happen between saving the
-> > dynticks snapshot and checking it again, so RCU waits some more?
+> Hoping to get:
+>  - Thoughts from people who have been following bcachefs development,
+>    and people who have looked at the code
+>  - Continuation of the LSF discussion - maybe some people could repeat
+>    here what they said there (re: code review, iomap, etc.)
+>  - Any concerns about how this might impact the rest of the kernel, or
+>    discussion about what impact merging a new filesystem is likely to
+>    have on other people's work
 > 
-> That's my understanding as well but I have to defer on Paul to make sure I'm
-> not overlooking something.
+> AFAIK the only big ask that hasn't happened yet is better documentation:
+> David Howells wanted (better) a man page, which is definitely something
+> that needs to happen but it'll be some months before I'm back to working
+> on documentation - I'm happy to share my current list of priorities if
+> that would be helpful.
+> 
+> In the meantime, the Latex principles of operation is reasonably up to
+> date (and I intend to greatly expand the sections on on disk data
+> structures, I think that'll be great reference documentation for
+> developers getting up to speed on the code)
+> 
+> https://bcachefs.org/bcachefs-principles-of-operation.pdf
+> 
+> I feel that bcachefs is in a pretty mature state at this point, but it's
+> also _huge_, which is a bit different than e.g. the btrfs merger; it's
+> hard to know where to start to get a meaninful discussion/review process
+> going.
+> 
+> Patch bombing the mailing list with 90k loc is clearly not going to be
+> productive, which is why I've been trying to talk more about development
+> process and status - but all suggestions and feedback are welcome.
 
-That does look plausible to me.
+I've been watching this from the sidelines sort of busy with other things, but I
+realize that comments I made at LSFMMBPF have been sort of taken as the gospel
+truth and I want to clear some of that up.
 
-And yes, RCU really cares about whether its part of this counter has
-been a multiple of two during a given interval of time, because this
-indicates that the CPU has no pre-existing RCU readers still active.
-One way that this can happen is for that value to be a multiple of two
-at some point in time.  The other way that this can happen is for the
-value to have changed.  No matter what the start and end values, if they
-are different, the counter must necessarily have at least passed through
-multiple of two in the meantime, again guaranteeing that any RCU readers
-that around when the count was first fetched have now finished.
+I said this at LSFMMBPF, and I haven't said it on list before so I'll repeat it
+here.
 
-But we should take the machine's opinions much more seriously than we
-take any of our own opinions.  Why not adjust RCU_DYNTICKS_IDX so as
-to crank RCU's portion of this counter down to (say) two or three bits
-and let rcutorture have at it on TREE04 or TREE07, both of which have
-nohz_full CPUs?
+I'm of the opinion that me and any other outsider reviewing the bcachefs code in
+bulk is largely useless.  I could probably do things like check for locking
+stuff and other generic things.
 
-Maybe also adjust mkinitrd.sh to make the user/kernel transitions more
-frequent?
+You have patches that are outside of fs/bcachefs.  Get those merged and then do
+a pull with just fs/bcachefs, because again posting 90k loc is going to be
+unwieldy and the quality of review just simply will not make a difference.
 
-Please note that I do -not- recommend production use of a three-bit
-(let alone a two-bit) RCU portion because this has a high probability
-of excessively extending grace periods.  But it might be good to keep
-a tiny counter as a debug option so that we regularly rcutorture it.
+Alternatively rework your code to not have any dependencies outside of
+fs/bcachefs.  This is what btrfs did.  That merge didn't touch anything outside
+of fs/btrfs.
 
-							Thanx, Paul
+This merge attempt has gone off the rails, for what appears to be a few common
+things.
+
+1) The external dependencies.  There's a reason I was really specific about what
+I said at LSFMMBPF, both this year and in 2022.  Get these patches merged first,
+the rest will be easier.  You are burning a lot of good will being combative
+with people over these dependencies.  This is not the hill to die on.  You want
+bcachefs in the kernel and to get back to bcachefs things.  Make the changes you
+need to make to get these dependencies in, or simply drop the need for them and
+come back to it later after bcachefs is merged.
+
+2) We already have recent examples of merge and disappear.  Yes of course you've
+been around for a long time, you aren't the NTFS developers.  But as you point
+out it's 90k of code.  When btrfs was merged there were 3 large contributors,
+Chris, myself, and Yanzheng.  If Chris got hit by a bus we could still drive the
+project forward.  Can the same be said for bachefs?  I know others have chimed
+in and done some stuff, but as it's been stated elsewhere it would be good to
+have somebody else in the MAINTAINERS file with you.
+
+I am really, really wanting you to succeed here Kent.  If the general consensus
+is you need to have some idiot review fs/bcachefs I will happily carve out some
+time and dig in.
+
+At this point however it's time to be pragmatic.  Stop dying on every hill, it's
+not worth it.  Ruthlessly prioritize and do what needs to be done to get this
+thing merged.  Christian saying he's almost ready to stop replying should be a
+wakeup call that your approach is not working.  Thanks,
+
+Josef
