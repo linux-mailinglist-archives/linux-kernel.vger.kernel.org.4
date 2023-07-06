@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1F374A0BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B0474A0C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbjGFPTo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jul 2023 11:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S231889AbjGFPVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjGFPTm (ORCPT
+        with ESMTP id S229470AbjGFPVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:19:42 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFCD172B;
-        Thu,  6 Jul 2023 08:19:41 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qHQlS-000sPU-3c; Thu, 06 Jul 2023 17:19:26 +0200
-Received: from p57bd990e.dip0.t-ipconnect.de ([87.189.153.14] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qHQlR-000YHO-SJ; Thu, 06 Jul 2023 17:19:26 +0200
-Message-ID: <a2adf8613ea19c5301531ed2583d0af1afb8edb7.camel@physik.fu-berlin.de>
-Subject: Re: [GIT PULL] sh updates for v6.5
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Thu, 06 Jul 2023 17:19:24 +0200
-In-Reply-To: <3da1af1f-58e1-cb54-a959-1dfd6b8a1222@roeck-us.net>
-References: <9a6b730fc6c8e70ff034e2e3665478ec31858c29.camel@physik.fu-berlin.de>
-         <9bc72d0c-fe33-5759-799c-f54e325ba38d@roeck-us.net>
-         <ab09d99c78bd378f23580427323c6418cd0888af.camel@physik.fu-berlin.de>
-         <3da1af1f-58e1-cb54-a959-1dfd6b8a1222@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
+        Thu, 6 Jul 2023 11:21:08 -0400
+Received: from out-12.mta0.migadu.com (out-12.mta0.migadu.com [IPv6:2001:41d0:1004:224b::c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870C51996
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:21:07 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 11:20:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688656865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yhAoOQcwd+d4OLL39cP41fnoMThXfUILYjJ33i61aFU=;
+        b=QQmoeKEPL9xuySm8hbfJYwu3y419fER7BZmSfzAqdxmIB0txdzdDY15LCFe/FDNd1lSIVE
+        Q5tHXN+llY0W9YMu9YVO4zj6K4ak8CeYIs2MhtqqnuHv3ExJYR/JUQR42h8qJTnz1LvTVO
+        9znAKCiJI+R2fKeBsRk5IsX2isSOjjM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Dave Chinner <david@fromorbit.com>,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230706152059.smhy7jdbim4qlr6f@moria.home.lan>
+References: <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
+ <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
+ <20230628225514.n3xtlgmjkgapgnrd@moria.home.lan>
+ <1e2134f1-f48b-1459-a38e-eac9597cd64a@kernel.dk>
+ <20230628235018.ttvtzpfe42fri4yq@moria.home.lan>
+ <ZJzXs6C8G2SL10vq@dread.disaster.area>
+ <d6546c44-04db-cbca-1523-a914670a607f@kernel.dk>
+ <20230629-fragen-dennoch-fb5265aaba23@brauner>
+ <20230629153108.wyn32bvaxmztnakl@moria.home.lan>
+ <20230630-aufwiegen-ausrollen-e240052c0aaa@brauner>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.14
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630-aufwiegen-ausrollen-e240052c0aaa@brauner>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,19 +59,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-07-06 at 08:08 -0700, Guenter Roeck wrote:
-> The build failure was introduced into linux-next with commit 99b619b37ae1.
-> According to the commit log, that happened around June 9. Ever since then
-> all sh builds in linux-next failed.
+On Fri, Jun 30, 2023 at 11:40:32AM +0200, Christian Brauner wrote:
+> We're all not very impressed with that's going on here. I think everyone
+> has made that pretty clear.
+> 
+> It's worrying that this reply is so quickly and happily turning to
+> "I'm a real engineer" and "you're confused" tropes and then isn't even
+> making a clear point. Going forward this should stop otherwise I'll
+> cease replying.
+>
+> Nothing I said was confused. The discussion was initially trying to fix
+> this in umount and we're not going to fix async aio behavior in umount.
 
-OK, then I need to subscribe to the CI notifications so I get notified about
-this error. I didn't get any notification and my for-next tree is always
-based on the last rc1.
+Christain, why on earth would we be trying to fix this in umount? All
+you posted was a stack trace and something handwavy about how fixing it
+in umount would be hard, and yes it would be! That's crazy!
 
-Adrian
+This is a basic lifetime issue, where we just need to make sure that
+refcounts are getting released at the appropriate place and not being
+delayed for arbitrarily long (i.e. the global delayed fput list, which
+honestly we should probably try to get rid of).
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Furthermore, when issues with fput have caused umount to fail in the
+past it's always been considered a bug - see the addition of
+__fput_sync(), if you do some searching you should be able to find
+multiple patches where this has been dealt with.
+
+> My earlier mail clearly said that io_uring can be changed by Jens pretty
+> quickly to not cause such test failures.
+
+Jens posted a fix that didn't actually fix anything, and after that it
+seemed neither of you were interested in actually fixing this. So based
+on that, maybe we need to consider switching fstests back to AIO just so
+we can get work done...
