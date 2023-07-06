@@ -2,82 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D7E7495C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9B97495BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 08:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbjGFGjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 02:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S233698AbjGFGiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 02:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbjGFGjC (ORCPT
+        with ESMTP id S233477AbjGFGix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 02:39:02 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5963BE54
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jul 2023 23:39:01 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51de841a727so527636a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jul 2023 23:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688625540; x=1691217540;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ubpoaC9EzMplfQrBSeEcb7LUnfn7d45sUTFt95vzvBc=;
-        b=CQAv2r9jw5Vw9NsORpehoSIOxspn0nGUVtog4W4gS/FAyNPsXCCuel9cngxv3TafTT
-         +ZBa9AA0N/rxkymEGOMDH+S5onhIAtQTdLoEAJMSJ7bGvGvUb3BSF0ABWRVbrsR14pjw
-         ul4F/dN1SVMWUYwYsRmppzMlm6dHhSAi+AcJrNkBcS7rtpdjjrQm5GMtdtvK/ras3XLH
-         C8wJ03F2x1hpoQ2VPDqtq89tKjQiQLT+uC8Vwg+oy4IfylklYNIVvMHJMYrX3A98zU2J
-         l6ttWevu95ZeGROAk4cgc0UH8zakCbUFTb+G7QOxQCZOIniLH0ljJvotq2iHdDI6Stas
-         P+hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688625540; x=1691217540;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ubpoaC9EzMplfQrBSeEcb7LUnfn7d45sUTFt95vzvBc=;
-        b=bA/Hct7Fb2OI3eQxokelluX6dJy+Ob/uguhTX7xgm7zOUzNC/FBEXgCgFxPOBhwrNc
-         oP6zRqGRcijxsl5tex7uAZRqY3HGx/pbhWKp/kPejH6APWnxkrWUZ9yT/ZrzujLaMSFN
-         XGlSW/8iKzAuvt5wumrEGiaJk9d/OqISMj7oIeJsWwqMmVS5WbXnjIGAyII5mQblCkwA
-         82UuhRp9FQmT7m+ar+xTayjaMfvZm+x2gpYOc0/AnYB2BeTQMhEywCcCOzEsmiZRuiXY
-         0bZ/YNn/q15uvHuZvNszNqU+1oG8bPBmw3EjgfTDVHX95JD6Da8wPJlD3MeFaBccmtg6
-         MngQ==
-X-Gm-Message-State: ABy/qLaccuzfAN4GBIlbMn3Mf68hEOmYGzYlVGdqQ/V2iEYK1q93WSle
-        GN/cnl7W7zc+e1V9zZHP3LgY1w==
-X-Google-Smtp-Source: APBJJlGdk6m02V0kX8E+G3wiBzfjjWJX4q5mx5yIhxxnI72FPFBQh7N6W0jmb66+UCh2kWaVXY/jNA==
-X-Received: by 2002:a17:906:729d:b0:988:b58d:5e0 with SMTP id b29-20020a170906729d00b00988b58d05e0mr738996ejl.16.1688625539940;
-        Wed, 05 Jul 2023 23:38:59 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s24-20020a170906169800b0096f7500502csm381433ejd.199.2023.07.05.23.38.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 23:38:59 -0700 (PDT)
-Message-ID: <9d5c1411-e56e-fa56-c8f2-808e0c403d9a@linaro.org>
-Date:   Thu, 6 Jul 2023 08:38:56 +0200
+        Thu, 6 Jul 2023 02:38:53 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2219019B;
+        Wed,  5 Jul 2023 23:38:50 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QxRdF3rm2zPjxF;
+        Thu,  6 Jul 2023 14:36:33 +0800 (CST)
+Received: from huawei.com (10.174.151.185) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 6 Jul
+ 2023 14:38:46 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <dan.j.williams@intel.com>,
+        <vishal.l.verma@intel.com>, <dave.jiang@intel.com>
+CC:     <ying.huang@intel.com>, <nvdimm@lists.linux.dev>,
+        <linux-cxl@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH] memory tier: rename destroy_memory_type() to put_memory_type()
+Date:   Thu, 6 Jul 2023 14:39:05 +0800
+Message-ID: <20230706063905.543800-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 6/6] arm64: dts: qcom: sa8775p-ride: enable pcie nodes
-Content-Language: en-US
-To:     Mrinmay Sarkar <quic_msarkar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, konrad.dybcio@linaro.org, mani@kernel.org
-Cc:     quic_shazhuss@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_ramkri@quicinc.com, quic_nayiluri@quicinc.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <1688545032-17748-1-git-send-email-quic_msarkar@quicinc.com>
- <1688545032-17748-7-git-send-email-quic_msarkar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1688545032-17748-7-git-send-email-quic_msarkar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,32 +48,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2023 10:17, Mrinmay Sarkar wrote:
-> Enable pcie0, pcie1 nodes and their respective phy's.
-> 
-> Signed-off-by: Mrinmay Sarkar <quic_msarkar@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 68 +++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> index ab767cfa51ff..4a39294259fe 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-> @@ -443,6 +443,74 @@ qup_uart17_rx: qup0-uart17-rx-pins {
->  			bias-pull-down;
->  		};
->  	};
-> +
-> +	pcie0_default_state: pcie0-default {
-> +		perst {
+It appears that destroy_memory_type() isn't a very good name because
+we usually will not free the memory_type here. So rename it to a more
+appropriate name i.e. put_memory_type().
 
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
+Suggested-by: Huang, Ying <ying.huang@intel.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ drivers/dax/kmem.c           | 4 ++--
+ include/linux/memory-tiers.h | 4 ++--
+ mm/memory-tiers.c            | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+index 898ca9505754..c57acb73e3db 100644
+--- a/drivers/dax/kmem.c
++++ b/drivers/dax/kmem.c
+@@ -264,7 +264,7 @@ static int __init dax_kmem_init(void)
+ 	return rc;
+ 
+ error_dax_driver:
+-	destroy_memory_type(dax_slowmem_type);
++	put_memory_type(dax_slowmem_type);
+ err_dax_slowmem_type:
+ 	kfree_const(kmem_name);
+ 	return rc;
+@@ -275,7 +275,7 @@ static void __exit dax_kmem_exit(void)
+ 	dax_driver_unregister(&device_dax_kmem_driver);
+ 	if (!any_hotremove_failed)
+ 		kfree_const(kmem_name);
+-	destroy_memory_type(dax_slowmem_type);
++	put_memory_type(dax_slowmem_type);
+ }
+ 
+ MODULE_AUTHOR("Intel Corporation");
+diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+index fc9647b1b4f9..437441cdf78f 100644
+--- a/include/linux/memory-tiers.h
++++ b/include/linux/memory-tiers.h
+@@ -33,7 +33,7 @@ struct memory_dev_type {
+ #ifdef CONFIG_NUMA
+ extern bool numa_demotion_enabled;
+ struct memory_dev_type *alloc_memory_type(int adistance);
+-void destroy_memory_type(struct memory_dev_type *memtype);
++void put_memory_type(struct memory_dev_type *memtype);
+ void init_node_memory_type(int node, struct memory_dev_type *default_type);
+ void clear_node_memory_type(int node, struct memory_dev_type *memtype);
+ #ifdef CONFIG_MIGRATION
+@@ -68,7 +68,7 @@ static inline struct memory_dev_type *alloc_memory_type(int adistance)
+ 	return NULL;
+ }
+ 
+-static inline void destroy_memory_type(struct memory_dev_type *memtype)
++static inline void put_memory_type(struct memory_dev_type *memtype)
+ {
+ 
+ }
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index 1719fa3bcf02..c49ab03f49b1 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -560,11 +560,11 @@ struct memory_dev_type *alloc_memory_type(int adistance)
+ }
+ EXPORT_SYMBOL_GPL(alloc_memory_type);
+ 
+-void destroy_memory_type(struct memory_dev_type *memtype)
++void put_memory_type(struct memory_dev_type *memtype)
+ {
+ 	kref_put(&memtype->kref, release_memtype);
+ }
+-EXPORT_SYMBOL_GPL(destroy_memory_type);
++EXPORT_SYMBOL_GPL(put_memory_type);
+ 
+ void init_node_memory_type(int node, struct memory_dev_type *memtype)
+ {
+@@ -586,7 +586,7 @@ void clear_node_memory_type(int node, struct memory_dev_type *memtype)
+ 	 */
+ 	if (!node_memory_types[node].map_count) {
+ 		node_memory_types[node].memtype = NULL;
+-		destroy_memory_type(memtype);
++		put_memory_type(memtype);
+ 	}
+ 	mutex_unlock(&memory_tier_lock);
+ }
+-- 
+2.33.0
 
