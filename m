@@ -2,170 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BB174A1A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EFA74A1B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 17:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbjGFP6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 11:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S233064AbjGFP74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 11:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbjGFP6M (ORCPT
+        with ESMTP id S229721AbjGFP7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 11:58:12 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8F91BCA;
-        Thu,  6 Jul 2023 08:58:09 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b71cdb47e1so810906a34.2;
-        Thu, 06 Jul 2023 08:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688659088; x=1691251088;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ELX9uuKAjfgek1/p+NwumoGO6BxLWYptg064O9OiHBc=;
-        b=eom9rNUvY8PSvEiS2yEy5jzWdJZzDvOogRDYqmeCMmwnH49PDRAlb6A64DC/BsFdvw
-         8sB/gBTWnJUy3Vf5sxBQdnzN798+8M5al/Six8srqG7vFuN2j7eIGkCoIn1jGVbxOdlQ
-         k0TJlPB+p1leNL2pQtt57MxN0BJjUABkoTMJ7K06jyI0oSeTnDNIW3BFtD36isceJnhC
-         Ov1RKDxVv9ttVhyc/ajzhjVYQ408TrEBueG0oqMFX09h5Wm5fiw3CBKSJWuZpbbW9mDl
-         fzgNaq6H/z5+MW47FmpSbb1giv9UrEZWmHwC2aEaPtVkw0QUhiZaco32bqgO4JpuPB+3
-         c8qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688659088; x=1691251088;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ELX9uuKAjfgek1/p+NwumoGO6BxLWYptg064O9OiHBc=;
-        b=AUApLFpYG4JtsH8Ada6zAVwbzfKHCysmoLg0f02x7s+1Ee1xvVc/p2JzJMHVwz3v9e
-         srLriQcIVb4lS3Q1iXV/z4hpGaYQUi74niKJZdEEL0pV+Gfrf+nBFIEXDObq1FIxPpiK
-         qbtOBnw3jw/E/gs4syooJI9JYL2MDfHwUKFXI0sLtBuu1/2D4t5753+n6aCWTlgLdgPk
-         7ArsZ6Y/68We2enz2YeYreHKWdaclBxhP5tzpClodOSDsq9DVbqxceUI4YWFVQCmnIMa
-         JgZkzKTwbRAaLt2WXnCH5ACHVeSjhl4OvgsDZx8ScmGj24c0X7nl+3lkbrY63sjlg1Cj
-         gqvw==
-X-Gm-Message-State: ABy/qLbzbckLuIUsRDDTjM9DyN2v6fzWVe3HMuIDOdzOco0iIjNloGWO
-        LjA4N04rX+xPX0KqZMBjzj0=
-X-Google-Smtp-Source: APBJJlFDnf5rOYi7hzzNB1UrOiVyacVt/Eu6Y2AcAbTzk9CE0nP6/LyCfIuOIjrJ9jJQIFHGu3ZFYg==
-X-Received: by 2002:a05:6830:1e42:b0:6b7:4e97:343 with SMTP id e2-20020a0568301e4200b006b74e970343mr2928881otj.27.1688659088029;
-        Thu, 06 Jul 2023 08:58:08 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id q17-20020a656a91000000b005533c53f550sm1366282pgu.45.2023.07.06.08.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 08:58:07 -0700 (PDT)
-Date:   Thu, 6 Jul 2023 08:58:05 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Xu <peterx@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v7 5/8] KVM: x86/mmu: Don't pass FOLL_GET to
- __kvm_follow_pfn
-Message-ID: <20230706155805.GD3894444@ls.amr.corp.intel.com>
-References: <20230704075054.3344915-1-stevensd@google.com>
- <20230704075054.3344915-6-stevensd@google.com>
- <20230705101800.ut4c6topn6ylwczs@linux.intel.com>
- <CAD=HUj41PAKC0x+c3zWAr-aCm59K7hs2zRh1uWs9778_Mai4UA@mail.gmail.com>
+        Thu, 6 Jul 2023 11:59:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC649D;
+        Thu,  6 Jul 2023 08:59:53 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366FgAa9030838;
+        Thu, 6 Jul 2023 15:58:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=jjAfeSlWgg+dGbiwYeBow8jF6nVRG2uJUdHPsfaGRHI=;
+ b=q0IFs2Rczs+oBoivTwSre2ltXn8XEF9JFIsZhKRmT4uRW5Dkmqbsnw6C7N2RmpX1r4+I
+ WSGAPQmuBZzsv/3gL49TQfx1bdmjRmuwq8MgaN8yNyZvF46q/cy3T1hgSjbxGzIR95eE
+ QTCu+6M2QyQG8An3uvx9qg2OxpR9y+zZob/c0kPW2D2mzNBL0bwt6WD1+m/691y3Feu8
+ w3FPCn8U3bXaH3oSTeGUPFGKb0LZK6JaoujYcrX55xmbEqnIy+dPpm1a1aS3x7KvOQEC
+ 8IBCPBmz1PAaOLOWq7w0yxegYExf9mRQiY9qDi69Ross4ZajvNmjnnyyK5OSMbCZMwPJ /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rp0fx0h7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 15:58:34 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 366FgS7Y000441;
+        Thu, 6 Jul 2023 15:58:31 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rp0fx0h6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 15:58:31 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3669Hul0011059;
+        Thu, 6 Jul 2023 15:58:28 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3rjbs4tgxy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 15:58:28 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 366FwOEu49348944
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jul 2023 15:58:24 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A39772004E;
+        Thu,  6 Jul 2023 15:58:24 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E971C2004B;
+        Thu,  6 Jul 2023 15:58:22 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu,  6 Jul 2023 15:58:22 +0000 (GMT)
+Date:   Thu, 6 Jul 2023 17:58:21 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
+        keescook@chromium.org, paulmck@kernel.org, peterz@infradead.org,
+        frederic@kernel.org, akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
+        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCH v4 12/13] s390/kexec: refactor for kernel/Kconfig.kexec
+Message-ID: <ZKbknQoC1MkAjsqJ@tuxmaker.boeblingen.de.ibm.com>
+References: <20230705142004.3605799-1-eric.devolder@oracle.com>
+ <20230705142004.3605799-13-eric.devolder@oracle.com>
+ <20230705154958.GA3643511@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=HUj41PAKC0x+c3zWAr-aCm59K7hs2zRh1uWs9778_Mai4UA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230705154958.GA3643511@dev-arch.thelio-3990X>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fRdpOUZjdtAMTOmk2K-csX7Bzx0RFgu9
+X-Proofpoint-ORIG-GUID: iUrSZgVFrrjm2QXnS9jxUKUHl5MpwGXP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_11,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 spamscore=0 clxscore=1011 adultscore=0
+ bulkscore=0 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060140
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 01:52:08PM +0900,
-David Stevens <stevensd@chromium.org> wrote:
-
-> On Wed, Jul 5, 2023 at 7:17 PM Yu Zhang <yu.c.zhang@linux.intel.com> wrote:
-> >
-> > On Tue, Jul 04, 2023 at 04:50:50PM +0900, David Stevens wrote:
-> > > From: David Stevens <stevensd@chromium.org>
-> > >
-> > > Stop passing FOLL_GET to __kvm_follow_pfn. This allows the host to map
-> > > memory into the guest that is backed by un-refcounted struct pages - for
-> > > example, higher order non-compound pages allocated by the amdgpu driver
-> > > via ttm_pool_alloc_page.
-> >
-> > I guess you mean the tail pages of the higher order non-compound pages?
-> > And as to the head page, it is said to be set to one coincidentally[*],
-> > and shall not be considered as refcounted.  IIUC, refcount of this head
-> > page will be increased and decreased soon in hva_to_pfn_remapped(), so
-> > this may not be a problem(?). But treating this head page differently,
-> > as a refcounted one(e.g., to set the A/D flags), is weired.
-> >
-> > Or maybe I missed some context, e.g., can the head page be allocted to
-> > guest at all?
+On Wed, Jul 05, 2023 at 08:49:58AM -0700, Nathan Chancellor wrote:
+...
+> I just bisected the following build failure visible with 'ARCH=s390
+> allnoconfig' to this change as commit 842ce0e1dafa ("s390/kexec:
+> refactor for kernel/Kconfig.kexec") in -next.
 > 
-> Yes, this is to allow mapping the tail pages of higher order
-> non-compound pages - I should have been more precise in my wording.
-> The head pages can already be mapped into the guest.
+>   arch/s390/kernel/machine_kexec.c:120:37: warning: 'struct kimage' declared inside parameter list will not be visible outside of this definition or declaration
+>     120 | static bool kdump_csum_valid(struct kimage *image)
+>         |                                     ^~~~~~
+>   arch/s390/kernel/machine_kexec.c:188:34: warning: 'struct kimage' declared inside parameter list will not be visible outside of this definition or declaration
+>     188 | int machine_kexec_prepare(struct kimage *image)
+>         |                                  ^~~~~~
+>   arch/s390/kernel/machine_kexec.c: In function 'machine_kexec_prepare':
+>   arch/s390/kernel/machine_kexec.c:192:18: error: invalid use of undefined type 'struct kimage'
+>     192 |         if (image->type == KEXEC_TYPE_CRASH)
+>         |                  ^~
+>   arch/s390/kernel/machine_kexec.c:192:28: error: 'KEXEC_TYPE_CRASH' undeclared (first use in this function); did you mean 'KEXEC_ON_CRASH'?
+>     192 |         if (image->type == KEXEC_TYPE_CRASH)
+>         |                            ^~~~~~~~~~~~~~~~
+>         |                            KEXEC_ON_CRASH
+>   arch/s390/kernel/machine_kexec.c:192:28: note: each undeclared identifier is reported only once for each function it appears in
+>   arch/s390/kernel/machine_kexec.c:196:18: error: invalid use of undefined type 'struct kimage'
+>     196 |         if (image->type != KEXEC_TYPE_DEFAULT)
+>         |                  ^~
+>   arch/s390/kernel/machine_kexec.c:196:28: error: 'KEXEC_TYPE_DEFAULT' undeclared (first use in this function); did you mean 'KEXEC_ARCH_DEFAULT'?
+>     196 |         if (image->type != KEXEC_TYPE_DEFAULT)
+>         |                            ^~~~~~~~~~~~~~~~~~
+>         |                            KEXEC_ARCH_DEFAULT
+>   In file included from arch/s390/include/asm/thread_info.h:31,
+>                    from include/linux/thread_info.h:60,
+>                    from arch/s390/include/asm/preempt.h:6,
+>                    from include/linux/preempt.h:79,
+>                    from arch/s390/include/asm/percpu.h:5,
+>                    from include/linux/irqflags.h:18,
+>                    from include/linux/rcupdate.h:26,
+>                    from include/linux/rculist.h:11,
+>                    from include/linux/pid.h:5,
+>                    from include/linux/sched.h:14,
+>                    from include/linux/ratelimit.h:6,
+>                    from include/linux/dev_printk.h:16,
+>                    from include/linux/device.h:15,
+>                    from arch/s390/kernel/machine_kexec.c:9:
+>   arch/s390/kernel/machine_kexec.c:200:48: error: invalid use of undefined type 'struct kimage'
+>     200 |         reboot_code_buffer = page_to_virt(image->control_code_page);
+>         |                                                ^~
+>   arch/s390/include/asm/page.h:186:58: note: in definition of macro '__va'
+>     186 | #define __va(x)                 ((void *)(unsigned long)(x))
+>         |                                                          ^
+>   arch/s390/include/asm/page.h:194:38: note: in expansion of macro 'pfn_to_phys'
+>     194 | #define pfn_to_virt(pfn)        __va(pfn_to_phys(pfn))
+>         |                                      ^~~~~~~~~~~
+>   arch/s390/include/asm/page.h:199:33: note: in expansion of macro 'pfn_to_virt'
+>     199 | #define page_to_virt(page)      pfn_to_virt(page_to_pfn(page))
+>         |                                 ^~~~~~~~~~~
+>   include/asm-generic/memory_model.h:64:21: note: in expansion of macro '__page_to_pfn'
+>      64 | #define page_to_pfn __page_to_pfn
+>         |                     ^~~~~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c:200:30: note: in expansion of macro 'page_to_virt'
+>     200 |         reboot_code_buffer = page_to_virt(image->control_code_page);
+>         |                              ^~~~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c: At top level:
+>   arch/s390/kernel/machine_kexec.c:207:35: warning: 'struct kimage' declared inside parameter list will not be visible outside of this definition or declaration
+>     207 | void machine_kexec_cleanup(struct kimage *image)
+>         |                                   ^~~~~~
+>   arch/s390/kernel/machine_kexec.c: In function '__do_machine_kexec':
+>   arch/s390/kernel/machine_kexec.c:243:40: error: invalid use of undefined type 'struct kimage'
+>     243 |         data_mover = page_to_phys(image->control_code_page);
+>         |                                        ^~
+>   arch/s390/include/asm/page.h:189:35: note: in definition of macro 'pfn_to_phys'
+>     189 | #define pfn_to_phys(pfn)        ((pfn) << PAGE_SHIFT)
+>         |                                   ^~~
+>   include/asm-generic/memory_model.h:64:21: note: in expansion of macro '__page_to_pfn'
+>      64 | #define page_to_pfn __page_to_pfn
+>         |                     ^~~~~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c:243:22: note: in expansion of macro 'page_to_phys'
+>     243 |         data_mover = page_to_phys(image->control_code_page);
+>         |                      ^~~~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c:244:36: error: invalid use of undefined type 'struct kimage'
+>     244 |         entry = virt_to_phys(&image->head);
+>         |                                    ^~
+>   In file included from arch/s390/kernel/machine_kexec.c:27:
+>   arch/s390/kernel/machine_kexec.c:252:40: error: invalid use of undefined type 'struct kimage'
+>     252 |                    unsigned long, image->start,
+>         |                                        ^~
+>   arch/s390/include/asm/stacktrace.h:101:32: note: in definition of macro 'CALL_LARGS_2'
+>     101 |         long arg2 = (long)(t2)(a2)
+>         |                                ^~
+>   arch/s390/include/asm/stacktrace.h:216:9: note: in expansion of macro 'CALL_LARGS_3'
+>     216 |         CALL_LARGS_##nr(__VA_ARGS__);                                   \
+>         |         ^~~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c:250:9: note: in expansion of macro 'call_nodat'
+>     250 |         call_nodat(3, void, (relocate_kernel_t)data_mover,
+>         |         ^~~~~~~~~~
+>   In file included from include/linux/irqflags.h:15:
+>   arch/s390/kernel/machine_kexec.c:252:40: error: invalid use of undefined type 'struct kimage'
+>     252 |                    unsigned long, image->start,
+>         |                                        ^~
+>   include/linux/typecheck.h:11:16: note: in definition of macro 'typecheck'
+>      11 |         typeof(x) __dummy2; \
+>         |                ^
+>   arch/s390/include/asm/stacktrace.h:136:9: note: in expansion of macro 'CALL_TYPECHECK_2'
+>     136 |         CALL_TYPECHECK_2(__VA_ARGS__);                                  \
+>         |         ^~~~~~~~~~~~~~~~
+>   arch/s390/include/asm/stacktrace.h:219:9: note: in expansion of macro 'CALL_TYPECHECK_3'
+>     219 |         CALL_TYPECHECK_##nr(__VA_ARGS__);                               \
+>         |         ^~~~~~~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c:250:9: note: in expansion of macro 'call_nodat'
+>     250 |         call_nodat(3, void, (relocate_kernel_t)data_mover,
+>         |         ^~~~~~~~~~
+>   include/linux/typecheck.h:12:25: warning: comparison of distinct pointer types lacks a cast
+>      12 |         (void)(&__dummy == &__dummy2); \
+>         |                         ^~
+>   arch/s390/include/asm/stacktrace.h:134:9: note: in expansion of macro 'typecheck'
+>     134 |         typecheck(t, a)
+>         |         ^~~~~~~~~
+>   arch/s390/include/asm/stacktrace.h:136:9: note: in expansion of macro 'CALL_TYPECHECK_2'
+>     136 |         CALL_TYPECHECK_2(__VA_ARGS__);                                  \
+>         |         ^~~~~~~~~~~~~~~~
+>   arch/s390/include/asm/stacktrace.h:219:9: note: in expansion of macro 'CALL_TYPECHECK_3'
+>     219 |         CALL_TYPECHECK_##nr(__VA_ARGS__);                               \
+>         |         ^~~~~~~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c:250:9: note: in expansion of macro 'call_nodat'
+>     250 |         call_nodat(3, void, (relocate_kernel_t)data_mover,
+>         |         ^~~~~~~~~~
+>   arch/s390/kernel/machine_kexec.c: At top level:
+>   arch/s390/kernel/machine_kexec.c:278:27: warning: 'struct kimage' declared inside parameter list will not be visible outside of this definition or declaration
+>     278 | void machine_kexec(struct kimage *image)
+>         |                           ^~~~~~
+>   arch/s390/kernel/machine_kexec.c: In function 'machine_kexec':
+>   arch/s390/kernel/machine_kexec.c:280:18: error: invalid use of undefined type 'struct kimage'
+>     280 |         if (image->type == KEXEC_TYPE_CRASH && !kdump_csum_valid(image))
+>         |                  ^~
+>   arch/s390/kernel/machine_kexec.c:280:28: error: 'KEXEC_TYPE_CRASH' undeclared (first use in this function); did you mean 'KEXEC_ON_CRASH'?
+>     280 |         if (image->type == KEXEC_TYPE_CRASH && !kdump_csum_valid(image))
+>         |                            ^~~~~~~~~~~~~~~~
+>         |                            KEXEC_ON_CRASH
+>   arch/s390/kernel/machine_kexec.c:280:66: error: passing argument 1 of 'kdump_csum_valid' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>     280 |         if (image->type == KEXEC_TYPE_CRASH && !kdump_csum_valid(image))
+>         |                                                                  ^~~~~
+>         |                                                                  |
+>         |                                                                  struct kimage *
+>   arch/s390/kernel/machine_kexec.c:120:45: note: expected 'struct kimage *' but argument is of type 'struct kimage *'
+>     120 | static bool kdump_csum_valid(struct kimage *image)
+>         |                              ~~~~~~~~~~~~~~~^~~~~
+>   cc1: some warnings being treated as errors
 > 
-> Treating the head and tail pages would require changing how KVM
-> behaves in a situation it supports today (rather than just adding
-> support for an unsupported situation). Currently, without this series,
-> KVM can map VM_PFNMAP|VM_IO memory backed by refcounted pages into the
-> guest. When that happens, KVM sets the A/D flags. I'm not sure whether
-> that's actually valid behavior, nor do I know whether anyone actually
-> cares about it. But it's what KVM does today, and I would shy away
-> from modifying that behavior without good reason.
+> I don't think this change is equivalent for s390, which had
 > 
-> > >
-> > > The bulk of this change is tracking the is_refcounted_page flag so that
-> > > non-refcounted pages don't trigger page_count() == 0 warnings. This is
-> > > done by storing the flag in an unused bit in the sptes.
-> >
-> > Also, maybe we should mention this only works on x86-64.
-> >
-> > >
-> > > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c          | 44 +++++++++++++++++++++------------
-> > >  arch/x86/kvm/mmu/mmu_internal.h |  1 +
-> > >  arch/x86/kvm/mmu/paging_tmpl.h  |  9 ++++---
-> > >  arch/x86/kvm/mmu/spte.c         |  4 ++-
-> > >  arch/x86/kvm/mmu/spte.h         | 12 ++++++++-
-> > >  arch/x86/kvm/mmu/tdp_mmu.c      | 22 ++++++++++-------
-> > >  6 files changed, 62 insertions(+), 30 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index e44ab512c3a1..b1607e314497 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> >
-> > ...
-> >
-> > > @@ -2937,6 +2943,7 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, struct kvm_memory_slot *slot,
-> > >       bool host_writable = !fault || fault->map_writable;
-> > >       bool prefetch = !fault || fault->prefetch;
-> > >       bool write_fault = fault && fault->write;
-> > > +     bool is_refcounted = !fault || fault->is_refcounted_page;
-> >
-> > Just wonder, what if a non-refcounted page is prefetched?  Or is it possible in
-> > practice?
+>   config KEXEC
+>       def_bool y
+>       select KEXEC_CORE
 > 
-> Prefetching is still done via gfn_to_page_many_atomic, which sets
-> FOLL_GET. That's fixable, but it's not something this series currently
-> does.
+> but it is now the equivalent of
+> 
+>   config KEXEC
+>       bool "Enable kexec system call"
+>       default y
+> 
+> which enables KEXEC by default but it also allows KEXEC to be disabled
+> for s390 now, because it is a user-visible symbol, not one that is
+> unconditionally enabled no matter what. If s390 can tolerate KEXEC being
+> user selectable, then I assume the fix is just adjusting
+> arch/s390/kernel/Makefile to only build the machine_kexec files when
+> CONFIG_KEXEC_CORE is set:
+> 
+> diff --git a/arch/s390/kernel/Makefile b/arch/s390/kernel/Makefile
+> index 6b2a051e1f8a..a06b39da95f0 100644
+> --- a/arch/s390/kernel/Makefile
+> +++ b/arch/s390/kernel/Makefile
+> @@ -37,10 +37,10 @@ CFLAGS_unwind_bc.o	+= -fno-optimize-sibling-calls
+>  obj-y	:= head64.o traps.o time.o process.o earlypgm.o early.o setup.o idle.o vtime.o
+>  obj-y	+= processor.o syscall.o ptrace.o signal.o cpcmd.o ebcdic.o nmi.o
+>  obj-y	+= debug.o irq.o ipl.o dis.o diag.o vdso.o cpufeature.o
+> -obj-y	+= sysinfo.o lgr.o os_info.o machine_kexec.o
+> +obj-y	+= sysinfo.o lgr.o os_info.o
+>  obj-y	+= runtime_instr.o cache.o fpu.o dumpstack.o guarded_storage.o sthyi.o
+>  obj-y	+= entry.o reipl.o relocate_kernel.o kdebugfs.o alternative.o
+> -obj-y	+= nospec-branch.o ipl_vmparm.o machine_kexec_reloc.o unwind_bc.o
+> +obj-y	+= nospec-branch.o ipl_vmparm.o unwind_bc.o
+>  obj-y	+= smp.o text_amode31.o stacktrace.o abs_lowcore.o
+>  
+>  extra-y				+= vmlinux.lds
+> @@ -66,6 +66,7 @@ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+>  obj-$(CONFIG_UPROBES)		+= uprobes.o
+>  obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+>  
+> +obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o machine_kexec_reloc.o
+>  obj-$(CONFIG_KEXEC_FILE)	+= machine_kexec_file.o kexec_image.o
+>  obj-$(CONFIG_KEXEC_FILE)	+= kexec_elf.o
+>  
+> 
+> Otherwise, the prompt for KEXEC could be made conditional on some ARCH
+> symbol so that architectures can opt out of it.
 
-So if we prefetch a page, REFCOUNTED bit is cleared unconditionally with this
-hunk.  kvm_set_page_{dirty, accessed} won't be called as expected for prefetched
-spte.  If I read the patch correctly, REFCOUNTED bit in SPTE should represent
-whether the corresponding page is ref-countable or not, right?
+Hi Nathan,
 
-Because direct_pte_prefetch_many() is for legacy KVM MMU and FNAME(prefetch_pte)
-is shadow paging, we need to test it with legacy KVM MMU or shadow paging to hit
-the issue, though.
+Thanks a lot for looking into it!
+With few modification the fix would looke like below.
+It probably needs to be a pre-requisite for this series:
 
-Thanks,
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+
+[PATCH] s390/kexec: make machine_kexec depend on CONFIG_KEXEC_CORE
+
+Make machine_kexec.o and relocate_kernel.o depend on
+CONFIG_KEXEC_CORE option as other architectures do.
+
+Still generate machine_kexec_reloc.o unconditionally,
+since arch_kexec_do_relocs() function is neded by the
+decompressor.
+
+Probably, #include <asm/kexec.h> could be be removed from
+machine_kexec_reloc.c source as well, but that would revert
+commit 155e6c706125 ("s390/kexec: add missing include to
+machine_kexec_reloc.c").
+
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+---
+ arch/s390/kernel/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/s390/kernel/Makefile b/arch/s390/kernel/Makefile
+index 8d7514c72bb8..0df2b88cc0da 100644
+--- a/arch/s390/kernel/Makefile
++++ b/arch/s390/kernel/Makefile
+@@ -37,9 +37,9 @@ CFLAGS_unwind_bc.o	+= -fno-optimize-sibling-calls
+ obj-y	:= head64.o traps.o time.o process.o earlypgm.o early.o setup.o idle.o vtime.o
+ obj-y	+= processor.o syscall.o ptrace.o signal.o cpcmd.o ebcdic.o nmi.o
+ obj-y	+= debug.o irq.o ipl.o dis.o diag.o vdso.o cpufeature.o
+-obj-y	+= sysinfo.o lgr.o os_info.o machine_kexec.o
++obj-y	+= sysinfo.o lgr.o os_info.o
+ obj-y	+= runtime_instr.o cache.o fpu.o dumpstack.o guarded_storage.o sthyi.o
+-obj-y	+= entry.o reipl.o relocate_kernel.o kdebugfs.o alternative.o
++obj-y	+= entry.o reipl.o kdebugfs.o alternative.o
+ obj-y	+= nospec-branch.o ipl_vmparm.o machine_kexec_reloc.o unwind_bc.o
+ obj-y	+= smp.o text_amode31.o stacktrace.o abs_lowcore.o
+ 
+@@ -63,6 +63,7 @@ obj-$(CONFIG_RETHOOK)		+= rethook.o
+ obj-$(CONFIG_FUNCTION_TRACER)	+= ftrace.o
+ obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o
+ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
++obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
+ obj-$(CONFIG_UPROBES)		+= uprobes.o
+ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+ 
+> Cheers,
+> Nathan
+
+Thanks!
