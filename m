@@ -2,153 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439CD74972D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0816174972B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 10:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233712AbjGFIOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 04:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S232731AbjGFIOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 04:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbjGFIOP (ORCPT
+        with ESMTP id S229476AbjGFION (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:14:15 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB571726;
-        Thu,  6 Jul 2023 01:14:14 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3667J5QN028460;
-        Thu, 6 Jul 2023 10:14:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=c5EMg95qPheNNBLTXxowIRmmt2QQXYhtphsjHwo2EsE=;
- b=WihLRuSUCIhlwL+cWQwqVD6B8J5Dtfk3gpEE+UbA3mP0ihvqIw+cqM+S1ikLtfgReAco
- ON8+lal6RSr08FvS71H8KjR3yXZS0/qdEdYph3aYaysyaJ4u6pFhtLjeowUJM24ajzHQ
- 3ZhiPHimqnPqcjQGgG3a+VDyH5IWBDGH01wvDGEkpLkXRXLrR8coybE/E4o/Zi4u+U0n
- 3EPQSKEzJOfkduMHPIpzWRH+QWvjS8WEeWDLmEupQS9g12u93TylEf4hJ+aMFXoFtIMi
- P+Pm+aJQx1sduToqRUzH8OZPsTQL/QKLFZ/2rMgp2PBNNH7FUHKPSMYVPJ3dEC+zrU9N jw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rns47re5w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 10:14:00 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0BC80100052;
-        Thu,  6 Jul 2023 10:14:00 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F15C62138E1;
-        Thu,  6 Jul 2023 10:13:59 +0200 (CEST)
-Received: from localhost (10.201.20.168) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 6 Jul
- 2023 10:13:59 +0200
-From:   Valentin Caron <valentin.caron@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH v3] spi: stm32: disable device mode with st,stm32f4-spi compatible
-Date:   Thu, 6 Jul 2023 10:13:42 +0200
-Message-ID: <20230706081342.468090-1-valentin.caron@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 6 Jul 2023 04:14:13 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330D31982
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 01:14:11 -0700 (PDT)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 64BAE3F205
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jul 2023 08:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688631248;
+        bh=7HSYp1icG+guqeU+FJYsU4fa4qwz2KYF1jp5j0Ry53A=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ugAHKkGVza55YQSIromYzK/jDa6tYo96wMw/8i7/TPzXk6jqZ0Iu6xBoocheYWOqg
+         7873ac0pz4H3uTv08F1RK7COcD9FFRKYB5Y34NRCeNB4dC0m9lqII/Nl/lwY/bf7kR
+         YP8/ZbuLJPsYcMH9vORx7ejNp5ImTMMTiN7TiZp6tsW28QAGudYwi2++XALEuzvc0z
+         b2fIACBAQhMESk3F6RpCTBPcA+l9fTnUGzRm2t8LfZ16gUzJ5gx5T9aDjgzbp7BqsF
+         6vl/V86zgkOt9FW5eaAbsoZr2b329AsGhPGemzrbZFQiF4kwx3tqcOFkaGLwsnCLQb
+         dXWhx60eMfiGw==
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-666e3dad70aso826759b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jul 2023 01:14:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688631247; x=1691223247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7HSYp1icG+guqeU+FJYsU4fa4qwz2KYF1jp5j0Ry53A=;
+        b=jTKHJ3Qjw9aK1m3do41gxavup5ddrRrRNcmPJ2ThXhjVtqnhnmrYq9uw7vH2ZijIUG
+         rW8LfCbOHs17nan4JZwLnIjY9tLK9G27/5A/8Eoq7zNaLkhBfeanE9eHhSh5usyT29yJ
+         UUptZz+ipIUkrwzLV4Yo6fJvdB0zik8WcLvbyKsukUFYJHKdovwAULwQDq349iwp4nFP
+         wuoSEHIMoxV7j0Uwskld/1GvfSQ8EaRw7CPbkEXmf7T1qM4HqBMNbTqlo2F36hexvta6
+         tnZ7yvdmiEDM25MmFeEJW1ZJZxmesRPkx+RSkFeKeFlioo8wGhytJq+GqpClC6yrlNxG
+         fMVQ==
+X-Gm-Message-State: ABy/qLbpML1AJiCZESSvVeJFNXRZ5r/aegzm4n5dJf2kN0dA8E0xRBYv
+        BjdOOPhlZOdRn9KAAPOLV7Dgpuv/E6WprdkMwVAQX4bNngh+7j7kYDj8XLdDec1ZHUtH9hFjtMo
+        VvnND/yCLAWnc//9KflFLREgnVR7Blwq68Kq/BTyBm84CdmxaI0k5OfnRNw==
+X-Received: by 2002:a05:6a20:7484:b0:11f:33da:56ec with SMTP id p4-20020a056a20748400b0011f33da56ecmr1160248pzd.27.1688631247020;
+        Thu, 06 Jul 2023 01:14:07 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlF95ylLuO9tMs5+hripSwj2rqR9msxTCudrpIm4KNPOB7It6fu0srnyBvU7aXSE34l+pb0V6g1vX6qIhO02+bY=
+X-Received: by 2002:a05:6a20:7484:b0:11f:33da:56ec with SMTP id
+ p4-20020a056a20748400b0011f33da56ecmr1160236pzd.27.1688631246691; Thu, 06 Jul
+ 2023 01:14:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.20.168]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_04,2023-07-06_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230704074506.2304939-1-kai.heng.feng@canonical.com> <CAJZ5v0jwO1NJ_x2t3RV-kYDmVY9UtyexznCSZMAmQ-gK4dWCmA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jwO1NJ_x2t3RV-kYDmVY9UtyexznCSZMAmQ-gK4dWCmA@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 6 Jul 2023 16:13:55 +0800
+Message-ID: <CAAd53p4vUkmvgAa8JgxzSNS1F0EVWYQxTBPOoRS+bQscDEc_nA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: video: Invoke _PS0 at boot for ACPI video
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-STM32 SPI driver is not capable to handle device mode with stm32f4 soc.
-Stop probing if this case happens.
+On Wed, Jul 5, 2023 at 12:59=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Tue, Jul 4, 2023 at 9:46=E2=80=AFAM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> >
+> > Screen brightness can only be changed once on some HP laptops.
+> >
+> > Vendor identified the root cause as Linux doesn't invoke _PS0 at boot
+> > for all ACPI devices:
+>
+> This part of the changelog is confusing, because the evaluation of
+> _PS0 is not a separate operation.  _PS0 gets evaluated when devices
+> undergo transitions from low-power states to D0.
 
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
----
-Changes since v2:
-- Do not cast of_device_get_match_data() function
-- Remove compatible in dev_err
+But not at boot.
 
-Changes since v1:
-- Replace of_match_device()->data by of_device_get_match_data()
+>
+> >     Scope (\_SB.PC00.GFX0)
+> >     {
+> >         Scope (DD1F)
+> >         {
+> >             Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+> >             {
+> >                 If (CondRefOf (\_SB.PC00.LPCB.EC0.SSBC))
+> >                 {
+> >                     \_SB.PC00.LPCB.EC0.SSBC ()
+> >                 }
+> >             }
+> >             ...
+> >         }
+> >         ...
+> >     }
+> >
+> > _PS0 doesn't get invoked for all ACPI devices because of commit
+> > 7cd8407d53ef ("ACPI / PM: Do not execute _PS0 for devices without _PSC
+> > during initialization").
+>
+> And yes, Linux doesn't put all of the ACPI devices into D0 during
+> initialization, but the above commit has a little to do with that.
 
- drivers/spi/spi-stm32.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Devices without _PSC now doesn't have _PS0 evaluated at boot time. I
+don't quite understand why it's not related to this commit?
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 6d10fa4ab783..536d89e044cf 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -238,6 +238,7 @@ struct stm32_spi;
-  * @baud_rate_div_min: minimum baud rate divisor
-  * @baud_rate_div_max: maximum baud rate divisor
-  * @has_fifo: boolean to know if fifo is used for driver
-+ * @has_device_mode: is this compatible capable to switch on device mode
-  * @flags: compatible specific SPI controller flags used at registration time
-  */
- struct stm32_spi_cfg {
-@@ -259,6 +260,7 @@ struct stm32_spi_cfg {
- 	unsigned int baud_rate_div_min;
- 	unsigned int baud_rate_div_max;
- 	bool has_fifo;
-+	bool has_device_mode;
- 	u16 flags;
- };
- 
-@@ -1750,6 +1752,7 @@ static const struct stm32_spi_cfg stm32f4_spi_cfg = {
- 	.baud_rate_div_min = STM32F4_SPI_BR_DIV_MIN,
- 	.baud_rate_div_max = STM32F4_SPI_BR_DIV_MAX,
- 	.has_fifo = false,
-+	.has_device_mode = false,
- 	.flags = SPI_MASTER_MUST_TX,
- };
- 
-@@ -1774,6 +1777,7 @@ static const struct stm32_spi_cfg stm32h7_spi_cfg = {
- 	.baud_rate_div_min = STM32H7_SPI_MBR_DIV_MIN,
- 	.baud_rate_div_max = STM32H7_SPI_MBR_DIV_MAX,
- 	.has_fifo = true,
-+	.has_device_mode = true,
- };
- 
- static const struct of_device_id stm32_spi_of_match[] = {
-@@ -1798,8 +1802,13 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	bool device_mode;
- 	int ret;
-+	const struct stm32_spi_cfg *cfg = of_device_get_match_data(&pdev->dev);
- 
- 	device_mode = of_property_read_bool(np, "spi-slave");
-+	if (!cfg->has_device_mode && device_mode) {
-+		dev_err(&pdev->dev, "spi-slave not supported\n");
-+		return -EPERM;
-+	}
- 
- 	if (device_mode)
- 		ctrl = devm_spi_alloc_slave(&pdev->dev, sizeof(struct stm32_spi));
-@@ -1817,9 +1826,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	spi->device_mode = device_mode;
- 	spin_lock_init(&spi->lock);
- 
--	spi->cfg = (const struct stm32_spi_cfg *)
--		of_match_device(pdev->dev.driver->of_match_table,
--				&pdev->dev)->data;
-+	spi->cfg = cfg;
- 
- 	spi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(spi->base))
--- 
-2.25.1
+>
+> > For now explicitly call _PS0 for ACPI video to workaround the issue.
+>
+> This is not what the patch is doing.
 
+To be specific, it's for the child device nodes under ACPI GFX.
+
+Kai-Heng
+
+>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> >  drivers/acpi/acpi_video.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
+> > index 62f4364e4460..793259bd18c8 100644
+> > --- a/drivers/acpi/acpi_video.c
+> > +++ b/drivers/acpi/acpi_video.c
+> > @@ -2027,6 +2027,8 @@ static int acpi_video_bus_add(struct acpi_device =
+*device)
+> >         if (error)
+> >                 goto err_put_video;
+> >
+> > +       acpi_device_fix_up_power_extended(device);
+> > +
+>
+> I would like to know what Hans thinks about this.
+>
+> >         pr_info("%s [%s] (multi-head: %s  rom: %s  post: %s)\n",
+> >                ACPI_VIDEO_DEVICE_NAME, acpi_device_bid(device),
+> >                video->flags.multihead ? "yes" : "no",
+> > --
