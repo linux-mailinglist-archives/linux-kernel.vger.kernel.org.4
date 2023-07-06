@@ -2,210 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECC074A330
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 19:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DA074A22E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jul 2023 18:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjGFRiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jul 2023 13:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S230045AbjGFQ2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jul 2023 12:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjGFRiW (ORCPT
+        with ESMTP id S229640AbjGFQ2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:38:22 -0400
-X-Greylist: delayed 2136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 10:38:08 PDT
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8382310C;
-        Thu,  6 Jul 2023 10:38:08 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:40568)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1qHQio-00FMgf-7e; Thu, 06 Jul 2023 09:16:42 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:55228 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1qHQim-00AsXt-Fk; Thu, 06 Jul 2023 09:16:41 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     jk@ozlabs.org, arnd@arndb.de, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
-        cmllamas@google.com, surenb@google.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        leon@kernel.org, bwarrum@linux.ibm.com, rituagar@linux.ibm.com,
-        ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
-        linux_oss@crudebyte.com, dsterba@suse.com, dhowells@redhat.com,
-        marc.dionne@auristor.com, viro@zeniv.linux.org.uk,
-        raven@themaw.net, luisbg@kernel.org, salah.triki@gmail.com,
-        aivazian.tigran@gmail.com, keescook@chromium.org, clm@fb.com,
-        josef@toxicpanda.com, xiubli@redhat.com, idryomov@gmail.com,
-        jaharkes@cs.cmu.edu, coda@cs.cmu.edu, jlbec@evilplan.org,
-        hch@lst.de, nico@fluxnic.net, rafael@kernel.org, code@tyhicks.com,
-        ardb@kernel.org, xiang@kernel.org, chao@kernel.org,
-        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linkinjeon@kernel.org, sj1557.seo@samsung.com, jack@suse.com,
-        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
-        hirofumi@mail.parknet.co.jp, miklos@szeredi.hu,
-        rpeterso@redhat.com, agruenba@redhat.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        mikulas@artax.karlin.mff.cuni.cz, mike.kravetz@oracle.com,
-        muchun.song@linux.dev, dwmw2@infradead.org, shaggy@kernel.org,
-        tj@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
-        chuck.lever@oracle.com, neilb@suse.de, kolga@netapp.com,
-        Dai.Ngo@oracle.com, tom@talpey.com, konishi.ryusuke@gmail.com,
-        anton@tuxera.com, almaz.alexandrovich@paragon-software.com,
-        mark@fasheh.com, joseph.qi@linux.alibaba.com, me@bobcopeland.com,
-        hubcap@omnibond.com, martin@omnibond.com, amir73il@gmail.com,
-        mcgrof@kernel.org, yzaikin@google.com, tony.luck@intel.com,
-        gpiccoli@igalia.com, al@alarsen.net, sfrench@samba.org,
-        pc@manguebit.com, lsahlber@redhat.com, sprasad@microsoft.com,
-        senozhatsky@chromium.org, phillip@squashfs.org.uk,
-        rostedt@goodmis.org, mhiramat@kernel.org, dushistov@mail.ru,
-        hdegoede@redhat.com, djwong@kernel.org, dlemoal@kernel.org,
-        naohiro.aota@wdc.com, jth@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, hughd@google.com, akpm@linux-foundation.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, john.johansen@canonical.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        jgross@suse.com, stern@rowland.harvard.edu, lrh2000@pku.edu.cn,
-        sebastian.reichel@collabora.com, wsa+renesas@sang-engineering.com,
-        quic_ugoswami@quicinc.com, quic_linyyuan@quicinc.com,
-        john@keeping.me.uk, error27@gmail.com, quic_uaggarwa@quicinc.com,
-        hayama@lineo.co.jp, jomajm@gmail.com, axboe@kernel.dk,
-        dhavale@google.com, dchinner@redhat.com, hannes@cmpxchg.org,
-        zhangpeng362@huawei.com, slava@dubeyko.com, gargaditya08@live.com,
-        penguin-kernel@I-love.SAKURA.ne.jp, yifeliu@cs.stonybrook.edu,
-        madkar@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
-        yuzhe@nfschina.com, willy@infradead.org, okanatov@gmail.com,
-        jeffxu@chromium.org, linux@treblig.org, mirimmad17@gmail.com,
-        yijiangshan@kylinos.cn, yang.yang29@zte.com.cn,
-        xu.xin16@zte.com.cn, chengzhihao1@huawei.com, shr@devkernel.io,
-        Liam.Howlett@Oracle.com, adobriyan@gmail.com,
-        chi.minghao@zte.com.cn, roberto.sassu@huawei.com,
-        linuszeng@tencent.com, bvanassche@acm.org, zohar@linux.ibm.com,
-        yi.zhang@huawei.com, trix@redhat.com, fmdefrancesco@gmail.com,
-        ebiggers@google.com, princekumarmaurya06@gmail.com,
-        chenzhongjin@huawei.com, riel@surriel.com,
-        shaozhengchao@huawei.com, jingyuwang_vip@163.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-usb@vger.kernel.org, v9fs@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        autofs@vger.kernel.org, linux-mm@kvack.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-um@lists.infradead.org,
-        linux-mtd@lists.infradead.org,
-        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
-        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org
-References: <20230705185812.579118-1-jlayton@kernel.org>
-        <a4e6cfec345487fc9ac8ab814a817c79a61b123a.camel@kernel.org>
-Date:   Thu, 06 Jul 2023 10:16:19 -0500
-In-Reply-To: <a4e6cfec345487fc9ac8ab814a817c79a61b123a.camel@kernel.org> (Jeff
-        Layton's message of "Wed, 05 Jul 2023 17:57:46 -0400")
-Message-ID: <87ilaxgjek.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 6 Jul 2023 12:28:20 -0400
+X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 09:28:19 PDT
+Received: from mx08-00376f01.pphosted.com (mx08-00376f01.pphosted.com [91.207.212.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9866E1727;
+        Thu,  6 Jul 2023 09:28:19 -0700 (PDT)
+Received: from pps.filterd (m0168888.ppops.net [127.0.0.1])
+        by mx08-00376f01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3668moGT005401;
+        Thu, 6 Jul 2023 16:45:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imgtec.com; h=
+        from:to:cc:subject:date:message-id:references:in-reply-to
+        :content-type:content-id:content-transfer-encoding:mime-version;
+         s=dk201812; bh=N8f/aQKB8+497pyVgB+T7ci2teqbRKd4a3QMu+7nq1Q=; b=
+        BLSLfHI8ZEvWhgdaWeBzveNtu1v2Sy8YHlSzLRn/UntLLCsLHF3VuYbaxUmy4ge8
+        BzvTgEGPRPecDOtNorhss4LoEFi0XpiNtvu8MHMbG+X2z7OL+/y3A35KkVeYHeMA
+        3/mz7KHwNZgXJZ/2pQ3bwAOSK2HhScchz2EQ36uyh0RF3VbmzETJhek8mqlm+pb2
+        P1kp1C+akSONRekbuyU6XHIYDH7n9Y578NjvxZw4uE2zCCpWkdyd0RXQkLbWrxk+
+        zT6jCji0aN5SVBLCSsfcv4oWA1JLLG1SC470OPcFEYK0PRe4MK8ACHt8QeGmF/cX
+        vurNlpm5fSmxYJ6JNELRbA==
+Received: from hhmail05.hh.imgtec.org ([217.156.249.195])
+        by mx08-00376f01.pphosted.com (PPS) with ESMTPS id 3rjadqm42v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 06 Jul 2023 16:45:08 +0100 (BST)
+Received: from HHMAIL05.hh.imgtec.org (10.100.10.120) by
+ HHMAIL05.hh.imgtec.org (10.100.10.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 6 Jul 2023 16:45:07 +0100
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (104.47.20.58) by
+ email.imgtec.com (10.100.10.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27 via Frontend
+ Transport; Thu, 6 Jul 2023 16:45:07 +0100
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KBxoof1M7fVQwQfopJbJjK06lOb3yoNxUuQaU0hkXMRJBSi/TS4UxHa7Qdw6rHg8JCp8F7V6fjxZOVDpRJadR2TYepyRCYP8bGXnWQywupg9IIYiZCmfZEoM+77NT58T2K3reztd96BDYsAdNt39smEfBhRq2aoUXBrxTZDqtRTx6TozgKiazNTO6Dq8YeLQG+YhKOE6XSwrzLVgD9N01zgDTELaTLOiEYl4swLnaC7hvWDxPxoLsRz4lG3Eq5pr/CRzPY8BZQ3aPqHq/N8V8Cv+aH3Ur7K0GLJXqp7FQhmRn0sAICff+txtKTzNB0fQqICsihAmLz0/ZewOk/zGvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=N8f/aQKB8+497pyVgB+T7ci2teqbRKd4a3QMu+7nq1Q=;
+ b=LId0wupFBKANyNP3uTzAcqT754yWk2eMm9DWz8yakw2TALwc+weI9k14Q8HrPRuBZ0Wdu0mB3pNivPZq1QyD1XrgTxLr+2a20rRS8w29r5K4u4IMGhthiU1JOyK1wIMVzxsLr4uOzWzRPeWNB107pStXDQt7JWFwwbCHW0CDg/7QSxYIaykM+Cn3hVCsRnQKfXmi3/5fG1uku7Le4qVFJlkO0Yp+VgQjRKUQtmoiLLFNKlSCq+BXaeGtxpzYm2vBIl9jbTF5lEzpqd1yBWQyKjxgdc3XFmDYI/W+v71HE1rid9nf6lbHOezjoP/zYqLdENNEP+iK/jUxeo+icxa0CA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=imgtec.com; dmarc=pass action=none header.from=imgtec.com;
+ dkim=pass header.d=imgtec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=IMGTecCRM.onmicrosoft.com; s=selector2-IMGTecCRM-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N8f/aQKB8+497pyVgB+T7ci2teqbRKd4a3QMu+7nq1Q=;
+ b=FUPmXuKwV8pZZXyjWogpg7FDRKwkGuFT4/g5miw3H8eIzJ9DJwyl9mSvwQDA/zPSw+IPT/k/YQEcoMew67h2qtfFVx9I2E3D1mN/FSdBzn3aoriOYR/sNEj24nJdzAGSMa2/4mqB4Go1zgYGxVWibJ4YkE3RPKdTJzNwok9V1t4=
+Received: from CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1a0::8)
+ by CWXP265MB5650.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:159::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 15:45:05 +0000
+Received: from CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::4694:a4a9:5649:14eb]) by CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::4694:a4a9:5649:14eb%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
+ 15:45:05 +0000
+From:   Donald Robson <Donald.Robson@imgtec.com>
+To:     "corbet@lwn.net" <corbet@lwn.net>,
+        "jason@jlekstrand.net" <jason@jlekstrand.net>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "matthew.brost@intel.com" <matthew.brost@intel.com>,
+        "bskeggs@redhat.com" <bskeggs@redhat.com>,
+        "dakr@redhat.com" <dakr@redhat.com>,
+        "ogabbay@kernel.org" <ogabbay@kernel.org>,
+        "boris.brezillon@collabora.com" <boris.brezillon@collabora.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "alexdeucher@gmail.com" <alexdeucher@gmail.com>,
+        "airlied@gmail.com" <airlied@gmail.com>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "airlied@redhat.com" <airlied@redhat.com>
+Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
+ mappings
+Thread-Topic: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
+ mappings
+Thread-Index: AQHZsCDVszc+u6AXYEi0dgSKg2mf4A==
+Date:   Thu, 6 Jul 2023 15:45:05 +0000
+Message-ID: <8d01cb3add315277c86cf4b28d6901fed1977448.camel@imgtec.com>
+References: <20230629222651.3196-1-dakr@redhat.com>
+         <20230629222651.3196-3-dakr@redhat.com>
+In-Reply-To: <20230629222651.3196-3-dakr@redhat.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CWLP265MB5770:EE_|CWXP265MB5650:EE_
+x-ms-office365-filtering-correlation-id: 6fba4e03-a841-4e00-64ab-08db7e37f839
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8wVAtJZ4XnWG/shEniPLEoBbescBXfempfylRjOsLwWYTvN7sPTzPeEQozNMwaAeAtT/DwirS1B9NOu6FSTVdoMKhFhH29Q/ETLTa4qaSvZ8UWCTdCfv/pTkt+//EVzR3VuQrINEa0CB5O81fgIAIwXW+C//XrLDqIRBdc5JyU6jnpZAJ+vZmdZtwVm0hpDQpntTJLxm6MErXZQ6bvX2fGHa2zCMeJlen/b9Ct5QCc2OoOfXbxoyaqXoGtQSycUryReph8uSyhM3Ohc5v3eXruoysUl0GKvqyOXT05y49fwNbHaGnp8vQUqnQ9V0rtu7T+1IlljBT+v/YDOkWSwkusM3iLHXn51NI/pDJYyKAZmamNzgoiRCDxX2I+/GlR6dzgdvowbDSeJPywrlA09g2nXRBsIOFC/F8LDoTM5DM6aOYJUhDOzXNaUG9LFbCVGgYNjstIM00faKUPmXiw3IbwSLfoykP2DFvP6/OSwGm0XAMYjR1g3uKrIYakCNtDTTAZ3pI5QE5uMhdVeP5/07eTpW+GX5Hesr5gfCN/SP/vFiYEzGZYG/+6GJ0xeOUOx9vUihxZqjPhpvj6ZtoK0NBS8UkIWhQ3yoG5gX2mznC17abBwN16myf+u6Gvb0Z1gD
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(376002)(39850400004)(366004)(346002)(136003)(396003)(451199021)(54906003)(5660300002)(8936002)(8676002)(41300700001)(316002)(2906002)(83380400001)(7416002)(122000001)(921005)(76116006)(2616005)(4326008)(66946007)(66556008)(91956017)(38100700002)(64756008)(66476007)(66446008)(478600001)(86362001)(186003)(26005)(110136005)(6506007)(36756003)(6486002)(38070700005)(6512007)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OGVZc290NXVoUU5kTG5xUVpQSmtCTmdJbVJTWnpRbTY0cmVVTTl0NzJDNnlz?=
+ =?utf-8?B?STlUdW9rdlNtUExXV25pT0lYZ3FmUGVGQXFZK1BDc0M2SEdwWVZleGFSajhL?=
+ =?utf-8?B?S1pXSVBUOWhqQm1kL1ZqcEg5WWtXZzB3ZW1XWXF5dmpWNFhqUjE1SzNaS0I0?=
+ =?utf-8?B?WXNEUGpRclpTZkdUMlV4SW1KcnhWNW5hWGFPaFRWSnZKOSt3Rkwrc3J2NEMr?=
+ =?utf-8?B?SldmcmxyUyttRThQQ3NEbkFZODZnTVF1T0FmZ0Nockp3alA1YTFRS2ZxK3Fu?=
+ =?utf-8?B?WWlwUVFCQ2VibEt1U2c4QjM0YVJ4cUlJbXd0K0hQUGhZOHI0NlNXWGZuSmp4?=
+ =?utf-8?B?cVlWSzVoOHZiOWxucDJEWjRpNWZBeVZUNzF4ODV0dGJKOGViWjk0L1lneDls?=
+ =?utf-8?B?SEh6OURuQzBqOGhCbEt3TFVGUVNobHhLL2pVc3NWalZ5czRCd3ZqSWYvNHFp?=
+ =?utf-8?B?b0Y0RWJkb2IyWUFsZFdObUVwcW5yUkg4NUN1aWppMGNmOEhlcHNlMzZleXNK?=
+ =?utf-8?B?R3JsbmtOR2pZT2FFdVJUODZNbFYwblJoalU2MVowc0c5NU53MUVrOG5pVmIv?=
+ =?utf-8?B?OUNyRUhpeVk2dzNRQWg1SW1UdFUwWHJubnk0TGlPYlc5cW1LUEdneDRZRHNa?=
+ =?utf-8?B?K1QrZjYxSXVwQ1RHNXBNMjF2LytFL0VWaTMzWGgzMjVpRUQvemR6VVZ3cU9X?=
+ =?utf-8?B?STVic09JVDlzS21Nd1hqSHJudFRIRjZvcXVuN1FmTjRzY3dnUEQrQm1RSVlV?=
+ =?utf-8?B?NHkvSndYczZ2SDFYTVoralpyVFdUaG12b0NiSkdpYzZqVGhqaWJLZmxHb1py?=
+ =?utf-8?B?dUJyVmdDMElnVm1SMnFCZ00xbkdmOXQ4a1g3L2N1R0VqOEhGcExpWHpKK1Zn?=
+ =?utf-8?B?SGx3M2ltWG5mNFpnaVdIKzgzdjU1UlhaWlp5eUkvcUV6L2FTMUtJeGNsMktZ?=
+ =?utf-8?B?cWw3MVBmWHRadkJlVkYrOEtXaWdCcnU1MXdkNTRnRmJCdVp3Ym45RkUwNzRk?=
+ =?utf-8?B?WklTeVhncWo1T0w2a1NxMWp2bUxVVXViQlNWVU1MN0l0aEMremp5TldLczlr?=
+ =?utf-8?B?TnVsV25sVklEeGFObG5qVzYyVmlNY1VkMmFOTDErU1BrZmUzZjc5bTROREtF?=
+ =?utf-8?B?NzhrQmNDTnhjVW1Fa2pycHh1azQ5L2M1OHhRbldKbnU3WE1LdEZ3ZWc5WHlT?=
+ =?utf-8?B?azdBOHNtOTF5bHpYYnJ5aDArUlVTOVl2L1pvZHQvZVNJcXZQbTgybnV6aFh0?=
+ =?utf-8?B?TStmKzdzN01VT0JnSmFoYThEbDdhU1RlYXNPV0g4dldZV0lwVDBKREhULy9M?=
+ =?utf-8?B?cldiT2pia29vbVVuUU1lQm5Panp2R3FwY1pNRnM2dURETTlsOWVuNGU3cldo?=
+ =?utf-8?B?ZGJveTQ1clh0bGVaSyt3Smgvc1d6MlVHR3U5UitvaFdLYzBJVThMSFE2VlEv?=
+ =?utf-8?B?dWtpZEF1cU1xc29HTHhYeUROL3NjWm9yb1NkZVJrMEZ4a0lKbFFkeEpKc1pG?=
+ =?utf-8?B?SUliYlJ4TS9JWTVHOWVkSitWMjZsVVo0aGZLTDBIUWFES1JybHgrTG1MT1I4?=
+ =?utf-8?B?eEhrODBSRmRNeU9sLzQ0UFZIb0NJSDgwNjFUKzdQV0RzNU9NREY4eEVSM255?=
+ =?utf-8?B?Q2ZlZkE1TFd2NWNtVlBHZVpwL2JITVVQRGc0QjZKRzNXL2F5OFhXb212N2FT?=
+ =?utf-8?B?b2FsbTNTVWVSK0x6R0hWaWlCZW9NOTFMa0llU0dKbUg0WGpqVzFxZTMxeXUx?=
+ =?utf-8?B?VUlBUEcvNmhUekp6NzhVNC91OFNDSHd6TEhJaTFobEJiOEpDellXNzg0SW5o?=
+ =?utf-8?B?VG1Ka1dYaStxUnI2SVRtd2FlVHI2dzJtcXdNek9CelA1cnBuN2FoaEhQS0Ur?=
+ =?utf-8?B?MXk1U0YwNkV1S3lQYTFHUktDRXhodERuZ25TM1BmSUxVN1VPRkFQclZUZTFT?=
+ =?utf-8?B?djRyWE1NbXgwRjk5RzhkYmhFZmprRTRwUWR6TlQvYmROaFYvaFY4SXlSUEZ0?=
+ =?utf-8?B?L1hPRG5wZlJyL3ZkUFgzOEtnMVYzT1EzcHdvYlNjNzc4a3IvOFB0bU9YU2ll?=
+ =?utf-8?B?dm5nd0dJU1c0blZaeEtMRHJrWEtJaVJOd0Vxbnh2WDhacENRQTJTaTFnVlY1?=
+ =?utf-8?B?RlZMN0FyTGVHaVBnVnBpdjNTUG1BQVU4V29yRWJuNzR6b1hzbk01NGhURTk0?=
+ =?utf-8?B?RGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <44FCC495D5E8F2499AF1C33EDBDA5C86@GBRP265.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1qHQim-00AsXt-Fk;;;mid=<87ilaxgjek.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19hfnilZzLMqG1RlF+DuMto1+nqSkCNAbk=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB5770.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fba4e03-a841-4e00-64ab-08db7e37f839
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 15:45:05.5597
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0d5fd8bb-e8c2-4e0a-8dd5-2c264f7140fe
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UoMDqqbDpDehv1T0bCOcy9HoxHxU1a/3iodj/UV1UvmlyySdfYreQYLqZ+ouOH2roMzNwbPHSxv/LwbMpWir2Av3jT/5wgsjgiZxla3GyOA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB5650
+X-OriginatorOrg: imgtec.com
+X-EXCLAIMER-MD-CONFIG: 15a78312-3e47-46eb-9010-2e54d84a9631
+X-Proofpoint-ORIG-GUID: Tt50dFvZAKIj1sP-Nm-zF4LTJHHMSvX9
+X-Proofpoint-GUID: Tt50dFvZAKIj1sP-Nm-zF4LTJHHMSvX9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Jeff Layton <jlayton@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 959 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (1.2%), b_tie_ro: 10 (1.1%), parse: 1.62
-        (0.2%), extract_message_metadata: 4.3 (0.4%), get_uri_detail_list:
-        1.88 (0.2%), tests_pri_-2000: 2.4 (0.3%), tests_pri_-1000: 10 (1.1%),
-        tests_pri_-950: 1.27 (0.1%), tests_pri_-900: 1.56 (0.2%),
-        tests_pri_-200: 0.85 (0.1%), tests_pri_-100: 4.3 (0.4%),
-        tests_pri_-90: 283 (29.5%), check_bayes: 278 (29.0%), b_tokenize: 27
-        (2.9%), b_tok_get_all: 20 (2.1%), b_comp_prob: 4.6 (0.5%),
-        b_tok_touch_all: 220 (23.0%), b_finish: 0.94 (0.1%), tests_pri_0: 616
-        (64.3%), check_dkim_signature: 0.56 (0.1%), check_dkim_adsp: 2.8
-        (0.3%), poll_dns_idle: 0.55 (0.1%), tests_pri_10: 2.2 (0.2%),
-        tests_pri_500: 9 (0.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 00/89] fs: new accessors for inode->i_ctime
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> writes:
-
-> On Wed, 2023-07-05 at 14:58 -0400, Jeff Layton wrote:
->> v2:
->> - prepend patches to add missing ctime updates
->> - add simple_rename_timestamp helper function
->> - rename ctime accessor functions as inode_get_ctime/inode_set_ctime_*
->> - drop individual inode_ctime_set_{sec,nsec} helpers
->> 
->> I've been working on a patchset to change how the inode->i_ctime is
->> accessed in order to give us conditional, high-res timestamps for the
->> ctime and mtime. struct timespec64 has unused bits in it that we can use
->> to implement this. In order to do that however, we need to wrap all
->> accesses of inode->i_ctime to ensure that bits used as flags are
->> appropriately handled.
->> 
->> The patchset starts with reposts of some missing ctime updates that I
->> spotted in the tree. It then adds a new helper function for updating the
->> timestamp after a successful rename, and new ctime accessor
->> infrastructure.
->> 
->> The bulk of the patchset is individual conversions of different
->> subsysteme to use the new infrastructure. Finally, the patchset renames
->> the i_ctime field to __i_ctime to help ensure that I didn't miss
->> anything.
->> 
->> This should apply cleanly to linux-next as of this morning.
->> 
->> Most of this conversion was done via 5 different coccinelle scripts, run
->> in succession, with a large swath of by-hand conversions to clean up the
->> remainder.
->> 
->
-> A couple of other things I should note:
->
-> If you sent me an Acked-by or Reviewed-by in the previous set, then I
-> tried to keep it on the patch here, since the respun patches are mostly
-> just renaming stuff from v1. Let me know if I've missed any.
->
-> I've also pushed the pile to my tree as this tag:
->
->     https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/tag/?h=ctime.20230705
->
-> In case that's easier to work with.
-
-Are there any preliminary patches showing what you want your introduced
-accessors to turn into?  It is hard to judge the sanity of the
-introduction of wrappers without seeing what the wrappers are ultimately
-going to do.
-
-Eric
+T24gRnJpLCAyMDIzLTA2LTMwIGF0IDAwOjI1ICswMjAwLCBEYW5pbG8gS3J1bW1yaWNoIHdyb3Rl
+Og0KPiANCj4gKyNpZmRlZiBDT05GSUdfTE9DS0RFUA0KPiArdHlwZWRlZiBzdHJ1Y3QgbG9ja2Rl
+cF9tYXAgKmxvY2tkZXBfbWFwX3A7DQo+ICsjZGVmaW5lIGRybV9ncHV2YV9tYW5hZ2VyX2V4dF9h
+c3NlcnRfaGVsZChtZ3IpCQlcDQo+ICsJbG9ja2RlcF9hc3NlcnQobG9ja19pc19oZWxkKChtZ3Ip
+LT5leHRfbG9jaykgIT0gTE9DS19TVEFURV9OT1RfSEVMRCkNCj4gKy8qKg0KPiArICogZHJtX2dw
+dXZhX21hbmFnZXJfc2V0X2V4dF9sb2NrIC0gc2V0IHRoZSBleHRlcm5hbCBsb2NrIGFjY29yZGlu
+ZyB0bw0KPiArICogQERSTV9HUFVWQV9NQU5BR0VSX0xPQ0tfRVhURVJODQo+ICsgKiBAbWdyOiB0
+aGUgJmRybV9ncHV2YV9tYW5hZ2VyIHRvIHNldCB0aGUgbG9jayBmb3INCj4gKyAqIEBsb2NrOiB0
+aGUgbG9jayB0byBzZXQNCj4gKyAqDQo+ICsgKiBJZiBARFJNX0dQVVZBX01BTkFHRVJfTE9DS19F
+WFRFUk4gaXMgc2V0LCBkcml2ZXJzIG5lZWQgdG8gY2FsbCB0aGlzIGZ1bmN0aW9uDQo+ICsgKiB0
+byBwcm92aWRlIHRoZSBsb2NrIHVzZWQgdG8gbG9jayBsaW5raW5nIGFuZCB1bmxpbmtpbmcgb2Yg
+JmRybV9ncHV2YXMgdG8gdGhlDQo+ICsgKiAmZHJtX2dlbV9vYmplY3RzIEdQVVZBIGxpc3QuDQo+
+ICsgKi8NCj4gKyNkZWZpbmUgZHJtX2dwdXZhX21hbmFnZXJfc2V0X2V4dF9sb2NrKG1nciwgbG9j
+aykJXA0KPiArCShtZ3IpLT5leHRfbG9jayA9ICYobG9jayktPmRlcF9tYXANCj4gKyNlbHNlDQo+
+ICt0eXBlZGVmIHN0cnVjdCB7IC8qIG5vdGhpbmcgKi8gfSBsb2NrZGVwX21hcF9wOw0KDQpsb2Nr
+ZGVwX21hcF9wIGNvbmZsaWN0cyB3aXRoIGFuIGlkZW50aWNhbCB0eXBlZGVmIGluIG1hcGxlX3Ry
+ZWUuaCB3aGVuIENPTkZJR19MT0NLREVQIGlzDQpub3Qgc2V0IChpdCdzIGJlaW5nIHB1bGxlZCBp
+biBieSBtbS5oIGluIGRybV92bWFfbWFuYWdlci5oKS4gSSdsbCBqdXN0IGNvbW1lbnQgdGhlIGxp
+bmUNCm91dCBmb3Igbm93Lg0KDQo+ICsjZGVmaW5lIGRybV9ncHV2YV9tYW5hZ2VyX2V4dF9hc3Nl
+cnRfaGVsZChtZ3IpCQlkbyB7ICh2b2lkKShtZ3IpOyB9IHdoaWxlICgwKQ0KPiArI2RlZmluZSBk
+cm1fZ3B1dmFfbWFuYWdlcl9zZXRfZXh0X2xvY2sobWdyLCBsb2NrKQlkbyB7IH0gd2hpbGUgKDAp
+DQo+ICsjZW5kaWYNCj4gKw0K
